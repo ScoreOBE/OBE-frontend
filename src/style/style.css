@@ -1,6 +1,22 @@
 @tailwind base;
 
-
 .custom-radial-gradient {
-    background: radial-gradient(98.92% 98.92% at 48.99% 98.48%, rgba(215, 163, 125, 0.56) 4.5%, rgba(217, 173, 108, 0.68) 22%, rgba(99, 86, 150, 0.52) 45%, rgba(68, 53, 129, 0.55) 60.5%, rgba(11, 2, 104, 0.56) 75%, rgba(11, 2, 104, 0.62) 87%, rgba(11, 2, 104, 0.68) 96.5%);
+  background: radial-gradient(
+    98.92% 98.92% at 48.99% 98.48%,
+    rgba(215, 163, 125, 0.56) 4.5%,
+    rgba(217, 173, 108, 0.68) 22%,
+    rgba(99, 86, 150, 0.52) 45%,
+    rgba(68, 53, 129, 0.55) 60.5%,
+    rgba(11, 2, 104, 0.56) 75%,
+    rgba(11, 2, 104, 0.62) 87%,
+    rgba(11, 2, 104, 0.68) 96.5%
+  );
+}
+
+.sidebar-linear-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(2, 4, 134, 0.64) 0%,
+    rgba(21, 0, 67, 0.47) 100%
+  );
 }

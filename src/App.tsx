@@ -10,7 +10,7 @@ import Dashboard from "./pages/dashboard";
 
 function App() {
   const location = window.location.pathname;
-  const showSidebar = location !== "/";
+  const showSidebar = !["/", "/select-department"].includes(location);
 
   return (
     <Router>
@@ -22,7 +22,7 @@ function App() {
         {showSidebar && <Sidebar />}
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/selectDepartment" element={<SelectDepartment />} />
+          <Route path="/select-department" element={<SelectDepartment />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </div>
