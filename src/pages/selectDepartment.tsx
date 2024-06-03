@@ -43,7 +43,10 @@ export default function SelectDepartment() {
           </div>
         </div>
         <div className="flex flex-col justify-end">
-          <div className="bg-[rgba(78,78,80,0.30)] rounded-[25px] mb-5  flex-col  p-6 h-[640px] scroll-smooth  font-sf-pro">
+          <div
+            className="bg-[rgba(78,78,80,0.30)] rounded-[25px] mb-5  flex-col  p-6 h-[640px] scroll-smooth  font-sf-pro"
+            style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
+          >
             <div className="text-white font-medium text-[20px] cursor-default">
               Select department
             </div>

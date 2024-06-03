@@ -12,7 +12,7 @@ export default function Login() {
         className=" absolute top-12 left-12 h-[24px]"
       />
 
-      <div className="rounded-[25px] items-center justify-center p-12 px-24 flex flex-col w-auto h-auto bg-[rgba(78,78,80,0.35)] drop-shadow-xl shadow-red-700 ">
+      <div className="rounded-[25px] items-center justify-center p-12 px-24 flex flex-col w-auto h-auto bg-[rgba(78,78,80,0.35)] drop-shadow-xl shadow-red-700 " style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.35)" }}>
         <img src={entlogo} alt="CMULogo" className="h-[130px]" />
         <div className=" cursor-default mt-7 font-sf-pro-rounded text-white text-4xl">
           Score OBE
