@@ -5,15 +5,16 @@ import "@mantine/core/styles.css";
 import "tailwindcss/tailwind.css";
 import "./App.css";
 import Login from "./pages/login";
+import SelectDepartment from "./pages/selectDepartment";
 
 function App() {
-  const [count, setCount] = useState(0);
 
   return (
     
     <Router>
       <Routes>
-        <Route exact path="/" element={<Login />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/selectDepartment" element={<SelectDepartment />} />
       </Routes>
     </Router>
   );
