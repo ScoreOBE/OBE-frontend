@@ -4,6 +4,7 @@ import "@mantine/core/styles.css";
 import "tailwindcss/tailwind.css";
 import "./App.css";
 import Sidebar from "./component/Sidebar";
+import Navbar from "./component/Navbar";
 import Login from "./pages/login";
 import SelectDepartment from "./pages/selectDepartment";
 import Dashboard from "./pages/dashboard";
@@ -11,6 +12,7 @@ import Dashboard from "./pages/dashboard";
 function App() {
   const location = window.location.pathname;
   const showSidebar = !["/", "/select-department"].includes(location);
+  const showNavbar = !["/", "/select-department"].includes(location);
 
   return (
     <Router>
@@ -20,11 +22,14 @@ function App() {
         }`}
       >
         {showSidebar && <Sidebar />}
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/select-department" element={<SelectDepartment />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
+        <div className="flex flex-col w-full">
+          {showNavbar && <Navbar />}
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/select-department" element={<SelectDepartment />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );
