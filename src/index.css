@@ -1,9 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "./style/style.css";
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "SF Pro", "NotoSansThai" Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -58,6 +59,12 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.custom-radial-gradient {
+  background: radial-gradient(98.92% 98.92% at 48.99% 98.48%, rgba(215, 163, 125, 0.56) 4.5%, rgba(217, 173, 108, 0.68) 22%, rgba(99, 86, 150, 0.52) 45%, rgba(68, 53, 129, 0.55) 60.5%, rgba(11, 2, 104, 0.56) 75%, rgba(11, 2, 104, 0.62) 87%, rgba(11, 2, 104, 0.68) 96.5%);
+}
+
+
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -69,4 +76,28 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+@font-face {
+  font-family: "SF Pro";
+  src: url("./assets/fonts/SF-Pro.ttf") format("truetype");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SF Pro";
+  src: url("./assets/fonts/SF-Pro-Italic.ttf") format("truetype");
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "SF Pro Rounded";
+  src: url("./assets/fonts/SF-Pro-Rounded-Medium.otf") format("opentype");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NotoSansThai";
+  src: url("./assets/fonts/NotoSansThai.ttf") format("opentype");
+  font-style: normal;
 }
