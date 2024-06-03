@@ -9,6 +9,7 @@ import { getUserInfo } from "@services/user/user.service";
 import CMUOAuthCallback from "@pages/cmuOAuthCallback";
 import { removeLocalStorage } from "@helpers/functions/localStorage";
 import { ROUTE_PATH } from "@helpers/constants/route";
+import SelectDepartment from "@pages/selectDepartment";
 
 function App() {
   const user = useSelector((state: any) => state.user.value);
@@ -37,6 +38,7 @@ function App() {
           path={ROUTE_PATH.CMU_OAUTH_CALLBACK}
           element={<CMUOAuthCallback />}
         />
+        <Route path={ROUTE_PATH.SELECTED_DEPARTMENT} element={<SelectDepartment />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </Router>
