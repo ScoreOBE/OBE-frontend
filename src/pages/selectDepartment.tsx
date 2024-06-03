@@ -15,6 +15,10 @@ export default function SelectDepartment() {
     }));
   };
 
+  const sortedKeys = Object.keys(DEPARTMENT_EN).sort((a, b: any) =>
+    DEPARTMENT_EN[a as keyof typeof DEPARTMENT_EN].localeCompare(DEPARTMENT_EN[b as keyof typeof DEPARTMENT_EN])
+  );
+
   return (
     <div className=" custom-radial-gradient h-screen w-screen">
       <img
@@ -42,12 +46,12 @@ export default function SelectDepartment() {
             </div>
 
             <div className="flex flex-1 flex-col overflow-y-scroll h-[515px] gap-4 text-white ">
-              {Object.keys(DEPARTMENT_EN).map((key) => {
+              {sortedKeys.map((key) => {
                 const isChecked = checkedItems[key];
                 return (
                   <div
                     key={key}
-                    className={`w-[540px] min-h-[55px] cursor-default text-[16px] font-normal rounded-[10px] pl-4 py-4 scroll-auto items-center flex ${
+                    className={`w-[540px] min-h-[55px] cursor-default text-[16px] font-medium rounded-[10px] pl-4 py-4 scroll-auto items-center flex ${
                       isChecked
                         ? "bg-[rgba(136,145,205,0.56)]"
                         : "bg-[rgba(181,181,181,0.40)]"
@@ -62,8 +66,7 @@ export default function SelectDepartment() {
                       color="#5768D5"
                       checked={isChecked}
                       onChange={() => handleCheckboxChange(key)}
-                 
-                    ></Checkbox>
+                    />
                     {DEPARTMENT_EN[key as keyof typeof DEPARTMENT_EN]} (
                     {key.replace("_", "-")})
                   </div>
