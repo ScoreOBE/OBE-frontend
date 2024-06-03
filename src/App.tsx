@@ -1,20 +1,29 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Radio, Group } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "tailwindcss/tailwind.css";
 import "./App.css";
+import Sidebar from "./component/Sidebar";
 import Login from "./pages/login";
+import Dashboard from "./pages/dashboard";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const location = window.location.pathname;
+  const showSidebar = location !== "/";
 
   return (
-    
     <Router>
-      <Routes>
-        <Route exact path="/" element={<Login />} />
-      </Routes>
+      <div
+        className={`flex  h-screen w-screen ${
+          showSidebar ? "sidebar-linear-gradient" : ""
+        }`}
+      >
+        {showSidebar && <Sidebar />}
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </div>
     </Router>
   );
 }
