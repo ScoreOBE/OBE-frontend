@@ -1,16 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "@mantine/core/styles.css";
-import "tailwindcss/tailwind.css";
 import "./App.css";
-import Sidebar from "./component/Sidebar";
-import Login from "./pages/login";
-import SelectDepartment from "./pages/selectDepartment";
-import Dashboard from "./pages/dashboard";
+import Sidebar from "@/components/Sidebar";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "@/store/user";
+import Login from "@/pages/login";
+import Page404 from "@/pages/Page404";
+import { getUserInfo } from "@/services/user/user.service";
+import CMUOAuthCallback from "@/pages/cmuOAuthCallback";
+import { removeLocalStorage } from "@/helpers/functions/localStorage";
+import { ROUTE_PATH } from "@/helpers/constants/route";
+import SelectDepartment from "@/pages/selectDepartment";
+import { IModelUser } from "@/models/ModelUser";
+import Dashboard from "@/pages/dashboard";
 
 function App() {
-  const location = window.location.pathname;
-  const showSidebar = !["/", "/select-department"].includes(location);
+  const user: IModelUser = useSelector((state: any) => state.user.value);
+  const dispatch = useDispatch();
+  const path = window.location.pathname;
+  const showSidebar = !["/", "/select-department"].includes(path);
+
+  useEffect(() => {
+    if (user.role || path == ROUTE_PATH.CMU_OAUTH_CALLBACK) return;
+
+    const fetchData = async () => {
+      const res = await getUserInfo();
+      if (res.role) {
+        dispatch(setUser(res));
+      } else {
+        if (path != ROUTE_PATH.LOGIN) {
+          removeLocalStorage("token");
+          window.location.replace(ROUTE_PATH.LOGIN);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Router>
@@ -21,9 +47,17 @@ function App() {
       >
         {showSidebar && <Sidebar />}
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/select-department" element={<SelectDepartment />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path={ROUTE_PATH.LOGIN} element={<Login />} />
+          <Route
+            path={ROUTE_PATH.CMU_OAUTH_CALLBACK}
+            element={<CMUOAuthCallback />}
+          />
+          <Route
+            path={ROUTE_PATH.SELECTED_DEPARTMENT}
+            element={<SelectDepartment />}
+          />
+          <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />
+          <Route path="*" element={<Page404 />} />
         </Routes>
       </div>
     </Router>
