@@ -5,6 +5,7 @@ import "tailwindcss/tailwind.css";
 import "./App.css";
 import Sidebar from "./component/Sidebar";
 import Login from "./pages/login";
+import SelectDepartment from "./pages/selectDepartment";
 import Dashboard from "./pages/dashboard";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         {showSidebar && <Sidebar />}
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/selectDepartment" element={<SelectDepartment />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </div>
