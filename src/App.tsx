@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Sidebar from "@/component/Sidebar";
+import Sidebar from "@/components/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/store/user";
 import Login from "@/pages/login";
@@ -56,6 +56,7 @@ function App() {
             path={ROUTE_PATH.SELECTED_DEPARTMENT}
             element={<SelectDepartment />}
           />
+          <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />
           <Route path="*" element={<Page404 />} />
         </Routes>
       </div>

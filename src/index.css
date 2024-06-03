@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "./style/style.css";
 
 :root {
   font-family: "SF Pro", "NotoSansThai" Helvetica, Arial, sans-serif;
@@ -42,28 +41,13 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
 }
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.custom-radial-gradient {
-  background: radial-gradient(98.92% 98.92% at 48.99% 98.48%, rgba(215, 163, 125, 0.56) 4.5%, rgba(217, 173, 108, 0.68) 22%, rgba(99, 86, 150, 0.52) 45%, rgba(68, 53, 129, 0.55) 60.5%, rgba(11, 2, 104, 0.56) 75%, rgba(11, 2, 104, 0.62) 87%, rgba(11, 2, 104, 0.68) 96.5%);
-}
-
-
 
 @media (prefers-color-scheme: light) {
   :root {
