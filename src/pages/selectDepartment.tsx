@@ -1,9 +1,17 @@
 import { useState } from "react";
-import cmulogo from "../assets/image/cmuLogo.png";
-import { DEPARTMENT_EN } from "../helpers/constants/enum";
+import cmulogo from "@/assets/image/cmuLogo.png";
+import { DEPARTMENT_EN } from "@/helpers/constants/department.enum";
 import { Button, Checkbox } from "@mantine/core";
+import { useSelector } from "react-redux";
+import { IModelUser } from "@/models/ModelUser";
+import { FACULTY_EN } from "@/helpers/constants/faculty.enum";
+import { getEnumByKey, getEnumByValue } from "@/helpers/functions/function";
 
 export default function SelectDepartment() {
+  const user: IModelUser = useSelector((state: any) => state.user.value);
+  const sortedKeys = Object.keys(DEPARTMENT_EN).sort((a: string, b: string) =>
+    getEnumByKey(DEPARTMENT_EN, a).localeCompare(getEnumByKey(DEPARTMENT_EN, b))
+  );
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -14,10 +22,6 @@ export default function SelectDepartment() {
       [key]: !prevCheckedItems[key],
     }));
   };
-
-  const sortedKeys = Object.keys(DEPARTMENT_EN).sort((a, b: any) =>
-    DEPARTMENT_EN[a as keyof typeof DEPARTMENT_EN].localeCompare(DEPARTMENT_EN[b as keyof typeof DEPARTMENT_EN])
-  );
 
   return (
     <div className=" custom-radial-gradient h-screen w-screen">
@@ -32,9 +36,11 @@ export default function SelectDepartment() {
             Welcome to Score OBE <span className=" text-[#FFCD1B]"> +</span>
           </div>
           <div className=" font-normal translate-y-[-4px] text-[22px]">
-            Sawit Charuekpoonpol
+            {user.firstNameEN} {user.lastNameEN}
           </div>
-          <div className=" font-light text-[16px]">Faculty of Engineering</div>
+          <div className=" font-light text-[16px]">
+            {getEnumByValue(FACULTY_EN, user.facultyCode)}
+          </div>
         </div>
         <div className="flex flex-col justify-end">
           <div className="bg-[rgba(78,78,80,0.30)] rounded-[25px] mb-5  flex-col  p-6 h-[640px] scroll-smooth  font-sf-pro">
@@ -67,15 +73,14 @@ export default function SelectDepartment() {
                       checked={isChecked}
                       onChange={() => handleCheckboxChange(key)}
                     />
-                    {DEPARTMENT_EN[key as keyof typeof DEPARTMENT_EN]} (
-                    {key.replace("_", "-")})
+                    {getEnumByKey(DEPARTMENT_EN, key)} ({key.replace("_", "-")})
                   </div>
                 );
               })}
             </div>
           </div>
           <Button className="rounded-[15px] text-[#6C67A5]   h-12 font-sf-pro text-[16px] border-none bg-[#ffffff] bg-opacity-75 hover:bg-opacity-90 hover:bg-[#ffffff] hover:text-[#6C67A5] hover:border-none">
-            Get Start{" "}
+            Get Start
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="15"

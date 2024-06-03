@@ -1,5 +1,5 @@
 import { useState } from "react";
-import cmulogo from "../assets/image/cmuLogo.png";
+import cmulogo from "@/assets/image/cmuLogo.png";
 import { Button } from "@mantine/core";
 
 export default function Sidebar() {
