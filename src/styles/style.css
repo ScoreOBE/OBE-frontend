@@ -10,3 +10,11 @@
     rgba(11, 2, 104, 0.68) 96.5%
   );
 }
+
+.sidebar-linear-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(2, 4, 134, 0.64) 0%,
+    rgba(21, 0, 67, 0.47) 100%
+  );
+}

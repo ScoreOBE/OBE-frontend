@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Sidebar from "@/components/Sidebar";
+import Navbar from "@/components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/store/user";
 import Login from "@/pages/login";
@@ -18,7 +19,7 @@ function App() {
   const user: IModelUser = useSelector((state: any) => state.user.value);
   const dispatch = useDispatch();
   const path = window.location.pathname;
-  const showSidebar = !["/", "/select-department"].includes(path);
+  const showSidebar = ![ROUTE_PATH.LOGIN, ROUTE_PATH.SELECTED_DEPARTMENT, ROUTE_PATH.CMU_OAUTH_CALLBACK].includes(path as any);
 
   useEffect(() => {
     if (user.role || path == ROUTE_PATH.CMU_OAUTH_CALLBACK) return;
@@ -46,19 +47,22 @@ function App() {
         }`}
       >
         {showSidebar && <Sidebar />}
-        <Routes>
-          <Route path={ROUTE_PATH.LOGIN} element={<Login />} />
-          <Route
-            path={ROUTE_PATH.CMU_OAUTH_CALLBACK}
-            element={<CMUOAuthCallback />}
-          />
-          <Route
-            path={ROUTE_PATH.SELECTED_DEPARTMENT}
-            element={<SelectDepartment />}
-          />
-          <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />
-          <Route path="*" element={<Page404 />} />
-        </Routes>
+        <div className="flex flex-col w-full">
+          {showSidebar && <Navbar />}
+          <Routes>
+            <Route path={ROUTE_PATH.LOGIN} element={<Login />} />
+            <Route
+              path={ROUTE_PATH.CMU_OAUTH_CALLBACK}
+              element={<CMUOAuthCallback />}
+            />
+            <Route
+              path={ROUTE_PATH.SELECTED_DEPARTMENT}
+              element={<SelectDepartment />}
+            />
+            <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />
+            <Route path="*" element={<Page404 />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );
