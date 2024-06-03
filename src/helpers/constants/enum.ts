@@ -1,4 +1,6 @@
-enum DEPARTMENT_CODE {
+
+
+export enum DEPARTMENT_CODE {
   CE,
   EE,
   ENV,
@@ -13,7 +15,7 @@ enum DEPARTMENT_CODE {
   IE_INTER,
 }
 
-enum DEPARTMENT_TH {
+export enum DEPARTMENT_TH {
   CE = "วิศวกรรมโยธา",
   EE = "วิศวกรรมไฟฟ้า",
   ENV = "วิศวกรรมสิ่งแวดล้อม",
@@ -28,7 +30,7 @@ enum DEPARTMENT_TH {
   IE_INTER = "วิศวกรรมอุตสาหการและการจัดการโลจิสติกส์",
 }
 
-enum DEPARTMENT_EN {
+export enum DEPARTMENT_EN {
   CE = "Civil Engineering",
   EE = "Electrical Engineering",
   ENV = "Environmental Engineering",
@@ -37,8 +39,10 @@ enum DEPARTMENT_EN {
   MN = "Mining Engineering",
   CPE = "Computer Engineering",
   ISNE = "Information Systems and Network Engineering",
-  ME_INTTER = "Mechanical Engineering and Engineering Project Management",
+  ME_INTER = "Mechanical Engineering and Engineering Project Management",
   REAI = "Robotics Engineering and Artificial Intelligence",
   INTEGRATION = "Integrated Engineering",
   IE_INTER = "Industrial Engineering and Logistics Management",
 }
+
+

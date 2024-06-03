@@ -26,8 +26,8 @@ export default function Login() {
         {/* // button login */}
         <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
           <Button
-            style={{ borderRadius: "12px" }}
-            className="bg-white mt-1  text-[#696AA9] font-sf-pro-rounded font-medium text-[14px] border-0 h-10 hover:bg-[#DFDFDF] hover:text-[#696AA9] hover:border-0 focus:outline-0"
+            
+            className="bg-white mt-1 rounded-[12px]  text-[#696AA9] font-sf-pro-rounded font-medium text-[14px] border-0 h-10 hover:bg-[#DFDFDF] hover:text-[#696AA9] hover:border-0 focus:outline-0"
           >
             <img
               src={cmulogoLogin}
