@@ -35,8 +35,6 @@ const getConfig = (configService: any, params?: any) => {
       ? { responseType: configService.responseType }
       : {}),
   };
-  console.log(config);
-  
   return config;
 };
 

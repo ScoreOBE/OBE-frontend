@@ -7,7 +7,7 @@ export interface IModelUser {
   lastNameEN: string;
   email: string;
   facultyCode: string;
-  departmentCode: string;
+  departmentCode: string[];
   role: string;
   isAdmin: boolean;
   // enrollCourses: Course[];
