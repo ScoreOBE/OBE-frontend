@@ -8,11 +8,5 @@ export const login = async (code: string) => {
     code,
     redirectUri: import.meta.env.VITE_CMU_OAUTH_REDIRECT_URL,
   });
-
-  // if (isValidResponse(res)) {
-  //   const data = res.data;
-  //   return data;
-  // }
-
   return isValidResponse(res);
 };

@@ -1,26 +1,44 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import cmulogo from "@/assets/image/cmuLogo.png";
 import { DEPARTMENT_EN } from "@/helpers/constants/department.enum";
 import { Button, Checkbox } from "@mantine/core";
-import { useSelector } from "react-redux";
-import { IModelUser } from "@/models/ModelUser";
 import { FACULTY_EN } from "@/helpers/constants/faculty.enum";
 import { getEnumByKey, getEnumByValue } from "@/helpers/functions/function";
+import { useAppSelector } from "@/store";
+import { ROUTE_PATH } from "@/helpers/constants/route";
+import { updateUser } from "@/services/user/user.service";
+import { ROLE } from "@/helpers/constants/enum";
 
 export default function SelectDepartment() {
-  const user: IModelUser = useSelector((state: any) => state.user.value);
+  const navigate = useNavigate();
+  const user = useAppSelector((state) => state.user);
   const sortedKeys = Object.keys(DEPARTMENT_EN).sort((a: string, b: string) =>
     getEnumByKey(DEPARTMENT_EN, a).localeCompare(getEnumByKey(DEPARTMENT_EN, b))
   );
-  const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
-    {}
-  );
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
-  const handleCheckboxChange = (key: string) => {
-    setCheckedItems((prevCheckedItems) => ({
-      ...prevCheckedItems,
-      [key]: !prevCheckedItems[key],
-    }));
+  const handleCheckboxChange = (key: string, checked: boolean) => {
+    const selected = [...checkedItems];
+    if (checked) {
+      if (selected.length == 2) {
+        alert("Cannot Selected more than 2 departments");
+        return;
+      }
+      selected.push(key);
+    } else selected.splice(selected.indexOf(key), 1);
+
+    setCheckedItems([...selected]);
+  };
+
+  const getStart = async () => {
+    if (!checkedItems.length) {
+      alert("Pleace Selected departments at least 1");
+      return;
+    }
+    await updateUser({ departmentCode: checkedItems });
+    if (user.role == ROLE.STUDENT) navigate(ROUTE_PATH.DASHBOARD_STD);
+    else navigate(ROUTE_PATH.DASHBOARD_INS);
   };
 
   return (
@@ -56,7 +74,7 @@ export default function SelectDepartment() {
 
             <div className="flex flex-1 flex-col overflow-y-scroll h-[515px] gap-4 text-white ">
               {sortedKeys.map((key) => {
-                const isChecked = checkedItems[key];
+                const isChecked = checkedItems.includes(key);
                 return (
                   <div
                     key={key}
@@ -74,7 +92,7 @@ export default function SelectDepartment() {
                       }}
                       color="#5768D5"
                       checked={isChecked}
-                      onChange={() => handleCheckboxChange(key)}
+                      onChange={() => handleCheckboxChange(key, !isChecked)}
                     />
                     {getEnumByKey(DEPARTMENT_EN, key)} ({key.replace("_", "-")})
                   </div>
@@ -82,7 +100,10 @@ export default function SelectDepartment() {
               })}
             </div>
           </div>
-          <Button className="rounded-[15px] text-[#6C67A5]   h-12 font-sf-pro text-[16px] border-none bg-[#ffffff] bg-opacity-75 hover:bg-opacity-90 hover:bg-[#ffffff] hover:text-[#6C67A5] hover:border-none">
+          <Button
+            className="rounded-[15px] text-[#6C67A5] h-12 font-sf-pro text-[16px] bg-[#ffffff] bg-opacity-75 hover:bg-opacity-90 hover:bg-[#ffffff] hover:text-[#6C67A5]"
+            onClick={() => getStart()}
+          >
             Get Start
             <svg
               xmlns="http://www.w3.org/2000/svg"
