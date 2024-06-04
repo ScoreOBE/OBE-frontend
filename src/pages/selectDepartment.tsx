@@ -5,14 +5,16 @@ import { DEPARTMENT_EN } from "@/helpers/constants/department.enum";
 import { Button, Checkbox, Radio } from "@mantine/core";
 import { FACULTY_EN } from "@/helpers/constants/faculty.enum";
 import { getEnumByKey, getEnumByValue } from "@/helpers/functions/function";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { updateUser } from "@/services/user/user.service";
 import { ROLE } from "@/helpers/constants/enum";
+import { setUser } from "@/store/user";
 
 export default function SelectDepartment() {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const isStudent = user.role == ROLE.STUDENT;
   const sortedKeys = Object.keys(DEPARTMENT_EN).sort((a: string, b: string) =>
     getEnumByKey(DEPARTMENT_EN, a).localeCompare(getEnumByKey(DEPARTMENT_EN, b))
@@ -28,7 +30,8 @@ export default function SelectDepartment() {
   };
 
   const getStart = async () => {
-    await updateUser({ departmentCode: checkedItems });
+    const res = await updateUser({ departmentCode: checkedItems });
+    dispatch(setUser(res));
     if (isStudent) navigate(ROUTE_PATH.DASHBOARD_STD);
     else navigate(ROUTE_PATH.DASHBOARD_INS);
   };

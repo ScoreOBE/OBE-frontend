@@ -7,11 +7,14 @@ import "@mantine/core/styles.css";
 import "tailwindcss/tailwind.css";
 import { Provider } from "react-redux";
 import store from "@/store/index.ts";
+import { BrowserRouter as Router } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <MantineProvider>
-      <App />
+      <Router>
+        <App />
+      </Router>
     </MantineProvider>
   </Provider>
 );

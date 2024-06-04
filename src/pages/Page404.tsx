@@ -11,7 +11,7 @@ export default function NotFoundPage() {
         <p className="text-9xl font-bold">404</p>
         <p className="text-3xl font-bold">Page Not Found</p>
       </div>
-      <Button onClick={() => navigate(ROUTE_PATH.DASHBOARD_INS)}>
+      <Button onClick={() => navigate(ROUTE_PATH.LOGIN)}>
         Go Home
       </Button>
     </div>
