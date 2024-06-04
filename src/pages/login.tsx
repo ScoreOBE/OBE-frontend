@@ -6,13 +6,13 @@ import { useAppSelector } from "@/store";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
+import { isEmpty } from "lodash";
 
 export default function Login() {
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!user) return;
-    else {
+    if (!isEmpty(user)) {
       navigate(ROUTE_PATH.DASHBOARD_INS);
     }
   }, [user]);

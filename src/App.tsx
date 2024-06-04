@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
@@ -18,6 +18,7 @@ function App() {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const path = useLocation().pathname;
+  const navigate = useNavigate();
   const routesWithoutSidebar = [
     ROUTE_PATH.LOGIN,
     ROUTE_PATH.SELECTED_DEPARTMENT,
@@ -28,19 +29,19 @@ function App() {
 
   useEffect(() => {
     setShowSidebar(!isPageNotFound && !routesWithoutSidebar.includes(path));
-    if (path == ROUTE_PATH.CMU_OAUTH_CALLBACK || isPageNotFound) return;
+    if (!isEmpty(user) || path == ROUTE_PATH.CMU_OAUTH_CALLBACK || isPageNotFound) return;
 
     const fetchData = async () => {
       const res = await getUserInfo();
       if (res.email) {
         dispatch(setUser(res));
-      } else if (path != ROUTE_PATH.LOGIN) {
-        window.location.replace(ROUTE_PATH.LOGIN);
       }
     };
-    
-    if (isEmpty(user)) {
+
+    if (localStorage.getItem("token")) {
       fetchData();
+    } else if (path != ROUTE_PATH.LOGIN) {
+      navigate(ROUTE_PATH.LOGIN);
     }
   }, [user, path]);
 
