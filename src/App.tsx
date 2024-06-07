@@ -13,9 +13,12 @@ import SelectDepartment from "@/pages/selectDepartment";
 import Dashboard from "@/pages/dashboard";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { isEmpty } from "lodash";
+import { getAcademicYear } from "./services/academicYear/academicYear.service";
+import { setAcademicYear } from "./store/academicYear";
 
 function App() {
   const user = useAppSelector((state) => state.user);
+  const academicYear = useAppSelector((state) => state.academicYear);
   const dispatch = useAppDispatch();
   const path = useLocation().pathname;
   const navigate = useNavigate();
@@ -29,12 +32,19 @@ function App() {
 
   useEffect(() => {
     setShowSidebar(!isPageNotFound && !routesWithoutSidebar.includes(path));
-    if (!isEmpty(user) || path == ROUTE_PATH.CMU_OAUTH_CALLBACK || isPageNotFound) return;
+    if (
+      !isEmpty(user) ||
+      path == ROUTE_PATH.CMU_OAUTH_CALLBACK ||
+      isPageNotFound
+    )
+      return;
 
     const fetchData = async () => {
       const res = await getUserInfo();
       if (res.email) {
         dispatch(setUser(res));
+        const rsAcademicYear = await getAcademicYear();
+        dispatch(setAcademicYear(rsAcademicYear));
       }
     };
 
