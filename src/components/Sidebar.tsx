@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import cmulogo from "@/assets/image/cmuLogo.png";
 import { Button } from "@mantine/core";
+import { useAppSelector } from "@/store";
+import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 
 export default function Sidebar() {
   const [active, setActive] = useState(false);
+  const academicYear = useAppSelector((state) => state.academicYear);
+  const [selectedTerm, setSelectedTerm] = useState(
+    academicYear?.find((e) => e.isActive)
+  );
+
+  useEffect(() => {
+    if (academicYear.length) {
+      setSelectedTerm(academicYear.find((e) => e.isActive));
+    }
+  }, [academicYear]);
 
   return (
     <div className="w-[270px] h-screen flex justify-center font-sf-pro ">
@@ -58,7 +70,10 @@ export default function Sidebar() {
             >
               <div className="flex flex-col justify-start items-start gap-[7px]">
                 <p className="font-medium text-[14px]">Semester</p>
-                <p className="font-normal text-[12px]">Course (1/67)</p>
+                <p className="font-normal text-[12px]">
+                  Course ({selectedTerm?.semester}/
+                  {selectedTerm?.year.toString().slice(-2)})
+                </p>
               </div>
             </Button>
           </div>
