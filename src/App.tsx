@@ -15,6 +15,8 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { isEmpty } from "lodash";
 import { getAcademicYear } from "./services/academicYear/academicYear.service";
 import { setAcademicYear } from "./store/academicYear";
+import { ROLE } from "./helpers/constants/enum";
+import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
 
 function App() {
   const user = useAppSelector((state) => state.user);
@@ -43,7 +45,8 @@ function App() {
       const res = await getUserInfo();
       if (res.email) {
         dispatch(setUser(res));
-        const rsAcademicYear = await getAcademicYear();
+        let params = new AcademicYearRequestDTO();
+        const rsAcademicYear = await getAcademicYear(params);
         dispatch(setAcademicYear(rsAcademicYear));
       }
     };

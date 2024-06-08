@@ -1,11 +1,12 @@
 import { isValidResponse } from "@/helpers/functions/validation";
 import { academicYearController } from "./academicYear.repository";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
+import { AcademicYearRequestDTO } from "./dto/academicYear.dto";
 
 const academicYearService = academicYearController();
 
-export const getAcademicYear = async () => {
-  const res = await academicYearService.getAcademicYear();
+export const getAcademicYear = async (params?: AcademicYearRequestDTO) => {
+  const res = await academicYearService.getAcademicYear(params);
   return isValidResponse(res);
 };
 export const createAcademicYear = async (
