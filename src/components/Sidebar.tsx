@@ -16,7 +16,7 @@ export default function Sidebar() {
 
   return (
     <div className="w-[270px] h-screen flex justify-center font-sf-pro ">
-      <div className="absolute top-5 flex flex-col gap-11 text-white ">
+      <div className="absolute top-5 flex flex-col gap-10 text-white ">
         <img src={cmulogo} alt="CMULogo" className="h-[24px]" />
 
         {/* instructor dashboard */}
