@@ -12,3 +12,4 @@ export const updateUser = async (params: Partial<IModelUser>) => {
   const res = await userService.updateUser(params);
   return isValidResponse(res);
 };
+
