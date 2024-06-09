@@ -18,3 +18,43 @@
     rgba(21, 0, 67, 0.47) 100%
   );
 }
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  height: 150px;
+}
+
+:root {
+  --tqf-color-done: #06b84d;
+  --tqf-color-in-progress: #f39d4e;
+  --tqf-color-no-data: #a2a2a2;
+}
+
+.tqf-done {
+  color: var(--tqf-color-done);
+  border-color: var(--tqf-color-done);
+}
+
+.tqf-in-progress {
+  color: var(--tqf-color-in-progress);
+  border-color: var(--tqf-color-in-progress);
+}
+
+.tqf-no-data {
+  color: var(--tqf-color-no-data);
+  border-color: var(--tqf-color-no-data);
+}
+
+.tqf-done-with-bg {
+  background-color: var(--tqf-color-done);
+}
+
+.tqf-in-progress-with-bg {
+  background-color: var(--tqf-color-in-progress);
+}
+
+.tqf-no-data-with-bg {
+  background-color: var(--tqf-color-no-data);
+}

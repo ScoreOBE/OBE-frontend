@@ -1,7 +1,7 @@
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { createSlice } from "@reduxjs/toolkit";
 
-export const AcademicYearSlice = createSlice({
+export const academicYearSlice = createSlice({
   name: "academicYear",
   initialState: [] as IModelAcademicYear[],
   reducers: {
@@ -11,6 +11,6 @@ export const AcademicYearSlice = createSlice({
   },
 });
 
-export const { setAcademicYear } = AcademicYearSlice.actions;
+export const { setAcademicYear } = academicYearSlice.actions;
 
-export default AcademicYearSlice.reducer;
+export default academicYearSlice.reducer;
