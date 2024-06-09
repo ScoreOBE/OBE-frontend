@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import cmulogo from "@/assets/image/cmuLogo.png";
 import { Button, Modal, Select } from "@mantine/core";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import Icon from "./Icon";
 import { IconChevronDown } from "@tabler/icons-react";
 import CalendarIcon from "@/assets/icons/calendar.svg?react";
 import { useDisclosure } from "@mantine/hooks";
+import { getCourse } from "@/services/course/course.service";
+import { CourseRequestDTO } from "@/services/course/dto/course.dto";
+import { setCourse } from "@/store/course";
 
 export default function Sidebar() {
   const [openedFilterTerm, { open: openFilterTerm, close: closeFilterTerm }] =
     useDisclosure(false);
+  const payloadCourse = new CourseRequestDTO();
   const academicYear = useAppSelector((state) => state.academicYear);
+  const course = useAppSelector((state) => state.course);
+  const dispatch = useAppDispatch();
   const [term, setTerm] = useState(academicYear[0]);
   const termOption = academicYear.map((e) => {
     return { label: `${e.semester}/${e.year}`, value: e.id };
@@ -18,17 +24,28 @@ export default function Sidebar() {
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState(termOption[0]);
 
+  const fetchCourse = async (id: string) => {
+    payloadCourse.academicYear = id;
+    const res = await getCourse(payloadCourse);
+    if (res.length) {
+      dispatch(setCourse(res));
+    }
+  };
+
   useEffect(() => {
     if (academicYear.length) {
       setTerm(academicYear[0]);
       setSelectedTerm(termOption[0]);
+      if (!course.length) {
+        fetchCourse(academicYear[0].id);
+      }
     }
-  }, [academicYear]);
+  }, [academicYear, course]);
 
   const confirmFilterTerm = async () => {
     closeFilterTerm();
     setTerm(academicYear.find((e) => e.id == selectedTerm.value)!);
-    // const res = await getCourseByAcademicYear(term.id);
+    fetchCourse(selectedTerm.value);
   };
 
   return (
@@ -65,7 +82,11 @@ export default function Sidebar() {
           onDropdownOpen={() => setOpenedDropdown(true)}
           onDropdownClose={() => setOpenedDropdown(false)}
         />
-        <Button className="w-full" color="#6869AD" onClick={() => confirmFilterTerm()}>
+        <Button
+          className="w-full"
+          color="#6869AD"
+          onClick={() => confirmFilterTerm()}
+        >
           OK
         </Button>
       </Modal>
@@ -105,7 +126,8 @@ export default function Sidebar() {
                 <p className="font-medium text-[14px]">Semester</p>
                 <p className="font-normal text-[12px]">
                   Course (
-                  {term && `${term.semester}/${term.year.toString().slice(-2)}`})
+                  {term && `${term.semester}/${term.year.toString().slice(-2)}`}
+                  )
                 </p>
               </div>
             </Button>

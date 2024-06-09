@@ -2,9 +2,13 @@ import { useAppSelector } from "@/store";
 import { Button } from "@mantine/core";
 import { useEffect } from "react";
 import { IconPlus } from "@tabler/icons-react";
+import { statusColor } from "@/helpers/functions/function";
+import { TQF_STATUS } from "@/helpers/constants/enum";
 
 export default function Dashboard() {
   const user = useAppSelector((state) => state.user);
+  const course = useAppSelector((state) => state.course);
+
   return (
     <div className=" bg-[#F6F6F6] flex flex-col  h-full w-full p-6 py-5 gap-3">
       <div className="flex flex-row items-center justify-between">
@@ -24,9 +28,40 @@ export default function Dashboard() {
         </Button>
       </div>
       <div
-        className="flex w-full h-full bg-white rounded-[5px] p-5"
+        className="flex flex-wrap w-full h-full bg-white rounded-[5px] p-5"
         style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.50)" }}
-      ></div>
+      >
+        {course.map((item) => {
+          const statusTQF3 = statusColor(item.TQF3?.status);
+          const statusTQF5 = statusColor(item.TQF5?.status);
+          return (
+            <div
+              key={item.id}
+              className="card justify-between rounded-md"
+              style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.50)" }}
+            >
+              <div className="p-2.5">
+                <p className="font-semibold">{item.courseNo}</p>
+                <p className="text-xs font-medium">{item.courseName}</p>
+              </div>
+              <div className="bg-primary flex justify-between rounded-b-md">
+                <p className="p-2.5 text-white">
+                  {item.sections.length} Section
+                  {item.sections.length > 1 ? "s" : ""}
+                </p>
+                <div className="flex gap-3 px-2.5 py-1 justify-end items-center">
+                  <p className={`px-1 border-2 rounded-md ${statusTQF3}`}>
+                    TQF 3
+                  </p>
+                  <p className={`px-1 border-2 rounded-md ${statusTQF5}`}>
+                    TQF 5
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

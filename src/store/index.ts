@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./user";
 import { useDispatch, useSelector } from "react-redux";
+import userReducer from "./user";
 import academicYearReducer from "./academicYear";
+import courseReducer from "./course";
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     academicYear: academicYearReducer,
+    course: courseReducer,
   },
 });
 
