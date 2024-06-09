@@ -27,7 +27,7 @@ export default function Sidebar() {
   const fetchCourse = async (id: string) => {
     payloadCourse.academicYear = id;
     const res = await getCourse(payloadCourse);
-    if (res.length) {
+    if (res) {
       dispatch(setCourse(res));
     }
   };
@@ -40,7 +40,7 @@ export default function Sidebar() {
         fetchCourse(academicYear[0].id);
       }
     }
-  }, [academicYear, course]);
+  }, [academicYear]);
 
   const confirmFilterTerm = async () => {
     closeFilterTerm();
