@@ -1,21 +1,75 @@
 import { useEffect, useState } from "react";
 import cmulogo from "@/assets/image/cmuLogo.png";
-import { Button } from "@mantine/core";
+import { Button, Modal, Select } from "@mantine/core";
 import { useAppSelector } from "@/store";
 import Icon from "./Icon";
+import { IconChevronDown } from "@tabler/icons-react";
 import CalendarIcon from "@/assets/icons/calendar.svg?react";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function Sidebar() {
-  const [active, setActive] = useState(false);
+  const [openedFilterTerm, { open: openFilterTerm, close: closeFilterTerm }] =
+    useDisclosure(false);
   const academicYear = useAppSelector((state) => state.academicYear);
-  const [selectedTerm, setSelectedTerm] = useState(academicYear[0]);
+  const [term, setTerm] = useState(academicYear[0]);
+  const termOption = academicYear.map((e) => {
+    return { label: `${e.semester}/${e.year}`, value: e.id };
+  });
+  const [openedDropdown, setOpenedDropdown] = useState(false);
+  const [selectedTerm, setSelectedTerm] = useState(termOption[0]);
 
   useEffect(() => {
-    if (academicYear.length) setSelectedTerm(academicYear[0]);
+    if (academicYear.length) {
+      setTerm(academicYear[0]);
+      setSelectedTerm(termOption[0]);
+    }
   }, [academicYear]);
 
+  const confirmFilterTerm = async () => {
+    closeFilterTerm();
+    setTerm(academicYear.find((e) => e.id == selectedTerm.value)!);
+    // const res = await getCourseByAcademicYear(term.id);
+  };
+
   return (
-    <div className="w-[270px] h-screen flex justify-center font-sf-pro ">
+    <div className="w-[270px] h-screen flex justify-center font-sf-pro">
+      <Modal
+        opened={openedFilterTerm}
+        onClose={closeFilterTerm}
+        closeOnClickOutside={false}
+        title="Filter"
+        size="400px"
+        centered
+        classNames={{ title: "text-primary font-medium text-lg" }}
+      >
+        <Select
+          label="Semester"
+          data={termOption}
+          value={selectedTerm?.value}
+          onChange={(_value, option) => setSelectedTerm(option)}
+          allowDeselect={false}
+          withCheckIcon={false}
+          className="rounded-md mb-5 border-none w-1/2"
+          classNames={{
+            label: "font-medium mb-1",
+            input: "text-primary font-medium",
+            option: "hover:bg-[#DDDDF6] text-primary font-medium",
+          }}
+          rightSection={
+            <IconChevronDown
+              className={`${
+                openedDropdown ? "rotate-180" : ""
+              } stroke-primary stroke-2`}
+            />
+          }
+          onDropdownOpen={() => setOpenedDropdown(true)}
+          onDropdownClose={() => setOpenedDropdown(false)}
+        />
+        <Button className="w-full" color="#6869AD" onClick={() => confirmFilterTerm()}>
+          OK
+        </Button>
+      </Modal>
+
       <div className="absolute top-5 flex flex-col gap-10 text-white ">
         <img src={cmulogo} alt="CMULogo" className="h-[24px]" />
 
@@ -37,20 +91,21 @@ export default function Sidebar() {
           <div className="flex flex-col gap-3">
             <p className="text-md font-semibold">Course</p>
             <Button
-              className="bg-transparent w-full h-[50px] flex justify-start items-center  px-3 py-1 border-none rounded-lg text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-[#6869AD] focus:border-none group"
+              className="bg-transparent w-full h-[50px] flex justify-start items-center  px-3 py-1 border-none rounded-lg text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-primary focus:border-none group"
               leftSection={
                 <Icon
-                  className="-mt-4 mr-1 hover:stroke-[#6869AD]"
+                  className="-mt-4 mr-1 hover:stroke-primary"
                   IconComponent={CalendarIcon}
                 />
               }
               variant="default"
+              onClick={openFilterTerm}
             >
               <div className="flex flex-col justify-start items-start gap-[7px]">
                 <p className="font-medium text-[14px]">Semester</p>
                 <p className="font-normal text-[12px]">
-                  Course ({selectedTerm?.semester}/
-                  {selectedTerm?.year?.toString().slice(-2)})
+                  Course (
+                  {term && `${term.semester}/${term.year.toString().slice(-2)}`})
                 </p>
               </div>
             </Button>
