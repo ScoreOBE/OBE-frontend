@@ -12,6 +12,7 @@ export const statusColor = (
   status: TQF_STATUS | undefined,
   bg: boolean = false
 ): string => {
+  
   const done = "tqf-done";
   const inProgress = "tqf-in-progress";
   const noData = "tqf-no-data";
@@ -19,10 +20,13 @@ export const statusColor = (
   switch (status) {
     case TQF_STATUS.DONE:
       className = done;
+      break;
     case TQF_STATUS.IN_PROGRESS:
       className = inProgress;
+      break;
     default:
       className = noData;
+      break;
   }
   if (bg) {
     className += ` ${className}-with-bg`;

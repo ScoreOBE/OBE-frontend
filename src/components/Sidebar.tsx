@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import cmulogo from "@/assets/image/cmuLogo.png";
-import { Button, Modal, Select } from "@mantine/core";
+import { Button, Modal, Select, Transition } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import Icon from "./Icon";
 import { IconChevronDown } from "@tabler/icons-react";
@@ -36,6 +36,7 @@ export default function Sidebar() {
     if (academicYear.length) {
       setTerm(academicYear[0]);
       setSelectedTerm(termOption[0]);
+      localStorage.setItem("term", termOption[0]?.label)
       if (!course.length) {
         fetchCourse(academicYear[0].id);
       }
@@ -45,11 +46,13 @@ export default function Sidebar() {
   const confirmFilterTerm = async () => {
     closeFilterTerm();
     setTerm(academicYear.find((e) => e.id == selectedTerm.value)!);
+    localStorage.setItem("term", selectedTerm.label)
     fetchCourse(selectedTerm.value);
   };
 
   return (
     <div className="w-[270px] h-screen flex justify-center font-sf-pro">
+      
       <Modal
         opened={openedFilterTerm}
         onClose={closeFilterTerm}
@@ -57,6 +60,7 @@ export default function Sidebar() {
         title="Filter"
         size="400px"
         centered
+        transitionProps={{ transition: "pop" }}
         classNames={{ title: "text-primary font-medium text-lg" }}
       >
         <Select
