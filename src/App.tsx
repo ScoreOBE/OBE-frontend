@@ -35,16 +35,18 @@ function App() {
   useEffect(() => {
     setShowSidebar(!isPageNotFound && !routesWithoutSidebar.includes(path));
     if (
-      !isEmpty(user) ||
+      (!isEmpty(user) && !isEmpty(academicYear)) ||
       path == ROUTE_PATH.CMU_OAUTH_CALLBACK ||
       isPageNotFound
     )
       return;
 
     const fetchData = async () => {
-      const res = await getUserInfo();
-      if (res.email) {
+      if (!user.email) {
+        const res = await getUserInfo();
         dispatch(setUser(res));
+      }
+      if (!academicYear.length) {
         let params = new AcademicYearRequestDTO();
         const rsAcademicYear = await getAcademicYear(params);
         dispatch(setAcademicYear(rsAcademicYear));
