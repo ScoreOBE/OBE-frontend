@@ -6,7 +6,7 @@ export const courseSlice = createSlice({
   initialState: [] as IModelCourse[],
   reducers: {
     setCourse: (state, data) => {
-      return [...state, ...data.payload];
+      return [...data.payload];
     },
   },
 });
