@@ -51,7 +51,7 @@ export default function Sidebar() {
         </Button>
       </Modal>
 
-      <div className="absolute top-5 flex flex-col gap-11 text-white ">
+      <div className="absolute top-5 flex flex-col gap-10 text-white ">
         <img src={cmulogo} alt="CMULogo" className="h-[24px]" />
 
         {/* instructor dashboard */}
