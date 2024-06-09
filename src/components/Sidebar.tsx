@@ -3,7 +3,7 @@ import cmulogo from "@/assets/image/cmuLogo.png";
 import { Button, Modal, Select } from "@mantine/core";
 import { useAppSelector } from "@/store";
 import Icon from "./Icon";
-import { FaChevronDown } from "react-icons/fa6";
+import { IconChevronDown } from "@tabler/icons-react";
 import CalendarIcon from "@/assets/icons/calendar.svg?react";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -11,19 +11,28 @@ export default function Sidebar() {
   const [openedFilterTerm, { open: openFilterTerm, close: closeFilterTerm }] =
     useDisclosure(false);
   const academicYear = useAppSelector((state) => state.academicYear);
+  const [term, setTerm] = useState(academicYear[0]);
   const termOption = academicYear.map((e) => {
     return { label: `${e.semester}/${e.year}`, value: e.id };
   });
+  const [openedDropdown, setOpenedDropdown] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState(termOption[0]);
 
   useEffect(() => {
     if (academicYear.length) {
+      setTerm(academicYear[0]);
       setSelectedTerm(termOption[0]);
     }
   }, [academicYear]);
 
+  const confirmFilterTerm = async () => {
+    closeFilterTerm();
+    setTerm(academicYear.find((e) => e.id == selectedTerm.value)!);
+    // const res = await getCourseByAcademicYear(term.id);
+  };
+
   return (
-    <div className="w-[270px] h-screen flex justify-center font-sf-pro ">
+    <div className="w-[270px] h-screen flex justify-center font-sf-pro">
       <Modal
         opened={openedFilterTerm}
         onClose={closeFilterTerm}
@@ -31,6 +40,7 @@ export default function Sidebar() {
         title="Filter"
         size="400px"
         centered
+        classNames={{ title: "text-primary font-medium text-lg" }}
       >
         <Select
           label="Semester"
@@ -39,14 +49,23 @@ export default function Sidebar() {
           onChange={(_value, option) => setSelectedTerm(option)}
           allowDeselect={false}
           withCheckIcon={false}
-          radius="md"
-          my="md"
-          bd={"none"}
-          classNames={{label: "text-primary"}}
-          rightSection={<FaChevronDown fill="#6869AD" />}
-          // onDropdownOpen={()=>}
+          className="rounded-md mb-5 border-none w-1/2"
+          classNames={{
+            label: "font-medium mb-1",
+            input: "text-primary font-medium",
+            option: "hover:bg-[#DDDDF6] text-primary font-medium",
+          }}
+          rightSection={
+            <IconChevronDown
+              className={`${
+                openedDropdown ? "rotate-180" : ""
+              } stroke-primary stroke-2`}
+            />
+          }
+          onDropdownOpen={() => setOpenedDropdown(true)}
+          onDropdownClose={() => setOpenedDropdown(false)}
         />
-        <Button w={"100%"} color="#6869AD">
+        <Button className="w-full" color="#6869AD" onClick={() => confirmFilterTerm()}>
           OK
         </Button>
       </Modal>
@@ -85,7 +104,8 @@ export default function Sidebar() {
               <div className="flex flex-col justify-start items-start gap-[7px]">
                 <p className="font-medium text-[14px]">Semester</p>
                 <p className="font-normal text-[12px]">
-                  Course ({selectedTerm?.label})
+                  Course (
+                  {term && `${term.semester}/${term.year.toString().slice(-2)}`})
                 </p>
               </div>
             </Button>
