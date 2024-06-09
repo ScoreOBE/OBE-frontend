@@ -65,7 +65,7 @@ function App() {
       }`}
     >
       {showSidebar && <Sidebar />}
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col h-full w-full overflow-hidden">
         {showSidebar && <Navbar />}
         <Routes>
           <Route path={ROUTE_PATH.LOGIN} element={<Login />} />
