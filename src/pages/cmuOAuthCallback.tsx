@@ -23,7 +23,7 @@ export default function CMUOAuthCallback() {
       if (res.token) {
         localStorage.setItem("token", res.token);
         dispatch(setUser(res.user));
-        if (res.user.departmentCode) navigate(ROUTE_PATH.DASHBOARD_INS);
+        if (res.user.departmentCode.length) navigate(ROUTE_PATH.DASHBOARD_INS);
         else navigate(ROUTE_PATH.SELECTED_DEPARTMENT);
       } else {
         setMessage(res);
