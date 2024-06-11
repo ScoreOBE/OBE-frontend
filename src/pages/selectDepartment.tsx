@@ -51,12 +51,14 @@ export default function SelectDepartment() {
   return (
     <div className=" custom-radial-gradient h-screen w-screen">
       <div className="absolute top-12 left-12 flex justify-start items-center gap-3">
-        <Button
-          className="rounded-full p-2 bg-white bg-opacity-0 hover:bg-[#d4d4d4] hover:bg-opacity-100 text-white hover:text-primary"
-          onClick={() => navigate(-1)}
-        >
-          <FaArrowLeftLong size={20} />
-        </Button>
+        {user.departmentCode?.length && (
+          <Button
+            className="rounded-full p-2 bg-white bg-opacity-0 hover:bg-[#d4d4d4] hover:bg-opacity-100 text-white hover:text-primary"
+            onClick={() => navigate(-1)}
+          >
+            <FaArrowLeftLong size={20} />
+          </Button>
+        )}
         <img src={cmulogo} alt="CMULogo" className="h-[24px]" />
       </div>
       <div className="bg-[rgba(78,78,80,0.30)] h-screen w-screen flex justify-between px-36 items-center font-sf-pro">
