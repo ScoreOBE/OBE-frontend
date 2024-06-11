@@ -36,8 +36,7 @@ export default function Profile() {
   const Logout = () => {
     localStorage.removeItem("token");
     dispatch(setUser({}));
-    // navigate(ROUTE_PATH.LOGIN);
-    window.location.replace(ROUTE_PATH.LOGIN);
+    navigate(ROUTE_PATH.LOGIN, { replace: true });
   };
 
   return (

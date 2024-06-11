@@ -6,7 +6,7 @@ export const userSlice = createSlice({
   initialState: {} as IModelUser,
   reducers: {
     setUser: (state, data) => {
-      return { ...state, ...data.payload };
+      return { ...data.payload };
     },
   },
 });
