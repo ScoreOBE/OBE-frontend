@@ -1,3 +1,8 @@
+/* fix width InfiniteScroll */
+.infinite-scroll-component__outerdiv {
+  width: 100%;
+}
+
 .custom-radial-gradient {
   background: radial-gradient(
     98.92% 98.92% at 48.99% 98.48%,
@@ -25,8 +30,8 @@
 }
 
 :root {
-  --tqf-color-done: #3DFF45;
-  --tqf-color-in-progress: #FFF50D;
+  --tqf-color-done: #3dff45;
+  --tqf-color-in-progress: #fff50d;
   --tqf-color-no-data: #a2a2a2;
 }
 
@@ -46,13 +51,16 @@
 }
 
 .tqf-done-with-bg {
+  color: white;
   background-color: var(--tqf-color-done);
 }
 
 .tqf-in-progress-with-bg {
+  color: white;
   background-color: var(--tqf-color-in-progress);
 }
 
 .tqf-no-data-with-bg {
+  color: white;
   background-color: var(--tqf-color-no-data);
 }

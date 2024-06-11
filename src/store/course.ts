@@ -8,9 +8,12 @@ export const courseSlice = createSlice({
     setCourse: (state, data) => {
       return [...data.payload];
     },
+    addLoadMoreCourse: (state, data) => {
+      return [...state, ...data.payload];
+    },
   },
 });
 
-export const { setCourse } = courseSlice.actions;
+export const { setCourse, addLoadMoreCourse } = courseSlice.actions;
 
 export default courseSlice.reducer;
