@@ -51,7 +51,7 @@ export default function SelectDepartment() {
   return (
     <div className=" custom-radial-gradient h-screen w-screen">
       <div className="absolute top-12 left-12 flex justify-start items-center gap-3">
-        {user.departmentCode?.length && (
+        {user.departmentCode?.length > 0 && (
           <Button
             className="rounded-full p-2 bg-white bg-opacity-0 hover:bg-[#d4d4d4] hover:bg-opacity-100 text-white hover:text-primary"
             onClick={() => navigate(-1)}

@@ -1,5 +1,5 @@
 export const ROUTE_PATH = {
-  LOGIN: "/login",
+  LOGIN: "/",
   CMU_OAUTH_CALLBACK: "/cmuOAuthCallback",
   DASHBOARD_INS: "/dashboard",
   DASHBOARD_STD: "/dashboard-student",
