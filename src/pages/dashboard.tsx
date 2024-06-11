@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/store";
+import store, { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { Button } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
@@ -6,7 +6,7 @@ import { statusColor } from "@/helpers/functions/function";
 import { useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import { addLoadMoreCourse } from "@/store/course";
+import { addLoadMoreCourse, setCourse } from "@/store/course";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 
@@ -37,6 +37,17 @@ export default function Dashboard() {
       }
     }
   }, [academicYear, params]);
+
+  useEffect(() => {
+    if (term) {
+      setPayload({
+        ...new CourseRequestDTO(),
+        academicYear: term.id,
+        hasMore: true,
+      });
+      localStorage.removeItem("search");
+    }
+  }, [localStorage.getItem("search")]);
 
   const onSowMore = async () => {
     if (payload.academicYear) {
@@ -86,6 +97,7 @@ export default function Dashboard() {
           loader={<></>}
           hasMore={payload?.hasMore}
           className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-1"
+          style={{ height: "fit-content", maxHeight: "100%" }}
         >
           {course.map((item) => {
             const statusTQF3 = statusColor(item.TQF3?.status);
