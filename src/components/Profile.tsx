@@ -11,6 +11,7 @@ import { IconLogout } from "@tabler/icons-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setUser } from "@/store/user";
+import { ROLE } from "@/helpers/constants/enum";
 
 export default function Profile() {
   const user = useAppSelector((state) => state.user);
@@ -21,16 +22,14 @@ export default function Profile() {
 
   const getRoleColor = (role: any) => {
     switch (role) {
-      case "Student":
+      case ROLE.STUDENT:
         return "#6869AD";
-      case "Instructor":
+      case ROLE.INSTRUCTOR:
         return "#13A5A5";
-      case "Admin":
+      case ROLE.ADMIN:
         return "#009BCC";
-      case "S. Admin":
+      case ROLE.SUPREME_ADMIN:
         return "#1B75DF";
-      default:
-        return "#6869AD";
     }
   };
 
@@ -39,7 +38,6 @@ export default function Profile() {
     dispatch(setUser({}));
     // navigate(ROUTE_PATH.LOGIN);
     window.location.replace(ROUTE_PATH.LOGIN);
-    console.log(path);
   };
 
   return (
@@ -85,7 +83,10 @@ export default function Profile() {
             </div>
           </Menu.Item>
           <Menu.Divider />
-          <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+          <Menu.Item
+            className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20"
+            onClick={() => navigate(ROUTE_PATH.SELECTED_DEPARTMENT)}
+          >
             <div className="flex items-center gap-2">
               <IconStatusChange
                 className="h-5 w-5"
@@ -106,7 +107,10 @@ export default function Profile() {
             </div>
           </Menu.Item>
           <Menu.Divider />
-          <Menu.Item className="text-[#FF4747] h-8 w-[200px] hover:bg-[#d55757]/20" onClick={Logout}>
+          <Menu.Item
+            className="text-[#FF4747] h-8 w-[200px] hover:bg-[#d55757]/20"
+            onClick={Logout}
+          >
             <div className="flex items-center gap-2">
               <IconLogout className="h-5 w-5" stroke={1.5} color="#FF4747" />
               <span>Log out</span>
