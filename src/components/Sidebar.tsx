@@ -37,6 +37,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     if (academicYear.length) {
+      setTerm(academicYear[0]);
       setSelectedTerm(termOption[0]);
       if (!course.length) {
         fetchCourse(academicYear[0].id);
