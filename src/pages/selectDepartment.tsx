@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import cmulogo from "@/assets/image/cmuLogo.png";
+import { FaArrowLeftLong } from "react-icons/fa6";
 import { DEPARTMENT_EN } from "@/helpers/constants/department.enum";
 import { Button, Checkbox, Radio } from "@mantine/core";
 import { FACULTY_EN } from "@/helpers/constants/faculty.enum";
@@ -21,12 +22,22 @@ export default function SelectDepartment() {
     getEnumByKey(DEPARTMENT_EN, a).localeCompare(getEnumByKey(DEPARTMENT_EN, b))
   );
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const [notChange, setNotChange] = useState(false);
+
+  useEffect(() => {
+    if (user.departmentCode?.length) {
+      setCheckedItems([...user.departmentCode]);
+      setNotChange(true);
+    }
+  }, [user]);
 
   const handleCheckboxChange = (key: string, checked: boolean) => {
     const selected = [...checkedItems];
     if (checked) selected.push(key);
     else selected.splice(selected.indexOf(key), 1);
-
+    if (user.departmentCode == selected) {
+      setNotChange(true);
+    }
     setCheckedItems([...selected]);
   };
 
@@ -39,11 +50,15 @@ export default function SelectDepartment() {
 
   return (
     <div className=" custom-radial-gradient h-screen w-screen">
-      <img
-        src={cmulogo}
-        alt="CMULogo"
-        className=" absolute top-12 left-12 h-[24px]"
-      />
+      <div className="absolute top-12 left-12 flex justify-start items-center gap-3">
+        <Button
+          className="rounded-full p-2 bg-white bg-opacity-0 hover:bg-[#d4d4d4] hover:bg-opacity-100 text-white hover:text-primary"
+          onClick={() => navigate(-1)}
+        >
+          <FaArrowLeftLong size={20} />
+        </Button>
+        <img src={cmulogo} alt="CMULogo" className="h-[24px]" />
+      </div>
       <div className="bg-[rgba(78,78,80,0.30)] h-screen w-screen flex justify-between px-36 items-center font-sf-pro">
         <div className="  text-white cursor-default">
           <motion.div
@@ -103,7 +118,9 @@ export default function SelectDepartment() {
                       onClick={() => {
                         isStudent
                           ? setCheckedItems([key])
-                          : disabled? "" : handleCheckboxChange(key, !isChecked);
+                          : disabled
+                          ? ""
+                          : handleCheckboxChange(key, !isChecked);
                       }}
                     >
                       {isStudent ? (
@@ -136,7 +153,7 @@ export default function SelectDepartment() {
                 })}
               </div>
             </div>
-            {checkedItems.length > 0 && (
+            {checkedItems.length > 0 && !notChange && (
               <motion.button
                 whileHover={{
                   scale: 1.05,
