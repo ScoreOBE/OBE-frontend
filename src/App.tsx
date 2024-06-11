@@ -46,7 +46,7 @@ function App() {
         const res = await getUserInfo();
         dispatch(setUser(res));
       }
-      if (!academicYear.length) {
+      if (user.email && !academicYear.length) {
         let params = new AcademicYearRequestDTO();
         const rsAcademicYear = await getAcademicYear(params);
         dispatch(setAcademicYear(rsAcademicYear));
@@ -62,7 +62,7 @@ function App() {
 
   return (
     <div
-      className={`flex  h-screen w-screen ${
+      className={`flex h-screen w-screen font-sf-pro ${
         showSidebar ? "sidebar-linear-gradient" : ""
       }`}
     >

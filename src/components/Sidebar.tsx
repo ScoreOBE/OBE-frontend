@@ -9,15 +9,18 @@ import { useDisclosure } from "@mantine/hooks";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { setCourse } from "@/store/course";
+import { useSearchParams } from "react-router-dom";
+import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 
 export default function Sidebar() {
   const [openedFilterTerm, { open: openFilterTerm, close: closeFilterTerm }] =
     useDisclosure(false);
+  const [params, setParams] = useSearchParams({});
+  const term = { year: params.get("year"), semester: params.get("semester") };
   const payloadCourse = new CourseRequestDTO();
   const academicYear = useAppSelector((state) => state.academicYear);
   const course = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();
-  const [term, setTerm] = useState(academicYear[0]);
   const termOption = academicYear.map((e) => {
     return { label: `${e.semester}/${e.year}`, value: e.id };
   });
@@ -28,7 +31,8 @@ export default function Sidebar() {
     payloadCourse.academicYear = id;
     const res = await getCourse(payloadCourse);
     if (res) {
-      dispatch(setCourse(res));
+      localStorage.setItem("totalCourses", res.totalCount);
+      dispatch(setCourse(res.courses));
     }
   };
 
@@ -36,23 +40,27 @@ export default function Sidebar() {
     if (academicYear.length) {
       setTerm(academicYear[0]);
       setSelectedTerm(termOption[0]);
-      localStorage.setItem("term", termOption[0]?.label)
       if (!course.length) {
         fetchCourse(academicYear[0].id);
       }
     }
   }, [academicYear]);
 
+  const setTerm = (data: IModelAcademicYear) => {
+    params.set("year", data.year.toString());
+    params.set("semester", data.semester.toString());
+    setParams(params);
+  };
+
   const confirmFilterTerm = async () => {
     closeFilterTerm();
-    setTerm(academicYear.find((e) => e.id == selectedTerm.value)!);
-    localStorage.setItem("term", selectedTerm.label)
+    const term = academicYear.find((e) => e.id == selectedTerm.value)!;
+    setTerm(term);
     fetchCourse(selectedTerm.value);
   };
 
   return (
     <div className="w-[270px] h-screen flex justify-center font-sf-pro">
-      
       <Modal
         opened={openedFilterTerm}
         onClose={closeFilterTerm}
@@ -129,9 +137,7 @@ export default function Sidebar() {
               <div className="flex flex-col justify-start items-start gap-[7px]">
                 <p className="font-medium text-[14px]">Semester</p>
                 <p className="font-normal text-[12px]">
-                  Course (
-                  {term && `${term.semester}/${term.year.toString().slice(-2)}`}
-                  )
+                  Course ({`${term.semester}/${term.year?.slice(-2)}`})
                 </p>
               </div>
             </Button>
