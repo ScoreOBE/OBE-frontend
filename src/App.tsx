@@ -54,7 +54,11 @@ function App() {
       if (!isEmpty(user) && !isEmpty(academicYear)) {
         return;
       }
-      if (user.departmentCode && !user.departmentCode.length) {
+      if (
+        user.departmentCode &&
+        !user.departmentCode.length &&
+        path != ROUTE_PATH.SELECTED_DEPARTMENT
+      ) {
         localStorage.removeItem("token");
       }
       fetchData();
