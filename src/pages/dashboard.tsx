@@ -9,6 +9,8 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { addLoadMoreCourse, setCourse } from "@/store/course";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
+import ModalAddCourse from "@/components/Modal/ModalAddCourse";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function Dashboard() {
   const user = useAppSelector((state) => state.user);
@@ -19,6 +21,8 @@ export default function Dashboard() {
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<IModelAcademicYear>();
+  const [openAddModal, { open: openedAddModal, close: closeAddModal }] =
+    useDisclosure(false);
 
   useEffect(() => {
     const year = parseInt(params.get("year")!);
@@ -67,6 +71,7 @@ export default function Dashboard() {
 
   return (
     <div className="bg-[#F6F6F6] flex flex-col h-full w-full p-6 py-5 gap-3 overflow-hidden">
+      <ModalAddCourse opened={openAddModal} onClose={closeAddModal} />
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-col">
           <p className="text-[#6869AD] text-[22px] font-medium mb-[2px]">
@@ -81,7 +86,10 @@ export default function Dashboard() {
             on your plate. Let dive in!
           </p>
         </div>
-        <Button className=" rounded-[8px] text-[12px] font-medium bg-[#6869AD] h-8 px-2 hover:bg-[#52538A]">
+        <Button
+          className=" rounded-[8px] text-[12px] font-medium bg-[#6869AD] h-8 px-2 hover:bg-[#52538A]"
+          onClick={openedAddModal}
+        >
           <IconPlus className="h-5 w-5 mr-1" stroke={1.5} color="#ffffff" />
           Add course
         </Button>
