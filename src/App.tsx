@@ -33,14 +33,6 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
-    setShowSidebar(!isPageNotFound && !routesWithoutSidebar.includes(path));
-    if (
-      (!isEmpty(user) && !isEmpty(academicYear)) ||
-      path == ROUTE_PATH.CMU_OAUTH_CALLBACK ||
-      isPageNotFound
-    )
-      return;
-
     const fetchData = async () => {
       if (!user.email) {
         const res = await getUserInfo();
@@ -53,7 +45,18 @@ function App() {
       }
     };
 
+    setShowSidebar(!isPageNotFound && !routesWithoutSidebar.includes(path));
+    if (path == ROUTE_PATH.CMU_OAUTH_CALLBACK || isPageNotFound) {
+      return;
+    }
+
     if (localStorage.getItem("token")) {
+      if (!isEmpty(user) && !isEmpty(academicYear)) {
+        return;
+      }
+      if (user.departmentCode && !user.departmentCode.length) {
+        localStorage.removeItem("token");
+      }
       fetchData();
     } else if (path != ROUTE_PATH.LOGIN) {
       navigate(ROUTE_PATH.LOGIN);

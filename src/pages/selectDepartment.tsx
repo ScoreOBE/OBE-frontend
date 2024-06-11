@@ -44,8 +44,9 @@ export default function SelectDepartment() {
   const getStart = async () => {
     const res = await updateUser({ departmentCode: checkedItems });
     dispatch(setUser(res));
-    if (isStudent) navigate(ROUTE_PATH.DASHBOARD_STD);
-    else navigate(ROUTE_PATH.DASHBOARD_INS);
+    // if (isStudent) navigate(ROUTE_PATH.DASHBOARD_STD);
+    // else navigate(ROUTE_PATH.DASHBOARD_INS);
+    navigate(ROUTE_PATH.DASHBOARD_INS);
   };
 
   return (
@@ -135,6 +136,7 @@ export default function SelectDepartment() {
                           color="#5768D5"
                           value={key}
                           checked={isChecked}
+                          readOnly
                         />
                       ) : (
                         <Checkbox
@@ -146,6 +148,7 @@ export default function SelectDepartment() {
                           color="#5768D5"
                           checked={isChecked}
                           disabled={disabled}
+                          readOnly
                         />
                       )}
                       {getEnumByKey(DEPARTMENT_EN, key)} (
