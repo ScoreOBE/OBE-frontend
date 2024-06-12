@@ -8,6 +8,12 @@ export const getUserInfo = async () => {
   const res = await userService.getUserInfo();
   return isValidResponse(res);
 };
+
+export const getInstructor = async () => {
+  const res = await userService.getInstructor();
+  return isValidResponse(res);
+} 
+
 export const updateUser = async (params: Partial<IModelUser>) => {
   const res = await userService.updateUser(params);
   return isValidResponse(res);
