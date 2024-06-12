@@ -4,17 +4,13 @@ type Props = {
   opened: boolean;
   onClose: () => void;
 };
-const initialState = {};
 export default function ModalAddCourse({ opened, onClose }: Props) {
   const [active, setActive] = useState(0);
   const nextStep = () => {
-    if (active == 4) {
-      closeModal();
-    }
-    setActive((current) => (current < 4 ? current + 1 : current));
+    if (active == 4) closeModal();
+    setActive((cur) => (cur < 4 ? cur + 1 : cur));
   };
-  const prevStep = () =>
-    setActive((current) => (current > 0 ? current - 1 : current));
+  const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
 
   const closeModal = () => {
     setActive(0);
@@ -27,7 +23,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       onClose={closeModal}
       closeOnClickOutside={false}
       title="Filter"
-      size="auto"
+      size="800px"
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{ title: "text-primary font-medium text-lg" }}
@@ -60,10 +56,12 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         </Stepper.Step>
       </Stepper>
 
-      <Group justify="center" mt="xl">
-        <Button variant="default" onClick={prevStep}>
-          Back
-        </Button>
+      <Group className="flex w-full justify-between mt-5">
+        {active > 0 && (
+          <Button variant="default" justify="start" onClick={prevStep}>
+            Back
+          </Button>
+        )}
         <Button onClick={nextStep}>{active == 4 ? "Done" : "Next"}</Button>
       </Group>
     </Modal>
