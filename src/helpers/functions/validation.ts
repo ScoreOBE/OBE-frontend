@@ -45,6 +45,13 @@ export const containsOnlyNumbers = (
   return true;
 };
 
+export const ellipsisText = (text: string, limit: number = 10) => {
+  if (typeof text !== "string") {
+    return "";
+  }
+  return text.length <= limit ? text : text.substring(0, limit).concat("...");
+};
+
 export const validateEmail = (email: string) => {
   const regex = /^\S+@cmu\.ac\.th$/i;
   return regex.test(email);
