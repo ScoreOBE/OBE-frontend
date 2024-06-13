@@ -1,6 +1,6 @@
 export interface IModelUser {
   id: string;
-  studentId: string;
+  studentId?: string;
   firstNameTH: string;
   lastNameTH: string;
   firstNameEN: string;
@@ -9,11 +9,10 @@ export interface IModelUser {
   facultyCode: string;
   departmentCode: string[];
   role: string;
-  isAdmin: boolean;
   // enrollCourses: Course[];
   // ownCourses: Course[];
   // coCourses: Course[];
-  enrollCourses: any[];
-  ownCourses: any[];
-  coCourses: any[];
+  enrollCourses?: any[];
+  ownCourses?: any[];
+  coCourses?: any[];
 }

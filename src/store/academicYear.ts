@@ -5,8 +5,8 @@ export const academicYearSlice = createSlice({
   name: "academicYear",
   initialState: [] as IModelAcademicYear[],
   reducers: {
-    setAcademicYear: (state, data) => {
-      return [...data.payload];
+    setAcademicYear: (state, action) => {
+      return [...action.payload];
     },
   },
 });

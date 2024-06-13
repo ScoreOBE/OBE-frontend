@@ -15,10 +15,8 @@ import { ROLE } from "@/helpers/constants/enum";
 
 export default function Profile() {
   const user = useAppSelector((state) => state.user);
-  const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const path = useLocation().pathname;
 
   const getRoleColor = (role: any) => {
     switch (role) {
@@ -43,10 +41,7 @@ export default function Profile() {
     <>
       <Menu trigger="click-hover" openDelay={100} closeDelay={400}>
         <Menu.Target>
-          <Button
-            className="flex flex-row justify-center bg-white items-center rounded-lg py-0.5 px-4 cursor-pointer hover:bg-gray-200"
-            onClick={() => setShowMenu(true)}
-          >
+          <Button className="flex flex-row justify-center bg-white items-center rounded-lg py-0.5 px-4 cursor-pointer hover:bg-gray-200">
             <div className="flex flex-col text-[12px] gap-1 text-end mr-3">
               <p className="text-black font-semibold">
                 {user.firstNameEN} {user.lastNameEN?.slice(0, 1)}.
@@ -117,7 +112,6 @@ export default function Profile() {
           </Menu.Item>
         </Menu.Dropdown>
       </Menu>
-      {showMenu && <></>}
     </>
   );
 }

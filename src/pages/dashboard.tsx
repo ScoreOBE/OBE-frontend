@@ -1,12 +1,17 @@
-import store, { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
+import { Button, Menu } from "@mantine/core";
+import {
+  IconDots,
+  IconPencilMinus,
+  IconPlus,
+  IconTrash,
+} from "@tabler/icons-react";
 import { statusColor } from "@/helpers/functions/function";
 import { useSearchParams } from "react-router-dom";
-import { getCourse } from "@/services/course/course.service";
+import { deleteCourse, getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import { addLoadMoreCourse, setCourse } from "@/store/course";
+import { addLoadMoreCourse, removeCourse, setCourse } from "@/store/course";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import ModalAddCourse from "@/components/Modal/ModalAddCourse";
@@ -67,6 +72,13 @@ export default function Dashboard() {
       } else {
         setPayload({ ...payload, hasMore: false });
       }
+    }
+  };
+
+  const onClickDeleteCourse = async (id: string) => {
+    const res = await deleteCourse(id);
+    if (res) {
+      dispatch(removeCourse(res.id));
     }
   };
 
@@ -142,7 +154,7 @@ export default function Dashboard() {
         ) : (
           <InfiniteScroll
             dataLength={course.length}
-            next={() => onSowMore()}
+            next={onSowMore}
             height={"100%"}
             loader={<></>}
             hasMore={payload?.hasMore}
@@ -155,14 +167,46 @@ export default function Dashboard() {
               return (
                 <div
                   key={item.id}
-                  className="card justify-between xl:h-[145px] md:h-[130px] cursor-pointer rounded-md hover:bg-[#F3F3F3]"
+                  className="card relative justify-between xl:h-[145px] md:h-[130px] cursor-pointer rounded-md hover:bg-[#F3F3F3]"
                   style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)" }}
                 >
-                  <div className="p-2.5">
+                  <div className="p-2.5 flex flex-col">
                     <p className="font-semibold">{item.courseNo}</p>
                     <p className="text-xs font-medium text-gray-600">
                       {item.courseName}
                     </p>
+                    {item.addFirstTime && (
+                      <Menu trigger="click" position="bottom-end" offset={2}>
+                        <Menu.Target>
+                          <IconDots className="absolute top-2 right-2 rounded-full hover:bg-gray-300" />
+                        </Menu.Target>
+                        <Menu.Dropdown
+                          className="rounded-xl backdrop-blur-xl bg-white/70 font-sf-pro"
+                          style={{
+                            boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                          }}
+                        >
+                          <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                            <div className="flex items-center gap-2">
+                              <IconPencilMinus
+                                stroke={1.5}
+                                className="h-5 w-5"
+                              />
+                              <span>Edit Course</span>
+                            </div>
+                          </Menu.Item>
+                          <Menu.Item
+                            className="text-[#FF4747] h-8 w-[200px] hover:bg-[#d55757]/20"
+                            onClick={() => onClickDeleteCourse(item.id)}
+                          >
+                            <div className="flex items-center gap-2">
+                              <IconTrash className="h-5 w-5" stroke={1.5} />
+                              <span>Delete Course</span>
+                            </div>
+                          </Menu.Item>
+                        </Menu.Dropdown>
+                      </Menu>
+                    )}
                   </div>
                   <div className="bg-primary flex h-8 items-center justify-between rounded-b-md">
                     <p className="p-2.5 text-white font-medium text-[12px]">
