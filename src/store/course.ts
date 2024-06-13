@@ -5,15 +5,19 @@ export const courseSlice = createSlice({
   name: "course",
   initialState: [] as IModelCourse[],
   reducers: {
-    setCourse: (state, data) => {
-      return [...data.payload];
+    setCourse: (state, action) => {
+      return [...action.payload];
     },
-    addLoadMoreCourse: (state, data) => {
-      return [...state, ...data.payload];
+    addLoadMoreCourse: (state, action) => {
+      return [...state, ...action.payload];
+    },
+    removeCourse: (state, action) => {
+      return state.filter((e) => e.id != action.payload);
     },
   },
 });
 
-export const { setCourse, addLoadMoreCourse } = courseSlice.actions;
+export const { setCourse, addLoadMoreCourse, removeCourse } =
+  courseSlice.actions;
 
 export default courseSlice.reducer;
