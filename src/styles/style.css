@@ -5,6 +5,13 @@
   overflow: hidden;
 }
 
+.mantine-Stepper-stepIcon[data-completed],
+.mantine-Stepper-separator[data-active] {
+  background-color: #1FC461;
+  border-color: #1FC461;
+}
+
+
 .custom-radial-gradient {
   background: radial-gradient(
     98.92% 98.92% at 48.99% 98.48%,
