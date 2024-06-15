@@ -7,16 +7,16 @@ export const courseController = (configService = {}) => {
 
   return {
     getCourse: async (params?: CourseRequestDTO) => {
-      return service.get(`/courses`, { ...params });
+      return service.get(`/course`, { ...params });
     },
     createCourse: async (params: Partial<IModelCourse>) => {
-      return service.put(`/courses`, { ...params });
+      return service.put(`/course`, { ...params });
     },
-    activeCourse: async (id: string) => {
-      return service.put(`/courses/${id}`, {});
+    updateCourse: async (id: string, params: Partial<IModelCourse>) => {
+      return service.put(`/course/${id}`, { ...params });
     },
     deleteCourse: async (id: string) => {
-      return service.delete(`/courses/${id}`, {});
+      return service.delete(`/course/${id}`, {});
     },
   };
 };
