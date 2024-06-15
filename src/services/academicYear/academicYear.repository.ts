@@ -7,16 +7,16 @@ export const academicYearController = (configService = {}) => {
 
   return {
     getAcademicYear: async (params?: AcademicYearRequestDTO) => {
-      return service.get(`/academicYears`, { ...params });
+      return service.get(`/academicYear`, { ...params });
     },
     createAcademicYear: async (params: Partial<IModelAcademicYear>) => {
-      return service.put(`/academicYears`, { ...params });
+      return service.put(`/academicYear`, { ...params });
     },
     activeAcademicYear: async (id: string) => {
-      return service.put(`/academicYears/${id}`, {});
+      return service.put(`/academicYear/${id}`, {});
     },
     deleteAcademicYear: async (id: string) => {
-      return service.delete(`/academicYears/${id}`, {});
+      return service.delete(`/academicYear/${id}`, {});
     },
   };
 };
