@@ -183,7 +183,7 @@ export default function Dashboard() {
                         <Menu.Dropdown
                           className="rounded-xl backdrop-blur-xl bg-white/70 font-sf-pro"
                           style={{
-                            boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                           }}
                         >
                           <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
