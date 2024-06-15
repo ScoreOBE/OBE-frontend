@@ -11,6 +11,14 @@
   border-color: #1FC461;
 }
 
+.mantine-Stepper-stepIcon[data-progress] {
+  background-color: #6869AD;
+  background-clip:content-box;
+  padding: 5px;
+  color: #6869AD;
+  border-color: #6869AD;
+}
+
 
 .custom-radial-gradient {
   background: radial-gradient(
