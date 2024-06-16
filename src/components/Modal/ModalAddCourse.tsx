@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Stepper,
   Button,
@@ -8,8 +8,10 @@ import {
   TextInput,
   Textarea,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { IconChevronDown, IconCircleFilled } from "@tabler/icons-react";
 import { COURSE_TYPE } from "@/helpers/constants/enum";
+import { IModelCourse } from "@/models/ModelCourse";
 type Props = {
   opened: boolean;
   onClose: () => void;
@@ -17,15 +19,48 @@ type Props = {
 export default function ModalAddCourse({ opened, onClose }: Props) {
   const [active, setActive] = useState(0);
   const [openedDropdown, setOpenedDropdown] = useState(false);
+  const form = useForm({
+    initialValues: {} as Partial<IModelCourse>,
+    validate: {
+      type: (value) => {
+        return !value && "Course Type is required";
+      },
+      courseNo: (value) => {
+        if (!value) return "Course No. is required";
+        const isValid = /^\d{6}$/.test(value.toString());
+        return isValid ? null : "Please enter a valid course no";
+      },
+      courseName: (value) => {
+        return !value && "Course Name is required";
+      },
+    },
+    validateInputOnBlur: true,
+  });
 
   const nextStep = () => {
-    if (active == 4) closeModal();
-    setActive((cur) => (cur < 4 ? cur + 1 : cur));
+    let isValid = true;
+    switch (active) {
+      case 0:
+        isValid = !form.validateField("type").hasError;
+        break;
+      case 1:
+        isValid = !form.validateField("courseNo").hasError;
+        isValid = !form.validateField("courseName").hasError;
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+    }
+    if (isValid) {
+      if (active == 4) closeModal();
+      setActive((cur) => (cur < 4 ? cur + 1 : cur));
+    }
   };
   const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
-
   const closeModal = () => {
     setActive(0);
+    form.reset();
     onClose();
   };
 
@@ -68,8 +103,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             label="Type of Course"
             placeholder="Select Type of Course"
             data={[COURSE_TYPE.GENERAL, COURSE_TYPE.SEL_TOPIC]}
-            value={""}
-            // onChange={(_value, option) => setSelectedTerm(option)}
+            {...form.getInputProps("type")}
             allowDeselect={false}
             withCheckIcon={false}
             className="rounded-md my-5 border-none  "
@@ -102,12 +136,13 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               classNames={{ input: "focus:border-primary " }}
               label="Course no."
               placeholder="Ex. 001102"
+              {...form.getInputProps("courseNo")}
             />
             <TextInput
               label="Course name"
               classNames={{ input: "focus:border-primary " }}
               placeholder="English 2"
-              value={""}
+              {...form.getInputProps("courseName")}
             />
           </div>
         </Stepper.Step>
@@ -127,7 +162,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 Course No.
               </span>
               <span className="text-primary font-medium text-[14px]">
-                261361
+                {form.getValues().courseNo}
               </span>
             </div>
             <div className="flex flex-col gap-1">
@@ -135,7 +170,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 Course Name
               </span>
               <span className="text-primary font-medium text-[14px]">
-                Software Engineering
+                {form.getValues().courseName}
               </span>
             </div>
           </div>

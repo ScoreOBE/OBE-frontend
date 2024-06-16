@@ -11,6 +11,13 @@ export const courseSlice = createSlice({
     addLoadMoreCourse: (state, action) => {
       return [...state, ...action.payload];
     },
+    editCourse: (state, action) => {
+      return state.forEach((e) => {
+        if (e.id == action.payload.id) {
+          e = { ...e, ...action.payload };
+        }
+      });
+    },
     removeCourse: (state, action) => {
       return state.filter((e) => e.id != action.payload);
     },
