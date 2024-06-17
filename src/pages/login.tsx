@@ -29,7 +29,7 @@ export default function Login() {
         style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.35)" }}
       >
         <img src={entlogo} alt="CMULogo" className="h-[130px]" />
-        <div className=" cursor-default mt-7 font-sf-pro-rounded text-white text-4xl">
+        <div className=" cursor-default mt-7 -rounded text-white text-4xl">
           Score OBE
           <span className=" text-[#FFCD1B]"> +</span>
         </div>
@@ -39,7 +39,7 @@ export default function Login() {
         </div>
         {/* // button login */}
         <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
-          <Button className="bg-white mt-1 rounded-[12px] text-[#696AA9] font-sf-pro-rounded font-medium text-[14px] h-10 hover:bg-[#DFDFDF] hover:text-[#696AA9]">
+          <Button className="bg-white mt-1 rounded-[12px] text-[#696AA9] -rounded font-medium text-[14px] h-10 hover:bg-[#DFDFDF] hover:text-[#696AA9]">
             <img
               src={cmulogoLogin}
               alt="CMULogo"

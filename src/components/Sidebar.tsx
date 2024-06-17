@@ -59,7 +59,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="w-[270px] h-screen flex justify-center font-sf-pro">
+    <div className="w-[270px] h-screen flex justify-center ">
       <Modal
         opened={openedFilterTerm}
         onClose={closeFilterTerm}
