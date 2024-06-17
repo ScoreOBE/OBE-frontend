@@ -2,9 +2,6 @@
   font-family: "SF Pro", "NotoSansThai" Helvetica, Arial, sans-serif;
 }
 
-.logo {
-
-}
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }

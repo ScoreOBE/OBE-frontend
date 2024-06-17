@@ -69,7 +69,7 @@ function App() {
 
   return (
     <div
-      className={`flex h-screen w-screen font-sf-pro ${
+      className={`flex h-screen w-screen  ${
         showSidebar ? "sidebar-linear-gradient" : ""
       }`}
     >

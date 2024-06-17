@@ -35,7 +35,7 @@ export default function CMUOAuthCallback() {
   }, [code]);
 
   return (
-    <div className="flex flex-col w-screen h-screen gap-10 font-sf-pro-rounded font-extrabold justify-center items-center">
+    <div className="flex flex-col w-screen h-screen gap-10 -rounded font-extrabold justify-center items-center">
       <h1 className="text-3xl whitespace-break-spaces">
         {message || "Redirecting ..."}
       </h1>

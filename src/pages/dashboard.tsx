@@ -181,7 +181,7 @@ export default function Dashboard() {
                           <IconDots className="absolute top-2 right-2 rounded-full hover:bg-gray-300" />
                         </Menu.Target>
                         <Menu.Dropdown
-                          className="rounded-xl backdrop-blur-xl bg-white/70 font-sf-pro"
+                          className="rounded-xl backdrop-blur-xl bg-white/70 "
                           style={{
                             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                           }}
