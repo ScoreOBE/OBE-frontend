@@ -33,7 +33,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [instructorOption, setInstructorOption] = useState([]);
   const form = useForm({
-    initialValues: {} as Partial<IModelCourse>,
+    initialValues: { sections: [] } as Partial<IModelCourse>,
     validate: {
       type: (value) => {
         return !value && "Course Type is required";
@@ -44,7 +44,13 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         return isValid ? null : "Please enter a valid course no";
       },
       courseName: (value) => {
-        return !value && "Course Name is required";
+        if (!value) return "Course Name is required";
+        if (!value.replace(/^[ ]+$/, "").length)
+          return "cannot have only space";
+        const isValid = /^[0-9A-Za-z !"%'()*+\-.<=>?@[\]\\^_]+$/.test(value);
+        return isValid
+          ? null
+          : `only contain 0-9, a-z, A-Z, space, !"%&()*+'-.<=>?@[]\\^-`;
       },
     },
     validateInputOnBlur: true,
@@ -89,6 +95,10 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     form.reset();
     onClose();
   };
+
+  useEffect(() => {
+    console.log(form.getValues().sections);
+  }, [form]);
 
   return (
     <Modal
@@ -184,15 +194,23 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               </span>
             </div>
           </div>
-          <div className="text-[#3E3E3E] mt-4 mb-1 font-medium text-[14px] ">
+          <div className="text-[#3E3E3E] mt-4 mb-1 font-medium text-[14px]">
             Section
           </div>
           <TagsInput
             classNames={{
-              input: "focus:border-primary active:border-primary h-[140px]   ",
+              input: "focus:border-primary active:border-primary h-[140px]",
               pill: "bg-primary text-white",
             }}
             placeholder="Fill Section Number Ex. 001 or 1 (Press Enter for fill the next section)"
+            {...form.getInputProps("sections")}
+            value={form.getValues().sections?.map((e) => ("000" + e).slice(-3))}
+            onChange={(sections) =>
+              form.setFieldValue(
+                "sections",
+                sections.map((section) => section.replace(/^0+/, ""))
+              )
+            }
           ></TagsInput>
         </Stepper.Step>
         <Stepper.Step label="Map Semester" description="STEP 4">
