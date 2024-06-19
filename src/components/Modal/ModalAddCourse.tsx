@@ -9,6 +9,7 @@ import {
   Checkbox,
   TagsInput,
   Input,
+  List,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
@@ -23,13 +24,16 @@ import Icon from "../Icon";
 import { getInstructor } from "@/services/user/user.service";
 import { IModelUser } from "@/models/ModelUser";
 import { TbSearch } from "react-icons/tb";
+import { SEMESTER } from "@/helpers/constants/enum";
+import { useSearchParams } from "react-router-dom";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
 };
 export default function ModalAddCourse({ opened, onClose }: Props) {
-  const [active, setActive] = useState(0);
+  const [params, setParams] = useSearchParams();
+  const [active, setActive] = useState(3);
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [instructorOption, setInstructorOption] = useState([]);
   const form = useForm({
@@ -47,7 +51,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         if (!value) return "Course Name is required";
         if (!value.replace(/^[ ]+$/, "").length)
           return "cannot have only space";
-        const isValid = /^[0-9A-Za-z !"%'()*+\-.<=>?@[\]\\^_]+$/.test(value);
+        const isValid = /^[0-9A-Za-z !"%&'()*+\-.<=>?@[\]\\^_]+$/.test(value);
         return isValid
           ? null
           : `only contain 0-9, a-z, A-Z, space, !"%&()*+'-.<=>?@[]\\^-`;
@@ -96,9 +100,9 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     onClose();
   };
 
-  useEffect(() => {
-    console.log(form.getValues().sections);
-  }, [form]);
+  // useEffect(() => {
+  //   console.log(form.getValues().sections);
+  // }, [form]);
 
   return (
     <Modal
@@ -199,22 +203,81 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           </div>
           <TagsInput
             classNames={{
-              input: "focus:border-primary active:border-primary h-[140px]",
+              input:
+                "focus:border-primary active:border-primary h-[140px] p-3 px-3",
               pill: "bg-primary text-white",
             }}
             placeholder="Fill Section Number Ex. 001 or 1 (Press Enter for fill the next section)"
             {...form.getInputProps("sections")}
             value={form.getValues().sections?.map((e) => ("000" + e).slice(-3))}
-            onChange={(sections) =>
+            onChange={(sections) => {
               form.setFieldValue(
                 "sections",
                 sections.map((section) => section.replace(/^0+/, ""))
-              )
-            }
+              );
+            }}
           ></TagsInput>
         </Stepper.Step>
         <Stepper.Step label="Map Semester" description="STEP 4">
-          <div></div>
+          <div
+            style={{
+              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
+            className="flex flex-col gap-5 h-[350px] w-full mt-2  p-4  rounded-md  overflow-y-scroll  "
+          >
+            <div className="flex flex-col font-medium text-[14px] gap-1">
+              <span className="text-primary">
+                Select Semester for Section 803
+              </span>
+              <div
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+                className="w-full p-3 rounded-md gap-2 flex flex-col "
+              >
+                <div className="flex flex-row items-center justify-between">
+                  <span>Open Semester</span>
+                  <div className="flex flex-row gap-1">
+                    {Object.keys(SEMESTER).map((e) => (
+                      <Checkbox
+                        classNames={{
+                          input:
+                            "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                          body: "mr-3",
+                          label: "text-[14px]",
+                        }}
+                        color="#5768D5"
+                        size="xs"
+                        value={e}
+                        label={e}
+                        // checked={isChecked}
+                        // disabled={disabled}
+                        readOnly
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <Checkbox
+                  classNames={{
+                    input:
+                      "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                    body: "mr-3",
+                    label: "text-[14px] text-[#615F5F] ",
+                  }}
+                  color="#5768D5"
+                  size="xs"
+                  value={"1"}
+                  label={`Open in this semester (${params.get(
+                    "semester"
+                  )}/${params.get("year")?.slice(-2)})`}
+                  // checked={isChecked}
+                  // disabled={disabled}
+                  readOnly
+                />
+              </div>
+            </div>
+          </div>
         </Stepper.Step>
         <Stepper.Step label="Co-Instructor" description="STEP 5">
           <div className="flex flex-col gap-5 mt-3 flex-1 ">
@@ -264,11 +327,11 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
-              className="w-full mt-2  h-full p-4 rounded-md gap-4 flex flex-col "
+              className="w-full mt-2  h-full p-4 rounded-md gap-1.5 flex flex-col "
             >
               <Input
                 leftSection={<TbSearch />}
-                placeholder="Course No / Course Name"
+                placeholder="Name"
                 // value={searchValue}
                 // onChange={(event) => setSearchValue(event.currentTarget.value)}
                 // onKeyDown={(event) => event.key == "Enter" && searchCourse()}
@@ -287,11 +350,14 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   <div className="flex w-full justify-between items-center">
                     <div className="flex flex-col gap-1 font-medium text-[14px]">
                       <span className="text-[#3E3E3E] ">Name</span>
-                      <span className="text-primary text-[16px]">
+                      <span className="text-primary text-[14px]">
                         Switch Thanaporn
                       </span>
                     </div>
-                    <Button className=" px-5 rounded-md  " color="#FF4747">
+                    <Button
+                      className=" px-3 h-3/4 rounded-lg  "
+                      color="#FF4747"
+                    >
                       Remove
                     </Button>
                   </div>
@@ -353,11 +419,14 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   <div className="flex w-full justify-between items-center">
                     <div className="flex flex-col gap-1 font-medium text-[14px]">
                       <span className="text-[#3E3E3E] ">Name</span>
-                      <span className="text-primary text-[16px]">
+                      <span className="text-primary text-[14px]">
                         Switch Thanaporn
                       </span>
                     </div>
-                    <Button className=" px-5 rounded-md  " color="#FF4747">
+                    <Button
+                      className=" px-3 h-3/4 rounded-lg  "
+                      color="#FF4747"
+                    >
                       Remove
                     </Button>
                   </div>
@@ -415,7 +484,81 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           </div>
         </Stepper.Step>
         <Stepper.Step label="Review" description="STEP 6">
-          <div></div>
+          <div className="flex flex-col gap-4 mt-3 font-medium text-[14px]">
+            <div
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
+              className=" flex flex-col flex-1 p-4 rounded-md gap-4 "
+            >
+              <div className="flex flex-col gap-1 ">
+                <span className="text-[#3E3E3E]">Course No.</span>
+                <span className="text-primary">
+                  {form.getValues().courseNo}
+                </span>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <span className="text-[#3E3E3E]">Course Name</span>
+                <span className="text-primary">
+                  {form.getValues().courseName}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2  ">
+              <span className="text-[#3E3E3E] ">Review</span>
+              <div
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+                className=" flex flex-col flex-1 rounded-md gap-4"
+              >
+                <div className="flex flex-col p-4 h-[200px] gap-4 overflow-y-scroll">
+                  <div
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                    className="w-full  h-fit p-4 rounded-md gap-4 flex flex-col"
+                  >
+                    <span className="text-[#3E3E3E]">Section 803</span>
+
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[#3E3E3E]">Main Instructor</span>
+                      <div className="ps-1.5 text-primary ">
+                        <List size="sm" listStyleType="disc">
+                          <List.Item>Arnan Sripitakiat</List.Item>
+                        </List>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[#3E3E3E]">Co-Instructor</span>
+                      <div className="ps-1.5 text-primary">
+                        <List size="sm" listStyleType="disc">
+                          <List.Item>Dome Potikanond</List.Item>
+                        </List>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[#3E3E3E]">Open in Semester</span>
+                      <div className="ps-1.5 text-primary">
+                        <List
+                          size="sm"
+                          listStyleType="disc"
+                          className="flex flex-col gap-1"
+                        >
+                          <List.Item>1, 2 and 3</List.Item>
+                          <List.Item>Open in this semester (3/66)</List.Item>
+                        </List>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </Stepper.Step>
       </Stepper>
 
