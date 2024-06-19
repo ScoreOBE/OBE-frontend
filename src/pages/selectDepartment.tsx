@@ -3,13 +3,12 @@ import { useNavigate } from "react-router-dom";
 import cmulogo from "@/assets/image/cmuLogo.png";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { DEPARTMENT_EN } from "@/helpers/constants/department.enum";
-import { Button, Checkbox, Radio } from "@mantine/core";
+import { Button, Checkbox } from "@mantine/core";
 import { FACULTY_EN } from "@/helpers/constants/faculty.enum";
 import { getEnumByKey, getEnumByValue } from "@/helpers/functions/function";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { updateUser } from "@/services/user/user.service";
-import { ROLE } from "@/helpers/constants/enum";
 import { setUser } from "@/store/user";
 import { motion } from "framer-motion";
 
@@ -17,7 +16,6 @@ export default function SelectDepartment() {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  const isStudent = user.role == ROLE.STUDENT;
   const sortedKeys = Object.keys(DEPARTMENT_EN).sort((a: string, b: string) =>
     getEnumByKey(DEPARTMENT_EN, a).localeCompare(getEnumByKey(DEPARTMENT_EN, b))
   );
@@ -44,8 +42,6 @@ export default function SelectDepartment() {
   const getStart = async () => {
     const res = await updateUser({ departmentCode: checkedItems });
     dispatch(setUser(res));
-    // if (isStudent) navigate(ROUTE_PATH.DASHBOARD_STD);
-    // else navigate(ROUTE_PATH.DASHBOARD_INS);
     navigate(ROUTE_PATH.DASHBOARD_INS);
   };
 
@@ -97,15 +93,10 @@ export default function SelectDepartment() {
               <div className="text-white font-medium text-[20px] cursor-default">
                 Select department
               </div>
-              {user.role && !isStudent && (
-                <div className="text-[#FFB876] font-normal mb-6 cursor-default">
-                  Select up to 2 departments
-                </div>
-              )}
-              <div
-                className={`flex flex-1 flex-col overflow-y-scroll gap-4 text-white 
-              ${isStudent ? "mt-5 h-[540px]" : "h-[515px]"}`}
-              >
+              <div className="text-[#FFB876] font-normal mb-6 cursor-default">
+                Select up to 2 departments
+              </div>
+              <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[515px]">
                 {sortedKeys.map((key) => {
                   const isChecked = checkedItems.includes(key);
                   const disabled =
@@ -119,38 +110,20 @@ export default function SelectDepartment() {
                           : "bg-[rgba(181,181,181,0.40)]"
                       } ${disabled ? "text-gray-300" : ""}`}
                       onClick={() => {
-                        isStudent
-                          ? setCheckedItems([key])
-                          : disabled
-                          ? ""
-                          : handleCheckboxChange(key, !isChecked);
+                        disabled ? "" : handleCheckboxChange(key, !isChecked);
                       }}
                     >
-                      {isStudent ? (
-                        <Radio
-                          classNames={{
-                            radio:
-                              "bg-black bg-opacity-0 border-[1.5px] border-white cursor-pointer",
-                            body: "mr-3",
-                          }}
-                          color="#5768D5"
-                          value={key}
-                          checked={isChecked}
-                          readOnly
-                        />
-                      ) : (
-                        <Checkbox
-                          classNames={{
-                            input:
-                              "bg-black bg-opacity-0 border-[1.5px] border-white cursor-pointer disabled:bg-gray-400",
-                            body: "mr-3",
-                          }}
-                          color="#5768D5"
-                          checked={isChecked}
-                          disabled={disabled}
-                          readOnly
-                        />
-                      )}
+                      <Checkbox
+                        classNames={{
+                          input:
+                            "bg-black bg-opacity-0 border-[1.5px] border-white cursor-pointer disabled:bg-gray-400",
+                          body: "mr-3",
+                        }}
+                        color="#5768D5"
+                        checked={isChecked}
+                        disabled={disabled}
+                        readOnly
+                      />
                       {getEnumByKey(DEPARTMENT_EN, key)} (
                       {key.replace("_", "-")})
                     </div>
