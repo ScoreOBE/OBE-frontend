@@ -49,10 +49,16 @@ export default function Course() {
           {course?.sections.length! > 1 && "s"}
         </p>
         <div className="flex gap-5 items-center">
-          <Button leftSection={<IconUpload />} color="#6869AD" radius={"md"}>
+          <Button
+            leftSection={<IconUpload className="h-5 w-5" />}
+            color="#6869AD"
+            className="rounded-[8px] text-[12px] font-medium h-8 px-2"
+          >
             Upload and Assets
           </Button>
-          <IconDots className="rounded-full hover:bg-gray-300 cursor-pointer" />
+          <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
+            <IconDots />
+          </div>
         </div>
       </div>
       <div
