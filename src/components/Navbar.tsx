@@ -5,7 +5,7 @@ import { TbSearch } from "react-icons/tb";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { setCourse } from "@/store/course";
+import { setCourseList } from "@/store/course";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { getCourse } from "@/services/course/course.service";
 import { ellipsisText } from "@/helpers/functions/validation";
@@ -31,7 +31,7 @@ export default function Navbar() {
       )?.id ?? "";
     const res = await getCourse(payloadCourse);
     if (res) {
-      dispatch(setCourse(res.courses ?? res));
+      dispatch(setCourseList(res.courses ?? res));
     }
     localStorage.setItem("search", "true");
   };
