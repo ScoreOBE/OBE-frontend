@@ -8,17 +8,19 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { statusColor } from "@/helpers/functions/function";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { deleteCourse, getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import { addLoadMoreCourse, removeCourse, setCourse } from "@/store/course";
+import { addLoadMoreCourse, removeCourse } from "@/store/course";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import ModalAddCourse from "@/components/Modal/ModalAddCourse";
 import { useDisclosure } from "@mantine/hooks";
 import notFoundImage from "@/assets/image/notFound.png";
+import { ROUTE_PATH } from "@/helpers/constants/route";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const course = useAppSelector((state) => state.course);
@@ -80,6 +82,12 @@ export default function Dashboard() {
     if (res) {
       dispatch(removeCourse(res.id));
     }
+  };
+
+  const goToCourse = (courseNo: number) => {
+    navigate(
+      `${ROUTE_PATH.COURSE}/${courseNo}?year=${term?.year}&semester=${term?.semester}`
+    );
   };
 
   return (
@@ -169,6 +177,7 @@ export default function Dashboard() {
                   key={item.id}
                   className="card relative justify-between xl:h-[145px] md:h-[130px] cursor-pointer rounded-md hover:bg-[#F3F3F3]"
                   style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)" }}
+                  onClick={() => goToCourse(item.courseNo)}
                 >
                   <div className="p-2.5 flex flex-col">
                     <p className="font-semibold">{item.courseNo}</p>

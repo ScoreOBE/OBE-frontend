@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  matchPath,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import "./App.css";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
@@ -15,8 +23,8 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { isEmpty } from "lodash";
 import { getAcademicYear } from "./services/academicYear/academicYear.service";
 import { setAcademicYear } from "./store/academicYear";
-import { ROLE } from "./helpers/constants/enum";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
+import Course from "./pages/course";
 
 function App() {
   const user = useAppSelector((state) => state.user);
@@ -29,7 +37,6 @@ function App() {
     ROUTE_PATH.SELECTED_DEPARTMENT,
     ROUTE_PATH.CMU_OAUTH_CALLBACK,
   ];
-  const isPageNotFound = !Object.values(ROUTE_PATH).includes(path);
   const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
@@ -39,21 +46,28 @@ function App() {
         dispatch(setUser(res));
       }
       if (user.email && !academicYear.length) {
-        let params = new AcademicYearRequestDTO();
-        const rsAcademicYear = await getAcademicYear(params);
+        let payload = new AcademicYearRequestDTO();
+        const rsAcademicYear = await getAcademicYear(payload);
         dispatch(setAcademicYear(rsAcademicYear));
       }
     };
 
+    const isPageNotFound =
+      !Object.values(ROUTE_PATH).some((path) =>
+        matchPath({ path, end: true }, location.pathname)
+      ) &&
+      !matchPath(
+        { path: `${ROUTE_PATH.COURSE}/:courseNo`, end: true },
+        location.pathname
+      );
     setShowSidebar(!isPageNotFound && !routesWithoutSidebar.includes(path));
     if (path == ROUTE_PATH.CMU_OAUTH_CALLBACK || isPageNotFound) {
       return;
     }
 
     if (localStorage.getItem("token")) {
-      if (!isEmpty(user) && !isEmpty(academicYear)) {
-        return;
-      }
+      if (!isEmpty(user) && !isEmpty(academicYear)) return;
+
       if (
         user.departmentCode &&
         !user.departmentCode.length &&
@@ -87,6 +101,7 @@ function App() {
             element={<SelectDepartment />}
           />
           <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />
+          <Route path={`${ROUTE_PATH.COURSE}/:courseNo`} element={<Course />} />
           <Route path="*" element={<Page404 />} />
         </Routes>
       </div>

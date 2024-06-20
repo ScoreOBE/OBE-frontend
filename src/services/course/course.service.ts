@@ -9,6 +9,10 @@ export const getCourse = async (params?: CourseRequestDTO) => {
   const res = await courseService.getCourse(params);
   return isValidResponse(res);
 };
+export const getOneCourse = async (params?: any) => {
+  const res = await courseService.getOneCourse(params);
+  return isValidResponse(res);
+};
 export const createCourse = async (params: Partial<IModelCourse>) => {
   const res = await courseService.createCourse(params);
   return isValidResponse(res);
