@@ -33,9 +33,22 @@ type Props = {
 };
 export default function ModalAddCourse({ opened, onClose }: Props) {
   const [params, setParams] = useSearchParams();
-  const [active, setActive] = useState(3);
+  const [active, setActive] = useState(0);
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [instructorOption, setInstructorOption] = useState([]);
+
+  const validateCourseNameorTopic = (value: string) => {
+    const maxLength = 70;
+    if (!value) return "Course Name is required";
+    if (!value.trim().length) return "Cannot have only spaces";
+    if (value.length > maxLength)
+      return `You have ${value.length - 70} characters too many`;
+    const isValid = /^[0-9A-Za-z !"%&'()*+\-.<=>?@[\]\\^_]+$/.test(value);
+    return isValid
+      ? null
+      : `only contain 0-9, a-z, A-Z, space, !"%&()*+'-.<=>?@[]\\^-`;
+  };
+
   const form = useForm({
     initialValues: { sections: [] } as Partial<IModelCourse>,
     validate: {
@@ -47,15 +60,8 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         const isValid = /^\d{6}$/.test(value.toString());
         return isValid ? null : "Please enter a valid course no";
       },
-      courseName: (value) => {
-        if (!value) return "Course Name is required";
-        if (!value.replace(/^[ ]+$/, "").length)
-          return "cannot have only space";
-        const isValid = /^[0-9A-Za-z !"%&'()*+\-.<=>?@[\]\\^_]+$/.test(value);
-        return isValid
-          ? null
-          : `only contain 0-9, a-z, A-Z, space, !"%&()*+'-.<=>?@[]\\^-`;
-      },
+      courseName: (value) => validateCourseNameorTopic(value!),
+      // sections: (value) => validateCourseNameorTopic(value!),
     },
     validateInputOnBlur: true,
   });
@@ -100,9 +106,9 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     onClose();
   };
 
-  // useEffect(() => {
-  //   console.log(form.getValues().sections);
-  // }, [form]);
+  useEffect(() => {
+    console.log(form.getValues().sections);
+  }, [form]);
 
   return (
     <Modal
@@ -164,20 +170,35 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           />
         </Stepper.Step>
         <Stepper.Step label="Course Name" description="STEP 2">
-          <div className=" flex flex-col gap-4">
+          <div className="flex flex-col gap-4 mt-3">
             <TextInput
-              className=" mt-3"
               classNames={{ input: "focus:border-primary " }}
               label="Course no."
-              placeholder="Ex. 001102"
+              placeholder={
+                form.getValues().type === COURSE_TYPE.SEL_TOPIC
+                  ? "Ex. 26X4XX"
+                  : "Ex. 001102"
+              }
               {...form.getInputProps("courseNo")}
             />
             <TextInput
               label="Course name"
               classNames={{ input: "focus:border-primary " }}
-              placeholder="English 2"
+              placeholder={
+                form.getValues().type === COURSE_TYPE.SEL_TOPIC
+                  ? "Ex. Select Topic in Comp Engr"
+                  : "Ex. English 2"
+              }
               {...form.getInputProps("courseName")}
             />
+            {form.getValues().type == COURSE_TYPE.SEL_TOPIC && (
+              <TextInput
+                label="Course Topic"
+                classNames={{ input: "focus:border-primary" }}
+                placeholder="Ex. Full Stack Development"
+                {...form.getInputProps("sections.topic")}
+              />
+            )}
           </div>
         </Stepper.Step>
         <Stepper.Step label="Add Section" description="STEP 3">
@@ -197,6 +218,15 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 {form.getValues().courseName}
               </span>
             </div>
+            {form.getValues().type === COURSE_TYPE.SEL_TOPIC && (
+              <div className="flex flex-col gap-1  font-medium text-[14px]">
+                <span className="text-[#3E3E3E]">Course Topic</span>
+                <span className="text-primary">
+                  {/* รอใส่ข้อมูล Topic {form.getValues().____} */}
+                  Test Course Topic
+                </span>
+              </div>
+            )}
           </div>
           <div className="text-[#3E3E3E] mt-4 mb-1 font-medium text-[14px]">
             Section
@@ -504,6 +534,16 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   {form.getValues().courseName}
                 </span>
               </div>
+
+              {form.getValues().type === COURSE_TYPE.SEL_TOPIC && (
+                <div className="flex flex-col gap-1  font-medium text-[14px]">
+                  <span className="text-[#3E3E3E]">Course Topic</span>
+                  <span className="text-primary">
+                    {/* รอใส่ข้อมูล Topic {form.getValues().____} */}
+                    Test Course Topic
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col gap-2  ">
