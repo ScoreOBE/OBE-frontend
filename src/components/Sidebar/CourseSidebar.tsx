@@ -53,7 +53,7 @@ export default function CourseSidebar() {
 
   return (
     <>
-      <div className="flex flex-col gap-11">
+      <div className="flex flex-col gap-[27px]">
         <Button
           className="hover:font-bold hover:bg-transparent p-0 flex justify-start"
           color="none"
@@ -64,41 +64,58 @@ export default function CourseSidebar() {
           Back to Your Course
         </Button>
 
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-col gap-2">
-            <p className="font-semibold text-lg">
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-col flex-1 font-semibold gap-1 ">
+            <p className="text-lg">
               {course?.courseNo} ({params.get("semester")}/
               {params.get("year")?.slice(-2)})
             </p>
-            <p className="text-[11px]">{course?.courseName}</p>
+            <p className="text-[13px] text-pretty max-w-full">
+              {course?.courseName}
+            </p>
           </div>
           <div className="flex flex-col gap-2">
             <Button
               leftSection={<RxDashboard size={18} />}
-              className="font-normal bg-transparent w-full flex justify-start items-center px-3 py-1 border-none rounded-lg text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-primary focus:border-none group"
+              className={`font-medium w-full h-8 flex justify-start items-center border-none rounded-lg transition-colors duration-300 focus:border-none group
+              ${
+                path.startsWith(ROUTE_PATH.COURSE)
+                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+              }`}
             >
               Sections
             </Button>
             <Button
               leftSection={<Icon IconComponent={TQF3} className="h-5 w-5" />}
-              className="font-normal bg-transparent w-full flex justify-start items-center px-3 py-1 border-none rounded-lg text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-primary focus:border-none group"
+              className={`font-medium w-full h-8 flex justify-start items-center border-none rounded-lg transition-colors duration-300 focus:border-none group
+                ${
+                  path.startsWith(ROUTE_PATH.TQF3)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                }`}
             >
               TQF 3
             </Button>
             <Button
               leftSection={<Icon IconComponent={TQF5} className="h-5 w-5" />}
-              className="font-normal bg-transparent w-full flex justify-start items-center px-3 py-1 border-none rounded-lg text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-primary focus:border-none group"
+              className={`font-medium w-full h-8 flex justify-start items-center border-none rounded-lg transition-colors duration-300 focus:border-none group
+                ${
+                  path.startsWith(ROUTE_PATH.TQF5)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                }`}
             >
               TQF 5
             </Button>
           </div>
         </div>
 
-        <div className="flex flex-col gap-3">
-          <p className="text-sm font-semibold">Instructors</p>
+        <div className="flex flex-col gap-3 mt-5">
+          <p className="text-md font-semibold">Instructors</p>
           {instructors.map((item) => {
             return (
-              <p key={item.id} className="text-wrap text-[11px]">
+              <p key={item.id} className="text-pretty text-[13px] ps-2">
                 {item.firstNameEN} {item.lastNameEN}
               </p>
             );

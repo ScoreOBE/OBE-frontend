@@ -118,10 +118,11 @@ export default function Dashboard() {
           <span></span>
         ) : (
           <Button
-            className=" rounded-[8px] text-[12px] font-medium bg-[#6869AD] h-8 px-2 hover:bg-[#52538A]"
+            color="#6869AD"
+            leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
+            className=" rounded-[8px] text-[12px] font-medium h-8 px-2"
             onClick={openedAddModal}
           >
-            <IconPlus className="h-5 w-5 mr-1" stroke={1.5} color="#ffffff" />
             Add course
           </Button>
         )}
@@ -134,7 +135,7 @@ export default function Dashboard() {
           <div className=" flex flex-row flex-1 justify-between">
             <div className="h-full px-[60px] justify-center flex flex-col">
               <p className="text-primary text-[22px] font-[590]">
-                No course found{" "}
+                No course found
               </p>
               <br />
               <p className=" -mt-4 mb-6  text-black text-[16px] break-words font-400 leading-relaxed">
