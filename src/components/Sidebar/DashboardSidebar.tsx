@@ -82,6 +82,7 @@ export default function DashboardSidebar() {
             input: "text-primary font-medium",
             option: "hover:bg-[#DDDDF6] text-primary font-medium",
           }}
+          rightSectionPointerEvents="none"
           rightSection={
             <IconChevronDown
               className={`${

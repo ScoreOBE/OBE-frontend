@@ -1,5 +1,6 @@
 import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { IModelAcademicYear } from "./ModelAcademicYear";
+import { IModelSection } from "./ModelSection";
 
 export interface IModelCourse {
   id: string;
@@ -7,8 +8,7 @@ export interface IModelCourse {
   courseNo: number;
   courseName: string;
   type: COURSE_TYPE;
-  // sections: Section[];
-  sections: any[];
+  sections: Partial<IModelSection>[];
   addFirstTime?: boolean;
   isProcessTQF3: boolean;
   // TQF3: TQF;

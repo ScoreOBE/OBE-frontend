@@ -109,8 +109,8 @@ export default function Course() {
                 </div>
                 <div className="bg-primary flex h-8 items-center justify-between rounded-b-md">
                   <p className="p-2.5 text-white font-medium text-[12px]">
-                    {item.assignments.length} Assignment
-                    {item.assignments.length > 1 ? "s" : ""}
+                    {item.assignments?.length} Assignment
+                    {item.assignments?.length! > 1 ? "s" : ""}
                   </p>
                 </div>
               </div>
