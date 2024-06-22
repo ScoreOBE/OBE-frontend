@@ -16,6 +16,8 @@ import {
   IconChevronDown,
   IconCircleFilled,
   IconChevronRight,
+  IconArrowRight,
+  IconUsers,
 } from "@tabler/icons-react";
 import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
@@ -36,13 +38,14 @@ type Props = {
 export default function ModalAddCourse({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
   const [params, setParams] = useSearchParams();
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(4);
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [instructorOption, setInstructorOption] = useState<any[]>([]);
   const [sectionNoList, setSectionNoList] = useState<string[]>([]);
   const [insInput, setInsInput] = useState<any>();
   const [coInsList, setCoInsList] = useState<any[]>([]);
+  const [swapMethodAddCo, setSwapMethodAddCo] = useState(false);
 
   const validateCourseNameorTopic = (value: string, title: string) => {
     const maxLength = 70;
@@ -104,9 +107,10 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         break;
       case 1:
         isValid =
-          !form.validateField("courseNo").hasError &&
-          !form.validateField("courseName").hasError &&
-          !form.validateField("sections.0.topic").hasError;
+          (!form.validateField("courseNo").hasError &&
+            !form.validateField("courseName").hasError) ||
+          (!form.validateField("sections.0.topic").hasError &&
+            form.getValues().type == COURSE_TYPE.SEL_TOPIC);
         break;
       case 2:
         for (let i = 0; i < length; i++) {
@@ -233,9 +237,10 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
-        title: "text-primary font-semibold text-[18px]",
+        title: "text-primary font-medium text-[18px]",
+        header: "bg-[#F6F7FA]",
         content:
-          "flex flex-col justify-center item-center px-2 overflow-hidden",
+          "flex flex-col justify-center bg-[#F6F7FA] item-center px-2 overflow-hidden",
       }}
     >
       <Stepper
@@ -251,66 +256,80 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           stepBody: "flex-col-reverse m-0 ",
           stepLabel: "text-[14px]",
         }}
-        className=" justify-center items-center mt-3 text-[14px] max-h-full"
+        className=" justify-center items-center mt-1 mb-5 text-[14px] max-h-full"
       >
         <Stepper.Step label="Course Type" description="STEP 1">
-          <Select
-            clearable
-            label="Type of Course"
-            placeholder="Select Type of Course"
-            data={[COURSE_TYPE.GENERAL, COURSE_TYPE.SEL_TOPIC]}
-            {...form.getInputProps("type")}
-            allowDeselect={false}
-            withCheckIcon={false}
-            className="rounded-md my-5 border-none mb-8"
-            style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
-            classNames={{
-              label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
-              input: "text-primary font-medium focus:border-primary",
-              option: "hover:bg-[#DDDDF6] text-primary font-medium",
-              dropdown: "drop-shadow-[0_0px_4px_rgba(0,0,0,0.30)]",
-            }}
-            rightSection={
-              <IconChevronDown
-                className={`${
-                  openedDropdown ? "rotate-180" : ""
-                } stroke-primary stroke-2`}
-              />
-            }
-            onDropdownOpen={() => setOpenedDropdown(true)}
-            onDropdownClose={() => setOpenedDropdown(false)}
-          />
+          <div
+            className="w-full px-4 py-[1px] mt-2 bg-white rounded-md"
+            style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.20)" }}
+          >
+            <Select
+              clearable
+              withAsterisk
+              rightSectionPointerEvents="none"
+              label="Type of Course"
+              placeholder="Select Type of Course"
+              data={[COURSE_TYPE.GENERAL, COURSE_TYPE.SEL_TOPIC]}
+              {...form.getInputProps("type")}
+              allowDeselect={false}
+              withCheckIcon={false}
+              className="rounded-md my-5 border-none mb-8"
+              classNames={{
+                label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
+                input: "text-primary font-medium focus:border-primary",
+                option: "hover:bg-hover text-primary font-medium",
+                dropdown: "drop-shadow-[0_0px_4px_rgba(0,0,0,0.30)]",
+              }}
+              rightSection={
+                <IconChevronDown
+                  className={`${
+                    openedDropdown ? "rotate-180" : ""
+                  } stroke-primary stroke-2`}
+                />
+              }
+              onDropdownOpen={() => setOpenedDropdown(true)}
+              onDropdownClose={() => setOpenedDropdown(false)}
+            />
+          </div>
         </Stepper.Step>
         <Stepper.Step label="Course Name" description="STEP 2">
-          <div className="flex flex-col gap-4 mt-3">
-            <TextInput
-              classNames={{ input: "focus:border-primary " }}
-              label="Course no."
-              placeholder={
-                form.getValues().type === COURSE_TYPE.SEL_TOPIC
-                  ? "Ex. 26X4XX"
-                  : "Ex. 001102"
-              }
-              {...form.getInputProps("courseNo")}
-            />
-            <TextInput
-              label="Course name"
-              classNames={{ input: "focus:border-primary " }}
-              placeholder={
-                form.getValues().type === COURSE_TYPE.SEL_TOPIC
-                  ? "Ex. Select Topic in Comp Engr"
-                  : "Ex. English 2"
-              }
-              {...form.getInputProps("courseName")}
-            />
-            {form.getValues().type == COURSE_TYPE.SEL_TOPIC && (
+          <div
+            className="w-full p-5 mt-2  bg-white rounded-md"
+            style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.20)" }}
+          >
+            <div className="flex flex-col gap-4">
               <TextInput
-                label="Course Topic"
-                classNames={{ input: "focus:border-primary" }}
-                placeholder="Ex. Full Stack Development"
-                {...form.getInputProps("sections.0.topic")}
+                classNames={{ input: "focus:border-primary " }}
+                label="Course no."
+                withAsterisk
+                placeholder={
+                  form.getValues().type === COURSE_TYPE.SEL_TOPIC
+                    ? "Ex. 26X4XX"
+                    : "Ex. 001102"
+                }
+                {...form.getInputProps("courseNo")}
               />
-            )}
+              <TextInput
+                label="Course name"
+                withAsterisk
+                classNames={{ input: "focus:border-primary " }}
+                placeholder={
+                  form.getValues().type === COURSE_TYPE.SEL_TOPIC
+                    ? "Ex. Select Topic in Comp Engr"
+                    : "Ex. English 2"
+                }
+                {...form.getInputProps("courseName")}
+              />
+              {form.getValues().type == COURSE_TYPE.SEL_TOPIC && (
+                <TextInput
+                  label="Course Topic"
+                  withAsterisk
+                  classNames={{ input: "focus:border-primary" }}
+                  placeholder="Ex. Full Stack Development"
+                  {...form.getInputProps("sections.0.topic")}
+                />
+              )}
+            </div>
           </div>
         </Stepper.Step>
         <Stepper.Step label="Add Section" description="STEP 3">
@@ -318,7 +337,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
-            className="w-full mt-2 te h-full p-4 rounded-md gap-4 flex flex-col"
+            className="w-full mt-2 te h-full bg-white p-4 rounded-md gap-4 flex flex-col"
           >
             <div className="flex flex-col gap-1  font-medium text-[14px]">
               <span className="text-[#3E3E3E]">Course No.</span>
@@ -339,35 +358,41 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               </div>
             )}
           </div>
-          <div className="text-[#3E3E3E] mt-4 mb-1 font-medium text-[14px]">
-            Section
+          <div
+            className="w-full p-5 py-4 mt-5  bg-white rounded-md"
+            style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.20)" }}
+          >
+            <TagsInput
+              label="Section"
+              withAsterisk
+              classNames={{
+                input:
+                  "focus:border-primary h-[140px] p-3 mb-3 px-3 rounded-lg",
+                pill: "bg-primary text-white",
+              }}
+              placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
+              splitChars={[",", " ", "|"]}
+              {...form.getInputProps(`section.sectionNo`)}
+              error={form.validateField(`sections.0.sectionNo`).error}
+              value={sectionNoList}
+              onChange={setSectionList}
+            ></TagsInput>
+            <p>{form.validateField("sections.sectionNo").error}</p>
           </div>
-          <TagsInput
-            classNames={{
-              input: "focus:border-primary h-[140px] p-3 px-3 rounded-lg",
-              pill: "bg-primary text-white",
-            }}
-            placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
-            splitChars={[",", " ", "|"]}
-            {...form.getInputProps(`section.sectionNo`)}
-            error={form.validateField(`sections.0.sectionNo`).error}
-            value={sectionNoList}
-            onChange={setSectionList}
-          ></TagsInput>
-          <p>{form.validateField("sections.sectionNo").error}</p>
         </Stepper.Step>
         <Stepper.Step label="Map Semester" description="STEP 4">
           <div
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
-            className="flex flex-col gap-5 h-[350px] w-full mt-2  p-4  rounded-md  overflow-y-scroll  "
+            className="flex flex-col max-h-[320px] h-fit w-full mt-2  p-4   rounded-md  overflow-y-scroll  "
           >
-            <div className="flex flex-col font-medium text-[14px] gap-1">
+            <div className="flex flex-col font-medium text-[14px] gap-5">
               {form.getValues().sections?.map((e, index) => (
-                <>
+                <div className="flex flex-col gap-1">
                   <span className="text-primary">
-                    Select Semester for Section {e.sectionNo}
+                    Select Semester for Section{" "}
+                    {("000" + e.sectionNo).slice(-3)}
                   </span>
                   <div
                     style={{
@@ -376,11 +401,34 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                     className="w-full p-3 rounded-md gap-2 flex flex-col "
                   >
                     <div className="flex flex-row items-center justify-between">
-                      <span>Open Semester</span>
+                      <div className="gap-2 flex flex-col">
+                        <span>Open Semester</span>
+                        <Checkbox
+                          classNames={{
+                            input:
+                              "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                            body: "mr-3",
+                            label: "text-[14px] text-[#615F5F] ",
+                          }}
+                          color="#5768D5"
+                          size="xs"
+                          label={`Open in this semester (${params.get(
+                            "semester"
+                          )}/${params.get("year")?.slice(-2)})`}
+                          {...form.getInputProps(
+                            `sections.${index}.openThisTerm`,
+                            {
+                              type: "checkbox",
+                            }
+                          )}
+                        />
+                      </div>
                       <Checkbox.Group
+                        classNames={{ error: "mt-2" }}
+                        className=""
                         {...form.getInputProps(`sections.${index}.semester`)}
                       >
-                        <Group className="flex flex-row gap-1">
+                        <Group className="flex flex-row gap-1 justify-end ">
                           {Object.keys(SEMESTER).map((item) => (
                             <Checkbox
                               key={item}
@@ -399,73 +447,81 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                         </Group>
                       </Checkbox.Group>
                     </div>
-                    <Checkbox
-                      classNames={{
-                        input:
-                          "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                        body: "mr-3",
-                        label: "text-[14px] text-[#615F5F] ",
-                      }}
-                      color="#5768D5"
-                      size="xs"
-                      label={`Open in this semester (${params.get(
-                        "semester"
-                      )}/${params.get("year")?.slice(-2)})`}
-                      {...form.getInputProps(`sections.${index}.openThisTerm`, {
-                        type: "checkbox",
-                      })}
-                    />
                   </div>
-                </>
+                </div>
               ))}
             </div>
           </div>
         </Stepper.Step>
         <Stepper.Step label="Co-Instructor" description="STEP 5">
           <div className="flex flex-col gap-5 mt-3 flex-1 ">
-            <div className="bg-[#F4F5FE]  h-12 rounded-lg text-secondary flex justify-between items-center px-6   ">
+            <div
+              onClick={() => setSwapMethodAddCo(!swapMethodAddCo)}
+              className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center p-4   "
+            >
               <div className="flex gap-6">
                 <Icon IconComponent={AddCoIcon} className="text-secondary" />
                 <p>
                   Add Co-Instructor by using{" "}
-                  <span className="font-semibold">CMU Account</span>
+                  <span className="font-semibold">
+                    {swapMethodAddCo ? "Dropdown list" : "CMU Account"}
+                  </span>
                 </p>
               </div>
               <IconChevronRight stroke={2} />
             </div>
+
             <div className="flex w-full items-end h-fit ">
-              <Select
-                clearable
-                label="Add Co-Instrcutor"
-                placeholder="Select Instructor"
-                data={instructorOption}
-                allowDeselect
-                withCheckIcon={false}
-                searchable
-                className="w-full border-none "
-                style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
-                classNames={{
-                  label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
-                  input:
-                    "text-primary font-medium focus:border-primary rounded-e-none cursor-pointer",
-                  option: "hover:bg-[#DDDDF6] text-primary font-medium",
-                  dropdown: "drop-shadow-[0_0px_4px_rgba(0,0,0,0.30)]",
-                }}
-                rightSectionPointerEvents="all"
-                rightSection={
-                  !insInput && (
+              {swapMethodAddCo ? (
+                <TextInput
+                  label={
+                    <p>
+                      Add Co-Instructor via CMU account{" "}
+                      <span className=" text-red-500">
+                        (make sure CMU account correct)
+                      </span>
+                    </p>
+                  }
+                  className="w-full border-none "
+                  style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+                  classNames={{
+                    label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
+                    input:
+                      "text-primary font-medium focus:border-primary rounded-e-none cursor-pointer",
+                  }}
+                  placeholder="example@cmu.ac.th"
+                ></TextInput>
+              ) : (
+                <Select
+                  rightSectionPointerEvents="none"
+                  label="Select Co-Instructor to add"
+                  placeholder="Select Instructor"
+                  data={instructorOption}
+                  allowDeselect
+                  withCheckIcon={false}
+                  searchable
+                  className="w-full border-none "
+                  style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+                  classNames={{
+                    label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
+                    input:
+                      "text-primary font-medium focus:border-primary rounded-e-none cursor-pointer",
+                    option: "hover:bg-[#DDDDF6] text-primary font-medium",
+                    dropdown: "drop-shadow-[0_0px_4px_rgba(0,0,0,0.30)]",
+                  }}
+                  rightSection={
                     <IconChevronDown
                       className={`${
                         openedDropdown ? "rotate-180" : ""
                       } stroke-primary stroke-2`}
                     />
-                  )
-                }
-                onDropdownOpen={() => setOpenedDropdown(true)}
-                onDropdownClose={() => setOpenedDropdown(false)}
-                value={insInput?.value}
-                onChange={(value, option) => setInsInput(option)}
-              />
+                  }
+                  onDropdownOpen={() => setOpenedDropdown(true)}
+                  onDropdownClose={() => setOpenedDropdown(false)}
+                  value={insInput?.value}
+                  onChange={(value, option) => setInsInput(option)}
+                />
+              )}
               <Button
                 className="rounded-s-none w-[12%]"
                 color="#5768D5"
@@ -474,80 +530,88 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 Add
               </Button>
             </div>
+
             <div
+              className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
-              className="w-full mt-2 h-full p-4 rounded-md gap-1.5 flex flex-col"
             >
-              <Input
-                leftSection={<TbSearch />}
-                placeholder="Name"
-                value={searchValue}
-                onChange={(event) => setSearchValue(event.currentTarget.value)}
-                className="focus:border-none px-1"
-                classNames={{ input: "bg-gray-200 rounded-md border-none" }}
-                rightSectionPointerEvents="all"
-              />
-              <div className="flex flex-col h-[200px] gap-4 overflow-y-scroll p-1">
-                {coInsList.map(
-                  (e) =>
-                    (!searchValue.length ||
-                      e.label
-                        .toLowerCase()
-                        .includes(searchValue.toLowerCase())) && (
-                      <div
-                        style={{
-                          boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                        }}
-                        className="w-full mt-2 h-fit p-4 rounded-md gap-4 flex flex-col"
-                      >
-                        <div className="flex w-full justify-between items-center">
-                          <div className="flex flex-col gap-1 font-medium text-[14px]">
-                            <span className="text-[#3E3E3E]">Name</span>
-                            <span className="text-primary text-[14px]">
-                              {e.label}
-                            </span>
+              <div className="bg-[#e6e9ff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-medium">
+                <IconUsers/> Added Co-Instructor
+              </div>
+              <div className="flex flex-col max-h-[250px] h-fit w-full   p-4  overflow-y-scroll ">
+                <Input
+                  leftSection={<TbSearch />}
+                  placeholder="Name"
+                  value={searchValue}
+                  onChange={(event) =>
+                    setSearchValue(event.currentTarget.value)
+                  }
+                  className="focus:border-none px-1"
+                  classNames={{ input: "bg-gray-200 rounded-md border-none" }}
+                  rightSectionPointerEvents="all"
+                />
+                <div className="flex flex-col h-[200px] gap-2 overflow-y-scroll p-1">
+                  {coInsList.map(
+                    (e) =>
+                      (!searchValue.length ||
+                        e.label
+                          .toLowerCase()
+                          .includes(searchValue.toLowerCase())) && (
+                        <div
+                          style={{
+                            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                          }}
+                          className="w-full mt-2 h-fit p-4 rounded-md gap-4 flex flex-col"
+                        >
+                          <div className="flex w-full justify-between items-center">
+                            <div className="flex flex-col gap-1 font-medium text-[14px]">
+                              <span className="text-[#3E3E3E]">Name</span>
+                              <span className="text-primary text-[14px]">
+                                {e.label}
+                              </span>
+                            </div>
+                            <Button
+                              className="px-3 h-3/4 rounded-lg"
+                              color="#FF4747"
+                              onClick={() => removeCoIns(e)}
+                            >
+                              Remove
+                            </Button>
                           </div>
-                          <Button
-                            className="px-3 h-3/4 rounded-lg"
-                            color="#FF4747"
-                            onClick={() => removeCoIns(e)}
-                          >
-                            Remove
-                          </Button>
+                          <div className="flex flex-col gap-3.5 font-medium text-[14px]">
+                            <span className="text-[#3E3E3E] ">Can access</span>
+                            <Checkbox.Group>
+                              <Group className="flex flex-col w-fit">
+                                {sectionNoList.map((sectionNo, index) => (
+                                  <Checkbox
+                                    classNames={{
+                                      input:
+                                        "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                                      body: "mr-3",
+                                      label: "text-[14px]",
+                                    }}
+                                    color="#5768D5"
+                                    size="xs"
+                                    label={`Section ${sectionNo}`}
+                                    // value={}
+                                    onChange={(event) =>
+                                      addCoInsInSec(
+                                        index,
+                                        event.currentTarget.checked,
+                                        e.value
+                                      )
+                                    }
+                                  />
+                                ))}
+                              </Group>
+                            </Checkbox.Group>
+                          </div>
                         </div>
-                        <div className="flex flex-col gap-3.5 font-medium text-[14px]">
-                          <span className="text-[#3E3E3E] ">Can access</span>
-                          <Checkbox.Group>
-                            <Group className="flex flex-col w-fit">
-                              {sectionNoList.map((sectionNo, index) => (
-                                <Checkbox
-                                  classNames={{
-                                    input:
-                                      "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                                    body: "mr-3",
-                                    label: "text-[14px]",
-                                  }}
-                                  color="#5768D5"
-                                  size="xs"
-                                  label={`Section ${sectionNo}`}
-                                  // value={}
-                                  onChange={(event) =>
-                                    addCoInsInSec(
-                                      index,
-                                      event.currentTarget.checked,
-                                      e.value
-                                    )
-                                  }
-                                />
-                              ))}
-                            </Group>
-                          </Checkbox.Group>
-                        </div>
-                      </div>
-                    )
-                )}
+                      )
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -640,12 +704,12 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         </Stepper.Step>
       </Stepper>
 
-      <Group className="flex w-full h-fit items-end justify-between mt-4">
+      <Group className="flex w-full h-fit items-end justify-between">
         <div>
           {active > 0 && (
             <Button
-              className="rounded-[10px] mt-4 hover:bg-[#ebebeb] items-center justify-center h-[36px]  border-0"
-              variant="default"
+              color="#E3E5EB"
+              className="rounded-[10px]   items-center text-black hover:text-black justify-center h-[36px]  border-0"
               justify="start"
               onClick={prevStep}
             >
@@ -655,10 +719,13 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         </div>
         <Button
           color="#6869AD"
-          className="rounded-[10px] h-[36px] mt-4 w-[100px]"
+          className="rounded-[10px] h-[36px] w-fit"
           onClick={nextStep}
+          rightSection={
+            active != 5 && <IconArrowRight stroke={2} className="ml-1" />
+          }
         >
-          {active == 5 ? "Done" : "Next"}
+          {active == 5 ? "Done" : "Next step"}
         </Button>
       </Group>
     </Modal>
