@@ -25,6 +25,7 @@ import { getAcademicYear } from "./services/academicYear/academicYear.service";
 import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
 import Course from "./pages/course";
+import { setLoading } from "./store/loading";
 
 function App() {
   const user = useAppSelector((state) => state.user);
@@ -75,6 +76,7 @@ function App() {
       ) {
         localStorage.removeItem("token");
       }
+      dispatch(setLoading(true));
       fetchData();
     } else if (path != ROUTE_PATH.LOGIN) {
       navigate(ROUTE_PATH.LOGIN);

@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { Menu, Button } from "@mantine/core";
 import Icon from "./Icon";
 import ProfileIcon from "@/assets/icons/profile.svg?react";
-import { IconList } from "@tabler/icons-react";
+import { IconChevronRight, IconList } from "@tabler/icons-react";
 import { IconUserScreen } from "@tabler/icons-react";
 import { IconStatusChange } from "@tabler/icons-react";
 import { IconAdjustmentsHorizontal } from "@tabler/icons-react";
@@ -18,11 +18,17 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setUser } from "@/store/user";
 import { ROLE } from "@/helpers/constants/enum";
+import ModalManageAdmin from "./Modal/ModalManageAdmin";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function Profile() {
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [
+    modalManageAdmin,
+    { open: openModalManageAdmin, close: closeModalManageAdmin },
+  ] = useDisclosure(false);
 
   const getRoleColor = (role: any) => {
     switch (role) {
@@ -45,7 +51,11 @@ export default function Profile() {
 
   return (
     <>
-      <Menu trigger="click-hover" openDelay={100} closeDelay={400}>
+      <ModalManageAdmin
+        opened={modalManageAdmin}
+        onClose={closeModalManageAdmin}
+      />
+      <Menu trigger="click" openDelay={100} closeDelay={400}>
         <Menu.Target>
           <Button className="flex flex-row justify-center bg-white items-center rounded-lg py-0.5 px-4 cursor-pointer hover:bg-gray-200">
             <div className="flex flex-col text-[12px] gap-1 text-end mr-3">
@@ -63,7 +73,7 @@ export default function Profile() {
           </Button>
         </Menu.Target>
         <Menu.Dropdown
-          className="rounded-xl translate-y-[-8px] translate-x-[-16px] backdrop-blur-xl bg-white/70"
+          className="rounded-xl translate-y-[-8px] translate-x-[-16px] backdrop-blur-xl bg-white"
           style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
         >
           {user.role !== ROLE.STUDENT && (
@@ -104,10 +114,10 @@ export default function Profile() {
           {/* SUB MENU MANAGEMENT */}
           <Menu trigger="click-hover" openDelay={100} closeDelay={400}>
             {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
-              <>
-                <Menu.Target>
-                  <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
-                    <div className="flex items-center gap-2">
+              <Menu.Target>
+                <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                  <div className="flex justify-between items-center gap-2">
+                    <div className="flex gap-2">
                       <IconAdjustmentsHorizontal
                         className="h-5 w-5"
                         stroke={1.5}
@@ -115,12 +125,17 @@ export default function Profile() {
                       />
                       <span>Management</span>
                     </div>
-                  </Menu.Item>
-                </Menu.Target>
-              </>
+                    <IconChevronRight
+                      className="h-5 w-5"
+                      stroke={1.5}
+                      color="#3e3e3e"
+                    />
+                  </div>
+                </Menu.Item>
+              </Menu.Target>
             )}
             <Menu.Dropdown
-              className="rounded-xl -translate-y-[45px] -translate-x-[210px]  bg-white/70"
+              className="rounded-xl -translate-y-[45px] -translate-x-[210px]  bg-white"
               style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
             >
               {user.role === ROLE.SUPREME_ADMIN && (
@@ -139,7 +154,10 @@ export default function Profile() {
                   </Menu.Item>
                 </>
               )}
-              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+              <Menu.Item
+                onClick={openModalManageAdmin}
+                className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20"
+              >
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={AdminIcon} className="h-5 w-5" />
                   <span>Admin</span>

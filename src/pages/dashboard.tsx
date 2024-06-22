@@ -31,6 +31,7 @@ export default function Dashboard() {
   const [term, setTerm] = useState<IModelAcademicYear>();
   const [openAddModal, { open: openedAddModal, close: closeAddModal }] =
     useDisclosure(false);
+  const loading = useAppSelector((state) => state.loading);
 
   useEffect(() => {
     const year = parseInt(params.get("year")!);
@@ -131,7 +132,9 @@ export default function Dashboard() {
         className="flex h-full w-full bg-white rounded-[5px] p-3 overflow-hidden"
         style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.50)" }}
       >
-        {course.length === 0 ? (
+        {loading ? (
+          <div>hello</div>
+        ) : course.length === 0 ? (
           <div className=" flex flex-row flex-1 justify-between">
             <div className="h-full px-[60px] justify-center flex flex-col">
               <p className="text-primary text-[22px] font-[590]">

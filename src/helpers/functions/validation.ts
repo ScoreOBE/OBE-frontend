@@ -1,4 +1,5 @@
 import { RESPONSE_MESSAGE } from "@/helpers/constants/response.enum";
+import { ROUTE_PATH } from "../constants/route";
 
 export const isValidResponse = (
   res: any
@@ -8,6 +9,10 @@ export const isValidResponse = (
   if (res.message === RESPONSE_MESSAGE.SUCCESS) {
     return res.data;
   } else {
+    if(res == RESPONSE_MESSAGE.UNAUTHORIZED) {
+      localStorage.removeItem('token')
+      window.location.replace(ROUTE_PATH.LOGIN)
+    }
     return res;
     // localStorage.setItem("isCheckError", JSON.stringify(res));
     // window.postMessage({

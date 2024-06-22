@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import userReducer from "./user";
 import academicYearReducer from "./academicYear";
 import courseReducer from "./course";
+import loadingReducer from "./loading";
 
 const store = configureStore({
   reducer: {
+    loading: loadingReducer,
     user: userReducer,
     academicYear: academicYearReducer,
     course: courseReducer,

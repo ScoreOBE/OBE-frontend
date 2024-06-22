@@ -10,6 +10,7 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { setCourseList } from "@/store/course";
 import { useSearchParams } from "react-router-dom";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
+import { setLoading } from "@/store/loading";
 
 export default function DashboardSidebar() {
   const [openedFilterTerm, { open: openFilterTerm, close: closeFilterTerm }] =
@@ -32,16 +33,20 @@ export default function DashboardSidebar() {
       localStorage.setItem("totalCourses", res.totalCount);
       dispatch(setCourseList(res.courses));
     }
+    dispatch(setLoading(false))
   };
 
   useEffect(() => {
+  
     if (academicYear.length) {
       setTerm(academicYear[0]);
       setSelectedTerm(termOption[0]);
       if (!course.length) {
+        dispatch(setLoading(true))
         fetchCourse(academicYear[0].id);
       }
     }
+    
   }, [academicYear]);
 
   const setTerm = (data: IModelAcademicYear) => {

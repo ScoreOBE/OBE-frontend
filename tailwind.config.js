@@ -9,6 +9,7 @@ export default {
         primary: "#6869AD",
         secondary: "#5768D5",
         tertiary: "#3E3E3E",
+        hover: "#efefef"
       },
     },
     fontFamily: {
