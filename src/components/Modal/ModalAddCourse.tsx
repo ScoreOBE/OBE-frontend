@@ -11,7 +11,7 @@ import {
   Input,
   List,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { FORM_INDEX, useForm } from "@mantine/form";
 import {
   IconChevronDown,
   IconCircleFilled,
@@ -26,49 +26,66 @@ import { IModelUser } from "@/models/ModelUser";
 import { TbSearch } from "react-icons/tb";
 import { SEMESTER } from "@/helpers/constants/enum";
 import { useSearchParams } from "react-router-dom";
+import { isNumber } from "lodash";
+import { useAppSelector } from "@/store";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
 };
 export default function ModalAddCourse({ opened, onClose }: Props) {
+  const user = useAppSelector((state) => state.user);
   const [params, setParams] = useSearchParams();
   const [active, setActive] = useState(0);
   const [openedDropdown, setOpenedDropdown] = useState(false);
-  const [instructorOption, setInstructorOption] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [instructorOption, setInstructorOption] = useState<any[]>([]);
+  const [sectionNoList, setSectionNoList] = useState<string[]>([]);
+  const [insInput, setInsInput] = useState<any>();
+  const [coInsList, setCoInsList] = useState<any[]>([]);
 
-  const validateCourseNameorTopic = (value: string) => {
+  const validateCourseNameorTopic = (value: string, title: string) => {
     const maxLength = 70;
-    if (!value) return "Course Name is required";
+    if (!value) return `${title} is required`;
     if (!value.trim().length) return "Cannot have only spaces";
     if (value.length > maxLength)
       return `You have ${value.length - 70} characters too many`;
-    const isValid = /^[0-9A-Za-z !"%&'()*+\-.<=>?@[\]\\^_]+$/.test(value);
+    const isValid = /^[0-9A-Za-z "%&()*+,-./<=>?@[\]\\^_]+$/.test(value);
     return isValid
       ? null
-      : `only contain 0-9, a-z, A-Z, space, !"%&()*+'-.<=>?@[]\\^-`;
+      : `only contain 0-9, a-z, A-Z, space, "%&()*+,-./<=>?@[]\\^_`;
   };
 
   const form = useForm({
-    initialValues: { sections: [] } as Partial<IModelCourse>,
+    mode: "uncontrolled",
+    initialValues: { sections: [{}] } as Partial<IModelCourse>,
     validate: {
-      type: (value) => {
-        return !value && "Course Type is required";
-      },
+      type: (value) => !value && "Course Type is required",
       courseNo: (value) => {
         if (!value) return "Course No. is required";
         const isValid = /^\d{6}$/.test(value.toString());
         return isValid ? null : "Please enter a valid course no";
       },
-      courseName: (value) => validateCourseNameorTopic(value!),
-      // sections: (value) => validateCourseNameorTopic(value!),
+      courseName: (value) => validateCourseNameorTopic(value!, "Course Name"),
+      sections: {
+        topic: (value) => validateCourseNameorTopic(value!, "Topic"),
+        sectionNo: (value) => {
+          if (value === undefined) return "Section No. is required";
+          const isValid = isNumber(value) && value.toString().length <= 3;
+          return isValid ? null : "Please enter a valid section no";
+        },
+        semester: (value) => {
+          return value?.length ? null : "Please select semester at least one.";
+        },
+      },
     },
     validateInputOnBlur: true,
   });
 
   useEffect(() => {
     const fetchIns = async () => {
-      const res = await getInstructor();
+      let res = await getInstructor();
+      res = res.filter((e: any) => e.id != user.id);
       setInstructorOption(
         res.map((e: IModelUser) => {
           return { label: `${e.firstNameEN} ${e.lastNameEN}`, value: e.id };
@@ -76,10 +93,11 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       );
     };
     fetchIns();
-  }, []);
+  }, [onClose]);
 
   const nextStep = () => {
     let isValid = true;
+    const length = form.getValues().sections?.length || 0;
     switch (active) {
       case 0:
         isValid = !form.validateField("type").hasError;
@@ -87,11 +105,25 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       case 1:
         isValid =
           !form.validateField("courseNo").hasError &&
-          !form.validateField("courseName").hasError;
+          !form.validateField("courseName").hasError &&
+          !form.validateField("sections.0.topic").hasError;
         break;
       case 2:
+        for (let i = 0; i < length; i++) {
+          isValid = !form.validateField(`sections.${i}.sectionNo`).hasError;
+          if (!isValid) break;
+        }
         break;
       case 3:
+        for (let i = 0; i < length; i++) {
+          if (isValid) {
+            isValid = !form.validateField(`sections.${i}.semester`).hasError;
+          } else {
+            form.validateField(`sections.${i}.semester`);
+          }
+        }
+        break;
+      case 4:
         break;
     }
     if (isValid) {
@@ -102,13 +134,93 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
   const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
   const closeModal = () => {
     setActive(0);
+    setSectionNoList([]);
+    setInsInput(undefined);
+    setCoInsList([]);
     form.reset();
     onClose();
   };
 
+  const setSectionList = (value: string[]) => {
+    let sections = form.getValues().sections;
+    let sectionNo: string[] = [...sectionNoList];
+    if (sections && sections.length) {
+      const topic = sections[0].topic;
+      if (!value.length) {
+        sections = sections?.slice(0, 1);
+        sections[0].sectionNo = undefined;
+        sectionNo = [];
+      } else if (sections?.length! > value.length) {
+        sections = sections?.slice(0, value.length);
+        sectionNo = sectionNo?.slice(0, value.length);
+      }
+      value.forEach((secNo, index) => {
+        if (
+          !parseInt(secNo) ||
+          secNo.length > 3 ||
+          sections?.find((e) => e.sectionNo == parseInt(secNo))
+        )
+          return;
+        else if (sections?.at(index)) {
+          sections[index].topic = topic;
+          sections[index].sectionNo = parseInt(secNo);
+          sectionNo[index] = ("000" + secNo).slice(-3);
+        } else {
+          sections?.push({ topic, sectionNo: parseInt(secNo) });
+          sectionNo.push(("000" + secNo).slice(-3));
+        }
+      });
+    }
+    form.setFieldValue("sections", [...sections!]);
+    setSectionNoList(sectionNo);
+  };
+
+  const addCoIns = () => {
+    if (insInput) {
+      setCoInsList([...coInsList, insInput]);
+      const updatedInstructorOptions = instructorOption.map((option) =>
+        option.value === insInput.value ? { ...option, disabled: true } : option
+      );
+      setInstructorOption(updatedInstructorOptions);
+    }
+    setInsInput(undefined);
+  };
+
+  const removeCoIns = (coIns: any) => {
+    const newCoIns = coInsList.filter((e) => e.value !== coIns.value);
+    const insOption: any[] = [];
+    instructorOption.forEach((e) => {
+      if (e.value == coIns.value) {
+        insOption.push({ ...coIns, disabled: false });
+      } else {
+        insOption.push(e);
+      }
+    });
+    let sections = form.getValues().sections;
+    sections?.forEach((e) => {
+      e.coInstructors = e.coInstructors?.filter(
+        (p) => p != coIns.value
+      ) as string[];
+    });
+    form.setFieldValue("sections", [...sections!]);
+    setInstructorOption(insOption);
+    setCoInsList(newCoIns);
+  };
+
+  const addCoInsInSec = (index: number, checked: boolean, value: string) => {
+    let coInstructors: string[] =
+      (form.getValues().sections?.at(index)?.coInstructors as string[]) ?? [];
+    if (checked) {
+      coInstructors?.push(value);
+    } else {
+      coInstructors = coInstructors?.filter((e) => e != value);
+    }
+    form.setFieldValue(`sections.${index}.coInstructors`, coInstructors);
+  };
+
   useEffect(() => {
     console.log(form.getValues().sections);
-  }, [form]);
+  }, [form, insInput]);
 
   return (
     <Modal
@@ -196,7 +308,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 label="Course Topic"
                 classNames={{ input: "focus:border-primary" }}
                 placeholder="Ex. Full Stack Development"
-                {...form.getInputProps("sections.topic")}
+                {...form.getInputProps("sections.0.topic")}
               />
             )}
           </div>
@@ -218,12 +330,11 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 {form.getValues().courseName}
               </span>
             </div>
-            {form.getValues().type === COURSE_TYPE.SEL_TOPIC && (
+            {form.getValues().sections?.at(0)?.topic && (
               <div className="flex flex-col gap-1  font-medium text-[14px]">
                 <span className="text-[#3E3E3E]">Course Topic</span>
                 <span className="text-primary">
-                  {/* รอใส่ข้อมูล Topic {form.getValues().____} */}
-                  Test Course Topic
+                  {form.getValues().sections?.at(0)?.topic}
                 </span>
               </div>
             )}
@@ -233,20 +344,17 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           </div>
           <TagsInput
             classNames={{
-              input:
-                "focus:border-primary active:border-primary h-[140px] p-3 px-3",
+              input: "focus:border-primary h-[140px] p-3 px-3 rounded-lg",
               pill: "bg-primary text-white",
             }}
-            placeholder="Fill Section Number Ex. 001 or 1 (Press Enter for fill the next section)"
-            {...form.getInputProps("sections")}
-            value={form.getValues().sections?.map((e) => ("000" + e).slice(-3))}
-            onChange={(sections) => {
-              form.setFieldValue(
-                "sections",
-                sections.map((section) => section.replace(/^0+/, ""))
-              );
-            }}
+            placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
+            splitChars={[",", " ", "|"]}
+            {...form.getInputProps(`section.sectionNo`)}
+            error={form.validateField(`sections.0.sectionNo`).error}
+            value={sectionNoList}
+            onChange={setSectionList}
           ></TagsInput>
+          <p>{form.validateField("sections.sectionNo").error}</p>
         </Stepper.Step>
         <Stepper.Step label="Map Semester" description="STEP 4">
           <div
@@ -256,56 +364,60 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             className="flex flex-col gap-5 h-[350px] w-full mt-2  p-4  rounded-md  overflow-y-scroll  "
           >
             <div className="flex flex-col font-medium text-[14px] gap-1">
-              <span className="text-primary">
-                Select Semester for Section 803
-              </span>
-              <div
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-                className="w-full p-3 rounded-md gap-2 flex flex-col "
-              >
-                <div className="flex flex-row items-center justify-between">
-                  <span>Open Semester</span>
-                  <div className="flex flex-row gap-1">
-                    {Object.keys(SEMESTER).map((e) => (
-                      <Checkbox
-                        classNames={{
-                          input:
-                            "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                          body: "mr-3",
-                          label: "text-[14px]",
-                        }}
-                        color="#5768D5"
-                        size="xs"
-                        value={e}
-                        label={e}
-                        // checked={isChecked}
-                        // disabled={disabled}
-                        readOnly
-                      />
-                    ))}
+              {form.getValues().sections?.map((e, index) => (
+                <>
+                  <span className="text-primary">
+                    Select Semester for Section {e.sectionNo}
+                  </span>
+                  <div
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                    className="w-full p-3 rounded-md gap-2 flex flex-col "
+                  >
+                    <div className="flex flex-row items-center justify-between">
+                      <span>Open Semester</span>
+                      <Checkbox.Group
+                        {...form.getInputProps(`sections.${index}.semester`)}
+                      >
+                        <Group className="flex flex-row gap-1">
+                          {Object.keys(SEMESTER).map((item) => (
+                            <Checkbox
+                              key={item}
+                              classNames={{
+                                input:
+                                  "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                                body: "mr-3",
+                                label: "text-[14px]",
+                              }}
+                              color="#5768D5"
+                              size="xs"
+                              label={item}
+                              value={item}
+                            />
+                          ))}
+                        </Group>
+                      </Checkbox.Group>
+                    </div>
+                    <Checkbox
+                      classNames={{
+                        input:
+                          "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                        body: "mr-3",
+                        label: "text-[14px] text-[#615F5F] ",
+                      }}
+                      color="#5768D5"
+                      size="xs"
+                      label={`Open in this semester (${params.get(
+                        "semester"
+                      )}/${params.get("year")?.slice(-2)})`}
+                      {...form.getInputProps(`sections.${index}.openThisTerm`, {
+                        type: "checkbox",
+                      })}
+                    />
                   </div>
-                </div>
-
-                <Checkbox
-                  classNames={{
-                    input:
-                      "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                    body: "mr-3",
-                    label: "text-[14px] text-[#615F5F] ",
-                  }}
-                  color="#5768D5"
-                  size="xs"
-                  value={"1"}
-                  label={`Open in this semester (${params.get(
-                    "semester"
-                  )}/${params.get("year")?.slice(-2)})`}
-                  // checked={isChecked}
-                  // disabled={disabled}
-                  readOnly
-                />
-              </div>
+                </>
+              ))}
             </div>
           </div>
         </Stepper.Step>
@@ -316,7 +428,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 <Icon IconComponent={AddCoIcon} className="text-secondary" />
                 <p>
                   Add Co-Instructor by using{" "}
-                  <span className="font-semibold"> CMU Account</span>
+                  <span className="font-semibold">CMU Account</span>
                 </p>
               </div>
               <IconChevronRight stroke={2} />
@@ -327,7 +439,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 label="Add Co-Instrcutor"
                 placeholder="Select Instructor"
                 data={instructorOption}
-                allowDeselect={false}
+                allowDeselect
                 withCheckIcon={false}
                 searchable
                 className="w-full border-none "
@@ -335,21 +447,30 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 classNames={{
                   label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
                   input:
-                    "text-primary font-medium focus:border-primary rounded-e-none ",
+                    "text-primary font-medium focus:border-primary rounded-e-none cursor-pointer",
                   option: "hover:bg-[#DDDDF6] text-primary font-medium",
                   dropdown: "drop-shadow-[0_0px_4px_rgba(0,0,0,0.30)]",
                 }}
+                rightSectionPointerEvents="all"
                 rightSection={
-                  <IconChevronDown
-                    className={`${
-                      openedDropdown ? "rotate-180" : ""
-                    } stroke-primary stroke-2`}
-                  />
+                  !insInput && (
+                    <IconChevronDown
+                      className={`${
+                        openedDropdown ? "rotate-180" : ""
+                      } stroke-primary stroke-2`}
+                    />
+                  )
                 }
                 onDropdownOpen={() => setOpenedDropdown(true)}
                 onDropdownClose={() => setOpenedDropdown(false)}
+                value={insInput?.value}
+                onChange={(value, option) => setInsInput(option)}
               />
-              <Button className="rounded-s-none w-[12%]" color="#5768D5">
+              <Button
+                className="rounded-s-none w-[12%]"
+                color="#5768D5"
+                onClick={addCoIns}
+              >
                 Add
               </Button>
             </div>
@@ -357,158 +478,76 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
-              className="w-full mt-2  h-full p-4 rounded-md gap-1.5 flex flex-col "
+              className="w-full mt-2 h-full p-4 rounded-md gap-1.5 flex flex-col"
             >
               <Input
                 leftSection={<TbSearch />}
                 placeholder="Name"
-                // value={searchValue}
-                // onChange={(event) => setSearchValue(event.currentTarget.value)}
-                // onKeyDown={(event) => event.key == "Enter" && searchCourse()}
-                // onInput={() => setIsFocused(true)}
+                value={searchValue}
+                onChange={(event) => setSearchValue(event.currentTarget.value)}
                 className="focus:border-none px-1"
                 classNames={{ input: "bg-gray-200 rounded-md border-none" }}
                 rightSectionPointerEvents="all"
               />
               <div className="flex flex-col h-[200px] gap-4 overflow-y-scroll p-1">
-                <div
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  }}
-                  className="w-full mt-2 h-fit p-4 rounded-md gap-4 flex flex-col"
-                >
-                  <div className="flex w-full justify-between items-center">
-                    <div className="flex flex-col gap-1 font-medium text-[14px]">
-                      <span className="text-[#3E3E3E] ">Name</span>
-                      <span className="text-primary text-[14px]">
-                        Switch Thanaporn
-                      </span>
-                    </div>
-                    <Button
-                      className=" px-3 h-3/4 rounded-lg  "
-                      color="#FF4747"
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                  <div className="flex flex-col gap-3.5 font-medium text-[14px]">
-                    <span className="text-[#3E3E3E] ">Can access</span>
-                    <Checkbox
-                      classNames={{
-                        input:
-                          "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                        body: "mr-3",
-                        label: "text-[14px]",
-                      }}
-                      color="#5768D5"
-                      size="xs"
-                      value={"001"}
-                      label="Section 001"
-                      // checked={isChecked}
-                      // disabled={disabled}
-                      readOnly
-                    />
-                    <Checkbox
-                      classNames={{
-                        input:
-                          "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                        body: "mr-3",
-                        label: "text-[14px]",
-                      }}
-                      color="#5768D5"
-                      size="xs"
-                      value={"001"}
-                      label="Section 001"
-                      // checked={isChecked}
-                      // disabled={disabled}
-                      readOnly
-                    />
-                    <Checkbox
-                      classNames={{
-                        input:
-                          "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                        body: "mr-3",
-                        label: "text-[14px]",
-                      }}
-                      color="#5768D5"
-                      size="xs"
-                      value={"001"}
-                      label="Section 001"
-                      // checked={isChecked}
-                      // disabled={disabled}
-                      readOnly
-                    />
-                  </div>
-                </div>
-                <div
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  }}
-                  className="w-full mt-2 h-fit p-4 rounded-md gap-4 flex flex-col"
-                >
-                  <div className="flex w-full justify-between items-center">
-                    <div className="flex flex-col gap-1 font-medium text-[14px]">
-                      <span className="text-[#3E3E3E] ">Name</span>
-                      <span className="text-primary text-[14px]">
-                        Switch Thanaporn
-                      </span>
-                    </div>
-                    <Button
-                      className=" px-3 h-3/4 rounded-lg  "
-                      color="#FF4747"
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                  <div className="flex flex-col gap-3.5 font-medium text-[14px]">
-                    <span className="text-[#3E3E3E] ">Can access</span>
-                    <Checkbox
-                      classNames={{
-                        input:
-                          "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                        body: "mr-3",
-                        label: "text-[14px]",
-                      }}
-                      color="#5768D5"
-                      size="xs"
-                      value={"001"}
-                      label="Section 001"
-                      // checked={isChecked}
-                      // disabled={disabled}
-                      readOnly
-                    />
-                    <Checkbox
-                      classNames={{
-                        input:
-                          "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                        body: "mr-3",
-                        label: "text-[14px]",
-                      }}
-                      color="#5768D5"
-                      size="xs"
-                      value={"001"}
-                      label="Section 001"
-                      // checked={isChecked}
-                      // disabled={disabled}
-                      readOnly
-                    />
-                    <Checkbox
-                      classNames={{
-                        input:
-                          "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                        body: "mr-3",
-                        label: "text-[14px]",
-                      }}
-                      color="#5768D5"
-                      size="xs"
-                      value={"001"}
-                      label="Section 001"
-                      // checked={isChecked}
-                      // disabled={disabled}
-                      readOnly
-                    />
-                  </div>
-                </div>
+                {coInsList.map(
+                  (e) =>
+                    (!searchValue.length ||
+                      e.label
+                        .toLowerCase()
+                        .includes(searchValue.toLowerCase())) && (
+                      <div
+                        style={{
+                          boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                        }}
+                        className="w-full mt-2 h-fit p-4 rounded-md gap-4 flex flex-col"
+                      >
+                        <div className="flex w-full justify-between items-center">
+                          <div className="flex flex-col gap-1 font-medium text-[14px]">
+                            <span className="text-[#3E3E3E]">Name</span>
+                            <span className="text-primary text-[14px]">
+                              {e.label}
+                            </span>
+                          </div>
+                          <Button
+                            className="px-3 h-3/4 rounded-lg"
+                            color="#FF4747"
+                            onClick={() => removeCoIns(e)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                        <div className="flex flex-col gap-3.5 font-medium text-[14px]">
+                          <span className="text-[#3E3E3E] ">Can access</span>
+                          <Checkbox.Group>
+                            <Group className="flex flex-col w-fit">
+                              {sectionNoList.map((sectionNo, index) => (
+                                <Checkbox
+                                  classNames={{
+                                    input:
+                                      "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                                    body: "mr-3",
+                                    label: "text-[14px]",
+                                  }}
+                                  color="#5768D5"
+                                  size="xs"
+                                  label={`Section ${sectionNo}`}
+                                  // value={}
+                                  onChange={(event) =>
+                                    addCoInsInSec(
+                                      index,
+                                      event.currentTarget.checked,
+                                      e.value
+                                    )
+                                  }
+                                />
+                              ))}
+                            </Group>
+                          </Checkbox.Group>
+                        </div>
+                      </div>
+                    )
+                )}
               </div>
             </div>
           </div>
@@ -534,13 +573,11 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   {form.getValues().courseName}
                 </span>
               </div>
-
-              {form.getValues().type === COURSE_TYPE.SEL_TOPIC && (
+              {form.getValues().sections?.at(0)?.topic && (
                 <div className="flex flex-col gap-1  font-medium text-[14px]">
                   <span className="text-[#3E3E3E]">Course Topic</span>
                   <span className="text-primary">
-                    {/* รอใส่ข้อมูล Topic {form.getValues().____} */}
-                    Test Course Topic
+                    {form.getValues().sections?.at(0)?.topic}
                   </span>
                 </div>
               )}
@@ -555,6 +592,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 className=" flex flex-col flex-1 rounded-md gap-4"
               >
                 <div className="flex flex-col p-4 h-[200px] gap-4 overflow-y-scroll">
+                  {}
                   <div
                     style={{
                       boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
