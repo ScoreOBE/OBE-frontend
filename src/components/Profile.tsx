@@ -8,6 +8,12 @@ import { IconUserScreen } from "@tabler/icons-react";
 import { IconStatusChange } from "@tabler/icons-react";
 import { IconAdjustmentsHorizontal } from "@tabler/icons-react";
 import { IconLogout } from "@tabler/icons-react";
+import SupremeIcon from "@/assets/icons/supremeAdmin.svg?react";
+import CourseIcon from "@/assets/icons/course.svg?react";
+import SOIcon from "@/assets/icons/SO.svg?react";
+import TQFIcon from "@/assets/icons/TQF.svg?react";
+import AdminIcon from "@/assets/icons/admin.svg?react";
+import SemesterIcon from "@/assets/icons/calendar.svg?react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setUser } from "@/store/user";
@@ -60,23 +66,27 @@ export default function Profile() {
           className="rounded-xl translate-y-[-8px] translate-x-[-16px] backdrop-blur-xl bg-white/70"
           style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
         >
-          <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
-            <div className="flex items-center gap-2">
-              <IconList stroke={1.5} className="h-5 w-5" color="#3e3e3e" />
-              <span>Activity log</span>
-            </div>
-          </Menu.Item>
-          <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
-            <div className="flex items-center gap-2">
-              <IconUserScreen
-                className="h-5 w-5"
-                stroke={1.5}
-                color="#3e3e3e"
-              />
-              <span>Instructor view</span>
-            </div>
-          </Menu.Item>
-          <Menu.Divider />
+          {user.role !== ROLE.STUDENT && (
+            <>
+              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                <div className="flex items-center gap-2">
+                  <IconList stroke={1.5} className="h-5 w-5" color="#3e3e3e" />
+                  <span>Activity log</span>
+                </div>
+              </Menu.Item>
+              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                <div className="flex items-center gap-2">
+                  <IconUserScreen
+                    className="h-5 w-5"
+                    stroke={1.5}
+                    color="#3e3e3e"
+                  />
+                  <span>Instructor view</span>
+                </div>
+              </Menu.Item>
+              <Menu.Divider />
+            </>
+          )}
           <Menu.Item
             className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20"
             onClick={() => navigate(ROUTE_PATH.SELECTED_DEPARTMENT)}
@@ -90,16 +100,72 @@ export default function Profile() {
               <span>Department</span>
             </div>
           </Menu.Item>
-          <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
-            <div className="flex items-center gap-2">
-              <IconAdjustmentsHorizontal
-                className="h-5 w-5"
-                stroke={1.5}
-                color="#3e3e3e"
-              />
-              <span>Management</span>
-            </div>
-          </Menu.Item>
+
+          {/* SUB MENU MANAGEMENT */}
+          <Menu trigger="click-hover" openDelay={100} closeDelay={400}>
+            {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
+              <>
+                <Menu.Target>
+                  <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                    <div className="flex items-center gap-2">
+                      <IconAdjustmentsHorizontal
+                        className="h-5 w-5"
+                        stroke={1.5}
+                        color="#3e3e3e"
+                      />
+                      <span>Management</span>
+                    </div>
+                  </Menu.Item>
+                </Menu.Target>
+              </>
+            )}
+            <Menu.Dropdown
+              className="rounded-xl -translate-y-[45px] -translate-x-[210px]  bg-white/70"
+              style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
+            >
+              {user.role === ROLE.SUPREME_ADMIN && (
+                <>
+                  <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                    <div className="flex items-center gap-2">
+                      <Icon IconComponent={SupremeIcon} className="h-5 w-5" />
+                      <span>Supreme Admin</span>
+                    </div>
+                  </Menu.Item>
+                  <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                    <div className="flex items-center gap-2">
+                      <Icon IconComponent={SemesterIcon} className="h-5 w-5" />
+                      <span>Semester</span>
+                    </div>
+                  </Menu.Item>
+                </>
+              )}
+              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                <div className="flex items-center gap-2">
+                  <Icon IconComponent={AdminIcon} className="h-5 w-5" />
+                  <span>Admin</span>
+                </div>
+              </Menu.Item>
+              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                <div className="flex items-center gap-2">
+                  <Icon IconComponent={CourseIcon} className="h-5 w-5" />
+                  <span>Course</span>
+                </div>
+              </Menu.Item>
+              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                <div className="flex items-center gap-2">
+                  <Icon IconComponent={SOIcon} className="h-5 w-5" />
+                  <span>SO</span>
+                </div>
+              </Menu.Item>
+              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                <div className="flex items-center gap-2">
+                  <Icon IconComponent={TQFIcon} className="h-5 w-5" />
+                  <span>TQF</span>
+                </div>
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+
           <Menu.Divider />
           <Menu.Item
             className="text-[#FF4747] h-8 w-[200px] hover:bg-[#d55757]/20"
