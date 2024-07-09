@@ -11,6 +11,12 @@ export default {
         tertiary: "#3E3E3E",
         hover: "#efefef"
       },
+      fontSize: {
+        h1: "20px",
+        h2: "18px",
+        b1: "16px",
+        b2: "14px"
+      }
     },
     fontFamily: {
       "sf-pro": ["SF Pro"],
