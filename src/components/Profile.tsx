@@ -19,7 +19,10 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setUser } from "@/store/user";
 import { ROLE } from "@/helpers/constants/enum";
 import ModalManageAdmin from "./Modal/ModalManageAdmin";
+import ModallManageSemester from "./Modal/ModalManageSemester";
+import ModalChangeSupAdmin from "./Modal/ModalChangeSupremeAdmin";
 import { useDisclosure } from "@mantine/hooks";
+import ModalManageSemester from "./Modal/ModalManageSemester";
 
 export default function Profile() {
   const user = useAppSelector((state) => state.user);
@@ -28,6 +31,14 @@ export default function Profile() {
   const [
     modalManageAdmin,
     { open: openModalManageAdmin, close: closeModalManageAdmin },
+  ] = useDisclosure(false);
+  const [
+    modalChangeSupAdmin,
+    { open: openModalChangeSupAdmin, close: closeModalChangeSupAdmin },
+  ] = useDisclosure(false);
+  const [
+    modalManageSemester,
+    { open: openModalManageSemester, close: closeModalManageSemester },
   ] = useDisclosure(false);
 
   const getRoleColor = (role: any) => {
@@ -54,6 +65,14 @@ export default function Profile() {
       <ModalManageAdmin
         opened={modalManageAdmin}
         onClose={closeModalManageAdmin}
+      />
+      <ModalChangeSupAdmin
+        opened={modalChangeSupAdmin}
+        onClose={closeModalChangeSupAdmin}
+      />
+      <ModalManageSemester
+        opened={modalManageSemester}
+        onClose={closeModalManageSemester}
       />
       <Menu trigger="click" openDelay={100} closeDelay={400}>
         <Menu.Target>
@@ -140,13 +159,19 @@ export default function Profile() {
             >
               {user.role === ROLE.SUPREME_ADMIN && (
                 <>
-                  <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                  <Menu.Item
+                    className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20"
+                    onClick={openModalChangeSupAdmin}
+                  >
                     <div className="flex items-center gap-2">
                       <Icon IconComponent={SupremeIcon} className="h-5 w-5" />
                       <span>Supreme Admin</span>
                     </div>
                   </Menu.Item>
-                  <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                  <Menu.Item
+                    className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20"
+                    onClick={openModalManageSemester}
+                  >
                     <div className="flex items-center gap-2">
                       <Icon IconComponent={SemesterIcon} className="h-5 w-5" />
                       <span>Semester</span>

@@ -20,8 +20,10 @@ import { TbSearch } from "react-icons/tb";
 import Icon from "../Icon";
 import { IModelUser } from "@/models/ModelUser";
 import { getInstructor } from "@/services/user/user.service";
-import user from "@/store/user";
 import { useAppSelector } from "@/store";
+import { ROLE } from "@/helpers/constants/enum";
+import { updateUser } from "@/services/user/user.service";
+import { log } from "console";
 
 type Props = {
   opened: boolean;
@@ -29,34 +31,68 @@ type Props = {
 };
 export default function ModalManageAdmin({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
-  const [swapMethodAddCo, setSwapMethodAddCo] = useState(false);
+  const [swapMethodAddAdmin, setSwapMethodAddAdmin] = useState(false);
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [instructorOption, setInstructorOption] = useState<any[]>([]);
+  const [adminList, setAdminList] = useState<any[]>([]);
+
   const closeModal = () => {
-    setSwapMethodAddCo(false);
+    setSwapMethodAddAdmin(false);
     onClose();
   };
+
+  const addAdmin = async () => {};
 
   useEffect(() => {
     const fetchIns = async () => {
       let res = await getInstructor();
-      res = res.filter((e: any) => e.id != user.id);
+      let insList = res.filter(
+        (e: any) => e.id != user.id && e.role === ROLE.INSTRUCTOR
+      );
+      let adminList = res.filter(
+        (e: any) => e.id != user.id && e.role === ROLE.ADMIN
+      );
+
+      // Add current user to the top of the admin list
+      if (user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) {
+        adminList = [
+          {
+            firstNameEN: user.firstNameEN,
+            lastNameEN: user.lastNameEN,
+            value: user.id,
+            email: user.email,
+          },
+          ...adminList,
+        ];
+      }
+
       setInstructorOption(
-        res.map((e: IModelUser) => {
+        insList.map((e: IModelUser) => {
           return { label: `${e.firstNameEN} ${e.lastNameEN}`, value: e.id };
         })
       );
+      setAdminList(
+        adminList.map((e: IModelUser) => {
+          return {
+            firstNameEN: e.firstNameEN,
+            lastNameEN: e.lastNameEN,
+            value: e.id,
+            email: e.email,
+          };
+        })
+      );
     };
-    fetchIns();
-  }, [onClose]);
+    if (opened) {
+      fetchIns();
+    }
+  }, [opened]);
 
   return (
     <Modal
       opened={opened}
       onClose={onClose}
       closeOnClickOutside={false}
-      withCloseButton={false}
       title="Management admin"
       size="45vw"
       radius={"12px"}
@@ -66,21 +102,20 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
         title: "text-primary font-medium text-[18px]",
         header: "bg-[#F6F7FA]",
         content:
-          "flex flex-col justify-center bg-[#F6F7FA] text-[14px] item-center px-2 overflow-hidden",
+          "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-[90%] ",
       }}
     >
-      {" "}
-      <div className="flex flex-col gap-5  flex-1 ">
+      <div className="flex flex-col gap-5 flex-1">
         <div
-          onClick={() => setSwapMethodAddCo(!swapMethodAddCo)}
+          onClick={() => setSwapMethodAddAdmin(!swapMethodAddAdmin)}
           className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center p-4   "
         >
-          <div className="flex gap-6">
+          <div className="flex gap-6 items-center">
             <Icon IconComponent={AddCoIcon} className="text-secondary" />
             <p>
               Add Admin by using{" "}
               <span className="font-semibold">
-                {swapMethodAddCo ? "Dropdown list" : "CMU Account"}
+                {swapMethodAddAdmin ? "Dropdown list" : "CMU Account"}
               </span>
             </p>
           </div>
@@ -88,7 +123,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
         </div>
 
         <div className="flex w-full items-end h-fit ">
-          {swapMethodAddCo ? (
+          {swapMethodAddAdmin ? (
             <TextInput
               label={
                 <p>
@@ -111,6 +146,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
             <Select
               rightSectionPointerEvents="none"
               label="Select Admin to add"
+              defaultDropdownOpened={false}
               placeholder="Select Admin"
               data={instructorOption}
               allowDeselect
@@ -141,13 +177,15 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
           <Button
             className="rounded-s-none w-[12%]"
             color="#5768D5"
-            //onClick={addCoIns}
+            onClick={() => addAdmin()}
           >
             Add
           </Button>
         </div>
+
+        {/* Added Admin */}
         <div
-          className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md"
+          className="w-full  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
@@ -155,7 +193,8 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
           <div className="bg-[#e6e9ff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-medium">
             <IconUsers /> Added Admin
           </div>
-          <div className="flex flex-col max-h-[300px] h-fit w-full  p-4  overflow-y-scroll ">
+          {/* Show List Of Admin */}
+          <div className="flex flex-col  w-full h-[330px]  p-4  overflow-y-hidden">
             <Input
               leftSection={<TbSearch />}
               placeholder="Name"
@@ -165,51 +204,46 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
               classNames={{ input: "bg-gray-200 rounded-md border-none" }}
               rightSectionPointerEvents="all"
             />
-            <div className="flex flex-col h-[200px] gap-2 overflow-y-scroll p-1">
-              <div
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-                className="w-full items-center justify-between mt-2 h-fit py-3 px-4 rounded-md flex"
-              >
-                <div className="gap-4 flex items-center">
-                  <IconUserCircle size={32} stroke={1} />
-                  <div className="flex flex-col">
-                    <p className="font-[500]">
-                      {user.firstNameEN} {user.lastNameEN}
-                    </p>
-                    <p className="text-[#4E5150] text-[12px] font-normal">
-                      {user.email}
-                    </p>
+            {/* List of Admin */}
+            <div className="flex flex-col gap-2 overflow-y-scroll p-1">
+              {adminList.map((e) => (
+                <div
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                  }}
+                  className="w-full items-center justify-between mt-2 py-3 px-4 rounded-md flex"
+                >
+                  <div className="gap-4 flex items-center">
+                    <IconUserCircle size={32} stroke={1} />
+                    <div className="flex flex-col">
+                      <p className="font-[500]">
+                        {e.firstNameEN} {e.lastNameEN}
+                      </p>
+                      <p className="text-[#4E5150] text-[12px] font-normal">
+                        {e.email}
+                      </p>
+                    </div>
                   </div>
+                  {e.firstNameEN === user.firstNameEN &&
+                  e.lastNameEN === user.lastNameEN ? (
+                    <p className="mr-1 text-[#C0C0C0] text-[16px] font-normal">
+                      You
+                    </p>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      color="red"
+                      className=" rounded-full px-[7px]"
+                    >
+                      <IconTrash className="h-5 w-5" stroke={1.5} />
+                    </Button>
+                  )}
                 </div>
-                <Button variant="outline" color="red" className=" rounded-full px-[7px]">
-                <IconTrash className="h-5 w-5" stroke={1.5} />
-                </Button>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-      <Group className="flex w-full h-fit items-end mt-5 justify-end">
-        <div>
-          <Button
-            color="#E3E5EB"
-            className="rounded-[10px]  items-center text-black hover:text-black justify-center h-[36px]  border-0"
-            justify="start"
-            onClick={closeModal}
-          >
-            Cancel
-          </Button>
-        </div>
-        <Button
-          color="#6869AD"
-          className="rounded-[10px] h-[36px] w-fit"
-          //onClick={nextStep}
-        >
-          Done
-        </Button>
-      </Group>
     </Modal>
   );
 }
