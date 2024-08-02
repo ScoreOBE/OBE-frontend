@@ -96,7 +96,7 @@ export default function Dashboard() {
       <ModalAddCourse opened={openAddModal} onClose={closeAddModal} />
       <div className="flex flex-row  items-center justify-between">
         <div className="flex flex-col">
-          <p className="text-[#6869AD] text-[22px] font-medium mb-[2px]">
+          <p className="text-[#6869AD] text-[20px] font-medium mb-[1px]">
             Hi there, {user.firstNameEN} {user.lastNameEN?.slice(0, 1)}.
           </p>
           <p className="text-[#575757] text-[14px]">
@@ -121,7 +121,7 @@ export default function Dashboard() {
           <Button
             color="#6869AD"
             leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
-            className=" rounded-[8px] text-[12px] font-medium h-8 px-2"
+            className=" rounded-[10px]  text-[12px] font-medium h-8 px-3"
             onClick={openedAddModal}
           >
             Add course
