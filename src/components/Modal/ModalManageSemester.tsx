@@ -1,74 +1,57 @@
-import {
-  Button,
-  Checkbox,
-  Group,
-  Input,
-  Modal,
-  Select,
-  TextInput,
-} from "@mantine/core";
+import { Button, Input, Modal, Select } from "@mantine/core";
 import AddCoIcon from "@/assets/icons/addCo.svg?react";
-import {
-  IconChevronRight,
-  IconChevronDown,
-  IconUsers,
-  IconUserCircle,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconChevronDown, IconUsers } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import Icon from "../Icon";
-import { IModelUser } from "@/models/ModelUser";
-import { getInstructor } from "@/services/user/user.service";
+import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { useAppSelector } from "@/store";
-import { ROLE } from "@/helpers/constants/enum";
-import { updateUser } from "@/services/user/user.service";
-import { log } from "console";
+import { SEMESTER } from "@/helpers/constants/enum";
+
+import { IModelAcademicYear } from "@/models/ModelAcademicYear";
+import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
 };
 export default function ModalManageSemester({ opened, onClose }: Props) {
-  const user = useAppSelector((state) => state.user);
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [instructorOption, setInstructorOption] = useState<any[]>([]);
-  const [adminList, setAdminList] = useState<any[]>([]);
+  const [semesterList, setSemesterlist] = useState<any>([]);
+  const [termOption, setTermOption] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchSemester = async () => {
-      // let res = await getInstructor();
-      // Add current user to the top of the admin list
-      // if (user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) {
-      //   adminList = [
-      //     {
-      //       firstNameEN: user.firstNameEN,
-      //       lastNameEN: user.lastNameEN,
-      //       value: user.id,
-      //       email: user.email,
-      //     },
-      //     ...adminList,
-      //   ];
-      // }
-      // setInstructorOption(
-      //   insList.map((e: IModelUser) => {
-      //     return { label: `${e.firstNameEN} ${e.lastNameEN}`, value: e.id };
-      //   })
-      // );
-      // setAdminList(
-      //   adminList.map((e: IModelUser) => {
-      //     return {
-      //       firstNameEN: e.firstNameEN,
-      //       lastNameEN: e.lastNameEN,
-      //       value: e.id,
-      //       email: e.email,
-      //     };
-      //   })
-      // );
+      let payload = new AcademicYearRequestDTO();
+      payload.manage = true;
+      const res = await getAcademicYear(payload);
+      const academicYearList = res.map((e: IModelAcademicYear) => {
+        return {
+          value: e.id,
+          year: e.year,
+          semester: e.semester,
+          isActive: e.isActive,
+        };
+      });
+      //Group by Year
+      const semestersByYear = academicYearList.reduce(
+        (acc: any, academicYearList: any) => {
+          if (!acc[academicYearList.year]) {
+            acc[academicYearList.year] = [];
+          }
+          acc[academicYearList.year].push(academicYearList);
+          return acc;
+        },
+        {}
+      );
+      setSemesterlist(semestersByYear);
     };
+
     if (opened) {
       fetchSemester();
+      console.log(semesterList);
+      console.log(Object.keys(semesterList));
     }
   }, [opened]);
 
@@ -136,7 +119,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           </p>
         </div>
 
-        {/* Added Admin */}
+        {/* Added Semester */}
         <div
           className="w-full  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
           style={{
@@ -158,88 +141,68 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
               rightSectionPointerEvents="all"
             />
             {/* List of Semester */}
-            <div
-              className="flex flex-col gap-1  p-4  h-full  bg-white border-[1px]  rounded-md"
-              style={{
-                boxShadow: "0px 0px 2px 0px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              <div className="flex flex-col gap-2 rounded-3xl p-1">
-                <div className="border-[1px] border-[#C8CFF7] rounded-xl overflow-clip flex flex-col w-full items-center justify-between ">
-                  <div className="flex flex-row items-center justify-between px-4 py-2  w-full  bg-[#F3F3F3]">
-                    <div>
-                      <p className="font-medium text-[#4E5150] text-[12px]">
-                        Year
-                      </p>
-                      <p className="font-semibold text-black text-[16px]">
-                        2567
-                      </p>
-                    </div>
 
-                    <div>
-                      <p className="font-medium text-[#4E5150] text-[12px]">
-                        Semester
-                      </p>
-                      <p className="font-semibold text-black text-[16px]">3</p>
-                    </div>
-                    <Button
-                      variant="filled"
-                      color="#5768D5"
-                      className="rounded-xl px-[10px] text-white font-normal"
-                    >
-                      Activate
-                    </Button>
-                  </div>
-                  <div className="flex flex-row items-center justify-between gap-[156px] px-4 py-2  w-full  bg-[#F3F3F3]">
-                    <div>
-                      <p className="font-medium text-[#4E5150] text-[12px]">
-                        Year
-                      </p>
-                      <p className="font-semibold text-black text-[16px]">
-                        2567
-                      </p>
-                    </div>
+            <div className="flex flex-col gap-2 rounded-3xl p-1 overflow-y-auto">
+              {Object.keys(semesterList).map((year) => (
+                <div
+                  key={year}
+                  className="border-[2px] border-[#C8CFF7] rounded-xl overflow-clip flex flex-col w-full items-center justify-between"
+                >
+                  <div className="flex flex-col w-full items-center">
+                    {semesterList[year].map((e: any, index: number) => (
+                      <div
+                        key={e.id}
+                        className={`flex flex-row items-center h-16  px-4 py-2 w-full justify-between
+                            ${e.isActive ? "bg-[#E5E8FF]" : "bg-[#F3F3F3]"} `}
+                      >
+                        {index === 0 ? (
+                          <div>
+                            <p className="font-medium text-[#4E5150] text-[12px]">
+                              Year
+                            </p>
+                            <p className="font-semibold text-black text-[16px]">
+                              {year}
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="w-10"></div>
+                        )}
+                        <div>
+                          <p className="font-medium text-[#4E5150] text-[12px]">
+                            Semester
+                          </p>
+                          <p
+                            className={`font-semibold text-black text-[16px] ${
+                              e.isActive ? "text-secondary" : "text-black"
+                            }`}
+                          >
+                            {e.semester}
+                          </p>
+                        </div>
 
-                    <div>
-                      <p className="font-medium text-[#4E5150] text-[12px]">
-                        Semester
-                      </p>
-                      <p className="font-semibold text-black text-[16px]">3</p>
-                    </div>
-                    <Button
-                      variant="filled"
-                      color="#5768D5"
-                      className="rounded-xl px-[10px] text-white font-normal"
-                    >
-                      Activate
-                    </Button>
-                  </div>
-                  <div className="flex flex-row items-center justify-between gap-[156px] px-4 py-2  w-full  bg-[#F3F3F3]">
-                    <div>
-                      <p className="font-medium text-[#4E5150] text-[12px]">
-                        Year
-                      </p>
-                      <p className="font-semibold text-black text-[16px]">
-                        2567
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="font-medium text-[#4E5150] text-[12px]">
-                        Semester
-                      </p>
-                      <p className="font-semibold text-black text-[16px]">3</p>
-                    </div>
-                    <Button
-                      variant="filled"
-                      color="#5768D5"
-                      className="rounded-xl px-[10px] text-white font-normal"
-                    >
-                      Activate
-                    </Button>
+                        {e.isActive ? (
+                          <Button
+                            disabled
+                            variant="filled"
+                            color="#C8CFF7"
+                            className="rounded-xl w-[85px] px-[10px] bg-[#C8CFF7] text-[#6869AD] font-normal"
+                          >
+                            Currently
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="filled"
+                            color="#5768D5"
+                            className="rounded-xl w-[85px] px-[10px] text-white font-normal"
+                          >
+                            Activate
+                          </Button>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
