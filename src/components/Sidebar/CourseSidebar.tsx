@@ -55,7 +55,7 @@ export default function CourseSidebar() {
     <>
       <div className="flex flex-col gap-[27px]">
         <Button
-          className="hover:font-bold hover:bg-transparent p-0 flex justify-start"
+          className="hover:underline hover:bg-transparent p-0 flex justify-start"
           color="none"
           radius={"md"}
           onClick={goToDashboard}
@@ -70,7 +70,7 @@ export default function CourseSidebar() {
               {course?.courseNo} ({params.get("semester")}/
               {params.get("year")?.slice(-2)})
             </p>
-            <p className="text-[13px] text-pretty max-w-full">
+            <p className="text-[13px] font-medium text-pretty max-w-full">
               {course?.courseName}
             </p>
           </div>
@@ -111,11 +111,11 @@ export default function CourseSidebar() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 mt-5">
-          <p className="text-md font-semibold">Instructors</p>
+        <div className="flex flex-col gap-2 mt-5">
+          <p className="text-md font-semibold mb-1">Instructors</p>
           {instructors.map((item) => {
             return (
-              <p key={item.id} className="text-pretty text-[13px] ps-2">
+              <p key={item.id} className="text-pretty text-[12px]">
                 {item.firstNameEN} {item.lastNameEN}
               </p>
             );
