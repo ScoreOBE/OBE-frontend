@@ -2,25 +2,37 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import cmulogo from "@/assets/image/cmuLogo.png";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { DEPARTMENT_EN } from "@/helpers/constants/department.enum";
 import { Button, Checkbox } from "@mantine/core";
-import { FACULTY_EN } from "@/helpers/constants/faculty.enum";
-import { getEnumByKey, getEnumByValue } from "@/helpers/functions/function";
+import {
+  getEnumByKey,
+  getEnumByValue,
+  sortData,
+} from "@/helpers/functions/function";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { updateUser } from "@/services/user/user.service";
 import { setUser } from "@/store/user";
 import { motion } from "framer-motion";
+import { getDepartment } from "@/services/faculty/faculty.service";
 
 export default function SelectDepartment() {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  const sortedKeys = Object.keys(DEPARTMENT_EN).sort((a: string, b: string) =>
-    getEnumByKey(DEPARTMENT_EN, a).localeCompare(getEnumByKey(DEPARTMENT_EN, b))
-  );
+  const [faculty, setFaculty] = useState<any>({});
+  const [departmentList, setDepartmentList] = useState<any[]>([]);
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const [notChange, setNotChange] = useState(false);
+
+  useEffect(() => {
+    const fetchDep = async () => {
+      const res = await getDepartment(user.facultyCode);
+      setFaculty({ facultyTH: res.facultyTH, facultyEN: res.facultyEN });
+      sortData(res.department, "departmentEN", "string");
+      setDepartmentList(res.department);
+    };
+    fetchDep();
+  }, []);
 
   useEffect(() => {
     if (user.departmentCode?.length) {
@@ -73,9 +85,7 @@ export default function SelectDepartment() {
             <div className=" font-normal translate-y-[-4px] text-[22px]">
               {user.firstNameEN} {user.lastNameEN}
             </div>
-            <div className=" font-light text-[16px]">
-              {getEnumByValue(FACULTY_EN, user.facultyCode)}
-            </div>
+            <div className=" font-light text-[16px]">{faculty.facultyEN}</div>
           </motion.div>
         </div>
         <motion.div
@@ -97,20 +107,26 @@ export default function SelectDepartment() {
                 Select up to 2 departments
               </div>
               <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[515px]">
-                {sortedKeys.map((key) => {
-                  const isChecked = checkedItems.includes(key);
+                {departmentList.map((key: any) => {
+                  const isChecked = checkedItems.includes(key.departmentCode);
                   const disabled =
-                    checkedItems.length == 2 && !checkedItems.includes(key);
+                    checkedItems.length == 2 &&
+                    !checkedItems.includes(key.departmentCode);
                   return (
                     <div
-                      key={key}
+                      key={key.departmentCode}
                       className={`w-[540px] min-h-[55px] cursor-pointer text-[16px] font-medium rounded-[10px] pl-4 py-4 scroll-auto items-center flex hover:bg-[rgba(182,187,221,0.56)] ${
                         isChecked
                           ? "bg-[rgba(136,145,205,0.56)]"
                           : "bg-[rgba(181,181,181,0.40)]"
                       } ${disabled ? "text-gray-300" : ""}`}
                       onClick={() => {
-                        disabled ? "" : handleCheckboxChange(key, !isChecked);
+                        disabled
+                          ? ""
+                          : handleCheckboxChange(
+                              key.departmentCode,
+                              !isChecked
+                            );
                       }}
                     >
                       <Checkbox
@@ -124,8 +140,7 @@ export default function SelectDepartment() {
                         disabled={disabled}
                         readOnly
                       />
-                      {getEnumByKey(DEPARTMENT_EN, key)} (
-                      {key.replace("_", "-")})
+                      {key.departmentEN} ({key.departmentCode})
                     </div>
                   );
                 })}
