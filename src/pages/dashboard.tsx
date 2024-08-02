@@ -137,11 +137,11 @@ export default function Dashboard() {
         ) : course.length === 0 ? (
           <div className=" flex flex-row flex-1 justify-between">
             <div className="h-full px-[60px] justify-center flex flex-col">
-              <p className="text-primary text-[22px] font-[590]">
+              <p className="text-primary text-h2 font-semibold">
                 No course found
               </p>
               <br />
-              <p className=" -mt-4 mb-6  text-black text-[16px] break-words font-400 leading-relaxed">
+              <p className=" -mt-4 mb-6  text-black text-b2 break-words font-400 leading-relaxed">
                 It looks like you haven't added any courses yet. <br />
                 Click 'Add Course' button below to get started!
               </p>

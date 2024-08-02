@@ -52,7 +52,7 @@ export default function Course() {
           <Button
             leftSection={<IconUpload className="h-5 w-5" />}
             color="#6869AD"
-            className="rounded-[8px] text-[12px] font-medium h-8 px-2"
+            className="rounded-[8px]  text-[12px] font-medium h-8 px-2"
           >
             Upload and Assets
           </Button>
