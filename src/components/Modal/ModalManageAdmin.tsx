@@ -1,12 +1,4 @@
-import {
-  Button,
-  Checkbox,
-  Group,
-  Input,
-  Modal,
-  Select,
-  TextInput,
-} from "@mantine/core";
+import { Button, Input, Modal, Select, TextInput } from "@mantine/core";
 import AddCoIcon from "@/assets/icons/addCo.svg?react";
 import {
   IconChevronRight,
@@ -19,11 +11,11 @@ import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import Icon from "../Icon";
 import { IModelUser } from "@/models/ModelUser";
-import { getInstructor } from "@/services/user/user.service";
+import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import { useAppSelector } from "@/store";
 import { ROLE } from "@/helpers/constants/enum";
-import { updateUser } from "@/services/user/user.service";
-import { log } from "console";
+import { validateEmail } from "@/helpers/functions/validation";
+import { showNotifications } from "@/helpers/functions/function";
 
 type Props = {
   opened: boolean;
@@ -35,58 +27,95 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [instructorOption, setInstructorOption] = useState<any[]>([]);
-  const [adminList, setAdminList] = useState<any[]>([]);
+  const [adminList, setAdminList] = useState<IModelUser[]>([]);
+  const [adminFilter, setAdminFilter] = useState<IModelUser[]>([]);
+  const [editUser, setEditUser] = useState<string | null>();
+  const [invalidEmail, setInvalidEmail] = useState(false);
 
-  const closeModal = () => {
-    setSwapMethodAddAdmin(false);
-    onClose();
+  const fetchIns = async () => {
+    const res = await getInstructor();
+    const insList = res.filter(
+      (e: any) => e.id != user.id && e.role === ROLE.INSTRUCTOR
+    );
+    let adminList = res.filter((e: IModelUser) => {
+      if (e.id !== user.id && e.role === ROLE.ADMIN) {
+        return {
+          id: e.id,
+          firstNameEN: e.firstNameEN,
+          lastNameEN: e.lastNameEN,
+          email: e.email,
+        };
+      }
+    });
+    // Add current user to the top of the admin list
+    if (user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) {
+      adminList = [
+        {
+          id: user.id,
+          firstNameEN: user.firstNameEN,
+          lastNameEN: user.lastNameEN,
+          email: user.email,
+        },
+        ...adminList,
+      ];
+    }
+
+    setInstructorOption(
+      insList.map((e: IModelUser) => {
+        return { label: `${e.firstNameEN} ${e.lastNameEN}`, value: e.id };
+      })
+    );
+    setAdminList(adminList);
+    setAdminFilter(adminList);
   };
 
-  const addAdmin = async () => {};
+  const editAdmin = async (id: string, role: ROLE) => {
+    const payload: Partial<IModelUser> = { role };
+    if (swapMethodAddAdmin && role === ROLE.ADMIN) {
+      if (invalidEmail) return;
+      payload.email = id;
+    } else payload.id = id;
+    const res = await updateAdmin(payload);
+    if (res) {
+      const name = res.firstNameEN?.length
+        ? `${res.firstNameEN} ${res.lastNameEN}`
+        : res.email;
+      const message =
+        res.role == ROLE.ADMIN
+          ? `${name} is an admin`
+          : `Delete ${name} from admin`;
+      setEditUser(null);
+      fetchIns();
+      showNotifications("success", "Success", message);
+    }
+  };
 
   useEffect(() => {
-    const fetchIns = async () => {
-      let res = await getInstructor();
-      let insList = res.filter(
-        (e: any) => e.id != user.id && e.role === ROLE.INSTRUCTOR
-      );
-      let adminList = res.filter(
-        (e: any) => e.id != user.id && e.role === ROLE.ADMIN
-      );
-
-      // Add current user to the top of the admin list
-      if (user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) {
-        adminList = [
-          {
-            firstNameEN: user.firstNameEN,
-            lastNameEN: user.lastNameEN,
-            value: user.id,
-            email: user.email,
-          },
-          ...adminList,
-        ];
-      }
-
-      setInstructorOption(
-        insList.map((e: IModelUser) => {
-          return { label: `${e.firstNameEN} ${e.lastNameEN}`, value: e.id };
-        })
-      );
-      setAdminList(
-        adminList.map((e: IModelUser) => {
-          return {
-            firstNameEN: e.firstNameEN,
-            lastNameEN: e.lastNameEN,
-            value: e.id,
-            email: e.email,
-          };
-        })
-      );
-    };
     if (opened) {
+      setEditUser(null);
+      setSearchValue("");
+      setSwapMethodAddAdmin(false);
       fetchIns();
     }
   }, [opened]);
+
+  useEffect(() => {
+    if (swapMethodAddAdmin) {
+      if (editUser?.length) setInvalidEmail(!validateEmail(editUser));
+      else setInvalidEmail(false);
+    }
+  }, [editUser]);
+
+  useEffect(() => {
+    setAdminFilter(
+      adminList.filter(
+        (admin) =>
+          `${admin.firstNameEN.toLowerCase()} ${admin.lastNameEN.toLowerCase()}`.includes(
+            searchValue.toLowerCase()
+          ) || admin.email.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    );
+  }, [searchValue]);
 
   return (
     <Modal
@@ -107,7 +136,10 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
     >
       <div className="flex flex-col gap-5 flex-1">
         <div
-          onClick={() => setSwapMethodAddAdmin(!swapMethodAddAdmin)}
+          onClick={() => {
+            setEditUser(null);
+            setSwapMethodAddAdmin(!swapMethodAddAdmin);
+          }}
           className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center p-4   "
         >
           <div className="flex gap-6 items-center">
@@ -128,12 +160,12 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
               label={
                 <p>
                   Add Admin via CMU account{" "}
-                  <span className=" text-red-500">
+                  <span className="text-red-500">
                     (make sure CMU account correct)
                   </span>
                 </p>
               }
-              className="w-full border-none "
+              className="w-full border-none"
               style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
               classNames={{
                 label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
@@ -141,6 +173,8 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                   "text-primary font-medium focus:border-primary rounded-e-none cursor-pointer",
               }}
               placeholder="example@cmu.ac.th"
+              value={editUser!}
+              onChange={(event) => setEditUser(event.target.value)}
             ></TextInput>
           ) : (
             <Select
@@ -170,14 +204,15 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
               }
               onDropdownOpen={() => setOpenedDropdown(true)}
               onDropdownClose={() => setOpenedDropdown(false)}
-              //value={insInput?.value}
-              //onChange={(value, option) => setInsInput(option)}
+              value={editUser}
+              onChange={(value, option) => setEditUser(option.value)}
             />
           )}
           <Button
             className="rounded-s-none w-[12%]"
             color="#5768D5"
-            onClick={() => addAdmin()}
+            disabled={!editUser?.length || (swapMethodAddAdmin && invalidEmail)}
+            onClick={() => editAdmin(editUser!, ROLE.ADMIN)}
           >
             Add
           </Button>
@@ -206,7 +241,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
             />
             {/* List of Admin */}
             <div className="flex flex-col gap-2 overflow-y-scroll p-1">
-              {adminList.map((e) => (
+              {adminFilter.map((admin) => (
                 <div
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -217,15 +252,15 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                     <IconUserCircle size={32} stroke={1} />
                     <div className="flex flex-col">
                       <p className="font-[500]">
-                        {e.firstNameEN} {e.lastNameEN}
+                        {admin.firstNameEN} {admin.lastNameEN}
                       </p>
                       <p className="text-[#4E5150] text-[12px] font-normal">
-                        {e.email}
+                        {admin.email}
                       </p>
                     </div>
                   </div>
-                  {e.firstNameEN === user.firstNameEN &&
-                  e.lastNameEN === user.lastNameEN ? (
+                  {admin.firstNameEN === user.firstNameEN &&
+                  admin.lastNameEN === user.lastNameEN ? (
                     <p className="mr-1 text-[#C0C0C0] text-[16px] font-normal">
                       You
                     </p>
@@ -234,6 +269,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                       variant="outline"
                       color="red"
                       className=" rounded-full px-[7px]"
+                      onClick={() => editAdmin(admin.id, ROLE.INSTRUCTOR)}
                     >
                       <IconTrash className="h-5 w-5" stroke={1.5} />
                     </Button>
