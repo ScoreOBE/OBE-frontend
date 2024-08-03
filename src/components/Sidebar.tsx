@@ -14,8 +14,8 @@ export default function Sidebar() {
     } else return <></>;
   };
   return (
-    <div className="w-[245px] h-screen flex p-5">
-      <div className="flex w-full flex-col gap-10 text-white">
+    <div className="w-[245px] border-r-[1px] border-[#e0e0e0 h-screen flex p-5">
+      <div className="flex w-full flex-col gap-10">
         <img src={cmulogo} alt="CMULogo" className="h-fit w-[155px]" />
         {getSidebar()}
       </div>

@@ -105,7 +105,7 @@ export default function DashboardSidebar() {
           OK
         </Button>
       </Modal>
-      <div className="flex flex-col gap-11">
+      <div className="flex text-white flex-col gap-11">
         <div className="text-sm flex flex-col gap-[6px]">
           <p className="font-semibold">Welcome to CMU OBE!</p>
           <div className="font-normal flex flex-col gap-[2px]">
@@ -120,7 +120,7 @@ export default function DashboardSidebar() {
         </div>
 
         <div className="flex flex-col gap-3">
-          <p className="text-md font-semibold">Course</p>
+          <p className="text-md text-white font-semibold">Course</p>
           <Button
             className="bg-transparent w-full h-[50px] flex justify-start items-center  px-3 py-1 border-none rounded-lg text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none group"
             leftSection={

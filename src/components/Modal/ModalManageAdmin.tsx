@@ -220,7 +220,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <div className="bg-[#e6e9ff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
+          <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
             <IconUsers /> Added Admin
           </div>
           {/* Show List Of Admin */}
