@@ -4,19 +4,20 @@ import { AcademicYearRequestDTO } from "./dto/academicYear.dto";
 
 export const academicYearController = (configService = {}) => {
   const service = apiService(configService);
+  const prefix = "/academicYear";
 
   return {
     getAcademicYear: async (params?: AcademicYearRequestDTO) => {
-      return service.get(`/academicYear`, { ...params });
+      return service.get(`${prefix}`, { ...params });
     },
     createAcademicYear: async (params: Partial<IModelAcademicYear>) => {
-      return service.put(`/academicYear`, { ...params });
+      return service.put(`${prefix}`, { ...params });
     },
     activeAcademicYear: async (id: string) => {
-      return service.put(`/academicYear/${id}`, {});
+      return service.put(`${prefix}/${id}`, {});
     },
     deleteAcademicYear: async (id: string) => {
-      return service.delete(`/academicYear/${id}`, {});
+      return service.delete(`${prefix}/${id}`, {});
     },
   };
 };

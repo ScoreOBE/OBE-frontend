@@ -12,10 +12,19 @@ export const getUserInfo = async () => {
 export const getInstructor = async () => {
   const res = await userService.getInstructor();
   return isValidResponse(res);
-} 
+};
 
 export const updateUser = async (params: Partial<IModelUser>) => {
   const res = await userService.updateUser(params);
   return isValidResponse(res);
 };
 
+export const updateAdmin = async (params: Partial<IModelUser>) => {
+  const res = await userService.updateAdmin(params);
+  return isValidResponse(res);
+};
+
+export const updateSAdmin = async (params: Partial<IModelUser>) => {
+  const res = await userService.updateSAdmin(params);
+  return isValidResponse(res);
+};

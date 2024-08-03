@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import { TQF_STATUS } from "../constants/enum";
 
 export const sortData = (
@@ -64,4 +65,35 @@ export const statusColor = (
     className += ` ${className}-with-bg`;
   }
   return className;
+};
+
+export const showNotifications = (
+  type: string,
+  title: string,
+  message: string
+) => {
+  let className, color;
+  switch (type) {
+    case "success":
+      // className = "bg-green-500 bg-opacity-50 rounded-md";
+      color = "green";
+      break;
+    case "error":
+      // className = "bg-red-500 bg-opacity-75 rounded-md";
+      color = "red";
+      break;
+    default:
+      break;
+  }
+  notifications.show({
+    title,
+    message,
+    autoClose: 3000,
+    className,
+    color,
+    // classNames: {
+    //   title: "text-white",
+    //   description: "text-gray-200 font-normal",
+    // },
+  });
 };

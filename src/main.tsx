@@ -4,10 +4,12 @@ import { MantineProvider } from "@mantine/core";
 import "./index.css";
 import "@/styles/style.css";
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import "tailwindcss/tailwind.css";
 import { Provider } from "react-redux";
 import store from "@/store/index.ts";
 import { BrowserRouter as Router } from "react-router-dom";
+import { Notifications } from "@mantine/notifications";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
@@ -16,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         fontFamily: `"SF Pro", "NotoSansThai", Helvetica, Arial, sans-serif`,
       }}
     >
+      <Notifications position="top-right" zIndex={1000} />
       <Router>
         <App />
       </Router>
