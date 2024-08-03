@@ -44,8 +44,8 @@ export default function Navbar() {
 
   return (
     <div
-      style={{ boxShadow: "0px 2px 2px 0px rgba(0, 0, 0, 0.20)" }}
-      className="min-h-14 drop-shadow-md px-6 rounded-tl-3xl inline-flex flex-wrap justify-between items-center z-50 bg-white  text-primary text-[18px]"
+      
+      className="min-h-14 border-b-[1px] border-[#e0e0e0] px-6  inline-flex flex-wrap justify-between items-center z-50 bg-[#fcfcfc]  text-secondary text-[18px]"
     >
       <p className="font-semibold">Your Courses</p>
       {[ROUTE_PATH.DASHBOARD_INS].includes(location) && (

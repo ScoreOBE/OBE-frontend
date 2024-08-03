@@ -77,7 +77,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       onClose={onClose}
       closeOnClickOutside={true}
       title="Managemet Supreme Admin"
-      size="42vw"
+      size="43vw"
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{

@@ -138,7 +138,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <div className="bg-[#e6e9ff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] py-3 px-5 text-secondary font-semibold">
+          <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] py-3 px-5 text-secondary font-semibold">
             <IconUsers /> Added Semester
           </div>
           {/* Show List Of Semester */}
@@ -163,7 +163,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                     {semesterList[year].map((e: any, index: number) => (
                       <div
                         key={e.id}
-                        className={`flex flex-row items-center h-16  px-4 py-2 w-full justify-between
+                        className={`flex flex-row items-center h-[56px]  px-4 w-full justify-between
                             ${e.isActive ? "bg-[#E5E8FF]" : "bg-[#ffffff]"} `}
                       >
                         {index === 0 ? (

@@ -92,12 +92,12 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="bg-[#F6F6F6] flex flex-col h-full w-full p-6 py-5 gap-3 overflow-hidden">
+    <div className="bg-[#ffffff] flex flex-col h-full w-full p-6 py-3 gap-3 overflow-hidden">
       <ModalAddCourse opened={openAddModal} onClose={closeAddModal} />
       <div className="flex flex-row  items-center justify-between">
         <div className="flex flex-col">
-          <p className="text-[#6869AD] text-[20px] font-medium mb-[1px]">
-            Hi there, {user.firstNameEN} {user.lastNameEN?.slice(0, 1)}.
+          <p className="text-secondary text-[20px] font-semibold mb-[1px]">
+            Hi there, {user.firstNameEN}
           </p>
           <p className="text-[#575757] text-[14px]">
             In semester {term?.semester}, {term?.year}!{" "}
@@ -105,12 +105,12 @@ export default function Dashboard() {
               <span>Your course card is currently empty</span>
             ) : (
               <span>
-                You currently have{" "}
+                Your currently have{" "}
                 <span className="text-[#5768D5] font-semibold">
                   {totalCourses} Course
                   {totalCourses > 1 ? "s " : " "}
                 </span>
-                on your plate. Let dive in!
+                on your plate.
               </span>
             )}
           </p>
@@ -119,19 +119,16 @@ export default function Dashboard() {
           <span></span>
         ) : (
           <Button
-            color="#6869AD"
+            color="#5768D5"
             leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
-            className=" rounded-[10px]  text-[12px] font-medium h-8 px-3"
+            className=" rounded-[8px]   text-[14px] font-semibold h-8 px-3"
             onClick={openedAddModal}
           >
             Add course
           </Button>
         )}
       </div>
-      <div
-        className="flex h-full w-full bg-white rounded-[5px] p-3 overflow-hidden"
-        style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.50)" }}
-      >
+      <div className="flex h-full w-full bg-white rounded-[5px]  overflow-hidden">
         {loading ? (
           <div>hello</div>
         ) : course.length === 0 ? (
@@ -147,7 +144,8 @@ export default function Dashboard() {
               </p>
               {term?.isActive && (
                 <Button
-                  className=" rounded-[8px] text-[12px] w-28 font-medium bg-[#6869AD] h-8 px-2 hover:bg-[#52538A]"
+                  color="#5C55E5"
+                  className=" rounded-[8px] text-[12px] w-28 font-medium  h-8 px-2 "
                   onClick={openedAddModal}
                 >
                   <IconPlus
@@ -179,12 +177,12 @@ export default function Dashboard() {
               return (
                 <div
                   key={item.id}
-                  className="card relative justify-between xl:h-[145px] md:h-[130px] cursor-pointer rounded-md hover:bg-[#F3F3F3]"
+                  className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-md hover:bg-[#F3F3F3]"
                   style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)" }}
                   onClick={() => goToCourse(item.courseNo)}
                 >
                   <div className="p-2.5 flex flex-col">
-                    <p className="font-semibold">{item.courseNo}</p>
+                    <p className="font-semibold text-sm">{item.courseNo}</p>
                     <p className="text-xs font-medium text-gray-600">
                       {item.courseName}
                     </p>
@@ -221,12 +219,12 @@ export default function Dashboard() {
                       </Menu>
                     )}
                   </div>
-                  <div className="bg-primary flex h-8 items-center justify-between rounded-b-md">
-                    <p className="p-2.5 text-white font-medium text-[12px]">
+                  <div className="bg-[#e7eaff] flex h-8 items-center justify-between rounded-b-md">
+                    <p className="p-2.5 text-secondary font-semibold text-[12px]">
                       {item.sections.length} Section
                       {item.sections.length > 1 ? "s" : ""}
                     </p>
-                    <div className="flex gap-3 px-2.5 font-medium text-[11px] py-1 justify-end items-center">
+                    <div className="flex gap-3 px-2.5 font-semibold text-[11px] py-1 justify-end items-center">
                       <p
                         className={`px-1 border-[1px] rounded-md ${statusTQF3}`}
                       >
