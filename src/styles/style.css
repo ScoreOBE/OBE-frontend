@@ -94,6 +94,7 @@
   font-size: 13px !important;
   color: var(--color-tertiary) !important;
   font-weight: 600 !important;
+  margin-bottom: 4px;
 }
 
 .mantine-TextInput-input {

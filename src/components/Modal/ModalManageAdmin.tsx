@@ -124,7 +124,6 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
       closeOnClickOutside={false}
       title="Management Admin"
       size="45vw"
-      radius={"12px"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
