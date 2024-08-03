@@ -83,9 +83,9 @@ export default function Navbar() {
                 )}
               </div>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center text-secondary gap-1">
                 Press{" "}
-                <div className="ml-1 flex items-center gap-1 border-[1px] border-gray-600 p-1 font-semibold rounded-md">
+                <div className="ml-1 flex items-center gap-1 border-[1px] border-secondary p-1 font-semibold rounded-md">
                   Enter <AiOutlineEnter className="stroke-[50px]" />
                 </div>
               </div>
