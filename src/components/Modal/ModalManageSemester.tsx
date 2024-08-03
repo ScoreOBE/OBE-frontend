@@ -10,6 +10,7 @@ import { SEMESTER } from "@/helpers/constants/enum";
 
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
+import { sortData } from "@/helpers/functions/function";
 
 type Props = {
   opened: boolean;
@@ -20,6 +21,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
   const [searchValue, setSearchValue] = useState("");
   const [semesterList, setSemesterlist] = useState<any>([]);
   const [termOption, setTermOption] = useState<any[]>([]);
+  const [selectSemester, setSelectSemester] = useState();
 
   useEffect(() => {
     const fetchSemester = async () => {
@@ -45,13 +47,22 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
         },
         {}
       );
+      // const t = Object.keys(semestersByYear).sort((a: any, b: any) => b - a)
+      // console.log(t);
+      
+      // const t = Object.keys(semestersByYear)
+      //   .sort((a: any, b: any) => b - a)
+      //   .reduce((obj:any, key:any) => {
+      //     obj[key] = semestersByYear[key];
+      //     return obj
+      //   });
+      // console.log(t);
+
       setSemesterlist(semestersByYear);
     };
 
     if (opened) {
       fetchSemester();
-      console.log(semesterList);
-      console.log(Object.keys(semesterList));
     }
   }, [opened]);
 
@@ -62,19 +73,16 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       closeOnClickOutside={false}
       title="Management Semester"
       size="42vw"
-      radius={"12px"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
-        title: "text-primary font-medium text-[18px]",
-        header: "bg-[#F6F7FA]",
         content:
           "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-[90%] ",
       }}
     >
       <div className="flex flex-col gap-5 flex-1">
         <div
-          className="flex flex-col gap-1  p-4   bg-white border-[1px]  rounded-md"
+          className="flex flex-col gap-1  p-3 px-4   bg-white border-[1px]  rounded-md"
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
@@ -82,20 +90,15 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           <div className="flex w-full items-end h-fit ">
             <Select
               rightSectionPointerEvents="none"
-              label="Select Semester to add"
+              label="Select Semester"
               defaultDropdownOpened={false}
-              placeholder="Select Semester"
+              placeholder="Semester"
               allowDeselect
               withCheckIcon={false}
               searchable
-              className="w-full border-none "
-              style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+              className="w-full  "
               classNames={{
-                label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
-                input:
-                  "text-primary font-medium focus:border-primary rounded-e-none cursor-pointer",
-                option: "hover:bg-[#DDDDF6] text-primary font-medium",
-                dropdown: "drop-shadow-[0_0px_4px_rgba(0,0,0,0.30)]",
+                input: "!rounded-r-none",
               }}
               rightSection={
                 <IconChevronDown
@@ -108,14 +111,20 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
               onDropdownClose={() => setOpenedDropdown(false)}
             />
 
-            <Button className="rounded-s-none w-[12%]" color="#5768D5">
+            <Button
+              className="rounded-s-none min-w-fit border-l-0"
+              color="#5768D5"
+              disabled={!selectSemester}
+            >
               Add
             </Button>
           </div>
-          <p className="text-[#575757] font-10px;">
-            Add courses for the{" "}
-            <span className="text-[#5768D5;]">next 3 semesters</span> from the
-            current semester.
+          <p className="text-tertiary font-normal text-[11px]">
+            Add semester for the{" "}
+            <span className="text-secondary font-semibold">
+              next 3 semesters
+            </span>{" "}
+            from the current semester.
           </p>
         </div>
 
@@ -126,34 +135,33 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <div className="bg-[#e6e9ff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-medium">
-            <IconUsers /> Management Semester
+          <div className="bg-[#e6e9ff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] py-3 px-5 text-secondary font-semibold">
+            <IconUsers /> Added Semester
           </div>
           {/* Show List Of Semester */}
-          <div className="flex flex-col gap-4  w-full h-[330px]  p-4  overflow-y-hidden">
+          <div className="flex flex-col gap-2  w-full h-[350px]  p-4  overflow-y-hidden">
             <Input
               leftSection={<TbSearch />}
+              size="xs"
               placeholder="Year"
               value={searchValue}
               onChange={(event) => setSearchValue(event.currentTarget.value)}
-              className="focus:border-none px-1"
-              classNames={{ input: "bg-gray-200 rounded-md border-none" }}
               rightSectionPointerEvents="all"
             />
             {/* List of Semester */}
 
-            <div className="flex flex-col gap-2 rounded-3xl p-1 overflow-y-auto">
+            <div className="flex flex-col gap-2  p-1 overflow-y-auto">
               {Object.keys(semesterList).map((year) => (
                 <div
                   key={year}
-                  className="border-[2px] border-[#C8CFF7] rounded-xl overflow-clip flex flex-col w-full items-center justify-between"
+                  className="border-[1px] border-[#C8CFF7] rounded-md bg-white overflow-clip flex flex-col w-full items-center justify-between"
                 >
                   <div className="flex flex-col w-full items-center">
                     {semesterList[year].map((e: any, index: number) => (
                       <div
                         key={e.id}
                         className={`flex flex-row items-center h-16  px-4 py-2 w-full justify-between
-                            ${e.isActive ? "bg-[#E5E8FF]" : "bg-[#F3F3F3]"} `}
+                            ${e.isActive ? "bg-[#E5E8FF]" : "bg-[#ffffff]"} `}
                       >
                         {index === 0 ? (
                           <div>
@@ -183,21 +191,34 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                         {e.isActive ? (
                           <Button
                             disabled
+                            size="xs"
                             variant="filled"
-                            color="#C8CFF7"
-                            className="rounded-xl w-[85px] px-[10px] bg-[#C8CFF7] text-[#6869AD] font-normal"
+                            className="rounded-lg !border-none  text-white  bg-secondary"
                           >
                             Currently
                           </Button>
                         ) : (
                           <Button
-                            variant="filled"
+                            variant="outline"
                             color="#5768D5"
-                            className="rounded-xl w-[85px] px-[10px] text-white font-normal"
+                            size="xs"
+                            className="rounded-lg "
                           >
                             Activate
                           </Button>
                         )}
+                        {/* <Button
+                      variant="outline"
+                      color="red"
+                      size="xs"
+                      className=" rounded-lg"
+                      onClick={() => editAdmin(admin.id, ROLE.INSTRUCTOR)}
+                      leftSection={
+                        <IconTrash className=" size-4" stroke={1.5} />
+                      }
+                    >
+                      Delete
+                    </Button> */}
                       </div>
                     ))}
                   </div>

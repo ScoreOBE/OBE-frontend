@@ -1,9 +1,11 @@
-import { Button, Input, Modal } from "@mantine/core";
+import { Button, Input, Modal, TextInput } from "@mantine/core";
 import { IconUserCircle, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { AiOutlineSwap } from "react-icons/ai";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 import Icon from "../Icon";
+import InfoIcon from "@/assets/icons/info.svg?react";
 import { IModelUser } from "@/models/ModelUser";
 import { getInstructor, updateSAdmin } from "@/services/user/user.service";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -73,53 +75,59 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
     <Modal
       opened={opened}
       onClose={onClose}
-      closeOnClickOutside={false}
-      title="Management Supreme Admin"
-      size="45vw"
+      closeOnClickOutside={true}
+      title="Managemet Supreme Admin"
       radius={"12px"}
+      size="42vw"
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
-        title: "text-primary font-medium text-[18px]",
-        header: "bg-[#F6F7FA]",
         content:
-          "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-[95%]",
+          "flex flex-col    justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden ",
       }}
     >
+      <div className="bg-[#C7EBFF] items-center gap-4 flex rounded-md py-3 px-5 mb-5 ">
+        <Icon IconComponent={InfoIcon} />
+        <p className="text-[#0067A0] font-semibold">
+          Changing the Supreme Admin{" "}
+          <span className=" font-extrabold"> will revoke </span> your current
+          supreme admin status.
+        </p>
+      </div>
       <div
-        className="w-full max-h-[500px]  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
+        className=" max-h-[500px]  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
         style={{
           boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
         }}
       >
         {/* Show List Of Admin */}
-        <div className="flex  flex-col  flex-1  p-4  overflow-y-hidden">
-          <Input
+        <div className="flex  flex-col gap-2  flex-1  p-4  overflow-y-hidden">
+          <TextInput
             leftSection={<TbSearch />}
-            placeholder="Name"
+            placeholder="Name / CMU account"
             value={searchValue}
-            onChange={(event) => setSearchValue(event.currentTarget.value)}
-            className="focus:border-none px-1"
-            classNames={{ input: "bg-gray-200 rounded-md border-none" }}
+            size="xs"
+            onChange={(event:any) => setSearchValue(event.currentTarget.value)}
             rightSectionPointerEvents="all"
           />
+
           {/* List of Admin */}
-          <div className="flex flex-1 flex-col gap-2 overflow-y-auto p-1">
+          <div className="flex flex-1 flex-col gap-2  overflow-y-auto p-1">
             {adminFilter.map((admin) => (
               <div
                 key={admin.id}
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
-                className="flex flex-1 items-center justify-between mt-2 py-3 px-4 rounded-md "
+                className="flex flex-1 items-center justify-between mt-2 py-3 px-4 rounded-md"
               >
-                <div className="gap-4 flex items-center">
+                <div className="gap-3 flex items-center">
                   <IconUserCircle size={32} stroke={1} />
                   <div className="flex flex-col">
-                    <p className="font-[500]">
+                    <p className="font-semibold text-[14px] text-tertiary">
                       {admin.firstNameEN} {admin.lastNameEN}
                     </p>
-                    <p className="text-[#4E5150] text-[12px] font-normal">
+                    <p className="text-secondary text-[10px] font-normal">
                       {admin.email}
                     </p>
                   </div>
@@ -127,10 +135,14 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                 <Button
                   variant="outline"
                   color="#5768D5"
-                  className=" rounded-full px-[7px]"
+                  size="xs"
+                  className=" rounded-lg gap"
                   onClick={() => editSAdmin(admin.id)}
+                  leftSection={
+                    <AiOutlineSwap className=" stroke-[20px] size-4" />
+                  }
                 >
-                  <AiOutlineSwap className="h-5 w-5" />
+                  Change
                 </Button>
               </div>
             ))}

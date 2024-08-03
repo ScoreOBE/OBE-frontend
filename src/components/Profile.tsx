@@ -74,9 +74,9 @@ export default function Profile() {
         opened={modalManageSemester}
         onClose={closeModalManageSemester}
       />
-      <Menu trigger="click" openDelay={100} closeDelay={400}>
+      <Menu trigger="hover" openDelay={100} closeDelay={400}>
         <Menu.Target>
-          <Button className="flex flex-row justify-center bg-white items-center rounded-lg py-0.5 px-4 cursor-pointer hover:bg-gray-200">
+          <Button className="flex flex-row justify-center bg-white items-center rounded-lg py-0.5 px-4 cursor-pointer hover:bg-[#efefef]">
             <div className="flex flex-col text-[12px] gap-1 text-end mr-3">
               <p className="text-black font-semibold">
                 {user.firstNameEN} {user.lastNameEN?.slice(0, 1)}.
@@ -92,18 +92,18 @@ export default function Profile() {
           </Button>
         </Menu.Target>
         <Menu.Dropdown
-          className="rounded-xl translate-y-[-8px] translate-x-[-16px] backdrop-blur-xl bg-white"
-          style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
+          className="rounded-md -translate-y-[3px] translate-x-[-18px] backdrop-blur-xl bg-white"
+          style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
         >
           {user.role !== ROLE.STUDENT && (
             <>
-              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] ">
                 <div className="flex items-center gap-2">
                   <IconList stroke={1.5} className="h-5 w-5" color="#3e3e3e" />
                   <span>Activity log</span>
                 </div>
               </Menu.Item>
-              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px]">
                 <div className="flex items-center gap-2">
                   <IconUserScreen
                     className="h-5 w-5"
@@ -117,7 +117,7 @@ export default function Profile() {
             </>
           )}
           <Menu.Item
-            className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20"
+            className="text-[#3E3E3E] h-8 w-[200px] "
             onClick={() => navigate(ROUTE_PATH.SELECTED_DEPARTMENT)}
           >
             <div className="flex items-center gap-2">
@@ -134,7 +134,7 @@ export default function Profile() {
           <Menu trigger="click-hover" openDelay={100} closeDelay={400}>
             {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
               <Menu.Target>
-                <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+                <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] ">
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex gap-2">
                       <IconAdjustmentsHorizontal
@@ -154,13 +154,13 @@ export default function Profile() {
               </Menu.Target>
             )}
             <Menu.Dropdown
-              className="rounded-xl -translate-y-[45px] -translate-x-[210px]  bg-white"
-              style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
+              className="rounded-md -translate-y-[42px] -translate-x-[210px]  bg-white"
+              style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
             >
               {user.role === ROLE.SUPREME_ADMIN && (
                 <>
                   <Menu.Item
-                    className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20"
+                    className="text-[#3E3E3E] h-8 w-[200px]"
                     onClick={openModalChangeSupAdmin}
                   >
                     <div className="flex items-center gap-2">
@@ -169,7 +169,7 @@ export default function Profile() {
                     </div>
                   </Menu.Item>
                   <Menu.Item
-                    className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20"
+                    className="text-[#3E3E3E] h-8 w-[200px] "
                     onClick={openModalManageSemester}
                   >
                     <div className="flex items-center gap-2">
@@ -181,26 +181,26 @@ export default function Profile() {
               )}
               <Menu.Item
                 onClick={openModalManageAdmin}
-                className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20"
+                className="text-[#3E3E3E] h-8 w-[200px] "
               >
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={AdminIcon} className="h-5 w-5" />
                   <span>Admin</span>
                 </div>
               </Menu.Item>
-              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px]">
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={CourseIcon} className="h-5 w-5" />
                   <span>Course</span>
                 </div>
               </Menu.Item>
-              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] ">
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={SOIcon} className="h-5 w-5" />
                   <span>SO</span>
                 </div>
               </Menu.Item>
-              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
+              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px]">
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={TQFIcon} className="h-5 w-5" />
                   <span>TQF</span>
@@ -211,7 +211,7 @@ export default function Profile() {
 
           <Menu.Divider />
           <Menu.Item
-            className="text-[#FF4747] h-8 w-[200px] hover:bg-[#d55757]/20"
+            className="text-[#FF4747] h-8 w-[200px] hover:bg-[#d55757]/10"
             onClick={Logout}
           >
             <div className="flex items-center gap-2">

@@ -4,7 +4,7 @@
 
 @layer base, mantine, components;
 :root {
-  font-family: "SF Pro", "NotoSansThai", Helvetica, Arial, sans-serif;
+  font-family: "Lato", "NotoSansThai", Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -29,7 +29,7 @@ a:hover {
 }
 
 body {
-  font-family: "SF Pro", "NotoSansThai" Helvetica, Arial, sans-serif;
+  font-family: "Lato", "NotoSansThai" Helvetica, Arial, sans-serif;
   margin: 0;
   place-items: center;
   min-width: 320px;
@@ -65,25 +65,9 @@ button {
 }
 
 @font-face {
-  font-family: "SF Pro";
-  src: url("./assets/fonts/SF-Pro.ttf") format("truetype");
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "SF Pro";
-  src: url("./assets/fonts/SF-Pro-Italic.ttf") format("truetype");
-  font-style: italic;
-}
-
-@font-face {
-  font-family: "SF Pro Rounded";
-  src: url("./assets/fonts/SF-Pro-Rounded-Medium.otf") format("opentype");
-  font-style: normal;
-}
-
-@font-face {
   font-family: "NotoSansThai";
-  src: url("./assets/fonts/NotoSansThai.ttf") format("opentype");
+  src: url("~@/assets/fonts/NotoSansThai.ttf") format("opentype");
+  font-weight: normal;
   font-style: normal;
+  unicode-range: U+0E00- U+0E7F;
 }

@@ -237,8 +237,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
-        title: "text-primary font-medium text-[18px]",
-        header: "bg-[#F6F7FA]",
         content:
           "flex flex-col justify-center bg-[#F6F7FA] item-center px-2 overflow-hidden",
       }}
