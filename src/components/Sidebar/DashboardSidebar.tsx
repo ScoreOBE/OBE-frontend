@@ -120,9 +120,9 @@ export default function DashboardSidebar() {
         </div>
 
         <div className="flex flex-col gap-3">
-          <p className="text-md text-white font-semibold">Course</p>
+          <p className="text-b2 text-white font-semibold">Course</p>
           <Button
-            className="bg-transparent w-full h-[50px] flex justify-start items-center  px-3 py-1 border-none rounded-lg text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none group"
+            className="bg-transparent w-full h-[50px] flex justify-start items-center  px-3 py-1 border-none rounded-[4px] text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none group"
             leftSection={
               <Icon className="-mt-4 mr-1" IconComponent={CalendarIcon} />
             }

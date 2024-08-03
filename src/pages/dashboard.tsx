@@ -121,7 +121,7 @@ export default function Dashboard() {
           <Button
             color="#5768D5"
             leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
-            className=" rounded-[8px]   text-[14px] font-semibold h-8 px-3"
+            className=" rounded-[4px]   text-[14px] font-semibold h-9 px-3"
             onClick={openedAddModal}
           >
             Add course
@@ -177,7 +177,7 @@ export default function Dashboard() {
               return (
                 <div
                   key={item.id}
-                  className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-md hover:bg-[#F3F3F3]"
+                  className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-[4px] hover:bg-[#F3F3F3]"
                   style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)" }}
                   onClick={() => goToCourse(item.courseNo)}
                 >
@@ -187,39 +187,45 @@ export default function Dashboard() {
                       {item.courseName}
                     </p>
                     {item.addFirstTime && (
-                      <Menu trigger="click" position="bottom-end" offset={2}>
-                        <Menu.Target>
-                          <IconDots className="absolute top-2 right-2 rounded-full hover:bg-gray-300" />
-                        </Menu.Target>
-                        <Menu.Dropdown
-                          className="rounded-xl backdrop-blur-xl bg-white/70 "
-                          style={{
-                            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                          }}
-                        >
-                          <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] hover:bg-[#5768D5]/20">
-                            <div className="flex items-center gap-2">
-                              <IconPencilMinus
-                                stroke={1.5}
-                                className="h-5 w-5"
-                              />
-                              <span>Edit Course</span>
-                            </div>
-                          </Menu.Item>
-                          <Menu.Item
-                            className="text-[#FF4747] h-8 w-[200px] hover:bg-[#d55757]/20"
-                            onClick={() => onClickDeleteCourse(item.id)}
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        <Menu trigger="click" position="bottom-end" offset={2}>
+                          <Menu.Target>
+                            <IconDots className="absolute top-2 right-2 rounded-full hover:bg-gray-300" />
+                          </Menu.Target>
+                          <Menu.Dropdown
+                            className="rounded-md backdrop-blur-xl bg-white/70 "
+                            style={{
+                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                            }}
                           >
-                            <div className="flex items-center gap-2">
-                              <IconTrash className="h-5 w-5" stroke={1.5} />
-                              <span>Delete Course</span>
-                            </div>
-                          </Menu.Item>
-                        </Menu.Dropdown>
-                      </Menu>
+                            <Menu.Item className="text-[#3E3E3E]  text-b3 h-7 w-[180px]">
+                              <div className="flex items-center gap-2">
+                                <IconPencilMinus
+                                  stroke={1.5}
+                                  className="h-4 w-4"
+                                />
+                                <span>Edit Course</span>
+                              </div>
+                            </Menu.Item>
+                            <Menu.Item
+                              className="text-[#FF4747] h-7 w-[180px]  text-b3 hover:bg-[#d55757]/10"
+                              onClick={() => onClickDeleteCourse(item.id)}
+                            >
+                              <div className="flex items-center gap-2">
+                                <IconTrash className="h-4 w-4" stroke={1.5} />
+                                <span>Delete Course</span>
+                              </div>
+                            </Menu.Item>
+                          </Menu.Dropdown>
+                        </Menu>
+                      </div>
                     )}
                   </div>
-                  <div className="bg-[#e7eaff] flex h-8 items-center justify-between rounded-b-md">
+                  <div className="bg-[#e7eaff] flex h-8 items-center justify-between rounded-b-[4px]">
                     <p className="p-2.5 text-secondary font-semibold text-[12px]">
                       {item.sections.length} Section
                       {item.sections.length > 1 ? "s" : ""}

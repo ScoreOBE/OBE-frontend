@@ -76,7 +76,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       opened={opened}
       onClose={onClose}
       closeOnClickOutside={true}
-      title="Managemet Supreme Admin"
+      title="Management Supreme Admin"
       size="43vw"
       centered
       transitionProps={{ transition: "pop" }}
@@ -85,12 +85,12 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           "flex flex-col    justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden ",
       }}
     >
-      <div className="bg-[#C7EBFF] items-center gap-4 flex rounded-md py-3 px-5 mb-5 ">
-        <Icon IconComponent={InfoIcon} />
-        <p className="text-[#0067A0] font-semibold">
+      <div className="bg-[#d6f0fe] items-center gap-4 flex rounded-md py-2 px-5 mb-5 ">
+        <Icon className=" size-6" IconComponent={InfoIcon} />
+        <p className="text-[#117bb4] font-semibold">
           Changing the Supreme Admin{" "}
-          <span className=" font-extrabold"> will revoke </span> your current
-          supreme admin status.
+          <span className=" font-extrabold text-[#075c8a]"> will revoke </span> your current
+          role
         </p>
       </div>
       <div
@@ -135,7 +135,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                   variant="outline"
                   color="#5768D5"
                   size="xs"
-                  className=" rounded-lg gap"
+                  className=" rounded-[4px]"
                   onClick={() => editSAdmin(admin.id)}
                   leftSection={
                     <AiOutlineSwap className=" stroke-[20px] size-4" />

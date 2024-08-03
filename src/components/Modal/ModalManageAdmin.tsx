@@ -265,7 +265,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                       variant="outline"
                       color="red"
                       size="xs"
-                      className=" rounded-lg"
+                      className=" rounded-[4px]"
                       onClick={() => editAdmin(admin.id, ROLE.INSTRUCTOR)}
                       leftSection={
                         <IconTrash className=" size-4" stroke={1.5} />
