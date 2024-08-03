@@ -233,7 +233,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       closeOnClickOutside={false}
       title="Add course"
       size="50vw"
-      radius={"12px"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{

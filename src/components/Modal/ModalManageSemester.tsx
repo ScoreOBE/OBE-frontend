@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Select } from "@mantine/core";
+import { Button, Input, Modal, Select, TextInput } from "@mantine/core";
 import AddCoIcon from "@/assets/icons/addCo.svg?react";
 import { IconChevronDown, IconUsers } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import { SEMESTER } from "@/helpers/constants/enum";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 import { sortData } from "@/helpers/functions/function";
+import academicYear from "@/store/academicYear";
 
 type Props = {
   opened: boolean;
@@ -19,7 +20,7 @@ type Props = {
 export default function ModalManageSemester({ opened, onClose }: Props) {
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [semesterList, setSemesterlist] = useState<any>([]);
+  const [semesterList, setSemesterlist] = useState<any>({});
   const [termOption, setTermOption] = useState<any[]>([]);
   const [selectSemester, setSelectSemester] = useState();
 
@@ -39,24 +40,23 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       //Group by Year
       const semestersByYear = academicYearList.reduce(
         (acc: any, academicYearList: any) => {
-          if (!acc[academicYearList.year]) {
-            acc[academicYearList.year] = [];
+          const year: string = academicYearList.year.toString() + "a";
+
+          if (!acc[year]) {
+            acc[year] = [];
           }
-          acc[academicYearList.year].push(academicYearList);
+          acc[year].push(academicYearList);
+
           return acc;
         },
         {}
       );
-      // const t = Object.keys(semestersByYear).sort((a: any, b: any) => b - a)
-      // console.log(t);
-      
-      // const t = Object.keys(semestersByYear)
-      //   .sort((a: any, b: any) => b - a)
-      //   .reduce((obj:any, key:any) => {
-      //     obj[key] = semestersByYear[key];
-      //     return obj
-      //   });
-      // console.log(t);
+      // const sortedSemester = Object.keys(semestersByYear)
+      // .sort((a: any, b: any) => b - a)
+      // .reduce((result: any, key: any) => {
+      //   result[key] = semestersByYear[key];
+      //   return result;
+      // }, {});
 
       setSemesterlist(semestersByYear);
     };
@@ -65,6 +65,10 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       fetchSemester();
     }
   }, [opened]);
+
+  useEffect(() => {
+    console.log(semesterList);
+  }, [semesterList]);
 
   return (
     <Modal
@@ -95,7 +99,6 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
               placeholder="Semester"
               allowDeselect
               withCheckIcon={false}
-              searchable
               className="w-full  "
               classNames={{
                 input: "!rounded-r-none",
@@ -140,7 +143,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           </div>
           {/* Show List Of Semester */}
           <div className="flex flex-col gap-2  w-full h-[350px]  p-4  overflow-y-hidden">
-            <Input
+            <TextInput
               leftSection={<TbSearch />}
               size="xs"
               placeholder="Year"
@@ -164,12 +167,12 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                             ${e.isActive ? "bg-[#E5E8FF]" : "bg-[#ffffff]"} `}
                       >
                         {index === 0 ? (
-                          <div>
-                            <p className="font-medium text-[#4E5150] text-[12px]">
+                          <div className="w-10">
+                            <p className="font-medium text-[#4E5150] text-[10px]">
                               Year
                             </p>
-                            <p className="font-semibold text-black text-[16px]">
-                              {year}
+                            <p className="font-semibold text-black text-[14px]">
+                              {year.slice(0,-1)}
                             </p>
                           </div>
                         ) : (
@@ -180,7 +183,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                             Semester
                           </p>
                           <p
-                            className={`font-semibold text-black text-[16px] ${
+                            className={`font-semibold text-black text-[14px] ${
                               e.isActive ? "text-secondary" : "text-black"
                             }`}
                           >
@@ -193,7 +196,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                             disabled
                             size="xs"
                             variant="filled"
-                            className="rounded-lg !border-none  text-white  bg-secondary"
+                            className="rounded-lg !border-none  "
                           >
                             Currently
                           </Button>
