@@ -19,10 +19,10 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setUser } from "@/store/user";
 import { ROLE } from "@/helpers/constants/enum";
 import ModalManageAdmin from "./Modal/ModalManageAdmin";
-import ModallManageSemester from "./Modal/ModalManageSemester";
 import ModalChangeSupAdmin from "./Modal/ModalChangeSupremeAdmin";
 import { useDisclosure } from "@mantine/hooks";
 import ModalManageSemester from "./Modal/ModalManageSemester";
+import ModalManageTQF from "./Modal/ModalManageTQF";
 
 export default function Profile() {
   const user = useAppSelector((state) => state.user);
@@ -39,6 +39,10 @@ export default function Profile() {
   const [
     modalManageSemester,
     { open: openModalManageSemester, close: closeModalManageSemester },
+  ] = useDisclosure(false);
+  const [
+    modalManageTQF,
+    { open: openModalManageTQF, close: closeModalManageTQF },
   ] = useDisclosure(false);
 
   const getRoleColor = (role: any) => {
@@ -70,6 +74,7 @@ export default function Profile() {
         opened={modalChangeSupAdmin}
         onClose={closeModalChangeSupAdmin}
       />
+      <ModalManageTQF opened={modalManageTQF} onClose={closeModalManageTQF} />
       <ModalManageSemester
         opened={modalManageSemester}
         onClose={closeModalManageSemester}
@@ -200,7 +205,10 @@ export default function Profile() {
                   <span>SO</span>
                 </div>
               </Menu.Item>
-              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px]">
+              <Menu.Item
+                className="text-[#3E3E3E] h-8 w-[200px]"
+                onClick={openModalManageTQF}
+              >
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={TQFIcon} className="h-5 w-5" />
                   <span>TQF</span>

@@ -250,7 +250,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                       <p className="font-semibold text-[14px] text-tertiary">
                         {admin.firstNameEN} {admin.lastNameEN}
                       </p>
-                      <p className="text-secondary text-[10px] font-normal">
+                      <p className="text-secondary text-[12px] font-normal">
                         {admin.email}
                       </p>
                     </div>

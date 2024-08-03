@@ -106,7 +106,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
             placeholder="Name / CMU account"
             value={searchValue}
             size="xs"
-            onChange={(event:any) => setSearchValue(event.currentTarget.value)}
+            onChange={(event: any) => setSearchValue(event.currentTarget.value)}
             rightSectionPointerEvents="all"
           />
 
@@ -126,7 +126,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                     <p className="font-semibold text-[14px] text-tertiary">
                       {admin.firstNameEN} {admin.lastNameEN}
                     </p>
-                    <p className="text-secondary text-[10px] font-normal">
+                    <p className="text-secondary text-[12px] font-normal">
                       {admin.email}
                     </p>
                   </div>
