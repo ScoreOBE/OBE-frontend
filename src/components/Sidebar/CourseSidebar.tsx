@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { RxDashboard } from "react-icons/rx";
-import { IconChevronLeft } from "@tabler/icons-react";
+import { IconChevronLeft, IconLogout } from "@tabler/icons-react";
 
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import Icon from "../Icon";
@@ -53,18 +53,16 @@ export default function CourseSidebar() {
 
   return (
     <>
-      <div className="flex flex-col gap-[27px]">
-        <Button
-          className="hover:underline hover:bg-transparent p-0 flex justify-start"
-          color="none"
-          radius={"md"}
+      <div className="flex text-white flex-col h-full  gap-[32px]">
+        <div
+          className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
           onClick={goToDashboard}
         >
-          <IconChevronLeft viewBox="8 0 24 24" />
+          <IconChevronLeft size={20} viewBox="8 0 24 24" />
           Back to Your Course
-        </Button>
+        </div>
 
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 ">
           <div className="flex flex-col flex-1 font-semibold gap-1 ">
             <p className="text-lg">
               {course?.courseNo} ({params.get("semester")}/
@@ -77,7 +75,7 @@ export default function CourseSidebar() {
           <div className="flex flex-col gap-2">
             <Button
               leftSection={<RxDashboard size={18} />}
-              className={`font-medium w-full h-8 flex justify-start items-center border-none rounded-lg transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[4px] transition-colors duration-300 focus:border-none group
               ${
                 path.startsWith(ROUTE_PATH.COURSE)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -88,7 +86,7 @@ export default function CourseSidebar() {
             </Button>
             <Button
               leftSection={<Icon IconComponent={TQF3} className="h-5 w-5" />}
-              className={`font-medium w-full h-8 flex justify-start items-center border-none rounded-lg transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[4px] transition-colors duration-300 focus:border-none group
                 ${
                   path.startsWith(ROUTE_PATH.TQF3)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -99,7 +97,7 @@ export default function CourseSidebar() {
             </Button>
             <Button
               leftSection={<Icon IconComponent={TQF5} className="h-5 w-5" />}
-              className={`font-medium w-full h-8 flex justify-start items-center border-none rounded-lg transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[4px] transition-colors duration-300 focus:border-none group
                 ${
                   path.startsWith(ROUTE_PATH.TQF5)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -112,7 +110,7 @@ export default function CourseSidebar() {
         </div>
 
         <div className="flex flex-col gap-2 mt-5">
-          <p className="text-md font-semibold mb-1">Instructors</p>
+          <p className="text-b2 font-semibold mb-1">Instructors</p>
           {instructors.map((item) => {
             return (
               <p key={item.id} className="text-pretty text-[12px]">
@@ -120,6 +118,17 @@ export default function CourseSidebar() {
               </p>
             );
           })}
+        </div>
+        <div className="flex absolute gap-1 bottom-6 flex-col ">
+          <p className="text-[14px] text-white font-semibold">Course Action</p>
+          <Button
+            leftSection={<IconLogout className="h-5 w-5" stroke={1.5} />}
+            className="font-semibold text-[#ffffff] bg-transparent hover:bg-[#d55757]/80  w-full h-8 flex justify-start items-center border-none rounded-[4px] transition-colors duration-300 focus:border-none group"
+          >
+            <div className="flex flex-col justify-start items-start gap-[7px]">
+              <p className="font-medium text-b2">Leave form Course</p>
+            </div>
+          </Button>
         </div>
       </div>
     </>

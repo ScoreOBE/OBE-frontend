@@ -122,7 +122,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
               Add
             </Button>
           </div>
-          <p className="text-tertiary font-normal text-[11px]">
+          <p className="text-tertiary mt-1 font-normal text-[11px]">
             Add semester for the{" "}
             <span className="text-secondary font-semibold">
               next 3 semesters

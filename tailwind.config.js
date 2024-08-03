@@ -15,7 +15,8 @@ export default {
         h1: "20px",
         h2: "18px",
         b1: "16px",
-        b2: "14px"
+        b2: "14px",
+        b3: "12px"
       }
     },
     fontFamily: {

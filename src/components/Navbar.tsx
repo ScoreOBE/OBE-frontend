@@ -42,12 +42,21 @@ export default function Navbar() {
     searchCourse(true);
   };
 
+  const topicPath = () => {
+    const path = "/" + location.split("/")[1];
+    switch (path) {
+      case ROUTE_PATH.DASHBOARD_INS:
+        return "Your Courses";
+      case ROUTE_PATH.COURSE:
+        return "Section";
+      default:
+        return;
+    }
+  };
+
   return (
-    <div
-      
-      className="min-h-14 border-b-[1px] border-[#e0e0e0] px-6  inline-flex flex-wrap justify-between items-center z-50 bg-[#fcfcfc]  text-secondary text-[18px]"
-    >
-      <p className="font-semibold">Your Courses</p>
+    <div className="min-h-14 border-b-[1px] border-[#e0e0e0] px-6  inline-flex flex-wrap justify-between items-center z-50 bg-[#fcfcfc]  text-secondary text-[18px]">
+      <p className="font-semibold">{topicPath()}</p>
       {[ROUTE_PATH.DASHBOARD_INS].includes(location) && (
         <div className="w-[400px]">
           <TextInput
@@ -85,7 +94,7 @@ export default function Navbar() {
 
               <div className="flex items-center text-secondary gap-1">
                 Press{" "}
-                <div className="ml-1 flex items-center gap-1 border-[1px] border-secondary p-1 font-semibold rounded-md">
+                <div className="ml-1 flex items-center gap-1 border-[1px] border-secondary p-1 font-semibold rounded-[6px]">
                   Enter <AiOutlineEnter className="stroke-[50px]" />
                 </div>
               </div>
