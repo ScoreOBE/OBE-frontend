@@ -1,3 +1,30 @@
+:root {
+  --tqf-color-done: #3dff45;
+  --tqf-color-in-progress: #fff50d;
+  --tqf-color-no-data: #a2a2a2;
+  --color-primary: #6869ad;
+  --color-secondary: #5768d5;
+  --color-tertiary: #3e3e3e;
+  --color-hover: #efefef;
+  --color-border-input: #cecece;
+  --color-background-input: #f9f9f9;
+  --input-radius: 20px;
+}
+
+* {
+  font-family: "Lato", "NotoSansThai";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: "NotoSansThai";
+  src: url("~@/assets/fonts/NotoSansThai.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  unicode-range: U+0E00- U+0E7F;
+}
+
 /* fix width height InfiniteScroll */
 .infinite-scroll-component__outerdiv {
   width: 100%;
@@ -7,18 +34,97 @@
 
 .mantine-Stepper-stepIcon[data-completed],
 .mantine-Stepper-separator[data-active] {
-  background-color: #1FC461;
-  border-color: #1FC461;
+  background-color: #1fc461;
+  border-color: #1fc461;
 }
 
 .mantine-Stepper-stepIcon[data-progress] {
-  background-color: #6869AD;
-  background-clip:content-box;
+  background-color: var(--color-primary);
+  background-clip: content-box;
   padding: 5px;
-  color: #6869AD;
-  border-color: #6869AD;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
+.mantine-Modal-title {
+  font-weight: 600 !important;
+  color: var(--color-primary);
+  font-size: 18px !important;
+}
+
+.mantine-Modal-content,
+.mantine-Modal-header {
+  background-color: #f6f7fa !important;
+}
+
+.mantine-Paper-root {
+  border-radius: 12px !important;
+  padding: 4px !important;
+  width: fit-content !important;
+}
+
+.mantine-Select-dropdown {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px !important;
+}
+
+.mantine-Select-option {
+  color: var(--color-primary) !important;
+  font-weight: 500 !important;
+}
+
+.mantine-Select-option:hover {
+  background-color: var(--color-hover) !important;
+}
+
+.mantine-Select-input {
+  color: var(--color-primary) !important;
+  padding-inline: 16px !important;
+  font-size: 12px !important;
+  background-color: var(--color-background-input) !important;
+  font-weight: 500 !important;
+  border: var(--color-border-input) solid 1px !important;
+  cursor: pointer !important;
+}
+
+.mantine-Select-input:focus {
+  border-color: var(--color-secondary) !important;
+}
+
+.mantine-Select-label {
+  font-size: 13px !important;
+  color: var(--color-tertiary) !important;
+  font-weight: 600 !important;
+}
+
+.mantine-TextInput-input {
+  border-color: var(--color-border-input) !important;
+  background-color: var(--color-background-input) !important;
+  border-radius: 6px !important;
+}
+
+.mantine-TextInput-input:focus {
+  border: 1px solid;
+  border-color: var(--color-secondary) !important ;
+}
+
+.mantine-TextInput-label {
+  font-size: 13px !important;
+  color: var(--color-tertiary) !important;
+  font-weight: 600 !important;
+}
+
+.mantine-TextInput-description {
+  color: var(--color-secondary) !important;
+}
+
+.mantine-Menu-item:hover {
+  background-color: var(--color-hover);
+}
+
+Button:disabled {
+  border-color: var(--color-border-input) !important;
+  cursor: not-allowed !important;
+}
 
 .custom-radial-gradient {
   background: radial-gradient(
@@ -44,12 +150,6 @@
 .card {
   display: flex;
   flex-direction: column;
-}
-
-:root {
-  --tqf-color-done: #3dff45;
-  --tqf-color-in-progress: #fff50d;
-  --tqf-color-no-data: #a2a2a2;
 }
 
 .tqf-done {

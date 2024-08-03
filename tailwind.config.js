@@ -19,9 +19,8 @@ export default {
       }
     },
     fontFamily: {
-      "sf-pro": ["SF Pro"],
-      "sf-pro-rounded": ["SF Pro Rounded"],
       notoThai: ["NotoSansThai"],
+      lato: ["Lato"],
     },
   },
   plugins: [],

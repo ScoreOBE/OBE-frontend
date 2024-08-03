@@ -66,13 +66,12 @@ export default function DashboardSidebar() {
     <>
       <Modal
         opened={openedFilterTerm}
+        withCloseButton ={false}
         onClose={closeFilterTerm}
-        closeOnClickOutside={false}
         title="Filter"
         size="400px"
         centered
         transitionProps={{ transition: "pop" }}
-        classNames={{ title: "text-primary font-medium text-lg" }}
       >
         <Select
           label="Semester"

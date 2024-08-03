@@ -122,100 +122,96 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
       opened={opened}
       onClose={onClose}
       closeOnClickOutside={false}
-      title="Management admin"
+      title="Management Admin"
       size="45vw"
       radius={"12px"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
-        title: "text-primary font-medium text-[18px]",
-        header: "bg-[#F6F7FA]",
         content:
-          "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-[90%] ",
+          "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-fit ",
       }}
     >
-      <div className="flex flex-col gap-5 flex-1">
+      <div className="flex flex-col h-full    flex-1 ">
         <div
           onClick={() => {
             setEditUser(null);
             setSwapMethodAddAdmin(!swapMethodAddAdmin);
           }}
-          className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center p-4   "
+          className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center py-3 px-5 mb-3  "
         >
           <div className="flex gap-6 items-center">
             <Icon IconComponent={AddCoIcon} className="text-secondary" />
-            <p>
-              Add Admin by using{" "}
-              <span className="font-semibold">
-                {swapMethodAddAdmin ? "Dropdown list" : "CMU Account"}
+            <p className="font-semibold">
+              Add Admin by using {"  "}
+              <span className="font-extrabold">
+                {swapMethodAddAdmin ? " Dropdown list" : " CMU Account"}
               </span>
             </p>
           </div>
           <IconChevronRight stroke={2} />
         </div>
 
-        <div className="flex w-full items-end h-fit ">
-          {swapMethodAddAdmin ? (
-            <TextInput
-              label={
-                <p>
-                  Add Admin via CMU account{" "}
-                  <span className="text-red-500">
-                    (make sure CMU account correct)
-                  </span>
-                </p>
-              }
-              className="w-full border-none"
-              style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
-              classNames={{
-                label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
-                input:
-                  "text-primary font-medium focus:border-primary rounded-e-none cursor-pointer",
-              }}
-              placeholder="example@cmu.ac.th"
-              value={editUser!}
-              onChange={(event) => setEditUser(event.target.value)}
-            ></TextInput>
-          ) : (
-            <Select
-              rightSectionPointerEvents="none"
-              label="Select Admin to add"
-              defaultDropdownOpened={false}
-              placeholder="Select Admin"
-              data={instructorOption}
-              allowDeselect
-              withCheckIcon={false}
-              searchable
-              className="w-full border-none "
-              style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
-              classNames={{
-                label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
-                input:
-                  "text-primary font-medium focus:border-primary rounded-e-none cursor-pointer",
-                option: "hover:bg-[#DDDDF6] text-primary font-medium",
-                dropdown: "drop-shadow-[0_0px_4px_rgba(0,0,0,0.30)]",
-              }}
-              rightSection={
-                <IconChevronDown
-                  className={`${
-                    openedDropdown ? "rotate-180" : ""
-                  } stroke-primary stroke-2`}
-                />
-              }
-              onDropdownOpen={() => setOpenedDropdown(true)}
-              onDropdownClose={() => setOpenedDropdown(false)}
-              value={editUser}
-              onChange={(value, option) => setEditUser(option.value)}
-            />
-          )}
-          <Button
-            className="rounded-s-none w-[12%]"
-            color="#5768D5"
-            disabled={!editUser?.length || (swapMethodAddAdmin && invalidEmail)}
-            onClick={() => editAdmin(editUser!, ROLE.ADMIN)}
+        <div className="flex w-full mb-4 items-end h-fit ">
+          <div
+            className="flex flex-row items-end  p-3 px-4 w-full   bg-white border-[1px]  rounded-md"
+            style={{
+              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
           >
-            Add
-          </Button>
+            {swapMethodAddAdmin ? (
+              <TextInput
+                withAsterisk={true}
+                description="Make sure CMU account correct"
+                label="CMU account"
+                className="w-full border-none rounded-r-none"
+                style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+                classNames={{
+                  input: " !rounded-r-none ",
+                }}
+                placeholder="example@cmu.ac.th"
+                value={editUser!}
+                onChange={(event) => setEditUser(event.target.value)}
+              ></TextInput>
+            ) : (
+              <Select
+                rightSectionPointerEvents="none"
+                defaultDropdownOpened={false}
+                label="Select Admin"
+                placeholder="Admin"
+                data={instructorOption}
+                allowDeselect
+                searchable
+                nothingFoundMessage="No result"
+                className="w-full border-none "
+                classNames={{
+                  input: " rounded-e-none  rounded-md ",
+                }}
+                rightSection={
+                  <IconChevronDown
+                    className={`${
+                      openedDropdown ? "rotate-180" : ""
+                    } stroke-primary stroke-2`}
+                  />
+                }
+                onDropdownOpen={() => setOpenedDropdown(true)}
+                onDropdownClose={() => setOpenedDropdown(false)}
+                value={editUser}
+                onChange={(value, option) => setEditUser(option.value)}
+              />
+            )}
+
+            <Button
+              className="rounded-s-none min-w-fit border-l-0"
+              color="#5768D5"
+              disabled={
+                !editUser?.length || (swapMethodAddAdmin && invalidEmail)
+              }
+              onClick={() => editAdmin(editUser!, ROLE.ADMIN)}
+            >
+              Add
+            </Button>
+          </div>
         </div>
 
         {/* Added Admin */}
@@ -225,18 +221,19 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <div className="bg-[#e6e9ff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-medium">
+          <div className="bg-[#e6e9ff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
             <IconUsers /> Added Admin
           </div>
           {/* Show List Of Admin */}
-          <div className="flex flex-col  w-full h-[330px]  p-4  overflow-y-hidden">
-            <Input
+          <div className="flex flex-col gap-2 w-full h-[400px]   p-4  overflow-y-hidden">
+            <TextInput
               leftSection={<TbSearch />}
-              placeholder="Name"
+              placeholder="Name / CMU account"
+              size="xs"
               value={searchValue}
-              onChange={(event) => setSearchValue(event.currentTarget.value)}
-              className="focus:border-none px-1"
-              classNames={{ input: "bg-gray-200 rounded-md border-none" }}
+              onChange={(event: any) =>
+                setSearchValue(event.currentTarget.value)
+              }
               rightSectionPointerEvents="all"
             />
             {/* List of Admin */}
@@ -248,30 +245,34 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                   }}
                   className="w-full items-center justify-between mt-2 py-3 px-4 rounded-md flex"
                 >
-                  <div className="gap-4 flex items-center">
+                  <div className="gap-3 flex items-center">
                     <IconUserCircle size={32} stroke={1} />
                     <div className="flex flex-col">
-                      <p className="font-[500]">
+                      <p className="font-semibold text-[14px] text-tertiary">
                         {admin.firstNameEN} {admin.lastNameEN}
                       </p>
-                      <p className="text-[#4E5150] text-[12px] font-normal">
+                      <p className="text-secondary text-[10px] font-normal">
                         {admin.email}
                       </p>
                     </div>
                   </div>
                   {admin.firstNameEN === user.firstNameEN &&
                   admin.lastNameEN === user.lastNameEN ? (
-                    <p className="mr-1 text-[#C0C0C0] text-[16px] font-normal">
+                    <p className="mr-1 text-secondary text-[14px] font-normal">
                       You
                     </p>
                   ) : (
                     <Button
                       variant="outline"
                       color="red"
-                      className=" rounded-full px-[7px]"
+                      size="xs"
+                      className=" rounded-lg"
                       onClick={() => editAdmin(admin.id, ROLE.INSTRUCTOR)}
+                      leftSection={
+                        <IconTrash className=" size-4" stroke={1.5} />
+                      }
                     >
-                      <IconTrash className="h-5 w-5" stroke={1.5} />
+                      Delete
                     </Button>
                   )}
                 </div>

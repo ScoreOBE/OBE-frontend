@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Button, CloseButton, Input, Tooltip } from "@mantine/core";
+import { Button, CloseButton, Input, TextInput, Tooltip } from "@mantine/core";
 import Profile from "./Profile";
 import { TbSearch } from "react-icons/tb";
+import { AiOutlineEnter } from "react-icons/ai";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -46,21 +47,18 @@ export default function Navbar() {
       style={{ boxShadow: "0px 2px 2px 0px rgba(0, 0, 0, 0.20)" }}
       className="min-h-14 drop-shadow-md px-6 rounded-tl-3xl inline-flex flex-wrap justify-between items-center z-50 bg-white  text-primary text-[18px]"
     >
-      <p className="font-medium">Your Courses</p>
+      <p className="font-semibold">Your Courses</p>
       {[ROUTE_PATH.DASHBOARD_INS].includes(location) && (
         <div className="w-[400px]">
-          <Input
-            leftSection={!isFocused && <TbSearch />}
+          <TextInput
+            leftSection={!isFocused && <TbSearch className="size-4" />}
             placeholder="Course No / Course Name"
             size="xs"
             value={searchValue}
-            onChange={(event) => setSearchValue(event.currentTarget.value)}
-            onKeyDown={(event) => event.key == "Enter" && searchCourse()}
-            onInput={() => setIsFocused(true)}
-            classNames={{
-              input:
-                "bg-gray-100 rounded-md focus:border-1  focus:border-secondary",
-            }}
+            onChange={(event: any) => setSearchValue(event.currentTarget.value)}
+            onKeyDown={(event: any) => event.key == "Enter" && searchCourse()}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             rightSectionPointerEvents="all"
             rightSection={
               searchValue.length > 0 && (
@@ -72,11 +70,12 @@ export default function Navbar() {
           />
           {isFocused && (
             <div
-              className="mt-2 absolute cursor-pointer w-[400px] bg-gray-100 rounded-md text-slate-800 px-2 py-3 text-[12px] flex justify-between items-center"
+              className="mt-2 absolute cursor-pointer w-[400px] rounded-md bg-white text-slate-800 p-3 text-[12px] flex justify-between items-center"
               onClick={() => searchCourse()}
+              style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
             >
-              <div className="flex items-center gap-3">
-                <TbSearch className="w-auto" />
+              <div className="flex items-center  gap-3">
+                <TbSearch className=" size-4" />
                 {searchValue.length > 0 ? (
                   <p className="">{ellipsisText(searchValue, 35)}</p>
                 ) : (
@@ -84,12 +83,12 @@ export default function Navbar() {
                 )}
               </div>
 
-              <p>
+              <div className="flex items-center gap-1">
                 Press{" "}
-                <span className="ml-1 border-[1px] border-gray-600 p-1 font-semibold rounded-md">
-                  Enter
-                </span>
-              </p>
+                <div className="ml-1 flex items-center gap-1 border-[1px] border-gray-600 p-1 font-semibold rounded-md">
+                  Enter <AiOutlineEnter className="stroke-[50px]" />
+                </div>
+              </div>
             </div>
           )}
         </div>
