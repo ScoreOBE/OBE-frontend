@@ -150,13 +150,13 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                 <p className="font-semibold text-[14px] text-tertiary">
                   TQF 3 Edit
                 </p>
-                <Switch size="lg" onLabel="ON" offLabel="OFF" />
+                <Switch color="#5C55E5" size="lg" onLabel="ON" offLabel="OFF" />
               </div>
               <div className="flex flex-row justify-between items-center border-t-2 border-[#DADADA] px-5 py-3 w-full">
                 <p className="font-semibold text-[14px] text-tertiary">
                   TQF 5 Edit
                 </p>
-                <Switch size="lg" onLabel="ON" offLabel="OFF" />
+                <Switch color="#5C55E5" size="lg" onLabel="ON" offLabel="OFF" />
               </div>
             </div>
             <div className="ml-4">
@@ -199,7 +199,10 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
               <Icon IconComponent={notCompleteIcon} className="h-5 w-5" />
               <span>List of Courses that are Incomplete TQF 3</span>
             </div>
-            <p>{`${notCompleteTQF3List.length}   Course`}</p>
+            <p>
+              {`${notCompleteTQF3List.length}   Course`}
+              {`${notCompleteTQF3List.length > 1 ? "s" : ""}`}
+            </p>
           </div>
 
           {/* Show List Of Manage TQF */}
