@@ -91,7 +91,7 @@ function App() {
     >
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-full w-full overflow-hidden">
-        {showSidebar && <Navbar />}
+        {<Navbar />}
         <Routes>
           <Route path={ROUTE_PATH.LOGIN} element={<Login />} />
           <Route
