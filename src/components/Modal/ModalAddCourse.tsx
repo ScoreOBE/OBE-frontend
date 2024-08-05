@@ -238,47 +238,50 @@ export default function ModalAddCourse({
         option.value === insInput.value ? { ...option, disabled: true } : option
       );
       setInstructorOption(updatedInstructorOptions);
-      let sections = form.getValues().sections ?? [];
-      sections.forEach((sec) => {
-        sec.coInstructors?.push(insInput);
-      });
-      form.setFieldValue("sections", [...sections]);
+      delete insInput.disabled;
+      const updatedSections = form.getValues().sections?.map((sec) => ({
+        ...sec,
+        coInstructors: [...(sec.coInstructors ?? []), insInput],
+      }));
+      form.setFieldValue("sections", [...updatedSections!]);
     }
     setInsInput({ value: null });
   };
 
   const removeCoIns = (coIns: any) => {
     const newCoIns = coInsList.filter((e) => e.value !== coIns.value);
-    const insOption: any[] = [];
-    instructorOption.forEach((e) => {
-      if (e.value == coIns.value) {
-        insOption.push({ ...coIns, disabled: false });
-      } else {
-        insOption.push(e);
-      }
-    });
-    let sections = form.getValues().sections ?? [];
-    sections?.forEach((e) => {
-      e.coInstructors = e.coInstructors?.filter(
-        (p) => p.value != coIns.value
-      ) as string[];
-    });
-    form.setFieldValue("sections", [...sections]);
-    setInstructorOption(insOption);
+    const updatedInstructorOptions = instructorOption.map((option) =>
+      option.value === coIns.value ? { ...option, disabled: false } : option
+    );
+    setInstructorOption(updatedInstructorOptions);
+    const updatedSections = form.getValues().sections?.map((sec) => ({
+      ...sec,
+      coInstructors: (sec.coInstructors ?? []).filter(
+        (p) => p.value !== coIns.value
+      ),
+    }));
+    form.setFieldValue("sections", [...updatedSections!]);
     setCoInsList(newCoIns);
   };
 
-  const addCoInsInSec = (index: number, checked: boolean, value: any) => {
-    let coInstructors: any[] =
-      form.getValues().sections?.at(index)?.coInstructors ?? [];
-    if (checked) {
-      delete value.disabled;
-      coInstructors?.push({ value });
-    } else {
-      coInstructors = coInstructors?.filter((e) => e.value != value);
-    }
-    form.setFieldValue(`sections.${index}.coInstructors`, coInstructors);
+  const addCoInsInSec = (index: number, checked: boolean, coIns: any) => {
+    const updatedSections = form.getValues().sections?.map((section, i) => {
+      if (i === index) {
+        const updatedCoInstructors = checked
+          ? [...(section.coInstructors ?? []), { ...coIns }]
+          : (section.coInstructors ?? []).filter(
+              (e) => e.value !== coIns.value
+            );
+        return { ...section, coInstructors: updatedCoInstructors };
+      }
+      return section;
+    });
+    form.setFieldValue("sections", [...updatedSections!]);
   };
+
+  useEffect(() => {
+    console.log(form.getValues().sections);
+  }, [form]);
 
   return (
     <Modal
