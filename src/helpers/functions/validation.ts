@@ -1,6 +1,7 @@
 import { RESPONSE_MESSAGE } from "@/helpers/constants/response.enum";
 import { ROUTE_PATH } from "../constants/route";
 import { showNotifications } from "./function";
+import { NOTI_TYPE } from "../constants/enum";
 
 export const isValidResponse = (res: any) => {
   if (res.message === RESPONSE_MESSAGE.SUCCESS) {
@@ -10,7 +11,7 @@ export const isValidResponse = (res: any) => {
       localStorage.removeItem("token");
       window.location.replace(ROUTE_PATH.LOGIN);
     }
-    showNotifications("error", "Error", res);
+    showNotifications(NOTI_TYPE.ERROR, "Something went wrong", res);
     return;
   }
 };

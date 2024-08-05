@@ -79,10 +79,10 @@ export default function Profile() {
         opened={modalManageSemester}
         onClose={closeModalManageSemester}
       />
-      <Menu trigger="hover" openDelay={100} closeDelay={400}>
+      <Menu trigger="click" openDelay={100} closeDelay={400}>
         <Menu.Target>
-          <Button className="flex flex-row justify-center bg-white items-center rounded-lg py-0.5 px-4 cursor-pointer hover:bg-[#efefef]">
-            <div className="flex flex-col text-[12px] gap-1 text-end mr-3">
+          <Button className="flex flex-row justify-end px-0 pl-4 h-10  bg-white items-center rounded-lg  cursor-pointer hover:bg-[#f0f0f0]">
+            <div className="flex flex-col gap-1 text-end mr-3 text-[12px]">
               <p className="text-black font-semibold">
                 {user.firstNameEN} {user.lastNameEN?.slice(0, 1)}.
               </p>
@@ -97,18 +97,33 @@ export default function Profile() {
           </Button>
         </Menu.Target>
         <Menu.Dropdown
-          className="rounded-md -translate-y-[3px] translate-x-[-18px] backdrop-blur-xl bg-white"
+          className="rounded-md -translate-y-[3px] translate-x-[-18px] bg-white"
           style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
         >
           {user.role !== ROLE.STUDENT && (
             <>
-              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] ">
+              <div className="flex flex-row p-4 py-3 gap-3">
+                <Icon className="pt-[5px]" IconComponent={ProfileIcon} />
+                <div className="flex flex-col text-[12px]   ">
+                  <p className="text-black font-semibold">
+                    {user.firstNameEN} {user.lastNameEN}
+                  </p>
+                  <p
+                    className="font-medium"
+                    style={{ color: getRoleColor(user.role) }}
+                  >
+                    {user.role}
+                  </p>
+                </div>
+              </div>
+              <Menu.Divider />
+              <Menu.Item className="text-[#3E3E3E] h-8 w-full ">
                 <div className="flex items-center gap-2">
                   <IconList stroke={1.5} className="h-5 w-5" color="#3e3e3e" />
                   <span>Activity log</span>
                 </div>
               </Menu.Item>
-              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px]">
+              <Menu.Item className="text-[#3E3E3E] h-8 w-full">
                 <div className="flex items-center gap-2">
                   <IconUserScreen
                     className="h-5 w-5"
@@ -122,7 +137,7 @@ export default function Profile() {
             </>
           )}
           <Menu.Item
-            className="text-[#3E3E3E] h-8 w-[200px] "
+            className="text-[#3E3E3E] h-8 w-full "
             onClick={() => navigate(ROUTE_PATH.SELECTED_DEPARTMENT)}
           >
             <div className="flex items-center gap-2">
@@ -139,7 +154,7 @@ export default function Profile() {
           <Menu trigger="click-hover" openDelay={100} closeDelay={400}>
             {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
               <Menu.Target>
-                <Menu.Item className="text-[#3E3E3E] h-8 w-[200px] ">
+                <Menu.Item className="text-[#3E3E3E] h-8 w-full ">
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex gap-2">
                       <IconAdjustmentsHorizontal
@@ -159,7 +174,7 @@ export default function Profile() {
               </Menu.Target>
             )}
             <Menu.Dropdown
-              className="rounded-md -translate-y-[42px] -translate-x-[210px]  bg-white"
+              className="rounded-md -translate-y-[62px] -translate-x-[210px]  bg-white"
               style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
             >
               {user.role === ROLE.SUPREME_ADMIN && (

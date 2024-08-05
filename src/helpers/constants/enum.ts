@@ -49,3 +49,13 @@ export enum TQF_STATUS {
   IN_PROGRESS = "In Progress",
   DONE = "Done",
 }
+
+export enum POPUP_TYPE {
+  DELETE = 'Delete',
+  WARNING = 'Warning',
+}
+
+export enum NOTI_TYPE {
+  SUCCESS = 'Success',
+  ERROR = 'Error',
+}

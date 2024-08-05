@@ -39,11 +39,11 @@
 }
 
 .mantine-Stepper-stepIcon[data-progress] {
-  background-color: var(--color-primary);
+  background-color: var(--color-secondary);
   background-clip: content-box;
   padding: 5px;
-  color: var(--color-primary);
-  border-color: var(--color-primary);
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
 }
 
 .mantine-Modal-title {
@@ -58,7 +58,7 @@
 }
 
 .mantine-Paper-root {
-  border-radius: 12px !important;
+  border-radius: 8px !important;
   padding: 4px !important;
   width: fit-content !important;
 }
@@ -166,8 +166,8 @@ Button:disabled {
 }
 
 .tqf-no-data {
-  color: var(--tqf-color-no-data);
-  border-color: var(--tqf-color-no-data);
+  color:#ffffff;
+  background-color: #aaaaaa;
 }
 
 .tqf-done-with-bg {
