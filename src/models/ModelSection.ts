@@ -6,8 +6,8 @@ export interface IModelSection {
   topic?: string;
   semester?: number[];
   openThisTerm?: boolean;
-  instructor: IModelUser;
-  coInstructors: IModelUser[] | string[];
+  instructor: IModelUser | string;
+  coInstructors: IModelUser[] | any[];
   isActive?: boolean;
   assignments: any[];
   isProcessTQF3: boolean;

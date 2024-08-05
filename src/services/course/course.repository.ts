@@ -14,7 +14,7 @@ export const courseController = (configService = {}) => {
       return service.get(`${prefix}/one`, { ...params });
     },
     createCourse: async (params: Partial<IModelCourse>) => {
-      return service.put(`${prefix}`, { ...params });
+      return service.post(`${prefix}`, { ...params });
     },
     updateCourse: async (id: string, params: Partial<IModelCourse>) => {
       return service.put(`${prefix}/${id}`, { ...params });

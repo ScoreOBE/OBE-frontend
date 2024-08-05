@@ -33,21 +33,19 @@ export default function DashboardSidebar() {
       localStorage.setItem("totalCourses", res.totalCount);
       dispatch(setCourseList(res.courses));
     }
-    dispatch(setLoading(false))
+    dispatch(setLoading(false));
   };
 
   useEffect(() => {
-  
     if (academicYear.length) {
       setTerm(academicYear[0]);
       setSelectedTerm(termOption[0]);
       if (!course.length) {
-        dispatch(setLoading(true))
+        dispatch(setLoading(true));
         fetchCourse(academicYear[0].id);
       }
     }
-    
-  }, [academicYear]);
+  }, [academicYear, course]);
 
   const setTerm = (data: IModelAcademicYear) => {
     params.set("year", data.year.toString());
@@ -66,7 +64,7 @@ export default function DashboardSidebar() {
     <>
       <Modal
         opened={openedFilterTerm}
-        withCloseButton ={false}
+        withCloseButton={false}
         onClose={closeFilterTerm}
         title="Filter"
         size="400px"

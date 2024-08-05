@@ -18,6 +18,7 @@ import {
   IconChevronRight,
   IconArrowRight,
   IconUsers,
+  IconX,
 } from "@tabler/icons-react";
 import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
@@ -29,23 +30,36 @@ import { TbSearch } from "react-icons/tb";
 import { SEMESTER } from "@/helpers/constants/enum";
 import { useSearchParams } from "react-router-dom";
 import { isNumber } from "lodash";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { validateEmail } from "@/helpers/functions/validation";
+import { createCourse } from "@/services/course/course.service";
+import { showNotifications } from "@/helpers/functions/function";
+import { IModelAcademicYear } from "@/models/ModelAcademicYear";
+import { setCourseList } from "@/store/course";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
+  academicYear: IModelAcademicYear;
 };
-export default function ModalAddCourse({ opened, onClose }: Props) {
+export default function ModalAddCourse({
+  opened,
+  onClose,
+  academicYear,
+}: Props) {
   const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const [params, setParams] = useSearchParams();
-  const [active, setActive] = useState(4);
+  const [active, setActive] = useState(0);
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [instructorOption, setInstructorOption] = useState<any[]>([]);
   const [sectionNoList, setSectionNoList] = useState<string[]>([]);
-  const [insInput, setInsInput] = useState<any>();
+  const [insInput, setInsInput] = useState<any>({ value: null });
   const [coInsList, setCoInsList] = useState<any[]>([]);
   const [swapMethodAddCo, setSwapMethodAddCo] = useState(false);
+  const [invalidEmail, setInvalidEmail] = useState(false);
+  const [firstInput, setFirstInput] = useState(true);
 
   const validateCourseNameorTopic = (value: string, title: string) => {
     const maxLength = 70;
@@ -61,7 +75,12 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
 
   const form = useForm({
     mode: "uncontrolled",
-    initialValues: { sections: [{}] } as Partial<IModelCourse>,
+    initialValues: {
+      academicYear: academicYear.id,
+      updatedYear: academicYear.year,
+      updatedSemester: academicYear.semester,
+      sections: [{}],
+    } as Partial<IModelCourse>,
     validate: {
       type: (value) => !value && "Course Type is required",
       courseNo: (value) => {
@@ -98,7 +117,15 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     fetchIns();
   }, [onClose]);
 
-  const nextStep = () => {
+  useEffect(() => {
+    if (swapMethodAddCo) {
+      if (insInput.value) setInvalidEmail(!validateEmail(insInput.value));
+      else setInvalidEmail(false);
+    }
+  }, [insInput]);
+
+  const nextStep = async () => {
+    setFirstInput(false);
     let isValid = true;
     const length = form.getValues().sections?.length || 0;
     switch (active) {
@@ -131,7 +158,10 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         break;
     }
     if (isValid) {
-      if (active == 5) closeModal();
+      setFirstInput(true);
+      if (active == 5) {
+        await addCourse();
+      }
       setActive((cur) => (cur < 5 ? cur + 1 : cur));
     }
   };
@@ -139,19 +169,31 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
   const closeModal = () => {
     setActive(0);
     setSectionNoList([]);
-    setInsInput(undefined);
+    setInsInput({ value: null });
     setCoInsList([]);
     form.reset();
     onClose();
   };
 
+  const addCourse = async () => {
+    const payload = form.getValues();
+    payload.sections?.forEach((sec) => {
+      sec.coInstructors = sec.coInstructors?.map((coIns) => coIns.value);
+    });
+    const res = await createCourse(payload);
+    if (res) {
+      dispatch(setCourseList([]));
+      closeModal();
+      showNotifications("success", "Create Course", "Create coures successful");
+    }
+  };
+
   const setSectionList = (value: string[]) => {
-    let sections = form.getValues().sections;
+    let sections = form.getValues().sections ?? [];
     let sectionNo: string[] = [...sectionNoList];
-    if (sections && sections.length) {
-      const topic = sections[0].topic;
+    if (sections) {
+      const topic = sections[0]?.topic;
       if (!value.length) {
-        sections = sections?.slice(0, 1);
         sections[0].sectionNo = undefined;
         sectionNo = [];
       } else if (sections?.length! > value.length) {
@@ -166,28 +208,42 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         )
           return;
         else if (sections?.at(index)) {
-          sections[index].topic = topic;
           sections[index].sectionNo = parseInt(secNo);
+          sections[index].instructor = user.id;
+          sections[index].coInstructors = [];
           sectionNo[index] = ("000" + secNo).slice(-3);
         } else {
-          sections?.push({ topic, sectionNo: parseInt(secNo) });
+          const data: any = {
+            sectionNo: parseInt(secNo),
+            instructor: user.id,
+            coInstructors: [],
+          };
+          if (form.getValues().type === COURSE_TYPE.SEL_TOPIC) {
+            data.topic = topic;
+          }
+          sections?.push(data);
           sectionNo.push(("000" + secNo).slice(-3));
         }
       });
     }
-    form.setFieldValue("sections", [...sections!]);
+    form.setFieldValue("sections", [...sections]);
     setSectionNoList(sectionNo);
   };
 
   const addCoIns = () => {
-    if (insInput) {
+    if (insInput.value) {
       setCoInsList([...coInsList, insInput]);
       const updatedInstructorOptions = instructorOption.map((option) =>
         option.value === insInput.value ? { ...option, disabled: true } : option
       );
       setInstructorOption(updatedInstructorOptions);
+      let sections = form.getValues().sections ?? [];
+      sections.forEach((sec) => {
+        sec.coInstructors?.push(insInput);
+      });
+      form.setFieldValue("sections", [...sections]);
     }
-    setInsInput(undefined);
+    setInsInput({ value: null });
   };
 
   const removeCoIns = (coIns: any) => {
@@ -200,31 +256,28 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         insOption.push(e);
       }
     });
-    let sections = form.getValues().sections;
+    let sections = form.getValues().sections ?? [];
     sections?.forEach((e) => {
       e.coInstructors = e.coInstructors?.filter(
-        (p) => p != coIns.value
+        (p) => p.value != coIns.value
       ) as string[];
     });
-    form.setFieldValue("sections", [...sections!]);
+    form.setFieldValue("sections", [...sections]);
     setInstructorOption(insOption);
     setCoInsList(newCoIns);
   };
 
-  const addCoInsInSec = (index: number, checked: boolean, value: string) => {
-    let coInstructors: string[] =
-      (form.getValues().sections?.at(index)?.coInstructors as string[]) ?? [];
+  const addCoInsInSec = (index: number, checked: boolean, value: any) => {
+    let coInstructors: any[] =
+      form.getValues().sections?.at(index)?.coInstructors ?? [];
     if (checked) {
-      coInstructors?.push(value);
+      delete value.disabled;
+      coInstructors?.push({ value });
     } else {
-      coInstructors = coInstructors?.filter((e) => e != value);
+      coInstructors = coInstructors?.filter((e) => e.value != value);
     }
     form.setFieldValue(`sections.${index}.coInstructors`, coInstructors);
   };
-
-  useEffect(() => {
-    console.log(form.getValues().sections);
-  }, [form, insInput]);
 
   return (
     <Modal
@@ -245,7 +298,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         color="#6869AD"
         onStepClick={setActive}
         allowNextStepsSelect={false}
-        icon={<IconCircleFilled size={300} />}
+        icon={<IconCircleFilled />}
         classNames={{
           separator: "text-primary -mx-2 mb-12 h-[3px] -translate-x-6",
           step: "flex flex-col  items-start mr-2",
@@ -261,15 +314,12 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.20)" }}
           >
             <Select
-              clearable
               withAsterisk
               rightSectionPointerEvents="none"
               label="Type of Course"
               placeholder="Select Type of Course"
               data={[COURSE_TYPE.GENERAL, COURSE_TYPE.SEL_TOPIC]}
-              {...form.getInputProps("type")}
               allowDeselect={false}
-              withCheckIcon={false}
               className="rounded-md my-5 border-none mb-8"
               classNames={{
                 label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
@@ -286,6 +336,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               }
               onDropdownOpen={() => setOpenedDropdown(true)}
               onDropdownClose={() => setOpenedDropdown(false)}
+              {...form.getInputProps("type")}
             />
           </div>
         </Stepper.Step>
@@ -304,6 +355,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                     ? "Ex. 26X4XX"
                     : "Ex. 001102"
                 }
+                maxLength={6}
                 {...form.getInputProps("courseNo")}
               />
               <TextInput
@@ -370,7 +422,9 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
               splitChars={[",", " ", "|"]}
               {...form.getInputProps(`section.sectionNo`)}
-              error={form.validateField(`sections.0.sectionNo`).error}
+              error={
+                !firstInput && form.validateField(`sections.0.sectionNo`).error
+              }
               value={sectionNoList}
               onChange={setSectionList}
             ></TagsInput>
@@ -386,7 +440,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           >
             <div className="flex flex-col font-medium text-[14px] gap-5">
               {form.getValues().sections?.map((e, index) => (
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1" key={index}>
                   <span className="text-primary">
                     Select Semester for Section{" "}
                     {("000" + e.sectionNo).slice(-3)}
@@ -405,7 +459,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                             input:
                               "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                             body: "mr-3",
-                            label: "text-[14px] text-[#615F5F] ",
+                            label: "text-[14px] text-[#615F5F] cursor-pointer",
                           }}
                           color="#5768D5"
                           size="xs"
@@ -422,7 +476,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                       </div>
                       <Checkbox.Group
                         classNames={{ error: "mt-2" }}
-                        className=""
                         {...form.getInputProps(`sections.${index}.semester`)}
                       >
                         <Group className="flex flex-row gap-1 justify-end ">
@@ -433,7 +486,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                                 input:
                                   "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                                 body: "mr-3",
-                                label: "text-[14px]",
+                                label: "text-[14px] cursor-pointer",
                               }}
                               color="#5768D5"
                               size="xs"
@@ -454,14 +507,14 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           <div className="flex flex-col gap-5 mt-3 flex-1 ">
             <div
               onClick={() => setSwapMethodAddCo(!swapMethodAddCo)}
-              className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center p-4   "
+              className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer h-fit rounded-lg text-secondary flex justify-between items-center p-4"
             >
               <div className="flex gap-6">
                 <Icon IconComponent={AddCoIcon} className="text-secondary" />
                 <p>
-                  Add Co-Instructor by using{" "}
+                  Add Co-Instructor by using
                   <span className="font-semibold">
-                    {swapMethodAddCo ? "Dropdown list" : "CMU Account"}
+                    {swapMethodAddCo ? " Dropdown list" : " CMU Account"}
                   </span>
                 </p>
               </div>
@@ -474,7 +527,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   label={
                     <p>
                       Add Co-Instructor via CMU account{" "}
-                      <span className=" text-red-500">
+                      <span className="text-red-500">
                         (make sure CMU account correct)
                       </span>
                     </p>
@@ -484,19 +537,22 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   classNames={{
                     label: "font-medium mb-1 text-[14px] text-[#3E3E3E]",
                     input:
-                      "text-primary font-medium focus:border-primary rounded-e-none cursor-pointer",
+                      "text-primary font-medium focus:border-primary !rounded-r-none cursor-pointer",
                   }}
                   placeholder="example@cmu.ac.th"
-                ></TextInput>
+                  value={insInput.value!}
+                  onChange={(event) =>
+                    setInsInput({ value: event.target.value })
+                  }
+                />
               ) : (
                 <Select
-                  rightSectionPointerEvents="none"
+                  rightSectionPointerEvents="all"
                   label="Select Co-Instructor to add"
                   placeholder="Select Instructor"
                   data={instructorOption}
-                  allowDeselect
-                  withCheckIcon={false}
                   searchable
+                  nothingFoundMessage="No result"
                   className="w-full border-none "
                   style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
                   classNames={{
@@ -507,21 +563,36 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                     dropdown: "drop-shadow-[0_0px_4px_rgba(0,0,0,0.30)]",
                   }}
                   rightSection={
-                    <IconChevronDown
-                      className={`${
-                        openedDropdown ? "rotate-180" : ""
-                      } stroke-primary stroke-2`}
-                    />
+                    <template className="flex items-center gap-2 absolute right-2">
+                      {insInput.value && (
+                        <IconX
+                          size={"1.25rem"}
+                          stroke={2}
+                          className={`cursor-pointer`}
+                          onClick={() => setInsInput({ value: null })}
+                        />
+                      )}
+                      <IconChevronDown
+                        stroke={2}
+                        className={`${
+                          openedDropdown ? "rotate-180" : ""
+                        } stroke-primary cursor-pointer`}
+                        onClick={() => setOpenedDropdown(!openedDropdown)}
+                      />
+                    </template>
                   }
-                  onDropdownOpen={() => setOpenedDropdown(true)}
+                  dropdownOpened={openedDropdown}
+                  // onDropdownOpen={() => setOpenedDropdown(true)}
                   onDropdownClose={() => setOpenedDropdown(false)}
-                  value={insInput?.value}
+                  value={insInput.value!}
                   onChange={(value, option) => setInsInput(option)}
+                  onClick={() => setOpenedDropdown(!openedDropdown)}
                 />
               )}
               <Button
                 className="rounded-s-none w-[12%]"
                 color="#5768D5"
+                disabled={!insInput.value || (swapMethodAddCo && invalidEmail)}
                 onClick={addCoIns}
               >
                 Add
@@ -535,10 +606,10 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               }}
             >
               <div className="bg-[#e6e9ff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-medium">
-                <IconUsers/> Added Co-Instructor
+                <IconUsers /> Added Co-Instructor
               </div>
               <div className="flex flex-col max-h-[250px] h-fit w-full   p-4  overflow-y-scroll ">
-                <Input
+                <TextInput
                   leftSection={<TbSearch />}
                   placeholder="Name"
                   value={searchValue}
@@ -551,12 +622,13 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 />
                 <div className="flex flex-col h-[200px] gap-2 overflow-y-scroll p-1">
                   {coInsList.map(
-                    (e) =>
+                    (coIns, index) =>
                       (!searchValue.length ||
-                        e.label
+                        coIns.label
                           .toLowerCase()
                           .includes(searchValue.toLowerCase())) && (
                         <div
+                          key={index}
                           style={{
                             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                           }}
@@ -564,15 +636,17 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                         >
                           <div className="flex w-full justify-between items-center">
                             <div className="flex flex-col gap-1 font-medium text-[14px]">
-                              <span className="text-[#3E3E3E]">Name</span>
+                              <span className="text-[#3E3E3E]">
+                                {coIns.label ? "Name" : "Email"}
+                              </span>
                               <span className="text-primary text-[14px]">
-                                {e.label}
+                                {coIns.label ?? coIns.value}
                               </span>
                             </div>
                             <Button
                               className="px-3 h-3/4 rounded-lg"
                               color="#FF4747"
-                              onClick={() => removeCoIns(e)}
+                              onClick={() => removeCoIns(coIns)}
                             >
                               Remove
                             </Button>
@@ -583,6 +657,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                               <Group className="flex flex-col w-fit">
                                 {sectionNoList.map((sectionNo, index) => (
                                   <Checkbox
+                                    key={index}
                                     classNames={{
                                       input:
                                         "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
@@ -592,12 +667,18 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                                     color="#5768D5"
                                     size="xs"
                                     label={`Section ${sectionNo}`}
-                                    // value={}
+                                    checked={form
+                                      .getValues()
+                                      .sections?.find(
+                                        (sec: any) =>
+                                          sec.sectionNo == parseInt(sectionNo)
+                                      )
+                                      ?.coInstructors?.includes(coIns)}
                                     onChange={(event) =>
                                       addCoInsInSec(
                                         index,
                                         event.currentTarget.checked,
-                                        e.value
+                                        coIns
                                       )
                                     }
                                   />
@@ -653,47 +734,64 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 className=" flex flex-col flex-1 rounded-md gap-4"
               >
                 <div className="flex flex-col p-4 h-[200px] gap-4 overflow-y-scroll">
-                  {}
-                  <div
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                    }}
-                    className="w-full  h-fit p-4 rounded-md gap-4 flex flex-col"
-                  >
-                    <span className="text-[#3E3E3E]">Section 803</span>
+                  {form.getValues().sections?.map((sec, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      }}
+                      className="w-full  h-fit p-4 rounded-md gap-4 flex flex-col"
+                    >
+                      <span className="text-[#3E3E3E]">
+                        Section {("000" + sec.sectionNo).slice(-3)}
+                      </span>
 
-                    <div className="flex flex-col gap-1">
-                      <span className="text-[#3E3E3E]">Main Instructor</span>
-                      <div className="ps-1.5 text-primary ">
-                        <List size="sm" listStyleType="disc">
-                          <List.Item>Arnan Sripitakiat</List.Item>
-                        </List>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[#3E3E3E]">Main Instructor</span>
+                        <div className="ps-1.5 text-primary ">
+                          <List size="sm" listStyleType="disc">
+                            <List.Item>
+                              {user.firstNameEN} {user.lastNameEN}
+                            </List.Item>
+                          </List>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[#3E3E3E]">Co-Instructor</span>
+                        <div className="ps-1.5 text-primary">
+                          <List size="sm" listStyleType="disc">
+                            {sec.coInstructors?.map((coIns, index) => (
+                              <List.Item key={index}>{coIns?.label}</List.Item>
+                            ))}
+                          </List>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[#3E3E3E]">Open in Semester</span>
+                        <div className="ps-1.5 text-primary">
+                          <List
+                            size="sm"
+                            listStyleType="disc"
+                            className="flex flex-col gap-1"
+                          >
+                            <List.Item>
+                              {sec.semester
+                                ?.join(", ")
+                                .replace(/, ([^,]*)$/, " and $1")}
+                            </List.Item>
+                            {sec.openThisTerm && (
+                              <List.Item>
+                                Open in this semester ({academicYear.semester}/
+                                {academicYear.year.toString().slice(-2)})
+                              </List.Item>
+                            )}
+                          </List>
+                        </div>
                       </div>
                     </div>
-
-                    <div className="flex flex-col gap-1">
-                      <span className="text-[#3E3E3E]">Co-Instructor</span>
-                      <div className="ps-1.5 text-primary">
-                        <List size="sm" listStyleType="disc">
-                          <List.Item>Dome Potikanond</List.Item>
-                        </List>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <span className="text-[#3E3E3E]">Open in Semester</span>
-                      <div className="ps-1.5 text-primary">
-                        <List
-                          size="sm"
-                          listStyleType="disc"
-                          className="flex flex-col gap-1"
-                        >
-                          <List.Item>1, 2 and 3</List.Item>
-                          <List.Item>Open in this semester (3/66)</List.Item>
-                        </List>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>

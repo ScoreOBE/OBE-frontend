@@ -62,7 +62,7 @@ export default function Dashboard() {
     }
   }, [localStorage.getItem("search")]);
 
-  const onSowMore = async () => {
+  const onShowMore = async () => {
     if (payload.academicYear) {
       const res = await getCourse({ ...payload, page: payload.page + 1 });
       if (res.length) {
@@ -93,7 +93,13 @@ export default function Dashboard() {
 
   return (
     <div className="bg-[#ffffff] flex flex-col h-full w-full p-6 py-3 gap-3 overflow-hidden">
-      <ModalAddCourse opened={openAddModal} onClose={closeAddModal} />
+      {term && (
+        <ModalAddCourse
+          opened={openAddModal}
+          onClose={closeAddModal}
+          academicYear={term}
+        />
+      )}
       <div className="flex flex-row  items-center justify-between">
         <div className="flex flex-col">
           <p className="text-secondary text-[20px] font-semibold mb-[1px]">
@@ -164,7 +170,7 @@ export default function Dashboard() {
         ) : (
           <InfiniteScroll
             dataLength={course.length}
-            next={onSowMore}
+            next={onShowMore}
             height={"100%"}
             loader={<></>}
             hasMore={payload?.hasMore}
