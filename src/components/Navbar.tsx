@@ -35,6 +35,7 @@ export default function Navbar() {
       dispatch(setCourseList(res.courses ?? res));
     }
     localStorage.setItem("search", "true");
+    
   };
 
   const reset = () => {
@@ -69,8 +70,9 @@ export default function Navbar() {
                 setSearchValue(event.currentTarget.value)
               }
               onKeyDown={(event: any) => event.key == "Enter" && searchCourse()}
-              onFocus={() => setIsFocused(true)}
+              onInput={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
+              
               rightSectionPointerEvents="all"
               rightSection={
                 searchValue.length > 0 && (

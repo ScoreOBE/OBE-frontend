@@ -75,7 +75,7 @@ export default function CourseSidebar() {
           <div className="flex flex-col gap-2">
             <Button
               leftSection={<RxDashboard size={18} />}
-              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[4px] transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
                 path.startsWith(ROUTE_PATH.COURSE)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -86,7 +86,7 @@ export default function CourseSidebar() {
             </Button>
             <Button
               leftSection={<Icon IconComponent={TQF3} className="h-5 w-5" />}
-              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[4px] transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
                 ${
                   path.startsWith(ROUTE_PATH.TQF3)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -97,7 +97,7 @@ export default function CourseSidebar() {
             </Button>
             <Button
               leftSection={<Icon IconComponent={TQF5} className="h-5 w-5" />}
-              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[4px] transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
                 ${
                   path.startsWith(ROUTE_PATH.TQF5)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -119,14 +119,14 @@ export default function CourseSidebar() {
             );
           })}
         </div>
-        <div className="flex absolute gap-1 bottom-6 flex-col ">
+        <div className="flex absolute gap-2 bottom-7 flex-col ">
           <p className="text-[14px] text-white font-semibold">Course Action</p>
           <Button
             leftSection={<IconLogout className="h-5 w-5" stroke={1.5} />}
-            className="font-semibold text-[#ffffff] bg-transparent hover:bg-[#d55757]/80  w-full h-8 flex justify-start items-center border-none rounded-[4px] transition-colors duration-300 focus:border-none group"
+            className="font-semibold text-[#ffffff] bg-transparent hover:bg-[#d55757]  w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group"
           >
             <div className="flex flex-col justify-start items-start gap-[7px]">
-              <p className="font-medium text-b2">Leave form Course</p>
+              <p className="font-semibold text-b2">Leave form Course</p>
             </div>
           </Button>
         </div>

@@ -132,13 +132,19 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
           "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-fit ",
       }}
     >
-      <div className="flex flex-col h-full    flex-1 ">
+      <div className="flex flex-col h-full gap-5    flex-1 ">
+      <div
+              className="flex flex-col gap-3 max-h-[320px] rounded-md h-fit w-full mt-2 p-4  "
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
+            >
         <div
           onClick={() => {
             setEditUser(null);
             setSwapMethodAddAdmin(!swapMethodAddAdmin);
           }}
-          className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center py-3 px-5 mb-3  "
+          className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center py-3 px-5  "
         >
           <div className="flex gap-6 items-center">
             <Icon IconComponent={AddCoIcon} className="text-secondary" />
@@ -152,12 +158,10 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
           <IconChevronRight stroke={2} />
         </div>
 
-        <div className="flex w-full mb-4 items-end h-fit ">
+        <div className="flex w-full  items-end h-fit ">
           <div
             className="flex flex-row items-end  p-3 px-4 w-full bg-white border-[1px]  rounded-md"
-            style={{
-              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-            }}
+           
           >
             {swapMethodAddAdmin ? (
               <TextInput
@@ -223,6 +227,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
               Add
             </Button>
           </div>
+        </div>
         </div>
 
         {/* Added Admin */}

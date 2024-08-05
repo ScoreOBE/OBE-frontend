@@ -1,5 +1,5 @@
 import { notifications } from "@mantine/notifications";
-import { TQF_STATUS } from "../constants/enum";
+import { NOTI_TYPE, TQF_STATUS } from "../constants/enum";
 
 export const sortData = (
   data: any[],
@@ -74,11 +74,11 @@ export const showNotifications = (
 ) => {
   let className, color;
   switch (type) {
-    case "success":
+    case NOTI_TYPE.SUCCESS:
       // className = "bg-green-500 bg-opacity-50 rounded-md";
       color = "green";
       break;
-    case "error":
+    case NOTI_TYPE.ERROR:
       // className = "bg-red-500 bg-opacity-75 rounded-md";
       color = "red";
       break;

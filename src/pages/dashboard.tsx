@@ -7,7 +7,7 @@ import {
   IconPlus,
   IconTrash,
 } from "@tabler/icons-react";
-import { statusColor } from "@/helpers/functions/function";
+import { showNotifications, statusColor } from "@/helpers/functions/function";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { deleteCourse, getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
@@ -18,6 +18,9 @@ import ModalAddCourse from "@/components/Modal/ModalAddCourse";
 import { useDisclosure } from "@mantine/hooks";
 import notFoundImage from "@/assets/image/notFound.png";
 import { ROUTE_PATH } from "@/helpers/constants/route";
+import MainPopup from "../components/Popup/MainPopup";
+import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
+import { IModelCourse } from "@/models/ModelCourse";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -32,6 +35,9 @@ export default function Dashboard() {
   const [openAddModal, { open: openedAddModal, close: closeAddModal }] =
     useDisclosure(false);
   const loading = useAppSelector((state) => state.loading);
+  const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
+    useDisclosure(false);
+  const [delCourse, setDelCourse] = useState<Partial<IModelCourse>>();
 
   useEffect(() => {
     const year = parseInt(params.get("year")!);
@@ -83,6 +89,12 @@ export default function Dashboard() {
     if (res) {
       dispatch(removeCourse(res.id));
     }
+    closeMainPopup();
+    showNotifications(
+      NOTI_TYPE.SUCCESS,
+      "Delete Success",
+      `Delete ${delCourse?.courseNo}`
+    );
   };
 
   const goToCourse = (courseNo: number) => {
@@ -93,6 +105,24 @@ export default function Dashboard() {
 
   return (
     <div className="bg-[#ffffff] flex flex-col h-full w-full p-6 py-3 gap-3 overflow-hidden">
+      <MainPopup
+        opened={openMainPopup}
+        onClose={closeMainPopup}
+        action={() => onClickDeleteCourse(delCourse?.id!)}
+        type={POPUP_TYPE.DELETE}
+        title={`Delete ${delCourse?.courseNo} Course`}
+        message={
+          <p>
+            All data form the current semester for this course will be
+            permanently deleted. Data from previous semesters will not be
+            affected. <br />{" "}
+            <div className=" mt-5">
+              Are you sure you want to deleted this course?{" "}
+            </div>
+          </p>
+        }
+        // message="All data form the current semester for this course will be permanently deleted. Data from previous semesters will not be affected.  Are you sure you want to deleted?"
+      ></MainPopup>
       {term && (
         <ModalAddCourse
           opened={openAddModal}
@@ -127,10 +157,10 @@ export default function Dashboard() {
           <Button
             color="#5768D5"
             leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
-            className=" rounded-[4px]   text-[14px] font-semibold h-9 px-3"
+            className=" rounded-[8px]   text-[13px] font-semibold h-9 px-3"
             onClick={openedAddModal}
           >
-            Add course
+            Add Course
           </Button>
         )}
       </div>
@@ -219,7 +249,10 @@ export default function Dashboard() {
                             </Menu.Item>
                             <Menu.Item
                               className="text-[#FF4747] h-7 w-[180px]  text-b3 hover:bg-[#d55757]/10"
-                              onClick={() => onClickDeleteCourse(item.id)}
+                              onClick={() => {
+                                setDelCourse(item);
+                                openedMainPopup();
+                              }}
                             >
                               <div className="flex items-center gap-2">
                                 <IconTrash className="h-4 w-4" stroke={1.5} />
