@@ -4,7 +4,7 @@ import { IModelSection } from "./ModelSection";
 
 export interface IModelCourse {
   id: string;
-  academicYear: IModelAcademicYear;
+  academicYear: IModelAcademicYear | string;
   courseNo: number;
   courseName: string;
   type: COURSE_TYPE;

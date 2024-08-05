@@ -72,6 +72,7 @@
   font-weight: 500 !important;
 }
 
+.mantine-Select-option[data-combobox-selected],
 .mantine-Select-option:hover {
   background-color: var(--color-hover) !important;
 }
@@ -86,7 +87,8 @@
   cursor: pointer !important;
 }
 
-.mantine-Select-input:focus {
+.mantine-Select-input:focus,
+.mantine-Select-input:active {
   border-color: var(--color-secondary) !important;
 }
 

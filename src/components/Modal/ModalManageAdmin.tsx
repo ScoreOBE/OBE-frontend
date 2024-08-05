@@ -6,6 +6,7 @@ import {
   IconUsers,
   IconUserCircle,
   IconTrash,
+  IconX,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
@@ -142,7 +143,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
           <div className="flex gap-6 items-center">
             <Icon IconComponent={AddCoIcon} className="text-secondary" />
             <p className="font-semibold">
-              Add Admin by using {"  "}
+              Add Admin by using
               <span className="font-extrabold">
                 {swapMethodAddAdmin ? " Dropdown list" : " CMU Account"}
               </span>
@@ -153,7 +154,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
 
         <div className="flex w-full mb-4 items-end h-fit ">
           <div
-            className="flex flex-row items-end  p-3 px-4 w-full   bg-white border-[1px]  rounded-md"
+            className="flex flex-row items-end  p-3 px-4 w-full bg-white border-[1px]  rounded-md"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
@@ -165,17 +166,14 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                 label="CMU account"
                 className="w-full border-none rounded-r-none"
                 style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
-                classNames={{
-                  input: " !rounded-r-none ",
-                }}
+                classNames={{ input: "!rounded-r-none" }}
                 placeholder="example@cmu.ac.th"
                 value={editUser!}
                 onChange={(event) => setEditUser(event.target.value)}
-              ></TextInput>
+              />
             ) : (
               <Select
-                rightSectionPointerEvents="none"
-                defaultDropdownOpened={false}
+                rightSectionPointerEvents="all"
                 label="Select Admin"
                 placeholder="Admin"
                 data={instructorOption}
@@ -187,16 +185,30 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                   input: " rounded-e-none  rounded-md ",
                 }}
                 rightSection={
-                  <IconChevronDown
-                    className={`${
-                      openedDropdown ? "rotate-180" : ""
-                    } stroke-primary stroke-2`}
-                  />
+                  <template className="flex items-center gap-2 absolute right-2">
+                    {editUser && (
+                      <IconX
+                        size={"1.25rem"}
+                        stroke={2}
+                        className={`cursor-pointer`}
+                        onClick={() => setEditUser(null)}
+                      />
+                    )}
+                    <IconChevronDown
+                      stroke={2}
+                      className={`${
+                        openedDropdown ? "rotate-180" : ""
+                      } stroke-primary cursor-pointer`}
+                      onClick={() => setOpenedDropdown(!openedDropdown)}
+                    />
+                  </template>
                 }
-                onDropdownOpen={() => setOpenedDropdown(true)}
+                dropdownOpened={openedDropdown}
+                // onDropdownOpen={() => setOpenedDropdown(true)}
                 onDropdownClose={() => setOpenedDropdown(false)}
                 value={editUser}
-                onChange={(value, option) => setEditUser(option.value)}
+                onChange={setEditUser}
+                onClick={() => setOpenedDropdown(!openedDropdown)}
               />
             )}
 
@@ -265,10 +277,10 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                       variant="outline"
                       color="red"
                       size="xs"
-                      className=" rounded-[4px]"
+                      className="rounded-[4px]"
                       onClick={() => editAdmin(admin.id, ROLE.INSTRUCTOR)}
                       leftSection={
-                        <IconTrash className=" size-4" stroke={1.5} />
+                        <IconTrash className="size-4" stroke={1.5} />
                       }
                     >
                       Delete
