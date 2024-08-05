@@ -72,6 +72,7 @@ export default function Navbar() {
               onKeyDown={(event: any) => event.key == "Enter" && searchCourse()}
               onInput={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
+              onFocus={() => setIsFocused(true)}
               
               rightSectionPointerEvents="all"
               rightSection={
