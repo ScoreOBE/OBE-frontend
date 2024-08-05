@@ -635,24 +635,25 @@ export default function ModalAddCourse({
                           className="w-full mt-2 h-fit p-4 rounded-md gap-4 flex flex-col"
                         >
                           <div className="flex w-full justify-between items-center">
-                            <div className="flex flex-col gap-1 font-medium text-[14px]">
-                              <span className="text-[#3E3E3E]">
+                            <div className="flex flex-col  font-medium text-[14px]">
+                              <span className="text-[#3E3E3E] font-semibold">
                                 {coIns.label ? "Name" : "Email"}
                               </span>
-                              <span className="text-primary text-[14px]">
+                              <span className="text-secondary text-[14px]">
                                 {coIns.label ?? coIns.value}
                               </span>
                             </div>
                             <Button
-                              className="px-3 h-3/4 rounded-lg"
+                              className="text-[12px]  rounded-md"
+                              size="xs"
                               color="#FF4747"
                               onClick={() => removeCoIns(coIns)}
                             >
                               Remove
                             </Button>
                           </div>
-                          <div className="flex flex-col gap-3.5 font-medium text-[14px]">
-                            <span className="text-[#3E3E3E] ">Can access</span>
+                          <div className="flex flex-col gap-3 font-medium text-[14px]">
+                            <span className="text-[#3E3E3E] font-semibold">Can access</span>
                             <Checkbox.Group>
                               <Group className="flex flex-col w-fit">
                                 {sectionNoList.map((sectionNo, index) => (
@@ -753,7 +754,7 @@ export default function ModalAddCourse({
 
                   <div className="flex flex-col gap-1">
                     <span className="text-[#3E3E3E] font-semibold">Co-Instructor</span>
-                    <div className="ps-1.5 text-primary">
+                    <div className="ps-1.5 text-secondary">
                       <List size="sm" listStyleType="disc">
                         {sec.coInstructors?.map((coIns, index) => (
                           <List.Item key={index}>{coIns?.label}</List.Item>
