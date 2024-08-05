@@ -7,43 +7,33 @@ import {
   Switch,
   List,
 } from "@mantine/core";
-import AddCoIcon from "@/assets/icons/addCo.svg?react";
-import {
-  IconChevronRight,
-  IconChevronDown,
-  IconUsers,
-  IconUserCircle,
-  IconTrash,
-} from "@tabler/icons-react";
+import checkedTQF3Completed from "@/assets/icons/checkedTQF3Completed.svg?react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import Icon from "../Icon";
 import notCompleteIcon from "@/assets/icons/notComplete.svg?react";
 import { IModelUser } from "@/models/ModelUser";
-import { getCourse } from "@/services/course/course.service";
+import { getCourse, updateCourse } from "@/services/course/course.service";
 import { useAppSelector } from "@/store";
-import { COURSE_TYPE, ROLE, TQF_STATUS } from "@/helpers/constants/enum";
+import { COURSE_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { IModelCourse } from "@/models/ModelCourse";
 import { useSearchParams } from "react-router-dom";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
-import { RxEnterFullScreen } from "react-icons/rx";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
 };
 export default function ModalManageTQF({ opened, onClose }: Props) {
-  const user = useAppSelector((state) => state.user);
   const [searchValue, setSearchValue] = useState("");
-  const [adminList, setAdminList] = useState<IModelUser[]>([]);
-  const [notCompleteTQF3List, setnotCompleteTQF3List] = useState<any[]>([]);
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<IModelAcademicYear>();
   const academicYear = useAppSelector((state) => state.academicYear);
-
-  const loading = useAppSelector((state) => state.loading);
+  const [checkedTQF3, setCheckedTQF3] = useState(true);
+  const [checkedTQF5, setCheckedTQF5] = useState(false);
+  const [notCompleteTQF3List, setnotCompleteTQF3List] = useState<any[]>([]);
 
   useEffect(() => {
     const year = parseInt(params.get("year")!);
@@ -57,7 +47,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
         setPayload({
           ...new CourseRequestDTO(),
           academicYear: acaYear.id,
-          // hasMore: true,
         });
       }
     }
@@ -98,29 +87,54 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
             }
           }
         });
-        setnotCompleteTQF3List(courseList);
+
+        setnotCompleteTQF3List([...courseList]);
       }
     }
+  };
+
+  const onClickeToggleProcessTQF3 = (checked: any, index?: number) => {
+    const updatedList = notCompleteTQF3List.map((item, idx) => {
+      if (index === undefined || index === idx) {
+        return {
+          ...item,
+          isProcessTQF3: checked,
+          sections:
+            item.type === COURSE_TYPE.SEL_TOPIC
+              ? item.sections.map((section: any) => ({
+                  ...section,
+                  isProcessTQF3: checked,
+                }))
+              : item.sections,
+        };
+      }
+      return item;
+    });
+
+    setnotCompleteTQF3List(updatedList);
+  };
+
+  const clickToggleTQF3 = (checked: any) => {
+    setCheckedTQF3(checked);
+    setCheckedTQF5(!checked);
+    if (checked) {
+      onClickeToggleProcessTQF3(true);
+    } else {
+      onClickeToggleProcessTQF3(false);
+    }
+  };
+
+  const clickToggleTQF5 = (checked: any) => {
+    setCheckedTQF5(checked);
+    setCheckedTQF3(!checked);
   };
 
   useEffect(() => {
     if (opened) {
       setSearchValue("");
       fetchCourse();
-      console.log(notCompleteTQF3List);
     }
   }, [opened]);
-
-  // useEffect(() => {
-  //   setAdminFilter(
-  //     adminList.filter(
-  //       (admin) =>
-  //         `${admin.firstNameEN.toLowerCase()} ${admin.lastNameEN.toLowerCase()}`.includes(
-  //           searchValue.toLowerCase()
-  //         ) || admin.email.toLowerCase().includes(searchValue.toLowerCase())
-  //     )
-  //   );
-  // }, [searchValue]);
 
   return (
     <Modal
@@ -150,13 +164,31 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                 <p className="font-semibold text-[14px] text-tertiary">
                   TQF 3 Edit
                 </p>
-                <Switch color="#5C55E5" size="lg" onLabel="ON" offLabel="OFF" />
+                <Switch
+                  color="#5C55E5"
+                  size="lg"
+                  onLabel="ON"
+                  offLabel="OFF"
+                  checked={checkedTQF3}
+                  onChange={(event) =>
+                    clickToggleTQF3(event.currentTarget.checked)
+                  }
+                />
               </div>
               <div className="flex flex-row justify-between items-center border-t-2 border-[#DADADA] px-5 py-3 w-full">
                 <p className="font-semibold text-[14px] text-tertiary">
                   TQF 5 Edit
                 </p>
-                <Switch color="#5C55E5" size="lg" onLabel="ON" offLabel="OFF" />
+                <Switch
+                  color="#5C55E5"
+                  size="lg"
+                  onLabel="ON"
+                  offLabel="OFF"
+                  checked={checkedTQF5}
+                  onChange={(event) =>
+                    clickToggleTQF5(event.currentTarget.checked)
+                  }
+                />
               </div>
             </div>
             <div className="ml-4">
@@ -186,69 +218,94 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
           </div>
         </div>
 
-        {/* List of Courses that are Incomplete TQF 3 */}
         <div
-          className="w-full  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
+          className="w-full  flex flex-col bg-white border-secondary border-[1px]  rounded-md overflow-clip"
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
-            <div className="flex items-center gap-2">
-              {/* <Icon className="ml-1" IconComponent={notCompleteIcon} /> */}
-              <Icon IconComponent={notCompleteIcon} className="h-5 w-5" />
-              <span>List of Courses that are Incomplete TQF 3</span>
+          {!notCompleteTQF3List.length ? (
+            <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md  px-4 py-3 text-secondary font-semibold">
+              <div className="flex items-center gap-2">
+                <Icon
+                  IconComponent={checkedTQF3Completed}
+                  className="h-5 w-5"
+                />
+                <span>All courses have completed TQF 3</span>
+              </div>
             </div>
-            <p>
-              {`${notCompleteTQF3List.length}   Course`}
-              {`${notCompleteTQF3List.length > 1 ? "s" : ""}`}
-            </p>
-          </div>
-
-          {/* Show List Of Manage TQF */}
-          <div className="flex flex-col gap-2 w-full h-[350px]   p-4  overflow-y-hidden">
-            <TextInput
-              leftSection={<TbSearch />}
-              placeholder="Course No, Course name "
-              size="xs"
-              value={searchValue}
-              onChange={(event: any) =>
-                setSearchValue(event.currentTarget.value)
-              }
-              rightSectionPointerEvents="all"
-            />
-            {/* List of Admin */}
-            <div className="flex flex-col gap-2 overflow-y-scroll p-1">
-              {notCompleteTQF3List.map((e, index) => (
-                <div
-                  key={index}
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  }}
-                  className="w-full items-center justify-between mt-2 py-3 px-4 rounded-md flex"
-                >
-                  <div className="gap-3 flex items-center">
-                    <div className="flex flex-col">
-                      <p className="font-semibold text-[14px] text-secondary">
-                        {e.courseNo}
-                        {e.type === COURSE_TYPE.SEL_TOPIC &&
-                          ` (Sec. ${("000" + e.sectionNo).slice(-3)})`}
-                      </p>
-                      <p className="text-[12px] font-normal text-[#4E5150]">
-                        {e.type === COURSE_TYPE.GENERAL
-                          ? e.courseName
-                          : e.topic}
-                      </p>
-                    </div>
-                  </div>
-
-                  <p className="mr-1 text-[#4E5150] text-[12px] font-normal">
-                    {e.instructor}
-                  </p>
+          ) : (
+            <>
+              <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
+                <div className="flex items-center gap-2">
+                  <Icon IconComponent={notCompleteIcon} className="h-5 w-5" />
+                  <span>List of Courses that are Incomplete TQF 3</span>
                 </div>
-              ))}
-            </div>
-          </div>
+                <p>
+                  {`${notCompleteTQF3List.length} Course`}
+                  {`${notCompleteTQF3List.length > 1 ? "s" : ""}`}
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 w-full h-[350px] p-4 overflow-y-hidden">
+                <TextInput
+                  leftSection={<TbSearch />}
+                  placeholder="Course No, Course name "
+                  size="xs"
+                  value={searchValue}
+                  onChange={(event: any) =>
+                    setSearchValue(event.currentTarget.value)
+                  }
+                  rightSectionPointerEvents="all"
+                />
+                <div className="flex flex-col gap-2 overflow-y-scroll p-1">
+                  {notCompleteTQF3List.map((e, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      }}
+                      className="w-full items-center justify-between mt-2 py-3 px-4 rounded-md flex"
+                    >
+                      <div className="gap-3 flex items-center">
+                        <div className="flex flex-col">
+                          <p className="font-semibold text-[14px] text-secondary">
+                            {e.courseNo}
+                            {e.type === COURSE_TYPE.SEL_TOPIC &&
+                              ` (Sec. ${("000" + e.sectionNo).slice(-3)})`}
+                          </p>
+                          <p className="text-[12px] font-normal text-[#4E5150]">
+                            {e.type === COURSE_TYPE.GENERAL
+                              ? e.courseName
+                              : e.topic}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex flex-row items-center justify-between w-[50%]">
+                        <p className="mr-1 text-[#4E5150] text-[12px] font-normal text-wrap">
+                          {e.instructor}
+                        </p>
+                        {!checkedTQF3 && (
+                          <Switch
+                            color="#5C55E5"
+                            size="lg"
+                            onLabel="ON"
+                            offLabel="OFF"
+                            checked={e.isProcessTQF3}
+                            onChange={(event) =>
+                              onClickeToggleProcessTQF3(
+                                event.currentTarget.checked,
+                                index
+                              )
+                            }
+                          />
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </Modal>
