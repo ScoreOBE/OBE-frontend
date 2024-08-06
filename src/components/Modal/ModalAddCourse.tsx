@@ -8,10 +8,9 @@ import {
   TextInput,
   Checkbox,
   TagsInput,
-  Input,
   List,
 } from "@mantine/core";
-import { FORM_INDEX, useForm } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import {
   IconChevronDown,
   IconCircleFilled,
@@ -33,7 +32,7 @@ import { isNumber } from "lodash";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { validateEmail } from "@/helpers/functions/validation";
 import { createCourse } from "@/services/course/course.service";
-import { showNotifications } from "@/helpers/functions/function";
+import { showNotifications, sortData } from "@/helpers/functions/function";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { setCourseList } from "@/store/course";
 
@@ -156,6 +155,11 @@ export default function ModalAddCourse({
         }
         break;
       case 4:
+        // coInsList.forEach((conIns)=>{
+        //   if(isValid) {
+        //     isValid =
+        //   }
+        // })
         break;
     }
     if (isValid) {
@@ -227,6 +231,7 @@ export default function ModalAddCourse({
         }
       });
     }
+    sections.forEach((sec) => sortData(sec.coInstructors!, "label", "string"));
     form.setFieldValue("sections", [...sections]);
     setSectionNoList(sectionNo);
   };
@@ -239,10 +244,14 @@ export default function ModalAddCourse({
       );
       setInstructorOption(updatedInstructorOptions);
       delete insInput.disabled;
-      const updatedSections = form.getValues().sections?.map((sec) => ({
-        ...sec,
-        coInstructors: [...(sec.coInstructors ?? []), insInput],
-      }));
+      const updatedSections = form.getValues().sections?.map((sec) => {
+        const coInsArr = [...(sec.coInstructors ?? []), insInput];
+        sortData(coInsArr, "label", "string");
+        return {
+          ...sec,
+          coInstructors: [...coInsArr],
+        };
+      });
       form.setFieldValue("sections", [...updatedSections!]);
     }
     setInsInput({ value: null });
@@ -265,23 +274,23 @@ export default function ModalAddCourse({
   };
 
   const addCoInsInSec = (index: number, checked: boolean, coIns: any) => {
-    const updatedSections = form.getValues().sections?.map((section, i) => {
+    const updatedSections = form.getValues().sections?.map((sec, i) => {
       if (i === index) {
+        const coInsArr = [...(sec.coInstructors ?? []), { ...coIns }];
+        sortData(coInsArr, "label", "string");
         const updatedCoInstructors = checked
-          ? [...(section.coInstructors ?? []), { ...coIns }]
-          : (section.coInstructors ?? []).filter(
-              (e) => e.value !== coIns.value
-            );
-        return { ...section, coInstructors: updatedCoInstructors };
+          ? coInsArr
+          : (sec.coInstructors ?? []).filter((e) => e.value !== coIns.value);
+        return { ...sec, coInstructors: updatedCoInstructors };
       }
-      return section;
+      return sec;
     });
     form.setFieldValue("sections", [...updatedSections!]);
   };
 
-  useEffect(() => {
-    console.log(form.getValues().sections);
-  }, [form]);
+  // useEffect(() => {
+  //   console.log(form.getValues().sections);
+  // }, [form]);
 
   return (
     <Modal
@@ -656,39 +665,41 @@ export default function ModalAddCourse({
                             </Button>
                           </div>
                           <div className="flex flex-col gap-3 font-medium text-[14px]">
-                            <span className="text-[#3E3E3E] font-semibold">Can access</span>
-                            <Checkbox.Group>
-                              <Group className="flex flex-col w-fit">
-                                {sectionNoList.map((sectionNo, index) => (
-                                  <Checkbox
-                                    key={index}
-                                    classNames={{
-                                      input:
-                                        "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                                      body: "mr-3",
-                                      label: "text-[14px]",
-                                    }}
-                                    color="#5768D5"
-                                    size="xs"
-                                    label={`Section ${sectionNo}`}
-                                    checked={form
-                                      .getValues()
-                                      .sections?.find(
-                                        (sec: any) =>
-                                          sec.sectionNo == parseInt(sectionNo)
-                                      )
-                                      ?.coInstructors?.includes(coIns)}
-                                    onChange={(event) =>
-                                      addCoInsInSec(
-                                        index,
-                                        event.currentTarget.checked,
-                                        coIns
-                                      )
-                                    }
-                                  />
-                                ))}
-                              </Group>
-                            </Checkbox.Group>
+                            <span className="text-[#3E3E3E] font-semibold">
+                              Can access
+                            </span>
+                            <div className="flex flex-col gap-2 w-full">
+                              {sectionNoList.map((sectionNo, index) => (
+                                <Checkbox
+                                  key={index}
+                                  classNames={{
+                                    input:
+                                      "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                                    body: "mr-3",
+                                    label: "text-[14px]",
+                                  }}
+                                  color="#5768D5"
+                                  size="xs"
+                                  label={`Section ${sectionNo}`}
+                                  checked={form
+                                    .getValues()
+                                    .sections?.find(
+                                      (sec) =>
+                                        sec.sectionNo == parseInt(sectionNo)
+                                    )
+                                    ?.coInstructors?.some(
+                                      (coins) => coins.value == coIns.value
+                                    )}
+                                  onChange={(event) =>
+                                    addCoInsInSec(
+                                      index,
+                                      event.currentTarget.checked,
+                                      coIns
+                                    )
+                                  }
+                                />
+                              ))}
+                            </div>
                           </div>
                         </div>
                       )
@@ -714,14 +725,18 @@ export default function ModalAddCourse({
               </div>
 
               <div className="flex flex-col">
-                <span className="text-[#3E3E3E] font-semibold">Course Name</span>
+                <span className="text-[#3E3E3E] font-semibold">
+                  Course Name
+                </span>
                 <span className="text-secondary">
                   {form.getValues().courseName}
                 </span>
               </div>
               {form.getValues().sections?.at(0)?.topic && (
                 <div className="flex flex-col   font-medium text-[14px]">
-                  <span className="text-[#3E3E3E] font-semibold">Course Topic</span>
+                  <span className="text-[#3E3E3E] font-semibold">
+                    Course Topic
+                  </span>
                   <span className="text-secondary">
                     {form.getValues().sections?.at(0)?.topic}
                   </span>
@@ -745,7 +760,9 @@ export default function ModalAddCourse({
                   </span>
 
                   <div className="flex flex-col gap-1">
-                    <span className="text-[#3E3E3E] font-semibold">Main Instructor</span>
+                    <span className="text-[#3E3E3E] font-semibold">
+                      Main Instructor
+                    </span>
                     <div className="ps-1.5 text-secondary ">
                       <List size="sm" listStyleType="disc">
                         <List.Item>
@@ -755,19 +772,25 @@ export default function ModalAddCourse({
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[#3E3E3E] font-semibold">Co-Instructor</span>
-                    <div className="ps-1.5 text-secondary">
-                      <List size="sm" listStyleType="disc">
-                        {sec.coInstructors?.map((coIns, index) => (
-                          <List.Item key={index}>{coIns?.label}</List.Item>
-                        ))}
-                      </List>
+                  {!!sec.coInstructors?.length && (
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[#3E3E3E] font-semibold">
+                        Co-Instructor
+                      </span>
+                      <div className="ps-1.5 text-secondary">
+                        <List size="sm" listStyleType="disc">
+                          {sec.coInstructors?.map((coIns, index) => (
+                            <List.Item key={index}>{coIns?.label}</List.Item>
+                          ))}
+                        </List>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <div className="flex flex-col gap-1">
-                    <span className="text-[#3E3E3E] font-semibold">Open in Semester</span>
+                    <span className="text-[#3E3E3E] font-semibold">
+                      Open in Semester
+                    </span>
                     <div className="ps-1.5 text-secondary">
                       <List
                         size="sm"
