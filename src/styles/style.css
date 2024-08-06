@@ -70,8 +70,13 @@
 
 .mantine-Paper-root {
   border-radius: 8px !important;
-  padding: 4px !important;
+  padding: 6px !important;
   width: fit-content !important;
+}
+
+.mantine-Checkbox-body{
+  height: 25px;
+  padding: 8px;
 }
 
 .mantine-Select-dropdown {
