@@ -32,21 +32,20 @@ import { isNumber } from "lodash";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { validateEmail } from "@/helpers/functions/validation";
 import { createCourse } from "@/services/course/course.service";
-import { showNotifications, sortData } from "@/helpers/functions/function";
-import { IModelAcademicYear } from "@/models/ModelAcademicYear";
+import {
+  getUserName,
+  showNotifications,
+  sortData,
+} from "@/helpers/functions/function";
 import { setCourseList } from "@/store/course";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
-  academicYear: IModelAcademicYear;
 };
-export default function ModalAddCourse({
-  opened,
-  onClose,
-  academicYear,
-}: Props) {
+export default function ModalAddCourse({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
+  const academicYear = useAppSelector((state) => state.academicYear[0] ?? {});
   const dispatch = useAppDispatch();
   const [params, setParams] = useSearchParams();
   const [active, setActive] = useState(0);
@@ -74,12 +73,7 @@ export default function ModalAddCourse({
 
   const form = useForm({
     mode: "uncontrolled",
-    initialValues: {
-      academicYear: academicYear.id,
-      updatedYear: academicYear.year,
-      updatedSemester: academicYear.semester,
-      sections: [{}],
-    } as Partial<IModelCourse>,
+    initialValues: { sections: [{}] } as Partial<IModelCourse>,
     validate: {
       type: (value) => !value && "Course Type is required",
       courseNo: (value) => {
@@ -109,7 +103,7 @@ export default function ModalAddCourse({
       res = res.filter((e: any) => e.id != user.id);
       setInstructorOption(
         res.map((e: IModelUser) => {
-          return { label: `${e.firstNameEN} ${e.lastNameEN}`, value: e.id };
+          return { label: getUserName(e, 1), value: e.id };
         })
       );
     };
@@ -181,9 +175,15 @@ export default function ModalAddCourse({
   };
 
   const addCourse = async () => {
-    const payload = form.getValues();
-    payload.sections?.forEach((sec) => {
-      sec.coInstructors = sec.coInstructors?.map((coIns) => coIns.value);
+    let payload: any = form.getValues();
+    payload = {
+      ...payload,
+      academicYear: academicYear.id,
+      updatedYear: academicYear.year,
+      updatedSemester: academicYear.semester,
+    };
+    payload.sections?.forEach((sec: any) => {
+      sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
     });
     const res = await createCourse(payload);
     if (res) {
@@ -287,10 +287,6 @@ export default function ModalAddCourse({
     });
     form.setFieldValue("sections", [...updatedSections!]);
   };
-
-  // useEffect(() => {
-  //   console.log(form.getValues().sections);
-  // }, [form]);
 
   return (
     <Modal
@@ -851,9 +847,7 @@ export default function ModalAddCourse({
                     </span>
                     <div className="ps-1.5 text-secondary ">
                       <List size="sm" listStyleType="disc">
-                        <List.Item>
-                          {user.firstNameEN} {user.lastNameEN}
-                        </List.Item>
+                        <List.Item>{getUserName(user, 1)}</List.Item>
                       </List>
                     </div>
                   </div>

@@ -3,11 +3,7 @@ import { useNavigate } from "react-router-dom";
 import cmulogo from "@/assets/image/cmuLogo.png";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Button, Checkbox } from "@mantine/core";
-import {
-  getEnumByKey,
-  getEnumByValue,
-  sortData,
-} from "@/helpers/functions/function";
+import { getUserName, sortData } from "@/helpers/functions/function";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { updateUser } from "@/services/user/user.service";
@@ -83,7 +79,7 @@ export default function SelectDepartment() {
               Welcome to Score OBE <span className=" text-[#FFCD1B]"> +</span>
             </div>
             <div className=" font-normal translate-y-[-4px] text-[22px]">
-              {user.firstNameEN} {user.lastNameEN}
+              {getUserName(user, 1)}
             </div>
             <div className=" font-light text-[16px]">{faculty.facultyEN}</div>
           </motion.div>

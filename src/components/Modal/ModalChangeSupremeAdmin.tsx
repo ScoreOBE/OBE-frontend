@@ -1,17 +1,16 @@
-import { Button, Input, Modal, TextInput } from "@mantine/core";
-import { IconUserCircle, IconTrash } from "@tabler/icons-react";
+import { Button, Modal, TextInput } from "@mantine/core";
+import { IconUserCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { AiOutlineSwap } from "react-icons/ai";
-import { IoIosInformationCircleOutline } from "react-icons/io";
 import Icon from "../Icon";
 import InfoIcon from "@/assets/icons/info.svg?react";
 import { IModelUser } from "@/models/ModelUser";
 import { getInstructor, updateSAdmin } from "@/services/user/user.service";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { ROLE } from "@/helpers/constants/enum";
+import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { setUser } from "@/store/user";
-import { showNotifications } from "@/helpers/functions/function";
+import { getUserName, showNotifications } from "@/helpers/functions/function";
 
 type Props = {
   opened: boolean;
@@ -36,9 +35,8 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
     setAdminFilter(
       adminList.filter(
         (admin) =>
-          `${admin.firstNameEN.toLowerCase()} ${admin.lastNameEN.toLowerCase()}`.includes(
-            searchValue.toLowerCase()
-          ) || admin.email.toLowerCase().includes(searchValue.toLowerCase())
+          `${getUserName(admin, 2)}`.includes(searchValue.toLowerCase()) ||
+          admin.email.toLowerCase().includes(searchValue.toLowerCase())
       )
     );
   }, [searchValue]);
@@ -63,10 +61,14 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
     const res = await updateSAdmin({ id });
     if (res) {
       const name = res.newSAdmin.firstNameEN?.length
-        ? `${res.newSAdmin.firstNameEN} ${res.newSAdmin.lastNameEN}`
+        ? getUserName(res.newSAdmin, 1)
         : res.newSAdmin.email;
       dispatch(setUser(res.user));
-      showNotifications("success", "Success", `${name} is an supreme admin`);
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Success",
+        `${name} is an supreme admin`
+      );
       onClose();
     }
   };
@@ -89,8 +91,8 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
         <Icon className=" size-6" IconComponent={InfoIcon} />
         <p className="text-[#117bb4] font-semibold">
           Changing the Supreme Admin{" "}
-          <span className=" font-extrabold text-[#075c8a]"> will revoke </span> your current
-          role
+          <span className=" font-extrabold text-[#075c8a]"> will revoke </span>{" "}
+          your current role
         </p>
       </div>
       <div
@@ -124,7 +126,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                   <IconUserCircle size={32} stroke={1} />
                   <div className="flex flex-col">
                     <p className="font-semibold text-[14px] text-tertiary">
-                      {admin.firstNameEN} {admin.lastNameEN}
+                      {getUserName(admin, 1)}
                     </p>
                     <p className="text-secondary text-[12px] font-normal">
                       {admin.email}
