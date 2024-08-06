@@ -24,6 +24,7 @@ import { isEmpty } from "lodash";
 import { getAcademicYear } from "./services/academicYear/academicYear.service";
 import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
+import CourseManagement from "@/pages/courseManagement";
 import Course from "./pages/course";
 import { setLoading } from "./store/loading";
 
@@ -101,6 +102,10 @@ function App() {
           <Route
             path={ROUTE_PATH.SELECTED_DEPARTMENT}
             element={<SelectDepartment />}
+          />
+          <Route
+            path={ROUTE_PATH.COURSE_MANAGEMENT}
+            element={<CourseManagement />}
           />
           <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />
           <Route path={`${ROUTE_PATH.COURSE}/:courseNo`} element={<Course />} />
