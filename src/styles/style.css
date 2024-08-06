@@ -41,9 +41,20 @@
 .mantine-Stepper-stepIcon[data-progress] {
   background-color: var(--color-secondary);
   background-clip: content-box;
-  padding: 5px;
+  padding: 8px;
   color: var(--color-secondary);
   border-color: var(--color-secondary);
+}
+
+.mantine-Stepper-stepWrapper {
+ width: 3px;
+  
+ 
+}
+
+.mantine-Stepper-stepLabel {
+  font-weight: 600;
+  font-size: 1px;
 }
 
 .mantine-Modal-title {
@@ -54,7 +65,7 @@
 
 .mantine-Modal-content,
 .mantine-Modal-header {
-  background-color: #f6f7fa !important;
+  background-color: #ffffff !important;
 }
 
 .mantine-Paper-root {
