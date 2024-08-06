@@ -60,7 +60,7 @@ export default function SelectDepartment() {
   return (
     <div className=" custom-radial-gradient h-screen w-screen">
       <div className="absolute top-12 left-12 flex justify-start items-center gap-3">
-        {user.departmentCode?.length > 0 && (
+        {!!user.departmentCode?.length && (
           <Button
             className="rounded-full p-2 bg-white bg-opacity-0 hover:bg-[#d4d4d4] hover:bg-opacity-100 text-white hover:text-primary"
             onClick={() => navigate(-1)}
@@ -146,7 +146,7 @@ export default function SelectDepartment() {
                 })}
               </div>
             </div>
-            {checkedItems.length > 0 && !notChange && (
+            {!!checkedItems.length && !notChange && (
               <motion.button
                 whileHover={{
                   scale: 1.05,
