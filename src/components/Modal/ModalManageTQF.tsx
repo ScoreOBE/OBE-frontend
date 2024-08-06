@@ -83,6 +83,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
             }
           }
         });
+        console.log(res);
 
         setnotCompleteTQF3List([...courseList]);
       }

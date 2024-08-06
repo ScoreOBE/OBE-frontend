@@ -4,13 +4,20 @@ import { IconChevronDown, IconUsers } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import Icon from "../Icon";
-import { getAcademicYear } from "@/services/academicYear/academicYear.service";
+import {
+  activeAcademicYear,
+  createAcademicYear,
+  getAcademicYear,
+} from "@/services/academicYear/academicYear.service";
 import { useAppSelector } from "@/store";
-import { SEMESTER } from "@/helpers/constants/enum";
+import { NOTI_TYPE, SEMESTER } from "@/helpers/constants/enum";
 
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
-import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
-import { sortData } from "@/helpers/functions/function";
+import {
+  AcademicYearRequestDTO,
+  CreateAcademicYearRequestDTO,
+} from "@/services/academicYear/dto/academicYear.dto";
+import { showNotifications, sortData } from "@/helpers/functions/function";
 import academicYear from "@/store/academicYear";
 
 type Props = {
@@ -21,54 +28,64 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [semesterList, setSemesterlist] = useState<any>({});
-  const [termOption, setTermOption] = useState<any[]>([]);
-  const [selectSemester, setSelectSemester] = useState();
+  const [selectSemester, setSelectSemester] =
+    useState<CreateAcademicYearRequestDTO>();
+
+  const fetchSemester = async () => {
+    let payload = new AcademicYearRequestDTO();
+    payload.manage = true;
+    const res = await getAcademicYear(payload);
+    const semester =
+      res[0].semester === SEMESTER[3] ? SEMESTER[1] : res[0].semester + 1;
+    const year = semester === SEMESTER[1] ? res[0].year + 1 : res[0].year;
+    setSelectSemester({ year, semester });
+
+    //Group by Year
+    const semestersByYear = res.reduce((acc: any, academicYearList: any) => {
+      const year: string = academicYearList.year.toString() + "a";
+
+      if (!acc[year]) {
+        acc[year] = [];
+      }
+      acc[year].push(academicYearList);
+
+      return acc;
+    }, {});
+
+    setSemesterlist(semestersByYear);
+  };
 
   useEffect(() => {
-    const fetchSemester = async () => {
-      let payload = new AcademicYearRequestDTO();
-      payload.manage = true;
-      const res = await getAcademicYear(payload);
-      const academicYearList = res.map((e: IModelAcademicYear) => {
-        return {
-          value: e.id,
-          year: e.year,
-          semester: e.semester,
-          isActive: e.isActive,
-        };
-      });
-      //Group by Year
-      const semestersByYear = academicYearList.reduce(
-        (acc: any, academicYearList: any) => {
-          const year: string = academicYearList.year.toString() + "a";
-
-          if (!acc[year]) {
-            acc[year] = [];
-          }
-          acc[year].push(academicYearList);
-
-          return acc;
-        },
-        {}
-      );
-      // const sortedSemester = Object.keys(semestersByYear)
-      // .sort((a: any, b: any) => b - a)
-      // .reduce((result: any, key: any) => {
-      //   result[key] = semestersByYear[key];
-      //   return result;
-      // }, {});
-
-      setSemesterlist(semestersByYear);
-    };
-
-    if (opened) {
+    if (opened && !selectSemester) {
       fetchSemester();
     }
-  }, [opened]);
+  }, [opened, selectSemester]);
 
-  useEffect(() => {
-    console.log(semesterList);
-  }, [semesterList]);
+  const onClickActivate = async (e: IModelAcademicYear) => {
+    const res = await activeAcademicYear(e.id);
+    if (res) {
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Activate",
+        `Activate ${e.semester}, ${e.year} successful`
+      );
+      setSelectSemester(undefined);
+    }
+  };
+
+  const onClickAdd = async () => {
+    if (selectSemester) {
+      const res = await createAcademicYear(selectSemester);
+      if (res) {
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Add Success",
+          `Add Semester ${selectSemester.semester}, ${selectSemester.year} successful`
+        );
+        setSelectSemester(undefined);
+      }
+    }
+  };
 
   return (
     <Modal
@@ -85,51 +102,13 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       }}
     >
       <div className="flex flex-col gap-5 flex-1">
-        <div
-          className="flex flex-col gap-1  p-3 px-4   bg-white border-[1px]  rounded-md"
-          style={{
-            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-          }}
+        <Button
+          className="rounded-s-md min-w-fit w-full border-l-0"
+          color="#5768D5"
+          onClick={onClickAdd}
         >
-          <div className="flex w-full items-end h-fit ">
-            <Select
-              rightSectionPointerEvents="none"
-              label="Select Semester"
-              defaultDropdownOpened={false}
-              placeholder="Semester"
-              allowDeselect
-              withCheckIcon={false}
-              className="w-full  "
-              classNames={{
-                input: "!rounded-r-none",
-              }}
-              rightSection={
-                <IconChevronDown
-                  className={`${
-                    openedDropdown ? "rotate-180" : ""
-                  } stroke-primary stroke-2`}
-                />
-              }
-              onDropdownOpen={() => setOpenedDropdown(true)}
-              onDropdownClose={() => setOpenedDropdown(false)}
-            />
-
-            <Button
-              className="rounded-s-none min-w-fit border-l-0"
-              color="#5768D5"
-              disabled={!selectSemester}
-            >
-              Add
-            </Button>
-          </div>
-          <p className="text-tertiary mt-1 font-normal text-[11px]">
-            Add semester for the{" "}
-            <span className="text-secondary font-semibold">
-              next 3 semesters
-            </span>{" "}
-            from the current semester.
-          </p>
-        </div>
+          Add Semester {selectSemester?.semester}, {selectSemester?.year}
+        </Button>
 
         {/* Added Semester */}
         <div
@@ -172,7 +151,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                               Year
                             </p>
                             <p className="font-semibold text-black text-[14px]">
-                              {year.slice(0,-1)}
+                              {year.slice(0, -1)}
                             </p>
                           </div>
                         ) : (
@@ -196,7 +175,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                             disabled
                             size="xs"
                             variant="filled"
-                            className="rounded-lg !border-none  "
+                            className="rounded-lg !border-none  w-[78px]"
                           >
                             Currently
                           </Button>
@@ -205,23 +184,12 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                             variant="outline"
                             color="#5768D5"
                             size="xs"
-                            className="rounded-lg "
+                            className="rounded-lg"
+                            onClick={() => onClickActivate(e)}
                           >
                             Activate
                           </Button>
                         )}
-                        {/* <Button
-                      variant="outline"
-                      color="red"
-                      size="xs"
-                      className=" rounded-lg"
-                      onClick={() => editAdmin(admin.id, ROLE.INSTRUCTOR)}
-                      leftSection={
-                        <IconTrash className=" size-4" stroke={1.5} />
-                      }
-                    >
-                      Delete
-                    </Button> */}
                       </div>
                     ))}
                   </div>
