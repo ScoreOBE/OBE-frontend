@@ -12,6 +12,7 @@ import TQF5 from "@/assets/icons/TQF5.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { setCourseList } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
+import { getUserName } from "@/helpers/functions/function";
 
 export default function CourseSidebar() {
   const navigate = useNavigate();
@@ -114,7 +115,7 @@ export default function CourseSidebar() {
           {instructors.map((item) => {
             return (
               <p key={item.id} className="text-pretty text-[12px]">
-                {item.firstNameEN} {item.lastNameEN}
+                {getUserName(item, 1)}
               </p>
             );
           })}

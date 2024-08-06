@@ -1,5 +1,18 @@
 import { notifications } from "@mantine/notifications";
 import { NOTI_TYPE, TQF_STATUS } from "../constants/enum";
+import { IModelUser } from "@/models/ModelUser";
+
+export const getUserName = (user: IModelUser, format?: number) => {
+  if (!user.firstNameEN || !user.lastNameEN) return;
+  switch (format) {
+    case 1:
+      return `${user.firstNameEN} ${user.lastNameEN}`; // John Doe
+    case 2:
+      return `${user.firstNameEN.toLowerCase()} ${user.lastNameEN.toLowerCase()}`; // john doe
+    default:
+      return `${user.firstNameEN} ${user.lastNameEN.slice(0, 1)}.`; // John D.
+  }
+};
 
 export const sortData = (
   data: any[],
@@ -34,13 +47,13 @@ export const sortData = (
   });
 };
 
-export function getEnumByKey(Enum: any, key: string): string {
+export const getEnumByKey = (Enum: any, key: string): string => {
   return Enum[key as keyof typeof Enum] ?? "";
-}
+};
 
-export function getEnumByValue(Enum: any, value: string): string {
+export const getEnumByValue = (Enum: any, value: string): string => {
   return Object.keys(Enum)[Object.values(Enum).indexOf(value)] ?? "";
-}
+};
 
 export const statusColor = (
   status: TQF_STATUS | undefined,

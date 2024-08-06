@@ -20,6 +20,7 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { IModelCourse } from "@/models/ModelCourse";
 import { useSearchParams } from "react-router-dom";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
+import { getUserName } from "@/helpers/functions/function";
 
 type Props = {
   opened: boolean;
@@ -66,19 +67,14 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                 courseList.push({
                   ...course,
                   ...section,
-                  instructor: `${
-                    section.instructor?.firstNameEN
-                  } ${section.instructor?.lastNameEN.slice(0, 1)}.`,
+                  instructor: getUserName(section.instructor as IModelUser),
                 });
               });
             } else {
               let temp = Array.from(
                 new Set(
-                  course.sections.map(
-                    (section) =>
-                      `${
-                        section.instructor?.firstNameEN
-                      } ${section.instructor?.lastNameEN.slice(0, 1)}.`
+                  course.sections.map((section) =>
+                    getUserName(section.instructor as IModelUser)
                   )
                 )
               ).toString();

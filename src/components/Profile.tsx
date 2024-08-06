@@ -23,6 +23,7 @@ import ModalChangeSupAdmin from "./Modal/ModalChangeSupremeAdmin";
 import { useDisclosure } from "@mantine/hooks";
 import ModalManageSemester from "./Modal/ModalManageSemester";
 import ModalManageTQF from "./Modal/ModalManageTQF";
+import { getUserName } from "@/helpers/functions/function";
 
 export default function Profile() {
   const user = useAppSelector((state) => state.user);
@@ -83,9 +84,7 @@ export default function Profile() {
         <Menu.Target>
           <Button className="flex flex-row justify-end px-0 pl-4 h-10  bg-white items-center rounded-lg  cursor-pointer hover:bg-[#f0f0f0]">
             <div className="flex flex-col gap-1 text-end mr-3 text-[12px]">
-              <p className="text-black font-semibold">
-                {user.firstNameEN} {user.lastNameEN?.slice(0, 1)}.
-              </p>
+              <p className="text-black font-semibold">{getUserName(user)}</p>
               <p
                 className="font-medium"
                 style={{ color: getRoleColor(user.role) }}
@@ -106,7 +105,7 @@ export default function Profile() {
                 <Icon className="pt-[5px]" IconComponent={ProfileIcon} />
                 <div className="flex flex-col text-[12px]   ">
                   <p className="text-black font-semibold">
-                    {user.firstNameEN} {user.lastNameEN}
+                    {getUserName(user, 1)}
                   </p>
                   <p
                     className="font-medium"

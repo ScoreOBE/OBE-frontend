@@ -121,15 +121,9 @@ export default function Dashboard() {
             </div>
           </p>
         }
-        // message="All data form the current semester for this course will be permanently deleted. Data from previous semesters will not be affected.  Are you sure you want to deleted?"
-      ></MainPopup>
-      {term && (
-        <ModalAddCourse
-          opened={openAddModal}
-          onClose={closeAddModal}
-          academicYear={term}
-        />
-      )}
+      />
+      <ModalAddCourse opened={openAddModal} onClose={closeAddModal} />
+
       <div className="flex flex-row  items-center justify-between">
         <div className="flex flex-col">
           <p className="text-secondary text-[20px] font-semibold mb-[1px]">

@@ -11,20 +11,6 @@
   --input-radius: 20px;
 }
 
-* {
-  font-family: "Lato", "NotoSansThai";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-@font-face {
-  font-family: "NotoSansThai";
-  src: url("~@/assets/fonts/NotoSansThai.ttf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  unicode-range: U+0E00- U+0E7F;
-}
-
 /* fix width height InfiniteScroll */
 .infinite-scroll-component__outerdiv {
   width: 100%;

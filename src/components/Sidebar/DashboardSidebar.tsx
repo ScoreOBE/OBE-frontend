@@ -27,6 +27,7 @@ export default function DashboardSidebar() {
   const [selectedTerm, setSelectedTerm] = useState(termOption[0]);
 
   const fetchCourse = async (id: string) => {
+    dispatch(setLoading(true));
     payloadCourse.academicYear = id;
     const res = await getCourse(payloadCourse);
     if (res) {
@@ -41,11 +42,10 @@ export default function DashboardSidebar() {
       setTerm(academicYear[0]);
       setSelectedTerm(termOption[0]);
       if (!course.length) {
-        dispatch(setLoading(true));
         fetchCourse(academicYear[0].id);
       }
     }
-  }, [academicYear, course]);
+  }, [academicYear]);
 
   const setTerm = (data: IModelAcademicYear) => {
     params.set("year", data.year.toString());
