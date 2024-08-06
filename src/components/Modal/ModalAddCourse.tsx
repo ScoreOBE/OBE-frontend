@@ -319,7 +319,6 @@ export default function ModalAddCourse({
           stepBody: "flex-col-reverse m-0 text-[12px] ",
           stepLabel: "text-[12px] font-semibold",
           stepDescription: "text-[12px] font-semibold",
-          
         }}
         className=" justify-center items-center mt-1 mb-5 text-[14px] max-h-full"
       >
@@ -868,43 +867,45 @@ export default function ModalAddCourse({
                           <List.Item key={index}>{coIns?.label}</List.Item>
                         ))}
                       </List>
-                  {!!sec.coInstructors?.length && (
+                    </div>
+                    {!!sec.coInstructors?.length && (
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[#3E3E3E] font-semibold">
+                          Co-Instructor
+                        </span>
+                        <div className="ps-1.5 text-secondary">
+                          <List size="sm" listStyleType="disc">
+                            {sec.coInstructors?.map((coIns, index) => (
+                              <List.Item key={index}>{coIns?.label}</List.Item>
+                            ))}
+                          </List>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="flex flex-col gap-1">
                       <span className="text-[#3E3E3E] font-semibold">
-                        Co-Instructor
+                        Open in Semester
                       </span>
                       <div className="ps-1.5 text-secondary">
-                        <List size="sm" listStyleType="disc">
-                          {sec.coInstructors?.map((coIns, index) => (
-                            <List.Item key={index}>{coIns?.label}</List.Item>
-                          ))}
+                        <List
+                          size="sm"
+                          listStyleType="disc"
+                          className="flex flex-col gap-1"
+                        >
+                          <List.Item>
+                            {sec.semester
+                              ?.join(", ")
+                              .replace(/, ([^,]*)$/, " and $1")}
+                          </List.Item>
+                          {sec.openThisTerm && (
+                            <List.Item>
+                              Open in this semester ({academicYear.semester}/
+                              {academicYear.year.toString().slice(-2)})
+                            </List.Item>
+                          )}
                         </List>
                       </div>
-                    </div>
-                  )}
-
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[#3E3E3E] font-semibold">
-                      Open in Semester
-                    </span>
-                    <div className="ps-1.5 text-secondary">
-                      <List
-                        size="sm"
-                        listStyleType="disc"
-                        className="flex flex-col gap-1"
-                      >
-                        <List.Item>
-                          {sec.semester
-                            ?.join(", ")
-                            .replace(/, ([^,]*)$/, " and $1")}
-                        </List.Item>
-                        {sec.openThisTerm && (
-                          <List.Item>
-                            Open in this semester ({academicYear.semester}/
-                            {academicYear.year.toString().slice(-2)})
-                          </List.Item>
-                        )}
-                      </List>
                     </div>
                   </div>
                 </div>
