@@ -3,6 +3,7 @@ import { NOTI_TYPE, TQF_STATUS } from "../constants/enum";
 import { IModelUser } from "@/models/ModelUser";
 
 export const getUserName = (user: IModelUser, format?: number) => {
+  if (!user.firstNameEN || !user.lastNameEN) return;
   switch (format) {
     case 1:
       return `${user.firstNameEN} ${user.lastNameEN}`; // John Doe
