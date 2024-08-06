@@ -35,7 +35,6 @@ export default function Navbar() {
       dispatch(setCourseList(res.courses ?? res));
     }
     localStorage.setItem("search", "true");
-    
   };
 
   const reset = () => {
@@ -73,10 +72,9 @@ export default function Navbar() {
               onInput={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               onFocus={() => setIsFocused(true)}
-              
               rightSectionPointerEvents="all"
               rightSection={
-                searchValue.length > 0 && (
+                !!searchValue.length && (
                   <Tooltip className="text-[12px]" label="Reset">
                     <CloseButton size="sm" onClick={reset} />
                   </Tooltip>
@@ -91,7 +89,7 @@ export default function Navbar() {
               >
                 <div className="flex items-center  gap-3">
                   <TbSearch className=" size-4" />
-                  {searchValue.length > 0 ? (
+                  {!!searchValue.length ? (
                     <p className="">{ellipsisText(searchValue, 35)}</p>
                   ) : (
                     <p>Show All Your Course</p>
@@ -109,7 +107,9 @@ export default function Navbar() {
           </div>
         )}
         {[ROUTE_PATH.LOGIN].includes(location) && (
-          <div className=" bg-white justify-start flex flex-1 items-start">OBEfully</div>
+          <div className=" bg-white justify-start flex flex-1 items-start">
+            OBEfully
+          </div>
         )}
         {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}
       </div>
