@@ -271,9 +271,9 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                               ` (Sec. ${("000" + e.sectionNo).slice(-3)})`}
                           </p>
                           <p className="text-[12px] font-normal text-[#4E5150]">
-                            {e.type === COURSE_TYPE.GENERAL
-                              ? e.courseName
-                              : e.topic}
+                            {e.type === COURSE_TYPE.SEL_TOPIC
+                              ? e.topic
+                              : e.courseName}
                           </p>
                         </div>
                       </div>
