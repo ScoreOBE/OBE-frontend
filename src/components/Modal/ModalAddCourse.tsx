@@ -86,7 +86,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       sections: {
         topic: (value) => validateCourseNameorTopic(value!, "Topic"),
         sectionNo: (value) => {
-          if (value === undefined) return "Section No. is required";
+          if (value == undefined) return "Section No. is required";
           const isValid = isNumber(value) && value.toString().length <= 3;
           return isValid ? null : "Please enter a valid section no";
         },
@@ -224,7 +224,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             instructor: user.id,
             coInstructors: [],
           };
-          if (form.getValues().type === COURSE_TYPE.SEL_TOPIC) {
+          if (form.getValues().type == COURSE_TYPE.SEL_TOPIC) {
             data.topic = topic;
           }
           sections?.push(data);
@@ -241,7 +241,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     if (insInput.value) {
       setCoInsList([...coInsList, insInput]);
       const updatedInstructorOptions = instructorOption.map((option) =>
-        option.value === insInput.value ? { ...option, disabled: true } : option
+        option.value == insInput.value ? { ...option, disabled: true } : option
       );
       setInstructorOption(updatedInstructorOptions);
       delete insInput.disabled;
@@ -261,7 +261,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
   const removeCoIns = (coIns: any) => {
     const newCoIns = coInsList.filter((e) => e.value !== coIns.value);
     const updatedInstructorOptions = instructorOption.map((option) =>
-      option.value === coIns.value ? { ...option, disabled: false } : option
+      option.value == coIns.value ? { ...option, disabled: false } : option
     );
     setInstructorOption(updatedInstructorOptions);
     const updatedSections = form.getValues().sections?.map((sec) => ({
@@ -276,7 +276,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
 
   const addCoInsInSec = (index: number, checked: boolean, coIns: any) => {
     const updatedSections = form.getValues().sections?.map((sec, i) => {
-      if (i === index) {
+      if (i == index) {
         const coInsArr = [...(sec.coInstructors ?? []), { ...coIns }];
         sortData(coInsArr, "label", "string");
         const updatedCoInstructors = checked
@@ -332,8 +332,8 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-[#3e3e3e]">
-                  General Education
-                </span>{" "}
+                  {COURSE_TYPE.GENERAL}
+                </span>
                 <br />
                 <span className="flex justify-start font-semibold text-[12px] text-[#36926f] -mt-1">
                   - Learner Person / Innovative Co-creator / Active Citizen
@@ -341,22 +341,20 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               </p>
             </Button>
             <Button
-              onClick={() => nextStep(COURSE_TYPE.GENERAL)}
+              onClick={() => nextStep(COURSE_TYPE.SPECIAL)}
               color="#86e7f664"
               className="w-ful border-[1px] text-[13px]  border-[#2e93ad] h-fit py-3 !text-[#000000] items-center rounded-[6px] flex justify-start"
             >
-              {" "}
               <p className="justify-start flex flex-col">
-                {" "}
                 <span className="flex justify-start text-[#3e3e3e]">
-                  Field of Specialization
-                </span>{" "}
+                  {COURSE_TYPE.SPECIAL}
+                </span>
                 <br />
                 <span className="flex justify-start font-semibold text-[12px] text-[#2e93ad] -mt-1">
                   - Core Courses / Major Courses (Required Courses) / Minor
                   Courses
                 </span>
-              </p>{" "}
+              </p>
             </Button>
             <Button
               onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC)}
@@ -372,12 +370,13 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               </p>
             </Button>
             <Button
-              onClick={() => nextStep(COURSE_TYPE.GENERAL)}
+              onClick={() => nextStep(COURSE_TYPE.FREE)}
               color="#e5c2f580"
               className="w-full border-[1px] h-fit py-3 text-[13px]   border-[#df8cf1] items-start  !text-[#000000] rounded-[6px] flex justify-start"
             >
               <p className="justify-start flex flex-col">
-                <span className="flex justify-start">Free Elective</span> <br />
+                <span className="flex justify-start">{COURSE_TYPE.FREE}</span>
+                <br />
                 <span className="flex justify-start font-medium text-[12px] text-secondary -mt-1">
                   -
                 </span>
@@ -397,7 +396,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 size="xs"
                 withAsterisk
                 placeholder={
-                  form.getValues().type === COURSE_TYPE.SEL_TOPIC
+                  form.getValues().type == COURSE_TYPE.SEL_TOPIC
                     ? "Ex. 26X4XX"
                     : "Ex. 001102"
                 }
@@ -410,7 +409,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 size="xs"
                 classNames={{ input: "focus:border-primary " }}
                 placeholder={
-                  form.getValues().type === COURSE_TYPE.SEL_TOPIC
+                  form.getValues().type == COURSE_TYPE.SEL_TOPIC
                     ? "Ex. Select Topic in Comp Engr"
                     : "Ex. English 2"
                 }
