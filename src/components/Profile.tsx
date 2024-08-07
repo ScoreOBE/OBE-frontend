@@ -207,7 +207,10 @@ export default function Profile() {
                   <span>Admin</span>
                 </div>
               </Menu.Item>
-              <Menu.Item className="text-[#3E3E3E] h-8 w-[200px]">
+              <Menu.Item
+                className="text-[#3E3E3E] h-8 w-[200px]"
+                onClick={() => navigate(ROUTE_PATH.COURSE_MANAGEMENT)}
+              >
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={CourseIcon} className="h-5 w-5" />
                   <span>Course</span>
