@@ -7,7 +7,11 @@ import {
   IconPlus,
   IconTrash,
 } from "@tabler/icons-react";
-import { showNotifications, statusColor } from "@/helpers/functions/function";
+import {
+  getCourseNo,
+  showNotifications,
+  statusColor,
+} from "@/helpers/functions/function";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { deleteCourse, getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
@@ -97,7 +101,7 @@ export default function Dashboard() {
     );
   };
 
-  const goToCourse = (courseNo: number) => {
+  const goToCourse = (courseNo: string) => {
     navigate(
       `${ROUTE_PATH.COURSE}/${courseNo}?year=${term?.year}&semester=${term?.semester}`
     );
@@ -209,10 +213,12 @@ export default function Dashboard() {
                   key={item.id}
                   className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-[4px] hover:bg-[#F3F3F3]"
                   style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)" }}
-                  onClick={() => goToCourse(item.courseNo)}
+                  onClick={() => goToCourse(getCourseNo(item.courseNo))}
                 >
                   <div className="p-2.5 flex flex-col">
-                    <p className="font-semibold text-sm">{item.courseNo}</p>
+                    <p className="font-semibold text-sm">
+                      {getCourseNo(item.courseNo)}
+                    </p>
                     <p className="text-xs font-medium text-gray-600">
                       {item.courseName}
                     </p>

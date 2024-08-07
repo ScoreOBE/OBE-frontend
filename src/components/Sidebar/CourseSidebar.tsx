@@ -12,7 +12,7 @@ import TQF5 from "@/assets/icons/TQF5.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { setCourseList } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
-import { getUserName } from "@/helpers/functions/function";
+import { getCourseNo, getUserName } from "@/helpers/functions/function";
 
 export default function CourseSidebar() {
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ export default function CourseSidebar() {
         <div className="flex flex-col gap-5 ">
           <div className="flex flex-col flex-1 font-semibold gap-1 ">
             <p className="text-lg">
-              {course?.courseNo} ({params.get("semester")}/
+              {getCourseNo(course?.courseNo)} ({params.get("semester")}/
               {params.get("year")?.slice(-2)})
             </p>
             <p className="text-[13px] font-medium text-pretty max-w-full">

@@ -34,6 +34,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { validateEmail } from "@/helpers/functions/validation";
 import { createCourse } from "@/services/course/course.service";
 import {
+  getSection,
   getUserName,
   showNotifications,
   sortData,
@@ -46,7 +47,7 @@ type Props = {
 };
 export default function ModalAddCourse({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
-  const academicYear = useAppSelector((state) => state.academicYear[0] ?? {});
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const dispatch = useAppDispatch();
   const [params, setParams] = useSearchParams();
   const [active, setActive] = useState(0);
@@ -157,7 +158,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
 
           keys.forEach((key: string) => {
             const secNo = form.getInputProps(key).defaultValue;
-            secNoList.push(("000" + secNo).slice(-3));
+            secNoList.push(getSection(secNo));
           });
           secNoList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
           showNotifications(
@@ -231,7 +232,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           sections[index].sectionNo = parseInt(secNo);
           sections[index].instructor = user.id;
           sections[index].coInstructors = [];
-          sectionNo[index] = ("000" + secNo).slice(-3);
+          sectionNo[index] = getSection(secNo);
         } else {
           const data: any = {
             sectionNo: parseInt(secNo),
@@ -242,7 +243,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             data.topic = topic;
           }
           sections?.push(data);
-          sectionNo.push(("000" + secNo).slice(-3));
+          sectionNo.push(getSection(secNo));
         }
       });
     }
@@ -262,7 +263,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       const updatedSections = form.getValues().sections?.map((sec) => {
         const coInsArr = [...(sec.coInstructors ?? []), insInput];
         sortData(coInsArr, "label", "string");
-        insInput.sections.push(("000" + sec.sectionNo).slice(-3));
+        insInput.sections.push(getSection(sec.sectionNo));
         insInput.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
         return {
           ...sec,
@@ -294,7 +295,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
   const addCoInsInSec = (index: number, checked: boolean, coIns: any) => {
     const updatedSections = form.getValues().sections?.map((sec, i) => {
       if (i == index) {
-        const secNo = ("000" + sec.sectionNo).slice(-3);
+        const secNo = getSection(sec.sectionNo);
         if (checked) {
           coIns.sections.push(secNo);
           coIns.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
@@ -509,8 +510,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               {form.getValues().sections?.map((e, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary font-semibold">
-                    Select Semester for Section{" "}
-                    {("000" + e.sectionNo).slice(-3)}
+                    Select Semester for Section {getSection(e.sectionNo)}
                   </span>
                   <div
                     style={{
@@ -806,7 +806,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                     className="w-full border-b-[1px] border-[#c9c9c9] pb-2  h-fit px-4    gap-1 flex flex-col"
                   >
                     <span className="text-secondary font-semibold text-[14px] mb-2">
-                      Section {("000" + sec.sectionNo).slice(-3)}
+                      Section {getSection(sec.sectionNo)}
                     </span>
 
                     <div className="flex flex-col gap-1">

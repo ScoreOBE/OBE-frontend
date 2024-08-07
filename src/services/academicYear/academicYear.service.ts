@@ -1,6 +1,5 @@
 import { isValidResponse } from "@/helpers/functions/validation";
 import { academicYearController } from "./academicYear.repository";
-import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import {
   AcademicYearRequestDTO,
   CreateAcademicYearRequestDTO,
