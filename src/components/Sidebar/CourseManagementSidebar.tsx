@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { RxDashboard } from "react-icons/rx";
+import CourseIcon from "@/assets/icons/course.svg?react";
+import SOIcon from "@/assets/icons/SO.svg?react";
+
 import { IconChevronLeft, IconLogout } from "@tabler/icons-react";
 
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import Icon from "../Icon";
-import TQF3 from "@/assets/icons/TQF3.svg?react";
-import TQF5 from "@/assets/icons/TQF5.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { setCourseList } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
@@ -63,73 +62,36 @@ export default function CourseSidebar() {
           Back to Your Course
         </div>
 
+        <div className="text-sm flex flex-col gap-[6px]">
+          <p className="font-semibold">Welcome to</p>
+          <p className="font-semibold">Course Management!</p>
+        </div>
+
         <div className="flex flex-col gap-5 ">
-          <div className="flex flex-col flex-1 font-semibold gap-1 ">
-            <p className="text-lg">
-              {course?.courseNo} ({params.get("semester")}/
-              {params.get("year")?.slice(-2)})
-            </p>
-            <p className="text-[13px] font-medium text-pretty max-w-full">
-              {course?.courseName}
-            </p>
-          </div>
           <div className="flex flex-col gap-2">
             <Button
-              leftSection={<RxDashboard size={18} />}
+              leftSection={<CourseIcon />}
               className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
-                path.startsWith(ROUTE_PATH.COURSE)
+                path.startsWith(ROUTE_PATH.COURSE_MANAGEMENT)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               }`}
             >
-              Sections
+              Dashboard
             </Button>
             <Button
-              leftSection={<Icon IconComponent={TQF3} className="h-5 w-5" />}
+              leftSection={<SOIcon />}
               className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
-                ${
-                  path.startsWith(ROUTE_PATH.TQF3)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                }`}
+              ${
+                path.startsWith(ROUTE_PATH.COURSE_MANAGEMENT_MAP)
+                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+              }`}
             >
-              TQF 3
-            </Button>
-            <Button
-              leftSection={<Icon IconComponent={TQF5} className="h-5 w-5" />}
-              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
-                ${
-                  path.startsWith(ROUTE_PATH.TQF5)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                }`}
-            >
-              TQF 5
+              Map PLO required
             </Button>
           </div>
-        </div>
-
-        <div className="flex flex-col gap-2 mt-5">
-          <p className="text-b2 font-semibold mb-1">Instructors</p>
-          {instructors.map((item) => {
-            return (
-              <p key={item.id} className="text-pretty text-[12px]">
-                {getUserName(item, 1)}
-              </p>
-            );
-          })}
-        </div>
-        <div className="flex absolute gap-2 bottom-7 flex-col ">
-          <p className="text-[14px] text-white font-semibold">Course Action</p>
-          <Button
-            leftSection={<IconLogout className="h-5 w-5" stroke={1.5} />}
-            className="font-semibold text-[#ffffff] bg-transparent hover:bg-[#d55757]  w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group"
-          >
-            <div className="flex flex-col justify-start items-start gap-[7px]">
-              <p className="font-semibold text-b2">Leave form Course</p>
-            </div>
-          </Button>
         </div>
       </div>
     </>

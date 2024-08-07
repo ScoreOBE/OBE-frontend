@@ -3,15 +3,18 @@ import { useLocation } from "react-router-dom";
 import DashboardSidebar from "./Sidebar/DashboardSidebar";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import CourseSidebar from "./Sidebar/CourseSidebar";
+import CourseManagementSidebar from "./Sidebar/CourseManagementSidebar";
 
 export default function Sidebar() {
   const path = useLocation().pathname;
   const getSidebar = () => {
     if (path.includes(ROUTE_PATH.DASHBOARD_INS)) {
       return <DashboardSidebar />;
+    } else if (path.includes(ROUTE_PATH.COURSE_MANAGEMENT)) {
+      return <CourseManagementSidebar />;
     } else if (path.includes(ROUTE_PATH.COURSE)) {
       return <CourseSidebar />;
-    } else return <></>;
+    } else return;
   };
   return (
     <div className="w-[245px] border-r-[1px] border-[#e0e0e0 h-screen flex p-5">

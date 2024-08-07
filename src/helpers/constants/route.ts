@@ -8,4 +8,5 @@ export const ROUTE_PATH = {
   TQF5: "/tqf5",
   DASHBOARD_STD: "/dashboard-student",
   COURSE_MANAGEMENT: "/course-management",
+  COURSE_MANAGEMENT_MAP: "/course-management-map",
 };

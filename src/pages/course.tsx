@@ -115,9 +115,11 @@ export default function Course() {
                 </div>
                 <div className="bg-[#e7eaff] flex h-8 items-center justify-between rounded-b-[4px]">
                   <p className="p-2.5 text-secondary font-semibold text-[12px]">
-          
-                  {(item.assignments?.length ?? 0) === 1 ? "Assignment" : ((item.assignments?.length ?? 0) > 1 ? "Assignments" : "No Assignment")}
-
+                    {(item.assignments?.length ?? 0) === 1
+                      ? "Assignment"
+                      : (item.assignments?.length ?? 0) > 1
+                      ? "Assignments"
+                      : "No Assignment"}
                   </p>
                 </div>
               </div>
