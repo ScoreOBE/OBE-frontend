@@ -20,7 +20,7 @@ import {
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
-import { COURSE_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import AddCoIcon from "@/assets/icons/addCo.svg?react";
 import Icon from "../Icon";
@@ -141,6 +141,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         }
         break;
       case 3:
+        const secNoList: any = [];
         for (let i = 0; i < length; i++) {
           if (isValid) {
             isValid = !form.validateField(`sections.${i}.semester`).hasError;
@@ -148,13 +149,26 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             form.validateField(`sections.${i}.semester`);
           }
         }
+
+        if (form.errors) {
+          const keys = Object.keys(form.errors).map((key) =>
+            key.replace("semester", "sectionNo")
+          );
+
+          keys.forEach((key: string) => {
+            const secNo = form.getInputProps(key).defaultValue;
+            secNoList.push(("000" + secNo).slice(-3));
+          });
+          secNoList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+          showNotifications(
+            NOTI_TYPE.ERROR,
+            "iiiii",
+            `ooooooo ${secNoList.join(", ")}`
+          );
+        }
+
         break;
       case 4:
-        // coInsList.forEach((conIns)=>{
-        //   if(isValid) {
-        //     isValid =
-        //   }
-        // })
         break;
     }
     if (isValid) {
@@ -239,7 +253,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
 
   const addCoIns = () => {
     if (insInput.value) {
-      setCoInsList([...coInsList, insInput]);
+      insInput.sections = [];
       const updatedInstructorOptions = instructorOption.map((option) =>
         option.value == insInput.value ? { ...option, disabled: true } : option
       );
@@ -248,11 +262,14 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       const updatedSections = form.getValues().sections?.map((sec) => {
         const coInsArr = [...(sec.coInstructors ?? []), insInput];
         sortData(coInsArr, "label", "string");
+        insInput.sections.push(("000" + sec.sectionNo).slice(-3));
+        insInput.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
         return {
           ...sec,
           coInstructors: [...coInsArr],
         };
       });
+      setCoInsList([...coInsList, insInput]);
       form.setFieldValue("sections", [...updatedSections!]);
     }
     setInsInput({ value: null });
@@ -277,6 +294,13 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
   const addCoInsInSec = (index: number, checked: boolean, coIns: any) => {
     const updatedSections = form.getValues().sections?.map((sec, i) => {
       if (i == index) {
+        const secNo = ("000" + sec.sectionNo).slice(-3);
+        if (checked) {
+          coIns.sections.push(secNo);
+          coIns.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+        } else {
+          coIns.sections = coIns.sections.filter((e: any) => e !== secNo);
+        }
         const coInsArr = [...(sec.coInstructors ?? []), { ...coIns }];
         sortData(coInsArr, "label", "string");
         const updatedCoInstructors = checked
@@ -327,30 +351,30 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           <div className="w-full    mt-2 flex flex-col gap-3  bg-transparent rounded-md">
             <Button
               onClick={() => nextStep(COURSE_TYPE.GENERAL)}
-              color="#95e6c860"
-              className="w-ful border-[1px] text-[13px] border-[#4ab78d] bg-[#95e6c860] h-fit py-3 !text-[#000000] items-center rounded-[6px] flex justify-start"
+              color="#ffffff"
+              className="w-ful border-[1px] text-[13px] border-secondary  h-fit py-3 items-center rounded-[6px] flex justify-start"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-[#3e3e3e]">
                   {COURSE_TYPE.GENERAL}
                 </span>
                 <br />
-                <span className="flex justify-start font-semibold text-[12px] text-[#36926f] -mt-1">
+                <span className="flex justify-start font-normal text-[12px] text-secondary -mt-1">
                   - Learner Person / Innovative Co-creator / Active Citizen
                 </span>
               </p>
             </Button>
             <Button
               onClick={() => nextStep(COURSE_TYPE.SPECIAL)}
-              color="#86e7f664"
-              className="w-ful border-[1px] text-[13px]  border-[#2e93ad] h-fit py-3 !text-[#000000] items-center rounded-[6px] flex justify-start"
+              color="#ffffff"
+              className="w-ful border-[1px] text-[13px]  border-secondary h-fit py-3 !text-[#000000] items-center rounded-[6px] flex justify-start"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-[#3e3e3e]">
                   {COURSE_TYPE.SPECIAL}
                 </span>
                 <br />
-                <span className="flex justify-start font-semibold text-[12px] text-[#2e93ad] -mt-1">
+                <span className="flex justify-start font-normal text-[12px] text-secondary -mt-1">
                   - Core Courses / Major Courses (Required Courses) / Minor
                   Courses
                 </span>
@@ -358,21 +382,21 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             </Button>
             <Button
               onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC)}
-              color="#d3d3ffa9"
+              color="#ffffff"
               className="w-ful border-[1px] text-[13px] border-secondary  h-fit py-3 !text-[#000000] items-center rounded-[6px] flex justify-start"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start">Major Elective</span>{" "}
                 <br />
-                <span className="flex justify-start font-semibold text-[12px] text-secondary -mt-1">
+                <span className="flex justify-start font-normal text-[12px] text-secondary -mt-1">
                   - Selected Topics Course
                 </span>
               </p>
             </Button>
             <Button
               onClick={() => nextStep(COURSE_TYPE.FREE)}
-              color="#e5c2f580"
-              className="w-full border-[1px] h-fit py-3 text-[13px]   border-[#df8cf1] items-start  !text-[#000000] rounded-[6px] flex justify-start"
+              color="#ffffff"
+              className="w-full border-[1px] h-fit py-3 text-[13px]   border-secondary items-start  !text-[#000000] rounded-[6px] flex justify-start"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start">{COURSE_TYPE.FREE}</span>
@@ -452,7 +476,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 </div>
               )}{" "}
               <div
-                className="w-full p-4   bg-white rounded-md"
+                className="w-full p-4   bg-white rounded-md "
                 style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.20)" }}
               >
                 <TagsInput
@@ -460,7 +484,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   withAsterisk
                   classNames={{
                     input:
-                      "focus:border-secondary h-[145px] mt-1 p-3 text-[12px]  rounded-md",
+                      "focus-within:border-secondary h-[145px] mt-1 p-3 text-[12px] rounded-md",
                     pill: "bg-secondary text-white",
                     label: "font-semibold text-[#3e3e3e]",
                   }}
@@ -492,10 +516,10 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                     style={{
                       boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                     }}
-                    className="w-full p-3 rounded-md gap-2 flex flex-col "
+                    className="w-full p-3 bg-white rounded-md gap-2 flex flex-col "
                   >
                     <div className="flex flex-row items-center justify-between">
-                      <div className="gap-2 flex flex-col">
+                      <div className="gap-1 flex flex-col">
                         <span className="font-semibold">Open Semester</span>
                         <Checkbox
                           classNames={{
@@ -549,7 +573,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         <Stepper.Step label="Co-Instructor" description="STEP 5">
           <div className="flex flex-col gap-5 mt-3 flex-1 ">
             <div
-              className="flex flex-col gap-2 max-h-[320px]  rounded-md h-fit w-full  p-4  "
+              className="flex flex-col bg-white gap-2 max-h-[320px]  rounded-md h-fit w-full  p-4  "
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
@@ -660,7 +684,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   }
                   rightSectionPointerEvents="all"
                 /> */}
-                  <div className="flex flex-col max-h-[400px] h-fit  overflow-y-scroll p-1">
+                  <div className="flex flex-col max-h-[400px] h-fit p-1">
                     {coInsList.map(
                       (coIns, index) =>
                         (!searchValue.length ||
@@ -684,9 +708,10 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                                 <Menu shadow="md" width={200}>
                                   <Menu.Target>
                                     <Button
-                                      color="#26b67a"
+                                      variant="outline"
+                                      color="#5768d5"
                                       size="xs"
-                                      className="translate-y-2 text-[12px] rounded-md"
+                                      className=" transform-none text-[12px] rounded-md"
                                     >
                                       Access
                                     </Button>
@@ -696,30 +721,26 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                                     <Menu.Label className=" -translate-x-1">
                                       Can access
                                     </Menu.Label>
-                                    <div className="flex flex-col h-fit gap-2 w-full">
+                                    <div className="flex flex-col pb-2 h-fit gap-2 w-full">
                                       {sectionNoList.map((sectionNo, index) => (
                                         <Checkbox
+                                          disabled={
+                                            coIns.sections.length == 1 &&
+                                            coIns.sections.includes(sectionNo)
+                                          }
                                           key={index}
                                           classNames={{
                                             input:
-                                              "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                                              "bg-black bg-opacity-0  border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                                             body: "mr-3",
                                             label: "text-[14px]",
                                           }}
                                           color="#5768D5"
                                           size="xs"
                                           label={`Section ${sectionNo}`}
-                                          checked={form
-                                            .getValues()
-                                            .sections?.find(
-                                              (sec) =>
-                                                sec.sectionNo ==
-                                                parseInt(sectionNo)
-                                            )
-                                            ?.coInstructors?.some(
-                                              (coins) =>
-                                                coins.value == coIns.value
-                                            )}
+                                          checked={coIns.sections.includes(
+                                            sectionNo
+                                          )}
                                           onChange={(event) =>
                                             addCoInsInSec(
                                               index,
@@ -733,8 +754,9 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                                   </Menu.Dropdown>
                                 </Menu>
                                 <Button
-                                  className="text-[12px] translate-y-2  rounded-md"
+                                  className="text-[12px] transform-none rounded-md"
                                   size="xs"
+                                  variant="outline"
                                   color="#FF4747"
                                   onClick={() => removeCoIns(coIns)}
                                 >
@@ -745,12 +767,14 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                             <div className="flex text-secondary flex-row w-[70%] flex-wrap -mt-5 gap-1 font-medium text-[13px]">
                               <p className=" font-semibold">Section</p>
 
-                              {sectionNoList.map((sectionNo, index) => (
-                                <p className="">
-                                  {sectionNo}
-                                  {index !== sectionNoList.length - 1 && ","}
-                                </p>
-                              ))}
+                              {coIns.sections.map(
+                                (sectionNo: any, index: number) => (
+                                  <p className="">
+                                    {sectionNo}
+                                    {index !== coIns.sections.length - 1 && ","}
+                                  </p>
+                                )
+                              )}
                             </div>
                           </div>
                         )
@@ -769,19 +793,19 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             }}
           >
             <div className="bg-[#e6e9ff] flex gap-3 font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
-              <span className="text-secondary text-[16px]">
+              <span className="text-secondary text-[14px]">
                 {form.getValues().courseNo} - {form.getValues().courseName}
               </span>
             </div>
             <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-scroll ">
               {" "}
-              <div className="flex flex-col gap-3 mt-3   font-medium text-[14px]">
+              <div className="flex flex-col gap-3 mt-3   font-medium text-[12px]">
                 {form.getValues().sections?.map((sec, index) => (
                   <div
                     key={index}
                     className="w-full border-b-[1px] border-[#c9c9c9] pb-2  h-fit px-4    gap-1 flex flex-col"
                   >
-                    <span className="text-secondary font-semibold text-[16px] mb-2">
+                    <span className="text-secondary font-semibold text-[14px] mb-2">
                       Section {("000" + sec.sectionNo).slice(-3)}
                     </span>
 
