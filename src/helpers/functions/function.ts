@@ -2,6 +2,14 @@ import { notifications } from "@mantine/notifications";
 import { NOTI_TYPE, TQF_STATUS } from "../constants/enum";
 import { IModelUser } from "@/models/ModelUser";
 
+export const getSection = (sectionNo: number | string | undefined) => {
+  if (!sectionNo) return "";
+  return ("000" + sectionNo).slice(-3);
+};
+export const getCourseNo = (courseNo: number | string | undefined) => {
+  if (!courseNo) return "";
+  return ("000000" + courseNo).slice(-6);
+};
 export const getUserName = (user: IModelUser, format?: number) => {
   if (!user.firstNameEN || !user.lastNameEN) return;
   switch (format) {

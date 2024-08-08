@@ -11,6 +11,7 @@ import {
 import { IModelCourse } from "@/models/ModelCourse";
 import { getOneCourse } from "@/services/course/course.service";
 import { setCourseList } from "@/store/course";
+import { getSection } from "@/helpers/functions/function";
 
 export default function Course() {
   const { courseNo } = useParams();
@@ -72,7 +73,7 @@ export default function Course() {
               >
                 <div className="p-2.5 flex flex-col">
                   <p className="font-semibold text-sm">
-                    Section {("000" + item.sectionNo).slice(-3)}
+                    Section {getSection(item.sectionNo)}
                   </p>
                   {course.addFirstTime && (
                     <div

@@ -8,7 +8,7 @@ export const isValidResponse = (res: any) => {
     return res.data;
   } else {
     if (res == RESPONSE_MESSAGE.UNAUTHORIZED) {
-      localStorage.removeItem("token");
+      localStorage.clear();
       window.location.replace(ROUTE_PATH.LOGIN);
     }
     showNotifications(NOTI_TYPE.ERROR, "Something went wrong", res);
