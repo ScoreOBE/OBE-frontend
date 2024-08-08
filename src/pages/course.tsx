@@ -31,8 +31,10 @@ export default function Course() {
       );
       if (term) {
         const res = await getOneCourse({ academicYear: term.id, courseNo });
-        dispatch(setCourseList([res]));
-        setCourse(res);
+        if (res) {
+          dispatch(setCourseList([res]));
+          setCourse(res);
+        }
       }
     };
     if (!courseList.length && params.get("year")) fetchCourse();

@@ -43,7 +43,7 @@ const axiosSuccess = (res: any, configService?: any) => {
 };
 
 const axiosError = (error: any, configService?: any) => {
-  return error.response.data.message;
+  return error.response.data;
 };
 
 const axiosService = (

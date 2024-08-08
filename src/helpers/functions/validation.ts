@@ -1,4 +1,7 @@
-import { RESPONSE_MESSAGE } from "@/helpers/constants/response.enum";
+import {
+  RESPONSE_MESSAGE,
+  STATUS_CODE,
+} from "@/helpers/constants/response.enum";
 import { ROUTE_PATH } from "../constants/route";
 import { showNotifications } from "./function";
 import { NOTI_TYPE } from "../constants/enum";
@@ -7,11 +10,16 @@ export const isValidResponse = (res: any) => {
   if (res.message === RESPONSE_MESSAGE.SUCCESS) {
     return res.data;
   } else {
-    if (res == RESPONSE_MESSAGE.UNAUTHORIZED) {
-      localStorage.clear();
-      window.location.replace(ROUTE_PATH.LOGIN);
+    switch (res.statusCode) {
+      case STATUS_CODE.NOT_FOUND:
+        break;
+      case STATUS_CODE.UNAUTHORIZED:
+        localStorage.clear();
+        window.location.replace(ROUTE_PATH.LOGIN);
+      default:
+        showNotifications(NOTI_TYPE.ERROR, "Something went wrong", res.message);
+        break;
     }
-    showNotifications(NOTI_TYPE.ERROR, "Something went wrong", res);
     return;
   }
 };
