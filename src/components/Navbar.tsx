@@ -61,7 +61,7 @@ export default function Navbar() {
     <>
       <div className="min-h-14 border-b-[1px] border-[#e0e0e0] px-6  inline-flex flex-wrap justify-between items-center z-50 bg-[#fcfcfc]  text-secondary text-[18px]">
         <p className="font-semibold">{topicPath()}</p>
-        {[ROUTE_PATH.DASHBOARD_INS && ROUTE_PATH.COURSE_MANAGEMENT].includes(
+        {[ROUTE_PATH.DASHBOARD_INS, ROUTE_PATH.COURSE_MANAGEMENT].includes(
           location
         ) && (
           <div className="w-[400px]">
