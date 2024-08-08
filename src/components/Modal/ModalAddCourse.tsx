@@ -130,12 +130,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     }
   }, [insInput]);
 
-  useEffect(() => {
-    console.log("form:", form.getValues().sections);
-    console.log("sections:", sectionNoList);
-    console.log("coInsList:", coInsList);
-  }, [form]);
-
   const nextStep = async (type?: COURSE_TYPE) => {
     setFirstInput(false);
     let isValid = true;
@@ -358,7 +352,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       opened={opened}
       onClose={closeModal}
       closeOnClickOutside={false}
-      title="Add course"
+      title="Add Course"
       size="50vw"
       centered
       transitionProps={{ transition: "pop" }}
@@ -501,11 +495,11 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               }}
             >
               <div className="bg-[#e6e9ff] flex flex-col font-semibold rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary">
-                <p className="text-secondary text-b1">
+                <p className="text-secondary text-b2">
                   {form.getValues().courseNo} - {form.getValues().courseName}
                 </p>
-                <p className="text-secondary text-b2">
-                  {form.getValues().sections?.at(0)?.topic}
+                <p className="text-secondary text-b3">
+                  Topic: {form.getValues().sections?.at(0)?.topic}
                 </p>
               </div>
               <div
@@ -518,7 +512,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   classNames={{
                     input:
                       "focus-within:border-secondary h-[145px] mt-1 p-3 text-[12px] rounded-md",
-                    pill: "bg-secondary text-white",
+                    pill: "bg-secondary text-white font-bold",
                     label: "font-semibold text-[#3e3e3e]",
                   }}
                   placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
@@ -542,7 +536,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               {form.getValues().sections?.map((sec, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary font-semibold">
-                    Select Semester for Section {getSection(sec.sectionNo)}
+                    Select Semester for Section {getSection(sec.sectionNo)} <span className="text-red-500">*</span>
                   </span>
                   <div
                     style={{
@@ -630,11 +624,12 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 {swapMethodAddCo ? (
                   <TextInput
                     description="Make sure CMU account correct"
-                    label={<p>Add Co-Instructor via CMU account </p>}
+                    label={<p>Add Co-Instructor via CMU account (Optional)</p>}
                     className="w-full border-none "
                     style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
                     classNames={{
                       input: " !rounded-r-none ",
+                      description: "font-medium mt-[1px] mb-2"
                     }}
                     placeholder="example@cmu.ac.th"
                     value={insInput.value!}
@@ -645,7 +640,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 ) : (
                   <Select
                     rightSectionPointerEvents="all"
-                    label="Select Co-Instructor"
+                    label="Select Co-Instructor (Optional)"
                     placeholder="Co-Instructor"
                     data={instructorOption}
                     searchable
@@ -824,10 +819,11 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
           >
-            <div className="bg-[#e6e9ff] flex gap-3 font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
-              <span className="text-secondary text-[14px]">
-                {form.getValues().courseNo} - {form.getValues().courseName}
-              </span>
+            <div className="bg-[#e6e9ff] flex flex-col justify-start gap-1 font-semibold  rounded-t-md border-b-secondary border-[1px] px-4 py-2 text-secondary ">
+
+                <p>{form.getValues().courseNo} - {form.getValues().courseName} </p>
+                <p>{getUserName(user, 1)}</p>
+             
             </div>
             <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-scroll ">
               {" "}
@@ -840,17 +836,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                     <span className="text-secondary font-semibold text-[14px] mb-2">
                       Section {getSection(sec.sectionNo)}
                     </span>
-
-                    <div className="flex flex-col gap-1">
-                      <span className="text-[#3E3E3E] font-semibold">
-                        Main Instructor
-                      </span>
-                      <div className="ps-1.5 text-secondary mb-2">
-                        <List size="sm" listStyleType="disc">
-                          <List.Item>{getUserName(user, 1)}</List.Item>
-                        </List>
-                      </div>
-                    </div>
 
                     {!!sec.coInstructors?.length && (
                       <div className="flex flex-col gap-1">
