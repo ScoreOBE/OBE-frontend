@@ -254,11 +254,15 @@ export default function CourseManagement() {
                         </div>
 
                         <div
-                          className={`px-4 py-2  rounded-full text-white text-[12px] font-medium ${
-                            sec.isActive ? "bg-[#13CE66]" : "bg-[#919191]"
+                          className={`px-3 py-1  rounded-[20px]  text-[12px] font-medium ${
+                            sec.isActive
+                              ? "bg-[#10e5908e] text-[#267156]"
+                              : "bg-[#919191] text-white"
                           } `}
                         >
-                          <p>{sec.isActive ? "Active" : "Inactive"}</p>
+                          <p className=" font-semibold ">
+                            {sec.isActive ? "Active" : "Inactive"}
+                          </p>
                         </div>
                       </div>
 
