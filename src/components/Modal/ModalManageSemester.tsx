@@ -39,20 +39,19 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
     const year = semester === SEMESTER[0] ? res[0].year + 1 : res[0].year;
     setSelectSemester({ year, semester });
 
-      //Group by Year
-      const semestersByYear = res.reduce((acc: any, academicYearList: any) => {
-        const year: string = academicYearList.year.toString() + "a";
+    //Group by Year
+    const semestersByYear = res.reduce((acc: any, academicYearList: any) => {
+      const year: string = academicYearList.year.toString() + "a";
 
-        if (!acc[year]) {
-          acc[year] = [];
-        }
-        acc[year].push(academicYearList);
+      if (!acc[year]) {
+        acc[year] = [];
+      }
+      acc[year].push(academicYearList);
 
-        return acc;
-      }, {});
+      return acc;
+    }, {});
 
-      setSemesterlist(semestersByYear);
-    }
+    setSemesterlist(semestersByYear);
   };
 
   useEffect(() => {
