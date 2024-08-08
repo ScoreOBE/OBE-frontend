@@ -13,18 +13,18 @@
 }
 
 :root {
-  font-family: "Oxygen", "NotoSansThai", Helvetica, Arial, sans-serif;
+  font-family: "Manrope", "NotoSansThai", Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --mantine-font-family: "Oxygen", "NotoSansThai";
+  --mantine-font-family: "Manrope", "NotoSansThai";
 }
 
 * {
-  font-family: "Oxygen", "NotoSansThai";
+  font-family: "Manrope", "NotoSansThai";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -39,7 +39,7 @@ a:hover {
 }
 
 body {
-  font-family: "Oxygen", "NotoSansThai" Helvetica, Arial, sans-serif;
+  font-family: "Manrope", "NotoSansThai" Helvetica, Arial, sans-serif;
   margin: 0;
   place-items: center;
   min-width: 320px;
