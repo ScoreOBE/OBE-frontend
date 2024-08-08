@@ -19,6 +19,7 @@ import {
 } from "@/services/academicYear/dto/academicYear.dto";
 import { showNotifications, sortData } from "@/helpers/functions/function";
 import academicYear from "@/store/academicYear";
+import { log } from "console";
 
 type Props = {
   opened: boolean;
@@ -26,6 +27,8 @@ type Props = {
 };
 export default function ModalManageSemester({ opened, onClose }: Props) {
   const [searchValue, setSearchValue] = useState("");
+  const [yearList, setYearList] = useState<IModelAcademicYear[]>([]);
+  const [yearFilter, setYearFilter] = useState<any>({});
   const [semesterList, setSemesterlist] = useState<any>({});
   const [selectSemester, setSelectSemester] =
     useState<CreateAcademicYearRequestDTO>();
@@ -34,24 +37,28 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
     let payload = new AcademicYearRequestDTO();
     payload.manage = true;
     const res = await getAcademicYear(payload);
-    const semester =
-      res[0].semester === SEMESTER[2] ? SEMESTER[0] : res[0].semester + 1;
-    const year = semester === SEMESTER[0] ? res[0].year + 1 : res[0].year;
-    setSelectSemester({ year, semester });
+    if (res) {
+      setYearList(res);
+      const semester =
+        res[0].semester === SEMESTER[2] ? SEMESTER[0] : res[0].semester + 1;
+      const year = semester === SEMESTER[0] ? res[0].year + 1 : res[0].year;
+      setSelectSemester({ year, semester });
 
-    //Group by Year
-    const semestersByYear = res.reduce((acc: any, academicYearList: any) => {
-      const year: string = academicYearList.year.toString() + "a";
+      //Group by Year
+      const semestersByYear = res.reduce((acc: any, academicYearList: any) => {
+        const year: string = academicYearList.year.toString() + "a";
 
-      if (!acc[year]) {
-        acc[year] = [];
-      }
-      acc[year].push(academicYearList);
+        if (!acc[year]) {
+          acc[year] = [];
+        }
+        acc[year].push(academicYearList);
 
-      return acc;
-    }, {});
+        return acc;
+      }, {});
 
-    setSemesterlist(semestersByYear);
+      setSemesterlist(semestersByYear);
+      setYearFilter(semestersByYear);
+    }
   };
 
   useEffect(() => {
@@ -75,6 +82,40 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
 
   const onClickAdd = async () => {
     if (selectSemester) {
+      const active = yearList.find((semester) => semester.isActive);
+
+      if (!active) {
+        showNotifications(NOTI_TYPE.ERROR, "No active semester found", "ihjj");
+        return;
+      }
+
+      let newSemester = active.semester + 3;
+      let newYear = active.year;
+
+      // Adjust the year if the semester exceeds 3
+      if (newSemester > 3) {
+        newYear += Math.floor((newSemester - 1) / 3);
+        newSemester = newSemester % 3 || 3; // Wrap around and ensure it's within 1-3
+      }
+
+      const limit = {
+        semester: newSemester,
+        year: newYear,
+      };
+
+      if (
+        limit.year < selectSemester.year ||
+        (limit.year === selectSemester.year &&
+          limit.semester < selectSemester.semester)
+      ) {
+        showNotifications(
+          NOTI_TYPE.ERROR,
+          "Cannot add more than 3 semesters",
+          "You cannot add more than 3 semesters from the active semester."
+        );
+        return;
+      }
+
       const res = await createAcademicYear(selectSemester);
       if (res) {
         showNotifications(
@@ -86,6 +127,18 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       }
     }
   };
+
+  useEffect(() => {
+    const keyFilter = Object.keys(semesterList).filter((year) =>
+      year.replace("a", "").includes(searchValue)
+    );
+    let filter: any = {};
+    keyFilter.map((year) => {
+      filter[year] = semesterList[year];
+    });
+
+    setYearFilter(filter);
+  }, [searchValue]);
 
   return (
     <Modal
@@ -102,14 +155,6 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       }}
     >
       <div className="flex flex-col gap-5 flex-1">
-        <Button
-          className="rounded-s-md min-w-fit w-full border-l-0"
-          color="#5768D5"
-          onClick={onClickAdd}
-        >
-          Add Semester {selectSemester?.semester}, {selectSemester?.year}
-        </Button>
-
         {/* Added Semester */}
         <div
           className="w-full  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
@@ -133,13 +178,13 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             {/* List of Semester */}
 
             <div className="flex flex-col gap-2  p-1 overflow-y-auto">
-              {Object.keys(semesterList).map((year) => (
+              {Object.keys(yearFilter).map((year) => (
                 <div
                   key={year}
                   className="border-[1px] border-[#C8CFF7] rounded-md bg-white overflow-clip flex flex-col w-full items-center justify-between"
                 >
                   <div className="flex flex-col w-full items-center">
-                    {semesterList[year].map((e: any, index: number) => (
+                    {yearFilter[year].map((e: any, index: number) => (
                       <div
                         key={e.id}
                         className={`flex flex-row items-center h-[56px]  px-4 w-full justify-between
@@ -175,7 +220,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                             disabled
                             size="xs"
                             variant="filled"
-                            className="rounded-lg !border-none  w-[78px]"
+                            className="rounded-lg !border-none  w-fit"
                           >
                             Currently
                           </Button>
@@ -198,6 +243,13 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             </div>
           </div>
         </div>
+        <Button
+          className="rounded-s-md min-w-fit h-10 w-full border-l-0"
+          color="#5768D5"
+          onClick={onClickAdd}
+        >
+          Add Semester {selectSemester?.semester}, {selectSemester?.year}
+        </Button>
       </div>
     </Modal>
   );

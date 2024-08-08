@@ -28,3 +28,7 @@ export const deleteCourse = async (id: string) => {
   const res = await courseService.deleteCourse(id);
   return isValidResponse(res);
 };
+export const leaveCourse = async (id: string) => {
+  const res = await courseService.leaveCourse(id);
+  return isValidResponse(res);
+}

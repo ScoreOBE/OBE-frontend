@@ -1,6 +1,7 @@
 import { IModelCourse } from "@/models/ModelCourse";
 import apiService from "@/services/apiService";
 import { CourseRequestDTO } from "./dto/course.dto";
+import { leaveCourse } from "./course.service";
 
 export const courseController = (configService = {}) => {
   const service = apiService(configService);
@@ -22,5 +23,8 @@ export const courseController = (configService = {}) => {
     deleteCourse: async (id: string) => {
       return service.delete(`${prefix}/${id}`, {});
     },
+    leaveCourse: async (id: string) => {
+      return service.post(`${prefix}/leave/${id}`, {})
+    }
   };
 };
