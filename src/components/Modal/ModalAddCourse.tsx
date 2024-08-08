@@ -26,7 +26,6 @@ import AddCoIcon from "@/assets/icons/addCo.svg?react";
 import Icon from "../Icon";
 import { getInstructor } from "@/services/user/user.service";
 import { IModelUser } from "@/models/ModelUser";
-import { TbSearch } from "react-icons/tb";
 import { SEMESTER } from "@/helpers/constants/enum";
 import { isNumber } from "lodash";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -131,11 +130,11 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     }
   }, [insInput]);
 
-  // useEffect(() => {
-  //   console.log("form:", form.getValues().sections);
-  //   console.log("sections:", sectionNoList);
-  //   console.log("coInsList:", coInsList);
-  // }, [form]);
+  useEffect(() => {
+    console.log("form:", form.getValues().sections);
+    console.log("sections:", sectionNoList);
+    console.log("coInsList:", coInsList);
+  }, [form]);
 
   const nextStep = async (type?: COURSE_TYPE) => {
     setFirstInput(false);
@@ -145,13 +144,14 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       case 0:
         form.setFieldValue("type", type);
         isValid = !form.validateField("type").hasError;
+        form.setFieldValue("sections", [{}]);
         break;
       case 1:
         isValid =
-          (!form.validateField("courseNo").hasError &&
-            !form.validateField("courseName").hasError) ||
-          (!form.validateField("sections.0.topic").hasError &&
-            form.getValues().type == COURSE_TYPE.SEL_TOPIC);
+          !form.validateField("courseNo").hasError &&
+          !form.validateField("courseName").hasError &&
+          (!form.validateField("sections.0.topic").hasError ||
+            form.getValues().type !== COURSE_TYPE.SEL_TOPIC);
         break;
       case 2:
         for (let i = 0; i < length; i++) {
@@ -224,60 +224,71 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
   };
 
   const setSectionList = (value: string[]) => {
-    let sections = [...form.getValues().sections!];
-    const newSec: any = value.length ? value[value.length - 1] : 0;
-    if (value.length && newSec) {
+    let sections = form.getValues().sections ?? [];
+    const lastValue = value[value.length - 1];
+    const type = form.getValues().type;
+    // validate section No
+    if (value.length > sections.length) {
       if (
-        !parseInt(newSec) ||
-        newSec.length > 3 ||
-        sections.some((sec) => sec.sectionNo === parseInt(newSec))
+        !parseInt(lastValue) ||
+        lastValue.length > 3 ||
+        sections.some((sec) => sec.sectionNo === parseInt(lastValue))
       )
         return;
     }
-    const type = form.getValues().type;
-    let sectionNo = [...value];
-    if (sectionNo.length > 1) {
-      sectionNo.sort((a, b) => parseInt(a) - parseInt(b));
-    }
+    const sectionNo: string[] = value.sort((a, b) => parseInt(a) - parseInt(b));
     setSectionNoList(sectionNo.map((secNo) => getSection(secNo)));
+    let newSections: any[] = [];
     if (sections) {
-      const topic = sections[0]?.topic;
+      // reset sections and instructors
       if (!sectionNo.length) {
-        sections[0] = {};
-        sections[0].sectionNo = undefined;
-        setCoInsList([]);
+        let initialSection = {};
         if (type == COURSE_TYPE.SEL_TOPIC) {
-          sections[0].topic = topic;
+          initialSection = { topic: sections[0]?.topic };
         }
-      } else if (sections?.length! > sectionNo.length) {
-        sections = sections?.slice(0, sectionNo.length);
-        coInsList.forEach((coIns) => {
+        setCoInsList([]);
+        instructorOption.forEach((option) => (option.disabled = false));
+      }
+      // adjust coInstructors
+      else if (sections?.length! > sectionNo.length) {
+        coInsList.forEach((coIns, index) => {
           coIns.sections = coIns.sections.filter((sec: string) =>
             sectionNo.includes(sec)
           );
+          if (!coIns.sections.length) {
+            instructorOption.forEach((option) => {
+              if (option.value == coIns.value) option.disabled = false;
+            });
+          }
         });
-      } else {
-        const data: any = {
-          sectionNo: parseInt(newSec),
-          instructor: user?.id,
-          coInstructors: [],
-        };
-        coInsList.forEach((coIns) => {
-          data.coInstructors.push({ ...coIns });
-          coIns.sections.push(getSection(newSec));
-          coIns.sections.sort(
-            (a: string, b: string) => parseInt(a) - parseInt(b)
-          );
-        });
-        if (type == COURSE_TYPE.SEL_TOPIC) {
-          data.topic = topic;
-        }
-        sections?.push(data);
+        setCoInsList(coInsList.filter((coIns) => coIns.sections.length > 0));
       }
+      sectionNo.forEach((secNo, index) => {
+        const data: any = {
+          ...(sections.find((sec) => sec.sectionNo == parseInt(secNo)) || {}),
+          sectionNo: parseInt(secNo),
+          instructor: user.id,
+          coInstructors: coInsList.map((coIns) => ({ ...coIns })),
+        };
+        if (type == COURSE_TYPE.SEL_TOPIC) {
+          data.topic = sections[0]?.topic;
+        }
+        coInsList.forEach((coIns) => {
+          if (!coIns.sections.includes(getSection(secNo))) {
+            coIns.sections.push(getSection(secNo));
+            coIns.sections.sort(
+              (a: string, b: string) => parseInt(a) - parseInt(b)
+            );
+          }
+        });
+        newSections?.push(data);
+      });
     }
-    sections.forEach((sec) => sortData(sec.coInstructors!, "label", "string"));
-    sortData(sections, "sectionNo");
-    form.setFieldValue("sections", [...sections]);
+    newSections.forEach((sec) =>
+      sortData(sec.coInstructors!, "label", "string")
+    );
+    sortData(newSections, "sectionNo");
+    form.setFieldValue("sections", [...newSections]);
   };
 
   const addCoIns = () => {
@@ -298,7 +309,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           coInstructors: [...coInsArr],
         };
       });
-      setCoInsList([...coInsList, insInput]);
+      setCoInsList([insInput, ...coInsList]);
       form.setFieldValue("sections", [...updatedSections!]);
     }
     setInsInput({ value: null });
@@ -377,7 +388,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             Select type of course
           </p>
 
-          <div className="w-full    mt-2 flex flex-col gap-3  bg-transparent rounded-md">
+          <div className="w-full mt-2 flex flex-col gap-3  bg-transparent rounded-md">
             <Button
               onClick={() => nextStep(COURSE_TYPE.GENERAL)}
               color="#ffffff"
@@ -489,21 +500,14 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
             >
-              <div className="bg-[#e6e9ff] flex gap-3 font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
-                <span className="text-secondary text-[16px]">
+              <div className="bg-[#e6e9ff] flex flex-col font-semibold rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary">
+                <p className="text-secondary text-b1">
                   {form.getValues().courseNo} - {form.getValues().courseName}
-                </span>
+                </p>
+                <p className="text-secondary text-b2">
+                  {form.getValues().sections?.at(0)?.topic}
+                </p>
               </div>
-              {form.getValues().sections?.at(0)?.topic && (
-                <div className="flex flex-col  font-medium text-[14px]">
-                  <span className="text-[#3E3E3E] font-semibold">
-                    Course Topic
-                  </span>
-                  <span className="text-secondary mb-1">
-                    {form.getValues().sections?.at(0)?.topic}
-                  </span>
-                </div>
-              )}{" "}
               <div
                 className="w-full p-4   bg-white rounded-md "
                 style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.20)" }}
