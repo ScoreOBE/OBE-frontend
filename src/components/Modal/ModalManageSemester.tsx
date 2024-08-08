@@ -25,7 +25,6 @@ type Props = {
   onClose: () => void;
 };
 export default function ModalManageSemester({ opened, onClose }: Props) {
-  const [openedDropdown, setOpenedDropdown] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [semesterList, setSemesterlist] = useState<any>({});
   const [selectSemester, setSelectSemester] =
@@ -36,8 +35,8 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
     payload.manage = true;
     const res = await getAcademicYear(payload);
     const semester =
-      res[0].semester === SEMESTER[3] ? SEMESTER[1] : res[0].semester + 1;
-    const year = semester === SEMESTER[1] ? res[0].year + 1 : res[0].year;
+      res[0].semester === SEMESTER[2] ? SEMESTER[0] : res[0].semester + 1;
+    const year = semester === SEMESTER[0] ? res[0].year + 1 : res[0].year;
     setSelectSemester({ year, semester });
 
     //Group by Year
@@ -58,6 +57,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
   useEffect(() => {
     if (opened && !selectSemester) {
       fetchSemester();
+      console.log(selectSemester);
     }
   }, [opened, selectSemester]);
 
