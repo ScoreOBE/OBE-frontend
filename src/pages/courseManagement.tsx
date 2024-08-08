@@ -121,11 +121,11 @@ export default function CourseManagement() {
                       </div>
 
                       <div
-                        className={`px-4 py-2  rounded-full text-white text-[12px] font-medium ${
-                          sec.isActive ? "bg-[#13CE66]" : "bg-[#919191]"
+                        className={`px-3 py-1  rounded-[20px] text-white text-[12px] font-medium ${
+                          sec.isActive ? "bg-[#10e5908e]" : "bg-[#919191]"
                         } `}
                       >
-                        <p>{sec.isActive ? "Active" : "Inactive"}</p>
+                        <p className=" font-semibold text-[#267156]">{sec.isActive ? "Active" : "Inactive"}</p>
                       </div>
                     </div>
 
@@ -149,16 +149,16 @@ export default function CourseManagement() {
                       </div>
 
                       {/* Button */}
-                      <div className="flex flex-row gap-4">
-                        <Button className="flex flex-row justify-center items-center bg-transparent  border-1 border-secondary text-secondary h-8 w-8 bg-none rounded-lg  cursor-pointer hover:bg-secondary ">
+                      <div className="flex flex-row gap-4 items-center">
+                        <div className="flex flex-row justify-center items-center  bg-transparent  border-[1px] border-secondary text-secondary size-8 bg-none rounded-full  cursor-pointer hover:bg-secondary/10">
                           <Icon IconComponent={ManageAdminIcon} />
-                        </Button>
-                        <Button className="flex flex-row justify-center items-center bg-transparent  border-1 border-[#F39D4E] text-[#F39D4E] h-8 w-8 bg-none rounded-lg  cursor-pointer hover:bg-[#F39D4E]">
+                        </div>
+                        <div className="flex flex-row justify-center items-center bg-transparent  border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10">
                           <IconEdit className="size-4" stroke={1.5} />
-                        </Button>
-                        <Button className="flex flex-row justify-center items-center bg-transparent  border-1 border-[#FF4747] text-[#FF4747] h-8 w-8 bg-none rounded-lg  cursor-pointer hover:bg-[#FF4747]">
+                        </div>
+                        <div className="flex flex-row justify-center items-center bg-transparent  border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10">
                           <IconTrash className="size-4" stroke={1.5} />
-                        </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
