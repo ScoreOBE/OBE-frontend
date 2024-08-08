@@ -4,10 +4,12 @@ import userReducer from "./user";
 import academicYearReducer from "./academicYear";
 import courseReducer from "./course";
 import loadingReducer from "./loading";
+import errorResponseReducer from "./errorResponse";
 
 const store = configureStore({
   reducer: {
     loading: loadingReducer,
+    errorResponse: errorResponseReducer,
     user: userReducer,
     academicYear: academicYearReducer,
     course: courseReducer,

@@ -16,9 +16,9 @@ import { getCourseNo, getUserName } from "@/helpers/functions/function";
 
 export default function CourseSidebar() {
   const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
   const courseNo = parseInt(path.split("/").pop()!);
-  const [params, setParams] = useSearchParams();
   const user = useAppSelector((state) => state.user);
   const courseList = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();
@@ -26,9 +26,6 @@ export default function CourseSidebar() {
   const [instructors, setInstructors] = useState<IModelUser[]>([]);
 
   useEffect(() => {
-    if (!params.get("year") && path.includes(`${ROUTE_PATH.COURSE}/`))
-      navigate(ROUTE_PATH.DASHBOARD_INS, { replace: true });
-
     if (courseList.length && courseNo) {
       const findCourse = courseList.find((e) => e.courseNo == courseNo);
       setCourse(findCourse);

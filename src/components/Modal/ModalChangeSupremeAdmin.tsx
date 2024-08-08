@@ -43,18 +43,20 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
 
   const fetchIns = async () => {
     const res = await getInstructor();
-    const list = res.filter((e: IModelUser) => {
-      if (e.id !== user.id && e.role === ROLE.ADMIN) {
-        return {
-          id: e.id,
-          firstNameEN: e.firstNameEN,
-          lastNameEN: e.lastNameEN,
-          email: e.email,
-        };
-      }
-    });
-    setAdminList(list);
-    setAdminFilter(list);
+    if (res) {
+      const list = res.filter((e: IModelUser) => {
+        if (e.id !== user.id && e.role === ROLE.ADMIN) {
+          return {
+            id: e.id,
+            firstNameEN: e.firstNameEN,
+            lastNameEN: e.lastNameEN,
+            email: e.email,
+          };
+        }
+      });
+      setAdminList(list);
+      setAdminFilter(list);
+    }
   };
 
   const editSAdmin = async (id: string) => {
