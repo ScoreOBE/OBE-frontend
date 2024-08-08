@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <MantineProvider
       theme={{
-        fontFamily: `"Mulish", "NotoSansThai", Helvetica, Arial, sans-serif`,
+        fontFamily: `"Manrope", "NotoSansThai", Helvetica, Arial, sans-serif`,
       }}
     >
       <Notifications position="top-right" zIndex={1000} />

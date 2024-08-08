@@ -21,7 +21,7 @@ export default {
     },
     fontFamily: {
       notoThai: ["NotoSansThai"],
-      Mulish: ["Mulish"],
+      manrope: ["Manrope"],
     },
   },
   plugins: [],
