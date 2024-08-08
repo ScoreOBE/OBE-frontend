@@ -21,7 +21,7 @@ export default {
     },
     fontFamily: {
       notoThai: ["NotoSansThai"],
-      manrope: ["Manrope"],
+      manrope: ["Oxygen"],
     },
   },
   plugins: [],
