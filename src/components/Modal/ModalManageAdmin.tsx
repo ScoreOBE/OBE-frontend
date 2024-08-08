@@ -35,39 +35,41 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
 
   const fetchIns = async () => {
     const res = await getInstructor();
-    const insList = res.filter(
-      (e: any) => e.id != user.id && e.role === ROLE.INSTRUCTOR
-    );
-    let adminList = res.filter((e: IModelUser) => {
-      if (e.id !== user.id && e.role === ROLE.ADMIN) {
-        return {
-          id: e.id,
-          firstNameEN: e.firstNameEN,
-          lastNameEN: e.lastNameEN,
-          email: e.email,
-        };
+    if (res) {
+      const insList = res.filter(
+        (e: any) => e.id != user.id && e.role === ROLE.INSTRUCTOR
+      );
+      let adminList = res.filter((e: IModelUser) => {
+        if (e.id !== user.id && e.role === ROLE.ADMIN) {
+          return {
+            id: e.id,
+            firstNameEN: e.firstNameEN,
+            lastNameEN: e.lastNameEN,
+            email: e.email,
+          };
+        }
+      });
+      // Add current user to the top of the admin list
+      if (user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) {
+        adminList = [
+          {
+            id: user.id,
+            firstNameEN: user.firstNameEN,
+            lastNameEN: user.lastNameEN,
+            email: user.email,
+          },
+          ...adminList,
+        ];
       }
-    });
-    // Add current user to the top of the admin list
-    if (user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) {
-      adminList = [
-        {
-          id: user.id,
-          firstNameEN: user.firstNameEN,
-          lastNameEN: user.lastNameEN,
-          email: user.email,
-        },
-        ...adminList,
-      ];
-    }
 
-    setInstructorOption(
-      insList.map((e: IModelUser) => {
-        return { label: getUserName(e, 1), value: e.id };
-      })
-    );
-    setAdminList(adminList);
-    setAdminFilter(adminList);
+      setInstructorOption(
+        insList.map((e: IModelUser) => {
+          return { label: getUserName(e, 1), value: e.id };
+        })
+      );
+      setAdminList(adminList);
+      setAdminFilter(adminList);
+    }
   };
 
   const editAdmin = async (id: string, role: ROLE) => {

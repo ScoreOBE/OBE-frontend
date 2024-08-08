@@ -35,24 +35,26 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
     let payload = new AcademicYearRequestDTO();
     payload.manage = true;
     const res = await getAcademicYear(payload);
-    const semester =
-      res[0].semester === SEMESTER[3] ? SEMESTER[1] : res[0].semester + 1;
-    const year = semester === SEMESTER[1] ? res[0].year + 1 : res[0].year;
-    setSelectSemester({ year, semester });
+    if (res) {
+      const semester =
+        res[0].semester === SEMESTER[3] ? SEMESTER[1] : res[0].semester + 1;
+      const year = semester === SEMESTER[1] ? res[0].year + 1 : res[0].year;
+      setSelectSemester({ year, semester });
 
-    //Group by Year
-    const semestersByYear = res.reduce((acc: any, academicYearList: any) => {
-      const year: string = academicYearList.year.toString() + "a";
+      //Group by Year
+      const semestersByYear = res.reduce((acc: any, academicYearList: any) => {
+        const year: string = academicYearList.year.toString() + "a";
 
-      if (!acc[year]) {
-        acc[year] = [];
-      }
-      acc[year].push(academicYearList);
+        if (!acc[year]) {
+          acc[year] = [];
+        }
+        acc[year].push(academicYearList);
 
-      return acc;
-    }, {});
+        return acc;
+      }, {});
 
-    setSemesterlist(semestersByYear);
+      setSemesterlist(semestersByYear);
+    }
   };
 
   useEffect(() => {

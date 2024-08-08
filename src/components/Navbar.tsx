@@ -27,6 +27,7 @@ export default function Navbar() {
     payloadCourse.academicYear =
       academicYear.find(
         (e) =>
+          e.id == params.get("id") &&
           e.year == parseInt(params.get("year") ?? "") &&
           e.semester == parseInt(params.get("semester") ?? "")
       )?.id ?? "";
