@@ -1,24 +1,18 @@
-import { Button, Input, Modal, TextInput } from "@mantine/core";
-import { IconUserCircle, IconTrash } from "@tabler/icons-react";
-import { ReactElement, useEffect, useState } from "react";
-import { TbSearch } from "react-icons/tb";
-import { AiOutlineSwap } from "react-icons/ai";
-import Icon from "../Icon";
-import InfoIcon from "@/assets/icons/info.svg?react";
-import { IModelUser } from "@/models/ModelUser";
-import { getInstructor, updateSAdmin } from "@/services/user/user.service";
-import { useAppDispatch, useAppSelector } from "@/store";
-import { POPUP_TYPE, ROLE } from "@/helpers/constants/enum";
-import { setUser } from "@/store/user";
-import { showNotifications } from "@/helpers/functions/function";
+import { Button, Modal } from "@mantine/core";
+import { ReactElement, ReactNode } from "react";
+import { POPUP_TYPE } from "@/helpers/constants/enum";
+import Icon from "@/components/Icon";
+import DeleteIcon from "@/assets/icons/delete.svg?react";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
   action: () => void;
   type: POPUP_TYPE;
-  title: string;
-  message: ReactElement;
+  title: ReactNode;
+  message: ReactNode;
+  labelButtonRight?: string;
+  icon?: ReactElement;
 };
 
 export default function MainPopup({
@@ -27,6 +21,8 @@ export default function MainPopup({
   action,
   title,
   message,
+  labelButtonRight,
+  icon,
   type,
 }: Props) {
   const titleClassName = () => {
@@ -42,7 +38,18 @@ export default function MainPopup({
       opened={opened}
       onClose={onClose}
       closeOnClickOutside={true}
-      title={title}
+      title={
+        <div className="flex items-center">
+          {icon ? (
+            icon
+          ) : type == POPUP_TYPE.DELETE ? (
+            <Icon IconComponent={DeleteIcon} className=" size-6 mr-2" />
+          ) : (
+            <></>
+          )}
+          {title}
+        </div>
+      }
       size="35.5vw"
       centered
       withCloseButton={false}
@@ -50,7 +57,7 @@ export default function MainPopup({
       classNames={{
         title: `${titleClassName()}`,
         content:
-          "flex flex-col  justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden ",
+          "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden ",
       }}
     >
       <div className="flex flex-col">
@@ -58,11 +65,16 @@ export default function MainPopup({
         <div className="flex gap-2 mt-5 justify-end">
           {type === POPUP_TYPE.DELETE ? (
             <>
-              <Button radius="10px" onClick={onClose} variant="subtle" color="#575757">
+              <Button
+                radius="10px"
+                onClick={onClose}
+                variant="subtle"
+                color="#575757"
+              >
                 Cancel
               </Button>{" "}
               <Button radius="10px" onClick={action} color="#FF4747">
-                Delete
+                {labelButtonRight ?? "Delete"}
               </Button>
             </>
           ) : type == POPUP_TYPE.WARNING ? (

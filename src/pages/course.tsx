@@ -73,7 +73,7 @@ export default function Course() {
                   <div
                     key={item.id}
                     className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-[4px] hover:bg-[#F3F3F3]"
-                    style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)" }}
+                  
                   >
                     <div className="p-2.5 flex flex-col">
                       <p className="font-semibold text-sm">
@@ -100,7 +100,7 @@ export default function Course() {
                                   "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                               }}
                             >
-                              <Menu.Item className="text-[#3E3E3E]  text-[12px] h-7 w-[180px] ">
+                              <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px] ">
                                 <div className="flex items-center gap-2">
                                   <IconPencilMinus
                                     stroke={1.5}
@@ -110,7 +110,7 @@ export default function Course() {
                                 </div>
                               </Menu.Item>
                               <Menu.Item
-                                className="text-[#FF4747] hover:bg-[#d55757]/10 text-[12px] h-7 w-[180px]"
+                                className="text-[#FF4747] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]"
                                 // onClick={() => onClickDeleteCourse(item.id)}
                               >
                                 <div className="flex items-center gap-2">

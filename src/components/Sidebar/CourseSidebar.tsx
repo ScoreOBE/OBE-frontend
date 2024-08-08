@@ -4,15 +4,23 @@ import { Button } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { RxDashboard } from "react-icons/rx";
 import { IconChevronLeft, IconLogout } from "@tabler/icons-react";
-
+import Icon from "@/components/Icon";
+import LeaveIcon from "@/assets/icons/leave.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import Icon from "../Icon";
 import TQF3 from "@/assets/icons/TQF3.svg?react";
 import TQF5 from "@/assets/icons/TQF5.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
-import { setCourseList } from "@/store/course";
+import { removeCourse, setCourseList } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
-import { getCourseNo, getUserName } from "@/helpers/functions/function";
+import {
+  getCourseNo,
+  getUserName,
+  showNotifications,
+} from "@/helpers/functions/function";
+import MainPopup from "../Popup/MainPopup";
+import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
+import { leaveCourse } from "@/services/course/course.service";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function CourseSidebar() {
   const navigate = useNavigate();
@@ -24,6 +32,8 @@ export default function CourseSidebar() {
   const dispatch = useAppDispatch();
   const [course, setCourse] = useState<IModelCourse>();
   const [instructors, setInstructors] = useState<IModelUser[]>([]);
+  const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
+    useDisclosure(false);
 
   useEffect(() => {
     if (courseList.length && courseNo) {
@@ -49,8 +59,33 @@ export default function CourseSidebar() {
     navigate(ROUTE_PATH.DASHBOARD_INS);
   };
 
+  const onClickLeaveCourse = async (id: string) => {
+    const res = await leaveCourse(id);
+    if (res) {
+      dispatch(removeCourse(res.id));
+      closeMainPopup();
+      showNotifications(NOTI_TYPE.SUCCESS, "Leave Course Success", ``);
+      navigate(ROUTE_PATH.DASHBOARD_INS);
+    }
+  };
+
   return (
     <>
+      <MainPopup
+        opened={openMainPopup}
+        onClose={closeMainPopup}
+        action={() => onClickLeaveCourse(course?.id!)}
+        type={POPUP_TYPE.DELETE}
+        labelButtonRight={`Leave ${getCourseNo(course?.courseNo)}`}
+        icon={<Icon IconComponent={LeaveIcon} className=" -translate-x-1 size-8" />}
+        title={`Leaving ${getCourseNo(course?.courseNo)} Course?`}
+        message={
+          <p className=" font-medium">
+            You won't have access to assignments, score, TQF and grades. <br />{" "}
+            <span>Are you sure you want to leave? </span>
+          </p>
+        }
+      />
       <div className="flex text-white flex-col h-full  gap-[32px]">
         <div
           className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
@@ -61,19 +96,19 @@ export default function CourseSidebar() {
         </div>
 
         <div className="flex flex-col gap-5 ">
-          <div className="flex flex-col flex-1 font-semibold gap-1 ">
+          <div className="flex flex-col flex-1 font-bold gap-1 ">
             <p className="text-lg">
               {getCourseNo(course?.courseNo)} ({params.get("semester")}/
               {params.get("year")?.slice(-2)})
             </p>
-            <p className="text-[13px] font-medium text-pretty max-w-full">
+            <p className="text-[13px] font-semibold text-pretty max-w-full">
               {course?.courseName}
             </p>
           </div>
           <div className="flex flex-col gap-2">
             <Button
               leftSection={<RxDashboard size={18} />}
-              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
                 path.startsWith(ROUTE_PATH.COURSE)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -84,7 +119,7 @@ export default function CourseSidebar() {
             </Button>
             <Button
               leftSection={<Icon IconComponent={TQF3} className="h-5 w-5" />}
-              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
                 ${
                   path.startsWith(ROUTE_PATH.TQF3)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -95,7 +130,7 @@ export default function CourseSidebar() {
             </Button>
             <Button
               leftSection={<Icon IconComponent={TQF5} className="h-5 w-5" />}
-              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
                 ${
                   path.startsWith(ROUTE_PATH.TQF5)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -107,27 +142,35 @@ export default function CourseSidebar() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 mt-5">
-          <p className="text-b2 font-semibold mb-1">Instructors</p>
+        <div className="flex  flex-col gap-2 mt-5">
+          <p className="text-b2 font-bold mb-1">Instructors</p>
           {instructors.map((item) => {
             return (
-              <p key={item.id} className="text-pretty text-[12px]">
+              <p key={item.id} className="text-pretty font-medium text-[12px]">
                 {getUserName(item, 1)}
               </p>
             );
           })}
         </div>
-        <div className="flex absolute gap-2 bottom-7 flex-col ">
-          <p className="text-[14px] text-white font-semibold">Course Action</p>
-          <Button
-            leftSection={<IconLogout className="h-5 w-5" stroke={1.5} />}
-            className="font-semibold text-[#ffffff] bg-transparent hover:bg-[#d55757]  w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group"
-          >
-            <div className="flex flex-col justify-start items-start gap-[7px]">
-              <p className="font-semibold text-b2">Leave form Course</p>
+        {course &&
+          !course?.sections.find(
+            (sec: any) => sec.instructor.email === user.email
+          ) && (
+            <div className="flex  w-full gap-2 justify-end flex-col flex-1">
+              <p className="text-[14px] text-white font-bold">Course Action</p>
+              <Button
+                onClick={() => {
+                  openedMainPopup();
+                }}
+                leftSection={<IconLogout className="h-5 w-5" stroke={1.5} />}
+                className="font-semibold text-[#ffffff] bg-transparent hover:bg-[#d55757] w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group"
+              >
+                <div className="flex flex-col justify-start w-full items-start gap-[7px]">
+                  <p className="font-semibold text-[13px]">Leave from Course</p>
+                </div>
+              </Button>
             </div>
-          </Button>
-        </div>
+          )}
       </div>
     </>
   );

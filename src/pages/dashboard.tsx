@@ -101,8 +101,8 @@ export default function Dashboard() {
     closeMainPopup();
     showNotifications(
       NOTI_TYPE.SUCCESS,
-      "Delete Success",
-      `Delete ${delCourse?.courseNo}`
+      "Delete Course Success",
+      `${delCourse?.courseNo} is deleted`
     );
   };
 
@@ -119,15 +119,13 @@ export default function Dashboard() {
         onClose={closeMainPopup}
         action={() => onClickDeleteCourse(delCourse?.id!)}
         type={POPUP_TYPE.DELETE}
-        title={`Delete ${delCourse?.courseNo} Course`}
+        title={`Delete ${getCourseNo(delCourse?.courseNo)} Course`}
         message={
           <p>
             All data form the current semester for this course will be
             permanently deleted. Data from previous semesters will not be
             affected. <br />{" "}
-            <div className=" mt-5">
-              Are you sure you want to deleted this course?{" "}
-            </div>
+            <span>Are you sure you want to deleted this course? </span>
           </p>
         }
       />
@@ -217,7 +215,6 @@ export default function Dashboard() {
                 <div
                   key={item.id}
                   className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-[4px] hover:bg-[#F3F3F3]"
-                  style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)" }}
                   onClick={() => goToCourse(getCourseNo(item.courseNo))}
                 >
                   <div className="p-2.5 flex flex-col">
@@ -243,7 +240,7 @@ export default function Dashboard() {
                               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                             }}
                           >
-                            <Menu.Item className="text-[#3E3E3E]  text-b3 h-7 w-[180px]">
+                            <Menu.Item className="text-[#3E3E3E] font-semibold  text-b3 h-7 w-[180px]">
                               <div className="flex items-center gap-2">
                                 <IconPencilMinus
                                   stroke={1.5}
@@ -253,7 +250,7 @@ export default function Dashboard() {
                               </div>
                             </Menu.Item>
                             <Menu.Item
-                              className="text-[#FF4747] h-7 w-[180px]  text-b3 hover:bg-[#d55757]/10"
+                              className="text-[#FF4747] h-7 w-[180px] font-semibold text-b3 hover:bg-[#d55757]/10"
                               onClick={() => {
                                 setDelCourse(item);
                                 openedMainPopup();
