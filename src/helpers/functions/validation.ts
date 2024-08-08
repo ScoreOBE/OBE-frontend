@@ -5,18 +5,24 @@ import {
 import { ROUTE_PATH } from "../constants/route";
 import { showNotifications } from "./function";
 import { NOTI_TYPE } from "../constants/enum";
+import store from "@/store";
+import { setErrorResponse } from "@/store/errorResponse";
 
 export const isValidResponse = (res: any) => {
   if (res.message === RESPONSE_MESSAGE.SUCCESS) {
     return res.data;
   } else {
+    const dispatch = store.dispatch;
     switch (res.statusCode) {
       case STATUS_CODE.NOT_FOUND:
+        dispatch(setErrorResponse(res));
         break;
       case STATUS_CODE.UNAUTHORIZED:
         localStorage.clear();
         window.location.replace(ROUTE_PATH.LOGIN);
+        break;
       default:
+        dispatch(setErrorResponse(res));
         showNotifications(NOTI_TYPE.ERROR, "Something went wrong", res.message);
         break;
     }

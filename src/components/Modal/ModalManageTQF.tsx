@@ -41,11 +41,16 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   const [notCompleteTQF3List, setnotCompleteTQF3List] = useState<any[]>([]);
 
   useEffect(() => {
+    const yearId = params.get("term");
     const year = parseInt(params.get("year")!);
     const semester = parseInt(params.get("semester")!);
-    if (year != term?.year && semester != term?.semester) {
+    if (
+      yearId != term?.id &&
+      year != term?.year &&
+      semester != term?.semester
+    ) {
       const acaYear = academicYear.find(
-        (e) => e.semester == semester && e.year == year
+        (e) => e.id == yearId && e.semester == semester && e.year == year
       );
       if (acaYear) {
         setTerm(acaYear);
@@ -61,7 +66,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
     if (payload.academicYear) {
       payload.manage = true;
       const res = await getCourse({ ...payload });
-
       if (res.length) {
         const courseList: any[] = [];
         res.forEach((course: IModelCourse) => {
@@ -87,8 +91,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
             }
           }
         });
-        console.log(res);
-
         setnotCompleteTQF3List([...courseList]);
       }
     }

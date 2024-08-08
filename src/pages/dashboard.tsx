@@ -44,11 +44,16 @@ export default function Dashboard() {
   const [delCourse, setDelCourse] = useState<Partial<IModelCourse>>();
 
   useEffect(() => {
+    const yearId = params.get("id");
     const year = parseInt(params.get("year")!);
     const semester = parseInt(params.get("semester")!);
-    if (year != term?.year && semester != term?.semester) {
+    if (
+      yearId != term?.id &&
+      year != term?.year &&
+      semester != term?.semester
+    ) {
       const acaYear = academicYear.find(
-        (e) => e.semester == semester && e.year == year
+        (e) => e.id == yearId && e.semester == semester && e.year == year
       );
       if (acaYear) {
         setTerm(acaYear);
@@ -103,7 +108,7 @@ export default function Dashboard() {
 
   const goToCourse = (courseNo: string) => {
     navigate(
-      `${ROUTE_PATH.COURSE}/${courseNo}?year=${term?.year}&semester=${term?.semester}`
+      `${ROUTE_PATH.COURSE}/${courseNo}?id=${term?.id}&year=${term?.year}&semester=${term?.semester}`
     );
   };
 

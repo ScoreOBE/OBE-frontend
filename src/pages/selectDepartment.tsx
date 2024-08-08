@@ -23,9 +23,11 @@ export default function SelectDepartment() {
   useEffect(() => {
     const fetchDep = async () => {
       const res = await getDepartment(user.facultyCode);
-      setFaculty({ facultyTH: res.facultyTH, facultyEN: res.facultyEN });
-      sortData(res.department, "departmentEN", "string");
-      setDepartmentList(res.department);
+      if (res) {
+        setFaculty({ facultyTH: res.facultyTH, facultyEN: res.facultyEN });
+        sortData(res.department, "departmentEN", "string");
+        setDepartmentList(res.department);
+      }
     };
     fetchDep();
   }, []);
@@ -49,8 +51,10 @@ export default function SelectDepartment() {
 
   const getStart = async () => {
     const res = await updateUser({ departmentCode: checkedItems });
-    dispatch(setUser(res));
-    navigate(ROUTE_PATH.DASHBOARD_INS);
+    if (res) {
+      dispatch(setUser(res));
+      navigate(ROUTE_PATH.DASHBOARD_INS);
+    }
   };
 
   return (

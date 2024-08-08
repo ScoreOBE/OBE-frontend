@@ -28,7 +28,7 @@ export const sortData = (
   typeKey: string = "number",
   typeSort: string = "asc"
 ) => {
-  data.sort((a, b) => {
+  data?.sort((a, b) => {
     if (typeKey === "number") {
       if (["asc", "ASC"].includes(typeSort)) {
         if (!a[key] && a[key] != 0) return -1;

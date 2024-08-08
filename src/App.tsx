@@ -29,6 +29,7 @@ import Course from "./pages/course";
 import { setLoading } from "./store/loading";
 
 function App() {
+  const error = useAppSelector((state) => state.errorResponse);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const dispatch = useAppDispatch();
@@ -45,12 +46,16 @@ function App() {
     const fetchData = async () => {
       if (!user.email) {
         const res = await getUserInfo();
-        dispatch(setUser(res));
+        if (res) {
+          dispatch(setUser(res));
+        }
       }
       if (user.email && !academicYear.length) {
         let payload = new AcademicYearRequestDTO();
         const rsAcademicYear = await getAcademicYear(payload);
-        dispatch(setAcademicYear(rsAcademicYear));
+        if (rsAcademicYear) {
+          dispatch(setAcademicYear(rsAcademicYear));
+        }
       }
     };
 
@@ -84,6 +89,12 @@ function App() {
     }
   }, [user, path]);
 
+  useEffect(() => {
+    if (error.statusCode) {
+      setShowSidebar(false);
+    }
+  }, [error]);
+
   return (
     <div
       className={`flex h-screen w-screen  ${
@@ -92,7 +103,7 @@ function App() {
     >
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-full w-full overflow-hidden">
-        {<Navbar />}
+        {!error.statusCode && <Navbar />}
         <Routes>
           <Route path={ROUTE_PATH.LOGIN} element={<Login />} />
           <Route
@@ -108,7 +119,11 @@ function App() {
             element={<CourseManagement />}
           />
           <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />
-          <Route path={`${ROUTE_PATH.COURSE}/:courseNo`} element={<Course />} />
+          <Route
+            path={`${ROUTE_PATH.COURSE}/:courseNo`}
+            element={<Course />}
+            errorElement={<Page404 />}
+          />
           <Route path="*" element={<Page404 />} />
         </Routes>
       </div>

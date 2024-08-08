@@ -48,6 +48,7 @@ export default function DashboardSidebar() {
   }, [academicYear]);
 
   const setTerm = (data: IModelAcademicYear) => {
+    params.set("id", data.id);
     params.set("year", data.year.toString());
     params.set("semester", data.semester.toString());
     setParams(params);
