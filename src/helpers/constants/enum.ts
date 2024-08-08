@@ -1,8 +1,4 @@
-export const SEMESTER = {
-  "1": 1,
-  "2": 2,
-  "3": 3,
-};
+export const SEMESTER = [1, 2, 3];
 
 export enum POPUP_TYPE {
   DELETE = "Delete",
