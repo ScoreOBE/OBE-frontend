@@ -6,10 +6,6 @@ export const getSection = (sectionNo: number | string | undefined) => {
   if (!sectionNo) return "";
   return ("000" + sectionNo).slice(-3);
 };
-export const getCourseNo = (courseNo: number | string | undefined) => {
-  if (!courseNo) return "";
-  return ("000000" + courseNo).slice(-6);
-};
 export const getUserName = (user: IModelUser, format?: number) => {
   if (!user.firstNameEN || !user.lastNameEN) return;
   switch (format) {

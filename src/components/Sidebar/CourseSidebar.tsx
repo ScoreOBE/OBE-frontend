@@ -12,11 +12,7 @@ import TQF5 from "@/assets/icons/TQF5.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { removeCourse, setCourseList } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
-import {
-  getCourseNo,
-  getUserName,
-  showNotifications,
-} from "@/helpers/functions/function";
+import { getUserName, showNotifications } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
 import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import { leaveCourse } from "@/services/course/course.service";
@@ -26,7 +22,7 @@ export default function CourseSidebar() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
-  const courseNo = parseInt(path.split("/").pop()!);
+  const courseNo = path.split("/").pop();
   const user = useAppSelector((state) => state.user);
   const courseList = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();
@@ -76,9 +72,11 @@ export default function CourseSidebar() {
         onClose={closeMainPopup}
         action={() => onClickLeaveCourse(course?.id!)}
         type={POPUP_TYPE.DELETE}
-        labelButtonRight={`Leave ${getCourseNo(course?.courseNo)}`}
-        icon={<Icon IconComponent={LeaveIcon} className=" -translate-x-1 size-8" />}
-        title={`Leaving ${getCourseNo(course?.courseNo)} Course?`}
+        labelButtonRight={`Leave ${course?.courseNo}`}
+        icon={
+          <Icon IconComponent={LeaveIcon} className=" -translate-x-1 size-8" />
+        }
+        title={`Leaving ${course?.courseNo} Course?`}
         message={
           <p className=" font-medium">
             You won't have access to assignments, score, TQF and grades. <br />{" "}
@@ -98,7 +96,7 @@ export default function CourseSidebar() {
         <div className="flex flex-col gap-5 ">
           <div className="flex flex-col flex-1 font-bold gap-1 ">
             <p className="text-lg">
-              {getCourseNo(course?.courseNo)} ({params.get("semester")}/
+              {course?.courseNo} ({params.get("semester")}/
               {params.get("year")?.slice(-2)})
             </p>
             <p className="text-[13px] font-semibold text-pretty max-w-full">

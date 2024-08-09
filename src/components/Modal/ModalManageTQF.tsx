@@ -13,18 +13,14 @@ import { TbSearch } from "react-icons/tb";
 import Icon from "../Icon";
 import notCompleteIcon from "@/assets/icons/notComplete.svg?react";
 import { IModelUser } from "@/models/ModelUser";
-import { getCourse, updateCourse } from "@/services/course/course.service";
+import { getCourse } from "@/services/course/course.service";
 import { useAppSelector } from "@/store";
 import { COURSE_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { IModelCourse } from "@/models/ModelCourse";
 import { useSearchParams } from "react-router-dom";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
-import {
-  getCourseNo,
-  getSection,
-  getUserName,
-} from "@/helpers/functions/function";
+import { getSection, getUserName } from "@/helpers/functions/function";
 
 type Props = {
   opened: boolean;
@@ -272,7 +268,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                       <div className="gap-3 flex items-center">
                         <div className="flex flex-col">
                           <p className="font-semibold text-[14px] text-secondary">
-                            {getCourseNo(e.courseNo)}
+                            {e.courseNo}
                             {e.type === COURSE_TYPE.SEL_TOPIC &&
                               ` (Sec. ${getSection(e.sectionNo)})`}
                           </p>

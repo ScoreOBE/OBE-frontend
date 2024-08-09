@@ -18,11 +18,7 @@ import { getCourseManagement } from "@/services/courseManagement/courseManagemen
 import { setLoading } from "@/store/loading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { COURSE_TYPE, SEMESTER } from "@/helpers/constants/enum";
-import {
-  getCourseNo,
-  getSection,
-  getUserName,
-} from "@/helpers/functions/function";
+import { getSection } from "@/helpers/functions/function";
 import { useDisclosure } from "@mantine/hooks";
 
 export default function CourseManagement() {
@@ -86,7 +82,7 @@ export default function CourseManagement() {
           closeOnClickOutside={false}
           title={`Edit section ${
             editCourse ? getSection(editCourse.sectionNo) : ""
-          } in ${editCourse ? getCourseNo(editCourse.courseNo) : ""}`}
+          } in ${editCourse ? editCourse.courseNo : ""}`}
           size="30vw"
           centered
           transitionProps={{ transition: "pop" }}
@@ -99,7 +95,7 @@ export default function CourseManagement() {
           <div className="flex flex-col gap-6">
             <div className="text-primary font-semibold">
               <p className="text-[#3E3E3E]">Course No.</p>
-              {getCourseNo(editCourse.courseNo)}
+              {editCourse.courseNo}
             </div>
             <div className="text-primary font-semibold">
               <p className="text-[#3E3E3E]">Course Name</p>
@@ -221,7 +217,7 @@ export default function CourseManagement() {
               <div className="gap-3 flex items-center w-full justify-between">
                 <div className="flex flex-col w-[25%]">
                   <p className="font-semibold text-[14px] text-secondary">
-                    {getCourseNo(course.courseNo)}
+                    {course.courseNo}
                   </p>
                   <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">
                     {course.courseName}
@@ -244,7 +240,6 @@ export default function CourseManagement() {
                         <div className="flex flex-col w-56">
                           <p className="font-semibold text-[14px] text-tertiary">
                             Section {getSection(sec.sectionNo)}
-                            {/* {e.courseNo} */}
                           </p>
                           {course.type === COURSE_TYPE.SEL_TOPIC && (
                             <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">

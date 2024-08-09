@@ -38,7 +38,7 @@ export default function Course() {
     if (!courseList.length && params.get("id")) fetchCourse();
 
     if (!course && courseNo) {
-      setCourse(courseList.find((e) => e.courseNo == parseInt(courseNo)));
+      setCourse(courseList.find((e) => e.courseNo == courseNo));
     }
   }, [academicYear, courseList]);
 
@@ -73,7 +73,6 @@ export default function Course() {
                   <div
                     key={item.id}
                     className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-[4px] hover:bg-[#F3F3F3]"
-                  
                   >
                     <div className="p-2.5 flex flex-col">
                       <p className="font-semibold text-sm">
