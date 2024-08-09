@@ -10,6 +10,11 @@ import { Provider } from "react-redux";
 import store from "@/store/index.ts";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Notifications } from "@mantine/notifications";
+import { tailspin } from 'ldrs'
+import { waveform } from 'ldrs'
+
+tailspin.register()
+waveform.register()
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
