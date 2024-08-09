@@ -22,6 +22,7 @@ import { getSection, getUserName } from "@/helpers/functions/function";
 import { useDisclosure } from "@mantine/hooks";
 import { isNumber } from "lodash";
 import { containsOnlyNumbers } from "@/helpers/functions/validation";
+import ComproMangementIns from "@/components/ComproManageIns";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -30,9 +31,15 @@ export default function CourseManagement() {
   const [courseManagement, setCourseManagement] = useState<any[]>([]);
   const [editCourse, setEditCourse] = useState<any>();
   const [editSectionNo, setEditSectionNo] = useState<any>();
+  const [editSectionModal, setEditSectionModal] = useState(false);
+  const [editInstructorModal, setEditInstructorModal] = useState(false);
   const [
     modalEditSection,
     { open: openModalEditSection, close: closeModalEditSection },
+  ] = useDisclosure(false);
+  const [
+    modalEditInstructor,
+    { open: openModalEditInstructor, close: closeModalEditInstructor },
   ] = useDisclosure(false);
   const dispatch = useAppDispatch();
   const validateCourseNameorTopic = (value?: string) => {
@@ -109,7 +116,47 @@ export default function CourseManagement() {
 
   return (
     <>
-      {editCourse && (
+      {editInstructorModal && (
+        <Modal
+          opened={modalEditInstructor}
+          onClose={closeModalEditInstructor}
+          withCloseButton={false}
+          closeOnClickOutside={false}
+          title={`Edit Instructor in ${editCourse ? editCourse.courseNo : ""}`}
+          size="45vw"
+          centered
+          transitionProps={{ transition: "pop" }}
+          classNames={{
+            content:
+              "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center overflow-hidden max-h-fit ",
+          }}
+        >
+          <div className="flex flex-col gap-6">
+            <ComproMangementIns />
+            <div className="flex gap-2 justify-end w-full">
+              <Button
+                color="#575757"
+                variant="subtle"
+                className="rounded-[8px] text-[12px]   h-[36px] "
+                justify="start"
+                onClick={() => {
+                  setEditInstructorModal(false);
+                  closeModalEditSection;
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                color="#5768d5"
+                className="rounded-[8px] text-[12px] h-[36px] w-fit"
+              >
+                Done
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+      {editSectionModal && (
         <Modal
           opened={modalEditSection}
           onClose={closeModalEditSection}
@@ -233,7 +280,10 @@ export default function CourseManagement() {
                 variant="subtle"
                 className="rounded-[8px] text-[12px]   h-[36px] "
                 justify="start"
-                onClick={closeModalEditSection}
+                onClick={() => {
+                  setEditSectionModal(false);
+                  closeModalEditSection;
+                }}
               >
                 Cancel
               </Button>
@@ -351,9 +401,21 @@ export default function CourseManagement() {
 
                           {/* Button */}
                           <div className="flex flex-row gap-4 items-center">
-                            <div className="flex flex-row justify-center items-center  bg-transparent  border-[1px] border-secondary text-secondary size-8 bg-none rounded-full  cursor-pointer hover:bg-secondary/10">
+                            <div
+                              className="flex flex-row justify-center items-center  bg-transparent  border-[1px] border-secondary text-secondary size-8 bg-none rounded-full  cursor-pointer hover:bg-secondary/10"
+                              onClick={() => {
+                                setEditCourse({
+                                  ...sec,
+                                  ...course,
+                                });
+                                setEditInstructorModal(true);
+
+                                openModalEditInstructor();
+                              }}
+                            >
                               <Icon IconComponent={ManageAdminIcon} />
                             </div>
+
                             <div
                               onClick={() => {
                                 setEditCourse({
@@ -361,6 +423,7 @@ export default function CourseManagement() {
                                   ...course,
                                 });
                                 setEditSectionNo(sec.sectionNo);
+                                setEditSectionModal(true);
                                 openModalEditSection();
                               }}
                               className="flex flex-row justify-center items-center bg-transparent  border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"
