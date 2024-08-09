@@ -199,7 +199,14 @@ export default function Dashboard() {
             dataLength={course.length}
             next={onShowMore}
             height={"100%"}
-            loader={<></>}
+            loader={
+              <l-waveform
+                size="35"
+                stroke="3.5"
+                speed="1"
+                color="black"
+              ></l-waveform>
+            }
             hasMore={payload?.hasMore}
             className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-1"
             style={{ height: "fit-content", maxHeight: "100%" }}
