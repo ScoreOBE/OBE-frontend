@@ -5,7 +5,7 @@ import { IModelSection } from "./ModelSection";
 export interface IModelCourse {
   id: string;
   academicYear: IModelAcademicYear | string;
-  courseNo: number;
+  courseNo: string;
   courseName: string;
   type: COURSE_TYPE;
   sections: Partial<IModelSection>[];

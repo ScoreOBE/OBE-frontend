@@ -16,7 +16,7 @@ import { getUserName } from "@/helpers/functions/function";
 export default function CourseSidebar() {
   const navigate = useNavigate();
   const path = useLocation().pathname;
-  const courseNo = parseInt(path.split("/").pop()!);
+  const courseNo = path.split("/").pop();
   const user = useAppSelector((state) => state.user);
   const courseList = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();

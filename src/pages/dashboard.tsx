@@ -7,11 +7,7 @@ import {
   IconPlus,
   IconTrash,
 } from "@tabler/icons-react";
-import {
-  getCourseNo,
-  showNotifications,
-  statusColor,
-} from "@/helpers/functions/function";
+import { showNotifications, statusColor } from "@/helpers/functions/function";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { deleteCourse, getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
@@ -119,7 +115,7 @@ export default function Dashboard() {
         onClose={closeMainPopup}
         action={() => onClickDeleteCourse(delCourse?.id!)}
         type={POPUP_TYPE.DELETE}
-        title={`Delete ${getCourseNo(delCourse?.courseNo)} Course`}
+        title={`Delete ${delCourse?.courseNo} Course`}
         message={
           <p>
             All data form the current semester for this course will be
@@ -215,12 +211,10 @@ export default function Dashboard() {
                 <div
                   key={item.id}
                   className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-[4px] hover:bg-[#F3F3F3]"
-                  onClick={() => goToCourse(getCourseNo(item.courseNo))}
+                  onClick={() => goToCourse(item.courseNo)}
                 >
                   <div className="p-2.5 flex flex-col">
-                    <p className="font-semibold text-sm">
-                      {getCourseNo(item.courseNo)}
-                    </p>
+                    <p className="font-semibold text-sm">{item.courseNo}</p>
                     <p className="text-xs font-medium text-gray-600">
                       {item.courseName}
                     </p>
