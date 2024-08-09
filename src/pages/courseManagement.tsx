@@ -18,8 +18,10 @@ import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/cour
 import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { COURSE_TYPE, SEMESTER } from "@/helpers/constants/enum";
-import { getSection } from "@/helpers/functions/function";
+import { getSection, getUserName } from "@/helpers/functions/function";
 import { useDisclosure } from "@mantine/hooks";
+import { isNumber } from "lodash";
+import { containsOnlyNumbers } from "@/helpers/functions/validation";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -27,12 +29,23 @@ export default function CourseManagement() {
   const [payload, setPayload] = useState<any>();
   const [courseManagement, setCourseManagement] = useState<any[]>([]);
   const [editCourse, setEditCourse] = useState<any>();
+  const [editSectionNo, setEditSectionNo] = useState<any>();
   const [
     modalEditSection,
     { open: openModalEditSection, close: closeModalEditSection },
   ] = useDisclosure(false);
   const dispatch = useAppDispatch();
-
+  const validateCourseNameorTopic = (value?: string) => {
+    const maxLength = 70;
+    if (!value) return `Topic is required`;
+    if (!value.trim().length) return "Cannot have only spaces";
+    if (value.length > maxLength)
+      return `You have ${value.length - 70} characters too many`;
+    const isValid = /^[0-9A-Za-z "%&()*+,-./<=>?@[\]\\^_]+$/.test(value);
+    return isValid
+      ? null
+      : `only contain 0-9, a-z, A-Z, space, "%&()*+,-./<=>?@[]\\^_`;
+  };
   useEffect(() => {
     if (user.departmentCode) {
       const payloadCourse = {
@@ -52,7 +65,6 @@ export default function CourseManagement() {
       setCourseManagement(res);
     }
     setLoading(false);
-    console.log(courseManagement);
   };
 
   const onShowMore = async () => {
@@ -72,9 +84,28 @@ export default function CourseManagement() {
     }
   };
 
-  function clickToggleTQF3(checked: boolean): void {
-    throw new Error("Function not implemented.");
-  }
+  const onClickSetEditSemester = (checked: boolean, value: number) => {
+    const semester: number[] = editCourse.semester;
+    if (checked) {
+      semester.push(value);
+      semester.sort();
+    } else {
+      semester.splice(semester.indexOf(value), 1);
+      semester.sort();
+    }
+    setEditCourse({ ...editCourse, semester });
+  };
+
+  const onClickEditSecNo = (value: string) => {
+    if (isNumber(parseInt(value)) || !value.length) {
+      console.log(value);
+
+      setEditCourse((prev: any) => ({
+        ...prev,
+        sectionNo: value,
+      }));
+    }
+  };
 
   return (
     <>
@@ -82,43 +113,35 @@ export default function CourseManagement() {
         <Modal
           opened={modalEditSection}
           onClose={closeModalEditSection}
+          withCloseButton={false}
           closeOnClickOutside={false}
           title={`Edit section ${
-            editCourse ? getSection(editCourse.sectionNo) : ""
+            editCourse ? getSection(editSectionNo) : ""
           } in ${editCourse ? editCourse.courseNo : ""}`}
           size="30vw"
           centered
           transitionProps={{ transition: "pop" }}
           classNames={{
             content:
-              "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-fit ",
+              "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center overflow-hidden max-h-fit ",
           }}
         >
-          {" "}
           <div className="flex flex-col gap-6">
-            <div className="text-primary font-semibold">
-              <p className="text-[#3E3E3E]">Course No.</p>
-              {editCourse.courseNo}
-            </div>
-            <div className="text-primary font-semibold">
-              <p className="text-[#3E3E3E]">Course Name</p>
-              {editCourse.courseName}
-            </div>
-
             {/* Text Input */}
             {editCourse.type === COURSE_TYPE.SEL_TOPIC && (
               <TextInput
                 classNames={{ input: "focus:border-primary" }}
                 label="Topic"
                 size="xs"
-                value={editCourse ? editCourse.topic : ""}
+                value={editCourse.topic}
                 withAsterisk
-                onChange={(e) => {
-                  const updatedCourseTopic = e.target.value;
-                  setEditCourse((editCourse: any) => ({
-                    ...editCourse,
-                    topic: updatedCourseTopic,
+                error={validateCourseNameorTopic(editCourse.topic)}
+                onChange={(event) => {
+                  setEditCourse((prev: any) => ({
+                    ...prev,
+                    topic: event.target.value,
                   }));
+                  console.log(event.target.value);
                 }}
               />
             )}
@@ -126,15 +149,15 @@ export default function CourseManagement() {
               classNames={{ input: "focus:border-primary" }}
               label="Section"
               size="xs"
-              value={editCourse ? getSection(editCourse.sectionNo) : ""}
+              value={editCourse.sectionNo}
               withAsterisk
               maxLength={3}
-              onChange={(e) => {
-                const updatedSectionNo = e.target.value;
-                setEditCourse((editCourse: any) => ({
-                  ...editCourse,
-                  sectionNo: updatedSectionNo,
-                }));
+              error={
+                !containsOnlyNumbers(editCourse.sectionNo.toString()) &&
+                "Please enter a valid section no"
+              }
+              onChange={(event) => {
+                onClickEditSecNo(event.target.value);
               }}
             />
             {/* Open in */}
@@ -154,14 +177,17 @@ export default function CourseManagement() {
                 offLabel="OFF"
                 checked={editCourse.isActive}
                 onChange={() => {
-                  setEditCourse(!editCourse.isActive);
+                  setEditCourse({
+                    ...editCourse,
+                    isActive: !editCourse.isActive,
+                  });
                 }}
               />
             </div>
 
             {/* Open Semester */}
             <div
-              className="flex justify-between items-center rounded-lg p-3  gap-1 bg-white"
+              className="flex justify-between items-center rounded-lg p-3  bg-white"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
@@ -171,26 +197,52 @@ export default function CourseManagement() {
               </span>
               <Checkbox.Group
                 classNames={{ error: "mt-2" }}
-                // {...form.getInputProps(`sections.${index}.semester`)}
+                value={editCourse.semester}
               >
                 <Group className="flex flex-row gap-1 justify-end ">
-                  {SEMESTER.map((item) => (
-                    <Checkbox
-                      key={item}
-                      classNames={{
-                        input:
-                          "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                        body: "mr-3",
-                        label: "text-[14px] cursor-pointer",
-                      }}
-                      color="#5768D5"
-                      size="xs"
-                      label={item}
-                      value={item.toString()}
-                    />
-                  ))}
+                  {SEMESTER.map((item) => {
+                    return (
+                      <Checkbox
+                        key={item}
+                        classNames={{
+                          input:
+                            "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                          body: "mr-3",
+                          label: "text-[14px] cursor-pointer",
+                        }}
+                        disabled={
+                          editCourse.semester.length == 1 &&
+                          editCourse.semester.includes(item)
+                        }
+                        color="#5768D5"
+                        size="xs"
+                        label={item}
+                        value={item}
+                        onChange={(event) => {
+                          onClickSetEditSemester(event.target.checked, item);
+                        }}
+                      />
+                    );
+                  })}
                 </Group>
               </Checkbox.Group>
+            </div>
+            <div className="flex gap-2 justify-end w-full">
+              <Button
+                color="#575757"
+                variant="subtle"
+                className="rounded-[8px] text-[12px]   h-[36px] "
+                justify="start"
+                onClick={closeModalEditSection}
+              >
+                Cancel
+              </Button>
+              <Button
+                color="#5768d5"
+                className="rounded-[8px] text-[12px] h-[36px] w-fit"
+              >
+                Done
+              </Button>
             </div>
           </div>
         </Modal>
@@ -278,7 +330,9 @@ export default function CourseManagement() {
 
                         <div className="flex flex-row w-[60%] items-center justify-between text-[#4E5150] text-[12px] font-normal ">
                           {/* Main Instructor */}
-                          <p className="text-wrap w-[20%]">Thanaporn P.</p>
+                          <p className="text-wrap w-[20%]">
+                            {getUserName(sec.instructor)}
+                          </p>
                           {/* Open Symester */}
                           <div className="flex flex-row gap-1 w-[30%]">
                             <p className="text-wrap ">Open Semester</p>
@@ -302,11 +356,11 @@ export default function CourseManagement() {
                             </div>
                             <div
                               onClick={() => {
-                                const temp = {
+                                setEditCourse({
                                   ...sec,
                                   ...course,
-                                };
-                                setEditCourse(temp);
+                                });
+                                setEditSectionNo(sec.sectionNo);
                                 openModalEditSection();
                               }}
                               className="flex flex-row justify-center items-center bg-transparent  border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"
