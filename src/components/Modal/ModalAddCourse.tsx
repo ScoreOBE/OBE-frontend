@@ -112,6 +112,11 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     }
   }, [insInput]);
 
+  useEffect(() => {
+    console.log("form: ", form.getValues().sections);
+    console.log("coInsList: ", coInsList);
+  }, [form]);
+
   const nextStep = async (type?: COURSE_TYPE) => {
     setFirstInput(false);
     let isValid = true;
@@ -308,8 +313,11 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     setCoInsList(newCoIns);
   };
 
-  const addCoInsInSec = (index: number, checked: boolean, coIns: any) => {
-    const updatedSections = form.getValues().sections?.map((sec, i) => {
+  const editCoInsInSec = (index: number, checked: boolean, coIns: any) => {
+    console.log(checked);
+
+    const updatedSections = form.getValues().sections;
+    updatedSections?.forEach((sec, i) => {
       if (i == index) {
         const secNo = getSection(sec.sectionNo);
         if (checked) {
@@ -506,7 +514,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             </div>
           </div>
         </Stepper.Step>
-
         <Stepper.Step label="Semester" description="STEP 3">
           <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-scroll  ">
             <div className="flex flex-col font-medium text-[14px] gap-5">
@@ -537,7 +544,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                           label={`Open in this semester (${
                             academicYear?.semester
                           }/${academicYear?.year.toString()?.slice(-2)})`}
-                          value={true}
+                          checked={sec.openThisTerm}
                           {...form.getInputProps(
                             `sections.${index}.openThisTerm`
                           )}
@@ -633,9 +640,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                     searchable
                     nothingFoundMessage="No result"
                     className="w-full border-none "
-                    classNames={{
-                      input: " rounded-e-none  rounded-md ",
-                    }}
+                    classNames={{ input: " rounded-e-none  rounded-md " }}
                     style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
                     rightSection={
                       <template className="flex items-center gap-2 absolute right-2">
@@ -747,7 +752,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                                             input:
                                               "bg-black bg-opacity-0  border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                                             body: "mr-3",
-                                            label: "text-[14px]",
+                                            label: "text-[14px] cursor-pointer",
                                           }}
                                           color="#5768D5"
                                           size="xs"
@@ -756,7 +761,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                                             sectionNo
                                           )}
                                           onChange={(event) =>
-                                            addCoInsInSec(
+                                            editCoInsInSec(
                                               index,
                                               event.currentTarget.checked,
                                               coIns

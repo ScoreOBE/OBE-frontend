@@ -1,11 +1,9 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
 import {
   Button,
   Checkbox,
   Group,
-  Menu,
   Modal,
   Skeleton,
   Switch,
@@ -15,10 +13,7 @@ import { IconDots, IconTrash, IconEdit } from "@tabler/icons-react";
 import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import Icon from "@/components/Icon";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
-import {
-  deleteCourse,
-  getCourseManagement,
-} from "@/services/courseManagement/courseManagement.service";
+import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
   COURSE_TYPE,
@@ -33,19 +28,46 @@ import {
 } from "@/helpers/functions/function";
 import { useDisclosure } from "@mantine/hooks";
 import { isNumber } from "lodash";
-import { containsOnlyNumbers } from "@/helpers/functions/validation";
-import ComproMangementIns from "@/components/CompoManageIns";
+import CompoMangementIns from "@/components/CompoManageIns";
+import {
+  containsOnlyNumbers,
+  validateCourseNameorTopic,
+} from "@/helpers/functions/validation";
 import MainPopup from "@/components/Popup/MainPopup";
-import course, { removeCourse } from "@/store/course";
+import { removeCourse } from "@/store/course";
 import { IModelSection } from "@/models/ModelSection";
+import {
+  IModelCourseManagement,
+  IModelSectionManagement,
+} from "@/models/ModelCourseManagement";
+import { useForm } from "@mantine/form";
+import Loading from "@/components/Loading";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState<any>();
-  const [courseManagement, setCourseManagement] = useState<any[]>([]);
+  const [courseManagement, setCourseManagement] = useState<
+    IModelCourseManagement[]
+  >([]);
+  const [totalCourses, setTotalCourses] = useState<number>(0);
   const [editCourse, setEditCourse] = useState<any>();
-  const [editSectionNo, setEditSectionNo] = useState<any>();
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {} as Partial<IModelSectionManagement>,
+    validate: {
+      topic: (value) => validateCourseNameorTopic(value, "Topic"),
+      sectionNo: (value) => {
+        if (value == undefined) return "Section No. is required";
+        const isValid = isNumber(value) && value.toString().length <= 3;
+        return isValid ? null : "Please enter a valid section no";
+      },
+      semester: (value) => {
+        return value?.length ? null : "Please select semester at least one.";
+      },
+    },
+    validateInputOnBlur: true,
+  });
   const [editSectionModal, setEditSectionModal] = useState(false);
   const [editInstructorModal, setEditInstructorModal] = useState(false);
   const [
@@ -57,17 +79,7 @@ export default function CourseManagement() {
     { open: openModalEditInstructor, close: closeModalEditInstructor },
   ] = useDisclosure(false);
   const dispatch = useAppDispatch();
-  const validateCourseNameorTopic = (value?: string) => {
-    const maxLength = 70;
-    if (!value) return `Topic is required`;
-    if (!value.trim().length) return "Cannot have only spaces";
-    if (value.length > maxLength)
-      return `You have ${value.length - 70} characters too many`;
-    const isValid = /^[0-9A-Za-z "%&()*+,-./<=>?@[\]\\^_]+$/.test(value);
-    return isValid
-      ? null
-      : `only contain 0-9, a-z, A-Z, space, "%&()*+,-./<=>?@[]\\^_`;
-  };
+
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
   const [delSec, setdelSec] = useState<Partial<IModelSection>>();
@@ -87,7 +99,8 @@ export default function CourseManagement() {
     setLoading(true);
     const res = await getCourseManagement(payloadCourse);
     if (res) {
-      setCourseManagement(res);
+      setTotalCourses(res.totalCount);
+      setCourseManagement(res.courses);
     }
     setLoading(false);
   };
@@ -97,7 +110,7 @@ export default function CourseManagement() {
       ...payload,
       page: payload.page + 1,
     });
-    if (res.length) {
+    if (res) {
       setCourseManagement([...courseManagement, ...res]);
       setPayload({
         ...payload,
@@ -133,16 +146,16 @@ export default function CourseManagement() {
   };
 
   const onClickDeleteCourse = async (id: string) => {
-    const res = await deleteCourse(id);
-    if (res) {
-      dispatch(removeCourse(res.id));
-    }
-    closeMainPopup();
-    showNotifications(
-      NOTI_TYPE.SUCCESS,
-      "Delete Course Success",
-      `${delSec?.sectionNo} is deleted`
-    );
+    // const res = await deleteCourse(id);
+    // if (res) {
+    //   dispatch(removeCourse(res.id));
+    // }
+    // closeMainPopup();
+    // showNotifications(
+    //   NOTI_TYPE.SUCCESS,
+    //   "Delete Course Success",
+    //   `${delSec?.sectionNo} is deleted`
+    // );
   };
 
   return (
@@ -162,39 +175,25 @@ export default function CourseManagement() {
             "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center  overflow-hidden ",
         }}
       >
-        {" "}
         <div className="flex flex-col gap-5">
           {/* Text Input */}
           {editCourse?.type === COURSE_TYPE.SEL_TOPIC && (
             <TextInput
-              classNames={{ input: "focus:border-primary" }}
               label="Topic"
-              size="xs"
-              value={editCourse ? editCourse.topic : ""}
               withAsterisk
-              onChange={(e) => {
-                const updatedCourseTopic = e.target.value;
-                setEditCourse((editCourse: any) => ({
-                  ...editCourse,
-                  topic: updatedCourseTopic,
-                }));
-              }}
+              size="xs"
+              classNames={{ input: "focus:border-primary" }}
+              value={getSection(form.getValues().sectionNo)}
+              {...form.getInputProps("topic")}
             />
           )}
           <TextInput
-            classNames={{ input: "focus:border-primary" }}
             label="Section"
-            size="sm"
-            value={editCourse ? getSection(editCourse.sectionNo) : ""}
             withAsterisk
+            size="sm"
             maxLength={3}
-            onChange={(e) => {
-              const updatedSectionNo = e.target.value;
-              setEditCourse((editCourse: any) => ({
-                ...editCourse,
-                sectionNo: updatedSectionNo,
-              }));
-            }}
+            classNames={{ input: "focus:border-primary" }}
+            {...form.getInputProps("sectionNo")}
           />
           {/* Open in */}
           <div
@@ -203,7 +202,7 @@ export default function CourseManagement() {
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
           >
-            <span className="text-[#3E3E3E] font-semibold">
+            <span className="text-tertiary font-semibold">
               Open in Semester 3/66
             </span>
             <Switch
@@ -211,10 +210,7 @@ export default function CourseManagement() {
               size="lg"
               onLabel="ON"
               offLabel="OFF"
-              checked={editCourse?.isActive}
-              onChange={() => {
-                setEditCourse(!editCourse?.isActive);
-              }}
+              {...form.getInputProps("isActive")}
             />
           </div>
 
@@ -225,33 +221,30 @@ export default function CourseManagement() {
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
           >
-            <span className="text-[#3E3E3E] font-semibold">Open Semester</span>
+            <span className="text-tertiary font-semibold">Open Semester</span>
             <Checkbox.Group
               classNames={{ error: "mt-2" }}
               className="flex items-center   justify-center"
-              value={editCourse?.semester}
+              {...form.getInputProps("semester")}
             >
               <Group className="flex flex-row gap-1 items-center justify-center ">
                 {SEMESTER.map((item) => {
                   return (
                     <Checkbox
                       key={item}
-                      classNames={{
-                        input:
-                          "bg-black bg-opacity-0 border-[1.5px]  border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                        label: "text-[14px] cursor-pointer",
-                      }}
-                      disabled={
-                        editCourse?.semester.length == 1 &&
-                        editCourse?.semester.includes(item)
-                      }
                       color="#5768D5"
                       size="xs"
+                      classNames={{
+                        input:
+                          "bg-black bg-opacity-0 border-[1.5px]  border-tertiary cursor-pointer disabled:bg-gray-400",
+                        label: "text-[14px] cursor-pointer",
+                      }}
                       label={item}
                       value={item}
-                      onChange={(event) => {
-                        onClickSetEditSemester(event.target.checked, item);
-                      }}
+                      disabled={
+                        form?.getValues().semester?.length == 1 &&
+                        form?.getValues().semester?.includes(item)
+                      }
                     />
                   );
                 })}
@@ -301,32 +294,27 @@ export default function CourseManagement() {
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
         <div className="flex flex-col  py-1 gap-1 items-start ">
           <p className="text-secondary text-[16px] font-bold">Dashboard</p>
-          <p className="text-tertiary text-[14px] font-medium">XX Courses</p>
+          <p className="text-tertiary text-[14px] font-medium">
+            {totalCourses} Courses
+          </p>
         </div>
         {/* Course Detail */}
         {loading ? (
-          <Skeleton></Skeleton>
+          <Loading />
         ) : (
           <InfiniteScroll
             dataLength={courseManagement.length}
             next={onShowMore}
             height={"100%"}
-            loader={
-              <l-tailspin
-                size="40"
-                stroke="5"
-                speed="0.9"
-                color="black"
-              ></l-tailspin>
-            }
             hasMore={payload?.hasMore}
             className="overflow-y-auto w-full h-fit max-h-full flex flex-col gap-4 "
             style={{ height: "fit-content", maxHeight: "100%" }}
+            loader={<Loading />}
           >
             {courseManagement.map((course, index) => (
               <div
                 key={index}
-                className="bg-[#eff0fd] rounded-md flex flex-col  p-5 "
+                className="bg-[#eff0fd] rounded-md flex flex-col p-5"
               >
                 {/* Course Topic */}
                 <div className="gap-3 mb-4 flex items-center w-full justify-between">
@@ -344,99 +332,90 @@ export default function CourseManagement() {
                   </div>
                 </div>
                 {/* Section */}
-                <div className="flex flex-col ">
+                <div className="flex flex-col">
                   {course.sections.map((sec: any) => (
-                    <div className="bg-white flex flex-col first:rounded-t-md last:rounded-b-md py-4 border-b-[1px] border-[#eeeeee]  px-5 ">
-                      <div className="gap-3 flex items-center justify-between ">
-                        <div className="flex flex-row items-center w-fit gap-6">
-                          <div className="flex flex-col w-56">
-                            <p className="font-semibold text-[14px] text-tertiary">
-                              Section {getSection(sec.sectionNo)}
-                            </p>
-                            {course.type === COURSE_TYPE.SEL_TOPIC && (
-                              <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">
-                                {sec.topic}
-                              </p>
-                            )}
-                          </div>
+                    <div className="bg-white grid grid-cols-5 items-center justify-between first:rounded-t-md last:rounded-b-md py-4 border-b-[1px] border-[#eeeeee] px-5">
+                      {/* Section No & Topic */}
+                      <div className="flex flex-col ">
+                        <p className="font-semibold text-[14px] text-tertiary">
+                          Section {getSection(sec.sectionNo)}
+                        </p>
+                        {course.type === COURSE_TYPE.SEL_TOPIC && (
+                          <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">
+                            {sec.topic}
+                          </p>
+                        )}
+                      </div>
+                      {/* Status */}
+                      <div
+                        className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
+                          sec.isActive
+                            ? "bg-[#10e5908e] text-[#267156]"
+                            : "bg-[#919191] text-white"
+                        } `}
+                      >
+                        <p className=" font-semibold ">
+                          {sec.isActive ? "Active" : "Inactive"}
+                        </p>
+                      </div>
+                      {/* Main Instructor */}
+                      <div className="flex items-center font-medium text-[#4E5150] text-b3">
+                        {getUserName(sec.instructor)}
+                      </div>
+                      {/* Open Symester */}
+                      <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
+                        <p className="text-wrap font-medium">Open Semester</p>
+                        <div className="flex gap-1">
+                          {sec.semester.map((term: any, index: number) => (
+                            <span key={index} className="text-wrap">
+                              {index === 0
+                                ? term
+                                : index === sec.semester.length - 1
+                                ? ` and ${term}`
+                                : `, ${term}`}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
 
-                          <div
-                            className={`px-3 py-1  rounded-[20px]  text-[12px] font-medium ${
-                              sec.isActive
-                                ? "bg-[#10e5908e] text-[#267156]"
-                                : "bg-[#919191] text-white"
-                            } `}
-                          >
-                            <p className=" font-semibold ">
-                              {sec.isActive ? "Active" : "Inactive"}
-                            </p>
-                          </div>
+                      {/* Button */}
+                      <div className="flex justify-end gap-4 items-center">
+                        <div
+                          className="bg-transparent border-[1px] border-secondary text-secondary size-8 bg-none rounded-full cursor-pointer hover:bg-secondary/10"
+                          onClick={() => {
+                            setEditCourse({
+                              ...sec,
+                              ...course,
+                            });
+                            setEditInstructorModal(true);
+                            openModalEditInstructor();
+                          }}
+                        >
+                          <Icon IconComponent={ManageAdminIcon} />
                         </div>
 
-                        <div className="flex flex-row w-[60%] items-center justify-between text-[#4E5150] text-[12px] font-normal ">
-                          {/* Main Instructor */}
-                          <p className="text-wrap w-[20%] font-medium">
-                            {getUserName(sec.instructor)}
-                          </p>
-                          {/* Open Symester */}
-                          <div className="flex flex-row gap-1 w-[30%]">
-                            <p className="text-wrap font-medium ">
-                              Open Semester
-                            </p>
-                            <div className="flex flex-row gap-1">
-                              {sec.semester.map((term: any, index: number) => (
-                                <span key={index} className="text-wrap ">
-                                  {index === 0
-                                    ? term
-                                    : index === sec.semester.length - 1
-                                    ? ` and ${term}`
-                                    : `, ${term}`}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Button */}
-                          <div className="flex flex-row gap-4 items-center">
-                            <div
-                              className="flex flex-row justify-center items-center  bg-transparent  border-[1px] border-secondary text-secondary size-8 bg-none rounded-full  cursor-pointer hover:bg-secondary/10"
-                              onClick={() => {
-                                setEditCourse({
-                                  ...sec,
-                                  ...course,
-                                });
-                                setEditInstructorModal(true);
-
-                                openModalEditInstructor();
-                              }}
-                            >
-                              <Icon IconComponent={ManageAdminIcon} />
-                            </div>
-
-                            <div
-                              onClick={() => {
-                                setEditCourse({
-                                  ...sec,
-                                  ...course,
-                                });
-                                setEditSectionNo(sec.sectionNo);
-                                setEditSectionModal(true);
-                                openModalEditSection();
-                              }}
-                              className="flex flex-row justify-center items-center bg-transparent  border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"
-                            >
-                              <IconEdit className="size-4" stroke={1.5} />
-                            </div>
-                            <div
-                              onClick={() => {
-                                setdelSec(sec);
-                                openedMainPopup();
-                              }}
-                              className="flex flex-row justify-center items-center bg-transparent  border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"
-                            >
-                              <IconTrash className="size-4" stroke={1.5} />
-                            </div>
-                          </div>
+                        <div
+                          onClick={() => {
+                            setEditCourse({
+                              ...sec,
+                              ...course,
+                            });
+                            form.setValues({ ...sec });
+                            setEditSectionModal(true);
+                            openModalEditSection();
+                          }}
+                          className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"
+                        >
+                          <IconEdit className="size-4" stroke={1.5} />
+                        </div>
+                        <div
+                          onClick={() => {
+                            setdelSec(sec);
+                            openedMainPopup();
+                          }}
+                          className="flex justify-center items-center bg-transparent border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"
+                        >
+                          <IconTrash className="size-4" stroke={1.5} />
                         </div>
                       </div>
                     </div>

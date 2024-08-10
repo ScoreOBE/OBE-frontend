@@ -53,6 +53,7 @@ export default function DashboardSidebar() {
       if (!res.map((term: any) => term.id).includes(params.get("id"))) {
         setTerm(res[0]);
         setSelectedTerm(termOption[0]);
+        fetchCourse(res[0].id);
       }
     }
   };
@@ -154,7 +155,10 @@ export default function DashboardSidebar() {
               <p className="font-medium text-[14px]">Semester</p>
               <p className="font-normal text-[12px]">
                 Course (
-                {`${params.get("semester")}/${params.get("year")?.slice(-2)}`})
+                {`${params.get("semester") ?? ""}/${
+                  params.get("year")?.slice(-2) ?? ""
+                }`}
+                )
               </p>
             </div>
           </Button>
