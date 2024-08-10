@@ -87,7 +87,7 @@ export default function Profile() {
         classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
       >
         <Menu.Target>
-          <Button className="flex flex-row justify-end px-0 pl-4 h-10  bg-white items-center rounded-lg  cursor-pointer hover:bg-[#f0f0f0]">
+          <Button className="flex flex-row justify-end px-0 pl-4 h-10  bg-[#f5f5f5] items-center rounded-lg  cursor-pointer hover:bg-[#f0f0f0]">
             <div className="flex flex-col gap-1 text-end mr-3 text-[12px]">
               <p className="text-black font-semibold">{getUserName(user)}</p>
               <p
@@ -121,7 +121,7 @@ export default function Profile() {
                 </div>
               </div>
               <Menu.Divider />
-              <Menu.Item>
+              <Menu.Item className="text-[#3E3E3E] text-[14px] h-8 w-full ">
                 <div className="flex items-center gap-2">
                   <IconList stroke={1.5} className="size-5" />
                   <span>Activity log</span>
