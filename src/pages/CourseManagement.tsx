@@ -35,11 +35,15 @@ import {
 } from "@/helpers/functions/function";
 import { useDisclosure } from "@mantine/hooks";
 import { isNumber } from "lodash";
+
 import {
   containsOnlyNumbers,
   validateCourseNameorTopic,
 } from "@/helpers/functions/validation";
+
 import CompoMangementIns from "@/components/CompoManageIns";
+
+
 import MainPopup from "@/components/Popup/MainPopup";
 import course, { removeCourse } from "@/store/course";
 import { IModelSection } from "@/models/ModelSection";

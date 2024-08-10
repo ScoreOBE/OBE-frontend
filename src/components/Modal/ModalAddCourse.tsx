@@ -553,7 +553,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         </Stepper.Step>
         <Stepper.Step label="Co-Instructor" description="STEP 4">
           <div className="flex flex-col mt-3 flex-1 ">
-            {/* <div
+            {/* {/* <div
               className="flex flex-col bg-white gap-2 max-h-[320px] mb-5 rounded-md h-fit w-full  p-4  "
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
