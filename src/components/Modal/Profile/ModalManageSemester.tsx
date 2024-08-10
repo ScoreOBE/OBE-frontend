@@ -179,11 +179,15 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                   className="border-[1px] border-[#C8CFF7] rounded-md bg-white overflow-clip flex flex-col w-full items-center justify-between"
                 >
                   <div className="flex flex-col w-full items-center">
-                    {yearFilter[year].map((e: any, index: number) => (
+                    {yearFilter[year].map((semester: any, index: number) => (
                       <div
-                        key={e.id}
+                        key={semester.id}
                         className={`flex flex-row items-center h-[56px]  px-4 w-full justify-between
-                            ${e.isActive ? "bg-[#E5E8FF]" : "bg-[#ffffff]"} `}
+                            ${
+                              semester.isActive
+                                ? "bg-[#E5E8FF]"
+                                : "bg-[#ffffff]"
+                            } `}
                       >
                         {index === 0 ? (
                           <div className="w-10">
@@ -203,14 +207,16 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                           </p>
                           <p
                             className={`font-semibold text-black text-[14px] ${
-                              e.isActive ? "text-secondary" : "text-black"
+                              semester.isActive
+                                ? "text-secondary"
+                                : "text-black"
                             }`}
                           >
-                            {e.semester}
+                            {semester.semester}
                           </p>
                         </div>
 
-                        {e.isActive ? (
+                        {semester.isActive ? (
                           <Button
                             disabled
                             size="xs"
@@ -225,7 +231,8 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                             color="#5768D5"
                             size="xs"
                             className="rounded-lg"
-                            onClick={() => onClickActivate(e)}
+                            // disabled={}
+                            onClick={() => onClickActivate(semester)}
                           >
                             Activate
                           </Button>
