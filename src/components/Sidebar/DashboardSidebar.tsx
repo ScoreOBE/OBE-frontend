@@ -53,6 +53,7 @@ export default function DashboardSidebar() {
       if (!res.map((term: any) => term.id).includes(params.get("id"))) {
         setTerm(res[0]);
         setSelectedTerm(termOption[0]);
+        fetchCourse(res[0].id);
       }
     }
   };
