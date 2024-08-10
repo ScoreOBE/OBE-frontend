@@ -135,7 +135,7 @@ export default function Dashboard() {
             Hi there, {user.firstNameEN}
           </p>
           <p className="text-[#575757] text-[14px]">
-            In semester {term?.semester}, {term?.year}!{" "}
+            In semester {term?.semester ?? ""}, {term?.year ?? ""}!{" "}
             {course.length === 0 ? (
               <span>Your course card is currently empty</span>
             ) : (
