@@ -506,7 +506,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             </div>
           </div>
         </Stepper.Step>
-
         <Stepper.Step label="Semester" description="STEP 3">
           <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-scroll  ">
             <div className="flex flex-col font-medium text-[14px] gap-5">
@@ -537,7 +536,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                           label={`Open in this semester (${
                             academicYear?.semester
                           }/${academicYear?.year.toString()?.slice(-2)})`}
-                          value={true}
+                          checked={sec.openThisTerm}
                           {...form.getInputProps(
                             `sections.${index}.openThisTerm`
                           )}
