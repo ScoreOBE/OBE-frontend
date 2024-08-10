@@ -34,6 +34,9 @@ export default function Navbar() {
     const res = await getCourse(payloadCourse);
     if (res) {
       dispatch(setCourseList(res.courses ?? res));
+      if (res.totalCourses) {
+        localStorage.setItem("totalCourses", res.totalCount);
+      }
     }
     localStorage.setItem("search", "true");
   };
@@ -66,6 +69,7 @@ export default function Navbar() {
         ) && (
           <div className="relative md:w-[400px] w-[220px]">
             <TextInput
+              autoFocus={false}
               leftSection={!isFocused && <TbSearch className="size-4" />}
               placeholder="Course No / Course Name"
               size="xs"

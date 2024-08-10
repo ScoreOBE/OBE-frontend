@@ -18,6 +18,10 @@
   overflow: hidden;
 }
 
+.mantine-focus-auto:focus-visible {
+  outline: none !important;
+}
+
 .mantine-Stepper-stepIcon[data-completed],
 .mantine-Stepper-separator[data-active] {
   background-color: #1fc461;
@@ -29,7 +33,7 @@
   border: var(--color-border-input) solid 1px !important;
 }
 
-.mantine-active:active{
+.mantine-active:active {
   transform: none !important;
 }
 
@@ -42,7 +46,7 @@
 }
 
 .mantine-Stepper-stepWrapper {
- width: 3px;
+  width: 3px;
 }
 
 .mantine-Stepper-stepLabel {
@@ -71,7 +75,7 @@
   width: fit-content !important;
 }
 
-.mantine-Checkbox-body{
+.mantine-Checkbox-body {
   height: 25px;
   padding: 8px;
 }
@@ -85,7 +89,7 @@
   font-weight: 500 !important;
 }
 
-.mantine-Select-option[data-combobox-selected],
+* [data-combobox-selected],
 .mantine-Select-option:hover {
   background-color: var(--color-hover) !important;
 }
@@ -172,7 +176,7 @@ Button:disabled {
 .card {
   display: flex;
   flex-direction: column;
-  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25) 
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .tqf-done {
@@ -186,7 +190,7 @@ Button:disabled {
 }
 
 .tqf-no-data {
-  color:#ffffff;
+  color: #ffffff;
   background-color: #aaaaaa;
 }
 

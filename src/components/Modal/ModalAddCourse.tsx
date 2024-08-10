@@ -37,7 +37,7 @@ import {
   showNotifications,
   sortData,
 } from "@/helpers/functions/function";
-import course, { setCourseList } from "@/store/course";
+import { setCourseList } from "@/store/course";
 
 type Props = {
   opened: boolean;
@@ -77,6 +77,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       type: (value) => !value && "Course Type is required",
       courseNo: (value) => {
         if (!value) return "Course No. is required";
+        if (!value.replace(/^[0]+$/, "").length) return "Cannot have only 0";
         const isValid = /^\d{6}$/.test(value.toString());
         return isValid ? null : "Require number 6 digits";
       },
@@ -94,16 +95,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       },
     },
     validateInputOnBlur: true,
-    // onValuesChange: (value) => {
-    //   value.sections?.forEach((sec) => {
-    //     const semester: any = academicYear?.semester.toString();
-    //     if (semester && sec.openThisTerm && !sec.semester?.includes(semester)) {
-    //       if (!sec.semester) sec.semester = [];
-    //       sec.semester.push(semester);
-    //     }
-    //     console.log(semester);
-    //   });
-    // },
   });
 
   useEffect(() => {
@@ -348,6 +339,25 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     form.setFieldValue("sections", [...updatedSections!]);
   };
 
+  const setSemesterInSec = (
+    index: number,
+    checked: boolean,
+    semester?: string[]
+  ) => {
+    const semesterList: any[] =
+      form.getValues().sections?.at(index)?.semester ?? [];
+    if (!semester) {
+      form.setFieldValue(`sections.${index}.openThisTerm`, checked);
+      if (checked && !semesterList?.includes(academicYear?.semester)) {
+        semesterList.push(academicYear?.semester.toString());
+        semesterList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+        form.setFieldValue(`sections.${index}.semester`, semesterList);
+      }
+    } else {
+      form.setFieldValue(`sections.${index}.semester`, semester.sort());
+    }
+  };
+
   return (
     <Modal
       opened={opened}
@@ -444,10 +454,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           </div>
         </Stepper.Step>
         <Stepper.Step label="Course Info" description="STEP 2">
-          <div
-            className="w-full  mt-2 h-fit  bg-white mb-5 rounded-md"
-            
-          >
+          <div className="w-full  mt-2 h-fit  bg-white mb-5 rounded-md">
             <div className="flex flex-col gap-3">
               <TextInput
                 classNames={{ input: "focus:border-primary" }}
@@ -493,7 +500,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   pill: "bg-secondary text-white font-bold",
                   label: "font-semibold text-[#3e3e3e] text-b2",
                   error: "text-[10px] !border-none",
-                  
                 }}
                 placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
                 splitChars={[",", " ", "|"]}
@@ -513,7 +519,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         <Stepper.Step label="Semester" description="STEP 3">
           <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-scroll  ">
             <div className="flex flex-col font-medium text-[14px] gap-5">
-              {form.getValues().sections?.map((sec, index) => (
+              {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary font-semibold">
                     Select Semester for Section {getSection(sec.sectionNo)}{" "}
@@ -540,17 +546,22 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                           label={`Open in this semester (${
                             academicYear?.semester
                           }/${academicYear?.year.toString()?.slice(-2)})`}
+                          value={true}
                           {...form.getInputProps(
-                            `sections.${index}.openThisTerm`,
-                            {
-                              type: "checkbox",
-                            }
+                            `sections.${index}.openThisTerm`
                           )}
+                          onChange={(event) =>
+                            setSemesterInSec(index, event.target.checked)
+                          }
                         />
                       </div>
                       <Checkbox.Group
                         classNames={{ error: "mt-2" }}
                         {...form.getInputProps(`sections.${index}.semester`)}
+                        value={sec.semester}
+                        onChange={(event) => {
+                          setSemesterInSec(index, true, event);
+                        }}
                       >
                         <Group className="flex flex-row gap-1 justify-end ">
                           {SEMESTER.map((item) => (
@@ -565,6 +576,10 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                               color="#5768D5"
                               size="xs"
                               label={item}
+                              disabled={
+                                sec.semester?.includes(item.toString()) &&
+                                sec.openThisTerm
+                              }
                               value={item.toString()}
                             />
                           ))}

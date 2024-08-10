@@ -250,8 +250,9 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
             />
             {/* List of Admin */}
             <div className="flex flex-col gap-2 overflow-y-scroll p-1">
-              {adminFilter.map((admin) => (
+              {adminFilter.map((admin, index) => (
                 <div
+                  key={index}
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                   }}
