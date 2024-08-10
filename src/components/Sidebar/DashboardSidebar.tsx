@@ -8,13 +8,18 @@ import { useDisclosure } from "@mantine/hooks";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { setCourseList } from "@/store/course";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { setLoading } from "@/store/loading";
+import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
+import { getAcademicYear } from "@/services/academicYear/academicYear.service";
+import { setAcademicYear } from "@/store/academicYear";
+import { ROUTE_PATH } from "@/helpers/constants/route";
 
 export default function DashboardSidebar() {
   const [openedFilterTerm, { open: openFilterTerm, close: closeFilterTerm }] =
     useDisclosure(false);
+  const path = useLocation().pathname;
   const [params, setParams] = useSearchParams();
   const payloadCourse = new CourseRequestDTO();
   const academicYear = useAppSelector((state) => state.academicYear);
@@ -25,6 +30,32 @@ export default function DashboardSidebar() {
   });
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState(termOption[0]);
+
+  useEffect(() => {
+    if (academicYear.length && !selectedTerm) {
+      setTerm(academicYear[0]);
+      setSelectedTerm(termOption[0]);
+      if (!course.length) {
+        fetchCourse(academicYear[0].id);
+      }
+    } else if (
+      !params.get("id") ||
+      !academicYear.map((term) => term.id).includes(selectedTerm?.value)
+    ) {
+      fetchAcademicYear();
+    }
+  }, [academicYear, params]);
+
+  const fetchAcademicYear = async () => {
+    const res = await getAcademicYear(new AcademicYearRequestDTO());
+    if (res) {
+      dispatch(setAcademicYear(res));
+      if (!res.map((term: any) => term.id).includes(params.get("id"))) {
+        setTerm(res[0]);
+        setSelectedTerm(termOption[0]);
+      }
+    }
+  };
 
   const fetchCourse = async (id: string) => {
     dispatch(setLoading(true));
@@ -37,21 +68,12 @@ export default function DashboardSidebar() {
     dispatch(setLoading(false));
   };
 
-  useEffect(() => {
-    if (academicYear.length) {
-      setTerm(academicYear[0]);
-      setSelectedTerm(termOption[0]);
-      if (!course.length) {
-        fetchCourse(academicYear[0].id);
-      }
-    }
-  }, [academicYear]);
-
   const setTerm = (data: IModelAcademicYear) => {
-    params.set("id", data.id);
-    params.set("year", data.year.toString());
-    params.set("semester", data.semester.toString());
-    setParams(params);
+    setParams({
+      id: data.id,
+      year: data.year.toString(),
+      semester: data.semester.toString(),
+    });
   };
 
   const confirmFilterTerm = async () => {

@@ -30,6 +30,21 @@ export const isValidResponse = (res: any) => {
   }
 };
 
+export const validateCourseNameorTopic = (
+  value: string | null | undefined,
+  title: string
+) => {
+  const maxLength = 70;
+  if (!value) return `${title} is required`;
+  if (!value.trim().length) return "Cannot have only spaces";
+  if (value.length > maxLength)
+    return `You have ${value.length - 70} characters too many`;
+  const isValid = /^[0-9A-Za-z "%&()*+,-./<=>?@[\]\\^_]+$/.test(value);
+  return isValid
+    ? null
+    : `only contain 0-9, a-z, A-Z, space, "%&()*+,-./<=>?@[]\\^_`;
+};
+
 export const containsOnlyNumbers = (
   textString: any,
   min?: number,

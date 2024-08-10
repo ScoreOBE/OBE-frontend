@@ -1,37 +1,52 @@
-import { Button, Input, Modal, Select, TextInput } from "@mantine/core";
-import AddCoIcon from "@/assets/icons/addCo.svg?react";
-import { IconChevronDown, IconUsers } from "@tabler/icons-react";
+import { Button, Modal, TextInput } from "@mantine/core";
+import { IconUsers } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
-import Icon from "../Icon";
 import {
   activeAcademicYear,
   createAcademicYear,
   getAcademicYear,
 } from "@/services/academicYear/academicYear.service";
-import { useAppSelector } from "@/store";
 import { NOTI_TYPE, SEMESTER } from "@/helpers/constants/enum";
-
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import {
   AcademicYearRequestDTO,
   CreateAcademicYearRequestDTO,
 } from "@/services/academicYear/dto/academicYear.dto";
-import { showNotifications, sortData } from "@/helpers/functions/function";
-import academicYear from "@/store/academicYear";
-import { log } from "console";
+import { showNotifications } from "@/helpers/functions/function";
+import { useAppDispatch } from "@/store";
+import { setAcademicYear } from "@/store/academicYear";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
 };
 export default function ModalManageSemester({ opened, onClose }: Props) {
+  const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [yearList, setYearList] = useState<IModelAcademicYear[]>([]);
   const [yearFilter, setYearFilter] = useState<any>({});
   const [semesterList, setSemesterlist] = useState<any>({});
   const [selectSemester, setSelectSemester] =
     useState<CreateAcademicYearRequestDTO>();
+
+  useEffect(() => {
+    if (opened && !selectSemester) {
+      fetchSemester();
+    }
+  }, [opened, selectSemester]);
+
+  useEffect(() => {
+    const keyFilter = Object.keys(semesterList).filter((year) =>
+      year.replace("a", "").includes(searchValue)
+    );
+    let filter: any = {};
+    keyFilter.map((year) => {
+      filter[year] = semesterList[year];
+    });
+
+    setYearFilter(filter);
+  }, [searchValue]);
 
   const fetchSemester = async () => {
     let payload = new AcademicYearRequestDTO();
@@ -47,12 +62,10 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       //Group by Year
       const semestersByYear = res.reduce((acc: any, academicYearList: any) => {
         const year: string = academicYearList.year.toString() + "a";
-
         if (!acc[year]) {
           acc[year] = [];
         }
         acc[year].push(academicYearList);
-
         return acc;
       }, {});
 
@@ -60,13 +73,6 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       setYearFilter(semestersByYear);
     }
   };
-
-  useEffect(() => {
-    if (opened && !selectSemester) {
-      fetchSemester();
-      console.log(selectSemester);
-    }
-  }, [opened, selectSemester]);
 
   const onClickActivate = async (e: IModelAcademicYear) => {
     const res = await activeAcademicYear(e.id);
@@ -77,6 +83,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
         `Activate ${e.semester}, ${e.year} successful`
       );
       setSelectSemester(undefined);
+      dispatch(setAcademicYear([]));
     }
   };
 
@@ -127,18 +134,6 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       }
     }
   };
-
-  useEffect(() => {
-    const keyFilter = Object.keys(semesterList).filter((year) =>
-      year.replace("a", "").includes(searchValue)
-    );
-    let filter: any = {};
-    keyFilter.map((year) => {
-      filter[year] = semesterList[year];
-    });
-
-    setYearFilter(filter);
-  }, [searchValue]);
 
   return (
     <Modal
