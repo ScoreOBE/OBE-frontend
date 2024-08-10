@@ -17,6 +17,7 @@ import { useAppSelector } from "@/store";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { validateEmail } from "@/helpers/functions/validation";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
+import CompoMangeIns from "@/components/CompoManageIns";
 
 type Props = {
   opened: boolean;
@@ -25,87 +26,29 @@ type Props = {
 export default function ModalManageAdmin({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
   const [swapMethodAddAdmin, setSwapMethodAddAdmin] = useState(false);
-  const [openedDropdown, setOpenedDropdown] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [instructorOption, setInstructorOption] = useState<any[]>([]);
   const [adminList, setAdminList] = useState<IModelUser[]>([]);
   const [adminFilter, setAdminFilter] = useState<IModelUser[]>([]);
-  const [editUser, setEditUser] = useState<string | null>();
-  const [invalidEmail, setInvalidEmail] = useState(false);
 
-  const fetchIns = async () => {
-    const res = await getInstructor();
-    if (res) {
-      const insList = res.filter(
-        (e: any) => e.id != user.id && e.role === ROLE.INSTRUCTOR
-      );
-      let adminList = res.filter((e: IModelUser) => {
-        if (e.id !== user.id && e.role === ROLE.ADMIN) {
-          return {
-            id: e.id,
-            firstNameEN: e.firstNameEN,
-            lastNameEN: e.lastNameEN,
-            email: e.email,
-          };
-        }
-      });
-      // Add current user to the top of the admin list
-      if (user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) {
-        adminList = [
-          {
-            id: user.id,
-            firstNameEN: user.firstNameEN,
-            lastNameEN: user.lastNameEN,
-            email: user.email,
-          },
-          ...adminList,
-        ];
-      }
-
-      setInstructorOption(
-        insList.map((e: IModelUser) => {
-          return { label: getUserName(e, 1), value: e.id };
-        })
-      );
-      setAdminList(adminList);
-      setAdminFilter(adminList);
-    }
-  };
-
-  const editAdmin = async (id: string, role: ROLE) => {
-    const payload: Partial<IModelUser> = { role };
-    if (swapMethodAddAdmin && role === ROLE.ADMIN) {
-      if (invalidEmail) return;
-      payload.email = id;
-    } else payload.id = id;
+  const deleteAdmin = async (id: string) => {
+    const payload: Partial<IModelUser> = { id, role: ROLE.INSTRUCTOR };
     const res = await updateAdmin(payload);
     if (res) {
       const name = res.firstNameEN?.length ? getUserName(res, 1) : res.email;
-      const message =
-        res.role == ROLE.ADMIN
-          ? `${name} is an admin`
-          : `Delete ${name} from admin`;
-      setEditUser(null);
-      fetchIns();
-      showNotifications(NOTI_TYPE.SUCCESS, "Success", message);
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Success",
+        `Delete ${name} from admin`
+      );
     }
   };
 
   useEffect(() => {
     if (opened) {
-      setEditUser(null);
       setSearchValue("");
       setSwapMethodAddAdmin(false);
-      fetchIns();
     }
   }, [opened]);
-
-  useEffect(() => {
-    if (swapMethodAddAdmin) {
-      if (editUser?.length) setInvalidEmail(!validateEmail(editUser));
-      else setInvalidEmail(false);
-    }
-  }, [editUser]);
 
   useEffect(() => {
     setAdminFilter(
@@ -131,8 +74,8 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
           "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-fit ",
       }}
     >
-      <div className="flex flex-col h-full gap-5    flex-1 ">
-        <div
+      <div className="flex flex-1 flex-col h-full gap-5  ">
+        {/* <div
           className="flex flex-col gap-3 max-h-[320px] rounded-md h-fit w-full mt-2 p-4  "
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -224,7 +167,13 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
               </Button>
             </div>
           </div>
-        </div>
+        </div> */}
+        <CompoMangeIns
+          opened={opened}
+          role={ROLE.ADMIN}
+          setUserList={setAdminList}
+          setUserFilter={setAdminFilter}
+        />
 
         {/* Added Admin */}
         <div
@@ -280,7 +229,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                       color="red"
                       size="xs"
                       className="rounded-[4px]"
-                      onClick={() => editAdmin(admin.id, ROLE.INSTRUCTOR)}
+                      onClick={() => deleteAdmin(admin.id)}
                       leftSection={
                         <IconTrash className="size-4" stroke={1.5} />
                       }

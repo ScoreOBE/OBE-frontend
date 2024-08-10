@@ -34,7 +34,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { isNumber } from "lodash";
 import { containsOnlyNumbers } from "@/helpers/functions/validation";
-import ComproMangementIns from "@/components/ComproManageIns";
+import ComproMangementIns from "@/components/CompoManageIns";
 import MainPopup from "@/components/Popup/MainPopup";
 import course, { removeCourse } from "@/store/course";
 import { IModelSection } from "@/models/ModelSection";
