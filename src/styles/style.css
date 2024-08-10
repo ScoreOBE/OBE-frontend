@@ -7,7 +7,7 @@
   --color-tertiary: #3e3e3e;
   --color-hover: #efefef;
   --color-border-input: #cecece;
-  --color-background-input: #f9f9f9;
+  --color-background-input: #ffffff;
   --input-radius: 20px;
 }
 
@@ -24,6 +24,11 @@
   border-color: #1fc461;
 }
 
+
+.mantine-TagsInput-input[data-error]{
+  border: var(--color-border-input) solid 1px !important;
+}
+
 .mantine-active:active{
   transform: none !important;
 }
@@ -38,8 +43,6 @@
 
 .mantine-Stepper-stepWrapper {
  width: 3px;
-  
- 
 }
 
 .mantine-Stepper-stepLabel {
@@ -53,14 +56,18 @@
   font-size: 18px !important;
 }
 
-.mantine-Modal-content,
+
 .mantine-Modal-header {
-  background-color: #f7f7f7 !important;
+  background-color: #ffffff !important;
+}
+
+.mantine-Modal-content{
+  background-color: #ffffff !important;
 }
 
 .mantine-Paper-root {
   border-radius: 8px !important;
-  padding: 6px !important;
+  padding: 10px !important;
   width: fit-content !important;
 }
 
@@ -94,7 +101,9 @@
 }
 
 .mantine-Select-input:focus,
-.mantine-Select-input:active {
+.mantine-Select-input:active,
+.mantine-TagsInput-input:active,
+.mantine-TagsInput-input:focus-within {
   border-color: var(--color-secondary) !important;
 }
 
@@ -128,6 +137,10 @@
 
 .mantine-Menu-item:hover {
   background-color: var(--color-hover);
+}
+
+.mantine-Menu-item {
+  font-weight: 500;
 }
 
 Button:disabled {

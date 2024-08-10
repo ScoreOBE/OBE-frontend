@@ -79,7 +79,7 @@ export default function DashboardSidebar() {
           onChange={(_value, option) => setSelectedTerm(option)}
           allowDeselect={false}
           withCheckIcon={false}
-          className="rounded-md mb-5 border-none w-1/2"
+          className="mb-7 border-none w-1/2"
           classNames={{
             label: "font-medium mb-1",
             input: "text-primary font-medium",
@@ -98,7 +98,7 @@ export default function DashboardSidebar() {
         />
         <Button
           className="w-full"
-          color="#6869AD"
+          color="#5768d5"
           onClick={() => confirmFilterTerm()}
         >
           OK

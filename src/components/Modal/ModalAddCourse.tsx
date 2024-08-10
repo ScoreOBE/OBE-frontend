@@ -37,7 +37,7 @@ import {
   showNotifications,
   sortData,
 } from "@/helpers/functions/function";
-import { setCourseList } from "@/store/course";
+import course, { setCourseList } from "@/store/course";
 
 type Props = {
   opened: boolean;
@@ -78,7 +78,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       courseNo: (value) => {
         if (!value) return "Course No. is required";
         const isValid = /^\d{6}$/.test(value.toString());
-        return isValid ? null : "Please enter a valid course no";
+        return isValid ? null : "Require number 6 digits";
       },
       courseName: (value) => validateCourseNameorTopic(value!, "Course Name"),
       sections: {
@@ -136,24 +136,27 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     const length = form.getValues().sections?.length || 0;
     switch (active) {
       case 0:
+        form.reset();
         form.setFieldValue("type", type);
         isValid = !form.validateField("type").hasError;
-        form.setFieldValue("sections", [{}]);
+        setSectionNoList([]);
+        setCoInsList([]);
         break;
       case 1:
+        for (let i = 0; i < length; i++) {
+          isValid = !form.validateField(`sections.${i}.sectionNo`).hasError;
+          if (!isValid) break;
+        }
+        form.validateField("courseName");
+        form.validateField("sections.0.topic");
         isValid =
           !form.validateField("courseNo").hasError &&
           !form.validateField("courseName").hasError &&
           (!form.validateField("sections.0.topic").hasError ||
             form.getValues().type !== COURSE_TYPE.SEL_TOPIC);
+
         break;
       case 2:
-        for (let i = 0; i < length; i++) {
-          isValid = !form.validateField(`sections.${i}.sectionNo`).hasError;
-          if (!isValid) break;
-        }
-        break;
-      case 3:
         const secNoList: string[] = [];
         for (let i = 0; i < length; i++) {
           const isError = form.validateField(`sections.${i}.semester`).hasError;
@@ -177,15 +180,13 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           );
         }
         break;
-      case 4:
-        break;
     }
     if (isValid) {
       setFirstInput(true);
-      if (active == 5) {
+      if (active == 4) {
         await addCourse();
       }
-      setActive((cur) => (cur < 5 ? cur + 1 : cur));
+      setActive((cur) => (cur < 4 ? cur + 1 : cur));
     }
   };
   const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
@@ -222,7 +223,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     const lastValue = value[value.length - 1];
     const type = form.getValues().type;
     // validate section No
-    if (value.length > sections.length) {
+    if (value.length >= sections.length) {
       if (
         !parseInt(lastValue) ||
         lastValue.length > 3 ||
@@ -358,7 +359,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       transitionProps={{ transition: "pop" }}
       classNames={{
         content:
-          "flex flex-col justify-center bg-[#F6F7FA] item-center px-2 overflow-hidden",
+          "flex flex-col justify-center bg-[#F6F7FA] item-center overflow-hidden",
       }}
     >
       <Stepper
@@ -375,7 +376,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           stepLabel: "text-[13px] font-semibold",
           stepDescription: "text-[13px] font-semibold",
         }}
-        className=" justify-center items-center mt-1 mb-5 text-[14px] max-h-full"
+        className=" justify-center items-center mt-1  text-[14px] max-h-full"
       >
         <Stepper.Step label="Course Type" description="STEP 1">
           <p className="font-semibold mt-5 text-[15px]">
@@ -393,7 +394,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   {COURSE_TYPE.GENERAL}
                 </span>
                 <br />
-                <span className="flex justify-start font-normal text-[12px] text-secondary -mt-1">
+                <span className="flex justify-start font-medium text-[12px] f text-secondary -mt-1">
                   - Learner Person / Innovative Co-creator / Active Citizen
                 </span>
               </p>
@@ -408,7 +409,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   {COURSE_TYPE.SPECIAL}
                 </span>
                 <br />
-                <span className="flex justify-start font-normal text-[12px] text-secondary -mt-1">
+                <span className="flex justify-start font-medium text-[12px] text-secondary -mt-1">
                   - Core Courses / Major Courses (Required Courses) / Minor
                   Courses
                 </span>
@@ -422,7 +423,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start">Major Elective</span>{" "}
                 <br />
-                <span className="flex justify-start font-normal text-[12px] text-secondary -mt-1">
+                <span className="flex justify-start font-medium text-[12px] text-secondary -mt-1">
                   - Selected Topics Course
                 </span>
               </p>
@@ -442,15 +443,15 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             </Button>
           </div>
         </Stepper.Step>
-        <Stepper.Step label="Course Name" description="STEP 2">
+        <Stepper.Step label="Course Info" description="STEP 2">
           <div
-            className="w-full p-4 mt-2 h-fit  bg-white rounded-md"
-            style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.20)" }}
+            className="w-full  mt-2 h-fit  bg-white mb-5 rounded-md"
+            
           >
             <div className="flex flex-col gap-3">
               <TextInput
                 classNames={{ input: "focus:border-primary" }}
-                label="Course no."
+                label="Course No."
                 size="xs"
                 withAsterisk
                 placeholder={
@@ -462,7 +463,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                 {...form.getInputProps("courseNo")}
               />
               <TextInput
-                label="Course name"
+                label="Course Name"
                 withAsterisk
                 size="xs"
                 classNames={{ input: "focus:border-primary " }}
@@ -483,60 +484,40 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   {...form.getInputProps("sections.0.topic")}
                 />
               )}
+              <TagsInput
+                label="Section"
+                withAsterisk
+                classNames={{
+                  input:
+                    " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-[12px]  rounded-md",
+                  pill: "bg-secondary text-white font-bold",
+                  label: "font-semibold text-[#3e3e3e] text-b2",
+                  error: "text-[10px] !border-none",
+                  
+                }}
+                placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
+                splitChars={[",", " ", "|"]}
+                {...form.getInputProps(`section.sectionNo`)}
+                error={
+                  !firstInput &&
+                  form.validateField(`sections.0.sectionNo`).error
+                }
+                value={sectionNoList}
+                onChange={setSectionList}
+              ></TagsInput>
+              <p>{form.validateField("sections.sectionNo").error}</p>
             </div>
           </div>
         </Stepper.Step>
-        <Stepper.Step label="Add Section" description="STEP 3">
-          <div className="flex gap-2 flex-col">
-            <div
-              className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md"
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              <div className="bg-[#e6e9ff] flex flex-col font-semibold rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary">
-                <p className="text-secondary text-b2">
-                  {form.getValues().courseNo} - {form.getValues().courseName}
-                </p>
-                <p className="text-secondary text-b3">
-                  Topic: {form.getValues().sections?.at(0)?.topic}
-                </p>
-              </div>
-              <div
-                className="w-full p-4   bg-white rounded-md "
-                style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.20)" }}
-              >
-                <TagsInput
-                  label="Section"
-                  withAsterisk
-                  classNames={{
-                    input:
-                      "focus-within:border-secondary h-[145px] mt-1 p-3 text-[12px] rounded-md",
-                    pill: "bg-secondary text-white font-bold",
-                    label: "font-semibold text-[#3e3e3e]",
-                  }}
-                  placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
-                  splitChars={[",", " ", "|"]}
-                  {...form.getInputProps(`section.sectionNo`)}
-                  error={
-                    !firstInput &&
-                    form.validateField(`sections.0.sectionNo`).error
-                  }
-                  value={sectionNoList}
-                  onChange={setSectionList}
-                ></TagsInput>
-                <p>{form.validateField("sections.sectionNo").error}</p>
-              </div>
-            </div>
-          </div>
-        </Stepper.Step>
-        <Stepper.Step label="Map Semester" description="STEP 4">
-          <div className="flex flex-col max-h-[380px] h-fit w-full mt-2   p-[2px]    overflow-y-scroll  ">
+
+        <Stepper.Step label="Semester" description="STEP 3">
+          <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-scroll  ">
             <div className="flex flex-col font-medium text-[14px] gap-5">
               {form.getValues().sections?.map((sec, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary font-semibold">
-                    Select Semester for Section {getSection(sec.sectionNo)} <span className="text-red-500">*</span>
+                    Select Semester for Section {getSection(sec.sectionNo)}{" "}
+                    <span className="text-red-500">*</span>
                   </span>
                   <div
                     style={{
@@ -596,10 +577,10 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             </div>
           </div>
         </Stepper.Step>
-        <Stepper.Step label="Co-Instructor" description="STEP 5">
+        <Stepper.Step label="Co-Instructor" description="STEP 4">
           <div className="flex flex-col gap-5 mt-3 flex-1 ">
             <div
-              className="flex flex-col bg-white gap-2 max-h-[320px]  rounded-md h-fit w-full  p-4  "
+              className="flex flex-col bg-white gap-2 max-h-[320px] mb-5 rounded-md h-fit w-full  p-4  "
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
@@ -629,7 +610,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                     style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
                     classNames={{
                       input: " !rounded-r-none ",
-                      description: "font-medium mt-[1px] mb-2"
+                      description: "font-medium mt-[1px] mb-2",
                     }}
                     placeholder="example@cmu.ac.th"
                     value={insInput.value!}
@@ -812,18 +793,23 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             )}
           </div>
         </Stepper.Step>
-        <Stepper.Step label="Review" description="STEP 6">
+        <Stepper.Step label="Review" description="STEP 5">
           <div
-            className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md"
+            className="w-full flex flex-col bg-white border-secondary border-[1px] mb-5 rounded-md"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
           >
-            <div className="bg-[#e6e9ff] flex flex-col justify-start gap-1 font-semibold  rounded-t-md border-b-secondary border-[1px] px-4 py-2 text-secondary ">
-
-                <p>{form.getValues().courseNo} - {form.getValues().courseName} </p>
-                <p>{getUserName(user, 1)}</p>
-             
+            <div className="bg-[#e6e9ff] flex flex-col justify-start gap-[2px] font-semibold  rounded-t-md border-b-secondary border-[1px] px-4 py-2 text-secondary ">
+              <p>
+                {form.getValues().courseNo} - {form.getValues().courseName}{" "}
+              </p>
+              {form.getValues().sections?.at(0)?.topic && (
+                <p className="text-secondary text-b3">
+                  Topic: {form.getValues().sections?.at(0)?.topic}
+                </p>
+              )}
+              <p className="text-b3">Onwer Course: {getUserName(user, 1)}</p>
             </div>
             <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-scroll ">
               {" "}
@@ -906,10 +892,10 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
             className="rounded-[8px] text-[12px] h-[36px] w-fit"
             onClick={() => nextStep()}
             rightSection={
-              active != 5 && <IconArrowRight stroke={2} size={20} />
+              active != 4 && <IconArrowRight stroke={2} size={20} />
             }
           >
-            {active == 5 ? "Done" : "Next step"}
+            {active == 4 ? "Done" : "Next step"}
           </Button>
         </Group>
       )}

@@ -58,7 +58,7 @@ export default function CourseSidebar() {
           Back to Your Course
         </div>
 
-        <div className="text-sm flex flex-col gap-[6px]">
+        <div className="text-sm flex flex-col gap-[3px]">
           <p className="font-semibold">Welcome to</p>
           <p className="font-semibold">Course Management!</p>
         </div>
@@ -67,7 +67,7 @@ export default function CourseSidebar() {
           <div className="flex flex-col gap-2">
             <Button
               leftSection={<CourseIcon />}
-              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 flex justify-start text-[13px] items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
                 path.startsWith(ROUTE_PATH.COURSE_MANAGEMENT)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -78,7 +78,7 @@ export default function CourseSidebar() {
             </Button>
             <Button
               leftSection={<SOIcon />}
-              className={`font-semibold w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 flex justify-start text-[13px] items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
                 path.startsWith(ROUTE_PATH.COURSE_MANAGEMENT_MAP)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
