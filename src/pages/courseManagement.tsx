@@ -15,14 +15,29 @@ import { IconDots, IconTrash, IconEdit } from "@tabler/icons-react";
 import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import Icon from "@/components/Icon";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
-import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
+import {
+  deleteCourse,
+  getCourseManagement,
+} from "@/services/courseManagement/courseManagement.service";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { COURSE_TYPE, SEMESTER } from "@/helpers/constants/enum";
-import { getSection, getUserName } from "@/helpers/functions/function";
+import {
+  COURSE_TYPE,
+  NOTI_TYPE,
+  POPUP_TYPE,
+  SEMESTER,
+} from "@/helpers/constants/enum";
+import {
+  getSection,
+  getUserName,
+  showNotifications,
+} from "@/helpers/functions/function";
 import { useDisclosure } from "@mantine/hooks";
 import { isNumber } from "lodash";
 import { containsOnlyNumbers } from "@/helpers/functions/validation";
 import ComproMangementIns from "@/components/ComproManageIns";
+import MainPopup from "@/components/Popup/MainPopup";
+import course, { removeCourse } from "@/store/course";
+import { IModelSection } from "@/models/ModelSection";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -53,6 +68,9 @@ export default function CourseManagement() {
       ? null
       : `only contain 0-9, a-z, A-Z, space, "%&()*+,-./<=>?@[]\\^_`;
   };
+  const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
+    useDisclosure(false);
+  const [delSec, setdelSec] = useState<Partial<IModelSection>>();
   useEffect(() => {
     if (user.departmentCode) {
       const payloadCourse = {
@@ -114,194 +132,176 @@ export default function CourseManagement() {
     }
   };
 
+  const onClickDeleteCourse = async (id: string) => {
+    const res = await deleteCourse(id);
+    if (res) {
+      dispatch(removeCourse(res.id));
+    }
+    closeMainPopup();
+    showNotifications(
+      NOTI_TYPE.SUCCESS,
+      "Delete Course Success",
+      `${delSec?.sectionNo} is deleted`
+    );
+  };
+
   return (
     <>
-      {editInstructorModal && (
-        <Modal
-          opened={modalEditInstructor}
-          onClose={closeModalEditInstructor}
-          withCloseButton={false}
-          closeOnClickOutside={false}
-          title={`Edit Instructor in ${editCourse ? editCourse.courseNo : ""}`}
-          size="45vw"
-          centered
-          transitionProps={{ transition: "pop" }}
-          classNames={{
-            content:
-              "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center overflow-hidden max-h-fit ",
-          }}
-        >
-          <div className="flex flex-col gap-6">
-            <ComproMangementIns />
-            <div className="flex gap-2 justify-end w-full">
-              <Button
-                color="#575757"
-                variant="subtle"
-                className="rounded-[8px] text-[12px]   h-[36px] "
-                justify="start"
-                onClick={() => {
-                  setEditInstructorModal(false);
-                  closeModalEditSection;
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                color="#5768d5"
-                className="rounded-[8px] text-[12px] h-[36px] w-fit"
-              >
-                Done
-              </Button>
-            </div>
-          </div>
-        </Modal>
-      )}
-      {editSectionModal && (
-        <Modal
-          opened={modalEditSection}
-          onClose={closeModalEditSection}
-          withCloseButton={false}
-          closeOnClickOutside={false}
-          title={`Edit section ${
-            editCourse ? getSection(editSectionNo) : ""
-          } in ${editCourse ? editCourse.courseNo : ""}`}
-          size="30vw"
-          centered
-          transitionProps={{ transition: "pop" }}
-          classNames={{
-            content:
-              "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center overflow-hidden max-h-fit ",
-          }}
-        >
-          <div className="flex flex-col gap-6">
-            {/* Text Input */}
-            {editCourse.type === COURSE_TYPE.SEL_TOPIC && (
-              <TextInput
-                classNames={{ input: "focus:border-primary" }}
-                label="Topic"
-                size="xs"
-                value={editCourse.topic}
-                withAsterisk
-                error={validateCourseNameorTopic(editCourse.topic)}
-                onChange={(event) => {
-                  setEditCourse((prev: any) => ({
-                    ...prev,
-                    topic: event.target.value,
-                  }));
-                  console.log(event.target.value);
-                }}
-              />
-            )}
+      <Modal
+        opened={modalEditSection && editCourse}
+        onClose={closeModalEditSection}
+        closeOnClickOutside={false}
+        title={`Edit section ${
+          editCourse ? getSection(editCourse.sectionNo) : ""
+        } in ${editCourse ? editCourse.courseNo : ""}`}
+        size="30vw"
+        centered
+        transitionProps={{ transition: "pop" }}
+        classNames={{
+          content:
+            "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center  overflow-hidden ",
+        }}
+      >
+        {" "}
+        <div className="flex flex-col gap-5">
+          {/* Text Input */}
+          {editCourse?.type === COURSE_TYPE.SEL_TOPIC && (
             <TextInput
               classNames={{ input: "focus:border-primary" }}
-              label="Section"
+              label="Topic"
               size="xs"
-              value={editCourse.sectionNo}
+              value={editCourse ? editCourse.topic : ""}
               withAsterisk
-              maxLength={3}
-              error={
-                !containsOnlyNumbers(editCourse.sectionNo.toString()) &&
-                "Please enter a valid section no"
-              }
-              onChange={(event) => {
-                onClickEditSecNo(event.target.value);
+              onChange={(e) => {
+                const updatedCourseTopic = e.target.value;
+                setEditCourse((editCourse: any) => ({
+                  ...editCourse,
+                  topic: updatedCourseTopic,
+                }));
               }}
             />
-            {/* Open in */}
-            <div
-              className="flex justify-between items-center rounded-lg p-3  gap-1 bg-white"
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+          )}
+          <TextInput
+            classNames={{ input: "focus:border-primary" }}
+            label="Section"
+            size="sm"
+            value={editCourse ? getSection(editCourse.sectionNo) : ""}
+            withAsterisk
+            maxLength={3}
+            onChange={(e) => {
+              const updatedSectionNo = e.target.value;
+              setEditCourse((editCourse: any) => ({
+                ...editCourse,
+                sectionNo: updatedSectionNo,
+              }));
+            }}
+          />
+          {/* Open in */}
+          <div
+            className="flex justify-between items-center rounded-lg p-3  gap-1 bg-white"
+            style={{
+              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <span className="text-[#3E3E3E] font-semibold">
+              Open in Semester 3/66
+            </span>
+            <Switch
+              color="#5768d5"
+              size="lg"
+              onLabel="ON"
+              offLabel="OFF"
+              checked={editCourse?.isActive}
+              onChange={() => {
+                setEditCourse(!editCourse?.isActive);
               }}
-            >
-              <span className="text-[#3E3E3E] font-semibold">
-                Open in Semester 3/66
-              </span>
-              <Switch
-                color="#5C55E5"
-                size="lg"
-                onLabel="ON"
-                offLabel="OFF"
-                checked={editCourse.isActive}
-                onChange={() => {
-                  setEditCourse({
-                    ...editCourse,
-                    isActive: !editCourse.isActive,
-                  });
-                }}
-              />
-            </div>
-
-            {/* Open Semester */}
-            <div
-              className="flex justify-between items-center rounded-lg p-3  bg-white"
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              <span className="text-[#3E3E3E] font-semibold">
-                Open Semester
-              </span>
-              <Checkbox.Group
-                classNames={{ error: "mt-2" }}
-                value={editCourse.semester}
-              >
-                <Group className="flex flex-row gap-1 justify-end ">
-                  {SEMESTER.map((item) => {
-                    return (
-                      <Checkbox
-                        key={item}
-                        classNames={{
-                          input:
-                            "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                          body: "mr-3",
-                          label: "text-[14px] cursor-pointer",
-                        }}
-                        disabled={
-                          editCourse.semester.length == 1 &&
-                          editCourse.semester.includes(item)
-                        }
-                        color="#5768D5"
-                        size="xs"
-                        label={item}
-                        value={item}
-                        onChange={(event) => {
-                          onClickSetEditSemester(event.target.checked, item);
-                        }}
-                      />
-                    );
-                  })}
-                </Group>
-              </Checkbox.Group>
-            </div>
-            <div className="flex gap-2 justify-end w-full">
-              <Button
-                color="#575757"
-                variant="subtle"
-                className="rounded-[8px] text-[12px]   h-[36px] "
-                justify="start"
-                onClick={() => {
-                  setEditSectionModal(false);
-                  closeModalEditSection;
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                color="#5768d5"
-                className="rounded-[8px] text-[12px] h-[36px] w-fit"
-              >
-                Done
-              </Button>
-            </div>
+            />
           </div>
-        </Modal>
-      )}
 
-      <div className="bg-[#ffffff] flex flex-col h-full w-full p-6 py-3 gap-3 overflow-hidden">
+          {/* Open Semester */}
+          <div
+            className="flex justify-between items-center rounded-lg p-4 mb-3  bg-white"
+            style={{
+              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <span className="text-[#3E3E3E] font-semibold">Open Semester</span>
+            <Checkbox.Group
+              classNames={{ error: "mt-2" }}
+              className="flex items-center   justify-center"
+              value={editCourse?.semester}
+            >
+              <Group className="flex flex-row gap-1 items-center justify-center ">
+                {SEMESTER.map((item) => {
+                  return (
+                    <Checkbox
+                      key={item}
+                      classNames={{
+                        input:
+                          "bg-black bg-opacity-0 border-[1.5px]  border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                        label: "text-[14px] cursor-pointer",
+                      }}
+                      disabled={
+                        editCourse?.semester.length == 1 &&
+                        editCourse?.semester.includes(item)
+                      }
+                      color="#5768D5"
+                      size="xs"
+                      label={item}
+                      value={item}
+                      onChange={(event) => {
+                        onClickSetEditSemester(event.target.checked, item);
+                      }}
+                    />
+                  );
+                })}
+              </Group>
+            </Checkbox.Group>
+          </div>
+
+          <div className="flex gap-2 justify-end w-full">
+            <Button
+              color="#575757"
+              variant="subtle"
+              className="rounded-[8px] text-[12px]   h-[36px] "
+              justify="start"
+              onClick={() => {
+                setEditSectionModal(false);
+                closeModalEditSection;
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="#5768d5"
+              className="rounded-[8px] text-[12px] font-bold h-[36px] w-fit"
+            >
+              Done
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      <MainPopup
+        opened={openMainPopup}
+        onClose={closeMainPopup}
+        action={() => onClickDeleteCourse(delSec?.id!)}
+        type={POPUP_TYPE.DELETE}
+        title={`Delete ${getSection(delSec?.sectionNo)} in Course ไม่รู้ทำไง`}
+        message={
+          <p>
+            All data form the current semester for this course will be
+            permanently deleted. Data from previous semesters will not be
+            affected. <br />{" "}
+            <span>Are you sure you want to deleted this course? </span>
+          </p>
+        }
+      />
+
+      <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
         <div className="flex flex-col  py-1 gap-1 items-start ">
-          <p className="text-secondary text-[16px] font-semibold">Dashboard</p>
-          <p className="text-tertiary text-[12px] font-medium">XX Courses</p>
+          <p className="text-secondary text-[16px] font-bold">Dashboard</p>
+          <p className="text-tertiary text-[14px] font-medium">XX Courses</p>
         </div>
         {/* Course Detail */}
         {loading ? (
@@ -320,21 +320,21 @@ export default function CourseManagement() {
               ></l-tailspin>
             }
             hasMore={payload?.hasMore}
-            className="overflow-y-auto w-full h-fit max-h-full flex flex-col gap-4 p-1"
+            className="overflow-y-auto w-full h-fit max-h-full flex flex-col gap-4 "
             style={{ height: "fit-content", maxHeight: "100%" }}
           >
             {courseManagement.map((course, index) => (
               <div
                 key={index}
-                className="bg-[#F4F5FE] flex flex-col rounded-lg py-5 px-8 gap-4"
+                className="bg-[#eff0fd] rounded-md flex flex-col  p-5 "
               >
                 {/* Course Topic */}
-                <div className="gap-3 flex items-center w-full justify-between">
-                  <div className="flex flex-col w-[25%]">
-                    <p className="font-semibold text-[14px] text-secondary">
+                <div className="gap-3 mb-4 flex items-center w-full justify-between">
+                  <div className="flex flex-col  w-fit">
+                    <p className=" font-bold text-b2 text-secondary">
                       {course.courseNo}
                     </p>
-                    <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">
+                    <p className="text-b2 font-medium text-[#4E5150] flex-wrap ">
                       {course.courseName}
                     </p>
                   </div>
@@ -344,14 +344,9 @@ export default function CourseManagement() {
                   </div>
                 </div>
                 {/* Section */}
-                {course.sections.map((sec: any) => (
-                  <div className="flex flex-col gap-4">
-                    <div
-                      className="bg-white py-3 px-5 rounded-lg"
-                      style={{
-                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.20)",
-                      }}
-                    >
+                <div className="flex flex-col ">
+                  {course.sections.map((sec: any) => (
+                    <div className="bg-white flex flex-col first:rounded-t-md last:rounded-b-md py-4 border-b-[1px] border-[#eeeeee]  px-5 ">
                       <div className="gap-3 flex items-center justify-between ">
                         <div className="flex flex-row items-center w-fit gap-6">
                           <div className="flex flex-col w-56">
@@ -380,12 +375,14 @@ export default function CourseManagement() {
 
                         <div className="flex flex-row w-[60%] items-center justify-between text-[#4E5150] text-[12px] font-normal ">
                           {/* Main Instructor */}
-                          <p className="text-wrap w-[20%]">
+                          <p className="text-wrap w-[20%] font-medium">
                             {getUserName(sec.instructor)}
                           </p>
                           {/* Open Symester */}
                           <div className="flex flex-row gap-1 w-[30%]">
-                            <p className="text-wrap ">Open Semester</p>
+                            <p className="text-wrap font-medium ">
+                              Open Semester
+                            </p>
                             <div className="flex flex-row gap-1">
                               {sec.semester.map((term: any, index: number) => (
                                 <span key={index} className="text-wrap ">
@@ -430,15 +427,21 @@ export default function CourseManagement() {
                             >
                               <IconEdit className="size-4" stroke={1.5} />
                             </div>
-                            <div className="flex flex-row justify-center items-center bg-transparent  border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10">
+                            <div
+                              onClick={() => {
+                                setdelSec(sec);
+                                openedMainPopup();
+                              }}
+                              className="flex flex-row justify-center items-center bg-transparent  border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"
+                            >
                               <IconTrash className="size-4" stroke={1.5} />
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             ))}
           </InfiniteScroll>
