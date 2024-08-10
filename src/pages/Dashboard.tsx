@@ -117,12 +117,12 @@ export default function Dashboard() {
         onClose={closeMainPopup}
         action={() => onClickDeleteCourse(delCourse?.id!)}
         type={POPUP_TYPE.DELETE}
-        title={`Delete ${delCourse?.courseNo} Course`}
+        labelButtonRight="Delete course"
+        title={`Delete ${delCourse?.courseNo} Course?`}
         message={
           <p>
-            All data form the current semester for this course will be
-            permanently deleted. Data from previous semesters will not be
-            affected. <br />{" "}
+            Deleting this course will permanently remove all data from the
+            current semester. Data from previous semesters will not be affected.<br />{" "}
             <span>Are you sure you want to deleted this course? </span>
           </p>
         }

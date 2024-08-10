@@ -50,14 +50,14 @@ export default function MainPopup({
           {title}
         </div>
       }
-      size="35.5vw"
+      size="39.4vw"
       centered
       withCloseButton={false}
       transitionProps={{ transition: "pop" }}
       classNames={{
         title: `${titleClassName()}`,
         content:
-          "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden ",
+          "flex flex-col justify-start   font-medium leading-[24px] text-[14px] item-center  overflow-hidden ",
       }}
     >
       <div className="flex flex-col">
@@ -70,11 +70,12 @@ export default function MainPopup({
                 onClick={onClose}
                 variant="subtle"
                 color="#575757"
+               className="text-[14px]"
               >
                 Cancel
               </Button>{" "}
-              <Button radius="10px" onClick={action} color="#FF4747">
-                {labelButtonRight ?? "Delete"}
+              <Button radius="10px" onClick={action}  className="text-[14px]" color="#FF4747">
+                {labelButtonRight}
               </Button>
             </>
           ) : type == POPUP_TYPE.WARNING ? (

@@ -4,12 +4,19 @@ import {
   Button,
   Checkbox,
   Group,
+  Menu,
   Modal,
   Skeleton,
   Switch,
   TextInput,
 } from "@mantine/core";
-import { IconDots, IconTrash, IconEdit } from "@tabler/icons-react";
+import {
+  IconDots,
+  IconTrash,
+  IconEdit,
+  IconPencilMinus,
+  IconPlus,
+} from "@tabler/icons-react";
 import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import Icon from "@/components/Icon";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
@@ -28,13 +35,17 @@ import {
 } from "@/helpers/functions/function";
 import { useDisclosure } from "@mantine/hooks";
 import { isNumber } from "lodash";
-import CompoMangementIns from "@/components/CompoManageIns";
+
 import {
   containsOnlyNumbers,
   validateCourseNameorTopic,
 } from "@/helpers/functions/validation";
+
+import CompoMangementIns from "@/components/CompoManageIns";
+
+
 import MainPopup from "@/components/Popup/MainPopup";
-import { removeCourse } from "@/store/course";
+import course, { removeCourse } from "@/store/course";
 import { IModelSection } from "@/models/ModelSection";
 import {
   IModelCourseManagement,
@@ -42,6 +53,9 @@ import {
 } from "@/models/ModelCourseManagement";
 import { useForm } from "@mantine/form";
 import Loading from "@/components/Loading";
+import { getCourse } from "@/services/course/course.service";
+import { IModelCourse } from "@/models/ModelCourse";
+import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -82,7 +96,23 @@ export default function CourseManagement() {
 
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
-  const [delSec, setdelSec] = useState<Partial<IModelSection>>();
+
+  const [
+    openMainPopupDelCourse,
+    { open: openedMainPopupDelCourse, close: closeMainPopupDelCourse },
+  ] = useDisclosure(false);
+
+  const [
+    openModalManageInst,
+    { open: openedModalManageInst, close: closeModalManageInst },
+  ] = useDisclosure(false);
+
+  const [delSec, setDelSec] = useState<
+    Partial<IModelSection> & Record<string, any>
+  >();
+
+  const [delCourse, setDelCourse] = useState<Partial<IModelCourseManagement>>();
+
   useEffect(() => {
     if (user.departmentCode) {
       const payloadCourse = {
@@ -146,6 +176,19 @@ export default function CourseManagement() {
   };
 
   const onClickDeleteCourse = async (id: string) => {
+    // const res = await deleteCourse(id);
+    // if (res) {
+    //   dispatch(removeCourse(res.id));
+    // }
+    // closeMainPopup();
+    // showNotifications(
+    //   NOTI_TYPE.SUCCESS,
+    //   "Delete Course Success",
+    //   `${delSec?.sectionNo} is deleted`
+    // );
+  };
+
+  const onClickDeleteSec = async (id: string) => {
     // const res = await deleteCourse(id);
     // if (res) {
     //   dispatch(removeCourse(res.id));
@@ -256,7 +299,7 @@ export default function CourseManagement() {
             <Button
               color="#575757"
               variant="subtle"
-              className="rounded-[8px] text-[12px]   h-[36px] "
+              className="rounded-[10px] text-[14px]   h-[36px] "
               justify="start"
               onClick={() => {
                 setEditSectionModal(false);
@@ -267,7 +310,7 @@ export default function CourseManagement() {
             </Button>
             <Button
               color="#5768d5"
-              className="rounded-[8px] text-[12px] font-bold h-[36px] w-fit"
+              className="rounded-[10px] text-[14px] font-bold h-[36px] w-fit"
             >
               Done
             </Button>
@@ -278,17 +321,40 @@ export default function CourseManagement() {
       <MainPopup
         opened={openMainPopup}
         onClose={closeMainPopup}
-        action={() => onClickDeleteCourse(delSec?.id!)}
+        action={() => onClickDeleteSec(delSec?.id!)}
         type={POPUP_TYPE.DELETE}
-        title={`Delete ${getSection(delSec?.sectionNo)} in Course ไม่รู้ทำไง`}
+        labelButtonRight="Delete section"
+        title={`Delete seciton ${getSection(delSec?.sectionNo)} in ${
+          delSec?.courseNo
+        }?`}
         message={
           <p>
-            All data form the current semester for this course will be
-            permanently deleted. Data from previous semesters will not be
-            affected. <br />{" "}
-            <span>Are you sure you want to deleted this course? </span>
+            Deleting this section will permanently remove all data from the
+            current semester. Data from previous semesters will not be affected.{" "}
+            <br /> <span>Are you sure you want to deleted this section? </span>
           </p>
         }
+      />
+
+      <MainPopup
+        opened={openMainPopupDelCourse}
+        onClose={closeMainPopupDelCourse}
+        action={() => onClickDeleteCourse(delCourse?.id!)}
+        type={POPUP_TYPE.DELETE}
+        labelButtonRight="Delete course"
+        title={`Delete ${delCourse?.courseNo} Course?`}
+        message={
+          <p>
+            Deleting this course will permanently remove all data from the
+            current semester. Data from previous semesters will not be affected.{" "}
+            <br /> <span>Are you sure you want to deleted this course? </span>
+          </p>
+        }
+      />
+
+      <ModalManageIns
+        opened={openModalManageInst}
+        onClose={closeModalManageInst}
       />
 
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
@@ -327,8 +393,59 @@ export default function CourseManagement() {
                     </p>
                   </div>
 
-                  <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
-                    <IconDots />
+                  <div className="rounded-full  size-8 hover:bg-gray-300 p-1 ">
+                    <Menu trigger="click" position="bottom-end" offset={2}>
+                      <Menu.Target>
+                        <IconDots className=" rounded-full hover:bg-gray-300" />
+                      </Menu.Target>
+                      <Menu.Dropdown
+                        className="rounded-md backdrop-blur-xl bg-white/70 "
+                        style={{
+                          boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                        }}
+                      >
+                        <Menu.Item className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]">
+                          <div className="flex items-center gap-2">
+                            <IconPlus stroke={2} className="h-4 w-4" />
+                            <span>Add section</span>
+                          </div>
+                        </Menu.Item>
+                        <Menu.Item className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]">
+                          <div className="flex items-center gap-2">
+                            <IconPencilMinus stroke={1.5} className="h-4 w-4" />
+                            <span>Edit course</span>
+                          </div>
+                        </Menu.Item>
+                        <Menu.Item
+                          onClick={openedModalManageInst}
+                          className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Icon
+                              className="h-4 w-4"
+                              IconComponent={ManageAdminIcon}
+                            />
+
+                            <span>Manage instructor</span>
+                          </div>
+                        </Menu.Item>
+                        <Menu.Item
+                          className="text-[#FF4747]  w-[180px] font-semibold text-b2 hover:bg-[#d55757]/10"
+                          onClick={() => {
+                            setDelCourse({
+                              id: course.id,
+                              courseNo: course.courseNo,
+                            });
+                            openedMainPopupDelCourse();
+                          }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <IconTrash className="h-4 w-4" stroke={1.5} />
+                            <span>Delete course</span>
+                          </div>
+                        </Menu.Item>
+                      </Menu.Dropdown>
+                    </Menu>
                   </div>
                 </div>
                 {/* Section */}
@@ -410,7 +527,7 @@ export default function CourseManagement() {
                         </div>
                         <div
                           onClick={() => {
-                            setdelSec(sec);
+                            setDelSec({ ...sec, courseNo: course.courseNo });
                             openedMainPopup();
                           }}
                           className="flex justify-center items-center bg-transparent border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"

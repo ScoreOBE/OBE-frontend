@@ -10,7 +10,7 @@ import {
 import checkedTQF3Completed from "@/assets/icons/checkedTQF3Completed.svg?react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
-import Icon from "../Icon";
+import Icon from "@/components/Icon";
 import notCompleteIcon from "@/assets/icons/notComplete.svg?react";
 import { IModelUser } from "@/models/ModelUser";
 import { getCourse } from "@/services/course/course.service";
@@ -33,6 +33,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   const [term, setTerm] = useState<IModelAcademicYear>();
   const [checkedTQF3, setCheckedTQF3] = useState(true);
   const [checkedTQF5, setCheckedTQF5] = useState(false);
+  const [isCheck, setIsCheck] = useState(false);
   const [notCompleteTQF3List, setnotCompleteTQF3List] = useState<any[]>([]);
 
   useEffect(() => {
@@ -105,6 +106,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   const clickToggleTQF3 = (checked: any) => {
     setCheckedTQF3(checked);
     setCheckedTQF5(!checked);
+    setIsCheck(checked);
     if (checked) {
       onClickeToggleProcessTQF3(true);
     } else {
@@ -115,6 +117,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   const clickToggleTQF5 = (checked: any) => {
     setCheckedTQF5(checked);
     setCheckedTQF3(!checked);
+    setIsCheck(!checked);
   };
 
   return (
@@ -132,21 +135,21 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
           "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-fit ",
       }}
     >
-      <div className="flex flex-col h-full    flex-1 ">
-        <div className="flex flex-row w-full mb-4 items-end h-fit ">
+      <div className="flex flex-col h-full gap-4   flex-1 ">
+        <div className="flex flex-row w-full mt-[2px] items-end h-fit ">
           <div
-            className="flex flex-col gap-3  p-3 px-3 w-full   bg-white border-[1px]  rounded-md"
+            className="flex flex-col gap-2  p-3 px-3 w-full   bg-white border-[1px]  rounded-md"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
           >
-            <div className="flex flex-col bg-[#F3F3F3] w-full rounded-xl overflow-clip">
+            <div className="flex flex-col bg-[#F3F3F3] w-full rounded-md overflow-clip">
               <div className="flex flex-row justify-between items-center px-5 py-3 w-full">
                 <p className="font-semibold text-[14px] text-tertiary">
                   TQF 3 Edit
                 </p>
                 <Switch
-                  color="#5C55E5"
+                  color="#5768d5"
                   size="lg"
                   onLabel="ON"
                   offLabel="OFF"
@@ -156,12 +159,12 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                   }
                 />
               </div>
-              <div className="flex flex-row justify-between items-center border-t-2 border-[#DADADA] px-5 py-3 w-full">
+              <div className="flex flex-row justify-between items-center border-t-[1px] border-[#DADADA] px-5 py-3 w-full">
                 <p className="font-semibold text-[14px] text-tertiary">
                   TQF 5 Edit
                 </p>
                 <Switch
-                  color="#5C55E5"
+                  color="#5768d5"
                   size="lg"
                   onLabel="ON"
                   offLabel="OFF"
@@ -172,30 +175,55 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                 />
               </div>
             </div>
-            <div className="ml-4">
-              <p className="font-semibold text-[13px] text-tertiary">
-                Turn on TQF 5 edit
-              </p>
-              <List
-                listStyleType="disc"
-                className="ml-2 text-[12px] text-[#575757] "
-              >
-                <List.Item>
-                  All CPE department course instructors will be able to edit TQF
-                  5,
-                </List.Item>
-                <List.Item>
-                  <span className="text-secondary">
-                    TQF 3 edit will be automatically turn off.
-                  </span>{" "}
-                  As a result, instructors will not be able to edit TQF 3.
-                </List.Item>
-                <List.Item className="text-secondary">
-                  Does not affect courses with no data or incomplete in TQF 3.
-                  Instructors will still be able to edit TQF 3.
-                </List.Item>
-              </List>
-            </div>
+            {isCheck ? (
+              <div className="w-full px-3 font-medium">
+                <p className="font-semibold text-[13px] text-tertiary">
+                  When turn on TQF 5 edit
+                </p>
+                <List
+                  listStyleType="disc"
+                  className="ml-2 flex flex-1 flex-col text-[12px] text-[#575757] "
+                >
+                  <List.Item>
+                    All CPE course instructors will gain access to edit TQF 5.
+                  </List.Item>
+                  <List.Item>
+                    <span className="text-secondary">
+                      TQF 3 editing will automatically be disabled,
+                    </span>{" "}
+                    preventing further edits.
+                  </List.Item>
+                  <List.Item className="text-secondary w-full">
+                    Courses without data or with incomplete TQF 3 will still be
+                    editable.
+                  </List.Item>
+                </List>
+              </div>
+            ) : (
+              <div className="w-full px-3 font-medium">
+                <p className="font-semibold text-[13px] text-tertiary">
+                  When turn on TQF 3 edit
+                </p>
+                <List
+                  listStyleType="disc"
+                  className="ml-2 flex flex-1 flex-col text-[12px] text-[#575757] "
+                >
+                  <List.Item>
+                    All CPE course instructors will gain access to edit TQF 3.
+                  </List.Item>
+                  <List.Item>
+                    <span className="text-secondary">
+                      TQF 5 editing will automatically be disabled,
+                    </span>{" "}
+                    As a result, instructors will not be able to edit TQF 5.
+                  </List.Item>
+                  <List.Item className="text-secondary font-semibold w-full">
+                    You can select specific courses below to enable TQF 3
+                    editing.
+                  </List.Item>
+                </List>
+              </div>
+            )}
           </div>
         </div>
 
@@ -227,7 +255,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                   {`${notCompleteTQF3List.length > 1 ? "s" : ""}`}
                 </p>
               </div>
-              <div className="flex flex-col gap-2 w-full h-[350px] p-4 overflow-y-hidden">
+              <div className="flex flex-col gap-2 w-full h-[350px] p-4 py-3 overflow-y-hidden">
                 <TextInput
                   leftSection={<TbSearch />}
                   placeholder="Course No, Course name "
@@ -238,23 +266,20 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                   }
                   rightSectionPointerEvents="all"
                 />
-                <div className="flex flex-col gap-2 overflow-y-scroll p-1">
+                <div className="flex flex-col  overflow-y-scroll p-1">
                   {notCompleteTQF3List.map((e, index) => (
                     <div
                       key={index}
-                      style={{
-                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                      }}
-                      className="w-full items-center justify-between mt-2 py-3 px-4 rounded-md flex"
+                      className="w-full items-center justify-between last:border-none border-b-[1px]  py-3 px-4  flex"
                     >
                       <div className="gap-3 flex items-center">
                         <div className="flex flex-col">
                           <p className="font-semibold text-[14px] text-secondary">
                             {e.courseNo}
                             {e.type === COURSE_TYPE.SEL_TOPIC &&
-                              ` (Sec. ${getSection(e.sectionNo)})`}
+                              ` (Section ${getSection(e.sectionNo)})`}
                           </p>
-                          <p className="text-[12px] font-normal text-[#4E5150]">
+                          <p className="text-[12px] font-medium text-[#4E5150]">
                             {e.type === COURSE_TYPE.SEL_TOPIC
                               ? e.topic
                               : e.courseName}
@@ -262,12 +287,12 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                         </div>
                       </div>
                       <div className="flex flex-row items-center justify-between w-[50%]">
-                        <p className="mr-1 text-[#4E5150] text-[12px] font-normal text-wrap">
+                        <p className="mr-1 text-[#4E5150] text-[12px] font-medium text-wrap">
                           {e.instructor}
                         </p>
                         {!checkedTQF3 && (
                           <Switch
-                            color="#5C55E5"
+                            color="#5768d5"
                             size="lg"
                             onLabel="ON"
                             offLabel="OFF"

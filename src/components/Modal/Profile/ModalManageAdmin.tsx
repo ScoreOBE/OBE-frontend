@@ -10,7 +10,7 @@ import {
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
-import Icon from "../Icon";
+import Icon from  "@/components/Icon";
 import { IModelUser } from "@/models/ModelUser";
 import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import { useAppSelector } from "@/store";
@@ -86,7 +86,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
               setEditUser(null);
               setSwapMethodAddAdmin(!swapMethodAddAdmin);
             }}
-            className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center py-3 px-5  "
+            className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center p-4  "
           >
             <div className="flex gap-6 items-center">
               <Icon IconComponent={AddCoIcon} className="text-secondary" />
@@ -101,7 +101,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
           </div>
 
           <div className="flex w-full  items-end h-fit ">
-            <div className="flex flex-row items-end  p-3 px-4 w-full bg-white border-[1px]  rounded-md">
+            <div className="flex flex-row items-end  w-full bg-white   rounded-md">
               {swapMethodAddAdmin ? (
                 <TextInput
                   withAsterisk={true}
@@ -186,7 +186,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
             <IconUsers /> Added Admin
           </div>
           {/* Show List Of Admin */}
-          <div className="flex flex-col gap-2 w-full h-[400px]   p-4  overflow-y-hidden">
+          <div className="flex flex-col gap-2 w-full h-[400px]   p-4 py-3  overflow-y-hidden">
             <TextInput
               leftSection={<TbSearch />}
               placeholder="Name / CMU account"
@@ -198,17 +198,15 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
               rightSectionPointerEvents="all"
             />
             {/* List of Admin */}
-            <div className="flex flex-col gap-2 overflow-y-scroll p-1">
+            <div className="flex flex-col overflow-y-scroll p-1">
               {adminFilter.map((admin, index) => (
                 <div
                   key={index}
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  }}
-                  className="w-full items-center justify-between mt-2 py-3 px-4 rounded-md flex"
+                  
+                  className="w-full items-center last:border-none border-b-[1px] justify-between  p-3  flex"
                 >
                   <div className="gap-3 flex items-center">
-                    <IconUserCircle size={32} stroke={1} />
+                    <IconUserCircle size={32} className=" -translate-x-1" stroke={1} />
                     <div className="flex flex-col">
                       <p className="font-semibold text-[14px] text-tertiary">
                         {getUserName(admin, 1)}
@@ -228,11 +226,9 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                       variant="outline"
                       color="red"
                       size="xs"
-                      className="rounded-[4px]"
+                      className="rounded-[6px]"
                       onClick={() => deleteAdmin(admin.id)}
-                      leftSection={
-                        <IconTrash className="size-4" stroke={1.5} />
-                      }
+                     
                     >
                       Delete
                     </Button>

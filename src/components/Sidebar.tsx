@@ -4,6 +4,7 @@ import DashboardSidebar from "./Sidebar/DashboardSidebar";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import CourseSidebar from "./Sidebar/CourseSidebar";
 import CourseManagementSidebar from "./Sidebar/CourseManagementSidebar";
+import { motion } from "framer-motion";
 
 export default function Sidebar() {
   const path = useLocation().pathname;
@@ -17,11 +18,18 @@ export default function Sidebar() {
     } else return;
   };
   return (
-    <div className="w-[255px] border-r-[1px] h-screen flex p-5">
+    <motion.div
+    initial={{
+      x: -120,
+    }}
+    animate={{ x: 0 }}
+    transition={{ duration: 0.3, type: 'keyframes', stiffness: 80 }}
+      className="w-[255px] border-r-[1px] h-screen flex p-5 sidebar-linear-gradient"
+    >
       <div className="flex w-full flex-col gap-11">
         <img src={cmulogo} alt="CMULogo" className="h-fit w-[155px]" />
         {getSidebar()}
       </div>
-    </div>
+    </motion.div>
   );
 }

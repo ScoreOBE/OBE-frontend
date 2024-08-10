@@ -552,8 +552,8 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           </div>
         </Stepper.Step>
         <Stepper.Step label="Co-Instructor" description="STEP 4">
-          <div className="flex flex-col gap-5 mt-3 flex-1 ">
-            {/* <div
+          <div className="flex flex-col mt-3 flex-1 ">
+            {/* {/* <div
               className="flex flex-col bg-white gap-2 max-h-[320px] mb-5 rounded-md h-fit w-full  p-4  "
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -651,7 +651,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
 
             {!!coInsList.length && (
               <div
-                className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md"
+                className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md"
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
@@ -767,7 +767,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                   Topic: {form.getValues().sections?.at(0)?.topic}
                 </p>
               )}
-              <p className="text-b3">Onwer Course: {getUserName(user, 1)}</p>
+              <p className="text-b3">Course owner: {getUserName(user, 1)}</p>
             </div>
             <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-scroll ">
               {" "}
@@ -837,7 +837,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
               <Button
                 color="#575757"
                 variant="subtle"
-                className="rounded-[8px] text-[12px]   h-[36px] "
+                className="rounded-[8px] text-[14px]   h-[36px] "
                 justify="start"
                 onClick={prevStep}
               >
@@ -847,7 +847,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
           </div>
           <Button
             color="#5768d5"
-            className="rounded-[8px] text-[12px] h-[36px] w-fit"
+            className="rounded-[8px] text-[14px] h-[36px] w-fit"
             onClick={() => nextStep()}
             rightSection={
               active != 4 && <IconArrowRight stroke={2} size={20} />
