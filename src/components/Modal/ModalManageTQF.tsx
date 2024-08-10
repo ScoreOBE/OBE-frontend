@@ -27,42 +27,31 @@ type Props = {
   onClose: () => void;
 };
 export default function ModalManageTQF({ opened, onClose }: Props) {
-  const [searchValue, setSearchValue] = useState("");
-  const [payload, setPayload] = useState<any>();
-  const [params, setParams] = useSearchParams({});
-  const [term, setTerm] = useState<IModelAcademicYear>();
   const academicYear = useAppSelector((state) => state.academicYear);
+  const [searchValue, setSearchValue] = useState("");
+  const [payload, setPayload] = useState<any>({});
+  const [term, setTerm] = useState<IModelAcademicYear>();
   const [checkedTQF3, setCheckedTQF3] = useState(true);
   const [checkedTQF5, setCheckedTQF5] = useState(false);
   const [notCompleteTQF3List, setnotCompleteTQF3List] = useState<any[]>([]);
 
   useEffect(() => {
-    const yearId = params.get("term");
-    const year = parseInt(params.get("year")!);
-    const semester = parseInt(params.get("semester")!);
-    if (
-      yearId != term?.id &&
-      year != term?.year &&
-      semester != term?.semester
-    ) {
-      const acaYear = academicYear.find(
-        (e) => e.id == yearId && e.semester == semester && e.year == year
-      );
-      if (acaYear) {
-        setTerm(acaYear);
-        setPayload({
-          ...new CourseRequestDTO(),
-          academicYear: acaYear.id,
-        });
-      }
+    if (academicYear.length && opened) {
+      setSearchValue("");
+      fetchCourse();
     }
-  }, [academicYear, params]);
+  }, [academicYear, opened]);
 
   const fetchCourse = async () => {
-    if (payload.academicYear) {
-      payload.manage = true;
-      const res = await getCourse({ ...payload });
-      if (res.length) {
+    const activeTerm = academicYear.find((e) => e.isActive);
+    if (activeTerm) {
+      const initialPayload = new CourseRequestDTO();
+      initialPayload.academicYear = activeTerm.id;
+      initialPayload.manage = true;
+      setTerm(activeTerm);
+      setPayload(initialPayload);
+      const res = await getCourse(initialPayload);
+      if (res) {
         const courseList: any[] = [];
         res.forEach((course: IModelCourse) => {
           if (!course.TQF3 || course.TQF3?.status !== TQF_STATUS.DONE) {
@@ -127,13 +116,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
     setCheckedTQF5(checked);
     setCheckedTQF3(!checked);
   };
-
-  useEffect(() => {
-    if (opened) {
-      setSearchValue("");
-      fetchCourse();
-    }
-  }, [opened]);
 
   return (
     <Modal

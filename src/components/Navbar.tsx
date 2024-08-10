@@ -66,6 +66,7 @@ export default function Navbar() {
         ) && (
           <div className="relative md:w-[400px] w-[220px]">
             <TextInput
+              autoFocus={false}
               leftSection={!isFocused && <TbSearch className="size-4" />}
               placeholder="Course No / Course Name"
               size="xs"

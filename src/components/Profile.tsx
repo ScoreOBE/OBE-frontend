@@ -83,6 +83,7 @@ export default function Profile() {
       <Menu
         trigger="click"
         openDelay={100}
+        clickOutsideEvents={["click"]}
         classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
       >
         <Menu.Target>
@@ -143,13 +144,13 @@ export default function Profile() {
           </Menu.Item>
 
           {/* SUB MENU MANAGEMENT */}
-          <Menu
-            trigger="click-hover"
-            openDelay={100}
-            closeDelay={400}
-            classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
-          >
-            {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
+          {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
+            <Menu
+              trigger="click-hover"
+              openDelay={100}
+              closeDelay={200}
+              classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+            >
               <Menu.Target>
                 <Menu.Item>
                   <div className="flex justify-between items-center gap-2">
@@ -164,62 +165,62 @@ export default function Profile() {
                   </div>
                 </Menu.Item>
               </Menu.Target>
-            )}
-            <Menu.Dropdown
-              className="rounded-md -translate-y-[62px] -translate-x-[210px] bg-white"
-              style={{
-                width: "200px",
-                boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px",
-              }}
-            >
-              {user.role === ROLE.SUPREME_ADMIN && (
-                <>
-                  <Menu.Item onClick={openModalChangeSupAdmin}>
-                    <div className="flex items-center gap-2">
-                      <Icon IconComponent={SupremeIcon} className="size-5" />
-                      <span>Supreme Admin</span>
-                    </div>
-                  </Menu.Item>
-                  <Menu.Item onClick={openModalManageSemester}>
-                    <div className="flex items-center gap-2">
-                      <Icon IconComponent={SemesterIcon} className="size-5" />
-                      <span>Semester</span>
-                    </div>
-                  </Menu.Item>
-                </>
-              )}
-              <Menu.Item onClick={openModalManageAdmin}>
-                <div className="flex items-center gap-2">
-                  <Icon IconComponent={AdminIcon} className="size-5" />
-                  <span>Admin</span>
-                </div>
-              </Menu.Item>
-              <Menu.Item
-                className="text-[#3e3e3e] h-8 w-w-full"
-                onClick={() => navigate(ROUTE_PATH.COURSE_MANAGEMENT)}
+              <Menu.Dropdown
+                className="rounded-md -translate-y-[62px] -translate-x-[210px] bg-white"
+                style={{
+                  width: "200px",
+                  boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px",
+                }}
               >
-                <div className="flex items-center gap-2">
-                  <Icon IconComponent={CourseIcon} className="size-5" />
-                  <span>Course</span>
-                </div>
-              </Menu.Item>
-              <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
-                <div className="flex items-center gap-2">
-                  <Icon IconComponent={SOIcon} className="size-5" />
-                  <span>SO</span>
-                </div>
-              </Menu.Item>
-              <Menu.Item
-                className="text-[#3e3e3e] h-8 w-w-full"
-                onClick={openModalManageTQF}
-              >
-                <div className="flex items-center gap-2">
-                  <Icon IconComponent={TQFIcon} className="size-5" />
-                  <span>TQF</span>
-                </div>
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+                {user.role === ROLE.SUPREME_ADMIN && (
+                  <>
+                    <Menu.Item onClick={openModalChangeSupAdmin}>
+                      <div className="flex items-center gap-2">
+                        <Icon IconComponent={SupremeIcon} className="size-5" />
+                        <span>Supreme Admin</span>
+                      </div>
+                    </Menu.Item>
+                    <Menu.Item onClick={openModalManageSemester}>
+                      <div className="flex items-center gap-2">
+                        <Icon IconComponent={SemesterIcon} className="size-5" />
+                        <span>Semester</span>
+                      </div>
+                    </Menu.Item>
+                  </>
+                )}
+                <Menu.Item onClick={openModalManageAdmin}>
+                  <div className="flex items-center gap-2">
+                    <Icon IconComponent={AdminIcon} className="size-5" />
+                    <span>Admin</span>
+                  </div>
+                </Menu.Item>
+                <Menu.Item
+                  className="text-[#3e3e3e] h-8 w-w-full"
+                  onClick={() => navigate(ROUTE_PATH.COURSE_MANAGEMENT)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Icon IconComponent={CourseIcon} className="size-5" />
+                    <span>Course</span>
+                  </div>
+                </Menu.Item>
+                <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
+                  <div className="flex items-center gap-2">
+                    <Icon IconComponent={SOIcon} className="size-5" />
+                    <span>SO</span>
+                  </div>
+                </Menu.Item>
+                <Menu.Item
+                  className="text-[#3e3e3e] h-8 w-w-full"
+                  onClick={openModalManageTQF}
+                >
+                  <div className="flex items-center gap-2">
+                    <Icon IconComponent={TQFIcon} className="size-5" />
+                    <span>TQF</span>
+                  </div>
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          )}
 
           <Menu.Divider />
           <Menu.Item
