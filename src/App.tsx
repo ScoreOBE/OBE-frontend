@@ -27,6 +27,7 @@ import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
 import CourseManagement from "@/pages/CourseManagement";
 import { setLoading } from "@/store/loading";
+import { motion } from "framer-motion";
 
 function App() {
   const error = useAppSelector((state) => state.errorResponse);
@@ -103,9 +104,11 @@ function App() {
 
   return (
     <div
-      className={`flex h-screen w-screen  ${
-        showSidebar ? "sidebar-linear-gradient" : ""
-      }`}
+   
+    className="flex h-screen w-screen"
+      // className={`flex h-screen w-screen  ${
+      //   showSidebar ? "sidebar-linear-gradient" : ""
+      // }`}
     >
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-full w-full overflow-hidden">

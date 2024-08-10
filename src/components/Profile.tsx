@@ -18,11 +18,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setUser } from "@/store/user";
 import { ROLE } from "@/helpers/constants/enum";
-import ModalManageAdmin from "./Modal/ModalManageAdmin";
-import ModalChangeSupAdmin from "./Modal/ModalChangeSupremeAdmin";
+import ModalManageAdmin from "./Modal/Profile/ModalManageAdmin";
+import ModalChangeSupAdmin from "./Modal/Profile/ModalChangeSupremeAdmin";
 import { useDisclosure } from "@mantine/hooks";
-import ModalManageSemester from "./Modal/ModalManageSemester";
-import ModalManageTQF from "./Modal/ModalManageTQF";
+import ModalManageSemester from "./Modal/Profile/ModalManageSemester";
+import ModalManageTQF from "./Modal/Profile/ModalManageTQF";
 import { getUserName } from "@/helpers/functions/function";
 
 export default function Profile() {

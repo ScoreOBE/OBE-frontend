@@ -3,7 +3,7 @@ import { IconUserCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { AiOutlineSwap } from "react-icons/ai";
-import Icon from "../Icon";
+import Icon from "@/components/Icon";
 import InfoIcon from "@/assets/icons/info.svg?react";
 import { IModelUser } from "@/models/ModelUser";
 import { getInstructor, updateSAdmin } from "@/services/user/user.service";
