@@ -6,9 +6,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#6869AD",
-        secondary: "#5768D5",
-        tertiary: "#3E3E3E",
+        primary: "#6869ad",
+        secondary: "#5768d5",
+        tertiary: "#3e3e3e",
         hover: "#efefef",
       },
       fontSize: {

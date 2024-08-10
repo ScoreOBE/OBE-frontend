@@ -93,6 +93,7 @@ export default function Dashboard() {
     const res = await deleteCourse(id);
     if (res) {
       dispatch(removeCourse(res.id));
+      localStorage.setItem("totalCourses", (totalCourses - 1).toString());
     }
     closeMainPopup();
     showNotifications(

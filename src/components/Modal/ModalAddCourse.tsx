@@ -29,7 +29,10 @@ import { IModelUser } from "@/models/ModelUser";
 import { SEMESTER } from "@/helpers/constants/enum";
 import { isNumber } from "lodash";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { validateEmail } from "@/helpers/functions/validation";
+import {
+  validateCourseNameorTopic,
+  validateEmail,
+} from "@/helpers/functions/validation";
 import { createCourse } from "@/services/course/course.service";
 import {
   getSection,
@@ -58,18 +61,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [firstInput, setFirstInput] = useState(true);
 
-  const validateCourseNameorTopic = (value: string, title: string) => {
-    const maxLength = 70;
-    if (!value) return `${title} is required`;
-    if (!value.trim().length) return "Cannot have only spaces";
-    if (value.length > maxLength)
-      return `You have ${value.length - 70} characters too many`;
-    const isValid = /^[0-9A-Za-z "%&()*+,-./<=>?@[\]\\^_]+$/.test(value);
-    return isValid
-      ? null
-      : `only contain 0-9, a-z, A-Z, space, "%&()*+,-./<=>?@[]\\^_`;
-  };
-
   const form = useForm({
     mode: "uncontrolled",
     initialValues: { sections: [{}] } as Partial<IModelCourse>,
@@ -81,9 +72,9 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         const isValid = /^\d{6}$/.test(value.toString());
         return isValid ? null : "Require number 6 digits";
       },
-      courseName: (value) => validateCourseNameorTopic(value!, "Course Name"),
+      courseName: (value) => validateCourseNameorTopic(value, "Course Name"),
       sections: {
-        topic: (value) => validateCourseNameorTopic(value!, "Topic"),
+        topic: (value) => validateCourseNameorTopic(value, "Topic"),
         sectionNo: (value) => {
           if (value == undefined) return "Section No. is required";
           const isValid = isNumber(value) && value.toString().length <= 3;

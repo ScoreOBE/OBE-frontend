@@ -34,7 +34,7 @@ export default function Navbar() {
     const res = await getCourse(payloadCourse);
     if (res) {
       dispatch(setCourseList(res.courses ?? res));
-      if (res.totalCourses) {
+      if (res.totalCount) {
         localStorage.setItem("totalCourses", res.totalCount);
       }
     }
