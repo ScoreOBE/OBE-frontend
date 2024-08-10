@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Routes,
   Route,
@@ -34,6 +34,7 @@ function App() {
   const academicYear = useAppSelector((state) => state.academicYear);
   const dispatch = useAppDispatch();
   const path = useLocation().pathname;
+  const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const routesWithoutSidebar = [
     ROUTE_PATH.LOGIN,
@@ -55,6 +56,11 @@ function App() {
         const rsAcademicYear = await getAcademicYear(payload);
         if (rsAcademicYear) {
           dispatch(setAcademicYear(rsAcademicYear));
+          setParams({
+            id: rsAcademicYear[0].id,
+            year: rsAcademicYear[0].year.toString(),
+            semester: rsAcademicYear[0].semester.toString(),
+          });
         }
       }
     };
