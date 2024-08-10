@@ -28,11 +28,11 @@ import {
 } from "@/helpers/functions/function";
 import { useDisclosure } from "@mantine/hooks";
 import { isNumber } from "lodash";
+import CompoMangementIns from "@/components/CompoManageIns";
 import {
   containsOnlyNumbers,
   validateCourseNameorTopic,
 } from "@/helpers/functions/validation";
-import ComproMangementIns from "@/components/ComproManageIns";
 import MainPopup from "@/components/Popup/MainPopup";
 import { removeCourse } from "@/store/course";
 import { IModelSection } from "@/models/ModelSection";
