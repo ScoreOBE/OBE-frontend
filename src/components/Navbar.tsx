@@ -34,6 +34,9 @@ export default function Navbar() {
     const res = await getCourse(payloadCourse);
     if (res) {
       dispatch(setCourseList(res.courses ?? res));
+      if (res.totalCourses) {
+        localStorage.setItem("totalCourses", res.totalCount);
+      }
     }
     localStorage.setItem("search", "true");
   };
