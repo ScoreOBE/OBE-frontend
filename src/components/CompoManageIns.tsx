@@ -59,9 +59,6 @@ export default function CompoMangementIns({
     if (!sections?.length) {
       instructorOption.forEach((option) => (option.disabled = false));
     } else {
-      console.log(
-        sections.map((sec) => sec.coInstructors?.map((coIns) => coIns.value))
-      );
       const coInsList = [
         ...new Set(
           sections
@@ -81,13 +78,12 @@ export default function CompoMangementIns({
     if (res) {
       res = !role
         ? res
-        : res.filter((e: any) => e.id != user.id && e.role === ROLE.INSTRUCTOR);
+        : res.filter((e: any) => e.id != user.id && e.role === role);
       setInstructorOption(
         res.map((e: IModelUser) => {
           return { label: getUserName(e, 1), value: e.id };
         })
       );
-
       // Manage Admin
       if (role) {
         let adminList = res.filter((e: IModelUser) => {

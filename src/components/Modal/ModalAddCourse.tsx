@@ -72,11 +72,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     validateInputOnBlur: true,
   });
 
-  useEffect(() => {
-    console.log("form: ", form.getValues().sections);
-    console.log("coInsList: ", coInsList);
-  }, [form]);
-
   const nextStep = async (type?: COURSE_TYPE) => {
     setFirstInput(false);
     let isValid = true;
@@ -191,14 +186,14 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       }
       // adjust coInstructors
       else if (sections?.length! > sectionNo.length) {
-        coInsList.forEach((coIns, index) => {
+        coInsList.forEach((coIns) => {
           coIns.sections = coIns.sections.filter((sec: string) =>
             sectionNo.includes(sec)
           );
         });
         setCoInsList(coInsList.filter((coIns) => coIns.sections.length > 0));
       }
-      sectionNo.forEach((secNo, index) => {
+      sectionNo.forEach((secNo) => {
         const data: any = {
           ...(sections.find((sec) => sec.sectionNo == parseInt(secNo)) || {}),
           sectionNo: parseInt(secNo),
