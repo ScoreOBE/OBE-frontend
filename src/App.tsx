@@ -25,7 +25,7 @@ import { isEmpty } from "lodash";
 import { getAcademicYear } from "./services/academicYear/academicYear.service";
 import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
-import CourseManagement from "@/pages/courseManagement";
+import CourseManagement from "@/pages/CourseManagement";
 import { setLoading } from "@/store/loading";
 
 function App() {
