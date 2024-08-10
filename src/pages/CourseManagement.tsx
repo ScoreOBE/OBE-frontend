@@ -39,7 +39,7 @@ import {
   containsOnlyNumbers,
   validateCourseNameorTopic,
 } from "@/helpers/functions/validation";
-import ComproMangementIns from "@/components/ComproManageIns";
+import CompoMangementIns from "@/components/CompoManageIns";
 import MainPopup from "@/components/Popup/MainPopup";
 import course, { removeCourse } from "@/store/course";
 import { IModelSection } from "@/models/ModelSection";
