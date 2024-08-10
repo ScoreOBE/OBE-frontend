@@ -26,6 +26,8 @@ import { getAcademicYear } from "./services/academicYear/academicYear.service";
 import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
 import CourseManagement from "@/pages/CourseManagement";
+import MapPLO from "@/pages/MapPLO";
+
 import { setLoading } from "@/store/loading";
 import { motion } from "framer-motion";
 
@@ -127,6 +129,7 @@ function App() {
             path={ROUTE_PATH.COURSE_MANAGEMENT}
             element={<CourseManagement />}
           />
+          <Route path={ROUTE_PATH.COURSE_MANAGEMENT_MAP} element={<MapPLO />} />
           <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />
           <Route
             path={`${ROUTE_PATH.COURSE}/:courseNo`}

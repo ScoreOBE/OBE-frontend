@@ -5,6 +5,7 @@
   --color-primary: #423e90;
   --color-secondary: #5768d5;
   --color-tertiary: #3e3e3e;
+  --color-edit: #f39d4e;
   --color-hover: #efefef;
   --color-border-input: #cecece;
   --color-background-input: #ffffff;
@@ -28,8 +29,7 @@
   border-color: #1fc461;
 }
 
-
-.mantine-TagsInput-input[data-error]{
+.mantine-TagsInput-input[data-error] {
   border: var(--color-border-input) solid 1px !important;
 }
 
@@ -60,12 +60,11 @@
   font-size: 18px !important;
 }
 
-
 .mantine-Modal-header {
   background-color: #ffffff !important;
 }
 
-.mantine-Modal-content{
+.mantine-Modal-content {
   background-color: #ffffff !important;
 }
 
@@ -145,6 +144,31 @@
 
 .mantine-Menu-item {
   font-weight: 500;
+}
+
+.mantine-Table-table {
+  border-color: var(--color-secondary) !important;
+  border-bottom-color: var(--color-secondary);
+}
+
+.mantine-Table-thead {
+  border-bottom-color: var(--color-secondary);
+  color: var(--color-secondary);
+  height: 45px !important;
+}
+
+.mantine-Table-th {
+  padding-left: 5px !important;
+  padding-block: 3px !important;
+}
+
+.mantine-Table-th {
+  padding-left: 5px !important;
+  padding-block: 3px !important;
+}
+.mantine-Table-tbody {
+  border-bottom: var(--color-secondary);
+  color: var(--color-secondary);
 }
 
 Button:disabled {
