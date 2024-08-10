@@ -1,23 +1,13 @@
-import { Button, Input, Modal, Select, TextInput } from "@mantine/core";
-import AddCoIcon from "@/assets/icons/addCo.svg?react";
-import {
-  IconChevronRight,
-  IconChevronDown,
-  IconUsers,
-  IconUserCircle,
-  IconTrash,
-  IconX,
-} from "@tabler/icons-react";
+import { Button, Modal, TextInput } from "@mantine/core";
+import { IconUsers, IconUserCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
-import Icon from  "@/components/Icon";
 import { IModelUser } from "@/models/ModelUser";
-import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import { useAppSelector } from "@/store";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
-import { validateEmail } from "@/helpers/functions/validation";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
 import CompoMangeIns from "@/components/CompoManageIns";
+import { updateAdmin } from "@/services/user/user.service";
 
 type Props = {
   opened: boolean;
@@ -25,10 +15,25 @@ type Props = {
 };
 export default function ModalManageAdmin({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
-  const [swapMethodAddAdmin, setSwapMethodAddAdmin] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [adminList, setAdminList] = useState<IModelUser[]>([]);
   const [adminFilter, setAdminFilter] = useState<IModelUser[]>([]);
+
+  useEffect(() => {
+    if (opened) {
+      setSearchValue("");
+    }
+  }, [opened]);
+
+  useEffect(() => {
+    setAdminFilter(
+      adminList.filter(
+        (admin) =>
+          `${getUserName(admin, 2)}`.includes(searchValue.toLowerCase()) ||
+          admin.email.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    );
+  }, [searchValue]);
 
   const deleteAdmin = async (id: string) => {
     const payload: Partial<IModelUser> = { id, role: ROLE.INSTRUCTOR };
@@ -42,23 +47,6 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
       );
     }
   };
-
-  useEffect(() => {
-    if (opened) {
-      setSearchValue("");
-      setSwapMethodAddAdmin(false);
-    }
-  }, [opened]);
-
-  useEffect(() => {
-    setAdminFilter(
-      adminList.filter(
-        (admin) =>
-          `${getUserName(admin, 2)}`.includes(searchValue.toLowerCase()) ||
-          admin.email.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    );
-  }, [searchValue]);
 
   return (
     <Modal
@@ -75,99 +63,6 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
       }}
     >
       <div className="flex flex-1 flex-col h-full gap-5  ">
-        {/* <div
-          className="flex flex-col gap-3 max-h-[320px] rounded-md h-fit w-full mt-2 p-4  "
-          style={{
-            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-          }}
-        >
-          <div
-            onClick={() => {
-              setEditUser(null);
-              setSwapMethodAddAdmin(!swapMethodAddAdmin);
-            }}
-            className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center p-4  "
-          >
-            <div className="flex gap-6 items-center">
-              <Icon IconComponent={AddCoIcon} className="text-secondary" />
-              <p className="font-semibold">
-                Add Admin by using
-                <span className="font-extrabold">
-                  {swapMethodAddAdmin ? " Dropdown list" : " CMU Account"}
-                </span>
-              </p>
-            </div>
-            <IconChevronRight stroke={2} />
-          </div>
-
-          <div className="flex w-full  items-end h-fit ">
-            <div className="flex flex-row items-end  w-full bg-white   rounded-md">
-              {swapMethodAddAdmin ? (
-                <TextInput
-                  withAsterisk={true}
-                  description="Make sure CMU account correct"
-                  label="CMU account"
-                  className="w-full border-none rounded-r-none"
-                  style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
-                  classNames={{ input: "!rounded-r-none" }}
-                  placeholder="example@cmu.ac.th"
-                  value={editUser!}
-                  onChange={(event) => setEditUser(event.target.value)}
-                />
-              ) : (
-                <Select
-                  rightSectionPointerEvents="all"
-                  label="Select Admin"
-                  placeholder="Admin"
-                  data={instructorOption}
-                  allowDeselect
-                  searchable
-                  nothingFoundMessage="No result"
-                  className="w-full border-none "
-                  classNames={{
-                    input: " rounded-e-none  rounded-md ",
-                  }}
-                  rightSection={
-                    <template className="flex items-center gap-2 absolute right-2">
-                      {editUser && (
-                        <IconX
-                          size={"1.25rem"}
-                          stroke={2}
-                          className={`cursor-pointer`}
-                          onClick={() => setEditUser(null)}
-                        />
-                      )}
-                      <IconChevronDown
-                        stroke={2}
-                        className={`${
-                          openedDropdown ? "rotate-180" : ""
-                        } stroke-primary cursor-pointer`}
-                        onClick={() => setOpenedDropdown(!openedDropdown)}
-                      />
-                    </template>
-                  }
-                  dropdownOpened={openedDropdown}
-                  // onDropdownOpen={() => setOpenedDropdown(true)}
-                  onDropdownClose={() => setOpenedDropdown(false)}
-                  value={editUser}
-                  onChange={setEditUser}
-                  onClick={() => setOpenedDropdown(!openedDropdown)}
-                />
-              )}
-
-              <Button
-                className="rounded-s-none min-w-fit border-l-0"
-                color="#5768D5"
-                disabled={
-                  !editUser?.length || (swapMethodAddAdmin && invalidEmail)
-                }
-                onClick={() => editAdmin(editUser!, ROLE.ADMIN)}
-              >
-                Add
-              </Button>
-            </div>
-          </div>
-        </div> */}
         <CompoMangeIns
           opened={opened}
           role={ROLE.ADMIN}
@@ -202,11 +97,14 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
               {adminFilter.map((admin, index) => (
                 <div
                   key={index}
-                  
                   className="w-full items-center last:border-none border-b-[1px] justify-between  p-3  flex"
                 >
                   <div className="gap-3 flex items-center">
-                    <IconUserCircle size={32} className=" -translate-x-1" stroke={1} />
+                    <IconUserCircle
+                      size={32}
+                      className=" -translate-x-1"
+                      stroke={1}
+                    />
                     <div className="flex flex-col">
                       <p className="font-semibold text-[14px] text-tertiary">
                         {getUserName(admin, 1)}
@@ -228,7 +126,6 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                       size="xs"
                       className="rounded-[6px]"
                       onClick={() => deleteAdmin(admin.id)}
-                     
                     >
                       Delete
                     </Button>
