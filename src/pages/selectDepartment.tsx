@@ -10,23 +10,22 @@ import { updateUser } from "@/services/user/user.service";
 import { setUser } from "@/store/user";
 import { motion } from "framer-motion";
 import { getDepartment } from "@/services/faculty/faculty.service";
+import { isEqual } from "lodash";
 
 export default function SelectDepartment() {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const [faculty, setFaculty] = useState<any>({});
-  const [departmentList, setDepartmentList] = useState<any[]>([]);
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
-  const [notChange, setNotChange] = useState(false);
+  const [notChange, setNotChange] = useState(true);
 
   useEffect(() => {
     const fetchDep = async () => {
       const res = await getDepartment(user.facultyCode);
       if (res) {
-        setFaculty({ facultyTH: res.facultyTH, facultyEN: res.facultyEN });
+        setFaculty(res);
         sortData(res.department, "departmentEN", "string");
-        setDepartmentList(res.department);
       }
     };
     fetchDep();
@@ -43,9 +42,7 @@ export default function SelectDepartment() {
     const selected = [...checkedItems];
     if (checked) selected.push(key);
     else selected.splice(selected.indexOf(key), 1);
-    if (user.departmentCode == selected) {
-      setNotChange(true);
-    }
+    setNotChange(isEqual(user.departmentCode, selected));
     setCheckedItems([...selected]);
   };
 
@@ -107,10 +104,10 @@ export default function SelectDepartment() {
                 Select up to 2 departments
               </div>
               <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[515px]">
-                {departmentList.map((key: any) => {
+                {faculty.department?.map((key: any) => {
                   const isChecked = checkedItems.includes(key.departmentCode);
                   const disabled =
-                    checkedItems.length == 2 &&
+                    checkedItems.length == 3 &&
                     !checkedItems.includes(key.departmentCode);
                   return (
                     <div

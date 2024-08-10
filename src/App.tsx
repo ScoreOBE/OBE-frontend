@@ -12,21 +12,21 @@ import "./App.css";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import { setUser } from "@/store/user";
-import Login from "@/pages/login";
+import Login from "@/pages/Login";
 import Page404 from "@/pages/Page404";
 import { getUserInfo } from "@/services/user/user.service";
-import CMUOAuthCallback from "@/pages/cmuOAuthCallback";
+import CMUOAuthCallback from "@/pages/CmuOAuthCallback";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import SelectDepartment from "@/pages/selectDepartment";
-import Dashboard from "@/pages/dashboard";
+import SelectDepartment from "@/pages/SelectDepartment";
+import Dashboard from "@/pages/Dashboard";
+import Course from "@/pages/Course";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { isEmpty } from "lodash";
 import { getAcademicYear } from "./services/academicYear/academicYear.service";
 import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
 import CourseManagement from "@/pages/courseManagement";
-import Course from "./pages/course";
-import { setLoading } from "./store/loading";
+import { setLoading } from "@/store/loading";
 
 function App() {
   const error = useAppSelector((state) => state.errorResponse);
