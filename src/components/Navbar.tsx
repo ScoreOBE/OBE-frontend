@@ -64,7 +64,7 @@ export default function Navbar() {
         {[ROUTE_PATH.DASHBOARD_INS, ROUTE_PATH.COURSE_MANAGEMENT].includes(
           location
         ) && (
-          <div className="w-[400px]">
+          <div className="relative md:w-[400px] w-[220px]">
             <TextInput
               leftSection={!isFocused && <TbSearch className="size-4" />}
               placeholder="Course No / Course Name"
@@ -75,7 +75,7 @@ export default function Navbar() {
               }
               onKeyDown={(event: any) => event.key == "Enter" && searchCourse()}
               onInput={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
+              onBlur={() => setTimeout(() => setIsFocused(false), 300)}
               onFocus={() => setIsFocused(true)}
               rightSectionPointerEvents="all"
               rightSection={
@@ -88,20 +88,22 @@ export default function Navbar() {
             />
             {isFocused && (
               <div
-                className="mt-2 absolute cursor-pointer w-[400px] rounded-md bg-white text-slate-800 p-3 text-[12px] flex justify-between items-center"
+                className="mt-2 absolute cursor-pointer w-full rounded-md bg-white text-slate-800 p-3 text-[12px] flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center"
                 onClick={() => searchCourse()}
                 style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
               >
-                <div className="flex items-center  gap-3">
-                  <TbSearch className=" size-4" />
+                <div className="flex md:w-fit w-full items-center gap-3">
+                  <TbSearch className="size-4" />
                   {!!searchValue.length ? (
-                    <p className="">{ellipsisText(searchValue, 35)}</p>
+                    <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                      {ellipsisText(searchValue, 40)}
+                    </p>
                   ) : (
                     <p>Show All Your Course</p>
                   )}
                 </div>
 
-                <div className="flex items-center text-secondary gap-1">
+                <div className="flex md:w-fit w-full justify-end items-center text-secondary gap-1">
                   Press{" "}
                   <div className="ml-1 flex items-center gap-1 border-[1px] border-secondary p-1 font-semibold rounded-[6px]">
                     Enter <AiOutlineEnter className="stroke-[50px]" />
