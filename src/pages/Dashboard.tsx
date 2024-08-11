@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button, Menu } from "@mantine/core";
+import { Button, Menu, TextInput } from "@mantine/core";
 import {
   IconDots,
   IconPencilMinus,
@@ -19,6 +19,7 @@ import { useDisclosure } from "@mantine/hooks";
 import notFoundImage from "@/assets/image/notFound.png";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import MainPopup from "../components/Popup/MainPopup";
+import ModalEditCourse from "../components/Modal/ModalEdit";
 import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading";
@@ -39,6 +40,10 @@ export default function Dashboard() {
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
   const [delCourse, setDelCourse] = useState<Partial<IModelCourse>>();
+  const [
+    openModalEditCourse,
+    { open: openedModalEditCourse, close: closeModalEditCourse },
+  ] = useDisclosure(false);
 
   useEffect(() => {
     const yearId = params.get("id");
@@ -127,7 +132,15 @@ export default function Dashboard() {
           </p>
         }
       />
-      <ModalAddCourse opened={openAddModal} onClose={closeAddModal} />
+
+      <ModalEditCourse
+        opened={openModalEditCourse}
+        title={`Edit course`}
+        onClose={closeModalEditCourse}
+        
+      ></ModalEditCourse>
+
+      <ModalAddCourse opened={openAddModal} onClose={closeAddModal} ></ModalAddCourse>
 
       <div className="flex flex-row  items-center justify-between">
         <div className="flex flex-col">
@@ -234,7 +247,12 @@ export default function Dashboard() {
                               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                             }}
                           >
-                            <Menu.Item className="text-[#3E3E3E] font-semibold  text-b3 h-7 w-[180px]">
+                            <Menu.Item
+                              onClick={() => {
+                                openedModalEditCourse();
+                              }}
+                              className="text-[#3E3E3E] font-semibold  text-b3 h-7 w-[180px]"
+                            >
                               <div className="flex items-center gap-2">
                                 <IconPencilMinus
                                   stroke={1.5}

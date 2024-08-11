@@ -43,7 +43,6 @@ import {
 
 import CompoMangementIns from "@/components/CompoManageIns";
 
-
 import MainPopup from "@/components/Popup/MainPopup";
 import course, { removeCourse } from "@/store/course";
 import { IModelSection } from "@/models/ModelSection";
@@ -355,6 +354,7 @@ export default function CourseManagement() {
       <ModalManageIns
         opened={openModalManageInst}
         onClose={closeModalManageInst}
+        data={editCourse}
       />
 
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
@@ -416,8 +416,11 @@ export default function CourseManagement() {
                             <span>Edit course</span>
                           </div>
                         </Menu.Item>
-                        <Menu.Item
-                          onClick={openedModalManageInst}
+                        {/* <Menu.Item
+                          onClick={() => {
+                          
+
+                          }}
                           className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]"
                         >
                           <div className="flex items-center gap-2">
@@ -428,7 +431,7 @@ export default function CourseManagement() {
 
                             <span>Manage instructor</span>
                           </div>
-                        </Menu.Item>
+                        </Menu.Item> */}
                         <Menu.Item
                           className="text-[#FF4747]  w-[180px] font-semibold text-b2 hover:bg-[#d55757]/10"
                           onClick={() => {
@@ -500,12 +503,8 @@ export default function CourseManagement() {
                         <div
                           className="bg-transparent border-[1px] border-secondary text-secondary size-8 bg-none rounded-full cursor-pointer hover:bg-secondary/10"
                           onClick={() => {
-                            setEditCourse({
-                              ...sec,
-                              ...course,
-                            });
-                            setEditInstructorModal(true);
-                            openModalEditInstructor();
+                            setEditCourse({courseNo: course.courseNo, ...sec})
+                            openedModalManageInst();
                           }}
                         >
                           <Icon IconComponent={ManageAdminIcon} />
