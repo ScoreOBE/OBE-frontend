@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import { Button, Menu } from "@mantine/core";
 import {
   IconDots,
@@ -21,6 +21,7 @@ export default function Course() {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const academicYear = useAppSelector((state) => state.academicYear);
+  const activeTerm = useLocation().state.activeTerm;
   const courseList = useAppSelector((state) => state.course);
   const [course, setCourse] = useState<IModelCourse>();
 
@@ -35,6 +36,7 @@ export default function Course() {
         setCourse(res);
       }
     };
+
     if (!courseList.length && params.get("id")) fetchCourse();
 
     if (!course && courseNo) {
@@ -53,18 +55,20 @@ export default function Course() {
               {course?.sections.length} Section
               {course?.sections.length! > 1 && "s"}
             </p>
-            <div className="flex gap-5 items-center">
-              <Button
-                leftSection={<IconUpload className="h-5 w-5" />}
-                color="#5768D5"
-                className="rounded-[8px] font-semibold  text-[13px]  h-9 px-3"
-              >
-                Upload and Assets
-              </Button>
-              <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
-                <IconDots />
+            {activeTerm && (
+              <div className="flex gap-5 items-center">
+                <Button
+                  leftSection={<IconUpload className="h-5 w-5" />}
+                  color="#5768D5"
+                  className="rounded-[8px] font-semibold  text-[13px]  h-9 px-3"
+                >
+                  Upload and Assets
+                </Button>
+                <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
+                  <IconDots />
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className="flex h-full w-full rounded-[5px] pt-1  overflow-hidden">
             <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-1">
@@ -78,7 +82,7 @@ export default function Course() {
                       <p className="font-semibold text-sm">
                         Section {getSection(item.sectionNo)}
                       </p>
-                      {course.addFirstTime && (
+                      {course.addFirstTime && activeTerm && (
                         <div
                           onClick={(e) => {
                             e.stopPropagation();

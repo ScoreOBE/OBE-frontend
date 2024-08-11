@@ -31,10 +31,10 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
     useState<CreateAcademicYearRequestDTO>();
 
   useEffect(() => {
-    if (opened && !selectSemester) {
+    if (opened) {
       fetchSemester();
     }
-  }, [opened, selectSemester]);
+  }, [opened]);
 
   useEffect(() => {
     const keyFilter = Object.keys(semesterList).filter((year) =>
@@ -95,6 +95,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       );
       setSelectSemester(undefined);
       dispatch(setAcademicYear([]));
+      fetchSemester();
     }
   };
 
@@ -109,18 +110,13 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
 
       let newSemester = active.semester + 3;
       let newYear = active.year;
-
       // Adjust the year if the semester exceeds 3
       if (newSemester > 3) {
         newYear += Math.floor((newSemester - 1) / 3);
-        newSemester = newSemester % 3 || 3; // Wrap around and ensure it's within 1-3
+        newSemester = newSemester % 3 || 3;
       }
 
-      const limit = {
-        semester: newSemester,
-        year: newYear,
-      };
-
+      const limit = { semester: newSemester, year: newYear };
       if (
         limit.year < selectSemester.year ||
         (limit.year === selectSemester.year &&
@@ -142,6 +138,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           `Add Semester ${selectSemester.semester}, ${selectSemester.year} successful`
         );
         setSelectSemester(undefined);
+        fetchSemester();
       }
     }
   };
