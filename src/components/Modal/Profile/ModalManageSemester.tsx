@@ -51,7 +51,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
   const fetchSemester = async () => {
     let payload = new AcademicYearRequestDTO();
     payload.manage = true;
-    const res = await getAcademicYear(payload);
+    const res: IModelAcademicYear[] = await getAcademicYear(payload);
     if (res) {
       setYearList(res);
       const semester =
@@ -60,14 +60,25 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       setSelectSemester({ year, semester });
 
       //Group by Year
-      const semestersByYear = res.reduce((acc: any, academicYearList: any) => {
-        const year: string = academicYearList.year.toString() + "a";
-        if (!acc[year]) {
-          acc[year] = [];
-        }
-        acc[year].push(academicYearList);
-        return acc;
-      }, {});
+      const semestersByYear = res.reduce(
+        (acc: any, academicYearList: IModelAcademicYear) => {
+          const termActive = res.find((term) => term.isActive);
+          const year: string = academicYearList.year.toString() + "a";
+          if (!acc[year]) {
+            acc[year] = [];
+          }
+          acc[year].push({
+            ...academicYearList,
+            disabled:
+              academicYearList.isActive ||
+              termActive?.year! > academicYearList.year ||
+              (termActive?.year! == academicYearList.year &&
+                termActive?.semester! > academicYearList.semester),
+          });
+          return acc;
+        },
+        {}
+      );
 
       setSemesterlist(semestersByYear);
       setYearFilter(semestersByYear);
@@ -187,7 +198,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                               semester.isActive
                                 ? "bg-[#E5E8FF]"
                                 : "bg-[#ffffff]"
-                            } `}
+                            }`}
                       >
                         {index === 0 ? (
                           <div className="w-10">
@@ -215,28 +226,18 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                             {semester.semester}
                           </p>
                         </div>
-
-                        {semester.isActive ? (
-                          <Button
-                            disabled
-                            size="xs"
-                            variant="filled"
-                            className="rounded-lg !border-none  w-fit"
-                          >
-                            Currently
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="outline"
-                            color="#5768D5"
-                            size="xs"
-                            className="rounded-lg"
-                            // disabled={}
-                            onClick={() => onClickActivate(semester)}
-                          >
-                            Activate
-                          </Button>
-                        )}
+                        <Button
+                          variant="outline"
+                          color="#5768D5"
+                          size="xs"
+                          className={`rounded-lg ${
+                            semester.isActive && "border-none"
+                          }`}
+                          disabled={semester.disabled}
+                          onClick={() => onClickActivate(semester)}
+                        >
+                          {semester.isActive ? "Currently" : "Activate"}
+                        </Button>
                       </div>
                     ))}
                   </div>
