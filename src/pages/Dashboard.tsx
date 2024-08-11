@@ -44,11 +44,7 @@ export default function Dashboard() {
     const yearId = params.get("id");
     const year = parseInt(params.get("year")!);
     const semester = parseInt(params.get("semester")!);
-    if (
-      yearId != term?.id &&
-      year != term?.year &&
-      semester != term?.semester
-    ) {
+    if (academicYear.length) {
       const acaYear = academicYear.find(
         (e) => e.id == yearId && e.semester == semester && e.year == year
       );
@@ -106,7 +102,11 @@ export default function Dashboard() {
 
   const goToCourse = (courseNo: string) => {
     navigate(
-      `${ROUTE_PATH.COURSE}/${courseNo}?id=${term?.id}&year=${term?.year}&semester=${term?.semester}`
+      {
+        pathname: `${ROUTE_PATH.COURSE}/${courseNo}`,
+        search: "?" + params.toString(),
+      },
+      { state: { activeTerm: term?.isActive } }
     );
   };
 
@@ -122,8 +122,8 @@ export default function Dashboard() {
         message={
           <p>
             Deleting this course will permanently remove all data from the
-            current semester. Data from previous semesters will not be affected.<br />{" "}
-            <span>Are you sure you want to deleted this course? </span>
+            current semester. Data from previous semesters will not be affected.
+            <br /> <span>Are you sure you want to deleted this course? </span>
           </p>
         }
       />
@@ -150,9 +150,7 @@ export default function Dashboard() {
             )}
           </p>
         </div>
-        {course.length === 0 ? (
-          <span></span>
-        ) : (
+        {term?.isActive && (
           <Button
             color="#5768D5"
             leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
@@ -220,7 +218,7 @@ export default function Dashboard() {
                     <p className="text-xs font-medium text-gray-600">
                       {item.courseName}
                     </p>
-                    {item.addFirstTime && (
+                    {item.addFirstTime && term?.isActive && (
                       <div
                         onClick={(e) => {
                           e.stopPropagation();

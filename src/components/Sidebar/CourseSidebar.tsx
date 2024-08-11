@@ -51,8 +51,14 @@ export default function CourseSidebar() {
   }, [courseList, courseNo]);
 
   const goToDashboard = () => {
-    if (courseList.length == 1) dispatch(setCourseList([]));
-    navigate(ROUTE_PATH.DASHBOARD_INS);
+    dispatch(setCourseList([]));
+    navigate(
+      {
+        pathname: ROUTE_PATH.DASHBOARD_INS,
+        search: "?" + params.toString(),
+      },
+      { state: { fetchCourse: true } }
+    );
   };
 
   const onClickLeaveCourse = async (id: string) => {

@@ -14,12 +14,11 @@ import { setLoading } from "@/store/loading";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { setAcademicYear } from "@/store/academicYear";
-import { ROUTE_PATH } from "@/helpers/constants/route";
 
 export default function DashboardSidebar() {
   const [openedFilterTerm, { open: openFilterTerm, close: closeFilterTerm }] =
     useDisclosure(false);
-  const path = useLocation().pathname;
+  const fetchNewCourse = useLocation().state?.fetchCourse;
   const [params, setParams] = useSearchParams();
   const payloadCourse = new CourseRequestDTO();
   const academicYear = useAppSelector((state) => state.academicYear);
@@ -29,32 +28,40 @@ export default function DashboardSidebar() {
     return { label: `${e.semester}/${e.year}`, value: e.id };
   });
   const [openedDropdown, setOpenedDropdown] = useState(false);
-  const [selectedTerm, setSelectedTerm] = useState(termOption[0]);
+  const [selectedTerm, setSelectedTerm] = useState<any>(
+    termOption.find((term) => term.value == params.get("id"))
+  );
 
   useEffect(() => {
-    if (academicYear.length && !selectedTerm) {
+    if (academicYear.length && (!params.get("id") || !selectedTerm)) {
       setTerm(academicYear[0]);
       setSelectedTerm(termOption[0]);
       if (!course.length) {
         fetchCourse(academicYear[0].id);
       }
     } else if (
-      !params.get("id") ||
-      !academicYear.map((term) => term.id).includes(selectedTerm?.value)
+      !academicYear.length
+      // || !academicYear.map((term) => term.id).includes(selectedTerm?.value
     ) {
       fetchAcademicYear();
     }
   }, [academicYear, params]);
 
+  useEffect(() => {
+    if (fetchNewCourse && params.get("id")) fetchCourse(params.get("id")!);
+  }, [fetchNewCourse]);
+
   const fetchAcademicYear = async () => {
     const res = await getAcademicYear(new AcademicYearRequestDTO());
     if (res) {
       dispatch(setAcademicYear(res));
-      if (!res.map((term: any) => term.id).includes(params.get("id"))) {
+      // if (!res.map((term: any) => term.id).includes(params.get("id"))) {
+      if (!selectedTerm) {
         setTerm(res[0]);
         setSelectedTerm(termOption[0]);
         fetchCourse(res[0].id);
       }
+      // }
     }
   };
 
