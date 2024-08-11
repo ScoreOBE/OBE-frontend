@@ -6,8 +6,8 @@ export const getSection = (sectionNo: number | string | undefined) => {
   if (!sectionNo) return "";
   return ("000" + sectionNo).slice(-3);
 };
-export const getUserName = (user: IModelUser, format?: number) => {
-  if (!user.firstNameEN || !user.lastNameEN) return;
+export const getUserName = (user: IModelUser | undefined, format?: number) => {
+  if (!user || !user.firstNameEN || !user.lastNameEN) return;
   switch (format) {
     case 1:
       return `${user.firstNameEN} ${user.lastNameEN}`; // John Doe

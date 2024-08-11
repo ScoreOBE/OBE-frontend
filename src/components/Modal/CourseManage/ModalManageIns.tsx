@@ -16,14 +16,20 @@ import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import { useAppSelector } from "@/store";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { validateEmail } from "@/helpers/functions/validation";
-import { getUserName, showNotifications } from "@/helpers/functions/function";
+import {
+  getSection,
+  getUserName,
+  showNotifications,
+} from "@/helpers/functions/function";
 import { Tabs } from "@mantine/core";
+import { IModelSectionManagement } from "@/models/ModelCourseManagement";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
+  data: Partial<IModelSectionManagement> & Record<string, any>;
 };
-export default function ModalManageIns({ opened, onClose }: Props) {
+export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
   const user = useAppSelector((state) => state.user);
   const [swapMethodAddAdmin, setSwapMethodAddAdmin] = useState(false);
   const [openedDropdown, setOpenedDropdown] = useState(false);
@@ -123,7 +129,14 @@ export default function ModalManageIns({ opened, onClose }: Props) {
       opened={opened}
       onClose={onClose}
       closeOnClickOutside={false}
-      title="Management Instructor CourseNo"
+      title={
+        <div className="flex flex-col gap-2">
+          <p>Management Instructor</p>{" "}
+          <p className="text-b2 font-medium text-[#575757]">
+            {data.courseNo} Section {getSection(data.sectionNo)}
+          </p>{" "}
+        </div>
+      }
       size="45vw"
       centered
       transitionProps={{ transition: "pop" }}
@@ -140,17 +153,24 @@ export default function ModalManageIns({ opened, onClose }: Props) {
 
         <Tabs.Panel value="mainInstructor">
           <div className="flex flex-col h-full gap-4  mt-4  flex-1 ">
-            <div    style={{
+            <div
+              style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-              }} className="flex gap-3 items-center rounded-md border-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
+              }}
+              className="flex gap-3 items-center rounded-md border-secondary border-[1px] px-4 py-3 text-secondary font-semibold"
+            >
               <IconUserCircle
                 size={32}
                 className=" -translate-x-1"
                 stroke={1}
               />
               <div className="flex flex-col">
-                <p className="text-[#575757]">Name</p>
-                <p className="text-[12px] ">Owner course</p>
+                <p className="text-[#575757]">
+                  {getUserName(data.instructor , 1)}
+                </p>
+                <p className="text-[12px] ">
+                  Owner Section {getSection(data.sectionNo)}{" "}
+                </p>
               </div>
             </div>
 
@@ -170,7 +190,7 @@ export default function ModalManageIns({ opened, onClose }: Props) {
                 <div className="flex gap-6 items-center">
                   <Icon IconComponent={AddCoIcon} className="text-secondary" />
                   <p className="font-semibold">
-                    Change Owner course by using
+                    Change Owner section by using
                     <span className="font-extrabold">
                       {swapMethodAddAdmin ? " Dropdown list" : " CMU Account"}
                     </span>
@@ -198,7 +218,7 @@ export default function ModalManageIns({ opened, onClose }: Props) {
                   ) : (
                     <Select
                       rightSectionPointerEvents="all"
-                      label="Select Owner course"
+                      label="Select Owner section"
                       placeholder="Owner course"
                       data={instructorOption}
                       allowDeselect
