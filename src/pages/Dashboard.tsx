@@ -63,8 +63,8 @@ export default function Dashboard() {
   }, [academicYear, params]);
 
   useEffect(() => {
-    if (fetchNewCourse && term?.id) fetchCourse(term?.id);
-  }, [fetchNewCourse]);
+    if ((fetchNewCourse || !course.length) && term?.id) fetchCourse(term?.id);
+  }, [fetchNewCourse, course]);
 
   useEffect(() => {
     if (term) {

@@ -10,6 +10,7 @@ import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { setAcademicYear } from "@/store/academicYear";
+import { setCourseList } from "@/store/course";
 
 export default function DashboardSidebar() {
   const [params, setParams] = useSearchParams();
@@ -68,6 +69,7 @@ export default function DashboardSidebar() {
     closeFilterTerm();
     const term = academicYear.find((e) => e.id == selectedTerm.value)!;
     setTerm(term);
+    dispatch(setCourseList([]));
   };
 
   return (
