@@ -51,7 +51,6 @@ export default function CourseSidebar() {
   }, [courseList, courseNo]);
 
   const goToDashboard = () => {
-    dispatch(setCourseList([]));
     navigate(
       {
         pathname: ROUTE_PATH.DASHBOARD_INS,

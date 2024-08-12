@@ -21,7 +21,10 @@ export default function Course() {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const academicYear = useAppSelector((state) => state.academicYear);
-  const activeTerm = useLocation().state.activeTerm;
+  // const activeTerm = useLocation().state?.activeTerm;
+  const activeTerm = academicYear.find(
+    (term) => term.id == params.get("id")
+  )?.isActive;
   const courseList = useAppSelector((state) => state.course);
   const [course, setCourse] = useState<IModelCourse>();
 
