@@ -158,14 +158,15 @@
 }
 
 .mantine-Table-th {
-  padding-left: 5px !important;
-  padding-block: 3px !important;
+  padding-left: 20px !important;
+  padding-block: 16px !important;
 }
 
-.mantine-Table-th {
-  padding-left: 5px !important;
-  padding-block: 3px !important;
+.mantine-Table-td {
+  padding-left: 20px !important;
+  padding-block: 16px !important;
 }
+
 .mantine-Table-tbody {
   border-bottom: var(--color-secondary);
   color: var(--color-secondary);

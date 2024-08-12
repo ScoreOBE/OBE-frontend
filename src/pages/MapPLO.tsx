@@ -2,11 +2,66 @@ import { Button, Select, Table, Checkbox } from "@mantine/core";
 import { IconChevronDown, IconEdit, IconPlus } from "@tabler/icons-react";
 import PLOdescIcon from "@/assets/icons/PLOdescription.svg?react";
 import Icon from "@/components/Icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CheckIcon from "@/assets/icons/Check.svg?react";
+import { IModelCourseManagement } from "@/models/ModelCourseManagement";
+import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
+import CourseManagement from "./CourseManagement";
+import { useAppSelector } from "@/store";
+import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
+import Loading from "@/components/Loading";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function MapPLO() {
+  const user = useAppSelector((state) => state.user);
   const [openedDropdown, setOpenedDropdown] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [payload, setPayload] = useState<any>();
+  const [courseManagement, setCourseManagement] = useState<
+    IModelCourseManagement[]
+  >([]);
+
+  useEffect(() => {
+    if (user.departmentCode) {
+      const payloadCourse = {
+        ...new CourseManagementRequestDTO(),
+        departmentCode: user.departmentCode,
+        hasMore: true,
+      };
+      setPayload(payloadCourse);
+      fetchCourse(payloadCourse);
+    }
+  }, [user]);
+
+  const fetchCourse = async (payloadCourse: any) => {
+    setLoading(true);
+    const res = await getCourseManagement(payloadCourse);
+    if (res) {
+      setCourseManagement(res.courses);
+    }
+    setLoading(false);
+  };
+
+  const onShowMore = async () => {
+    const res = await getCourseManagement({
+      ...payload,
+      page: payload.page + 1,
+    });
+    if (res) {
+      setCourseManagement([...courseManagement, ...res]);
+      setPayload({
+        ...payload,
+        page: payload.page + 1,
+        hasMore: res.length >= payload.limit,
+      });
+    } else {
+      setPayload({ ...payload, hasMore: false });
+    }
+  };
+
+  useEffect(() => {
+    console.log(CourseManagement);
+  });
 
   return (
     <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
@@ -78,36 +133,34 @@ export default function MapPLO() {
           />
         </div>
       </div>
-      <Table stickyHeader stickyHeaderOffset={60} withTableBorder>
-        <Table.Thead>
-          <Table.Tr className="bg-[#F4F5FE]">
-            <Table.Th>Course</Table.Th>
-            <Table.Th>PLO 1</Table.Th>
-            <Table.Th>PLO 2</Table.Th>
-            <Table.Th>PLO 3</Table.Th>
-            <Table.Th>PLO 4</Table.Th>
-            <Table.Th>PLO 5</Table.Th>
-            <Table.Th>PLO 6</Table.Th>
-            <Table.Th>PLO 7</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
 
-        <Table.Tbody>
-          <Table.Tr>
-            <Table.Td className="py-4 pl-5">266514</Table.Td>
-            <Table.Td className="py-4 pl-5 flex items-start ">
-              <Icon IconComponent={CheckIcon} />
-            </Table.Td>
-          </Table.Tr>
+      <div className="rounded-lg overflow-clip border border-secondary">
+        <Table stickyHeader stickyHeaderOffset={60}>
+          <Table.Thead>
+            <Table.Tr className="bg-[#F4F5FE]">
+              <Table.Th>Course</Table.Th>
+              <Table.Th>PLO 1</Table.Th>
+              <Table.Th>PLO 2</Table.Th>
+              <Table.Th>PLO 3</Table.Th>
+              <Table.Th>PLO 4</Table.Th>
+              <Table.Th>PLO 5</Table.Th>
+              <Table.Th>PLO 6</Table.Th>
+              <Table.Th>PLO 7</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
 
-          <Table.Tr>
-            <Table.Td className="py-4 pl-5">266324</Table.Td>
-            <Table.Td className="py-4 pl-5 flex items-start">
-              <Icon IconComponent={CheckIcon} />
-            </Table.Td>
-          </Table.Tr>
-        </Table.Tbody>
-      </Table>
+          <Table.Tbody>
+            {courseManagement.map((course, index) => (
+              <Table.Tr>
+                <Table.Td className="py-4 pl-5">{course.courseNo}</Table.Td>
+                <Table.Td className="py-4 pl-5 flex items-start ">
+                  <Icon IconComponent={CheckIcon} />
+                </Table.Td>
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
+        </Table>
+      </div>
     </div>
   );
 }
