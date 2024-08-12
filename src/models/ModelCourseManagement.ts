@@ -16,7 +16,7 @@ export interface IModelCourseManagement {
 export interface IModelSectionManagement {
   topic?: string;
   sectionNo: number;
-  semester: number[];
+  semester: number[] | string[];
   instructor: IModelUser;
   coInstructors: IModelUser[];
   isActive: boolean;

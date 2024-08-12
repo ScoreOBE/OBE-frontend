@@ -60,11 +60,13 @@ export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState<any>();
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [courseManagement, setCourseManagement] = useState<
     IModelCourseManagement[]
   >([]);
   const [totalCourses, setTotalCourses] = useState<number>(0);
   const [editCourse, setEditCourse] = useState<any>();
+
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {} as Partial<IModelSectionManagement>,
@@ -81,6 +83,7 @@ export default function CourseManagement() {
     },
     validateInputOnBlur: true,
   });
+
   const [editSectionModal, setEditSectionModal] = useState(false);
   const [editInstructorModal, setEditInstructorModal] = useState(false);
   const [
@@ -200,16 +203,21 @@ export default function CourseManagement() {
     // );
   };
 
+  useEffect(() => {
+    console.log(form.getValues());
+  }, [form]);
+
   return (
     <>
       <Modal
         opened={modalEditSection && editCourse}
         onClose={closeModalEditSection}
         closeOnClickOutside={false}
+        withCloseButton={false}
         title={`Edit section ${
           editCourse ? getSection(editCourse.sectionNo) : ""
         } in ${editCourse ? editCourse.courseNo : ""}`}
-        size="30vw"
+        size="35vw"
         centered
         transitionProps={{ transition: "pop" }}
         classNames={{
@@ -225,75 +233,88 @@ export default function CourseManagement() {
               withAsterisk
               size="xs"
               classNames={{ input: "focus:border-primary" }}
-              value={getSection(form.getValues().sectionNo)}
               {...form.getInputProps("topic")}
             />
           )}
           <TextInput
             label="Section"
             withAsterisk
-            size="sm"
+            size="xs"
             maxLength={3}
             classNames={{ input: "focus:border-primary" }}
+            value={getSection(form.getValues().sectionNo)}
             {...form.getInputProps("sectionNo")}
           />
-          {/* Open in */}
+
           <div
-            className="flex justify-between items-center rounded-lg p-3  gap-1 bg-white"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
+            className="w-full p-3 bg-white rounded-md gap-2 flex flex-col "
           >
-            <span className="text-tertiary font-semibold">
-              Open in Semester 3/66
-            </span>
-            <Switch
-              color="#5768d5"
-              size="lg"
-              onLabel="ON"
-              offLabel="OFF"
-              {...form.getInputProps("isActive")}
-            />
+            <div className="flex flex-row items-center justify-between">
+              <div className="gap-1 flex flex-col">
+                <span className="font-semibold">Open Semester</span>
+                <Checkbox
+                  classNames={{
+                    input:
+                      "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                    body: "mr-3  px-0",
+                    label: "text-[14px] text-[#615F5F] cursor-pointer",
+                  }}
+                  color="#5768D5"
+                  size="xs"
+                  label={`Open in this semester (${
+                    academicYear?.semester
+                  }/${academicYear?.year.toString()?.slice(-2)})`}
+                  checked={
+                    form.getValues().isActive &&
+                    (form?.getValues().semester as string[]).includes(
+                      academicYear.semester.toString()
+                    )
+                  }
+                  {...form.getInputProps("isActive")}
+                  // onChange={(event) =>
+                  //   setSemesterInSec(index, event.target.checked)
+                  // }
+                />
+              </div>
+              <Checkbox.Group
+                classNames={{ error: "mt-2" }}
+                {...form.getInputProps("semester")}
+                value={form.getValues().semester as string[]}
+                onChange={(event: any) => {
+                  form.setFieldValue("semester", event.sort());
+                }}
+              >
+                <Group className="flex flex-row gap-1 justify-end">
+                  {SEMESTER.map((item) => {
+                    const semester =
+                      (form?.getValues().semester as string[]) ?? [];
+                    return (
+                      <Checkbox
+                        key={item}
+                        classNames={{
+                          input:
+                            "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                          body: "mr-3",
+                          label: "text-[14px] cursor-pointer",
+                        }}
+                        color="#5768D5"
+                        size="xs"
+                        label={item}
+                        value={item.toString()}
+                        disabled={
+                          semester.length == 1 &&
+                          semester.includes(item.toString())
+                        }
+                      />
+                    );
+                  })}
+                </Group>
+              </Checkbox.Group>
+            </div>
           </div>
-
-          {/* Open Semester */}
-          <div
-            className="flex justify-between items-center rounded-lg p-4 mb-3  bg-white"
-            style={{
-              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-            }}
-          >
-            <span className="text-tertiary font-semibold">Open Semester</span>
-            <Checkbox.Group
-              classNames={{ error: "mt-2" }}
-              className="flex items-center   justify-center"
-              {...form.getInputProps("semester")}
-            >
-              <Group className="flex flex-row gap-1 items-center justify-center ">
-                {SEMESTER.map((item) => {
-                  return (
-                    <Checkbox
-                      key={item}
-                      color="#5768D5"
-                      size="xs"
-                      classNames={{
-                        input:
-                          "bg-black bg-opacity-0 border-[1.5px]  border-tertiary cursor-pointer disabled:bg-gray-400",
-                        label: "text-[14px] cursor-pointer",
-                      }}
-                      label={item}
-                      value={item}
-                      disabled={
-                        form?.getValues().semester?.length == 1 &&
-                        form?.getValues().semester?.includes(item)
-                      }
-                    />
-                  );
-                })}
-              </Group>
-            </Checkbox.Group>
-          </div>
-
           <div className="flex gap-2 justify-end w-full">
             <Button
               color="#575757"
@@ -302,7 +323,7 @@ export default function CourseManagement() {
               justify="start"
               onClick={() => {
                 setEditSectionModal(false);
-                closeModalEditSection;
+                closeModalEditSection();
               }}
             >
               Cancel
@@ -453,89 +474,105 @@ export default function CourseManagement() {
                 </div>
                 {/* Section */}
                 <div className="flex flex-col">
-                  {course.sections.map((sec: any) => (
-                    <div className="bg-white grid grid-cols-5 items-center justify-between first:rounded-t-md last:rounded-b-md py-4 border-b-[1px] border-[#eeeeee] px-5">
-                      {/* Section No & Topic */}
-                      <div className="flex flex-col ">
-                        <p className="font-semibold text-[14px] text-tertiary">
-                          Section {getSection(sec.sectionNo)}
-                        </p>
-                        {course.type === COURSE_TYPE.SEL_TOPIC && (
-                          <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">
-                            {sec.topic}
-                          </p>
-                        )}
-                      </div>
-                      {/* Status */}
+                  {course.sections.map((sec: any) => {
+                    const isActive =
+                      sec.isActive &&
+                      sec.semester.includes(academicYear.semester);
+                    return (
                       <div
-                        className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
-                          sec.isActive
-                            ? "bg-[#10e5908e] text-[#267156]"
-                            : "bg-[#919191] text-white"
-                        } `}
+                        key={sec.sectionNo}
+                        className="bg-white grid grid-cols-5 items-center justify-between first:rounded-t-md last:rounded-b-md py-4 border-b-[1px] border-[#eeeeee] px-5"
                       >
-                        <p className=" font-semibold ">
-                          {sec.isActive ? "Active" : "Inactive"}
-                        </p>
-                      </div>
-                      {/* Main Instructor */}
-                      <div className="flex items-center font-medium text-[#4E5150] text-b3">
-                        {getUserName(sec.instructor)}
-                      </div>
-                      {/* Open Symester */}
-                      <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
-                        <p className="text-wrap font-medium">Open Semester</p>
-                        <div className="flex gap-1">
-                          {sec.semester.map((term: any, index: number) => (
-                            <span key={index} className="text-wrap">
-                              {index === 0
-                                ? term
-                                : index === sec.semester.length - 1
-                                ? ` and ${term}`
-                                : `, ${term}`}
-                            </span>
-                          ))}
+                        {/* Section No & Topic */}
+                        <div className="flex flex-col ">
+                          <p className="font-semibold text-[14px] text-tertiary">
+                            Section {getSection(sec.sectionNo)}
+                          </p>
+                          {course.type === COURSE_TYPE.SEL_TOPIC && (
+                            <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">
+                              {sec.topic}
+                            </p>
+                          )}
                         </div>
-                      </div>
+                        {/* Status */}
+                        <div
+                          className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
+                            isActive
+                              ? "bg-[#10e5908e] text-[#267156]"
+                              : "bg-[#919191] text-white"
+                          } `}
+                        >
+                          <p className=" font-semibold ">
+                            {isActive ? "Active" : "Inactive"}
+                          </p>
+                        </div>
+                        {/* Main Instructor */}
+                        <div className="flex items-center font-medium text-[#4E5150] text-b3">
+                          {getUserName(sec.instructor)}
+                        </div>
+                        {/* Open Symester */}
+                        <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
+                          <p className="text-wrap font-medium">Open Semester</p>
+                          <div className="flex gap-1">
+                            {sec.semester.map((term: any, index: number) => (
+                              <span key={index} className="text-wrap">
+                                {index === 0
+                                  ? term
+                                  : index === sec.semester.length - 1
+                                  ? ` and ${term}`
+                                  : `, ${term}`}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
 
-                      {/* Button */}
-                      <div className="flex justify-end gap-4 items-center">
-                        <div
-                          className="bg-transparent border-[1px] border-secondary text-secondary size-8 bg-none rounded-full cursor-pointer hover:bg-secondary/10"
-                          onClick={() => {
-                            setEditCourse({courseNo: course.courseNo, ...sec})
-                            openedModalManageInst();
-                          }}
-                        >
-                          <Icon IconComponent={ManageAdminIcon} />
-                        </div>
+                        {/* Button */}
+                        <div className="flex justify-end gap-4 items-center">
+                          <div
+                            className="bg-transparent border-[1px] border-secondary text-secondary size-8 bg-none rounded-full cursor-pointer hover:bg-secondary/10"
+                            onClick={() => {
+                              setEditCourse({
+                                courseNo: course.courseNo,
+                                ...sec,
+                              });
+                              openedModalManageInst();
+                            }}
+                          >
+                            <Icon IconComponent={ManageAdminIcon} />
+                          </div>
 
-                        <div
-                          onClick={() => {
-                            setEditCourse({
-                              ...sec,
-                              ...course,
-                            });
-                            form.setValues({ ...sec });
-                            setEditSectionModal(true);
-                            openModalEditSection();
-                          }}
-                          className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"
-                        >
-                          <IconEdit className="size-4" stroke={1.5} />
-                        </div>
-                        <div
-                          onClick={() => {
-                            setDelSec({ ...sec, courseNo: course.courseNo });
-                            openedMainPopup();
-                          }}
-                          className="flex justify-center items-center bg-transparent border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"
-                        >
-                          <IconTrash className="size-4" stroke={1.5} />
+                          <div
+                            onClick={() => {
+                              setEditCourse({
+                                ...sec,
+                                ...course,
+                              });
+                              form.setValues({
+                                ...sec,
+                                semester: sec.semester.map((e: any) =>
+                                  e.toString()
+                                ),
+                              });
+                              setEditSectionModal(true);
+                              openModalEditSection();
+                            }}
+                            className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"
+                          >
+                            <IconEdit className="size-4" stroke={1.5} />
+                          </div>
+                          <div
+                            onClick={() => {
+                              setDelSec({ ...sec, courseNo: course.courseNo });
+                              openedMainPopup();
+                            }}
+                            className="flex justify-center items-center bg-transparent border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"
+                          >
+                            <IconTrash className="size-4" stroke={1.5} />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ))}
