@@ -21,8 +21,16 @@ export const updateCourseManagement = async (id: string, params: any) => {
   return isValidResponse(res);
 };
 
-export const updateSectionManagement = async (id: string, params: any) => {
-  const res = await courseManagementService.updateSectionManagement(id, params);
+export const updateSectionManagement = async (
+  id: string,
+  section: string,
+  params: any
+) => {
+  const res = await courseManagementService.updateSectionManagement(
+    id,
+    section,
+    params
+  );
   return isValidResponse(res);
 };
 
@@ -31,7 +39,10 @@ export const deleteCourseManagement = async (id: string) => {
   return isValidResponse(res);
 };
 
-export const deleteSectionManagement = async (id: string) => {
-  const res = await courseManagementService.deleteSectionManagement(id);
+export const deleteSectionManagement = async (id: string, section: string) => {
+  const res = await courseManagementService.deleteSectionManagement(
+    id,
+    section
+  );
   return isValidResponse(res);
 };

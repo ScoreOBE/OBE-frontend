@@ -13,16 +13,20 @@ export const courseManagementController = (configService = {}) => {
       return service.post(`${prefix}`, { ...params });
     },
     updateCourseManagement: async (id: string, params: any) => {
-      return service.put(`${prefix}/course/${id}`, { ...params });
+      return service.put(`${prefix}/${id}`, { ...params });
     },
-    updateSectionManagement: async (id: string, params: any) => {
-      return service.put(`${prefix}/section/${id}`, { ...params });
+    updateSectionManagement: async (
+      id: string,
+      section: string,
+      params: any
+    ) => {
+      return service.put(`${prefix}/${id}/${section}`, { ...params });
     },
     deleteCourseManagement: async (id: string) => {
-      return service.delete(`${prefix}/course/${id}`, {});
+      return service.delete(`${prefix}/${id}`, {});
     },
-    deleteSectionManagement: async (id: string) => {
-      return service.delete(`${prefix}/section/${id}`, {});
+    deleteSectionManagement: async (id: string, section: string) => {
+      return service.delete(`${prefix}/${id}/${section}`, {});
     },
   };
 };
