@@ -63,7 +63,16 @@ export default function Dashboard() {
   }, [academicYear, params]);
 
   useEffect(() => {
-    if ((fetchNewCourse || !course.length) && term?.id) fetchCourse(term?.id);
+    if ((fetchNewCourse || !course.length) && term?.id) {
+      fetchCourse(term?.id);
+      navigate(
+        {
+          pathname: ".",
+          search: "?" + params.toString(),
+        },
+        { replace: true, state: {} }
+      );
+    }
   }, [fetchNewCourse, course]);
 
   useEffect(() => {
@@ -128,8 +137,8 @@ export default function Dashboard() {
       {
         pathname: `${ROUTE_PATH.COURSE}/${courseNo}`,
         search: "?" + params.toString(),
-      },
-      { state: { activeTerm: term?.isActive } }
+      }
+      // { state: { activeTerm: term?.isActive } }
     );
   };
 

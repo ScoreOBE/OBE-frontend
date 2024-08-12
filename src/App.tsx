@@ -59,11 +59,13 @@ function App() {
         const rsAcademicYear = await getAcademicYear(payload);
         if (rsAcademicYear) {
           dispatch(setAcademicYear(rsAcademicYear));
-          setParams({
-            id: rsAcademicYear[0].id,
-            year: rsAcademicYear[0].year.toString(),
-            semester: rsAcademicYear[0].semester.toString(),
-          });
+          if (!params.get("id")) {
+            setParams({
+              id: rsAcademicYear[0].id,
+              year: rsAcademicYear[0].year.toString(),
+              semester: rsAcademicYear[0].semester.toString(),
+            });
+          }
         }
       }
     };
@@ -106,8 +108,7 @@ function App() {
 
   return (
     <div
-   
-    className="flex h-screen w-screen"
+      className="flex h-screen w-screen"
       // className={`flex h-screen w-screen  ${
       //   showSidebar ? "sidebar-linear-gradient" : ""
       // }`}

@@ -10,7 +10,6 @@ import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { setAcademicYear } from "@/store/academicYear";
-import { setCourseList } from "@/store/course";
 
 export default function DashboardSidebar() {
   const [params, setParams] = useSearchParams();
@@ -27,12 +26,12 @@ export default function DashboardSidebar() {
   );
 
   useEffect(() => {
-    if (academicYear.length && (!params.get("id") || !selectedTerm)) {
+    if (academicYear.length && !params.get("id") && !selectedTerm) {
       setTerm(academicYear[0]);
       setSelectedTerm(termOption[0]);
     } else if (
-      !academicYear.length
-      // || !academicYear.map((term) => term.id).includes(selectedTerm?.value
+      !academicYear.length 
+      // || !academicYear.map((term) => term.id).includes(selectedTerm?.value)
     ) {
       fetchAcademicYear();
     }
@@ -49,7 +48,7 @@ export default function DashboardSidebar() {
     if (res) {
       dispatch(setAcademicYear(res));
       // if (!res.map((term: any) => term.id).includes(params.get("id"))) {
-      if (!selectedTerm) {
+      if (!params.get("id") && !selectedTerm) {
         setTerm(res[0]);
         setSelectedTerm(termOption[0]);
       }
@@ -69,7 +68,6 @@ export default function DashboardSidebar() {
     closeFilterTerm();
     const term = academicYear.find((e) => e.id == selectedTerm.value)!;
     setTerm(term);
-    dispatch(setCourseList([]));
   };
 
   return (
