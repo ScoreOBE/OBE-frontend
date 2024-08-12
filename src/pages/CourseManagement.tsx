@@ -52,8 +52,6 @@ import {
 } from "@/models/ModelCourseManagement";
 import { useForm } from "@mantine/form";
 import Loading from "@/components/Loading";
-import { getCourse } from "@/services/course/course.service";
-import { IModelCourse } from "@/models/ModelCourse";
 import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
 
 export default function CourseManagement() {
