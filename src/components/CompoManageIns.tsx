@@ -171,7 +171,12 @@ export default function CompoMangementIns({
             classNames={{ input: "!rounded-r-none" }}
             placeholder="example@cmu.ac.th"
             value={inputUser.value!}
-            onChange={(event) => setInputUser({ value: event.target.value })}
+            onChange={(event) =>
+              setInputUser({
+                label: event.target.value,
+                value: event.target.value,
+              })
+            }
           />
         ) : (
           <Select
