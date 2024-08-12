@@ -492,7 +492,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                           classNames={{
                             input:
                               "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                            body: "mr-3",
+                            body: "mr-3 px-0",
                             label: "text-[14px] text-[#615F5F] cursor-pointer",
                           }}
                           color="#5768D5"
