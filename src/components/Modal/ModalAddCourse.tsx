@@ -92,6 +92,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         form.validateField("courseName");
         form.validateField("sections.0.topic");
         isValid =
+          isValid &&
           !form.validateField("courseNo").hasError &&
           !form.validateField("courseName").hasError &&
           (!form.validateField("sections.0.topic").hasError ||
@@ -149,6 +150,7 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
       updatedSemester: academicYear.semester,
     };
     payload.sections?.forEach((sec: any) => {
+      sec.semester = sec.semester.map((term: string) => parseInt(term));
       sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
     });
     const res = await createCourse(payload);
@@ -501,9 +503,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                             academicYear?.semester
                           }/${academicYear?.year.toString()?.slice(-2)})`}
                           checked={sec.openThisTerm}
-                          {...form.getInputProps(
-                            `sections.${index}.openThisTerm`
-                          )}
                           onChange={(event) =>
                             setSemesterInSec(index, event.target.checked)
                           }
@@ -530,11 +529,12 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
                               color="#5768D5"
                               size="xs"
                               label={item}
-                              disabled={
-                                sec.semester?.includes(item.toString()) &&
-                                sec.openThisTerm
-                              }
                               value={item.toString()}
+                              disabled={
+                                sec.openThisTerm &&
+                                item == academicYear.semester &&
+                                sec.semester?.includes(item.toString())
+                              }
                             />
                           ))}
                         </Group>
@@ -548,95 +548,6 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
         </Stepper.Step>
         <Stepper.Step label="Co-Instructor" description="STEP 4">
           <div className="flex flex-col mt-3 flex-1 ">
-            {/* {/* <div
-              className="flex flex-col bg-white gap-2 max-h-[320px] mb-5 rounded-md h-fit w-full  p-4  "
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              <div
-                onClick={() => setSwapMethodAddCo(!swapMethodAddCo)}
-                className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer h-fit rounded-lg text-secondary flex justify-between items-center p-4 "
-              >
-                <div className="flex gap-6">
-                  <Icon IconComponent={AddCoIcon} className="text-secondary" />
-                  <p className="font-semibold">
-                    Add Co-Instructor by using
-                    <span className="font-extrabold">
-                      {swapMethodAddCo ? " Dropdown list" : " CMU Account"}
-                    </span>
-                  </p>
-                </div>
-                <IconChevronRight stroke={2} />
-              </div>
-
-              <div className="flex w-full items-end h-fit ">
-                {swapMethodAddCo ? (
-                  <TextInput
-                    description="Make sure CMU account correct"
-                    label={<p>Add Co-Instructor via CMU account (Optional)</p>}
-                    className="w-full border-none "
-                    style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
-                    classNames={{
-                      input: " !rounded-r-none ",
-                      description: "font-medium mt-[1px] mb-2",
-                    }}
-                    placeholder="example@cmu.ac.th"
-                    value={insInput.value!}
-                    onChange={(event) =>
-                      setInsInput({ value: event.target.value })
-                    }
-                  />
-                ) : (
-                  <Select
-                    rightSectionPointerEvents="all"
-                    label="Select Co-Instructor (Optional)"
-                    placeholder="Co-Instructor"
-                    data={instructorOption}
-                    searchable
-                    nothingFoundMessage="No result"
-                    className="w-full border-none "
-                    classNames={{ input: " rounded-e-none  rounded-md " }}
-                    style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
-                    rightSection={
-                      <template className="flex items-center gap-2 absolute right-2">
-                        {insInput.value && (
-                          <IconX
-                            size={"1.25rem"}
-                            stroke={2}
-                            className={`cursor-pointer`}
-                            onClick={() => setInsInput({ value: null })}
-                          />
-                        )}
-                        <IconChevronDown
-                          stroke={2}
-                          className={`${
-                            openedDropdown ? "rotate-180" : ""
-                          } stroke-primary cursor-pointer`}
-                          onClick={() => setOpenedDropdown(!openedDropdown)}
-                        />
-                      </template>
-                    }
-                    dropdownOpened={openedDropdown}
-                    // onDropdownOpen={() => setOpenedDropdown(true)}
-                    onDropdownClose={() => setOpenedDropdown(false)}
-                    value={insInput.value!}
-                    onChange={(value, option) => setInsInput(option)}
-                    onClick={() => setOpenedDropdown(!openedDropdown)}
-                  />
-                )}
-                <Button
-                  className="rounded-s-none min-w-fit border-l-0"
-                  color="#5768D5"
-                  disabled={
-                    !insInput.value || (swapMethodAddCo && invalidEmail)
-                  }
-                  onClick={addCoIns}
-                >
-                  Add
-                </Button>
-              </div>
-            </div> */}
             <CompoMangementIns
               opened={active == 3}
               action={addCoIns}
