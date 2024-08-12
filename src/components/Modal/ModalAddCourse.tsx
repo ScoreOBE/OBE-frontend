@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Stepper,
   Button,
@@ -20,7 +20,7 @@ import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import { SEMESTER } from "@/helpers/constants/enum";
 import { isNumber } from "lodash";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppSelector } from "@/store";
 import { validateCourseNameorTopic } from "@/helpers/functions/validation";
 import { createCourse } from "@/services/course/course.service";
 import {
@@ -29,17 +29,20 @@ import {
   showNotifications,
   sortData,
 } from "@/helpers/functions/function";
-import { setCourseList } from "@/store/course";
 import CompoMangementIns from "../CompoManageIns";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
+  fetchCourse: (id: string) => void;
 };
-export default function ModalAddCourse({ opened, onClose }: Props) {
+export default function ModalAddCourse({
+  opened,
+  onClose,
+  fetchCourse,
+}: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const dispatch = useAppDispatch();
   const [active, setActive] = useState(0);
   const [sectionNoList, setSectionNoList] = useState<string[]>([]);
   const [coInsList, setCoInsList] = useState<any[]>([]);
@@ -155,9 +158,9 @@ export default function ModalAddCourse({ opened, onClose }: Props) {
     });
     const res = await createCourse(payload);
     if (res) {
-      dispatch(setCourseList([]));
       closeModal();
       showNotifications("success", "Create Course", "Create coures successful");
+      fetchCourse(academicYear.id);
     }
   };
 

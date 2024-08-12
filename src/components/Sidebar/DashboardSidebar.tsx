@@ -5,28 +5,21 @@ import Icon from "@/components/Icon";
 import { IconChevronDown } from "@tabler/icons-react";
 import CalendarIcon from "@/assets/icons/calendar.svg?react";
 import { useDisclosure } from "@mantine/hooks";
-import { getCourse } from "@/services/course/course.service";
-import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import { setCourseList } from "@/store/course";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
-import { setLoading } from "@/store/loading";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { setAcademicYear } from "@/store/academicYear";
 
 export default function DashboardSidebar() {
-  const [openedFilterTerm, { open: openFilterTerm, close: closeFilterTerm }] =
-    useDisclosure(false);
-  const fetchNewCourse = useLocation().state?.fetchCourse;
   const [params, setParams] = useSearchParams();
-  const payloadCourse = new CourseRequestDTO();
   const academicYear = useAppSelector((state) => state.academicYear);
-  const course = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();
   const termOption = academicYear.map((e) => {
     return { label: `${e.semester}/${e.year}`, value: e.id };
   });
+  const [openedFilterTerm, { open: openFilterTerm, close: closeFilterTerm }] =
+    useDisclosure(false);
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState<any>(
     termOption.find((term) => term.value == params.get("id"))
@@ -36,9 +29,6 @@ export default function DashboardSidebar() {
     if (academicYear.length && (!params.get("id") || !selectedTerm)) {
       setTerm(academicYear[0]);
       setSelectedTerm(termOption[0]);
-      if (!course.length) {
-        fetchCourse(academicYear[0].id);
-      }
     } else if (
       !academicYear.length
       // || !academicYear.map((term) => term.id).includes(selectedTerm?.value
@@ -48,8 +38,10 @@ export default function DashboardSidebar() {
   }, [academicYear, params]);
 
   useEffect(() => {
-    if (fetchNewCourse && params.get("id")) fetchCourse(params.get("id")!);
-  }, [fetchNewCourse]);
+    if (termOption && !selectedTerm) {
+      setSelectedTerm(termOption[0]);
+    }
+  }, [termOption]);
 
   const fetchAcademicYear = async () => {
     const res = await getAcademicYear(new AcademicYearRequestDTO());
@@ -59,21 +51,9 @@ export default function DashboardSidebar() {
       if (!selectedTerm) {
         setTerm(res[0]);
         setSelectedTerm(termOption[0]);
-        fetchCourse(res[0].id);
       }
       // }
     }
-  };
-
-  const fetchCourse = async (id: string) => {
-    dispatch(setLoading(true));
-    payloadCourse.academicYear = id;
-    const res = await getCourse(payloadCourse);
-    if (res) {
-      localStorage.setItem("totalCourses", res.totalCount);
-      dispatch(setCourseList(res.courses));
-    }
-    dispatch(setLoading(false));
   };
 
   const setTerm = (data: IModelAcademicYear) => {
@@ -88,7 +68,6 @@ export default function DashboardSidebar() {
     closeFilterTerm();
     const term = academicYear.find((e) => e.id == selectedTerm.value)!;
     setTerm(term);
-    fetchCourse(selectedTerm.value);
   };
 
   return (
@@ -106,7 +85,7 @@ export default function DashboardSidebar() {
           label="Semester"
           data={termOption}
           value={selectedTerm?.value}
-          onChange={(_value, option) => setSelectedTerm(option)}
+          onChange={(value, option) => setSelectedTerm(option)}
           allowDeselect={false}
           withCheckIcon={false}
           className="mb-7 border-none w-1/2"

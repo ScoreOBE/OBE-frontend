@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button, Menu, TextInput } from "@mantine/core";
+import { Button, Menu } from "@mantine/core";
 import {
   IconDots,
   IconPencilMinus,
@@ -8,10 +8,10 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { showNotifications, statusColor } from "@/helpers/functions/function";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { deleteCourse, getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import { addLoadMoreCourse, removeCourse } from "@/store/course";
+import { addLoadMoreCourse, removeCourse, setCourseList } from "@/store/course";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import ModalAddCourse from "@/components/Modal/ModalAddCourse";
@@ -23,12 +23,14 @@ import ModalEditCourse from "../components/Modal/ModalEdit";
 import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading";
+import { setLoading } from "@/store/loading";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const course = useAppSelector((state) => state.course);
+  const fetchNewCourse = useLocation().state?.fetchCourse;
   const dispatch = useAppDispatch();
   const totalCourses = parseInt(localStorage.getItem("totalCourses") ?? "0");
   const [payload, setPayload] = useState<any>();
@@ -55,14 +57,14 @@ export default function Dashboard() {
       );
       if (acaYear) {
         setTerm(acaYear);
-        setPayload({
-          ...new CourseRequestDTO(),
-          academicYear: acaYear.id,
-          hasMore: true,
-        });
+        fetchCourse(acaYear.id);
       }
     }
   }, [academicYear, params]);
+
+  useEffect(() => {
+    if (fetchNewCourse && term?.id) fetchCourse(term?.id);
+  }, [fetchNewCourse]);
 
   useEffect(() => {
     if (term) {
@@ -74,6 +76,22 @@ export default function Dashboard() {
       localStorage.removeItem("search");
     }
   }, [localStorage.getItem("search")]);
+
+  const fetchCourse = async (id: string) => {
+    dispatch(setLoading(true));
+    const payloadCourse = new CourseRequestDTO();
+    payloadCourse.academicYear = id;
+    setPayload({
+      ...payloadCourse,
+      hasMore: true,
+    });
+    const res = await getCourse(payloadCourse);
+    if (res) {
+      localStorage.setItem("totalCourses", res.totalCount);
+      dispatch(setCourseList(res.courses));
+    }
+    dispatch(setLoading(false));
+  };
 
   const onShowMore = async () => {
     if (payload.academicYear) {
@@ -137,10 +155,13 @@ export default function Dashboard() {
         opened={openModalEditCourse}
         title={`Edit course`}
         onClose={closeModalEditCourse}
-        
       ></ModalEditCourse>
 
-      <ModalAddCourse opened={openAddModal} onClose={closeAddModal} ></ModalAddCourse>
+      <ModalAddCourse
+        opened={openAddModal}
+        onClose={closeAddModal}
+        fetchCourse={(id) => fetchCourse(id)}
+      ></ModalAddCourse>
 
       <div className="flex flex-row  items-center justify-between">
         <div className="flex flex-col">
