@@ -1,15 +1,6 @@
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Checkbox,
-  Group,
-  Menu,
-  Modal,
-  Skeleton,
-  Switch,
-  TextInput,
-} from "@mantine/core";
+import { Button, Checkbox, Group, Menu, Modal, TextInput } from "@mantine/core";
 import {
   IconDots,
   IconTrash,
@@ -37,15 +28,11 @@ import { useDisclosure } from "@mantine/hooks";
 import { isNumber } from "lodash";
 
 import {
-  containsOnlyNumbers,
   validateCourseNameorTopic,
   validateSectionNo,
 } from "@/helpers/functions/validation";
 
-import CompoMangementIns from "@/components/CompoManageIns";
-
 import MainPopup from "@/components/Popup/MainPopup";
-import course, { removeCourse } from "@/store/course";
 import { IModelSection } from "@/models/ModelSection";
 import {
   IModelCourseManagement,
@@ -54,6 +41,7 @@ import {
 import { useForm } from "@mantine/form";
 import Loading from "@/components/Loading";
 import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
+import ModalEditCourse from "@/components/Modal/ModalEdit";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -80,16 +68,10 @@ export default function CourseManagement() {
   });
 
   const [editSectionModal, setEditSectionModal] = useState(false);
-  const [editInstructorModal, setEditInstructorModal] = useState(false);
   const [
     modalEditSection,
     { open: openModalEditSection, close: closeModalEditSection },
   ] = useDisclosure(false);
-  const [
-    modalEditInstructor,
-    { open: openModalEditInstructor, close: closeModalEditInstructor },
-  ] = useDisclosure(false);
-  const dispatch = useAppDispatch();
 
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
@@ -102,6 +84,11 @@ export default function CourseManagement() {
   const [
     openModalManageInst,
     { open: openedModalManageInst, close: closeModalManageInst },
+  ] = useDisclosure(false);
+
+  const [
+    openModalEditCourse,
+    { open: openedModalEditCourse, close: closeModalEditCourse },
   ] = useDisclosure(false);
 
   const [delSec, setDelSec] = useState<
@@ -245,17 +232,17 @@ export default function CourseManagement() {
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
-            className="w-full p-3 bg-white rounded-md gap-2 flex flex-col "
+            className="w-full p-3 bg-white mb-3 rounded-md gap-2 flex flex-col "
           >
             <div className="flex flex-row items-center justify-between">
               <div className="gap-1 flex flex-col">
-                <span className="font-semibold">Open Semester</span>
+                <span className="font-semibold text-[13px]">Open Semester</span>
                 <Checkbox
                   classNames={{
                     input:
                       "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                     body: "mr-3  px-0",
-                    label: "text-[14px] text-[#615F5F] cursor-pointer",
+                    label: "text-[13px] text-[#615F5F] cursor-pointer",
                   }}
                   color="#5768D5"
                   size="xs"
@@ -314,7 +301,7 @@ export default function CourseManagement() {
             <Button
               color="#575757"
               variant="subtle"
-              className="rounded-[10px] text-[14px]   h-[36px] "
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
               justify="start"
               onClick={() => {
                 setEditSectionModal(false);
@@ -325,7 +312,7 @@ export default function CourseManagement() {
             </Button>
             <Button
               color="#5768d5"
-              className="rounded-[10px] text-[14px] font-bold h-[36px] w-fit"
+              className="rounded-[8px] font-bold text-[12px] h-[32px] w-fit "
             >
               Done
             </Button>
@@ -373,8 +360,15 @@ export default function CourseManagement() {
         data={editCourse}
       />
 
-      <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
-        <div className="flex flex-col  py-1 gap-1 items-start ">
+      <ModalEditCourse
+        // key={editCourse?.id ?? undefined}
+        opened={openModalEditCourse}
+        onClose={closeModalEditCourse}
+        value={editCourse}
+      />
+
+      <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
+        <div className="flex flex-col  items-start ">
           <p className="text-secondary text-[16px] font-bold">Dashboard</p>
           <p className="text-tertiary text-[14px] font-medium">
             {totalCourses} Courses
@@ -389,14 +383,14 @@ export default function CourseManagement() {
             next={onShowMore}
             height={"100%"}
             hasMore={payload?.hasMore}
-            className="overflow-y-auto w-full h-fit max-h-full flex flex-col gap-4 "
+            className="overflow-y-auto w-full h-fit max-h-full flex flex-col gap-3 "
             style={{ height: "fit-content", maxHeight: "100%" }}
             loader={<Loading />}
           >
             {courseManagement.map((course, index) => (
               <div
                 key={index}
-                className="bg-[#eff0fd] rounded-md flex flex-col p-5"
+                className="bg-[#bfbfff3e] rounded-md flex flex-col py-4 px-5"
               >
                 {/* Course Topic */}
                 <div className="gap-3 mb-4 flex items-center w-full justify-between">
@@ -409,7 +403,7 @@ export default function CourseManagement() {
                     </p>
                   </div>
 
-                  <div className="rounded-full  size-8 hover:bg-gray-300 p-1 ">
+                  <div className="rounded-full cursor-pointer size-8 hover:bg-gray-300 p-1 ">
                     <Menu trigger="click" position="bottom-end" offset={2}>
                       <Menu.Target>
                         <IconDots className=" rounded-full hover:bg-gray-300" />
@@ -427,19 +421,34 @@ export default function CourseManagement() {
                           </div>
                         </Menu.Item>
                         <Menu.Item className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]">
-                          <div className="flex items-center gap-2">
+                          <div
+                            onClick={() => {
+                              setEditCourse({
+                                id: course.id,
+                                courseNo: course.courseNo,
+                                courseName: course.courseName,
+                              });
+                              openedModalEditCourse();
+                            }}
+                            className="flex items-center gap-2"
+                          >
                             <IconPencilMinus stroke={1.5} className="h-4 w-4" />
                             <span>Edit course</span>
                           </div>
                         </Menu.Item>
-                        {/* <Menu.Item
-                          onClick={() => {
-                          
-
-                          }}
+                        <Menu.Item
+                          onClick={() => {}}
                           className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]"
                         >
-                          <div className="flex items-center gap-2">
+                          <div
+                            className="flex items-center gap-2"
+                            onClick={() => {
+                              setEditCourse({
+                                ...course,
+                              });
+                              openedModalManageInst();
+                            }}
+                          >
                             <Icon
                               className="h-4 w-4"
                               IconComponent={ManageAdminIcon}
@@ -447,7 +456,7 @@ export default function CourseManagement() {
 
                             <span>Manage instructor</span>
                           </div>
-                        </Menu.Item> */}
+                        </Menu.Item>
                         <Menu.Item
                           className="text-[#FF4747]  w-[180px] font-semibold text-b2 hover:bg-[#d55757]/10"
                           onClick={() => {
@@ -476,11 +485,11 @@ export default function CourseManagement() {
                     return (
                       <div
                         key={sec.sectionNo}
-                        className="bg-white grid grid-cols-5 items-center justify-between first:rounded-t-md last:rounded-b-md py-4 border-b-[1px] border-[#eeeeee] px-5"
+                        className="bg-white grid grid-cols-5 items-center justify-between first:rounded-t-md last:rounded-b-md py-3 border-b-[1px] border-[#eeeeee] px-5"
                       >
                         {/* Section No & Topic */}
                         <div className="flex flex-col ">
-                          <p className="font-semibold text-[14px] text-tertiary">
+                          <p className="font-medium text-[13px] text-tertiary">
                             Section {getSection(sec.sectionNo)}
                           </p>
                           {course.type === COURSE_TYPE.SEL_TOPIC && (
@@ -523,7 +532,7 @@ export default function CourseManagement() {
 
                         {/* Button */}
                         <div className="flex justify-end gap-4 items-center">
-                          <div
+                          {/* <div
                             className="bg-transparent border-[1px] border-secondary text-secondary size-8 bg-none rounded-full cursor-pointer hover:bg-secondary/10"
                             onClick={() => {
                               setEditCourse({
@@ -534,7 +543,7 @@ export default function CourseManagement() {
                             }}
                           >
                             <Icon IconComponent={ManageAdminIcon} />
-                          </div>
+                          </div> */}
 
                           <div
                             onClick={() => {

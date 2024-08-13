@@ -92,6 +92,7 @@ export default function ModalAddCourse({
           isValid = !form.validateField(`sections.${i}.sectionNo`).hasError;
           if (!isValid) break;
         }
+        form.validateField("courseNo");
         form.validateField("courseName");
         form.validateField("sections.0.topic");
         isValid =
@@ -356,7 +357,7 @@ export default function ModalAddCourse({
         }}
         className=" justify-center items-center mt-1  text-[14px] max-h-full"
       >
-        <Stepper.Step label="Course Type" description="STEP 1">
+        <Stepper.Step allowStepSelect={false} label="Course Type" description="STEP 1">
           <p className="font-semibold mt-5 text-[15px]">
             Select type of course
           </p>
@@ -421,7 +422,7 @@ export default function ModalAddCourse({
             </Button>
           </div>
         </Stepper.Step>
-        <Stepper.Step label="Course Info" description="STEP 2">
+        <Stepper.Step allowStepSelect={false} label="Course Info" description="STEP 2">
           <div className="w-full  mt-2 h-fit  bg-white mb-5 rounded-md">
             <div className="flex flex-col gap-3">
               <TextInput
@@ -483,7 +484,7 @@ export default function ModalAddCourse({
             </div>
           </div>
         </Stepper.Step>
-        <Stepper.Step label="Semester" description="STEP 3">
+        <Stepper.Step allowStepSelect={false} label="Semester" description="STEP 3">
           <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-scroll  ">
             <div className="flex flex-col font-medium text-[14px] gap-5">
               {form.getValues().sections?.map((sec: any, index) => (
@@ -557,7 +558,7 @@ export default function ModalAddCourse({
             </div>
           </div>
         </Stepper.Step>
-        <Stepper.Step label="Co-Instructor" description="STEP 4">
+        <Stepper.Step allowStepSelect={false} label="Co-Instructor" description="STEP 4">
           <div className="flex flex-col mt-3 flex-1 ">
             <CompoMangementIns
               opened={active == 3}
@@ -639,7 +640,7 @@ export default function ModalAddCourse({
                               </Menu.Dropdown>
                             </Menu>
                             <Button
-                              className="text-[12px] transform-none rounded-md"
+                              className="text-[12px] transform-none rounded-[8px]"
                               size="xs"
                               variant="outline"
                               color="#FF4747"
@@ -668,7 +669,7 @@ export default function ModalAddCourse({
             )}
           </div>
         </Stepper.Step>
-        <Stepper.Step label="Review" description="STEP 5">
+        <Stepper.Step allowStepSelect={false} label="Review" description="STEP 5">
           <div
             className="w-full flex flex-col bg-white border-secondary border-[1px] mb-5 rounded-md"
             style={{
@@ -754,7 +755,7 @@ export default function ModalAddCourse({
               <Button
                 color="#575757"
                 variant="subtle"
-                className="rounded-[8px] text-[14px]   h-[36px] "
+                className="rounded-[8px] text-[12px] h-[32px] w-fit "
                 justify="start"
                 onClick={prevStep}
               >
@@ -764,7 +765,7 @@ export default function ModalAddCourse({
           </div>
           <Button
             color="#5768d5"
-            className="rounded-[8px] text-[14px] h-[36px] w-fit"
+            className="rounded-[8px] text-[12px] h-[32px] w-fit "
             loading={loading}
             onClick={() => nextStep()}
             rightSection={

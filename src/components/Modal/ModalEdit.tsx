@@ -54,7 +54,6 @@ export default function ModalEditCourse({ opened, onClose, value }: Props) {
     <Modal
       opened={opened}
       onClose={onClose}
-      closeOnClickOutside={true}
       title="Edit course"
       size="39vw"
       centered
@@ -66,7 +65,7 @@ export default function ModalEditCourse({ opened, onClose, value }: Props) {
           "flex flex-col justify-start   font-medium leading-[24px] text-[14px] item-center  overflow-hidden ",
       }}
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         <TextInput
           classNames={{ input: "focus:border-primary" }}
           label="Course No."
@@ -95,18 +94,16 @@ export default function ModalEditCourse({ opened, onClose, value }: Props) {
 
         <div className="flex gap-2 mt-3 justify-end">
           <Button
-            radius="10px"
             onClick={onClose}
             variant="subtle"
             color="#575757"
-            className="text-[14px]"
+            className="rounded-[8px] text-[12px] h-[32px] w-fit "
           >
             Cancel
           </Button>
           <Button
-            radius="10px"
             onClick={submit}
-            className="text-[14px]"
+            className="rounded-[8px] text-[12px] h-[32px] w-fit "
             color="#5768d5"
           >
             Done

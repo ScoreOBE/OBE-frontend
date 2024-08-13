@@ -130,7 +130,7 @@
 
 .mantine-TextInput-label {
   font-size: 13px !important;
-  color: var(--color-tertiary) !important;
+  color: #000000 !important;
   font-weight: 600 !important;
 }
 
@@ -142,8 +142,15 @@
   background-color: var(--color-hover);
 }
 
+.mantine-Menu-dropdown {
+  border-radius: 10px !important;
+}
+
 .mantine-Menu-item {
-  font-weight: 500;
+  height: 30px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  border-radius: 10px !important;
 }
 
 .mantine-Table-table {
@@ -176,6 +183,7 @@ Button:disabled {
   border-color: var(--color-border-input) !important;
   cursor: not-allowed !important;
 }
+
 
 .custom-radial-gradient {
   background: radial-gradient(
@@ -233,3 +241,17 @@ Button:disabled {
   color: white;
   background-color: var(--tqf-color-no-data);
 }
+
+.height-animation {
+  max-height:350px;
+  transition: height 0.3s ease-in-out;
+}
+
+.height-animation.expand {
+  height: 350px;
+}
+
+.height-animation.collaps {
+  height: 260px;
+}
+

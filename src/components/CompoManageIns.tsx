@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Icon from "./Icon";
 import { useAppSelector } from "@/store";
 import { validateEmail } from "@/helpers/functions/validation";
-import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
+import { NOTI_TYPE, ROLE, TITLE_ROLE } from "@/helpers/constants/enum";
 import { IModelUser } from "@/models/ModelUser";
 import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import {
@@ -19,15 +19,17 @@ import { IModelSection } from "@/models/ModelSection";
 type Props = {
   opened: boolean;
   role?: ROLE;
+  change?: boolean;
   sections?: Partial<IModelSection>[] | undefined;
   action?: (input?: any, func?: any) => void;
-  setUserList: React.Dispatch<React.SetStateAction<any[]>>;
+  setUserList?: React.Dispatch<React.SetStateAction<any[]>>;
   setUserFilter?: React.Dispatch<React.SetStateAction<IModelUser[]>>;
 };
 
 export default function CompoMangementIns({
   opened,
   role,
+  change = false,
   sections,
   action,
   setUserList,
@@ -95,7 +97,7 @@ export default function CompoMangementIns({
         if (user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) {
           adminList = [{ ...user }, ...adminList];
         }
-        setUserList(adminList);
+        if (setUserList) setUserList(adminList);
         if (setUserFilter) setUserFilter(adminList);
       }
     }
@@ -134,9 +136,17 @@ export default function CompoMangementIns({
     }
   };
 
+  const getLabel = () => {
+    return change
+      ? TITLE_ROLE.MAIN_INS_SEC
+      : role
+      ? ROLE.ADMIN
+      : TITLE_ROLE.CO_INS;
+  };
+
   return (
     <div
-      className="flex flex-col gap-3 max-h-[320px] rounded-md h-fit w-full mt-2 p-4  "
+      className="flex flex-col gap-3 max-h-[320px] mb-5 rounded-md h-fit w-full mt-2 p-4  "
       style={{
         boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
       }}
@@ -151,7 +161,7 @@ export default function CompoMangementIns({
         <div className="flex gap-6 items-center">
           <Icon IconComponent={AddCoIcon} className="text-secondary" />
           <p className="font-semibold">
-            Add Admin by using
+            {change ? "Change" : "Add"} {getLabel()} by using
             <span className="font-extrabold">
               {swapMethodAddUser ? " Dropdown list" : " CMU Account"}
             </span>
@@ -181,7 +191,7 @@ export default function CompoMangementIns({
         ) : (
           <Select
             rightSectionPointerEvents="all"
-            label="Select Admin"
+            label={`Select ${getLabel()}`}
             placeholder="Admin"
             data={instructorOption}
             allowDeselect
@@ -225,7 +235,7 @@ export default function CompoMangementIns({
           disabled={!inputUser.value || (swapMethodAddUser && invalidEmail)}
           onClick={() => addUser()}
         >
-          Add
+          {change ? "Change" : "Add"}
         </Button>
       </div>
     </div>

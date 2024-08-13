@@ -115,14 +115,12 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           />
 
           {/* List of Admin */}
-          <div className="flex flex-1 flex-col gap-2  overflow-y-auto p-1">
+          <div className="flex flex-1 flex-col gap-2  overflow-y-auto">
             {adminFilter.map((admin) => (
               <div
                 key={admin.id}
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-                className="flex flex-1 items-center justify-between mt-2 py-3 px-4 rounded-md"
+          
+                className="flex flex-1 items-center justify-between last:border-none border-b-[1px]  p-3 "
               >
                 <div className="gap-3 flex items-center">
                   <IconUserCircle size={32} stroke={1} />
@@ -139,11 +137,9 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                   variant="outline"
                   color="#5768D5"
                   size="xs"
-                  className=" rounded-[4px]"
+                  className=" rounded-[8px] font-semibold text-[12px]"
                   onClick={() => editSAdmin(admin.id)}
-                  leftSection={
-                    <AiOutlineSwap className=" stroke-[20px] size-4" />
-                  }
+                 
                 >
                   Change
                 </Button>
