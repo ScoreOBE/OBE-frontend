@@ -217,6 +217,54 @@ Button:disabled {
   border-color: var(--tqf-color-done);
 }
 
+.mantine-Tabs-root {
+  width: fit-content;
+  height: 10px;
+}
+
+.mantine-Tabs-tab {
+  width: fit-content;
+  background-color: light-dark(var(--color-secondary));
+}
+.mantine-Tabs-tab:last-of-type {
+  border-radius: 0 8px 8px 0;
+}
+.mantine-Tabs-tab:first-of-type {
+  border-radius: 8px 0 0 8px;
+}
+.mantine-Tabs-tab + .mantine-Tabs-tab {
+  border-left-width: 0;
+}
+
+.mantine-Tabs-tab:hover {
+  background-color: #e9e9e9;
+  color: light-dark(var(--color-tertiary));
+  border: 1px solid #bcbce1;
+}
+
+/* .mantine-Tabs-tab::before {
+  position: absolute;
+} */
+
+.mantine-Tabs-tab[data-active] {
+  z-index: 1;
+  background-color: #d5d5f7;
+  border-color: #bcbce1;
+  color: light-dark(var(--color-secondary));
+  border: 1px solid #bcbce1;
+}
+
+.mantine-Tabs-list {
+  background-color: light-dark(var(--color-hover));
+  border-radius: 8px;
+  color: light-dark(var(--color-tertiary));
+}
+
+.mantine-Tabs-tabLabel {
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .tqf-in-progress {
   color: var(--tqf-color-in-progress);
   border-color: var(--tqf-color-in-progress);
