@@ -39,6 +39,7 @@ import { isNumber } from "lodash";
 import {
   containsOnlyNumbers,
   validateCourseNameorTopic,
+  validateSectionNo,
 } from "@/helpers/functions/validation";
 
 import CompoMangementIns from "@/components/CompoManageIns";
@@ -70,11 +71,7 @@ export default function CourseManagement() {
     initialValues: {} as Partial<IModelSectionManagement>,
     validate: {
       topic: (value) => validateCourseNameorTopic(value, "Topic"),
-      sectionNo: (value) => {
-        if (value == undefined) return "Section No. is required";
-        const isValid = isNumber(value) && value.toString().length <= 3;
-        return isValid ? null : "Please enter a valid section no";
-      },
+      sectionNo: (value) => validateSectionNo(value),
       semester: (value) => {
         return value?.length ? null : "Please select semester at least one.";
       },

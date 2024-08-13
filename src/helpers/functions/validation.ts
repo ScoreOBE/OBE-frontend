@@ -7,6 +7,7 @@ import { showNotifications } from "./function";
 import { NOTI_TYPE } from "../constants/enum";
 import store from "@/store";
 import { setErrorResponse } from "@/store/errorResponse";
+import { isNumber } from "lodash";
 
 export const isValidResponse = (res: any) => {
   if (res.message === RESPONSE_MESSAGE.SUCCESS) {
@@ -30,6 +31,13 @@ export const isValidResponse = (res: any) => {
   }
 };
 
+export const validateCourseNo = (value: string | null | undefined) => {
+  if (!value) return "Course No. is required";
+  if (!value.replace(/^[0]+$/, "").length) return "Cannot have only 0";
+  const isValid = /^\d{6}$/.test(value.toString());
+  return isValid ? null : "Require number 6 digits";
+};
+
 export const validateCourseNameorTopic = (
   value: string | null | undefined,
   title: string
@@ -43,6 +51,14 @@ export const validateCourseNameorTopic = (
   return isValid
     ? null
     : `only contain 0-9, a-z, A-Z, space, "%&()*+,-./<=>?@[]\\^_`;
+};
+
+export const validateSectionNo = (
+  value: number | string | null | undefined
+) => {
+  if (value == undefined) return "Section No. is required";
+  const isValid = isNumber(value) && value.toString().length <= 3;
+  return isValid ? null : "Please enter a valid section no";
 };
 
 export const validateEmail = (email: string) => {

@@ -21,7 +21,11 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { SEMESTER } from "@/helpers/constants/enum";
 import { isNumber } from "lodash";
 import { useAppSelector } from "@/store";
-import { validateCourseNameorTopic } from "@/helpers/functions/validation";
+import {
+  validateCourseNameorTopic,
+  validateCourseNo,
+  validateSectionNo,
+} from "@/helpers/functions/validation";
 import { createCourse } from "@/services/course/course.service";
 import {
   getSection,
@@ -53,20 +57,11 @@ export default function ModalAddCourse({
     initialValues: { sections: [{}] } as Partial<IModelCourse>,
     validate: {
       type: (value) => !value && "Course Type is required",
-      courseNo: (value) => {
-        if (!value) return "Course No. is required";
-        if (!value.replace(/^[0]+$/, "").length) return "Cannot have only 0";
-        const isValid = /^\d{6}$/.test(value.toString());
-        return isValid ? null : "Require number 6 digits";
-      },
+      courseNo: (value) => validateCourseNo(value),
       courseName: (value) => validateCourseNameorTopic(value, "Course Name"),
       sections: {
         topic: (value) => validateCourseNameorTopic(value, "Topic"),
-        sectionNo: (value) => {
-          if (value == undefined) return "Section No. is required";
-          const isValid = isNumber(value) && value.toString().length <= 3;
-          return isValid ? null : "Please enter a valid section no";
-        },
+        sectionNo: (value) => validateSectionNo(value),
         semester: (value) => {
           return value?.length ? null : "Please select semester at least one.";
         },

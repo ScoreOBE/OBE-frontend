@@ -12,19 +12,19 @@ export const courseSlice = createSlice({
       return [...state, ...action.payload];
     },
     editCourse: (state, action) => {
-      return state.forEach((e) => {
-        if (e.id == action.payload.id) {
-          e = { ...e, ...action.payload };
-        }
-      });
+      return state.map((course) => 
+        course.id === action.payload.id 
+          ? { ...course, ...action.payload } 
+          : course
+      );
     },
     removeCourse: (state, action) => {
-      return state.filter((e) => e.id != action.payload);
+      return state.filter((course) => course.id != action.payload);
     },
   },
 });
 
-export const { setCourseList, addLoadMoreCourse, removeCourse } =
+export const { setCourseList, addLoadMoreCourse, editCourse, removeCourse } =
   courseSlice.actions;
 
 export default courseSlice.reducer;
