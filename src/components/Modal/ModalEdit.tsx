@@ -33,6 +33,8 @@ export default function ModalEditCourse({ opened, onClose, value }: Props) {
   useEffect(() => {
     if (opened && value) {
       form.setValues(value);
+    } else {
+      form.reset();
     }
   }, [opened, value]);
 
