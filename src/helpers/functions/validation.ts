@@ -22,7 +22,7 @@ export const isValidResponse = (res: any) => {
         window.location.replace(ROUTE_PATH.LOGIN);
         break;
       default:
-        dispatch(setErrorResponse(res));
+        // dispatch(setErrorResponse(res));
         showNotifications(NOTI_TYPE.ERROR, "Something went wrong", res.message);
         break;
     }
@@ -43,6 +43,10 @@ export const validateCourseNameorTopic = (
   return isValid
     ? null
     : `only contain 0-9, a-z, A-Z, space, "%&()*+,-./<=>?@[]\\^_`;
+};
+
+export const validateEmail = (email: string) => {
+  return /^\S+@cmu\.ac\.th$/i.test(email);
 };
 
 export const containsOnlyNumbers = (
@@ -75,8 +79,4 @@ export const ellipsisText = (text: string, limit: number = 10) => {
     return "";
   }
   return text.length <= limit ? text : text.substring(0, limit).concat("...");
-};
-
-export const validateEmail = (email: string) => {
-  return /^\S+@cmu\.ac\.th$/i.test(email);
 };
