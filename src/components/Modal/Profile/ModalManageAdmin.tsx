@@ -62,7 +62,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
           "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-fit ",
       }}
     >
-      <div className="flex flex-1 flex-col h-full gap-5  ">
+      <div className="flex flex-1 flex-col h-full ">
         <CompoMangeIns
           opened={opened}
           role={ROLE.ADMIN}
@@ -124,7 +124,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                       variant="outline"
                       color="red"
                       size="xs"
-                      className="rounded-[6px]"
+                      className="rounded-[8px] font-semibold text-[12px]"
                       onClick={() => deleteAdmin(admin.id)}
                     >
                       Delete

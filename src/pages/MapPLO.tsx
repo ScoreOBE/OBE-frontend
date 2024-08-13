@@ -64,9 +64,9 @@ export default function MapPLO() {
   });
 
   return (
-    <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
+    <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
       <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-1 items-start ">
+        <div className="flex flex-col  items-start ">
           <p className="text-secondary text-[16px] font-bold">
             Map PLO required
           </p>
@@ -80,14 +80,14 @@ export default function MapPLO() {
           <Button
             color="#F39D4E"
             leftSection={<IconEdit className="size-4" stroke={1.5} />}
-            className=" rounded-[8px]  text-[13px] font-semibold h-9 px-3"
+            className="rounded-[8px] text-[12px] h-[32px] w-fit "
           >
             Map PLO
           </Button>
           <Button
             color="#5768D5"
             leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
-            className=" rounded-[8px]  text-[13px] font-semibold h-9 px-3"
+            className="rounded-[8px] text-[12px] h-[32px] w-fit "
           >
             Add Course
           </Button>
@@ -96,7 +96,7 @@ export default function MapPLO() {
             leftSection={
               <Icon IconComponent={PLOdescIcon} className="h-5 w-5 -mr-1" />
             }
-            className=" rounded-[8px]  text-[13px] font-semibold h-9 px-3 text-tertiary border-[#DCDCDC]  hover:text-tertiary"
+            className="rounded-[8px] text-[12px] h-[32px] w-fit "
           >
             PLO
           </Button>
@@ -105,9 +105,9 @@ export default function MapPLO() {
             // data={instructorOption}
             allowDeselect
             placeholder="Collection 1"
-            className="w-36 border-none"
+            className="w-36  border-none"
             classNames={{
-              input: "rounded-md  border-secondary",
+              input: "rounded-md h-[32px]  border-secondary",
             }}
             rightSection={
               <template className="flex items-center gap-2 absolute right-2">

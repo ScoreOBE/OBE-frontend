@@ -15,6 +15,10 @@ export enum ROLE {
   ADMIN = "Admin",
   SUPREME_ADMIN = "S. Admin",
 }
+export enum TITLE_ROLE {
+  CO_INS = "Co-Instructor",
+  MAIN_INS_SEC = "Owner section",
+}
 export enum COURSE_TYPE {
   GENERAL = "General Education",
   SPECIAL = "Field of Specialization",

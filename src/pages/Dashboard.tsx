@@ -166,7 +166,7 @@ export default function Dashboard() {
         fetchCourse={(id) => fetchCourse(id)}
       />
       <ModalEditCourse
-        key={editCourse?.id ?? undefined}
+        // key={editCourse?.id ?? undefined}
         opened={openModalEditCourse}
         onClose={closeModalEditCourse}
         value={editCourse}
@@ -195,9 +195,10 @@ export default function Dashboard() {
         </div>
         {term?.isActive && (
           <Button
+            size="xs"
             color="#5768D5"
-            leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
-            className=" rounded-[8px]   text-[13px] font-semibold h-9 px-3"
+            leftSection={<IconPlus className=" size-5 -mr-1" stroke={1.5} />}
+            className=" rounded-[8px] text-[12px] h-[32px] w-fit "
             onClick={openedAddModal}
           >
             Add Course

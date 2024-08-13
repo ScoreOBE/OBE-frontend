@@ -70,11 +70,11 @@ export default function MainPopup({
                 onClick={onClose}
                 variant="subtle"
                 color="#575757"
-               className="text-[14px]"
+               className="text-[12px]"
               >
                 Cancel
               </Button>{" "}
-              <Button radius="10px" onClick={action}  className="text-[14px]" color="#FF4747">
+              <Button radius="10px" onClick={action}  className="text-[12px]" color="#FF4747">
                 {labelButtonRight}
               </Button>
             </>
