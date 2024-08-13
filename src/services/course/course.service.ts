@@ -13,6 +13,10 @@ export const getOneCourse = async (params?: any) => {
   const res = await courseService.getOneCourse(params);
   return isValidResponse(res);
 };
+export const checkCanCreateCourse = async (params: Partial<IModelCourse>) => {
+  const res = await courseService.checkCanCreateCourse(params);
+  return isValidResponse(res);
+};
 export const createCourse = async (params: Partial<IModelCourse>) => {
   const res = await courseService.createCourse(params);
   return isValidResponse(res);
