@@ -27,6 +27,7 @@ import { setLoading } from "@/store/loading";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const loading = useAppSelector((state) => state.loading);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const course = useAppSelector((state) => state.course);
@@ -36,12 +37,12 @@ export default function Dashboard() {
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<IModelAcademicYear>();
+  const [delCourse, setDelCourse] = useState<Partial<IModelCourse>>();
+  const [editCourse, setEditCourse] = useState<Partial<IModelCourse>>();
   const [openAddModal, { open: openedAddModal, close: closeAddModal }] =
     useDisclosure(false);
-  const loading = useAppSelector((state) => state.loading);
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
-  const [delCourse, setDelCourse] = useState<Partial<IModelCourse>>();
   const [
     openModalEditCourse,
     { open: openedModalEditCourse, close: closeModalEditCourse },
@@ -159,18 +160,17 @@ export default function Dashboard() {
           </p>
         }
       />
-
-      <ModalEditCourse
-        opened={openModalEditCourse}
-        title={`Edit course`}
-        onClose={closeModalEditCourse}
-      ></ModalEditCourse>
-
       <ModalAddCourse
         opened={openAddModal}
         onClose={closeAddModal}
         fetchCourse={(id) => fetchCourse(id)}
-      ></ModalAddCourse>
+      />
+      <ModalEditCourse
+        key={editCourse?.id ?? undefined}
+        opened={openModalEditCourse}
+        onClose={closeModalEditCourse}
+        value={editCourse}
+      />
 
       <div className="flex flex-row  items-center justify-between">
         <div className="flex flex-col">
@@ -279,6 +279,11 @@ export default function Dashboard() {
                           >
                             <Menu.Item
                               onClick={() => {
+                                setEditCourse({
+                                  id: item.id,
+                                  courseNo: item.courseNo,
+                                  courseName: item.courseName,
+                                });
                                 openedModalEditCourse();
                               }}
                               className="text-[#3E3E3E] font-semibold  text-b3 h-7 w-[180px]"
