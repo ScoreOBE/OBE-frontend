@@ -26,7 +26,10 @@ import {
   validateCourseNo,
   validateSectionNo,
 } from "@/helpers/functions/validation";
-import { createCourse } from "@/services/course/course.service";
+import {
+  checkCanCreateCourse,
+  createCourse,
+} from "@/services/course/course.service";
 import {
   getSection,
   getUserName,
@@ -47,6 +50,7 @@ export default function ModalAddCourse({
 }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(0);
   const [sectionNoList, setSectionNoList] = useState<string[]>([]);
   const [coInsList, setCoInsList] = useState<any[]>([]);
@@ -72,6 +76,7 @@ export default function ModalAddCourse({
 
   const nextStep = async (type?: COURSE_TYPE) => {
     setFirstInput(false);
+    setLoading(true);
     let isValid = true;
     const length = form.getValues().sections?.length || 0;
     switch (active) {
@@ -95,7 +100,11 @@ export default function ModalAddCourse({
           !form.validateField("courseName").hasError &&
           (!form.validateField("sections.0.topic").hasError ||
             form.getValues().type !== COURSE_TYPE.SEL_TOPIC);
-
+        if (isValid) {
+          let payload = setPayload();
+          const res = await checkCanCreateCourse(payload);
+          if (!res) isValid = false;
+        }
         break;
       case 2:
         const secNoList: string[] = [];
@@ -129,6 +138,7 @@ export default function ModalAddCourse({
       }
       setActive((cur) => (cur < 4 ? cur + 1 : cur));
     }
+    setLoading(false);
   };
   const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
   const closeModal = () => {
@@ -139,14 +149,17 @@ export default function ModalAddCourse({
     onClose();
   };
 
-  const addCourse = async () => {
-    let payload: any = form.getValues();
-    payload = {
-      ...payload,
+  const setPayload = () => {
+    return {
+      ...form.getValues(),
       academicYear: academicYear.id,
       updatedYear: academicYear.year,
       updatedSemester: academicYear.semester,
     };
+  };
+
+  const addCourse = async () => {
+    let payload = setPayload();
     payload.sections?.forEach((sec: any) => {
       sec.semester = sec.semester.map((term: string) => parseInt(term));
       sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
@@ -752,6 +765,7 @@ export default function ModalAddCourse({
           <Button
             color="#5768d5"
             className="rounded-[8px] text-[14px] h-[36px] w-fit"
+            loading={loading}
             onClick={() => nextStep()}
             rightSection={
               active != 4 && <IconArrowRight stroke={2} size={20} />

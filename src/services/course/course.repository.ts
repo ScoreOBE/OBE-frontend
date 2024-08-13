@@ -14,6 +14,9 @@ export const courseController = (configService = {}) => {
     getOneCourse: async (params?: CourseRequestDTO) => {
       return service.get(`${prefix}/one`, { ...params });
     },
+    checkCanCreateCourse: async (params: Partial<IModelCourse>) => {
+      return service.post(`${prefix}/check`, { ...params });
+    },
     createCourse: async (params: Partial<IModelCourse>) => {
       return service.post(`${prefix}`, { ...params });
     },
