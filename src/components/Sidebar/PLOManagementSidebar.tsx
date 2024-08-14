@@ -23,13 +23,13 @@ export default function PLOSidebar() {
   useEffect(() => {
     const fetchPLO = async () => {
       const res = await getPLOs({
-        orderType: 'desc',
+        orderType: "desc",
         role: user.role,
         departmentCode: user.departmentCode,
       });
       if (res) {
-        localStorage.setItem('totalPLOs', res.totalCount)
-        setPLOCollection(res.plos)
+        localStorage.setItem("totalPLOs", res.totalCount);
+        setPLOCollection(res.plos);
       }
     };
     if (user.id) {
@@ -74,6 +74,7 @@ export default function PLOSidebar() {
                 onClick={() =>
                   navigate(`${ROUTE_PATH.PLO_MANAGEMENT}/${index + 1}`)
                 }
+                key={index}
                 leftSection={<CourseIcon />}
                 className={`font-semibold w-full h-8 flex justify-start text-[13px] items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${

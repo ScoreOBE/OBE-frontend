@@ -10,6 +10,8 @@ export interface IModelPLO {
   isActive: boolean;
   facultyCode: string;
   departmentCode: string[];
+  criteriaTH: string;
+  criteriaEN: string;
   data: IModelPLONo[];
 }
 

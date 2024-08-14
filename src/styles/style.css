@@ -78,8 +78,6 @@
   width: fit-content !important;
 }
 
-
-
 .mantine-Checkbox-body {
   height: 25px;
   padding: 8px;
@@ -190,7 +188,6 @@ Button:disabled {
   cursor: not-allowed !important;
 }
 
-
 .custom-radial-gradient {
   background: radial-gradient(
     98.92% 98.92% at 48.99% 98.48%,
@@ -223,53 +220,47 @@ Button:disabled {
   border-color: var(--tqf-color-done);
 }
 
-/* .mantine-Tabs-root {
-  width: fit-content;
-  height: 10px;
+.mantine-Tabs-tab[data-variant="pills"] {
+  background-color: var(--color-hover);
+  height: 33px;
 }
-
-.mantine-Tabs-tab {
-  width: fit-content;
-  background-color: light-dark(var(--color-secondary));
-}
-.mantine-Tabs-tab:last-of-type {
+.mantine-Tabs-tab:last-of-type[data-variant="pills"] {
   border-radius: 0 8px 8px 0;
 }
-.mantine-Tabs-tab:first-of-type {
+.mantine-Tabs-tab:first-of-type[data-variant="pills"] {
   border-radius: 8px 0 0 8px;
 }
-.mantine-Tabs-tab + .mantine-Tabs-tab {
+.mantine-Tabs-tab[data-variant="pills"]
+  + .mantine-Tabs-tab[data-variant="pills"] {
   border-left-width: 0;
+  border-right-width: 0;
 }
 
-.mantine-Tabs-tab:hover {
-  background-color: #e9e9e9;
-  color: light-dark(var(--color-tertiary));
+.mantine-Tabs-tab:hover[data-variant="pills"] {
+  background-color: #d8d8d8;
+  color: var(--color-tertiary);
   border: 1px solid #bcbce1;
-} */
+}
 
-/* .mantine-Tabs-tab::before {
-  position: absolute;
-} */
-
-/* .mantine-Tabs-tab[data-active] {
+.mantine-Tabs-tab[data-active][data-variant="pills"] {
   z-index: 1;
   background-color: #d5d5f7;
   border-color: #bcbce1;
-  color: light-dark(var(--color-secondary));
+  color: var(--color-secondary);
   border: 1px solid #bcbce1;
 }
 
-.mantine-Tabs-list {
-  background-color: light-dark(var(--color-hover));
+.mantine-Tabs-list[data-variant="pills"] {
+  background-color: var(--color-hover);
   border-radius: 8px;
-  color: light-dark(var(--color-tertiary));
+  gap: 0;
+  color: var(--color-tertiary);
 }
 
-.mantine-Tabs-tabLabel {
-  font-size: 14px;
+.mantine-Tabs-tabLabel[data-variant="pills"] {
   font-weight: 500;
-} */
+  font-size: 10px !important;
+}
 
 .tqf-in-progress {
   color: var(--tqf-color-in-progress);
@@ -297,7 +288,7 @@ Button:disabled {
 }
 
 .height-animation {
-  max-height:350px;
+  max-height: 350px;
   transition: height 0.3s ease-in-out;
 }
 
@@ -308,4 +299,3 @@ Button:disabled {
 .height-animation.collaps {
   height: 260px;
 }
-

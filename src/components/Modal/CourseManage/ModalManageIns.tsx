@@ -158,8 +158,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
         key={changeMainIns.toString()}
       > */}
       <div
-        className={`height-animation ${
-          changeMainIns ?  "collaps" : "expand"}`}
+        className={`height-animation ${changeMainIns ? "collaps" : "expand"}`}
       >
         {changeMainIns && editSection ? (
           <div className="flex flex-col gap-2">
