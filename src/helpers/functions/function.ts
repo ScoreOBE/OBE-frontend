@@ -2,7 +2,7 @@ import { notifications } from "@mantine/notifications";
 import { NOTI_TYPE, TQF_STATUS } from "../constants/enum";
 import { IModelUser } from "@/models/ModelUser";
 
-export const getSection = (sectionNo: number | string | undefined) => {
+export const getSectionNo = (sectionNo: number | string | undefined) => {
   if (!sectionNo) return "";
   return ("000" + sectionNo).slice(-3);
 };

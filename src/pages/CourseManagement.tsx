@@ -20,7 +20,7 @@ import {
   SEMESTER,
 } from "@/helpers/constants/enum";
 import {
-  getSection,
+  getSectionNo,
   getUserName,
   showNotifications,
 } from "@/helpers/functions/function";
@@ -197,7 +197,7 @@ export default function CourseManagement() {
         closeOnClickOutside={false}
         withCloseButton={false}
         title={`Edit section ${
-          editCourse ? getSection(editCourse.sectionNo) : ""
+          editCourse ? getSectionNo(editCourse.sectionNo) : ""
         } in ${editCourse ? editCourse.courseNo : ""}`}
         size="35vw"
         centered
@@ -224,7 +224,7 @@ export default function CourseManagement() {
             size="xs"
             maxLength={3}
             classNames={{ input: "focus:border-primary" }}
-            value={getSection(form.getValues().sectionNo)}
+            value={getSectionNo(form.getValues().sectionNo)}
             {...form.getInputProps("sectionNo")}
           />
 
@@ -326,7 +326,7 @@ export default function CourseManagement() {
         action={() => onClickDeleteSec(delSec?.id!)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete section"
-        title={`Delete seciton ${getSection(delSec?.sectionNo)} in ${
+        title={`Delete seciton ${getSectionNo(delSec?.sectionNo)} in ${
           delSec?.courseNo
         }?`}
         message={
@@ -490,7 +490,7 @@ export default function CourseManagement() {
                         {/* Section No & Topic */}
                         <div className="flex flex-col ">
                           <p className="font-medium text-[13px] text-tertiary">
-                            Section {getSection(sec.sectionNo)}
+                            Section {getSectionNo(sec.sectionNo)}
                           </p>
                           {course.type === COURSE_TYPE.SEL_TOPIC && (
                             <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">

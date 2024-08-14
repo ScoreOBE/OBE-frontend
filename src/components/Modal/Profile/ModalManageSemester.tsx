@@ -99,7 +99,9 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
         `Activate ${e.semester}, ${e.year} successful`
       );
       setSelectSemester(undefined);
-      dispatch(setAcademicYear([]));
+      const res = await getAcademicYear(new AcademicYearRequestDTO());
+      dispatch(setAcademicYear(res));
+      setOpenActivateModal(false);
       fetchSemester();
     }
   };
@@ -273,11 +275,11 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
         <TextInput
           label={`To confirm, type "semester${activateSemester?.semester}year${activateSemester?.year}" in the box below`}
           value={textActivate}
-          classNames={{label: " select-none"} }
+          classNames={{ label: " select-none" }}
           onChange={(event) => setTextActivate(event.target.value)}
         ></TextInput>
         <Button
-        color="#5768D5"
+          color="#5768D5"
           disabled={
             !isEqual(
               `semester${activateSemester?.semester}year${activateSemester?.year}`,
@@ -285,7 +287,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             )
           }
           onClick={() => onClickActivate(activateSemester!)}
-           className="rounded-s-[4px] mt-4 min-w-fit h-[36px]  border-none w-full"
+          className="rounded-s-[4px] mt-4 min-w-fit h-[36px]  border-none w-full"
         >
           Activate this semester
         </Button>
