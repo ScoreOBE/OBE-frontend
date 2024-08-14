@@ -9,7 +9,7 @@ import { useAppSelector } from "@/store";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { validateEmail } from "@/helpers/functions/validation";
 import {
-  getSection,
+  getSectionNo,
   getUserName,
   showNotifications,
 } from "@/helpers/functions/function";
@@ -179,7 +179,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                   {getUserName(editSection?.instructor, 1)}
                 </p>
                 <p className="text-secondary text-[12px] font-normal">
-                  Owner Section {getSection(editSection.sectionNo)}{" "}
+                  Owner Section {getSectionNo(editSection.sectionNo)}{" "}
                 </p>
               </div>
             </div>
@@ -210,7 +210,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                           {getUserName(sec.instructor, 1)}
                         </p>
                         <p className="text-secondary text-[12px] font-normal">
-                          Owner Section {getSection(sec.sectionNo)}{" "}
+                          Owner Section {getSectionNo(sec.sectionNo)}{" "}
                         </p>
                       </div>
                     </div>

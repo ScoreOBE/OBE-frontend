@@ -11,7 +11,7 @@ import {
 import { IModelCourse } from "@/models/ModelCourse";
 import { getOneCourse } from "@/services/course/course.service";
 import { setCourseList } from "@/store/course";
-import { getSection } from "@/helpers/functions/function";
+import { getSectionNo } from "@/helpers/functions/function";
 import PageError from "./PageError";
 
 export default function Course() {
@@ -83,7 +83,7 @@ export default function Course() {
                   >
                     <div className="p-2.5 flex flex-col">
                       <p className="font-semibold text-sm">
-                        Section {getSection(item.sectionNo)}
+                        Section {getSectionNo(item.sectionNo)}
                       </p>
                       {course.addFirstTime && activeTerm && (
                         <div

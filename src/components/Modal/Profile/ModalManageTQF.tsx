@@ -20,7 +20,7 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { IModelCourse } from "@/models/ModelCourse";
 import { useSearchParams } from "react-router-dom";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
-import { getSection, getUserName } from "@/helpers/functions/function";
+import { getSectionNo, getUserName } from "@/helpers/functions/function";
 
 type Props = {
   opened: boolean;
@@ -277,7 +277,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                           <p className="font-semibold text-[14px] text-secondary">
                             {e.courseNo}
                             {e.type === COURSE_TYPE.SEL_TOPIC &&
-                              ` (Section ${getSection(e.sectionNo)})`}
+                              ` (Section ${getSectionNo(e.sectionNo)})`}
                           </p>
                           <p className="text-[12px] font-medium text-[#4E5150]">
                             {e.type === COURSE_TYPE.SEL_TOPIC

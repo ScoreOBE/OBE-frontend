@@ -31,7 +31,7 @@ import {
   createCourse,
 } from "@/services/course/course.service";
 import {
-  getSection,
+  getSectionNo,
   getUserName,
   showNotifications,
   sortData,
@@ -117,7 +117,7 @@ export default function ModalAddCourse({
           }
           if (isError) {
             secNoList.push(
-              getSection(form.getValues().sections?.at(i)?.sectionNo)
+              getSectionNo(form.getValues().sections?.at(i)?.sectionNo)
             );
           }
         }
@@ -186,7 +186,7 @@ export default function ModalAddCourse({
         return;
     }
     const sectionNo: string[] = value.sort((a, b) => parseInt(a) - parseInt(b));
-    setSectionNoList(sectionNo.map((secNo) => getSection(secNo)));
+    setSectionNoList(sectionNo.map((secNo) => getSectionNo(secNo)));
     let newSections: any[] = [];
     if (sections) {
       // reset sections and instructors
@@ -217,8 +217,8 @@ export default function ModalAddCourse({
           data.topic = sections[0]?.topic;
         }
         coInsList.forEach((coIns) => {
-          if (!coIns.sections.includes(getSection(secNo))) {
-            coIns.sections.push(getSection(secNo));
+          if (!coIns.sections.includes(getSectionNo(secNo))) {
+            coIns.sections.push(getSectionNo(secNo));
             coIns.sections.sort(
               (a: string, b: string) => parseInt(a) - parseInt(b)
             );
@@ -259,7 +259,7 @@ export default function ModalAddCourse({
       const updatedSections = form.getValues().sections?.map((sec) => {
         const coInsArr = [...(sec.coInstructors ?? []), inputUser];
         sortData(coInsArr, "label", "string");
-        inputUser.sections.push(getSection(sec.sectionNo));
+        inputUser.sections.push(getSectionNo(sec.sectionNo));
         inputUser.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
         return {
           ...sec,
@@ -287,7 +287,7 @@ export default function ModalAddCourse({
   const editCoInsInSec = (sectionNo: string, checked: boolean, coIns: any) => {
     const updatedSections = form.getValues().sections;
     updatedSections?.forEach((sec, index) => {
-      const secNo = getSection(sec.sectionNo);
+      const secNo = getSectionNo(sec.sectionNo);
       if (sectionNo == secNo) {
         if (checked) {
           coIns.sections.push(secNo);
@@ -501,7 +501,7 @@ export default function ModalAddCourse({
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary font-semibold">
-                    Select Semester for Section {getSection(sec.sectionNo)}{" "}
+                    Select Semester for Section {getSectionNo(sec.sectionNo)}{" "}
                     <span className="text-red-500">*</span>
                   </span>
                   <div
@@ -715,7 +715,7 @@ export default function ModalAddCourse({
                     className="w-full border-b-[1px] border-[#c9c9c9] pb-2  h-fit px-4    gap-1 flex flex-col"
                   >
                     <span className="text-secondary font-semibold text-[14px] mb-2">
-                      Section {getSection(sec.sectionNo)}
+                      Section {getSectionNo(sec.sectionNo)}
                     </span>
 
                     {!!sec.coInstructors?.length && (

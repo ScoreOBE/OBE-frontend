@@ -9,7 +9,7 @@ import { NOTI_TYPE, ROLE, TITLE_ROLE } from "@/helpers/constants/enum";
 import { IModelUser } from "@/models/ModelUser";
 import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import {
-  getSection,
+  getSectionNo,
   getUserName,
   showNotifications,
   sortData,
