@@ -30,6 +30,7 @@ import MapPLO from "@/pages/MapPLO";
 
 import { setLoading } from "@/store/loading";
 import { motion } from "framer-motion";
+import PLOManagement from "./pages/PLOManagement";
 
 function App() {
   const error = useAppSelector((state) => state.errorResponse);
@@ -76,6 +77,10 @@ function App() {
       ) &&
       !matchPath(
         { path: `${ROUTE_PATH.COURSE}/:courseNo`, end: true },
+        location.pathname
+      ) &&
+      !matchPath(
+        { path: `${ROUTE_PATH.PLO_MANAGEMENT}/:collection`, end: true },
         location.pathname
       );
     setShowSidebar(!isPageNotFound && !routesWithoutSidebar.includes(path));
@@ -130,7 +135,11 @@ function App() {
             path={ROUTE_PATH.COURSE_MANAGEMENT}
             element={<CourseManagement />}
           />
-          <Route path={ROUTE_PATH.COURSE_MANAGEMENT_MAP} element={<MapPLO />} />
+          <Route path={ROUTE_PATH.PLO_MANAGEMENT} element={<PLOManagement />} />
+          <Route
+            path={`${ROUTE_PATH.PLO_MANAGEMENT}/:collection`}
+            element={<MapPLO />}
+          />
           <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />
           <Route
             path={`${ROUTE_PATH.COURSE}/:courseNo`}

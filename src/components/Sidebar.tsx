@@ -5,6 +5,7 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import CourseSidebar from "./Sidebar/CourseSidebar";
 import CourseManagementSidebar from "./Sidebar/CourseManagementSidebar";
 import { motion } from "framer-motion";
+import PLOSidebar from "./Sidebar/PLOManagementSidebar";
 
 export default function Sidebar() {
   const path = useLocation().pathname;
@@ -15,6 +16,8 @@ export default function Sidebar() {
       return <CourseManagementSidebar />;
     } else if (path.includes(ROUTE_PATH.COURSE)) {
       return <CourseSidebar />;
+    } else if (path.includes(ROUTE_PATH.PLO_MANAGEMENT)) {
+      return <PLOSidebar />;
     } else return;
   };
   return (

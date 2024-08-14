@@ -203,10 +203,10 @@ export default function Profile() {
                     <span>Course</span>
                   </div>
                 </Menu.Item>
-                <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
+                <Menu.Item className="text-[#3e3e3e] h-8 w-w-full " onClick={() => navigate(ROUTE_PATH.PLO_MANAGEMENT)}>
                   <div className="flex items-center gap-2">
                     <Icon IconComponent={SOIcon} className="size-5" />
-                    <span>SO</span>
+                    <span>PLO</span>
                   </div>
                 </Menu.Item>
                 <Menu.Item

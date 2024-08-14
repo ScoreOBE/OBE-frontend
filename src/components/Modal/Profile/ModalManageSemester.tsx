@@ -155,7 +155,6 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       <Modal
         opened={opened}
         onClose={onClose}
-        closeOnClickOutside={false}
         title="Management Semester"
         size="42vw"
         centered
