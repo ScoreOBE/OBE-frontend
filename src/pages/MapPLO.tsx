@@ -25,6 +25,7 @@ export default function MapPLO() {
   >([]);
   const [drawerPLO, { open: opendDrawerPLO, close: closeDrawerPLO }] =
     useDisclosure(false);
+    
 
   useEffect(() => {
     if (user.departmentCode) {

@@ -5,6 +5,7 @@ import { Button, Menu } from "@mantine/core";
 import {
   IconDots,
   IconPencilMinus,
+  IconPlus,
   IconTrash,
   IconUpload,
 } from "@tabler/icons-react";
@@ -13,6 +14,14 @@ import { getOneCourse } from "@/services/course/course.service";
 import { setCourseList } from "@/store/course";
 import { getSectionNo } from "@/helpers/functions/function";
 import PageError from "./PageError";
+import MainPopup from "@/components/Popup/MainPopup";
+import { useDisclosure } from "@mantine/hooks";
+import { IModelSection } from "@/models/ModelSection";
+import { POPUP_TYPE } from "@/helpers/constants/enum";
+import ModalEditSec from "@/components/Modal/ModalEdit2";
+import Icon from "@/components/Icon";
+import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
+import ExcelIcon from "@/assets/icons/excel.svg?react";
 
 export default function Course() {
   const { courseNo } = useParams();
@@ -27,6 +36,20 @@ export default function Course() {
   )?.isActive;
   const courseList = useAppSelector((state) => state.course);
   const [course, setCourse] = useState<IModelCourse>();
+  const [
+    openMainPopupDelCourse,
+    { open: openedMainPopupDelCourse, close: closeMainPopupDelCourse },
+  ] = useDisclosure(false);
+  const [delSec, setDelSec] = useState<
+    Partial<IModelSection> & Record<string, any>
+  >();
+  const [editSec, setEditSec] = useState<
+    Partial<IModelSection> & Record<string, any>
+  >();
+  const [
+    openModalEditSec,
+    { open: openedModalEditSec, close: closeModalEditSec },
+  ] = useDisclosure(false);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -47,8 +70,46 @@ export default function Course() {
     }
   }, [academicYear, courseList]);
 
+  const onClickDeleteSec = async (id: string) => {
+    // const res = await deleteCourse(id);
+    // if (res) {
+    //   dispatch(removeCourse(res.id));
+    // }
+    // closeMainPopup();
+    // showNotifications(
+    //   NOTI_TYPE.SUCCESS,
+    //   "Delete Course Success",
+    //   `${delSec?.sectionNo} is deleted`
+    // );
+  };
+
   return (
     <>
+      <MainPopup
+        opened={openMainPopupDelCourse}
+        onClose={closeMainPopupDelCourse}
+        action={() => onClickDeleteSec(delSec?.id!)}
+        type={POPUP_TYPE.DELETE}
+        labelButtonRight="Delete section"
+        title={`Delete section ${getSectionNo(delSec?.sectionNo)} in ${
+          delSec?.courseNo
+        }?`}
+        message={
+          <p>
+            Deleting this section will permanently remove all data from the
+            current semester. Data from previous semesters will not be affected.{" "}
+            <br /> <span>Are you sure you want to deleted this section? </span>
+          </p>
+        }
+      />
+
+      <ModalEditSec
+        // key={editCourse?.id ?? undefined}
+        opened={openModalEditSec}
+        onClose={closeModalEditSec}
+        value={editSec}
+      />
+
       {error.statusCode ? (
         <PageError />
       ) : (
@@ -63,12 +124,48 @@ export default function Course() {
                 <Button
                   leftSection={<IconUpload className="h-5 w-5" />}
                   color="#5768D5"
-                  className="rounded-[8px] font-semibold  text-[13px]  h-9 px-3"
+                  className="rounded-[8px] text-[12px] w-fit font-medium  h-8 px-2 "
                 >
                   Upload and Assets
                 </Button>
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
-                  <IconDots />
+                  <Menu trigger="click" position="bottom-end" offset={2}>
+                    <Menu.Target>
+                      <IconDots />
+                    </Menu.Target>
+                    <Menu.Dropdown
+                      className="rounded-md backdrop-blur-xl bg-white/70 "
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      }}
+                    >
+                      <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px] ">
+                        <div className="flex items-center gap-2">
+                          <IconPlus stroke={2} className="h-4 w-4" />
+                          <span>Add section</span>
+                        </div>
+                      </Menu.Item>
+                      <Menu.Item className=" font-semibold text-[12px] h-7 w-[180px]">
+                        <div className="flex items-center gap-2">
+                          <Icon
+                            className="h-4 w-4"
+                            IconComponent={ManageAdminIcon}
+                          />
+                          <span>Manage Co-Instructor</span>
+                        </div>
+                      </Menu.Item>
+                      <Menu.Item className=" text-[#20884f] hover:bg-[#06B84D]/20 font-semibold text-[12px] h-7 w-[180px]">
+                        <div className="flex items-center  gap-2">
+                          <Icon
+                            className="h-4 w-4 "
+                            IconComponent={ExcelIcon}
+                            
+                          />
+                          <span>Export score</span>
+                        </div>
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
                 </div>
               </div>
             )}
@@ -107,7 +204,15 @@ export default function Course() {
                               }}
                             >
                               <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px] ">
-                                <div className="flex items-center gap-2">
+                                <div
+                                  onClick={() => {
+                                    setEditSec({
+                                      ...item,
+                                    });
+                                    openedModalEditSec();
+                                  }}
+                                  className="flex items-center gap-2"
+                                >
                                   <IconPencilMinus
                                     stroke={1.5}
                                     className="h-4 w-4"
@@ -117,7 +222,13 @@ export default function Course() {
                               </Menu.Item>
                               <Menu.Item
                                 className="text-[#FF4747] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]"
-                                // onClick={() => onClickDeleteCourse(item.id)}
+                                onClick={() => {
+                                  setDelSec({
+                                    ...item,
+                                    courseNo: course.courseNo,
+                                  });
+                                  openedMainPopupDelCourse();
+                                }}
                               >
                                 <div className="flex items-center gap-2">
                                   <IconTrash className="h-4 w-4" stroke={1.5} />
