@@ -19,7 +19,7 @@ export const getUserName = (user: IModelUser | undefined, format?: number) => {
 };
 
 export const sortData = (
-  data: any[],
+  data: any[] | undefined,
   key: string,
   typeKey: string = "number",
   typeSort: string = "asc"

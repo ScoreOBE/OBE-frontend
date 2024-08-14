@@ -75,8 +75,8 @@ export default function ModalAddCourse({
   });
 
   const nextStep = async (type?: COURSE_TYPE) => {
-    setFirstInput(false);
     setLoading(true);
+    setFirstInput(false);
     let isValid = true;
     const length = form.getValues().sections?.length || 0;
     switch (active) {
@@ -102,8 +102,7 @@ export default function ModalAddCourse({
           (!form.validateField("sections.0.topic").hasError ||
             form.getValues().type !== COURSE_TYPE.SEL_TOPIC);
         if (isValid) {
-          let payload = setPayload();
-          const res = await checkCanCreateCourse(payload);
+          const res = await checkCanCreateCourse(setPayload());
           if (!res) isValid = false;
         }
         break;
@@ -151,21 +150,21 @@ export default function ModalAddCourse({
   };
 
   const setPayload = () => {
-    return {
+    let payload = {
       ...form.getValues(),
       academicYear: academicYear.id,
       updatedYear: academicYear.year,
       updatedSemester: academicYear.semester,
     };
+    payload.sections?.forEach((sec: any) => {
+      sec.semester = sec.semester?.map((term: string) => parseInt(term));
+      sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
+    });
+    return payload;
   };
 
   const addCourse = async () => {
-    let payload = setPayload();
-    payload.sections?.forEach((sec: any) => {
-      sec.semester = sec.semester.map((term: string) => parseInt(term));
-      sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
-    });
-    const res = await createCourse(payload);
+    const res = await createCourse(setPayload());
     if (res) {
       closeModal();
       showNotifications("success", "Create Course", "Create coures successful");
@@ -285,23 +284,20 @@ export default function ModalAddCourse({
     setCoInsList(newList);
   };
 
-  const editCoInsInSec = (index: number, checked: boolean, coIns: any) => {
+  const editCoInsInSec = (sectionNo: string, checked: boolean, coIns: any) => {
     const updatedSections = form.getValues().sections;
-    updatedSections?.forEach((sec, i) => {
-      if (i == index) {
-        const secNo = getSection(sec.sectionNo);
+    updatedSections?.forEach((sec, index) => {
+      const secNo = getSection(sec.sectionNo);
+      if (sectionNo == secNo) {
         if (checked) {
           coIns.sections.push(secNo);
           coIns.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+          sec.coInstructors?.push({ ...coIns });
         } else {
           coIns.sections = coIns.sections.filter((e: any) => e !== secNo);
+          sec.coInstructors?.splice(sec.coInstructors.indexOf(coIns), 1);
         }
-        const coInsArr = [...(sec.coInstructors ?? []), { ...coIns }];
-        sortData(coInsArr, "label", "string");
-        const updatedCoInstructors = checked
-          ? coInsArr
-          : sec.coInstructors?.splice(sec.coInstructors.indexOf(coIns), 1);
-        return { ...sec, coInstructors: updatedCoInstructors };
+        sortData(sec.coInstructors, "label", "string");
       }
       return sec;
     });
@@ -317,7 +313,10 @@ export default function ModalAddCourse({
       form.getValues().sections?.at(index)?.semester ?? [];
     if (!semester) {
       form.setFieldValue(`sections.${index}.openThisTerm`, checked);
-      if (checked && !semesterList?.includes(academicYear?.semester)) {
+      if (
+        checked &&
+        !semesterList?.includes(academicYear?.semester.toString())
+      ) {
         semesterList.push(academicYear?.semester.toString());
         semesterList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
         form.setFieldValue(`sections.${index}.semester`, semesterList);
@@ -357,7 +356,11 @@ export default function ModalAddCourse({
         }}
         className=" justify-center items-center mt-1  text-[14px] max-h-full"
       >
-        <Stepper.Step allowStepSelect={false} label="Course Type" description="STEP 1">
+        <Stepper.Step
+          allowStepSelect={false}
+          label="Course Type"
+          description="STEP 1"
+        >
           <p className="font-semibold mt-5 text-[15px]">
             Select type of course
           </p>
@@ -422,7 +425,11 @@ export default function ModalAddCourse({
             </Button>
           </div>
         </Stepper.Step>
-        <Stepper.Step allowStepSelect={false} label="Course Info" description="STEP 2">
+        <Stepper.Step
+          allowStepSelect={false}
+          label="Course Info"
+          description="STEP 2"
+        >
           <div className="w-full  mt-2 h-fit  bg-white mb-5 rounded-md">
             <div className="flex flex-col gap-3">
               <TextInput
@@ -484,7 +491,11 @@ export default function ModalAddCourse({
             </div>
           </div>
         </Stepper.Step>
-        <Stepper.Step allowStepSelect={false} label="Semester" description="STEP 3">
+        <Stepper.Step
+          allowStepSelect={false}
+          label="Semester"
+          description="STEP 3"
+        >
           <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-scroll  ">
             <div className="flex flex-col font-medium text-[14px] gap-5">
               {form.getValues().sections?.map((sec: any, index) => (
@@ -558,7 +569,11 @@ export default function ModalAddCourse({
             </div>
           </div>
         </Stepper.Step>
-        <Stepper.Step allowStepSelect={false} label="Co-Instructor" description="STEP 4">
+        <Stepper.Step
+          allowStepSelect={false}
+          label="Co-Instructor"
+          description="STEP 4"
+        >
           <div className="flex flex-col mt-3 flex-1 ">
             <CompoMangementIns
               opened={active == 3}
@@ -629,7 +644,7 @@ export default function ModalAddCourse({
                                       )}
                                       onChange={(event) =>
                                         editCoInsInSec(
-                                          index,
+                                          sectionNo,
                                           event.currentTarget.checked,
                                           coIns
                                         )
@@ -669,7 +684,11 @@ export default function ModalAddCourse({
             )}
           </div>
         </Stepper.Step>
-        <Stepper.Step allowStepSelect={false} label="Review" description="STEP 5">
+        <Stepper.Step
+          allowStepSelect={false}
+          label="Review"
+          description="STEP 5"
+        >
           <div
             className="w-full flex flex-col bg-white border-secondary border-[1px] mb-5 rounded-md"
             style={{
