@@ -62,15 +62,19 @@
 
 .mantine-Modal-header {
   background-color: #ffffff !important;
+  padding-top: 25px !important;
 }
 
 .mantine-Modal-content {
   background-color: #ffffff !important;
 }
 
+
+
 .mantine-Paper-root {
   border-radius: 8px !important;
-  padding: 10px !important;
+  padding-bottom: 10px !important;
+  padding-inline: 10px !important;
   width: fit-content !important;
 }
 

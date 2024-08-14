@@ -4,16 +4,38 @@ import CourseIcon from "@/assets/icons/course.svg?react";
 import SOIcon from "@/assets/icons/SO.svg?react";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
+import { RxDashboard } from "react-icons/rx";
+import { useEffect, useState } from "react";
+import { IModelPLO } from "@/models/ModelPLO";
+import { useAppSelector } from "@/store";
+import { getPLOs } from "@/services/plo/plo.service";
 
 export default function PLOSidebar() {
   const navigate = useNavigate();
   const path = useLocation().pathname;
 
+  const user = useAppSelector((state) => state.user);
   const goToDashboard = () => {
     navigate(ROUTE_PATH.DASHBOARD_INS);
   };
 
-  const ploCollection = [{collection: 1}, {collection: 2}]
+  const [ploCollection, setPLOCollection] = useState<IModelPLO[]>([]);
+  useEffect(() => {
+    const fetchPLO = async () => {
+      const res = await getPLOs({
+        orderType: 'desc',
+        role: user.role,
+        departmentCode: user.departmentCode,
+      });
+      if (res) {
+        localStorage.setItem('totalPLOs', res.totalCount)
+        setPLOCollection(res.plos)
+      }
+    };
+    if (user.id) {
+      fetchPLO();
+    }
+  });
 
   return (
     <>
@@ -35,7 +57,7 @@ export default function PLOSidebar() {
           <div className="flex flex-col gap-2">
             <Button
               onClick={() => navigate(ROUTE_PATH.PLO_MANAGEMENT)}
-              leftSection={<CourseIcon />}
+              leftSection={<RxDashboard size={18} />}
               className={`font-semibold w-full h-8 flex justify-start text-[13px] items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
                 path.includes(ROUTE_PATH.PLO_MANAGEMENT) &&
@@ -47,19 +69,22 @@ export default function PLOSidebar() {
               Dashboard
             </Button>
 
-            {ploCollection.map((collection, index) => <Button
-              onClick={() => navigate(`${ROUTE_PATH.PLO_MANAGEMENT}/${index+1}`)}
-              leftSection={<CourseIcon />}
-              className={`font-semibold w-full h-8 flex justify-start text-[13px] items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
+            {ploCollection.map((collection, index) => (
+              <Button
+                onClick={() =>
+                  navigate(`${ROUTE_PATH.PLO_MANAGEMENT}/${index + 1}`)
+                }
+                leftSection={<CourseIcon />}
+                className={`font-semibold w-full h-8 flex justify-start text-[13px] items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
-               
-                path.includes(`${ROUTE_PATH.PLO_MANAGEMENT}/${index+1}`)
+                path.includes(`${ROUTE_PATH.PLO_MANAGEMENT}/${index + 1}`)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               }`}
-            >
-              PLO Collection {index+1}
-            </Button>)}
+              >
+                PLO Collection {index + 1}
+              </Button>
+            ))}
             {/* <Button
               onClick={() => navigate(ROUTE_PATH.COURSE_MANAGEMENT_MAP)}
               leftSection={<SOIcon />}

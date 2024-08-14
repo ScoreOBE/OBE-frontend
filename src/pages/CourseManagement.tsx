@@ -371,7 +371,8 @@ export default function CourseManagement() {
         <div className="flex flex-col  items-start ">
           <p className="text-secondary text-[16px] font-bold">Dashboard</p>
           <p className="text-tertiary text-[14px] font-medium">
-            {totalCourses} Courses
+            {totalCourses} Course
+            {totalCourses > 1 ? "s " : " "}
           </p>
         </div>
         {/* Course Detail */}

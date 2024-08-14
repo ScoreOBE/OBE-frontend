@@ -69,7 +69,7 @@ export default function Navbar() {
         {[
           ROUTE_PATH.DASHBOARD_INS,
           ROUTE_PATH.COURSE_MANAGEMENT,
-          ROUTE_PATH.COURSE_MANAGEMENT_MAP,
+          ROUTE_PATH.PLO_MANAGEMENT,
         ].includes(location) && (
           <div className="relative md:w-[400px] w-[220px]">
             <TextInput
