@@ -55,8 +55,8 @@ export default function Navbar() {
         return "Section";
       case ROUTE_PATH.COURSE_MANAGEMENT:
         return "Course Management";
-      case ROUTE_PATH.COURSE_MANAGEMENT_MAP:
-        return "Course Management";
+      case ROUTE_PATH.PLO_MANAGEMENT:
+        return "PLO Management";
       default:
         return;
     }

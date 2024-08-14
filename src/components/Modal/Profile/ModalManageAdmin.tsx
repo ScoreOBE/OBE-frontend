@@ -52,7 +52,6 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
     <Modal
       opened={opened}
       onClose={onClose}
-      closeOnClickOutside={false}
       title="Management Admin"
       size="45vw"
       centered

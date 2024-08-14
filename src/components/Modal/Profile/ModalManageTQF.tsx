@@ -124,7 +124,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
     <Modal
       opened={opened}
       onClose={onClose}
-      closeOnClickOutside={false}
       title="Management TQF"
       size="45vw"
       radius={"12px"}
@@ -193,9 +192,10 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                     </span>{" "}
                     preventing further edits.
                   </List.Item>
-                  <List.Item className="text-secondary w-full">
-                    Courses without data or with incomplete TQF 3 will still be
-                    editable.
+                  
+                  <List.Item className="text-secondary font-semibold w-full">
+                    You can select specific courses below to enable TQF 3
+                    editing.
                   </List.Item>
                 </List>
               </div>
@@ -217,10 +217,10 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                     </span>{" "}
                     As a result, instructors will not be able to edit TQF 5.
                   </List.Item>
-                  <List.Item className="text-secondary font-semibold w-full">
-                    You can select specific courses below to enable TQF 3
-                    editing.
-                  </List.Item>
+                  {/* <List.Item className="text-secondary w-full">
+                    Courses without data or with incomplete TQF 3 will still be
+                    editable.
+                  </List.Item> */}
                 </List>
               </div>
             )}

@@ -74,6 +74,8 @@
   width: fit-content !important;
 }
 
+
+
 .mantine-Checkbox-body {
   height: 25px;
   padding: 8px;
@@ -217,7 +219,7 @@ Button:disabled {
   border-color: var(--tqf-color-done);
 }
 
-.mantine-Tabs-root {
+/* .mantine-Tabs-root {
   width: fit-content;
   height: 10px;
 }
@@ -240,13 +242,13 @@ Button:disabled {
   background-color: #e9e9e9;
   color: light-dark(var(--color-tertiary));
   border: 1px solid #bcbce1;
-}
+} */
 
 /* .mantine-Tabs-tab::before {
   position: absolute;
 } */
 
-.mantine-Tabs-tab[data-active] {
+/* .mantine-Tabs-tab[data-active] {
   z-index: 1;
   background-color: #d5d5f7;
   border-color: #bcbce1;
@@ -263,7 +265,7 @@ Button:disabled {
 .mantine-Tabs-tabLabel {
   font-size: 14px;
   font-weight: 500;
-}
+} */
 
 .tqf-in-progress {
   color: var(--tqf-color-in-progress);

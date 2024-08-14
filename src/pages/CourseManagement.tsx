@@ -502,8 +502,8 @@ export default function CourseManagement() {
                         <div
                           className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
                             isActive
-                              ? "bg-[#10e5908e] text-[#267156]"
-                              : "bg-[#919191] text-white"
+                              ? "bg-[#10e5908e] text-[#228762]"
+                              : "bg-[#a2a2a2] text-[#ffffff]"
                           } `}
                         >
                           <p className=" font-semibold ">
