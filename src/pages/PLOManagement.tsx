@@ -2,7 +2,7 @@ import { useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import { getPLOs } from "@/services/plo/plo.service";
-import { IModelPLOCollection } from "@/models/ModelPLO";
+import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
 import { Modal, ScrollArea, Table } from "@mantine/core";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -12,7 +12,9 @@ export default function CourseManagement() {
   const [ploCollection, setPLOCollection] = useState<IModelPLOCollection[]>([]);
   const [totalPLOs, setTotalPLOs] = useState<number>(0);
   const [openModal, setOpenModal] = useState(false);
-
+  const [collection, setCollection] = useState<
+    Partial<IModelPLO> & Record<string, any>
+  >({});
   useEffect(() => {
     const fetchPLO = async () => {
       setLoading(true);
@@ -33,6 +35,43 @@ export default function CourseManagement() {
 
   return (
     <>
+      <Modal
+        title={`PLO Collection ${collection.index + 1}`}
+        opened={openModal}
+        onClose={() => setOpenModal(false)}
+        transitionProps={{ transition: "pop" }}
+        size="75vw"
+        centered
+        classNames={{
+          content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
+          body: "flex flex-col overflow-hidden max-h-full h-fit",
+        }}
+      >
+        <div className="flex flex-col overflow-y-auto h-full">
+          <Table verticalSpacing="sm" stickyHeader className="rounded-md">
+            <Table.Thead>
+              <Table.Tr className="bg-[#F4F5FE]">
+                <Table.Th>PLO</Table.Th>
+                <Table.Th>Description</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {collection.data?.map((ploNo, index) => (
+                <Table.Tr key={index}>
+                  <Table.Td className="py-4 font-bold pl-5">
+                    <p>{ploNo.no}</p>
+                  </Table.Td>
+                  <Table.Td className="py-4 pl-5 flex text-[#575757] gap-2  flex-col items-start">
+                    <p>{ploNo.descTH}</p>
+                    <p>{ploNo.descEN}</p>
+                  </Table.Td>
+                </Table.Tr>
+              ))}
+            </Table.Tbody>
+          </Table>
+        </div>
+      </Modal>
+
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
         <div className="flex flex-col  items-start ">
           <p className="text-secondary text-[16px] font-bold">Dashboard</p>
@@ -55,7 +94,10 @@ export default function CourseManagement() {
               {department.collections.map((collection, index) => (
                 <>
                   <div
-                    onClick={() => setOpenModal(true)}
+                    onClick={() => {
+                      setCollection({ index, ...collection });
+                      setOpenModal(true);
+                    }}
                     className="bg-white cursor-pointer hover:bg-[#fafafa] grid grid-cols-5 items-center justify-between first:rounded-t-md last:rounded-b-md rounded-md py-4 border-b-[1px] border-[#eeeeee] px-5"
                   >
                     {/* PLO List */}
@@ -104,43 +146,6 @@ export default function CourseManagement() {
                       <div className="flex justify-center items-center bg-transparent border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"></div> */}
                     </div>
                   </div>
-                  <Modal
-                    title={`PLO Collection ${index + 1}`}
-                    opened={openModal}
-                    onClose={() => setOpenModal(false)}
-                    transitionProps={{ transition: "pop" }}
-                    size="75vw"
-                    centered
-                  >
-
-                      <Table
-                        verticalSpacing="sm"
-                        stickyHeader
-                        stickyHeaderOffset={70}
-                        className="rounded-md"
-                      >
-                        <Table.Thead>
-                          <Table.Tr className="bg-[#F4F5FE]">
-                            <Table.Th>PLO</Table.Th>
-                            <Table.Th>Description</Table.Th>
-                          </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                          {collection.data.map((ploNo, index) => (
-                            <Table.Tr key={index}>
-                              <Table.Td className="py-4 font-bold pl-5">
-                                <p>{ploNo.no}</p>
-                              </Table.Td>
-                              <Table.Td className="py-4 pl-5 flex text-[#575757] gap-2  flex-col items-start">
-                                <p>{ploNo.descTH}</p>
-                                <p>{ploNo.descEN}</p>
-                              </Table.Td>
-                            </Table.Tr>
-                          ))}
-                        </Table.Tbody>
-                      </Table>
-                  
-                  </Modal>
                 </>
               ))}
             </div>

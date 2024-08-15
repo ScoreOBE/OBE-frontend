@@ -19,6 +19,27 @@
   overflow: hidden;
 }
 
+/* For Firefox */
+.scroller {
+  scrollbar-width: thin;
+  scrollbar-color: darkgrey lightgrey;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: lightgrey;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  border-radius: 8px;
+  border: 2px solid transparent;
+}
+
 .mantine-focus-auto:focus-visible {
   outline: none !important;
 }
@@ -68,8 +89,6 @@
 .mantine-Modal-content {
   background-color: #ffffff !important;
 }
-
-
 
 .mantine-Paper-root {
   border-radius: 8px !important;
