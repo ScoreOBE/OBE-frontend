@@ -226,6 +226,7 @@ export default function Course() {
                                         type: course.type,
                                         id: sec.id,
                                         oldSectionNo: sec.sectionNo,
+                                        topic: sec.topic,
                                         sectionNo: sec.sectionNo,
                                         semester: sec.semester?.map((e) =>
                                           e.toString()
