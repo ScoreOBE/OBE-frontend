@@ -57,7 +57,8 @@ export const validateSectionNo = (
   value: number | string | null | undefined
 ) => {
   if (value == undefined) return "Section No. is required";
-  const isValid = isNumber(value) && value.toString().length <= 3;
+  const isValid =
+    (isNumber(value) || parseInt(value)) && value.toString().length <= 3;
   return isValid ? null : "Please enter a valid section no";
 };
 

@@ -1,7 +1,6 @@
 import { IModelCourse } from "@/models/ModelCourse";
 import apiService from "@/services/apiService";
 import { CourseRequestDTO } from "./dto/course.dto";
-import { leaveCourse } from "./course.service";
 
 export const courseController = (configService = {}) => {
   const service = apiService(configService);

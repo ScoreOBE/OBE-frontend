@@ -12,9 +12,9 @@ export const courseSlice = createSlice({
       return [...state, ...action.payload];
     },
     editCourse: (state, action) => {
-      return state.map((course) => 
-        course.id === action.payload.id 
-          ? { ...course, ...action.payload } 
+      return state.map((course) =>
+        course.id === action.payload.id
+          ? { ...course, ...action.payload }
           : course
       );
     },

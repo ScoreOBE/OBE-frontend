@@ -11,6 +11,11 @@ export const getCourseManagement = async (
   return isValidResponse(res);
 };
 
+export const getOneCourseManagement = async (courseNo: string) => {
+  const res = await courseManagementService.getOneCourseManagement(courseNo);
+  return isValidResponse(res);
+};
+
 export const createCourseManagement = async (params: any) => {
   const res = await courseManagementService.createCourseManagement(params);
   return isValidResponse(res);

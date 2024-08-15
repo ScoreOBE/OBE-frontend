@@ -9,6 +9,9 @@ export const courseManagementController = (configService = {}) => {
     getCourseManagement: async (params?: CourseManagementRequestDTO) => {
       return service.get(`${prefix}`, { ...params });
     },
+    getOneCourseManagement: async (courseNo: string) => {
+      return service.get(`${prefix}/one`, { courseNo });
+    },
     createCourseManagement: async (params: any) => {
       return service.post(`${prefix}`, { ...params });
     },
