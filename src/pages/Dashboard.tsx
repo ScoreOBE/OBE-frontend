@@ -55,12 +55,12 @@ export default function Dashboard() {
       const acaYear = academicYear.find(
         (e) => e.id == yearId && e.semester == semester && e.year == year
       );
-      if (acaYear && yearId != term?.id) {
+      if (acaYear && yearId != term.id) {
         setTerm(acaYear);
         if (!course.length) fetchCourse(acaYear.id);
       }
     }
-  }, [academicYear, term]);
+  }, [academicYear, term, params]);
 
   useEffect(() => {
     if (term) {
