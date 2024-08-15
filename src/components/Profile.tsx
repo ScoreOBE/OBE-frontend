@@ -14,7 +14,7 @@ import SOIcon from "@/assets/icons/SO.svg?react";
 import TQFIcon from "@/assets/icons/TQF.svg?react";
 import AdminIcon from "@/assets/icons/admin.svg?react";
 import SemesterIcon from "@/assets/icons/calendar.svg?react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setUser } from "@/store/user";
 import { ROLE } from "@/helpers/constants/enum";
@@ -29,22 +29,10 @@ export default function Profile() {
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [
-    modalManageAdmin,
-    { open: openModalManageAdmin, close: closeModalManageAdmin },
-  ] = useDisclosure(false);
-  const [
-    modalChangeSupAdmin,
-    { open: openModalChangeSupAdmin, close: closeModalChangeSupAdmin },
-  ] = useDisclosure(false);
-  const [
-    modalManageSemester,
-    { open: openModalManageSemester, close: closeModalManageSemester },
-  ] = useDisclosure(false);
-  const [
-    modalManageTQF,
-    { open: openModalManageTQF, close: closeModalManageTQF },
-  ] = useDisclosure(false);
+  const [openModalManageAdmin, setOpenModalManageAdmin] = useState(false);
+  const [openModalChangeSupAdmin, setOpenModalChangeSupAdmin] = useState(false);
+  const [openModalManageSemester, setOpenModalManageSemester] = useState(false);
+  const [openModalManageTQF, setOpenModalManageTQF] = useState(false);
 
   const getRoleColor = (role: any) => {
     switch (role) {
@@ -68,22 +56,25 @@ export default function Profile() {
   return (
     <>
       <ModalManageAdmin
-        opened={modalManageAdmin}
-        onClose={closeModalManageAdmin}
+        opened={openModalManageAdmin}
+        onClose={() => setOpenModalManageAdmin(false)}
       />
       <ModalChangeSupAdmin
-        opened={modalChangeSupAdmin}
-        onClose={closeModalChangeSupAdmin}
+        opened={openModalChangeSupAdmin}
+        onClose={() => setOpenModalChangeSupAdmin(false)}
       />
-      <ModalManageTQF opened={modalManageTQF} onClose={closeModalManageTQF} />
+      <ModalManageTQF
+        opened={openModalManageTQF}
+        onClose={() => setOpenModalManageTQF(false)}
+      />
       <ModalManageSemester
-        opened={modalManageSemester}
-        onClose={closeModalManageSemester}
+        opened={openModalManageSemester}
+        onClose={() => setOpenModalManageSemester(false)}
       />
       <Menu
         trigger="click"
         openDelay={100}
-        clickOutsideEvents={["click"]}
+        clickOutsideEvents={["mousedown"]}
         classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
       >
         <Menu.Target>
@@ -101,7 +92,7 @@ export default function Profile() {
           </Button>
         </Menu.Target>
         <Menu.Dropdown
-          className="rounded-md -translate-y-[3px] translate-x-[-18px] bg-white"
+          className="!z-50 rounded-md -translate-y-[3px] translate-x-[-18px] bg-white"
           style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
         >
           {user.role !== ROLE.STUDENT && (
@@ -146,7 +137,7 @@ export default function Profile() {
           {/* SUB MENU MANAGEMENT */}
           {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
             <Menu
-              trigger="click-hover"
+              trigger="hover"
               openDelay={100}
               closeDelay={200}
               classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
@@ -166,7 +157,7 @@ export default function Profile() {
                 </Menu.Item>
               </Menu.Target>
               <Menu.Dropdown
-                className="rounded-md -translate-y-[62px] -translate-x-[210px] bg-white"
+                className="!z-50 rounded-md -translate-y-[62px] -translate-x-[210px] bg-white"
                 style={{
                   width: "200px",
                   boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px",
@@ -174,13 +165,17 @@ export default function Profile() {
               >
                 {user.role === ROLE.SUPREME_ADMIN && (
                   <>
-                    <Menu.Item onClick={openModalChangeSupAdmin}>
+                    <Menu.Item
+                      onMouseDown={() => setOpenModalChangeSupAdmin(true)}
+                    >
                       <div className="flex items-center gap-2">
                         <Icon IconComponent={SupremeIcon} className="size-5" />
                         <span>Supreme Admin</span>
                       </div>
                     </Menu.Item>
-                    <Menu.Item onClick={openModalManageSemester}>
+                    <Menu.Item
+                      onMouseDown={() => setOpenModalManageSemester(true)}
+                    >
                       <div className="flex items-center gap-2">
                         <Icon IconComponent={SemesterIcon} className="size-5" />
                         <span>Semester</span>
@@ -188,7 +183,7 @@ export default function Profile() {
                     </Menu.Item>
                   </>
                 )}
-                <Menu.Item onClick={openModalManageAdmin}>
+                <Menu.Item onMouseDown={() => setOpenModalManageAdmin(true)}>
                   <div className="flex items-center gap-2">
                     <Icon IconComponent={AdminIcon} className="size-5" />
                     <span>Admin</span>
@@ -196,14 +191,17 @@ export default function Profile() {
                 </Menu.Item>
                 <Menu.Item
                   className="text-[#3e3e3e] h-8 w-w-full"
-                  onClick={() => navigate(ROUTE_PATH.COURSE_MANAGEMENT)}
+                  onMouseDown={() => navigate(ROUTE_PATH.COURSE_MANAGEMENT)}
                 >
                   <div className="flex items-center gap-2">
                     <Icon IconComponent={CourseIcon} className="size-5" />
                     <span>Course</span>
                   </div>
                 </Menu.Item>
-                <Menu.Item className="text-[#3e3e3e] h-8 w-w-full " onClick={() => navigate(ROUTE_PATH.PLO_MANAGEMENT)}>
+                <Menu.Item
+                  className="text-[#3e3e3e] h-8 w-w-full "
+                  onMouseDown={() => navigate(ROUTE_PATH.PLO_MANAGEMENT)}
+                >
                   <div className="flex items-center gap-2">
                     <Icon IconComponent={SOIcon} className="size-5" />
                     <span>PLO</span>
@@ -211,7 +209,7 @@ export default function Profile() {
                 </Menu.Item>
                 <Menu.Item
                   className="text-[#3e3e3e] h-8 w-w-full"
-                  onClick={openModalManageTQF}
+                  onMouseDown={() => setOpenModalManageTQF(true)}
                 >
                   <div className="flex items-center gap-2">
                     <Icon IconComponent={TQFIcon} className="size-5" />
