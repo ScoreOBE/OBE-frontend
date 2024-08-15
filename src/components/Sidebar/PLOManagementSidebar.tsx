@@ -20,22 +20,22 @@ export default function PLOSidebar() {
   };
 
   const [ploCollection, setPLOCollection] = useState<IModelPLO[]>([]);
+
   useEffect(() => {
     const fetchPLO = async () => {
       const res = await getPLOs({
-        orderType: "desc",
+        manage: true,
         role: user.role,
         departmentCode: user.departmentCode,
       });
       if (res) {
-        localStorage.setItem("totalPLOs", res.totalCount);
-        setPLOCollection(res.plos);
+        setPLOCollection(res);
       }
     };
     if (user.id) {
       fetchPLO();
     }
-  });
+  }, []);
 
   return (
     <>
@@ -86,18 +86,6 @@ export default function PLOSidebar() {
                 PLO Collection {index + 1}
               </Button>
             ))}
-            {/* <Button
-              onClick={() => navigate(ROUTE_PATH.COURSE_MANAGEMENT_MAP)}
-              leftSection={<SOIcon />}
-              className={`font-semibold w-full h-8 flex justify-start text-[13px] items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
-              ${
-                path.includes(ROUTE_PATH.COURSE_MANAGEMENT_MAP)
-                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-              }`}
-            >
-              Map PLO required
-            </Button> */}
           </div>
         </div>
       </div>
