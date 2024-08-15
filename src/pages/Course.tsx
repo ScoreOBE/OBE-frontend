@@ -168,11 +168,7 @@ export default function Course() {
                       <p className="font-semibold text-sm">
                         Section {getSectionNo(sec.sectionNo)}
                       </p>
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      >
+                      <div onClick={(event) => event.stopPropagation()}>
                         {course.addFirstTime && activeTerm ? (
                           <Menu
                             trigger="click"
