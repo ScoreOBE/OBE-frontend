@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
-import { Button, Menu } from "@mantine/core";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Button, Menu, Switch } from "@mantine/core";
 import {
   IconDots,
   IconPencilMinus,
@@ -10,7 +10,7 @@ import {
   IconUpload,
 } from "@tabler/icons-react";
 import { IModelCourse } from "@/models/ModelCourse";
-import { getOneCourse } from "@/services/course/course.service";
+import { getCourse, getOneCourse } from "@/services/course/course.service";
 import { setCourseList } from "@/store/course";
 import { getSectionNo } from "@/helpers/functions/function";
 import PageError from "./PageError";
@@ -22,12 +22,18 @@ import ModalEditSec from "@/components/Modal/ModalEdit2";
 import Icon from "@/components/Icon";
 import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import ExcelIcon from "@/assets/icons/excel.svg?react";
+import { CourseRequestDTO } from "@/services/course/dto/course.dto";
+import Loading from "@/components/Loading";
+import { setLoading } from "@/store/loading";
+import { ROUTE_PATH } from "@/helpers/constants/route";
 
 export default function Course() {
+  const navigate = useNavigate();
   const { courseNo } = useParams();
   const [params, setParams] = useSearchParams();
   const error = useAppSelector((state) => state.errorResponse);
   const user = useAppSelector((state) => state.user);
+  const loading = useAppSelector((state) => state.loading);
   const dispatch = useAppDispatch();
   const academicYear = useAppSelector((state) => state.academicYear);
   // const activeTerm = useLocation().state?.activeTerm;
@@ -40,12 +46,6 @@ export default function Course() {
     openMainPopupDelCourse,
     { open: openedMainPopupDelCourse, close: closeMainPopupDelCourse },
   ] = useDisclosure(false);
-  const [delSec, setDelSec] = useState<
-    Partial<IModelSection> & Record<string, any>
-  >();
-  const [editSec, setEditSec] = useState<
-    Partial<IModelSection> & Record<string, any>
-  >();
   const [
     openModalEditSec,
     { open: openedModalEditSec, close: closeModalEditSec },
@@ -53,22 +53,32 @@ export default function Course() {
 
   useEffect(() => {
     const fetchCourse = async () => {
+      dispatch(setLoading(true));
+      const payloadCourse = new CourseRequestDTO();
+      payloadCourse.academicYear = params.get("id")!;
+      const resCourse = await getCourse(payloadCourse);
+      if (resCourse) {
+        localStorage.setItem("totalCourses", resCourse.totalCount);
+        dispatch(setCourseList(resCourse.courses));
+      }
       const res = await getOneCourse({
         academicYear: params.get("id"),
         courseNo,
       });
       if (res) {
-        dispatch(setCourseList([res]));
         setCourse(res);
       }
+      dispatch(setLoading(false));
     };
 
-    if (!courseList.length && params.get("id")) fetchCourse();
+    if (!params.get("id") || !params.get("year") || !params.get("semester"))
+      navigate(ROUTE_PATH.DASHBOARD_INS);
+    else if (!courseList.length && params.get("id")) fetchCourse();
 
     if (!course && courseNo) {
       setCourse(courseList.find((e) => e.courseNo == courseNo));
     }
-  }, [academicYear, courseList]);
+  }, [academicYear, courseList, params]);
 
   const onClickDeleteSec = async (id: string) => {
     // const res = await deleteCourse(id);
@@ -85,33 +95,10 @@ export default function Course() {
 
   return (
     <>
-      <MainPopup
-        opened={openMainPopupDelCourse}
-        onClose={closeMainPopupDelCourse}
-        action={() => onClickDeleteSec(delSec?.id!)}
-        type={POPUP_TYPE.DELETE}
-        labelButtonRight="Delete section"
-        title={`Delete section ${getSectionNo(delSec?.sectionNo)} in ${
-          delSec?.courseNo
-        }?`}
-        message={
-          <p>
-            Deleting this section will permanently remove all data from the
-            current semester. Data from previous semesters will not be affected.{" "}
-            <br /> <span>Are you sure you want to deleted this section? </span>
-          </p>
-        }
-      />
-
-      <ModalEditSec
-        // key={editCourse?.id ?? undefined}
-        opened={openModalEditSec}
-        onClose={closeModalEditSec}
-        value={editSec}
-      />
-
       {error.statusCode ? (
         <PageError />
+      ) : loading ? (
+        <Loading />
       ) : (
         <div className="bg-white flex flex-col h-full w-full p-6 py-3 gap-3 overflow-hidden">
           <div className="flex flex-row  py-2  items-center justify-between">
@@ -159,7 +146,6 @@ export default function Course() {
                           <Icon
                             className="h-4 w-4 "
                             IconComponent={ExcelIcon}
-                            
                           />
                           <span>Export score</span>
                         </div>
@@ -172,84 +158,112 @@ export default function Course() {
           </div>
           <div className="flex h-full w-full rounded-[5px] pt-1  overflow-hidden">
             <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-1">
-              {course?.sections.map((item) => {
+              {course?.sections.map((sec) => {
                 return (
-                  <div
-                    key={item.id}
-                    className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-[4px] hover:bg-[#F3F3F3]"
-                  >
-                    <div className="p-2.5 flex flex-col">
-                      <p className="font-semibold text-sm">
-                        Section {getSectionNo(item.sectionNo)}
-                      </p>
-                      {course.addFirstTime && activeTerm && (
+                  <>
+                    <div
+                      key={sec.id}
+                      className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-[4px] hover:bg-[#F3F3F3]"
+                    >
+                      <div className="p-2.5 flex flex-col">
+                        <p className="font-semibold text-sm">
+                          Section {getSectionNo(sec.sectionNo)}
+                        </p>
                         <div
                           onClick={(e) => {
                             e.stopPropagation();
                           }}
                         >
-                          <Menu
-                            trigger="click"
-                            position="bottom-end"
-                            offset={2}
-                          >
-                            <Menu.Target>
-                              <IconDots className="absolute top-2 right-2 rounded-full hover:bg-gray-300" />
-                            </Menu.Target>
-                            <Menu.Dropdown
-                              className="rounded-md backdrop-blur-xl bg-white/70 "
-                              style={{
-                                boxShadow:
-                                  "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                              }}
+                          {course.addFirstTime && activeTerm ? (
+                            <Menu
+                              trigger="click"
+                              position="bottom-end"
+                              offset={2}
                             >
-                              <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px] ">
-                                <div
-                                  onClick={() => {
-                                    setEditSec({
-                                      ...item,
-                                    });
-                                    openedModalEditSec();
-                                  }}
-                                  className="flex items-center gap-2"
-                                >
-                                  <IconPencilMinus
-                                    stroke={1.5}
-                                    className="h-4 w-4"
-                                  />
-                                  <span>Edit Section</span>
-                                </div>
-                              </Menu.Item>
-                              <Menu.Item
-                                className="text-[#FF4747] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]"
-                                onClick={() => {
-                                  setDelSec({
-                                    ...item,
-                                    courseNo: course.courseNo,
-                                  });
-                                  openedMainPopupDelCourse();
+                              <Menu.Target>
+                                <IconDots className="absolute top-2 right-2 rounded-full hover:bg-gray-300" />
+                              </Menu.Target>
+                              <Menu.Dropdown
+                                className="rounded-md backdrop-blur-xl bg-white/70 "
+                                style={{
+                                  boxShadow:
+                                    "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                                 }}
                               >
-                                <div className="flex items-center gap-2">
-                                  <IconTrash className="h-4 w-4" stroke={1.5} />
-                                  <span>Delete Section</span>
-                                </div>
-                              </Menu.Item>
-                            </Menu.Dropdown>
-                          </Menu>
+                                <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px] ">
+                                  <div
+                                    onClick={openedModalEditSec}
+                                    className="flex items-center gap-2"
+                                  >
+                                    <IconPencilMinus
+                                      stroke={1.5}
+                                      className="h-4 w-4"
+                                    />
+                                    <span>Edit Section</span>
+                                  </div>
+                                </Menu.Item>
+                                <Menu.Item
+                                  className="text-[#FF4747] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]"
+                                  onClick={openedMainPopupDelCourse}
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <IconTrash
+                                      className="h-4 w-4"
+                                      stroke={1.5}
+                                    />
+                                    <span>Delete Section</span>
+                                  </div>
+                                </Menu.Item>
+                              </Menu.Dropdown>
+                            </Menu>
+                          ) : (
+                            <Switch
+                              size="xs"
+                              className="absolute top-3 right-3"
+                              defaultChecked
+                              // checked={sec.isActive}
+                            />
+                          )}
                         </div>
-                      )}
+                      </div>
+                      <div className="bg-[#e7eaff] flex h-8 items-center justify-between rounded-b-[4px]">
+                        <p className="p-2.5 text-secondary font-semibold text-[12px]">
+                          {(sec.assignments?.length ?? 0) === 1
+                            ? "Assignment"
+                            : (sec.assignments?.length ?? 0) > 1
+                            ? "Assignments"
+                            : "No Assignment"}
+                        </p>
+                      </div>
                     </div>
-                    <div className="bg-[#e7eaff] flex h-8 items-center justify-between rounded-b-[4px]">
-                      <p className="p-2.5 text-secondary font-semibold text-[12px]">
-                        {(item.assignments?.length ?? 0) === 1
-                          ? "Assignment"
-                          : (item.assignments?.length ?? 0) > 1
-                          ? "Assignments"
-                          : "No Assignment"}
-                      </p>
-                    </div>
-                  </div>
+
+                    <ModalEditSec
+                      opened={openModalEditSec}
+                      onClose={closeModalEditSec}
+                      value={sec}
+                    />
+
+                    <MainPopup
+                      opened={openMainPopupDelCourse}
+                      onClose={closeMainPopupDelCourse}
+                      action={() => onClickDeleteSec(sec.id!)}
+                      type={POPUP_TYPE.DELETE}
+                      labelButtonRight="Delete section"
+                      title={`Delete section ${getSectionNo(
+                        sec.sectionNo
+                      )} in ${course.courseNo}?`}
+                      message={
+                        <p>
+                          Deleting this section will permanently remove all data
+                          from the current semester. Data from previous
+                          semesters will not be affected. <br />{" "}
+                          <span>
+                            Are you sure you want to deleted this section?{" "}
+                          </span>
+                        </p>
+                      }
+                    />
+                  </>
                 );
               })}
             </div>
