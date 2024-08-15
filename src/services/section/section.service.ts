@@ -19,7 +19,7 @@ export const updateSection = async (
   const res = await sectionService.updateSection(id, params);
   return isValidResponse(res);
 };
-export const deleteSection = async (id: string) => {
-  const res = await sectionService.deleteSection(id);
+export const deleteSection = async (id: string, params: any) => {
+  const res = await sectionService.deleteSection(id, params);
   return isValidResponse(res);
 };
