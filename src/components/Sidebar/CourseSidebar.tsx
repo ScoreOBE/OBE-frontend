@@ -144,9 +144,9 @@ export default function CourseSidebar() {
 
         <div className="flex  flex-col gap-2 mt-5">
           <p className="text-b2 font-bold mb-1">Instructors</p>
-          {instructors.map((item) => {
+          {instructors.map((item, index) => {
             return (
-              <p key={item.id} className="text-pretty font-medium text-[12px]">
+              <p key={index} className="text-pretty font-medium text-[12px]">
                 {getUserName(item, 1)}
               </p>
             );

@@ -14,6 +14,7 @@ export interface IModelCourseManagement {
 }
 
 export interface IModelSectionManagement {
+  id: string;
   topic?: string;
   sectionNo: number;
   semester: number[] | string[];

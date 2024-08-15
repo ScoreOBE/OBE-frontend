@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button, Checkbox, Group, Menu, Modal, TextInput } from "@mantine/core";
+import { Menu } from "@mantine/core";
 import {
   IconDots,
   IconTrash,
@@ -11,14 +11,12 @@ import {
 import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import Icon from "@/components/Icon";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
-import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
-import InfiniteScroll from "react-infinite-scroll-component";
 import {
-  COURSE_TYPE,
-  NOTI_TYPE,
-  POPUP_TYPE,
-  SEMESTER,
-} from "@/helpers/constants/enum";
+  deleteSectionManagement,
+  getCourseManagement,
+} from "@/services/courseManagement/courseManagement.service";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { COURSE_TYPE, NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import {
   getSectionNo,
   getUserName,
@@ -42,6 +40,7 @@ import { useForm } from "@mantine/form";
 import Loading from "@/components/Loading";
 import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
 import ModalEditCourse from "@/components/Modal/ModalEdit";
+import ModalEditSection from "@/components/Modal/ModalEditSection";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -53,49 +52,27 @@ export default function CourseManagement() {
   >([]);
   const [totalCourses, setTotalCourses] = useState<number>(0);
   const [editCourse, setEditCourse] = useState<any>();
-
-  const form = useForm({
-    mode: "uncontrolled",
-    initialValues: {} as Partial<IModelSectionManagement>,
-    validate: {
-      topic: (value) => validateCourseNameorTopic(value, "Topic"),
-      sectionNo: (value) => validateSectionNo(value),
-      semester: (value) => {
-        return value?.length ? null : "Please select semester at least one.";
-      },
-    },
-    validateInputOnBlur: true,
-  });
-
-  const [editSectionModal, setEditSectionModal] = useState(false);
-  const [
-    modalEditSection,
-    { open: openModalEditSection, close: closeModalEditSection },
-  ] = useDisclosure(false);
-
+  const [delSec, setDelSec] = useState<
+    Partial<IModelSection> & Record<string, any>
+  >();
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
-
   const [
     openMainPopupDelCourse,
     { open: openedMainPopupDelCourse, close: closeMainPopupDelCourse },
   ] = useDisclosure(false);
-
   const [
     openModalManageInst,
     { open: openedModalManageInst, close: closeModalManageInst },
   ] = useDisclosure(false);
-
   const [
     openModalEditCourse,
     { open: openedModalEditCourse, close: closeModalEditCourse },
   ] = useDisclosure(false);
-
-  const [delSec, setDelSec] = useState<
-    Partial<IModelSection> & Record<string, any>
-  >();
-
-  const [delCourse, setDelCourse] = useState<Partial<IModelCourseManagement>>();
+  const [
+    modalEditSection,
+    { open: openModalEditSection, close: closeModalEditSection },
+  ] = useDisclosure(false);
 
   useEffect(() => {
     if (user.departmentCode) {
@@ -109,8 +86,15 @@ export default function CourseManagement() {
     }
   }, [user]);
 
-  const fetchCourse = async (payloadCourse: any) => {
+  const fetchCourse = async (payloadCourse?: any) => {
     setLoading(true);
+    if (!payloadCourse) {
+      payloadCourse = {
+        ...new CourseManagementRequestDTO(),
+        departmentCode: user.departmentCode,
+        hasMore: true,
+      };
+    }
     const res = await getCourseManagement(payloadCourse);
     if (res) {
       setTotalCourses(res.totalCount);
@@ -136,29 +120,6 @@ export default function CourseManagement() {
     }
   };
 
-  const onClickSetEditSemester = (checked: boolean, value: number) => {
-    const semester: number[] = editCourse.semester;
-    if (checked) {
-      semester.push(value);
-      semester.sort();
-    } else {
-      semester.splice(semester.indexOf(value), 1);
-      semester.sort();
-    }
-    setEditCourse({ ...editCourse, semester });
-  };
-
-  const onClickEditSecNo = (value: string) => {
-    if (isNumber(parseInt(value)) || !value.length) {
-      console.log(value);
-
-      setEditCourse((prev: any) => ({
-        ...prev,
-        sectionNo: value,
-      }));
-    }
-  };
-
   const onClickDeleteCourse = async (id: string) => {
     // const res = await deleteCourse(id);
     // if (res) {
@@ -172,158 +133,25 @@ export default function CourseManagement() {
     // );
   };
 
-  const onClickDeleteSec = async (id: string) => {
-    // const res = await deleteCourse(id);
-    // if (res) {
-    //   dispatch(removeCourse(res.id));
-    // }
-    // closeMainPopup();
-    // showNotifications(
-    //   NOTI_TYPE.SUCCESS,
-    //   "Delete Course Success",
-    //   `${delSec?.sectionNo} is deleted`
-    // );
+  const onClickDeleteSec = async (id: string, secId: string) => {
+    const res = await deleteSectionManagement(id, secId);
+    if (res) {
+      // setCourseManagement(())
+      closeMainPopup();
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Delete Section Success",
+        `${delSec?.sectionNo} is deleted`
+      );
+    }
   };
-
-  useEffect(() => {
-    console.log(form.getValues());
-  }, [form]);
 
   return (
     <>
-      <Modal
-        opened={modalEditSection && editCourse}
-        onClose={closeModalEditSection}
-        closeOnClickOutside={false}
-        withCloseButton={false}
-        title={`Edit section ${
-          editCourse ? getSectionNo(editCourse.sectionNo) : ""
-        } in ${editCourse ? editCourse.courseNo : ""}`}
-        size="35vw"
-        centered
-        transitionProps={{ transition: "pop" }}
-        classNames={{
-          content:
-            "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center  overflow-hidden ",
-        }}
-      >
-        <div className="flex flex-col gap-5">
-          {/* Text Input */}
-          {editCourse?.type === COURSE_TYPE.SEL_TOPIC && (
-            <TextInput
-              label="Topic"
-              withAsterisk
-              size="xs"
-              classNames={{ input: "focus:border-primary" }}
-              {...form.getInputProps("topic")}
-            />
-          )}
-          <TextInput
-            label="Section"
-            withAsterisk
-            size="xs"
-            maxLength={3}
-            classNames={{ input: "focus:border-primary" }}
-            value={getSectionNo(form.getValues().sectionNo)}
-            {...form.getInputProps("sectionNo")}
-          />
-
-          <div
-            style={{
-              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-            }}
-            className="w-full p-3 bg-white mb-3 rounded-md gap-2 flex flex-col "
-          >
-            <div className="flex flex-row items-center justify-between">
-              <div className="gap-1 flex flex-col">
-                <span className="font-semibold text-[13px]">Open Semester</span>
-                <Checkbox
-                  classNames={{
-                    input:
-                      "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                    body: "mr-3  px-0",
-                    label: "text-[13px] text-[#615F5F] cursor-pointer",
-                  }}
-                  color="#5768D5"
-                  size="xs"
-                  label={`Open in this semester (${
-                    academicYear?.semester
-                  }/${academicYear?.year.toString()?.slice(-2)})`}
-                  checked={
-                    form.getValues().isActive &&
-                    (form?.getValues().semester as string[]).includes(
-                      academicYear.semester.toString()
-                    )
-                  }
-                  {...form.getInputProps("isActive")}
-                  // onChange={(event) =>
-                  //   setSemesterInSec(index, event.target.checked)
-                  // }
-                />
-              </div>
-              <Checkbox.Group
-                classNames={{ error: "mt-2" }}
-                {...form.getInputProps("semester")}
-                value={form.getValues().semester as string[]}
-                onChange={(event: any) => {
-                  form.setFieldValue("semester", event.sort());
-                }}
-              >
-                <Group className="flex flex-row gap-1 justify-end">
-                  {SEMESTER.map((item) => {
-                    const semester =
-                      (form?.getValues().semester as string[]) ?? [];
-                    return (
-                      <Checkbox
-                        key={item}
-                        classNames={{
-                          input:
-                            "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                          body: "mr-3",
-                          label: "text-[14px] cursor-pointer",
-                        }}
-                        color="#5768D5"
-                        size="xs"
-                        label={item}
-                        value={item.toString()}
-                        disabled={
-                          semester.length == 1 &&
-                          semester.includes(item.toString())
-                        }
-                      />
-                    );
-                  })}
-                </Group>
-              </Checkbox.Group>
-            </div>
-          </div>
-          <div className="flex gap-2 justify-end w-full">
-            <Button
-              color="#575757"
-              variant="subtle"
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
-              justify="start"
-              onClick={() => {
-                setEditSectionModal(false);
-                closeModalEditSection();
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="#5768d5"
-              className="rounded-[8px] font-bold text-[12px] h-[32px] w-fit "
-            >
-              Done
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
       <MainPopup
         opened={openMainPopup}
         onClose={closeMainPopup}
-        action={() => onClickDeleteSec(delSec?.id!)}
+        action={() => onClickDeleteSec(delSec?.id!, delSec?.secId)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete section"
         title={`Delete seciton ${getSectionNo(delSec?.sectionNo)} in ${
@@ -337,14 +165,13 @@ export default function CourseManagement() {
           </p>
         }
       />
-
       <MainPopup
         opened={openMainPopupDelCourse}
         onClose={closeMainPopupDelCourse}
-        action={() => onClickDeleteCourse(delCourse?.id!)}
+        action={() => onClickDeleteCourse(editCourse?.id!)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete course"
-        title={`Delete ${delCourse?.courseNo} Course?`}
+        title={`Delete ${editCourse?.courseNo} Course?`}
         message={
           <p>
             Deleting this course will permanently remove all data from the
@@ -353,18 +180,25 @@ export default function CourseManagement() {
           </p>
         }
       />
-
       <ModalManageIns
         opened={openModalManageInst}
         onClose={closeModalManageInst}
         data={editCourse}
       />
-
       <ModalEditCourse
-        // key={editCourse?.id ?? undefined}
         opened={openModalEditCourse}
         onClose={closeModalEditCourse}
         value={editCourse}
+      />
+      <ModalEditSection
+        opened={modalEditSection && editCourse}
+        onClose={closeModalEditSection}
+        isCourseManage={true}
+        title={`Edit section ${
+          editCourse && getSectionNo(editCourse.sectionNo)
+        } in ${editCourse && editCourse.courseNo}`}
+        value={editCourse}
+        fetchCourse={fetchCourse}
       />
 
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
@@ -461,7 +295,7 @@ export default function CourseManagement() {
                         <Menu.Item
                           className="text-[#FF4747]  w-[180px] font-semibold text-b2 hover:bg-[#d55757]/10"
                           onClick={() => {
-                            setDelCourse({
+                            setEditCourse({
                               id: course.id,
                               courseNo: course.courseNo,
                             });
@@ -551,14 +385,10 @@ export default function CourseManagement() {
                               setEditCourse({
                                 ...sec,
                                 ...course,
-                              });
-                              form.setValues({
-                                ...sec,
                                 semester: sec.semester.map((e: any) =>
                                   e.toString()
                                 ),
                               });
-                              setEditSectionModal(true);
                               openModalEditSection();
                             }}
                             className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"
@@ -567,7 +397,11 @@ export default function CourseManagement() {
                           </div>
                           <div
                             onClick={() => {
-                              setDelSec({ ...sec, courseNo: course.courseNo });
+                              setDelSec({
+                                id: course.id,
+                                secId: sec.id,
+                                sectionNo: sec.sectionNo,
+                              });
                               openedMainPopup();
                             }}
                             className="flex justify-center items-center bg-transparent border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"
