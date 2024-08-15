@@ -12,11 +12,11 @@ import {
 import { IModelCourse } from "@/models/ModelCourse";
 import { getCourse, getOneCourse } from "@/services/course/course.service";
 import { setCourseList } from "@/store/course";
-import { getSectionNo } from "@/helpers/functions/function";
+import { getSectionNo, showNotifications } from "@/helpers/functions/function";
 import PageError from "./PageError";
 import MainPopup from "@/components/Popup/MainPopup";
 import { useDisclosure } from "@mantine/hooks";
-import { POPUP_TYPE } from "@/helpers/constants/enum";
+import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import ModalEditSection from "@/components/Modal/ModalEditSection";
 import Icon from "@/components/Icon";
 import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
@@ -26,6 +26,7 @@ import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { IModelSection } from "@/models/ModelSection";
+import { deleteSection } from "@/services/section/section.service";
 
 export default function Course() {
   const navigate = useNavigate();
@@ -83,17 +84,20 @@ export default function Course() {
     dispatch(setLoading(false));
   };
 
-  const onClickDeleteSec = async (id: string) => {
-    // const res = await deleteCourse(id);
-    // if (res) {
-    //   dispatch(removeCourse(res.id));
-    // }
-    // closeMainPopup();
-    // showNotifications(
-    //   NOTI_TYPE.SUCCESS,
-    //   "Delete Course Success",
-    //   `${delSec?.sectionNo} is deleted`
-    // );
+  const onClickDeleteSec = async () => {
+    const id = editSec.id;
+    if (id) {
+      const res = await deleteSection(id, editSec);
+      if (res) {
+        closeMainPopupDelCourse();
+        fetchCourse();
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Delete Course Success",
+          `${editSec?.sectionNo} is deleted`
+        );
+      }
+    }
   };
 
   return (
@@ -104,11 +108,10 @@ export default function Course() {
         value={editSec}
         fetchCourse={fetchCourse}
       />
-
       <MainPopup
         opened={openMainPopupDelCourse}
         onClose={closeMainPopupDelCourse}
-        action={() => onClickDeleteSec(editSec.id!)}
+        action={() => onClickDeleteSec()}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete section"
         title={`Delete section ${getSectionNo(editSec.sectionNo)} in ${
@@ -243,8 +246,10 @@ export default function Course() {
                                   className="text-[#FF4747] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]"
                                   onClick={() => {
                                     setEditSec({
+                                      id: sec.id,
+                                      courseId: course.id,
                                       courseNo: course.courseNo,
-                                      ...sec,
+                                      sectionNo: sec.sectionNo,
                                     });
                                     openedMainPopupDelCourse();
                                   }}

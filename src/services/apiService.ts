@@ -52,7 +52,10 @@ const axiosService = (
   params: any,
   configService: any
 ) => {
-  let config = getConfig(configService, "get".includes(type) ? params : null);
+  let config = getConfig(
+    configService,
+    ["get", "delete"].includes(type) ? params : null
+  );
   switch (type) {
     case "get":
       return axios

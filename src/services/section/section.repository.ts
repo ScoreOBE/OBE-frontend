@@ -15,8 +15,8 @@ export const sectionController = (configService = {}) => {
     updateSection: async (id: string, params: Partial<IModelSection>) => {
       return service.put(`${prefix}/${id}`, { ...params });
     },
-    deleteSection: async (id: string) => {
-      return service.delete(`${prefix}/${id}`, {});
+    deleteSection: async (id: string, params: any) => {
+      return service.delete(`${prefix}/${id}`, { ...params });
     },
   };
 };

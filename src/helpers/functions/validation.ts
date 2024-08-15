@@ -16,7 +16,7 @@ export const isValidResponse = (res: any) => {
     const dispatch = store.dispatch;
     switch (res.statusCode) {
       case STATUS_CODE.NOT_FOUND:
-        dispatch(setErrorResponse(res));
+        // dispatch(setErrorResponse(res));
         break;
       case STATUS_CODE.UNAUTHORIZED:
         localStorage.clear();
