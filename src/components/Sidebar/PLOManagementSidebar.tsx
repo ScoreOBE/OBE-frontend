@@ -35,7 +35,7 @@ export default function PLOSidebar() {
     if (user.id) {
       fetchPLO();
     }
-  }, []);
+  }, [user]);
 
   return (
     <>
