@@ -10,6 +10,10 @@ import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { setAcademicYear } from "@/store/academicYear";
+import { setLoading } from "@/store/loading";
+import { CourseRequestDTO } from "@/services/course/dto/course.dto";
+import { getCourse } from "@/services/course/course.service";
+import { setCourseList } from "@/store/course";
 
 export default function DashboardSidebar() {
   const [params, setParams] = useSearchParams();
@@ -28,20 +32,19 @@ export default function DashboardSidebar() {
   useEffect(() => {
     if (academicYear.length && !params.get("id") && !selectedTerm) {
       setTerm(academicYear[0]);
-      setSelectedTerm(termOption[0]);
     } else if (
-      !academicYear.length 
-      // || !academicYear.map((term) => term.id).includes(selectedTerm?.value)
+      !academicYear.length
+      //   // || !academicYear.map((term) => term.id).includes(selectedTerm?.value)
     ) {
       fetchAcademicYear();
     }
-  }, [academicYear, params]);
+  }, [academicYear, termOption, params]);
 
   useEffect(() => {
-    if (termOption && !selectedTerm) {
-      setSelectedTerm(termOption[0]);
+    if (termOption && params.get("id") && !selectedTerm) {
+      setSelectedTerm(termOption.find((e) => e.value == params.get("id")));
     }
-  }, [termOption]);
+  }, [termOption, params]);
 
   const fetchAcademicYear = async () => {
     const res = await getAcademicYear(new AcademicYearRequestDTO());
@@ -50,10 +53,22 @@ export default function DashboardSidebar() {
       // if (!res.map((term: any) => term.id).includes(params.get("id"))) {
       if (!params.get("id") && !selectedTerm) {
         setTerm(res[0]);
-        setSelectedTerm(termOption[0]);
+        fetchCourse(res[0].id);
       }
       // }
     }
+  };
+
+  const fetchCourse = async (id: string) => {
+    dispatch(setLoading(true));
+    const payloadCourse = new CourseRequestDTO();
+    payloadCourse.academicYear = id;
+    const res = await getCourse(payloadCourse);
+    if (res) {
+      localStorage.setItem("totalCourses", res.totalCount);
+      dispatch(setCourseList(res.courses));
+    }
+    dispatch(setLoading(false));
   };
 
   const setTerm = (data: IModelAcademicYear) => {
@@ -62,12 +77,14 @@ export default function DashboardSidebar() {
       year: data.year.toString(),
       semester: data.semester.toString(),
     });
+    setSelectedTerm(termOption.find((term) => term.value == data.id));
   };
 
   const confirmFilterTerm = async () => {
     closeFilterTerm();
     const term = academicYear.find((e) => e.id == selectedTerm.value)!;
     setTerm(term);
+    fetchCourse(term.id);
   };
 
   return (

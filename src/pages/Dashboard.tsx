@@ -8,7 +8,7 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { showNotifications, statusColor } from "@/helpers/functions/function";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { deleteCourse, getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { addLoadMoreCourse, removeCourse, setCourseList } from "@/store/course";
@@ -31,12 +31,11 @@ export default function Dashboard() {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const course = useAppSelector((state) => state.course);
-  const fetchNewCourse = useLocation().state?.fetchCourse;
   const dispatch = useAppDispatch();
   const totalCourses = parseInt(localStorage.getItem("totalCourses") ?? "0");
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
-  const [term, setTerm] = useState<IModelAcademicYear>();
+  const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
   const [delCourse, setDelCourse] = useState<Partial<IModelCourse>>();
   const [editCourse, setEditCourse] = useState<Partial<IModelCourse>>();
   const [openAddModal, { open: openedAddModal, close: closeAddModal }] =
@@ -56,25 +55,12 @@ export default function Dashboard() {
       const acaYear = academicYear.find(
         (e) => e.id == yearId && e.semester == semester && e.year == year
       );
-      if (acaYear) {
+      if (acaYear && yearId != term?.id && !course.length) {
         setTerm(acaYear);
         fetchCourse(acaYear.id);
       }
     }
-  }, [academicYear, params]);
-
-  useEffect(() => {
-    if ((fetchNewCourse || !course.length) && term?.id) {
-      fetchCourse(term?.id);
-      navigate(
-        {
-          pathname: ".",
-          search: "?" + params.toString(),
-        },
-        { replace: true, state: {} }
-      );
-    }
-  }, [fetchNewCourse, course]);
+  }, [academicYear, term]);
 
   useEffect(() => {
     if (term) {
@@ -91,10 +77,7 @@ export default function Dashboard() {
     dispatch(setLoading(true));
     const payloadCourse = new CourseRequestDTO();
     payloadCourse.academicYear = id;
-    setPayload({
-      ...payloadCourse,
-      hasMore: true,
-    });
+    setPayload({ ...payloadCourse, hasMore: true });
     const res = await getCourse(payloadCourse);
     if (res) {
       localStorage.setItem("totalCourses", res.totalCount);
@@ -193,7 +176,7 @@ export default function Dashboard() {
             )}
           </p>
         </div>
-        {term?.isActive && (
+        {term?.isActive && !!course.length && (
           <Button
             size="xs"
             color="#5768D5"
@@ -221,7 +204,7 @@ export default function Dashboard() {
               </p>
               {term?.isActive && (
                 <Button
-                  color="#5C55E5"
+                  color="#5768D5"
                   className=" rounded-[8px] text-[12px] w-28 font-medium  h-8 px-2 "
                   onClick={openedAddModal}
                 >

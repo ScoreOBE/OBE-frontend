@@ -10,7 +10,7 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import TQF3 from "@/assets/icons/TQF3.svg?react";
 import TQF5 from "@/assets/icons/TQF5.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
-import { removeCourse, setCourseList } from "@/store/course";
+import { removeCourse } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
@@ -51,13 +51,10 @@ export default function CourseSidebar() {
   }, [courseList, courseNo]);
 
   const goToDashboard = () => {
-    navigate(
-      {
-        pathname: ROUTE_PATH.DASHBOARD_INS,
-        search: "?" + params.toString(),
-      },
-      { state: { fetchCourse: true } }
-    );
+    navigate({
+      pathname: ROUTE_PATH.DASHBOARD_INS,
+      search: "?" + params.toString(),
+    });
   };
 
   const onClickLeaveCourse = async (id: string) => {

@@ -27,15 +27,14 @@ import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
 import CourseManagement from "@/pages/CourseManagement";
 import MapPLO from "@/pages/MapPLO";
-
 import { setLoading } from "@/store/loading";
-import { motion } from "framer-motion";
 import PLOManagement from "./pages/PLOManagement";
 
 function App() {
   const error = useAppSelector((state) => state.errorResponse);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
+  const course = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();
   const path = useLocation().pathname;
   const [params, setParams] = useSearchParams();
@@ -49,6 +48,7 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
+      dispatch(setLoading(true));
       if (!user.email) {
         const res = await getUserInfo();
         if (res) {
@@ -60,15 +60,9 @@ function App() {
         const rsAcademicYear = await getAcademicYear(payload);
         if (rsAcademicYear) {
           dispatch(setAcademicYear(rsAcademicYear));
-          if (!params.get("id")) {
-            setParams({
-              id: rsAcademicYear[0].id,
-              year: rsAcademicYear[0].year.toString(),
-              semester: rsAcademicYear[0].semester.toString(),
-            });
-          }
         }
       }
+      // dispatch(setLoading(false));
     };
 
     const isPageNotFound =
@@ -97,9 +91,9 @@ function App() {
         path != ROUTE_PATH.SELECTED_DEPARTMENT
       ) {
         localStorage.removeItem("token");
+      } else {
+        fetchData();
       }
-      dispatch(setLoading(true));
-      fetchData();
     } else if (path != ROUTE_PATH.LOGIN) {
       navigate(ROUTE_PATH.LOGIN);
     }
