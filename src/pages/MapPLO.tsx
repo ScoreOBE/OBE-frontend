@@ -27,7 +27,7 @@ import { useDisclosure } from "@mantine/hooks";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import { getPLOs } from "@/services/plo/plo.service";
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import { rem, Text } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
@@ -35,6 +35,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { IconGripVertical } from "@tabler/icons-react";
 
 export default function MapPLO() {
+  const { collection } = useParams();
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const [params, setParams] = useSearchParams();
@@ -84,14 +85,25 @@ export default function MapPLO() {
     if (academicYear.length) {
       fetchPLO();
     }
-    console.log(state);
-  }, [academicYear, params]);
+  }, [academicYear]);
 
   useEffect(() => {
     if (ploList.data) {
       handlers.setState(ploList.data);
     }
+    console.log(state);
   }, [ploList.data]);
+
+  useEffect(() => {
+    console.log(state);
+    if (state) {
+      const plo = state;
+      plo.forEach((e, index) => {
+        e.no = index + 1;
+      });
+      setPloList({ ...ploList, data: plo });
+    }
+  }, [state]);
 
   const onShowMore = async () => {
     const res = await getCourseManagement({
@@ -115,7 +127,7 @@ export default function MapPLO() {
       <div className=" flex flex-col h-full w-full px-6 pb-2 pt-2 gap-4 overflow-hidden ">
         <Tabs
           color="#5768d5"
-          classNames={{ root: "overflow-hidden flex flex-col max-h-full" }}
+          classNames={{ root: "overflow-hidden flex flex-col max-h-full " }}
           defaultValue="plodescription"
         >
           <Tabs.List>
@@ -125,114 +137,142 @@ export default function MapPLO() {
             </Tabs.Tab>
           </Tabs.List>
 
-          <Tabs.Panel value="plodescription" className="overflow-hidden">
+          <Tabs.Panel value="plodescription" className="overflow-hidden mt-1">
             <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  py-3 gap-[12px] ">
               <div className="flex items-center  justify-between  ">
                 <div className="flex flex-col items-start ">
                   <div className="flex items-center text-primary gap-1">
                     <p className="text-secondary text-[16px] font-bold">
-                      PLO Collection {}
+                      PLO Collection {collection}
                     </p>
                     {/* Tooltip */}
 
                     <Tooltip
                       multiline
-                      arrowOffset={18}
-                      arrowSize={7}
-                      label="
-                       Use this button to save this information in your profile, after that you will be able to access it any time and share it via email.
-                      "
-                      withArrow
-                      className="w-60"
-                      // color="white"
+                      label={
+                        <div className="text-black text-[13px] p-2 flex flex-col gap-2">
+                          <div className="text-secondary font-bold text-[14px]">
+                            PLO Collection {collection}
+                          </div>
+                          <div>
+                            <p className="font-semibold">Active in:</p>
+                            <p className="text-tertiary  pl-3">
+                              {ploList.semester}/{ploList.year} -{" "}
+                              {ploList.isActive ? "Currently" : ""}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="font-semibold">Department:</p>
+
+                            <p className="text-tertiary pl-3 flex flex-col gap-1">
+                              {ploList.departmentCode?.join(", ")}
+                            </p>
+                          </div>
+                        </div>
+                      }
+                      color="#FCFCFC"
+                      className="w-fit  border rounded-md"
+                      classNames={{
+                        arrow: "border ",
+                      }}
+                      style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
                       position="bottom-start"
                     >
-                      <IconInfoCircle size={16} className="-ml-0" />
+                      <IconInfoCircle
+                        size={16}
+                        className="-ml-0 text-secondary"
+                      />
                     </Tooltip>
                   </div>
                   <div className="text-[#909090] text-[12px] font-medium">
-                    <p>เกณฑ์ของ ABET (ABET Criteria)</p>
+                    <p>
+                      {ploList.criteriaTH} {ploList.criteriaEN}
+                    </p>
                   </div>
                 </div>
               </div>
-              <div className="overflow-y-auto">
-                <DragDropContext
-                  onDragEnd={({ destination, source }) =>
-                    handlers.reorder({
-                      from: source.index,
-                      to: destination?.index || 0,
-                    })
-                  }
-                >
-                  <Droppable droppableId="dnd-list" direction="vertical">
-                    {(provided) => (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        className=" -mt-4 overflow-y-auto"
-                      >
-                        {state.map((item, index) => (
-                          <Draggable
-                            key={item.no}
-                            index={index}
-                            draggableId={item.no.toString()}
-                          >
-                            {(provided, snapshot) => (
-                              <div
-                                className="flex p-4 w-full  justify-between   border-b last:border-none"
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              >
-                                <div className=" flex flex-col gap-2 w-[90%]">
-                                  <p className="text-secondary font-semibold text-[14px]">
-                                    PLO-{item.no}
-                                  </p>
-                                  <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
-                                    <div className="flex">
-                                      <li></li> {item.descTH}
-                                    </div>
-                                    <div className="flex">
-                                      <li></li> {item.descEN}
-                                    </div>
+
+              <DragDropContext
+                onDragEnd={({ destination, source }) => {
+                  handlers.reorder({
+                    from: source.index,
+                    to: destination?.index || 0,
+                  });
+                }}
+              >
+                <Droppable droppableId="dnd-list" direction="vertical">
+                  {(provided) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className=" overflow-y-auto"
+                    >
+                      {state.map((item, index) => (
+                        <Draggable
+                          key={item.no}
+                          index={index}
+                          draggableId={item.no.toString()}
+                        >
+                          {(provided, snapshot) => (
+                            <div
+                              className="flex p-4 w-full justify-between border-b last:border-none"
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                            >
+                              <div className="flex flex-col gap-2 w-[90%]">
+                                <p className="text-secondary font-semibold text-[14px]">
+                                  PLO-{item.no}
+                                </p>
+                                <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
+                                  <div className="flex">
+                                    <li></li> {item.descTH}
+                                  </div>
+                                  <div className="flex">
+                                    <li></li> {item.descEN}
                                   </div>
                                 </div>
+                              </div>
 
-                                <div className="flex gap-3 items-center">
-                                  <IconEdit
-                                    size={16}
-                                    stroke={1.5}
-                                    color="#F39D4E"
-                                    className="flex items-center"
-                                  />
-                                  <IconTrash
-                                    size={16}
-                                    stroke={1.5}
-                                    color="red"
-                                    className="flex items-center"
-                                  />
+                              <div className="flex gap-3 items-center">
+                                <IconEdit
+                                  size={16}
+                                  stroke={1.5}
+                                  color="#F39D4E"
+                                  className="flex items-center"
+                                />
+                                <IconTrash
+                                  size={16}
+                                  stroke={1.5}
+                                  color="red"
+                                  className="flex items-center"
+                                />
+                                <div
+                                  className="cursor-pointer"
+                                  {...provided.dragHandleProps}
+                                >
                                   <IconGripVertical
                                     style={{
                                       width: rem(18),
                                       height: rem(18),
                                     }}
                                     stroke={1.5}
+                                    className="hover:bg-hover my-1 rounded-md text-tertiary"
                                   />
                                 </div>
                               </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
-              </div>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </div>
           </Tabs.Panel>
 
-          <Tabs.Panel className=" overflow-hidden" value="plomapping">
+          <Tabs.Panel className=" overflow-hidden mt-1" value="plomapping">
             <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  py-3 gap-[12px] ">
               <div className="flex items-center  justify-between  ">
                 <div className="flex flex-col items-start ">
