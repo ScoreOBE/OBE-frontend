@@ -6,6 +6,9 @@ import {
   Drawer,
   ScrollArea,
   Tooltip,
+  Modal,
+  TextInput,
+  Textarea,
 } from "@mantine/core";
 import {
   IconEdit,
@@ -33,18 +36,36 @@ import { rem, Text } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { IconGripVertical } from "@tabler/icons-react";
+import { COURSE_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
+import MainPopup from "@/components/Popup/MainPopup";
+import { validateCourseNo } from "@/helpers/functions/validation";
 
 export default function MapPLO() {
   const { collection } = useParams();
   const user = useAppSelector((state) => state.user);
-  const academicYear = useAppSelector((state) => state.academicYear);
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [params, setParams] = useSearchParams();
-  const [openedDropdown, setOpenedDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState<any>();
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
   const [state, handlers] = useListState(ploList.data || []);
-
+  const [getPLONo, setGetPLONo] = useState<number>();
+  const [couresNo, setCouresNo] = useState("");
+  const isFirstSemester =
+    ploList.semester === academicYear.semester &&
+    ploList.year === academicYear.year;
+  const [
+    mainPopupDelPLO,
+    { open: openMainPopupDelPLO, close: closeMainPopupDelPLO },
+  ] = useDisclosure(false);
+  const [
+    modalAddPLONo,
+    { open: openModalAddPLONo, close: closeModalAddPLONo },
+  ] = useDisclosure(false);
+  const [
+    modalEditPLONo,
+    { open: openModalEditPLONo, close: closeModalEditPLONo },
+  ] = useDisclosure(false);
   const fetchPLO = async () => {
     let res = await getPLOs({
       role: user.role,
@@ -54,6 +75,10 @@ export default function MapPLO() {
       setPloList(res.plos[0].collections[0]);
     }
   };
+  const [
+    modalAddCourse,
+    { open: openModalAddCourse, close: closeModalAddCourse },
+  ] = useDisclosure(false);
 
   const [courseManagement, setCourseManagement] = useState<
     IModelCourseManagement[]
@@ -81,8 +106,20 @@ export default function MapPLO() {
     setLoading(false);
   };
 
+  const onClickDeletePLO = async (no: any) => {
+    // const res = await deleteSectionManagement(coures.id, coures.secId, coures);
+    // if (res) {
+    //   closeMainPopupDelPLO();
+    //   showNotifications(
+    //     NOTI_TYPE.SUCCESS,
+    //     "Delete Section Success",
+    //     `${editSec?.sectionNo} is deleted`
+    //   );
+    // }
+  };
+
   useEffect(() => {
-    if (academicYear.length) {
+    if (academicYear) {
       fetchPLO();
     }
   }, [academicYear]);
@@ -91,7 +128,6 @@ export default function MapPLO() {
     if (ploList.data) {
       handlers.setState(ploList.data);
     }
-    console.log(state);
   }, [ploList.data]);
 
   useEffect(() => {
@@ -124,6 +160,198 @@ export default function MapPLO() {
 
   return (
     <>
+      {/* Add PLO */}
+      <Modal
+        title="Add PLO"
+        opened={modalAddPLONo}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+        onClose={closeModalAddPLONo}
+        transitionProps={{ transition: "pop" }}
+        size="35vw"
+        centered
+        classNames={{
+          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+          body: "flex flex-col overflow-hidden max-h-full h-fit",
+        }}
+      >
+        <div className="flex flex-col gap-3">
+          <Textarea
+            withAsterisk={true}
+            label={
+              <p className="text-b2 flex gap-1">
+                PLO <span className="text-secondary">Thai language</span>
+              </p>
+            }
+            className="w-full border-none rounded-r-none "
+            style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+            classNames={{
+              input: "flex !rounded-r-none h-[150px] p-3",
+              label: "flex pb-1",
+            }}
+            placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
+          />
+          <Textarea
+            withAsterisk={true}
+            label={
+              <p className="text-b2 flex gap-1 ">
+                PLO <span className="text-secondary">English language</span>
+              </p>
+            }
+            className="w-full border-none rounded-r-none "
+            style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+            classNames={{
+              input: "flex !rounded-r-none h-[150px] p-3",
+              label: "flex pb-1",
+            }}
+            placeholder="Ex. An ability to solve complex engineering problems."
+          />
+
+          <div className="flex gap-2 mt-3 justify-end">
+            <Button
+              onClick={closeModalAddPLONo}
+              variant="subtle"
+              color="#575757"
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+            >
+              Cancel
+            </Button>
+            <Button
+              // onClick={submit}
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+              color="#5768d5"
+            >
+              Done
+            </Button>
+          </div>
+        </div>
+      </Modal>
+      {/* Edit PLO */}
+      <Modal
+        title={`Edit PLO-${getPLONo}`}
+        opened={modalEditPLONo}
+        withCloseButton={false}
+        closeOnClickOutside={false}
+        onClose={closeModalEditPLONo}
+        transitionProps={{ transition: "pop" }}
+        size="35vw"
+        centered
+        classNames={{
+          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+          body: "flex flex-col overflow-hidden max-h-full h-fit",
+        }}
+      >
+        <div className="flex flex-col gap-3">
+          <Textarea
+            withAsterisk={true}
+            label={
+              <p className="text-b2 flex gap-1">
+                PLO <span className="text-secondary">Thai language</span>
+              </p>
+            }
+            className="w-full border-none rounded-r-none "
+            style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+            classNames={{
+              input: "flex !rounded-r-none h-[150px] p-3",
+              label: "flex pb-1",
+            }}
+            placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
+          />
+          <Textarea
+            withAsterisk={true}
+            label={
+              <p className="text-b2 flex gap-1 ">
+                PLO <span className="text-secondary">English language</span>
+              </p>
+            }
+            className="w-full border-none rounded-r-none "
+            style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+            classNames={{
+              input: "flex !rounded-r-none h-[150px] p-3",
+              label: "flex pb-1",
+            }}
+            placeholder="Ex. An ability to solve complex engineering problems."
+          />
+
+          <div className="flex gap-2 mt-3 justify-end">
+            <Button
+              onClick={closeModalEditPLONo}
+              variant="subtle"
+              color="#575757"
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+            >
+              Cancel
+            </Button>
+            <Button
+              // onClick={submit}
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+              color="#5768d5"
+            >
+              Done
+            </Button>
+          </div>
+        </div>
+      </Modal>
+      {/* Add Course */}
+      <Modal
+        title={`Add Course`}
+        opened={modalAddCourse}
+        withCloseButton={false}
+        onClose={closeModalAddCourse}
+        transitionProps={{ transition: "pop" }}
+        size="35vw"
+        centered
+        classNames={{
+          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+          body: "flex flex-col overflow-hidden max-h-full h-fit",
+        }}
+      >
+        <div className="flex flex-col gap-3">
+          <TextInput
+            classNames={{ input: "focus:border-primary" }}
+            label="Course No."
+            size="xs"
+            withAsterisk
+            placeholder="Ex. 26X4XX"
+            maxLength={6}
+            value={couresNo}
+            error={validateCourseNo(couresNo)}
+            onChange={(event) => setCouresNo(event.target.value)}
+          />
+
+          <div className="flex gap-2 mt-3 justify-end">
+            <Button
+              onClick={closeModalAddCourse}
+              variant="subtle"
+              color="#575757"
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+            >
+              Cancel
+            </Button>
+            <Button
+              // onClick={submit}
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+              color="#5768d5"
+            >
+              Done
+            </Button>
+          </div>
+        </div>
+      </Modal>
+      <MainPopup
+        opened={mainPopupDelPLO}
+        onClose={closeMainPopupDelPLO}
+        action={() => onClickDeletePLO(getPLONo)}
+        type={POPUP_TYPE.DELETE}
+        labelButtonRight="Delete PLO"
+        title={`Delete PLO ${getPLONo}`}
+        message={
+          <p>
+            xxxxxxxxxxxxxxx
+            <br /> <span>Are you sure you want to deleted this PLO? </span>
+          </p>
+        }
+      />
       <div className=" flex flex-col h-full w-full px-6 pb-2 pt-2 gap-4 overflow-hidden ">
         <Tabs
           color="#5768d5"
@@ -190,6 +418,18 @@ export default function MapPLO() {
                     </p>
                   </div>
                 </div>
+                {isFirstSemester && (
+                  <Button
+                    color="#5768D5"
+                    leftSection={
+                      <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
+                    }
+                    className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                    onClick={openModalAddPLONo}
+                  >
+                    Add PLO
+                  </Button>
+                )}
               </div>
 
               <DragDropContext
@@ -219,44 +459,59 @@ export default function MapPLO() {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                             >
-                              <div className="flex flex-col gap-2 w-[90%]">
+                              <div className="flex flex-col gap-2 w-[85%] ">
                                 <p className="text-secondary font-semibold text-[14px]">
                                   PLO-{item.no}
                                 </p>
                                 <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
-                                  <div className="flex">
+                                  <div className="flex  text-pretty ">
                                     <li></li> {item.descTH}
                                   </div>
-                                  <div className="flex">
+                                  <div className="flex  text-pretty ">
                                     <li></li> {item.descEN}
                                   </div>
                                 </div>
                               </div>
 
-                              <div className="flex gap-3 items-center">
-                                <IconEdit
-                                  size={16}
-                                  stroke={1.5}
-                                  color="#F39D4E"
-                                  className="flex items-center"
-                                />
-                                <IconTrash
-                                  size={16}
-                                  stroke={1.5}
-                                  color="red"
-                                  className="flex items-center"
-                                />
+                              <div className="flex gap-1 items-center">
                                 <div
-                                  className="cursor-pointer"
+                                  className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
+                                  onClick={() => {
+                                    setGetPLONo(item.no);
+                                    openModalEditPLONo();
+                                  }}
+                                >
+                                  <IconEdit
+                                    stroke={1.5}
+                                    color="#F39D4E"
+                                    className="flex items-center size-4"
+                                  />
+                                </div>
+                                {isFirstSemester && (
+                                  <div
+                                    className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
+                                    onClick={() => {
+                                      setGetPLONo(item.no);
+                                      openMainPopupDelPLO();
+                                    }}
+                                  >
+                                    <IconTrash
+                                      stroke={1.5}
+                                      color="#FF4747"
+                                      className=" size-4 flex items-center"
+                                    />
+                                  </div>
+                                )}
+                                <div
+                                  className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
                                   {...provided.dragHandleProps}
                                 >
                                   <IconGripVertical
                                     style={{
-                                      width: rem(18),
-                                      height: rem(18),
+                                      width: rem(20),
+                                      height: rem(20),
                                     }}
                                     stroke={1.5}
-                                    className="hover:bg-hover my-1 rounded-md text-tertiary"
                                   />
                                 </div>
                               </div>
@@ -298,6 +553,7 @@ export default function MapPLO() {
                       <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
                     }
                     className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                    onClick={openModalAddCourse}
                   >
                     Add Course
                   </Button>
