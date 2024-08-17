@@ -39,15 +39,20 @@ export const updateSectionManagement = async (
   return isValidResponse(res);
 };
 
-export const deleteCourseManagement = async (id: string) => {
-  const res = await courseManagementService.deleteCourseManagement(id);
+export const deleteCourseManagement = async (id: string, params: any) => {
+  const res = await courseManagementService.deleteCourseManagement(id, params);
   return isValidResponse(res);
 };
 
-export const deleteSectionManagement = async (id: string, section: string) => {
+export const deleteSectionManagement = async (
+  id: string,
+  section: string,
+  params: any
+) => {
   const res = await courseManagementService.deleteSectionManagement(
     id,
-    section
+    section,
+    params
   );
   return isValidResponse(res);
 };

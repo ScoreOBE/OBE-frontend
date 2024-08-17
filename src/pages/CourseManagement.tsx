@@ -12,6 +12,7 @@ import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import Icon from "@/components/Icon";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
 import {
+  deleteCourseManagement,
   deleteSectionManagement,
   getCourseManagement,
 } from "@/services/courseManagement/courseManagement.service";
@@ -31,8 +32,10 @@ import ModalEditCourse from "@/components/Modal/ModalEditCourse";
 import ModalEditSection from "@/components/Modal/ModalEditSection";
 import {
   addLoadMoreCourseManagement,
+  removeCourseManagement,
   setCourseManagementList,
 } from "@/store/courseManagement";
+import { removeCourse } from "@/store/course";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -45,8 +48,10 @@ export default function CourseManagement() {
   const [delSec, setDelSec] = useState<
     Partial<IModelSection> & Record<string, any>
   >();
-  const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
-    useDisclosure(false);
+  const [
+    openMainPopupDelSec,
+    { open: openedMainPopupDelSec, close: closeMainPopupDelSec },
+  ] = useDisclosure(false);
   const [
     openMainPopupDelCourse,
     { open: openedMainPopupDelCourse, close: closeMainPopupDelCourse },
@@ -122,24 +127,24 @@ export default function CourseManagement() {
     }
   };
 
-  const onClickDeleteCourse = async (id: string) => {
-    // const res = await deleteCourse(id);
-    // if (res) {
-    //   dispatch(removeCourse(res.id));
-    // }
-    // closeMainPopup();
-    // showNotifications(
-    //   NOTI_TYPE.SUCCESS,
-    //   "Delete Course Success",
-    //   `${delSec?.sectionNo} is deleted`
-    // );
+  const onClickDeleteCourse = async (coures: any) => {
+    const res = await deleteCourseManagement(coures.id, coures);
+    if (res) {
+      closeMainPopupDelCourse();
+      dispatch(removeCourseManagement(res.id));
+      dispatch(removeCourse(res.courseId));
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Delete Course Success",
+        `${coures.courseNo} is deleted`
+      );
+    }
   };
 
-  const onClickDeleteSec = async (id: string, secId: string) => {
-    const res = await deleteSectionManagement(id, secId);
+  const onClickDeleteSec = async (coures: any) => {
+    const res = await deleteSectionManagement(coures.id, coures.secId, coures);
     if (res) {
-      // setCourseManagement(())
-      closeMainPopup();
+      closeMainPopupDelSec();
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Delete Section Success",
@@ -151,9 +156,24 @@ export default function CourseManagement() {
   return (
     <>
       <MainPopup
-        opened={openMainPopup}
-        onClose={closeMainPopup}
-        action={() => onClickDeleteSec(delSec?.id!, delSec?.secId)}
+        opened={openMainPopupDelCourse}
+        onClose={closeMainPopupDelCourse}
+        action={() => onClickDeleteCourse(editCourse)}
+        type={POPUP_TYPE.DELETE}
+        labelButtonRight="Delete course"
+        title={`Delete ${editCourse?.courseNo} Course?`}
+        message={
+          <p>
+            Deleting this course will permanently remove all data from the
+            current semester. Data from previous semesters will not be affected.{" "}
+            <br /> <span>Are you sure you want to deleted this course? </span>
+          </p>
+        }
+      />
+      <MainPopup
+        opened={openMainPopupDelSec}
+        onClose={closeMainPopupDelSec}
+        action={() => onClickDeleteSec(delSec)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete section"
         title={`Delete seciton ${getSectionNo(delSec?.sectionNo)} in ${
@@ -164,21 +184,6 @@ export default function CourseManagement() {
             Deleting this section will permanently remove all data from the
             current semester. Data from previous semesters will not be affected.{" "}
             <br /> <span>Are you sure you want to deleted this section? </span>
-          </p>
-        }
-      />
-      <MainPopup
-        opened={openMainPopupDelCourse}
-        onClose={closeMainPopupDelCourse}
-        action={() => onClickDeleteCourse(editCourse?.id!)}
-        type={POPUP_TYPE.DELETE}
-        labelButtonRight="Delete course"
-        title={`Delete ${editCourse?.courseNo} Course?`}
-        message={
-          <p>
-            Deleting this course will permanently remove all data from the
-            current semester. Data from previous semesters will not be affected.{" "}
-            <br /> <span>Are you sure you want to deleted this course? </span>
           </p>
         }
       />
@@ -203,7 +208,6 @@ export default function CourseManagement() {
         value={editCourse}
         fetchCourse={fetchCourse}
       />
-
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
         <div className="flex flex-col  items-start ">
           <p className="text-secondary text-[16px] font-bold">Dashboard</p>
@@ -301,6 +305,7 @@ export default function CourseManagement() {
                           onClick={() => {
                             setEditCourse({
                               id: course.id,
+                              academicYear: academicYear.id,
                               courseNo: course.courseNo,
                             });
                             openedMainPopupDelCourse();
@@ -393,7 +398,7 @@ export default function CourseManagement() {
                                 secId: sec.id,
                                 sectionNo: sec.sectionNo,
                               });
-                              openedMainPopup();
+                              openedMainPopupDelSec();
                             }}
                             className="flex justify-center items-center bg-transparent border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"
                           >
