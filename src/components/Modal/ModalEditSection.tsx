@@ -60,7 +60,13 @@ export default function ModalEditSection({
 
     if (opened && value) {
       form.setValues(value);
-      setOpenThisTerm(value.isActive ?? false);
+      setOpenThisTerm(
+        (value.isActive &&
+          (value.semester as string[])?.includes(
+            academicYear.semester.toString()
+          )) ??
+          false
+      );
       if (value.semester) setSemester(value.semester as string[]);
       if (!isCourseManage) fetchCourseManagement();
     } else {
@@ -171,7 +177,9 @@ export default function ModalEditSection({
                     label={item}
                     value={item.toString()}
                     disabled={
-                      (openThisTerm && item == academicYear.semester) ||
+                      (openThisTerm &&
+                        item == academicYear.semester &&
+                        semester.includes(item.toString())) ||
                       (semester.length == 1 &&
                         semester.includes(item.toString()))
                     }

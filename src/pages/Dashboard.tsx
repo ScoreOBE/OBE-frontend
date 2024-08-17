@@ -19,7 +19,7 @@ import { useDisclosure } from "@mantine/hooks";
 import notFoundImage from "@/assets/image/notFound.png";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import MainPopup from "../components/Popup/MainPopup";
-import ModalEditCourse from "../components/Modal/ModalEdit";
+import ModalEditCourse from "../components/Modal/ModalEditCourse";
 import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading";
@@ -32,7 +32,6 @@ export default function Dashboard() {
   const academicYear = useAppSelector((state) => state.academicYear);
   const course = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();
-  const totalCourses = parseInt(localStorage.getItem("totalCourses") ?? "0");
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
@@ -57,7 +56,7 @@ export default function Dashboard() {
       );
       if (acaYear && yearId != term.id) {
         setTerm(acaYear);
-        if (!course.length) fetchCourse(acaYear.id);
+        if (!course.courses.length) fetchCourse(acaYear.id);
       }
     }
   }, [academicYear, term, params]);
@@ -67,6 +66,7 @@ export default function Dashboard() {
       setPayload({
         ...new CourseRequestDTO(),
         academicYear: term.id,
+        search: course.search,
         hasMore: true,
       });
       localStorage.removeItem("search");
@@ -80,8 +80,7 @@ export default function Dashboard() {
     setPayload({ ...payloadCourse, hasMore: true });
     const res = await getCourse(payloadCourse);
     if (res) {
-      localStorage.setItem("totalCourses", res.totalCount);
-      dispatch(setCourseList(res.courses));
+      dispatch(setCourseList(res));
     }
     dispatch(setLoading(false));
   };
@@ -106,7 +105,6 @@ export default function Dashboard() {
     const res = await deleteCourse(id);
     if (res) {
       dispatch(removeCourse(res.id));
-      localStorage.setItem("totalCourses", (totalCourses - 1).toString());
     }
     closeMainPopup();
     showNotifications(
@@ -162,21 +160,21 @@ export default function Dashboard() {
             </p>
             <p className="text-[#575757] text-[14px]">
               In semester {term?.semester ?? ""}, {term?.year ?? ""}!{" "}
-              {course.length === 0 ? (
+              {course.courses.length === 0 ? (
                 <span>Your course card is currently empty</span>
               ) : (
                 <span>
                   Your currently have{" "}
                   <span className="text-[#5768D5] font-semibold">
-                    {totalCourses} Course
-                    {totalCourses > 1 ? "s " : " "}
+                    {course.total} Course
+                    {course.total > 1 ? "s " : " "}
                   </span>
                   on your plate.
                 </span>
               )}
             </p>
           </div>
-          {term?.isActive && !!course.length && (
+          {term?.isActive && !!course.courses.length && (
             <Button
               size="xs"
               color="#5768D5"
@@ -191,7 +189,7 @@ export default function Dashboard() {
         <div className="flex h-full w-full bg-white rounded-[5px]  overflow-hidden">
           {loading ? (
             <Loading />
-          ) : course.length === 0 ? (
+          ) : course.courses.length === 0 ? (
             <div className=" flex flex-row flex-1 justify-between">
               <div className="h-full px-[60px] justify-center flex flex-col">
                 <p className="text-primary text-h2 font-semibold">
@@ -223,7 +221,7 @@ export default function Dashboard() {
             </div>
           ) : (
             <InfiniteScroll
-              dataLength={course.length}
+              dataLength={course.courses.length}
               next={onShowMore}
               height={"100%"}
               loader={<Loading />}
@@ -231,7 +229,7 @@ export default function Dashboard() {
               className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-1"
               style={{ height: "fit-content", maxHeight: "100%" }}
             >
-              {course.map((item) => {
+              {course.courses.map((item) => {
                 const statusTQF3 = statusColor(item.TQF3?.status);
                 const statusTQF5 = statusColor(item.TQF5?.status);
                 return (

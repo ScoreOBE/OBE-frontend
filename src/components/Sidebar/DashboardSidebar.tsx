@@ -65,8 +65,7 @@ export default function DashboardSidebar() {
     payloadCourse.academicYear = id;
     const res = await getCourse(payloadCourse);
     if (res) {
-      localStorage.setItem("totalCourses", res.totalCount);
-      dispatch(setCourseList(res.courses));
+      dispatch(setCourseList(res));
     }
     dispatch(setLoading(false));
   };
