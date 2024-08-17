@@ -3,23 +3,38 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const courseSlice = createSlice({
   name: "course",
-  initialState: [] as IModelCourse[],
+  initialState: { total: 0, search: "", courses: [] } as {
+    total: number;
+    search: string;
+    courses: IModelCourse[];
+  },
   reducers: {
     setCourseList: (state, action) => {
-      return [...action.payload];
+      return {
+        total: action.payload.totalCount ?? state.total,
+        search: action.payload.search ?? state.search,
+        courses: [...(action.payload.courses ?? action.payload)],
+      };
     },
     addLoadMoreCourse: (state, action) => {
-      return [...state, ...action.payload];
+      return { ...state, courses: [...state.courses, ...action.payload] };
     },
     editCourse: (state, action) => {
-      return state.map((course) =>
-        course.id === action.payload.id
-          ? { ...course, ...action.payload }
-          : course
-      );
+      return {
+        ...state,
+        courses: state.courses.map((course) =>
+          course.id === action.payload.id
+            ? { ...course, ...action.payload }
+            : course
+        ),
+      };
     },
     removeCourse: (state, action) => {
-      return state.filter((course) => course.id != action.payload);
+      return {
+        total: state.total - 1,
+        search: state.search,
+        courses: state.courses.filter((course) => course.id != action.payload),
+      };
     },
   },
 });

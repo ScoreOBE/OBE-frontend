@@ -9,20 +9,30 @@ import {
 } from "@/helpers/functions/validation";
 import { updateCourse } from "@/services/course/course.service";
 import { showNotifications } from "@/helpers/functions/function";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { editCourse } from "@/store/course";
+import { updateCourseManagement } from "@/services/courseManagement/courseManagement.service";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
-  value: Partial<IModelCourse> | undefined;
+  isCourseManage?: boolean;
+  value: (Partial<IModelCourse> & Record<string, any>) | undefined;
+  fetchCourse?: () => void;
 };
 
-export default function ModalEditCourse({ opened, onClose, value }: Props) {
+export default function ModalEditCourse({
+  opened,
+  onClose,
+  isCourseManage = false,
+  value,
+  fetchCourse,
+}: Props) {
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const dispatch = useAppDispatch();
   const form = useForm({
     mode: "uncontrolled",
-    initialValues: {} as Partial<IModelCourse>,
+    initialValues: {} as Partial<IModelCourse> & Record<string, any>,
     validate: {
       courseNo: (value) => validateCourseNo(value),
       courseName: (value) => validateCourseNameorTopic(value, "Course Name"),
@@ -42,10 +52,17 @@ export default function ModalEditCourse({ opened, onClose, value }: Props) {
     let payload = form.getValues();
     const id = payload.id || "";
     delete payload.id;
-    const res = await updateCourse(id, payload);
+    let res;
+    if (isCourseManage) {
+      payload.academicYear = academicYear.id;
+      res = await updateCourseManagement(id, payload);
+    } else {
+      res = await updateCourse(id, payload);
+    }
     if (res) {
       onClose();
-      dispatch(editCourse({ id, ...payload }));
+      if (fetchCourse) fetchCourse();
+      dispatch(editCourse({ id: res.id, ...payload }));
       showNotifications("success", "Edit Course", "Edit coures successful");
     }
   };

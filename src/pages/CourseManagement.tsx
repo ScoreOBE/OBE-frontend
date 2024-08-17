@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { Menu } from "@mantine/core";
 import {
@@ -23,34 +23,24 @@ import {
   showNotifications,
 } from "@/helpers/functions/function";
 import { useDisclosure } from "@mantine/hooks";
-import { isNumber } from "lodash";
-
-import {
-  validateCourseNameorTopic,
-  validateSectionNo,
-} from "@/helpers/functions/validation";
-
 import MainPopup from "@/components/Popup/MainPopup";
 import { IModelSection } from "@/models/ModelSection";
-import {
-  IModelCourseManagement,
-  IModelSectionManagement,
-} from "@/models/ModelCourseManagement";
-import { useForm } from "@mantine/form";
 import Loading from "@/components/Loading";
 import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
-import ModalEditCourse from "@/components/Modal/ModalEdit";
+import ModalEditCourse from "@/components/Modal/ModalEditCourse";
 import ModalEditSection from "@/components/Modal/ModalEditSection";
+import {
+  addLoadMoreCourseManagement,
+  setCourseManagementList,
+} from "@/store/courseManagement";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const courseManagement = useAppSelector((state) => state.courseManagement);
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState<any>();
-  const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const [courseManagement, setCourseManagement] = useState<
-    IModelCourseManagement[]
-  >([]);
-  const [totalCourses, setTotalCourses] = useState<number>(0);
   const [editCourse, setEditCourse] = useState<any>();
   const [delSec, setDelSec] = useState<
     Partial<IModelSection> & Record<string, any>
@@ -79,6 +69,7 @@ export default function CourseManagement() {
       const payloadCourse = {
         ...new CourseManagementRequestDTO(),
         departmentCode: user.departmentCode,
+        search: courseManagement.search,
         hasMore: true,
       };
       setPayload(payloadCourse);
@@ -86,19 +77,30 @@ export default function CourseManagement() {
     }
   }, [user]);
 
+  useEffect(() => {
+    setPayload({
+      ...new CourseManagementRequestDTO(),
+      departmentCode: user.departmentCode,
+      search: courseManagement.search,
+      hasMore: true,
+    });
+    localStorage.removeItem("search");
+  }, [localStorage.getItem("search")]);
+
   const fetchCourse = async (payloadCourse?: any) => {
     setLoading(true);
     if (!payloadCourse) {
       payloadCourse = {
         ...new CourseManagementRequestDTO(),
         departmentCode: user.departmentCode,
+        search: courseManagement.search,
         hasMore: true,
       };
+      setPayload(payloadCourse);
     }
     const res = await getCourseManagement(payloadCourse);
     if (res) {
-      setTotalCourses(res.totalCount);
-      setCourseManagement(res.courses);
+      dispatch(setCourseManagementList(res));
     }
     setLoading(false);
   };
@@ -109,7 +111,7 @@ export default function CourseManagement() {
       page: payload.page + 1,
     });
     if (res) {
-      setCourseManagement([...courseManagement, ...res]);
+      dispatch(addLoadMoreCourseManagement(res));
       setPayload({
         ...payload,
         page: payload.page + 1,
@@ -188,7 +190,9 @@ export default function CourseManagement() {
       <ModalEditCourse
         opened={openModalEditCourse}
         onClose={closeModalEditCourse}
+        isCourseManage={true}
         value={editCourse}
+        fetchCourse={fetchCourse}
       />
       <ModalEditSection
         opened={modalEditSection && editCourse}
@@ -205,8 +209,8 @@ export default function CourseManagement() {
         <div className="flex flex-col  items-start ">
           <p className="text-secondary text-[16px] font-bold">Dashboard</p>
           <p className="text-tertiary text-[14px] font-medium">
-            {totalCourses} Course
-            {totalCourses > 1 ? "s " : " "}
+            {courseManagement.total} Course
+            {courseManagement.total > 1 ? "s " : " "}
           </p>
         </div>
         {/* Course Detail */}
@@ -214,7 +218,7 @@ export default function CourseManagement() {
           <Loading />
         ) : (
           <InfiniteScroll
-            dataLength={courseManagement.length}
+            dataLength={courseManagement.courseManagements.length}
             next={onShowMore}
             height={"100%"}
             hasMore={payload?.hasMore}
@@ -222,7 +226,7 @@ export default function CourseManagement() {
             style={{ height: "fit-content", maxHeight: "100%" }}
             loader={<Loading />}
           >
-            {courseManagement.map((course, index) => (
+            {courseManagement.courseManagements.map((course, index) => (
               <div
                 key={index}
                 className="bg-[#bfbfff3e] rounded-md flex flex-col py-4 px-5"
@@ -260,6 +264,7 @@ export default function CourseManagement() {
                             onClick={() => {
                               setEditCourse({
                                 id: course.id,
+                                oldCourseNo: course.courseNo,
                                 courseNo: course.courseNo,
                                 courseName: course.courseName,
                               });
@@ -367,19 +372,6 @@ export default function CourseManagement() {
 
                         {/* Button */}
                         <div className="flex justify-end gap-4 items-center">
-                          {/* <div
-                            className="bg-transparent border-[1px] border-secondary text-secondary size-8 bg-none rounded-full cursor-pointer hover:bg-secondary/10"
-                            onClick={() => {
-                              setEditCourse({
-                                courseNo: course.courseNo,
-                                ...sec,
-                              });
-                              openedModalManageInst();
-                            }}
-                          >
-                            <Icon IconComponent={ManageAdminIcon} />
-                          </div> */}
-
                           <div
                             onClick={() => {
                               setEditCourse({

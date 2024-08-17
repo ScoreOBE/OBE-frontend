@@ -10,33 +10,60 @@ import { setCourseList } from "@/store/course";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { getCourse } from "@/services/course/course.service";
 import { ellipsisText } from "@/helpers/functions/validation";
+import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
+import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
+import { setCourseManagementList } from "@/store/courseManagement";
+import user from "@/store/user";
 
 export default function Navbar() {
   const location = useLocation().pathname;
   const [params, setParams] = useSearchParams();
+  const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
-  const payloadCourse = new CourseRequestDTO();
   const [isFocused, setIsFocused] = useState(false);
 
   const searchCourse = async (reset?: boolean) => {
     setIsFocused(false);
+
+    const path = "/" + location.split("/")[1];
+    let res;
+    let payloadCourse: any = {};
     if (reset) payloadCourse.search = "";
     else payloadCourse.search = searchValue;
-    payloadCourse.academicYear =
-      academicYear.find(
-        (e) =>
-          e.id == params.get("id") &&
-          e.year == parseInt(params.get("year") ?? "") &&
-          e.semester == parseInt(params.get("semester") ?? "")
-      )?.id ?? "";
-    const res = await getCourse(payloadCourse);
-    if (res) {
-      dispatch(setCourseList(res.courses ?? res));
-      if (res.totalCount) {
-        localStorage.setItem("totalCourses", res.totalCount);
-      }
+    switch (path) {
+      case ROUTE_PATH.DASHBOARD_INS:
+        payloadCourse = { ...new CourseRequestDTO(), ...payloadCourse };
+        payloadCourse.academicYear =
+          academicYear.find(
+            (e) =>
+              e.id == params.get("id") &&
+              e.year == parseInt(params.get("year") ?? "") &&
+              e.semester == parseInt(params.get("semester") ?? "")
+          )?.id ?? "";
+        res = await getCourse(payloadCourse);
+        if (res) {
+          res.search = searchValue;
+          dispatch(setCourseList(res));
+        }
+        break;
+      case ROUTE_PATH.COURSE_MANAGEMENT:
+        payloadCourse = {
+          ...new CourseManagementRequestDTO(),
+          departmentCode: user.departmentCode,
+          ...payloadCourse,
+        };
+        res = await getCourseManagement(payloadCourse);
+        if (res) {
+          res.search = searchValue;
+          dispatch(setCourseManagementList(res));
+        }
+        break;
+      case ROUTE_PATH.PLO_MANAGEMENT:
+        break;
+      default:
+        break;
     }
     localStorage.setItem("search", "true");
   };
