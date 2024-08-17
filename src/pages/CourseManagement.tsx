@@ -33,9 +33,10 @@ import ModalEditSection from "@/components/Modal/ModalEditSection";
 import {
   addLoadMoreCourseManagement,
   removeCourseManagement,
+  removeSectionManagement,
   setCourseManagementList,
 } from "@/store/courseManagement";
-import { removeCourse } from "@/store/course";
+import { removeCourse, removeSection } from "@/store/course";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -141,14 +142,18 @@ export default function CourseManagement() {
     }
   };
 
-  const onClickDeleteSec = async (coures: any) => {
-    const res = await deleteSectionManagement(coures.id, coures.secId, coures);
+  const onClickDeleteSec = async (course: any) => {
+    let payload = { ...course };
+    delete payload.id;
+    const res = await deleteSectionManagement(course.id, course.secId, payload);
     if (res) {
       closeMainPopupDelSec();
+      dispatch(removeSectionManagement({ id: course.id, secId: course.secId }));
+      dispatch(removeSection({ id: res.courseId, secId: res.secId }));
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Delete Section Success",
-        `${editSec?.sectionNo} is deleted`
+        `${getSectionNo(editSec?.sectionNo)} is deleted`
       );
     }
   };
@@ -377,8 +382,8 @@ export default function CourseManagement() {
                           <div
                             onClick={() => {
                               setEditSec({
-                                academicYear: academicYear.id,
                                 id: course.id,
+                                academicYear: academicYear.id,
                                 courseNo: course.courseNo,
                                 secId: sec.id,
                                 oldSectionNo: sec.sectionNo,
@@ -401,8 +406,8 @@ export default function CourseManagement() {
                           <div
                             onClick={() => {
                               setEditSec({
-                                academicYear: academicYear.id,
                                 id: course.id,
+                                academicYear: academicYear.id,
                                 courseNo: course.courseNo,
                                 secId: sec.id,
                                 sectionNo: sec.sectionNo,
