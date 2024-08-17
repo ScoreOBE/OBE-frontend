@@ -12,6 +12,7 @@ import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import Icon from "@/components/Icon";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
 import {
+  deleteCourseManagement,
   deleteSectionManagement,
   getCourseManagement,
 } from "@/services/courseManagement/courseManagement.service";
@@ -31,8 +32,10 @@ import ModalEditCourse from "@/components/Modal/ModalEditCourse";
 import ModalEditSection from "@/components/Modal/ModalEditSection";
 import {
   addLoadMoreCourseManagement,
+  removeCourseManagement,
   setCourseManagementList,
 } from "@/store/courseManagement";
+import { removeCourse } from "@/store/course";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -42,11 +45,13 @@ export default function CourseManagement() {
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState<any>();
   const [editCourse, setEditCourse] = useState<any>();
-  const [delSec, setDelSec] = useState<
+  const [editSec, setEditSec] = useState<
     Partial<IModelSection> & Record<string, any>
   >();
-  const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
-    useDisclosure(false);
+  const [
+    openMainPopupDelSec,
+    { open: openedMainPopupDelSec, close: closeMainPopupDelSec },
+  ] = useDisclosure(false);
   const [
     openMainPopupDelCourse,
     { open: openedMainPopupDelCourse, close: closeMainPopupDelCourse },
@@ -110,7 +115,7 @@ export default function CourseManagement() {
       ...payload,
       page: payload.page + 1,
     });
-    if (res) {
+    if (res.length) {
       dispatch(addLoadMoreCourseManagement(res));
       setPayload({
         ...payload,
@@ -122,55 +127,49 @@ export default function CourseManagement() {
     }
   };
 
-  const onClickDeleteCourse = async (id: string) => {
-    // const res = await deleteCourse(id);
-    // if (res) {
-    //   dispatch(removeCourse(res.id));
-    // }
-    // closeMainPopup();
-    // showNotifications(
-    //   NOTI_TYPE.SUCCESS,
-    //   "Delete Course Success",
-    //   `${delSec?.sectionNo} is deleted`
-    // );
+  const onClickDeleteCourse = async (coures: any) => {
+    const res = await deleteCourseManagement(coures.id, coures);
+    if (res) {
+      closeMainPopupDelCourse();
+      dispatch(removeCourseManagement(res.id));
+      dispatch(removeCourse(res.courseId));
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Delete Course Success",
+        `${coures.courseNo} is deleted`
+      );
+    }
   };
 
-  const onClickDeleteSec = async (id: string, secId: string) => {
-    const res = await deleteSectionManagement(id, secId);
+  const onClickDeleteSec = async (coures: any) => {
+    const res = await deleteSectionManagement(coures.id, coures.secId, coures);
     if (res) {
-      // setCourseManagement(())
-      closeMainPopup();
+      closeMainPopupDelSec();
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Delete Section Success",
-        `${delSec?.sectionNo} is deleted`
+        `${editSec?.sectionNo} is deleted`
       );
     }
   };
 
   return (
     <>
-      <MainPopup
-        opened={openMainPopup}
-        onClose={closeMainPopup}
-        action={() => onClickDeleteSec(delSec?.id!, delSec?.secId)}
-        type={POPUP_TYPE.DELETE}
-        labelButtonRight="Delete section"
-        title={`Delete seciton ${getSectionNo(delSec?.sectionNo)} in ${
-          delSec?.courseNo
-        }?`}
-        message={
-          <p>
-            Deleting this section will permanently remove all data from the
-            current semester. Data from previous semesters will not be affected.{" "}
-            <br /> <span>Are you sure you want to deleted this section? </span>
-          </p>
-        }
+      <ModalEditCourse
+        opened={openModalEditCourse}
+        onClose={closeModalEditCourse}
+        isCourseManage={true}
+        value={editCourse}
+      />
+      <ModalManageIns
+        opened={openModalManageInst}
+        onClose={closeModalManageInst}
+        data={editCourse}
       />
       <MainPopup
         opened={openMainPopupDelCourse}
         onClose={closeMainPopupDelCourse}
-        action={() => onClickDeleteCourse(editCourse?.id!)}
+        action={() => onClickDeleteCourse(editCourse)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete course"
         title={`Delete ${editCourse?.courseNo} Course?`}
@@ -182,28 +181,32 @@ export default function CourseManagement() {
           </p>
         }
       />
-      <ModalManageIns
-        opened={openModalManageInst}
-        onClose={closeModalManageInst}
-        data={editCourse}
-      />
-      <ModalEditCourse
-        opened={openModalEditCourse}
-        onClose={closeModalEditCourse}
-        isCourseManage={true}
-        value={editCourse}
-      />
       <ModalEditSection
-        opened={modalEditSection && editCourse}
+        opened={modalEditSection}
         onClose={closeModalEditSection}
         isCourseManage={true}
-        title={`Edit section ${
-          editCourse && getSectionNo(editCourse.sectionNo)
-        } in ${editCourse && editCourse.courseNo}`}
-        value={editCourse}
-        fetchCourse={fetchCourse}
+        title={`Edit section ${getSectionNo(editSec?.sectionNo)} in ${
+          editSec?.courseNo
+        }`}
+        value={editSec}
       />
-
+      <MainPopup
+        opened={openMainPopupDelSec}
+        onClose={closeMainPopupDelSec}
+        action={() => onClickDeleteSec(editSec)}
+        type={POPUP_TYPE.DELETE}
+        labelButtonRight="Delete section"
+        title={`Delete seciton ${getSectionNo(editSec?.sectionNo)} in ${
+          editSec?.courseNo
+        }?`}
+        message={
+          <p>
+            Deleting this section will permanently remove all data from the
+            current semester. Data from previous semesters will not be affected.{" "}
+            <br /> <span>Are you sure you want to deleted this section? </span>
+          </p>
+        }
+      />
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
         <div className="flex flex-col  items-start ">
           <p className="text-secondary text-[16px] font-bold">Dashboard</p>
@@ -292,7 +295,6 @@ export default function CourseManagement() {
                               className="h-4 w-4"
                               IconComponent={ManageAdminIcon}
                             />
-
                             <span>Manage instructor</span>
                           </div>
                         </Menu.Item>
@@ -301,6 +303,7 @@ export default function CourseManagement() {
                           onClick={() => {
                             setEditCourse({
                               id: course.id,
+                              academicYear: academicYear.id,
                               courseNo: course.courseNo,
                             });
                             openedMainPopupDelCourse();
@@ -373,12 +376,21 @@ export default function CourseManagement() {
                         <div className="flex justify-end gap-4 items-center">
                           <div
                             onClick={() => {
-                              setEditCourse({
-                                ...sec,
-                                ...course,
-                                semester: sec.semester.map((e: any) =>
-                                  e.toString()
-                                ),
+                              setEditSec({
+                                academicYear: academicYear.id,
+                                id: course.id,
+                                courseNo: course.courseNo,
+                                secId: sec.id,
+                                oldSectionNo: sec.sectionNo,
+                                type: course.type,
+                                isActive: sec.isActive,
+                                data: {
+                                  topic: sec.topic,
+                                  sectionNo: sec.sectionNo,
+                                  semester: sec.semester.map((e: any) =>
+                                    e.toString()
+                                  ),
+                                },
                               });
                               openModalEditSection();
                             }}
@@ -388,12 +400,14 @@ export default function CourseManagement() {
                           </div>
                           <div
                             onClick={() => {
-                              setDelSec({
+                              setEditSec({
+                                academicYear: academicYear.id,
                                 id: course.id,
+                                courseNo: course.courseNo,
                                 secId: sec.id,
                                 sectionNo: sec.sectionNo,
                               });
-                              openedMainPopup();
+                              openedMainPopupDelSec();
                             }}
                             className="flex justify-center items-center bg-transparent border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"
                           >

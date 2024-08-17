@@ -19,7 +19,6 @@ import {
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import { SEMESTER } from "@/helpers/constants/enum";
-import { isNumber } from "lodash";
 import { useAppSelector } from "@/store";
 import {
   validateCourseNameorTopic,
@@ -707,7 +706,6 @@ export default function ModalAddCourse({
               <p className="text-b3">Course owner: {getUserName(user, 1)}</p>
             </div>
             <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-scroll ">
-              {" "}
               <div className="flex flex-col gap-3 mt-3   font-medium text-[12px]">
                 {form.getValues().sections?.map((sec, index) => (
                   <div

@@ -5,13 +5,18 @@ import {
   validateCourseNameorTopic,
   validateSectionNo,
 } from "@/helpers/functions/validation";
-import { getSectionNo, showNotifications } from "@/helpers/functions/function";
-import { useAppSelector } from "@/store";
+import { showNotifications } from "@/helpers/functions/function";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { IModelSection } from "@/models/ModelSection";
 import { updateSection } from "@/services/section/section.service";
 import { IModelSectionManagement } from "@/models/ModelCourseManagement";
 import { COURSE_TYPE, SEMESTER } from "@/helpers/constants/enum";
-import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
+import {
+  getOneCourseManagement,
+  updateSectionManagement,
+} from "@/services/courseManagement/courseManagement.service";
+import { editSectionManagement } from "@/store/courseManagement";
+import { editSection } from "@/store/course";
 
 type Props = {
   opened: boolean;
@@ -21,7 +26,6 @@ type Props = {
   value:
     | (Partial<IModelSection | IModelSectionManagement> & Record<string, any>)
     | undefined;
-  fetchCourse: () => void;
 };
 
 export default function ModalEditSection({
@@ -30,9 +34,9 @@ export default function ModalEditSection({
   isCourseManage = false,
   title,
   value,
-  fetchCourse,
 }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const dispatch = useAppDispatch();
   const [openThisTerm, setOpenThisTerm] = useState(false);
   const [semester, setSemester] = useState<string[]>([]);
   const form = useForm({
@@ -59,18 +63,20 @@ export default function ModalEditSection({
     };
 
     if (opened && value) {
-      form.setValues(value);
+      form.setValues(value.data);
       setOpenThisTerm(
         (value.isActive &&
-          (value.semester as string[])?.includes(
+          (value.data.semester as string[])?.includes(
             academicYear.semester.toString()
           )) ??
           false
       );
-      if (value.semester) setSemester(value.semester as string[]);
+      if (value.data.semester) setSemester(value.data.semester as string[]);
       if (!isCourseManage) fetchCourseManagement();
     } else {
       form.reset();
+      setOpenThisTerm(false);
+      setSemester([]);
     }
   }, [opened, value]);
 
@@ -82,18 +88,45 @@ export default function ModalEditSection({
   }, [openThisTerm]);
 
   const submit = async () => {
-    let payload = form.getValues();
-    payload.data = {};
-    payload.data.sectionNo = parseInt(payload.sectionNo?.toString()!);
+    let payload: any = { ...value, data: {} };
+    if (value?.type == COURSE_TYPE.SEL_TOPIC) {
+      payload.data.topic = form.getValues().topic;
+    }
+    payload.data.sectionNo = parseInt(form.getValues().sectionNo?.toString()!);
     payload.data.semester = semester.map((term) => parseInt(term));
     const id = payload.id;
     delete payload.id;
-    const res = await updateSection(id!, payload);
+    let res;
+    if (isCourseManage) {
+      const secId = payload.secId;
+      delete payload.secId;
+      res = await updateSectionManagement(id!, secId, payload);
+      if (res) {
+        dispatch(editSectionManagement({ id, secId, data: payload.data }));
+        dispatch(
+          editSection({
+            id: res.courseId,
+            secId: res.secId,
+            data: payload.data,
+          })
+        );
+      }
+    } else {
+      res = await updateSection(id!, payload);
+      if (res) {
+        dispatch(
+          editSection({
+            id: payload.courseId,
+            secId: id,
+            data: payload.data,
+          })
+        );
+      }
+    }
     if (res) {
       onClose();
       setOpenThisTerm(false);
       setSemester([]);
-      fetchCourse();
       showNotifications("success", "Edit Section", "Edit section successful");
     }
   };

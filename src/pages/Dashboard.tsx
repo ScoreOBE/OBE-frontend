@@ -105,13 +105,13 @@ export default function Dashboard() {
     const res = await deleteCourse(id);
     if (res) {
       dispatch(removeCourse(res.id));
+      closeMainPopup();
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Delete Course Success",
+        `${delCourse?.courseNo} is deleted`
+      );
     }
-    closeMainPopup();
-    showNotifications(
-      NOTI_TYPE.SUCCESS,
-      "Delete Course Success",
-      `${delCourse?.courseNo} is deleted`
-    );
   };
 
   const goToCourse = (courseNo: string) => {

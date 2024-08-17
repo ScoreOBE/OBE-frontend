@@ -25,11 +25,15 @@ export const courseManagementController = (configService = {}) => {
     ) => {
       return service.put(`${prefix}/${id}/${section}`, { ...params });
     },
-    deleteCourseManagement: async (id: string) => {
-      return service.delete(`${prefix}/${id}`, {});
+    deleteCourseManagement: async (id: string, params: any) => {
+      return service.delete(`${prefix}/${id}`, { ...params });
     },
-    deleteSectionManagement: async (id: string, section: string) => {
-      return service.delete(`${prefix}/${id}/${section}`, {});
+    deleteSectionManagement: async (
+      id: string,
+      section: string,
+      params: any
+    ) => {
+      return service.delete(`${prefix}/${id}/${section}`, { ...params });
     },
   };
 };
