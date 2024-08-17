@@ -69,7 +69,7 @@ export const courseManagementSlice = createSlice({
             ? {
                 ...courseManagement,
                 sections: courseManagement.sections.filter(
-                  (sec) => sec !== action.payload.secId
+                  (sec) => sec.id !== action.payload.secId
                 ),
               }
             : courseManagement

@@ -11,7 +11,7 @@ import {
 } from "@tabler/icons-react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { getCourse, getOneCourse } from "@/services/course/course.service";
-import { setCourseList } from "@/store/course";
+import { removeSection, setCourseList } from "@/store/course";
 import { getSectionNo, showNotifications } from "@/helpers/functions/function";
 import PageError from "./PageError";
 import MainPopup from "@/components/Popup/MainPopup";
@@ -89,11 +89,11 @@ export default function Course() {
       const res = await deleteSection(id, editSec);
       if (res) {
         closeMainPopupDelCourse();
-        fetchCourse();
+        dispatch(removeSection({ id: editSec.courseId, secId: id }));
         showNotifications(
           NOTI_TYPE.SUCCESS,
           "Delete Course Success",
-          `${editSec?.sectionNo} is deleted`
+          `${getSectionNo(editSec?.sectionNo)} is deleted`
         );
       }
     }

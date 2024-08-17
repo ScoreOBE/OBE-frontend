@@ -55,6 +55,22 @@ export const courseSlice = createSlice({
         courses: state.courses.filter((course) => course.id != action.payload),
       };
     },
+    removeSection: (state, action) => {
+      return {
+        total: state.total - 1,
+        search: state.search,
+        courses: state.courses.map((course) =>
+          course.id === action.payload.id
+            ? {
+                ...course,
+                sections: course.sections.filter(
+                  (sec) => sec.id !== action.payload.secId
+                ),
+              }
+            : course
+        ),
+      };
+    },
   },
 });
 
@@ -64,6 +80,7 @@ export const {
   editCourse,
   editSection,
   removeCourse,
+  removeSection,
 } = courseSlice.actions;
 
 export default courseSlice.reducer;
