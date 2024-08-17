@@ -86,7 +86,7 @@ export default function ModalEditCourse({
           "flex flex-col justify-start   font-medium leading-[24px] text-[14px] item-center  overflow-hidden ",
       }}
     >
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col mt-2 gap-3">
         <TextInput
           classNames={{ input: "focus:border-primary" }}
           label="Course No."

@@ -507,10 +507,10 @@ export default function ModalAddCourse({
                     style={{
                       boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                     }}
-                    className="w-full p-3 bg-white rounded-md gap-2 flex flex-col "
+                    className="w-full justify-center p-3 py-4 bg-white rounded-md  flex flex-col "
                   >
                     <div className="flex flex-row items-center justify-between">
-                      <div className="gap-1 flex flex-col">
+                      <div className="gap-3 flex flex-col">
                         <span className="font-semibold">Open Semester</span>
                         <Checkbox
                           classNames={{
@@ -532,13 +532,14 @@ export default function ModalAddCourse({
                       </div>
                       <Checkbox.Group
                         classNames={{ error: "mt-2" }}
+                        className=" "
                         {...form.getInputProps(`sections.${index}.semester`)}
                         value={sec.semester}
                         onChange={(event) => {
                           setSemesterInSec(index, true, event);
                         }}
                       >
-                        <Group className="flex flex-row gap-1 justify-end ">
+                        <Group className=" items-center h-full flex flex-row gap-1 justify-end ">
                           {SEMESTER.map((item) => (
                             <Checkbox
                               key={item}
@@ -617,11 +618,11 @@ export default function ModalAddCourse({
                                 </Button>
                               </Menu.Target>
 
-                              <Menu.Dropdown className=" overflow-y-scroll max-h-[180px] h-fit">
-                                <Menu.Label className=" -translate-x-1">
+                              <Menu.Dropdown className=" overflow-y-scroll max-h-[220px] !w-[220px] h-fit">
+                                <Menu.Label className=" translate-x-1 mb-2">
                                   Can access
                                 </Menu.Label>
-                                <div className="flex flex-col pb-2 h-fit gap-2 w-full">
+                                <div className="flex flex-col pl-3  pb-2 h-fit gap-4 w-full">
                                   {sectionNoList.map((sectionNo, index) => (
                                     <Checkbox
                                       disabled={

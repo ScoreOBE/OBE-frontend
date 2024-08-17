@@ -39,6 +39,7 @@ import { IconGripVertical } from "@tabler/icons-react";
 import { COURSE_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import MainPopup from "@/components/Popup/MainPopup";
 import { validateCourseNo } from "@/helpers/functions/validation";
+import { useForm } from "@mantine/form";
 
 export default function MapPLO() {
   const { collection } = useParams();
@@ -52,8 +53,8 @@ export default function MapPLO() {
   const [getPLONo, setGetPLONo] = useState<number>();
   const [couresNo, setCouresNo] = useState("");
   const isFirstSemester =
-    ploList.semester === academicYear.semester &&
-    ploList.year === academicYear.year;
+    ploList.semester === academicYear?.semester &&
+    ploList.year === academicYear?.year;
   const [
     mainPopupDelPLO,
     { open: openMainPopupDelPLO, close: closeMainPopupDelPLO },
@@ -118,6 +119,17 @@ export default function MapPLO() {
     // }
   };
 
+  const form = useForm({
+    mode: "controlled",
+    initialValues: { courseNo: "" },
+    validate: {
+      courseNo: (value) => {
+        return validateCourseNo(value);
+      },
+    },
+    validateInputOnBlur: true,
+  });
+
   useEffect(() => {
     if (academicYear) {
       fetchPLO();
@@ -131,7 +143,6 @@ export default function MapPLO() {
   }, [ploList.data]);
 
   useEffect(() => {
-    console.log(state);
     if (state) {
       const plo = state;
       plo.forEach((e, index) => {
@@ -140,6 +151,13 @@ export default function MapPLO() {
       setPloList({ ...ploList, data: plo });
     }
   }, [state]);
+
+  useEffect(() => {
+    if (!modalAddCourse) {
+     form.reset();
+    }
+  }, [modalAddCourse]);
+
 
   const onShowMore = async () => {
     const res = await getCourseManagement({
@@ -175,18 +193,17 @@ export default function MapPLO() {
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
       >
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col mt-2 gap-3">
           <Textarea
             withAsterisk={true}
             label={
-              <p className="text-b2 flex gap-1">
+              <p className="text-b2 font-semibold flex gap-1">
                 PLO <span className="text-secondary">Thai language</span>
               </p>
             }
-            className="w-full border-none rounded-r-none "
-            style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+            className="w-full border-none   rounded-r-none "
             classNames={{
-              input: "flex !rounded-r-none h-[150px] p-3",
+              input: "flex  h-[150px] p-3 ",
               label: "flex pb-1",
             }}
             placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
@@ -194,14 +211,13 @@ export default function MapPLO() {
           <Textarea
             withAsterisk={true}
             label={
-              <p className="text-b2 flex gap-1 ">
+              <p className="text-b2 font-semibold flex gap-1 ">
                 PLO <span className="text-secondary">English language</span>
               </p>
             }
-            className="w-full border-none rounded-r-none "
-            style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+            className="w-full border-none rounded-r-none"
             classNames={{
-              input: "flex !rounded-r-none h-[150px] p-3",
+              input: "flex  h-[150px] p-3",
               label: "flex pb-1",
             }}
             placeholder="Ex. An ability to solve complex engineering problems."
@@ -314,9 +330,7 @@ export default function MapPLO() {
             withAsterisk
             placeholder="Ex. 26X4XX"
             maxLength={6}
-            value={couresNo}
-            error={validateCourseNo(couresNo)}
-            onChange={(event) => setCouresNo(event.target.value)}
+            {...form.getInputProps("courseNo")}
           />
 
           <div className="flex gap-2 mt-3 justify-end">

@@ -97,11 +97,6 @@
   width: fit-content !important;
 }
 
-.mantine-Checkbox-body {
-  height: 25px;
-  padding: 8px;
-}
-
 .mantine-Select-dropdown {
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px !important;
 }
@@ -279,6 +274,10 @@ Button:disabled {
 .mantine-Tabs-tabLabel[data-variant="pills"] {
   font-weight: 500;
   font-size: 10px !important;
+}
+
+.mantine-Input-input:focus {
+  border: 1px solid #5768d5 !important;
 }
 
 .tqf-in-progress {

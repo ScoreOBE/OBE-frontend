@@ -130,23 +130,23 @@ export default function CourseManagement() {
           <Loading />
         ) : (
           ploCollection.map((department) => (
-            <div className="bg-[#bfbfff3e] rounded-md flex gap-2 flex-col py-4 px-5">
-              <div className="flex flex-col  w-fit">
+            <div className="bg-[#bfbfff3e] rounded-md flex  flex-col py-4 px-5">
+              <div className="flex flex-col mb-4  w-fit">
                 <p className=" font-bold text-b2 text-secondary">
                   {department.departmentEN}
                 </p>
               </div>
               {department.collections.map((collection, index) => (
-                <>
+                <div className="flex flex-col">
                   <div
                     onClick={() => {
                       setCollection({ index, ...collection });
                       setOpenModal(true);
                     }}
-                    className="bg-white cursor-pointer hover:bg-[#fafafa] grid grid-cols-5 items-center justify-between first:rounded-t-md last:rounded-b-md rounded-md py-4 border-b-[1px] border-[#eeeeee] px-5"
+                    className="bg-white cursor-pointer hover:bg-[#fafafa] grid grid-cols-5 items-center first:rounded-t-md last:rounded-b-md justify-between  py-3 border-b-[1px] border-[#eeeeee] px-5"
                   >
                     {/* PLO List */}
-                    <div className="flex flex-col ">
+                    <div className="flex flex-col  ">
                       <p className="font-medium text-[13px] text-tertiary">
                         PLO Collection {index + 1}
                       </p>
@@ -175,7 +175,7 @@ export default function CourseManagement() {
                     {/* Button */}
                     <div className="flex justify-end gap-4 items-center"></div>
                   </div>
-                </>
+                </div>
               ))}
             </div>
           ))

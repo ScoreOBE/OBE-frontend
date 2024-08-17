@@ -60,8 +60,6 @@ export default function Navbar() {
           dispatch(setCourseManagementList(res));
         }
         break;
-      case ROUTE_PATH.PLO_MANAGEMENT:
-        break;
       default:
         break;
     }
@@ -97,7 +95,6 @@ export default function Navbar() {
           {[
             ROUTE_PATH.DASHBOARD_INS,
             ROUTE_PATH.COURSE_MANAGEMENT,
-            ROUTE_PATH.PLO_MANAGEMENT,
           ].includes(location) && (
             <div className="relative md:w-[400px] w-[220px]">
               <TextInput

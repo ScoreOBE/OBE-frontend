@@ -379,10 +379,10 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
                     style={{
                       boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                     }}
-                    className="w-full p-3 bg-white rounded-md gap-2 flex flex-col "
+                    className="w-full p-3 py-4 bg-white rounded-md gap-2 flex flex-col "
                   >
                     <div className="flex flex-row items-center justify-between">
-                      <div className="gap-1 flex flex-col">
+                      <div className="gap-3 flex flex-col">
                         <span className="font-semibold">Open Semester</span>
                         <Checkbox
                           classNames={{
