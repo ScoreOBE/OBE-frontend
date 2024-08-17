@@ -27,6 +27,7 @@ import { setLoading } from "@/store/loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { IModelSection } from "@/models/ModelSection";
 import { deleteSection } from "@/services/section/section.service";
+import ModalAddSection from "@/components/Modal/ModalAddSection";
 
 export default function Course() {
   const navigate = useNavigate();
@@ -46,14 +47,10 @@ export default function Course() {
   const [editSec, setEditSec] = useState<
     Partial<IModelSection> & Record<string, any>
   >({});
-  const [
-    openMainPopupDelCourse,
-    { open: openedMainPopupDelCourse, close: closeMainPopupDelCourse },
-  ] = useDisclosure(false);
-  const [
-    openModalEditSec,
-    { open: openedModalEditSec, close: closeModalEditSec },
-  ] = useDisclosure(false);
+  const [addSec, setAddSec] = useState<Partial<IModelCourse>>();
+  const [openMainPopupDelCourse, setOpenMainPopupDelCourse] = useState(false);
+  const [openModalEditSec, setOpenModalEditSec] = useState(false);
+  const [openModalAddSec, setOpenModalAddSec] = useState(false);
 
   useEffect(() => {
     if (!params.get("id") || !params.get("year") || !params.get("semester"))
@@ -88,7 +85,7 @@ export default function Course() {
     if (id) {
       const res = await deleteSection(id, editSec);
       if (res) {
-        closeMainPopupDelCourse();
+        setOpenMainPopupDelCourse(false);
         dispatch(removeSection({ id: editSec.courseId, secId: id }));
         showNotifications(
           NOTI_TYPE.SUCCESS,
@@ -103,12 +100,12 @@ export default function Course() {
     <>
       <ModalEditSection
         opened={openModalEditSec}
-        onClose={closeModalEditSec}
+        onClose={() => setOpenModalEditSec(false)}
         value={editSec}
       />
       <MainPopup
         opened={openMainPopupDelCourse}
-        onClose={closeMainPopupDelCourse}
+        onClose={() => setOpenMainPopupDelCourse(false)}
         action={() => onClickDeleteSec()}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete section"
@@ -123,6 +120,11 @@ export default function Course() {
           </p>
         }
       />
+      <ModalAddSection
+        opened={openModalAddSec}
+        onClose={() => setOpenModalAddSec(false)}
+        data={addSec!}
+      />
 
       {error.statusCode ? (
         <PageError />
@@ -135,7 +137,6 @@ export default function Course() {
               {course?.sections.length} Section
               {course?.sections.length! > 1 && "s"}
             </p>
-
             <div className="flex gap-5 items-center">
               {activeTerm && (
                 <Button
@@ -159,7 +160,13 @@ export default function Course() {
                   >
                     {activeTerm && (
                       <>
-                        <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px] ">
+                        <Menu.Item
+                          className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]"
+                          onClick={() => {
+                            setAddSec({ ...course });
+                            setOpenModalAddSec(true);
+                          }}
+                        >
                           <div className="flex items-center gap-2">
                             <IconPlus stroke={2} className="h-4 w-4" />
                             <span>Add section</span>
@@ -199,6 +206,9 @@ export default function Course() {
                       <p className="font-semibold text-sm">
                         Section {getSectionNo(sec.sectionNo)}
                       </p>
+                      <p className="text-xs font-medium text-gray-600">
+                        {sec?.topic}
+                      </p>
                       <div onClick={(event) => event.stopPropagation()}>
                         {activeTerm &&
                           (course.addFirstTime ? (
@@ -217,27 +227,27 @@ export default function Course() {
                                     "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                                 }}
                               >
-                                <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px] ">
-                                  <div
-                                    onClick={() => {
-                                      setEditSec({
-                                        id: sec.id,
-                                        courseId: course.id,
-                                        oldSectionNo: sec.sectionNo,
-                                        courseNo: course.courseNo,
-                                        type: course.type,
-                                        data: {
-                                          topic: sec.topic,
-                                          sectionNo: sec.sectionNo,
-                                          semester: sec.semester?.map((e) =>
-                                            e.toString()
-                                          ),
-                                        },
-                                      });
-                                      openedModalEditSec();
-                                    }}
-                                    className="flex items-center gap-2"
-                                  >
+                                <Menu.Item
+                                  className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]"
+                                  onClick={() => {
+                                    setEditSec({
+                                      id: sec.id,
+                                      courseId: course.id,
+                                      oldSectionNo: sec.sectionNo,
+                                      courseNo: course.courseNo,
+                                      type: course.type,
+                                      data: {
+                                        topic: sec.topic,
+                                        sectionNo: sec.sectionNo,
+                                        semester: sec.semester?.map((e) =>
+                                          e.toString()
+                                        ),
+                                      },
+                                    });
+                                    setOpenModalEditSec(true);
+                                  }}
+                                >
+                                  <div className="flex items-center gap-2">
                                     <IconPencilMinus
                                       stroke={1.5}
                                       className="h-4 w-4"
@@ -254,7 +264,7 @@ export default function Course() {
                                       courseNo: course.courseNo,
                                       sectionNo: sec.sectionNo,
                                     });
-                                    openedMainPopupDelCourse();
+                                    setOpenMainPopupDelCourse(true);
                                   }}
                                 >
                                   <div className="flex items-center gap-2">
