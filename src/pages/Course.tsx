@@ -60,7 +60,7 @@ export default function Course() {
       navigate(ROUTE_PATH.DASHBOARD_INS);
     else if (!courseList.length && params.get("id")) fetchCourse();
 
-    if (!course && courseNo) {
+    if (courseNo) {
       setCourse(courseList.find((e) => e.courseNo == courseNo));
     }
   }, [academicYear, courseList, params]);
@@ -105,7 +105,6 @@ export default function Course() {
         opened={openModalEditSec}
         onClose={closeModalEditSec}
         value={editSec}
-        fetchCourse={fetchCourse}
       />
       <MainPopup
         opened={openMainPopupDelCourse}
@@ -222,16 +221,18 @@ export default function Course() {
                                   <div
                                     onClick={() => {
                                       setEditSec({
+                                        id: sec.id,
                                         courseId: course.id,
+                                        oldSectionNo: sec.sectionNo,
                                         courseNo: course.courseNo,
                                         type: course.type,
-                                        id: sec.id,
-                                        oldSectionNo: sec.sectionNo,
-                                        topic: sec.topic,
-                                        sectionNo: sec.sectionNo,
-                                        semester: sec.semester?.map((e) =>
-                                          e.toString()
-                                        ),
+                                        data: {
+                                          topic: sec.topic,
+                                          sectionNo: sec.sectionNo,
+                                          semester: sec.semester?.map((e) =>
+                                            e.toString()
+                                          ),
+                                        },
                                       });
                                       openedModalEditSec();
                                     }}

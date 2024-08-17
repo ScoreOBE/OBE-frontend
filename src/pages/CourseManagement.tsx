@@ -45,7 +45,7 @@ export default function CourseManagement() {
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState<any>();
   const [editCourse, setEditCourse] = useState<any>();
-  const [delSec, setDelSec] = useState<
+  const [editSec, setEditSec] = useState<
     Partial<IModelSection> & Record<string, any>
   >();
   const [
@@ -115,7 +115,7 @@ export default function CourseManagement() {
       ...payload,
       page: payload.page + 1,
     });
-    if (res) {
+    if (res.length) {
       dispatch(addLoadMoreCourseManagement(res));
       setPayload({
         ...payload,
@@ -148,13 +148,24 @@ export default function CourseManagement() {
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Delete Section Success",
-        `${delSec?.sectionNo} is deleted`
+        `${editSec?.sectionNo} is deleted`
       );
     }
   };
 
   return (
     <>
+      <ModalEditCourse
+        opened={openModalEditCourse}
+        onClose={closeModalEditCourse}
+        isCourseManage={true}
+        value={editCourse}
+      />
+      <ModalManageIns
+        opened={openModalManageInst}
+        onClose={closeModalManageInst}
+        data={editCourse}
+      />
       <MainPopup
         opened={openMainPopupDelCourse}
         onClose={closeMainPopupDelCourse}
@@ -170,14 +181,23 @@ export default function CourseManagement() {
           </p>
         }
       />
+      <ModalEditSection
+        opened={modalEditSection}
+        onClose={closeModalEditSection}
+        isCourseManage={true}
+        title={`Edit section ${getSectionNo(editSec?.sectionNo)} in ${
+          editSec?.courseNo
+        }`}
+        value={editSec}
+      />
       <MainPopup
         opened={openMainPopupDelSec}
         onClose={closeMainPopupDelSec}
-        action={() => onClickDeleteSec(delSec)}
+        action={() => onClickDeleteSec(editSec)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete section"
-        title={`Delete seciton ${getSectionNo(delSec?.sectionNo)} in ${
-          delSec?.courseNo
+        title={`Delete seciton ${getSectionNo(editSec?.sectionNo)} in ${
+          editSec?.courseNo
         }?`}
         message={
           <p>
@@ -186,27 +206,6 @@ export default function CourseManagement() {
             <br /> <span>Are you sure you want to deleted this section? </span>
           </p>
         }
-      />
-      <ModalManageIns
-        opened={openModalManageInst}
-        onClose={closeModalManageInst}
-        data={editCourse}
-      />
-      <ModalEditCourse
-        opened={openModalEditCourse}
-        onClose={closeModalEditCourse}
-        isCourseManage={true}
-        value={editCourse}
-      />
-      <ModalEditSection
-        opened={modalEditSection && editCourse}
-        onClose={closeModalEditSection}
-        isCourseManage={true}
-        title={`Edit section ${
-          editCourse && getSectionNo(editCourse.sectionNo)
-        } in ${editCourse && editCourse.courseNo}`}
-        value={editCourse}
-        fetchCourse={fetchCourse}
       />
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
         <div className="flex flex-col  items-start ">
@@ -296,7 +295,6 @@ export default function CourseManagement() {
                               className="h-4 w-4"
                               IconComponent={ManageAdminIcon}
                             />
-
                             <span>Manage instructor</span>
                           </div>
                         </Menu.Item>
@@ -378,12 +376,21 @@ export default function CourseManagement() {
                         <div className="flex justify-end gap-4 items-center">
                           <div
                             onClick={() => {
-                              setEditCourse({
-                                ...sec,
-                                ...course,
-                                semester: sec.semester.map((e: any) =>
-                                  e.toString()
-                                ),
+                              setEditSec({
+                                academicYear: academicYear.id,
+                                id: course.id,
+                                courseNo: course.courseNo,
+                                secId: sec.id,
+                                oldSectionNo: sec.sectionNo,
+                                type: course.type,
+                                isActive: sec.isActive,
+                                data: {
+                                  topic: sec.topic,
+                                  sectionNo: sec.sectionNo,
+                                  semester: sec.semester.map((e: any) =>
+                                    e.toString()
+                                  ),
+                                },
                               });
                               openModalEditSection();
                             }}
@@ -393,8 +400,10 @@ export default function CourseManagement() {
                           </div>
                           <div
                             onClick={() => {
-                              setDelSec({
+                              setEditSec({
+                                academicYear: academicYear.id,
                                 id: course.id,
+                                courseNo: course.courseNo,
                                 secId: sec.id,
                                 sectionNo: sec.sectionNo,
                               });

@@ -29,6 +29,25 @@ export const courseSlice = createSlice({
         ),
       };
     },
+    editSection: (state, action) => {
+      return {
+        ...state,
+        courses: state.courses.map((course) =>
+          course.id === action.payload.id
+            ? {
+                ...course,
+                sections: course.sections
+                  .map((sec) =>
+                    sec.id === action.payload.secId
+                      ? { ...sec, ...action.payload.data }
+                      : sec
+                  )
+                  .sort((a, b) => a.sectionNo - b.sectionNo),
+              }
+            : course
+        ),
+      };
+    },
     removeCourse: (state, action) => {
       return {
         total: state.total - 1,
@@ -39,7 +58,12 @@ export const courseSlice = createSlice({
   },
 });
 
-export const { setCourseList, addLoadMoreCourse, editCourse, removeCourse } =
-  courseSlice.actions;
+export const {
+  setCourseList,
+  addLoadMoreCourse,
+  editCourse,
+  editSection,
+  removeCourse,
+} = courseSlice.actions;
 
 export default courseSlice.reducer;

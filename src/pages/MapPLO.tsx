@@ -110,7 +110,7 @@ export default function MapPLO() {
       ...payload,
       page: payload.page + 1,
     });
-    if (res) {
+    if (res.length) {
       setCourseManagement([...courseManagement, ...res]);
       setPayload({
         ...payload,
