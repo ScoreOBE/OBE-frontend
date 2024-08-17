@@ -18,6 +18,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
   const [searchValue, setSearchValue] = useState("");
   const [adminList, setAdminList] = useState<IModelUser[]>([]);
   const [adminFilter, setAdminFilter] = useState<IModelUser[]>([]);
+  const [isNewFetch, setIsNewFetch] = useState(false);
 
   useEffect(() => {
     if (opened) {
@@ -39,6 +40,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
     const payload: Partial<IModelUser> = { id, role: ROLE.INSTRUCTOR };
     const res = await updateAdmin(payload);
     if (res) {
+      setIsNewFetch(true);
       setAdminList(adminList.filter((admin) => admin.id !== res.id));
       const name = res.firstNameEN?.length ? getUserName(res, 1) : res.email;
       showNotifications(
@@ -66,6 +68,8 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
         <CompoMangeIns
           opened={opened}
           role={ROLE.ADMIN}
+          newFetch={isNewFetch}
+          setNewFetch={setIsNewFetch}
           setUserList={setAdminList}
           setUserFilter={setAdminFilter}
         />
