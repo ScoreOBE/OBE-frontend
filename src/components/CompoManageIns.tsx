@@ -14,6 +14,8 @@ import { IModelSection } from "@/models/ModelSection";
 type Props = {
   opened: boolean;
   role?: ROLE;
+  newFetch?: boolean;
+  setNewFetch?: (value: boolean) => void;
   change?: boolean;
   sections?: Partial<IModelSection>[] | undefined;
   action?: (input?: any, func?: any) => void;
@@ -24,6 +26,8 @@ type Props = {
 export default function CompoMangementIns({
   opened,
   role,
+  newFetch = false,
+  setNewFetch,
   change = false,
   sections,
   action,
@@ -69,6 +73,13 @@ export default function CompoMangementIns({
       });
     }
   }, [sections]);
+
+  useEffect(() => {
+    if (newFetch && setNewFetch) {
+      fetchIns();
+      setNewFetch(false);
+    }
+  }, [newFetch]);
 
   const fetchIns = async () => {
     let res = await getInstructor();
