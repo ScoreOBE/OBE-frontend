@@ -17,7 +17,7 @@ type Props = {
 };
 
 export default function DrawerPLOdes({ opened, onClose }: Props) {
-  const [ploNoList, setPloList] = useState<IModelPLONo[]>([]);
+  const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
   const user = useAppSelector((state) => state.user);
   const [isTH, setIsTH] = useState<string | null>("TH");
 
@@ -27,21 +27,12 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
       departmentCode: user.departmentCode,
     });
     if (res) {
-      setPloList(res.plos[0].collections[0].data);
-      console.log(res.plos[0].collections[0].data);
+      setPloList(res.plos[0].collections[0]);
+      console.log(res.plos[0].collections[0]);
     }
   };
 
   useEffect(() => {
-    //   const yearId = params.get("id");
-    //   const year = parseInt(params.get("year")!);
-    //   const semester = parseInt(params.get("semester")!);
-
-    //   if (academicYear.length) {
-    //     const acaYear = academicYear.find(
-    //       (e) => e.id == yearId && e.semester == semester && e.year == year
-    //     );
-    //   }
     if (opened) {
       fetchPLO();
     }
@@ -68,7 +59,7 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
                       </p>
 
                       <p className="text-[#909090] text-[12px] font-medium">
-                        PLO Collection 1
+                        PLO Collection
                       </p>
                     </div>
                   </Drawer.Title>
@@ -77,7 +68,7 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
 
                 <div className="flex w-full justify-between items-start ">
                   <p className="flex items-center font-medium text-tertiary h-9 text-[14px]">
-                    ABET Criteria
+                    {isTH === "TH" ? ploList.criteriaTH : ploList.criteriaEN}
                   </p>
                   <Tabs value={isTH} onChange={setIsTH} variant="pills">
                     <Tabs.List>
@@ -100,7 +91,7 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
             </Drawer.Header>
             <Drawer.Body className="flex flex-col gap-3 max-h-full overflow-y-auto ">
               {/* <div className="flex flex-col gap-3 w-full h-full overflow-y-auto"> */}
-              {ploNoList.map((plo) => (
+              {ploList.data?.map((plo) => (
                 <div className="flex flex-col gap-2 bg-[#eff0ff] px-6 py-4 text-[13px]  rounded-lg ">
                   <p className="text-[14px] font-semibold text-secondary">
                     PLO-{plo.no}

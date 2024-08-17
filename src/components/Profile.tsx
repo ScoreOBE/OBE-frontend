@@ -145,7 +145,7 @@ export default function Profile() {
               <Menu.Target>
                 <Menu.Item>
                   <div className="flex justify-between items-center gap-2">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-center">
                       <IconAdjustmentsHorizontal
                         className="size-5"
                         stroke={1.5}
