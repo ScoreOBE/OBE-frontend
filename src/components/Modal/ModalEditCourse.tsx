@@ -12,13 +12,13 @@ import { showNotifications } from "@/helpers/functions/function";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { editCourse } from "@/store/course";
 import { updateCourseManagement } from "@/services/courseManagement/courseManagement.service";
+import { editCourseManagement } from "@/store/courseManagement";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
   isCourseManage?: boolean;
   value: (Partial<IModelCourse> & Record<string, any>) | undefined;
-  fetchCourse?: () => void;
 };
 
 export default function ModalEditCourse({
@@ -26,7 +26,6 @@ export default function ModalEditCourse({
   onClose,
   isCourseManage = false,
   value,
-  fetchCourse,
 }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const dispatch = useAppDispatch();
@@ -56,14 +55,19 @@ export default function ModalEditCourse({
     if (isCourseManage) {
       payload.academicYear = academicYear.id;
       res = await updateCourseManagement(id, payload);
+      if (res) {
+        onClose();
+        dispatch(editCourseManagement(res));
+        dispatch(editCourse({ ...res, id: res.courseId }));
+        showNotifications("success", "Edit Course", "Edit coures successful");
+      }
     } else {
       res = await updateCourse(id, payload);
-    }
-    if (res) {
-      onClose();
-      if (fetchCourse) fetchCourse();
-      dispatch(editCourse({ id: res.id, ...payload }));
-      showNotifications("success", "Edit Course", "Edit coures successful");
+      if (res) {
+        onClose();
+        dispatch(editCourse(res));
+        showNotifications("success", "Edit Course", "Edit coures successful");
+      }
     }
   };
 

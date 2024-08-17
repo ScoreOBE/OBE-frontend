@@ -24,7 +24,7 @@ export default function CourseSidebar() {
   const path = useLocation().pathname;
   const courseNo = path.split("/").pop();
   const user = useAppSelector((state) => state.user);
-  const courseList = useAppSelector((state) => state.course);
+  const courseList = useAppSelector((state) => state.course.courses);
   const dispatch = useAppDispatch();
   const [course, setCourse] = useState<IModelCourse>();
   const [instructors, setInstructors] = useState<IModelUser[]>([]);
