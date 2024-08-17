@@ -192,7 +192,6 @@ export default function CourseManagement() {
         onClose={closeModalEditCourse}
         isCourseManage={true}
         value={editCourse}
-        fetchCourse={fetchCourse}
       />
       <ModalEditSection
         opened={modalEditSection && editCourse}
