@@ -3,8 +3,20 @@ import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import { getPLOs } from "@/services/plo/plo.service";
 import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
-import { Modal, ScrollArea, Table } from "@mantine/core";
-import InfiniteScroll from "react-infinite-scroll-component";
+import {
+  Button,
+  Modal,
+  ScrollArea,
+  Table,
+  Tabs,
+  TextInput,
+} from "@mantine/core";
+import ThIcon from "@/assets/icons/thai.svg?react";
+import EngIcon from "@/assets/icons/eng.svg?react";
+import Icon from "@/components/Icon";
+import { IconPlus } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import { COURSE_TYPE } from "@/helpers/constants/enum";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -12,9 +24,11 @@ export default function CourseManagement() {
   const [ploCollection, setPLOCollection] = useState<IModelPLOCollection[]>([]);
   const [totalPLOs, setTotalPLOs] = useState<number>(0);
   const [openModal, setOpenModal] = useState(false);
+  const [isTH, setIsTH] = useState<string | null>("TH");
   const [collection, setCollection] = useState<
     Partial<IModelPLO> & Record<string, any>
   >({});
+
   useEffect(() => {
     const fetchPLO = async () => {
       setLoading(true);
@@ -43,42 +57,73 @@ export default function CourseManagement() {
         size="75vw"
         centered
         classNames={{
-          content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
+          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
       >
-        <div className="flex flex-col overflow-y-auto h-full">
-          <Table verticalSpacing="sm" stickyHeader className="rounded-md">
-            <Table.Thead>
-              <Table.Tr className="bg-[#F4F5FE]">
-                <Table.Th>PLO</Table.Th>
-                <Table.Th>Description</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {collection.data?.map((ploNo, index) => (
-                <Table.Tr key={index}>
-                  <Table.Td className="py-4 font-bold pl-5">
-                    <p>{ploNo.no}</p>
-                  </Table.Td>
-                  <Table.Td className="py-4 pl-5 flex text-[#575757] gap-2  flex-col items-start">
-                    <p>{ploNo.descTH}</p>
-                    <p>{ploNo.descEN}</p>
-                  </Table.Td>
+        <div className="flex flex-col gap-4 overflow-hidden  h-full">
+          <div className="flex justify-between items-center">
+            <div>
+              {isTH === "TH" ? collection.criteriaTH : collection.criteriaEN}
+            </div>
+            <Tabs value={isTH} onChange={setIsTH} variant="pills">
+              <Tabs.List>
+                <Tabs.Tab value="TH">
+                  <div className="flex flex-row items-center gap-2 ">
+                    <Icon IconComponent={ThIcon} />
+                    ไทย
+                  </div>
+                </Tabs.Tab>
+                <Tabs.Tab value="EN">
+                  <div className="flex flex-row items-center gap-2 ">
+                    <Icon IconComponent={EngIcon} />
+                    Eng
+                  </div>
+                </Tabs.Tab>
+              </Tabs.List>
+            </Tabs>
+          </div>
+          <div className="flex flex-col rounded-lg border overflow-y-auto h-full">
+            <Table verticalSpacing="sm" stickyHeader className="rounded-md">
+              <Table.Thead>
+                <Table.Tr className="bg-[#F4F5FE]">
+                  <Table.Th>PLO</Table.Th>
+                  <Table.Th>Description</Table.Th>
                 </Table.Tr>
-              ))}
-            </Table.Tbody>
-          </Table>
+              </Table.Thead>
+              <Table.Tbody>
+                {collection.data?.map((ploNo, index) => (
+                  <Table.Tr key={index}>
+                    <Table.Td className="py-4 font-bold pl-5">
+                      <p>{ploNo.no}</p>
+                    </Table.Td>
+                    <Table.Td className="py-4 pl-5 flex text-[#575757] gap-2  flex-col items-start">
+                      {isTH === "TH" ? ploNo.descTH : ploNo.descEN}
+                    </Table.Td>
+                  </Table.Tr>
+                ))}
+              </Table.Tbody>
+            </Table>
+          </div>
         </div>
       </Modal>
 
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
-        <div className="flex flex-col  items-start ">
-          <p className="text-secondary text-[16px] font-bold">Dashboard</p>
-          <p className="text-tertiary text-[14px] font-medium">
-            {totalPLOs} Collection
-            {totalPLOs > 1 ? "s " : " "}
-          </p>
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col  items-start ">
+            <p className="text-secondary text-[16px] font-bold">Dashboard</p>
+            <p className="text-tertiary text-[14px] font-medium">
+              {totalPLOs} Collection
+              {totalPLOs > 1 ? "s " : " "}
+            </p>
+          </div>
+          <Button
+            color="#5768D5"
+            leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
+            className="rounded-[8px] text-[12px] h-[32px] w-fit "
+          >
+            Add Collection
+          </Button>
         </div>
         {/* Course Detail */}
         {loading ? (
@@ -128,23 +173,7 @@ export default function CourseManagement() {
                       <div className="flex gap-1"></div>
                     </div>
                     {/* Button */}
-                    <div className="flex justify-end gap-4 items-center">
-                      {/* <div
-                            className="bg-transparent border-[1px] border-secondary text-secondary size-8 bg-none rounded-full cursor-pointer hover:bg-secondary/10"
-                            onClick={() => {
-                              setEditCourse({
-                                courseNo: course.courseNo,
-                                ...sec,
-                              });
-                              openedModalManageInst();
-                            }}
-                          >
-                            <Icon IconComponent={ManageAdminIcon} />
-                          </div> */}
-
-                      {/* <div className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"></div>
-                      <div className="flex justify-center items-center bg-transparent border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"></div> */}
-                    </div>
+                    <div className="flex justify-end gap-4 items-center"></div>
                   </div>
                 </>
               ))}
