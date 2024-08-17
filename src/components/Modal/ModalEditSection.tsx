@@ -145,7 +145,7 @@ export default function ModalEditSection({
           "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center  overflow-hidden ",
       }}
     >
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col mt-2 gap-5">
         {value?.type === COURSE_TYPE.SEL_TOPIC && (
           <TextInput
             label="Topic"
@@ -167,10 +167,10 @@ export default function ModalEditSection({
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
-          className={`w-full p-3 bg-white mb-3 rounded-md gap-2 flex flex-col`}
+          className={`w-full p-3 py-4 bg-white mb-3 rounded-md gap-2 flex flex-col`}
         >
           <div className={`flex flex-row justify-between items-center`}>
-            <div className="gap-1 flex flex-col">
+            <div className="gap-3 flex flex-col">
               <span className="font-semibold text-[13px]">Open Semester</span>
               {isCourseManage && (
                 <Checkbox

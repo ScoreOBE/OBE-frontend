@@ -33,7 +33,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   const [term, setTerm] = useState<IModelAcademicYear>();
   const [checkedTQF3, setCheckedTQF3] = useState(true);
   const [checkedTQF5, setCheckedTQF5] = useState(false);
-  const [isCheck, setIsCheck] = useState(false);
   const [notCompleteTQF3List, setnotCompleteTQF3List] = useState<any[]>([]);
 
   useEffect(() => {
@@ -106,7 +105,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   const clickToggleTQF3 = (checked: any) => {
     setCheckedTQF3(checked);
     setCheckedTQF5(!checked);
-    setIsCheck(checked);
+
     if (checked) {
       onClickeToggleProcessTQF3(true);
     } else {
@@ -117,7 +116,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   const clickToggleTQF5 = (checked: any) => {
     setCheckedTQF5(checked);
     setCheckedTQF3(!checked);
-    setIsCheck(!checked);
+
   };
 
   return (
@@ -174,7 +173,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                 />
               </div>
             </div>
-            {isCheck ? (
+            {checkedTQF3 ? (
               <div className="w-full px-3 font-medium">
                 <p className="font-semibold text-[13px] text-tertiary">
                   When turn on TQF 5 edit
