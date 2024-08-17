@@ -33,12 +33,13 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
           admin.email.toLowerCase().includes(searchValue.toLowerCase())
       )
     );
-  }, [searchValue]);
+  }, [searchValue, adminList]);
 
   const deleteAdmin = async (id: string) => {
     const payload: Partial<IModelUser> = { id, role: ROLE.INSTRUCTOR };
     const res = await updateAdmin(payload);
     if (res) {
+      setAdminList(adminList.filter((admin) => admin.id !== res.id));
       const name = res.firstNameEN?.length ? getUserName(res, 1) : res.email;
       showNotifications(
         NOTI_TYPE.SUCCESS,

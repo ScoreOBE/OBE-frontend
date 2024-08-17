@@ -8,12 +8,7 @@ import { validateEmail } from "@/helpers/functions/validation";
 import { NOTI_TYPE, ROLE, TITLE_ROLE } from "@/helpers/constants/enum";
 import { IModelUser } from "@/models/ModelUser";
 import { getInstructor, updateAdmin } from "@/services/user/user.service";
-import {
-  getSectionNo,
-  getUserName,
-  showNotifications,
-  sortData,
-} from "@/helpers/functions/function";
+import { getUserName, showNotifications } from "@/helpers/functions/function";
 import { IModelSection } from "@/models/ModelSection";
 
 type Props = {
@@ -78,11 +73,11 @@ export default function CompoMangementIns({
   const fetchIns = async () => {
     let res = await getInstructor();
     if (res) {
-      res = !role
+      const list = !role
         ? res
-        : res.filter((e: any) => e.id != user.id && e.role === role);
+        : res.filter((e: any) => e.id != user.id && e.role === ROLE.INSTRUCTOR);
       setInstructorOption(
-        res.map((e: IModelUser) => {
+        list.map((e: IModelUser) => {
           return { label: getUserName(e, 1), value: e.id };
         })
       );
