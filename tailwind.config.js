@@ -9,6 +9,7 @@ export default {
         primary: "#6869ad",
         secondary: "#5768d5",
         tertiary: "#3e3e3e",
+        done: "#0eb092",
         edit: "F39D4E",
         hover: "#efefef",
       },
