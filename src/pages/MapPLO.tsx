@@ -392,7 +392,7 @@ export default function MapPLO() {
                     <Tooltip
                       multiline
                       label={
-                        <div className="text-black text-[13px] p-2 flex flex-col gap-2">
+                        <div className="text-[#333333] text-[13px] p-2 flex flex-col gap-2">
                           <div className="text-secondary font-bold text-[14px]">
                             PLO Collection {collection}
                           </div>
@@ -597,7 +597,7 @@ export default function MapPLO() {
                   <Table.Tbody>
                     {courseManagement.map((course, index) => (
                       <Table.Tr key={index}>
-                        <Table.Td className="py-4 font-bold pl-5">
+                        <Table.Td className="py-4 text-[#333333] text-b3 font-semibold pl-5">
                           {course.courseNo}
                         </Table.Td>
                         <Table.Td className="py-4 pl-5 flex items-start ">

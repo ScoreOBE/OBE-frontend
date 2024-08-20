@@ -360,7 +360,7 @@ export default function ModalAddCourse({
           label="Course Type"
           description="STEP 1"
         >
-          <p className="font-semibold mt-5 text-[15px]">
+          <p className="font-semibold text-[#333333] mt-5 text-[15px]">
             Select type of course
           </p>
 
@@ -383,7 +383,7 @@ export default function ModalAddCourse({
             <Button
               onClick={() => nextStep(COURSE_TYPE.SPECIAL)}
               color="#ffffff"
-              className="w-ful border-[1px] text-[13px]  border-secondary h-fit py-3 !text-[#000000] items-center rounded-[6px] flex justify-start"
+              className="w-ful border-[1px] text-[13px]  border-secondary h-fit py-3 !text-[#333333] items-center rounded-[6px] flex justify-start"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-[#3e3e3e]">
@@ -399,7 +399,7 @@ export default function ModalAddCourse({
             <Button
               onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC)}
               color="#ffffff"
-              className="w-ful border-[1px] text-[13px] border-secondary  h-fit py-3 !text-[#000000] items-center rounded-[6px] flex justify-start"
+              className="w-ful border-[1px] text-[13px] border-secondary  h-fit py-3 !text-[#333333] items-center rounded-[6px] flex justify-start"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start">Major Elective</span>{" "}
@@ -412,7 +412,7 @@ export default function ModalAddCourse({
             <Button
               onClick={() => nextStep(COURSE_TYPE.FREE)}
               color="#ffffff"
-              className="w-full border-[1px] h-fit py-3 text-[13px]   border-secondary items-start  !text-[#000000] rounded-[6px] flex justify-start"
+              className="w-full border-[1px] h-fit py-3 text-[13px]   border-secondary items-start  !text-[#333333] rounded-[6px] flex justify-start"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start">{COURSE_TYPE.FREE}</span>
