@@ -196,7 +196,7 @@ export default function Dashboard() {
                   No course found
                 </p>
                 <br />
-                <p className=" -mt-4 mb-6  text-black text-b2 break-words font-400 leading-relaxed">
+                <p className=" -mt-4 mb-6  text-[#333333] text-b2 break-words font-400 leading-relaxed">
                   It looks like you haven't added any courses yet. <br />
                   Click 'Add Course' button below to get started!
                 </p>
@@ -239,7 +239,7 @@ export default function Dashboard() {
                     onClick={() => goToCourse(item.courseNo)}
                   >
                     <div className="p-2.5 flex flex-col">
-                      <p className="font-semibold text-sm">{item.courseNo}</p>
+                      <p className="font-bold text-sm">{item.courseNo}</p>
                       <p className="text-xs font-medium text-gray-600">
                         {item.courseName}
                       </p>

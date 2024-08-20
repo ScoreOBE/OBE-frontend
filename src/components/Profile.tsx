@@ -80,7 +80,7 @@ export default function Profile() {
         <Menu.Target>
           <Button className="flex flex-row justify-end px-0 pl-4 h-10  bg-[#f5f5f5] items-center rounded-lg  cursor-pointer hover:bg-[#f0f0f0]">
             <div className="flex flex-col gap-1 text-end mr-3 text-[12px]">
-              <p className="text-black font-semibold">{getUserName(user)}</p>
+              <p className="text-[#333333] font-semibold">{getUserName(user)}</p>
               <p
                 className="font-medium"
                 style={{ color: getRoleColor(user.role) }}
@@ -100,7 +100,7 @@ export default function Profile() {
               <div className="flex flex-row p-4 py-3 gap-3">
                 <Icon className="pt-[5px]" IconComponent={ProfileIcon} />
                 <div className="flex flex-col text-[12px]   ">
-                  <p className="text-black font-semibold">
+                  <p className="text-[#333333] font-semibold">
                     {getUserName(user, 1)}
                   </p>
                   <p

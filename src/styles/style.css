@@ -73,6 +73,7 @@
 .mantine-Stepper-stepLabel {
   font-weight: 600;
   font-size: 1px;
+  color: #333333;
 }
 
 .mantine-Modal-title {
@@ -148,7 +149,7 @@
 
 .mantine-TextInput-label {
   font-size: 13px !important;
-  color: #000000 !important;
+  color: #424242 !important;
   font-weight: 600 !important;
 }
 
