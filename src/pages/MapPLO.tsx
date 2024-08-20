@@ -9,12 +9,14 @@ import {
   Modal,
   TextInput,
   Textarea,
+  Checkbox,
 } from "@mantine/core";
 import {
   IconEdit,
   IconPlus,
   IconInfoCircle,
   IconTrash,
+  IconCheck,
 } from "@tabler/icons-react";
 import Icon from "@/components/Icon";
 import { useEffect, useState } from "react";
@@ -49,9 +51,11 @@ export default function MapPLO() {
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState<any>();
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
+  const [ploListTest, setPloListTest] = useState<Partial<IModelPLO>>({});
   const [state, handlers] = useListState(ploList.data || []);
   const [getPLONo, setGetPLONo] = useState<number>();
   const [couresNo, setCouresNo] = useState("");
+  const [isMapPLO, setIsMapPLO] = useState(false);
   const isFirstSemester =
     ploList.semester === academicYear?.semester &&
     ploList.year === academicYear?.year;
@@ -74,6 +78,8 @@ export default function MapPLO() {
     });
     if (res) {
       setPloList(res.plos[0].collections[0]);
+      setPloListTest(res);
+      console.log(res);
     }
   };
   const [
@@ -97,6 +103,10 @@ export default function MapPLO() {
       fetchCourse(payloadCourse);
     }
   }, [user]);
+
+  // useEffect(() => {
+  //   console.log(ploListTest);
+  // }, [ploListTest]);
 
   const fetchCourse = async (payloadCourse: any) => {
     setLoading(true);
@@ -154,10 +164,9 @@ export default function MapPLO() {
 
   useEffect(() => {
     if (!modalAddCourse) {
-     form.reset();
+      form.reset();
     }
   }, [modalAddCourse]);
-
 
   const onShowMore = async () => {
     const res = await getCourseManagement({
@@ -554,23 +563,55 @@ export default function MapPLO() {
                 </div>
 
                 <div className="flex gap-3">
-                  <Button
-                    color="#F39D4E"
-                    leftSection={<IconEdit className="size-4" stroke={1.5} />}
-                    className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                  >
-                    Map PLO
-                  </Button>
-                  <Button
-                    color="#5768D5"
-                    leftSection={
-                      <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
-                    }
-                    className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                    onClick={openModalAddCourse}
-                  >
-                    Add Course
-                  </Button>
+                  {!isMapPLO && (
+                    <Button
+                      color="#5768D5"
+                      leftSection={
+                        <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
+                      }
+                      className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                      onClick={openModalAddCourse}
+                    >
+                      Add Course
+                    </Button>
+                  )}
+                  {!isMapPLO ? (
+                    <Button
+                      color="#F39D4E"
+                      leftSection={<IconEdit className="size-4" stroke={1.5} />}
+                      className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                      onClick={() => {
+                        setIsMapPLO(true);
+                      }}
+                    >
+                      Map PLO
+                    </Button>
+                  ) : (
+                    <div className="flex gap-3">
+                      <Button
+                        variant="subtle"
+                        color="#575757"
+                        className="rounded-[8px] text-[12px] h-[32px] w-fit bg-[#e5e7eb] hover-[#e5e7eb]/10"
+                        onClick={() => {
+                          setIsMapPLO(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        color="#0eb092"
+                        leftSection={
+                          <IconCheck className="size-4" stroke={2} />
+                        }
+                        className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                        onClick={() => {
+                          setIsMapPLO(false);
+                        }}
+                      >
+                        Done
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
               {/* Table */}
@@ -584,7 +625,7 @@ export default function MapPLO() {
                 style={{ height: "fit-content" }}
                 loader={<Loading />}
               >
-                <Table stickyHeader>
+                <Table stickyHeader striped>
                   <Table.Thead>
                     <Table.Tr className="bg-[#F4F5FE]">
                       <Table.Th>Course No.</Table.Th>
@@ -600,9 +641,28 @@ export default function MapPLO() {
                         <Table.Td className="py-4 text-[#333333] text-b3 font-semibold pl-5">
                           {course.courseNo}
                         </Table.Td>
-                        <Table.Td className="py-4 pl-5 flex items-start ">
-                          <Icon IconComponent={CheckIcon} />
-                        </Table.Td>
+
+                        {ploList.data?.map((plo, index) => (
+                          <Table.Td key={index}>
+                            <div className="flex items-start">
+                              {!isMapPLO ? (
+                                <Icon IconComponent={CheckIcon} />
+                              ) : (
+                                <Checkbox
+                                  classNames={{
+                                    input:
+                                      "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                                    body: "mr-3 px-0",
+                                    label:
+                                      "text-[14px] text-[#615F5F] cursor-pointer",
+                                  }}
+                                  color="#5768D5"
+                                  size="xs"
+                                />
+                              )}
+                            </div>
+                          </Table.Td>
+                        ))}
                       </Table.Tr>
                     ))}
                   </Table.Tbody>

@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import { getPLOs } from "@/services/plo/plo.service";
 import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
+import ModalAddPLOCollection from "@/components/Modal/ModalPLOCollection";
 import {
   Button,
+  Group,
   Modal,
+  Radio,
   ScrollArea,
   Table,
   Tabs,
@@ -28,6 +31,18 @@ export default function CourseManagement() {
   const [collection, setCollection] = useState<
     Partial<IModelPLO> & Record<string, any>
   >({});
+  const [checked, setChecked] = useState(false);
+  const [isDupliPLO, setIsDupliPLO] = useState(false);
+  const [ploCollectDupli, setPLOCollectionDupli] = useState<
+    IModelPLOCollection[]
+  >([]);
+
+  const [modalAddPLO, { open: openModalAddPLO, close: closeModalAddPLO }] =
+    useDisclosure(false);
+  const [
+    modalDupilcatePLO,
+    { open: openModalDupilcatePLO, close: closeModalDupilcatePLO },
+  ] = useDisclosure(false);
 
   useEffect(() => {
     const fetchPLO = async () => {
@@ -39,6 +54,7 @@ export default function CourseManagement() {
       if (res) {
         setTotalPLOs(res.totalCount);
         setPLOCollection(res.plos);
+        console.log(res);
       }
       setLoading(false);
     };
@@ -108,6 +124,98 @@ export default function CourseManagement() {
         </div>
       </Modal>
 
+      <Modal
+        title={
+          <div className="flex flex-col gap-1">
+            <p>Add PLO Collection </p>
+            {/* <p className="text-[#909090] text-[12px] font-medium">PLO Name</p> */}
+          </div>
+        }
+        opened={modalDupilcatePLO}
+        onClose={closeModalDupilcatePLO}
+        transitionProps={{ transition: "pop" }}
+        size="35vw"
+        centered
+        classNames={{
+          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+          body: "flex flex-col overflow-hidden max-h-full h-fit",
+        }}
+      >
+        <div className="flex flex-col gap-5 pt-1">
+          <div className="w-full justify-center  bg-white rounded-md  flex flex-col ">
+            <div className="flex flex-col gap-3">
+              <div
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+                className="p-3 px-3 rounded-md"
+              >
+                <Radio
+                  value="sv"
+                  // checked={checked}
+                  // onChange={(event) => setChecked(event.currentTarget.checked)}
+                  label="Collection A"
+                />
+              </div>
+
+              <div
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+                className="p-3 px-3 rounded-md"
+              >
+                <Radio
+                  value="sv"
+                  // checked={checked}
+                  // onChange={(event) => setChecked(event.currentTarget.checked)}
+                  label="Collection B"
+                />
+              </div>
+
+              <div
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+                className="p-3 px-3 rounded-md"
+              >
+                <Radio
+                  value="sv"
+                  // checked={checked}
+                  // onChange={(event) => setChecked(event.currentTarget.checked)}
+                  label="Collection C"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2 justify-end w-full">
+            <Button
+              color="#575757"
+              variant="subtle"
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+              onClick={() => {
+                openModalAddPLO();
+                setIsDupliPLO(false);
+                closeModalDupilcatePLO();
+              }}
+            >
+              Skip
+            </Button>
+            <Button
+              onClick={() => {
+                openModalAddPLO();
+                setIsDupliPLO(true);
+                closeModalDupilcatePLO();
+              }}
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+              color="#5768d5"
+            >
+              Duplicate and Edit
+            </Button>
+          </div>
+        </div>
+      </Modal>
+      <ModalAddPLOCollection opened={modalAddPLO} onClose={closeModalAddPLO} />
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
         <div className="flex items-center justify-between">
           <div className="flex flex-col  items-start ">
@@ -121,6 +229,7 @@ export default function CourseManagement() {
             color="#5768D5"
             leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
             className="rounded-[8px] text-[12px] h-[32px] w-fit "
+            onClick={openModalDupilcatePLO}
           >
             Add Collection
           </Button>
