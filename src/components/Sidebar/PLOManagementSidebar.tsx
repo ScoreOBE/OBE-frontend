@@ -73,7 +73,7 @@ export default function PLOSidebar() {
                 onClick={() =>
                   navigate(
                     `${ROUTE_PATH.PLO_MANAGEMENT}/${collection.name.replace(
-                      /^[/]+$/,
+                      /\//g,
                       "-"
                     )}`
                   )
