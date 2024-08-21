@@ -90,12 +90,11 @@ export default function Navbar() {
   return (
     <>
       {![ROUTE_PATH.SELECTED_DEPARTMENT].includes(location) && (
-        <div className="min-h-14 border-b-[1px] border-[#e0e0e0] px-6 inline-flex flex-wrap justify-between items-center z-50 bg-[#f5f5f5] text-secondary text-h2">
-          <p className="font-semibold md:w-fit w-min">{topicPath()}</p>
-          {[
-            ROUTE_PATH.DASHBOARD_INS,
-            ROUTE_PATH.COURSE_MANAGEMENT,
-          ].includes(location) && (
+        <div className="min-h-14 border-b-[1px] border-[#e0e0e0] px-6 inline-flex flex-wrap justify-between items-center z-50 bg-[#f5f5f5] text-secondary">
+          <p className="font-semibold text-h2 md:w-fit max-w-[30%]">{topicPath()}</p>
+          {[ROUTE_PATH.DASHBOARD_INS, ROUTE_PATH.COURSE_MANAGEMENT].includes(
+            location
+          ) && (
             <div className="relative md:w-[400px] w-[220px]">
               <TextInput
                 autoFocus={false}
@@ -139,7 +138,7 @@ export default function Navbar() {
                   </div>
 
                   <div className="flex md:w-fit w-full justify-end items-center text-secondary gap-1">
-                    Press{" "}
+                    Press
                     <div className="ml-1 flex items-center gap-1 border border-secondary p-1 font-semibold rounded-[6px]">
                       Enter <AiOutlineEnter className="stroke-[50px]" />
                     </div>
@@ -149,7 +148,7 @@ export default function Navbar() {
             </div>
           )}
           {[ROUTE_PATH.LOGIN].includes(location) && (
-            <div className=" bg-white justify-start flex flex-1 items-start">
+            <div className="bg-white justify-start flex flex-1 items-start">
               OBEfully
             </div>
           )}

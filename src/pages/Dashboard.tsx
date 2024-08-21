@@ -24,6 +24,7 @@ import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
+import { IModelUser } from "@/models/ModelUser";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -135,9 +136,10 @@ export default function Dashboard() {
         title={`Delete ${delCourse?.courseNo} Course?`}
         message={
           <p>
-            After you delete a course. It's permanently deleted all data from the
-            current semester. Data from previous semesters will not be affected.
-            <br /> 
+            After you delete a course. It's permanently deleted all data from
+            the current semester. Data from previous semesters will not be
+            affected.
+            <br />
           </p>
         }
       />
@@ -243,58 +245,65 @@ export default function Dashboard() {
                       <p className="text-xs font-medium text-gray-600">
                         {item.courseName}
                       </p>
-                      {item.addFirstTime && term?.isActive && (
-                        <div onClick={(event) => event.stopPropagation()}>
-                          <Menu
-                            trigger="click"
-                            position="bottom-end"
-                            offset={2}
-                          >
-                            <Menu.Target>
-                              <IconDots className="absolute top-2 right-2 rounded-full hover:bg-gray-300" />
-                            </Menu.Target>
-                            <Menu.Dropdown
-                              className="rounded-md backdrop-blur-xl bg-white/70 "
-                              style={{
-                                boxShadow:
-                                  "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                              }}
+                      {item.sections.find(
+                        (sec) => (sec.instructor as IModelUser).id == user.id
+                      ) &&
+                        item.addFirstTime &&
+                        term?.isActive && (
+                          <div onClick={(event) => event.stopPropagation()}>
+                            <Menu
+                              trigger="click"
+                              position="bottom-end"
+                              offset={2}
                             >
-                              <Menu.Item
-                                onClick={() => {
-                                  setEditCourse({
-                                    id: item.id,
-                                    courseNo: item.courseNo,
-                                    courseName: item.courseName,
-                                  });
-                                  openedModalEditCourse();
-                                }}
-                                className="text-[#3E3E3E] font-semibold  text-b3 h-7 w-[180px]"
-                              >
-                                <div className="flex items-center gap-2">
-                                  <IconPencilMinus
-                                    stroke={1.5}
-                                    className="h-4 w-4"
-                                  />
-                                  <span>Edit Course</span>
-                                </div>
-                              </Menu.Item>
-                              <Menu.Item
-                                className="text-[#FF4747] h-7 w-[180px] font-semibold text-b3 hover:bg-[#d55757]/10"
-                                onClick={() => {
-                                  setDelCourse(item);
-                                  openedMainPopup();
+                              <Menu.Target>
+                                <IconDots className="absolute top-2 right-2 rounded-full hover:bg-gray-300" />
+                              </Menu.Target>
+                              <Menu.Dropdown
+                                className="rounded-md backdrop-blur-xl bg-white/70 "
+                                style={{
+                                  boxShadow:
+                                    "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                                 }}
                               >
-                                <div className="flex items-center gap-2">
-                                  <IconTrash className="h-4 w-4" stroke={1.5} />
-                                  <span>Delete Course</span>
-                                </div>
-                              </Menu.Item>
-                            </Menu.Dropdown>
-                          </Menu>
-                        </div>
-                      )}
+                                <Menu.Item
+                                  onClick={() => {
+                                    setEditCourse({
+                                      id: item.id,
+                                      courseNo: item.courseNo,
+                                      courseName: item.courseName,
+                                    });
+                                    openedModalEditCourse();
+                                  }}
+                                  className="text-[#3E3E3E] font-semibold  text-b3 h-7 w-[180px]"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <IconPencilMinus
+                                      stroke={1.5}
+                                      className="h-4 w-4"
+                                    />
+                                    <span>Edit Course</span>
+                                  </div>
+                                </Menu.Item>
+                                <Menu.Item
+                                  className="text-[#FF4747] h-7 w-[180px] font-semibold text-b3 hover:bg-[#d55757]/10"
+                                  onClick={() => {
+                                    setDelCourse(item);
+                                    openedMainPopup();
+                                  }}
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <IconTrash
+                                      className="h-4 w-4"
+                                      stroke={1.5}
+                                    />
+                                    <span>Delete Course</span>
+                                  </div>
+                                </Menu.Item>
+                              </Menu.Dropdown>
+                            </Menu>
+                          </div>
+                        )}
                     </div>
                     <div className="bg-[#e7eaff] flex h-8 items-center justify-between rounded-b-[4px]">
                       <p className="p-2.5 text-secondary font-semibold text-[12px]">

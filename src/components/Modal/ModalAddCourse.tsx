@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Stepper,
   Button,
@@ -36,6 +36,7 @@ import {
   sortData,
 } from "@/helpers/functions/function";
 import CompoMangementIns from "../CompoManageIns";
+import { IModelSection } from "@/models/ModelSection";
 
 type Props = {
   opened: boolean;
@@ -101,7 +102,7 @@ export default function ModalAddCourse({
           (!form.validateField("sections.0.topic").hasError ||
             form.getValues().type !== COURSE_TYPE.SEL_TOPIC);
         if (isValid) {
-          const res = await checkCanCreateCourse(setPayload());
+          const res = await checkCanCreateCourse(setPayload(false));
           if (!res) isValid = false;
         }
         break;
@@ -148,17 +149,19 @@ export default function ModalAddCourse({
     onClose();
   };
 
-  const setPayload = () => {
+  const setPayload = (add = true) => {
     let payload = {
       ...form.getValues(),
       academicYear: academicYear.id,
       updatedYear: academicYear.year,
       updatedSemester: academicYear.semester,
     };
-    payload.sections?.forEach((sec: any) => {
-      sec.semester = sec.semester?.map((term: string) => parseInt(term));
-      sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
-    });
+    if (add) {
+      payload.sections?.forEach((sec: any) => {
+        sec.semester = sec.semester?.map((term: string) => parseInt(term));
+        sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
+      });
+    }
     return payload;
   };
 
@@ -166,7 +169,11 @@ export default function ModalAddCourse({
     const res = await createCourse(setPayload());
     if (res) {
       closeModal();
-      showNotifications(NOTI_TYPE.SUCCESS, "Add course success", `${res.courseNo} is added`);
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Add course success",
+        `${res.courseNo} is added`
+      );
       fetchCourse(academicYear.id);
     }
   };
@@ -176,7 +183,7 @@ export default function ModalAddCourse({
     const lastValue = value[value.length - 1];
     const type = form.getValues().type;
     // validate section No
-    if (value.length >= sections.length) {
+    if (value.length && value.length >= sections.length) {
       if (
         !parseInt(lastValue) ||
         lastValue.length > 3 ||
@@ -186,51 +193,51 @@ export default function ModalAddCourse({
     }
     const sectionNo: string[] = value.sort((a, b) => parseInt(a) - parseInt(b));
     setSectionNoList(sectionNo.map((secNo) => getSectionNo(secNo)));
-    let newSections: any[] = [];
-    if (sections) {
-      // reset sections and instructors
-      if (!sectionNo.length) {
-        let initialSection = {};
-        if (type == COURSE_TYPE.SEL_TOPIC) {
-          initialSection = { topic: sections[0]?.topic };
-        }
-        setCoInsList([]);
-      }
-      // adjust coInstructors
-      else if (sections?.length! > sectionNo.length) {
-        coInsList.forEach((coIns) => {
-          coIns.sections = coIns.sections.filter((sec: string) =>
-            sectionNo.includes(sec)
-          );
-        });
-        setCoInsList(coInsList.filter((coIns) => coIns.sections.length > 0));
-      }
-      sectionNo.forEach((secNo) => {
-        const data: any = {
-          ...(sections.find((sec) => sec.sectionNo == parseInt(secNo)) || {}),
-          sectionNo: parseInt(secNo),
-          instructor: user.id,
-          coInstructors: coInsList.map((coIns) => ({ ...coIns })),
-        };
-        if (type == COURSE_TYPE.SEL_TOPIC) {
-          data.topic = sections[0]?.topic;
-        }
-        coInsList.forEach((coIns) => {
-          if (!coIns.sections.includes(getSectionNo(secNo))) {
-            coIns.sections.push(getSectionNo(secNo));
-            coIns.sections.sort(
-              (a: string, b: string) => parseInt(a) - parseInt(b)
-            );
-          }
-        });
-        newSections?.push(data);
-      });
+    // reset sections and instructors
+    let initialSection: Partial<IModelSection> = { semester: [] };
+    if (type == COURSE_TYPE.SEL_TOPIC) {
+      initialSection.topic = sections[0]?.topic;
     }
-    newSections.forEach((sec) =>
-      sortData(sec.coInstructors!, "label", "string")
-    );
-    sortData(newSections, "sectionNo");
-    form.setFieldValue("sections", [...newSections]);
+    if (!sectionNo.length) {
+      sections = [{ ...initialSection }];
+      setCoInsList([]);
+    } else if (sections?.length == sectionNo.length) {
+      sections[sectionNo.length - 1] = {
+        ...initialSection,
+        sectionNo: parseInt(lastValue),
+        instructor: user.id,
+        coInstructors: coInsList.map((coIns) => ({ ...coIns })),
+      };
+    }
+    // adjust coInstructors
+    else if (sectionNo.length > sections?.length) {
+      coInsList.forEach((coIns) => {
+        coIns.sections = coIns.sections.filter((sec: string) =>
+          sectionNo.includes(sec)
+        );
+      });
+      setCoInsList(coInsList.filter((coIns) => coIns.sections.length > 0));
+      sections.push({
+        ...initialSection,
+        sectionNo: parseInt(lastValue),
+        instructor: user.id,
+        coInstructors: coInsList.map((coIns) => ({ ...coIns })),
+      });
+    } else {
+      coInsList.forEach((coIns) => {
+        coIns.sections = coIns.sections.filter((sec: string) =>
+          sectionNo.includes(sec)
+        );
+      });
+      setCoInsList(coInsList.filter((coIns) => coIns.sections.length > 0));
+      sections = sections.filter((sec) =>
+        sectionNo.includes(getSectionNo(sec.sectionNo))
+      );
+    }
+
+    sections.forEach((sec) => sortData(sec.coInstructors!, "label", "string"));
+    sortData(sections, "sectionNo");
+    form.setFieldValue("sections", [...sections]);
   };
 
   const addCoIns = (
@@ -310,7 +317,7 @@ export default function ModalAddCourse({
   ) => {
     const semesterList: any[] =
       form.getValues().sections?.at(index)?.semester ?? [];
-    if (!semester) {
+    if (!semester?.length) {
       form.setFieldValue(`sections.${index}.openThisTerm`, checked);
       if (
         checked &&
@@ -500,8 +507,8 @@ export default function ModalAddCourse({
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary font-semibold">
-                    Select Semester for Section {getSectionNo(sec.sectionNo)}{" "}
-                    <span className="text-red-500">*</span>
+                    Select Semester for Section {getSectionNo(sec.sectionNo)}
+                    <span className="text-red-500"> *</span>
                   </span>
                   <div
                     style={{
@@ -532,7 +539,6 @@ export default function ModalAddCourse({
                       </div>
                       <Checkbox.Group
                         classNames={{ error: "mt-2" }}
-                        className=" "
                         {...form.getInputProps(`sections.${index}.semester`)}
                         value={sec.semester}
                         onChange={(event) => {
@@ -697,7 +703,7 @@ export default function ModalAddCourse({
           >
             <div className="bg-[#e6e9ff] flex flex-col justify-start gap-[2px] font-semibold  rounded-t-md border-b-secondary border-[1px] px-4 py-2 text-secondary ">
               <p>
-                {form.getValues().courseNo} - {form.getValues().courseName}{" "}
+                {form.getValues().courseNo} - {form.getValues().courseName}
               </p>
               {form.getValues().sections?.at(0)?.topic && (
                 <p className="text-secondary text-b3">
