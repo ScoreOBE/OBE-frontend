@@ -44,7 +44,7 @@ import { validateCourseNo } from "@/helpers/functions/validation";
 import { useForm } from "@mantine/form";
 
 export default function MapPLO() {
-  const { collection } = useParams();
+  const { name } = useParams();
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [params, setParams] = useSearchParams();
@@ -394,7 +394,7 @@ export default function MapPLO() {
                 <div className="flex flex-col items-start ">
                   <div className="flex items-center text-primary gap-1">
                     <p className="text-secondary text-[16px] font-bold">
-                      PLO Collection {collection}
+                      {ploList.name}
                     </p>
                     {/* Tooltip */}
 
@@ -403,7 +403,7 @@ export default function MapPLO() {
                       label={
                         <div className="text-[#333333] text-[13px] p-2 flex flex-col gap-2">
                           <div className="text-secondary font-bold text-[14px]">
-                            PLO Collection {collection}
+                            {ploList.name}
                           </div>
                           <div>
                             <p className="font-semibold">Active in:</p>
