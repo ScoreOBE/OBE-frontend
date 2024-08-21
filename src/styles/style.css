@@ -202,6 +202,7 @@
   font-weight: 500 !important;
 }
 
+
 Button:disabled {
   border-color: var(--color-border-input) !important;
   cursor: not-allowed !important;
