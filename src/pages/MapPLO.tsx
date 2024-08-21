@@ -1,10 +1,7 @@
 import {
   Button,
-  Select,
   Table,
   Tabs,
-  Drawer,
-  ScrollArea,
   Tooltip,
   Modal,
   TextInput,
@@ -23,35 +20,29 @@ import { useEffect, useState } from "react";
 import CheckIcon from "@/assets/icons/Check.svg?react";
 import { IModelCourseManagement } from "@/models/ModelCourseManagement";
 import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
-import CourseManagement from "./CourseManagement";
 import { useAppSelector } from "@/store";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
 import Loading from "@/components/Loading";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useDisclosure } from "@mantine/hooks";
-import DrawerPLOdes from "@/components/DrawerPLO";
-import { getPLOs } from "@/services/plo/plo.service";
+import { getPLOs, updatePLO } from "@/services/plo/plo.service";
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
-import { useParams, useSearchParams } from "react-router-dom";
-
-import { rem, Text } from "@mantine/core";
+import { rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { IconGripVertical } from "@tabler/icons-react";
-import { COURSE_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
+import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import MainPopup from "@/components/Popup/MainPopup";
 import { validateCourseNo } from "@/helpers/functions/validation";
 import { useForm } from "@mantine/form";
+import { showNotifications } from "@/helpers/functions/function";
 
 export default function MapPLO() {
-  const { name } = useParams();
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const [params, setParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState<any>();
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
-  const [ploListTest, setPloListTest] = useState<Partial<IModelPLO>>({});
+  const [reorder, setReorder] = useState(false);
   const [state, handlers] = useListState(ploList.data || []);
   const [getPLONo, setGetPLONo] = useState<number>();
   const [couresNo, setCouresNo] = useState("");
@@ -59,37 +50,24 @@ export default function MapPLO() {
   const isFirstSemester =
     ploList.semester === academicYear?.semester &&
     ploList.year === academicYear?.year;
-  const [
-    mainPopupDelPLO,
-    { open: openMainPopupDelPLO, close: closeMainPopupDelPLO },
-  ] = useDisclosure(false);
-  const [
-    modalAddPLONo,
-    { open: openModalAddPLONo, close: closeModalAddPLONo },
-  ] = useDisclosure(false);
-  const [
-    modalEditPLONo,
-    { open: openModalEditPLONo, close: closeModalEditPLONo },
-  ] = useDisclosure(false);
-  const fetchPLO = async () => {
-    let res = await getPLOs({
-      role: user.role,
-      departmentCode: user.departmentCode,
-    });
-    if (res) {
-      setPloList(res.plos[0].collections[0]);
-      setPloListTest(res);
-      console.log(res);
-    }
-  };
-  const [
-    modalAddCourse,
-    { open: openModalAddCourse, close: closeModalAddCourse },
-  ] = useDisclosure(false);
-
   const [courseManagement, setCourseManagement] = useState<
     IModelCourseManagement[]
   >([]);
+  const [openMainPopupDelPLO, setOpenMainPopupDelPLO] = useState(false);
+  const [openModalAddPLONo, setOpenModalAddPLONo] = useState(false);
+  const [openModalEditPLONo, setOpenModalEditPLONo] = useState(false);
+  const [openModalAddCourse, setOpenModalAddCourse] = useState(false);
+
+  const form = useForm({
+    mode: "controlled",
+    initialValues: { courseNo: "" },
+    validate: {
+      courseNo: (value) => {
+        return validateCourseNo(value);
+      },
+    },
+    validateInputOnBlur: true,
+  });
 
   useEffect(() => {
     if (user.departmentCode) {
@@ -104,9 +82,55 @@ export default function MapPLO() {
     }
   }, [user]);
 
-  // useEffect(() => {
-  //   console.log(ploListTest);
-  // }, [ploListTest]);
+  useEffect(() => {
+    if (academicYear) {
+      fetchPLO();
+    }
+  }, [academicYear]);
+
+  useEffect(() => {
+    if (!openModalAddCourse) {
+      form.reset();
+    }
+  }, [openModalAddCourse]);
+
+  useEffect(() => {
+    if (ploList.data) {
+      handlers.setState(ploList.data);
+    }
+  }, [ploList.data]);
+
+  useEffect(() => {
+    const reorderPLO = async (data: IModelPLONo[]) => {
+      const res = await updatePLO(ploList.id!, { data });
+      if (res) {
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Update PLO",
+          "Reorder PLO success"
+        );
+      }
+    };
+    if (reorder && state) {
+      const plo = state;
+      plo.forEach((e, index) => {
+        e.no = index + 1;
+      });
+      setPloList({ ...ploList, data: plo });
+      reorderPLO(plo);
+      setReorder(false);
+    }
+  }, [reorder]);
+
+  const fetchPLO = async () => {
+    let res = await getPLOs({
+      role: user.role,
+      departmentCode: user.departmentCode,
+    });
+    if (res) {
+      setPloList(res.plos[0].collections[0]);
+    }
+  };
 
   const fetchCourse = async (payloadCourse: any) => {
     setLoading(true);
@@ -128,45 +152,6 @@ export default function MapPLO() {
     //   );
     // }
   };
-
-  const form = useForm({
-    mode: "controlled",
-    initialValues: { courseNo: "" },
-    validate: {
-      courseNo: (value) => {
-        return validateCourseNo(value);
-      },
-    },
-    validateInputOnBlur: true,
-  });
-
-  useEffect(() => {
-    if (academicYear) {
-      fetchPLO();
-    }
-  }, [academicYear]);
-
-  useEffect(() => {
-    if (ploList.data) {
-      handlers.setState(ploList.data);
-    }
-  }, [ploList.data]);
-
-  useEffect(() => {
-    if (state) {
-      const plo = state;
-      plo.forEach((e, index) => {
-        e.no = index + 1;
-      });
-      setPloList({ ...ploList, data: plo });
-    }
-  }, [state]);
-
-  useEffect(() => {
-    if (!modalAddCourse) {
-      form.reset();
-    }
-  }, [modalAddCourse]);
 
   const onShowMore = async () => {
     const res = await getCourseManagement({
@@ -190,10 +175,10 @@ export default function MapPLO() {
       {/* Add PLO */}
       <Modal
         title="Add PLO"
-        opened={modalAddPLONo}
+        opened={openModalAddPLONo}
         closeOnClickOutside={false}
         withCloseButton={false}
-        onClose={closeModalAddPLONo}
+        onClose={() => setOpenModalAddPLONo(false)}
         transitionProps={{ transition: "pop" }}
         size="35vw"
         centered
@@ -234,7 +219,7 @@ export default function MapPLO() {
 
           <div className="flex gap-2 mt-3 justify-end">
             <Button
-              onClick={closeModalAddPLONo}
+              onClick={() => setOpenModalAddPLONo(false)}
               variant="subtle"
               color="#575757"
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
@@ -254,10 +239,10 @@ export default function MapPLO() {
       {/* Edit PLO */}
       <Modal
         title={`Edit PLO-${getPLONo}`}
-        opened={modalEditPLONo}
+        opened={openModalEditPLONo}
         withCloseButton={false}
         closeOnClickOutside={false}
-        onClose={closeModalEditPLONo}
+        onClose={() => setOpenModalEditPLONo(false)}
         transitionProps={{ transition: "pop" }}
         size="35vw"
         centered
@@ -300,7 +285,7 @@ export default function MapPLO() {
 
           <div className="flex gap-2 mt-3 justify-end">
             <Button
-              onClick={closeModalEditPLONo}
+              onClick={() => setOpenModalEditPLONo(false)}
               variant="subtle"
               color="#575757"
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
@@ -320,9 +305,9 @@ export default function MapPLO() {
       {/* Add Course */}
       <Modal
         title={`Add Course`}
-        opened={modalAddCourse}
+        opened={openModalAddCourse}
         withCloseButton={false}
-        onClose={closeModalAddCourse}
+        onClose={() => setOpenModalAddCourse(false)}
         transitionProps={{ transition: "pop" }}
         size="35vw"
         centered
@@ -344,7 +329,7 @@ export default function MapPLO() {
 
           <div className="flex gap-2 mt-3 justify-end">
             <Button
-              onClick={closeModalAddCourse}
+              onClick={() => setOpenModalAddCourse(false)}
               variant="subtle"
               color="#575757"
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
@@ -362,8 +347,8 @@ export default function MapPLO() {
         </div>
       </Modal>
       <MainPopup
-        opened={mainPopupDelPLO}
-        onClose={closeMainPopupDelPLO}
+        opened={openMainPopupDelPLO}
+        onClose={() => setOpenMainPopupDelPLO(false)}
         action={() => onClickDeletePLO(getPLONo)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete PLO"
@@ -448,7 +433,7 @@ export default function MapPLO() {
                       <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
                     }
                     className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                    onClick={openModalAddPLONo}
+                    onClick={() => setOpenModalAddPLONo(true)}
                   >
                     Add PLO
                   </Button>
@@ -461,6 +446,7 @@ export default function MapPLO() {
                     from: source.index,
                     to: destination?.index || 0,
                   });
+                  setReorder(true);
                 }}
               >
                 <Droppable droppableId="dnd-list" direction="vertical">
@@ -501,7 +487,7 @@ export default function MapPLO() {
                                   className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
                                   onClick={() => {
                                     setGetPLONo(item.no);
-                                    openModalEditPLONo();
+                                    setOpenModalEditPLONo(true);
                                   }}
                                 >
                                   <IconEdit
@@ -515,7 +501,7 @@ export default function MapPLO() {
                                     className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
                                     onClick={() => {
                                       setGetPLONo(item.no);
-                                      openMainPopupDelPLO();
+                                      setOpenMainPopupDelPLO(true);
                                     }}
                                   >
                                     <IconTrash
@@ -570,7 +556,7 @@ export default function MapPLO() {
                         <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
                       }
                       className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                      onClick={openModalAddCourse}
+                      onClick={() => setOpenModalAddCourse(true)}
                     >
                       Add Course
                     </Button>
