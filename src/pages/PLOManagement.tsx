@@ -20,6 +20,8 @@ import Icon from "@/components/Icon";
 import { IconPlus } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { COURSE_TYPE } from "@/helpers/constants/enum";
+import { isEmpty } from "lodash";
+import { useForm } from "@mantine/form";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -31,12 +33,8 @@ export default function CourseManagement() {
   const [collection, setCollection] = useState<
     Partial<IModelPLO> & Record<string, any>
   >({});
-  const [checked, setChecked] = useState(false);
-  const [isDupliPLO, setIsDupliPLO] = useState(false);
-  const [ploCollectDupli, setPLOCollectionDupli] = useState<
-    IModelPLOCollection[]
-  >([]);
-
+  const [ploCollectDupli, setPLOCollectionDupli] = useState<IModelPLO[]>([]);
+  const [selectPloDupli, setSelectPloDupli] = useState<Partial<IModelPLO>>({});
   const [modalAddPLO, { open: openModalAddPLO, close: closeModalAddPLO }] =
     useDisclosure(false);
   const [
@@ -44,24 +42,41 @@ export default function CourseManagement() {
     { open: openModalDupilcatePLO, close: closeModalDupilcatePLO },
   ] = useDisclosure(false);
 
-  useEffect(() => {
-    const fetchPLO = async () => {
-      setLoading(true);
-      const res = await getPLOs({
-        role: user.role,
-        departmentCode: user.departmentCode,
-      });
-      if (res) {
+  const fetchPLO = async (all = false) => {
+    setLoading(true);
+    const res = await getPLOs({
+      all,
+      role: user.role,
+      departmentCode: user.departmentCode,
+    });
+    if (res) {
+      if (all) {
+        setPLOCollectionDupli(res);
+      } else {
         setTotalPLOs(res.totalCount);
         setPLOCollection(res.plos);
-        console.log(res);
       }
-      setLoading(false);
-    };
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     if (user.id) {
       fetchPLO();
     }
   }, [user]);
+
+  // useEffect(() => {
+  //   if (ploCollectDupli) console.log(ploCollectDupli);
+  // }, [ploCollectDupli]);
+
+  useEffect(() => {
+    if (modalDupilcatePLO) {
+      fetchPLO(true);
+    } else if (!modalAddPLO) {
+      setSelectPloDupli({});
+    }
+  }, [modalAddPLO, modalDupilcatePLO]);
 
   return (
     <>
@@ -128,7 +143,6 @@ export default function CourseManagement() {
         title={
           <div className="flex flex-col gap-1">
             <p>Add PLO Collection</p>
-            {/* <p className="text-[#909090] text-[12px] font-medium">PLO Name</p> */}
           </div>
         }
         opened={modalDupilcatePLO}
@@ -141,52 +155,29 @@ export default function CourseManagement() {
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
       >
-        <div className="flex flex-col gap-5 pt-1">
-          <div className="w-full justify-center  bg-white rounded-md  flex flex-col ">
-            <div className="flex flex-col gap-3">
-              <div
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-                className="p-3 px-3 rounded-md"
-              >
+        <div className="flex flex-col gap-5 pt-1 w-full">
+          <Radio.Group
+            value={selectPloDupli.name}
+            onChange={(event) =>
+              setSelectPloDupli(
+                ploCollectDupli.find((plo) => plo.name === event) ?? {}
+              )
+            }
+          >
+            <Group className="flex flex-col gap-3">
+              {ploCollectDupli.map((plo, index) => (
                 <Radio
-                  value="sv"
-                  // checked={checked}
-                  // onChange={(event) => setChecked(event.currentTarget.checked)}
-                  label="Collection A"
+                  key={index}
+                  value={plo.name}
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                  }}
+                  className="p-3 px-3 rounded-md w-full"
+                  label={plo.name}
                 />
-              </div>
-
-              <div
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-                className="p-3 px-3 rounded-md"
-              >
-                <Radio
-                  value="sv"
-                  // checked={checked}
-                  // onChange={(event) => setChecked(event.currentTarget.checked)}
-                  label="Collection B"
-                />
-              </div>
-
-              <div
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-                className="p-3 px-3 rounded-md"
-              >
-                <Radio
-                  value="sv"
-                  // checked={checked}
-                  // onChange={(event) => setChecked(event.currentTarget.checked)}
-                  label="Collection C"
-                />
-              </div>
-            </div>
-          </div>
+              ))}
+            </Group>
+          </Radio.Group>
 
           <div className="flex gap-2 justify-end w-full">
             <Button
@@ -194,8 +185,8 @@ export default function CourseManagement() {
               variant="subtle"
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
               onClick={() => {
+                setSelectPloDupli({});
                 openModalAddPLO();
-                setIsDupliPLO(false);
                 closeModalDupilcatePLO();
               }}
             >
@@ -204,10 +195,10 @@ export default function CourseManagement() {
             <Button
               onClick={() => {
                 openModalAddPLO();
-                setIsDupliPLO(true);
                 closeModalDupilcatePLO();
               }}
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
+              disabled={isEmpty(selectPloDupli)}
               color="#5768d5"
             >
               Duplicate and Edit
@@ -215,7 +206,11 @@ export default function CourseManagement() {
           </div>
         </div>
       </Modal>
-      <ModalAddPLOCollection opened={modalAddPLO} onClose={closeModalAddPLO} />
+      <ModalAddPLOCollection
+        opened={modalAddPLO}
+        onClose={closeModalAddPLO}
+        collection={selectPloDupli}
+      />
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
         <div className="flex items-center justify-between">
           <div className="flex flex-col  items-start ">
@@ -238,10 +233,10 @@ export default function CourseManagement() {
         {loading ? (
           <Loading />
         ) : (
-          ploCollection.map((department) => (
+          ploCollection?.map((department, indexPLO) => (
             <div
               className="bg-[#bfbfff3e] rounded-md flex  flex-col py-4 px-5"
-              key={collection.name}
+              key={indexPLO}
             >
               <div className="flex flex-col mb-4  w-fit">
                 <p className=" font-bold text-b2 text-secondary">
@@ -249,7 +244,7 @@ export default function CourseManagement() {
                 </p>
               </div>
               {department.collections.map((collection, index) => (
-                <div className="flex flex-col">
+                <div className="flex flex-col" key={index}>
                   <div
                     onClick={() => {
                       setCollection({ index, ...collection });

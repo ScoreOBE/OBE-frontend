@@ -176,7 +176,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
               <IconUsers /> Added Semester
             </div>
             {/* Show List Of Semester */}
-            <div className="flex flex-col gap-2  w-full h-[500px]  p-4  overflow-y-hidden">
+            <div className="flex flex-col gap-2  w-full h-[400px]  p-4  overflow-y-hidden">
               <TextInput
                 leftSection={<TbSearch />}
                 size="xs"
@@ -235,7 +235,8 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                             color="#5768D5"
                             size="xs"
                             className={`rounded-lg ${
-                              semester.isActive && "border-none text-secondary bg-[#E5E8FF]"
+                              semester.isActive &&
+                              "border-none text-secondary bg-[#E5E8FF]"
                             }`}
                             disabled={semester.disabled}
                             onClick={() => {

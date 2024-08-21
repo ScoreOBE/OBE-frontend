@@ -97,7 +97,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
               rightSectionPointerEvents="all"
             />
             {/* List of Admin */}
-            <div className="flex flex-col overflow-y-scroll p-1">
+            <div className="flex flex-col overflow-y-auto p-1">
               {adminFilter.map((admin, index) => (
                 <div
                   key={index}
