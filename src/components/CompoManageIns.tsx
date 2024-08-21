@@ -127,8 +127,8 @@ export default function CompoMangementIns({
           fetchIns();
           showNotifications(
             NOTI_TYPE.SUCCESS,
-            "Success",
-            `${name} is an admin`
+            "Add success",
+            `${name} is added to admin`
           );
         }
       }

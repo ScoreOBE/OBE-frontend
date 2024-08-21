@@ -161,13 +161,13 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
         transitionProps={{ transition: "pop" }}
         classNames={{
           content:
-            "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-[90%] ",
+            "flex flex-col justify-start bg-[#F6F7FA] text-[14px]  item-center px-2 pb-2 overflow-hidden max-h-[90%] ",
         }}
       >
         <div className="flex flex-col gap-5 flex-1">
           {/* Added Semester */}
           <div
-            className="w-full  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
+            className="w-full  flex flex-col bg-white border-secondary  border-[1px]  rounded-md"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
@@ -176,7 +176,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
               <IconUsers /> Added Semester
             </div>
             {/* Show List Of Semester */}
-            <div className="flex flex-col gap-2  w-full h-[350px]  p-4  overflow-y-hidden">
+            <div className="flex flex-col gap-2  w-full h-[500px]  p-4  overflow-y-hidden">
               <TextInput
                 leftSection={<TbSearch />}
                 size="xs"
@@ -206,7 +206,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                         >
                           {index === 0 ? (
                             <div className="w-10">
-                              <p className="font-medium text-[#4E5150] text-[10px]">
+                              <p className="font-medium text-[#4E5150] text-[12px]">
                                 Year
                               </p>
                               <p className="font-semibold text-[#333333] text-[14px]">
@@ -235,7 +235,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                             color="#5768D5"
                             size="xs"
                             className={`rounded-lg ${
-                              semester.isActive && "border-none"
+                              semester.isActive && "border-none text-secondary bg-[#E5E8FF]"
                             }`}
                             disabled={semester.disabled}
                             onClick={() => {
@@ -271,6 +271,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
         centered
         onClose={() => setOpenActivateModal(false)}
       >
+        <div className="bg-[#f8c23a3f]">fkfkfkfk</div>
         <TextInput
           label={`To confirm, type "semester${activateSemester?.semester}year${activateSemester?.year}" in the box below`}
           value={textActivate}

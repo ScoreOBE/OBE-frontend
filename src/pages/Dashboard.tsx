@@ -135,9 +135,9 @@ export default function Dashboard() {
         title={`Delete ${delCourse?.courseNo} Course?`}
         message={
           <p>
-            Deleting this course will permanently remove all data from the
+            After you delete a course. It's permanently deleted all data from the
             current semester. Data from previous semesters will not be affected.
-            <br /> <span>Are you sure you want to deleted this course? </span>
+            <br /> 
           </p>
         }
       />
