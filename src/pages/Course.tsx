@@ -153,7 +153,7 @@ export default function Course() {
                     <IconDots />
                   </Menu.Target>
                   <Menu.Dropdown
-                    className="rounded-md backdrop-blur-xl bg-white/70 "
+                    className="rounded-md translate-y-1 backdrop-blur-xl bg-white "
                     style={{
                       boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                     }}
@@ -161,7 +161,7 @@ export default function Course() {
                     {activeTerm && (
                       <>
                         <Menu.Item
-                          className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]"
+                          className=" text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
                           onClick={() => {
                             setAddSec({ ...course });
                             setOpenModalAddSec(true);
@@ -172,7 +172,7 @@ export default function Course() {
                             <span>Add section</span>
                           </div>
                         </Menu.Item>
-                        <Menu.Item className=" font-semibold text-[12px] h-7 w-[180px]">
+                        <Menu.Item className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]">
                           <div className="flex items-center gap-2">
                             <Icon
                               className="h-4 w-4"

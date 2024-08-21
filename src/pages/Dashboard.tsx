@@ -1,8 +1,10 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { Button, Menu } from "@mantine/core";
+import { Alert } from "@mantine/core";
 import {
   IconDots,
+  IconInfoCircle,
   IconPencilMinus,
   IconPlus,
   IconTrash,
@@ -125,6 +127,8 @@ export default function Dashboard() {
     );
   };
 
+  const icon = <IconInfoCircle />;
+
   return (
     <>
       <MainPopup
@@ -133,14 +137,29 @@ export default function Dashboard() {
         action={() => onClickDeleteCourse(delCourse?.id!)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete course"
-        title={`Delete ${delCourse?.courseNo} Course?`}
+        title={`Delete course`}
         message={
-          <p>
-            After you delete a course. It's permanently deleted all data from
-            the current semester. Data from previous semesters will not be
-            affected.
-            <br />
-          </p>
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title=" After you delete this course, it's permanently deleted all data from
+            the current semester. Data from previous semesters will not be affected. 
+            "
+              icon={icon}
+              classNames={{ title: "-mt-[2px]" }}
+            ></Alert>
+            <div className="flex flex-col mt-3 gap-2">
+              <div className="flex flex-col  ">
+                <p className="text-b3 text-[#808080]">Course no.</p>
+                <p className="  -translate-y-[2px] text-b1">{`${delCourse?.courseNo}`}</p>
+              </div>
+              <div className="flex flex-col ">
+                <p className="text-b3  text-[#808080]">Course name</p>
+                <p className=" -translate-y-[2px] text-b1">{`${delCourse?.courseName}`}</p>
+              </div>
+            </div>
+          </>
         }
       />
       <ModalAddCourse

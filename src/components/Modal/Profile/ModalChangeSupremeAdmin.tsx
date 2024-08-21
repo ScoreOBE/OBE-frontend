@@ -68,7 +68,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       dispatch(setUser(res.user));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Success",
+        "Change success",
         `${name} is an supreme admin`
       );
       onClose();

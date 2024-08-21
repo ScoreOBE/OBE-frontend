@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { IModelSection } from "@/models/ModelSection";
 import { updateSection } from "@/services/section/section.service";
 import { IModelSectionManagement } from "@/models/ModelCourseManagement";
-import { COURSE_TYPE, SEMESTER } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE, SEMESTER } from "@/helpers/constants/enum";
 import {
   getOneCourseManagement,
   updateSectionManagement,
@@ -127,7 +127,7 @@ export default function ModalEditSection({
       onClose();
       setOpenThisTerm(false);
       setSemester([]);
-      showNotifications("success", "Edit Section", "Edit section successful");
+      showNotifications(NOTI_TYPE.SUCCESS, "Edit success", "Section no. or Section topic is edited");
     }
   };
 

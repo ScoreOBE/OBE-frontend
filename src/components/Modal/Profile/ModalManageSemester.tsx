@@ -161,7 +161,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
         transitionProps={{ transition: "pop" }}
         classNames={{
           content:
-            "flex flex-col justify-start bg-[#F6F7FA] text-[14px]  item-center px-2 pb-2 overflow-hidden max-h-[90%] ",
+            "flex flex-col justify-start bg-[#F6F7FA] text-[14px]  item-center px-2 pb-2 overflow-hidden max-h-[100%] ",
         }}
       >
         <div className="flex flex-col gap-5 flex-1">

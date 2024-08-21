@@ -1,7 +1,7 @@
 import { Button, Modal, TextInput } from "@mantine/core";
 import { useEffect } from "react";
 import { IModelCourse } from "@/models/ModelCourse";
-import { COURSE_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { useForm } from "@mantine/form";
 import {
   validateCourseNameorTopic,
@@ -56,18 +56,22 @@ export default function ModalEditCourse({
       payload.academicYear = academicYear.id;
       res = await updateCourseManagement(id, payload);
       if (res) {
-        onClose();
         dispatch(editCourseManagement(res));
         dispatch(editCourse({ ...res, id: res.courseId }));
-        showNotifications("success", "Edit Course", "Edit coures successful");
       }
     } else {
       res = await updateCourse(id, payload);
       if (res) {
-        onClose();
         dispatch(editCourse(res));
-        showNotifications("success", "Edit Course", "Edit coures successful");
       }
+    }
+    if (res) {
+      onClose();
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Edit success",
+        `Course no. or Course name is edited`
+      );
     }
   };
 

@@ -1,12 +1,13 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Menu } from "@mantine/core";
+import { Alert, Menu } from "@mantine/core";
 import {
   IconDots,
   IconTrash,
   IconEdit,
   IconPencilMinus,
   IconPlus,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import Icon from "@/components/Icon";
@@ -128,16 +129,16 @@ export default function CourseManagement() {
     }
   };
 
-  const onClickDeleteCourse = async (coures: any) => {
-    const res = await deleteCourseManagement(coures.id, coures);
+  const onClickDeleteCourse = async (course: any) => {
+    const res = await deleteCourseManagement(course.id, course);
     if (res) {
       closeMainPopupDelCourse();
       dispatch(removeCourseManagement(res.id));
       dispatch(removeCourse(res.courseId));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Delete Course Success",
-        `${coures.courseNo} is deleted`
+        "Delete success",
+        `${course.courseNo} is deleted`
       );
     }
   };
@@ -158,6 +159,8 @@ export default function CourseManagement() {
     }
   };
 
+  const icon = <IconInfoCircle />;
+
   return (
     <>
       <ModalEditCourse
@@ -177,13 +180,29 @@ export default function CourseManagement() {
         action={() => onClickDeleteCourse(editCourse)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete course"
-        title={`Delete ${editCourse?.courseNo} Course?`}
+        title={`Delete course`}
         message={
-          <p>
-            Deleting this course will permanently remove all data from the
-            current semester. Data from previous semesters will not be affected.{" "}
-            <br /> <span>Are you sure you want to deleted this course? </span>
-          </p>
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title=" After you delete this course, it's permanently deleted all data from
+          the current semester. Data from previous semesters will not be affected. 
+          "
+              icon={icon}
+              classNames={{ title: "-mt-[2px]" }}
+            ></Alert>
+            <div className="flex flex-col mt-3 gap-2">
+              <div className="flex flex-col  ">
+                <p className="text-b3 text-[#808080]">Course no.</p>
+                <p className="  -translate-y-[2px] text-b1">{`${editCourse?.courseNo}`}</p>
+              </div>
+              <div className="flex flex-col ">
+                <p className="text-b3  text-[#808080]">Course name</p>
+                <p className=" -translate-y-[2px] text-b1">{`${editCourse?.courseName}`}</p>
+              </div>
+            </div>
+          </>
         }
       />
       <ModalEditSection
@@ -201,15 +220,33 @@ export default function CourseManagement() {
         action={() => onClickDeleteSec(editSec)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete section"
-        title={`Delete seciton ${getSectionNo(editSec?.sectionNo)} in ${
-          editSec?.courseNo
-        }?`}
+        title={`Delete section`}
         message={
-          <p>
-            Deleting this section will permanently remove all data from the
-            current semester. Data from previous semesters will not be affected.{" "}
-            <br /> <span>Are you sure you want to deleted this section? </span>
-          </p>
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title=" After you delete this section, it's permanently deleted all data from
+          the current semester. Data from previous semesters will not be affected. 
+          "
+              icon={icon}
+              classNames={{ title: "-mt-[2px]" }}
+            ></Alert>
+            <div className="flex flex-col mt-3 gap-2">
+              <div className="flex flex-col  ">
+                <p className="text-b3 text-[#808080]">Course no.</p>
+                <p className="  -translate-y-[2px] text-b1">{`${editSec?.courseNo}`}</p>
+              </div>
+              <div className="flex flex-col ">
+                <p className="text-b3  text-[#808080]">Course name</p>
+                <p className=" -translate-y-[2px] text-b1">{`${editSec?.courseName}`}</p>
+              </div>
+              <div className="flex flex-col ">
+                <p className="text-b3  text-[#808080]">Section</p>
+                <p className=" -translate-y-[2px] text-b1">{`${getSectionNo(editSec?.sectionNo)}`}</p>
+              </div>
+            </div>
+          </>
         }
       />
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
@@ -310,6 +347,7 @@ export default function CourseManagement() {
                               id: course.id,
                               academicYear: academicYear.id,
                               courseNo: course.courseNo,
+                              courseName: course.courseName,
                             });
                             openedMainPopupDelCourse();
                           }}
@@ -405,16 +443,20 @@ export default function CourseManagement() {
                           </div>
                           <div
                             onClick={() => {
-                              setEditSec({
-                                id: course.id,
-                                academicYear: academicYear.id,
-                                courseNo: course.courseNo,
-                                secId: sec.id,
-                                sectionNo: sec.sectionNo,
-                              });
-                              openedMainPopupDelSec();
+                              if (course.sections.length > 1) {
+                                setEditSec({
+                                  id: course.id,
+                                  academicYear: academicYear.id,
+                                  courseNo: course.courseNo,
+                                  courseName: course.courseName,
+                                  secId: sec.id,
+                                  sectionNo: sec.sectionNo,
+                                });
+                                openedMainPopupDelSec();
+                              }
                             }}
-                            className="flex justify-center items-center bg-transparent border-[1px] border-[#FF4747] text-[#FF4747] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#FF4747]/10"
+                            className={`flex  justify-center items-center bg-transparent border-[1px]  size-8 bg-none rounded-full  
+                              ${course.sections.length > 1 ? 'cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10' : 'cursor-not-allowed bg-[#f1f3f5] text-[#adb5bd] border-[#adb5bd]'}`}
                           >
                             <IconTrash className="size-4" stroke={1.5} />
                           </div>

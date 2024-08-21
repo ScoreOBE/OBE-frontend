@@ -111,7 +111,7 @@ export const showNotifications = (
   notifications.show({
     title,
     message,
-    autoClose: 3000,
+    autoClose: 5000,
     withCloseButton: false,
     className,
     color,
