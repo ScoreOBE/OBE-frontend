@@ -34,7 +34,6 @@ function App() {
   const error = useAppSelector((state) => state.errorResponse);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
-  const course = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();
   const path = useLocation().pathname;
   const [params, setParams] = useSearchParams();
@@ -74,7 +73,7 @@ function App() {
         location.pathname
       ) &&
       !matchPath(
-        { path: `${ROUTE_PATH.PLO_MANAGEMENT}/:collection`, end: true },
+        { path: `${ROUTE_PATH.PLO_MANAGEMENT}/:name`, end: true },
         location.pathname
       );
     setShowSidebar(!isPageNotFound && !routesWithoutSidebar.includes(path));
@@ -131,7 +130,7 @@ function App() {
           />
           <Route path={ROUTE_PATH.PLO_MANAGEMENT} element={<PLOManagement />} />
           <Route
-            path={`${ROUTE_PATH.PLO_MANAGEMENT}/:collection`}
+            path={`${ROUTE_PATH.PLO_MANAGEMENT}/:name`}
             element={<MapPLO />}
           />
           <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />

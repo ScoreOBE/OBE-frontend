@@ -5,6 +5,7 @@ export interface IModelPLOCollection {
 }
 export interface IModelPLO {
   id: string;
+  name: string;
   year: number;
   semester: number;
   isActive: boolean;

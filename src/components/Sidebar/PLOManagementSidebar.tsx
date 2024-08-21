@@ -13,12 +13,7 @@ import { getPLOs } from "@/services/plo/plo.service";
 export default function PLOSidebar() {
   const navigate = useNavigate();
   const path = useLocation().pathname;
-
   const user = useAppSelector((state) => state.user);
-  const goToDashboard = () => {
-    navigate(ROUTE_PATH.DASHBOARD_INS);
-  };
-
   const [ploCollection, setPLOCollection] = useState<IModelPLO[]>([]);
 
   useEffect(() => {
@@ -36,6 +31,10 @@ export default function PLOSidebar() {
       fetchPLO();
     }
   }, [user]);
+
+  const goToDashboard = () => {
+    navigate(ROUTE_PATH.DASHBOARD_INS);
+  };
 
   return (
     <>
@@ -69,21 +68,26 @@ export default function PLOSidebar() {
               Dashboard
             </Button>
 
-            {ploCollection.map((collection, index) => (
+            {ploCollection.map((collection) => (
               <Button
                 onClick={() =>
-                  navigate(`${ROUTE_PATH.PLO_MANAGEMENT}/${index + 1}`)
+                  navigate(
+                    `${ROUTE_PATH.PLO_MANAGEMENT}/${collection.name.replace(
+                      /^[/]+$/,
+                      "-"
+                    )}`
+                  )
                 }
-                key={index}
+                key={collection.name}
                 leftSection={<CourseIcon />}
                 className={`font-semibold w-full h-8 flex justify-start text-[13px] items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
-                path.includes(`${ROUTE_PATH.PLO_MANAGEMENT}/${index + 1}`)
+                path.includes(`${ROUTE_PATH.PLO_MANAGEMENT}/${collection.name}`)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               }`}
               >
-                PLO Collection {index + 1}
+                {collection.name}
               </Button>
             ))}
           </div>

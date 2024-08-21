@@ -127,7 +127,7 @@ export default function CourseManagement() {
       <Modal
         title={
           <div className="flex flex-col gap-1">
-            <p>Add PLO Collection </p>
+            <p>Add PLO Collection</p>
             {/* <p className="text-[#909090] text-[12px] font-medium">PLO Name</p> */}
           </div>
         }
@@ -239,7 +239,10 @@ export default function CourseManagement() {
           <Loading />
         ) : (
           ploCollection.map((department) => (
-            <div className="bg-[#bfbfff3e] rounded-md flex  flex-col py-4 px-5">
+            <div
+              className="bg-[#bfbfff3e] rounded-md flex  flex-col py-4 px-5"
+              key={collection.name}
+            >
               <div className="flex flex-col mb-4  w-fit">
                 <p className=" font-bold text-b2 text-secondary">
                   {department.departmentEN}
@@ -257,7 +260,7 @@ export default function CourseManagement() {
                     {/* PLO List */}
                     <div className="flex flex-col  ">
                       <p className="font-medium text-[13px] text-tertiary">
-                        PLO Collection {index + 1}
+                        {collection.name}
                       </p>
                     </div>
                     {/* Status */}
