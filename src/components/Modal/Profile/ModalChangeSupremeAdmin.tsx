@@ -1,5 +1,5 @@
-import { Button, Modal, TextInput } from "@mantine/core";
-import { IconUserCircle } from "@tabler/icons-react";
+import { Alert, Button, Modal, rem, TextInput } from "@mantine/core";
+import { IconInfoCircle, IconUserCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { AiOutlineSwap } from "react-icons/ai";
@@ -86,17 +86,27 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       transitionProps={{ transition: "pop" }}
       classNames={{
         content:
-          "flex flex-col    justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden ",
+          "flex flex-col  justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden ",
       }}
     >
-      <div className="bg-[#d6f0fe] items-center gap-4 flex rounded-md py-2 px-5 mb-5 ">
-        <Icon className=" size-6" IconComponent={InfoIcon} />
-        <p className="text-[#117bb4] font-semibold">
-          Changing the Supreme Admin{" "}
-          <span className=" font-extrabold text-[#075c8a]"> will revoke </span>{" "}
-          your current role
-        </p>
-      </div>
+      <Alert
+        radius="md"
+        icon={<IconInfoCircle />}
+        variant="light"
+        color="blue"
+        className="mb-5"
+        classNames={{
+          icon: "size-6",
+          body: " flex justify-center",
+        }}
+        title={
+          <p>
+            Changing the Supreme Admin
+            <span className=" font-extrabold"> will revoke </span> your current
+            role
+          </p>
+        }
+      ></Alert>
       <div
         className=" max-h-[500px]  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
         style={{
@@ -119,7 +129,6 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
             {adminFilter.map((admin) => (
               <div
                 key={admin.id}
-          
                 className="flex flex-1 items-center justify-between last:border-none border-b-[1px]  p-3 "
               >
                 <div className="gap-3 flex items-center">
@@ -139,7 +148,6 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                   size="xs"
                   className=" rounded-[8px] font-semibold text-[12px]"
                   onClick={() => editSAdmin(admin.id)}
-                 
                 >
                   Change
                 </Button>

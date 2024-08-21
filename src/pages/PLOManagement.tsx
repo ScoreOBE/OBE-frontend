@@ -43,7 +43,6 @@ export default function CourseManagement() {
     modalDuplicatePLO,
     { open: openModalDuplicatePLO, close: closeModalDuplicatePLO },
   ] = useDisclosure(false);
-  const icon = <IconInfoCircle />;
 
   const fetchPLO = async (all = false) => {
     const res = await getPLOs({
@@ -161,12 +160,20 @@ export default function CourseManagement() {
         <div className="flex flex-col gap-5 pt-1 w-full">
           <Alert
             radius="md"
-            icon={icon}
             variant="light"
             color="blue"
-            title="Duplicate PLO Collection"
+            classNames={{
+              icon: "size-6",
+              body: " flex justify-center",
+            }}
+            title={
+              <div className="flex items-center gap-2">
+                <IconInfoCircle />
+                <p>Duplicate PLO Collection </p>
+              </div>
+            }
           >
-            <p className="font-medium text-[#333333]">
+            <p className="font-medium text-[#333333] mx-8 ">
               We’ve found {totalPLOs} similar SO Collections. <br /> Select one
               to duplicate and edit, or skip duplicate.
             </p>

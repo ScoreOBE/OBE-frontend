@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  Alert,
   Button,
   Checkbox,
   CheckboxGroup,
@@ -10,7 +11,13 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
-import { IconArrowRight, IconCircleFilled } from "@tabler/icons-react";
+import {
+  IconArrowRight,
+  IconCircleFilled,
+  IconHome2,
+  IconHierarchy,
+  IconInfoCircle,
+} from "@tabler/icons-react";
 import { IModelPLO } from "@/models/ModelPLO";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { useAppSelector } from "@/store";
@@ -21,6 +28,7 @@ import Icon from "../Icon";
 import { useListState } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { isEqual } from "lodash";
+import { ROLE } from "@/helpers/constants/enum";
 
 type Props = {
   opened: boolean;
@@ -79,7 +87,14 @@ export default function ModalAddPLOCollection({
   const fetchDep = async () => {
     const res = await getDepartment(user.facultyCode);
     if (res) {
-      setDepartment(res.department);
+      if (user.role === ROLE.SUPREME_ADMIN) {
+        setDepartment(res.department);
+      } else {
+        const dep = res.department.filter((e: any) =>
+          user.departmentCode.includes(e.departmentCode)
+        );
+        setDepartment(dep);
+      }
       sortData(res.department, "departmentEN", "string");
     }
   };
@@ -88,14 +103,15 @@ export default function ModalAddPLOCollection({
     if (opened) {
       fetchDep();
     }
+    console.log(user);
   }, [opened]);
 
-  useEffect(() => {
-    // Assuming departmentCode is a string or a key you want to get values for
-    const departmentCodes = form.getValues();
+  // useEffect(() => {
+  //   // Assuming departmentCode is a string or a key you want to get values for
+  //   const departmentCodes = form.getValues();
 
-    console.log("Selected Department Codes:", departmentCodes);
-  }, [form]); // Add departmentCode if it's a dependency
+  //   console.log("Selected Department Codes:", departmentCodes);
+  // }, [form]); // Add departmentCode if it's a dependency
 
   return (
     <Modal
@@ -233,50 +249,66 @@ export default function ModalAddPLOCollection({
           label="Map Department"
           description="STEP 3"
         >
-          <div
-            className="w-full  flex flex-col bg-white border-secondary border-[1px] mt-3  rounded-md overflow-clip"
-            style={{
-              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-            }}
-          >
-            <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
-              <div className="flex items-center gap-2">
-                <span>List of Departments</span>
+          <div className="mt-3 flex flex-col">
+            <Alert
+              radius="md"
+              icon={<IconInfoCircle />}
+              variant="light"
+              color="blue"
+              className="mb-5"
+              classNames={{
+                icon: "size-6",
+                body: " flex justify-center",
+              }}
+              title={<p>lorem ipsum</p>}
+            ></Alert>
+            <div
+              className="w-full  flex flex-col bg-white border-secondary border-[1px] rounded-md overflow-clip"
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
+            >
+              <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
+                <div className="flex items-center gap-2">
+                  <IconHome2 className="text-secondary" size={19} />
+
+                  <span>List of Departments</span>
+                </div>
+                <p>{department.length} departments</p>
               </div>
-              <p>{department.length} departments</p>
-            </div>
-            <div className="flex flex-col w-full h-[350px] px-4 overflow-y-auto">
-              <Checkbox
-                className="p-3 py-5 rounded-md w-full last:border-none border-b-[1px]"
-                classNames={{ label: "ml-2", input: "cursor-pointer" }}
-                label="All"
-                checked={isEqual(
-                  form.getValues().departmentCode,
-                  department.map((dep: any) => dep.departmentCode)
-                )}
-                onChange={(event) => {
-                  setDepartmentCode(event.target.checked);
-                }}
-              />
-              <Checkbox.Group
-                {...form.getInputProps("departmentCode")}
-                value={form.getValues().departmentCode}
-                onChange={(event) => {
-                  form.setFieldValue("departmentCode", event);
-                }}
-              >
-                <Group className="gap-0">
-                  {department.map((dep: any, index: any) => (
-                    <Checkbox
-                      key={index}
-                      value={dep.departmentCode}
-                      className="p-3 py-5 rounded-md w-full last:border-none border-b-[1px] "
-                      classNames={{ label: "ml-2", input: "cursor-pointer" }}
-                      label={`${dep.departmentEN} (${dep.departmentCode})`}
-                    />
-                  ))}
-                </Group>
-              </Checkbox.Group>
+              <div className="flex flex-col w-full h-[280px] px-4 overflow-y-auto">
+                <Checkbox
+                  className="p-3 py-5 rounded-md w-full last:border-none border-b-[1px]"
+                  classNames={{ label: "ml-2", input: "cursor-pointer" }}
+                  label="All"
+                  checked={isEqual(
+                    form.getValues().departmentCode,
+                    department.map((dep: any) => dep.departmentCode)
+                  )}
+                  onChange={(event) => {
+                    setDepartmentCode(event.target.checked);
+                  }}
+                />
+                <Checkbox.Group
+                  {...form.getInputProps("departmentCode")}
+                  value={form.getValues().departmentCode}
+                  onChange={(event) => {
+                    form.setFieldValue("departmentCode", event);
+                  }}
+                >
+                  <Group className="gap-0">
+                    {department.map((dep: any, index: any) => (
+                      <Checkbox
+                        key={index}
+                        value={dep.departmentCode}
+                        className="p-3 py-5 rounded-md w-full last:border-none border-b-[1px] "
+                        classNames={{ label: "ml-2", input: "cursor-pointer" }}
+                        label={`${dep.departmentEN} (${dep.departmentCode})`}
+                      />
+                    ))}
+                  </Group>
+                </Checkbox.Group>
+              </div>
             </div>
           </div>
         </Stepper.Step>
