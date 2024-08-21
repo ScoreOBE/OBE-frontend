@@ -48,7 +48,7 @@ export default function ModalAddPLOCollection({ opened, onClose }: Props) {
         allowNextStepsSelect={false}
         icon={<IconCircleFilled />}
         classNames={{
-          separator: `text-primary  -mx-1 mb-12 h-[3px]  -translate-x-2 `,
+          separator: ` mb-12 h-[3px]  `,
           step: "flex flex-col  items-start mr-2",
           stepIcon: "mb-2 text-[#E6E6FF] bg-[#E6E6FF] border-[#E6E6FF]",
           stepBody: "flex-col-reverse m-0 ",
@@ -72,13 +72,14 @@ export default function ModalAddPLOCollection({ opened, onClose }: Props) {
                   input: "flex p-3 ",
                   label: "flex pb-1 gap-1",
                 }}
+                size="xs"
                 placeholder="Ex. PLO 1/67"
               />
             </div>
             <TextInput
               withAsterisk={true}
               label={
-                <p className="text-b2 font-semibold flex gap-1">
+                <p className=" font-semibold flex gap-1">
                   Criteria <span className="text-secondary">Thai language</span>
                 </p>
               }
@@ -87,12 +88,13 @@ export default function ModalAddPLOCollection({ opened, onClose }: Props) {
                 input: "flex p-3 ",
                 label: "flex pb-1 gap-1",
               }}
+               size="sm"
               placeholder="Ex. เกณฑ์ของ ABET"
             />
             <TextInput
               withAsterisk={true}
               label={
-                <p className="text-b2 font-semibold flex gap-1">
+                <p className=" flex gap-1">
                   Criteria{" "}
                   <span className="text-secondary">English language</span>
                 </p>
@@ -102,6 +104,7 @@ export default function ModalAddPLOCollection({ opened, onClose }: Props) {
                 input: "flex p-3 ",
                 label: "flex pb-1 gap-1",
               }}
+               size="xs"
               placeholder="Ex. ABET Criteria"
             />
           </div>

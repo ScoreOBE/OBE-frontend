@@ -50,7 +50,7 @@ export default function MainPopup({
           {title}
         </div>
       }
-      size="39.4vw"
+      size="42vw"
       centered
       withCloseButton={false}
       transitionProps={{ transition: "pop" }}
