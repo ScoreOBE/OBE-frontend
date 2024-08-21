@@ -257,6 +257,7 @@ export default function Course() {
                                 </Menu.Item>
                                 <Menu.Item
                                   className="text-[#FF4747] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]"
+                                  disabled={course.sections.length == 1}
                                   onClick={() => {
                                     setEditSec({
                                       id: sec.id,
