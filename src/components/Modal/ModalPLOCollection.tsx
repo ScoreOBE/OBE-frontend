@@ -245,7 +245,7 @@ export default function ModalAddPLOCollection({
               </div>
               <p>{department.length} departments</p>
             </div>
-            <div className="flex flex-col w-full h-[350px] p-4 py-3 overflow-y-auto">
+            <div className="flex flex-col w-full h-[350px] px-4 overflow-y-auto">
               <Checkbox
                 className="p-3 py-5 rounded-md w-full last:border-none border-b-[1px]"
                 classNames={{ label: "ml-2", input: "cursor-pointer" }}
@@ -265,7 +265,7 @@ export default function ModalAddPLOCollection({
                   form.setFieldValue("departmentCode", event);
                 }}
               >
-                <Group>
+                <Group className="gap-0">
                   {department.map((dep: any, index: any) => (
                     <Checkbox
                       key={index}
