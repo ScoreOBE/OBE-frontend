@@ -8,6 +8,7 @@ import {
   IconPencilMinus,
   IconPlus,
   IconInfoCircle,
+  IconExclamationCircle
 } from "@tabler/icons-react";
 import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import Icon from "@/components/Icon";
@@ -159,7 +160,7 @@ export default function CourseManagement() {
     }
   };
 
-  const icon = <IconInfoCircle />;
+  const icon = <IconExclamationCircle  />;
 
   return (
     <>

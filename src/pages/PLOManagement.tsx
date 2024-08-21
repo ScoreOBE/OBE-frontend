@@ -5,10 +5,12 @@ import { getPLOs } from "@/services/plo/plo.service";
 import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
 import ModalAddPLOCollection from "@/components/Modal/ModalPLOCollection";
 import {
+  Alert,
   Button,
   Group,
   Modal,
   Radio,
+  RadioCard,
   ScrollArea,
   Table,
   Tabs,
@@ -17,7 +19,7 @@ import {
 import ThIcon from "@/assets/icons/thai.svg?react";
 import EngIcon from "@/assets/icons/eng.svg?react";
 import Icon from "@/components/Icon";
-import { IconPlus } from "@tabler/icons-react";
+import { IconInfoCircle, IconPlus } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { isEmpty } from "lodash";
@@ -38,12 +40,12 @@ export default function CourseManagement() {
   const [modalAddPLO, { open: openModalAddPLO, close: closeModalAddPLO }] =
     useDisclosure(false);
   const [
-    modalDupilcatePLO,
-    { open: openModalDupilcatePLO, close: closeModalDupilcatePLO },
+    modalDuplicatePLO,
+    { open: openModalDuplicatePLO, close: closeModalDuplicatePLO },
   ] = useDisclosure(false);
+  const icon = <IconInfoCircle />;
 
   const fetchPLO = async (all = false) => {
-    setLoading(true);
     const res = await getPLOs({
       all,
       role: user.role,
@@ -57,12 +59,13 @@ export default function CourseManagement() {
         setPLOCollection(res.plos);
       }
     }
-    setLoading(false);
   };
 
   useEffect(() => {
     if (user.id) {
+      setLoading(true);
       fetchPLO();
+      setLoading(false);
     }
   }, [user]);
 
@@ -71,12 +74,12 @@ export default function CourseManagement() {
   // }, [ploCollectDupli]);
 
   useEffect(() => {
-    if (modalDupilcatePLO) {
+    if (modalDuplicatePLO) {
       fetchPLO(true);
     } else if (!modalAddPLO) {
       setSelectPloDupli({});
     }
-  }, [modalAddPLO, modalDupilcatePLO]);
+  }, [modalAddPLO, modalDuplicatePLO]);
 
   return (
     <>
@@ -145,8 +148,8 @@ export default function CourseManagement() {
             <p>Add PLO Collection</p>
           </div>
         }
-        opened={modalDupilcatePLO}
-        onClose={closeModalDupilcatePLO}
+        opened={modalDuplicatePLO && !!ploCollectDupli.length}
+        onClose={closeModalDuplicatePLO}
         transitionProps={{ transition: "pop" }}
         size="35vw"
         centered
@@ -156,6 +159,18 @@ export default function CourseManagement() {
         }}
       >
         <div className="flex flex-col gap-5 pt-1 w-full">
+          <Alert
+            radius="md"
+            icon={icon}
+            variant="light"
+            color="blue"
+            title="Duplicate PLO Collection"
+          >
+            <p className="font-medium text-[#333333]">
+              We’ve found {totalPLOs} similar SO Collections. <br /> Select one
+              to duplicate and edit, or skip duplicate.
+            </p>
+          </Alert>
           <Radio.Group
             value={selectPloDupli.name}
             onChange={(event) =>
@@ -164,17 +179,24 @@ export default function CourseManagement() {
               )
             }
           >
-            <Group className="flex flex-col gap-3">
+            <Group className="flex w-full flex-col gap-3">
               {ploCollectDupli.map((plo, index) => (
-                <Radio
+                <RadioCard
                   key={index}
                   value={plo.name}
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                   }}
-                  className="p-3 px-3 rounded-md w-full"
-                  label={plo.name}
-                />
+                  className="p-3 px-3 flex border-none h-full rounded-md w-full"
+                  // label={plo.name}
+                >
+                  <Group>
+                    <Radio.Indicator color="#5768D5" />
+                    <div className="text-b2 font-medium text-[#333333]">
+                      {plo.name}
+                    </div>
+                  </Group>
+                </RadioCard>
               ))}
             </Group>
           </Radio.Group>
@@ -187,17 +209,17 @@ export default function CourseManagement() {
               onClick={() => {
                 setSelectPloDupli({});
                 openModalAddPLO();
-                closeModalDupilcatePLO();
+                closeModalDuplicatePLO();
               }}
             >
-              Skip
+              Skip duplicate
             </Button>
             <Button
               onClick={() => {
                 openModalAddPLO();
-                closeModalDupilcatePLO();
+                closeModalDuplicatePLO();
               }}
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+              className="rounded-[8px] text-[12px] border-none h-[32px] w-fit "
               disabled={isEmpty(selectPloDupli)}
               color="#5768d5"
             >
@@ -224,7 +246,7 @@ export default function CourseManagement() {
             color="#5768D5"
             leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
             className="rounded-[8px] text-[12px] h-[32px] w-fit "
-            onClick={openModalDupilcatePLO}
+            onClick={openModalDuplicatePLO}
           >
             Add Collection
           </Button>

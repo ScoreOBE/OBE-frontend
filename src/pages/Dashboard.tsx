@@ -8,6 +8,7 @@ import {
   IconPencilMinus,
   IconPlus,
   IconTrash,
+  IconExclamationCircle,
 } from "@tabler/icons-react";
 import { showNotifications, statusColor } from "@/helpers/functions/function";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -127,7 +128,7 @@ export default function Dashboard() {
     );
   };
 
-  const icon = <IconInfoCircle />;
+  const icon = <IconExclamationCircle />;
 
   return (
     <>
