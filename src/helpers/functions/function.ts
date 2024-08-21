@@ -1,6 +1,8 @@
 import { notifications } from "@mantine/notifications";
 import { NOTI_TYPE, TQF_STATUS } from "../constants/enum";
 import { IModelUser } from "@/models/ModelUser";
+import { IconX, IconCheck, icons, Icon } from "@tabler/icons-react";
+import React, { ReactElement, ReactNode } from "react";
 
 export const getSectionNo = (sectionNo: number | string | undefined) => {
   if (!sectionNo) return "";
@@ -89,28 +91,35 @@ export const showNotifications = (
   title: string,
   message: string
 ) => {
-  let className, color;
+  let className, color, icon;
+
   switch (type) {
     case NOTI_TYPE.SUCCESS:
       // className = "bg-green-500 bg-opacity-50 rounded-md";
       color = "green";
+      icon = React.createElement(IconCheck);
       break;
     case NOTI_TYPE.ERROR:
       // className = "bg-red-500 bg-opacity-75 rounded-md";
       color = "red";
+      icon = React.createElement(IconX);
       break;
     default:
       break;
   }
+
   notifications.show({
     title,
     message,
     autoClose: 3000,
+    withCloseButton: false,
     className,
     color,
-    // classNames: {
-    //   title: "text-white",
-    //   description: "text-gray-200 font-normal",
-    // },
+    icon, // Pass the icon component here
+    classNames: {
+      title: "text-[#ffffff] font-bold text-[14px]",
+      description: "text-[#ffffff] font-normal text-[12px]",
+      root: "bg-[#112961] rounded-lg pl-5 "
+    },
   });
 };

@@ -166,7 +166,7 @@ export default function ModalAddCourse({
     const res = await createCourse(setPayload());
     if (res) {
       closeModal();
-      showNotifications("success", "Create Course", "Create coures successful");
+      showNotifications(NOTI_TYPE.SUCCESS, "Add course success", `${res.courseNo} is added`);
       fetchCourse(academicYear.id);
     }
   };

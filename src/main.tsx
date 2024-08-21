@@ -21,7 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         fontFamily: `"Manrope", "NotoSansThai", Helvetica, Arial, sans-serif`,
       }}
     >
-      <Notifications position="top-right" zIndex={1000} />
+      <Notifications position="top-center" className="w-fit"  zIndex={1000} />
       <Router>
         <App />
       </Router>

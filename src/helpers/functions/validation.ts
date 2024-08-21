@@ -24,7 +24,7 @@ export const isValidResponse = (res: any) => {
         break;
       default:
         // dispatch(setErrorResponse(res));
-        showNotifications(NOTI_TYPE.ERROR, "Something went wrong", res.message);
+        showNotifications(NOTI_TYPE.ERROR, res.title ?? "Something went wrong", res.message);
         break;
     }
     return;

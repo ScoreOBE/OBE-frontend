@@ -478,7 +478,7 @@ export default function MapPLO() {
                         >
                           {(provided, snapshot) => (
                             <div
-                              className="flex p-4 w-full justify-between border-b last:border-none"
+                              className="flex p-4 w-full justify-between first:-mt-2 border-b last:border-none"
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                             >

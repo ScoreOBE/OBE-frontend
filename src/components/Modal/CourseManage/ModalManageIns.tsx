@@ -89,11 +89,12 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
       const name = res.firstNameEN?.length ? getUserName(res, 1) : res.email;
       const message =
         res.role == ROLE.ADMIN
-          ? `${name} is an admin`
-          : `Delete ${name} from admin`;
+          ? `${name} is added to admin`
+          : `${name} is deleted from admin`;
+      const title = res.role == ROLE.ADMIN ? `Add success` : `Delete success`;
       setEditUser(null);
       fetchIns();
-      showNotifications(NOTI_TYPE.SUCCESS, "Success", message);
+      showNotifications(NOTI_TYPE.SUCCESS, title, message);
     }
   };
 
@@ -201,7 +202,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                     <div className="gap-3 flex items-center">
                       <IconUserCircle
                         size={32}
-                        className=" -translate-x-1"
+                        className=" -translate-x-1 "
                         stroke={1}
                       />
                       <div className="flex flex-col">
