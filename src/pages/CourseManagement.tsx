@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Alert, Menu } from "@mantine/core";
+import { Alert, Menu, Select } from "@mantine/core";
 import {
   IconDots,
   IconTrash,
@@ -8,7 +8,9 @@ import {
   IconPencilMinus,
   IconPlus,
   IconInfoCircle,
-  IconExclamationCircle
+  IconExclamationCircle,
+  IconChevronLeft,
+  IconChevronRight,
 } from "@tabler/icons-react";
 import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import Icon from "@/components/Icon";
@@ -46,7 +48,8 @@ export default function CourseManagement() {
   const courseManagement = useAppSelector((state) => state.courseManagement);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [payload, setPayload] = useState<any>();
+  const [payload, setPayload] = useState<any>({ page: 1, limit: 10 });
+  const [startEndPage, setStartEndPage] = useState({ start: 1, end: 10 });
   const [editCourse, setEditCourse] = useState<any>();
   const [editSec, setEditSec] = useState<
     Partial<IModelSection> & Record<string, any>
@@ -78,7 +81,6 @@ export default function CourseManagement() {
         ...new CourseManagementRequestDTO(),
         departmentCode: user.departmentCode,
         search: courseManagement.search,
-        hasMore: true,
       };
       setPayload(payloadCourse);
       fetchCourse(payloadCourse);
@@ -90,7 +92,6 @@ export default function CourseManagement() {
       ...new CourseManagementRequestDTO(),
       departmentCode: user.departmentCode,
       search: courseManagement.search,
-      hasMore: true,
     });
     localStorage.removeItem("search");
   }, [localStorage.getItem("search")]);
@@ -102,7 +103,6 @@ export default function CourseManagement() {
         ...new CourseManagementRequestDTO(),
         departmentCode: user.departmentCode,
         search: courseManagement.search,
-        hasMore: true,
       };
       setPayload(payloadCourse);
     }
@@ -113,20 +113,26 @@ export default function CourseManagement() {
     setLoading(false);
   };
 
-  const onShowMore = async () => {
+  const onChangePage = async (page: number, selectLimit?: number) => {
+    const total = courseManagement.total;
+    if (page < 1 || page > Math.ceil(total / payload.limit)) return;
+    const limit = selectLimit ?? payload.limit;
     const res = await getCourseManagement({
       ...payload,
-      page: payload.page + 1,
+      limit,
+      page,
     });
-    if (res.length) {
-      dispatch(addLoadMoreCourseManagement(res));
+    if (res) {
+      setStartEndPage({
+        start: (page - 1) * limit + 1,
+        end: Math.min(page * limit, total),
+      });
+      dispatch(setCourseManagementList(res));
       setPayload({
         ...payload,
-        page: payload.page + 1,
-        hasMore: res.length >= payload.limit,
+        limit,
+        page,
       });
-    } else {
-      setPayload({ ...payload, hasMore: false });
     }
   };
 
@@ -160,7 +166,7 @@ export default function CourseManagement() {
     }
   };
 
-  const icon = <IconExclamationCircle  />;
+  const icon = <IconExclamationCircle />;
 
   return (
     <>
@@ -244,33 +250,62 @@ export default function CourseManagement() {
               </div>
               <div className="flex flex-col ">
                 <p className="text-b3  text-[#808080]">Section</p>
-                <p className=" -translate-y-[2px] text-b1">{`${getSectionNo(editSec?.sectionNo)}`}</p>
+                <p className=" -translate-y-[2px] text-b1">{`${getSectionNo(
+                  editSec?.sectionNo
+                )}`}</p>
               </div>
             </div>
           </>
         }
       />
       <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
-        <div className="flex flex-col  items-start ">
-          <p className="text-secondary text-[16px] font-bold">Dashboard</p>
-          <p className="text-tertiary text-[14px] font-medium">
-            {courseManagement.total} Course
-            {courseManagement.total > 1 ? "s " : " "}
-          </p>
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-col  items-start ">
+            <p className="text-secondary text-[16px] font-bold">Dashboard</p>
+            <p className="text-tertiary text-[14px] font-medium">
+              {courseManagement.total} Course
+              {courseManagement.total > 1 ? "s " : " "}
+            </p>
+          </div>
+          <div className=" text-b3 gap-3 font-medium flex flex-row items-center">
+            Courses per page:{" "}
+            <Select
+              classNames={{ input: "border-none" }}
+              className=" w-[74px] mr-3"
+              data={["10", "20", "50"]}
+              value={payload.limit.toString()}
+              onChange={(event) => {
+                setPayload((prev: any) => {
+                  return { ...prev, limit: parseInt(event!) };
+                });
+                onChangePage(1, parseInt(event!));
+              }}
+            ></Select>
+            <div>
+              {startEndPage.start} - {startEndPage.end} of{" "}
+              {courseManagement.total}
+            </div>
+            <div
+              aria-disabled={startEndPage.start == 1}
+              onClick={() => onChangePage(payload.page - 1)}
+              className=" cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc]  rounded-full"
+            >
+              <IconChevronLeft></IconChevronLeft>
+            </div>
+            <div
+              aria-disabled={startEndPage.end == courseManagement.total}
+              onClick={() => onChangePage(payload.page + 1)}
+              className=" cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc]  rounded-full"
+            >
+              <IconChevronRight></IconChevronRight>
+            </div>
+          </div>
         </div>
         {/* Course Detail */}
         {loading ? (
           <Loading />
         ) : (
-          <InfiniteScroll
-            dataLength={courseManagement.courseManagements.length}
-            next={onShowMore}
-            height={"100%"}
-            hasMore={payload?.hasMore}
-            className="overflow-y-auto w-full h-fit max-h-full flex flex-col gap-3 "
-            style={{ height: "fit-content", maxHeight: "100%" }}
-            loader={<Loading />}
-          >
+          <div className="overflow-y-auto w-full h-fit max-h-full flex flex-col gap-3 ">
             {courseManagement.courseManagements.map((course, index) => (
               <div
                 key={index}
@@ -457,7 +492,11 @@ export default function CourseManagement() {
                               }
                             }}
                             className={`flex  justify-center items-center bg-transparent border-[1px]  size-8 bg-none rounded-full  
-                              ${course.sections.length > 1 ? 'cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10' : 'cursor-not-allowed bg-[#f1f3f5] text-[#adb5bd] border-[#adb5bd]'}`}
+                              ${
+                                course.sections.length > 1
+                                  ? "cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                                  : "cursor-not-allowed bg-[#f1f3f5] text-[#adb5bd] border-[#adb5bd]"
+                              }`}
                           >
                             <IconTrash className="size-4" stroke={1.5} />
                           </div>
@@ -467,8 +506,8 @@ export default function CourseManagement() {
                   })}
                 </div>
               </div>
-            ))}
-          </InfiniteScroll>
+            ))}{" "}
+          </div>
         )}
       </div>
     </>
