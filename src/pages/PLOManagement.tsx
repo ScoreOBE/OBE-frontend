@@ -19,7 +19,13 @@ import {
 import ThIcon from "@/assets/icons/thai.svg?react";
 import EngIcon from "@/assets/icons/eng.svg?react";
 import Icon from "@/components/Icon";
-import { IconInfoCircle, IconPlus } from "@tabler/icons-react";
+import {
+  IconChevronRight,
+  IconEdit,
+  IconInfoCircle,
+  IconPlus,
+  IconTrash,
+} from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { isEmpty } from "lodash";
@@ -264,26 +270,30 @@ export default function CourseManagement() {
         ) : (
           ploCollection?.map((department, indexPLO) => (
             <div
-              className="bg-[#bfbfff3e] rounded-md flex  flex-col py-4 px-5"
+              className="bg-[#d2d2ff3e] rounded-md flex  flex-col py-4 px-5"
               key={indexPLO}
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
             >
               <div className="flex flex-col mb-4  w-fit">
                 <p className=" font-bold text-b2 text-secondary">
                   {department.departmentEN}
                 </p>
               </div>
-              {department.collections.map((collection, index) => (
-                <div className="flex flex-col" key={index}>
+              <div className="flex flex-col">
+                {department.collections.map((collection, index) => (
                   <div
+                    key={` ${index}`}
                     onClick={() => {
                       setCollection({ index, ...collection });
                       setOpenModal(true);
                     }}
-                    className="bg-white cursor-pointer hover:bg-[#fafafa] grid grid-cols-5 items-center first:rounded-t-md last:rounded-b-md justify-between  py-3 border-b-[1px] border-[#eeeeee] px-5"
+                    className="bg-white   cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#eeeeee] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
                   >
                     {/* PLO List */}
-                    <div className="flex flex-col  ">
-                      <p className="font-medium text-[13px] text-tertiary">
+                    <div className="flex flex-col">
+                      <p className="font-semibold text-[13px] text-tertiary">
                         {collection.name}
                       </p>
                     </div>
@@ -303,16 +313,19 @@ export default function CourseManagement() {
                     <div className="flex items-center font-medium text-[#4E5150] text-b3"></div>
                     {/* Open Symester */}
                     <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
-                      <p className="text-wrap font-medium">
+                      <p className="text-wrap font-semibold">
                         Start in: {collection.semester}/{collection.year}
                       </p>
                       <div className="flex gap-1"></div>
                     </div>
-                    {/* Button */}
-                    <div className="flex justify-end gap-4 items-center"></div>
+                    <div className="flex justify-end gap-4 items-center">
+                      <div className="flex justify-center items-center   text-[#333333] size-8 ">
+                        <IconChevronRight className="size-4" stroke={3} />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           ))
         )}

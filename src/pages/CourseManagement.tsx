@@ -289,16 +289,16 @@ export default function CourseManagement() {
             <div
               aria-disabled={startEndPage.start == 1}
               onClick={() => onChangePage(payload.page - 1)}
-              className=" cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc]  rounded-full"
+              className=" cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 hover:bg-[#eeeeee] rounded-full"
             >
-              <IconChevronLeft></IconChevronLeft>
+              <IconChevronLeft color="#333333"></IconChevronLeft>
             </div>
             <div
               aria-disabled={startEndPage.end == courseManagement.total}
               onClick={() => onChangePage(payload.page + 1)}
-              className=" cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc]  rounded-full"
+              className=" cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 hover:bg-[#eeeeee] rounded-full"
             >
-              <IconChevronRight></IconChevronRight>
+              <IconChevronRight color="#333333"></IconChevronRight>
             </div>
           </div>
         </div>
@@ -306,14 +306,17 @@ export default function CourseManagement() {
         {loading ? (
           <Loading />
         ) : (
-          <div className="overflow-y-auto w-full h-fit max-h-full flex flex-col gap-3 ">
+          <div className="overflow-y-auto p-2 w-full h-fit max-h-full flex flex-col gap-3 ">
             {courseManagement.courseManagements.map((course, index) => (
               <div
                 key={index}
-                className="bg-[#bfbfff3e] rounded-md flex flex-col py-4 px-5"
+                className="bg-[#d2d2ff3e] rounded-md flex flex-col py-4  px-5"
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
               >
                 {/* Course Topic */}
-                <div className="gap-3 mb-4 flex items-center w-full justify-between">
+                <div className="gap-2 mb-3 flex items-center w-full justify-between">
                   <div className="flex flex-col  w-fit">
                     <p className=" font-bold text-b2 text-secondary">
                       {course.courseNo}
@@ -323,10 +326,10 @@ export default function CourseManagement() {
                     </p>
                   </div>
 
-                  <div className="rounded-full cursor-pointer size-8 hover:bg-gray-300 p-1 ">
+                  <div className="rounded-full cursor-pointer size-8 hover:bg-gray-200 p-1 ">
                     <Menu trigger="click" position="bottom-end" offset={2}>
                       <Menu.Target>
-                        <IconDots className=" rounded-full hover:bg-gray-300" />
+                        <IconDots className=" text-[#333333] rounded-full hover:bg-gray-200" />
                       </Menu.Target>
                       <Menu.Dropdown
                         className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -407,7 +410,7 @@ export default function CourseManagement() {
                     return (
                       <div
                         key={sec.sectionNo}
-                        className="bg-white grid grid-cols-5 items-center justify-between first:rounded-t-md last:rounded-b-md py-3 border-b-[1px] border-[#eeeeee] px-5"
+                        className=" bg-white first:rounded-t-md last:rounded-b-md grid grid-cols-5 items-center justify-between last:border-none  py-3 border-b-[1px]  border-[#eeeeee] px-7"
                       >
                         {/* Section No & Topic */}
                         <div className="flex flex-col ">
