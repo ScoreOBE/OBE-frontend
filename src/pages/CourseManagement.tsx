@@ -270,6 +270,7 @@ export default function CourseManagement() {
           <div className=" text-b3 gap-3 font-medium flex flex-row items-center">
             Courses per page:{" "}
             <Select
+              allowDeselect={false}
               classNames={{ input: "border-none" }}
               className=" w-[74px] mr-3"
               data={["10", "20", "50"]}
