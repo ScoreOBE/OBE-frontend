@@ -51,15 +51,13 @@ export default function ModalAddPLOCollection({
   const [department, setDepartment] = useState<any>([]);
   const [ploNo, setPloNo] = useState(0);
   const [selectDepartment, setSelectDepartment] = useState<string[]>([]);
-  const [state, handlers] = useListState([]);
+  const [state, handlers] = useListState<Partial<IModelPLONo>>([]);
 
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
       departmentCode: [],
-      data: [{ no: ploNo + 1, descTH: "", descEN: "" }] as Partial<
-        IModelPLONo[]
-      >,
+      data: [{ descTH: "", descEN: "" }] as Partial<IModelPLONo[]>,
     } as Partial<IModelPLO>,
     // validate: {
     //   type: (value) => !value && "Course Type is required",
@@ -125,6 +123,14 @@ export default function ModalAddPLOCollection({
 
     console.log("Add PLO:", data);
   }, [form]);
+
+  useEffect(() => {
+    const data = form.getValues().data?.filter((plo) => plo.no) ?? [];
+    if (data?.length) {
+      handlers.setState(data);
+      console.log(data);
+    }
+  }, [form.getValues().data]);
 
   return (
     <Modal
@@ -268,16 +274,17 @@ export default function ModalAddPLOCollection({
                 }}
               />
 
-              <div className="flex gap-2 mt-3 w-full justify-start">
+              <div className="flex gap-2 mt-3 w-full justify-end">
                 <Button
                   onClick={() => {
                     setPloNo(ploNo + 1);
+                    form.setFieldValue(`data.${ploNo}.no`, ploNo + 1);
                     form.insertListItem("data", {
-                      no: ploNo + 2,
                       descTH: "",
                       descEN: "",
                     });
                   }}
+                  variant="outline"
                   className="rounded-[8px] text-[12px] h-[32px] w-fit "
                   color="#5768d5"
                 >
@@ -287,21 +294,21 @@ export default function ModalAddPLOCollection({
             </div>
             {form.getValues().data?.length! > 1 && (
               <div
-                className="flex flex-col bg-white border-secondary border-[1px] rounded-md overflow-clip w-full"
+                className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-full h-[407px] overflow-y-hidden"
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
               >
                 <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
                   <div className="flex items-center gap-2">
-                    {/* <IconHome2 className="text-secondary" size={19} /> */}
+                    <Icon IconComponent={IconSO} />
 
                     <span>List PLO Added</span>
                   </div>
-                  <p>{department.length} PLOs</p>
+                  <p>{state.length} PLOs</p>
                 </div>
-                <div className="flex flex-col w-full h-[280px] px-4 overflow-y-auto">
-                  {/* <DragDropContext
+                <div className="flex flex-col w-full overflow-y-auto px-3">
+                  <DragDropContext
                     onDragEnd={({ destination, source }) => {
                       handlers.reorder({
                         from: source.index,
@@ -315,24 +322,60 @@ export default function ModalAddPLOCollection({
                         <div
                           {...provided.droppableProps}
                           ref={provided.innerRef}
-                          className=" overflow-y-auto"
+                          className="w-full"
                         >
                           {state.map((item, index) => (
                             <Draggable
-                              key={item.no}
+                              key={index}
                               index={index}
-                              // draggableId={item.no.toString()}
+                              draggableId={index.toString()}
                             >
-                              {(provided, snapshot) => (
+                              {(provided) => (
                                 <div
-                                  className="flex p-4 w-full justify-between first:-mt-2 border-b last:border-none"
+                                  className="flex px-5 py-5 w-full justify-between  border-b last:border-none "
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                 >
-                                  <div className="flex flex-col gap-2 w-[85%] ">
-                                    <p className="text-secondary font-semibold text-[14px]">
-                                      PLO-{item.no}
-                                    </p>
+                                  <div className="flex flex-col gap-2 w-full ">
+                                    <div className="flex items-center justify-between">
+                                      <p className="text-secondary font-semibold text-[14px]">
+                                        PLO-{index + 1}
+                                      </p>
+                                      <div className="flex gap-1 items-center">
+                                        <div
+                                          className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
+                                          onClick={() => {}}
+                                        >
+                                          <IconTrash
+                                            stroke={1.5}
+                                            color="#FF4747"
+                                            className=" size-4 flex items-center"
+                                            onClick={() => {
+                                              handlers.remove(index);
+                                              setPloNo(ploNo - 1);
+                                              form.removeListItem(
+                                                "data",
+                                                index
+                                              );
+                                            }}
+                                          />
+                                        </div>
+
+                                        <div
+                                          className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center "
+                                          {...provided.dragHandleProps}
+                                        >
+                                          <IconGripVertical
+                                            style={{
+                                              width: rem(20),
+                                              height: rem(20),
+                                            }}
+                                            stroke={1.5}
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+
                                     <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
                                       <div className="flex  text-pretty ">
                                         <li></li> {item.descTH}
@@ -340,32 +383,6 @@ export default function ModalAddPLOCollection({
                                       <div className="flex  text-pretty ">
                                         <li></li> {item.descEN}
                                       </div>
-                                    </div>
-                                  </div>
-
-                                  <div className="flex gap-1 items-center">
-                                    <div
-                                      className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
-                                      onClick={() => {}}
-                                    >
-                                      <IconTrash
-                                        stroke={1.5}
-                                        color="#FF4747"
-                                        className=" size-4 flex items-center"
-                                      />
-                                    </div>
-
-                                    <div
-                                      className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
-                                      {...provided.dragHandleProps}
-                                    >
-                                      <IconGripVertical
-                                        style={{
-                                          width: rem(20),
-                                          height: rem(20),
-                                        }}
-                                        stroke={1.5}
-                                      />
                                     </div>
                                   </div>
                                 </div>
@@ -376,7 +393,7 @@ export default function ModalAddPLOCollection({
                         </div>
                       )}
                     </Droppable>
-                  </DragDropContext> */}
+                  </DragDropContext>
                 </div>
               </div>
             )}
