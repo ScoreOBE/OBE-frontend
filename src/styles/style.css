@@ -153,6 +153,12 @@
   font-weight: 600 !important;
 }
 
+.mantine-Textarea-label {
+  font-size: 13px !important;
+  color: #424242 !important;
+  font-weight: 600 !important;
+}
+
 .mantine-TextInput-description {
   color: var(--color-secondary) !important;
 }
@@ -198,10 +204,9 @@
   color: var(--color-secondary);
 }
 
-.mantine-Tabs-tabLabel{
+.mantine-Tabs-tabLabel {
   font-weight: 500 !important;
 }
-
 
 Button:disabled {
   border-color: var(--color-border-input) !important;
