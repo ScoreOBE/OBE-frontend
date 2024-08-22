@@ -44,7 +44,7 @@ export default function Navbar() {
           )?.id ?? "";
         res = await getCourse(payloadCourse);
         if (res) {
-          res.search = searchValue;
+          res.search = payloadCourse.search;
           dispatch(setCourseList(res));
         }
         break;
@@ -56,7 +56,7 @@ export default function Navbar() {
         };
         res = await getCourseManagement(payloadCourse);
         if (res) {
-          res.search = searchValue;
+          res.search = payloadCourse.search;
           dispatch(setCourseManagementList(res));
         }
         break;
@@ -91,7 +91,9 @@ export default function Navbar() {
     <>
       {![ROUTE_PATH.SELECTED_DEPARTMENT].includes(location) && (
         <div className="min-h-14 border-b-[1px] border-[#e0e0e0] px-6 inline-flex flex-wrap justify-between items-center z-50 bg-[#f5f5f5] text-secondary">
-          <p className="font-semibold text-h2 md:w-fit max-w-[30%]">{topicPath()}</p>
+          <p className="font-semibold text-h2 md:w-fit max-w-[30%]">
+            {topicPath()}
+          </p>
           {[ROUTE_PATH.DASHBOARD_INS, ROUTE_PATH.COURSE_MANAGEMENT].includes(
             location
           ) && (

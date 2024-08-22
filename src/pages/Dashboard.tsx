@@ -41,14 +41,9 @@ export default function Dashboard() {
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
   const [delCourse, setDelCourse] = useState<Partial<IModelCourse>>();
   const [editCourse, setEditCourse] = useState<Partial<IModelCourse>>();
-  const [openAddModal, { open: openedAddModal, close: closeAddModal }] =
-    useDisclosure(false);
-  const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
-    useDisclosure(false);
-  const [
-    openModalEditCourse,
-    { open: openedModalEditCourse, close: closeModalEditCourse },
-  ] = useDisclosure(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openDelPopup, setOpenDelPopup] = useState(false);
+  const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
 
   useEffect(() => {
     const yearId = params.get("id");
@@ -109,7 +104,7 @@ export default function Dashboard() {
     const res = await deleteCourse(id);
     if (res) {
       dispatch(removeCourse(res.id));
-      closeMainPopup();
+      setOpenDelPopup(false);
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Delete Course Success",
@@ -133,8 +128,8 @@ export default function Dashboard() {
   return (
     <>
       <MainPopup
-        opened={openMainPopup}
-        onClose={closeMainPopup}
+        opened={openDelPopup}
+        onClose={() => setOpenDelPopup(false)}
         action={() => onClickDeleteCourse(delCourse?.id!)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete course"
@@ -165,12 +160,12 @@ export default function Dashboard() {
       />
       <ModalAddCourse
         opened={openAddModal}
-        onClose={closeAddModal}
+        onClose={() => setOpenAddModal(false)}
         fetchCourse={(id) => fetchCourse(id)}
       />
       <ModalEditCourse
         opened={openModalEditCourse}
-        onClose={closeModalEditCourse}
+        onClose={() => setOpenModalEditCourse(false)}
         value={editCourse}
       />
 
@@ -180,21 +175,27 @@ export default function Dashboard() {
             <p className="text-secondary text-[20px] font-semibold mb-[1px]">
               Hi there, {user.firstNameEN}
             </p>
-            <p className="text-[#575757] text-[14px]">
-              In semester {term?.semester ?? ""}, {term?.year ?? ""}!{" "}
-              {course.courses.length === 0 ? (
-                <span>Your course card is currently empty</span>
-              ) : (
-                <span>
-                  Your currently have{" "}
-                  <span className="text-[#5768D5] font-semibold">
-                    {course.total} Course
-                    {course.total > 1 ? "s " : " "}
+            {course.search.length ? (
+              <p className="text-[#575757] text-[14px]">
+                {course.total} result{course.total > 1 ? "s " : " "} found
+              </p>
+            ) : (
+              <p className="text-[#575757] text-[14px]">
+                In semester {term?.semester ?? ""}, {term?.year ?? ""}!{" "}
+                {course.courses.length === 0 ? (
+                  <span>Your course card is currently empty</span>
+                ) : (
+                  <span>
+                    Your currently have{" "}
+                    <span className="text-[#5768D5] font-semibold">
+                      {course.total} Course
+                      {course.total > 1 ? "s " : " "}
+                    </span>
+                    on your plate.
                   </span>
-                  on your plate.
-                </span>
-              )}
-            </p>
+                )}
+              </p>
+            )}
           </div>
           {term?.isActive && !!course.courses.length && (
             <Button
@@ -202,7 +203,7 @@ export default function Dashboard() {
               color="#5768D5"
               leftSection={<IconPlus className=" size-5 -mr-1" stroke={1.5} />}
               className=" rounded-[8px] text-[12px] h-[32px] w-fit "
-              onClick={openedAddModal}
+              onClick={() => setOpenAddModal(true)}
             >
               Add Course
             </Button>
@@ -215,18 +216,27 @@ export default function Dashboard() {
             <div className=" flex flex-row flex-1 justify-between">
               <div className="h-full px-[60px] justify-center flex flex-col">
                 <p className="text-primary text-h2 font-semibold">
-                  No course found
+                  {course.search.length
+                    ? `No results for "${course.search}" `
+                    : "No course found"}
                 </p>
                 <br />
                 <p className=" -mt-4 mb-6  text-[#333333] text-b2 break-words font-400 leading-relaxed">
-                  It looks like you haven't added any courses yet. <br />
-                  Click 'Add Course' button below to get started!
+                  {course.search.length ? (
+                    <>Check the spelling or try a new search.</>
+                  ) : (
+                    <>
+                      It looks like you haven't added any courses yet.
+                      <br />
+                      Click 'Add Course' button below to get started!
+                    </>
+                  )}
                 </p>
-                {term?.isActive && (
+                {term?.isActive && !course.search.length && (
                   <Button
                     color="#5768D5"
                     className=" rounded-[8px] text-[12px] w-28 font-medium  h-8 px-2 "
-                    onClick={openedAddModal}
+                    onClick={() => setOpenAddModal(true)}
                   >
                     <IconPlus
                       className="h-5 w-5 mr-1"
@@ -293,7 +303,7 @@ export default function Dashboard() {
                                       courseNo: item.courseNo,
                                       courseName: item.courseName,
                                     });
-                                    openedModalEditCourse();
+                                    setOpenModalEditCourse(true);
                                   }}
                                   className="text-[#3E3E3E] font-semibold  text-b3 h-7 w-[180px]"
                                 >
@@ -309,7 +319,7 @@ export default function Dashboard() {
                                   className="text-[#FF4747] h-7 w-[180px] font-semibold text-b3 hover:bg-[#d55757]/10"
                                   onClick={() => {
                                     setDelCourse(item);
-                                    openedMainPopup();
+                                    setOpenDelPopup(true);
                                   }}
                                 >
                                   <div className="flex items-center gap-2">
