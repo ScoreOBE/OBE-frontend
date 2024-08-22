@@ -7,6 +7,7 @@ import {
   Group,
   Modal,
   Radio,
+  rem,
   Stepper,
   Textarea,
   TextInput,
@@ -17,18 +18,22 @@ import {
   IconHome2,
   IconHierarchy,
   IconInfoCircle,
+  IconTrash,
+  IconGripVertical,
 } from "@tabler/icons-react";
-import { IModelPLO } from "@/models/ModelPLO";
+import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { useAppSelector } from "@/store";
 import { log } from "console";
 import { sortData } from "@/helpers/functions/function";
 import SelectDepartment from "@/pages/SelectDepartment";
 import Icon from "../Icon";
+import IconSO from "@/assets/icons/SO.svg?react";
 import { useListState } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { isEqual } from "lodash";
 import { ROLE } from "@/helpers/constants/enum";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 type Props = {
   opened: boolean;
@@ -44,11 +49,18 @@ export default function ModalAddPLOCollection({
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(0);
   const [department, setDepartment] = useState<any>([]);
+  const [ploNo, setPloNo] = useState(0);
   const [selectDepartment, setSelectDepartment] = useState<string[]>([]);
+  const [state, handlers] = useListState([]);
 
   const form = useForm({
     mode: "uncontrolled",
-    initialValues: { departmentCode: [] } as Partial<IModelPLO>,
+    initialValues: {
+      departmentCode: [],
+      data: [{ no: ploNo + 1, descTH: "", descEN: "" }] as Partial<
+        IModelPLONo[]
+      >,
+    } as Partial<IModelPLO>,
     // validate: {
     //   type: (value) => !value && "Course Type is required",
     //   courseNo: (value) => validateCourseNo(value),
@@ -69,14 +81,17 @@ export default function ModalAddPLOCollection({
   const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
   const closeModal = () => {
     setActive(0);
+    setPloNo(0);
     form.reset();
     onClose();
   };
 
-  const setDepartmentCode = (checked: boolean) => {
+  const setDepartmentCode = (checked: boolean, value?: string[]) => {
     let departmentCode = form.getValues().departmentCode;
 
-    if (checked) {
+    if (value) {
+      departmentCode = value.sort();
+    } else if (checked) {
       departmentCode = department.map((dep: any) => dep.departmentCode);
     } else {
       departmentCode = [];
@@ -95,7 +110,7 @@ export default function ModalAddPLOCollection({
         );
         setDepartment(dep);
       }
-      sortData(res.department, "departmentEN", "string");
+      sortData(res.department, "departmentCode", "string");
     }
   };
 
@@ -103,15 +118,13 @@ export default function ModalAddPLOCollection({
     if (opened) {
       fetchDep();
     }
-    console.log(user);
   }, [opened]);
 
-  // useEffect(() => {
-  //   // Assuming departmentCode is a string or a key you want to get values for
-  //   const departmentCodes = form.getValues();
+  useEffect(() => {
+    const data = form.getValues().data;
 
-  //   console.log("Selected Department Codes:", departmentCodes);
-  // }, [form]); // Add departmentCode if it's a dependency
+    console.log("Add PLO:", data);
+  }, [form]);
 
   return (
     <Modal
@@ -119,12 +132,12 @@ export default function ModalAddPLOCollection({
       onClose={closeModal}
       closeOnClickOutside={false}
       title="Add PLO Collection"
-      size="50vw"
+      size={active == 1 && form.getValues().data?.length! > 1 ? "65vw" : "45vw"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
         content:
-          "flex flex-col justify-center bg-[#F6F7FA] item-center overflow-hidden",
+          "flex flex-col justify-center bg-[#F6F7FA] item-center overflow-hidden max-w-[70vw] ",
       }}
     >
       <Stepper
@@ -203,45 +216,170 @@ export default function ModalAddPLOCollection({
           label="Add PLO"
           description="STEP 2"
         >
-          <div className="flex flex-col mt-3 gap-3">
-            <Textarea
-              withAsterisk={true}
-              label={
-                <p className="text-b2 font-semibold flex gap-1">
-                  PLO <span className="text-secondary">Thai language</span>
-                </p>
-              }
-              className="w-full border-none   rounded-r-none "
-              classNames={{
-                input: "flex  h-[150px] p-3 ",
-                label: "flex pb-1",
+          <div className="flex gap-5 h-full mt-3">
+            <div
+              className="flex flex-col  gap-3 p-5 rounded-lg h-full w-full"
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
-              placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
-            />
-            <Textarea
-              withAsterisk={true}
-              label={
-                <p className="text-b2 font-semibold flex gap-1 ">
-                  PLO <span className="text-secondary">English language</span>
-                </p>
-              }
-              className="w-full border-none rounded-r-none"
-              classNames={{
-                input: "flex  h-[150px] p-3",
-                label: "flex pb-1",
-              }}
-              placeholder="Ex. An ability to solve complex engineering problems."
-            />
+            >
+              <Textarea
+                withAsterisk={true}
+                label={
+                  <p className="font-semibold flex gap-1 h-full ">
+                    PLO <span className="text-secondary">Thai language</span>
+                  </p>
+                }
+                className="w-full border-none   rounded-r-none "
+                classNames={{
+                  input: "flex  h-[125px] p-3 ",
+                  label: "flex pb-1",
+                }}
+                placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
+                {...form.getInputProps(`data.${ploNo}.descTH`)}
+                value={form.getValues().data?.at(ploNo)?.descTH ?? undefined}
+                onChange={(event) => {
+                  form.setFieldValue(
+                    `data.${ploNo}.descTH`,
+                    event.target.value
+                  );
+                }}
+              />
+              <Textarea
+                withAsterisk={true}
+                label={
+                  <p className="font-semibold flex gap-1">
+                    PLO <span className="text-secondary">English language</span>
+                  </p>
+                }
+                className="w-full border-none rounded-r-none"
+                classNames={{
+                  input: "flex h-[125px] p-3",
+                  label: "flex pb-1",
+                }}
+                placeholder="Ex. An ability to solve complex engineering problems."
+                {...form.getInputProps(`data.${ploNo}.descEN`)}
+                value={form.getValues().data?.at(ploNo)?.descEN ?? undefined}
+                onChange={(event) => {
+                  form.setFieldValue(
+                    `data.${ploNo}.descEN`,
+                    event.target.value
+                  );
+                }}
+              />
 
-            <div className="flex gap-2 mt-3 justify-end">
-              <Button
-                // onClick={submit}
-                className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                color="#5768d5"
-              >
-                Add Another
-              </Button>
+              <div className="flex gap-2 mt-3 w-full justify-start">
+                <Button
+                  onClick={() => {
+                    setPloNo(ploNo + 1);
+                    form.insertListItem("data", {
+                      no: ploNo + 2,
+                      descTH: "",
+                      descEN: "",
+                    });
+                  }}
+                  className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                  color="#5768d5"
+                >
+                  Add Another
+                </Button>
+              </div>
             </div>
+            {form.getValues().data?.length! > 1 && (
+              <div
+                className="flex flex-col bg-white border-secondary border-[1px] rounded-md overflow-clip w-full"
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+              >
+                <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
+                  <div className="flex items-center gap-2">
+                    {/* <IconHome2 className="text-secondary" size={19} /> */}
+
+                    <span>List PLO Added</span>
+                  </div>
+                  <p>{department.length} PLOs</p>
+                </div>
+                <div className="flex flex-col w-full h-[280px] px-4 overflow-y-auto">
+                  {/* <DragDropContext
+                    onDragEnd={({ destination, source }) => {
+                      handlers.reorder({
+                        from: source.index,
+                        to: destination?.index || 0,
+                      });
+                      // setReorder(true);
+                    }}
+                  >
+                    <Droppable droppableId="dnd-list" direction="vertical">
+                      {(provided) => (
+                        <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                          className=" overflow-y-auto"
+                        >
+                          {state.map((item, index) => (
+                            <Draggable
+                              key={item.no}
+                              index={index}
+                              // draggableId={item.no.toString()}
+                            >
+                              {(provided, snapshot) => (
+                                <div
+                                  className="flex p-4 w-full justify-between first:-mt-2 border-b last:border-none"
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                >
+                                  <div className="flex flex-col gap-2 w-[85%] ">
+                                    <p className="text-secondary font-semibold text-[14px]">
+                                      PLO-{item.no}
+                                    </p>
+                                    <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
+                                      <div className="flex  text-pretty ">
+                                        <li></li> {item.descTH}
+                                      </div>
+                                      <div className="flex  text-pretty ">
+                                        <li></li> {item.descEN}
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div className="flex gap-1 items-center">
+                                    <div
+                                      className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
+                                      onClick={() => {}}
+                                    >
+                                      <IconTrash
+                                        stroke={1.5}
+                                        color="#FF4747"
+                                        className=" size-4 flex items-center"
+                                      />
+                                    </div>
+
+                                    <div
+                                      className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
+                                      {...provided.dragHandleProps}
+                                    >
+                                      <IconGripVertical
+                                        style={{
+                                          width: rem(20),
+                                          height: rem(20),
+                                        }}
+                                        stroke={1.5}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </DragDropContext> */}
+                </div>
+              </div>
+            )}
           </div>
         </Stepper.Step>
         <Stepper.Step
@@ -293,7 +431,8 @@ export default function ModalAddPLOCollection({
                   {...form.getInputProps("departmentCode")}
                   value={form.getValues().departmentCode}
                   onChange={(event) => {
-                    form.setFieldValue("departmentCode", event);
+                    setDepartmentCode(false, event);
+                    // form.setFieldValue("departmentCode", event);
                   }}
                 >
                   <Group className="gap-0">
