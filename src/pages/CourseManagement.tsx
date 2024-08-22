@@ -7,7 +7,6 @@ import {
   IconEdit,
   IconPencilMinus,
   IconPlus,
-  IconInfoCircle,
   IconExclamationCircle,
   IconChevronLeft,
   IconChevronRight,
@@ -20,14 +19,12 @@ import {
   deleteSectionManagement,
   getCourseManagement,
 } from "@/services/courseManagement/courseManagement.service";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { COURSE_TYPE, NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import {
   getSectionNo,
   getUserName,
   showNotifications,
 } from "@/helpers/functions/function";
-import { useDisclosure } from "@mantine/hooks";
 import MainPopup from "@/components/Popup/MainPopup";
 import { IModelSection } from "@/models/ModelSection";
 import Loading from "@/components/Loading";
@@ -35,12 +32,12 @@ import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
 import ModalEditCourse from "@/components/Modal/ModalEditCourse";
 import ModalEditSection from "@/components/Modal/ModalEditSection";
 import {
-  addLoadMoreCourseManagement,
   removeCourseManagement,
   removeSectionManagement,
   setCourseManagementList,
 } from "@/store/courseManagement";
 import { removeCourse, removeSection } from "@/store/course";
+import ModalAddSection from "@/components/Modal/ModalAddSection";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -54,26 +51,12 @@ export default function CourseManagement() {
   const [editSec, setEditSec] = useState<
     Partial<IModelSection> & Record<string, any>
   >();
-  const [
-    openMainPopupDelSec,
-    { open: openedMainPopupDelSec, close: closeMainPopupDelSec },
-  ] = useDisclosure(false);
-  const [
-    openMainPopupDelCourse,
-    { open: openedMainPopupDelCourse, close: closeMainPopupDelCourse },
-  ] = useDisclosure(false);
-  const [
-    openModalManageInst,
-    { open: openedModalManageInst, close: closeModalManageInst },
-  ] = useDisclosure(false);
-  const [
-    openModalEditCourse,
-    { open: openedModalEditCourse, close: closeModalEditCourse },
-  ] = useDisclosure(false);
-  const [
-    modalEditSection,
-    { open: openModalEditSection, close: closeModalEditSection },
-  ] = useDisclosure(false);
+  const [openMainPopupDelSec, setOpenMainPopupDelSec] = useState(false);
+  const [openMainPopupDelCourse, setOpenMainPopupDelCourse] = useState(false);
+  const [openModalManageIns, setOpenModalManageIns] = useState(false);
+  const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
+  const [openModalEditSec, setOpenModalEditSec] = useState(false);
+  const [openModalAddSec, setOpenModalAddSec] = useState(false);
 
   useEffect(() => {
     if (user.departmentCode) {
@@ -139,7 +122,7 @@ export default function CourseManagement() {
   const onClickDeleteCourse = async (course: any) => {
     const res = await deleteCourseManagement(course.id, course);
     if (res) {
-      closeMainPopupDelCourse();
+      setOpenMainPopupDelSec(false);
       dispatch(removeCourseManagement(res.id));
       dispatch(removeCourse(res.courseId));
       showNotifications(
@@ -155,7 +138,7 @@ export default function CourseManagement() {
     delete payload.id;
     const res = await deleteSectionManagement(course.id, course.secId, payload);
     if (res) {
-      closeMainPopupDelSec();
+      setOpenMainPopupDelSec(false);
       dispatch(removeSectionManagement({ id: course.id, secId: course.secId }));
       dispatch(removeSection({ id: res.courseId, secId: res.secId }));
       showNotifications(
@@ -170,20 +153,26 @@ export default function CourseManagement() {
 
   return (
     <>
+      <ModalAddSection
+        opened={openModalAddSec}
+        onClose={() => setOpenModalAddSec(false)}
+        isManage={true}
+        data={editCourse}
+      />
       <ModalEditCourse
         opened={openModalEditCourse}
-        onClose={closeModalEditCourse}
+        onClose={() => setOpenModalEditCourse(false)}
         isCourseManage={true}
         value={editCourse}
       />
       <ModalManageIns
-        opened={openModalManageInst}
-        onClose={closeModalManageInst}
+        opened={openModalManageIns}
+        onClose={() => setOpenModalManageIns(false)}
         data={editCourse}
       />
       <MainPopup
         opened={openMainPopupDelCourse}
-        onClose={closeMainPopupDelCourse}
+        onClose={() => setOpenMainPopupDelCourse(false)}
         action={() => onClickDeleteCourse(editCourse)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete course"
@@ -213,8 +202,8 @@ export default function CourseManagement() {
         }
       />
       <ModalEditSection
-        opened={modalEditSection}
-        onClose={closeModalEditSection}
+        opened={openModalEditSec}
+        onClose={() => setOpenModalEditSec(false)}
         isCourseManage={true}
         title={`Edit section ${getSectionNo(editSec?.sectionNo)} in ${
           editSec?.courseNo
@@ -223,7 +212,7 @@ export default function CourseManagement() {
       />
       <MainPopup
         opened={openMainPopupDelSec}
-        onClose={closeMainPopupDelSec}
+        onClose={() => setOpenMainPopupDelSec(false)}
         action={() => onClickDeleteSec(editSec)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete section"
@@ -334,42 +323,43 @@ export default function CourseManagement() {
                           boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                         }}
                       >
-                        <Menu.Item className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]">
+                        <Menu.Item
+                          onClick={() => {
+                            setEditCourse({ ...course });
+                            setOpenModalAddSec(true);
+                          }}
+                          className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]"
+                        >
                           <div className="flex items-center gap-2">
                             <IconPlus stroke={2} className="h-4 w-4" />
                             <span>Add section</span>
                           </div>
                         </Menu.Item>
-                        <Menu.Item className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]">
-                          <div
-                            onClick={() => {
-                              setEditCourse({
-                                id: course.id,
-                                oldCourseNo: course.courseNo,
-                                courseNo: course.courseNo,
-                                courseName: course.courseName,
-                              });
-                              openedModalEditCourse();
-                            }}
-                            className="flex items-center gap-2"
-                          >
+                        <Menu.Item
+                          onClick={() => {
+                            setEditCourse({
+                              id: course.id,
+                              oldCourseNo: course.courseNo,
+                              courseNo: course.courseNo,
+                              courseName: course.courseName,
+                            });
+                            setOpenModalEditCourse(true);
+                          }}
+                          className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]"
+                        >
+                          <div className="flex items-center gap-2">
                             <IconPencilMinus stroke={1.5} className="h-4 w-4" />
                             <span>Edit course</span>
                           </div>
                         </Menu.Item>
                         <Menu.Item
-                          onClick={() => {}}
+                          onClick={() => {
+                            setEditCourse({ ...course });
+                            setOpenModalManageIns(true);
+                          }}
                           className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]"
                         >
-                          <div
-                            className="flex items-center gap-2"
-                            onClick={() => {
-                              setEditCourse({
-                                ...course,
-                              });
-                              openedModalManageInst();
-                            }}
-                          >
+                          <div className="flex items-center gap-2">
                             <Icon
                               className="h-4 w-4"
                               IconComponent={ManageAdminIcon}
@@ -386,7 +376,7 @@ export default function CourseManagement() {
                               courseNo: course.courseNo,
                               courseName: course.courseName,
                             });
-                            openedMainPopupDelCourse();
+                            setOpenMainPopupDelCourse(true);
                           }}
                         >
                           <div className="flex items-center gap-2">
@@ -472,7 +462,7 @@ export default function CourseManagement() {
                                   ),
                                 },
                               });
-                              openModalEditSection();
+                              setOpenModalEditSec(true);
                             }}
                             className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"
                           >
@@ -489,7 +479,7 @@ export default function CourseManagement() {
                                   secId: sec.id,
                                   sectionNo: sec.sectionNo,
                                 });
-                                openedMainPopupDelSec();
+                                setOpenMainPopupDelSec(true);
                               }
                             }}
                             className={`flex  justify-center items-center bg-transparent border-[1px]  size-8 bg-none rounded-full  

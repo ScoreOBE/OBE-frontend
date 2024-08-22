@@ -15,6 +15,12 @@ export const courseManagementController = (configService = {}) => {
     createCourseManagement: async (params: any) => {
       return service.post(`${prefix}`, { ...params });
     },
+    checkCanCreateSectionManagement: async (params: any) => {
+      return service.get(`${prefix}/check`, { ...params });
+    },
+    createSectionManagement: async (id: string, params: any) => {
+      return service.post(`${prefix}/section/${id}`, { ...params });
+    },
     updateCourseManagement: async (id: string, params: any) => {
       return service.put(`${prefix}/${id}`, { ...params });
     },
