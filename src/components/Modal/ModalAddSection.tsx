@@ -18,7 +18,7 @@ import {
 } from "@tabler/icons-react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { SEMESTER } from "@/helpers/constants/enum";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import {
   validateCourseNameorTopic,
   validateSectionNo,
@@ -32,13 +32,23 @@ import {
 import CompoMangementIns from "../CompoManageIns";
 import { IModelSection } from "@/models/ModelSection";
 import { IModelCourse } from "@/models/ModelCourse";
+import {
+  checkCanCreateCourse,
+  createCourse,
+} from "@/services/course/course.service";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
   data: Partial<IModelCourse>;
+  fetchOneCourse: () => void;
 };
-export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
+export default function ModalAddSection({
+  opened,
+  onClose,
+  data = {},
+  fetchOneCourse,
+}: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [loading, setLoading] = useState(false);
@@ -49,16 +59,16 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
 
   const form = useForm({
     mode: "uncontrolled",
-    initialValues: [{}] as Partial<IModelSection>[],
-    validate: [
-      {
+    initialValues: { sections: [{}] as Partial<IModelSection>[] },
+    validate: {
+      sections: {
         topic: (value) => validateCourseNameorTopic(value, "Topic"),
         sectionNo: (value) => validateSectionNo(value),
         semester: (value) => {
           return value?.length ? null : "Please select semester at least one.";
         },
       },
-    ],
+    },
     validateInputOnBlur: true,
   });
 
@@ -66,50 +76,52 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
     setLoading(true);
     setFirstInput(false);
     let isValid = true;
-    // const length = form.getValues().length || 0;
-    // switch (active) {
-    //   case 0:
-    //     for (let i = 0; i < length; i++) {
-    //       isValid = !form.validateField(`${i}.sectionNo`).hasError;
-    //       if (!isValid) break;
-    //     }
-    //     form.validateField("0.topic");
-    //     isValid =
-    //       isValid &&
-    //       (!form.validateField("0.topic").hasError ||
-    //         data.type !== COURSE_TYPE.SEL_TOPIC);
-    //     // if (isValid) {
-    //     //   const res = await checkCanCreateCourse(setPayload());
-    //     //   if (!res) isValid = false;
-    //     // }
-    //     break;
-    //   case 2:
-    //     const secNoList: string[] = [];
-    //     for (let i = 0; i < length; i++) {
-    //       const isError = form.validateField(`${i}.semester`).hasError;
-    //       if (isValid) {
-    //         isValid = !isError;
-    //       } else {
-    //         form.validateField(`${i}.semester`);
-    //       }
-    //       if (isError) {
-    //         secNoList.push(getSectionNo(form.getValues().at(i)?.sectionNo));
-    //       }
-    //     }
-    //     if (secNoList.length) {
-    //       secNoList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
-    //       showNotifications(
-    //         NOTI_TYPE.ERROR,
-    //         "iiiii",
-    //         `ooooooo ${secNoList.join(", ")}`
-    //       );
-    //     }
-    //     break;
-    // }
+    const length = form.getValues().sections.length || 0;
+    switch (active) {
+      case 0:
+        for (let i = 0; i < length; i++) {
+          isValid = !form.validateField(`sections.${i}.sectionNo`).hasError;
+          if (!isValid) break;
+        }
+        form.validateField("sections.0.topic");
+        isValid =
+          isValid &&
+          (!form.validateField("sections.0.topic").hasError ||
+            data.type !== COURSE_TYPE.SEL_TOPIC);
+        if (isValid) {
+          const res = await checkCanCreateCourse(setPayload(false));
+          if (!res) isValid = false;
+        }
+        break;
+      case 1:
+        const secNoList: string[] = [];
+        for (let i = 0; i < length; i++) {
+          const isError = form.validateField(`sections.${i}.semester`).hasError;
+          if (isValid) {
+            isValid = !isError;
+          } else {
+            form.validateField(`sections.${i}.semester`);
+          }
+          if (isError) {
+            secNoList.push(
+              getSectionNo(form.getValues().sections.at(i)?.sectionNo)
+            );
+          }
+        }
+        if (secNoList.length) {
+          secNoList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+          showNotifications(
+            NOTI_TYPE.ERROR,
+            "iiiii",
+            `ooooooo ${secNoList.join(", ")}`
+          );
+        }
+        break;
+    }
     if (isValid) {
       setFirstInput(true);
-      if (active == 4) {
-        // await addSection();
+      if (active == 3) {
+        await addSection();
       }
       setActive((cur) => (cur < 3 ? cur + 1 : cur));
     }
@@ -125,181 +137,199 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
   };
 
   useEffect(() => {
-    console.log(form.getValues());
+    console.log(form.getValues().sections);
   }, [form]);
 
-  // const setPayload = () => {
-  //   let payload = {
-  //     ...form.getValues(),
-  //     academicYear: academicYear.id,
-  //     updatedYear: academicYear.year,
-  //     updatedSemester: academicYear.semester,
-  //   };
-  //   payload?.forEach((sec: any) => {
-  //     sec.semester = sec.semester?.map((term: string) => parseInt(term));
-  //     sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
-  //   });
-  //   return payload;
-  // };
+  const setPayload = (add = true) => {
+    let payload = {
+      ...data,
+      sections: [...form.getValues().sections],
+      academicYear: academicYear.id,
+      updatedYear: academicYear.year,
+      updatedSemester: academicYear.semester,
+    };
+    if (add) {
+      payload.sections?.forEach((sec: any) => {
+        sec.semester = sec.semester?.map((term: string) => parseInt(term));
+        sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
+      });
+    }
+    return payload;
+  };
 
-  // const setSectionList = (value: string[]) => {
-  //   let sections = form.getValues();
-  //   const lastValue = value[value.length - 1];
-  //   // validate section No
-  //   if (value.length >= sections.length) {
-  //     if (
-  //       !parseInt(lastValue) ||
-  //       lastValue.length > 3 ||
-  //       sections.some((sec) => sec?.sectionNo === parseInt(lastValue))
-  //     )
-  //       return;
-  //   }
-  //   const sectionNo: string[] = value.sort((a, b) => parseInt(a) - parseInt(b));
-  //   setSectionNoList(sectionNo.map((secNo) => getSectionNo(secNo)));
-  //   let newSections: any[] = [];
-  //   if (sections) {
-  //     // reset sections and instructors
-  //     if (!sectionNo.length) {
-  //       let initialSection = {};
-  //       if (data.type == COURSE_TYPE.SEL_TOPIC) {
-  //         initialSection = { topic: sections[0]?.topic };
-  //       }
-  //       setCoInsList([]);
-  //     }
-  //     // adjust coInstructors
-  //     else if (sections?.length! > sectionNo.length) {
-  //       coInsList.forEach((coIns) => {
-  //         coIns.sections = coIns.sections.filter((sec: string) =>
-  //           sectionNo.includes(sec)
-  //         );
-  //       });
-  //       setCoInsList(coInsList.filter((coIns) => coIns.sections.length > 0));
-  //     }
-  //     sectionNo.forEach((secNo) => {
-  //       const data: any = {
-  //         ...(sections.find((sec) => sec?.sectionNo == parseInt(secNo)) || {}),
-  //         sectionNo: parseInt(secNo),
-  //         instructor: user.id,
-  //         coInstructors: coInsList.map((coIns) => ({ ...coIns })),
-  //       };
-  //       if (data.type == COURSE_TYPE.SEL_TOPIC) {
-  //         data.topic = sections[0]?.topic;
-  //       }
-  //       coInsList.forEach((coIns) => {
-  //         if (!coIns.sections.includes(getSectionNo(secNo))) {
-  //           coIns.sections.push(getSectionNo(secNo));
-  //           coIns.sections.sort(
-  //             (a: string, b: string) => parseInt(a) - parseInt(b)
-  //           );
-  //         }
-  //       });
-  //       newSections?.push(data);
-  //     });
-  //   }
-  //   newSections.forEach((sec) =>
-  //     sortData(sec.coInstructors!, "label", "string")
-  //   );
-  //   sortData(newSections, "sectionNo");
-  //   form.setValues([...newSections]);
-  // };
+  const addSection = async () => {
+    const res = await createCourse(setPayload());
+    if (res) {
+      closeModal();
+      fetchOneCourse();
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Add section success",
+        `${sectionNoList.join(", ")} is added`
+      );
+    }
+  };
 
-  // const addCoIns = (
-  //   {
-  //     inputUser,
-  //     instructorOption,
-  //   }: { inputUser: any; instructorOption: any[] },
-  //   {
-  //     setInputUser,
-  //     setInstructorOption,
-  //   }: {
-  //     setInputUser: React.Dispatch<React.SetStateAction<any>>;
-  //     setInstructorOption: React.Dispatch<React.SetStateAction<any[]>>;
-  //   }
-  // ) => {
-  //   if (inputUser?.value) {
-  //     inputUser.sections = [];
-  //     const updatedInstructorOptions = instructorOption.map((option: any) =>
-  //       option?.value == inputUser.value
-  //         ? { ...option, disabled: true }
-  //         : option
-  //     );
-  //     setInstructorOption(updatedInstructorOptions);
-  //     delete inputUser.disabled;
-  //     const updatedSections = form.getValues()?.map((sec) => {
-  //       const coInsArr = [...(sec.coInstructors ?? []), inputUser];
-  //       sortData(coInsArr, "label", "string");
-  //       inputUser.sections.push(getSectionNo(sec.sectionNo));
-  //       inputUser.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
-  //       return {
-  //         ...sec,
-  //         coInstructors: [...coInsArr],
-  //       };
-  //     });
-  //     setCoInsList([inputUser, ...coInsList]);
-  //     form.setFieldValue("sections", [...updatedSections!]);
-  //   }
-  //   setInputUser({ value: null });
-  // };
+  const setSectionList = (value: string[]) => {
+    let sections = form.getValues().sections ?? [];
+    const lastValue = value[value.length - 1];
+    const type = data.type;
+    // validate section No
+    if (value.length && value.length >= sections.length) {
+      if (
+        !parseInt(lastValue) ||
+        lastValue.length > 3 ||
+        sections.some((sec) => sec.sectionNo === parseInt(lastValue))
+      )
+        return;
+    }
+    const sectionNo: string[] = value.sort((a, b) => parseInt(a) - parseInt(b));
+    setSectionNoList(sectionNo.map((secNo) => getSectionNo(secNo)));
+    // reset sections and instructors
+    let initialSection: Partial<IModelSection> = { semester: [] };
+    if (type == COURSE_TYPE.SEL_TOPIC) {
+      initialSection.topic = sections[0]?.topic;
+    }
+    if (!sectionNo.length) {
+      sections = [{ ...initialSection }];
+      setCoInsList([]);
+    } else if (sections?.length == sectionNo.length) {
+      sections[sectionNo.length - 1] = {
+        ...initialSection,
+        sectionNo: parseInt(lastValue),
+        instructor: user.id,
+        coInstructors: coInsList.map((coIns) => ({ ...coIns })),
+      };
+    }
+    // adjust coInstructors
+    else if (sectionNo.length > sections?.length) {
+      coInsList.forEach((coIns) => {
+        coIns.sections = coIns.sections.filter((sec: string) =>
+          sectionNo.includes(sec)
+        );
+      });
+      setCoInsList(coInsList.filter((coIns) => coIns.sections.length > 0));
+      sections.push({
+        ...initialSection,
+        sectionNo: parseInt(lastValue),
+        instructor: user.id,
+        coInstructors: coInsList.map((coIns) => ({ ...coIns })),
+      });
+    } else {
+      coInsList.forEach((coIns) => {
+        coIns.sections = coIns.sections.filter((sec: string) =>
+          sectionNo.includes(sec)
+        );
+      });
+      setCoInsList(coInsList.filter((coIns) => coIns.sections.length > 0));
+      sections = sections.filter((sec) =>
+        sectionNo.includes(getSectionNo(sec.sectionNo))
+      );
+    }
 
-  // const removeCoIns = (coIns: any) => {
-  //   const newList = coInsList.filter((e) => e.value !== coIns.value);
-  //   const updatedSections = form.getValues()?.map((sec) => ({
-  //     ...sec,
-  //     coInstructors: (sec?.coInstructors ?? []).filter(
-  //       (p) => p.value !== coIns.value
-  //     ),
-  //   }));
-  //   form.setFieldValue("sections", [...updatedSections!]);
-  //   setCoInsList(newList);
-  // };
+    sections.forEach((sec) => sortData(sec.coInstructors!, "label", "string"));
+    sortData(sections, "sectionNo");
+    form.setFieldValue("sections", [...sections]);
+  };
 
-  // const editCoInsInSec = (sectionNo: string, checked: boolean, coIns: any) => {
-  //   const updatedSections = form.getValues();
-  //   updatedSections?.forEach((sec, index) => {
-  //     const secNo = getSectionNo(sec?.sectionNo);
-  //     if (sectionNo == secNo) {
-  //       if (checked) {
-  //         coIns.sections.push(secNo);
-  //         coIns.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
-  //         sec?.coInstructors?.push({ ...coIns });
-  //       } else {
-  //         coIns.sections = coIns.sections.filter((e: any) => e !== secNo);
-  //         sec?.coInstructors?.splice(sec?.coInstructors.indexOf(coIns), 1);
-  //       }
-  //       sortData(sec?.coInstructors, "label", "string");
-  //     }
-  //     return sec;
-  //   });
-  //   form.setFieldValue("sections", [...updatedSections!]);
-  // };
+  const addCoIns = (
+    {
+      inputUser,
+      instructorOption,
+    }: { inputUser: any; instructorOption: any[] },
+    {
+      setInputUser,
+      setInstructorOption,
+    }: {
+      setInputUser: React.Dispatch<React.SetStateAction<any>>;
+      setInstructorOption: React.Dispatch<React.SetStateAction<any[]>>;
+    }
+  ) => {
+    if (inputUser?.value) {
+      inputUser.sections = [];
+      const updatedInstructorOptions = instructorOption.map((option: any) =>
+        option?.value == inputUser.value
+          ? { ...option, disabled: true }
+          : option
+      );
+      setInstructorOption(updatedInstructorOptions);
+      delete inputUser.disabled;
+      const updatedSections = form.getValues().sections?.map((sec) => {
+        const coInsArr = [...(sec.coInstructors ?? []), inputUser];
+        sortData(coInsArr, "label", "string");
+        inputUser.sections.push(getSectionNo(sec.sectionNo));
+        inputUser.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+        return {
+          ...sec,
+          coInstructors: [...coInsArr],
+        };
+      });
+      setCoInsList([inputUser, ...coInsList]);
+      form.setFieldValue("sections", [...updatedSections!]);
+    }
+    setInputUser({ value: null });
+  };
 
-  // const setSemesterInSec = (
-  //   index: number,
-  //   checked: boolean,
-  //   semester?: string[]
-  // ) => {
-  //   const semesterList: any[] = form.getValues()?.at(index)?.semester ?? [];
-  //   if (!semester) {
-  //     form.setFieldValue(`sections.${index}.openThisTerm`, checked);
-  //     if (
-  //       checked &&
-  //       !semesterList?.includes(academicYear?.semester.toString())
-  //     ) {
-  //       semesterList.push(academicYear?.semester.toString());
-  //       semesterList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
-  //       form.setFieldValue(`sections.${index}.semester`, semesterList);
-  //     }
-  //   } else {
-  //     form.setFieldValue(`sections.${index}.semester`, semester.sort());
-  //   }
-  // };
+  const removeCoIns = (coIns: any) => {
+    const newList = coInsList.filter((e) => e.value !== coIns.value);
+    const updatedSections = form.getValues().sections?.map((sec) => ({
+      ...sec,
+      coInstructors: (sec.coInstructors ?? []).filter(
+        (p) => p.value !== coIns.value
+      ),
+    }));
+    form.setFieldValue("sections", [...updatedSections!]);
+    setCoInsList(newList);
+  };
+
+  const editCoInsInSec = (sectionNo: string, checked: boolean, coIns: any) => {
+    const updatedSections = form.getValues().sections;
+    updatedSections?.forEach((sec, index) => {
+      const secNo = getSectionNo(sec.sectionNo);
+      if (sectionNo == secNo) {
+        if (checked) {
+          coIns.sections.push(secNo);
+          coIns.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+          sec.coInstructors?.push({ ...coIns });
+        } else {
+          coIns.sections = coIns.sections.filter((e: any) => e !== secNo);
+          sec.coInstructors?.splice(sec.coInstructors.indexOf(coIns), 1);
+        }
+        sortData(sec.coInstructors, "label", "string");
+      }
+      return sec;
+    });
+    form.setFieldValue("sections", [...updatedSections!]);
+  };
+
+  const setSemesterInSec = (
+    index: number,
+    checked: boolean,
+    semester?: string[]
+  ) => {
+    const semesterList: any[] =
+      form.getValues().sections?.at(index)?.semester ?? [];
+    if (!semester) {
+      form.setFieldValue(`sections.${index}.openThisTerm`, checked);
+      if (
+        checked &&
+        !semesterList?.includes(academicYear?.semester.toString())
+      ) {
+        semesterList.push(academicYear?.semester.toString());
+        semesterList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+        form.setFieldValue(`sections.${index}.semester`, semesterList);
+      }
+    } else {
+      form.setFieldValue(`sections.${index}.semester`, semester.sort());
+    }
+  };
 
   return (
     <Modal
       opened={opened}
       onClose={closeModal}
       closeOnClickOutside={false}
-      title="Add Course"
+      title="Add Section"
       size="50vw"
       centered
       transitionProps={{ transition: "pop" }}
@@ -338,7 +368,7 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
                   size="xs"
                   classNames={{ input: "focus:border-primary" }}
                   placeholder="Ex. Full Stack Development"
-                  {...form.getInputProps("")}
+                  {...form.getInputProps("sections.0.topic")}
                 />
               )}
               <TagsInput
@@ -353,12 +383,15 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
                 }}
                 placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
                 splitChars={[",", " ", "|"]}
-                {...form.getInputProps("sectionNo")}
-                error={!firstInput && form.validateField(`0.sectionNo`).error}
-                // value={sectionNoList}
-                // onChange={setSectionList}
+                {...form.getInputProps(`section.sectionNo`)}
+                error={
+                  !firstInput &&
+                  form.validateField(`sections.0.sectionNo`).error
+                }
+                value={sectionNoList}
+                onChange={setSectionList}
               ></TagsInput>
-              <p>{form.validateField("sectionNo").error}</p>
+              <p>{form.validateField("sections.sectionNo").error}</p>
             </div>
           </div>
         </Stepper.Step>
@@ -369,7 +402,7 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
         >
           <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-scroll  ">
             <div className="flex flex-col font-medium text-[14px] gap-5">
-              {form.getValues()?.map((sec: any, index) => (
+              {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary font-semibold">
                     Select Semester for Section {getSectionNo(sec.sectionNo)}{" "}
@@ -397,18 +430,18 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
                             academicYear?.semester
                           }/${academicYear?.year.toString()?.slice(-2)})`}
                           checked={sec.openThisTerm}
-                          // onChange={(event) =>
-                          //   setSemesterInSec(index, event.target.checked)
-                          // }
+                          onChange={(event) =>
+                            setSemesterInSec(index, event.target.checked)
+                          }
                         />
                       </div>
                       <Checkbox.Group
                         classNames={{ error: "mt-2" }}
-                        {...form.getInputProps(`${index}.semester`)}
+                        {...form.getInputProps(`sections.${index}.semester`)}
                         value={sec.semester}
-                        // onChange={(event) => {
-                        //   setSemesterInSec(index, true, event);
-                        // }}
+                        onChange={(event) => {
+                          setSemesterInSec(index, true, event);
+                        }}
                       >
                         <Group className="flex flex-row gap-1 justify-end ">
                           {SEMESTER.map((item) => (
@@ -447,9 +480,9 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
         >
           <div className="flex flex-col mt-3 flex-1 ">
             <CompoMangementIns
-              opened={active == 3}
-              // action={addCoIns}
-              sections={form.getValues()}
+              opened={active == 2}
+              action={addCoIns}
+              sections={form.getValues().sections}
               setUserList={setCoInsList}
             />
 
@@ -513,13 +546,13 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
                                       checked={coIns.sections?.includes(
                                         sectionNo
                                       )}
-                                      // onChange={(event) =>
-                                      //   editCoInsInSec(
-                                      //     sectionNo,
-                                      //     event.currentTarget.checked,
-                                      //     coIns
-                                      //   )
-                                      // }
+                                      onChange={(event) =>
+                                        editCoInsInSec(
+                                          sectionNo,
+                                          event.currentTarget.checked,
+                                          coIns
+                                        )
+                                      }
                                     />
                                   ))}
                                 </div>
@@ -530,7 +563,7 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
                               size="xs"
                               variant="outline"
                               color="#FF4747"
-                              // onClick={() => removeCoIns(coIns)}
+                              onClick={() => removeCoIns(coIns)}
                             >
                               Remove
                             </Button>
@@ -558,7 +591,7 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
         <Stepper.Step
           allowStepSelect={false}
           label="Review"
-          description="STEP 5"
+          description="STEP 4"
         >
           <div
             className="w-full flex flex-col bg-white border-secondary border-[1px] mb-5 rounded-md"
@@ -570,16 +603,16 @@ export default function ModalAddSection({ opened, onClose, data = {} }: Props) {
               <p>
                 {data.courseNo} - {data.courseName}{" "}
               </p>
-              {data.sections?.at(0)?.topic && (
+              {form.getValues().sections?.at(0)?.topic && (
                 <p className="text-secondary text-b3">
-                  Topic: {form.getValues().at(0)?.topic}
+                  Topic: {form.getValues().sections.at(0)?.topic}
                 </p>
               )}
               <p className="text-b3">Course owner: {getUserName(user, 1)}</p>
             </div>
             <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-scroll ">
               <div className="flex flex-col gap-3 mt-3   font-medium text-[12px]">
-                {form.getValues().map((sec, index) => (
+                {form.getValues().sections.map((sec, index) => (
                   <div
                     key={index}
                     className="w-full border-b-[1px] border-[#c9c9c9] pb-2  h-fit px-4    gap-1 flex flex-col"
