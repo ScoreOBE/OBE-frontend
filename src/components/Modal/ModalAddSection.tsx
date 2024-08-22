@@ -18,7 +18,7 @@ import {
 } from "@tabler/icons-react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { SEMESTER } from "@/helpers/constants/enum";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppSelector } from "@/store";
 import {
   validateCourseNameorTopic,
   validateSectionNo,
@@ -36,17 +36,20 @@ import {
   checkCanCreateCourse,
   createCourse,
 } from "@/services/course/course.service";
+import { checkCanCreateSectionManagement } from "@/services/courseManagement/courseManagement.service";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
   data: Partial<IModelCourse>;
-  fetchOneCourse: () => void;
+  isManage?: boolean;
+  fetchOneCourse?: () => void;
 };
 export default function ModalAddSection({
   opened,
   onClose,
   data = {},
+  isManage = false,
   fetchOneCourse,
 }: Props) {
   const user = useAppSelector((state) => state.user);
@@ -89,7 +92,9 @@ export default function ModalAddSection({
           (!form.validateField("sections.0.topic").hasError ||
             data.type !== COURSE_TYPE.SEL_TOPIC);
         if (isValid) {
-          const res = await checkCanCreateCourse(setPayload(false));
+          const res = isManage
+            ? await checkCanCreateSectionManagement(setPayload(false))
+            : await checkCanCreateCourse(setPayload(false));
           if (!res) isValid = false;
         }
         break;
@@ -120,7 +125,7 @@ export default function ModalAddSection({
     }
     if (isValid) {
       setFirstInput(true);
-      if (active == 3) {
+      if (active == 3 && !isManage) {
         await addSection();
       }
       setActive((cur) => (cur < 3 ? cur + 1 : cur));
@@ -160,13 +165,13 @@ export default function ModalAddSection({
   const addSection = async () => {
     const res = await createCourse(setPayload());
     if (res) {
-      closeModal();
-      fetchOneCourse();
+      if (fetchOneCourse) fetchOneCourse();
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Add section success",
         `${sectionNoList.join(", ")} is added`
       );
+      closeModal();
     }
   };
 
