@@ -502,7 +502,7 @@ export default function ModalAddCourse({
           label="Semester"
           description="STEP 3"
         >
-          <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-scroll  ">
+          <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-auto  ">
             <div className="flex flex-col font-medium text-[14px] gap-5">
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
@@ -598,12 +598,12 @@ export default function ModalAddCourse({
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <IconUsers /> Added Co-Instructor
                 </div>
-                <div className="flex flex-col max-h-[250px] h-fit w-full   px-2   overflow-y-scroll ">
-                  <div className="flex flex-col max-h-[400px] h-fit p-1">
+                <div className="flex flex-col max-h-[250px] h-fit w-full   px-2   overflow-y-auto ">
+                  <div className="flex flex-col max-h-[400px] h-fit p-1 ">
                     {coInsList.map((coIns, index) => (
                       <div
                         key={index}
-                        className="w-full h-fit p-3   gap-4 flex flex-col"
+                        className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none  py-5 "
                       >
                         <div className="flex w-full justify-between items-center">
                           <div className="flex flex-col  font-medium text-[14px]">
@@ -624,7 +624,7 @@ export default function ModalAddCourse({
                                 </Button>
                               </Menu.Target>
 
-                              <Menu.Dropdown className=" overflow-y-scroll max-h-[220px] !w-[220px] h-fit">
+                              <Menu.Dropdown className=" overflow-y-auto max-h-[220px] !w-[220px] h-fit border-b ">
                                 <Menu.Label className=" translate-x-1 mb-2">
                                   Can access
                                 </Menu.Label>
@@ -712,14 +712,14 @@ export default function ModalAddCourse({
               )}
               <p className="text-b3">Course owner: {getUserName(user, 1)}</p>
             </div>
-            <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-scroll ">
+            <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-auto ">
               <div className="flex flex-col gap-3 mt-3   font-medium text-[12px]">
                 {form.getValues().sections?.map((sec, index) => (
                   <div
                     key={index}
                     className="w-full border-b-[1px] border-[#c9c9c9] pb-2  h-fit px-4    gap-1 flex flex-col"
                   >
-                    <span className="text-secondary font-semibold text-[14px] mb-2">
+                    <span className="text-default font-semibold text-[14px] mb-2">
                       Section {getSectionNo(sec.sectionNo)}
                     </span>
 
