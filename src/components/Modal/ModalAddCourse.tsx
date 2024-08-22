@@ -317,7 +317,7 @@ export default function ModalAddCourse({
   ) => {
     const semesterList: any[] =
       form.getValues().sections?.at(index)?.semester ?? [];
-    if (!semester?.length) {
+    if (!semester) {
       form.setFieldValue(`sections.${index}.openThisTerm`, checked);
       if (
         checked &&

@@ -70,6 +70,11 @@ export default function Course() {
     if (resCourse) {
       dispatch(setCourseList(resCourse));
     }
+    fetchOneCourse();
+    dispatch(setLoading(false));
+  };
+
+  const fetchOneCourse = async () => {
     const res = await getOneCourse({
       academicYear: params.get("id"),
       courseNo,
@@ -77,7 +82,6 @@ export default function Course() {
     if (res) {
       setCourse(res);
     }
-    dispatch(setLoading(false));
   };
 
   const onClickDeleteSec = async () => {
@@ -124,6 +128,7 @@ export default function Course() {
         opened={openModalAddSec}
         onClose={() => setOpenModalAddSec(false)}
         data={addSec!}
+        fetchOneCourse={fetchOneCourse}
       />
 
       {error.statusCode ? (
