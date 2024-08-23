@@ -25,15 +25,19 @@ import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { useAppSelector } from "@/store";
 import { log } from "console";
-import { sortData } from "@/helpers/functions/function";
+import { showNotifications, sortData } from "@/helpers/functions/function";
 import SelectDepartment from "@/pages/SelectDepartment";
 import Icon from "../Icon";
 import IconSO from "@/assets/icons/SO.svg?react";
 import { useListState } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import { isEqual } from "lodash";
-import { ROLE } from "@/helpers/constants/enum";
+import { isEmpty, isEqual } from "lodash";
+import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import {
+  validateCourseNameorTopic,
+  validateCourseNo,
+} from "@/helpers/functions/validation";
 
 type Props = {
   opened: boolean;
@@ -52,6 +56,9 @@ export default function ModalAddPLOCollection({
   const [ploNo, setPloNo] = useState(0);
   const [selectDepartment, setSelectDepartment] = useState<string[]>([]);
   const [state, handlers] = useListState<Partial<IModelPLONo>>([]);
+  const [reorder, setReorder] = useState(false);
+  const [firstInput, setFirstInput] = useState(false);
+  const [isAddAnother, setIsAddAnother] = useState(false);
 
   const form = useForm({
     mode: "uncontrolled",
@@ -59,27 +66,75 @@ export default function ModalAddPLOCollection({
       departmentCode: [],
       data: [{ descTH: "", descEN: "" }] as Partial<IModelPLONo[]>,
     } as Partial<IModelPLO>,
-    // validate: {
-    //   type: (value) => !value && "Course Type is required",
-    //   courseNo: (value) => validateCourseNo(value),
-    //   courseName: (value) => validateCourseNameorTopic(value, "Course Name"),
-    //   sections: {
-    //     topic: (value) => validateCourseNameorTopic(value, "Topic"),
-    //     sectionNo: (value) => validateSectionNo(value),
-    //     semester: (value) => {
-    //       return value?.length ? null : "Please select semester at least one.";
-    //     },
-    //   },
-    // },
+    validate: {
+      name: (value) => {
+        if (!value) return `PLO Collection Name is required`;
+        if (!value.trim().length) return "Cannot have only spaces";
+      },
+      criteriaTH: (value) => {
+        if (!value) return `Criteria Thai language is required`;
+        if (!value.trim().length) return "Cannot have only spaces";
+      },
+      criteriaEN: (value) =>
+        validateCourseNameorTopic(value, "Criteria English language"),
+
+      departmentCode: (value) => {
+        return !value?.length && "Select department at least one";
+      },
+      data: {
+        descTH: (value) => {
+          if (!value && (isAddAnother || firstInput))
+            return `PLO Thai language is required`;
+        },
+        descEN: (value) => {
+          if (!value && (isAddAnother || firstInput))
+            return `PLO English language is required`;
+        },
+      },
+    },
     validateInputOnBlur: true,
   });
 
-  const nextStep = () =>
-    setActive((current) => (current < 3 ? current + 1 : current));
+  // const nextStep = () =>
+  //   setActive((current) => (current < 3 ? current + 1 : current));
+  const nextStep = async () => {
+    setFirstInput(false);
+    let isValid = true;
+    switch (active) {
+      case 0:
+        form.validateField("criteriaTH");
+        form.validateField("criteriaEN");
+        isValid =
+          isValid &&
+          !form.validateField("name").hasError &&
+          !form.validateField("criteriaTH").hasError &&
+          !form.validateField("criteriaEN").hasError;
+        break;
+
+      case 1:
+        isValid = form.getValues().data?.length! > 1;
+        if (!isValid) {
+          // setIsAddAnother(true);
+          form.validateField(`data.${ploNo}.descTH`);
+          form.validateField(`data.${ploNo}.descEN`);
+        }
+        break;
+      case 2:
+        form.validateField("departmentCode");
+        isValid = form.getValues().departmentCode?.length! > 0;
+    }
+    if (isValid) {
+      setActive((cur) => (cur < 4 ? cur + 1 : cur));
+      setFirstInput(true);
+    }
+  };
+
   const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
+
   const closeModal = () => {
     setActive(0);
     setPloNo(0);
+    handlers.setState([]);
     form.reset();
     onClose();
   };
@@ -115,22 +170,62 @@ export default function ModalAddPLOCollection({
   useEffect(() => {
     if (opened) {
       fetchDep();
+      if (!isEmpty(collection)) {
+        setPloNo(collection.data?.length!);
+        form.setValues(collection);
+        form.setFieldValue("name", "");
+        form.insertListItem("data", {
+          descTH: "",
+          descEN: "",
+        });
+        handlers.setState(collection.data!);
+      }
     }
+    console.log(collection);
   }, [opened]);
 
   useEffect(() => {
-    const data = form.getValues().data;
-
-    console.log("Add PLO:", data);
-  }, [form]);
+    if (state) {
+      const plo: any[] = state;
+      plo?.forEach((e, index) => {
+        e.no = index + 1;
+      });
+      handlers.setState(plo!);
+      form.setFieldValue("data", [
+        ...plo,
+        {
+          descTH: "",
+          descEN: "",
+        },
+      ]);
+      setReorder(false);
+    }
+  }, [reorder]);
 
   useEffect(() => {
-    const data = form.getValues().data?.filter((plo) => plo.no) ?? [];
-    if (data?.length) {
-      handlers.setState(data);
-      console.log(data);
+    if (isAddAnother) {
+      form.validateField(`data.${ploNo}.descTH`);
+      form.validateField(`data.${ploNo}.descEN`);
+      if (
+        !form.validateField(`data.${ploNo}.descTH`).hasError &&
+        !form.validateField(`data.${ploNo}.descEN`).hasError
+      ) {
+        form.setFieldValue(`data.${ploNo}.no`, ploNo + 1);
+        form.insertListItem("data", {
+          descTH: "",
+          descEN: "",
+        });
+        setPloNo(ploNo + 1);
+        handlers.setState(form.getValues().data?.filter((e) => e.no)!);
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Add success",
+          `PLO-${ploNo + 1} is added`
+        );
+      }
+      setIsAddAnother(false);
     }
-  }, [form.getValues().data]);
+  }, [isAddAnother]);
 
   return (
     <Modal
@@ -138,7 +233,11 @@ export default function ModalAddPLOCollection({
       onClose={closeModal}
       closeOnClickOutside={false}
       title="Add PLO Collection"
-      size={active == 1 && form.getValues().data?.length! > 1 ? "65vw" : "45vw"}
+      size={
+        (active === 1 && form.getValues().data?.length! > 1) || active === 3
+          ? "65vw"
+          : "45vw"
+      }
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
@@ -222,9 +321,9 @@ export default function ModalAddPLOCollection({
           label="Add PLO"
           description="STEP 2"
         >
-          <div className="flex gap-5 h-full mt-3">
+          <div className="flex gap-5 h-[450px] mt-3 ">
             <div
-              className="flex flex-col  gap-3 p-5 rounded-lg h-full w-full"
+              className="flex flex-col  gap-3 p-5 rounded-lg h-full w-full overflow-hidden relative"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
@@ -274,16 +373,9 @@ export default function ModalAddPLOCollection({
                 }}
               />
 
-              <div className="flex gap-2 mt-3 w-full justify-end">
+              <div className="flex gap-2 mt-3 w-full justify-end absolute right-5 bottom-5 ">
                 <Button
-                  onClick={() => {
-                    setPloNo(ploNo + 1);
-                    form.setFieldValue(`data.${ploNo}.no`, ploNo + 1);
-                    form.insertListItem("data", {
-                      descTH: "",
-                      descEN: "",
-                    });
-                  }}
+                  onClick={() => setIsAddAnother(true)}
                   variant="outline"
                   className="rounded-[8px] text-[12px] h-[32px] w-fit "
                   color="#5768d5"
@@ -294,7 +386,7 @@ export default function ModalAddPLOCollection({
             </div>
             {form.getValues().data?.length! > 1 && (
               <div
-                className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-full h-[407px] overflow-y-hidden"
+                className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-full h-full overflow-y-hidden"
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
@@ -307,14 +399,14 @@ export default function ModalAddPLOCollection({
                   </div>
                   <p>{state.length} PLOs</p>
                 </div>
-                <div className="flex flex-col w-full overflow-y-auto px-3">
+                <div className="flex flex-col w-full overflow-y-auto px-5">
                   <DragDropContext
                     onDragEnd={({ destination, source }) => {
                       handlers.reorder({
                         from: source.index,
                         to: destination?.index || 0,
                       });
-                      // setReorder(true);
+                      setReorder(true);
                     }}
                   >
                     <Droppable droppableId="dnd-list" direction="vertical">
@@ -332,14 +424,18 @@ export default function ModalAddPLOCollection({
                             >
                               {(provided) => (
                                 <div
-                                  className="flex px-5 py-5 w-full justify-between  border-b last:border-none "
+                                  className={`p-3 py-5 rounded-md w-full ${
+                                    form.getValues().departmentCode?.length! > 1
+                                      ? "last:border-none"
+                                      : ""
+                                  } border-b-[1px]`}
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                 >
                                   <div className="flex flex-col gap-2 w-full ">
                                     <div className="flex items-center justify-between">
                                       <p className="text-secondary font-semibold text-[14px]">
-                                        PLO-{index + 1}
+                                        PLO-{item.no}
                                       </p>
                                       <div className="flex gap-1 items-center">
                                         <div
@@ -357,6 +453,11 @@ export default function ModalAddPLOCollection({
                                                 "data",
                                                 index
                                               );
+                                              form
+                                                .getValues()
+                                                .data?.forEach((e, index) => {
+                                                  e.no = index + 1;
+                                                });
                                             }}
                                           />
                                         </div>
@@ -433,8 +534,12 @@ export default function ModalAddPLOCollection({
               </div>
               <div className="flex flex-col w-full h-[280px] px-4 overflow-y-auto">
                 <Checkbox
+                  size="xs"
                   className="p-3 py-5 rounded-md w-full last:border-none border-b-[1px]"
-                  classNames={{ label: "ml-2", input: "cursor-pointer" }}
+                  classNames={{
+                    label: "ml-2  text-[13px]",
+                    input: "cursor-pointer",
+                  }}
                   label="All"
                   checked={isEqual(
                     form.getValues().departmentCode,
@@ -445,7 +550,7 @@ export default function ModalAddPLOCollection({
                   }}
                 />
                 <Checkbox.Group
-                  {...form.getInputProps("departmentCode")}
+                  // {...form.getInputProps("departmentCode")}
                   value={form.getValues().departmentCode}
                   onChange={(event) => {
                     setDepartmentCode(false, event);
@@ -455,10 +560,14 @@ export default function ModalAddPLOCollection({
                   <Group className="gap-0">
                     {department.map((dep: any, index: any) => (
                       <Checkbox
+                        size="xs"
                         key={index}
                         value={dep.departmentCode}
-                        className="p-3 py-5 rounded-md w-full last:border-none border-b-[1px] "
-                        classNames={{ label: "ml-2", input: "cursor-pointer" }}
+                        className="p-3 py-4 rounded-md w-full last:border-none border-b-[1px] "
+                        classNames={{
+                          label: "ml-2 text-[13px]",
+                          input: "cursor-pointer",
+                        }}
                         label={`${dep.departmentEN} (${dep.departmentCode})`}
                       />
                     ))}
@@ -466,13 +575,98 @@ export default function ModalAddPLOCollection({
                 </Checkbox.Group>
               </div>
             </div>
+            {!firstInput && (
+              <div className="text-[#FA5252] text-[10px] mt-2">
+                {form.validateField("departmentCode").error}
+              </div>
+            )}
           </div>
         </Stepper.Step>
         <Stepper.Step
           allowStepSelect={false}
           label="Review"
           description="STEP 4"
-        ></Stepper.Step>
+        >
+          <div className="flex gap-5 mt-3">
+            <div
+              className="w-full  flex flex-col bg-white border-secondary border-[1px] rounded-md overflow-clip"
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
+            >
+              <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
+                <div className="flex items-center gap-2">
+                  <IconHome2 className="text-secondary" size={19} />
+
+                  <span>List of Departments</span>
+                </div>
+                <p>{form.getValues().departmentCode?.length!} departments</p>
+              </div>
+              <div className="flex flex-col w-full h-[358px] text-[13px] px-4 overflow-y-auto">
+                {department
+                  .filter((dep: any) =>
+                    form
+                      .getValues()
+                      .departmentCode!.includes(dep.departmentCode)
+                  )
+                  .map((dep: any) => (
+                    <div
+                      className={`p-3 py-5 rounded-md w-full ${
+                        form.getValues().departmentCode?.length! > 1
+                          ? "last:border-none"
+                          : ""
+                      } border-b-[1px]`}
+                    >
+                      {dep.departmentEN} ({dep.departmentCode})
+                    </div>
+                  ))}
+              </div>
+            </div>
+            <div
+              className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-full h-[407px] overflow-y-hidden"
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
+            >
+              <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
+                <div className="flex items-center gap-2">
+                  <Icon IconComponent={IconSO} />
+
+                  <span>List PLO Added</span>
+                </div>
+                <p>{state.length} PLOs</p>
+              </div>
+              <div className="flex flex-col w-full overflow-y-auto px-5">
+                {state.map((item, index) => (
+                  <div
+                    className={`flex  py-4 w-full justify-between  border-b ${
+                      form.getValues().data?.length! > 1
+                        ? "last:border-none"
+                        : ""
+                    }`}
+                  >
+                    <div className="flex flex-col gap-2 w-full ">
+                      <div className="flex items-center justify-between">
+                        <p className="text-secondary font-semibold text-[14px]">
+                          PLO-{item.no}
+                        </p>
+                      </div>
+
+                      <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
+                        <div className="flex  text-pretty ">
+                          <li></li> {item.descTH}
+                        </div>
+                        <div className="flex  text-pretty ">
+                          <li></li> {item.descEN}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Stepper.Step>
       </Stepper>
       {active >= 0 && (
         <Group className="flex w-full h-fit items-end justify-between mt-7">
