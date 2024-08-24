@@ -70,6 +70,8 @@ export default function ModalAddSection({
         semester: (value) => {
           return value?.length ? null : "Please select semester at least one.";
         },
+        instructor: (value) =>
+          (value as string)?.length ? null : "Please select instructor.",
       },
     },
     validateInputOnBlur: true,
@@ -80,55 +82,61 @@ export default function ModalAddSection({
     setFirstInput(false);
     let isValid = true;
     const length = form.getValues().sections.length || 0;
-    switch (active) {
-      case 0:
-        for (let i = 0; i < length; i++) {
-          isValid = !form.validateField(`sections.${i}.sectionNo`).hasError;
-          if (!isValid) break;
-        }
-        form.validateField("sections.0.topic");
-        isValid =
-          isValid &&
-          (!form.validateField("sections.0.topic").hasError ||
-            data.type !== COURSE_TYPE.SEL_TOPIC);
+    if (active == 0) {
+      for (let i = 0; i < length; i++) {
+        isValid = !form.validateField(`sections.${i}.sectionNo`).hasError;
+        if (!isValid) break;
+      }
+      form.validateField("sections.0.topic");
+      isValid =
+        isValid &&
+        (!form.validateField("sections.0.topic").hasError ||
+          data.type !== COURSE_TYPE.SEL_TOPIC);
+      if (isValid) {
+        const res = isManage
+          ? await checkCanCreateSectionManagement(setPayload(false))
+          : await checkCanCreateCourse(setPayload(false));
+        if (!res) isValid = false;
+      }
+    } else if (isManage && active == 1) {
+      for (let i = 0; i < length; i++) {
+        const isError = form.validateField(`sections.${i}.instructor`).hasError;
         if (isValid) {
-          const res = isManage
-            ? await checkCanCreateSectionManagement(setPayload(false))
-            : await checkCanCreateCourse(setPayload(false));
-          if (!res) isValid = false;
+          isValid = !isError;
+        } else {
+          form.validateField(`sections.${i}.instructor`);
         }
-        break;
-      case 1:
-        const secNoList: string[] = [];
-        for (let i = 0; i < length; i++) {
-          const isError = form.validateField(`sections.${i}.semester`).hasError;
-          if (isValid) {
-            isValid = !isError;
-          } else {
-            form.validateField(`sections.${i}.semester`);
-          }
-          if (isError) {
-            secNoList.push(
-              getSectionNo(form.getValues().sections.at(i)?.sectionNo)
-            );
-          }
+      }
+    } else if (isManage ? active == 2 : active == 1) {
+      const secNoList: string[] = [];
+      for (let i = 0; i < length; i++) {
+        const isError = form.validateField(`sections.${i}.semester`).hasError;
+        if (isValid) {
+          isValid = !isError;
+        } else {
+          form.validateField(`sections.${i}.semester`);
         }
-        if (secNoList.length) {
-          secNoList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
-          showNotifications(
-            NOTI_TYPE.ERROR,
-            "iiiii",
-            `ooooooo ${secNoList.join(", ")}`
+        if (isError) {
+          secNoList.push(
+            getSectionNo(form.getValues().sections.at(i)?.sectionNo)
           );
         }
-        break;
+      }
+      if (secNoList.length) {
+        secNoList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+        showNotifications(
+          NOTI_TYPE.ERROR,
+          "iiiii",
+          `ooooooo ${secNoList.join(", ")}`
+        );
+      }
     }
     if (isValid) {
       setFirstInput(true);
       if (active == 3 && !isManage) {
         await addSection();
       }
-      setActive((cur) => (cur < 3 ? cur + 1 : cur));
+      setActive((cur) => (cur < (isManage ? 4 : 3) ? cur + 1 : cur));
     }
     setLoading(false);
   };
@@ -202,7 +210,7 @@ export default function ModalAddSection({
       sections[sectionNo.length - 1] = {
         ...initialSection,
         sectionNo: parseInt(lastValue),
-        instructor: user.id,
+        instructor: isManage ? "" : user.id,
         coInstructors: coInsList.map((coIns) => ({ ...coIns })),
       };
     }
@@ -217,7 +225,7 @@ export default function ModalAddSection({
       sections.push({
         ...initialSection,
         sectionNo: parseInt(lastValue),
-        instructor: user.id,
+        instructor: isManage ? "" : user.id,
         coInstructors: coInsList.map((coIns) => ({ ...coIns })),
       });
     } else {
@@ -400,10 +408,45 @@ export default function ModalAddSection({
             </div>
           </div>
         </Stepper.Step>
+        {isManage && (
+          <Stepper.Step
+            allowStepSelect={false}
+            label="Main Instructor"
+            description="STEP 2"
+          >
+            {form
+              .getValues()
+              .sections?.map((sec: Partial<IModelSection>, index) => (
+                <div className="flex flex-col" key={index}>
+                  <p className="text-secondary font-semibold">
+                    Section {getSectionNo(sec.sectionNo)}
+                  </p>
+                  <CompoMangementIns
+                    opened={active == 1}
+                    mainIns={true}
+                    value={sec.instructor as string}
+                    swapMethod={(sec.instructor as string)?.includes(
+                      "@cmu.ac.th"
+                    )}
+                    action={(value) =>
+                      form.setFieldValue(`sections.${index}.instructor`, value)
+                    }
+                    error={
+                      firstInput
+                        ? undefined
+                        : form
+                            .validateField(`sections.${index}.instructor`)
+                            .error?.toString()
+                    }
+                  />
+                </div>
+              ))}
+          </Stepper.Step>
+        )}
         <Stepper.Step
           allowStepSelect={false}
           label="Semester"
-          description="STEP 2"
+          description={`STEP ${isManage ? 3 : 2}`}
         >
           <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-auto  ">
             <div className="flex flex-col font-medium text-[14px] gap-5">
@@ -481,7 +524,7 @@ export default function ModalAddSection({
         <Stepper.Step
           allowStepSelect={false}
           label="Co-Instructor"
-          description="STEP 3"
+          description={`STEP ${isManage ? 4 : 3}`}
         >
           <div className="flex flex-col mt-3 flex-1 ">
             <CompoMangementIns
@@ -596,7 +639,7 @@ export default function ModalAddSection({
         <Stepper.Step
           allowStepSelect={false}
           label="Review"
-          description="STEP 4"
+          description={`STEP ${isManage ? 5 : 4}`}
         >
           <div
             className="w-full flex flex-col bg-white border-secondary border-[1px] mb-5 rounded-md"

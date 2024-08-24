@@ -16,6 +16,10 @@ type Props = {
   role?: ROLE;
   newFetch?: boolean;
   setNewFetch?: (value: boolean) => void;
+  mainIns?: boolean;
+  value?: string;
+  swapMethod?: boolean;
+  error?: string;
   change?: boolean;
   sections?: Partial<IModelSection>[] | undefined;
   action?: (input?: any, func?: any) => void;
@@ -28,6 +32,10 @@ export default function CompoMangementIns({
   role,
   newFetch = false,
   setNewFetch,
+  mainIns = false,
+  value,
+  swapMethod = false,
+  error,
   change = false,
   sections,
   action,
@@ -44,7 +52,7 @@ export default function CompoMangementIns({
   useEffect(() => {
     if (opened) {
       setInputUser({ value: null });
-      setSwapMethodAddUser(false);
+      setSwapMethodAddUser(swapMethod);
       fetchIns();
     }
   }, [opened]);
@@ -144,9 +152,11 @@ export default function CompoMangementIns({
 
   const getLabel = () => {
     return change
-      ? TITLE_ROLE.MAIN_INS_SEC
+      ? TITLE_ROLE.OWNER_SEC
       : role
       ? ROLE.ADMIN
+      : mainIns
+      ? TITLE_ROLE.MAIN_INS
       : TITLE_ROLE.CO_INS;
   };
 
@@ -159,6 +169,7 @@ export default function CompoMangementIns({
     >
       <div
         onClick={() => {
+          if (mainIns && action) action(undefined);
           setInputUser({ value: null });
           setSwapMethodAddUser(!swapMethodAddUser);
         }}
@@ -182,16 +193,23 @@ export default function CompoMangementIns({
             withAsterisk={true}
             description="Make sure CMU account correct"
             label="CMU account"
-            className="w-full border-none rounded-r-none"
+            className={`w-full border-none`}
             style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
-            classNames={{ input: "!rounded-r-none" }}
+            classNames={{ input: `${!mainIns && "!rounded-r-none"}` }}
             placeholder="example@cmu.ac.th"
-            value={inputUser.value!}
-            onChange={(event) =>
-              setInputUser({
-                label: event.target.value,
-                value: event.target.value,
-              })
+            value={mainIns ? value : inputUser.value!}
+            onChange={(event) => {
+              if (mainIns && action) action(event.target.value);
+              else
+                setInputUser({
+                  label: event.target.value,
+                  value: event.target.value,
+                });
+            }}
+            error={
+              mainIns && error
+                ? "Please input instructor email"
+                : value && !validateEmail(value) && "Please input valid email"
             }
           />
         ) : (
@@ -205,7 +223,7 @@ export default function CompoMangementIns({
             nothingFoundMessage="No result"
             className="w-full border-none "
             classNames={{
-              input: " rounded-e-none  rounded-md ",
+              input: `rounded-md ${!mainIns && "rounded-e-none"}`,
             }}
             rightSection={
               <template className="flex items-center gap-2 absolute right-2">
@@ -229,20 +247,25 @@ export default function CompoMangementIns({
             dropdownOpened={openedDropdown}
             // onDropdownOpen={() => setOpenedDropdown(true)}
             onDropdownClose={() => setOpenedDropdown(false)}
-            value={inputUser.value!}
-            onChange={(value, option) => setInputUser(option)}
+            value={mainIns ? value : inputUser.value!}
+            onChange={(value, option) => {
+              if (value && action) action(value);
+              else setInputUser(option);
+            }}
+            error={mainIns && error}
             onClick={() => setOpenedDropdown(!openedDropdown)}
           />
         )}
-
-        <Button
-          className="rounded-s-none min-w-fit border-l-0"
-          color="#5768D5"
-          disabled={!inputUser.value || (swapMethodAddUser && invalidEmail)}
-          onClick={() => addUser()}
-        >
-          {change ? "Change" : "Add"}
-        </Button>
+        {!mainIns && (
+          <Button
+            className="rounded-s-none min-w-fit border-l-0"
+            color="#5768D5"
+            disabled={!inputUser.value || (swapMethodAddUser && invalidEmail)}
+            onClick={() => addUser()}
+          >
+            {change ? "Change" : "Add"}
+          </Button>
+        )}
       </div>
     </div>
   );
