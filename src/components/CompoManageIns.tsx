@@ -49,7 +49,7 @@ export default function CompoMangementIns({
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [instructorOption, setInstructorOption] = useState<any[]>([]);
   const [inputUser, setInputUser] = useState<any>({ value: null });
-  const [isFocus, setIsFocus] = useState(false)
+  const [isFocus, setIsFocus] = useState(false);
   const [invalidEmail, setInvalidEmail] = useState(false);
 
   useEffect(() => {
@@ -68,35 +68,38 @@ export default function CompoMangementIns({
   }, [inputUser]);
 
   useEffect(() => {
-    if (sections && !sections.length) {
-      instructorOption.forEach((option) => (option.disabled = false));
-    } else if (sections) {
-      const coInsList = [
-        ...new Set(
-          sections
-            .map((sec) =>
-              sec.coInstructors?.map((coIns) => coIns.value ?? coIns.id)
+    if (instructorOption.length) {
+      if (sections && !sections.length) {
+        instructorOption.forEach((option) => (option.disabled = false));
+      } else if (sections) {
+        const coInsList = [
+          ...new Set(
+            sections
+              .map((sec) =>
+                sec.coInstructors?.map((coIns) => coIns.value ?? coIns.id)
+              )
+              .flatMap((coIns: any) => coIns)
+              .filter((coIns) => coIns)
+          ),
+        ];
+        const list: any[] = [];
+        instructorOption.forEach((option) => {
+          if (coInsList.includes(option.value)) {
+            option.disabled = true;
+            list.push({ ...option });
+          } else option.disabled = false;
+        });
+        list.forEach((coIns) => {
+          coIns.sections = sections
+            .filter((sec) =>
+              sec.coInstructors?.some((e) => e.id == coIns.value)
             )
-            .flatMap((coIns: any) => coIns)
-            .filter((coIns) => coIns)
-        ),
-      ];
-      const list: any[] = [];
-      if (coInsList.length && setUserList) setUserList(coInsList);
-      instructorOption.forEach((option) => {
-        if (coInsList.includes(option.value)) {
-          option.disabled = true;
-          list.push({ ...option });
-        } else option.disabled = false;
-      });
-      list.forEach((coIns) => {
-        coIns.sections = sections
-          .filter((sec) => sec.coInstructors?.some((e) => e.id == coIns.value))
-          .map((sec) => sec.sectionNo);
-      });
-      if (setUserList) setUserList(list);
+            .map((sec) => sec.sectionNo);
+        });
+        if (list.length && setUserList) setUserList(list);
+      }
     }
-  }, [sections]);
+  }, [sections, instructorOption]);
 
   useEffect(() => {
     if (newFetch && setNewFetch) {
@@ -217,10 +220,11 @@ export default function CompoMangementIns({
             placeholder="example@cmu.ac.th"
             value={mainIns ? value.value : inputUser.value!}
             onChange={(event) => {
-              if (mainIns && action) action({
-                label: event.target.value,
-                value: event.target.value,
-              });
+              if (mainIns && action)
+                action({
+                  label: event.target.value,
+                  value: event.target.value,
+                });
               else
                 setInputUser({
                   label: event.target.value,
@@ -232,7 +236,10 @@ export default function CompoMangementIns({
             error={
               mainIns && error
                 ? "Please enter the instructor's email address."
-                : value && !isFocus && !validateEmail(value) && "Please enter a valid email address (e.g., example@cmu.ac.th)."
+                : value &&
+                  !isFocus &&
+                  !validateEmail(value) &&
+                  "Please enter a valid email address (e.g., example@cmu.ac.th)."
             }
           />
         ) : (
