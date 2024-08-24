@@ -247,8 +247,8 @@ export default function CourseManagement() {
           </>
         }
       />
-      <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
-        <div className="flex flex-row items-center justify-between">
+      <div className=" flex flex-col h-full w-full pt-3 gap-3 overflow-hidden">
+        <div className="flex flex-row items-center justify-between px-6">
           <div className="flex flex-col  items-start ">
             <p className="text-secondary text-[16px] font-bold">Dashboard</p>
             <p className="text-tertiary text-[14px] font-medium">
@@ -295,11 +295,12 @@ export default function CourseManagement() {
         {loading ? (
           <Loading />
         ) : (
-          <div className="overflow-y-auto p-2 w-full h-fit max-h-full flex flex-col gap-3 ">
+          <div className="flex flex-col overflow-y-auto gap-4 px-6 pb-3  pt-2">
+         
             {courseManagement.courseManagements.map((course, index) => (
               <div
                 key={index}
-                className="bg-[#d2d2ff3e] rounded-md flex flex-col py-4  px-5"
+                className="bg-[#d2d2ff5c] rounded-md flex flex-col py-4  px-5"
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
@@ -501,6 +502,7 @@ export default function CourseManagement() {
                 </div>
               </div>
             ))}{" "}
+         
           </div>
         )}
       </div>

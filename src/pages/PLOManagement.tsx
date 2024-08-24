@@ -169,18 +169,18 @@ export default function CourseManagement() {
             variant="light"
             color="blue"
             classNames={{
-              icon: "size-6",
               body: " flex justify-center",
             }}
             title={
-              <div className="flex items-center gap-2">
+              <div className="flex items-center  gap-2">
                 <IconInfoCircle />
                 <p>Duplicate PLO Collection </p>
               </div>
             }
+          
           >
             <p className="font-medium text-[#333333] mx-8 ">
-              We’ve found {totalPLOs} similar SO Collections. <br /> Select one
+              We’ve found {totalPLOs} similar PLO Collections. <br /> Select one
               to duplicate and edit, or skip duplicate.
             </p>
           </Alert>
@@ -246,8 +246,8 @@ export default function CourseManagement() {
         onClose={closeModalAddPLO}
         collection={selectPloDupli}
       />
-      <div className="bg-[#ffffff] flex flex-col h-full w-full px-6 py-3 gap-[12px] overflow-hidden">
-        <div className="flex items-center justify-between">
+      <div className=" flex flex-col h-full gap-3 w-full pt-3  overflow-hidden">
+        <div className="flex items-center justify-between px-6">
           <div className="flex flex-col  items-start ">
             <p className="text-secondary text-[16px] font-bold">Dashboard</p>
             <p className="text-tertiary text-[14px] font-medium">
@@ -268,9 +268,10 @@ export default function CourseManagement() {
         {loading ? (
           <Loading />
         ) : (
-          ploCollection?.map((department, indexPLO) => (
+          <div className="flex flex-col  overflow-y-auto gap-4 px-6 pb-3 pt-2">
+         { ploCollection?.map((department, indexPLO) => (
             <div
-              className="bg-[#d2d2ff3e] rounded-md flex  flex-col py-4 px-5"
+              className="bg-[#d2d2ff5c] rounded-md flex  flex-col py-4 px-5"
               key={indexPLO}
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -289,7 +290,7 @@ export default function CourseManagement() {
                       setCollection({ index, ...collection });
                       setOpenModal(true);
                     }}
-                    className="bg-white   cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#eeeeee] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
+                    className="bg-white    cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#eeeeee] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
                   >
                     {/* PLO List */}
                     <div className="flex flex-col">
@@ -327,8 +328,9 @@ export default function CourseManagement() {
                 ))}
               </div>
             </div>
-          ))
+          ))}  </div>
         )}
+      
       </div>
     </>
   );

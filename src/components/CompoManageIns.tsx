@@ -17,7 +17,7 @@ type Props = {
   newFetch?: boolean;
   setNewFetch?: (value: boolean) => void;
   mainIns?: boolean;
-  value?: string;
+  value?: any;
   swapMethod?: boolean;
   error?: string;
   change?: boolean;
@@ -47,6 +47,7 @@ export default function CompoMangementIns({
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [instructorOption, setInstructorOption] = useState<any[]>([]);
   const [inputUser, setInputUser] = useState<any>({ value: null });
+  const [isFocus, setIsFocus] = useState(false)
   const [invalidEmail, setInvalidEmail] = useState(false);
 
   useEffect(() => {
@@ -191,35 +192,41 @@ export default function CompoMangementIns({
         {swapMethodAddUser ? (
           <TextInput
             withAsterisk={true}
+            size="xs"
             description="Make sure CMU account correct"
             label="CMU account"
             className={`w-full border-none`}
-            style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
             classNames={{ input: `${!mainIns && "!rounded-r-none"}` }}
             placeholder="example@cmu.ac.th"
-            value={mainIns ? value : inputUser.value!}
+            value={mainIns ? value.value : inputUser.value!}
             onChange={(event) => {
-              if (mainIns && action) action(event.target.value);
+              if (mainIns && action) action({
+                label: event.target.value,
+                value: event.target.value,
+              });
               else
                 setInputUser({
                   label: event.target.value,
                   value: event.target.value,
                 });
             }}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
             error={
               mainIns && error
-                ? "Please input instructor email"
-                : value && !validateEmail(value) && "Please input valid email"
+                ? "Please enter the instructor's email address."
+                : value && !isFocus && !validateEmail(value) && "Please enter a valid email address (e.g., example@cmu.ac.th)."
             }
           />
         ) : (
           <Select
             rightSectionPointerEvents="all"
             label={`Select ${getLabel()}`}
-            placeholder="Admin"
+            placeholder={getLabel()}
             data={instructorOption}
             allowDeselect
             searchable
+            size="xs"
             nothingFoundMessage="No result"
             className="w-full border-none "
             classNames={{
@@ -247,9 +254,9 @@ export default function CompoMangementIns({
             dropdownOpened={openedDropdown}
             // onDropdownOpen={() => setOpenedDropdown(true)}
             onDropdownClose={() => setOpenedDropdown(false)}
-            value={mainIns ? value : inputUser.value!}
+            value={mainIns ? value.value : inputUser.value!}
             onChange={(value, option) => {
-              if (mainIns && action) action(value);
+              if (mainIns && action) action(option);
               else setInputUser(option);
             }}
             error={mainIns && error}
@@ -258,7 +265,7 @@ export default function CompoMangementIns({
         )}
         {!mainIns && (
           <Button
-            className="rounded-s-none min-w-fit border-l-0"
+            className="rounded-s-none min-w-fit text-b3 h-[30px] border-l-0"
             color="#5768D5"
             disabled={!inputUser.value || (swapMethodAddUser && invalidEmail)}
             onClick={() => addUser()}

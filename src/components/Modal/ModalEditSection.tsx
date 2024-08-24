@@ -1,4 +1,4 @@
-import { Button, Checkbox, Group, Modal, TextInput } from "@mantine/core";
+import { Button, Checkbox, Chip, Group, Modal, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import {
@@ -127,7 +127,11 @@ export default function ModalEditSection({
       onClose();
       setOpenThisTerm(false);
       setSemester([]);
-      showNotifications(NOTI_TYPE.SUCCESS, "Edit success", "Section no. or Section topic is edited");
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Edit success",
+        "Section no. or Section topic is edited"
+      );
     }
   };
 
@@ -167,12 +171,12 @@ export default function ModalEditSection({
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
-          className={`w-full p-3 py-4 bg-white mb-3 rounded-md gap-2 flex flex-col`}
+          className={`w-full pl-5 pr-[18px] py-4 bg-white mb-3 rounded-md gap-2 flex flex-col`}
         >
           <div className={`flex flex-row justify-between items-center`}>
             <div className="gap-3 flex flex-col">
-              <span className="font-semibold text-[13px]">Open Semester</span>
-              {isCourseManage && (
+              <span className="font-semibold text-[13px]">Repeat on semester</span>
+              {/* {isCourseManage && (
                 <Checkbox
                   classNames={{
                     input:
@@ -188,26 +192,26 @@ export default function ModalEditSection({
                   checked={openThisTerm}
                   onChange={(event) => setOpenThisTerm(event.target.checked)}
                 />
-              )}
+              )} */}
             </div>
-            <Checkbox.Group
-              classNames={{ error: "mt-2" }}
+            <Chip.Group
               value={semester}
               onChange={(event) => setSemester(event.sort())}
+              multiple
             >
-              <Group className="flex flex-row gap-1 justify-end">
+              <Group className="flex flex-row gap-4 justify-end">
                 {SEMESTER.map((item) => (
-                  <Checkbox
+                  <Chip
+                  icon={<></>}
                     key={item}
                     classNames={{
                       input:
                         "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                      body: "mr-3",
-                      label: "text-[14px] cursor-pointer",
+                        iconWrapper: "w-0",
+                        label: "text-[14px] px-4 cursor-pointer",
                     }}
                     color="#5768D5"
                     size="xs"
-                    label={item}
                     value={item.toString()}
                     disabled={
                       (openThisTerm &&
@@ -216,10 +220,12 @@ export default function ModalEditSection({
                       (semester.length == 1 &&
                         semester.includes(item.toString()))
                     }
-                  />
+                  >
+                    {item}
+                  </Chip>
                 ))}
               </Group>
-            </Checkbox.Group>
+            </Chip.Group>
           </div>
         </div>
 
