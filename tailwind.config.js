@@ -12,6 +12,8 @@ export default {
         tertiary: "#3e3e3e",
         done: "#0eb092",
         edit: "F39D4E",
+        delete: "#FF4747",
+        bgSecond: "#e6e9ff",
         hover: "#efefef",
       },
       fontSize: {
