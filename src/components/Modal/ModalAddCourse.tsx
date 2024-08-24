@@ -18,6 +18,7 @@ import {
   IconArrowRight,
   IconUsers,
   IconInfoCircle,
+  IconChevronRight,
 } from "@tabler/icons-react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
@@ -378,7 +379,17 @@ export default function ModalAddCourse({
             <Button
               onClick={() => nextStep(COURSE_TYPE.GENERAL)}
               color="#ffffff"
-              className="w-ful border-[1px] text-[13px] border-secondary  h-fit py-3 items-center rounded-[6px] flex justify-start"
+              rightSection={
+                <IconChevronRight
+                  className="size-5 items-center pt-1"
+                  stroke={3}
+                  color="#5768d5"
+                />
+              }
+              classNames={{
+                inner: "flex justify-between items-center w-full ",
+              }}
+              className="w-full border-[1px] text-[13px] border-secondary  h-fit py-3 items-center rounded-[6px] flex justify-start hover:bg-bgSecond "
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-[#3e3e3e]">
@@ -392,8 +403,18 @@ export default function ModalAddCourse({
             </Button>
             <Button
               onClick={() => nextStep(COURSE_TYPE.SPECIAL)}
+              rightSection={
+                <IconChevronRight
+                  className="size-5 items-center pt-1"
+                  stroke={3}
+                  color="#5768d5"
+                />
+              }
+              classNames={{
+                inner: "flex justify-between items-center w-full ",
+              }}
               color="#ffffff"
-              className="w-ful border-[1px] text-[13px]  border-secondary h-fit py-3 !text-[#333333] items-center rounded-[6px] flex justify-start"
+              className="w-full border-[1px] text-[13px]  border-secondary h-fit py-3 !text-[#333333] items-center rounded-[6px] flex hover:bg-bgSecond "
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-[#3e3e3e]">
@@ -408,8 +429,18 @@ export default function ModalAddCourse({
             </Button>
             <Button
               onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC)}
+              rightSection={
+                <IconChevronRight
+                  className="size-5 items-center pt-1"
+                  stroke={3}
+                  color="#5768d5"
+                />
+              }
+              classNames={{
+                inner: "flex justify-between items-center w-full ",
+              }}
               color="#ffffff"
-              className="w-ful border-[1px] text-[13px] border-secondary  h-fit py-3 !text-[#333333] items-center rounded-[6px] flex justify-start"
+              className="w-full border-[1px] text-[13px] border-secondary  h-fit py-3 !text-[#333333] items-center rounded-[6px] flex justify-start hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start">Major Elective</span>{" "}
@@ -422,7 +453,17 @@ export default function ModalAddCourse({
             <Button
               onClick={() => nextStep(COURSE_TYPE.FREE)}
               color="#ffffff"
-              className="w-full border-[1px] h-fit py-3 text-[13px]   border-secondary items-start  !text-[#333333] rounded-[6px] flex justify-start"
+              rightSection={
+                <IconChevronRight
+                  className="size-5 items-center pt-1"
+                  stroke={3}
+                  color="#5768d5"
+                />
+              }
+              classNames={{
+                inner: "flex justify-between items-center w-full ",
+              }}
+              className="w-full border-[1px] h-fit py-3 text-[13px]   border-secondary items-start  !text-[#333333] rounded-[6px] flex justify-start hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start">{COURSE_TYPE.FREE}</span>
