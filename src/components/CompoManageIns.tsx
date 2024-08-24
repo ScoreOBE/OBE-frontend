@@ -249,7 +249,7 @@ export default function CompoMangementIns({
             onDropdownClose={() => setOpenedDropdown(false)}
             value={mainIns ? value : inputUser.value!}
             onChange={(value, option) => {
-              if (value && action) action(value);
+              if (mainIns && action) action(value);
               else setInputUser(option);
             }}
             error={mainIns && error}
