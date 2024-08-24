@@ -48,13 +48,13 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       dispatch(setLoading(true));
-      if (!user.email) {
+      if (!user.id) {
         const res = await getUserInfo();
         if (res) {
           dispatch(setUser(res));
         }
       }
-      if (user.email && !academicYear.length) {
+      if (user.id && !academicYear.length) {
         let payload = new AcademicYearRequestDTO();
         const rsAcademicYear = await getAcademicYear(payload);
         if (rsAcademicYear) {

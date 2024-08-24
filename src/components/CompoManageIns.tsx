@@ -17,6 +17,7 @@ type Props = {
   newFetch?: boolean;
   setNewFetch?: (value: boolean) => void;
   mainIns?: boolean;
+  currentMainIns?: string;
   value?: any;
   swapMethod?: boolean;
   error?: string;
@@ -33,6 +34,7 @@ export default function CompoMangementIns({
   newFetch = false,
   setNewFetch,
   mainIns = false,
+  currentMainIns,
   value,
   swapMethod = false,
   error,
@@ -66,20 +68,33 @@ export default function CompoMangementIns({
   }, [inputUser]);
 
   useEffect(() => {
-    if (!sections?.length) {
+    if (sections && !sections.length) {
       instructorOption.forEach((option) => (option.disabled = false));
-    } else {
+    } else if (sections) {
       const coInsList = [
         ...new Set(
           sections
-            .map((sec) => sec.coInstructors?.map((coIns) => coIns.value))
+            .map((sec) =>
+              sec.coInstructors?.map((coIns) => coIns.value ?? coIns.id)
+            )
             .flatMap((coIns: any) => coIns)
+            .filter((coIns) => coIns)
         ),
       ];
+      const list: any[] = [];
+      if (coInsList.length && setUserList) setUserList(coInsList);
       instructorOption.forEach((option) => {
-        if (coInsList.includes(option.value)) option.disabled = true;
-        else option.disabled = false;
+        if (coInsList.includes(option.value)) {
+          option.disabled = true;
+          list.push({ ...option });
+        } else option.disabled = false;
       });
+      list.forEach((coIns) => {
+        coIns.sections = sections
+          .filter((sec) => sec.coInstructors?.some((e) => e.id == coIns.value))
+          .map((sec) => sec.sectionNo);
+      });
+      if (setUserList) setUserList(list);
     }
   }, [sections]);
 
@@ -93,12 +108,14 @@ export default function CompoMangementIns({
   const fetchIns = async () => {
     let res = await getInstructor();
     if (res) {
-      const list = !role
-        ? res
-        : res.filter((e: any) => e.id != user.id && e.role === ROLE.INSTRUCTOR);
       setInstructorOption(
-        list.map((e: IModelUser) => {
-          return { label: getUserName(e, 1), value: e.id };
+        res.map((e: IModelUser) => {
+          return {
+            label: getUserName(e, 1),
+            value: e.id,
+            disabled:
+              (role && e.role == role) || currentMainIns == e.id ? true : false,
+          };
         })
       );
       // Manage Admin
