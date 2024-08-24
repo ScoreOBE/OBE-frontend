@@ -169,7 +169,7 @@ export default function CourseManagement() {
             variant="light"
             color="blue"
             classNames={{
-              body: " flex justify-center",
+              body: " flex justify-center gap-1",
             }}
             title={
               <div className="flex items-center  gap-2">
@@ -177,7 +177,6 @@ export default function CourseManagement() {
                 <p>Duplicate PLO Collection </p>
               </div>
             }
-          
           >
             <p className="font-medium text-[#333333] mx-8 ">
               We’ve found {totalPLOs} similar PLO Collections. <br /> Select one
@@ -243,6 +242,7 @@ export default function CourseManagement() {
       </Modal>
       <ModalAddPLOCollection
         opened={modalAddPLO}
+        onOpen={openModalAddPLO}
         onClose={closeModalAddPLO}
         collection={selectPloDupli}
       />
@@ -269,68 +269,67 @@ export default function CourseManagement() {
           <Loading />
         ) : (
           <div className="flex flex-col  overflow-y-auto gap-4 px-6 pb-3 pt-2">
-         { ploCollection?.map((department, indexPLO) => (
-            <div
-              className="bg-[#d2d2ff5c] rounded-md flex  flex-col py-4 px-5"
-              key={indexPLO}
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              <div className="flex flex-col mb-4  w-fit">
-                <p className=" font-bold text-b2 text-secondary">
-                  {department.departmentEN}
-                </p>
-              </div>
-              <div className="flex flex-col">
-                {department.collections.map((collection, index) => (
-                  <div
-                    key={` ${index}`}
-                    onClick={() => {
-                      setCollection({ index, ...collection });
-                      setOpenModal(true);
-                    }}
-                    className="bg-white    cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#eeeeee] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
-                  >
-                    {/* PLO List */}
-                    <div className="flex flex-col">
-                      <p className="font-semibold text-[13px] text-tertiary">
-                        {collection.name}
-                      </p>
-                    </div>
-                    {/* Status */}
+            {ploCollection?.map((department, indexPLO) => (
+              <div
+                className="bg-[#d2d2ff5c] rounded-md flex  flex-col py-4 px-5"
+                key={indexPLO}
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+              >
+                <div className="flex flex-col mb-4  w-fit">
+                  <p className=" font-bold text-b2 text-secondary">
+                    {department.departmentEN}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  {department.collections.map((collection, index) => (
                     <div
-                      className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
-                        collection.isActive
-                          ? "bg-[#10e5908e] text-[#228762]"
-                          : "bg-[#a2a2a2] text-[#ffffff]"
-                      } `}
+                      key={` ${index}`}
+                      onClick={() => {
+                        setCollection({ index, ...collection });
+                        setOpenModal(true);
+                      }}
+                      className="bg-white    cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#eeeeee] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
                     >
-                      <p className=" font-semibold ">
-                        {collection.isActive ? "Active" : "Inactive"}
-                      </p>
-                    </div>
-                    {/* Main Instructor */}
-                    <div className="flex items-center font-medium text-[#4E5150] text-b3"></div>
-                    {/* Open Symester */}
-                    <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
-                      <p className="text-wrap font-semibold">
-                        Start in: {collection.semester}/{collection.year}
-                      </p>
-                      <div className="flex gap-1"></div>
-                    </div>
-                    <div className="flex justify-end gap-4 items-center">
-                      <div className="flex justify-center items-center   text-[#333333] size-8 ">
+                      {/* PLO List */}
+                      <div className="flex flex-col">
+                        <p className="font-semibold text-[13px] text-tertiary">
+                          {collection.name}
+                        </p>
+                      </div>
+                      {/* Status */}
+                      <div
+                        className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
+                          collection.isActive
+                            ? "bg-[#10e5908e] text-[#228762]"
+                            : "bg-[#a2a2a2] text-[#ffffff]"
+                        } `}
+                      >
+                        <p className=" font-semibold ">
+                          {collection.isActive ? "Active" : "Inactive"}
+                        </p>
+                      </div>
+                      {/* Main Instructor */}
+                      <div className="flex items-center font-medium text-[#4E5150] text-b3"></div>
+                      {/* Open Symester */}
+                      <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
+                        <p className="text-wrap font-semibold">
+                          Start in: {collection.semester}/{collection.year}
+                        </p>
+                        <div className="flex gap-1"></div>
+                      </div>
+
+                      <div className="flex w-full justify-end items-center   text-[#333333] size-8 ">
                         <IconChevronRight className="size-4" stroke={3} />
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}  </div>
+            ))}{" "}
+          </div>
         )}
-      
       </div>
     </>
   );
