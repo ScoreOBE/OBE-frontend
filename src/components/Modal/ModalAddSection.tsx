@@ -18,7 +18,7 @@ import {
 } from "@tabler/icons-react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { SEMESTER } from "@/helpers/constants/enum";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import {
   validateCourseNameorTopic,
   validateSectionNo,
@@ -36,7 +36,12 @@ import {
   checkCanCreateCourse,
   createCourse,
 } from "@/services/course/course.service";
-import { checkCanCreateSectionManagement } from "@/services/courseManagement/courseManagement.service";
+import {
+  checkCanCreateSectionManagement,
+  getOneCourseManagement,
+} from "@/services/courseManagement/courseManagement.service";
+import { editCourse } from "@/store/course";
+import { editCourseManagement } from "@/store/courseManagement";
 
 type Props = {
   opened: boolean;
@@ -54,6 +59,7 @@ export default function ModalAddSection({
 }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(0);
   const [sectionNoList, setSectionNoList] = useState<string[]>([]);
@@ -133,7 +139,7 @@ export default function ModalAddSection({
     }
     if (isValid) {
       setFirstInput(true);
-      if (active == 3 && !isManage) {
+      if (isManage ? active == 4 : active == 3) {
         await addSection();
       }
       setActive((cur) => (cur < (isManage ? 4 : 3) ? cur + 1 : cur));
@@ -149,10 +155,6 @@ export default function ModalAddSection({
     onClose();
   };
 
-  useEffect(() => {
-    console.log(form.getValues().sections);
-  }, [form]);
-
   const setPayload = (add = true) => {
     let payload = {
       ...data,
@@ -161,6 +163,7 @@ export default function ModalAddSection({
       updatedYear: academicYear.year,
       updatedSemester: academicYear.semester,
     };
+    delete payload.id;
     if (add) {
       payload.sections?.forEach((sec: any) => {
         sec.semester = sec.semester?.map((term: string) => parseInt(term));
@@ -174,6 +177,18 @@ export default function ModalAddSection({
     const res = await createCourse(setPayload());
     if (res) {
       if (fetchOneCourse) fetchOneCourse();
+      if (isManage) {
+        const resOne = await getOneCourseManagement(data.courseNo!);
+        if (resOne) {
+          dispatch(editCourseManagement(resOne));
+        }
+        dispatch(
+          editCourse({
+            id: res.courseId,
+            ...res,
+          })
+        );
+      }
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Add section success",
