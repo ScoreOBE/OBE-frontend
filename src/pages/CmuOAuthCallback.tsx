@@ -16,7 +16,7 @@ export default function CMUOAuthCallback() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    if (!code || user.email) return;
+    if (!code || user.id) return;
 
     const fetchData = async () => {
       const res = await login(code);
@@ -40,7 +40,7 @@ export default function CMUOAuthCallback() {
         {message || "Redirecting ..."}
       </h1>
       <div className="justify-center flex flex-row gap-10 text-xl">
-        {!user.email && (
+        {!user.id && (
           <Button
             className="bg-[#ED3838] text-lg hover:bg-[#ff6c6c]"
             onClick={() => navigate(ROUTE_PATH.LOGIN)}

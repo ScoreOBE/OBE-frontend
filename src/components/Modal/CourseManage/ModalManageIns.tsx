@@ -1,17 +1,16 @@
-import { Button, Input, Modal, Select, TextInput } from "@mantine/core";
-import { IconUserCircle, IconChevronLeft } from "@tabler/icons-react";
+import { Button, Checkbox, Menu, Modal } from "@mantine/core";
+import {
+  IconUserCircle,
+  IconChevronLeft,
+  IconUsers,
+} from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { TbSearch } from "react-icons/tb";
-import Icon from "@/components/Icon";
-import { IModelUser } from "@/models/ModelUser";
-import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import { useAppSelector } from "@/store";
-import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
-import { validateEmail } from "@/helpers/functions/validation";
 import {
   getSectionNo,
   getUserName,
   showNotifications,
+  sortData,
 } from "@/helpers/functions/function";
 import { Tabs } from "@mantine/core";
 import {
@@ -28,101 +27,87 @@ type Props = {
 };
 export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
   const user = useAppSelector((state) => state.user);
-  const [swapMethodAddAdmin, setSwapMethodAddAdmin] = useState(false);
-  const [openedDropdown, setOpenedDropdown] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
-  const [instructorOption, setInstructorOption] = useState<any[]>([]);
-  const [adminList, setAdminList] = useState<IModelUser[]>([]);
-  const [adminFilter, setAdminFilter] = useState<IModelUser[]>([]);
-  const [editUser, setEditUser] = useState<string | null>();
-  const [invalidEmail, setInvalidEmail] = useState(false);
   const [changeMainIns, setChangeMainIns] = useState(false);
   const [editSection, setEditSection] = useState<IModelSectionManagement>();
-
-  const fetchIns = async () => {
-    const res = await getInstructor();
-    if (res) {
-      const insList = res.filter(
-        (e: any) => e.id != user.id && e.role === ROLE.INSTRUCTOR
-      );
-      let adminList = res.filter((e: IModelUser) => {
-        if (e.id !== user.id && e.role === ROLE.ADMIN) {
-          return {
-            id: e.id,
-            firstNameEN: e.firstNameEN,
-            lastNameEN: e.lastNameEN,
-            email: e.email,
-          };
-        }
-      });
-      // Add current user to the top of the admin list
-      if (user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) {
-        adminList = [
-          {
-            id: user.id,
-            firstNameEN: user.firstNameEN,
-            lastNameEN: user.lastNameEN,
-            email: user.email,
-          },
-          ...adminList,
-        ];
-      }
-
-      setInstructorOption(
-        insList.map((e: IModelUser) => {
-          return { label: getUserName(e, 1), value: e.id };
-        })
-      );
-      setAdminList(adminList);
-      setAdminFilter(adminList);
-    }
-  };
-
-  const editAdmin = async (id: string, role: ROLE) => {
-    const payload: Partial<IModelUser> = { role };
-    if (swapMethodAddAdmin && role === ROLE.ADMIN) {
-      if (invalidEmail) return;
-      payload.email = id;
-    } else payload.id = id;
-    const res = await updateAdmin(payload);
-    if (res) {
-      const name = res.firstNameEN?.length ? getUserName(res, 1) : res.email;
-      const message =
-        res.role == ROLE.ADMIN
-          ? `${name} is added to admin`
-          : `${name} is deleted from admin`;
-      const title = res.role == ROLE.ADMIN ? `Add success` : `Delete success`;
-      setEditUser(null);
-      fetchIns();
-      showNotifications(NOTI_TYPE.SUCCESS, title, message);
-    }
-  };
+  const [coInsList, setCoInsList] = useState<any[]>([]);
 
   useEffect(() => {
     if (opened) {
-      setEditUser(null);
-      setSearchValue("");
-      setSwapMethodAddAdmin(false);
-      fetchIns();
+    } else {
+      setChangeMainIns(false);
     }
   }, [opened]);
 
-  useEffect(() => {
-    if (swapMethodAddAdmin) {
-      if (editUser?.length) setInvalidEmail(!validateEmail(editUser));
-      else setInvalidEmail(false);
-    }
-  }, [editUser]);
+  const onClickChangeMainIns = (value: string) => {
+    console.log(value);
+  };
 
-  useEffect(() => {
-    setAdminFilter(
-      adminList.filter(
-        (admin) =>
-          `${getUserName(admin, 2)}`.includes(searchValue.toLowerCase()) ||
-          admin.email.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    );
-  }, [searchValue]);
+  const addCoIns = (
+    {
+      inputUser,
+      instructorOption,
+    }: { inputUser: any; instructorOption: any[] },
+    {
+      setInputUser,
+      setInstructorOption,
+    }: {
+      setInputUser: React.Dispatch<React.SetStateAction<any>>;
+      setInstructorOption: React.Dispatch<React.SetStateAction<any[]>>;
+    }
+  ) => {
+    if (inputUser?.value) {
+      inputUser.sections = [];
+      const updatedInstructorOptions = instructorOption.map((option: any) =>
+        option?.value == inputUser.value
+          ? { ...option, disabled: true }
+          : option
+      );
+      setInstructorOption(updatedInstructorOptions);
+      delete inputUser.disabled;
+      const updatedSections = data.sections?.map((sec) => {
+        const coInsArr = [...(sec.coInstructors ?? []), inputUser];
+        sortData(coInsArr, "label", "string");
+        inputUser.sections.push(sec.sectionNo);
+        inputUser.sections.sort((a: any, b: any) => a - b);
+        return { ...sec, coInstructors: [...coInsArr] };
+      });
+      setCoInsList([inputUser, ...coInsList]);
+      data.sections = [...updatedSections!];
+    }
+    setInputUser({ value: null });
+  };
+
+  const removeCoIns = (coIns: any) => {
+    const newList = coInsList.filter((e) => e.value !== coIns.value);
+    const updatedSections = data.sections?.map((sec) => ({
+      ...sec,
+      coInstructors: (sec.coInstructors ?? []).filter(
+        (p: any) => p.value !== coIns.value
+      ),
+    }));
+    data.sections = [...updatedSections!];
+    setCoInsList(newList);
+  };
+
+  const editCoInsInSec = (sectionNo: number, checked: boolean, coIns: any) => {
+    const updatedSections = data.sections;
+    updatedSections?.forEach((sec, index) => {
+      const secNo = sec.sectionNo;
+      if (sectionNo == secNo) {
+        if (checked) {
+          coIns.sections.push(secNo);
+          coIns.sections.sort((a: any, b: any) => a - b);
+          sec.coInstructors?.push({ ...coIns });
+        } else {
+          coIns.sections = coIns.sections.filter((e: any) => e !== secNo);
+          sec.coInstructors?.splice(sec.coInstructors.indexOf(coIns), 1);
+        }
+        sortData(sec.coInstructors, "label", "string");
+      }
+      return sec;
+    });
+    data.sections = [...updatedSections!];
+  };
 
   return (
     <Modal
@@ -140,7 +125,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
             <p>Management Instructor</p>{" "}
             <p className="text-b3 font-medium text-[#575757]">
               {data.courseNo} {data.courseName}
-            </p>{" "}
+            </p>
           </div>
         </div>
       }
@@ -183,7 +168,12 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                 </p>
               </div>
             </div>
-            <CompoMangementIns opened={changeMainIns} change={true} />
+            <CompoMangementIns
+              opened={changeMainIns}
+              change={true}
+              currentMainIns={editSection.instructor.id}
+              action={(value) => onClickChangeMainIns(value)}
+            />
           </div>
         ) : (
           <Tabs color="#5768d5" defaultValue="mainInstructor">
@@ -228,6 +218,122 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                     </Button>
                   </div>
                 ))}
+              </div>
+            </Tabs.Panel>
+            <Tabs.Panel value="coInstructor">
+              <div className="flex flex-col mt-3 flex-1 ">
+                <CompoMangementIns
+                  opened={opened}
+                  action={addCoIns}
+                  sections={data.sections}
+                  setUserList={setCoInsList}
+                />
+
+                {!!coInsList.length && (
+                  <div
+                    className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md"
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                  >
+                    <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
+                      <IconUsers /> Added Co-Instructor
+                    </div>
+                    <div className="flex flex-col max-h-[250px] h-fit w-full   px-2   overflow-y-auto ">
+                      <div className="flex flex-col max-h-[400px] h-fit p-1 ">
+                        {coInsList.map((coIns, index) => (
+                          <div
+                            key={index}
+                            className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none  py-5 "
+                          >
+                            <div className="flex w-full justify-between items-center">
+                              <div className="flex flex-col  font-medium text-[14px]">
+                                <span className="text-[#3e3e3e] -translate-y-1 font-semibold text-[14px]">
+                                  {coIns?.label}
+                                </span>
+                              </div>
+                              <div className="flex justify-end gap-3 ">
+                                <Menu shadow="md" width={200}>
+                                  <Menu.Target>
+                                    <Button
+                                      variant="outline"
+                                      color="#5768d5"
+                                      size="xs"
+                                      className=" transform-none text-[12px] rounded-md"
+                                    >
+                                      Access
+                                    </Button>
+                                  </Menu.Target>
+
+                                  <Menu.Dropdown className=" overflow-y-auto max-h-[220px] !w-[220px] h-fit border-b ">
+                                    <Menu.Label className=" translate-x-1 mb-2">
+                                      Can access
+                                    </Menu.Label>
+                                    <div className="flex flex-col pl-3  pb-2 h-fit gap-4 w-full">
+                                      {data.sections?.map((sec, index) => (
+                                        <Checkbox
+                                          disabled={
+                                            coIns?.sections?.length == 1 &&
+                                            coIns?.sections?.includes(
+                                              sec.sectionNo
+                                            )
+                                          }
+                                          key={index}
+                                          classNames={{
+                                            input:
+                                              "bg-black bg-opacity-0  border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                                            body: "mr-3",
+                                            label: "text-[14px] cursor-pointer",
+                                          }}
+                                          color="#5768D5"
+                                          size="xs"
+                                          label={`Section ${getSectionNo(
+                                            sec.sectionNo
+                                          )}`}
+                                          checked={coIns?.sections?.includes(
+                                            sec.sectionNo
+                                          )}
+                                          onChange={(event) =>
+                                            editCoInsInSec(
+                                              sec.sectionNo,
+                                              event.currentTarget.checked,
+                                              coIns
+                                            )
+                                          }
+                                        />
+                                      ))}
+                                    </div>
+                                  </Menu.Dropdown>
+                                </Menu>
+                                <Button
+                                  className="text-[12px] transform-none rounded-[8px]"
+                                  size="xs"
+                                  variant="outline"
+                                  color="#FF4747"
+                                  onClick={() => removeCoIns(coIns)}
+                                >
+                                  Remove
+                                </Button>
+                              </div>
+                            </div>
+                            <div className="flex text-secondary flex-row w-[70%] flex-wrap -mt-5 gap-1 font-medium text-[13px]">
+                              <p className=" font-semibold">Section</p>
+                              {coIns?.sections?.map(
+                                (sectionNo: any, index: number) => (
+                                  <p key={index}>
+                                    {sectionNo}
+                                    {index !== coIns?.sections?.length - 1 &&
+                                      ","}
+                                  </p>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </Tabs.Panel>
           </Tabs>
