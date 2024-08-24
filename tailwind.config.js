@@ -6,6 +6,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        default: "#333333",
         primary: "#6869ad",
         secondary: "#5768d5",
         tertiary: "#3e3e3e",

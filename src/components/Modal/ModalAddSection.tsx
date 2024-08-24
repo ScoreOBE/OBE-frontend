@@ -448,7 +448,7 @@ export default function ModalAddSection({
           label="Semester"
           description={`STEP ${isManage ? 3 : 2}`}
         >
-          <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-scroll  ">
+          <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-auto  ">
             <div className="flex flex-col font-medium text-[14px] gap-5">
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
@@ -544,7 +544,7 @@ export default function ModalAddSection({
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <IconUsers /> Added Co-Instructor
                 </div>
-                <div className="flex flex-col max-h-[250px] h-fit w-full   px-2   overflow-y-scroll ">
+                <div className="flex flex-col max-h-[250px] h-fit w-full   px-2   overflow-y-auto ">
                   <div className="flex flex-col max-h-[400px] h-fit p-1">
                     {coInsList.map((coIns, index) => (
                       <div
@@ -570,7 +570,7 @@ export default function ModalAddSection({
                                 </Button>
                               </Menu.Target>
 
-                              <Menu.Dropdown className=" overflow-y-scroll max-h-[180px] h-fit">
+                              <Menu.Dropdown className=" overflow-y-auto max-h-[180px] h-fit">
                                 <Menu.Label className=" -translate-x-1">
                                   Can access
                                 </Menu.Label>
@@ -658,7 +658,7 @@ export default function ModalAddSection({
               )}
               <p className="text-b3">Course owner: {getUserName(user, 1)}</p>
             </div>
-            <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-scroll ">
+            <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-auto ">
               <div className="flex flex-col gap-3 mt-3   font-medium text-[12px]">
                 {form.getValues().sections.map((sec, index) => (
                   <div
