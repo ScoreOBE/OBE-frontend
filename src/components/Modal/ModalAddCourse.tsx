@@ -9,12 +9,15 @@ import {
   TagsInput,
   List,
   Menu,
+  Chip,
+  Alert,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
   IconCircleFilled,
   IconArrowRight,
   IconUsers,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
@@ -67,7 +70,7 @@ export default function ModalAddCourse({
         topic: (value) => validateCourseNameorTopic(value, "Topic"),
         sectionNo: (value) => validateSectionNo(value),
         semester: (value) => {
-          return value?.length ? null : "Please select semester at least one.";
+          return value?.length ? null : "Please choose semester at least one.";
         },
       },
     },
@@ -168,12 +171,12 @@ export default function ModalAddCourse({
   const addCourse = async () => {
     const res = await createCourse(setPayload());
     if (res) {
-      closeModal();
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Add course success",
-        `${res.courseNo} is added`
+        "Add success",
+        `${form.getValues().courseNo} is added`
       );
+      closeModal();
       fetchCourse(academicYear.id);
     }
   };
@@ -502,72 +505,79 @@ export default function ModalAddCourse({
           label="Semester"
           description="STEP 3"
         >
-          <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-auto  ">
-            <div className="flex flex-col font-medium text-[14px] gap-5">
+          <Alert
+            icon={<IconInfoCircle />}
+            title={<p>Each section can only have one main instructor.</p>}
+          ></Alert>
+          <div className="flex flex-col max-h-[420px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-auto  ">
+            <div className="flex flex-col font-medium text-[14px] gap-4">
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary font-semibold">
-                    Select Semester for Section {getSectionNo(sec.sectionNo)}
+                    Recurrence semester for section{" "}
+                    {getSectionNo(sec.sectionNo)}
                     <span className="text-red-500"> *</span>
                   </span>
                   <div
                     style={{
                       boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                     }}
-                    className="w-full justify-center p-3 py-4 bg-white rounded-md  flex flex-col "
+                    className="w-full justify-center pl-5 pr-[18px] pt-4 pb-5 bg-white rounded-md  flex flex-col "
                   >
-                    <div className="flex flex-row items-center justify-between">
-                      <div className="gap-3 flex flex-col">
-                        <span className="font-semibold">Open Semester</span>
-                        <Checkbox
-                          classNames={{
-                            input:
-                              "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                            body: "mr-3 px-0",
-                            label: "text-[14px] text-[#615F5F] cursor-pointer",
-                          }}
-                          color="#5768D5"
-                          size="xs"
-                          label={`Open in this semester (${
-                            academicYear?.semester
-                          }/${academicYear?.year.toString()?.slice(-2)})`}
-                          checked={sec.openThisTerm}
-                          onChange={(event) =>
-                            setSemesterInSec(index, event.target.checked)
-                          }
-                        />
-                      </div>
-                      <Checkbox.Group
-                        classNames={{ error: "mt-2" }}
+                    <div className="gap-2 flex flex-col">
+                      <span className="font-medium text-[#333333]">
+                        Repeat on semester
+                      </span>
+                      <Chip.Group
                         {...form.getInputProps(`sections.${index}.semester`)}
                         value={sec.semester}
                         onChange={(event) => {
-                          setSemesterInSec(index, true, event);
+                          setSemesterInSec(index, true, event as string[]);
                         }}
+                        multiple
                       >
-                        <Group className=" items-center h-full flex flex-row gap-1 justify-end ">
+                        <Group className=" items-center h-full flex flex-row gap-4">
                           {SEMESTER.map((item) => (
-                            <Checkbox
-                              key={item}
+                            <Chip
+                              icon={<></>}
                               classNames={{
                                 input:
-                                  "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                                body: "mr-3",
-                                label: "text-[14px] cursor-pointer",
+                                  "bg-black!  border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-500",
+                                iconWrapper: "w-0",
+                                label: "text-[14px] px-4 cursor-pointer",
                               }}
                               color="#5768D5"
                               size="xs"
-                              label={item}
                               value={item.toString()}
                               disabled={
                                 sec.openThisTerm &&
                                 item == academicYear.semester &&
                                 sec.semester?.includes(item.toString())
                               }
-                            />
+                            >
+                              {item}
+                            </Chip>
                           ))}
                         </Group>
-                      </Checkbox.Group>
+                      </Chip.Group>
+                      <Checkbox
+                        classNames={{
+                          input:
+                            "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                          body: "mr-3 px-0",
+                          label: "text-[14px] text-[#333333] cursor-pointer",
+                        }}
+                        className="mt-3 ml-1"
+                        color="#5768D5"
+                        size="xs"
+                        label={`Open in this semester (${
+                          academicYear?.semester
+                        }/${academicYear?.year.toString()?.slice(-2)})`}
+                        checked={sec.openThisTerm}
+                        onChange={(event) =>
+                          setSemesterInSec(index, event.target.checked)
+                        }
+                      />
                     </div>
                   </div>
                 </div>
@@ -603,22 +613,21 @@ export default function ModalAddCourse({
                     {coInsList.map((coIns, index) => (
                       <div
                         key={index}
-                        className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none  py-5 "
+                        className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none  "
                       >
                         <div className="flex w-full justify-between items-center">
-                          <div className="flex flex-col  font-medium text-[14px]">
-                            <span className="text-[#3e3e3e] -translate-y-1 font-semibold text-[14px]">
-                              {coIns.label}
-                            </span>
-                          </div>
-                          <div className="flex justify-end gap-3 ">
+                          <span className="text-[#3e3e3e] -translate-y-1 font-semibold text-[13px]">
+                            {coIns.label}
+                          </span>
+
+                          <div className="flex justify-end gap-4 mt-1 ">
                             <Menu shadow="md" width={200}>
                               <Menu.Target>
                                 <Button
                                   variant="outline"
                                   color="#5768d5"
                                   size="xs"
-                                  className=" transform-none text-[12px] rounded-md"
+                                  className=" transform-none text-[12px] h-7 px-3 rounded-[6px]"
                                 >
                                   Access
                                 </Button>
@@ -640,7 +649,7 @@ export default function ModalAddCourse({
                                         input:
                                           "bg-black bg-opacity-0  border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                                         body: "mr-3",
-                                        label: "text-[14px] cursor-pointer",
+                                        label: "text-b2 cursor-pointer",
                                       }}
                                       color="#5768D5"
                                       size="xs"
@@ -661,7 +670,7 @@ export default function ModalAddCourse({
                               </Menu.Dropdown>
                             </Menu>
                             <Button
-                              className="text-[12px] transform-none rounded-[8px]"
+                              className="text-[12px] transform-none h-7 px-3 rounded-[6px]"
                               size="xs"
                               variant="outline"
                               color="#FF4747"
@@ -671,7 +680,7 @@ export default function ModalAddCourse({
                             </Button>
                           </div>
                         </div>
-                        <div className="flex text-secondary flex-row w-[70%] flex-wrap -mt-5 gap-1 font-medium text-[13px]">
+                        <div className="flex text-secondary flex-row w-[70%] flex-wrap -mt-6 gap-1 font-medium text-b3">
                           <p className=" font-semibold">Section</p>
                           {coIns.sections?.map(
                             (sectionNo: any, index: number) => (
@@ -701,7 +710,7 @@ export default function ModalAddCourse({
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
           >
-            <div className="bg-[#e6e9ff] flex flex-col justify-start gap-[2px] font-semibold  rounded-t-md border-b-secondary border-[1px] px-4 py-2 text-secondary ">
+            <div className="bg-[#e6e9ff] flex flex-col justify-start gap-[2px] font-semibold  rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
               <p>
                 {form.getValues().courseNo} - {form.getValues().courseName}
               </p>
@@ -710,7 +719,6 @@ export default function ModalAddCourse({
                   Topic: {form.getValues().sections?.at(0)?.topic}
                 </p>
               )}
-              <p className="text-b3">Course owner: {getUserName(user, 1)}</p>
             </div>
             <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-auto ">
               <div className="flex flex-col gap-3 mt-3   font-medium text-[12px]">
@@ -719,9 +727,21 @@ export default function ModalAddCourse({
                     key={index}
                     className="w-full border-b-[1px] border-[#c9c9c9] pb-2  h-fit px-4    gap-1 flex flex-col"
                   >
-                    <span className="text-default font-semibold text-[14px] mb-2">
+                    <span className="text-default font-semibold flex flex-col text-[14px] mb-2">
                       Section {getSectionNo(sec.sectionNo)}
                     </span>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[#3E3E3E] font-semibold">
+                        Main Instructor
+                      </span>
+                      <div className="ps-1.5 text-secondary mb-2">
+                        <List size="sm" listStyleType="disc">
+                          <List.Item className="mb-[3px]">
+                            {getUserName(user, 1)}
+                          </List.Item>
+                        </List>
+                      </div>
+                    </div>
 
                     {!!sec.coInstructors?.length && (
                       <div className="flex flex-col gap-1">

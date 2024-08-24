@@ -9,12 +9,15 @@ import {
   TagsInput,
   List,
   Menu,
+  Alert,
+  Chip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
   IconCircleFilled,
   IconArrowRight,
   IconUsers,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { SEMESTER } from "@/helpers/constants/enum";
@@ -74,10 +77,10 @@ export default function ModalAddSection({
         topic: (value) => validateCourseNameorTopic(value, "Topic"),
         sectionNo: (value) => validateSectionNo(value),
         semester: (value) => {
-          return value?.length ? null : "Please select semester at least one.";
+          return value?.length ? null : "Please choose at least one semester.";
         },
-        instructor: (value) =>
-          (value as string)?.length ? null : "Please select instructor.",
+        instructor: (value: any) =>
+          value?.value?.length ? null : "Please select one main instructor.",
       },
     },
     validateInputOnBlur: true,
@@ -99,9 +102,7 @@ export default function ModalAddSection({
         (!form.validateField("sections.0.topic").hasError ||
           data.type !== COURSE_TYPE.SEL_TOPIC);
       if (isValid) {
-        const res = isManage
-          ? await checkCanCreateSectionManagement(setPayload(false))
-          : await checkCanCreateCourse(setPayload(false));
+        const res = await checkCanCreateCourse(setPayload(false));
         if (!res) isValid = false;
       }
     } else if (isManage && active == 1) {
@@ -167,6 +168,9 @@ export default function ModalAddSection({
     if (add) {
       payload.sections?.forEach((sec: any) => {
         sec.semester = sec.semester?.map((term: string) => parseInt(term));
+        if (isManage) {
+          sec.instructor = sec.instructor.value;
+        }
         sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
       });
     }
@@ -191,7 +195,7 @@ export default function ModalAddSection({
       }
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Add section success",
+        "Add success",
         `${sectionNoList.join(", ")} is added`
       );
       closeModal();
@@ -429,33 +433,57 @@ export default function ModalAddSection({
             label="Main Instructor"
             description="STEP 2"
           >
-            {form
-              .getValues()
-              .sections?.map((sec: Partial<IModelSection>, index) => (
-                <div className="flex flex-col" key={index}>
-                  <p className="text-secondary font-semibold">
-                    Section {getSectionNo(sec.sectionNo)}
-                  </p>
-                  <CompoMangementIns
-                    opened={active == 1}
-                    mainIns={true}
-                    value={sec.instructor as string}
-                    swapMethod={(sec.instructor as string)?.includes(
-                      "@cmu.ac.th"
-                    )}
-                    action={(value) =>
-                      form.setFieldValue(`sections.${index}.instructor`, value)
-                    }
-                    error={
-                      firstInput
-                        ? undefined
-                        : form
-                            .validateField(`sections.${index}.instructor`)
-                            .error?.toString()
-                    }
-                  />
-                </div>
-              ))}
+            <Alert
+              radius="md"
+              icon={<IconInfoCircle />}
+              variant="light"
+              color="blue"
+              className="mb-5"
+              classNames={{
+                icon: "size-6",
+                body: " flex justify-center",
+              }}
+              title={<p>Each section can only have one main instructor.</p>}
+            ></Alert>
+            <div className="flex flex-col max-h-[380px] h-fit w-full mt-1 mb-5  p-[2px]    overflow-y-auto  ">
+              <div className="flex flex-col font-medium text-[14px]">
+                {form
+                  .getValues()
+                  .sections?.map((sec: Partial<IModelSection>, index) => (
+                    <div className="flex flex-col" key={index}>
+                      <span className="text-secondary font-semibold">
+                        Select Main Instructor for Section{" "}
+                        {getSectionNo(sec.sectionNo)}
+                        <span className="text-red-500"> *</span>
+                        <br />
+                        {/* <span className="text-b3 text-[#a2a2a2] -mt-2">Only one instructor is allowed per section</span> */}
+                      </span>
+
+                      <CompoMangementIns
+                        opened={active == 1}
+                        mainIns={true}
+                        value={sec.instructor as string}
+                        swapMethod={(sec.instructor as any)?.label?.includes(
+                          "@cmu.ac.th"
+                        )}
+                        action={(value) =>
+                          form.setFieldValue(
+                            `sections.${index}.instructor`,
+                            value
+                          )
+                        }
+                        error={
+                          firstInput
+                            ? undefined
+                            : form
+                                .validateField(`sections.${index}.instructor`)
+                                .error?.toString()
+                        }
+                      />
+                    </div>
+                  ))}
+              </div>
+            </div>
           </Stepper.Step>
         )}
         <Stepper.Step
@@ -468,67 +496,69 @@ export default function ModalAddSection({
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary font-semibold">
-                    Select Semester for Section {getSectionNo(sec.sectionNo)}{" "}
+                    Recurrence semester for section{" "}
+                    {getSectionNo(sec.sectionNo)}{" "}
                     <span className="text-red-500">*</span>
                   </span>
                   <div
                     style={{
                       boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                     }}
-                    className="w-full p-3 py-4 bg-white rounded-md gap-2 flex flex-col "
+                    className="w-full justify-center pl-5 pr-[18px] pt-4 pb-5 bg-white rounded-md  flex flex-col "
                   >
-                    <div className="flex flex-row items-center justify-between">
-                      <div className="gap-3 flex flex-col">
-                        <span className="font-semibold">Open Semester</span>
-                        <Checkbox
-                          classNames={{
-                            input:
-                              "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                            body: "mr-3 px-0",
-                            label: "text-[14px] text-[#615F5F] cursor-pointer",
-                          }}
-                          color="#5768D5"
-                          size="xs"
-                          label={`Open in this semester (${
-                            academicYear?.semester
-                          }/${academicYear?.year.toString()?.slice(-2)})`}
-                          checked={sec.openThisTerm}
-                          onChange={(event) =>
-                            setSemesterInSec(index, event.target.checked)
-                          }
-                        />
-                      </div>
-                      <Checkbox.Group
-                        classNames={{ error: "mt-2" }}
+                    <div className="gap-2 flex flex-col">
+                      <span className="font-medium text-[#333333]">Repeat on semester</span>{" "}
+                      <Chip.Group
                         {...form.getInputProps(`sections.${index}.semester`)}
                         value={sec.semester}
                         onChange={(event) => {
-                          setSemesterInSec(index, true, event);
+                          setSemesterInSec(index, true, event as string[]);
                         }}
+                        multiple
                       >
-                        <Group className="flex flex-row gap-1 justify-end ">
+                        <Group className="flex flex-row gap-4">
                           {SEMESTER.map((item) => (
-                            <Checkbox
-                              key={item}
+                            <Chip
+                              icon={<></>}
                               classNames={{
                                 input:
                                   "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                                body: "mr-3",
-                                label: "text-[14px] cursor-pointer",
+                                iconWrapper: "w-0",
+                                label: "text-[14px] px-4 cursor-pointer",
                               }}
                               color="#5768D5"
+                              className=""
                               size="xs"
-                              label={item}
                               value={item.toString()}
                               disabled={
                                 sec.openThisTerm &&
                                 item == academicYear.semester &&
                                 sec.semester?.includes(item.toString())
                               }
-                            />
+                            >
+                              {item}
+                            </Chip>
                           ))}
                         </Group>
-                      </Checkbox.Group>
+                      </Chip.Group>
+                      <Checkbox
+                        classNames={{
+                          input:
+                            "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                          body: "mr-3 px-0",
+                          label: "text-[14px] text-[#333333] cursor-pointer",
+                        }}
+                        className="mt-3"
+                        color="#5768D5"
+                        size="xs"
+                        label={`Open in this semester (${
+                          academicYear?.semester
+                        }/${academicYear?.year.toString()?.slice(-2)})`}
+                        checked={sec.openThisTerm}
+                        onChange={(event) =>
+                          setSemesterInSec(index, event.target.checked)
+                        }
+                      />
                     </div>
                   </div>
                 </div>
@@ -662,7 +692,7 @@ export default function ModalAddSection({
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
           >
-            <div className="bg-[#e6e9ff] flex flex-col justify-start gap-[2px] font-semibold  rounded-t-md border-b-secondary border-[1px] px-4 py-2 text-secondary ">
+            <div className="bg-[#e6e9ff] flex flex-col justify-start gap-[2px] font-semibold  rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
               <p>
                 {data.courseNo} - {data.courseName}{" "}
               </p>
@@ -671,7 +701,6 @@ export default function ModalAddSection({
                   Topic: {form.getValues().sections.at(0)?.topic}
                 </p>
               )}
-              <p className="text-b3">Course owner: {getUserName(user, 1)}</p>
             </div>
             <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-auto ">
               <div className="flex flex-col gap-3 mt-3   font-medium text-[12px]">
@@ -683,6 +712,19 @@ export default function ModalAddSection({
                     <span className="text-secondary font-semibold text-[14px] mb-2">
                       Section {getSectionNo(sec.sectionNo)}
                     </span>
+
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[#3E3E3E] font-semibold">
+                        Main Instructor
+                      </span>
+                      <div className="ps-1.5 text-secondary">
+                        <List size="sm" listStyleType="disc">
+                          <List.Item className="mb-[3px]">
+                            {(sec?.instructor as any)?.label}
+                          </List.Item>
+                        </List>
+                      </div>
+                    </div>
 
                     {!!sec.coInstructors?.length && (
                       <div className="flex flex-col gap-1">
