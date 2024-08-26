@@ -422,7 +422,7 @@ export default function MapPLO() {
                   </div>
                   <div className="text-[#909090] text-[12px] font-medium">
                     <p>
-                      {ploList.criteriaTH} {ploList.criteriaEN}
+                      {ploList.criteriaTH}  {ploList.criteriaEN}
                     </p>
                   </div>
                 </div>

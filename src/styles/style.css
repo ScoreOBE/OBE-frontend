@@ -316,7 +316,7 @@ Button:disabled {
   background-color: var(--tqf-color-no-data);
 }
 
-.height-animation {
+/* .height-animation {
   max-height: 350px;
   transition: height 0.3s ease-in-out;
 }
@@ -327,4 +327,4 @@ Button:disabled {
 
 .height-animation.collaps {
   height: 260px;
-}
+} */

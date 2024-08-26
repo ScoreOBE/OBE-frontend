@@ -59,7 +59,6 @@ export default function ModalAddPLOCollection({
   const [active, setActive] = useState(0);
   const [department, setDepartment] = useState<any>([]);
   const [ploNo, setPloNo] = useState(0);
-  const [selectDepartment, setSelectDepartment] = useState<string[]>([]);
   const [state, handlers] = useListState<Partial<IModelPLONo>>([]);
   const [reorder, setReorder] = useState(false);
   const [firstInput, setFirstInput] = useState(false);

@@ -27,28 +27,25 @@ type Props = {
   onClose: () => void;
 };
 export default function ModalManageTQF({ opened, onClose }: Props) {
-  const academicYear = useAppSelector((state) => state.academicYear);
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [searchValue, setSearchValue] = useState("");
   const [payload, setPayload] = useState<any>({});
-  const [term, setTerm] = useState<IModelAcademicYear>();
   const [checkedTQF3, setCheckedTQF3] = useState(true);
   const [checkedTQF5, setCheckedTQF5] = useState(false);
   const [notCompleteTQF3List, setnotCompleteTQF3List] = useState<any[]>([]);
 
   useEffect(() => {
-    if (academicYear.length && opened) {
+    if (opened) {
       setSearchValue("");
       fetchCourse();
     }
   }, [academicYear, opened]);
 
   const fetchCourse = async () => {
-    const activeTerm = academicYear.find((e) => e.isActive);
-    if (activeTerm) {
+    if (academicYear) {
       const initialPayload = new CourseRequestDTO();
-      initialPayload.academicYear = activeTerm.id;
+      initialPayload.academicYear = academicYear.id;
       initialPayload.manage = true;
-      setTerm(activeTerm);
       setPayload(initialPayload);
       const res = await getCourse(initialPayload);
       if (res) {
@@ -116,16 +113,14 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   const clickToggleTQF5 = (checked: any) => {
     setCheckedTQF5(checked);
     setCheckedTQF3(!checked);
-
   };
 
   return (
     <Modal
-      opened={opened}
+      opened={opened && !!notCompleteTQF3List.length}
       onClose={onClose}
       title="Management TQF"
       size="45vw"
-      radius={"12px"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
@@ -191,7 +186,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                     </span>{" "}
                     preventing further edits.
                   </List.Item>
-                  
+
                   <List.Item className="text-secondary font-semibold w-full">
                     You can select specific courses below to enable TQF 3
                     editing.
@@ -266,7 +261,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                   rightSectionPointerEvents="all"
                 />
                 <div className="flex flex-col  overflow-y-scroll p-1">
-                  {notCompleteTQF3List.map((e, index) => (
+                  { notCompleteTQF3List.map((e, index) => (
                     <div
                       key={index}
                       className="w-full items-center justify-between last:border-none border-b-[1px]  py-3 px-4  flex"

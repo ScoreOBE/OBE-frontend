@@ -50,10 +50,13 @@ export default function CompoMangementIns({
   const [instructorOption, setInstructorOption] = useState<any[]>([]);
   const [inputUser, setInputUser] = useState<any>({ value: null });
   const [isFocus, setIsFocus] = useState(false);
+  const [firstInput, setFirstInput] = useState(true);
   const [invalidEmail, setInvalidEmail] = useState(false);
+
 
   useEffect(() => {
     if (opened) {
+      setFirstInput(true);
       setInputUser({ value: null });
       setSwapMethodAddUser(swapMethod);
       fetchIns();
@@ -96,7 +99,7 @@ export default function CompoMangementIns({
             )
             .map((sec) => sec.sectionNo);
         });
-        if (list.length && setUserList) setUserList(list);
+        if (mainIns && list.length && setUserList) setUserList(list);
       }
     }
   }, [sections, instructorOption]);
@@ -162,7 +165,7 @@ export default function CompoMangementIns({
         }
       }
       // Add coIns (Add Course)
-      else if (sections && action) {
+      else if (!mainIns && sections && action) {
         action(
           { inputUser, instructorOption },
           { setInputUser, setInstructorOption }
@@ -172,12 +175,10 @@ export default function CompoMangementIns({
   };
 
   const getLabel = () => {
-    return change
+    return change || mainIns
       ? TITLE_ROLE.OWNER_SEC
       : role
       ? ROLE.ADMIN
-      : mainIns
-      ? TITLE_ROLE.MAIN_INS
       : TITLE_ROLE.CO_INS;
   };
 
@@ -190,7 +191,7 @@ export default function CompoMangementIns({
     >
       <div
         onClick={() => {
-          if (mainIns && action) action(undefined);
+          if (mainIns && action) action({value: null});
           setInputUser({ value: null });
           setSwapMethodAddUser(!swapMethodAddUser);
         }}
@@ -231,14 +232,14 @@ export default function CompoMangementIns({
                   value: event.target.value,
                 });
             }}
-            onFocus={() => setIsFocus(true)}
+            onFocus={() => {setFirstInput(false), setIsFocus(true)}}
             onBlur={() => setIsFocus(false)}
             error={
-              mainIns && error
+              mainIns && error 
                 ? "Please enter the instructor's email address."
                 : value &&
                   !isFocus &&
-                  !validateEmail(value) &&
+                  !validateEmail(value) && !firstInput &&
                   "Please enter a valid email address (e.g., example@cmu.ac.th)."
             }
           />

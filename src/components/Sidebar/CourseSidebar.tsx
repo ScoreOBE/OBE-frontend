@@ -28,6 +28,7 @@ export default function CourseSidebar() {
   const dispatch = useAppDispatch();
   const [course, setCourse] = useState<IModelCourse>();
   const [instructors, setInstructors] = useState<IModelUser[]>([]);
+  const [coInstructors, setCoInstructors] = useState<IModelUser[]>([]);
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
 
@@ -36,17 +37,24 @@ export default function CourseSidebar() {
       const findCourse = courseList.find((e) => e.courseNo == courseNo);
       setCourse(findCourse);
       const insList: any[] = [];
+      const coInsList: any[] = [];
       findCourse?.sections.forEach((e: any) => {
-        if (!insList.map((p: any) => p.email).includes(e.instructor.email)) {
-          insList.push({ id: user.id, ...e.instructor });
+        if (!insList.map((p: any) => p.id).includes(e.instructor.id)) {
+          insList.push({ ...e.instructor });
         }
+      });
+      findCourse?.sections.forEach((e: any) => {
         e.coInstructors.forEach((p: any) => {
-          if (!insList.map((p: any) => p.email).includes(p.email)) {
-            insList.push({ id: user.id, ...p });
+          if (
+            !insList.map((p: any) => p.id).includes(p.id) &&
+            !coInsList.map((p: any) => p.id).includes(p.id)
+          ) {
+            coInsList.push({ ...p });
           }
         });
       });
       setInstructors(insList);
+      setCoInstructors(coInsList);
     }
   }, [courseList, courseNo]);
 
@@ -143,7 +151,7 @@ export default function CourseSidebar() {
         </div>
 
         <div className="flex  flex-col gap-2 mt-5">
-          <p className="text-b2 font-bold mb-1">Instructors</p>
+          <p className="text-b2 font-bold mb-1">Owner Section</p>
           {instructors.map((item, index) => {
             return (
               <p key={index} className="text-pretty font-medium text-[12px]">
@@ -152,12 +160,24 @@ export default function CourseSidebar() {
             );
           })}
         </div>
+        {!!coInstructors.length && (
+          <div className="flex  flex-col gap-2">
+            <p className="text-b2 font-bold mb-1">Co-Instructor</p>
+            {coInstructors.map((item, index) => {
+              return (
+                <p key={index} className="text-pretty font-medium text-[12px]">
+                  {getUserName(item, 1)}
+                </p>
+              );
+            })}
+          </div>
+        )}
         {course &&
           !course?.sections.find(
             (sec: any) => sec.instructor.email === user.email
           ) && (
-            <div className="flex  w-full gap-2 justify-end flex-col flex-1">
-              <p className="text-[14px] text-white font-bold">Course Action</p>
+            <div className="flex  w-full gap-1 justify-end flex-col flex-1">
+              <p className="text-b2 text-white font-bold">Course Action</p>
               <Button
                 onClick={() => {
                   openedMainPopup();
