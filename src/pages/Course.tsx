@@ -11,11 +11,10 @@ import {
 } from "@tabler/icons-react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { getCourse, getOneCourse } from "@/services/course/course.service";
-import { removeSection, setCourseList } from "@/store/course";
+import { editCourse, removeSection, setCourseList } from "@/store/course";
 import { getSectionNo, showNotifications } from "@/helpers/functions/function";
 import PageError from "./PageError";
 import MainPopup from "@/components/Popup/MainPopup";
-import { useDisclosure } from "@mantine/hooks";
 import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import ModalEditSection from "@/components/Modal/ModalEditSection";
 import Icon from "@/components/Icon";
@@ -26,7 +25,10 @@ import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { IModelSection } from "@/models/ModelSection";
-import { deleteSection } from "@/services/section/section.service";
+import {
+  deleteSection,
+  updateSectionActive,
+} from "@/services/section/section.service";
 import ModalAddSection from "@/components/Modal/ModalAddSection";
 
 export default function Course() {
@@ -80,7 +82,19 @@ export default function Course() {
       courseNo,
     });
     if (res) {
-      setCourse(res);
+      dispatch(editCourse(res));
+    }
+  };
+
+  const onClickActiveSection = async (id: string, checked: boolean) => {
+    const res = await updateSectionActive(id, { isActive: checked });
+    if (res) {
+      fetchOneCourse();
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        `${checked ? "Open" : "Close"} Section Success`,
+        `${getSectionNo(editSec?.sectionNo)} is ${checked ? "open" : "close"}`
+      );
     }
   };
 
@@ -93,7 +107,7 @@ export default function Course() {
         dispatch(removeSection({ id: editSec.courseId, secId: id }));
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Delete Course Success",
+          "Delete Section Success",
           `${getSectionNo(editSec?.sectionNo)} is deleted`
         );
       }
@@ -287,8 +301,13 @@ export default function Course() {
                             <Switch
                               size="xs"
                               className="absolute top-3 right-3"
-                              defaultChecked
-                              // checked={sec.isActive}
+                              checked={sec.isActive}
+                              onChange={(event) =>
+                                onClickActiveSection(
+                                  sec.id!,
+                                  event.target.checked
+                                )
+                              }
                             />
                           ))}
                       </div>
