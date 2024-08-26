@@ -17,6 +17,7 @@ export interface IModelPLO {
 }
 
 export interface IModelPLONo {
+  id: string;
   no: number;
   descTH: string;
   descEN: string;

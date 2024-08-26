@@ -7,6 +7,7 @@ import {
   TextInput,
   Textarea,
   Checkbox,
+  Alert,
 } from "@mantine/core";
 import {
   IconEdit,
@@ -14,6 +15,7 @@ import {
   IconInfoCircle,
   IconTrash,
   IconCheck,
+  IconExclamationCircle,
 } from "@tabler/icons-react";
 import Icon from "@/components/Icon";
 import { useEffect, useState } from "react";
@@ -44,7 +46,7 @@ export default function MapPLO() {
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
   const [reorder, setReorder] = useState(false);
   const [state, handlers] = useListState(ploList.data || []);
-  const [getPLONo, setGetPLONo] = useState<number>();
+  const [getPLONo, setGetPLONo] = useState<number>(0);
   const [couresNo, setCouresNo] = useState("");
   const [isMapPLO, setIsMapPLO] = useState(false);
   const isFirstSemester =
@@ -68,6 +70,42 @@ export default function MapPLO() {
     },
     validateInputOnBlur: true,
   });
+
+  const formPLO = useForm({
+    mode: "controlled",
+    initialValues: { id: "", no: 0, descTH: "", descEN: "" } as IModelPLONo,
+    validate: {
+      descTH: (value) => {
+        if (!value) return `PLO Thai language is required`;
+      },
+      descEN: (value) => {
+        if (!value) return `PLO English language is required`;
+      },
+    },
+    validateInputOnBlur: true,
+  });
+
+  const editPLO = async () => {
+    const payload = ploList.data?.map((plo) => {
+      if (plo.id === formPLO.getValues().id) {
+        plo = formPLO.getValues();
+      }
+      return plo;
+    });
+
+    const res = await updatePLO(ploList.id!, {
+      data: payload,
+    });
+    if (res) {
+      fetchPLO();
+      setOpenModalEditPLONo(false);
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Edit success",
+        `PLO-${formPLO.getValues().no} is edited`
+      );
+    }
+  };
 
   useEffect(() => {
     if (user.departmentCode) {
@@ -98,6 +136,7 @@ export default function MapPLO() {
     if (ploList.data) {
       handlers.setState(ploList.data);
     }
+    console.log(state);
   }, [ploList.data]);
 
   useEffect(() => {
@@ -238,7 +277,7 @@ export default function MapPLO() {
       </Modal>
       {/* Edit PLO */}
       <Modal
-        title={`Edit PLO-${getPLONo}`}
+        title={`Edit PLO-${formPLO.getValues().no}`}
         opened={openModalEditPLONo}
         withCloseButton={false}
         closeOnClickOutside={false}
@@ -266,6 +305,11 @@ export default function MapPLO() {
               label: "flex pb-1",
             }}
             placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
+            {...formPLO.getInputProps("descTH")}
+            value={formPLO.getValues().descTH}
+            onChange={(event) => {
+              formPLO.setFieldValue("descTH", event.target.value);
+            }}
           />
           <Textarea
             withAsterisk={true}
@@ -281,6 +325,11 @@ export default function MapPLO() {
               label: "flex pb-1",
             }}
             placeholder="Ex. An ability to solve complex engineering problems."
+            {...formPLO.getInputProps("descEN")}
+            value={formPLO.getValues().descEN}
+            onChange={(event) => {
+              formPLO.setFieldValue("descEN", event.target.value);
+            }}
           />
 
           <div className="flex gap-2 mt-3 justify-end">
@@ -293,7 +342,9 @@ export default function MapPLO() {
               Cancel
             </Button>
             <Button
-              // onClick={submit}
+              onClick={() => {
+                editPLO();
+              }}
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
               color="#5768d5"
             >
@@ -352,12 +403,23 @@ export default function MapPLO() {
         action={() => onClickDeletePLO(getPLONo)}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete PLO"
-        title={`Delete PLO ${getPLONo}`}
+        title={`Delete PLO ${formPLO.getValues().no}`}
         message={
-          <p>
-            xxxxxxxxxxxxxxx
-            <br /> <span>Are you sure you want to deleted this PLO? </span>
-          </p>
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title="After you delete this PLO, it will affect all courses that use this PLO collection."
+              icon={<IconExclamationCircle />}
+              classNames={{ title: "-mt-[2px]" }}
+            ></Alert>
+            <div className="flex flex-col mt-3 gap-2">
+              <p>
+                xxxxxxxxxxxxxxx
+                <br /> <span>Are you sure you want to deleted this PLO? </span>
+              </p>
+            </div>
+          </>
         }
       />
       <div className=" flex flex-col h-full w-full px-6 pb-2 pt-2 gap-4 overflow-hidden ">
@@ -486,7 +548,7 @@ export default function MapPLO() {
                                 <div
                                   className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
                                   onClick={() => {
-                                    setGetPLONo(item.no);
+                                    formPLO.setValues(item);
                                     setOpenModalEditPLONo(true);
                                   }}
                                 >
@@ -500,7 +562,7 @@ export default function MapPLO() {
                                   <div
                                     className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
                                     onClick={() => {
-                                      setGetPLONo(item.no);
+                                      formPLO.setValues(item);
                                       setOpenMainPopupDelPLO(true);
                                     }}
                                   >
@@ -607,7 +669,7 @@ export default function MapPLO() {
                 next={onShowMore}
                 height={"100%"}
                 hasMore={payload?.hasMore}
-                className="overflow-y-auto w-full h-fit max-h-full border flex flex-col  rounded-lg border-secondary"
+                className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col  rounded-lg border-secondary"
                 style={{ height: "fit-content" }}
                 loader={<Loading />}
               >
@@ -635,6 +697,7 @@ export default function MapPLO() {
                                 <Icon IconComponent={CheckIcon} />
                               ) : (
                                 <Checkbox
+                                  __size="xs"
                                   classNames={{
                                     input:
                                       "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",

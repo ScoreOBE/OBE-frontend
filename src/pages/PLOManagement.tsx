@@ -74,10 +74,6 @@ export default function CourseManagement() {
     }
   }, [user]);
 
-  // useEffect(() => {
-  //   if (ploCollectDupli) console.log(ploCollectDupli);
-  // }, [ploCollectDupli]);
-
   useEffect(() => {
     if (modalDuplicatePLO) {
       fetchPLO(true);
@@ -122,7 +118,7 @@ export default function CourseManagement() {
               </Tabs.List>
             </Tabs>
           </div>
-          <div className="flex flex-col rounded-lg border overflow-y-auto h-full">
+          <div className="flex flex-col rounded-lg border overflow-y-auto h-full border-secondary">
             <Table verticalSpacing="sm" stickyHeader className="rounded-md">
               <Table.Thead>
                 <Table.Tr className="bg-[#F4F5FE]">
@@ -146,7 +142,6 @@ export default function CourseManagement() {
           </div>
         </div>
       </Modal>
-
       <Modal
         title={
           <div className="flex flex-col gap-1">
@@ -290,7 +285,7 @@ export default function CourseManagement() {
                         setCollection({ index, ...collection });
                         setOpenModal(true);
                       }}
-                      className="bg-white    cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#eeeeee] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
+                      className="bg-white    cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#E4E4FF] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
                     >
                       {/* PLO List */}
                       <div className="flex flex-col">
@@ -320,7 +315,7 @@ export default function CourseManagement() {
                         <div className="flex gap-1"></div>
                       </div>
 
-                      <div className="flex w-full justify-end items-center   text-[#333333] size-8 ">
+                      <div className="flex w-full justify-end items-center   text-[#858585]   size-8 ">
                         <IconChevronRight className="size-4" stroke={3} />
                       </div>
                     </div>
