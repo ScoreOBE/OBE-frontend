@@ -8,7 +8,7 @@ export interface IModelSection {
   openThisTerm?: boolean;
   instructor: IModelUser | string;
   coInstructors: IModelUser[] | any[];
-  isActive?: boolean;
+  isActive: boolean;
   assignments: any[];
   isProcessTQF3: boolean;
   // TQF3: TQF;
