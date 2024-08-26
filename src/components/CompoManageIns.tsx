@@ -16,6 +16,7 @@ type Props = {
   role?: ROLE;
   newFetch?: boolean;
   setNewFetch?: (value: boolean) => void;
+  isManage?: boolean;
   mainIns?: boolean;
   currentMainIns?: string;
   value?: any;
@@ -33,6 +34,7 @@ export default function CompoMangementIns({
   role,
   newFetch = false,
   setNewFetch,
+  isManage = false,
   mainIns = false,
   currentMainIns,
   value,
@@ -99,7 +101,7 @@ export default function CompoMangementIns({
             )
             .map((sec) => sec.sectionNo);
         });
-        if (mainIns && list.length && setUserList) setUserList(list);
+        if ((isManage) && list.length && setUserList) setUserList(list);
       }
     }
   }, [sections, instructorOption]);
@@ -279,7 +281,7 @@ export default function CompoMangementIns({
             dropdownOpened={openedDropdown}
             // onDropdownOpen={() => setOpenedDropdown(true)}
             onDropdownClose={() => setOpenedDropdown(false)}
-            value={mainIns ? value.value : inputUser.value!}
+            value={mainIns ? value?.value : inputUser.value!}
             onChange={(value, option) => {
               if (mainIns && action) action(option);
               else setInputUser(option);
