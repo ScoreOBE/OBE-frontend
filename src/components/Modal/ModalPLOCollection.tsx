@@ -126,7 +126,6 @@ export default function ModalAddPLOCollection({
       case 1:
         isValid = form.getValues().data?.length! > 1;
         if (!isValid) {
-          // setIsAddAnother(true);
           form.validateField(`data.${ploNo}.descTH`);
           form.validateField(`data.${ploNo}.descEN`);
         }
@@ -549,8 +548,7 @@ export default function ModalAddPLOCollection({
                                 {(provided) => (
                                   <div
                                     className={`py-5 rounded-md w-full ${
-                                      form.getValues().departmentCode?.length! >
-                                      1
+                                      state?.length! > 1
                                         ? "last:border-none"
                                         : ""
                                     } border-b-[1px]`}
@@ -742,9 +740,7 @@ export default function ModalAddPLOCollection({
                     {state.map((item, index) => (
                       <div
                         className={`flex  py-4 w-full justify-between  border-b bg-red ${
-                          form.getValues().data?.length! > 1
-                            ? "last:border-none"
-                            : ""
+                          state?.length! > 1 ? "last:border-none" : ""
                         }`}
                       >
                         <div className="flex flex-col gap-2 w-full ">

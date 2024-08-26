@@ -149,8 +149,6 @@ export default function CourseManagement() {
     }
   };
 
-  const icon = <IconExclamationCircle />;
-
   return (
     <>
       <ModalAddSection
@@ -185,7 +183,7 @@ export default function CourseManagement() {
               title=" After you delete this course, it's permanently deleted all data from
           the current semester. Data from previous semesters will not be affected. 
           "
-              icon={icon}
+              icon={<IconExclamationCircle />}
               classNames={{ title: "-mt-[2px]" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
@@ -225,7 +223,7 @@ export default function CourseManagement() {
               title=" After you delete this section, it's permanently deleted all data from
           the current semester. Data from previous semesters will not be affected. 
           "
-              icon={icon}
+              icon={<IconExclamationCircle />}
               classNames={{ title: "-mt-[2px]" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
@@ -296,7 +294,6 @@ export default function CourseManagement() {
           <Loading />
         ) : (
           <div className="flex flex-col overflow-y-auto gap-4 px-6 pb-3  pt-2">
-         
             {courseManagement.courseManagements.map((course, index) => (
               <div
                 key={index}
@@ -502,7 +499,6 @@ export default function CourseManagement() {
                 </div>
               </div>
             ))}{" "}
-         
           </div>
         )}
       </div>
