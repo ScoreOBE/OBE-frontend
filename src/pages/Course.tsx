@@ -329,16 +329,22 @@ export default function Course() {
                       <div>
                         <p
                           className={`font-semibold text-sm ${
-                            !sec.isActive && "text-[#ababab]"
+                            !sec.isActive && "text-[#c8c8c8]"
                           }`}
                         >
                           Section {getSectionNo(sec.sectionNo)}
                         </p>
-                        <p className="text-xs font-medium text-gray-600">
+                        <p className={`font-semibold text-xs ${
+                            !sec.isActive && "text-[#c8c8c8]"
+                          }`} >
                           {sec?.topic}
                         </p>
                       </div>
-                      <div className="text-xs font-medium  text-gray-600">
+                      <div
+                        className={` text-xs font-medium text-[#757575]  ${
+                          !sec.isActive && "text-[#c8c8c8]"
+                        }`}
+                      >
                         {getUserName(sec.instructor as IModelUser, 1)}
                       </div>
                     </div>

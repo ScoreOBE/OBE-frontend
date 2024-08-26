@@ -94,7 +94,7 @@ export default function CourseSidebar() {
           </p>
         }
       />
-      <div className="flex text-white flex-col h-full  gap-[32px]">
+      <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
           className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
           onClick={goToDashboard}
@@ -138,7 +138,7 @@ export default function CourseSidebar() {
             </Button>
             <Button
               leftSection={<Icon IconComponent={TQF5} className="h-5 w-5" />}
-              className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
+              className={`font-semibold w-full h-8 text-[13px] mb-2 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
                 ${
                   path.startsWith(ROUTE_PATH.TQF5)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -152,41 +152,44 @@ export default function CourseSidebar() {
 
         <div className="flex  flex-col gap-2 mt-5">
           <p className="text-b2 font-bold mb-1">Owner Section</p>
-          {instructors.map((item, index) => {
-            return (
-              <p key={index} className="text-pretty font-medium text-[12px]">
-                {getUserName(item, 1)}
-              </p>
-            );
-          })}
+          <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
+            {instructors.map((item, index) => {
+              return (
+                <p key={index} className="text-pretty font-medium text-[12px]">
+                  {getUserName(item, 1)}
+                </p>
+              );
+            })}{" "}
+          </div>
         </div>
         {!!coInstructors.length && (
           <div className="flex  flex-col gap-2">
             <p className="text-b2 font-bold mb-1">Co-Instructor</p>
+            <div className="max-h-[140px] gap-1 flex flex-col  overflow-y-auto">
             {coInstructors.map((item, index) => {
               return (
                 <p key={index} className="text-pretty font-medium text-[12px]">
                   {getUserName(item, 1)}
                 </p>
               );
-            })}
+            })}</div>
           </div>
         )}
         {course &&
           !course?.sections.find(
             (sec: any) => sec.instructor.email === user.email
           ) && (
-            <div className="flex  w-full gap-1 justify-end flex-col flex-1">
+            <div className="flex  w-full gap-2 justify-end flex-col flex-1">
               <p className="text-b2 text-white font-bold">Course Action</p>
               <Button
                 onClick={() => {
                   openedMainPopup();
                 }}
                 leftSection={<IconLogout className="h-5 w-5" stroke={1.5} />}
-                className="font-semibold text-[#ffffff] bg-transparent hover:bg-[#d55757] w-full h-8 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group"
+                className="font-semibold text-[#ffffff] bg-transparent hover:bg-[#d55757] w-full h-9 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group"
               >
                 <div className="flex flex-col justify-start w-full items-start gap-[7px]">
-                  <p className="font-semibold text-[13px]">Leave from Course</p>
+                  <p className="font-medium text-[13px]">Leave from Course</p>
                 </div>
               </Button>
             </div>

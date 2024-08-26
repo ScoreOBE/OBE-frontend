@@ -171,6 +171,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
             <CompoMangementIns
               opened={changeMainIns}
               change={true}
+              mainIns={true}
               currentMainIns={editSection.instructor.id}
               action={(value) => onClickChangeMainIns(value)}
             />
@@ -183,7 +184,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
             </Tabs.List>
 
             <Tabs.Panel value="mainInstructor">
-              <div className="flex flex-col max-h-[300px] h-fit  mt-3 overflow-y-scroll p-1">
+              <div className="flex flex-col max-h-[420px] h-fit overflow-y-scroll p-1">
                 {data.sections?.map((sec, index) => (
                   <div
                     key={index}
@@ -224,6 +225,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
               <div className="flex flex-col mt-3 flex-1 ">
                 <CompoMangementIns
                   opened={opened}
+                  isManage={true}
                   action={addCoIns}
                   sections={data.sections}
                   setUserList={setCoInsList}
@@ -237,7 +239,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                     <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                       <IconUsers /> Added Co-Instructor
                     </div>
-                    <div className="flex flex-col max-h-[250px] h-fit w-full   px-2   overflow-y-auto ">
+                    <div className="flex flex-col max-h-[500px] h-fit w-full   px-2   overflow-y-auto ">
                       <div className="flex flex-col max-h-[400px] h-fit p-1 ">
                         {coInsList.map((coIns, index) => (
                           <div
