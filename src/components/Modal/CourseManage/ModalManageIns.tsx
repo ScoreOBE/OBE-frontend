@@ -231,10 +231,8 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
 
                 {!!coInsList.length && (
                   <div
-                    className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md"
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                    }}
+                    className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md"
+                   
                   >
                     <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                       <IconUsers /> Added Co-Instructor
@@ -244,22 +242,22 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                         {coInsList.map((coIns, index) => (
                           <div
                             key={index}
-                            className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none  py-5 "
+                            className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none "
                           >
                             <div className="flex w-full justify-between items-center">
                               <div className="flex flex-col  font-medium text-[14px]">
-                                <span className="text-[#3e3e3e] -translate-y-1 font-semibold text-[14px]">
+                                <span className="text-[#333333] -translate-y-1 font-semibold text-[13px]">
                                   {coIns?.label}
                                 </span>
                               </div>
-                              <div className="flex justify-end gap-3 ">
+                              <div className="flex justify-end gap-4 mt-1 ">
                                 <Menu shadow="md" width={200}>
                                   <Menu.Target>
                                     <Button
                                       variant="outline"
                                       color="#5768d5"
                                       size="xs"
-                                      className=" transform-none text-[12px] rounded-md"
+                                      className=" transform-none text-[12px] h-7 px-3 rounded-[6px]"
                                     >
                                       Access
                                     </Button>
@@ -306,7 +304,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                                   </Menu.Dropdown>
                                 </Menu>
                                 <Button
-                                  className="text-[12px] transform-none rounded-[8px]"
+                                  className="text-[12px] transform-none h-7 px-3 rounded-[6px]"
                                   size="xs"
                                   variant="outline"
                                   color="#FF4747"

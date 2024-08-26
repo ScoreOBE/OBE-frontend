@@ -77,9 +77,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
         {/* Added Admin */}
         <div
           className="w-full  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
-          style={{
-            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-          }}
+         
         >
           <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
             <IconUsers /> Added Admin

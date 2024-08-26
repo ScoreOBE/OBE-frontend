@@ -263,7 +263,7 @@ export default function CourseManagement() {
         {loading ? (
           <Loading />
         ) : (
-          <div className="flex flex-col  overflow-y-auto gap-4 px-6 pb-3 pt-2">
+          <div className="flex flex-col  overflow-y-auto gap-4 px-6 pb-5 pt-2">
             {ploCollection?.map((department, indexPLO) => (
               <div
                 className="bg-[#d2d2ff5c] rounded-md flex  flex-col py-4 px-5"

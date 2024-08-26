@@ -73,7 +73,7 @@ export default function PLOSidebar() {
                 onClick={() =>
                   navigate(
                     `${ROUTE_PATH.PLO_MANAGEMENT}/${collection.name.replace(
-                      /\//g,
+                      /[\/ ]/g,
                       "-"
                     )}`
                   )
@@ -82,7 +82,12 @@ export default function PLOSidebar() {
                 leftSection={<CourseIcon />}
                 className={`font-semibold w-full h-8 flex justify-start text-[13px] items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
-                path.includes(`${ROUTE_PATH.PLO_MANAGEMENT}/${collection.name}`)
+                path.includes(
+                  `${ROUTE_PATH.PLO_MANAGEMENT}/${collection.name.replace(
+                    /[\/ ]/g,
+                    "-"
+                  )}`
+                )
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               }`}

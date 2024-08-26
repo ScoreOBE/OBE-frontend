@@ -1,4 +1,12 @@
-import { Button, Checkbox, Chip, Group, Modal, TextInput } from "@mantine/core";
+import {
+  Button,
+  Checkbox,
+  Chip,
+  Group,
+  Modal,
+  Switch,
+  TextInput,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import {
@@ -17,6 +25,7 @@ import {
 } from "@/services/courseManagement/courseManagement.service";
 import { editSectionManagement } from "@/store/courseManagement";
 import { editSection } from "@/store/course";
+import { isEqual } from "lodash";
 
 type Props = {
   opened: boolean;
@@ -124,14 +133,20 @@ export default function ModalEditSection({
       }
     }
     if (res) {
-      onClose();
+      console.log(payload.data.sectionNo);
+      console.log(value?.sectionNo);
+      
       setOpenThisTerm(false);
       setSemester([]);
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Edit success",
-        "Section no. or Section topic is edited"
+        `${
+          payload.data.sectionNo !== value?.oldSectionNo ?
+          "Section no." : ''
+        } ${payload.data.topic !== value?.data.topic ? "Section topic" : ''} is edited`
       );
+      onClose();
     }
   };
 
@@ -171,28 +186,13 @@ export default function ModalEditSection({
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
-          className={`w-full pl-5 pr-[18px] py-4 bg-white mb-3 rounded-md gap-2 flex flex-col`}
+          className={`w-full pl-5 pr-[18px] py-[18px] bg-white  rounded-md gap-2 flex flex-col`}
         >
           <div className={`flex flex-row justify-between items-center`}>
             <div className="gap-3 flex flex-col">
-              <span className="font-semibold text-[13px]">Repeat on semester</span>
-              {/* {isCourseManage && (
-                <Checkbox
-                  classNames={{
-                    input:
-                      "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                    body: "mr-3  px-0",
-                    label: "text-[13px] text-[#615F5F] cursor-pointer",
-                  }}
-                  color="#5768D5"
-                  size="xs"
-                  label={`Open in this semester (${
-                    academicYear?.semester
-                  }/${academicYear?.year.toString()?.slice(-2)})`}
-                  checked={openThisTerm}
-                  onChange={(event) => setOpenThisTerm(event.target.checked)}
-                />
-              )} */}
+              <span className="font-semibold text-[13px] text-[#333333]">
+                Repeat on semester
+              </span>
             </div>
             <Chip.Group
               value={semester}
@@ -202,13 +202,13 @@ export default function ModalEditSection({
               <Group className="flex flex-row gap-4 justify-end">
                 {SEMESTER.map((item) => (
                   <Chip
-                  icon={<></>}
+                    icon={<></>}
                     key={item}
                     classNames={{
                       input:
                         "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                        iconWrapper: "w-0",
-                        label: "text-[14px] px-4 cursor-pointer",
+                      iconWrapper: "w-0",
+                      label: "text-[14px] px-4 cursor-pointer",
                     }}
                     color="#5768D5"
                     size="xs"
@@ -226,6 +226,28 @@ export default function ModalEditSection({
                 ))}
               </Group>
             </Chip.Group>
+          </div>
+        </div>
+        <div
+          style={{
+            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+          }}
+          className={`w-full pl-5 pr-[18px] py-4 bg-white mb-3 rounded-md gap-2 flex flex-col`}
+        >
+          <div className={`flex flex-row justify-between items-center`}>
+            <div className="gap-3 flex flex-col">
+              <span className="font-semibold text-[13px] text-[#333333]">
+                Open in {academicYear?.semester}/{academicYear?.year}
+              </span>
+            </div>
+            <Switch
+              color="#5768d5"
+              size="lg"
+              onLabel="ON"
+              offLabel="OFF"
+              checked={openThisTerm}
+              onChange={(event) => setOpenThisTerm(event.target.checked)}
+            ></Switch>
           </div>
         </div>
 

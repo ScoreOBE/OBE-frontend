@@ -80,7 +80,7 @@ export default function ModalAddSection({
           return value?.length ? null : "Please choose at least one semester.";
         },
         instructor: (value: any) =>
-          value?.value?.length ? null : "Please select one main instructor.",
+          value?.value?.length ? null : "Please select one owner section.",
       },
     },
     validateInputOnBlur: true,
@@ -133,8 +133,10 @@ export default function ModalAddSection({
         secNoList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
         showNotifications(
           NOTI_TYPE.ERROR,
-          "iiiii",
-          `ooooooo ${secNoList.join(", ")}`
+          "Missing Recurrence Semester",
+          `Please select a semester for recurrence in section ${secNoList.join(
+            ", "
+          )}`
         );
       }
     }
@@ -430,7 +432,7 @@ export default function ModalAddSection({
         {isManage && (
           <Stepper.Step
             allowStepSelect={false}
-            label="Main Instructor"
+            label="Owner section"
             description="STEP 2"
           >
             <Alert
@@ -443,7 +445,7 @@ export default function ModalAddSection({
                 icon: "size-6",
                 body: " flex justify-center",
               }}
-              title={<p>Each section can only have one main instructor.</p>}
+              title={<p>Each section can only have one owner section.</p>}
             ></Alert>
             <div className="flex flex-col max-h-[380px] h-fit w-full mt-1 mb-5  p-[2px]    overflow-y-auto  ">
               <div className="flex flex-col font-medium text-[14px]">
@@ -452,7 +454,7 @@ export default function ModalAddSection({
                   .sections?.map((sec: Partial<IModelSection>, index) => (
                     <div className="flex flex-col" key={index}>
                       <span className="text-secondary font-semibold">
-                        Select Main Instructor for Section{" "}
+                        Select Owner Section for Section{" "}
                         {getSectionNo(sec.sectionNo)}
                         <span className="text-red-500"> *</span>
                         <br />
@@ -507,7 +509,9 @@ export default function ModalAddSection({
                     className="w-full justify-center pl-5 pr-[18px] pt-4 pb-5 bg-white rounded-md  flex flex-col "
                   >
                     <div className="gap-2 flex flex-col">
-                      <span className="font-medium text-[#333333]">Repeat on semester</span>{" "}
+                      <span className="font-medium text-[#333333]">
+                        Repeat on semester
+                      </span>{" "}
                       <Chip.Group
                         {...form.getInputProps(`sections.${index}.semester`)}
                         value={sec.semester}
@@ -715,7 +719,7 @@ export default function ModalAddSection({
 
                     <div className="flex flex-col gap-1">
                       <span className="text-[#3E3E3E] font-semibold">
-                        Main Instructor
+                        Owner Section
                       </span>
                       <div className="ps-1.5 text-secondary">
                         <List size="sm" listStyleType="disc">

@@ -129,8 +129,8 @@ export default function ModalAddCourse({
           secNoList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
           showNotifications(
             NOTI_TYPE.ERROR,
-            "iiiii",
-            `ooooooo ${secNoList.join(", ")}`
+            "Missing Recurrence Semester",
+            `Please select a semester for recurrence in section ${secNoList.join(", ")}`
           );
         }
         break;
@@ -548,7 +548,7 @@ export default function ModalAddCourse({
         >
           <Alert
             icon={<IconInfoCircle />}
-            title={<p>Each section can only have one main instructor.</p>}
+            title={<p>Each section can only have one owner section.</p>}
           ></Alert>
           <div className="flex flex-col max-h-[420px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-auto  ">
             <div className="flex flex-col font-medium text-[14px] gap-4">
@@ -628,7 +628,7 @@ export default function ModalAddCourse({
         </Stepper.Step>
         <Stepper.Step
           allowStepSelect={false}
-          label="Co-Instructor"
+          label="Co-Instructor (optional)"
           description="STEP 4"
         >
           <div className="flex flex-col mt-3 flex-1 ">
@@ -642,9 +642,6 @@ export default function ModalAddCourse({
             {!!coInsList.length && (
               <div
                 className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md"
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
               >
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <IconUsers /> Added Co-Instructor
@@ -773,7 +770,7 @@ export default function ModalAddCourse({
                     </span>
                     <div className="flex flex-col gap-1">
                       <span className="text-[#3E3E3E] font-semibold">
-                        Main Instructor
+                        Owner Section
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">
                         <List size="sm" listStyleType="disc">
