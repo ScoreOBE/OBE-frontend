@@ -36,16 +36,16 @@ export default function Login() {
         <p className=" drop-shadow-xl cursor-default mt-5 leading-[60px] font-bold item-center -rounded text-[#333333] text-5xl">
           The all-in-one <span className=" text-secondary">OBE Score system </span> <br/>for instructor and student
         </p>
-        <p className="mt-6 text-h2 font-medium">Discover A Better Way to Do OBE Simplify Your Academic Journey</p>
+        <p className="mt-4 text-h2 font-medium">Discover A Better Way to Do OBE Simplify Your Academic Journey</p>
 
         
 
-        <div className=" cursor-default text-[16px] mb-1 mt-10 font-notoThai text-white">
+        {/* <div className=" cursor-default text-[16px] mb-1 mt-10 font-notoThai text-white">
           ลงชื่อเข้าสู่ระบบ
-        </div>
+        </div> */}
         {/* // button login */}
         <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
-          <Button className="bg-secondary mt-1 rounded-[12px] text-[#fffff] -rounded font-medium text-[14px] h-10 hover:bg-[#DFDFDF] hover:text-[#696AA9]">
+          <Button color="#5768d5" className=" mt-12 rounded-[12px] text-[#fffff] -rounded font-medium text-[14px] h-10 hover:bg-[#DFDFDF] hover:text-[#696AA9]">
             <img
               src={cmulogoLogin}
               alt="CMULogo"
