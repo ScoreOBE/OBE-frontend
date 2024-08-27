@@ -16,20 +16,19 @@ quantum.register();
 
 const theme = createTheme({
   fontFamily: `"Manrope", "NotoSansThai", Helvetica, Arial, sans-serif`,
-  primaryColor: "slate-blue",
-  primaryShade: 3,
+  primaryColor: "cmu",
   colors: {
-    "slate-blue": [
-      "#eef0fb",
-      "#e6e8f9",
-      "#cbd0f2",
-      "#5768d5",
-      "#4e5ec0",
-      "#4653aa",
-      "#414ea0",
-      "#343e80",
-      "#272f60",
+    cmu: [
       "#1e244b",
+      "#272f60",
+      "#343e80",
+      "#414ea0",
+      "#4653aa",
+      "#4e5ec0",
+      "#5768d5",
+      "#cbd0f2",
+      "#e6e8f9",
+      "#eef0fb",
     ],
   },
 });
