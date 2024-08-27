@@ -25,7 +25,7 @@ export default function Login() {
       /> */}
 
       <div
-        className=" items-center text-center justify-center p-12 px-24 flex flex-col w-full h-full drop-shadow-xl shadow-red-700 "
+        className=" items-center text-center justify-center   flex flex-col w-full h-full drop-shadow-xl shadow-red-700 "
         style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.35)" }}
       >
         {/* <img src={entlogo} alt="CMULogo" className="h-[130px]" /> */}

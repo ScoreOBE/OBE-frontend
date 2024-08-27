@@ -278,13 +278,15 @@ export default function ModalAddPLOCollection({
       <Modal
         title={
           <div className="flex flex-col gap-1">
-            <p>Add PLO Collection</p>
+            <p>Select semester</p>
           </div>
         }
+        closeOnClickOutside={false}
+        withCloseButton={false}
         opened={openModalSelectSemester}
         onClose={closeModal}
         transitionProps={{ transition: "pop" }}
-        size="35vw"
+        size="38vw"
         centered
         classNames={{
           content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
@@ -302,7 +304,9 @@ export default function ModalAddPLOCollection({
             title={
               <div className="flex items-center  gap-2">
                 <IconInfoCircle />
-                <p>เลือกเทอมที่ต้องการให้เริ่มใช้ PLO Collection</p>
+                <p>
+                  Select semester you want to begin using the PLO Collection.
+                </p>
               </div>
             }
           ></Alert>
@@ -310,29 +314,31 @@ export default function ModalAddPLOCollection({
             value={selectSemester}
             onChange={(event) => setSelectSemester(event)}
           >
-            <Group className="flex w-full flex-col gap-3">
-              {semesterOption.map((e, index) => (
-                <RadioCard
-                  key={index}
-                  value={e.label}
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  }}
-                  className="p-3 px-3 flex border-none h-full rounded-md w-full"
-                >
-                  <Group>
-                    <Radio.Indicator />
-                    <div className="text-b2 font-medium text-[#333333]">
-                      {e.label}
-                    </div>
-                  </Group>
-                </RadioCard>
-              ))}
+            <Group className="overflow-y-hidden max-h-[200px]">
+              <div className="flex p-1 w-full h-full flex-col overflow-y-auto gap-3">
+                {semesterOption.map((e, index) => (
+                  <RadioCard
+                    key={index}
+                    value={e.label}
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                    className="p-3 flex border-none h-full rounded-md w-full"
+                  >
+                    <Group>
+                      <Radio.Indicator />
+                      <div className="text-b2 font-medium text-[#333333]">
+                        {e.label}
+                      </div>
+                    </Group>
+                  </RadioCard>
+                ))}
+              </div>
             </Group>
           </Radio.Group>
 
-          <div className="flex gap-2 justify-end w-full">
-            <Group className="flex w-full h-fit items-end justify-between mt-7">
+          <div className="flex  justify-end w-full">
+            <Group className="flex w-full h-fit items-end justify-between">
               <div>
                 <Button
                   color="#575757"
@@ -348,7 +354,8 @@ export default function ModalAddPLOCollection({
                 </Button>
               </div>
               <Button
-                className="rounded-[8px] text-[12px] h-[32px] w-fit"
+                disabled={isEmpty(selectSemester)}
+                className="rounded-[8px] border-none text-[12px] h-[32px] w-fit"
                 onClick={addPLOCollection}
               >
                 Done
@@ -453,7 +460,7 @@ export default function ModalAddPLOCollection({
             label="Add PLO"
             description="STEP 2"
           >
-            <div className="flex gap-5 h-[420px] mt-3 ">
+            <div className="flex gap-3 h-[440px] mt-3 ">
               <div
                 className={`flex flex-col  gap-3 p-5 rounded-lg h-full ${
                   state.length ? "w-[40%]" : "w-full"
@@ -525,7 +532,7 @@ export default function ModalAddPLOCollection({
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                   }}
                 >
-                  <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
+                  <div className="bg-[#e6e9ff] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                     <div className="flex items-center gap-2">
                       <Icon IconComponent={IconSO} />
 
@@ -533,7 +540,7 @@ export default function ModalAddPLOCollection({
                     </div>
                     <p>{state.length} PLOs</p>
                   </div>
-                  <div className="flex flex-col w-full overflow-y-auto overflow-x-hidden px-5">
+                  <div className="flex flex-col w-full overflow-y-auto overflow-x-hidden px-5 pl-7">
                     <DragDropContext
                       onDragEnd={({ destination, source }) => {
                         handlers.reorder({
@@ -558,9 +565,9 @@ export default function ModalAddPLOCollection({
                               >
                                 {(provided) => (
                                   <div
-                                    className={`py-5 rounded-md w-full ${
+                                    className={`py-3 w-full ${
                                       state?.length! > 1
-                                        ? "last:border-none"
+                                        ? "last:border-none last:pb-5"
                                         : ""
                                     } border-b-[1px]`}
                                     ref={provided.innerRef}
@@ -661,12 +668,12 @@ export default function ModalAddPLOCollection({
                   </div>
                   <p>{department.length} departments</p>
                 </div>
-                <div className="flex flex-col w-full h-[280px] px-4 overflow-y-auto">
+                <div className="flex flex-col w-full h-[290px] px-3 overflow-y-auto">
                   <Checkbox
                     size="xs"
-                    className="p-3 py-5 rounded-md w-full last:border-none border-b-[1px]"
+                    className="p-3 py-5  w-full last:border-none border-b-[1px]"
                     classNames={{
-                      label: "ml-2  text-[13px]",
+                      label: "ml-2 font-medium  text-[13px]",
                       input: "cursor-pointer",
                     }}
                     label="All"
@@ -692,9 +699,9 @@ export default function ModalAddPLOCollection({
                           size="xs"
                           key={index}
                           value={dep.departmentCode}
-                          className="p-3 py-4 rounded-md w-full last:border-none border-b-[1px] "
+                          className="p-3 py-4  w-full last:border-none border-b-[1px] "
                           classNames={{
-                            label: "ml-2 text-[13px]",
+                            label: "ml-2 text-[13px] font-medium",
                             input: "cursor-pointer",
                           }}
                           label={`${dep.departmentEN} (${dep.departmentCode})`}
@@ -716,7 +723,7 @@ export default function ModalAddPLOCollection({
             label="Review"
             description="STEP 4"
           >
-            <div className="flex gap-5 mt-3   h-[400px]">
+            <div className="flex gap-5 mt-3   max-h-[440px]">
               <div
                 className="w-full  flex flex-col bg-white border-secondary border-[1px] rounded-md overflow-hidden"
                 style={{
@@ -796,10 +803,10 @@ export default function ModalAddPLOCollection({
                 nextStep();
               }}
               rightSection={
-                active != 3 && <IconArrowRight stroke={2} size={20} />
+                active != 4 && <IconArrowRight stroke={2} size={20} />
               }
             >
-              Next step
+              {active == 3 ? "Select semester" : "Next step"}
             </Button>
           </Group>
         )}

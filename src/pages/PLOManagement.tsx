@@ -85,7 +85,7 @@ export default function PLOManagement() {
   return (
     <>
       <Modal
-        title={`PLO Collection ${collection.index + 1}`}
+        title={`${collection.name}`}
         opened={openModal}
         onClose={() => setOpenModal(false)}
         transitionProps={{ transition: "pop" }}
@@ -148,6 +148,7 @@ export default function PLOManagement() {
             <p>Add PLO Collection</p>
           </div>
         }
+        closeOnClickOutside={false}
         opened={modalDuplicatePLO && !!ploCollectDupli.length}
         onClose={closeModalDuplicatePLO}
         transitionProps={{ transition: "pop" }}
@@ -178,6 +179,7 @@ export default function PLOManagement() {
               to duplicate and edit, or skip duplicate.
             </p>
           </Alert>
+
           <Radio.Group
             value={selectPloDupli.name}
             onChange={(event) =>
@@ -186,26 +188,29 @@ export default function PLOManagement() {
               )
             }
           >
-            <Group className="flex w-full flex-col gap-3">
-              {ploCollectDupli.map((plo, index) => (
-                <RadioCard
-                  key={index}
-                  value={plo.name}
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  }}
-                  className="p-3 px-3 flex border-none h-full rounded-md w-full"
-                  // label={plo.name}
-                >
-                  <Group>
-                    <Radio.Indicator color="#5768D5" />
-                    <div className="text-b2 font-medium text-[#333333]">
-                      {plo.name}
-                    </div>
-                  </Group>
-                </RadioCard>
-              ))}
-            </Group>
+           
+              <Group className="flex overflow-y-hidden max-h-[200px]">
+                <div className="flex p-1 w-full h-full flex-col overflow-y-auto gap-3">
+                {ploCollectDupli.map((plo, index) => (
+                  <RadioCard
+                    key={index}
+                    value={plo.name}
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                    className="p-3 px-3 flex border-none h-fit rounded-md w-full"
+                    // label={plo.name}
+                  >
+                    <Group>
+                      <Radio.Indicator color="#5768D5" />
+                      <div className="text-b2 font-medium text-[#333333]">
+                        {plo.name}
+                      </div>
+                    </Group>
+                  </RadioCard>
+                ))}      </div>
+              </Group>{" "}
+      
           </Radio.Group>
 
           <div className="flex gap-2 justify-end w-full">
@@ -240,14 +245,15 @@ export default function PLOManagement() {
         onOpen={openModalAddPLO}
         onClose={closeModalAddPLO}
         collection={selectPloDupli}
+        fetchPLO={fetchPLO}
       />
       <div className=" flex flex-col h-full gap-3 w-full pt-3  overflow-hidden">
         <div className="flex items-center justify-between px-6">
           <div className="flex flex-col  items-start ">
             <p className="text-secondary text-[16px] font-bold">Dashboard</p>
             <p className="text-tertiary text-[14px] font-medium">
-              {totalPLOs} Collection
-              {totalPLOs > 1 ? "s " : " "}
+              {ploCollection.length} Department
+              {ploCollection.length > 1 ? "s " : " "}
             </p>
           </div>
           <Button
