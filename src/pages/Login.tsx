@@ -17,7 +17,7 @@ export default function Login() {
     }
   }, [user]);
   return (
-    <div className=" custom-radial-gradient h-screen w-screen items-center justify-center flex">
+    <div className="  h-screen w-screen items-center justify-center flex">
       {/* <img
         src={cmulogo}
         alt="CMULogo"
