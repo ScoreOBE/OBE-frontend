@@ -213,7 +213,7 @@ Button:disabled {
   cursor: not-allowed !important;
 }
 
-.custom-radial-gradient {
+/* .custom-radial-gradient {
   background: radial-gradient(
     98.92% 98.92% at 48.99% 98.48%,
     rgba(215, 163, 125, 0.56) 4.5%,
@@ -224,7 +224,7 @@ Button:disabled {
     rgba(11, 2, 104, 0.62) 87%,
     rgba(11, 2, 104, 0.68) 96.5%
   );
-}
+} */
 
 .sidebar-linear-gradient {
   background: linear-gradient(

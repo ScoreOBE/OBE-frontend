@@ -14,6 +14,7 @@ import { getCourseManagement } from "@/services/courseManagement/courseManagemen
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
 import { setCourseManagementList } from "@/store/courseManagement";
 import user from "@/store/user";
+import cmulogo from "@/assets/image/cmuLogoPurple.png";
 
 export default function Navbar() {
   const location = useLocation().pathname;
@@ -90,7 +91,11 @@ export default function Navbar() {
   return (
     <>
       {![ROUTE_PATH.SELECTED_DEPARTMENT].includes(location) && (
-        <div className="min-h-14 border-b-[1px] border-[#e0e0e0] px-6 inline-flex flex-wrap justify-between items-center z-50 bg-[#f5f5f5] text-secondary">
+        <div
+          className={`min-h-14 border-b-[1px] border-[#e0e0e0] px-6 inline-flex flex-wrap justify-between items-center z-50 ${
+            [ROUTE_PATH.LOGIN].includes(location) ? "bg-white border-none" : "bg-[#f5f5f5]"
+          } text-secondary`}
+        >
           <p className="font-semibold text-h2 md:w-fit max-w-[30%]">
             {topicPath()}
           </p>
@@ -150,8 +155,8 @@ export default function Navbar() {
             </div>
           )}
           {[ROUTE_PATH.LOGIN].includes(location) && (
-            <div className="bg-white justify-start flex flex-1 items-start">
-              OBEfully
+            <div className="bg-white ml-10 justify-start flex flex-1 items-start">
+              <img src={cmulogo} alt="CMULogo" className=" h-[24px]" />
             </div>
           )}
           {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}
