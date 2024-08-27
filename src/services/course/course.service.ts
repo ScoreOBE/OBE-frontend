@@ -13,7 +13,7 @@ export const getOneCourse = async (params?: any) => {
   const res = await courseService.getOneCourse(params);
   return isValidResponse(res);
 };
-export const checkCanCreateCourse = async (params: Partial<IModelCourse>) => {
+export const checkCanCreateCourse = async (params: any) => {
   const res = await courseService.checkCanCreateCourse(params);
   return isValidResponse(res);
 };
@@ -35,4 +35,4 @@ export const deleteCourse = async (id: string) => {
 export const leaveCourse = async (id: string) => {
   const res = await courseService.leaveCourse(id);
   return isValidResponse(res);
-}
+};
