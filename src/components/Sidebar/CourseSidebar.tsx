@@ -22,7 +22,7 @@ export default function CourseSidebar() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
-  const courseNo = path.split("/").pop();
+  const courseNo = useLocation().state?.courseNo ?? path.split("/").pop();
   const user = useAppSelector((state) => state.user);
   const courseList = useAppSelector((state) => state.course.courses);
   const dispatch = useAppDispatch();
@@ -58,11 +58,14 @@ export default function CourseSidebar() {
     }
   }, [courseList, courseNo]);
 
-  const goToDashboard = () => {
-    navigate({
-      pathname: ROUTE_PATH.DASHBOARD_INS,
-      search: "?" + params.toString(),
-    });
+  const goToPage = (pathname: string) => {
+    navigate(
+      {
+        pathname,
+        search: "?" + params.toString(),
+      },
+      { state: { courseNo } }
+    );
   };
 
   const onClickLeaveCourse = async (id: string) => {
@@ -97,7 +100,7 @@ export default function CourseSidebar() {
       <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
           className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
-          onClick={goToDashboard}
+          onClick={() => goToPage(ROUTE_PATH.DASHBOARD_INS)}
         >
           <IconChevronLeft size={20} viewBox="8 0 24 24" />
           Back to Your Course
@@ -115,6 +118,7 @@ export default function CourseSidebar() {
           </div>
           <div className="flex flex-col gap-2">
             <Button
+              onClick={() => goToPage(`${ROUTE_PATH.COURSE}/${courseNo}`)}
               leftSection={<RxDashboard size={18} />}
               className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
@@ -126,6 +130,7 @@ export default function CourseSidebar() {
               Sections
             </Button>
             <Button
+              onClick={() => goToPage(ROUTE_PATH.TQF3)}
               leftSection={<Icon IconComponent={TQF3} className="h-5 w-5" />}
               className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
                 ${
@@ -166,13 +171,17 @@ export default function CourseSidebar() {
           <div className="flex  flex-col gap-2">
             <p className="text-b2 font-bold mb-1">Co-Instructor</p>
             <div className="max-h-[140px] gap-1 flex flex-col  overflow-y-auto">
-            {coInstructors.map((item, index) => {
-              return (
-                <p key={index} className="text-pretty font-medium text-[12px]">
-                  {getUserName(item, 1)}
-                </p>
-              );
-            })}</div>
+              {coInstructors.map((item, index) => {
+                return (
+                  <p
+                    key={index}
+                    className="text-pretty font-medium text-[12px]"
+                  >
+                    {getUserName(item, 1)}
+                  </p>
+                );
+              })}
+            </div>
           </div>
         )}
         {course &&

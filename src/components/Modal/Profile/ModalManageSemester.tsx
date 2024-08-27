@@ -1,5 +1,5 @@
-import { Button, Modal, PasswordInput, TextInput } from "@mantine/core";
-import { IconUsers } from "@tabler/icons-react";
+import { Alert, Button, Modal, PasswordInput, TextInput } from "@mantine/core";
+import { IconExclamationCircle, IconUsers } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import {
@@ -14,7 +14,7 @@ import {
   CreateAcademicYearRequestDTO,
 } from "@/services/academicYear/dto/academicYear.dto";
 import { showNotifications } from "@/helpers/functions/function";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { setAcademicYear } from "@/store/academicYear";
 import { isEqual } from "lodash";
 
@@ -23,6 +23,7 @@ type Props = {
   onClose: () => void;
 };
 export default function ModalManageSemester({ opened, onClose }: Props) {
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [yearList, setYearList] = useState<IModelAcademicYear[]>([]);
@@ -266,13 +267,20 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       </Modal>
       <Modal
         opened={openActivateModal}
-        size="42vw"
+        size="47vw"
         title={`Activate semester ${activateSemester?.semester}/${activateSemester?.year}`}
         transitionProps={{ transition: "pop" }}
         centered
         onClose={() => setOpenActivateModal(false)}
       >
-        <div className="bg-[#f8c23a3f]">fkfkfkfk</div>
+        <Alert
+          variant="light"
+          color="red"
+          title={` After you activate semester ${activateSemester?.semester}/${activateSemester?.year}, semester ${academicYear?.semester}/${academicYear?.year} cannot be reactivated. This means that instructor can't make any changes to them courses for that semester.  `}
+          icon={<IconExclamationCircle />}
+          classNames={{ title: "-mt-[2px]" }}
+          className="mb-5"
+        ></Alert>
         <TextInput
           label={`To confirm, type "semester${activateSemester?.semester}year${activateSemester?.year}" in the box below`}
           value={textActivate}

@@ -31,7 +31,7 @@ import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { isEmpty } from "lodash";
 import { useForm } from "@mantine/form";
 
-export default function CourseManagement() {
+export default function PLOManagement() {
   const user = useAppSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [ploCollection, setPLOCollection] = useState<IModelPLOCollection[]>([]);

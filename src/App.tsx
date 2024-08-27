@@ -29,6 +29,7 @@ import CourseManagement from "@/pages/CourseManagement";
 import MapPLO from "@/pages/MapPLO";
 import { setLoading } from "@/store/loading";
 import PLOManagement from "./pages/PLOManagement";
+import TQF3 from "./pages/TQF3";
 
 function App() {
   const error = useAppSelector((state) => state.errorResponse);
@@ -138,6 +139,10 @@ function App() {
             path={`${ROUTE_PATH.COURSE}/:courseNo`}
             element={<Course />}
             errorElement={<Page404 />}
+          />
+          <Route
+            path={ROUTE_PATH.TQF3}
+            element={<TQF3 />}
           />
           <Route path="*" element={<Page404 />} />
         </Routes>
