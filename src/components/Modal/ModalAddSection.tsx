@@ -724,7 +724,8 @@ export default function ModalAddSection({
                       <div className="ps-1.5 text-secondary">
                         <List size="sm" listStyleType="disc">
                           <List.Item className="mb-[3px]">
-                            {(sec?.instructor as any)?.label}
+                            {(sec?.instructor as any)?.label ??
+                              getUserName(user, 1)}
                           </List.Item>
                         </List>
                       </div>

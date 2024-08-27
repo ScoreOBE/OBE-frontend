@@ -245,10 +245,10 @@ export default function Course() {
                     className={`card relative justify-between xl:h-[135px] md:h-[120px]  rounded-[4px] ${
                       sec.isActive ? "hover:bg-[#F3F3F3] cursor-pointer" : ""
                     }`}
-                    // style={{ boxShadow: !sec.isActive ? "none" : "" }}
                   >
                     <div onClick={(event) => event.stopPropagation()}>
                       {activeTerm &&
+                          (sec.instructor as IModelUser).id == user.id &&
                         (course.addFirstTime ? (
                           <Menu
                             trigger="click"

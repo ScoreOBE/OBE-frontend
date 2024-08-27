@@ -26,30 +26,23 @@ export const sortData = (
   typeKey: string = "number",
   typeSort: string = "asc"
 ) => {
+  const isAscending = ["asc", "ASC"].includes(typeSort);
   data?.sort((a, b) => {
+    const aValue =
+      a[key] ?? (typeKey === "number" ? 0 : typeKey === "boolean" ? false : "");
+    const bValue =
+      b[key] ?? (typeKey === "number" ? 0 : typeKey === "boolean" ? false : "");
     if (typeKey === "number") {
-      if (["asc", "ASC"].includes(typeSort)) {
-        if (!a[key] && a[key] != 0) return -1;
-        else if (!b[key] && b[key] != 0) return 1;
-        else return a[key] - b[key];
-      } else {
-        if (!b[key] && b[key] != 0) return -1;
-        else if (!a[key] && a[key] != 0) return 1;
-        else return b[key] - a[key];
-      }
-    } else {
-      if (["asc", "ASC"].includes(typeSort)) {
-        if (!a[key]) return -1;
-        else if (!b[key]) return 1;
-        else if (a[key] < b[key]) return -1;
-        else return 1;
-      } else {
-        if (!b[key]) return -1;
-        else if (!a[key]) return 1;
-        else if (b[key] < a[key]) return -1;
-        else return 1;
-      }
-    }
+      return isAscending ? aValue - bValue : bValue - aValue;
+    } else if (typeKey === "string") {
+      return isAscending
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    } else if (typeKey === "boolean") {
+      return isAscending
+        ? Number(bValue) - Number(aValue)
+        : Number(aValue) - Number(bValue);
+    } else return 0;
   });
 };
 
@@ -119,7 +112,7 @@ export const showNotifications = (
     classNames: {
       title: "text-[#ffffff] font-bold text-[14px]",
       description: "text-[#ffffff] font-normal text-[12px]",
-      root: "bg-[#112961] rounded-lg pl-5 "
+      root: "bg-[#112961] rounded-lg pl-5 ",
     },
   });
 };
