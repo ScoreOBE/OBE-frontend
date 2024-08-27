@@ -69,17 +69,27 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       const semestersByYear = res.reduce(
         (acc: any, academicYearList: IModelAcademicYear) => {
           const termActive = res.find((term) => term.isActive);
+          const nextSemester: any = {};
+          nextSemester.semester = (termActive?.semester! + 1) % 3 || 3;
+          nextSemester.year =
+            nextSemester.semester == 1
+              ? termActive?.year! + 1
+              : termActive?.year!;
           const year: string = academicYearList.year.toString() + "a";
           if (!acc[year]) {
             acc[year] = [];
           }
+
           acc[year].push({
             ...academicYearList,
-            disabled:
-              academicYearList.isActive ||
-              termActive?.year! > academicYearList.year ||
-              (termActive?.year! == academicYearList.year &&
-                termActive?.semester! > academicYearList.semester),
+            disabled: !(
+              nextSemester.semester == academicYearList.semester &&
+              nextSemester.year == academicYearList.year
+            ),
+            // academicYearList.isActive ||
+            // termActive?.year! > academicYearList.year ||
+            // (termActive?.year! == academicYearList.year &&
+            //   termActive?.semester! > academicYearList.semester),
           });
           return acc;
         },
