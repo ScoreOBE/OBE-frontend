@@ -79,6 +79,8 @@ export default function Navbar() {
         return "Your Courses";
       case ROUTE_PATH.COURSE:
         return "Section";
+      case ROUTE_PATH.TQF3:
+        return "TQF 3";
       case ROUTE_PATH.COURSE_MANAGEMENT:
         return "Course Management";
       case ROUTE_PATH.PLO_MANAGEMENT:

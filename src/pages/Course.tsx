@@ -1,9 +1,10 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { Button, Menu, Switch } from "@mantine/core";
+import { Alert, Button, Menu, Switch } from "@mantine/core";
 import {
   IconDots,
+  IconExclamationCircle,
   IconPencilMinus,
   IconPlus,
   IconTrash,
@@ -150,15 +151,35 @@ export default function Course() {
         action={() => onClickDeleteSec()}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete section"
-        title={`Delete section ${getSectionNo(editSec.sectionNo)} in ${
-          editSec.courseNo
-        }?`}
+        title={`Delete section`}
         message={
-          <p>
-            Deleting this section will permanently remove all data from the
-            current semester. Data from previous semesters will not be affected.{" "}
-            <br /> <span>Are you sure you want to deleted this section? </span>
-          </p>
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title=" After you delete this section, it's permanently deleted all data from
+          the current semester. Data from previous semesters will not be affected. 
+          "
+              icon={<IconExclamationCircle />}
+              classNames={{ title: "-mt-[2px]" }}
+            ></Alert>
+            <div className="flex flex-col mt-3 gap-2">
+              <div className="flex flex-col  ">
+                <p className="text-b3 text-[#808080]">Course no.</p>
+                <p className="  -translate-y-[2px] text-b1">{`${editSec?.courseNo}`}</p>
+              </div>
+              <div className="flex flex-col ">
+                <p className="text-b3  text-[#808080]">Course name</p>
+                <p className=" -translate-y-[2px] text-b1">{`${editSec?.courseName}`}</p>
+              </div>
+              <div className="flex flex-col ">
+                <p className="text-b3  text-[#808080]">Section</p>
+                <p className=" -translate-y-[2px] text-b1">{`${getSectionNo(
+                  editSec?.sectionNo
+                )}`}</p>
+              </div>
+            </div>
+          </>
         }
       />
       <ModalAddSection
@@ -180,7 +201,7 @@ export default function Course() {
               {course?.sections.length! > 1 && "s"}
             </p>
             <div className="flex gap-5 items-center">
-              {activeTerm && (
+              {activeTerm ? (
                 <Button
                   leftSection={<IconUpload className="h-5 w-5" />}
                   color="#5768D5"
@@ -188,19 +209,29 @@ export default function Course() {
                 >
                   Upload and Assets
                 </Button>
+              ) : (
+                <Button
+                color="#20884f"
+                  leftSection={
+                    <Icon className="h-4 w-4 " IconComponent={ExcelIcon} />
+                  }
+                  className="rounded-[8px] text-[12px] w-fit font-medium  h-8 px-3 "
+                >
+                  Export score
+                </Button>
               )}
-              <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
-                <Menu trigger="click" position="bottom-end" offset={2}>
-                  <Menu.Target>
-                    <IconDots />
-                  </Menu.Target>
-                  <Menu.Dropdown
-                    className="rounded-md translate-y-1 backdrop-blur-xl bg-white "
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                    }}
-                  >
-                    {activeTerm && (
+              {activeTerm && (
+                <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
+                  <Menu trigger="click" position="bottom-end" offset={2}>
+                    <Menu.Target>
+                      <IconDots />
+                    </Menu.Target>
+                    <Menu.Dropdown
+                      className="rounded-md translate-y-1 backdrop-blur-xl bg-white "
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      }}
+                    >
                       <>
                         <Menu.Item
                           className=" text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
@@ -224,16 +255,20 @@ export default function Course() {
                           </div>
                         </Menu.Item>
                       </>
-                    )}
-                    <Menu.Item className=" text-[#20884f] hover:bg-[#06B84D]/20 font-semibold text-[12px] h-7 w-[180px]">
-                      <div className="flex items-center  gap-2">
-                        <Icon className="h-4 w-4 " IconComponent={ExcelIcon} />
-                        <span>Export score</span>
-                      </div>
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              </div>
+
+                      <Menu.Item className=" text-[#20884f] hover:bg-[#06B84D]/20 font-semibold text-[12px] h-7 w-[180px]">
+                        <div className="flex items-center  gap-2">
+                          <Icon
+                            className="h-4 w-4 "
+                            IconComponent={ExcelIcon}
+                          />
+                          <span>Export score</span>
+                        </div>
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex h-full w-full rounded-[5px] pt-1 overflow-hidden">
@@ -248,7 +283,7 @@ export default function Course() {
                   >
                     <div onClick={(event) => event.stopPropagation()}>
                       {activeTerm &&
-                          (sec.instructor as IModelUser).id == user.id &&
+                        (sec.instructor as IModelUser).id == user.id &&
                         (course.addFirstTime ? (
                           <Menu
                             trigger="click"
@@ -302,6 +337,7 @@ export default function Course() {
                                     courseId: course.id,
                                     courseNo: course.courseNo,
                                     sectionNo: sec.sectionNo,
+                                    courseName: course.courseName,
                                   });
                                   setOpenMainPopupDelCourse(true);
                                 }}
@@ -334,9 +370,11 @@ export default function Course() {
                         >
                           Section {getSectionNo(sec.sectionNo)}
                         </p>
-                        <p className={`font-semibold text-xs ${
+                        <p
+                          className={`font-semibold text-xs ${
                             !sec.isActive && "text-[#c8c8c8]"
-                          }`} >
+                          }`}
+                        >
                           {sec?.topic}
                         </p>
                       </div>

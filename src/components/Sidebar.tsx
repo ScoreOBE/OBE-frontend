@@ -14,7 +14,7 @@ export default function Sidebar() {
       return <DashboardSidebar />;
     } else if (path.includes(ROUTE_PATH.COURSE_MANAGEMENT)) {
       return <CourseManagementSidebar />;
-    } else if (path.includes(ROUTE_PATH.COURSE)) {
+    } else if (path.includes(ROUTE_PATH.COURSE) || [ROUTE_PATH.TQF3].includes(path)) {
       return <CourseSidebar />;
     } else if (path.includes(ROUTE_PATH.PLO_MANAGEMENT)) {
       return <PLOSidebar />;

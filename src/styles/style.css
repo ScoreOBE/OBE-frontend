@@ -249,31 +249,40 @@ Button:disabled {
   background-color: var(--color-hover);
   height: 33px;
 }
-.mantine-Tabs-tab:last-of-type[data-variant="pills"] {
+.mantine-Tabs-tab:last-of-type[data-variant="pills"],
+.mantine-Tabs-tab:last-of-type[data-active][data-variant="pills"],
+.mantine-Tabs-tab:last-of-type:hover[data-variant="pills"]  {
   border-radius: 0 8px 8px 0;
 }
-.mantine-Tabs-tab:first-of-type[data-variant="pills"] {
+.mantine-Tabs-tab:first-of-type[data-variant="pills"],
+.mantine-Tabs-tab:first-of-type[data-active][data-variant="pills"],
+.mantine-Tabs-tab:first-of-type:hover[data-variant="pills"] {
   border-radius: 8px 0 0 8px;
 }
-.mantine-Tabs-tab[data-variant="pills"]
+/* .mantine-Tabs-tab[data-variant="pills"]
   + .mantine-Tabs-tab[data-variant="pills"] {
   border-left-width: 0;
   border-right-width: 0;
-}
+} */
 
 .mantine-Tabs-tab:hover[data-variant="pills"] {
   background-color: #d8d8d8;
   color: var(--color-tertiary);
-  border: 1px solid #bcbce1;
+  border: none ;
+  border-radius: 0px;
 }
 
 .mantine-Tabs-tab[data-active][data-variant="pills"] {
-  z-index: 1;
   background-color: #d5d5f7;
   border-color: #bcbce1;
+  border-radius: 0px;
   color: var(--color-secondary);
   border: 1px solid #bcbce1;
 }
+
+
+
+
 
 .mantine-Tabs-list[data-variant="pills"] {
   background-color: var(--color-hover);

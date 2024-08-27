@@ -175,7 +175,7 @@ export default function ModalEditSection({
           />
         )}
         <TextInput
-          label="Section"
+          label="Section No."
           withAsterisk
           size="xs"
           maxLength={3}
