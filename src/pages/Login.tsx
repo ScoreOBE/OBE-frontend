@@ -33,9 +33,10 @@ export default function Login() {
           Welcome to Score OBE
           <span className=" text-[#FFCD1B]"> +</span>
         </div> */}
-        <p className=" cursor-default mt-5 leading-[60px] font-bold item-center -rounded text-[#333333] text-5xl">
-          The all-in-one <span className="text-secondary">OBE Score system </span> <br/>for instructor and student
+        <p className=" drop-shadow-xl cursor-default mt-5 leading-[60px] font-bold item-center -rounded text-[#333333] text-5xl">
+          The all-in-one <span className=" text-secondary">OBE Score system </span> <br/>for instructor and student
         </p>
+        <p className="mt-6 text-h2 font-medium">Discover A Better Way to Do OBE Simplify Your Academic Journey</p>
 
         
 
