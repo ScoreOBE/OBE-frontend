@@ -102,7 +102,10 @@ export default function ModalAddSection({
         (!form.validateField("sections.0.topic").hasError ||
           data.type !== COURSE_TYPE.SEL_TOPIC);
       if (isValid) {
-        const res = await checkCanCreateCourse(setPayload(false));
+        const res = await checkCanCreateCourse({
+          courseNo: data.courseNo,
+          sections: sectionNoList.map((sec) => parseInt(sec)),
+        });
         if (!res) isValid = false;
       }
     } else if (isManage && active == 1) {
@@ -158,7 +161,7 @@ export default function ModalAddSection({
     onClose();
   };
 
-  const setPayload = (add = true) => {
+  const setPayload = () => {
     let payload = {
       ...data,
       sections: [...form.getValues().sections],
@@ -167,15 +170,15 @@ export default function ModalAddSection({
       updatedSemester: academicYear.semester,
     };
     delete payload.id;
-    if (add) {
-      payload.sections?.forEach((sec: any) => {
-        sec.semester = sec.semester?.map((term: string) => parseInt(term));
-        if (isManage) {
-          sec.instructor = sec.instructor.value;
-        }
-        sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
-      });
-    }
+
+    payload.sections?.forEach((sec: any) => {
+      sec.semester = sec.semester?.map((term: string) => parseInt(term));
+      if (isManage) {
+        sec.instructor = sec.instructor.value;
+      }
+      sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
+    });
+
     return payload;
   };
 
@@ -666,16 +669,18 @@ export default function ModalAddSection({
                             </Button>
                           </div>
                         </div>
-                        <div className="flex text-secondary flex-row w-[70%] flex-wrap -mt-5 gap-1 font-medium text-[13px]">
-                          <p className=" font-semibold">Section</p>
-                          {coIns.sections?.map(
-                            (sectionNo: any, index: number) => (
-                              <p key={index}>
-                                {sectionNo}
-                                {index !== coIns.sections?.length - 1 && ","}
-                              </p>
-                            )
-                          )}
+                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[13px]">
+                          <div className=" font-semibold">Section</div>
+                          <div className="flex gap-1 w-[60%] flex-wrap ">
+                            {coIns.sections?.map(
+                              (sectionNo: any, index: number) => (
+                                <p key={index}>
+                                  {sectionNo}
+                                  {index !== coIns.sections?.length - 1 && ","}
+                                </p>
+                              )
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}

@@ -106,7 +106,10 @@ export default function ModalAddCourse({
           (!form.validateField("sections.0.topic").hasError ||
             form.getValues().type !== COURSE_TYPE.SEL_TOPIC);
         if (isValid) {
-          const res = await checkCanCreateCourse(setPayload(false));
+          const res = await checkCanCreateCourse({
+            courseNo: form.getValues().courseNo,
+            sections: sectionNoList?.map((sec) => parseInt(sec)),
+          });
           if (!res) isValid = false;
         }
         break;
@@ -130,7 +133,9 @@ export default function ModalAddCourse({
           showNotifications(
             NOTI_TYPE.ERROR,
             "Missing Recurrence Semester",
-            `Please select a semester for recurrence in section ${secNoList.join(", ")}`
+            `Please select a semester for recurrence in section ${secNoList.join(
+              ", "
+            )}`
           );
         }
         break;
@@ -153,19 +158,19 @@ export default function ModalAddCourse({
     onClose();
   };
 
-  const setPayload = (add = true) => {
+  const setPayload = () => {
     let payload = {
       ...form.getValues(),
       academicYear: academicYear.id,
       updatedYear: academicYear.year,
       updatedSemester: academicYear.semester,
     };
-    if (add) {
-      payload.sections?.forEach((sec: any) => {
-        sec.semester = sec.semester?.map((term: string) => parseInt(term));
-        sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
-      });
-    }
+
+    payload.sections?.forEach((sec: any) => {
+      sec.semester = sec.semester?.map((term: string) => parseInt(term));
+      sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
+    });
+
     return payload;
   };
 
@@ -640,9 +645,7 @@ export default function ModalAddCourse({
             />
 
             {!!coInsList.length && (
-              <div
-                className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md"
-              >
+              <div className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md">
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <IconUsers /> Added Co-Instructor
                 </div>
@@ -718,16 +721,18 @@ export default function ModalAddCourse({
                             </Button>
                           </div>
                         </div>
-                        <div className="flex text-secondary flex-row w-[70%] flex-wrap -mt-6 gap-1 font-medium text-b3">
-                          <p className=" font-semibold">Section</p>
-                          {coIns.sections?.map(
-                            (sectionNo: any, index: number) => (
-                              <p key={index}>
-                                {sectionNo}
-                                {index !== coIns.sections?.length - 1 && ","}
-                              </p>
-                            )
-                          )}
+                        <div className="flex text-secondary flex-row -mt-6 gap-1 font-medium text-b3">
+                          <div className=" font-semibold">Section:</div>
+                          <div className="flex gap-1 w-[60%] flex-wrap ">
+                            {coIns.sections?.map(
+                              (sectionNo: any, index: number) => (
+                                <p key={index}>
+                                  {sectionNo}
+                                  {index !== coIns.sections?.length - 1 && ","}
+                                </p>
+                              )
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}

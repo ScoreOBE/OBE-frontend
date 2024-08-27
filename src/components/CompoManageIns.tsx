@@ -55,7 +55,6 @@ export default function CompoMangementIns({
   const [firstInput, setFirstInput] = useState(true);
   const [invalidEmail, setInvalidEmail] = useState(false);
 
-
   useEffect(() => {
     if (opened) {
       setFirstInput(true);
@@ -101,7 +100,7 @@ export default function CompoMangementIns({
             )
             .map((sec) => sec.sectionNo);
         });
-        if ((isManage) && list.length && setUserList) setUserList(list);
+        if (isManage && list.length && setUserList) setUserList(list);
       }
     }
   }, [sections, instructorOption]);
@@ -193,7 +192,7 @@ export default function CompoMangementIns({
     >
       <div
         onClick={() => {
-          if (mainIns && action) action({value: null});
+          if (mainIns && action) action({ value: null });
           setInputUser({ value: null });
           setSwapMethodAddUser(!swapMethodAddUser);
         }}
@@ -234,14 +233,17 @@ export default function CompoMangementIns({
                   value: event.target.value,
                 });
             }}
-            onFocus={() => {setFirstInput(false), setIsFocus(true)}}
+            onFocus={() => {
+              setFirstInput(false), setIsFocus(true);
+            }}
             onBlur={() => setIsFocus(false)}
             error={
-              mainIns && error 
+              mainIns && error
                 ? "Please enter the instructor's email address."
                 : value &&
                   !isFocus &&
-                  !validateEmail(value) && !firstInput &&
+                  !validateEmail(value) &&
+                  !firstInput &&
                   "Please enter a valid email address (e.g., example@cmu.ac.th)."
             }
           />
@@ -258,6 +260,7 @@ export default function CompoMangementIns({
             className="w-full border-none "
             classNames={{
               input: `rounded-md ${!mainIns && "rounded-e-none"}`,
+              option: `py-1  `,
             }}
             rightSection={
               <template className="flex items-center gap-2 absolute right-2">
@@ -279,7 +282,6 @@ export default function CompoMangementIns({
               </template>
             }
             dropdownOpened={openedDropdown}
-            // onDropdownOpen={() => setOpenedDropdown(true)}
             onDropdownClose={() => setOpenedDropdown(false)}
             value={mainIns ? value?.value : inputUser.value!}
             onChange={(value, option) => {

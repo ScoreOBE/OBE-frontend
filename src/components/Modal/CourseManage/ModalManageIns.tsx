@@ -134,7 +134,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
       transitionProps={{ transition: "pop" }}
       classNames={{
         content:
-          "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-fit ",
+          "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden ",
       }}
     >
       {/* <motion.div
@@ -232,14 +232,11 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                 />
 
                 {!!coInsList.length && (
-                  <div
-                    className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md"
-                   
-                  >
+                  <div className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md">
                     <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                       <IconUsers /> Added Co-Instructor
                     </div>
-                    <div className="flex flex-col max-h-[500px] h-fit w-full   px-2   overflow-y-auto ">
+                    <div className="flex flex-col max-h-[300px] h-fit w-full   px-2   overflow-y-auto ">
                       <div className="flex flex-col max-h-[400px] h-fit p-1 ">
                         {coInsList.map((coIns, index) => (
                           <div
@@ -316,17 +313,19 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                                 </Button>
                               </div>
                             </div>
-                            <div className="flex text-secondary flex-row w-[70%] flex-wrap -mt-5 gap-1 font-medium text-[13px]">
-                              <p className=" font-semibold">Section</p>
-                              {coIns?.sections?.map(
-                                (sectionNo: any, index: number) => (
-                                  <p key={index}>
-                                    {sectionNo}
-                                    {index !== coIns?.sections?.length - 1 &&
-                                      ","}
-                                  </p>
-                                )
-                              )}
+                            <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[13px]">
+                              <div className=" font-semibold">Section:</div>
+                              <div className="flex gap-1  w-[60%]  flex-wrap">
+                                {coIns?.sections?.map(
+                                  (sectionNo: any, index: number) => (
+                                    <p key={index}>
+                                      {getSectionNo(sectionNo)}
+                                      {index !== coIns?.sections?.length - 1 &&
+                                        ","}
+                                    </p>
+                                  )
+                                )}
+                              </div>
                             </div>
                           </div>
                         ))}
