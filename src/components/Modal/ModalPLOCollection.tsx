@@ -3,9 +3,7 @@ import {
   Alert,
   Button,
   Checkbox,
-  CheckboxGroup,
   Group,
-  List,
   Modal,
   Radio,
   RadioCard,
@@ -18,7 +16,6 @@ import {
   IconArrowRight,
   IconCircleFilled,
   IconHome2,
-  IconHierarchy,
   IconInfoCircle,
   IconTrash,
   IconGripVertical,
@@ -26,32 +23,30 @@ import {
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { useAppSelector } from "@/store";
-import { log } from "console";
 import { showNotifications, sortData } from "@/helpers/functions/function";
-import SelectDepartment from "@/pages/SelectDepartment";
 import Icon from "../Icon";
 import IconSO from "@/assets/icons/SO.svg?react";
-import { useDisclosure, useListState } from "@mantine/hooks";
+import { useListState } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { isEmpty, isEqual } from "lodash";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import {
-  validateCourseNameorTopic,
-  validateCourseNo,
-} from "@/helpers/functions/validation";
+import { validateCourseNameorTopic } from "@/helpers/functions/validation";
+import { checkCanCreatePLO, createPLO } from "@/services/plo/plo.service";
 
 type Props = {
   opened: boolean;
   onOpen: () => void;
   onClose: () => void;
   collection: Partial<IModelPLO>;
+  fetchPLO: () => void;
 };
 export default function ModalAddPLOCollection({
   opened,
   onOpen,
   onClose,
   collection,
+  fetchPLO,
 }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
@@ -65,7 +60,7 @@ export default function ModalAddPLOCollection({
   const [isAddAnother, setIsAddAnother] = useState(false);
   const [openModalSelectSemester, setOpenModalSelectSemester] = useState(false);
   const [semesterOption, setSemesterOption] = useState<any[]>([]);
-  const [selectSemester, setSelectSemester] = useState<any>({});
+  const [selectSemester, setSelectSemester] = useState("");
 
   const form = useForm({
     mode: "uncontrolled",
@@ -109,6 +104,7 @@ export default function ModalAddPLOCollection({
   });
 
   const nextStep = async () => {
+    setLoading(true);
     setFirstInput(false);
     let isValid = true;
     switch (active) {
@@ -120,8 +116,11 @@ export default function ModalAddPLOCollection({
           !form.validateField("name").hasError &&
           !form.validateField("criteriaTH").hasError &&
           !form.validateField("criteriaEN").hasError;
+        if (isValid) {
+          const res = await checkCanCreatePLO(form.getValues().name!);
+          if (!res) isValid = false;
+        }
         break;
-
       case 1:
         isValid = form.getValues().data?.length! > 1;
         if (!isValid) {
@@ -141,30 +140,17 @@ export default function ModalAddPLOCollection({
         onClose();
       }
     }
+    setLoading(false);
   };
-
   const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
-
   const closeModal = () => {
     setOpenModalSelectSemester(false);
+    setSelectSemester("");
     setActive(0);
     setPloNo(0);
     handlers.setState([]);
     form.reset();
     onClose();
-  };
-
-  const setDepartmentCode = (checked: boolean, value?: string[]) => {
-    let departmentCode = form.getValues().departmentCode;
-
-    if (value) {
-      departmentCode = value.sort();
-    } else if (checked) {
-      departmentCode = department.map((dep: any) => dep.departmentCode);
-    } else {
-      departmentCode = [];
-    }
-    form.setFieldValue("departmentCode", departmentCode);
   };
 
   const fetchDep = async () => {
@@ -214,7 +200,6 @@ export default function ModalAddPLOCollection({
         }
       }
     }
-    console.log(collection);
   }, [opened, academicYear]);
 
   useEffect(() => {
@@ -224,13 +209,7 @@ export default function ModalAddPLOCollection({
         e.no = index + 1;
       });
       handlers.setState(plo!);
-      form.setFieldValue("data", [
-        ...plo,
-        {
-          descTH: "",
-          descEN: "",
-        },
-      ]);
+      form.setFieldValue("data", [...plo, { descTH: "", descEN: "" }]);
       setReorder(false);
     }
   }, [reorder]);
@@ -259,6 +238,40 @@ export default function ModalAddPLOCollection({
       setIsAddAnother(false);
     }
   }, [isAddAnother]);
+
+  const setDepartmentCode = (checked: boolean, value?: string[]) => {
+    let departmentCode = form.getValues().departmentCode;
+    if (value) {
+      departmentCode = value.sort();
+    } else if (checked) {
+      departmentCode = department.map((dep: any) => dep.departmentCode);
+    } else {
+      departmentCode = [];
+    }
+    form.setFieldValue("departmentCode", departmentCode);
+  };
+
+  const addPLOCollection = async () => {
+    const term = semesterOption.find(
+      (option) => option.label == selectSemester
+    );
+    const payload = {
+      ...form.getValues(),
+      semester: term.semester,
+      year: term.year,
+      data: form.getValues().data?.filter((plo) => plo.no),
+    };
+    const res = await createPLO(payload);
+    if (res) {
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Add success",
+        `${payload.name} is added`
+      );
+      closeModal();
+      fetchPLO();
+    }
+  };
 
   return (
     <>
@@ -289,12 +302,12 @@ export default function ModalAddPLOCollection({
             title={
               <div className="flex items-center  gap-2">
                 <IconInfoCircle />
-                <p>เลือกเทอมที่ต้องการให้เริ่มใช้ PLO Collection </p>
+                <p>เลือกเทอมที่ต้องการให้เริ่มใช้ PLO Collection</p>
               </div>
             }
           ></Alert>
           <Radio.Group
-            value={selectSemester.label}
+            value={selectSemester}
             onChange={(event) => setSelectSemester(event)}
           >
             <Group className="flex w-full flex-col gap-3">
@@ -308,7 +321,7 @@ export default function ModalAddPLOCollection({
                   className="p-3 px-3 flex border-none h-full rounded-md w-full"
                 >
                   <Group>
-                    <Radio.Indicator color="#5768D5" />
+                    <Radio.Indicator />
                     <div className="text-b2 font-medium text-[#333333]">
                       {e.label}
                     </div>
@@ -335,8 +348,8 @@ export default function ModalAddPLOCollection({
                 </Button>
               </div>
               <Button
-                color="#5768d5"
-                className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                className="rounded-[8px] text-[12px] h-[32px] w-fit"
+                onClick={addPLOCollection}
               >
                 Done
               </Button>
@@ -370,7 +383,7 @@ export default function ModalAddPLOCollection({
           allowNextStepsSelect={false}
           icon={<IconCircleFilled />}
           classNames={{
-            separator: ` mb-12 h-[3px]  `,
+            separator: `mb-12 h-[3px]`,
             step: "flex flex-col  items-start mr-2",
             stepIcon: "mb-2 text-[#E6E6FF] bg-[#E6E6FF] border-[#E6E6FF]",
             stepBody: "flex-col-reverse m-0 ",
@@ -390,9 +403,9 @@ export default function ModalAddPLOCollection({
                   size="xs"
                   withAsterisk={true}
                   label="PLO Collection Name"
-                  className="w-full border-none pb-5 "
+                  className="w-full border-none pb-5"
                   classNames={{
-                    input: "flex p-3 ",
+                    input: "flex p-3",
                     label: "flex pb-1 gap-1",
                   }}
                   placeholder="Ex. PLO 1/67"
@@ -410,7 +423,7 @@ export default function ModalAddPLOCollection({
                 }
                 className="w-full border-none "
                 classNames={{
-                  input: "flex p-3 ",
+                  input: "flex p-3",
                   label: "flex pb-1 gap-1",
                 }}
                 placeholder="Ex. เกณฑ์ของ ABET"
@@ -427,7 +440,7 @@ export default function ModalAddPLOCollection({
                 }
                 className="w-full border-none "
                 classNames={{
-                  input: "flex p-3 ",
+                  input: "flex p-3",
                   label: "flex pb-1 gap-1",
                 }}
                 placeholder="Ex. ABET Criteria"
@@ -500,7 +513,6 @@ export default function ModalAddPLOCollection({
                     onClick={() => setIsAddAnother(true)}
                     variant="outline"
                     className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                    color="#5768d5"
                   >
                     Add Another
                   </Button>
@@ -569,11 +581,7 @@ export default function ModalAddPLOCollection({
                                                 "data",
                                                 index
                                               );
-                                              form
-                                                .getValues()
-                                                .data?.forEach((e, index) => {
-                                                  e.no = index + 1;
-                                                });
+                                              setReorder(true);
                                             }}
                                           >
                                             <IconTrash
@@ -782,7 +790,6 @@ export default function ModalAddPLOCollection({
               )}
             </div>
             <Button
-              color="#5768d5"
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
               loading={loading}
               onClick={() => {
@@ -792,7 +799,6 @@ export default function ModalAddPLOCollection({
                 active != 3 && <IconArrowRight stroke={2} size={20} />
               }
             >
-              {/* {active == 3 ? "Done" : "Next step"} */}
               Next step
             </Button>
           </Group>

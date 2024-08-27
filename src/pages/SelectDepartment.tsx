@@ -132,7 +132,6 @@ export default function SelectDepartment() {
                             "bg-black bg-opacity-0 border-[1.5px] border-white cursor-pointer disabled:bg-gray-400",
                           body: "mr-3",
                         }}
-                        color="#5768D5"
                         checked={isChecked}
                         disabled={disabled}
                         readOnly
