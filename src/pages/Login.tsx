@@ -1,6 +1,6 @@
 import cmulogo from "@/assets/image/cmuLogo.png";
 import entlogo from "@/assets/image/entLogo.png";
-import cmulogoLogin from "@/assets/image/cmuLogoLogin.png";
+import cmulogoLogin from "@/assets/image/cmuLogoLoginWhite.png";
 import { Button } from "@mantine/core";
 import { useAppSelector } from "@/store";
 import { useEffect } from "react";
@@ -18,32 +18,37 @@ export default function Login() {
   }, [user]);
   return (
     <div className=" custom-radial-gradient h-screen w-screen items-center justify-center flex">
-      <img
+      {/* <img
         src={cmulogo}
         alt="CMULogo"
         className=" absolute top-12 left-12 h-[24px]"
-      />
+      /> */}
 
       <div
-        className="rounded-[25px] items-center justify-center p-12 px-24 flex flex-col w-auto h-auto bg-[rgba(78,78,80,0.35)] drop-shadow-xl shadow-red-700 "
+        className=" items-center text-center justify-center p-12 px-24 flex flex-col w-full h-full drop-shadow-xl shadow-red-700 "
         style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.35)" }}
       >
-        <img src={entlogo} alt="CMULogo" className="h-[130px]" />
-        <div className=" cursor-default mt-7 -rounded text-white text-4xl">
-          Score OBE
+        {/* <img src={entlogo} alt="CMULogo" className="h-[130px]" /> */}
+        {/* <div className=" cursor-default mt-7 font-bold -rounded text-[#333333] text-4xl">
+          Welcome to Score OBE
           <span className=" text-[#FFCD1B]"> +</span>
-        </div>
+        </div> */}
+        <p className=" cursor-default mt-5 leading-[60px] font-bold item-center -rounded text-[#333333] text-5xl">
+          The all-in-one <span className="text-secondary">OBE Score system </span> <br/>for instructor and student
+        </p>
+
+        
 
         <div className=" cursor-default text-[16px] mb-1 mt-10 font-notoThai text-white">
           ลงชื่อเข้าสู่ระบบ
         </div>
         {/* // button login */}
         <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
-          <Button className="bg-white mt-1 rounded-[12px] text-[#696AA9] -rounded font-medium text-[14px] h-10 hover:bg-[#DFDFDF] hover:text-[#696AA9]">
+          <Button className="bg-secondary mt-1 rounded-[12px] text-[#fffff] -rounded font-medium text-[14px] h-10 hover:bg-[#DFDFDF] hover:text-[#696AA9]">
             <img
               src={cmulogoLogin}
               alt="CMULogo"
-              className="h-[13px] mr-3 rounded-3xl"
+              className="h-[13px] mr-3 rounded-1xl"
             />
             Sign in CMU Account
           </Button>
