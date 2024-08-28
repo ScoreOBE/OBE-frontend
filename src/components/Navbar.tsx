@@ -161,7 +161,7 @@ export default function Navbar() {
             </div>
           )}
           {[ROUTE_PATH.LOGIN].includes(location) && (
-            <div className="bg-white ml-10 justify-start flex flex-1 items-start">
+            <div className="bg-white ml-10 mt-3 justify-start flex flex-1 items-start">
               <img src={cmulogo} alt="CMULogo" className=" h-[24px]" />
             </div>
           )}
