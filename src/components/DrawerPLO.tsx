@@ -1,15 +1,11 @@
 import { Drawer, Tabs } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import ThIcon from "@/assets/icons/thai.svg?react";
 import EngIcon from "@/assets/icons/eng.svg?react";
 import Icon from "./Icon";
-import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { useEffect, useState } from "react";
 import { getPLOs } from "@/services/plo/plo.service";
-import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
-import { useSearchParams } from "react-router-dom";
-import store, { useAppSelector } from "@/store";
-import { open } from "inspector";
+import { IModelPLO } from "@/models/ModelPLO";
+import { useAppSelector } from "@/store";
 
 type Props = {
   opened: boolean;
@@ -28,7 +24,6 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
     });
     if (res) {
       setPloList(res.plos[0].collections[0]);
-      console.log(res.plos[0].collections[0]);
     }
   };
 

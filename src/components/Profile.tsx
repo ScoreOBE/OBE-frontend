@@ -20,7 +20,6 @@ import { setUser } from "@/store/user";
 import { ROLE } from "@/helpers/constants/enum";
 import ModalManageAdmin from "./Modal/Profile/ModalManageAdmin";
 import ModalChangeSupAdmin from "./Modal/Profile/ModalChangeSupremeAdmin";
-import { useDisclosure } from "@mantine/hooks";
 import ModalManageSemester from "./Modal/Profile/ModalManageSemester";
 import ModalManageTQF from "./Modal/Profile/ModalManageTQF";
 import { getUserName } from "@/helpers/functions/function";
@@ -80,7 +79,9 @@ export default function Profile() {
         <Menu.Target>
           <Button className="flex flex-row justify-end px-0 pl-4 h-10  bg-[#f5f5f5] items-center rounded-lg  cursor-pointer hover:bg-[#f0f0f0]">
             <div className="flex flex-col gap-1 text-end mr-3 text-[12px]">
-              <p className="text-[#333333] font-semibold">{getUserName(user)}</p>
+              <p className="text-[#333333] font-semibold">
+                {getUserName(user)}
+              </p>
               <p
                 className="font-medium"
                 style={{ color: getRoleColor(user.role) }}

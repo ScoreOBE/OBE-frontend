@@ -1,24 +1,6 @@
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch } from "@/store";
 import { useEffect, useState } from "react";
-import Loading from "@/components/Loading";
-import { getPLOs } from "@/services/plo/plo.service";
-import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
-import ModalAddPLOCollection from "@/components/Modal/ModalPLOCollection";
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Group,
-  Menu,
-  Modal,
-  Radio,
-  RadioCard,
-  ScrollArea,
-  Table,
-  Tabs,
-  TextInput,
-  Tooltip,
-} from "@mantine/core";
+import { Tabs, Tooltip } from "@mantine/core";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -33,7 +15,7 @@ export default function TQF3() {
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
-  }, [])
+  }, []);
 
   const topicPart = () => {
     switch (tqf3Part) {
@@ -103,12 +85,17 @@ export default function TQF3() {
               </Tabs.List>
               <Tooltip
                 withArrow
-
                 arrowPosition="side"
                 arrowOffset={15}
                 arrowSize={7}
                 position="bottom-end"
-                label={<p>Reuse TQF 3 <br/> Simplify your course TQF3. Choose any course, and we'll automatically fill <br/>  the TQF documentation for you. Saving your time!</p>}
+                label={
+                  <p>
+                    Reuse TQF 3 <br /> Simplify your course TQF3. Choose any
+                    course, and we'll automatically fill <br /> the TQF
+                    documentation for you. Saving your time!
+                  </p>
+                }
               >
                 <div className=" bg-[#F39D4E] hover:bg-[#e39246] w-fit px-3 rounded-[8px] ">
                   <Icon IconComponent={dupTQF} />

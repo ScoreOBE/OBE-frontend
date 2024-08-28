@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, CloseButton, Input, TextInput, Tooltip } from "@mantine/core";
+import { CloseButton, TextInput, Tooltip } from "@mantine/core";
 import Profile from "./Profile";
 import { TbSearch } from "react-icons/tb";
 import { AiOutlineEnter } from "react-icons/ai";
@@ -13,7 +13,6 @@ import { ellipsisText } from "@/helpers/functions/validation";
 import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
 import { setCourseManagementList } from "@/store/courseManagement";
-import user from "@/store/user";
 import cmulogo from "@/assets/image/cmuLogoPurple.png";
 
 export default function Navbar() {
@@ -27,7 +26,6 @@ export default function Navbar() {
 
   const searchCourse = async (reset?: boolean) => {
     setIsFocused(false);
-
     const path = "/" + location.split("/")[1];
     let res;
     let payloadCourse: any = {};
@@ -80,7 +78,7 @@ export default function Navbar() {
       case ROUTE_PATH.COURSE:
         if (location.includes(ROUTE_PATH.TQF3)) return "TQF 3";
         else if (location.includes(ROUTE_PATH.TQF5)) return "TQF 5";
-        else if (location.includes(ROUTE_PATH.ASSIGNMENT)) return "Assignment"
+        else if (location.includes(ROUTE_PATH.ASSIGNMENT)) return "Assignment";
         else return "Section";
       case ROUTE_PATH.COURSE_MANAGEMENT:
         return "Course Management";
@@ -93,7 +91,10 @@ export default function Navbar() {
 
   return (
     <>
-      {![ROUTE_PATH.SELECTED_DEPARTMENT].includes(location) && (
+      {![
+        ROUTE_PATH.CMU_OAUTH_CALLBACK,
+        ROUTE_PATH.SELECTED_DEPARTMENT,
+      ].includes(location) && (
         <div
           className={`min-h-14 border-b-[1px] border-[#e0e0e0] px-6 inline-flex flex-wrap justify-between items-center z-50 ${
             [ROUTE_PATH.LOGIN].includes(location)

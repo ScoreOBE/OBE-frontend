@@ -1,12 +1,4 @@
-import {
-  Button,
-  Input,
-  Modal,
-  Select,
-  TextInput,
-  Switch,
-  List,
-} from "@mantine/core";
+import { Modal, TextInput, Switch, List } from "@mantine/core";
 import checkedTQF3Completed from "@/assets/icons/checkedTQF3Completed.svg?react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
@@ -18,8 +10,6 @@ import { useAppSelector } from "@/store";
 import { COURSE_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { IModelCourse } from "@/models/ModelCourse";
-import { useSearchParams } from "react-router-dom";
-import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
 
 type Props = {

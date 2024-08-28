@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Stepper,
   Button,
@@ -10,14 +10,12 @@ import {
   List,
   Menu,
   Chip,
-  Alert,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
   IconCircleFilled,
   IconArrowRight,
   IconUsers,
-  IconInfoCircle,
   IconChevronRight,
 } from "@tabler/icons-react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
@@ -581,7 +579,7 @@ export default function ModalAddCourse({
                         <Group className=" items-center h-full flex flex-row gap-4">
                           {SEMESTER.map((item, index) => (
                             <Chip
-                            key={index}
+                              key={index}
                               icon={<></>}
                               classNames={{
                                 input:

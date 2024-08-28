@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { RxDashboard } from "react-icons/rx";
-import { IconChevronLeft, IconLogout } from "@tabler/icons-react";
+import { IconLogout } from "@tabler/icons-react";
 import Icon from "@/components/Icon";
 import LeaveIcon from "@/assets/icons/leave.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
@@ -52,13 +46,10 @@ export default function AssignmentSidebar() {
   }, [courseList, courseNo]);
 
   const goToPage = (pathname: string, back?: boolean) => {
-    navigate(
-      {
-        pathname: back ? pathname : `${prefix}/${pathname}`,
-        search: "?" + params.toString(),
-      }
-      // { state: { courseNo } }
-    );
+    navigate({
+      pathname: back ? pathname : `${prefix}/${pathname}`,
+      search: "?" + params.toString(),
+    });
   };
 
   const onClickLeaveCourse = async (id: string) => {

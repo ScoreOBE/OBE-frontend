@@ -4,7 +4,6 @@ import { Button, Menu } from "@mantine/core";
 import { Alert } from "@mantine/core";
 import {
   IconDots,
-  IconInfoCircle,
   IconPencilMinus,
   IconPlus,
   IconTrash,
@@ -18,7 +17,6 @@ import { addLoadMoreCourse, removeCourse, setCourseList } from "@/store/course";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import ModalAddCourse from "@/components/Modal/ModalAddCourse";
-import { useDisclosure } from "@mantine/hooks";
 import notFoundImage from "@/assets/image/notFound.png";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import MainPopup from "../components/Popup/MainPopup";
@@ -29,8 +27,6 @@ import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { IModelUser } from "@/models/ModelUser";
 import { setShowSidebar } from "@/store/showSidebar";
-import { addPath } from "@/store/breadcrumbs";
-import { link } from "fs";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -119,14 +115,10 @@ export default function Dashboard() {
 
   const goToCourse = (courseNo: string) => {
     const pathname = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.SECTION}`;
-    dispatch(addPath({ title: "Your Course", path: pathname }));
-    navigate(
-      {
-        pathname,
-        search: "?" + params.toString(),
-      }
-      // { state: { activeTerm: term?.isActive } }
-    );
+    navigate({
+      pathname,
+      search: "?" + params.toString(),
+    });
   };
 
   const icon = <IconExclamationCircle />;

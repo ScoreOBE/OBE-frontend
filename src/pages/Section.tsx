@@ -1,17 +1,11 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Alert, Button, Menu, Switch } from "@mantine/core";
 import {
   IconDots,
   IconExclamationCircle,
   IconPencilMinus,
-  IconPlus,
   IconTrash,
   IconUpload,
 } from "@tabler/icons-react";
@@ -33,7 +27,6 @@ import MainPopup from "@/components/Popup/MainPopup";
 import { COURSE_TYPE, NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import ModalEditSection from "@/components/Modal/ModalEditSection";
 import Icon from "@/components/Icon";
-import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import ExcelIcon from "@/assets/icons/excel.svg?react";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import Loading from "@/components/Loading";
@@ -46,7 +39,7 @@ import {
 } from "@/services/section/section.service";
 import ModalAddSection from "@/components/Modal/ModalAddSection";
 import { IModelUser } from "@/models/ModelUser";
-import { addPath } from "@/store/breadcrumbs";
+import { setShowSidebar } from "@/store/showSidebar";
 
 export default function Section() {
   // const path = useLocation().pathname
@@ -73,6 +66,7 @@ export default function Section() {
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
 
   useEffect(() => {
+    dispatch(setShowSidebar(true));
     if (!params.get("id") || !params.get("year") || !params.get("semester"))
       navigate(ROUTE_PATH.DASHBOARD_INS);
     else if (!courseList.length && params.get("id")) fetchCourse();
@@ -147,15 +141,10 @@ export default function Section() {
 
   const goToAssignment = (sectionNo: number) => {
     const pathname = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.SECTION}`;
-    dispatch(addPath({ title: "Sections", path: pathname }));
-    dispatch(addPath({ title: getSectionNo(sectionNo) }));
-    navigate(
-      {
-        pathname: `${pathname}/${sectionNo}/${ROUTE_PATH.ASSIGNMENT}`,
-        search: "?" + params.toString(),
-      }
-      // { state: { activeTerm: term?.isActive } }
-    );
+    navigate({
+      pathname: `${pathname}/${sectionNo}/${ROUTE_PATH.ASSIGNMENT}`,
+      search: "?" + params.toString(),
+    });
   };
 
   return (

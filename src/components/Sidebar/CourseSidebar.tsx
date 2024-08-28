@@ -60,13 +60,10 @@ export default function CourseSidebar() {
   }, [courseList, courseNo]);
 
   const goToPage = (pathname: string, back?: boolean) => {
-    navigate(
-      {
-        pathname: back ? pathname : `${prefix}/${pathname}`,
-        search: "?" + params.toString(),
-      }
-      // { state: { courseNo } }
-    );
+    navigate({
+      pathname: back ? pathname : `${prefix}/${pathname}`,
+      search: "?" + params.toString(),
+    });
   };
 
   const onClickLeaveCourse = async (id: string) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Stepper,
   Button,
@@ -39,10 +39,7 @@ import {
   checkCanCreateCourse,
   createCourse,
 } from "@/services/course/course.service";
-import {
-  checkCanCreateSectionManagement,
-  getOneCourseManagement,
-} from "@/services/courseManagement/courseManagement.service";
+import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { editCourse } from "@/store/course";
 import { editCourseManagement } from "@/store/courseManagement";
 
@@ -526,6 +523,7 @@ export default function ModalAddSection({
                         <Group className="flex flex-row gap-4">
                           {SEMESTER.map((item) => (
                             <Chip
+                              key={item}
                               icon={<></>}
                               classNames={{
                                 input:

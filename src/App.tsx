@@ -1,36 +1,17 @@
-import { useEffect, useState } from "react";
-import {
-  Routes,
-  Route,
-  useLocation,
-  useNavigate,
-  matchPath,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import "./App.css";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import { setUser } from "@/store/user";
-import Login from "@/pages/Login";
-import Page404 from "@/pages/Page404";
 import { getUserInfo } from "@/services/user/user.service";
-import CMUOAuthCallback from "@/pages/CmuOAuthCallback";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import SelectDepartment from "@/pages/SelectDepartment";
-import Dashboard from "@/pages/Dashboard";
-import Section from "@/pages/Section";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { isEmpty } from "lodash";
 import { getAcademicYear } from "./services/academicYear/academicYear.service";
 import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
-import CourseManagement from "@/pages/CourseManagement";
-import MapPLO from "@/pages/MapPLO";
 import { setLoading } from "@/store/loading";
-import PLOManagement from "./pages/PLOManagement";
-import TQF3 from "./pages/TQF3";
-import Assignment from "./pages/Assignment";
 
 function App() {
   const showSidebar = useAppSelector((state) => state.showSidebar);
@@ -39,54 +20,47 @@ function App() {
   const academicYear = useAppSelector((state) => state.academicYear);
   const dispatch = useAppDispatch();
   const path = useLocation().pathname;
-  const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      dispatch(setLoading(true));
-      if (!user.id) {
-        const res = await getUserInfo();
-        if (res) {
-          dispatch(setUser(res));
-        }
-      }
-      if (user.id && !academicYear.length) {
-        let payload = new AcademicYearRequestDTO();
-        const rsAcademicYear = await getAcademicYear(payload);
-        if (rsAcademicYear) {
-          dispatch(setAcademicYear(rsAcademicYear));
-        }
-      }
-      // dispatch(setLoading(false));
-    };
-
-    if (!showSidebar) {
-      return;
-    }
-
     if (localStorage.getItem("token")) {
       if (!isEmpty(user) && !isEmpty(academicYear)) return;
-
       if (
         user.departmentCode &&
         !user.departmentCode.length &&
-        path != ROUTE_PATH.SELECTED_DEPARTMENT
+        ![
+          ROUTE_PATH.SELECTED_DEPARTMENT,
+          ROUTE_PATH.CMU_OAUTH_CALLBACK,
+        ].includes(path)
       ) {
         localStorage.removeItem("token");
       } else {
         fetchData();
       }
-    } else if (path != ROUTE_PATH.LOGIN) {
+    } else if (
+      ![ROUTE_PATH.LOGIN, ROUTE_PATH.CMU_OAUTH_CALLBACK].includes(path)
+    ) {
       navigate(ROUTE_PATH.LOGIN);
     }
   }, [user, path]);
 
-  // useEffect(() => {
-  //   if (error.statusCode) {
-  //     setShowSidebar(false);
-  //   }
-  // }, [error]);
+  const fetchData = async () => {
+    dispatch(setLoading(true));
+    if (!user.id) {
+      const res = await getUserInfo();
+      if (res) {
+        dispatch(setUser(res));
+      }
+    }
+    if (user.id && !academicYear.length && path !== ROUTE_PATH.DASHBOARD_INS) {
+      const payload = new AcademicYearRequestDTO();
+      const rsAcademicYear = await getAcademicYear(payload);
+      if (rsAcademicYear) {
+        dispatch(setAcademicYear(rsAcademicYear));
+      }
+    }
+    // dispatch(setLoading(false));
+  };
 
   return (
     <div
@@ -98,40 +72,7 @@ function App() {
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-full w-full overflow-hidden">
         {!error.statusCode && <Navbar />}
-        <Routes>
-          <Route path={ROUTE_PATH.LOGIN} element={<Login />} />
-          <Route
-            path={ROUTE_PATH.CMU_OAUTH_CALLBACK}
-            element={<CMUOAuthCallback />}
-          />
-          <Route
-            path={ROUTE_PATH.SELECTED_DEPARTMENT}
-            element={<SelectDepartment />}
-          />
-          <Route
-            path={ROUTE_PATH.COURSE_MANAGEMENT}
-            element={<CourseManagement />}
-          />
-          <Route path={ROUTE_PATH.PLO_MANAGEMENT} element={<PLOManagement />} />
-          <Route
-            path={`${ROUTE_PATH.PLO_MANAGEMENT}/:name`}
-            element={<MapPLO />}
-          />
-          <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />
-          <Route
-            path={`${ROUTE_PATH.COURSE}/:courseNo`}
-            errorElement={<Page404 />}
-          >
-            <Route path={ROUTE_PATH.SECTION}>
-              <Route path="" element={<Section />} />
-              <Route path={`:sectionNo/${ROUTE_PATH.ASSIGNMENT}`} element={<Assignment />} />
-            </Route>
-
-            <Route path={ROUTE_PATH.TQF3} element={<TQF3 />} />
-          </Route>
-
-          <Route path="*" element={<Page404 />} />
-        </Routes>
+        <Outlet />
       </div>
     </div>
   );
