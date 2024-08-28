@@ -11,10 +11,8 @@ import {
   Modal,
   Radio,
   RadioCard,
-  ScrollArea,
   Table,
   Tabs,
-  TextInput,
 } from "@mantine/core";
 import ThIcon from "@/assets/icons/thai.svg?react";
 import EngIcon from "@/assets/icons/eng.svg?react";
@@ -27,9 +25,7 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
-import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { isEmpty } from "lodash";
-import { useForm } from "@mantine/form";
 
 export default function PLOManagement() {
   const user = useAppSelector((state) => state.user);
@@ -188,9 +184,8 @@ export default function PLOManagement() {
               )
             }
           >
-           
-              <Group className="flex overflow-y-hidden max-h-[200px]">
-                <div className="flex p-1 w-full h-full flex-col overflow-y-auto gap-3">
+            <Group className="flex overflow-y-hidden max-h-[200px]">
+              <div className="flex p-1 w-full h-full flex-col overflow-y-auto gap-3">
                 {ploCollectDupli.map((plo, index) => (
                   <RadioCard
                     key={index}
@@ -202,15 +197,15 @@ export default function PLOManagement() {
                     // label={plo.name}
                   >
                     <Group>
-                      <Radio.Indicator color="#5768D5" />
+                      <Radio.Indicator />
                       <div className="text-b2 font-medium text-[#333333]">
                         {plo.name}
                       </div>
                     </Group>
                   </RadioCard>
-                ))}      </div>
-              </Group>{" "}
-      
+                ))}
+              </div>
+            </Group>
           </Radio.Group>
 
           <div className="flex gap-2 justify-end w-full">
@@ -233,7 +228,6 @@ export default function PLOManagement() {
               }}
               className="rounded-[8px] text-[12px] border-none h-[32px] w-fit "
               disabled={isEmpty(selectPloDupli)}
-              color="#5768d5"
             >
               Duplicate and Edit
             </Button>
@@ -257,7 +251,6 @@ export default function PLOManagement() {
             </p>
           </div>
           <Button
-            color="#5768D5"
             leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
             className="rounded-[8px] text-[12px] h-[32px] w-fit "
             onClick={openModalDuplicatePLO}

@@ -177,7 +177,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
             />
           </div>
         ) : (
-          <Tabs color="#5768d5" defaultValue="mainInstructor">
+          <Tabs defaultValue="mainInstructor">
             <Tabs.List>
               <Tabs.Tab value="mainInstructor">Owner section</Tabs.Tab>
               <Tabs.Tab value="coInstructor">Co-Instructor section</Tabs.Tab>
@@ -207,7 +207,6 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                     </div>
                     <Button
                       variant="outline"
-                      color="#5768d5"
                       size="xs"
                       className="rounded-[8px] font-semibold text-[12px]"
                       onClick={() => {
@@ -254,7 +253,6 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                                   <Menu.Target>
                                     <Button
                                       variant="outline"
-                                      color="#5768d5"
                                       size="xs"
                                       className=" transform-none text-[12px] h-7 px-3 rounded-[6px]"
                                     >
@@ -282,7 +280,6 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                                             body: "mr-3",
                                             label: "text-[14px] cursor-pointer",
                                           }}
-                                          color="#5768D5"
                                           size="xs"
                                           label={`Section ${getSectionNo(
                                             sec.sectionNo

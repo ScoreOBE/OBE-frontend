@@ -200,7 +200,6 @@ export default function Dashboard() {
           {term?.isActive && !!course.courses.length && (
             <Button
               size="xs"
-              color="#5768D5"
               leftSection={<IconPlus className=" size-5 -mr-1" stroke={1.5} />}
               className=" rounded-[8px] text-[12px] h-[32px] w-fit "
               onClick={() => setOpenAddModal(true)}
@@ -234,7 +233,6 @@ export default function Dashboard() {
                 </p>
                 {term?.isActive && !course.search.length && (
                   <Button
-                    color="#5768D5"
                     className=" rounded-[8px] text-[12px] w-28 font-medium  h-8 px-2 "
                     onClick={() => setOpenAddModal(true)}
                   >

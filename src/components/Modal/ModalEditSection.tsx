@@ -133,18 +133,16 @@ export default function ModalEditSection({
       }
     }
     if (res) {
-      console.log(payload.data.sectionNo);
-      console.log(value?.sectionNo);
-      
       setOpenThisTerm(false);
       setSemester([]);
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Edit success",
         `${
-          payload.data.sectionNo !== value?.oldSectionNo ?
-          "Section no." : ''
-        } ${payload.data.topic !== value?.data.topic ? "Section topic" : ''} is edited`
+          payload.data.sectionNo !== value?.oldSectionNo ? "Section no." : ""
+        } ${
+          payload.data.topic !== value?.data.topic ? "Section topic" : ""
+        } is edited`
       );
       onClose();
     }
@@ -210,7 +208,6 @@ export default function ModalEditSection({
                       iconWrapper: "w-0",
                       label: "text-[14px] px-4 cursor-pointer",
                     }}
-                    color="#5768D5"
                     size="xs"
                     value={item.toString()}
                     disabled={
@@ -241,7 +238,6 @@ export default function ModalEditSection({
               </span>
             </div>
             <Switch
-              color="#5768d5"
               size="lg"
               onLabel="ON"
               offLabel="OFF"
@@ -263,7 +259,6 @@ export default function ModalEditSection({
           <Button
             onClick={submit}
             className="rounded-[8px] text-[12px] h-[32px] w-fit "
-            color="#5768d5"
           >
             Done
           </Button>

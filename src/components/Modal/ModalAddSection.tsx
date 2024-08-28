@@ -533,7 +533,6 @@ export default function ModalAddSection({
                                 iconWrapper: "w-0",
                                 label: "text-[14px] px-4 cursor-pointer",
                               }}
-                              color="#5768D5"
                               className=""
                               size="xs"
                               value={item.toString()}
@@ -556,7 +555,6 @@ export default function ModalAddSection({
                           label: "text-[14px] text-[#333333] cursor-pointer",
                         }}
                         className="mt-3"
-                        color="#5768D5"
                         size="xs"
                         label={`Open in this semester (${
                           academicYear?.semester
@@ -614,7 +612,6 @@ export default function ModalAddSection({
                               <Menu.Target>
                                 <Button
                                   variant="outline"
-                                  color="#5768d5"
                                   size="xs"
                                   className=" transform-none text-[12px] rounded-md"
                                 >
@@ -640,7 +637,6 @@ export default function ModalAddSection({
                                         body: "mr-3",
                                         label: "text-[14px] cursor-pointer",
                                       }}
-                                      color="#5768D5"
                                       size="xs"
                                       label={`Section ${sectionNo}`}
                                       checked={coIns.sections?.includes(
@@ -800,7 +796,6 @@ export default function ModalAddSection({
           )}
         </div>
         <Button
-          color="#5768d5"
           className="rounded-[8px] text-[12px] h-[32px] w-fit "
           loading={loading}
           onClick={() => nextStep()}

@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import CheckIcon from "@/assets/icons/Check.svg?react";
 import { IModelCourseManagement } from "@/models/ModelCourseManagement";
 import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
 import Loading from "@/components/Loading";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -37,11 +37,15 @@ import MainPopup from "@/components/Popup/MainPopup";
 import { validateCourseNo } from "@/helpers/functions/validation";
 import { useForm } from "@mantine/form";
 import { showNotifications } from "@/helpers/functions/function";
+import { setLoading } from "@/store/loading";
+import { useParams } from "react-router-dom";
 
 export default function MapPLO() {
+  const { name } = useParams();
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const [loading, setLoading] = useState(false);
+  const loading = useAppSelector((state) => state.loading);
+  const dispatch = useAppDispatch();
   const [payload, setPayload] = useState<any>();
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
   const [reorder, setReorder] = useState(false);
@@ -136,7 +140,6 @@ export default function MapPLO() {
     if (ploList.data) {
       handlers.setState(ploList.data);
     }
-    console.log(state);
   }, [ploList.data]);
 
   useEffect(() => {
@@ -163,21 +166,27 @@ export default function MapPLO() {
 
   const fetchPLO = async () => {
     let res = await getPLOs({
+      manage: true,
       role: user.role,
       departmentCode: user.departmentCode,
     });
     if (res) {
-      setPloList(res.plos[0].collections[0]);
+      setPloList(
+        res.find(
+          (plo: any) =>
+            plo.name.replace(/[-\/ ]/g, "") == name?.replace(/[-\/ ]/g, "")
+        )
+      );
     }
   };
 
   const fetchCourse = async (payloadCourse: any) => {
-    setLoading(true);
+    dispatch(setLoading(true));
     const res = await getCourseManagement(payloadCourse);
     if (res) {
       setCourseManagement(res.courses);
     }
-    setLoading(false);
+    dispatch(setLoading(false));
   };
 
   const onClickDeletePLO = async (no: any) => {
@@ -268,7 +277,6 @@ export default function MapPLO() {
             <Button
               // onClick={submit}
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
-              color="#5768d5"
             >
               Done
             </Button>
@@ -346,7 +354,6 @@ export default function MapPLO() {
                 editPLO();
               }}
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
-              color="#5768d5"
             >
               Done
             </Button>
@@ -390,7 +397,6 @@ export default function MapPLO() {
             <Button
               // onClick={submit}
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
-              color="#5768d5"
             >
               Done
             </Button>
@@ -424,8 +430,7 @@ export default function MapPLO() {
       />
       <div className=" flex flex-col h-full w-full px-6 pb-2 pt-2 gap-4 overflow-hidden ">
         <Tabs
-          color="#5768d5"
-          classNames={{ root: "overflow-hidden flex flex-col max-h-full " }}
+          classNames={{ root: "overflow-hidden flex flex-col h-full" }}
           defaultValue="plodescription"
         >
           <Tabs.List>
@@ -435,167 +440,173 @@ export default function MapPLO() {
             </Tabs.Tab>
           </Tabs.List>
 
-          <Tabs.Panel value="plodescription" className="overflow-hidden mt-1">
-            <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  py-3 gap-[12px] ">
-              <div className="flex items-center  justify-between  ">
-                <div className="flex flex-col items-start ">
-                  <div className="flex items-center text-primary gap-1">
-                    <p className="text-secondary text-[16px] font-bold">
-                      {ploList.name}
-                    </p>
-                    {/* Tooltip */}
+          <Tabs.Panel
+            value="plodescription"
+            className="overflow-hidden flex h-full mt-1"
+          >
+            {loading ? (
+              <Loading />
+            ) : (
+              <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  py-3 gap-[12px] ">
+                <div className="flex items-center  justify-between  ">
+                  <div className="flex flex-col items-start ">
+                    <div className="flex items-center text-primary gap-1">
+                      <p className="text-secondary text-[16px] font-bold">
+                        {ploList.name}
+                      </p>
+                      {/* Tooltip */}
 
-                    <Tooltip
-                      multiline
-                      label={
-                        <div className="text-[#333333] text-[13px] p-2 flex flex-col gap-2">
-                          <div className="text-secondary font-bold text-[14px]">
-                            {ploList.name}
-                          </div>
-                          <div>
-                            <p className="font-semibold">Active in:</p>
-                            <p className="text-tertiary  pl-3">
-                              {ploList.semester}/{ploList.year} -{" "}
-                              {ploList.isActive ? "Currently" : ""}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="font-semibold">Department:</p>
+                      <Tooltip
+                        multiline
+                        label={
+                          <div className="text-[#333333] text-[13px] p-2 flex flex-col gap-2">
+                            <div className="text-secondary font-bold text-[14px]">
+                              {ploList.name}
+                            </div>
+                            <div>
+                              <p className="font-semibold">Active in:</p>
+                              <p className="text-tertiary  pl-3">
+                                {ploList.semester}/{ploList.year} -{" "}
+                                {ploList.isActive ? "Currently" : ""}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="font-semibold">Department:</p>
 
-                            <p className="text-tertiary pl-3 flex flex-col gap-1">
-                              {ploList.departmentCode?.join(", ")}
-                            </p>
+                              <p className="text-tertiary pl-3 flex flex-col gap-1">
+                                {ploList.departmentCode?.join(", ")}
+                              </p>
+                            </div>
                           </div>
-                        </div>
+                        }
+                        color="#FCFCFC"
+                        className="w-fit  border rounded-md"
+                        classNames={{
+                          arrow: "border ",
+                        }}
+                        style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
+                        position="bottom-start"
+                      >
+                        <IconInfoCircle
+                          size={16}
+                          className="-ml-0 text-secondary"
+                        />
+                      </Tooltip>
+                    </div>
+                    <div className="text-[#909090] text-[12px] font-medium">
+                      <p>
+                        {ploList.criteriaTH} {ploList.criteriaEN}
+                      </p>
+                    </div>
+                  </div>
+                  {isFirstSemester && (
+                    <Button
+                      leftSection={
+                        <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
                       }
-                      color="#FCFCFC"
-                      className="w-fit  border rounded-md"
-                      classNames={{
-                        arrow: "border ",
-                      }}
-                      style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
-                      position="bottom-start"
+                      className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                      onClick={() => setOpenModalAddPLONo(true)}
                     >
-                      <IconInfoCircle
-                        size={16}
-                        className="-ml-0 text-secondary"
-                      />
-                    </Tooltip>
-                  </div>
-                  <div className="text-[#909090] text-[12px] font-medium">
-                    <p>
-                      {ploList.criteriaTH}  {ploList.criteriaEN}
-                    </p>
-                  </div>
+                      Add PLO
+                    </Button>
+                  )}
                 </div>
-                {isFirstSemester && (
-                  <Button
-                    color="#5768D5"
-                    leftSection={
-                      <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
-                    }
-                    className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                    onClick={() => setOpenModalAddPLONo(true)}
-                  >
-                    Add PLO
-                  </Button>
-                )}
-              </div>
 
-              <DragDropContext
-                onDragEnd={({ destination, source }) => {
-                  handlers.reorder({
-                    from: source.index,
-                    to: destination?.index || 0,
-                  });
-                  setReorder(true);
-                }}
-              >
-                <Droppable droppableId="dnd-list" direction="vertical">
-                  {(provided) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      className=" overflow-y-auto"
-                    >
-                      {state.map((item, index) => (
-                        <Draggable
-                          key={item.no}
-                          index={index}
-                          draggableId={item.no.toString()}
-                        >
-                          {(provided, snapshot) => (
-                            <div
-                              className="flex p-4 w-full justify-between first:-mt-2 border-b last:border-none"
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                            >
-                              <div className="flex flex-col gap-2 w-[85%] ">
-                                <p className="text-secondary font-semibold text-[14px]">
-                                  PLO-{item.no}
-                                </p>
-                                <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
-                                  <div className="flex  text-pretty ">
-                                    <li></li> {item.descTH}
-                                  </div>
-                                  <div className="flex  text-pretty ">
-                                    <li></li> {item.descEN}
+                <DragDropContext
+                  onDragEnd={({ destination, source }) => {
+                    handlers.reorder({
+                      from: source.index,
+                      to: destination?.index || 0,
+                    });
+                    setReorder(true);
+                  }}
+                >
+                  <Droppable droppableId="dnd-list" direction="vertical">
+                    {(provided) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className=" overflow-y-auto"
+                      >
+                        {state.map((item, index) => (
+                          <Draggable
+                            key={item.no}
+                            index={index}
+                            draggableId={item.no.toString()}
+                          >
+                            {(provided, snapshot) => (
+                              <div
+                                className="flex p-4 w-full justify-between first:-mt-2 border-b last:border-none"
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                              >
+                                <div className="flex flex-col gap-2 w-[85%] ">
+                                  <p className="text-secondary font-semibold text-[14px]">
+                                    PLO-{item.no}
+                                  </p>
+                                  <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
+                                    <div className="flex  text-pretty ">
+                                      <li></li> {item.descTH}
+                                    </div>
+                                    <div className="flex  text-pretty ">
+                                      <li></li> {item.descEN}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              <div className="flex gap-1 items-center">
-                                <div
-                                  className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
-                                  onClick={() => {
-                                    formPLO.setValues(item);
-                                    setOpenModalEditPLONo(true);
-                                  }}
-                                >
-                                  <IconEdit
-                                    stroke={1.5}
-                                    color="#F39D4E"
-                                    className="flex items-center size-4"
-                                  />
-                                </div>
-                                {isFirstSemester && (
+                                <div className="flex gap-1 items-center">
                                   <div
-                                    className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
+                                    className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
                                     onClick={() => {
                                       formPLO.setValues(item);
-                                      setOpenMainPopupDelPLO(true);
+                                      setOpenModalEditPLONo(true);
                                     }}
                                   >
-                                    <IconTrash
+                                    <IconEdit
                                       stroke={1.5}
-                                      color="#FF4747"
-                                      className=" size-4 flex items-center"
+                                      color="#F39D4E"
+                                      className="flex items-center size-4"
                                     />
                                   </div>
-                                )}
-                                <div
-                                  className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
-                                  {...provided.dragHandleProps}
-                                >
-                                  <IconGripVertical
-                                    style={{
-                                      width: rem(20),
-                                      height: rem(20),
-                                    }}
-                                    stroke={1.5}
-                                  />
+                                  {isFirstSemester && (
+                                    <div
+                                      className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
+                                      onClick={() => {
+                                        formPLO.setValues(item);
+                                        setOpenMainPopupDelPLO(true);
+                                      }}
+                                    >
+                                      <IconTrash
+                                        stroke={1.5}
+                                        color="#FF4747"
+                                        className=" size-4 flex items-center"
+                                      />
+                                    </div>
+                                  )}
+                                  <div
+                                    className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
+                                    {...provided.dragHandleProps}
+                                  >
+                                    <IconGripVertical
+                                      style={{
+                                        width: rem(20),
+                                        height: rem(20),
+                                      }}
+                                      stroke={1.5}
+                                    />
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              </div>
+            )}
           </Tabs.Panel>
 
           <Tabs.Panel className=" overflow-hidden mt-1" value="plomapping">
@@ -613,7 +624,6 @@ export default function MapPLO() {
                 <div className="flex gap-3">
                   {!isMapPLO && (
                     <Button
-                      color="#5768D5"
                       leftSection={
                         <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
                       }
@@ -705,7 +715,6 @@ export default function MapPLO() {
                                     label:
                                       "text-[14px] text-[#615F5F] cursor-pointer",
                                   }}
-                                  color="#5768D5"
                                   size="xs"
                                 />
                               )}
