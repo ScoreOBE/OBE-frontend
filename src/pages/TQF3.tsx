@@ -1,6 +1,24 @@
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Tabs, Tooltip } from "@mantine/core";
+import Loading from "@/components/Loading";
+import { getPLOs } from "@/services/plo/plo.service";
+import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
+import ModalAddPLOCollection from "@/components/Modal/ModalAddPLOCollection";
+import {
+  Alert,
+  Button,
+  Checkbox,
+  Group,
+  Menu,
+  Modal,
+  Radio,
+  RadioCard,
+  ScrollArea,
+  Table,
+  Tabs,
+  TextInput,
+  Tooltip,
+} from "@mantine/core";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -90,14 +108,21 @@ export default function TQF3() {
                 arrowSize={7}
                 position="bottom-end"
                 label={
-                  <p>
-                    Reuse TQF 3 <br /> Simplify your course TQF3. Choose any
-                    course, and we'll automatically fill <br /> the TQF
-                    documentation for you. Saving your time!
-                  </p>
+                  <div className="text-[#333333] text-[13px] p-2 flex flex-col gap-2">
+                    <p>
+                      <span className="text-secondary font-semibold">
+                        Reuse TQF 3
+                      </span>{" "}
+                      <br />
+                      Simplify your course TQF3. Choose any course, and we'll
+                      automatically fill <br />
+                      the TQF documentation for you. Saving your time!
+                    </p>
+                  </div>
                 }
+                color="#FCFCFC"
               >
-                <div className=" bg-[#F39D4E] hover:bg-[#e39246] w-fit px-3 rounded-[8px] ">
+                <div className="bg-[#F39D4E] hover:bg-[#e39246] w-fit px-3 rounded-[8px]">
                   <Icon IconComponent={dupTQF} />
                 </div>
               </Tooltip>

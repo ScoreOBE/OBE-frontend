@@ -52,8 +52,10 @@ export default function MapPLO() {
   const [reorder, setReorder] = useState(false);
   const [state, handlers] = useListState(ploList.data || []);
   const [getPLONo, setGetPLONo] = useState<number>(0);
-  const [couresNo, setCouresNo] = useState("");
   const [isMapPLO, setIsMapPLO] = useState(false);
+  const courseManagementTotal = useAppSelector(
+    (state) => state.courseManagement
+  );
   const isFirstSemester =
     ploList.semester === academicYear?.semester &&
     ploList.year === academicYear?.year;
@@ -191,17 +193,7 @@ export default function MapPLO() {
     dispatch(setLoading(false));
   };
 
-  const onClickDeletePLO = async (no: any) => {
-    // const res = await deleteSectionManagement(coures.id, coures.secId, coures);
-    // if (res) {
-    //   closeMainPopupDelPLO();
-    //   showNotifications(
-    //     NOTI_TYPE.SUCCESS,
-    //     "Delete Section Success",
-    //     `${editSec?.sectionNo} is deleted`
-    //   );
-    // }
-  };
+  const onClickDeletePLO = async (no: any) => {};
 
   const onShowMore = async () => {
     const res = await getCourseManagement({
@@ -452,51 +444,55 @@ export default function MapPLO() {
               <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  py-3 gap-[12px] ">
                 <div className="flex items-center  justify-between  ">
                   <div className="flex flex-col items-start ">
-                    <div className="flex items-center text-primary gap-1">
-                      <p className="text-secondary text-[16px] font-bold">
+                    <div className="flex items-center text-primary gap-1"></div>
+                    <div className="text-[#909090] text-[12px] font-medium"></div>
+                    <div className="flex flex-col  items-start ">
+                      <div className="flex items-center gap-1 text-secondary text-[16px] font-bold">
                         {ploList.name}
-                      </p>
-                      {/* Tooltip */}
+                        <Tooltip
+                          arrowOffset={10}
+                          arrowSize={8}
+                          arrowRadius={1}
+                          transitionProps={{
+                            transition: "fade",
+                            duration: 300,
+                          }}
+                          multiline
+                          withArrow
+                          label={
+                            <div className="text-[#333333] text-[13px] p-2 flex flex-col gap-2">
+                              <div className="flex gap-2">
+                                <p className="text-secondary font-semibold">
+                                  Active in:
+                                </p>
+                                <p className=" font-medium ">
+                                  {ploList.semester}/{ploList.year} -{" "}
+                                  {ploList.isActive ? "Currently" : ""}
+                                </p>
+                              </div>
+                              <div className="flex gap-2">
+                                <p className="text-secondary font-semibold">
+                                  Department:
+                                </p>
 
-                      <Tooltip
-                        multiline
-                        label={
-                          <div className="text-[#333333] text-[13px] p-2 flex flex-col gap-2">
-                            <div className="text-secondary font-bold text-[14px]">
-                              {ploList.name}
+                                <p className="font-medium flex flex-col gap-1 ">
+                                  {ploList.departmentCode?.join(", ")}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <p className="font-semibold">Active in:</p>
-                              <p className="text-tertiary  pl-3">
-                                {ploList.semester}/{ploList.year} -{" "}
-                                {ploList.isActive ? "Currently" : ""}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="font-semibold">Department:</p>
+                          }
+                          color="#FCFCFC"
+                          className="w-fit border  rounded-md "
+                          position="bottom-start"
+                        >
+                          <IconInfoCircle
+                            size={16}
+                            className="-ml-0 text-secondary"
+                          />
+                        </Tooltip>
+                      </div>
 
-                              <p className="text-tertiary pl-3 flex flex-col gap-1">
-                                {ploList.departmentCode?.join(", ")}
-                              </p>
-                            </div>
-                          </div>
-                        }
-                        color="#FCFCFC"
-                        className="w-fit  border rounded-md"
-                        classNames={{
-                          arrow: "border ",
-                        }}
-                        style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
-                        position="bottom-start"
-                      >
-                        <IconInfoCircle
-                          size={16}
-                          className="-ml-0 text-secondary"
-                        />
-                      </Tooltip>
-                    </div>
-                    <div className="text-[#909090] text-[12px] font-medium">
-                      <p>
+                      <p className="text-tertiary text-[14px] font-medium">
                         {ploList.criteriaTH} {ploList.criteriaEN}
                       </p>
                     </div>
@@ -614,13 +610,14 @@ export default function MapPLO() {
           <Tabs.Panel className=" overflow-hidden mt-1" value="plomapping">
             <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  py-3 gap-[12px] ">
               <div className="flex items-center  justify-between  ">
-                <div className="flex flex-col items-start ">
+                <div className="flex flex-col  items-start ">
                   <p className="text-secondary text-[16px] font-bold">
                     Map PLO
                   </p>
-                  <div className="text-[#909090] text-[12px] font-medium">
-                    <p>xxxxxxxxxxxxxxx</p>
-                  </div>
+                  <p className="text-tertiary text-[14px] font-medium">
+                    {courseManagementTotal.total} Course
+                    {courseManagementTotal.total > 1 ? "s " : " "}
+                  </p>
                 </div>
 
                 <div className="flex gap-3">

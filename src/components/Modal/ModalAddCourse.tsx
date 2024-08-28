@@ -360,12 +360,12 @@ export default function ModalAddCourse({
         allowNextStepsSelect={false}
         icon={<IconCircleFilled />}
         classNames={{
-          separator: "text-primary -mx-1 mb-12 h-[3px] -translate-x-5",
-          step: "flex flex-col  items-start mr-2",
+          separator: `text-primary mb-12 h-[3px] `,
+          step: "flex flex-col  items-start  w-[42px] ",
           stepIcon: "mb-2 text-[#E6E6FF] bg-[#E6E6FF] border-[#E6E6FF]",
-          stepBody: "flex-col-reverse m-0 ",
+          stepBody: "flex-col-reverse m-0 text-nowrap",
           stepLabel: "text-[13px] font-semibold",
-          stepDescription: "text-[13px] font-semibold",
+          stepDescription: "text-[13px] font-semibold ",
         }}
         className=" justify-center items-center mt-1  text-[14px] max-h-full"
       >
@@ -381,9 +381,9 @@ export default function ModalAddCourse({
           <div className="w-full mt-2 flex flex-col gap-3  bg-transparent rounded-md">
             <Button
               onClick={() => nextStep(COURSE_TYPE.GENERAL)}
-              color="#ffffff"
               rightSection={
                 <IconChevronRight
+                  color="#5768d5"
                   className="size-5 items-center pt-1"
                   stroke={3}
                 />
@@ -391,14 +391,15 @@ export default function ModalAddCourse({
               classNames={{
                 inner: "flex justify-between items-center w-full ",
               }}
-              className="w-full border-[1px] text-[13px] border-secondary  h-fit py-3 items-center rounded-[6px] flex justify-start hover:bg-bgSecond "
+              color="#ffffff"
+              className="w-full border-[1px] text-[13px]  border-secondary h-fit py-3 !text-[#333333] items-center rounded-[6px] flex hover:bg-bgSecond "
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-[#3e3e3e]">
                   {COURSE_TYPE.GENERAL}
                 </span>
                 <br />
-                <span className="flex justify-start font-medium text-[12px] f text-secondary -mt-1">
+                <span className="flex justify-start font-medium text-[12px] text-secondary -mt-1">
                   - Learner Person / Innovative Co-creator / Active Citizen
                 </span>
               </p>
@@ -407,6 +408,7 @@ export default function ModalAddCourse({
               onClick={() => nextStep(COURSE_TYPE.SPECIAL)}
               rightSection={
                 <IconChevronRight
+                  color="#5768d5"
                   className="size-5 items-center pt-1"
                   stroke={3}
                 />
@@ -432,6 +434,7 @@ export default function ModalAddCourse({
               onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC)}
               rightSection={
                 <IconChevronRight
+                  color="#5768d5"
                   className="size-5 items-center pt-1"
                   stroke={3}
                 />
@@ -455,6 +458,7 @@ export default function ModalAddCourse({
               color="#ffffff"
               rightSection={
                 <IconChevronRight
+                  color="#5768d5"
                   className="size-5 items-center pt-1"
                   stroke={3}
                 />
@@ -626,7 +630,7 @@ export default function ModalAddCourse({
         </Stepper.Step>
         <Stepper.Step
           allowStepSelect={false}
-          label="Co-Instructor (optional)"
+          label="Co-Instructor"
           description="STEP 4"
         >
           <div className="flex flex-col mt-3 flex-1 ">
@@ -642,8 +646,8 @@ export default function ModalAddCourse({
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <IconUsers /> Added Co-Instructor
                 </div>
-                <div className="flex flex-col max-h-[250px] h-fit w-full   px-2   overflow-y-auto ">
-                  <div className="flex flex-col max-h-[400px] h-fit p-1 ">
+                <div className="flex flex-col max-h-[220px] h-fit w-full   px-2   overflow-y-auto ">
+                  <div className="flex flex-col h-fit p-1 ">
                     {coInsList.map((coIns, index) => (
                       <div
                         key={index}
@@ -712,7 +716,7 @@ export default function ModalAddCourse({
                             </Button>
                           </div>
                         </div>
-                        <div className="flex text-secondary flex-row -mt-6 gap-1 font-medium text-b3">
+                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[12px]">
                           <div className=" font-semibold">Section:</div>
                           <div className="flex gap-1 w-[60%] flex-wrap ">
                             {coIns.sections?.map(
