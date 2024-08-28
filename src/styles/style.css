@@ -337,3 +337,38 @@ Button:disabled {
 .height-animation.collaps {
   height: 260px;
 } */
+
+/* .splash-container {
+  background: linear-gradient(135deg, #FF469D, #0A7CFF, #FF7847, #00DFDF, #7733FF, #0A7CFF);
+  bottom: 0;
+  padding: 20px;
+  box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+}
+
+.splash-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.6); /* Adjust opacity for the effect */
+
+
+
+.bg-shape{
+  width: 800px;
+  height: 450px;
+  border-radius: 9999px;
+}
+
+.opacityy-50{
+opacity: .5;
+}
+
+.bg-blur{
+  filter: blur(90px);
+}
+
+
