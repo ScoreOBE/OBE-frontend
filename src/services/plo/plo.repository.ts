@@ -17,5 +17,14 @@ export const ploController = (configService = {}) => {
     updatePLO: async (id: string, params: any) => {
       return service.put(`${prefix}/${id}`, { ...params });
     },
+    createPLONo: async (id: string, params: any) => {
+      return service.put(`${prefix}/${id}/no`, { ...params });
+    },
+    deletePLO: async (id: string) => {
+      return service.delete(`${prefix}/${id}`, {});
+    },
+    deletePLONo: async (id: string, params: any) => {
+      return service.delete(`${prefix}/${id}/no`, { ...params });
+    },
   };
 };
