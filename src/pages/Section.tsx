@@ -6,9 +6,11 @@ import {
   IconDots,
   IconExclamationCircle,
   IconPencilMinus,
+  IconPlus,
   IconTrash,
   IconUpload,
 } from "@tabler/icons-react";
+import ManageAdminIcon from "@/assets/icons/addCo.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { getCourse, getOneCourse } from "@/services/course/course.service";
 import {
@@ -228,9 +230,9 @@ export default function Section() {
                   Export score
                 </Button>
               )}
-              {/* {activeTerm && (
+              {activeTerm && (
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
-                  <Menu trigger="click" position="bottom-end" offset={2}>
+                  <Menu trigger="click" position="bottom-end" offset={6}>
                     <Menu.Target>
                       <IconDots />
                     </Menu.Target>
@@ -276,7 +278,7 @@ export default function Section() {
                     </Menu.Dropdown>
                   </Menu>
                 </div>
-              )} */}
+              )}
             </div>
           </div>
           <div className="flex h-full w-full rounded-[5px] overflow-hidden">

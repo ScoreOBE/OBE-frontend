@@ -61,7 +61,6 @@ export default function ModalAddPLOCollection({
   const [openModalSelectSemester, setOpenModalSelectSemester] = useState(false);
   const [semesterOption, setSemesterOption] = useState<any[]>([]);
   const [selectSemester, setSelectSemester] = useState("");
-
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -83,18 +82,23 @@ export default function ModalAddPLOCollection({
         if (value.length > maxLength)
           return `You have ${value.length - maxLength} characters too many`;
       },
-      criteriaEN: (value) =>
-        validateCourseNameorTopic(value, "Criteria English language"),
+      criteriaEN: (value) => {
+        return validateCourseNameorTopic(value, "Criteria English language");
+      },
 
       departmentCode: (value) => {
         return !value?.length && "Select department at least one";
       },
       data: {
         descTH: (value) => {
+          if (form.getValues().data?.length! > 1 && firstInput && !isAddAnother)
+            return false;
           if (!value && (isAddAnother || firstInput))
             return `PLO Thai language is required`;
         },
         descEN: (value) => {
+          if (form.getValues().data?.length! > 1 && firstInput && !isAddAnother)
+            return false;
           if (!value && (isAddAnother || firstInput))
             return `PLO English language is required`;
         },
@@ -120,10 +124,18 @@ export default function ModalAddPLOCollection({
           const res = await checkCanCreatePLO(form.getValues().name!);
           if (!res) isValid = false;
         }
+        form.clearFieldError(`data.${ploNo}.descTH`);
+        form.clearFieldError(`data.${ploNo}.descEN`);
         break;
       case 1:
         isValid = form.getValues().data?.length! > 1;
         if (!isValid) {
+          setFirstInput(true);
+          showNotifications(
+            NOTI_TYPE.ERROR,
+            "Invalid PLO No.",
+            "Please add PLO No. at least one"
+          );
           form.validateField(`data.${ploNo}.descTH`);
           form.validateField(`data.${ploNo}.descEN`);
         }
@@ -257,6 +269,7 @@ export default function ModalAddPLOCollection({
     );
     const payload = {
       ...form.getValues(),
+      facultyCode: user.facultyCode,
       semester: term.semester,
       year: term.year,
       data: form.getValues().data?.filter((plo) => plo.no),
@@ -390,12 +403,12 @@ export default function ModalAddPLOCollection({
           allowNextStepsSelect={false}
           icon={<IconCircleFilled />}
           classNames={{
-            separator: `mb-12 h-[3px]`,
-            step: "flex flex-col  items-start mr-2",
+            separator: `text-primary mb-12 h-[3px] `,
+            step: "flex flex-col  items-start  w-[42px] ",
             stepIcon: "mb-2 text-[#E6E6FF] bg-[#E6E6FF] border-[#E6E6FF]",
-            stepBody: "flex-col-reverse m-0 ",
+            stepBody: "flex-col-reverse m-0 text-nowrap",
             stepLabel: "text-[13px] font-semibold",
-            stepDescription: "text-[13px] font-semibold",
+            stepDescription: "text-[13px] font-semibold ",
           }}
           className=" justify-center items-center mt-1  text-[14px] max-h-full"
         >
@@ -471,6 +484,7 @@ export default function ModalAddPLOCollection({
               >
                 <Textarea
                   withAsterisk={true}
+                  autoFocus={false}
                   label={
                     <p className="font-semibold flex gap-1 h-full ">
                       PLO <span className="text-secondary">Thai language</span>
@@ -492,6 +506,7 @@ export default function ModalAddPLOCollection({
                   }}
                 />
                 <Textarea
+                  autoFocus={false}
                   withAsterisk={true}
                   label={
                     <p className="font-semibold flex gap-1">
@@ -712,7 +727,7 @@ export default function ModalAddPLOCollection({
                 </div>
               </div>
               {!firstInput && (
-                <div className="text-[#FA5252] text-[10px] mt-2">
+                <div className="text-[#FA5252] text-[12px] mt-2">
                   {form.validateField("departmentCode").error}
                 </div>
               )}

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import { getPLOs } from "@/services/plo/plo.service";
 import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
-import ModalAddPLOCollection from "@/components/Modal/ModalPLOCollection";
+import ModalAddPLOCollection from "@/components/Modal/ModalAddPLOCollection";
 import {
   Alert,
   Button,
@@ -187,7 +187,7 @@ export default function PLOManagement() {
               )
             }
           >
-            <Group className="flex overflow-y-hidden max-h-[200px]">
+            <Group className="flex overflow-y-auto max-h-[260px]">
               <div className="flex p-1 w-full h-full flex-col overflow-y-auto gap-3">
                 {ploCollectDupli.map((plo, index) => (
                   <RadioCard

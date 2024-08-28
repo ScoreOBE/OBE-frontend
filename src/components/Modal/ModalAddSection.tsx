@@ -379,12 +379,12 @@ export default function ModalAddSection({
         allowNextStepsSelect={false}
         icon={<IconCircleFilled />}
         classNames={{
-          separator: "text-primary -mx-1 mb-12 h-[3px] -translate-x-5",
-          step: "flex flex-col  items-start mr-2",
+          separator: `text-primary mb-12 h-[3px] `,
+          step: "flex flex-col  items-start  w-[42px] ",
           stepIcon: "mb-2 text-[#E6E6FF] bg-[#E6E6FF] border-[#E6E6FF]",
-          stepBody: "flex-col-reverse m-0 ",
+          stepBody: "flex-col-reverse m-0 text-nowrap",
           stepLabel: "text-[13px] font-semibold",
-          stepDescription: "text-[13px] font-semibold",
+          stepDescription: "text-[13px] font-semibold ",
         }}
         className=" justify-center items-center mt-1  text-[14px] max-h-full"
       >
@@ -592,19 +592,18 @@ export default function ModalAddSection({
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <IconUsers /> Added Co-Instructor
                 </div>
-                <div className="flex flex-col max-h-[250px] h-fit w-full   px-2   overflow-y-auto ">
-                  <div className="flex flex-col max-h-[400px] h-fit p-1">
+                <div className="flex flex-col max-h-[220px] h-fit w-full   px-2   overflow-y-auto ">
+                  <div className="flex flex-col  h-fit p-1">
                     {coInsList.map((coIns, index) => (
                       <div
                         key={index}
-                        className="w-full h-fit p-3   gap-4 flex flex-col"
+                        className="w-full h-fit p-3   gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none"
                       >
                         <div className="flex w-full justify-between items-center">
-                          <div className="flex flex-col  font-medium text-[14px]">
-                            <span className="text-[#3e3e3e] -translate-y-1 font-semibold text-[14px]">
-                              {coIns.label}
-                            </span>
-                          </div>
+                          <span className="text-[#3e3e3e] -translate-y-1 font-semibold text-[13px]">
+                            {coIns.label}
+                          </span>
+
                           <div className="flex justify-end gap-3 ">
                             <Menu shadow="md" width={200}>
                               <Menu.Target>
@@ -621,7 +620,7 @@ export default function ModalAddSection({
                                 <Menu.Label className=" -translate-x-1">
                                   Can access
                                 </Menu.Label>
-                                <div className="flex flex-col pb-2 h-fit gap-2 w-full">
+                                <div className="flex flex-col pl-3  pb-2 h-fit gap-4 w-full">
                                   {sectionNoList.map((sectionNo, index) => (
                                     <Checkbox
                                       disabled={
@@ -663,8 +662,8 @@ export default function ModalAddSection({
                             </Button>
                           </div>
                         </div>
-                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[13px]">
-                          <div className=" font-semibold">Section</div>
+                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[12px]">
+                          <div className=" font-semibold">Section:</div>
                           <div className="flex gap-1 w-[60%] flex-wrap ">
                             {coIns.sections?.map(
                               (sectionNo: any, index: number) => (
