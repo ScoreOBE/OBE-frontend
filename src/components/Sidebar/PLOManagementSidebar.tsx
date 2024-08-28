@@ -32,16 +32,12 @@ export default function PLOSidebar() {
     }
   }, [user]);
 
-  const goToDashboard = () => {
-    navigate(ROUTE_PATH.DASHBOARD_INS);
-  };
-
   return (
     <>
       <div className="flex text-white flex-col h-full  gap-[32px]">
         <div
           className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
-          onClick={goToDashboard}
+          onClick={() => navigate(ROUTE_PATH.DASHBOARD_INS)}
         >
           <IconChevronLeft size={20} viewBox="8 0 24 24" />
           Back to Your Course

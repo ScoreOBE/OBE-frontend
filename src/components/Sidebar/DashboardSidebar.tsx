@@ -4,26 +4,21 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import Icon from "@/components/Icon";
 import { IconChevronDown } from "@tabler/icons-react";
 import CalendarIcon from "@/assets/icons/calendar.svg?react";
-import { useDisclosure } from "@mantine/hooks";
-import { useSearchParams } from "react-router-dom";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { setAcademicYear } from "@/store/academicYear";
-import { setLoading } from "@/store/loading";
-import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import { getCourse } from "@/services/course/course.service";
-import { setCourseList } from "@/store/course";
+import { useSearchParams } from "react-router-dom";
 
 export default function DashboardSidebar() {
+  const user = useAppSelector((state) => state.user);
   const [params, setParams] = useSearchParams();
   const academicYear = useAppSelector((state) => state.academicYear);
   const dispatch = useAppDispatch();
   const termOption = academicYear.map((e) => {
     return { label: `${e.semester}/${e.year}`, value: e.id };
   });
-  const [openedFilterTerm, { open: openFilterTerm, close: closeFilterTerm }] =
-    useDisclosure(false);
+  const [openFilterTerm, setOpenFilterTerm] = useState(false);
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState<any>(
     termOption.find((term) => term.value == params.get("id"))
@@ -32,10 +27,7 @@ export default function DashboardSidebar() {
   useEffect(() => {
     if (academicYear.length && !params.get("id") && !selectedTerm) {
       setTerm(academicYear[0]);
-    } else if (
-      !academicYear.length
-      //   // || !academicYear.map((term) => term.id).includes(selectedTerm?.value)
-    ) {
+    } else if (user && !academicYear.length) {
       fetchAcademicYear();
     }
   }, [academicYear, termOption, params]);
@@ -50,24 +42,10 @@ export default function DashboardSidebar() {
     const res = await getAcademicYear(new AcademicYearRequestDTO());
     if (res) {
       dispatch(setAcademicYear(res));
-      // if (!res.map((term: any) => term.id).includes(params.get("id"))) {
       if (!params.get("id") && !selectedTerm) {
         setTerm(res[0]);
-        fetchCourse(res[0].id);
       }
-      // }
     }
-  };
-
-  const fetchCourse = async (id: string) => {
-    dispatch(setLoading(true));
-    const payloadCourse = new CourseRequestDTO();
-    payloadCourse.academicYear = id;
-    const res = await getCourse(payloadCourse);
-    if (res) {
-      dispatch(setCourseList(res));
-    }
-    dispatch(setLoading(false));
   };
 
   const setTerm = (data: IModelAcademicYear) => {
@@ -80,18 +58,17 @@ export default function DashboardSidebar() {
   };
 
   const confirmFilterTerm = async () => {
-    closeFilterTerm();
+    setOpenFilterTerm(false);
     const term = academicYear.find((e) => e.id == selectedTerm.value)!;
     setTerm(term);
-    fetchCourse(term.id);
   };
 
   return (
     <>
       <Modal
-        opened={openedFilterTerm}
+        opened={openFilterTerm}
         withCloseButton={false}
-        onClose={closeFilterTerm}
+        onClose={() => setOpenFilterTerm(false)}
         title="Filter"
         size="400px"
         centered
@@ -147,7 +124,7 @@ export default function DashboardSidebar() {
               <Icon className="-mt-4 mr-1" IconComponent={CalendarIcon} />
             }
             variant="default"
-            onClick={openFilterTerm}
+            onClick={() => setOpenFilterTerm(true)}
           >
             <div className="flex flex-col justify-start items-start gap-[7px]">
               <p className="font-medium text-[14px]">Semester</p>

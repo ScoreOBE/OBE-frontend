@@ -11,12 +11,12 @@ export enum NOTI_TYPE {
 
 export enum ROLE {
   STUDENT = "Student",
+  TA = "TA",
   INSTRUCTOR = "Instructor",
   ADMIN = "Admin",
   SUPREME_ADMIN = "S. Admin",
 }
 export enum TITLE_ROLE {
-
   CO_INS = "Co-Instructor",
   OWNER_SEC = "Owner section",
 }

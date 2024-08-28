@@ -7,13 +7,11 @@ import userReducer from "./user";
 import academicYearReducer from "./academicYear";
 import courseReducer from "./course";
 import courseManagementReducer from "./courseManagement";
-import breadcrumbsReducer from "./breadcrumbs";
 
 const store = configureStore({
   reducer: {
     showSidebar: showSidebarReducer,
     loading: loadingReducer,
-    breadcrumbs: breadcrumbsReducer,
     errorResponse: errorResponseReducer,
     user: userReducer,
     academicYear: academicYearReducer,

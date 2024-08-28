@@ -13,7 +13,6 @@ export default function CMUOAuthCallback() {
   const queryParameters = new URLSearchParams(window.location.search);
   const code = queryParameters.get("code");
   const navigate = useNavigate();
-
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -32,7 +31,6 @@ export default function CMUOAuthCallback() {
         setMessage(res);
       }
     };
-
     fetchData();
   }, [code]);
 

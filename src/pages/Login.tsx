@@ -14,10 +14,9 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
+    dispatch(setShowSidebar(false));
     if (!isEmpty(user)) {
       navigate(ROUTE_PATH.DASHBOARD_INS);
-    } else {
-      dispatch(setShowSidebar(false));
     }
   }, [user]);
   return (

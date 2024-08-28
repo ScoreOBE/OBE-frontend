@@ -278,16 +278,21 @@ export default function CourseManagement() {
             <div
               aria-disabled={startEndPage.start == 1}
               onClick={() => onChangePage(payload.page - 1)}
-              className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${startEndPage.start !== 1 && 'hover:bg-[#eeeeee]'} rounded-full`}
+              className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                startEndPage.start !== 1 && "hover:bg-[#eeeeee]"
+              } rounded-full`}
             >
-              <IconChevronLeft ></IconChevronLeft>
+              <IconChevronLeft />
             </div>
             <div
               aria-disabled={startEndPage.end == courseManagement.total}
               onClick={() => onChangePage(payload.page + 1)}
-              className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${startEndPage.end !== courseManagement.total  && 'hover:bg-[#eeeeee]'} rounded-full`}
+              className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                startEndPage.end !== courseManagement.total &&
+                "hover:bg-[#eeeeee]"
+              } rounded-full`}
             >
-              <IconChevronRight ></IconChevronRight>
+              <IconChevronRight />
             </div>
           </div>
         </div>
@@ -295,9 +300,7 @@ export default function CourseManagement() {
         {loading ? (
           <Loading />
         ) : (
-
           <div className="flex flex-col overflow-y-auto gap-4 px-6 pb-3  pt-2">
-
             {courseManagement.courseManagements.map((course, index) => (
               <div
                 key={index}
