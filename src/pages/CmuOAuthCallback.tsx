@@ -5,6 +5,7 @@ import { login } from "@/services/authentication/authentication.service";
 import { Button } from "@mantine/core";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
+import { setShowSidebar } from "@/store/showSidebar";
 
 export default function CMUOAuthCallback() {
   const user = useAppSelector((state) => state.user);
@@ -16,6 +17,7 @@ export default function CMUOAuthCallback() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
+    dispatch(setShowSidebar(false));
     if (!code || user.id) return;
 
     const fetchData = async () => {

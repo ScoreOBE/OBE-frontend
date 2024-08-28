@@ -1,6 +1,11 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Alert, Button, Menu, Switch } from "@mantine/core";
 import {
   IconDots,
@@ -25,7 +30,7 @@ import {
 } from "@/helpers/functions/function";
 import PageError from "./PageError";
 import MainPopup from "@/components/Popup/MainPopup";
-import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import ModalEditSection from "@/components/Modal/ModalEditSection";
 import Icon from "@/components/Icon";
 import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
@@ -41,8 +46,10 @@ import {
 } from "@/services/section/section.service";
 import ModalAddSection from "@/components/Modal/ModalAddSection";
 import { IModelUser } from "@/models/ModelUser";
+import { addPath } from "@/store/breadcrumbs";
 
-export default function Course() {
+export default function Section() {
+  // const path = useLocation().pathname
   const navigate = useNavigate();
   const { courseNo } = useParams();
   const [params, setParams] = useSearchParams();
@@ -138,6 +145,19 @@ export default function Course() {
     }
   };
 
+  const goToAssignment = (sectionNo: number) => {
+    const pathname = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.SECTION}`;
+    dispatch(addPath({ title: "Sections", path: pathname }));
+    dispatch(addPath({ title: getSectionNo(sectionNo) }));
+    navigate(
+      {
+        pathname: `${pathname}/${sectionNo}/${ROUTE_PATH.ASSIGNMENT}`,
+        search: "?" + params.toString(),
+      }
+      // { state: { activeTerm: term?.isActive } }
+    );
+  };
+
   return (
     <>
       <ModalEditSection
@@ -194,8 +214,8 @@ export default function Course() {
       ) : loading ? (
         <Loading />
       ) : (
-        <div className="bg-white flex flex-col h-full w-full p-6 py-3 gap-3 overflow-hidden">
-          <div className="flex flex-row  py-2  items-center justify-between">
+        <div className=" flex flex-col h-full w-full overflow-hidden">
+          <div className="flex flex-row  px-6 pt-3 min-h-[60px]  items-center justify-between">
             <p className="text-secondary text-[16px] font-semibold">
               {course?.sections.length} Section
               {course?.sections.length! > 1 && "s"}
@@ -204,13 +224,13 @@ export default function Course() {
               {activeTerm ? (
                 <Button
                   leftSection={<IconUpload className="h-5 w-5" />}
-                  className="rounded-[8px] text-[12px] w-fit font-medium  h-8 px-2 "
+                  className="rounded-[8px] text-[12px] w-fit font-semibold  h-8 px-3 "
                 >
                   Upload and Assets
                 </Button>
               ) : (
                 <Button
-                color="#20884f"
+                  color="#20884f"
                   leftSection={
                     <Icon className="h-4 w-4 " IconComponent={ExcelIcon} />
                   }
@@ -219,7 +239,7 @@ export default function Course() {
                   Export score
                 </Button>
               )}
-              {activeTerm && (
+              {/* {activeTerm && (
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
                   <Menu trigger="click" position="bottom-end" offset={2}>
                     <Menu.Target>
@@ -267,14 +287,15 @@ export default function Course() {
                     </Menu.Dropdown>
                   </Menu>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
-          <div className="flex h-full w-full rounded-[5px] pt-1 overflow-hidden">
-            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-1">
+          <div className="flex h-full w-full rounded-[5px] overflow-hidden">
+            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 px-6 p-3">
               {course?.sections.map((sec, index) => {
                 return (
                   <div
+                    onClick={() => goToAssignment(sec.sectionNo!)}
                     key={index}
                     className={`card relative justify-between xl:h-[135px] md:h-[120px]  rounded-[4px] ${
                       sec.isActive ? "hover:bg-[#F3F3F3] cursor-pointer" : ""
@@ -376,13 +397,15 @@ export default function Course() {
                           {sec?.topic}
                         </p>
                       </div>
-                      <div
-                        className={` text-xs font-medium text-[#757575]  ${
-                          !sec.isActive && "text-[#c8c8c8]"
-                        }`}
-                      >
-                        {getUserName(sec.instructor as IModelUser, 1)}
-                      </div>
+                      {course?.type !== COURSE_TYPE.SEL_TOPIC && (
+                        <div
+                          className={` text-xs font-medium text-[#757575]  ${
+                            !sec.isActive && "text-[#c8c8c8]"
+                          }`}
+                        >
+                          {getUserName(sec.instructor as IModelUser, 1)}
+                        </div>
+                      )}
                     </div>
                     {sec.isActive && (
                       <div className="bg-[#e7eaff] flex h-8 items-center justify-between rounded-b-[4px]">

@@ -28,6 +28,9 @@ import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { IModelUser } from "@/models/ModelUser";
+import { setShowSidebar } from "@/store/showSidebar";
+import { addPath } from "@/store/breadcrumbs";
+import { link } from "fs";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -46,6 +49,7 @@ export default function Dashboard() {
   const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
 
   useEffect(() => {
+    dispatch(setShowSidebar(true));
     const yearId = params.get("id");
     const year = parseInt(params.get("year")!);
     const semester = parseInt(params.get("semester")!);
@@ -114,9 +118,11 @@ export default function Dashboard() {
   };
 
   const goToCourse = (courseNo: string) => {
+    const pathname = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.SECTION}`;
+    dispatch(addPath({ title: "Your Course", path: pathname }));
     navigate(
       {
-        pathname: `${ROUTE_PATH.COURSE}/${courseNo}`,
+        pathname,
         search: "?" + params.toString(),
       }
       // { state: { activeTerm: term?.isActive } }
@@ -169,10 +175,10 @@ export default function Dashboard() {
         value={editCourse}
       />
 
-      <div className="bg-[#ffffff] flex flex-col h-full w-full p-6 py-3 gap-3 overflow-hidden">
-        <div className="flex flex-row  items-center justify-between">
+      <div className=" flex flex-col h-full w-full  overflow-hidden">
+        <div className="flex flex-row px-6 pt-3   items-center justify-between">
           <div className="flex flex-col">
-            <p className="text-secondary text-[20px] font-semibold mb-[1px]">
+            <p className="text-secondary text-[18px] font-semibold ">
               Hi there, {user.firstNameEN}
             </p>
             {course.search.length ? (
@@ -186,7 +192,7 @@ export default function Dashboard() {
                   <span>Your course card is currently empty</span>
                 ) : (
                   <span>
-                    Your currently have{" "}
+                    You have{" "}
                     <span className="text-[#5768D5] font-semibold">
                       {course.total} Course
                       {course.total > 1 ? "s " : " "}
@@ -208,7 +214,7 @@ export default function Dashboard() {
             </Button>
           )}
         </div>
-        <div className="flex h-full w-full bg-white rounded-[5px]  overflow-hidden">
+        <div className="flex h-full w-full    overflow-hidden">
           {loading ? (
             <Loading />
           ) : course.courses.length === 0 ? (
@@ -256,7 +262,7 @@ export default function Dashboard() {
               height={"100%"}
               loader={<Loading />}
               hasMore={payload?.hasMore}
-              className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-1"
+              className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 px-6 p-3"
               style={{ height: "fit-content", maxHeight: "100%" }}
             >
               {course.courses.map((item) => {

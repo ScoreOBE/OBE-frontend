@@ -78,9 +78,10 @@ export default function Navbar() {
       case ROUTE_PATH.DASHBOARD_INS:
         return "Your Courses";
       case ROUTE_PATH.COURSE:
-        return "Section";
-      case ROUTE_PATH.TQF3:
-        return "TQF 3";
+        if (location.includes(ROUTE_PATH.TQF3)) return "TQF 3";
+        else if (location.includes(ROUTE_PATH.TQF5)) return "TQF 5";
+        else if (location.includes(ROUTE_PATH.ASSIGNMENT)) return "Assignment"
+        else return "Section";
       case ROUTE_PATH.COURSE_MANAGEMENT:
         return "Course Management";
       case ROUTE_PATH.PLO_MANAGEMENT:
@@ -95,7 +96,9 @@ export default function Navbar() {
       {![ROUTE_PATH.SELECTED_DEPARTMENT].includes(location) && (
         <div
           className={`min-h-14 border-b-[1px] border-[#e0e0e0] px-6 inline-flex flex-wrap justify-between items-center z-50 ${
-            [ROUTE_PATH.LOGIN].includes(location) ? "bg-white border-none" : "bg-[#f5f5f5]"
+            [ROUTE_PATH.LOGIN].includes(location)
+              ? "bg-white border-none"
+              : "bg-[#f5f5f5]"
           } text-secondary`}
         >
           <p className="font-semibold text-h2 md:w-fit max-w-[30%]">

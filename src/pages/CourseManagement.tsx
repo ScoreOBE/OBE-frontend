@@ -38,6 +38,7 @@ import {
 } from "@/store/courseManagement";
 import { removeCourse, removeSection } from "@/store/course";
 import ModalAddSection from "@/components/Modal/ModalAddSection";
+import { setShowSidebar } from "@/store/showSidebar";
 
 export default function CourseManagement() {
   const user = useAppSelector((state) => state.user);
@@ -59,6 +60,7 @@ export default function CourseManagement() {
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
 
   useEffect(() => {
+    dispatch(setShowSidebar(true));
     if (user.departmentCode) {
       const payloadCourse = {
         ...new CourseManagementRequestDTO(),

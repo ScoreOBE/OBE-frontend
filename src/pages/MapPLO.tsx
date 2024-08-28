@@ -39,6 +39,7 @@ import { useForm } from "@mantine/form";
 import { showNotifications } from "@/helpers/functions/function";
 import { setLoading } from "@/store/loading";
 import { useParams } from "react-router-dom";
+import { setShowSidebar } from "@/store/showSidebar";
 
 export default function MapPLO() {
   const { name } = useParams();
@@ -112,6 +113,7 @@ export default function MapPLO() {
   };
 
   useEffect(() => {
+    dispatch(setShowSidebar(true));
     if (user.departmentCode) {
       const payloadCourse = {
         ...new CourseManagementRequestDTO(),
