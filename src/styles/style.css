@@ -57,6 +57,17 @@
 .mantine-active:active {
   transform: none !important;
 }
+.mantine-Tooltip-arrow {
+  background-color: #fcfcfc;
+  border: 1px solid #dadada;
+  box-shadow: rgba(0, 0, 0, 0.1) -1px -1px 2px;
+}
+.mantine-Tooltip-tooltip {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+  border: 1px solid #dadada;
+  background-color: #ffffff;
+  padding: 8px;
+}
 
 .mantine-Stepper-stepIcon[data-progress] {
   background-color: var(--color-secondary);
@@ -251,7 +262,7 @@ Button:disabled {
 }
 .mantine-Tabs-tab:last-of-type[data-variant="pills"],
 .mantine-Tabs-tab:last-of-type[data-active][data-variant="pills"],
-.mantine-Tabs-tab:last-of-type:hover[data-variant="pills"]  {
+.mantine-Tabs-tab:last-of-type:hover[data-variant="pills"] {
   border-radius: 0 8px 8px 0;
 }
 .mantine-Tabs-tab:first-of-type[data-variant="pills"],
@@ -268,7 +279,7 @@ Button:disabled {
 .mantine-Tabs-tab:hover[data-variant="pills"] {
   background-color: #d8d8d8;
   color: var(--color-tertiary);
-  border: none ;
+  border: none;
   border-radius: 0px;
 }
 
@@ -279,10 +290,6 @@ Button:disabled {
   color: var(--color-secondary);
   border: 1px solid #bcbce1;
 }
-
-
-
-
 
 .mantine-Tabs-list[data-variant="pills"] {
   background-color: var(--color-hover);
