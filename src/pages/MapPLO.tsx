@@ -26,7 +26,12 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
 import Loading from "@/components/Loading";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { getPLOs, updatePLO } from "@/services/plo/plo.service";
+import {
+  createPLONo,
+  deletePLONo,
+  getPLOs,
+  updatePLO,
+} from "@/services/plo/plo.service";
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
@@ -135,10 +140,12 @@ export default function MapPLO() {
   }, [academicYear]);
 
   useEffect(() => {
-    if (!openModalAddCourse) {
+    if (openModalAddCourse) {
       form.reset();
+    } else if (openModalAddPLONo) {
+      formPLO.reset();
     }
-  }, [openModalAddCourse]);
+  }, [openModalAddCourse, openModalAddPLONo]);
 
   useEffect(() => {
     if (ploList.data) {
@@ -193,7 +200,40 @@ export default function MapPLO() {
     dispatch(setLoading(false));
   };
 
-  const onClickDeletePLO = async (no: any) => {};
+  const onClickAddPLONo = async () => {
+    const isValid = !formPLO.validate().hasErrors;
+    if (isValid) {
+      const no = ploList.data?.length! + 1;
+      const res = await createPLONo(ploList.id!, {
+        ...formPLO.getValues(),
+        no,
+      });
+      if (res) {
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          `Add PLO-${no} Success`,
+          `PLO-${no} is added`
+        );
+        setPloList(res);
+        setOpenModalAddPLONo(false);
+        formPLO.reset();
+      }
+    }
+  };
+
+  const onClickDeletePLO = async () => {
+    const res = await deletePLONo(ploList.id!, { id: formPLO.getValues().id });
+    if (res) {
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        `Delete PLO-${formPLO.getValues().no} Success`,
+        `PLO-${formPLO.getValues().no} is deleted`
+      );
+      setPloList(res);
+      setOpenMainPopupDelPLO(false);
+      formPLO.reset();
+    }
+  };
 
   const onShowMore = async () => {
     const res = await getCourseManagement({
@@ -243,6 +283,7 @@ export default function MapPLO() {
               label: "flex pb-1",
             }}
             placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
+            {...formPLO.getInputProps("descTH")}
           />
           <Textarea
             withAsterisk={true}
@@ -257,6 +298,7 @@ export default function MapPLO() {
               label: "flex pb-1",
             }}
             placeholder="Ex. An ability to solve complex engineering problems."
+            {...formPLO.getInputProps("descEN")}
           />
 
           <div className="flex gap-2 mt-3 justify-end">
@@ -269,7 +311,7 @@ export default function MapPLO() {
               Cancel
             </Button>
             <Button
-              // onClick={submit}
+              onClick={onClickAddPLONo}
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
             >
               Done
@@ -400,7 +442,7 @@ export default function MapPLO() {
       <MainPopup
         opened={openMainPopupDelPLO}
         onClose={() => setOpenMainPopupDelPLO(false)}
-        action={() => onClickDeletePLO(getPLONo)}
+        action={onClickDeletePLO}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete PLO"
         title={`Delete PLO ${formPLO.getValues().no}`}

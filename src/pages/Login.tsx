@@ -13,7 +13,13 @@ import lockIcon from "@/assets/icons/lockIcon.svg?react";
 import refresh from "@/assets/icons/refresh.svg?react";
 
 import Icon from "@/components/Icon";
-import { IconChevronLeft, IconChevronRight, IconPlus, IconShare, IconShare2 } from "@tabler/icons-react";
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconPlus,
+  IconShare,
+  IconShare2,
+} from "@tabler/icons-react";
 
 export default function Login() {
   const user = useAppSelector((state) => state.user);
@@ -26,8 +32,8 @@ export default function Login() {
     }
   }, [user]);
   return (
-    <div className=" overflow-hidden  h-screen w-screen p-3 items-center  flex">
-      <div className=" items-center text-center bg-[#f7f7f7]  rounded-xl  overflow-hidden  h-full  max-h-full  flex flex-col w-full   ">
+    <div className=" overflow-hidden  h-screen w-screen  items-center  flex">
+      <div className=" items-center text-center   rounded-xl  overflow-hidden  h-full  max-h-full  flex flex-col w-full   ">
         <p className=" drop-shadow-xl cursor-default mt-16 leading-[74px] font-[600] item-center -rounded text-[#000000] text-[60px]">
           The all-in-one{" "}
           <span className=" text-secondary">OBE Score system </span> <br />
@@ -38,7 +44,7 @@ export default function Login() {
         </p>
 
         <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
-          <Button className=" mt-8 rounded-[8px] text-[#fffff] text-[14px] font-semibold h-[44px] ">
+          <Button className=" mt-8 rounded-[8px] drop-shadow-lg text-[#fffff] text-[14px] font-semibold h-[44px] ">
             <img
               src={cmulogoLogin}
               alt="CMULogo"
@@ -48,13 +54,13 @@ export default function Login() {
           </Button>
         </a>
         <div
-          className="rounded-t-xl mt-8"
+          className="rounded-t-xl relative mt-8 w-10/12 h-4/6"
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <div className=" flex relative items-center rounded-t-xl justify-center p-5 py-[9px] border-b-[1px] border-[#eeeeee] flex-row gap-0 w-full bg-white">
-            <div className="flex justify-start w-[35%]  flex-row gap-6 items-center">
+          <div className=" flex relative  items-center rounded-t-xl justify-center p-5 py-[9px] border-b-[1px] border-[#eeeeee] flex-row gap-0 w-full bg-white">
+            <div className="flex justify-start w-[35%]   flex-row gap-6 items-center">
               <div className="flex  flex-row gap-2">
                 <div className=" rounded-full w-[12px] h-[12px] bg-[#ED6A5E]"></div>
                 <div className=" rounded-full w-[12px] h-[12px] bg-[#F4BF4F]"></div>
@@ -78,12 +84,19 @@ export default function Login() {
               </div>
             </div>
             <div className="flex w-[35%] justify-end items-center flex-row gap-2">
-            <IconShare2 className="text-[#8c8c8c] size-[20px]" />
+              <IconShare2 className="text-[#8c8c8c] size-[20px]" />
               <IconPlus className="text-[#8c8c8c] size-[20px]" />
             </div>
           </div>
 
-          <img className="max-h-[956px] max-w-[1232px]  " src={loginImage} alt="loginImage" />
+          <img className=" z-50 " src={loginImage} alt="loginImage" />
+        </div>
+        <div className=" absolute bottom-0 rotate-180 -z-50 w-screen h-screen overflow-hidden flex justify-center">
+          <div className="bg-shape bg-[#00DFDF] opacityy-50 bg-blur"></div>
+          <div className="bg-shape bg-[#0A7CFF] opacityy-50 bg-blur"></div>
+          <div className="bg-shape bg-[#7733FF] opacityy-50 bg-blur"></div>
+          <div className="bg-shape bg-[#FF469D] opacityy-50 bg-blur"></div>
+          <div className="bg-shape bg-[#FF7847] opacityy-50 bg-blur"></div>
         </div>
       </div>
     </div>

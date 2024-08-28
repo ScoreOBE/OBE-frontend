@@ -19,3 +19,15 @@ export const updatePLO = async (id: string, params: any) => {
   const res = await ploService.updatePLO(id, params);
   return isValidResponse(res);
 };
+export const createPLONo = async (id: string, params: any) => {
+  const res = await ploService.createPLONo(id, params);
+  return isValidResponse(res);
+};
+export const deletePLO = async (id: string) => {
+  const res = await ploService.deletePLO(id);
+  return isValidResponse(res);
+};
+export const deletePLONo = async (id: string, params: any) => {
+  const res = await ploService.deletePLONo(id, params);
+  return isValidResponse(res);
+};
