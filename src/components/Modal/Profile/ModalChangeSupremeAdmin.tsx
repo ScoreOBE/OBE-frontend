@@ -162,10 +162,8 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                   </div>
                   <Button
                     variant="outline"
-                    color="#5768D5"
-                    size="xs"
+                      size="xs"
                     className=" rounded-[8px] font-semibold text-[12px]"
-                    // onClick={() => editSAdmin(admin.id)}
                     onClick={() => {
                       setSupremeAdmin(admin);
                       onClose();

@@ -234,7 +234,8 @@ export default function CompoMangementIns({
                 });
             }}
             onFocus={() => {
-              setFirstInput(false), setIsFocus(true);
+              setFirstInput(false);
+              setIsFocus(true);
             }}
             onBlur={() => setIsFocus(false)}
             error={
@@ -295,7 +296,6 @@ export default function CompoMangementIns({
         {!mainIns && (
           <Button
             className="rounded-s-none min-w-fit text-b3 h-[30px] border-l-0"
-            color="#5768D5"
             disabled={!inputUser.value || (swapMethodAddUser && invalidEmail)}
             onClick={() => addUser()}
           >

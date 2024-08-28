@@ -142,7 +142,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                   TQF 3 Edit
                 </p>
                 <Switch
-                  color="#5768d5"
                   size="lg"
                   onLabel="ON"
                   offLabel="OFF"
@@ -157,7 +156,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                   TQF 5 Edit
                 </p>
                 <Switch
-                  color="#5768d5"
                   size="lg"
                   onLabel="ON"
                   offLabel="OFF"
@@ -261,7 +259,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                   rightSectionPointerEvents="all"
                 />
                 <div className="flex flex-col  overflow-y-scroll p-1">
-                  { notCompleteTQF3List.map((e, index) => (
+                  {notCompleteTQF3List.map((e, index) => (
                     <div
                       key={index}
                       className="w-full items-center justify-between last:border-none border-b-[1px]  py-3 px-4  flex"
@@ -286,7 +284,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                         </p>
                         {!checkedTQF3 && (
                           <Switch
-                            color="#5768d5"
                             size="lg"
                             onLabel="ON"
                             offLabel="OFF"

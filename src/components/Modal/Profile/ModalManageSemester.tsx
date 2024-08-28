@@ -243,7 +243,6 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                           </div>
                           <Button
                             variant="outline"
-                            color="#5768D5"
                             size="xs"
                             className={`rounded-lg ${
                               semester.isActive &&
@@ -268,7 +267,6 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           </div>
           <Button
             className="rounded-s-[4px] min-w-fit h-[36px] w-full "
-            color="#5768D5"
             onClick={onClickAdd}
           >
             Add Semester {selectSemester?.semester}, {selectSemester?.year}
@@ -298,7 +296,6 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           onChange={(event) => setTextActivate(event.target.value)}
         ></TextInput>
         <Button
-          color="#5768D5"
           disabled={
             !isEqual(
               `semester${activateSemester?.semester}year${activateSemester?.year}`,

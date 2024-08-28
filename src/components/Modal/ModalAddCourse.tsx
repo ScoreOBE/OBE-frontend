@@ -388,7 +388,6 @@ export default function ModalAddCourse({
                 <IconChevronRight
                   className="size-5 items-center pt-1"
                   stroke={3}
-                  color="#5768d5"
                 />
               }
               classNames={{
@@ -412,7 +411,6 @@ export default function ModalAddCourse({
                 <IconChevronRight
                   className="size-5 items-center pt-1"
                   stroke={3}
-                  color="#5768d5"
                 />
               }
               classNames={{
@@ -438,7 +436,6 @@ export default function ModalAddCourse({
                 <IconChevronRight
                   className="size-5 items-center pt-1"
                   stroke={3}
-                  color="#5768d5"
                 />
               }
               classNames={{
@@ -462,7 +459,6 @@ export default function ModalAddCourse({
                 <IconChevronRight
                   className="size-5 items-center pt-1"
                   stroke={3}
-                  color="#5768d5"
                 />
               }
               classNames={{
@@ -592,7 +588,6 @@ export default function ModalAddCourse({
                                 iconWrapper: "w-0",
                                 label: "text-[14px] px-4 cursor-pointer",
                               }}
-                              color="#5768D5"
                               size="xs"
                               value={item.toString()}
                               disabled={
@@ -614,7 +609,6 @@ export default function ModalAddCourse({
                           label: "text-[14px] text-[#333333] cursor-pointer",
                         }}
                         className="mt-3 ml-1"
-                        color="#5768D5"
                         size="xs"
                         label={`Open in this semester (${
                           academicYear?.semester
@@ -666,7 +660,6 @@ export default function ModalAddCourse({
                               <Menu.Target>
                                 <Button
                                   variant="outline"
-                                  color="#5768d5"
                                   size="xs"
                                   className=" transform-none text-[12px] h-7 px-3 rounded-[6px]"
                                 >
@@ -692,7 +685,6 @@ export default function ModalAddCourse({
                                         body: "mr-3",
                                         label: "text-b2 cursor-pointer",
                                       }}
-                                      color="#5768D5"
                                       size="xs"
                                       label={`Section ${sectionNo}`}
                                       checked={coIns.sections?.includes(
@@ -851,7 +843,6 @@ export default function ModalAddCourse({
             )}
           </div>
           <Button
-            color="#5768d5"
             className="rounded-[8px] text-[12px] h-[32px] w-fit "
             loading={loading}
             onClick={() => nextStep()}

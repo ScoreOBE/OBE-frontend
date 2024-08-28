@@ -121,11 +121,7 @@ export default function DashboardSidebar() {
           onDropdownOpen={() => setOpenedDropdown(true)}
           onDropdownClose={() => setOpenedDropdown(false)}
         />
-        <Button
-          className="w-full"
-          color="#5768d5"
-          onClick={() => confirmFilterTerm()}
-        >
+        <Button className="w-full" onClick={() => confirmFilterTerm()}>
           OK
         </Button>
       </Modal>

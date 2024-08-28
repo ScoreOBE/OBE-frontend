@@ -129,7 +129,6 @@ export default function ModalEditCourse({
           <Button
             onClick={submit}
             className="rounded-[8px] text-[12px] h-[32px] w-fit "
-            color="#5768d5"
           >
             Done
           </Button>

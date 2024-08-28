@@ -204,7 +204,6 @@ export default function Course() {
               {activeTerm ? (
                 <Button
                   leftSection={<IconUpload className="h-5 w-5" />}
-                  color="#5768D5"
                   className="rounded-[8px] text-[12px] w-fit font-medium  h-8 px-2 "
                 >
                   Upload and Assets
@@ -354,7 +353,6 @@ export default function Course() {
                             size="xs"
                             className="absolute top-3 right-3"
                             checked={sec.isActive}
-                            color="#5768d5"
                             onChange={(event) =>
                               onClickActiveSection(sec, event.target.checked)
                             }
