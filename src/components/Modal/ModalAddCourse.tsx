@@ -579,8 +579,9 @@ export default function ModalAddCourse({
                         multiple
                       >
                         <Group className=" items-center h-full flex flex-row gap-4">
-                          {SEMESTER.map((item) => (
+                          {SEMESTER.map((item, index) => (
                             <Chip
+                            key={index}
                               icon={<></>}
                               classNames={{
                                 input:
@@ -760,7 +761,7 @@ export default function ModalAddCourse({
                 {form.getValues().sections?.map((sec, index) => (
                   <div
                     key={index}
-                    className="w-full border-b-[1px] border-[#c9c9c9] pb-2  h-fit px-4    gap-1 flex flex-col"
+                    className="w-full border-b-[1px] last:border-none border-[#c9c9c9] pb-2  h-fit px-4    gap-1 flex flex-col"
                   >
                     <span className="text-default font-semibold flex flex-col text-[14px] mb-2">
                       Section {getSectionNo(sec.sectionNo)}

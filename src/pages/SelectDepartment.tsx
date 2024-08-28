@@ -11,6 +11,7 @@ import { setUser } from "@/store/user";
 import { motion } from "framer-motion";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { isEqual } from "lodash";
+import { setShowSidebar } from "@/store/showSidebar";
 
 export default function SelectDepartment() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function SelectDepartment() {
   const [notChange, setNotChange] = useState(true);
 
   useEffect(() => {
+    dispatch(setShowSidebar(false));
     const fetchDep = async () => {
       const res = await getDepartment(user.facultyCode);
       if (res) {

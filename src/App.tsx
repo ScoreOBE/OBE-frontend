@@ -19,7 +19,7 @@ import CMUOAuthCallback from "@/pages/CmuOAuthCallback";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import SelectDepartment from "@/pages/SelectDepartment";
 import Dashboard from "@/pages/Dashboard";
-import Course from "@/pages/Course";
+import Section from "@/pages/Section";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { isEmpty } from "lodash";
 import { getAcademicYear } from "./services/academicYear/academicYear.service";
@@ -30,8 +30,10 @@ import MapPLO from "@/pages/MapPLO";
 import { setLoading } from "@/store/loading";
 import PLOManagement from "./pages/PLOManagement";
 import TQF3 from "./pages/TQF3";
+import Assignment from "./pages/Assignment";
 
 function App() {
+  const showSidebar = useAppSelector((state) => state.showSidebar);
   const error = useAppSelector((state) => state.errorResponse);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
@@ -39,12 +41,6 @@ function App() {
   const path = useLocation().pathname;
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
-  const routesWithoutSidebar = [
-    ROUTE_PATH.LOGIN,
-    ROUTE_PATH.SELECTED_DEPARTMENT,
-    ROUTE_PATH.CMU_OAUTH_CALLBACK,
-  ];
-  const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,20 +61,7 @@ function App() {
       // dispatch(setLoading(false));
     };
 
-    const isPageNotFound =
-      !Object.values(ROUTE_PATH).some((path) =>
-        matchPath({ path, end: true }, location.pathname)
-      ) &&
-      !matchPath(
-        { path: `${ROUTE_PATH.COURSE}/:courseNo`, end: true },
-        location.pathname
-      ) &&
-      !matchPath(
-        { path: `${ROUTE_PATH.PLO_MANAGEMENT}/:name`, end: true },
-        location.pathname
-      );
-    setShowSidebar(!isPageNotFound && !routesWithoutSidebar.includes(path));
-    if (path == ROUTE_PATH.CMU_OAUTH_CALLBACK || isPageNotFound) {
+    if (!showSidebar) {
       return;
     }
 
@@ -99,11 +82,11 @@ function App() {
     }
   }, [user, path]);
 
-  useEffect(() => {
-    if (error.statusCode) {
-      setShowSidebar(false);
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error.statusCode) {
+  //     setShowSidebar(false);
+  //   }
+  // }, [error]);
 
   return (
     <div
@@ -137,13 +120,16 @@ function App() {
           <Route path={ROUTE_PATH.DASHBOARD_INS} element={<Dashboard />} />
           <Route
             path={`${ROUTE_PATH.COURSE}/:courseNo`}
-            element={<Course />}
             errorElement={<Page404 />}
-          />
-          <Route
-            path={ROUTE_PATH.TQF3}
-            element={<TQF3 />}
-          />
+          >
+            <Route path={ROUTE_PATH.SECTION}>
+              <Route path="" element={<Section />} />
+              <Route path={`:sectionNo/${ROUTE_PATH.ASSIGNMENT}`} element={<Assignment />} />
+            </Route>
+
+            <Route path={ROUTE_PATH.TQF3} element={<TQF3 />} />
+          </Route>
+
           <Route path="*" element={<Page404 />} />
         </Routes>
       </div>

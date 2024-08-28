@@ -1,15 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
+import showSidebarReducer from "./showSidebar";
 import loadingReducer from "./loading";
 import errorResponseReducer from "./errorResponse";
 import userReducer from "./user";
 import academicYearReducer from "./academicYear";
 import courseReducer from "./course";
 import courseManagementReducer from "./courseManagement";
+import breadcrumbsReducer from "./breadcrumbs";
 
 const store = configureStore({
   reducer: {
+    showSidebar: showSidebarReducer,
     loading: loadingReducer,
+    breadcrumbs: breadcrumbsReducer,
     errorResponse: errorResponseReducer,
     user: userReducer,
     academicYear: academicYearReducer,

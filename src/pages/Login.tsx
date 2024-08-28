@@ -2,18 +2,22 @@ import cmulogo from "@/assets/image/cmuLogo.png";
 import entlogo from "@/assets/image/entLogo.png";
 import cmulogoLogin from "@/assets/image/cmuLogoLoginWhite.png";
 import { Button } from "@mantine/core";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { isEmpty } from "lodash";
+import { setShowSidebar } from "@/store/showSidebar";
 
 export default function Login() {
   const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   useEffect(() => {
     if (!isEmpty(user)) {
       navigate(ROUTE_PATH.DASHBOARD_INS);
+    } else {
+      dispatch(setShowSidebar(false));
     }
   }, [user]);
   return (

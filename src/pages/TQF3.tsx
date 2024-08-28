@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import { getPLOs } from "@/services/plo/plo.service";
@@ -21,11 +21,19 @@ import {
 } from "@mantine/core";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
+import { setShowSidebar } from "@/store/showSidebar";
+import { useParams } from "react-router-dom";
 
 export default function TQF3() {
+  const { courseNo } = useParams();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [totalPLOs, setTotalPLOs] = useState<number>(0);
   const [tqf3Part, setTqf3Part] = useState<string | null>("tqf3p1");
+
+  useEffect(() => {
+    dispatch(setShowSidebar(true));
+  }, [])
 
   const topicPart = () => {
     switch (tqf3Part) {

@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import { getPLOs } from "@/services/plo/plo.service";
@@ -26,9 +26,11 @@ import {
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { isEmpty } from "lodash";
+import { setShowSidebar } from "@/store/showSidebar";
 
 export default function PLOManagement() {
   const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [ploCollection, setPLOCollection] = useState<IModelPLOCollection[]>([]);
   const [totalPLOs, setTotalPLOs] = useState<number>(0);
@@ -63,6 +65,7 @@ export default function PLOManagement() {
   };
 
   useEffect(() => {
+    dispatch(setShowSidebar(true));
     if (user.id) {
       setLoading(true);
       fetchPLO();

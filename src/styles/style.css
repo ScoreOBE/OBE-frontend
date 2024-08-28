@@ -247,7 +247,7 @@ Button:disabled {
 
 .mantine-Tabs-tab[data-variant="pills"] {
   background-color: var(--color-hover);
-  height: 33px;
+  height: 32px;
 }
 .mantine-Tabs-tab:last-of-type[data-variant="pills"],
 .mantine-Tabs-tab:last-of-type[data-active][data-variant="pills"],

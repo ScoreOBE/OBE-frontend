@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Button } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { RxDashboard } from "react-icons/rx";
@@ -7,8 +12,8 @@ import { IconChevronLeft, IconLogout } from "@tabler/icons-react";
 import Icon from "@/components/Icon";
 import LeaveIcon from "@/assets/icons/leave.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import TQF3 from "@/assets/icons/TQF3.svg?react";
-import TQF5 from "@/assets/icons/TQF5.svg?react";
+import list from "@/assets/icons/list.svg?react";
+import histogram from "@/assets/icons/histogram.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { removeCourse } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
@@ -17,45 +22,32 @@ import MainPopup from "../Popup/MainPopup";
 import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import { leaveCourse } from "@/services/course/course.service";
 import { useDisclosure } from "@mantine/hooks";
+import { IModelSection } from "@/models/ModelSection";
 
-export default function CourseSidebar() {
+export default function AssignmentSidebar() {
+  //const { courseNo, sectionNo } = useParams();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
   const courseNo = path.split("/")[2];
+  const sectionNo = path.split("/")[4];
   const prefix = `${ROUTE_PATH.COURSE}/${courseNo}`;
   const user = useAppSelector((state) => state.user);
   const courseList = useAppSelector((state) => state.course.courses);
   const dispatch = useAppDispatch();
   const [course, setCourse] = useState<IModelCourse>();
-  const [instructors, setInstructors] = useState<IModelUser[]>([]);
-  const [coInstructors, setCoInstructors] = useState<IModelUser[]>([]);
+  const [section, setSection] = useState<Partial<IModelSection>>();
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
 
   useEffect(() => {
     if (courseList.length && courseNo) {
       const findCourse = courseList.find((e) => e.courseNo == courseNo);
+      const findSection = findCourse?.sections.find(
+        (sec) => sec.sectionNo == parseInt(sectionNo)
+      );
       setCourse(findCourse);
-      const insList: any[] = [];
-      const coInsList: any[] = [];
-      findCourse?.sections.forEach((e: any) => {
-        if (!insList.map((p: any) => p.id).includes(e.instructor.id)) {
-          insList.push({ ...e.instructor });
-        }
-      });
-      findCourse?.sections.forEach((e: any) => {
-        e.coInstructors.forEach((p: any) => {
-          if (
-            !insList.map((p: any) => p.id).includes(p.id) &&
-            !coInsList.map((p: any) => p.id).includes(p.id)
-          ) {
-            coInsList.push({ ...p });
-          }
-        });
-      });
-      setInstructors(insList);
-      setCoInstructors(coInsList);
+      setSection(findSection);
     }
   }, [courseList, courseNo]);
 
@@ -99,14 +91,6 @@ export default function CourseSidebar() {
         }
       />
       <div className="flex text-white flex-col h-full  gap-[26px]">
-        <div
-          className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
-          onClick={() => goToPage(ROUTE_PATH.DASHBOARD_INS, true)}
-        >
-          <IconChevronLeft size={20} viewBox="8 0 24 24" />
-          Back to Your Course
-        </div>
-
         <div className="flex flex-col gap-5 ">
           <div className="flex flex-col flex-1 font-bold gap-1 ">
             <p className="text-lg">
@@ -120,7 +104,7 @@ export default function CourseSidebar() {
           <div className="flex flex-col gap-2">
             <Button
               onClick={() => goToPage(ROUTE_PATH.SECTION)}
-              leftSection={<RxDashboard size={18} />}
+              leftSection={<Icon IconComponent={list} />}
               className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
                 !path.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
@@ -129,11 +113,13 @@ export default function CourseSidebar() {
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               }`}
             >
-              Sections
+              Assignment
             </Button>
             <Button
               onClick={() => goToPage(ROUTE_PATH.TQF3)}
-              leftSection={<Icon IconComponent={TQF3} className="h-5 w-5" />}
+              leftSection={
+                <Icon IconComponent={histogram} className="h-5 w-5" />
+              }
               className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
                 ${
                   path.includes(ROUTE_PATH.TQF3)
@@ -141,18 +127,7 @@ export default function CourseSidebar() {
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                 }`}
             >
-              TQF 3
-            </Button>
-            <Button
-              leftSection={<Icon IconComponent={TQF5} className="h-5 w-5" />}
-              className={`font-semibold w-full h-8 text-[13px] mb-2 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
-                ${
-                  path.startsWith(ROUTE_PATH.TQF5)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                }`}
-            >
-              TQF 5
+              Histogram
             </Button>
           </div>
         </div>
@@ -160,20 +135,16 @@ export default function CourseSidebar() {
         <div className="flex  flex-col gap-2 mt-5">
           <p className="text-b2 font-bold mb-1">Owner Section</p>
           <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
-            {instructors.map((item, index) => {
-              return (
-                <p key={index} className="text-pretty font-medium text-[12px]">
-                  {getUserName(item, 1)}
-                </p>
-              );
-            })}{" "}
+            <p className="text-pretty font-medium text-[12px]">
+              {getUserName(section?.instructor as IModelUser, 1)}
+            </p>
           </div>
         </div>
-        {!!coInstructors.length && (
+        {!!section?.coInstructors?.length && (
           <div className="flex  flex-col gap-2">
             <p className="text-b2 font-bold mb-1">Co-Instructor</p>
             <div className="max-h-[140px] gap-1 flex flex-col  overflow-y-auto">
-              {coInstructors.map((item, index) => {
+              {section.coInstructors.map((item, index) => {
                 return (
                   <p
                     key={index}

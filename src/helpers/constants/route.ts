@@ -4,9 +4,11 @@ export const ROUTE_PATH = {
   SELECTED_DEPARTMENT: "/select-department",
   DASHBOARD_INS: "/dashboard",
   COURSE: "/course",
-  TQF3: "/tqf3",
-  TQF5: "/tqf5",
+  SECTION: "sections",
+  TQF3: "tqf3",
+  TQF5: "tqf5",
   DASHBOARD_STD: "/dashboard-student",
   COURSE_MANAGEMENT: "/course-management",
   PLO_MANAGEMENT: "/plo-mamangement",
+  ASSIGNMENT: "assignment"
 };

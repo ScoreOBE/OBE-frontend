@@ -1,12 +1,18 @@
 import { ROLE } from "@/helpers/constants/enum";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { setShowSidebar } from "@/store/showSidebar";
 import { Button } from "@mantine/core";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function NotFoundPage() {
   const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(setShowSidebar(false));
+  }, []);
 
   const goDashboard = () => {
     if (localStorage.getItem("token")) {
