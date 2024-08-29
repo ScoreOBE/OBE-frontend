@@ -300,11 +300,11 @@ export default function CourseManagement() {
         {loading ? (
           <Loading />
         ) : (
-          <div className="flex flex-col overflow-y-auto gap-4 px-6 pb-3  pt-2">
+          <div className="flex flex-col overflow-y-auto gap-4 px-6 pb-5 pt-2">
             {courseManagement.courseManagements.map((course, index) => (
               <div
                 key={index}
-                className="bg-[#d2d2ff5c] rounded-md flex flex-col py-4  px-5"
+                className="bg-[#ffffff] rounded-md flex flex-col py-4  px-5"
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
@@ -398,104 +398,106 @@ export default function CourseManagement() {
                 </div>
                 {/* Section */}
                 <div className="flex flex-col">
-                  {course.sections.map((sec: any) => (
-                    <div
-                      key={sec.sectionNo}
-                      className=" bg-white first:rounded-t-md last:rounded-b-md grid grid-cols-5 items-center justify-between last:border-none  py-3 border-b-[1px]  border-[#eeeeee] px-7"
-                    >
-                      {/* Section No & Topic */}
-                      <div className="flex flex-col ">
-                        <p className="font-medium text-[13px] text-tertiary">
-                          Section {getSectionNo(sec.sectionNo)}
-                        </p>
-                        {course.type === COURSE_TYPE.SEL_TOPIC && (
-                          <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">
-                            {sec.topic}
+                  {course.sections.map((sec: any, index: number) => (
+                    <div key={sec.sectionNo}>
+                      <div className=" bg-[#f5f6ff] first:rounded-t-md last:rounded-b-md grid grid-cols-5 items-center justify-between last:border-none  py-4  px-7">
+                        {/* Section No & Topic */}
+                        <div className="flex flex-col ">
+                          <p className="font-medium text-[13px] text-black">
+                            Section {getSectionNo(sec.sectionNo)}
                           </p>
-                        )}
-                      </div>
-                      {/* Status */}
-                      <div
-                        className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
-                          sec.isActive
-                            ? "bg-[#10e5908e] text-[#228762]"
-                            : "bg-[#a2a2a2] text-[#ffffff]"
-                        } `}
-                      >
-                        <p className=" font-semibold ">
-                          {sec.isActive ? "Active" : "Inactive"}
-                        </p>
-                      </div>
-                      {/* Main Instructor */}
-                      <div className="flex items-center font-medium text-[#4E5150] text-b3">
-                        {getUserName(sec.instructor)}
-                      </div>
-                      {/* Open Symester */}
-                      <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
-                        <p className="text-wrap font-medium">Open Semester</p>
-                        <div className="flex gap-1">
-                          {sec.semester.map((term: any, index: number) => (
-                            <span key={index} className="text-wrap">
-                              {index === 0
-                                ? term
-                                : index === sec.semester.length - 1
-                                ? ` and ${term}`
-                                : `, ${term}`}
-                            </span>
-                          ))}
+                          {course.type === COURSE_TYPE.SEL_TOPIC && (
+                            <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">
+                              {sec.topic}
+                            </p>
+                          )}
                         </div>
-                      </div>
-
-                      {/* Button */}
-                      <div className="flex justify-end gap-4 items-center">
+                        {/* Status */}
                         <div
-                          onClick={() => {
-                            setEditSec({
-                              id: course.id,
-                              academicYear: academicYear.id,
-                              courseNo: course.courseNo,
-                              secId: sec.id,
-                              oldSectionNo: sec.sectionNo,
-                              type: course.type,
-                              isActive: sec.isActive,
-                              data: {
-                                topic: sec.topic,
-                                sectionNo: sec.sectionNo,
-                                semester: sec.semester.map((e: any) =>
-                                  e.toString()
-                                ),
-                              },
-                            });
-                            setOpenModalEditSec(true);
-                          }}
-                          className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"
+                          className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
+                            sec.isActive
+                              ? "bg-[#10e5908e] text-[#228762]"
+                              : "bg-[#a2a2a2] text-[#ffffff]"
+                          } `}
                         >
-                          <IconEdit className="size-4" stroke={1.5} />
+                          <p className=" font-semibold ">
+                            {sec.isActive ? "Active" : "Inactive"}
+                          </p>
                         </div>
-                        <div
-                          onClick={() => {
-                            if (course.sections.length > 1) {
+                        {/* Main Instructor */}
+                        <div className="flex items-center font-medium text-[#4E5150] text-b3">
+                          {getUserName(sec.instructor)}
+                        </div>
+                        {/* Open Symester */}
+                        <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
+                          <p className="text-wrap font-medium">Open Semester</p>
+                          <div className="flex gap-1">
+                            {sec.semester.map((term: any, index: number) => (
+                              <span key={index} className="text-wrap">
+                                {index === 0
+                                  ? term
+                                  : index === sec.semester.length - 1
+                                  ? ` and ${term}`
+                                  : `, ${term}`}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Button */}
+                        <div className="flex justify-end gap-4 items-center">
+                          <div
+                            onClick={() => {
                               setEditSec({
                                 id: course.id,
                                 academicYear: academicYear.id,
                                 courseNo: course.courseNo,
-                                courseName: course.courseName,
                                 secId: sec.id,
-                                sectionNo: sec.sectionNo,
+                                oldSectionNo: sec.sectionNo,
+                                type: course.type,
+                                isActive: sec.isActive,
+                                data: {
+                                  topic: sec.topic,
+                                  sectionNo: sec.sectionNo,
+                                  semester: sec.semester.map((e: any) =>
+                                    e.toString()
+                                  ),
+                                },
                               });
-                              setOpenMainPopupDelSec(true);
-                            }
-                          }}
-                          className={`flex  justify-center items-center bg-transparent border-[1px]  size-8 bg-none rounded-full  
+                              setOpenModalEditSec(true);
+                            }}
+                            className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"
+                          >
+                            <IconEdit className="size-4" stroke={1.5} />
+                          </div>
+                          <div
+                            onClick={() => {
+                              if (course.sections.length > 1) {
+                                setEditSec({
+                                  id: course.id,
+                                  academicYear: academicYear.id,
+                                  courseNo: course.courseNo,
+                                  courseName: course.courseName,
+                                  secId: sec.id,
+                                  sectionNo: sec.sectionNo,
+                                });
+                                setOpenMainPopupDelSec(true);
+                              }
+                            }}
+                            className={`flex  justify-center items-center bg-transparent border-[1px]  size-8 bg-none rounded-full  
                               ${
                                 course.sections.length > 1
                                   ? "cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
                                   : "cursor-not-allowed bg-[#f1f3f5] text-[#adb5bd] border-[#adb5bd]"
                               }`}
-                        >
-                          <IconTrash className="size-4" stroke={1.5} />
+                          >
+                            <IconTrash className="size-4" stroke={1.5} />
+                          </div>
                         </div>
                       </div>
+                      {index < course.sections.length - 1 && (
+                        <div className="border-b-[1px] mx-5 border-[#5768d54a]"></div>
+                      )}
                     </div>
                   ))}
                 </div>
