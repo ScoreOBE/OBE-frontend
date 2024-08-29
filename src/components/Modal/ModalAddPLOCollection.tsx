@@ -168,6 +168,7 @@ export default function ModalAddPLOCollection({
   const fetchDep = async () => {
     const res = await getDepartment(user.facultyCode);
     if (res) {
+      sortData(res.department, "departmentCode", "string");
       if (user.role === ROLE.SUPREME_ADMIN) {
         setDepartment(res.department);
       } else {
@@ -176,7 +177,6 @@ export default function ModalAddPLOCollection({
         );
         setDepartment(dep);
       }
-      sortData(res.department, "departmentCode", "string");
     }
   };
 

@@ -3,7 +3,6 @@ import {
   Login,
   CMUOAuthCallback,
   SelectDepartment,
-  CourseManagement,
   PLOManagement,
   MapPLO,
   Dashboard,
@@ -30,10 +29,6 @@ const router = createBrowserRouter([
       {
         path: ROUTE_PATH.SELECTED_DEPARTMENT,
         element: <SelectDepartment />,
-      },
-      {
-        path: ROUTE_PATH.COURSE_MANAGEMENT,
-        element: <CourseManagement />,
       },
       {
         path: ROUTE_PATH.PLO_MANAGEMENT,

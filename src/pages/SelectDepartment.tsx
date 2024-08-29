@@ -26,8 +26,8 @@ export default function SelectDepartment() {
     const fetchDep = async () => {
       const res = await getDepartment(user.facultyCode);
       if (res) {
-        setFaculty(res);
         sortData(res.department, "departmentEN", "string");
+        setFaculty(res);
       }
     };
     fetchDep();
