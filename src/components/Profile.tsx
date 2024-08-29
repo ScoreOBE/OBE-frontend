@@ -23,14 +23,17 @@ import ModalChangeSupAdmin from "./Modal/Profile/ModalChangeSupremeAdmin";
 import ModalManageSemester from "./Modal/Profile/ModalManageSemester";
 import ModalManageTQF from "./Modal/Profile/ModalManageTQF";
 import { getUserName } from "@/helpers/functions/function";
+import ModalCourseManagement from "./Modal/Profile/ModalCourseManagement";
 
 export default function Profile() {
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [openModalManageAdmin, setOpenModalManageAdmin] = useState(false);
   const [openModalChangeSupAdmin, setOpenModalChangeSupAdmin] = useState(false);
   const [openModalManageSemester, setOpenModalManageSemester] = useState(false);
+  const [openModalManageAdmin, setOpenModalManageAdmin] = useState(false);
+  const [openModalCourseManagement, setOpenModalCourseManagement] =
+    useState(false);
   const [openModalManageTQF, setOpenModalManageTQF] = useState(false);
 
   const getRoleColor = (role: any) => {
@@ -69,6 +72,10 @@ export default function Profile() {
       <ModalManageSemester
         opened={openModalManageSemester}
         onClose={() => setOpenModalManageSemester(false)}
+      />
+      <ModalCourseManagement
+        opened={openModalCourseManagement}
+        onClose={() => setOpenModalCourseManagement(false)}
       />
       <Menu
         trigger="click"
@@ -192,7 +199,7 @@ export default function Profile() {
                 </Menu.Item>
                 <Menu.Item
                   className="text-[#3e3e3e] h-8 w-w-full"
-                  onMouseDown={() => navigate(ROUTE_PATH.COURSE_MANAGEMENT)}
+                  onMouseDown={() => setOpenModalCourseManagement(true)}
                 >
                   <div className="flex items-center gap-2">
                     <Icon IconComponent={CourseIcon} className="size-5" />

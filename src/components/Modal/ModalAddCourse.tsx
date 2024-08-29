@@ -633,14 +633,15 @@ export default function ModalAddCourse({
           label="Co-Instructor"
           description="STEP 4"
         >
-          <div className="flex flex-col mt-3 flex-1 ">
-            <CompoMangementIns
-              opened={active == 3}
-              action={addCoIns}
-              sections={form.getValues().sections}
-              setUserList={setCoInsList}
-            />
-
+          <div className="flex flex-col mt-3 flex-1">
+            <div className="mb-5">
+              <CompoMangementIns
+                opened={active == 3}
+                action={addCoIns}
+                sections={form.getValues().sections}
+                setUserList={setCoInsList}
+              />
+            </div>
             {!!coInsList.length && (
               <div className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md">
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">

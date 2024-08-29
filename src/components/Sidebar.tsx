@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import DashboardSidebar from "./Sidebar/DashboardSidebar";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import CourseSidebar from "./Sidebar/CourseSidebar";
-import CourseManagementSidebar from "./Sidebar/CourseManagementSidebar";
 import { motion } from "framer-motion";
 import PLOSidebar from "./Sidebar/PLOManagementSidebar";
 import AssignmentSidebar from "./Sidebar/AssignmentSidebar";
@@ -13,8 +12,6 @@ export default function Sidebar() {
   const getSidebar = () => {
     if (path.includes(ROUTE_PATH.DASHBOARD_INS)) {
       return <DashboardSidebar />;
-    } else if (path.includes(ROUTE_PATH.COURSE_MANAGEMENT)) {
-      return <CourseManagementSidebar />;
     } else if (path.includes(ROUTE_PATH.COURSE)) {
       if (path.includes(ROUTE_PATH.ASSIGNMENT)) {
         return <AssignmentSidebar />;

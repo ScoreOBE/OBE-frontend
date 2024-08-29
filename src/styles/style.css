@@ -282,7 +282,12 @@ Button:disabled {
   border: none;
   border-radius: 0px;
 }
-
+.mantine-Tabs-tab[data-variant="default"] {
+  color: #8c8c8c;
+}
+.mantine-Tabs-tab[data-active][data-variant="default"] {
+  color: var(--color-secondary);
+}
 .mantine-Tabs-tab[data-active][data-variant="pills"] {
   background-color: #d5d5f7;
   border-color: #bcbce1;
@@ -362,20 +367,16 @@ Button:disabled {
   bottom: 0;
   background: rgba(255, 255, 255, 0.6); /* Adjust opacity for the effect */
 
-
-
-.bg-shape{
+.bg-shape {
   width: 800px;
   height: 450px;
   border-radius: 9999px;
 }
 
-.opacityy-50{
-opacity: .5;
+.opacityy-50 {
+  opacity: 0.5;
 }
 
-.bg-blur{
+.bg-blur {
   filter: blur(90px);
 }
-
-
