@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CloseButton, TextInput, Tooltip } from "@mantine/core";
 import Profile from "./Profile";
 import { TbSearch } from "react-icons/tb";
@@ -6,13 +6,16 @@ import { AiOutlineEnter } from "react-icons/ai";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { setCourseList } from "@/store/course";
+import { resetSeachCourse, setCourseList } from "@/store/course";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { getCourse } from "@/services/course/course.service";
 import { ellipsisText } from "@/helpers/functions/validation";
 import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
-import { setCourseManagementList } from "@/store/courseManagement";
+import {
+  resetSeachCourseManagement,
+  setCourseManagementList,
+} from "@/store/courseManagement";
 import cmulogo from "@/assets/image/cmuLogoPurple.png";
 
 export default function Navbar() {
@@ -23,6 +26,12 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+
+  useEffect(() => {
+    setSearchValue("");
+    dispatch(resetSeachCourseManagement());
+    dispatch(resetSeachCourse());
+  }, [location]);
 
   const searchCourse = async (reset?: boolean) => {
     setIsFocused(false);

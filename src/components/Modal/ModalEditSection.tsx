@@ -1,12 +1,4 @@
-import {
-  Button,
-  Checkbox,
-  Chip,
-  Group,
-  Modal,
-  Switch,
-  TextInput,
-} from "@mantine/core";
+import { Button, Chip, Group, Modal, Switch, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import {
@@ -24,8 +16,9 @@ import {
   updateSectionManagement,
 } from "@/services/courseManagement/courseManagement.service";
 import { editSectionManagement } from "@/store/courseManagement";
-import { editSection } from "@/store/course";
-import { isEqual } from "lodash";
+import { editSection, setCourseList } from "@/store/course";
+import { getCourse } from "@/services/course/course.service";
+import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 
 type Props = {
   opened: boolean;
@@ -73,13 +66,7 @@ export default function ModalEditSection({
 
     if (opened && value) {
       form.setValues(value.data);
-      setOpenThisTerm(
-        (value.isActive &&
-          (value.data.semester as string[])?.includes(
-            academicYear.semester.toString()
-          )) ??
-          false
-      );
+      setOpenThisTerm(value.isActive!);
       if (value.data.semester) setSemester(value.data.semester as string[]);
       if (!isCourseManage) fetchCourseManagement();
     } else {
@@ -88,13 +75,6 @@ export default function ModalEditSection({
       setSemester([]);
     }
   }, [opened, value]);
-
-  useEffect(() => {
-    if (openThisTerm && !semester.includes(academicYear.semester.toString())) {
-      semester.push(academicYear.semester.toString());
-      semester.sort();
-    }
-  }, [openThisTerm]);
 
   const submit = async () => {
     let payload: any = { ...value, data: {} };
@@ -106,30 +86,31 @@ export default function ModalEditSection({
     const id = payload.id;
     delete payload.id;
     let res;
+    const data = { ...payload.data, isActive: openThisTerm };
     if (isCourseManage) {
       const secId = payload.secId;
+      payload.openThisTerm = openThisTerm;
       delete payload.secId;
+      delete payload.isActive;
       res = await updateSectionManagement(id!, secId, payload);
       if (res) {
-        dispatch(editSectionManagement({ id, secId, data: payload.data }));
-        dispatch(
-          editSection({
-            id: res.courseId,
-            secId: res.secId,
-            data: payload.data,
-          })
-        );
+        dispatch(editSectionManagement({ id, secId, data }));
+        if (openThisTerm) {
+          const payloadCourse = new CourseRequestDTO();
+          payloadCourse.academicYear = academicYear.id;
+          const resCourse = await getCourse(payloadCourse);
+          if (resCourse) {
+            dispatch(setCourseList(resCourse));
+          }
+        } else {
+          dispatch(editSection({ id: res.courseId, secId: res.secId, data }));
+        }
       }
     } else {
+      payload.data.isActive = openThisTerm;
       res = await updateSection(id!, payload);
       if (res) {
-        dispatch(
-          editSection({
-            id: payload.courseId,
-            secId: id,
-            data: payload.data,
-          })
-        );
+        dispatch(editSection({ id: payload.courseId, secId: id, data }));
       }
     }
     if (res) {
@@ -211,11 +192,7 @@ export default function ModalEditSection({
                     size="xs"
                     value={item.toString()}
                     disabled={
-                      (openThisTerm &&
-                        item == academicYear.semester &&
-                        semester.includes(item.toString())) ||
-                      (semester.length == 1 &&
-                        semester.includes(item.toString()))
+                      semester.length == 1 && semester.includes(item.toString())
                     }
                   >
                     {item}

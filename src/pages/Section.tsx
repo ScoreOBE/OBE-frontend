@@ -44,7 +44,6 @@ import { IModelUser } from "@/models/ModelUser";
 import { setShowSidebar } from "@/store/showSidebar";
 
 export default function Section() {
-  // const path = useLocation().pathname
   const navigate = useNavigate();
   const { courseNo } = useParams();
   const [params, setParams] = useSearchParams();
@@ -53,12 +52,13 @@ export default function Section() {
   const loading = useAppSelector((state) => state.loading);
   const dispatch = useAppDispatch();
   const academicYear = useAppSelector((state) => state.academicYear);
-  // const activeTerm = useLocation().state?.activeTerm;
   const activeTerm = academicYear.find(
     (term) => term.id == params.get("id")
   )?.isActive;
   const courseList = useAppSelector((state) => state.course.courses);
-  const [course, setCourse] = useState<IModelCourse>();
+  const course = useAppSelector((state) =>
+    state.course.courses.find((c) => c.courseNo == courseNo)
+  );
   const [editSec, setEditSec] = useState<
     Partial<IModelSection> & Record<string, any>
   >({});
@@ -72,10 +72,6 @@ export default function Section() {
     if (!params.get("id") || !params.get("year") || !params.get("semester"))
       navigate(ROUTE_PATH.DASHBOARD_INS);
     else if (!courseList.length && params.get("id")) fetchCourse();
-
-    if (courseNo) {
-      setCourse(courseList.find((e) => e.courseNo == courseNo));
-    }
   }, [academicYear, courseList, params]);
 
   const fetchCourse = async () => {
@@ -320,6 +316,7 @@ export default function Section() {
                                     oldSectionNo: sec.sectionNo,
                                     courseNo: course.courseNo,
                                     type: course.type,
+                                    isActive: sec.isActive,
                                     data: {
                                       topic: sec.topic,
                                       sectionNo: sec.sectionNo,
