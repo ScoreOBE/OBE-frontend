@@ -268,7 +268,7 @@ export default function PLOManagement() {
           <div className="flex flex-col  overflow-y-auto gap-4 px-6 pb-5 pt-2">
             {ploCollection?.map((department, indexPLO) => (
               <div
-                className="bg-[#d2d2ff5c] rounded-md flex  flex-col py-4 px-5"
+                className="bg-[#ffffff] rounded-md flex  flex-col py-4 px-5"
                 key={indexPLO}
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -287,7 +287,7 @@ export default function PLOManagement() {
                         setCollection({ index, ...collection });
                         setOpenModal(true);
                       }}
-                      className="bg-white    cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#E4E4FF] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
+                      className="bg-[#f5f6ff] cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#E4E4FF] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
                     >
                       {/* PLO List */}
                       <div className="flex flex-col">
