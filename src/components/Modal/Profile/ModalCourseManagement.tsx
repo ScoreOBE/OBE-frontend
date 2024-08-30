@@ -199,7 +199,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   };
 
   return (
-    <div>
+    <>
       <ModalAddSection
         opened={openModalAddSec}
         onClose={() => setOpenModalAddSec(false)}
@@ -300,11 +300,10 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         autoFocus={false}
         fullScreen={true}
         zIndex={50}
-        className="rounded-none"
-        classNames={{ content: "!pt-0 rounded-none", header: " rounded-none" }}
+        classNames={{ content: "!pt-0" }}
       >
         <Modal.Overlay />
-        <Modal.Content className="overflow-hidden rounded-none">
+        <Modal.Content className="overflow-hidden !rounded-none">
           <Modal.Header className="!py-0 flex w-full border-b border-[#e0e0e0] rounded-none justify-between">
             <div className="inline-flex gap-2 items-center w-fit justify-start">
               <Modal.CloseButton />
@@ -606,6 +605,6 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
           </Modal.Body>
         </Modal.Content>
       </Modal.Root>
-    </div>
+    </>
   );
 }
