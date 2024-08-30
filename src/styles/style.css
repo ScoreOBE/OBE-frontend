@@ -20,25 +20,32 @@
 }
 
 /* For Firefox */
-.scroller {
-  scrollbar-width: thin;
-  scrollbar-color: darkgrey lightgrey;
-}
-
-::-webkit-scrollbar {
+/* Initial hidden state */
+.scroller::-webkit-scrollbar {
   width: 8px;
+  opacity: 0; /* Hide the scrollbar */
+  transition: opacity 0.3s;
 }
 
-::-webkit-scrollbar-track {
+.scroller::-webkit-scrollbar-track {
   background: lightgrey;
   border-radius: 8px;
+ 
 }
 
-::-webkit-scrollbar-thumb {
+.scroller::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   border-radius: 8px;
   border: 2px solid transparent;
 }
+
+/* For Firefox */
+.scroller {
+  scrollbar-width: thin;
+  scrollbar-color: darkgrey lightgrey;
+  scrollbar-gutter: stable both-edges;
+}
+
 
 .mantine-focus-auto:focus-visible {
   outline: none !important;
