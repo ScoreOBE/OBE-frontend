@@ -315,9 +315,9 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
               <SearchInput onSearch={searchCourse} />
             </div>
           </Modal.Header>
-          <Modal.Body className="px-0 pt-1 flex flex-col h-full w-full gap-3 overflow-hidden">
+          <Modal.Body className="px-0 pt-1 flex flex-col h-full w-full gap-5 overflow-hidden">
             <Tabs
-              className="px-6"
+              className="px-6 mt-3"
               value={payload.searchDepartment}
               onChange={(event) =>
                 setPayload({ ...payload, searchDepartment: event })
@@ -333,7 +333,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
               {department.map((dep) => (
                 <Tabs.Panel
                   value={dep.departmentCode}
-                  className="flex flex-row mt-3 items-center justify-between"
+                  className="flex flex-row mt-6 items-center justify-between"
                 >
                   <div className="flex flex-col items-start">
                     <p className="text-secondary text-[16px] font-bold">
@@ -390,7 +390,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
             {loading ? (
               <Loading />
             ) : (
-              <div className="flex flex-col h-full overflow-y-auto gap-4 px-6 pb-14 pt-2">
+              <div className="flex flex-col h-full overflow-y-auto gap-4 px-6 pb-14 pt-1">
                 {courseManagement.courseManagements.map((course, index) => (
                   <div
                     key={index}

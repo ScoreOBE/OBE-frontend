@@ -37,6 +37,8 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
+  const [ploActive, setPloActive] = useState<IModelPLO[]>([]);
+  const [selectPlo, setSelectPlo] = useState<string | null>("Dashboard");
   const [ploCollection, setPLOCollection] = useState<IModelPLOCollection[]>([]);
   const [totalPLOs, setTotalPLOs] = useState<number>(0);
   const [openModal, setOpenModal] = useState(false);
@@ -68,6 +70,21 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
       }
     }
   };
+  useEffect(() => {
+    const fetchPLOTab = async () => {
+      const res = await getPLOs({
+        manage: true,
+        role: user.role,
+        departmentCode: user.departmentCode,
+      });
+      if (res) {
+        setPloActive([{ name: "Dashboard" }, ...res]);
+      }
+    };
+    if (opened) {
+      fetchPLOTab();
+    }
+  }, [opened]);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -267,8 +284,77 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               </div>
             </div>
           </Modal.Header>
-          <Modal.Body className="px-0 pt-1 flex flex-col h-full w-full gap-3 overflow-hidden">
-            <div className="flex items-center justify-between px-6">
+
+          <Modal.Body className="px-0 pt-1 flex flex-col h-full w-full gap-2 overflow-hidden">
+            <Tabs
+              variant="pills"
+              value={selectPlo}
+              onChange={setSelectPlo}
+              className="px-6 mt-2"
+              classNames={{
+                list: " !gap-2 !bg-none !bg-transparent",
+              }}
+            >
+              <Tabs.List>
+                {ploActive.map((collection) => (
+                  <Tabs.Tab
+                    className={`!rounded-xl !border-none ${
+                      selectPlo !== collection.name &&
+                      "!bg-transparent hover:!bg-hover"
+                    }`}
+                    value={collection.name}
+                  >
+                    {collection.name}
+                  </Tabs.Tab>
+                ))}
+              </Tabs.List>
+              {ploActive.map((collection, index) => (
+                <Tabs.Panel
+                  value={collection.name}
+                  className="flex flex-row mt-6 items-center justify-between"
+                >
+                  <div className="flex flex-col items-start">
+                    <p className="text-secondary text-[16px] font-bold">
+                      {collection.name}
+                    </p>
+                    {index == 0 && (
+                      <p className="text-tertiary text-[14px] font-medium">
+                        {ploCollection.length} Department
+                        {ploCollection.length > 1 ? "s " : " "}
+                      </p>
+                    )}
+                  </div>
+                  {index == 0 && (
+                    <Button
+                      leftSection={
+                        <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
+                      }
+                      className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                      onClick={openModalDuplicatePLO}
+                    >
+                      Add Collection
+                    </Button>
+                  )}
+                </Tabs.Panel>
+              ))}
+            </Tabs>
+            <Tabs className="px-6 mt-4" defaultValue="plodescription">
+              <Tabs.List className="!gap-6  !bg-transparent">
+                <Tabs.Tab
+                  className="px-0 !bg-transparent hover:!text-[#3e3e3e]"
+                  value="plodescription"
+                >
+                  PLO Description
+                </Tabs.Tab>
+                <Tabs.Tab
+                  className="px-0 !bg-transparent hover:!text-[#3e3e3e]"
+                  value="plomapping"
+                >
+                  PLO Mapping
+                </Tabs.Tab>
+              </Tabs.List>
+            </Tabs>
+            {/* <div className="flex items-center justify-between px-6">
               <div className="flex flex-col  items-start ">
                 <p className="text-secondary text-[16px] font-bold">
                   Dashboard
@@ -278,16 +364,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                   {ploCollection.length > 1 ? "s " : " "}
                 </p>
               </div>
-              <Button
-                leftSection={
-                  <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
-                }
-                className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                onClick={openModalDuplicatePLO}
-              >
-                Add Collection
-              </Button>
-            </div>
+            </div> */}
             {/* Course Detail */}
             {loading ? (
               <Loading />
