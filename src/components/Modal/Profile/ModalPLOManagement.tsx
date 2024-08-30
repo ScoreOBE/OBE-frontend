@@ -77,7 +77,6 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
       setLoading(false);
     }
   }, [user]);
-  
 
   useEffect(() => {
     if (modalDuplicatePLO) {
@@ -250,90 +249,114 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
         collection={selectPloDupli}
         fetchPLO={fetchPLO}
       />
-      <div className=" flex flex-col h-full gap-3 w-full pt-3  overflow-hidden">
-        <div className="flex items-center justify-between px-6">
-          <div className="flex flex-col  items-start ">
-            <p className="text-secondary text-[16px] font-bold">Dashboard</p>
-            <p className="text-tertiary text-[14px] font-medium">
-              {ploCollection.length} Department
-              {ploCollection.length > 1 ? "s " : " "}
-            </p>
-          </div>
-          <Button
-            leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
-            className="rounded-[8px] text-[12px] h-[32px] w-fit "
-            onClick={openModalDuplicatePLO}
-          >
-            Add Collection
-          </Button>
-        </div>
-        {/* Course Detail */}
-        {loading ? (
-          <Loading />
-        ) : (
-          <div className="flex flex-col  overflow-y-auto gap-4 px-6 pb-5 pt-2">
-            {ploCollection?.map((department, indexPLO) => (
-              <div
-                className="bg-[#ffffff] rounded-md flex  flex-col py-4 px-5"
-                key={indexPLO}
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-              >
-                <div className="flex flex-col mb-4  w-fit">
-                  <p className=" font-bold text-b2 text-secondary">
-                    {department.departmentEN}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  {department.collections.map((collection, index) => (
-                    <div
-                      key={` ${index}`}
-                      onClick={() => {
-                        setCollection({ index, ...collection });
-                        setOpenModal(true);
-                      }}
-                      className="bg-[#f5f6ff] cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#E4E4FF] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
-                    >
-                      {/* PLO List */}
-                      <div className="flex flex-col">
-                        <p className="font-semibold text-[13px] text-tertiary">
-                          {collection.name}
-                        </p>
-                      </div>
-                      {/* Status */}
-                      <div
-                        className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
-                          collection.isActive
-                            ? "bg-[#10e5908e] text-[#228762]"
-                            : "bg-[#a2a2a2] text-[#ffffff]"
-                        } `}
-                      >
-                        <p className=" font-semibold ">
-                          {collection.isActive ? "Active" : "Inactive"}
-                        </p>
-                      </div>
-                      {/* Main Instructor */}
-                      <div className="flex items-center font-medium text-[#4E5150] text-b3"></div>
-                      {/* Open Symester */}
-                      <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
-                        <p className="text-wrap font-semibold">
-                          Start in: {collection.semester}/{collection.year}
-                        </p>
-                        <div className="flex gap-1"></div>
-                      </div>
-
-                      <div className="flex w-full justify-end items-center   text-[#858585]   size-8 ">
-                        <IconChevronRight className="size-4" stroke={3} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+      <Modal.Root
+        opened={opened}
+        onClose={onClose}
+        autoFocus={false}
+        fullScreen={true}
+        zIndex={50}
+        classNames={{ content: "!pt-0" }}
+      >
+        <Modal.Overlay />
+        <Modal.Content className="overflow-hidden !rounded-none">
+          <Modal.Header className="!py-0 flex w-full border-b border-[#e0e0e0] rounded-none justify-between">
+            <div className="inline-flex gap-2 items-center w-fit justify-start">
+              <Modal.CloseButton />
+              <div className="font-semibold text-h2 text-secondary">
+                PLO Management
               </div>
-            ))}{" "}
-          </div>
-        )}
-      </div>
+            </div>
+          </Modal.Header>
+          <Modal.Body className="px-0 pt-1 flex flex-col h-full w-full gap-3 overflow-hidden">
+            <div className="flex items-center justify-between px-6">
+              <div className="flex flex-col  items-start ">
+                <p className="text-secondary text-[16px] font-bold">
+                  Dashboard
+                </p>
+                <p className="text-tertiary text-[14px] font-medium">
+                  {ploCollection.length} Department
+                  {ploCollection.length > 1 ? "s " : " "}
+                </p>
+              </div>
+              <Button
+                leftSection={
+                  <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
+                }
+                className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                onClick={openModalDuplicatePLO}
+              >
+                Add Collection
+              </Button>
+            </div>
+            {/* Course Detail */}
+            {loading ? (
+              <Loading />
+            ) : (
+              <div className="flex flex-col  overflow-y-auto gap-4 px-6 pb-14 pt-2">
+                {ploCollection?.map((department, indexPLO) => (
+                  <div
+                    className="bg-[#ffffff] rounded-md flex  flex-col py-4 px-5"
+                    key={indexPLO}
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                  >
+                    <div className="flex flex-col mb-4  w-fit">
+                      <p className=" font-bold text-b2 text-secondary">
+                        {department.departmentEN}
+                      </p>
+                    </div>
+                    <div className="flex flex-col">
+                      {department.collections.map((collection, index) => (
+                        <div
+                          key={` ${index}`}
+                          onClick={() => {
+                            setCollection({ index, ...collection });
+                            setOpenModal(true);
+                          }}
+                          className="bg-[#f5f6ff] cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#E4E4FF] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
+                        >
+                          {/* PLO List */}
+                          <div className="flex flex-col">
+                            <p className="font-semibold text-[13px] text-tertiary">
+                              {collection.name}
+                            </p>
+                          </div>
+                          {/* Status */}
+                          <div
+                            className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
+                              collection.isActive
+                                ? "bg-[#10e5908e] text-[#228762]"
+                                : "bg-[#a2a2a2] text-[#ffffff]"
+                            } `}
+                          >
+                            <p className=" font-semibold ">
+                              {collection.isActive ? "Active" : "Inactive"}
+                            </p>
+                          </div>
+                          {/* Main Instructor */}
+                          <div className="flex items-center font-medium text-[#4E5150] text-b3"></div>
+                          {/* Open Symester */}
+                          <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
+                            <p className="text-wrap font-semibold">
+                              Start in: {collection.semester}/{collection.year}
+                            </p>
+                            <div className="flex gap-1"></div>
+                          </div>
+
+                          <div className="flex w-full justify-end items-center   text-[#858585]   size-8 ">
+                            <IconChevronRight className="size-4" stroke={3} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}{" "}
+              </div>
+            )}
+          </Modal.Body>
+        </Modal.Content>
+      </Modal.Root>
     </>
   );
 }
