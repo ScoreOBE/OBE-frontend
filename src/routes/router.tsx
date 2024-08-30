@@ -30,14 +30,14 @@ const router = createBrowserRouter([
         path: ROUTE_PATH.SELECTED_DEPARTMENT,
         element: <SelectDepartment />,
       },
-      {
-        path: ROUTE_PATH.PLO_MANAGEMENT,
-        element: <PLOManagement />,
-      },
-      {
-        path: `${ROUTE_PATH.PLO_MANAGEMENT}/:name`,
-        element: <MapPLO />,
-      },
+      // {
+      //   path: ROUTE_PATH.PLO_MANAGEMENT,
+      //   element: <PLOManagement />,
+      // },
+      // {
+      //   path: `${ROUTE_PATH.PLO_MANAGEMENT}/:name`,
+      //   element: <MapPLO />,
+      // },
       {
         path: ROUTE_PATH.DASHBOARD_INS,
         element: <Dashboard />,

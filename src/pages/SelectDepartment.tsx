@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import cmulogo from "@/assets/image/cmuLogo.png";
+import cmulogo from "@/assets/image/cmuLogoLoginWhite.png";
+import entlogo from "@/assets/image/cpeLogo.png";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Button, Checkbox } from "@mantine/core";
 import { getUserName, sortData } from "@/helpers/functions/function";
@@ -58,7 +59,7 @@ export default function SelectDepartment() {
 
   return (
     <div className=" custom-radial-gradient h-screen w-screen">
-      <div className="absolute top-12 left-12 flex justify-start items-center gap-3">
+      <div className="absolute top-12 left-12 flex justify-between items-center gap-3">
         {!!user.departmentCode?.length && (
           <Button
             className="rounded-full p-2 bg-white bg-opacity-0 hover:bg-[#d4d4d4] hover:bg-opacity-100 text-white hover:text-primary"
@@ -67,8 +68,8 @@ export default function SelectDepartment() {
             <FaArrowLeftLong size={20} />
           </Button>
         )}
-        <img src={cmulogo} alt="CMULogo" className="h-[24px]" />
-      </div>
+        <img src={cmulogo} alt="CMULogo" className="h-[24px] " />
+      </div>{" "}
       <div className="bg-[rgba(78,78,80,0.30)] h-screen w-screen flex justify-between px-36 items-center font-sf-pro">
         <div className="  text-white cursor-default">
           <motion.div
@@ -78,10 +79,10 @@ export default function SelectDepartment() {
             animate={{ x: 0 }}
             transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
           >
-            <div className=" text-[32px] translate-y-[-16px] font-medium">
-              Welcome to Score OBE <span className=" text-[#FFCD1B]"> +</span>
+            <div className=" text-[36px] translate-y-[-16px] font-semibold">
+              Welcome to <span className="text-[#d4d5dd]"> Score OBE </span> <span className=" text-[#FFCD1B]"> +</span>
             </div>
-            <div className=" font-normal translate-y-[-4px] text-[22px]">
+            <div className=" font-medium -mt-1 translate-y-[-4px] text-[22px]">
               {getUserName(user, 1)}
             </div>
             <div className=" font-light text-[16px]">{faculty.facultyEN}</div>
