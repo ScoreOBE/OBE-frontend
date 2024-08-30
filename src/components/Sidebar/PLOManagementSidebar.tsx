@@ -43,10 +43,10 @@ export default function PLOSidebar() {
           Back to Your Course
         </div>
 
-        <div className="text-sm flex flex-col gap-[3px]">
+        {/* <div className="text-sm flex flex-col gap-[3px]">
           <p className="font-semibold">Welcome to</p>
           <p className="font-semibold">PLO Management!</p>
-        </div>
+        </div> */}
 
         <div className="flex flex-col gap-5 ">
           <div className="flex flex-col gap-2">

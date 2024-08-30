@@ -24,6 +24,7 @@ import ModalManageSemester from "./Modal/Profile/ModalManageSemester";
 import ModalManageTQF from "./Modal/Profile/ModalManageTQF";
 import { getUserName } from "@/helpers/functions/function";
 import ModalCourseManagement from "./Modal/Profile/ModalCourseManagement";
+import ModalPLOManagement from "./Modal/Profile/ModalPLOManagement";
 
 export default function Profile() {
   const user = useAppSelector((state) => state.user);
@@ -34,6 +35,7 @@ export default function Profile() {
   const [openModalManageAdmin, setOpenModalManageAdmin] = useState(false);
   const [openModalCourseManagement, setOpenModalCourseManagement] =
     useState(false);
+  const [openModalPLOManagement, setOpenModalPLOManagement] = useState(false);
   const [openModalManageTQF, setOpenModalManageTQF] = useState(false);
 
   const getRoleColor = (role: any) => {
@@ -76,6 +78,10 @@ export default function Profile() {
       <ModalCourseManagement
         opened={openModalCourseManagement}
         onClose={() => setOpenModalCourseManagement(false)}
+      />
+      <ModalPLOManagement
+        opened={openModalPLOManagement}
+        onClose={() => setOpenModalPLOManagement(false)}
       />
       <Menu
         trigger="click"
@@ -208,7 +214,7 @@ export default function Profile() {
                 </Menu.Item>
                 <Menu.Item
                   className="text-[#3e3e3e] h-8 w-w-full "
-                  onMouseDown={() => navigate(ROUTE_PATH.PLO_MANAGEMENT)}
+                  onMouseDown={() => setOpenModalPLOManagement(true)}
                 >
                   <div className="flex items-center gap-2">
                     <Icon IconComponent={SOIcon} className="size-5" />

@@ -1,7 +1,7 @@
 export { default as Login } from "./Login";
 export { default as CMUOAuthCallback } from "./CmuOAuthCallback";
 export { default as SelectDepartment } from "./SelectDepartment";
-export { default as PLOManagement } from "./PLOManagement";
+export { default as PLOManagement } from "../components/Modal/Profile/ModalPLOManagement";
 export { default as MapPLO } from "./MapPLO";
 export { default as Dashboard } from "./Dashboard";
 export { default as Section } from "./Section";

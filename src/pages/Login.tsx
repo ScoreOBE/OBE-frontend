@@ -36,7 +36,10 @@ export default function Login() {
       <div className=" items-center text-center   rounded-xl  overflow-hidden  h-full  max-h-full  flex flex-col w-full   ">
         <p className=" drop-shadow-xl cursor-default mt-16 leading-[74px] font-[600] item-center -rounded text-[#000000] text-[60px]">
           The all-in-one{" "}
-          <span className=" text-secondary">OBE Score system </span> <br />
+          <span className=" text-secondary font-[700]">
+            Score OBE  <span className=" text-[#FFCD1B]"> +</span>{" "}
+          </span>{" "}
+          <br />
           for instructor and student
         </p>
         <p className="mt-5 text-h2 text-[#4F4D55] font-[500]">
@@ -89,14 +92,14 @@ export default function Login() {
             </div>
           </div>
 
-          <img className=" z-50 " src={loginImage} alt="loginImage" />
+          <img className=" z-50 w-full " src={loginImage} alt="loginImage" />
         </div>
         <div className=" absolute bottom-0 rotate-180 -z-50 w-screen h-screen overflow-hidden flex justify-center">
-          <div className="bg-shape bg-[#00DFDF] opacityy-50 bg-blur"></div>
-          <div className="bg-shape bg-[#0A7CFF] opacityy-50 bg-blur"></div>
-          <div className="bg-shape bg-[#7733FF] opacityy-50 bg-blur"></div>
-          <div className="bg-shape bg-[#FF469D] opacityy-50 bg-blur"></div>
-          <div className="bg-shape bg-[#FF7847] opacityy-50 bg-blur"></div>
+          <div className="rounded-full h-3/6 w-3/6 bg-[#00DFDF] opacityy-50 bg-blur"></div>
+          <div className="rounded-full h-3/6 w-3/6 bg-[#0A7CFF] opacityy-50 bg-blur"></div>
+          <div className="rounded-full h-3/6 w-3/6 bg-[#7733FF] opacityy-50 bg-blur"></div>
+          <div className="rounded-full h-3/6 w-3/6 bg-[#FF469D] opacityy-50 bg-blur"></div>
+          <div className="rounded-full h-3/6 w-3/6 bg-[#FF7847] opacityy-50 bg-blur"></div>
         </div>
       </div>
     </div>

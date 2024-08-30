@@ -28,7 +28,12 @@ import { useDisclosure } from "@mantine/hooks";
 import { isEmpty } from "lodash";
 import { setShowSidebar } from "@/store/showSidebar";
 
-export default function PLOManagement() {
+type Props = {
+  opened: boolean;
+  onClose: () => void;
+};
+
+export default function ModalPLOManagement({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
@@ -72,6 +77,7 @@ export default function PLOManagement() {
       setLoading(false);
     }
   }, [user]);
+  
 
   useEffect(() => {
     if (modalDuplicatePLO) {

@@ -367,10 +367,8 @@ Button:disabled {
   bottom: 0;
   background: rgba(255, 255, 255, 0.6); /* Adjust opacity for the effect */
 
-.bg-shape {
-  width: 800px;
-  height: 450px;
-  border-radius: 9999px;
+.gg1 {
+  animation: one 10s infinite;
 }
 
 .opacityy-50 {

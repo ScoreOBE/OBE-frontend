@@ -6,6 +6,7 @@ import { setCourseList } from "@/store/course";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { getCourse } from "@/services/course/course.service";
 import cmulogo from "@/assets/image/cmuLogoPurple.png";
+import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { SearchInput } from "./SearchInput";
 
 export default function Navbar() {
@@ -52,8 +53,8 @@ export default function Navbar() {
         else if (location.includes(ROUTE_PATH.TQF5)) return "TQF 5";
         else if (location.includes(ROUTE_PATH.ASSIGNMENT)) return "Assignment";
         else return "Section";
-      case ROUTE_PATH.PLO_MANAGEMENT:
-        return "PLO Management";
+      // case ROUTE_PATH.PLO_MANAGEMENT:
+      //   return "PLO Management";
       default:
         return;
     }
@@ -79,8 +80,9 @@ export default function Navbar() {
             <SearchInput onSearch={searchCourse} />
           )}
           {[ROUTE_PATH.LOGIN].includes(location) && (
-            <div className="bg-white ml-10 mt-3 justify-start flex flex-1 items-start">
-              <img src={cmulogo} alt="CMULogo" className=" h-[24px]" />
+            <div className="bg-white items-center  mt-5 justify-between  flex flex-1">
+              <img src={cmulogo} alt="CMULogo" className=" h-[28px] ml-10" />
+              <img src={cpeLogoRed} alt="cpeLogo" className=" h-[80px] mr-10" />
             </div>
           )}
           {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}
