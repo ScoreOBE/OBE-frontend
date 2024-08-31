@@ -22,7 +22,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   const [payload, setPayload] = useState<any>({});
   const [checkedTQF3, setCheckedTQF3] = useState(true);
   const [checkedTQF5, setCheckedTQF5] = useState(false);
-  const [notCompleteTQF3List, setnotCompleteTQF3List] = useState<any[]>([]);
+  const [courseList, setCourseList] = useState<any[]>([]);
 
   useEffect(() => {
     if (opened) {
@@ -41,52 +41,55 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
       if (res) {
         const courseList: any[] = [];
         res.forEach((course: IModelCourse) => {
-          if (!course.TQF3 || course.TQF3?.status !== TQF_STATUS.DONE) {
-            if (course.type === COURSE_TYPE.SEL_TOPIC) {
-              course.sections.forEach((section) => {
+          if (course.type === COURSE_TYPE.SEL_TOPIC) {
+            course.sections.forEach((section) => {
+              if (section.isActive) {
                 courseList.push({
                   ...course,
                   ...section,
                   instructor: getUserName(section.instructor as IModelUser),
                 });
-              });
-            } else {
-              let temp = Array.from(
-                new Set(
-                  course.sections.map((section) =>
+              }
+            });
+          } else {
+            let temp = Array.from(
+              new Set(
+                course.sections
+                  .filter((sec) => sec.isActive)
+                  .map((section) =>
                     getUserName(section.instructor as IModelUser)
                   )
-                )
-              ).toString();
-
+              )
+            ).join(", ");
+            if (temp) {
               courseList.push({ ...course, instructor: temp });
             }
           }
         });
-        setnotCompleteTQF3List([...courseList]);
+        setCourseList([...courseList]);
       }
     }
   };
 
   const onClickeToggleProcessTQF3 = (checked: any, index?: number) => {
-    const updatedList = notCompleteTQF3List.map((item, idx) => {
+    const updatedList = courseList.map((item, idx) => {
       if (index === undefined || index === idx) {
         return {
           ...item,
-          isProcessTQF3: checked,
-          sections:
-            item.type === COURSE_TYPE.SEL_TOPIC
-              ? item.sections.map((section: any) => ({
-                  ...section,
-                  isProcessTQF3: checked,
-                }))
-              : item.sections,
+          // isProcessTQF3: checked,
+          // sections:
+          //   item.type === COURSE_TYPE.SEL_TOPIC
+          //     ? item.sections.map((section: any) => ({
+          //         ...section,
+          //         isProcessTQF3: checked,
+          //       }))
+          //     : item.sections,
         };
       }
       return item;
     });
 
-    setnotCompleteTQF3List(updatedList);
+    setCourseList(updatedList);
   };
 
   const clickToggleTQF3 = (checked: any) => {
@@ -107,7 +110,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
 
   return (
     <Modal
-      opened={opened && !!notCompleteTQF3List.length}
+      opened={opened && !!courseList.length}
       onClose={onClose}
       title="Management TQF"
       size="45vw"
@@ -215,7 +218,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          {!notCompleteTQF3List.length ? (
+          {!courseList.length ? (
             <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md  px-4 py-3 text-secondary font-semibold">
               <div className="flex items-center gap-2">
                 <Icon
@@ -230,11 +233,11 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
               <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={notCompleteIcon} className="h-5 w-5" />
-                  <span>List of Courses that are Incomplete TQF 3</span>
+                  <span>List of Courses</span>
                 </div>
                 <p>
-                  {`${notCompleteTQF3List.length} Course`}
-                  {`${notCompleteTQF3List.length > 1 ? "s" : ""}`}
+                  {`${courseList.length} Course`}
+                  {`${courseList.length > 1 ? "s" : ""}`}
                 </p>
               </div>
               <div className="flex flex-col gap-2 w-full h-[350px] p-4 py-3 overflow-y-hidden">
@@ -249,7 +252,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                   rightSectionPointerEvents="all"
                 />
                 <div className="flex flex-col  overflow-y-scroll p-1">
-                  {notCompleteTQF3List.map((e, index) => (
+                  {courseList.map((e, index) => (
                     <div
                       key={index}
                       className="w-full items-center justify-between last:border-none border-b-[1px]  py-3 px-4  flex"
@@ -268,10 +271,11 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                           </p>
                         </div>
                       </div>
-                      <div className="flex flex-row items-center justify-between w-[50%]">
-                        <p className="mr-1 text-[#4E5150] text-[12px] font-medium text-wrap">
+                      <div className="flex flex-row items-center justify-between w-[50%] gap-1">
+                        <p className="mr-1 text-[#4E5150] text-[12px] font-medium">
                           {e.instructor}
                         </p>
+
                         {!checkedTQF3 && (
                           <Switch
                             size="lg"

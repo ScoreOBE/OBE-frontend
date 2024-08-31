@@ -8,6 +8,7 @@ import {
   Radio,
   RadioCard,
   rem,
+  Text,
   Stepper,
   Textarea,
   TextInput,
@@ -20,6 +21,7 @@ import {
   IconTrash,
   IconGripVertical,
 } from "@tabler/icons-react";
+
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { useAppSelector } from "@/store";
@@ -548,19 +550,21 @@ export default function ModalAddPLOCollection({
                   <div className="bg-[#e6e9ff] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                     <div className="flex items-center gap-2">
                       <Icon IconComponent={IconSO} />
-
                       <span>List PLO Added</span>
                     </div>
                     <p>{state.length} PLOs</p>
                   </div>
-                  <div className="flex flex-col w-full overflow-y-auto overflow-x-hidden px-5 pl-7">
+                  <div className="flex flex-col w-full h-fit overflow-y-auto overflow-x-hidden px-5 pl-7">
                     <DragDropContext
                       onDragEnd={({ destination, source }) => {
-                        handlers.reorder({
-                          from: source.index,
-                          to: destination?.index || 0,
-                        });
-                        setReorder(true);
+                        if (destination) {
+                          // Ensure destination is not null
+                          handlers.reorder({
+                            from: source.index,
+                            to: destination.index,
+                          });
+                          setReorder(true);
+                        }
                       }}
                     >
                       <Droppable droppableId="dnd-list" direction="vertical">
@@ -568,7 +572,7 @@ export default function ModalAddPLOCollection({
                           <div
                             {...provided.droppableProps}
                             ref={provided.innerRef}
-                            className="w-full"
+                            className=""
                           >
                             {state.map((item, index) => (
                               <Draggable
@@ -593,7 +597,7 @@ export default function ModalAddPLOCollection({
                                         </p>
                                         <div className="flex gap-1 items-center">
                                           <div
-                                            className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
+                                            className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer"
                                             onClick={() => {
                                               handlers.remove(index);
                                               setPloNo(ploNo - 1);
@@ -607,12 +611,12 @@ export default function ModalAddPLOCollection({
                                             <IconTrash
                                               stroke={1.5}
                                               color="#FF4747"
-                                              className=" size-4 flex items-center"
+                                              className="size-4 flex items-center"
                                             />
                                           </div>
 
                                           <div
-                                            className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center "
+                                            className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
                                             {...provided.dragHandleProps}
                                           >
                                             <IconGripVertical
@@ -627,10 +631,10 @@ export default function ModalAddPLOCollection({
                                       </div>
 
                                       <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
-                                        <div className="flex  text-pretty ">
+                                        <div className="flex text-pretty">
                                           <li></li> {item.descTH}
                                         </div>
-                                        <div className="flex  text-pretty ">
+                                        <div className="flex text-pretty">
                                           <li></li> {item.descEN}
                                         </div>
                                       </div>
