@@ -370,7 +370,7 @@ export default function ModalAddCourse({
         icon={<IconCircleFilled />}
         classNames={{
           separator: `text-primary mb-12 h-[3px] `,
-          step: "flex flex-col  items-start  w-[42px] ",
+          step: "flex flex-col items-start w-[42px]",
           stepIcon: "mb-2 text-[#E6E6FF] bg-[#E6E6FF] border-[#E6E6FF]",
           stepBody: "flex-col-reverse m-0 text-nowrap",
           stepLabel: "text-[13px] font-semibold",
@@ -408,7 +408,7 @@ export default function ModalAddCourse({
                   {COURSE_TYPE.GENERAL}
                 </span>
                 <br />
-                <span className="flex justify-start font-medium text-[12px] text-secondary -mt-1">
+                <span className="flex justify-start font-medium text-b3 text-secondary -mt-1">
                   - Learner Person / Innovative Co-creator / Active Citizen
                 </span>
               </p>
@@ -426,14 +426,14 @@ export default function ModalAddCourse({
                 inner: "flex justify-between items-center w-full ",
               }}
               color="#ffffff"
-              className="w-full border-[1px] text-[13px]  border-secondary h-fit py-3 ! items-center rounded-[6px] flex hover:bg-bgSecond "
+              className="w-full border text-[13px]  border-secondary h-fit py-3 ! items-center rounded-[6px] flex hover:bg-bgSecond "
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-default">
                   {COURSE_TYPE.SPECIAL}
                 </span>
                 <br />
-                <span className="flex justify-start font-medium text-[12px] text-secondary -mt-1">
+                <span className="flex justify-start font-medium text-b3 text-secondary -mt-1">
                   - Core Courses / Major Courses (Required Courses) / Minor
                   Courses
                 </span>
@@ -449,10 +449,10 @@ export default function ModalAddCourse({
                 />
               }
               classNames={{
-                inner: "flex justify-between items-center w-full ",
+                inner: "flex justify-between items-center w-full",
               }}
               color="#ffffff"
-              className="w-full border-[1px] text-[13px] border-secondary  h-fit py-3 !text-default items-center rounded-[6px] flex justify-start hover:bg-bgSecond"
+              className="w-full border text-[13px] border-secondary  h-fit py-3 !text-default items-center rounded-[6px] flex justify-start hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start">Major Elective</span>{" "}
@@ -534,9 +534,9 @@ export default function ModalAddCourse({
                 withAsterisk
                 classNames={{
                   input:
-                    " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-[12px]  rounded-md",
+                    " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
                   pill: "bg-secondary text-white font-bold",
-                  label: "font-semibold text-[#3e3e3e] text-b2",
+                  label: "font-semibold text-tertiary text-b2",
                   error: "text-[10px] !border-none",
                 }}
                 placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
@@ -562,7 +562,7 @@ export default function ModalAddCourse({
             icon={<IconInfoCircle />}
             title={<p>Each section can only have one owner section.</p>}
           ></Alert> */}
-          <div className="flex flex-col max-h-[420px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-auto  ">
+          <div className="flex flex-col max-h-[420px] h-fit w-full mt-2 mb-5 p-[2px] overflow-y-auto">
             <div className="flex flex-col font-medium text-[14px] gap-4">
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
@@ -594,9 +594,9 @@ export default function ModalAddCourse({
                               icon={<></>}
                               classNames={{
                                 input:
-                                  "bg-black!  border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-500",
+                                  "bg-black!  border-[1.5px] border-tertiary cursor-pointer disabled:bg-gray-500",
                                 iconWrapper: "w-0",
-                                label: "text-[14px] px-4 cursor-pointer",
+                                label: "text-b2 px-4 cursor-pointer",
                               }}
                               size="xs"
                               value={item.toString()}
@@ -614,9 +614,9 @@ export default function ModalAddCourse({
                       <Checkbox
                         classNames={{
                           input:
-                            "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                            "bg-[black] bg-opacity-0 border-[1.5px] border-tertiary cursor-pointer disabled:bg-gray-400",
                           body: "mr-3 px-0",
-                          label: "text-[14px]  cursor-pointer",
+                          label: "text-b2  cursor-pointer",
                         }}
                         className="mt-3 ml-1"
                         size="xs"
@@ -659,10 +659,10 @@ export default function ModalAddCourse({
                     {coInsList.map((coIns, index) => (
                       <div
                         key={index}
-                        className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none  "
+                        className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none"
                       >
                         <div className="flex w-full justify-between items-center">
-                          <span className="text-[#3e3e3e] -translate-y-1 font-semibold text-[13px]">
+                          <span className="text-tertiary -translate-y-1 font-semibold text-[13px]">
                             {coIns.label}
                           </span>
 
@@ -714,7 +714,7 @@ export default function ModalAddCourse({
                               </Menu.Dropdown>
                             </Menu>
                             <Button
-                              className="text-[12px] transform-none h-7 px-3 rounded-[6px]"
+                              className="text-b3 transform-none h-7 px-3 rounded-[6px]"
                               size="xs"
                               variant="outline"
                               color="#FF4747"
@@ -724,7 +724,7 @@ export default function ModalAddCourse({
                             </Button>
                           </div>
                         </div>
-                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[12px]">
+                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-b3">
                           <div className=" font-semibold">Section:</div>
                           <div className="flex gap-1 w-[60%] flex-wrap ">
                             {coIns.sections?.map(
@@ -766,18 +766,18 @@ export default function ModalAddCourse({
                 </p>
               )}
             </div>
-            <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-auto ">
-              <div className="flex flex-col gap-3 mt-3   font-medium text-[12px]">
+            <div className="flex flex-col max-h-[320px] h-fit w-full px-2 overflow-y-auto ">
+              <div className="flex flex-col gap-3 mt-3 font-medium text-b3">
                 {form.getValues().sections?.map((sec, index) => (
                   <div
                     key={index}
-                    className="w-full border-b-[1px] last:border-none border-[#c9c9c9] pb-2  h-fit px-4    gap-1 flex flex-col"
+                    className="w-full border-b-[1px] last:border-none border-[#c9c9c9] pb-2 h-fit px-4 gap-1 flex flex-col"
                   >
-                    <span className="text-default font-semibold flex flex-col text-[14px] mb-2">
+                    <span className="text-default font-semibold flex flex-col text-b2 mb-2">
                       Section {getSectionNo(sec.sectionNo)}
                     </span>
                     <div className="flex flex-col gap-1">
-                      <span className="text-[#3E3E3E] font-semibold">
+                      <span className="text-tertiary font-semibold">
                         Owner Section
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">
@@ -791,7 +791,7 @@ export default function ModalAddCourse({
 
                     {!!sec.coInstructors?.length && (
                       <div className="flex flex-col gap-1">
-                        <span className="text-[#3E3E3E] font-semibold">
+                        <span className="text-tertiary font-semibold">
                           Co-Instructor
                         </span>
                         <div className="ps-1.5 text-secondary mb-2">
@@ -807,7 +807,7 @@ export default function ModalAddCourse({
                     )}
 
                     <div className="flex flex-col gap-1">
-                      <span className="text-[#3E3E3E] font-semibold">
+                      <span className="text-tertiary font-semibold">
                         Open in Semester
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">
@@ -845,7 +845,7 @@ export default function ModalAddCourse({
               <Button
                 color="#575757"
                 variant="subtle"
-                className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                className="rounded-[8px] text-b3 h-[32px] w-fit "
                 justify="start"
                 onClick={prevStep}
               >
@@ -854,7 +854,7 @@ export default function ModalAddCourse({
             )}
           </div>
           <Button
-            className="rounded-[8px] text-[12px] h-[32px] w-fit "
+            className="rounded-[8px] text-b3 h-[32px] w-fit "
             loading={loading}
             onClick={() => nextStep()}
             rightSection={

@@ -24,17 +24,18 @@ import { useEffect, useState } from "react";
 import CheckIcon from "@/assets/icons/Check.svg?react";
 import { IModelCourseManagement } from "@/models/ModelCourseManagement";
 import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppSelector } from "@/store";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
 import Loading from "@/components/Loading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
   createPLONo,
   deletePLONo,
+  getOnePLO,
   getPLOs,
   updatePLO,
 } from "@/services/plo/plo.service";
-import { IModelPLO, IModelPLOCollection, IModelPLONo } from "@/models/ModelPLO";
+import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
@@ -54,8 +55,7 @@ export default function MapPLO({ ploName = "" }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [loading, setLoading] = useState(false);
-  const dispatch = useAppDispatch();
-  const [payload, setPayload] = useState<any>();
+  const [payload, setPayload] = useState<any>({});
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
   const [reorder, setReorder] = useState(false);
   const [state, handlers] = useListState(ploList.data || []);
@@ -110,7 +110,7 @@ export default function MapPLO({ ploName = "" }: Props) {
       data: payload,
     });
     if (res) {
-      fetchPLO();
+      fetchOnePLO();
       setOpenModalEditPLONo(false);
       showNotifications(
         NOTI_TYPE.SUCCESS,
@@ -126,11 +126,10 @@ export default function MapPLO({ ploName = "" }: Props) {
         ...new CourseManagementRequestDTO(),
         limit: 20,
         departmentCode: user.departmentCode,
-        hasMore: true,
       };
       setPayload(payloadCourse);
       fetchCourse(payloadCourse);
-      fetchPLO();
+      fetchOnePLO();
     }
   }, [ploName]);
 
@@ -170,14 +169,10 @@ export default function MapPLO({ ploName = "" }: Props) {
     }
   }, [reorder]);
 
-  const fetchPLO = async () => {
-    let res = await getPLOs({
-      manage: true,
-      role: user.role,
-      departmentCode: user.departmentCode,
-    });
+  const fetchOnePLO = async () => {
+    const res = await getOnePLO(ploName);
     if (res) {
-      setPloList(res.find((plo: any) => plo.name == ploName));
+      setPloList(res);
     }
   };
 
@@ -185,7 +180,10 @@ export default function MapPLO({ ploName = "" }: Props) {
     setLoading(true);
     const res = await getCourseManagement(payloadCourse);
     if (res) {
-      setPayload({ ...payloadCourse, hasMore: res.length >= payload.limit });
+      setPayload({
+        ...payloadCourse,
+        hasMore: res.courses.length >= payloadCourse.limit,
+      });
       setTotalCourse(res.totalCount);
       setCourseManagement(res.courses);
     }
@@ -245,11 +243,11 @@ export default function MapPLO({ ploName = "" }: Props) {
   };
 
   const searchCourse = async (searchValue: string, reset?: boolean) => {
+    setCourseManagement([]);
     let payloadCourse: any = {
       ...new CourseManagementRequestDTO(),
       limit: 20,
       departmentCode: user.departmentCode,
-      hasMore: true,
     };
     if (reset) payloadCourse.search = "";
     else payloadCourse.search = searchValue;
@@ -468,16 +466,16 @@ export default function MapPLO({ ploName = "" }: Props) {
           </>
         }
       />
-
-      <div className=" flex flex-col h-full w-full px-6 pb-2 pt-2 gap-3 overflow-hidden ">
-        {ploList.name && (
+      {!ploList.name ? (
+        <Loading />
+      ) : (
+        <div className=" flex flex-col h-full w-full px-6 pb-2 pt-2 gap-3 overflow-hidden ">
           <div className="flex flex-row pt-4 pb-5 items-center justify-between">
             <div className="flex flex-col items-start">
               <div className="flex gap-1 items-center">
                 <p className="text-secondary text-[16px] font-bold">
                   {ploList.name}
                 </p>
-
                 <Tooltip
                   arrowOffset={10}
                   arrowSize={8}
@@ -489,12 +487,12 @@ export default function MapPLO({ ploName = "" }: Props) {
                   multiline
                   withArrow
                   label={
-                    <div className=" text-[13px] p-2 flex flex-col gap-2">
+                    <div className="text-default text-[13px] p-2 flex flex-col gap-2">
                       <div className="flex gap-2">
                         <p className="text-secondary font-semibold">
                           Active in:
                         </p>
-                        <p className=" font-medium text-default">
+                        <p className=" font-medium">
                           {ploList.semester}/{ploList.year} -{" "}
                           {ploList.isActive ? "Currently" : ""}
                         </p>
@@ -504,7 +502,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                           Department:
                         </p>
 
-                        <p className="text-default font-medium flex flex-col gap-1 ">
+                        <p className="font-medium flex flex-col gap-1 ">
                           {ploList.departmentCode?.join(", ")}
                         </p>
                       </div>
@@ -523,264 +521,267 @@ export default function MapPLO({ ploName = "" }: Props) {
               </p>
             </div>
           </div>
-        )}
-        <Tabs
-          classNames={{
-            root: "overflow-hidden flex flex-col h-full",
-            tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
-          }}
-          defaultValue="plodescription"
-        >
-          <Tabs.List className="!gap-6 !bg-transparent">
-            <Tabs.Tab value="plodescription">PLO Description</Tabs.Tab>
-            <Tabs.Tab className="overflow-hidden" value="plomapping">
-              PLO Mapping
-            </Tabs.Tab>
-          </Tabs.List>
-
-          <Tabs.Panel
-            value="plodescription"
-            className="overflow-hidden flex h-full mt-3"
+          <Tabs
+            classNames={{
+              root: "overflow-hidden flex flex-col h-full",
+              tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
+            }}
+            defaultValue="plodescription"
           >
-            <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  pb-[76px]">
-              <div className="flex items-center  justify-between  pt-2 pb-5">
-                <div className="flex flex-col items-start ">
-                  <div className="flex items-center text-primary gap-1">
-                    <p className="text-secondary text-[16px] font-bold">
-                      PLO Description
-                    </p>
-                  </div>
-                  <div className="text-[12px] font-medium">
-                    {ploList.data?.length} PLOs
-                  </div>
-                </div>
-                {isFirstSemester && (
-                  <Button
-                    leftSection={
-                      <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
-                    }
-                    className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                    onClick={() => setOpenModalAddPLONo(true)}
-                  >
-                    Add PLO
-                  </Button>
-                )}
-              </div>
+            <Tabs.List className="!gap-6 !bg-transparent">
+              <Tabs.Tab value="plodescription">PLO Description</Tabs.Tab>
+              <Tabs.Tab className="overflow-hidden" value="plomapping">
+                PLO Mapping
+              </Tabs.Tab>
+            </Tabs.List>
 
-              <DragDropContext
-                onDragEnd={({ destination, source }) => {
-                  handlers.reorder({
-                    from: source.index,
-                    to: destination?.index || 0,
-                  });
-                  setReorder(true);
-                }}
-              >
-                <Droppable droppableId="dnd-list" direction="vertical">
-                  {(provided) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      className=" overflow-y-auto"
+            <Tabs.Panel
+              value="plodescription"
+              className="overflow-hidden flex h-full mt-3"
+            >
+              <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  pb-[76px]">
+                <div className="flex items-center  justify-between  pt-2 pb-5">
+                  <div className="flex flex-col items-start ">
+                    <div className="flex items-center text-primary gap-1">
+                      <p className="text-secondary text-[16px] font-bold">
+                        PLO Description
+                      </p>
+                    </div>
+                    <div className="text-[12px] font-medium">
+                      {ploList.data?.length} PLOs
+                    </div>
+                  </div>
+                  {isFirstSemester && (
+                    <Button
+                      leftSection={
+                        <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
+                      }
+                      className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                      onClick={() => setOpenModalAddPLONo(true)}
                     >
-                      {state.map((item, index) => (
-                        <Draggable
-                          key={item.no}
-                          index={index}
-                          draggableId={item.no.toString()}
-                        >
-                          {(provided, snapshot) => (
-                            <div
-                              className="flex p-4 w-full justify-between first:-mt-2 border-b last:border-none"
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                            >
-                              <div className="flex flex-col gap-2 w-[85%] ">
-                                <p className="text-secondary font-semibold text-[14px]">
-                                  PLO-{item.no}
-                                </p>
-                                <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
-                                  <div className="flex  text-pretty ">
-                                    <li></li> {item.descTH}
-                                  </div>
-                                  <div className="flex  text-pretty ">
-                                    <li></li> {item.descEN}
+                      Add PLO
+                    </Button>
+                  )}
+                </div>
+
+                <DragDropContext
+                  onDragEnd={({ destination, source }) => {
+                    handlers.reorder({
+                      from: source.index,
+                      to: destination?.index || 0,
+                    });
+                    setReorder(true);
+                  }}
+                >
+                  <Droppable droppableId="dnd-list" direction="vertical">
+                    {(provided) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className=" overflow-y-auto"
+                      >
+                        {state.map((item, index) => (
+                          <Draggable
+                            key={item.no}
+                            index={index}
+                            draggableId={item.no.toString()}
+                          >
+                            {(provided, snapshot) => (
+                              <div
+                                className="flex p-4 w-full justify-between first:-mt-2 border-b last:border-none"
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                              >
+                                <div className="flex flex-col gap-2 w-[85%] ">
+                                  <p className="text-secondary font-semibold text-[14px]">
+                                    PLO-{item.no}
+                                  </p>
+                                  <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
+                                    <div className="flex  text-pretty ">
+                                      <li></li> {item.descTH}
+                                    </div>
+                                    <div className="flex  text-pretty ">
+                                      <li></li> {item.descEN}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              <div className="flex gap-1 items-center">
-                                <div
-                                  className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
+                                <div className="flex gap-1 items-center">
+                                  <div
+                                    className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
+                                    onClick={() => {
+                                      formPLO.setValues(item);
+                                      setOpenModalEditPLONo(true);
+                                    }}
+                                  >
+                                    <IconEdit
+                                      stroke={1.5}
+                                      color="#F39D4E"
+                                      className="flex items-center size-4"
+                                    />
+                                  </div>
+                                  {isFirstSemester && (
+                                    <>
+                                      <div
+                                        className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
+                                        onClick={() => {
+                                          formPLO.setValues(item);
+                                          setOpenMainPopupDelPLO(true);
+                                        }}
+                                      >
+                                        <IconTrash
+                                          stroke={1.5}
+                                          color="#FF4747"
+                                          className=" size-4 flex items-center"
+                                        />
+                                      </div>
+
+                                      <div
+                                        className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
+                                        {...provided.dragHandleProps}
+                                      >
+                                        <IconGripVertical
+                                          style={{
+                                            width: rem(20),
+                                            height: rem(20),
+                                          }}
+                                          stroke={1.5}
+                                        />
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              </div>
+            </Tabs.Panel>
+
+            <Tabs.Panel className="overflow-hidden mt-1" value="plomapping">
+              <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full pb-[76px]">
+                <div className="flex items-center  justify-between pt-4 pb-5">
+                  <div className="flex flex-col items-start ">
+                    <p className="text-secondary text-[16px] font-bold">
+                      PLO Mapping
+                    </p>
+                    <div className="text-[12px] font-medium">
+                      {totalCourse} Courses
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    {!isMapPLO ? (
+                      <div className="flex gap-5">
+                        <SearchInput onSearch={searchCourse} />
+
+                        <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
+                          <Menu
+                            trigger="click"
+                            position="bottom-end"
+                            offset={6}
+                          >
+                            <Menu.Target>
+                              <IconDots />
+                            </Menu.Target>
+                            <Menu.Dropdown
+                              className="rounded-md translate-y-1 backdrop-blur-xl bg-white "
+                              style={{
+                                boxShadow:
+                                  "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                              }}
+                            >
+                              <>
+                                <Menu.Item
+                                  className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
+                                  onClick={() => setOpenModalAddCourse(true)}
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <IconPlus
+                                      className="h-5 w-5 -mr-1"
+                                      stroke={1.5}
+                                    />
+                                    <span>Add Course</span>
+                                  </div>
+                                </Menu.Item>
+                                <Menu.Item
+                                  className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
                                   onClick={() => {
-                                    formPLO.setValues(item);
-                                    setOpenModalEditPLONo(true);
+                                    setIsMapPLO(true);
                                   }}
                                 >
-                                  <IconEdit
-                                    stroke={1.5}
-                                    color="#F39D4E"
-                                    className="flex items-center size-4"
-                                  />
-                                </div>
-                                {isFirstSemester && (
-                                  <>
-                                    <div
-                                      className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
-                                      onClick={() => {
-                                        formPLO.setValues(item);
-                                        setOpenMainPopupDelPLO(true);
-                                      }}
-                                    >
-                                      <IconTrash
-                                        stroke={1.5}
-                                        color="#FF4747"
-                                        className=" size-4 flex items-center"
-                                      />
-                                    </div>
-
-                                    <div
-                                      className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
-                                      {...provided.dragHandleProps}
-                                    >
-                                      <IconGripVertical
-                                        style={{
-                                          width: rem(20),
-                                          height: rem(20),
-                                        }}
-                                        stroke={1.5}
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            </div>
-          </Tabs.Panel>
-
-          <Tabs.Panel className="overflow-hidden mt-1" value="plomapping">
-            <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full   pb-[76px] ">
-              <div className="flex items-center  justify-between pt-4 pb-5">
-                <div className="flex flex-col items-start ">
-                  <p className="text-secondary text-[16px] font-bold">
-                    PLO Mapping
-                  </p>
-                  <div className="text-[12px] font-medium">
-                    {totalCourse} Courses
+                                  <div className="flex items-center gap-2">
+                                    <IconEdit className="size-4" stroke={1.5} />
+                                    <span>Mapping</span>
+                                  </div>
+                                </Menu.Item>
+                              </>
+                            </Menu.Dropdown>
+                          </Menu>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex gap-3">
+                        <Button
+                          variant="subtle"
+                          color="#575757"
+                          className="rounded-[8px] text-[12px] h-[32px] w-fit bg-[#e5e7eb] hover-[#e5e7eb]/10"
+                          onClick={() => {
+                            setIsMapPLO(false);
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          color="#0eb092"
+                          leftSection={
+                            <IconCheck className="size-4" stroke={2} />
+                          }
+                          className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                          onClick={() => {
+                            setIsMapPLO(false);
+                          }}
+                        >
+                          Done
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                <div className="flex gap-3">
-                  {!isMapPLO ? (
-                    <div className="flex gap-5">
-                      <SearchInput onSearch={searchCourse} />
-
-                      <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
-                        <Menu trigger="click" position="bottom-end" offset={6}>
-                          <Menu.Target>
-                            <IconDots />
-                          </Menu.Target>
-                          <Menu.Dropdown
-                            className="rounded-md translate-y-1 backdrop-blur-xl bg-white "
-                            style={{
-                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                            }}
-                          >
-                            <>
-                              <Menu.Item
-                                className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
-                                onClick={() => setOpenModalAddCourse(true)}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <IconPlus
-                                    className="h-5 w-5 -mr-1"
-                                    stroke={1.5}
-                                  />
-                                  <span>Add Course</span>
-                                </div>
-                              </Menu.Item>
-                              <Menu.Item
-                                className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
-                                onClick={() => {
-                                  setIsMapPLO(true);
-                                }}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <IconEdit className="size-4" stroke={1.5} />
-                                  <span>Mapping</span>
-                                </div>
-                              </Menu.Item>
-                            </>
-                          </Menu.Dropdown>
-                        </Menu>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex gap-3">
-                      <Button
-                        variant="subtle"
-                        color="#575757"
-                        className="rounded-[8px] text-[12px] h-[32px] w-fit bg-[#e5e7eb] hover-[#e5e7eb]/10"
-                        onClick={() => {
-                          setIsMapPLO(false);
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        color="#0eb092"
-                        leftSection={
-                          <IconCheck className="size-4" stroke={2} />
-                        }
-                        className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                        onClick={() => {
-                          setIsMapPLO(false);
-                        }}
-                      >
-                        Done
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Table */}
-              <InfiniteScroll
-                dataLength={courseManagement.length}
-                next={onShowMore}
-                height={"100%"}
-                hasMore={payload?.hasMore}
-                className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col  rounded-lg border-secondary"
-                style={{ height: "fit-content" }}
-                loader={<Loading />}
-              >
-                <Table stickyHeader striped>
-                  <Table.Thead>
-                    <Table.Tr className="bg-[#F4F5FE]">
-                      <Table.Th>Course No.</Table.Th>
-                      {ploList.data?.map((plo, index) => (
-                        <Table.Th key={index}>PLO-{plo.no}</Table.Th>
-                      ))}
-                    </Table.Tr>
-                  </Table.Thead>
-
-                  <Table.Tbody>
-                    {!loading && !courseManagement.length ? (
-                      <div className="flex flex-col w-full items-center justify-center">
-                        No Course Found
-                      </div>
-                    ) : (
-                      courseManagement.map((course, index) => (
+                {/* Table */}
+                <InfiniteScroll
+                  dataLength={courseManagement.length}
+                  next={onShowMore}
+                  height={"100%"}
+                  hasMore={payload?.hasMore}
+                  className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
+                  style={{ height: "fit-content" }}
+                  loader={<Loading />}
+                >
+                  <Table stickyHeader striped>
+                    <Table.Thead>
+                      <Table.Tr className="bg-[#F4F5FE]">
+                        <Table.Th>Course No.</Table.Th>
+                        {ploList.data?.map((plo, index) => (
+                          <Table.Th key={index}>PLO-{plo.no}</Table.Th>
+                        ))}
+                      </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                      {/* {!loading && !courseManagement.length ? (
+                        <div className="flex flex-col w-full items-center justify-center">
+                          No Course Found
+                        </div>
+                      ) : ( */}
+                      {courseManagement.map((course, index) => (
                         <Table.Tr key={index}>
-                          <Table.Td className="py-4  text-b3 font-semibold pl-5">
+                          <Table.Td className="py-4 text-b3 font-semibold pl-5">
                             {course.courseNo}
                           </Table.Td>
 
@@ -806,15 +807,16 @@ export default function MapPLO({ ploName = "" }: Props) {
                             </Table.Td>
                           ))}
                         </Table.Tr>
-                      ))
-                    )}
-                  </Table.Tbody>
-                </Table>
-              </InfiniteScroll>
-            </div>
-          </Tabs.Panel>
-        </Tabs>
-      </div>
+                      ))}
+                      {/* )} */}
+                    </Table.Tbody>
+                  </Table>
+                </InfiniteScroll>
+              </div>
+            </Tabs.Panel>
+          </Tabs>
+        </div>
+      )}
     </>
   );
 }

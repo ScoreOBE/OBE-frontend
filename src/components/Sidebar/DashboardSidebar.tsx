@@ -117,7 +117,7 @@ export default function DashboardSidebar() {
         </div>
 
         <div className="flex flex-col gap-3">
-          <p className="text-b2 text-white font-semibold">Course</p>
+          <p className="text-b2 font-semibold">Course</p>
           <Button
             className="bg-transparent w-full h-[50px] flex justify-start items-center  px-3 py-1 border-none rounded-[8px] text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none group"
             leftSection={

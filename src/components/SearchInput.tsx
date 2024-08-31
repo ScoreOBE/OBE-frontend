@@ -1,7 +1,6 @@
 import { ellipsisText } from "@/helpers/functions/validation";
 import { useAppDispatch } from "@/store";
 import { resetSeachCourse } from "@/store/course";
-import { resetSeachCourseManagement } from "@/store/courseManagement";
 import { TextInput, Tooltip, CloseButton } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { AiOutlineEnter } from "react-icons/ai";
@@ -16,12 +15,11 @@ export function SearchInput({ onSearch }: Props) {
   const [isFocused, setIsFocused] = useState(false);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    setIsFocused(false);
-    setSearchValue("");
-    dispatch(resetSeachCourseManagement());
-    dispatch(resetSeachCourse());
-  }, [location]);
+  // useEffect(() => {
+  //   setIsFocused(false);
+  //   setSearchValue("");
+  //   dispatch(resetSeachCourse());
+  // }, [location]);
 
   const reset = () => {
     setSearchValue("");

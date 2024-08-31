@@ -13,18 +13,14 @@ import {
   RadioCard,
   Table,
   Tabs,
-  Textarea,
-  Tooltip,
 } from "@mantine/core";
 import ThIcon from "@/assets/icons/thai.svg?react";
 import EngIcon from "@/assets/icons/eng.svg?react";
 import Icon from "@/components/Icon";
 import {
   IconChevronRight,
-  IconEdit,
   IconInfoCircle,
   IconPlus,
-  IconTrash,
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { isEmpty } from "lodash";
@@ -300,7 +296,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               >
                 <Tabs.List className="!gap-6 !bg-transparent px-[53px]">
                   {ploActive.map((collection) => (
-                    <Tabs.Tab value={collection.name}>
+                    <Tabs.Tab key={collection.name} value={collection.name}>
                       {collection.name}
                     </Tabs.Tab>
                   ))}
