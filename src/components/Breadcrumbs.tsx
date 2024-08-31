@@ -8,7 +8,7 @@ export default function Breadcrumbs({ items = [] }: Props) {
   const location = useLocation();
 
   return (
-    <div className="flex gap-3 bg-bgSecond px-3 py-2 rounded-md">
+    <div className="flex gap-3 bg-[#f1f3fe] px-4 py-2 rounded-md">
       {items.map((item, index) => (
         <div
           className="flex items-center justify-center gap-3 text-[14px]"
@@ -16,7 +16,7 @@ export default function Breadcrumbs({ items = [] }: Props) {
         >
           <Link
             to={item.path!}
-            className={`font-medium ${
+            className={`font-semibold ${
               !item.path ? "text-[#3F4474]" : "text-secondary"
             }`}
           >
