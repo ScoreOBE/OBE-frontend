@@ -43,7 +43,6 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
   const [loading, setLoading] = useState(false);
   const [ploActive, setPloActive] = useState<IModelPLO[]>([]);
   const [selectPlo, setSelectPlo] = useState<string | null>("Dashboard");
-  const [ploList, setPloList] = useState<IModelPLOCollection[]>([]);
   const [ploCollection, setPLOCollection] = useState<IModelPLOCollection[]>([]);
   const [totalPLOs, setTotalPLOs] = useState<number>(0);
   const [openModal, setOpenModal] = useState(false);
@@ -85,6 +84,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
         departmentCode: user.departmentCode,
       });
       if (res) {
+        setSelectPlo("Dashboard");
         setPloActive([{ name: "Dashboard" }, ...res]);
       }
     };
@@ -284,123 +284,58 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
       >
         <Modal.Overlay />
         <Modal.Content className="overflow-hidden !rounded-none">
-          <Modal.Header className="!py-0 flex w-full border-b border-[#e0e0e0] rounded-none justify-between">
-            <div className="inline-flex gap-2 items-center w-fit justify-start">
-              <Modal.CloseButton />
-              <div className="font-semibold text-h2 text-secondary">
-                PLO Management
+          <Modal.Header className="!pt-4  flex w-full rounded-none  pb-0 !px-0">
+            <div className="flex flex-col gap-2 items-start w-full ">
+              <div className="inline-flex px-4 w-full gap-2 font-semibold text-h2 text-secondary">
+                <Modal.CloseButton className="!m-0" />
+                <p>PLO Management</p>
               </div>
+              <Tabs
+                value={selectPlo}
+                onChange={setSelectPlo}
+                classNames={{
+                  root: "w-full left-0",
+                  tab: "px-0  !bg-transparent hover:!text-tertiary",
+                }}
+              >
+                <Tabs.List className="!gap-6 !bg-transparent px-[53px]">
+                  {ploActive.map((collection) => (
+                    <Tabs.Tab value={collection.name}>
+                      {collection.name}
+                    </Tabs.Tab>
+                  ))}
+                </Tabs.List>
+              </Tabs>
             </div>
           </Modal.Header>
 
-          <Modal.Body className="px-0 pt-1 flex flex-col h-full w-full gap-2 overflow-hidden">
-            <Tabs
-              variant="pills"
-              value={selectPlo}
-              onChange={(event) => {
-                setSelectPlo(event);
-              }}
-              className="px-6 mt-2"
-              classNames={{
-                list: " !gap-2 !bg-none !bg-transparent",
-              }}
-            >
-              <Tabs.List>
-                {ploActive.map((collection) => (
-                  <Tabs.Tab
-                    className={`!rounded-xl !border-none ${
-                      selectPlo !== collection.name &&
-                      "!bg-transparent hover:!bg-hover"
-                    }`}
-                    value={collection.name}
-                  >
-                    {collection.name}
-                  </Tabs.Tab>
-                ))}
-              </Tabs.List>
+          <Modal.Body className="px-0  flex flex-col h-full w-full  overflow-hidden">
+            {/* Topic */}
+            {selectPlo === "Dashboard" && (
+              <div className="flex flex-row px-6 pt-6 pb-5 items-center justify-between">
+                <div className="flex flex-col items-start">
+                  <p className="text-secondary text-[16px] font-bold">
+                    {selectPlo}
+                  </p>
 
-              {/* Topic */}
-              {ploActive.map((collection, index) => (
-                <Tabs.Panel
-                  value={collection.name}
-                  className="flex flex-row mt-6 items-center justify-between"
+                  <p className="text-tertiary text-[14px] font-medium">
+                    {ploCollection.length} Department
+                    {ploCollection.length > 1 ? "s " : " "}
+                  </p>
+                </div>
+
+                <Button
+                  leftSection={
+                    <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
+                  }
+                  className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                  onClick={openModalDuplicatePLO}
                 >
-                  <div className="flex flex-col items-start">
-                    <div className="flex gap-1 items-center">
-                      <p className="text-secondary text-[16px] font-bold">
-                        {collection.name}
-                      </p>
-                      {selectPlo !== "Dashboard" && (
-                        <Tooltip
-                          arrowOffset={10}
-                          arrowSize={8}
-                          arrowRadius={1}
-                          transitionProps={{
-                            transition: "fade",
-                            duration: 300,
-                          }}
-                          multiline
-                          withArrow
-                          label={
-                            <div className=" text-[13px] p-2 flex flex-col gap-2">
-                              <div className="flex gap-2">
-                                <p className="text-secondary font-semibold">
-                                  Active in:
-                                </p>
-                                <p className=" font-medium ">
-                                  {collection.semester}/{collection.year} -{" "}
-                                  {collection.isActive ? "Currently" : ""}
-                                </p>
-                              </div>
-                              <div className="flex gap-2">
-                                <p className="text-secondary font-semibold">
-                                  Department:
-                                </p>
+                  Add Collection
+                </Button>
+              </div>
+            )}
 
-                                <p className="font-medium flex flex-col gap-1 ">
-                                  {collection.departmentCode?.join(", ")}
-                                </p>
-                              </div>
-                            </div>
-                          }
-                          color="#FCFCFC"
-                          className="w-fit border  rounded-md "
-                          position="bottom-start"
-                        >
-                          <IconInfoCircle
-                            size={16}
-                            className="-ml-0 text-secondary"
-                          />
-                        </Tooltip>
-                      )}
-                    </div>
-
-                    <p className="text-tertiary text-[14px] font-medium">
-                      {collection.criteriaTH} {collection.criteriaEN}
-                    </p>
-
-                    {index == 0 && (
-                      <p className="text-tertiary text-[14px] font-medium">
-                        {ploCollection.length} Department
-                        {ploCollection.length > 1 ? "s " : " "}
-                      </p>
-                    )}
-                  </div>
-
-                  {index == 0 && (
-                    <Button
-                      leftSection={
-                        <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
-                      }
-                      className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                      onClick={openModalDuplicatePLO}
-                    >
-                      Add Collection
-                    </Button>
-                  )}
-                </Tabs.Panel>
-              ))}
-            </Tabs>
             {/* Course Detail */}
             {loading ? (
               <Loading />
