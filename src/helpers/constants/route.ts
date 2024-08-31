@@ -4,7 +4,6 @@ export const ROUTE_PATH = {
   SELECTED_DEPARTMENT: "/select-department",
   DASHBOARD_INS: "/dashboard",
   DASHBOARD_STD: "/dashboard-student",
-  PLO_MANAGEMENT: "/plo-mamangement",
   COURSE: "/course",
   SECTION: "sections",
   TQF3: "tqf3",

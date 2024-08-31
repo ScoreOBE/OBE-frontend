@@ -169,7 +169,7 @@ export default function ModalEditSection({
         >
           <div className={`flex flex-row justify-between items-center`}>
             <div className="gap-3 flex flex-col">
-              <span className="font-semibold text-[13px] text-[#333333]">
+              <span className="font-semibold text-[13px] ">
                 Repeat on semester
               </span>
             </div>
@@ -210,7 +210,7 @@ export default function ModalEditSection({
         >
           <div className={`flex flex-row justify-between items-center`}>
             <div className="gap-3 flex flex-col">
-              <span className="font-semibold text-[13px] text-[#333333]">
+              <span className="font-semibold text-[13px] ">
                 Open in {academicYear?.semester}/{academicYear?.year}
               </span>
             </div>

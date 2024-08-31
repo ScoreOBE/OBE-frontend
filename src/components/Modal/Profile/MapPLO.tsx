@@ -32,7 +32,7 @@ import {
   getPLOs,
   updatePLO,
 } from "@/services/plo/plo.service";
-import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
+import { IModelPLO, IModelPLOCollection, IModelPLONo } from "@/models/ModelPLO";
 import { rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
@@ -46,8 +46,11 @@ import { setLoading } from "@/store/loading";
 import { useParams } from "react-router-dom";
 import { setShowSidebar } from "@/store/showSidebar";
 
-export default function MapPLO() {
-  const { name } = useParams();
+type Props = {
+  ploName: string;
+};
+
+export default function MapPLO({ ploName }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const loading = useAppSelector((state) => state.loading);
@@ -56,11 +59,10 @@ export default function MapPLO() {
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
   const [reorder, setReorder] = useState(false);
   const [state, handlers] = useListState(ploList.data || []);
-  const [getPLONo, setGetPLONo] = useState<number>(0);
+
+  const [couresNo, setCouresNo] = useState("");
   const [isMapPLO, setIsMapPLO] = useState(false);
-  const courseManagementTotal = useAppSelector(
-    (state) => state.courseManagement
-  );
+  const [totalCourse, setTotalCourse] = useState<number>(0);
   const isFirstSemester =
     ploList.semester === academicYear?.semester &&
     ploList.year === academicYear?.year;
@@ -134,10 +136,10 @@ export default function MapPLO() {
   }, [user]);
 
   useEffect(() => {
-    if (academicYear) {
+    if (ploName) {
       fetchPLO();
     }
-  }, [academicYear]);
+  }, [ploName]);
 
   useEffect(() => {
     if (openModalAddCourse) {
@@ -182,12 +184,7 @@ export default function MapPLO() {
       departmentCode: user.departmentCode,
     });
     if (res) {
-      setPloList(
-        res.find(
-          (plo: any) =>
-            plo.name.replace(/[-\/ ]/g, "") == name?.replace(/[-\/ ]/g, "")
-        )
-      );
+      setPloList(res.find((plo: any) => plo.name == ploName));
     }
   };
 
@@ -195,6 +192,7 @@ export default function MapPLO() {
     dispatch(setLoading(true));
     const res = await getCourseManagement(payloadCourse);
     if (res) {
+      setTotalCourse(res.totalCount);
       setCourseManagement(res.courses);
     }
     dispatch(setLoading(false));
@@ -466,13 +464,16 @@ export default function MapPLO() {
       />
       <div className=" flex flex-col h-full w-full px-6 pb-2 pt-2 gap-4 overflow-hidden ">
         <Tabs
-          classNames={{ root: "overflow-hidden flex flex-col h-full" }}
+          classNames={{
+            root: "overflow-hidden flex flex-col h-full",
+            tab: "px-0 !bg-transparent hover:!text-[#3e3e3e]",
+          }}
           defaultValue="plodescription"
         >
-          <Tabs.List>
+          <Tabs.List className="!gap-6 mt-3 !bg-transparent">
             <Tabs.Tab value="plodescription">PLO Description</Tabs.Tab>
             <Tabs.Tab className="overflow-hidden" value="plomapping">
-              Map PLO
+              PLO Mapping
             </Tabs.Tab>
           </Tabs.List>
 
@@ -483,60 +484,16 @@ export default function MapPLO() {
             {loading ? (
               <Loading />
             ) : (
-              <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  py-3 gap-[12px] ">
+              <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  pt-2 pb-11 gap-[12px] ">
                 <div className="flex items-center  justify-between  ">
                   <div className="flex flex-col items-start ">
-                    <div className="flex items-center text-primary gap-1"></div>
-                    <div className="text-[#909090] text-[12px] font-medium"></div>
-                    <div className="flex flex-col  items-start ">
-                      <div className="flex items-center gap-1 text-secondary text-[16px] font-bold">
-                        {ploList.name}
-                        <Tooltip
-                          arrowOffset={10}
-                          arrowSize={8}
-                          arrowRadius={1}
-                          transitionProps={{
-                            transition: "fade",
-                            duration: 300,
-                          }}
-                          multiline
-                          withArrow
-                          label={
-                            <div className="text-[#333333] text-[13px] p-2 flex flex-col gap-2">
-                              <div className="flex gap-2">
-                                <p className="text-secondary font-semibold">
-                                  Active in:
-                                </p>
-                                <p className=" font-medium ">
-                                  {ploList.semester}/{ploList.year} -{" "}
-                                  {ploList.isActive ? "Currently" : ""}
-                                </p>
-                              </div>
-                              <div className="flex gap-2">
-                                <p className="text-secondary font-semibold">
-                                  Department:
-                                </p>
-
-                                <p className="font-medium flex flex-col gap-1 ">
-                                  {ploList.departmentCode?.join(", ")}
-                                </p>
-                              </div>
-                            </div>
-                          }
-                          color="#FCFCFC"
-                          className="w-fit border  rounded-md "
-                          position="bottom-start"
-                        >
-                          <IconInfoCircle
-                            size={16}
-                            className="-ml-0 text-secondary"
-                          />
-                        </Tooltip>
-                      </div>
-
-                      <p className="text-tertiary text-[14px] font-medium">
-                        {ploList.criteriaTH} {ploList.criteriaEN}
+                    <div className="flex items-center text-primary gap-1">
+                      <p className="text-secondary text-[16px] font-bold">
+                        PLO Description
                       </p>
+                    </div>
+                    <div className="text-[12px] font-medium">
+                      {ploList.data?.length} PLOs
                     </div>
                   </div>
                   {isFirstSemester && (
@@ -650,16 +607,15 @@ export default function MapPLO() {
           </Tabs.Panel>
 
           <Tabs.Panel className=" overflow-hidden mt-1" value="plomapping">
-            <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  py-3 gap-[12px] ">
+            <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full pt-2 pb-11 gap-[12px] ">
               <div className="flex items-center  justify-between  ">
-                <div className="flex flex-col  items-start ">
+                <div className="flex flex-col items-start ">
                   <p className="text-secondary text-[16px] font-bold">
-                    Map PLO
+                    PLO Mapping
                   </p>
-                  <p className="text-tertiary text-[14px] font-medium">
-                    {courseManagementTotal.total} Course
-                    {courseManagementTotal.total > 1 ? "s " : " "}
-                  </p>
+                  <div className="text-[12px] font-medium">
+                    {totalCourse} Courses
+                  </div>
                 </div>
 
                 <div className="flex gap-3">
@@ -737,7 +693,7 @@ export default function MapPLO() {
                   <Table.Tbody>
                     {courseManagement.map((course, index) => (
                       <Table.Tr key={index}>
-                        <Table.Td className="py-4 text-[#333333] text-b3 font-semibold pl-5">
+                        <Table.Td className="py-4  text-b3 font-semibold pl-5">
                           {course.courseNo}
                         </Table.Td>
 

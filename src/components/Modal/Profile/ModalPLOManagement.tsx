@@ -13,6 +13,8 @@ import {
   RadioCard,
   Table,
   Tabs,
+  Textarea,
+  Tooltip,
 } from "@mantine/core";
 import ThIcon from "@/assets/icons/thai.svg?react";
 import EngIcon from "@/assets/icons/eng.svg?react";
@@ -27,6 +29,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { isEmpty } from "lodash";
 import { setShowSidebar } from "@/store/showSidebar";
+import MapPLO from "./MapPLO";
 
 type Props = {
   opened: boolean;
@@ -35,10 +38,12 @@ type Props = {
 
 export default function ModalPLOManagement({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [ploActive, setPloActive] = useState<IModelPLO[]>([]);
   const [selectPlo, setSelectPlo] = useState<string | null>("Dashboard");
+  const [ploList, setPloList] = useState<IModelPLOCollection[]>([]);
   const [ploCollection, setPLOCollection] = useState<IModelPLOCollection[]>([]);
   const [totalPLOs, setTotalPLOs] = useState<number>(0);
   const [openModal, setOpenModal] = useState(false);
@@ -48,12 +53,14 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
   >({});
   const [ploCollectDupli, setPLOCollectionDupli] = useState<IModelPLO[]>([]);
   const [selectPloDupli, setSelectPloDupli] = useState<Partial<IModelPLO>>({});
+
   const [modalAddPLO, { open: openModalAddPLO, close: closeModalAddPLO }] =
     useDisclosure(false);
   const [
     modalDuplicatePLO,
     { open: openModalDuplicatePLO, close: closeModalDuplicatePLO },
   ] = useDisclosure(false);
+  const [openModalAddPLONo, setOpenModalAddPLONo] = useState(false);
 
   const fetchPLO = async (all = false) => {
     const res = await getPLOs({
@@ -105,6 +112,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
 
   return (
     <>
+      {/* Modal PLO Description */}
       <Modal
         title={`${collection.name}`}
         opened={openModal}
@@ -163,6 +171,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
           </div>
         </div>
       </Modal>
+      {/* Modal Add PLO Collection */}
       <Modal
         title={
           <div className="flex flex-col gap-1">
@@ -195,7 +204,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               </div>
             }
           >
-            <p className="font-medium text-[#333333] mx-8 ">
+            <p className="font-medium  mx-8 ">
               We’ve found {totalPLOs} similar PLO Collections. <br /> Select one
               to duplicate and edit, or skip duplicate.
             </p>
@@ -223,9 +232,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                   >
                     <Group>
                       <Radio.Indicator />
-                      <div className="text-b2 font-medium text-[#333333]">
-                        {plo.name}
-                      </div>
+                      <div className="text-b2 font-medium ">{plo.name}</div>
                     </Group>
                   </RadioCard>
                 ))}
@@ -266,6 +273,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
         collection={selectPloDupli}
         fetchPLO={fetchPLO}
       />
+      {/* Main Modal PLO */}
       <Modal.Root
         opened={opened}
         onClose={onClose}
@@ -289,7 +297,9 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             <Tabs
               variant="pills"
               value={selectPlo}
-              onChange={setSelectPlo}
+              onChange={(event) => {
+                setSelectPlo(event);
+              }}
               className="px-6 mt-2"
               classNames={{
                 list: " !gap-2 !bg-none !bg-transparent",
@@ -308,15 +318,67 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                   </Tabs.Tab>
                 ))}
               </Tabs.List>
+
+              {/* Topic */}
               {ploActive.map((collection, index) => (
                 <Tabs.Panel
                   value={collection.name}
                   className="flex flex-row mt-6 items-center justify-between"
                 >
                   <div className="flex flex-col items-start">
-                    <p className="text-secondary text-[16px] font-bold">
-                      {collection.name}
+                    <div className="flex gap-1 items-center">
+                      <p className="text-secondary text-[16px] font-bold">
+                        {collection.name}
+                      </p>
+                      {selectPlo !== "Dashboard" && (
+                        <Tooltip
+                          arrowOffset={10}
+                          arrowSize={8}
+                          arrowRadius={1}
+                          transitionProps={{
+                            transition: "fade",
+                            duration: 300,
+                          }}
+                          multiline
+                          withArrow
+                          label={
+                            <div className=" text-[13px] p-2 flex flex-col gap-2">
+                              <div className="flex gap-2">
+                                <p className="text-secondary font-semibold">
+                                  Active in:
+                                </p>
+                                <p className=" font-medium ">
+                                  {collection.semester}/{collection.year} -{" "}
+                                  {collection.isActive ? "Currently" : ""}
+                                </p>
+                              </div>
+                              <div className="flex gap-2">
+                                <p className="text-secondary font-semibold">
+                                  Department:
+                                </p>
+
+                                <p className="font-medium flex flex-col gap-1 ">
+                                  {collection.departmentCode?.join(", ")}
+                                </p>
+                              </div>
+                            </div>
+                          }
+                          color="#FCFCFC"
+                          className="w-fit border  rounded-md "
+                          position="bottom-start"
+                        >
+                          <IconInfoCircle
+                            size={16}
+                            className="-ml-0 text-secondary"
+                          />
+                        </Tooltip>
+                      )}
+                    </div>
+
+                    <p className="text-tertiary text-[14px] font-medium">
+                      {collection.criteriaTH} {collection.criteriaEN}
                     </p>
+
                     {index == 0 && (
                       <p className="text-tertiary text-[14px] font-medium">
                         {ploCollection.length} Department
@@ -324,6 +386,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                       </p>
                     )}
                   </div>
+
                   {index == 0 && (
                     <Button
                       leftSection={
@@ -338,37 +401,10 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 </Tabs.Panel>
               ))}
             </Tabs>
-            <Tabs className="px-6 mt-4" defaultValue="plodescription">
-              <Tabs.List className="!gap-6  !bg-transparent">
-                <Tabs.Tab
-                  className="px-0 !bg-transparent hover:!text-[#3e3e3e]"
-                  value="plodescription"
-                >
-                  PLO Description
-                </Tabs.Tab>
-                <Tabs.Tab
-                  className="px-0 !bg-transparent hover:!text-[#3e3e3e]"
-                  value="plomapping"
-                >
-                  PLO Mapping
-                </Tabs.Tab>
-              </Tabs.List>
-            </Tabs>
-            {/* <div className="flex items-center justify-between px-6">
-              <div className="flex flex-col  items-start ">
-                <p className="text-secondary text-[16px] font-bold">
-                  Dashboard
-                </p>
-                <p className="text-tertiary text-[14px] font-medium">
-                  {ploCollection.length} Department
-                  {ploCollection.length > 1 ? "s " : " "}
-                </p>
-              </div>
-            </div> */}
             {/* Course Detail */}
             {loading ? (
               <Loading />
-            ) : (
+            ) : selectPlo === "Dashboard" ? (
               <div className="flex flex-col  overflow-y-auto gap-4 px-6 pb-14 pt-2">
                 {ploCollection?.map((department, indexPLO) => (
                   <div
@@ -413,7 +449,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                           </div>
                           {/* Main Instructor */}
                           <div className="flex items-center font-medium text-[#4E5150] text-b3"></div>
-                          {/* Open Symester */}
+                          {/* Open Semester */}
                           <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
                             <p className="text-wrap font-semibold">
                               Start in: {collection.semester}/{collection.year}
@@ -430,6 +466,8 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                   </div>
                 ))}{" "}
               </div>
+            ) : (
+              <MapPLO ploName={selectPlo!} />
             )}
           </Modal.Body>
         </Modal.Content>

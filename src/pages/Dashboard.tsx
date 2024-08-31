@@ -218,7 +218,7 @@ export default function Dashboard() {
                     : "No course found"}
                 </p>
                 <br />
-                <p className=" -mt-4 mb-6  text-[#333333] text-b2 break-words font-400 leading-relaxed">
+                <p className=" -mt-4 mb-6   text-b2 break-words font-400 leading-relaxed">
                   {course.search.length ? (
                     <>Check the spelling or try a new search.</>
                   ) : (

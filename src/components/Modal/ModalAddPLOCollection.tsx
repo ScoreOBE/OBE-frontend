@@ -340,9 +340,7 @@ export default function ModalAddPLOCollection({
                   >
                     <Group>
                       <Radio.Indicator />
-                      <div className="text-b2 font-medium text-[#333333]">
-                        {e.label}
-                      </div>
+                      <div className="text-b2 font-medium ">{e.label}</div>
                     </Group>
                   </RadioCard>
                 ))}
