@@ -4,7 +4,6 @@ import DashboardSidebar from "./Sidebar/DashboardSidebar";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import CourseSidebar from "./Sidebar/CourseSidebar";
 import { motion } from "framer-motion";
-import PLOSidebar from "./Sidebar/PLOManagementSidebar";
 import AssignmentSidebar from "./Sidebar/AssignmentSidebar";
 
 export default function Sidebar() {
@@ -16,8 +15,6 @@ export default function Sidebar() {
       if (path.includes(ROUTE_PATH.ASSIGNMENT)) {
         return <AssignmentSidebar />;
       } else return <CourseSidebar />;
-    } else if (path.includes(ROUTE_PATH.PLO_MANAGEMENT)) {
-      return <PLOSidebar />;
     } else return;
   };
   return (
