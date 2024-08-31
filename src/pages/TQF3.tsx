@@ -108,7 +108,7 @@ export default function TQF3() {
                 arrowSize={7}
                 position="bottom-end"
                 label={
-                  <div className="text-[#333333] text-[13px] p-2 flex flex-col gap-2">
+                  <div className="text-default text-[13px] p-2 flex flex-col gap-2">
                     <p>
                       <span className="text-secondary font-semibold">
                         Reuse TQF 3

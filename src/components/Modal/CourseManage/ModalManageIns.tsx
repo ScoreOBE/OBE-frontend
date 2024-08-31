@@ -222,13 +222,15 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
             </Tabs.Panel>
             <Tabs.Panel value="coInstructor">
               <div className="flex flex-col mt-3 flex-1 ">
-                <CompoMangementIns
-                  opened={opened}
-                  isManage={true}
-                  action={addCoIns}
-                  sections={data.sections}
-                  setUserList={setCoInsList}
-                />
+                <div className="mb-5">
+                  <CompoMangementIns
+                    opened={opened}
+                    isManage={true}
+                    action={addCoIns}
+                    sections={data.sections}
+                    setUserList={setCoInsList}
+                  />
+                </div>
 
                 {!!coInsList.length && (
                   <div className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md">
@@ -244,7 +246,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
                           >
                             <div className="flex w-full justify-between items-center">
                               <div className="flex flex-col  font-medium text-[14px]">
-                                <span className="text-[#333333] -translate-y-1 font-semibold text-[13px]">
+                                <span className=" -translate-y-1 font-semibold text-[13px]">
                                   {coIns?.label}
                                 </span>
                               </div>

@@ -509,9 +509,7 @@ export default function ModalAddSection({
                     className="w-full justify-center pl-5 pr-[18px] pt-4 pb-5 bg-white rounded-md  flex flex-col "
                   >
                     <div className="gap-2 flex flex-col">
-                      <span className="font-medium text-[#333333]">
-                        Repeat on semester
-                      </span>{" "}
+                      <span className="font-medium ">Repeat on semester</span>{" "}
                       <Chip.Group
                         {...form.getInputProps(`sections.${index}.semester`)}
                         value={sec.semester}
@@ -550,7 +548,7 @@ export default function ModalAddSection({
                           input:
                             "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                           body: "mr-3 px-0",
-                          label: "text-[14px] text-[#333333] cursor-pointer",
+                          label: "text-[14px]  cursor-pointer",
                         }}
                         className="mt-3"
                         size="xs"

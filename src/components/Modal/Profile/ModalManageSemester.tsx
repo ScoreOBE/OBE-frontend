@@ -220,7 +220,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                               <p className="font-medium text-[#4E5150] text-[12px]">
                                 Year
                               </p>
-                              <p className="font-semibold text-[#333333] text-[14px]">
+                              <p className="font-semibold  text-[14px]">
                                 {year.slice(0, -1)}
                               </p>
                             </div>
@@ -232,10 +232,8 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                               Semester
                             </p>
                             <p
-                              className={`font-semibold text-[#333333] text-[14px] ${
-                                semester.isActive
-                                  ? "text-secondary"
-                                  : "text-[#333333]"
+                              className={`font-semibold  text-[14px] ${
+                                semester.isActive ? "text-secondary" : ""
                               }`}
                             >
                               {semester.semester}

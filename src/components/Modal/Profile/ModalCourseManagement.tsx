@@ -413,7 +413,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                       <div className="rounded-full cursor-pointer size-8 hover:bg-gray-200 p-1 ">
                         <Menu trigger="click" position="bottom-end" offset={2}>
                           <Menu.Target>
-                            <IconDots className=" text-[#333333] rounded-full hover:bg-gray-200" />
+                            <IconDots className="text-default  rounded-full hover:bg-gray-200" />
                           </Menu.Target>
                           <Menu.Dropdown
                             className="rounded-md backdrop-blur-xl bg-white/70 "

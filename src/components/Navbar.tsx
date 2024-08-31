@@ -53,8 +53,6 @@ export default function Navbar() {
         else if (location.includes(ROUTE_PATH.TQF5)) return "TQF 5";
         else if (location.includes(ROUTE_PATH.ASSIGNMENT)) return "Assignment";
         else return "Section";
-      // case ROUTE_PATH.PLO_MANAGEMENT:
-      //   return "PLO Management";
       default:
         return;
     }

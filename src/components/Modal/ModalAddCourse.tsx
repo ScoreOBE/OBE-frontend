@@ -374,7 +374,7 @@ export default function ModalAddCourse({
           label="Course Type"
           description="STEP 1"
         >
-          <p className="font-semibold text-[#333333] mt-5 text-[15px]">
+          <p className="font-semibold  mt-5 text-[15px]">
             Select type of course
           </p>
 
@@ -392,10 +392,10 @@ export default function ModalAddCourse({
                 inner: "flex justify-between items-center w-full ",
               }}
               color="#ffffff"
-              className="w-full border-[1px] text-[13px]  border-secondary h-fit py-3 !text-[#333333] items-center rounded-[6px] flex hover:bg-bgSecond "
+              className="w-full border-[1px] text-[13px]  border-secondary h-fit py-3 ! items-center rounded-[6px] flex hover:bg-bgSecond "
             >
               <p className="justify-start flex flex-col">
-                <span className="flex justify-start text-[#3e3e3e]">
+                <span className="flex justify-start text-default">
                   {COURSE_TYPE.GENERAL}
                 </span>
                 <br />
@@ -417,10 +417,10 @@ export default function ModalAddCourse({
                 inner: "flex justify-between items-center w-full ",
               }}
               color="#ffffff"
-              className="w-full border-[1px] text-[13px]  border-secondary h-fit py-3 !text-[#333333] items-center rounded-[6px] flex hover:bg-bgSecond "
+              className="w-full border-[1px] text-[13px]  border-secondary h-fit py-3 ! items-center rounded-[6px] flex hover:bg-bgSecond "
             >
               <p className="justify-start flex flex-col">
-                <span className="flex justify-start text-[#3e3e3e]">
+                <span className="flex justify-start text-default">
                   {COURSE_TYPE.SPECIAL}
                 </span>
                 <br />
@@ -443,7 +443,7 @@ export default function ModalAddCourse({
                 inner: "flex justify-between items-center w-full ",
               }}
               color="#ffffff"
-              className="w-full border-[1px] text-[13px] border-secondary  h-fit py-3 !text-[#333333] items-center rounded-[6px] flex justify-start hover:bg-bgSecond"
+              className="w-full border-[1px] text-[13px] border-secondary  h-fit py-3 !text-default items-center rounded-[6px] flex justify-start hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start">Major Elective</span>{" "}
@@ -466,7 +466,7 @@ export default function ModalAddCourse({
               classNames={{
                 inner: "flex justify-between items-center w-full ",
               }}
-              className="w-full border-[1px] h-fit py-3 text-[13px]   border-secondary items-start  !text-[#333333] rounded-[6px] flex justify-start hover:bg-bgSecond"
+              className="w-full border-[1px] h-fit py-3 text-[13px]   border-secondary items-start  !text-default rounded-[6px] flex justify-start hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start">{COURSE_TYPE.FREE}</span>
@@ -569,9 +569,7 @@ export default function ModalAddCourse({
                     className="w-full justify-center pl-5 pr-[18px] pt-4 pb-5 bg-white rounded-md  flex flex-col "
                   >
                     <div className="gap-2 flex flex-col">
-                      <span className="font-medium text-[#333333]">
-                        Repeat on semester
-                      </span>
+                      <span className="font-medium ">Repeat on semester</span>
                       <Chip.Group
                         {...form.getInputProps(`sections.${index}.semester`)}
                         value={sec.semester}
@@ -609,7 +607,7 @@ export default function ModalAddCourse({
                           input:
                             "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                           body: "mr-3 px-0",
-                          label: "text-[14px] text-[#333333] cursor-pointer",
+                          label: "text-[14px]  cursor-pointer",
                         }}
                         className="mt-3 ml-1"
                         size="xs"
