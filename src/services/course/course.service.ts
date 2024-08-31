@@ -13,6 +13,10 @@ export const getOneCourse = async (params?: any) => {
   const res = await courseService.getOneCourse(params);
   return isValidResponse(res);
 };
+export const getExistsCourseName = async (courseNo: string) => {
+  const res = await courseService.getExistsCourseName(courseNo);
+  return isValidResponse(res);
+};
 export const checkCanCreateCourse = async (params: any) => {
   const res = await courseService.checkCanCreateCourse(params);
   return isValidResponse(res);

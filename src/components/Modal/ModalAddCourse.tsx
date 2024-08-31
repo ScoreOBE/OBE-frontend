@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Stepper,
   Button,
@@ -30,6 +30,7 @@ import {
 import {
   checkCanCreateCourse,
   createCourse,
+  getExistsCourseName,
 } from "@/services/course/course.service";
 import {
   getSectionNo,
@@ -63,7 +64,13 @@ export default function ModalAddCourse({
     initialValues: { sections: [{}] } as Partial<IModelCourse>,
     validate: {
       type: (value) => !value && "Course Type is required",
-      courseNo: (value) => validateCourseNo(value),
+      courseNo: (value) => {
+        const invalid = validateCourseNo(value);
+        if (!invalid && value) {
+          getCourseName(value);
+        }
+        return invalid;
+      },
       courseName: (value) => validateCourseNameorTopic(value, "Course Name"),
       sections: {
         topic: (value) => validateCourseNameorTopic(value, "Topic"),
@@ -154,6 +161,11 @@ export default function ModalAddCourse({
     setCoInsList([]);
     form.reset();
     onClose();
+  };
+
+  const getCourseName = async (courseNo: string) => {
+    const res = await getExistsCourseName(courseNo);
+    form.setFieldValue("courseName", res);
   };
 
   const setPayload = () => {
