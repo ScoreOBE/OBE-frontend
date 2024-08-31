@@ -44,7 +44,6 @@ import {
 } from "@/store/courseManagement";
 import { removeCourse, removeSection } from "@/store/course";
 import ModalAddSection from "@/components/Modal/ModalAddSection";
-import { setShowSidebar } from "@/store/showSidebar";
 import { SearchInput } from "@/components/SearchInput";
 import { getDepartment } from "@/services/faculty/faculty.service";
 
@@ -79,7 +78,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
       const payloadCourse = {
         ...new CourseManagementRequestDTO(),
         departmentCode: user.departmentCode,
-        search: courseManagement.search,
+        search: "",
         searchDepartment: "ALL",
       };
       setPayload(payloadCourse);
@@ -104,22 +103,13 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
     }
   };
 
-  useEffect(() => {
-    setPayload({
-      ...new CourseManagementRequestDTO(),
-      departmentCode: user.departmentCode,
-      search: courseManagement.search,
-    });
-    localStorage.removeItem("search");
-  }, [localStorage.getItem("search")]);
-
   const fetchCourse = async (payloadCourse?: any) => {
     setLoading(true);
     if (!payloadCourse) {
       payloadCourse = {
         ...new CourseManagementRequestDTO(),
         departmentCode: user.departmentCode,
-        search: courseManagement.search,
+        search: "",
       };
       setPayload(payloadCourse);
     }
@@ -142,7 +132,6 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
       res.search = payloadCourse.search;
       dispatch(setCourseManagementList(res));
     }
-    localStorage.setItem("search", "true");
   };
 
   const onChangePage = async (page: number, selectLimit?: number) => {
@@ -410,10 +399,10 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                         </p>
                       </div>
 
-                      <div className="rounded-full cursor-pointer size-8 hover:bg-gray-200 p-1 ">
+                      <div className="rounded-full cursor-pointer size-8 hover:bg-gray-200 p-1 text-default">
                         <Menu trigger="click" position="bottom-end" offset={2}>
                           <Menu.Target>
-                            <IconDots className="text-default  rounded-full hover:bg-gray-200" />
+                            <IconDots className="rounded-full hover:bg-gray-200" />
                           </Menu.Target>
                           <Menu.Dropdown
                             className="rounded-md backdrop-blur-xl bg-white/70 "

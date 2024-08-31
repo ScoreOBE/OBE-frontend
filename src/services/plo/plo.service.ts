@@ -7,6 +7,10 @@ export const getPLOs = async (params: any) => {
   const res = await ploService.getPLOs(params);
   return isValidResponse(res);
 };
+export const getOnePLO = async (name: string) => {
+  const res = await ploService.getOnePLO(name);
+  return isValidResponse(res);
+};
 export const checkCanCreatePLO = async (name: string) => {
   const res = await ploService.checkCanCreatePLO(name);
   return isValidResponse(res);

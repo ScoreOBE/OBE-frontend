@@ -1,5 +1,4 @@
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
 import { createTheme, MantineProvider, virtualColor } from "@mantine/core";
 import "./index.css";
 import "@/styles/style.css";
