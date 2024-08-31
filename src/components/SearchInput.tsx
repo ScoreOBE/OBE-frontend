@@ -58,7 +58,7 @@ export function SearchInput({ onSearch }: Props) {
       />
       {isFocused && (
         <div
-          className="mt-2 absolute cursor-pointer w-full rounded-md bg-white text-slate-800 p-3 text-b3 flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center"
+          className="z-50 mt-2 absolute cursor-pointer w-full rounded-md bg-white text-slate-800 p-3 text-b3 flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center"
           onClick={() => {
             setIsFocused(false);
             onSearch(searchValue);
