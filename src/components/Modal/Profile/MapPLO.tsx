@@ -122,16 +122,22 @@ export default function MapPLO({ ploName = "" }: Props) {
 
   useEffect(() => {
     if (ploName.length) {
-      const payloadCourse = {
-        ...new CourseManagementRequestDTO(),
-        limit: 20,
-        departmentCode: user.departmentCode,
-      };
-      setPayload(payloadCourse);
-      fetchCourse(payloadCourse);
+      setCourseManagement([]);
       fetchOnePLO();
     }
   }, [ploName]);
+
+  useEffect(() => {
+    if (ploList.departmentCode && !courseManagement.length) {
+      const payloadCourse = {
+        ...new CourseManagementRequestDTO(),
+        limit: 20,
+        departmentCode: ploList.departmentCode,
+      };
+      setPayload(payloadCourse);
+      fetchCourse(payloadCourse);
+    }
+  }, [ploList]);
 
   useEffect(() => {
     if (openModalAddCourse) {
@@ -247,7 +253,7 @@ export default function MapPLO({ ploName = "" }: Props) {
     let payloadCourse: any = {
       ...new CourseManagementRequestDTO(),
       limit: 20,
-      departmentCode: user.departmentCode,
+      departmentCode: ploList.departmentCode,
     };
     if (reset) payloadCourse.search = "";
     else payloadCourse.search = searchValue;
@@ -607,21 +613,22 @@ export default function MapPLO({ ploName = "" }: Props) {
                                 </div>
 
                                 <div className="flex gap-1 items-center">
-                                  <div
-                                    className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
-                                    onClick={() => {
-                                      formPLO.setValues(item);
-                                      setOpenModalEditPLONo(true);
-                                    }}
-                                  >
-                                    <IconEdit
-                                      stroke={1.5}
-                                      color="#F39D4E"
-                                      className="flex items-center size-4"
-                                    />
-                                  </div>
                                   {isFirstSemester && (
                                     <>
+                                      <div
+                                        className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
+                                        onClick={() => {
+                                          formPLO.setValues(item);
+                                          setOpenModalEditPLONo(true);
+                                        }}
+                                      >
+                                        <IconEdit
+                                          stroke={1.5}
+                                          color="#F39D4E"
+                                          className="flex items-center size-4"
+                                        />
+                                      </div>
+
                                       <div
                                         className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
                                         onClick={() => {
