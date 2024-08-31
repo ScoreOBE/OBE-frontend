@@ -517,7 +517,7 @@ export default function MapPLO({ ploName = "" }: Props) {
               </div>
 
               <p className="text-tertiary text-[14px] font-medium">
-                {ploList.criteriaTH} {ploList.criteriaEN}
+                {ploList.criteriaTH} / {ploList.criteriaEN}
               </p>
             </div>
           </div>
@@ -525,6 +525,7 @@ export default function MapPLO({ ploName = "" }: Props) {
             classNames={{
               root: "overflow-hidden flex flex-col h-full",
               tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
+              tabLabel: "!font-semibold",
             }}
             defaultValue="plodescription"
           >

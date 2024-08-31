@@ -71,6 +71,9 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
+  const [selectDepartment, setSelectDepartment] = useState<string | null>(
+    "All Departments"
+  );
 
   useEffect(() => {
     if (opened) {
@@ -79,8 +82,9 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         ...new CourseManagementRequestDTO(),
         departmentCode: user.departmentCode,
         search: "",
-        searchDepartment: "ALL",
+        searchDepartment: "All Departments",
       };
+      setSelectDepartment("All Departments");
       setPayload(payloadCourse);
       fetchCourse(payloadCourse);
     }
@@ -97,7 +101,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         );
       }
       setDepartment([
-        { departmentCode: "ALL", departmentEN: "Dashboard" },
+        { departmentCode: "All Departments", departmentEN: "All Departments" },
         ...dep,
       ]);
     }
@@ -292,94 +296,105 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         classNames={{ content: "!pt-0" }}
       >
         <Modal.Overlay />
-        <Modal.Content className="overflow-hidden !rounded-none">
-          <Modal.Header className="!py-0 flex w-full border-b border-[#e0e0e0] rounded-none justify-between">
-            <div className="inline-flex gap-2 items-center w-fit justify-start">
-              <Modal.CloseButton />
-              <div className="font-semibold text-h2 text-secondary">
-                Course Management
+        <Modal.Content className="overflow-hidden !rounded-none !px-0">
+          <Modal.Header className=" flex w-full !pb-0 !px-0 !pt-4 rounded-none">
+            <div className="flex flex-col gap-[6px] items-start w-full ">
+              <div className="inline-flex px-12 w-full gap-2 justify-between">
+                <div className="flex gap-2">
+                  <Modal.CloseButton className="ml-0" />
+                  <p className="font-semibold text-h2 text-secondary">
+                    Course Management
+                  </p>
+                </div>
+
+                <SearchInput onSearch={searchCourse} />
               </div>
-            </div>
-            <div className="w-[63%]">
-              <SearchInput onSearch={searchCourse} />
+              <Tabs
+                classNames={{
+                  root: "w-full left-0",
+                  tab: "px-1  !bg-transparent hover:!text-tertiary",
+                  tabLabel: "!font-semibold",
+                }}
+                value={payload.searchDepartment}
+                onChange={(event) => {
+                  setSelectDepartment(
+                    department.find((dep) => dep.departmentCode == event)
+                      .departmentEN
+                  );
+                  setPayload({ ...payload, searchDepartment: event });
+                }}
+              >
+                <Tabs.List className="!gap-6 !bg-transparent px-[53px]">
+                  {department.map((dep) => (
+                    <Tabs.Tab value={dep.departmentCode}>
+                      {dep.departmentCode}
+                    </Tabs.Tab>
+                  ))}
+                </Tabs.List>
+              </Tabs>
             </div>
           </Modal.Header>
-          <Modal.Body className="px-0 pt-1 flex flex-col h-full w-full gap-5 overflow-hidden">
-            <Tabs
-              className="px-6 mt-3"
-              value={payload.searchDepartment}
-              onChange={(event) =>
-                setPayload({ ...payload, searchDepartment: event })
-              }
-            >
-              <Tabs.List>
-                {department.map((dep) => (
-                  <Tabs.Tab value={dep.departmentCode}>
-                    {dep.departmentCode}
-                  </Tabs.Tab>
-                ))}
-              </Tabs.List>
-              {department.map((dep) => (
-                <Tabs.Panel
-                  value={dep.departmentCode}
-                  className="flex flex-row mt-6 items-center justify-between"
+          <Modal.Body className="px-28 flex flex-col h-full w-full overflow-hidden">
+            <div className="flex flex-row py-6 px-6 items-center justify-between">
+              <div className="flex flex-col items-start">
+                <p className="text-secondary text-[16px] font-bold">
+                  {selectDepartment}
+                </p>
+                <p className="text-tertiary text-[14px] font-medium">
+                  {courseManagement.total} Course
+                  {courseManagement.total > 1 ? "s " : " "}
+                </p>
+              </div>
+              <div className="text-b3 gap-3 font-medium flex flex-row justify-end items-center">
+                Courses per page:{" "}
+                <Select
+                  size="xs"
+                  allowDeselect={false}
+                  classNames={{
+                    input: "border-none !h-[32px]",
+                    wrapper: "!h-[32px]",
+                  }}
+                  className=" w-[74px] mr-3 h-[32px]"
+                  data={["10", "20", "50"]}
+                  value={payload.limit.toString()}
+                  onChange={(event) => {
+                    setPayload((prev: any) => {
+                      return { ...prev, limit: parseInt(event!) };
+                    });
+                    onChangePage(1, parseInt(event!));
+                  }}
+                ></Select>
+                <div>
+                  {startEndPage.start} - {startEndPage.end} of{" "}
+                  {courseManagement.total}
+                </div>
+                <div
+                  aria-disabled={startEndPage.start == 1}
+                  onClick={() => onChangePage(payload.page - 1)}
+                  className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                    startEndPage.start !== 1 && "hover:bg-[#eeeeee]"
+                  } rounded-full`}
                 >
-                  <div className="flex flex-col items-start">
-                    <p className="text-secondary text-[16px] font-bold">
-                      {dep.departmentEN}
-                    </p>
-                    <p className="text-tertiary text-[14px] font-medium">
-                      {courseManagement.total} Course
-                      {courseManagement.total > 1 ? "s " : " "}
-                    </p>
-                  </div>
-                  <div className="text-b3 gap-3 font-medium flex flex-row justify-end items-center">
-                    Courses per page:{" "}
-                    <Select
-                      allowDeselect={false}
-                      classNames={{ input: "border-none" }}
-                      className=" w-[74px] mr-3"
-                      data={["10", "20", "50"]}
-                      value={payload.limit.toString()}
-                      onChange={(event) => {
-                        setPayload((prev: any) => {
-                          return { ...prev, limit: parseInt(event!) };
-                        });
-                        onChangePage(1, parseInt(event!));
-                      }}
-                    ></Select>
-                    <div>
-                      {startEndPage.start} - {startEndPage.end} of{" "}
-                      {courseManagement.total}
-                    </div>
-                    <div
-                      aria-disabled={startEndPage.start == 1}
-                      onClick={() => onChangePage(payload.page - 1)}
-                      className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
-                        startEndPage.start !== 1 && "hover:bg-[#eeeeee]"
-                      } rounded-full`}
-                    >
-                      <IconChevronLeft />
-                    </div>
-                    <div
-                      aria-disabled={startEndPage.end == courseManagement.total}
-                      onClick={() => onChangePage(payload.page + 1)}
-                      className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
-                        startEndPage.end !== courseManagement.total &&
-                        "hover:bg-[#eeeeee]"
-                      } rounded-full`}
-                    >
-                      <IconChevronRight />
-                    </div>
-                  </div>
-                </Tabs.Panel>
-              ))}
-            </Tabs>
+                  <IconChevronLeft />
+                </div>
+                <div
+                  aria-disabled={startEndPage.end == courseManagement.total}
+                  onClick={() => onChangePage(payload.page + 1)}
+                  className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                    startEndPage.end !== courseManagement.total &&
+                    "hover:bg-[#eeeeee]"
+                  } rounded-full`}
+                >
+                  <IconChevronRight />
+                </div>
+              </div>
+            </div>
+
             {/* Course Detail */}
             {loading ? (
               <Loading />
             ) : (
-              <div className="flex flex-col h-full overflow-y-auto gap-4 px-6 pb-14 pt-1">
+              <div className="flex flex-col h-full overflow-y-auto gap-4 px-6 pb-20 pt-1">
                 {courseManagement.courseManagements.map((course, index) => (
                   <div
                     key={index}

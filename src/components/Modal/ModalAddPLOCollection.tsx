@@ -299,7 +299,7 @@ export default function ModalAddPLOCollection({
         opened={openModalSelectSemester}
         onClose={closeModal}
         transitionProps={{ transition: "pop" }}
-        size="38vw"
+        size="39vw"
         centered
         classNames={{
           content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
@@ -318,7 +318,7 @@ export default function ModalAddPLOCollection({
               <div className="flex items-center  gap-2">
                 <IconInfoCircle />
                 <p>
-                  Select semester you want to begin using the PLO Collection.
+                  Select semester you would like to begin using the PLO Collection.
                 </p>
               </div>
             }
@@ -534,7 +534,7 @@ export default function ModalAddPLOCollection({
                     variant="outline"
                     className="rounded-[8px] text-[12px] h-[32px] w-fit "
                   >
-                    Add Another
+                    Add more
                   </Button>
                 </div>
               </div>
@@ -665,7 +665,7 @@ export default function ModalAddPLOCollection({
                   icon: "size-6",
                   body: " flex justify-center",
                 }}
-                title={<p>lorem ipsum</p>}
+                title={<p>Select the department you would like to use for the PLO collection.</p>}
               ></Alert>
               <div
                 className="w-full  flex flex-col bg-white border-secondary border-[1px] rounded-md overflow-clip"

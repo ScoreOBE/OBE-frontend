@@ -180,6 +180,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       </Modal>
       <Modal
         opened={openSetSAdminModal}
+        closeOnClickOutside={false}
         size="47vw"
         title="Change Supreme Admin"
         transitionProps={{ transition: "pop" }}
