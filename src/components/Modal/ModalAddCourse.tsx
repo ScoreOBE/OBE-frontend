@@ -64,13 +64,7 @@ export default function ModalAddCourse({
     initialValues: { sections: [{}] } as Partial<IModelCourse>,
     validate: {
       type: (value) => !value && "Course Type is required",
-      courseNo: (value) => {
-        const invalid = validateCourseNo(value);
-        if (!invalid && value) {
-          getCourseName(value);
-        }
-        return invalid;
-      },
+      courseNo: (value) => validateCourseNo(value),
       courseName: (value) => validateCourseNameorTopic(value, "Course Name"),
       sections: {
         topic: (value) => validateCourseNameorTopic(value, "Topic"),
@@ -81,6 +75,11 @@ export default function ModalAddCourse({
       },
     },
     validateInputOnBlur: true,
+    onValuesChange: (values, prev) => {
+      if (prev.courseNo !== values.courseNo && values.courseNo?.length == 6) {
+        getCourseName(values.courseNo!);
+      }
+    },
   });
 
   const nextStep = async (type?: COURSE_TYPE) => {
@@ -175,12 +174,10 @@ export default function ModalAddCourse({
       updatedYear: academicYear.year,
       updatedSemester: academicYear.semester,
     };
-
     payload.sections?.forEach((sec: any) => {
       sec.semester = sec.semester?.map((term: string) => parseInt(term));
       sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
     });
-
     return payload;
   };
 
