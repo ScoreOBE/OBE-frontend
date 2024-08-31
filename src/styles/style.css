@@ -253,6 +253,7 @@ Button:disabled {
   display: flex;
   flex-direction: column;
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+  color: #333333;
 }
 
 .tqf-done {
@@ -263,6 +264,7 @@ Button:disabled {
 .mantine-Tabs-tab[data-variant="pills"] {
   background-color: var(--color-hover);
   height: 32px;
+  font-size: 13px;
 }
 .mantine-Tabs-tab:last-of-type[data-variant="pills"],
 .mantine-Tabs-tab:last-of-type[data-active][data-variant="pills"],
@@ -297,7 +299,6 @@ Button:disabled {
   border-color: #bcbce1;
   border-radius: 0px;
   color: var(--color-secondary);
-  border: 1px solid #bcbce1;
 }
 
 .mantine-Tabs-list[data-variant="pills"] {

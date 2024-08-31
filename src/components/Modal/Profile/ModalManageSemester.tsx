@@ -273,6 +273,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       </Modal>
       <Modal
         opened={openActivateModal}
+        closeOnClickOutside={false}
         size="47vw"
         title={`Activate semester ${activateSemester?.semester}/${activateSemester?.year}`}
         transitionProps={{ transition: "pop" }}
