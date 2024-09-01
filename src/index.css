@@ -29,6 +29,30 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* For Firefox */
+.scroller {
+  scrollbar-width: thin;
+  scrollbar-color: darkgrey lightgrey;
+  scrollbar-gutter: stable both-edges;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+::-webkit-scrollbar-track {
+  background: lightgrey;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  border-radius: 8px;
+  border: 2px solid transparent;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
