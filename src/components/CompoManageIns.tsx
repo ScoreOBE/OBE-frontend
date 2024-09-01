@@ -47,6 +47,7 @@ export default function CompoMangementIns({
   setUserFilter,
 }: Props) {
   const user = useAppSelector((state) => state.user);
+  const [openFirst, setOpenFirst] = useState(false);
   const [swapMethodAddUser, setSwapMethodAddUser] = useState(false);
   const [openedDropdown, setOpenedDropdown] = useState(false);
   const [instructorOption, setInstructorOption] = useState<any[]>([]);
@@ -57,6 +58,7 @@ export default function CompoMangementIns({
 
   useEffect(() => {
     if (opened) {
+      setOpenFirst(true);
       setFirstInput(true);
       setInputUser({ value: null });
       setSwapMethodAddUser(swapMethod);
@@ -100,7 +102,10 @@ export default function CompoMangementIns({
             )
             .map((sec) => sec.sectionNo);
         });
-        if (isManage && list.length && setUserList) setUserList(list);
+        if (isManage && openFirst && list.length && setUserList) {
+          setOpenFirst(false);
+          setUserList(list);
+        }
       }
     }
   }, [sections, instructorOption]);
@@ -297,7 +302,7 @@ export default function CompoMangementIns({
           <Button
             className="rounded-s-none min-w-fit text-b3 h-[30px] border-l-0"
             disabled={!inputUser.value || (swapMethodAddUser && invalidEmail)}
-            onClick={() => addUser()}
+            onClick={() => (change && action ? action(inputUser) : addUser())}
           >
             {change ? "Change" : "Add"}
           </Button>

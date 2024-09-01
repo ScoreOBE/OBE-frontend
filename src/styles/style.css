@@ -19,31 +19,6 @@
   overflow: hidden;
 }
 
-/* For Firefox */
-.scroller {
-  scrollbar-width: thin;
-  scrollbar-color: darkgrey lightgrey;
-  scrollbar-gutter: stable both-edges;
-}
-
-/* Initial hidden state */
-::-webkit-scrollbar {
-  width: 8px;
-  opacity: 0; /* Hide the scrollbar */
-  transition: opacity 0.3s;
-}
-
-::-webkit-scrollbar-track {
-  background: lightgrey;
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
-  border-radius: 8px;
-  border: 2px solid transparent;
-}
-
 .mantine-focus-auto:focus-visible {
   outline: none !important;
 }
@@ -315,6 +290,15 @@ Button:disabled {
 
 .mantine-Input-input:focus {
   border: 1px solid #5768d5 !important;
+}
+
+.mantine-Checkbox-input,
+.mantine-Checkbox-label {
+  cursor: pointer !important;
+}
+.mantine-Checkbox-input:disabled,
+.mantine-Checkbox-label[data-disabled] {
+  cursor: not-allowed !important;
 }
 
 .tqf-in-progress {
