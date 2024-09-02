@@ -359,7 +359,8 @@ export default function Section() {
                           </Menu>
                         ) : (
                           <Switch
-                            size="xs"
+                            size="md"
+                            onLabel="ON" offLabel="OFF"
                             className="absolute top-3 right-3"
                             checked={sec.isActive}
                             onChange={(event) =>

@@ -24,6 +24,8 @@ export default function Sidebar() {
       }}
       animate={{ x: 0 }}
       transition={{ duration: 0.3, type: "keyframes", stiffness: 80 }}
+    
+      
       className="w-[255px] border-r-[1px] h-screen flex p-5 sidebar-linear-gradient"
     >
       <div className="flex w-full flex-col gap-11">

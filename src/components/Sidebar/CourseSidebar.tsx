@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { Button } from "@mantine/core";
+import { Alert, Button } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { RxDashboard } from "react-icons/rx";
-import { IconChevronLeft, IconLogout } from "@tabler/icons-react";
+import {
+  IconChevronLeft,
+  IconExclamationCircle,
+  IconLogout,
+} from "@tabler/icons-react";
 import Icon from "@/components/Icon";
 import LeaveIcon from "@/assets/icons/leave.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
@@ -87,12 +91,26 @@ export default function CourseSidebar() {
         icon={
           <Icon IconComponent={LeaveIcon} className=" -translate-x-1 size-8" />
         }
-        title={`Leaving ${course?.courseNo} Course?`}
+        title={`Leaving ${course?.courseNo} Course`}
         message={
-          <p className=" font-medium">
-            You won't have access to assignments, score, TQF and grades. <br />{" "}
-            <span>Are you sure you want to leave? </span>
-          </p>
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title={` After you leave ${course?.courseNo} course, you won't have access to Assignments, Score, TQF document and Grades in this course `}
+              icon={<IconExclamationCircle />}
+              classNames={{ title: "-mt-[2px]" }}
+              className="mb-5"
+            ></Alert>
+            <div className="flex flex-col  ">
+              <p className="text-b3  text-[#808080]">Course no.</p>
+              <p className=" -translate-y-[2px] text-b1">{`${course?.courseNo}`}</p>
+            </div>
+            <div className="flex flex-col mt-3 ">
+              <p className="text-b3  text-[#808080]">Course name</p>
+              <p className=" -translate-y-[2px] text-b1">{`${course?.courseName}`}</p>
+            </div>
+          </>
         }
       />
       <div className="flex text-white flex-col h-full  gap-[26px]">

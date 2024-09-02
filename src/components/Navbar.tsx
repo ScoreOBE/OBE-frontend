@@ -70,6 +70,10 @@ export default function Navbar() {
               ? "bg-white border-none"
               : "bg-[#f5f5f5]"
           } text-secondary`}
+          style={{
+            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+            overflowY: "auto",
+          }}
         >
           <p className="font-semibold text-h2 md:w-fit max-w-[30%]">
             {topicPath()}

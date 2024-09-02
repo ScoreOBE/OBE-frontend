@@ -41,7 +41,7 @@
 .mantine-Tooltip-tooltip {
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
   border: 1px solid #dadada;
-  background-color: #ffffff;
+  border-radius: 80px;
   padding: 8px;
 }
 
@@ -195,6 +195,10 @@
   font-weight: 500 !important;
 }
 
+.mantine-Switch-trackLabel{
+  font-size: 9px;
+}
+
 Button:disabled {
   cursor: not-allowed !important;
 }
@@ -297,54 +301,25 @@ Button:disabled {
   padding-top: 4px;
   padding-bottom: 4px;
   border-radius: 6px;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 700;
   line-height: 1;
 }
 
 .tqf-done {
-  color: #149067;
-  background-color: #a9dcdb;
+  color: #059061;
+  background-color: #bbe3e3;
 }
 
 .tqf-in-progress {
-  color: #ca9400;
-  background-color: #ebd8b1;
+  color: #9f7504;
+  background-color: #eedbb5;
 }
 
 .tqf-no-data {
-  color: #6f7173;
-  background-color: #cfd0d7;
+  color: #79797a;
+  background-color: #d8d8dd;
 }
-
-/* .height-animation {
-  max-height: 350px;
-  transition: height 0.3s ease-in-out;
-}
-
-.height-animation.expand {
-  height: 350px;
-}
-
-.height-animation.collaps {
-  height: 260px;
-} */
-
-/* .splash-container {
-  background: linear-gradient(135deg, #FF469D, #0A7CFF, #FF7847, #00DFDF, #7733FF, #0A7CFF);
-  bottom: 0;
-  padding: 20px;
-  box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-
-}
-
-.splash-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.6); /* Adjust opacity for the effect */
 
 .gg1 {
   animation: one 10s infinite;
