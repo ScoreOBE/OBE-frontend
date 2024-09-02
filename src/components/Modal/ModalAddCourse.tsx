@@ -312,12 +312,17 @@ export default function ModalAddCourse({
       const secNo = getSectionNo(sec.sectionNo);
       if (sectionNo == secNo) {
         if (checked) {
-          coIns.sections.push(secNo);
-          coIns.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+          if (!coIns.sections.includes(secNo)) {
+            coIns.sections = [...coIns.sections, secNo].sort(
+              (a: any, b: any) => a - b
+            );
+          }
           sec.coInstructors?.push({ ...coIns });
         } else {
           coIns.sections = coIns.sections.filter((e: any) => e !== secNo);
-          sec.coInstructors?.splice(sec.coInstructors.indexOf(coIns), 1);
+          sec.coInstructors = sec.coInstructors?.filter(
+            (p: any) => p.value !== coIns.value
+          );
         }
         sortData(sec.coInstructors, "label", "string");
       }

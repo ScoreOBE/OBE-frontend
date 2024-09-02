@@ -43,6 +43,7 @@ export default function ModalManageIns({
 }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
   const [changeMainIns, setChangeMainIns] = useState(false);
   const [editSec, setEditSec] = useState<
     Partial<IModelSection> & Record<string, any>
@@ -65,6 +66,7 @@ export default function ModalManageIns({
     if (!coInsList?.length && data.sections?.length) {
       setCoInsList(cloneDeep(editCoInsList));
     }
+    console.log(editCoSec);
   }, [editCoInsList]);
 
   const onClickChangeMainIns = async (value: any) => {
@@ -107,6 +109,7 @@ export default function ModalManageIns({
   };
 
   const onClickSave = async () => {
+    setLoading(true);
     const payload = editCoSec.map((sec) => {
       return {
         sectionNo: sec.sectionNo,
@@ -115,16 +118,21 @@ export default function ModalManageIns({
         ),
       };
     });
-    // const res = await updateCoInsSections(data.id!, {
-    //   academicYear: academicYear.id,
-    //   courseNo: data.courseNo,
-    //   data: payload,
-    // });
-    // if (res) {
-    //   dispatch(editCourseManagement(res));
-    //   dispatch(editCourse({ ...res, id: res.courseId }));
-    //   setCoInsList(cloneDeep(editCoInsList));
-    // }
+    const res = await updateCoInsSections(data.id!, {
+      academicYear: academicYear.id,
+      courseNo: data.courseNo,
+      data: payload,
+    });
+    if (res) {
+      dispatch(editCourseManagement(res));
+      setCoInsList(cloneDeep(editCoInsList));
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Update Co-Instructor success",
+        `Co-Instructor for ${data.courseNo} is update`
+      );
+    }
+    setLoading(false);
   };
 
   const addCoIns = (
@@ -149,12 +157,13 @@ export default function ModalManageIns({
       );
       delete inputUser.disabled;
       const updatedSections = editCoSec?.map((sec) => {
-        const coInsArr = [...(sec.coInstructors ?? []), inputUser];
-        sortData(coInsArr, "label", "string");
+        const coInsArr = [...(sec.coInstructors ?? [])];
         if (sec.instructor.id != inputUser.value) {
           inputUser.sections.push(sec.sectionNo);
           inputUser.sections.sort((a: any, b: any) => a - b);
+          coInsArr.push({ ...inputUser });
         }
+        sortData(coInsArr, "label", "string");
         return { ...sec, coInstructors: [...coInsArr] };
       });
       setEditCoInsList([inputUser, ...editCoInsList!]);
@@ -165,11 +174,13 @@ export default function ModalManageIns({
   };
 
   const removeCoIns = (coIns: any) => {
-    const newList = editCoInsList?.filter((e) => e.value !== coIns.value);
+    const newList = editCoInsList?.filter(
+      (e) => (e.id ?? e.value) !== coIns.value
+    );
     const updatedSections = editCoSec?.map((sec) => ({
       ...sec,
       coInstructors: (sec.coInstructors ?? []).filter(
-        (p: any) => p.value !== coIns.value
+        (p: any) => (p.id ?? p.value) !== coIns.value
       ),
     }));
     setEditCoSec([...updatedSections!]);
@@ -178,25 +189,31 @@ export default function ModalManageIns({
 
   const editCoInsInSec = (sectionNo: number, checked: boolean, coIns: any) => {
     const updatedSections = editCoSec.map((sec, index) => {
-      const secNo = sec.sectionNo;
-      if (sectionNo == secNo) {
+      if (sectionNo == sec.sectionNo) {
         let updatedCoInstructors = sec.coInstructors
           ? [...sec.coInstructors]
           : [];
         if (checked) {
-          coIns.sections.push(secNo);
-          coIns.sections.sort((a: any, b: any) => a - b);
+          if (!coIns.sections.includes(sec.sectionNo)) {
+            coIns.sections = [...coIns.sections, sec.sectionNo].sort(
+              (a: any, b: any) => a - b
+            );
+          }
           updatedCoInstructors.push({ ...coIns });
         } else {
-          coIns.sections = coIns.sections.filter((e: any) => e !== secNo);
-          updatedCoInstructors?.splice(sec.coInstructors.indexOf(coIns), 1);
+          coIns.sections = coIns.sections.filter(
+            (e: any) => e !== sec.sectionNo
+          );
+          updatedCoInstructors = updatedCoInstructors.filter(
+            (p: any) => (p.id ?? p.value) !== coIns.value
+          );
         }
         sortData(updatedCoInstructors, "label", "string");
         return { ...sec, coInstructors: updatedCoInstructors };
       }
-      return { ...sec };
+      return sec;
     });
-    setEditCoSec([...updatedSections!]);
+    setEditCoSec(updatedSections);
   };
 
   return (
@@ -428,6 +445,7 @@ export default function ModalManageIns({
                 className="rounded-s-[4px] min-w-fit h-[36px] w-full "
                 onClick={onClickSave}
                 disabled={isEqual(coInsList, editCoInsList)}
+                loading={loading}
               >
                 Save
               </Button>
