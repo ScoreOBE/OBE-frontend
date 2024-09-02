@@ -15,6 +15,7 @@ import router from "./routes/router.tsx";
 quantum.register();
 
 const theme = createTheme({
+  cursorType: 'pointer',
   fontFamily: `"Manrope", "NotoSansThai", Helvetica, Arial, sans-serif`,
   primaryColor: "slate-blue",
   colors: {
