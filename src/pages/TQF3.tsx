@@ -25,6 +25,7 @@ import Icon from "@/components/Icon";
 import { setShowSidebar } from "@/store/showSidebar";
 import { useParams } from "react-router-dom";
 import { COURSE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
+import Part1TQF3 from "@/components/TQF3/Part1TQF3";
 
 export default function TQF3() {
   const { courseNo } = useParams();
@@ -138,7 +139,7 @@ export default function TQF3() {
             className=" h-full w-full bg-white flex mt-2 mb-4 px-5 py-2 rounded-md text-[14px] "
           >
             <Tabs.Panel className="w-full" value="tqf3p1">
-              <div className="flex w-full justify-start  max-h-full">
+              {/* <div className="flex w-full justify-start  max-h-full">
                 <div className="flex  w-full flex-col">
                   <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
                     <div className="flex text-secondary pl-6  flex-col">
@@ -334,7 +335,8 @@ export default function TQF3() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
+              <Part1TQF3 />
             </Tabs.Panel>
             <Tabs.Panel value="tqf3p2">
               <div className="flex flex-col  flex-1 bg-slate-200 ">2</div>
