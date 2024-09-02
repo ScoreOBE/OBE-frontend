@@ -15,20 +15,32 @@ import {
 import { Tabs } from "@mantine/core";
 import { IModelCourseManagement } from "@/models/ModelCourseManagement";
 import CompoMangementIns from "@/components/CompoManageIns";
-import { updateSectionManagement } from "@/services/courseManagement/courseManagement.service";
+import {
+  updateCoInsSections,
+  updateSectionManagement,
+} from "@/services/courseManagement/courseManagement.service";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { IModelSection } from "@/models/ModelSection";
 import { IModelUser } from "@/models/ModelUser";
-import { editSectionManagement } from "@/store/courseManagement";
+import {
+  editCourseManagement,
+  editSectionManagement,
+} from "@/store/courseManagement";
 import { cloneDeep, isEqual } from "lodash";
+import { editCourse } from "@/store/course";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
   data: Partial<IModelCourseManagement>;
+  setNewData?: React.Dispatch<React.SetStateAction<any>>;
 };
-export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
-  const user = useAppSelector((state) => state.user);
+export default function ModalManageIns({
+  opened,
+  onClose,
+  data = {},
+  setNewData = () => {},
+}: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const dispatch = useAppDispatch();
   const [changeMainIns, setChangeMainIns] = useState(false);
@@ -43,6 +55,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
     if (opened) {
       setCoInsList([]);
       setEditCoInsList([]);
+      setEditSec(undefined);
       setEditCoSec(data.sections!);
       setChangeMainIns(false);
     }
@@ -66,6 +79,16 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
     if (res) {
       setChangeMainIns(false);
       setEditSec(undefined);
+      setNewData({
+        ...data,
+        sections: data.sections?.map((sec) => {
+          let instructor = sec.instructor;
+          if (sec.id == editSec?.secId) {
+            instructor = res.updateSection.instructor;
+          }
+          return { ...sec, instructor };
+        }),
+      });
       dispatch(
         editSectionManagement({
           id,
@@ -84,7 +107,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
   };
 
   const onClickSave = async () => {
-    const data = editCoSec.map((sec) => {
+    const payload = editCoSec.map((sec) => {
       return {
         sectionNo: sec.sectionNo,
         coInstructors: sec.coInstructors.map(
@@ -92,8 +115,16 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
         ),
       };
     });
-    console.log(data);
-    setCoInsList(cloneDeep(editCoInsList));
+    const res = await updateCoInsSections(data.id!, {
+      academicYear: academicYear.id,
+      courseNo: data.courseNo,
+      data: payload,
+    });
+    if (res) {
+      dispatch(editCourseManagement(res));
+      dispatch(editCourse({ ...res, id: res.courseId }));
+      setCoInsList(cloneDeep(editCoInsList));
+    }
   };
 
   const addCoIns = (
@@ -158,7 +189,7 @@ export default function ModalManageIns({ opened, onClose, data = {} }: Props) {
           updatedCoInstructors.push({ ...coIns });
         } else {
           coIns.sections = coIns.sections.filter((e: any) => e !== secNo);
-          sec.coInstructors?.splice(sec.coInstructors.indexOf(coIns), 1);
+          updatedCoInstructors?.splice(sec.coInstructors.indexOf(coIns), 1);
         }
         sortData(updatedCoInstructors, "label", "string");
         return { ...sec, coInstructors: updatedCoInstructors };
