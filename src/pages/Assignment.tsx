@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import Icon from "@/components/Icon";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -6,15 +6,26 @@ import { IModelSection } from "@/models/ModelSection";
 import { Button, Menu, Table } from "@mantine/core";
 import eyePublish from "@/assets/icons/eyePublish.svg?react";
 import publish from "@/assets/icons/publish.svg?react";
+import publishEach from "@/assets/icons/publishEach.svg?react";
+import publishAll from "@/assets/icons/publishAll.svg?react";
 import unPublish from "@/assets/icons/unPublish.svg?react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import { IconDots, IconPencilMinus, IconTrash } from "@tabler/icons-react";
+import {
+  IconDots,
+  IconList,
+  IconPencilMinus,
+  IconTrash,
+} from "@tabler/icons-react";
+import { getCourse, getOneCourse } from "@/services/course/course.service";
+import { editCourse, setCourseList } from "@/store/course";
+import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 
 export default function Assignment() {
   const { courseNo, sectionNo } = useParams();
+  const course = useAppSelector((state) => state.course.courses);
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -31,7 +42,7 @@ export default function Assignment() {
         ROUTE_PATH.SECTION
       }?${params.toString()}`,
     },
-    { title: getSectionNo(sectionNo) },
+    { title: `Assignment Section ${getSectionNo(sectionNo)}` },
   ]);
 
   useEffect(() => {
@@ -40,24 +51,50 @@ export default function Assignment() {
 
   return (
     <>
-      <div className="bg-white flex flex-col h-full w-full p-6 py-3 gap-3 overflow-hidden">
+      <div className="bg-white flex flex-col h-full w-full p-6 pb-3 pt-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
         {/* <Breadcrumbs /> */}
         <div className="flex flex-row  py-2  items-center justify-between">
           <p className="text-secondary text-[16px] font-semibold">
-            {section?.assignments.length} Assignment
+            {section?.assignments.length} Number of Assignment
             {section?.assignments.length! > 1 && "s"}
           </p>
 
-          <Button
-            color="#178F51"
-            leftSection={
-              <Icon IconComponent={eyePublish} className="h-5 w-5" />
-            }
-            className="rounded-[8px] font-semibold text-[12px] w-fit  h-8 px-3 "
+          <Menu
+            trigger="click"
+            openDelay={100}
+            clickOutsideEvents={["mousedown"]}
+            classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
           >
-            Publish
-          </Button>
+            <Menu.Target>
+              <Button
+                color="#20af65"
+                leftSection={
+                  <Icon IconComponent={eyePublish} className="h-5 w-5" />
+                }
+                className="rounded-[8px] font-semibold text-[12px] w-fit  h-8 px-3 "
+              >
+                Publish score
+              </Button>
+            </Menu.Target>
+            <Menu.Dropdown
+              className="!z-50 rounded-md -translate-y-[3px] translate-x-[5px] bg-white"
+              style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
+            >
+              <Menu.Item className="text-[#3E3E3E] text-[14px] h-8 w-full ">
+                <div className="flex items-center gap-2">
+                <Icon IconComponent={publishEach} className="h-4 w-4" />
+                  <span>Each Section</span>
+                </div>
+              </Menu.Item>
+              <Menu.Item className="text-[#3E3E3E] text-[14px] h-8 w-full ">
+                <div className="flex items-center gap-2">
+                <Icon IconComponent={publishAll} className="h-4 w-4" />
+                  <span>All Sections</span>
+                </div>
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
         </div>
         {/* Table */}
         <div
@@ -71,7 +108,7 @@ export default function Assignment() {
                 <Table.Th>Points</Table.Th>
                 <Table.Th>Mean</Table.Th>
                 <Table.Th>Created</Table.Th>
-                <Table.Th className="w-40">People</Table.Th>
+                <Table.Th className="w-40">Student(s)</Table.Th>
                 <Table.Th className="w-40 !px-4 text-center">
                   Published
                 </Table.Th>

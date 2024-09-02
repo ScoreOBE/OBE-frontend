@@ -23,6 +23,7 @@ import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
 import { setShowSidebar } from "@/store/showSidebar";
 import { useParams } from "react-router-dom";
+import { COURSE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
 
 export default function TQF3() {
   const { courseNo } = useParams();
@@ -109,8 +110,8 @@ export default function TQF3() {
                 position="bottom-end"
                 label={
                   <div className="text-default text-[13px] p-2 flex flex-col gap-2">
-                    <p>
-                      <span className="text-secondary font-semibold">
+                    <p className=" font-medium">
+                      <span className="text-secondary font-bold">
                         Reuse TQF 3
                       </span>{" "}
                       <br />
@@ -130,7 +131,79 @@ export default function TQF3() {
           </div>
           <div>
             <Tabs.Panel value="tqf3p1">
-              <div className="flex flex-col  flex-1 bg-slate-200 ">dkdkd</div>
+              <div className="flex  w-full  justify-between    pt-6  flex-1">
+                <div className="flex gap-4 flex-col">
+                  <div
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      overflowY: "auto",
+                    }}
+                    className="w-full h-fit items-center rounded-md gap-6  grid grid-cols-2 p-5 "
+                  >
+                    <div className="flex text-secondary pl-10  flex-col">
+                      <p className="font-semibold">ประเภทกระบวนวิชา</p>
+                      <p className="font-bold">Course Type</p>{" "}
+                    </div>
+
+                    <div className="flex text-[#333333] gap-3  flex-col">
+                      {Object.keys(COURSE_TYPE).map((key) => (
+                        <Radio
+                          classNames={{ label: "font-medium" }}
+                          label={key}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      overflowY: "auto",
+                    }}
+                    className="w-full h-fit items-center rounded-md gap-6  grid grid-cols-2 p-5 "
+                  >
+                    <div className="flex text-secondary pl-10 flex-col">
+                      <p className="font-medium">ลักษณะของกระบวนวิชา</p>
+                      <p className="font-semibold">Teachig Method</p>
+                    </div>
+                    <div className="flex text-[#333333] gap-4  flex-col">
+                      {Object.keys(TEACHING_METHOD).map((key) => (
+                        <Checkbox
+                          classNames={{ label: "font-medium" }}
+                          label={key}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col">
+                  <div
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      overflowY: "auto",
+                    }}
+                    className="w-full h-fit items-center rounded-md gap-12 justify-start flex p-6"
+                  >
+                    <div className="flex text-secondary gap-2  flex-row">
+                      <p className="font-semibold">ประเภทกระบวนวิชา</p>
+                      <p className="font-bold">(Course Type)</p>
+                    </div>
+                    <div className="flex text-[#333333] gap-4  flex-col">
+                      <Radio
+                        classNames={{ label: "font-medium" }}
+                        label="วิชาศึกษาทั่วไป (General Education)"
+                      />
+                      <Radio
+                        classNames={{ label: "font-medium" }}
+                        label="วิชาเฉพาะ (Field of specialization)"
+                      />
+                      <Radio
+                        classNames={{ label: "font-medium" }}
+                        label="วิชาเลือกเสรี (Free elective)"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </Tabs.Panel>
             <Tabs.Panel value="tqf3p2">
               <div className="flex flex-col  flex-1 bg-slate-200 ">2</div>
