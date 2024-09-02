@@ -1,7 +1,4 @@
 :root {
-  --tqf-color-done: #3dff45;
-  --tqf-color-in-progress: #fff50d;
-  --tqf-color-no-data: #adadad;
   --color-primary: #423e90;
   --color-secondary: #5768d5;
   --color-tertiary: #3e3e3e;
@@ -230,11 +227,6 @@ Button:disabled {
   color: #333333;
 }
 
-.tqf-done {
-  color: var(--tqf-color-done);
-  border-color: var(--tqf-color-done);
-}
-
 .mantine-Tabs-tab[data-variant="pills"] {
   background-color: var(--color-hover);
   height: 32px;
@@ -300,29 +292,28 @@ Button:disabled {
   cursor: not-allowed !important;
 }
 
+.tag-tqf {
+  padding-inline: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.tqf-done {
+  color: #149067;
+  background-color: #a9dcdb;
+}
+
 .tqf-in-progress {
-  color: var(--tqf-color-in-progress);
-  border-color: var(--tqf-color-in-progress);
+  color: #ca9400;
+  background-color: #ebd8b1;
 }
 
 .tqf-no-data {
-  color: #ffffff;
-  background-color: #aaaaaa;
-}
-
-.tqf-done-with-bg {
-  color: white;
-  background-color: var(--tqf-color-done);
-}
-
-.tqf-in-progress-with-bg {
-  color: white;
-  background-color: var(--tqf-color-in-progress);
-}
-
-.tqf-no-data-with-bg {
-  color: white;
-  background-color: var(--tqf-color-no-data);
+  color: #6f7173;
+  background-color: #cfd0d7;
 }
 
 /* .height-animation {

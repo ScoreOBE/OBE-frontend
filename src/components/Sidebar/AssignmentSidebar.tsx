@@ -94,11 +94,10 @@ export default function AssignmentSidebar() {
           </div>
           <div className="flex flex-col gap-2">
             <Button
-              onClick={() => goToPage(ROUTE_PATH.SECTION)}
               leftSection={<Icon IconComponent={list} />}
               className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
               ${
-                !path.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
+                !path.includes(ROUTE_PATH.ASSIGNMENT)
                   ? // ![ROUTE_PATH.TQF3, ROUTE_PATH.TQF5].includes(path)
                     "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
@@ -106,10 +105,11 @@ export default function AssignmentSidebar() {
             >
               Assignment
             </Button>
+
             <Button
-              onClick={() => goToPage(ROUTE_PATH.TQF3)}
+              //
               leftSection={
-                <Icon IconComponent={histogram} className="h-5 w-5" />
+                <Icon IconComponent={histogram} className="pl-1 pb-1" />
               }
               className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
                 ${
@@ -118,7 +118,7 @@ export default function AssignmentSidebar() {
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                 }`}
             >
-              Histogram
+              <p className="pl-1">Histogram</p>
             </Button>
           </div>
         </div>

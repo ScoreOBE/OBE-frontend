@@ -336,17 +336,9 @@ export default function Dashboard() {
                         {item.sections.length} Section
                         {item.sections.length > 1 ? "s" : ""}
                       </p>
-                      <div className="flex gap-3 px-2.5 font-semibold text-[11px] py-1 justify-end items-center">
-                        <p
-                          className={`px-1 border-[1px] rounded-md ${statusTQF3}`}
-                        >
-                          TQF 3
-                        </p>
-                        <p
-                          className={`px-1 border-[1px] rounded-md ${statusTQF5}`}
-                        >
-                          TQF 5
-                        </p>
+                      <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">
+                        <p className={`tag-tqf ${statusTQF3}`}>TQF 3</p>
+                        <p className={`tag-tqf ${statusTQF5}`}>TQF 5</p>
                       </div>
                     </div>
                   </div>
