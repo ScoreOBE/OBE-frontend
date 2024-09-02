@@ -31,6 +31,9 @@ export const courseManagementController = (configService = {}) => {
     ) => {
       return service.put(`${prefix}/${id}/${section}`, { ...params });
     },
+    updateCoInsSections: async (id: string, params: any) => {
+      return service.put(`${prefix}/${id}/coIns`, { ...params });
+    },
     deleteCourseManagement: async (id: string, params: any) => {
       return service.delete(`${prefix}/${id}`, { ...params });
     },

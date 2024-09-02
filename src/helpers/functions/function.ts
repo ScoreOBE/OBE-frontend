@@ -3,20 +3,26 @@ import { NOTI_TYPE, TQF_STATUS } from "../constants/enum";
 import { IModelUser } from "@/models/ModelUser";
 import { IconX, IconCheck, icons, Icon } from "@tabler/icons-react";
 import React, { ReactElement, ReactNode } from "react";
+import { isEmpty } from "lodash";
 
 export const getSectionNo = (sectionNo: number | string | undefined) => {
   if (!sectionNo) return "";
   return ("000" + parseInt(sectionNo.toString())).slice(-3);
 };
-export const getUserName = (user: Partial<IModelUser> | undefined, format?: number) => {
-  if (!user || !user.firstNameEN || !user.lastNameEN) return;
+export const getUserName = (
+  user: Partial<IModelUser> | undefined,
+  format?: number
+) => {
+  if (!user) return;
+  else if (isEmpty(user.firstNameEN) || isEmpty(user.lastNameEN))
+    return user.email;
   switch (format) {
     case 1:
       return `${user.firstNameEN} ${user.lastNameEN}`; // John Doe
     case 2:
-      return `${user.firstNameEN.toLowerCase()} ${user.lastNameEN.toLowerCase()}`; // john doe
+      return `${user.firstNameEN?.toLowerCase()} ${user.lastNameEN?.toLowerCase()}`; // john doe
     default:
-      return `${user.firstNameEN} ${user.lastNameEN.slice(0, 1)}.`; // John D.
+      return `${user.firstNameEN} ${user.lastNameEN?.slice(0, 1)}.`; // John D.
   }
 };
 

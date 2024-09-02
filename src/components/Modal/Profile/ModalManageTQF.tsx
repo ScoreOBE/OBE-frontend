@@ -6,11 +6,13 @@ import Icon from "@/components/Icon";
 import notCompleteIcon from "@/assets/icons/notComplete.svg?react";
 import { IModelUser } from "@/models/ModelUser";
 import { getCourse } from "@/services/course/course.service";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { COURSE_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { IModelCourse } from "@/models/ModelCourse";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
+import { updateProcessTqf3 } from "@/services/academicYear/academicYear.service";
+import { setProcessTQF3 } from "@/store/academicYear";
 
 type Props = {
   opened: boolean;
@@ -18,10 +20,9 @@ type Props = {
 };
 export default function ModalManageTQF({ opened, onClose }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [payload, setPayload] = useState<any>({});
-  const [checkedTQF3, setCheckedTQF3] = useState(true);
-  const [checkedTQF5, setCheckedTQF5] = useState(false);
   const [courseList, setCourseList] = useState<any[]>([]);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
       setSearchValue("");
       fetchCourse();
     }
-  }, [academicYear, opened]);
+  }, [opened]);
 
   const fetchCourse = async () => {
     if (academicYear) {
@@ -71,7 +72,16 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
     }
   };
 
-  const onClickeToggleProcessTQF3 = (checked: any, index?: number) => {
+  const onClickToggleProcessTQF = async (checked: any) => {
+    const res = await updateProcessTqf3(academicYear.id, {
+      isProcessTQF3: checked,
+    });
+    if (res) {
+      dispatch(setProcessTQF3(res));
+    }
+  };
+
+  const onClickToggleOne = (checked: any, index?: number) => {
     const updatedList = courseList.map((item, idx) => {
       if (index === undefined || index === idx) {
         return {
@@ -88,24 +98,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
       }
       return item;
     });
-
     setCourseList(updatedList);
-  };
-
-  const clickToggleTQF3 = (checked: any) => {
-    setCheckedTQF3(checked);
-    setCheckedTQF5(!checked);
-
-    if (checked) {
-      onClickeToggleProcessTQF3(true);
-    } else {
-      onClickeToggleProcessTQF3(false);
-    }
-  };
-
-  const clickToggleTQF5 = (checked: any) => {
-    setCheckedTQF5(checked);
-    setCheckedTQF3(!checked);
   };
 
   return (
@@ -138,9 +131,9 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                   size="lg"
                   onLabel="ON"
                   offLabel="OFF"
-                  checked={checkedTQF3}
+                  checked={academicYear?.isProcessTQF3}
                   onChange={(event) =>
-                    clickToggleTQF3(event.currentTarget.checked)
+                    onClickToggleProcessTQF(event.currentTarget.checked)
                   }
                 />
               </div>
@@ -152,14 +145,14 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                   size="lg"
                   onLabel="ON"
                   offLabel="OFF"
-                  checked={checkedTQF5}
+                  checked={!academicYear?.isProcessTQF3}
                   onChange={(event) =>
-                    clickToggleTQF5(event.currentTarget.checked)
+                    onClickToggleProcessTQF(!event.currentTarget.checked)
                   }
                 />
               </div>
             </div>
-            {checkedTQF3 ? (
+            {academicYear?.isProcessTQF3 ? (
               <div className="w-full px-3 font-medium">
                 <p className="font-semibold text-[13px] text-tertiary">
                   When turn on TQF 5 edit
@@ -276,14 +269,14 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                           {e.instructor}
                         </p>
 
-                        {!checkedTQF3 && (
+                        {!academicYear?.isProcessTQF3 && (
                           <Switch
                             size="lg"
                             onLabel="ON"
                             offLabel="OFF"
-                            checked={e.isProcessTQF3}
+                            checked={e.TQF3?.status == TQF_STATUS.DONE}
                             onChange={(event) =>
-                              onClickeToggleProcessTQF3(
+                              onClickToggleOne(
                                 event.currentTarget.checked,
                                 index
                               )

@@ -10,7 +10,6 @@ export interface IModelSection {
   coInstructors: IModelUser[] | any[];
   isActive: boolean;
   assignments: any[];
-  isProcessTQF3: boolean;
   // TQF3: TQF;
   // TQF5: TQF;
   TQF3?: any;

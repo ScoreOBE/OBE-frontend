@@ -19,6 +19,9 @@ export const academicYearController = (configService = {}) => {
     activeAcademicYear: async (id: string) => {
       return service.put(`${prefix}/${id}`, {});
     },
+    updateProcessTqf3: async (id: string, params: any) => {
+      return service.put(`${prefix}/${id}/tqf`, { ...params });
+    },
     deleteAcademicYear: async (id: string) => {
       return service.delete(`${prefix}/${id}`, {});
     },
