@@ -1,4 +1,4 @@
-import { Alert, Button, Modal, rem, TextInput } from "@mantine/core";
+import { Alert, Button, Modal, TextInput } from "@mantine/core";
 import {
   IconExclamationCircle,
   IconInfoCircle,
@@ -6,9 +6,6 @@ import {
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
-import { AiOutlineSwap } from "react-icons/ai";
-import Icon from "@/components/Icon";
-import InfoIcon from "@/assets/icons/info.svg?react";
 import { IModelUser } from "@/models/ModelUser";
 import { getInstructor, updateSAdmin } from "@/services/user/user.service";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -162,7 +159,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                   </div>
                   <Button
                     variant="outline"
-                      size="xs"
+                    size="xs"
                     className=" rounded-[8px] font-semibold text-[12px]"
                     onClick={() => {
                       setSupremeAdmin(admin);

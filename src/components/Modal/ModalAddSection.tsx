@@ -32,7 +32,7 @@ import {
   showNotifications,
   sortData,
 } from "@/helpers/functions/function";
-import CompoMangementIns from "../CompoManageIns";
+import CompoMangeIns from "../CompoManageIns";
 import { IModelSection } from "@/models/ModelSection";
 import { IModelCourse } from "@/models/ModelCourse";
 import {
@@ -461,9 +461,9 @@ export default function ModalAddSection({
                         {/* <span className="text-b3 text-[#a2a2a2] -mt-2">Only one instructor is allowed per section</span> */}
                       </span>
 
-                      <CompoMangementIns
+                      <CompoMangeIns
                         opened={active == 1}
-                        mainIns={true}
+                        type="mainIns"
                         value={sec.instructor as string}
                         swapMethod={(sec.instructor as any)?.label?.includes(
                           "@cmu.ac.th"
@@ -573,8 +573,9 @@ export default function ModalAddSection({
           description={`STEP ${isManage ? 4 : 3}`}
         >
           <div className="flex flex-col mt-3 flex-1 ">
-            <CompoMangementIns
+            <CompoMangeIns
               opened={active == 2}
+              type="add"
               action={addCoIns}
               sections={form.getValues().sections}
               setUserList={setCoInsList}
