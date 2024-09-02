@@ -115,16 +115,16 @@ export default function ModalManageIns({
         ),
       };
     });
-    const res = await updateCoInsSections(data.id!, {
-      academicYear: academicYear.id,
-      courseNo: data.courseNo,
-      data: payload,
-    });
-    if (res) {
-      dispatch(editCourseManagement(res));
-      dispatch(editCourse({ ...res, id: res.courseId }));
-      setCoInsList(cloneDeep(editCoInsList));
-    }
+    // const res = await updateCoInsSections(data.id!, {
+    //   academicYear: academicYear.id,
+    //   courseNo: data.courseNo,
+    //   data: payload,
+    // });
+    // if (res) {
+    //   dispatch(editCourseManagement(res));
+    //   dispatch(editCourse({ ...res, id: res.courseId }));
+    //   setCoInsList(cloneDeep(editCoInsList));
+    // }
   };
 
   const addCoIns = (
