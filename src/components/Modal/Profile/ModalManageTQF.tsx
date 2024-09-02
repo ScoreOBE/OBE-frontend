@@ -26,7 +26,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   const [courseList, setCourseList] = useState<any[]>([]);
 
   useEffect(() => {
-    if (opened) {
+    if (opened && !courseList.length) {
       setSearchValue("");
       fetchCourse();
     }
@@ -41,6 +41,8 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
       const res = await getCourse(initialPayload);
       if (res) {
         const courseList: any[] = [];
+        console.log(res);
+
         res.forEach((course: IModelCourse) => {
           if (course.type === COURSE_TYPE.SEL_TOPIC) {
             course.sections.forEach((section) => {
@@ -63,7 +65,13 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
               )
             ).join(", ");
             if (temp) {
-              courseList.push({ ...course, instructor: temp });
+              courseList.push({
+                TQF3: {
+                  status: TQF_STATUS.NO_DATA,
+                },
+                ...course,
+                instructor: temp,
+              });
             }
           }
         });
@@ -82,25 +90,21 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   };
 
   const onClickToggleOne = (checked: any, index?: number) => {
+    console.log(checked);
     const updatedList = courseList.map((item, idx) => {
-      if (index === undefined || index === idx) {
+      if (index === idx) {
         return {
           ...item,
-          // isProcessTQF3: checked,
-          // sections:
-          //   item.type === COURSE_TYPE.SEL_TOPIC
-          //     ? item.sections.map((section: any) => ({
-          //         ...section,
-          //         isProcessTQF3: checked,
-          //       }))
-          //     : item.sections,
+          TQF3: { status: checked ? TQF_STATUS.IN_PROGRESS : TQF_STATUS.DONE },
         };
       }
       return item;
     });
+    // Log updated list to ensure state changes
+    console.log("Updated course list:", updatedList);
+
     setCourseList(updatedList);
   };
-
   return (
     <Modal
       opened={opened && !!courseList.length}
@@ -117,7 +121,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
       <div className="flex flex-col h-full gap-4   flex-1 ">
         <div className="flex flex-row w-full mt-[2px] items-end h-fit ">
           <div
-            className="flex flex-col gap-2  p-3 px-3 w-full   bg-white border-[1px]  rounded-md"
+            className="flex flex-col gap-2  p-3 px-3 w-full bg-white border-[1px]  rounded-md"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
@@ -274,13 +278,13 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                             size="lg"
                             onLabel="ON"
                             offLabel="OFF"
-                            checked={e.TQF3?.status == TQF_STATUS.DONE}
-                            onChange={(event) =>
+                            checked={e.TQF3?.status !== TQF_STATUS.DONE}
+                            onChange={(event) => {
                               onClickToggleOne(
                                 event.currentTarget.checked,
                                 index
-                              )
-                            }
+                              );
+                            }}
                           />
                         )}
                       </div>
