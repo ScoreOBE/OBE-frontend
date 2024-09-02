@@ -320,7 +320,8 @@ export default function ModalAddPLOCollection({
               <div className="flex items-center  gap-2">
                 <IconInfoCircle />
                 <p>
-                  Select semester you would like to begin using the PLO Collection.
+                  Select semester you would like to begin using the PLO
+                  Collection.
                 </p>
               </div>
             }
@@ -384,7 +385,7 @@ export default function ModalAddPLOCollection({
         title="Add PLO Collection"
         size={
           active === 1 && form.getValues().data?.length! > 1
-            ? "65vw"
+            ? "100vw"
             : active === 3
             ? "55vw"
             : "45vw"
@@ -542,23 +543,23 @@ export default function ModalAddPLOCollection({
               </div>
               {form.getValues().data?.length! > 1 && (
                 <div
-                  className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[60%] h-full overflow-y-hidden"
+                  className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[60%] h-full"
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    overflowY: "auto",
                   }}
                 >
-                  <div className="bg-[#e6e9ff] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
+                  <div className="sticky top-0 z-10 bg-[#e6e9ff] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                     <div className="flex items-center gap-2">
                       <Icon IconComponent={IconSO} />
                       <span>List PLO Added</span>
                     </div>
                     <p>{state.length} PLOs</p>
                   </div>
-                  <div className="flex flex-col w-full h-fit overflow-y-auto overflow-x-hidden px-5 pl-7">
+                  <div className="flex flex-col w-full h-fit px-4">
                     <DragDropContext
                       onDragEnd={({ destination, source }) => {
                         if (destination) {
-                          // Ensure destination is not null
                           handlers.reorder({
                             from: source.index,
                             to: destination.index,
@@ -572,7 +573,6 @@ export default function ModalAddPLOCollection({
                           <div
                             {...provided.droppableProps}
                             ref={provided.innerRef}
-                            className=""
                           >
                             {state.map((item, index) => (
                               <Draggable
@@ -580,22 +580,26 @@ export default function ModalAddPLOCollection({
                                 index={index}
                                 draggableId={index.toString()}
                               >
-                                {(provided) => (
+                                {(provided, snapshot) => (
                                   <div
-                                    className={`py-3 w-full ${
-                                      state?.length! > 1
+                                    className={`py-3 w-full border-b-[1px] px-3 ${
+                                      state.length > 1
                                         ? "last:border-none last:pb-5"
                                         : ""
-                                    } border-b-[1px]`}
+                                    } ${
+                                      snapshot.isDragging
+                                        ? "bg-hover rounded-md"
+                                        : ""
+                                    }`}
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                   >
-                                    <div className="flex flex-col gap-2 w-full ">
+                                    <div className="flex flex-col gap-2 w-full">
                                       <div className="flex items-center justify-between">
                                         <p className="text-secondary font-semibold text-[14px]">
                                           PLO-{item.no}
                                         </p>
-                                        <div className="flex gap-1 items-center">
+                                        <div className="flex gap-1 ">
                                           <div
                                             className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer"
                                             onClick={() => {
@@ -616,7 +620,7 @@ export default function ModalAddPLOCollection({
                                           </div>
 
                                           <div
-                                            className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
+                                            className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
                                             {...provided.dragHandleProps}
                                           >
                                             <IconGripVertical
@@ -669,7 +673,12 @@ export default function ModalAddPLOCollection({
                   icon: "size-6",
                   body: " flex justify-center",
                 }}
-                title={<p>Select the department you would like to use for the PLO collection.</p>}
+                title={
+                  <p>
+                    Select the department you would like to use for the PLO
+                    collection.
+                  </p>
+                }
               ></Alert>
               <div
                 className="w-full  flex flex-col bg-white border-secondary border-[1px] rounded-md overflow-clip"
@@ -770,7 +779,7 @@ export default function ModalAddPLOCollection({
                   <div className="flex flex-col w-full ">
                     {state.map((item, index) => (
                       <div
-                        className={`flex  py-4 w-full justify-between  border-b bg-red ${
+                        className={`flex  py-4 w-full justify-between  border-b  ${
                           state?.length! > 1 ? "last:border-none" : ""
                         }`}
                       >

@@ -581,12 +581,8 @@ export default function MapPLO({ ploName = "" }: Props) {
                   }}
                 >
                   <Droppable droppableId="dnd-list" direction="vertical">
-                    {(provided) => (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        className=" overflow-y-auto"
-                      >
+                    {(provided, snapshot) => (
+                      <div {...provided.droppableProps} ref={provided.innerRef}>
                         {state.map((item, index) => (
                           <Draggable
                             key={item.no}
@@ -595,7 +591,11 @@ export default function MapPLO({ ploName = "" }: Props) {
                           >
                             {(provided, snapshot) => (
                               <div
-                                className="flex p-4 w-full justify-between first:-mt-2 border-b last:border-none"
+                                className={`flex p-4 w-full justify-between first:-mt-2 border-b last:border-none ${
+                                  snapshot.isDragging
+                                    ? "bg-hover rounded-md"
+                                    : ""
+                                }`}
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                               >
