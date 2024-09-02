@@ -210,6 +210,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         opened={openModalManageIns}
         onClose={() => setOpenModalManageIns(false)}
         data={editCourse}
+        setNewData={setEditCourse}
       />
       <MainPopup
         opened={openMainPopupDelCourse}
@@ -298,8 +299,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
       >
         <Modal.Overlay />
         <Modal.Content className="overflow-hidden !rounded-none !px-0">
-          <Modal.Header className=" flex w-full !pb-0 !px-0 !pt-4 rounded-none">
-            <div className="flex flex-col gap-[6px] items-start w-full ">
+          <Modal.Header className="flex w-full !pb-0 !px-0 !pt-4 rounded-none">
+            <div className="flex flex-col gap-[6px] items-start w-full">
               <div className="inline-flex px-12 w-full gap-2 justify-between">
                 <div className="flex gap-2">
                   <Modal.CloseButton className="ml-0" />
@@ -326,7 +327,10 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
               >
                 <Tabs.List className="!gap-6 !bg-transparent px-[53px]">
                   {department.map((dep) => (
-                    <Tabs.Tab value={dep.departmentCode}>
+                    <Tabs.Tab
+                      key={dep.departmentCode}
+                      value={dep.departmentCode}
+                    >
                       {dep.departmentCode}
                     </Tabs.Tab>
                   ))}
@@ -394,18 +398,18 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
             {loading ? (
               <Loading />
             ) : (
-              <div className="flex flex-col h-full overflow-y-auto gap-4 px-6 pb-20 pt-1">
+              <div className="flex flex-col h-full overflow-y-auto relative gap-4 px-6 pb-20 pt-1">
                 {courseManagement.courseManagements.map((course, index) => (
                   <div
                     key={index}
-                    className="bg-[#ffffff] rounded-md flex flex-col py-4  px-5"
+                    className="bg-[#ffffff] rounded-md flex flex-col py-4 px-5"
                     style={{
                       boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                     }}
                   >
                     {/* Course Topic */}
                     <div className="gap-2 mb-3 flex items-center w-full justify-between">
-                      <div className="flex flex-col  w-fit">
+                      <div className="flex flex-col w-fit">
                         <p className=" font-bold text-b2 text-secondary">
                           {course.courseNo}
                         </p>
@@ -415,12 +419,17 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                       </div>
 
                       <div className="rounded-full cursor-pointer size-8 hover:bg-gray-200 p-1 text-default">
-                        <Menu trigger="click" position="bottom-end" offset={2}>
+                        <Menu
+                          trigger="click"
+                          position="bottom-end"
+                          offset={2}
+                          zIndex={50}
+                        >
                           <Menu.Target>
                             <IconDots className="rounded-full hover:bg-gray-200" />
                           </Menu.Target>
                           <Menu.Dropdown
-                            className="rounded-md backdrop-blur-xl bg-white/70 "
+                            className="rounded-md backdrop-blur-xl bg-white/70"
                             style={{
                               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                             }}

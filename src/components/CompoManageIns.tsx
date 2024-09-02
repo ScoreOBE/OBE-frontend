@@ -300,7 +300,7 @@ export default function CompoMangementIns({
         )}
         {!mainIns && (
           <Button
-            className="rounded-s-none min-w-fit text-b3 h-[30px] border-l-0"
+            className="rounded-s-none min-w-fit text-b3 h-[30px] border-l-0 disabled:border-[#cecece]"
             disabled={!inputUser.value || (swapMethodAddUser && invalidEmail)}
             onClick={() => (change && action ? action(inputUser) : addUser())}
           >
