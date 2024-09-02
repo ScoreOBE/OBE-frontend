@@ -1,5 +1,5 @@
 export class CourseManagementRequestDTO {
-  departmentCode?: string;
+  departmentCode?: string[];
   orderBy: string = "courseNo";
   orderType: string = "asc";
   search: string = "";

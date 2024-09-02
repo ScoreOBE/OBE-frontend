@@ -71,24 +71,21 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
-  const [selectDepartment, setSelectDepartment] = useState<string | null>(
-    "All Departments"
-  );
+  const [selectDepartment, setSelectDepartment] = useState<any>({});
 
   useEffect(() => {
     if (opened) {
       fetchDep();
-      const payloadCourse = {
-        ...new CourseManagementRequestDTO(),
-        departmentCode: user.departmentCode,
-        search: "",
-        searchDepartment: "All Departments",
-      };
-      setSelectDepartment("All Departments");
-      setPayload(payloadCourse);
-      fetchCourse(payloadCourse);
+      setSelectDepartment({
+        departmentEN: "All Departments",
+        departmentCode: "All Departments",
+      });
     }
   }, [opened]);
+
+  useEffect(() => {
+    fetchCourse();
+  }, [department, selectDepartment]);
 
   const fetchDep = async () => {
     const res = await getDepartment(user.facultyCode);
@@ -107,30 +104,34 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
     }
   };
 
-  const fetchCourse = async (payloadCourse?: any) => {
+  const initialPayload = () => {
+    return {
+      ...new CourseManagementRequestDTO(),
+      departmentCode: selectDepartment.departmentCode?.includes("All")
+        ? department.map((dep) => dep.departmentCode)
+        : [selectDepartment.departmentCode],
+      search: "",
+    };
+  };
+
+  const fetchCourse = async () => {
     setLoading(true);
-    if (!payloadCourse) {
-      payloadCourse = {
-        ...new CourseManagementRequestDTO(),
-        departmentCode: user.departmentCode,
-        search: "",
-      };
+    if (department.length) {
+      const payloadCourse = initialPayload();
       setPayload(payloadCourse);
+      const res = await getCourseManagement(payloadCourse);
+      if (res) {
+        dispatch(setCourseManagementList(res));
+      }
+      setLoading(false);
     }
-    const res = await getCourseManagement(payloadCourse);
-    if (res) {
-      dispatch(setCourseManagementList(res));
-    }
-    setLoading(false);
   };
 
   const searchCourse = async (searchValue: string, reset?: boolean) => {
-    let payloadCourse: any = {
-      ...new CourseManagementRequestDTO(),
-      departmentCode: user.departmentCode,
-    };
+    let payloadCourse = initialPayload();
     if (reset) payloadCourse.search = "";
     else payloadCourse.search = searchValue;
+    setPayload(payloadCourse);
     const res = await getCourseManagement(payloadCourse);
     if (res) {
       res.search = payloadCourse.search;
@@ -315,11 +316,10 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   tab: "px-1  !bg-transparent hover:!text-tertiary",
                   tabLabel: "!font-semibold",
                 }}
-                value={payload.searchDepartment}
+                value={selectDepartment.departmentCode}
                 onChange={(event) => {
                   setSelectDepartment(
                     department.find((dep) => dep.departmentCode == event)
-                      .departmentEN
                   );
                   setPayload({ ...payload, searchDepartment: event });
                 }}
@@ -338,7 +338,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
             <div className="flex flex-row py-6 px-6 items-center justify-between">
               <div className="flex flex-col items-start">
                 <p className="text-secondary text-[16px] font-bold">
-                  {selectDepartment}
+                  {selectDepartment.departmentEN}
                 </p>
                 <p className="text-tertiary text-[14px] font-medium">
                   {courseManagement.total} Course
@@ -496,8 +496,11 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                     {/* Section */}
                     <div className="flex flex-col">
                       {course.sections.map((sec: any, index: number) => (
-                        <div key={sec.sectionNo}>
-                          <div className=" bg-[#f5f6ff] first:rounded-t-md last:rounded-b-md grid grid-cols-5 items-center justify-between last:border-none  py-4  px-7">
+                        <div
+                          key={sec.sectionNo}
+                          className="first:rounded-t-md last:rounded-b-md bg-[#f5f6ff]"
+                        >
+                          <div className="grid grid-cols-5 items-center justify-between py-4 px-7">
                             {/* Section No & Topic */}
                             <div className="flex flex-col ">
                               <p className="font-medium text-[13px] text-black">
