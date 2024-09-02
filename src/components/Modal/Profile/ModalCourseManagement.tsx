@@ -338,7 +338,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
               </Tabs>
             </div>
           </Modal.Header>
-          <Modal.Body className="px-28 flex flex-col h-full w-full overflow-hidden">
+          <Modal.Body className="px-28  flex flex-col h-full pb-24 w-full overflow-hidden">
             <div className="flex flex-row py-6 px-6 items-center justify-between">
               <div className="flex flex-col items-start">
                 <p className="text-secondary text-[16px] font-bold">
@@ -397,8 +397,13 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
             {/* Course Detail */}
             {loading ? (
               <Loading />
+            ) : courseManagement.courseManagements.length === 0 ? (
+              <div className="text-center h-full gap-1 justify-center items-center flex flex-col ">
+                <p className=" text-secondary text-[18px] font-semibold">Oops, No Courses here!</p>
+                <p>Currently, No {selectDepartment.departmentEN} courses are added. </p>
+              </div>
             ) : (
-              <div className="flex flex-col h-full overflow-y-auto relative gap-4 px-6 pb-20 pt-1">
+              <div className="flex flex-col h-full  overflow-y-auto relative gap-4 pb-1 px-6 pt-1">
                 {courseManagement.courseManagements.map((course, index) => (
                   <div
                     key={index}

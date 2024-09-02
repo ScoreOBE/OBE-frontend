@@ -376,7 +376,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             </div>
           </Modal.Header>
 
-          <Modal.Body className=" px-28  flex flex-col h-full w-full  overflow-hidden">
+          <Modal.Body className=" px-28  flex flex-col h-full w-full pb-24  overflow-hidden">
             {/* Topic */}
             {selectPlo === "Dashboard" && (
               <div className="flex flex-row px-6 py-6 items-center justify-between">
@@ -431,7 +431,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             {loading ? (
               <Loading />
             ) : selectPlo === "Dashboard" ? (
-              <div className="flex flex-col mt-3 overflow-y-auto gap-4 px-6 pb-20 pt-1">
+              <div className="flex flex-col mt-3 overflow-y-auto gap-4 px-6 pb-1 pt-1">
                 {selectView == "ploview"
                   ? ploCollection.map((plo, index) => (
                       <div
