@@ -17,6 +17,8 @@ import { showNotifications } from "@/helpers/functions/function";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { setAcademicYear } from "@/store/academicYear";
 import { isEqual } from "lodash";
+import Icon from "@/components/Icon";
+import CalendarIcon from "@/assets/icons/calendar.svg?react";
 
 type Props = {
   opened: boolean;
@@ -184,7 +186,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             }}
           >
             <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] py-3 px-5 text-secondary font-semibold">
-              <IconUsers /> Added Semester
+              <Icon IconComponent={CalendarIcon} /> Added Semester
             </div>
             {/* Show List Of Semester */}
             <div className="flex flex-col gap-2  w-full h-[400px]  p-4  overflow-y-hidden">
