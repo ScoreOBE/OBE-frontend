@@ -7,8 +7,8 @@ export default function Part1TQF3() {
   const form = useForm();
   return (
     <div className="flex w-full justify-start  max-h-full">
-      <div className="flex  w-full flex-col">
-        <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
+      <div className="flex  w-full flex-col text-[14px]">
+        <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
           <div className="flex text-secondary pl-6  flex-col">
             <p className="font-medium">
               ประเภทกระบวนวิชา <span className=" text-red-500">*</span>
