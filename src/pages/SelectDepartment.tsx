@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import cmulogo from "@/assets/image/cmuLogoLoginWhite.png";
-import entlogo from "@/assets/image/cpeLogo.png";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Button, Checkbox } from "@mantine/core";
 import { getUserName, sortData } from "@/helpers/functions/function";

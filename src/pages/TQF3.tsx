@@ -1,38 +1,23 @@
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch } from "@/store";
 import { useEffect, useState } from "react";
-import Loading from "@/components/Loading";
-import { getPLOs } from "@/services/plo/plo.service";
-import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
-import ModalAddPLOCollection from "@/components/Modal/ModalAddPLOCollection";
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Group,
-  Menu,
-  Modal,
-  Radio,
-  RadioCard,
-  ScrollArea,
-  Table,
-  Tabs,
-  Textarea,
-  TextInput,
-  Tooltip,
-} from "@mantine/core";
+import { Alert, Button, Modal, Select, Tabs, Tooltip } from "@mantine/core";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
 import { setShowSidebar } from "@/store/showSidebar";
 import { useParams } from "react-router-dom";
-import { COURSE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
+
 import Part1TQF3 from "@/components/TQF3/Part1TQF3";
+import Part2TQF3 from "@/components/TQF3/Part2TQF3";
+import Part3TQF3 from "@/components/TQF3/Part3TQF3";
+import Part4TQF3 from "@/components/TQF3/Part4TQF3";
+import Part5TQF3 from "@/components/TQF3/Part5TQF3";
+import Part6TQF3 from "@/components/TQF3/Part6TQF3";
+import { IconExclamationCircle, IconInfoCircle } from "@tabler/icons-react";
 
 export default function TQF3() {
-  const { courseNo } = useParams();
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
-  const [totalPLOs, setTotalPLOs] = useState<number>(0);
   const [tqf3Part, setTqf3Part] = useState<string | null>("tqf3p1");
+  const [openModalReuse, setOpenModalReuse] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -59,6 +44,58 @@ export default function TQF3() {
 
   return (
     <>
+      {/* Reuse TQF3 */}
+      <Modal
+        title="Reuse TQF3"
+        opened={openModalReuse}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+        onClose={() => setOpenModalReuse(false)}
+        transitionProps={{ transition: "pop" }}
+        size="35vw"
+        centered
+        classNames={{
+          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+          body: "flex flex-col overflow-hidden max-h-full h-fit",
+        }}
+      >
+        <div className="flex flex-col gap-3 ">
+          <Alert
+            variant="light"
+            color="blue"
+            title={` lorem ipsum `}
+            icon={<IconInfoCircle />}
+            classNames={{ title: "-mt-[2px]" }}
+          ></Alert>
+          <Select
+            rightSectionPointerEvents="all"
+            placeholder="course"
+            searchable
+            allowDeselect
+            size="xs"
+            label="Select course to reuse"
+            // nothingFoundMessage="No result"
+            className="w-full border-none "
+            classNames={{
+              input: `rounded-md`,
+              option: `py-1  `,
+            }}
+          ></Select>
+          <div className="flex gap-2 mt-3 justify-end">
+            <Button
+              onClick={() => setOpenModalReuse(false)}
+              variant="subtle"
+              color="#575757"
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+            >
+              Cancel
+            </Button>
+            <Button className="rounded-[8px] text-[12px] h-[32px] w-fit ">
+              Reuse TQF3
+            </Button>
+          </div>
+        </div>
+      </Modal>
       <div className=" flex flex-col bg-[#f8f8f8] h-full gap-3 w-full overflow-hidden">
         <Tabs
           value={tqf3Part}
@@ -105,6 +142,7 @@ export default function TQF3() {
                 </Tabs.Tab>
               </Tabs.List>
               <Tooltip
+                onClick={() => setOpenModalReuse(true)}
                 withArrow
                 arrowPosition="side"
                 arrowOffset={15}
@@ -139,219 +177,22 @@ export default function TQF3() {
             className=" h-full w-full bg-white flex mt-2 mb-4 px-5 py-2 rounded-md text-[14px] "
           >
             <Tabs.Panel className="w-full" value="tqf3p1">
-              {/* <div className="flex w-full justify-start  max-h-full">
-                <div className="flex  w-full flex-col">
-                  <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
-                    <div className="flex text-secondary pl-6  flex-col">
-                      <p className="font-medium">ประเภทกระบวนวิชา <span className=" text-red-500">*</span></p>
-                      <p className="font-semibold">Course Type</p>{" "}
-                    </div>
-
-                    <div className="flex text-[#333333] gap-3  flex-col">
-                      {Object.keys(COURSE_TYPE).map((key) => (
-                        <Radio
-                          classNames={{ label: "font-medium text-[13px]" }}
-                          label={key}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 py-5   ">
-                    <div className="flex text-secondary pl-6 flex-col ">
-                      <p className="font-medium">ลักษณะของกระบวนวิชา <span className=" text-red-500">*</span></p>
-                      <p className="font-semibold">Teachig Method</p>
-                    </div>
-                    <div className="flex text-[#333333] gap-4  flex-col">
-                      {Object.keys(TEACHING_METHOD).map((key) => (
-                        <Checkbox
-                          classNames={{ label: "font-medium text-[13px]" }}
-                          label={key}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
-                    <div className="flex text-secondary pl-6 pt-2 flex-col">
-                      <p className="font-medium">ชั้นปีที่เรียน <span className=" text-red-500">*</span></p>
-                      <p className="font-semibold">Student Year</p>
-                    </div>
-
-                    <div className="flex gap-8 text-[#333333]">
-                      <div className="flex flex-col gap-5">
-                        <Checkbox
-                          classNames={{ label: "font-medium text-[13px]" }}
-                          label="ชั้นปีที่ 1 (1st year)"
-                        />
-                        <Checkbox
-                          classNames={{ label: "font-medium text-[13px]" }}
-                          label="ชั้นปีที่ 2 (2nd year)"
-                        />{" "}
-                        <Checkbox
-                          classNames={{ label: "font-medium text-[13px]" }}
-                          label="ชั้นปีที่ 3 (3rd year)"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-5">
-                        <Checkbox
-                          classNames={{ label: "font-medium text-[13px]" }}
-                          label="ชั้นปีที่ 4 (4th year)"
-                        />
-                        <Checkbox
-                          classNames={{ label: "font-medium text-[13px]" }}
-                          label="ชั้นปีที่ 5 (5th year)"
-                        />{" "}
-                        <Checkbox
-                          classNames={{ label: "font-medium text-[13px]" }}
-                          label="ชั้นปีที่ 6 (6th year)"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
-                    <div className="flex text-secondary pl-6 flex-col">
-                      <p className="font-medium">การวัดและประเมินผล <span className=" text-red-500">*</span></p>
-                      <p className="font-semibold">Evaluation</p>
-                    </div>
-
-                    <div className="flex gap-8 text-[#333333]">
-                      <Radio
-                        classNames={{ label: "font-medium text-[13px]" }}
-                        label="A-F"
-                      />
-                      <Radio
-                        classNames={{ label: "font-medium text-[13px]" }}
-                        label="S/U"
-                      />{" "}
-                      <Radio
-                        classNames={{ label: "font-medium text-[13px]" }}
-                        label="P"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
-                    <div className="flex text-secondary pl-6 flex-col">
-                      <p className="font-medium">อาจารย์ผู้สอนทั้งหมด<span className=" text-red-500">*</span></p>
-                      <p className="font-semibold">Lecturers</p>
-                    </div>
-
-                    <div className="flex flex-col gap-3 text-[#333333]">
-                      <TextInput
-                        withAsterisk
-                        size="xs"
-                        label="Instructor 1"
-                        classNames={{ label: "text-[#333333]" }}
-                        className="w-[440px]"
-                        placeholder="(required)"
-                      />
-                      <TextInput
-                        label="Instructor 2"
-                        size="xs"
-                        classNames={{ label: "text-[#333333]" }}
-                        className="w-[440px]"
-                        placeholder="(optional)"
-                      />
-                      <TextInput
-                        label="Instructor 3"
-                        size="xs"
-                        classNames={{ label: "text-[#333333]" }}
-                        className="w-[440px]"
-                        placeholder="(optional)"
-                      />
-                      <TextInput
-                        label="Instructor 4"
-                        size="xs"
-                        classNames={{ label: "text-[#333333]" }}
-                        className="w-[440px]"
-                        placeholder="(optional)"
-                      />
-                      <TextInput
-                        label="Instructor 5"
-                        size="xs"
-                        classNames={{ label: "text-[#333333]" }}
-                        className="w-[440px]"
-                        placeholder="(optional)"
-                      />
-                      <TextInput
-                        label="Instructor 6"
-                        size="xs"
-                        classNames={{ label: "text-[#333333]" }}
-                        className="w-[440px]"
-                        placeholder="(optional)"
-                      />
-                      <TextInput
-                        label="Instructor 7"
-                        size="xs"
-                        classNames={{ label: "text-[#333333]" }}
-                        className="w-[440px]"
-                        placeholder="(optional)"
-                      />
-                      <TextInput
-                        label="Instructor 8"
-                        size="xs"
-                        classNames={{ label: "text-[#333333]" }}
-                        className="w-[440px]"
-                        placeholder="(optional)"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
-                    <div className="flex text-secondary pl-6 flex-col">
-                      <p className="font-medium">สถานที่สอนคาบบรรยาย</p>
-                      <p className="font-semibold">Lectures Venue</p>
-                    </div>
-
-                    <div className="flex flex-col gap-3 text-[#333333]">
-                      <Textarea label='Description' size="xs" placeholder="(optional)" className="w-[440px]" classNames={{ input: "h-[180px] p-3"}}></Textarea>
-                    </div>
-                  </div>
-                  <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
-                    <div className="flex text-secondary pl-6 flex-col">
-                      <p className="font-medium">สถานที่สอนคาบแลป</p>
-                      <p className="font-semibold">Laboratory Venue</p>
-                    </div>
-
-                    <div className="flex flex-col gap-3 text-[#333333]">
-                      <Textarea label='Description' size="xs" placeholder="(optional)" className="w-[440px]" classNames={{ input: "h-[180px] p-3", label: "text-[#333333]"}}></Textarea>
-                    </div>
-                  </div>
-                  <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
-                    <div className="flex text-secondary pl-6 flex-col">
-                      <p className="font-medium">ตำราและเอกสาร</p>
-                      <p className="font-semibold">Main Reference</p>
-                    </div>
-
-                    <div className="flex flex-col gap-3 text-[#333333]">
-                      <Textarea label='Description' size="xs" placeholder="(optional)" className="w-[440px]" classNames={{ input: "h-[180px] p-3", label: "text-[#333333]"}}></Textarea>
-                    </div>
-                  </div>
-                  <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
-                    <div className="flex text-secondary pl-6 flex-col">
-                      <p className="font-medium">เอกสารแนะนำ</p>
-                      <p className="font-semibold">Recommended Documents, e.g. Lecture notes, E-documents, etc.</p>
-                    </div>
-
-                    <div className="flex flex-col gap-3 text-[#333333]">
-                      <Textarea label='Description' size="xs" placeholder="(optional)" className="w-[440px]" classNames={{ input: "h-[180px] p-3", label: "text-[#333333]"}}></Textarea>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
               <Part1TQF3 />
             </Tabs.Panel>
             <Tabs.Panel value="tqf3p2">
-              <div className="flex flex-col  flex-1 bg-slate-200 ">2</div>
+              <Part2TQF3 />
             </Tabs.Panel>{" "}
             <Tabs.Panel value="tqf3p3">
-              <div className="flex flex-col  flex-1 bg-slate-200 ">3</div>
+              <Part3TQF3 />
             </Tabs.Panel>{" "}
             <Tabs.Panel value="tqf3p4">
-              <div className="flex flex-col  flex-1 bg-slate-200 ">4</div>
+              <Part4TQF3 />
             </Tabs.Panel>{" "}
             <Tabs.Panel value="tqf3p5">
-              <div className="flex flex-col  flex-1 bg-slate-200 ">5</div>
+              <Part5TQF3 />
             </Tabs.Panel>
             <Tabs.Panel value="tqf3p6">
-              <div className="flex flex-col  flex-1 bg-slate-200 ">6</div>
+              <Part6TQF3 />
             </Tabs.Panel>
           </div>
         </Tabs>
