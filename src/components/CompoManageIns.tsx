@@ -174,7 +174,7 @@ export default function CompoMangeIns({
         }
       }
       // Add coIns (Add Course)
-      else if (type != "mainIns" && sections && action) {
+      else if (type == "add" && sections && action) {
         action(
           { inputUser, instructorOption },
           { setInputUser, setInstructorOption }

@@ -9,6 +9,7 @@ export interface IModelSection {
   instructor: IModelUser | string;
   coInstructors: IModelUser[] | any[];
   isActive: boolean;
+  addFirstTime?: boolean;
   assignments: any[];
   // TQF3: TQF;
   // TQF5: TQF;

@@ -9,17 +9,12 @@ import { Button } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { IconLogout } from "@tabler/icons-react";
 import Icon from "@/components/Icon";
-import LeaveIcon from "@/assets/icons/leave.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import list from "@/assets/icons/list.svg?react";
 import histogram from "@/assets/icons/histogram.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
-import { removeCourse } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
-import MainPopup from "../Popup/MainPopup";
-import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
-import { getOneCourse, leaveCourse } from "@/services/course/course.service";
 import { useDisclosure } from "@mantine/hooks";
 import { IModelSection } from "@/models/ModelSection";
 import Loading from "../Loading";
@@ -29,7 +24,7 @@ export default function AssignmentSidebar() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
-  const prefix = `${ROUTE_PATH.COURSE}/${courseNo}`;
+  const prefix = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.SECTION}/${sectionNo}`;
   const user = useAppSelector((state) => state.user);
   const courseList = useAppSelector((state) => state.course.courses);
   const dispatch = useAppDispatch();
@@ -47,27 +42,8 @@ export default function AssignmentSidebar() {
       );
       setCourse(findCourse);
       setSection(findSection);
-    } else {
-      fetchOneCourse();
     }
   }, [courseList, courseNo]);
-
-  const fetchOneCourse = async () => {
-    setLoading(true);
-    const res = await getOneCourse({
-      academicYear: params.get("id"),
-      courseNo,
-    });
-    if (res) {
-      // dispatch(editCourse(res));
-      setCourse(res);
-      const findSection = res?.sections.find(
-        (sec: any) => sec.sectionNo == parseInt(sectionNo!)
-      );
-      setSection(findSection);
-    }
-    setLoading(false);
-  };
 
   return loading ? (
     <Loading />
