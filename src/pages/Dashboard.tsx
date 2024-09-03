@@ -141,7 +141,7 @@ export default function Dashboard() {
             the current semester. Data from previous semesters will not be affected. 
             "
               icon={icon}
-              classNames={{ title: "-mt-[2px]" }}
+              classNames={{ title: "-mt-[2px]", icon: 'size-6' }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">

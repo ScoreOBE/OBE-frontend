@@ -99,7 +99,7 @@ export default function CourseSidebar() {
               color="red"
               title={` After you leave ${course?.courseNo} course, you won't have access to Assignments, Score, TQF document and Grades in this course `}
               icon={<IconExclamationCircle />}
-              classNames={{ title: "-mt-[2px]" }}
+              classNames={{ title: "-mt-[2px]", icon: 'size-6' }}
               className="mb-5"
             ></Alert>
             <div className="flex flex-col  ">

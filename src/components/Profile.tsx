@@ -90,7 +90,7 @@ export default function Profile() {
         classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
       >
         <Menu.Target>
-          <Button className="flex flex-row justify-end px-0 pl-4 h-10 bg-[#f5f5f5] items-center rounded-lg  cursor-pointer hover:bg-[#f0f0f0]">
+          <Button color="#ffffff" className="flex flex-row pl-4 justify-end  px-0 h-10 items-center rounded-lg  cursor-pointer">
             <div className="flex flex-col gap-1 text-end mr-3 text-[12px]">
               <p className="font-semibold text-default">{getUserName(user)}</p>
               <p

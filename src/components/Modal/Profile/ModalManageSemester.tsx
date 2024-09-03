@@ -200,11 +200,11 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
               />
               {/* List of Semester */}
 
-              <div className="flex flex-col gap-2  p-1 overflow-y-auto">
+              <div className="flex flex-col gap-3  p-1 overflow-y-auto">
                 {Object.keys(yearFilter).map((year) => (
                   <div
                     key={year}
-                    className="border-[1px] border-[#C8CFF7] rounded-md bg-white overflow-clip flex flex-col w-full items-center justify-between"
+                    className="border-[1px] rounded-md border-[#e6e6e6] bg-white overflow-clip flex flex-col w-full items-center justify-between"
                   >
                     <div className="flex flex-col w-full items-center">
                       {yearFilter[year].map((semester: any, index: number) => (
@@ -287,7 +287,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           color="red"
           title={` After you activate semester ${activateSemester?.semester}/${activateSemester?.year}, semester ${academicYear?.semester}/${academicYear?.year} cannot be reactivated. This means that instructor can't make any changes to them courses for that semester.  `}
           icon={<IconExclamationCircle />}
-          classNames={{ title: "-mt-[2px]" }}
+          classNames={{ title: "-mt-[2px]", icon: 'size-6' }}
           className="mb-5"
         ></Alert>
         <TextInput

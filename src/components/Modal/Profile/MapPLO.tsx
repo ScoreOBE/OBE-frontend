@@ -461,7 +461,7 @@ export default function MapPLO({ ploName = "" }: Props) {
               color="red"
               title="After you delete this PLO, it will affect all courses that use this PLO collection."
               icon={<IconExclamationCircle />}
-              classNames={{ title: "-mt-[2px]" }}
+              classNames={{ title: "-mt-[2px]", icon: 'size-6' }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <p>
@@ -546,7 +546,7 @@ export default function MapPLO({ ploName = "" }: Props) {
               value="plodescription"
               className="overflow-hidden flex h-full mt-3"
             >
-              <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  pb-[76px]">
+              <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  ">
                 <div className="flex items-center  justify-between  pt-2 pb-5">
                   <div className="flex flex-col items-start ">
                     <div className="flex items-center text-primary gap-1">
@@ -570,7 +570,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                     </Button>
                   )}
                 </div>
-
+<div className=" overflow-y-auto max-h-full">
                 <DragDropContext
                   onDragEnd={({ destination, source }) => {
                     handlers.reorder({
@@ -667,12 +667,12 @@ export default function MapPLO({ ploName = "" }: Props) {
                       </div>
                     )}
                   </Droppable>
-                </DragDropContext>
+                </DragDropContext></div>
               </div>
             </Tabs.Panel>
 
             <Tabs.Panel className="overflow-hidden mt-1" value="plomapping">
-              <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full pb-[76px]">
+              <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full p">
                 <div className="flex items-center  justify-between pt-4 pb-5">
                   <div className="flex flex-col items-start ">
                     <p className="text-secondary text-[16px] font-bold">

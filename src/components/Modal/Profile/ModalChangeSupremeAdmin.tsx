@@ -189,7 +189,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           color="red"
           title={` After you change Supreme Admin, `}
           icon={<IconExclamationCircle />}
-          classNames={{ title: "-mt-[2px]" }}
+          classNames={{ title: "-mt-[2px]", icon: 'size-6' }}
           className="mb-5"
         ></Alert>
         <TextInput
