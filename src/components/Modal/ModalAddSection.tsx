@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Stepper,
   Button,
@@ -32,7 +32,7 @@ import {
   showNotifications,
   sortData,
 } from "@/helpers/functions/function";
-import CompoMangementIns from "../CompoManageIns";
+import CompoMangeIns from "../CompoManageIns";
 import { IModelSection } from "@/models/ModelSection";
 import { IModelCourse } from "@/models/ModelCourse";
 import {
@@ -142,10 +142,10 @@ export default function ModalAddSection({
     }
     if (isValid) {
       setFirstInput(true);
+      setActive((cur) => (cur < (isManage ? 4 : 3) ? cur + 1 : cur));
       if (isManage ? active == 4 : active == 3) {
         await addSection();
       }
-      setActive((cur) => (cur < (isManage ? 4 : 3) ? cur + 1 : cur));
     }
     setLoading(false);
   };
@@ -322,12 +322,17 @@ export default function ModalAddSection({
       const secNo = getSectionNo(sec.sectionNo);
       if (sectionNo == secNo) {
         if (checked) {
-          coIns.sections.push(secNo);
-          coIns.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+          if (!coIns.sections.includes(secNo)) {
+            coIns.sections = [...coIns.sections, secNo].sort(
+              (a: any, b: any) => a - b
+            );
+          }
           sec.coInstructors?.push({ ...coIns });
         } else {
           coIns.sections = coIns.sections.filter((e: any) => e !== secNo);
-          sec.coInstructors?.splice(sec.coInstructors.indexOf(coIns), 1);
+          sec.coInstructors = sec.coInstructors?.filter(
+            (p: any) => p.value !== coIns.value
+          );
         }
         sortData(sec.coInstructors, "label", "string");
       }
@@ -410,9 +415,9 @@ export default function ModalAddSection({
                 withAsterisk
                 classNames={{
                   input:
-                    " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-[12px]  rounded-md",
+                    " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
                   pill: "bg-secondary text-white font-bold",
-                  label: "font-semibold text-[#3e3e3e] text-b2",
+                  label: "font-semibold text-tertiary text-b2",
                   error: "text-[10px] !border-none",
                 }}
                 placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
@@ -461,9 +466,9 @@ export default function ModalAddSection({
                         {/* <span className="text-b3 text-[#a2a2a2] -mt-2">Only one instructor is allowed per section</span> */}
                       </span>
 
-                      <CompoMangementIns
+                      <CompoMangeIns
                         opened={active == 1}
-                        mainIns={true}
+                        type="mainIns"
                         value={sec.instructor as string}
                         swapMethod={(sec.instructor as any)?.label?.includes(
                           "@cmu.ac.th"
@@ -573,13 +578,15 @@ export default function ModalAddSection({
           description={`STEP ${isManage ? 4 : 3}`}
         >
           <div className="flex flex-col mt-3 flex-1 ">
-            <CompoMangementIns
-              opened={active == 2}
-              action={addCoIns}
-              sections={form.getValues().sections}
-              setUserList={setCoInsList}
-            />
-
+            <div className="mb-5">
+              <CompoMangeIns
+                opened={active == 2}
+                type="add"
+                action={addCoIns}
+                sections={form.getValues().sections}
+                setUserList={setCoInsList}
+              />
+            </div>
             {!!coInsList.length && (
               <div
                 className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md"

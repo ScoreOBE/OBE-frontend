@@ -67,7 +67,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
       <div className="flex flex-1 flex-col h-full ">
         <CompoMangeIns
           opened={opened}
-          role={ROLE.ADMIN}
+          type="admin"
           newFetch={isNewFetch}
           setNewFetch={setIsNewFetch}
           setUserList={setAdminList}
@@ -75,10 +75,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
         />
 
         {/* Added Admin */}
-        <div
-          className="w-full  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
-         
-        >
+        <div className="w-full  flex flex-col bg-white border-secondary border-[1px]  rounded-md">
           <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
             <IconUsers /> Added Admin
           </div>

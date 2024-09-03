@@ -38,7 +38,7 @@ import {
   showNotifications,
   sortData,
 } from "@/helpers/functions/function";
-import CompoMangementIns from "../CompoManageIns";
+import CompoMangeIns from "../CompoManageIns";
 import { IModelSection } from "@/models/ModelSection";
 
 type Props = {
@@ -647,8 +647,9 @@ export default function ModalAddCourse({
         >
           <div className="flex flex-col mt-3 flex-1">
             <div className="mb-5">
-              <CompoMangementIns
+              <CompoMangeIns
                 opened={active == 3}
+                type="add"
                 action={addCoIns}
                 sections={form.getValues().sections}
                 setUserList={setCoInsList}

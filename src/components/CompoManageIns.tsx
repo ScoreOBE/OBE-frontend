@@ -11,36 +11,32 @@ import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
 import { IModelSection } from "@/models/ModelSection";
 
+type type = "add" | "manage" | "mainIns" | "changeMain" | "admin";
+
 type Props = {
   opened: boolean;
-  role?: ROLE;
+  type: type;
   newFetch?: boolean;
   setNewFetch?: (value: boolean) => void;
-  isManage?: boolean;
-  mainIns?: boolean;
   currentMainIns?: string;
   value?: any;
   swapMethod?: boolean;
   error?: string;
-  change?: boolean;
   sections?: Partial<IModelSection>[] | undefined;
   action?: (input?: any, func?: any) => void;
   setUserList?: React.Dispatch<React.SetStateAction<any[]>>;
   setUserFilter?: React.Dispatch<React.SetStateAction<IModelUser[]>>;
 };
 
-export default function CompoMangementIns({
+export default function CompoMangeIns({
   opened,
-  role,
+  type,
   newFetch = false,
   setNewFetch,
-  isManage = false,
-  mainIns = false,
   currentMainIns,
   value,
   swapMethod = false,
   error,
-  change = false,
   sections,
   action,
   setUserList,
@@ -102,7 +98,7 @@ export default function CompoMangementIns({
             )
             .map((sec) => sec.sectionNo);
         });
-        if (isManage && openFirst && list.length && setUserList) {
+        if (type == "manage" && openFirst && list.length && setUserList) {
           setOpenFirst(false);
           setUserList(list);
         }
@@ -121,17 +117,24 @@ export default function CompoMangementIns({
     let res = await getInstructor();
     if (res) {
       setInstructorOption(
-        res.map((e: IModelUser) => {
-          return {
-            label: getUserName(e, 1),
-            value: e.id,
-            disabled:
-              (role && e.role == role) || currentMainIns == e.id ? true : false,
-          };
-        })
+        res
+          .filter((e: IModelUser) =>
+            ["add", "admin"].includes(type) ? e.id !== user.id : e
+          )
+          .map((e: IModelUser) => {
+            return {
+              label: getUserName(e, 1),
+              value: e.id,
+              disabled:
+                (type == "admin" && e.role == ROLE.ADMIN) ||
+                currentMainIns == e.id
+                  ? true
+                  : false,
+            };
+          })
       );
       // Manage Admin
-      if (role) {
+      if (type == "admin") {
         let adminList = res.filter((e: IModelUser) => {
           if (e.id !== user.id && e.role === ROLE.ADMIN) {
             return { ...e };
@@ -150,8 +153,8 @@ export default function CompoMangementIns({
   const addUser = async () => {
     if (inputUser.value) {
       // Add Admin
-      if (role) {
-        const payload: Partial<IModelUser> = { role };
+      if (type == "admin") {
+        const payload: Partial<IModelUser> = { role: ROLE.ADMIN };
         if (swapMethodAddUser) {
           if (invalidEmail) return;
           payload.email = inputUser.value;
@@ -171,7 +174,7 @@ export default function CompoMangementIns({
         }
       }
       // Add coIns (Add Course)
-      else if (!mainIns && sections && action) {
+      else if (type == "add" && sections && action) {
         action(
           { inputUser, instructorOption },
           { setInputUser, setInstructorOption }
@@ -181,9 +184,9 @@ export default function CompoMangementIns({
   };
 
   const getLabel = () => {
-    return change || mainIns
+    return type == "changeMain" || type == "mainIns"
       ? TITLE_ROLE.OWNER_SEC
-      : role
+      : type == "admin"
       ? ROLE.ADMIN
       : TITLE_ROLE.CO_INS;
   };
@@ -197,7 +200,7 @@ export default function CompoMangementIns({
     >
       <div
         onClick={() => {
-          if (mainIns && action) action({ value: null });
+          if (type == "mainIns" && action) action({ value: null });
           setInputUser({ value: null });
           setSwapMethodAddUser(!swapMethodAddUser);
         }}
@@ -206,7 +209,7 @@ export default function CompoMangementIns({
         <div className="flex gap-6 items-center">
           <Icon IconComponent={AddCoIcon} className="text-secondary" />
           <p className="font-semibold">
-            {change ? "Change" : "Add"} {getLabel()} by using
+            {type == "changeMain" ? "Change" : "Add"} {getLabel()} by using
             <span className="font-extrabold">
               {swapMethodAddUser ? " Dropdown list" : " CMU Account"}
             </span>
@@ -223,11 +226,11 @@ export default function CompoMangementIns({
             description="Make sure CMU account correct"
             label="CMU account"
             className={`w-full border-none`}
-            classNames={{ input: `${!mainIns && "!rounded-r-none"}` }}
+            classNames={{ input: `${type != "mainIns" && "!rounded-r-none"}` }}
             placeholder="example@cmu.ac.th"
-            value={mainIns ? value.value : inputUser.value!}
+            value={type == "mainIns" ? value.value : inputUser.value!}
             onChange={(event) => {
-              if (mainIns && action)
+              if (type == "mainIns" && action)
                 action({
                   label: event.target.value,
                   value: event.target.value,
@@ -244,7 +247,7 @@ export default function CompoMangementIns({
             }}
             onBlur={() => setIsFocus(false)}
             error={
-              mainIns && error
+              type == "mainIns" && error
                 ? "Please enter the instructor's email address."
                 : value &&
                   !isFocus &&
@@ -265,7 +268,7 @@ export default function CompoMangementIns({
             nothingFoundMessage="No result"
             className="w-full border-none "
             classNames={{
-              input: `rounded-md ${!mainIns && "rounded-e-none"}`,
+              input: `rounded-md ${type != "mainIns" && "rounded-e-none"}`,
               option: `py-1  `,
             }}
             rightSection={
@@ -289,22 +292,24 @@ export default function CompoMangementIns({
             }
             dropdownOpened={openedDropdown}
             onDropdownClose={() => setOpenedDropdown(false)}
-            value={mainIns ? value?.value : inputUser.value!}
+            value={type == "mainIns" ? value?.value : inputUser.value!}
             onChange={(value, option) => {
-              if (mainIns && action) action(option);
+              if (type == "mainIns" && action) action(option);
               else setInputUser(option);
             }}
-            error={mainIns && error}
+            error={type == "mainIns" && error}
             onClick={() => setOpenedDropdown(!openedDropdown)}
           />
         )}
-        {!mainIns && (
+        {type != "mainIns" && (
           <Button
             className="rounded-s-none min-w-fit text-b3 h-[30px] border-l-0 disabled:border-[#cecece]"
             disabled={!inputUser.value || (swapMethodAddUser && invalidEmail)}
-            onClick={() => (change && action ? action(inputUser) : addUser())}
+            onClick={() =>
+              type == "changeMain" && action ? action(inputUser) : addUser()
+            }
           >
-            {change ? "Change" : "Add"}
+            {type == "changeMain" ? "Change" : "Add"}
           </Button>
         )}
       </div>

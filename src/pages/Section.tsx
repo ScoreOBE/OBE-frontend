@@ -12,13 +12,8 @@ import {
 } from "@tabler/icons-react";
 import ManageAdminIcon from "@/assets/icons/addCo.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
-import { getCourse, getOneCourse } from "@/services/course/course.service";
-import {
-  editCourse,
-  editSection,
-  removeSection,
-  setCourseList,
-} from "@/store/course";
+import { getOneCourse } from "@/services/course/course.service";
+import { editCourse, editSection, removeSection } from "@/store/course";
 import {
   getSectionNo,
   getUserName,
@@ -30,9 +25,7 @@ import { COURSE_TYPE, NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import ModalEditSection from "@/components/Modal/ModalEditSection";
 import Icon from "@/components/Icon";
 import ExcelIcon from "@/assets/icons/excel.svg?react";
-import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import Loading from "@/components/Loading";
-import { setLoading } from "@/store/loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { IModelSection } from "@/models/ModelSection";
 import {
@@ -55,7 +48,6 @@ export default function Section() {
   const activeTerm = academicYear.find(
     (term) => term.id == params.get("id")
   )?.isActive;
-  const courseList = useAppSelector((state) => state.course.courses);
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
@@ -66,25 +58,6 @@ export default function Section() {
   const [openMainPopupDelCourse, setOpenMainPopupDelCourse] = useState(false);
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
-
-  useEffect(() => {
-    dispatch(setShowSidebar(true));
-    if (!params.get("id") || !params.get("year") || !params.get("semester"))
-      navigate(ROUTE_PATH.DASHBOARD_INS);
-    else if (!courseList.length && params.get("id")) fetchCourse();
-  }, [academicYear, courseList, params]);
-
-  const fetchCourse = async () => {
-    dispatch(setLoading(true));
-    const payloadCourse = new CourseRequestDTO();
-    payloadCourse.academicYear = params.get("id")!;
-    const resCourse = await getCourse(payloadCourse);
-    if (resCourse) {
-      dispatch(setCourseList(resCourse));
-    }
-    fetchOneCourse();
-    dispatch(setLoading(false));
-  };
 
   const fetchOneCourse = async () => {
     const res = await getOneCourse({
@@ -291,7 +264,7 @@ export default function Section() {
                     <div onClick={(event) => event.stopPropagation()}>
                       {activeTerm &&
                         (sec.instructor as IModelUser).id == user.id &&
-                        (course.addFirstTime ? (
+                        (course.addFirstTime || sec.addFirstTime ? (
                           <Menu
                             trigger="click"
                             position="bottom-end"
@@ -360,7 +333,8 @@ export default function Section() {
                         ) : (
                           <Switch
                             size="md"
-                            onLabel="ON" offLabel="OFF"
+                            onLabel="ON"
+                            offLabel="OFF"
                             className="absolute top-3 right-3"
                             checked={sec.isActive}
                             onChange={(event) =>

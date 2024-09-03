@@ -14,7 +14,7 @@ import {
 } from "@/helpers/functions/function";
 import { Tabs } from "@mantine/core";
 import { IModelCourseManagement } from "@/models/ModelCourseManagement";
-import CompoMangementIns from "@/components/CompoManageIns";
+import CompoMangeIns from "@/components/CompoManageIns";
 import {
   updateCoInsSections,
   updateSectionManagement,
@@ -271,9 +271,9 @@ export default function ModalManageIns({
               </p>
             </div>
           </div>
-          <CompoMangementIns
+          <CompoMangeIns
             opened={changeMainIns}
-            change={true}
+            type="changeMain"
             currentMainIns={(editSec.instructor as IModelUser)?.id}
             action={(value) => onClickChangeMainIns(value)}
           />
@@ -333,9 +333,9 @@ export default function ModalManageIns({
           </Tabs.Panel>
           <Tabs.Panel value="coInstructor">
             <div className="flex flex-col mt-3 flex-1 gap-5">
-              <CompoMangementIns
+              <CompoMangeIns
                 opened={opened}
-                isManage={true}
+                type="manage"
                 action={addCoIns}
                 sections={editCoSec}
                 setUserList={setEditCoInsList}
