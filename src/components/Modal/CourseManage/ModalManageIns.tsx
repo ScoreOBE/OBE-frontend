@@ -58,7 +58,7 @@ export default function ModalManageIns({
 
   useEffect(() => {
     if (opened) {
-      setCoInsList([]);
+      setCoInsList(undefined);
       setEditCoInsList([]);
       setEditSec(undefined);
       setEditCoSec(data.sections!);
@@ -67,10 +67,9 @@ export default function ModalManageIns({
   }, [opened]);
 
   useEffect(() => {
-    if (!coInsList?.length && data.sections?.length) {
+    if (!coInsList && data.sections?.length) {
       setCoInsList(cloneDeep(editCoInsList));
     }
-    console.log(editCoSec);
   }, [editCoInsList]);
 
   const onClickChangeMainIns = async (value: any) => {

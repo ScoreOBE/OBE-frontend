@@ -78,7 +78,7 @@ export default function ModalEditSection({
 
   const submit = async () => {
     let payload: any = { ...value, data: {} };
-    if (value?.type == COURSE_TYPE.SEL_TOPIC) {
+    if (value?.type == COURSE_TYPE.SEL_TOPIC.en) {
       payload.data.topic = form.getValues().topic;
     }
     payload.data.sectionNo = parseInt(form.getValues().sectionNo?.toString()!);
@@ -144,7 +144,7 @@ export default function ModalEditSection({
       }}
     >
       <div className="flex flex-col mt-2 gap-5">
-        {value?.type === COURSE_TYPE.SEL_TOPIC && (
+        {value?.type === COURSE_TYPE.SEL_TOPIC.en && (
           <TextInput
             label="Topic"
             withAsterisk

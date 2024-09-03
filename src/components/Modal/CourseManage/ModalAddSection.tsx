@@ -97,7 +97,7 @@ export default function ModalAddSection({
       isValid =
         isValid &&
         (!form.validateField("sections.0.topic").hasError ||
-          data.type !== COURSE_TYPE.SEL_TOPIC);
+          data.type !== COURSE_TYPE.SEL_TOPIC.en);
       if (isValid) {
         const res = await checkCanCreateCourse({
           courseNo: data.courseNo,
@@ -221,7 +221,7 @@ export default function ModalAddSection({
     setSectionNoList(sectionNo.map((secNo) => getSectionNo(secNo)));
     // reset sections and instructors
     let initialSection: Partial<IModelSection> = { semester: [] };
-    if (type == COURSE_TYPE.SEL_TOPIC) {
+    if (type == COURSE_TYPE.SEL_TOPIC.en) {
       initialSection.topic = sections[0]?.topic;
     }
     if (!sectionNo.length) {
@@ -400,7 +400,7 @@ export default function ModalAddSection({
         >
           <div className="w-full  mt-2 h-fit  bg-white mb-5 rounded-md">
             <div className="flex flex-col gap-3">
-              {data.type == COURSE_TYPE.SEL_TOPIC && (
+              {data.type == COURSE_TYPE.SEL_TOPIC.en && (
                 <TextInput
                   label="Course Topic"
                   withAsterisk
