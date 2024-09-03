@@ -65,15 +65,19 @@ export default function Navbar() {
         ROUTE_PATH.SELECTED_DEPARTMENT,
       ].includes(location) && (
         <div
-          className={`min-h-14 border-b border-[#e0e0e0] px-6 inline-flex flex-wrap justify-between items-center z-50 ${
-            [ROUTE_PATH.LOGIN].includes(location)
-              ? "bg-white border-none"
-              : "bg-[#f5f5f5]"
-          } text-secondary`}
-          style={{
-            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-            overflowY: "auto",
-          }}
+        className={`min-h-14 border-b border-[#e0e0e0] px-6 inline-flex flex-wrap justify-between items-center z-50 ${
+          [ROUTE_PATH.LOGIN].includes(location)
+            ? "bg-white border-none"
+            : "bg-[#f5f5f5]"
+        } text-secondary`}
+        style={
+          ![ROUTE_PATH.LOGIN].includes(location)
+            ? {
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                overflowY: "auto",
+              }
+            : {}
+        }
         >
           <p className="font-semibold text-h2 md:w-fit max-w-[30%]">
             {topicPath()}
