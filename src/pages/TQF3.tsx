@@ -1,36 +1,23 @@
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch } from "@/store";
 import { useEffect, useState } from "react";
-import Loading from "@/components/Loading";
-import { getPLOs } from "@/services/plo/plo.service";
-import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
-import ModalAddPLOCollection from "@/components/Modal/ModalAddPLOCollection";
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Group,
-  Menu,
-  Modal,
-  Radio,
-  RadioCard,
-  ScrollArea,
-  Table,
-  Tabs,
-  TextInput,
-  Tooltip,
-} from "@mantine/core";
+import { Alert, Button, Modal, Select, Tabs, Tooltip } from "@mantine/core";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
 import { setShowSidebar } from "@/store/showSidebar";
 import { useParams } from "react-router-dom";
-import { COURSE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
+
+import Part1TQF3 from "@/components/TQF3/Part1TQF3";
+import Part2TQF3 from "@/components/TQF3/Part2TQF3";
+import Part3TQF3 from "@/components/TQF3/Part3TQF3";
+import Part4TQF3 from "@/components/TQF3/Part4TQF3";
+import Part5TQF3 from "@/components/TQF3/Part5TQF3";
+import Part6TQF3 from "@/components/TQF3/Part6TQF3";
+import { IconExclamationCircle, IconInfoCircle } from "@tabler/icons-react";
 
 export default function TQF3() {
-  const { courseNo } = useParams();
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
-  const [totalPLOs, setTotalPLOs] = useState<number>(0);
   const [tqf3Part, setTqf3Part] = useState<string | null>("tqf3p1");
+  const [openModalReuse, setOpenModalReuse] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -57,16 +44,68 @@ export default function TQF3() {
 
   return (
     <>
-      <div className=" flex flex-col h-full gap-3 w-full pt-3  overflow-hidden">
+      {/* Reuse TQF3 */}
+      <Modal
+        title="Reuse TQF3"
+        opened={openModalReuse}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+        onClose={() => setOpenModalReuse(false)}
+        transitionProps={{ transition: "pop" }}
+        size="35vw"
+        centered
+        classNames={{
+          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+          body: "flex flex-col overflow-hidden max-h-full h-fit",
+        }}
+      >
+        <div className="flex flex-col gap-3 ">
+          <Alert
+            variant="light"
+            color="blue"
+            title={` lorem ipsum `}
+            icon={<IconInfoCircle />}
+            classNames={{ title: "-mt-[2px]" }}
+          ></Alert>
+          <Select
+            rightSectionPointerEvents="all"
+            placeholder="course"
+            searchable
+            allowDeselect
+            size="xs"
+            label="Select course to reuse"
+            // nothingFoundMessage="No result"
+            className="w-full border-none "
+            classNames={{
+              input: `rounded-md`,
+              option: `py-1  `,
+            }}
+          ></Select>
+          <div className="flex gap-2 mt-3 justify-end">
+            <Button
+              onClick={() => setOpenModalReuse(false)}
+              variant="subtle"
+              color="#575757"
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+            >
+              Cancel
+            </Button>
+            <Button className="rounded-[8px] text-[12px] h-[32px] w-fit ">
+              Reuse TQF3
+            </Button>
+          </div>
+        </div>
+      </Modal>
+      <div className=" flex flex-col bg-[#f8f8f8] h-full gap-3 w-full overflow-hidden">
         <Tabs
           value={tqf3Part}
           onChange={setTqf3Part}
           defaultValue="tqf3p1"
           variant="pills"
-          className="px-6"
+          className="px-6 pt-4 flex flex-col  h-full "
         >
-          <div className="flex items-center justify-between">
-            <div className=" text-secondary font-semibold  whitespace-break-spaces">
+          <div className="flex items-center w-full h-fit justify-between">
+            <div className=" text-secondary  overflow-y-auto font-semibold  whitespace-break-spaces">
               {topicPart()}
             </div>
             <div className="flex gap-2">
@@ -103,6 +142,7 @@ export default function TQF3() {
                 </Tabs.Tab>
               </Tabs.List>
               <Tooltip
+                onClick={() => setOpenModalReuse(true)}
                 withArrow
                 arrowPosition="side"
                 arrowOffset={15}
@@ -129,96 +169,30 @@ export default function TQF3() {
               </Tooltip>
             </div>
           </div>
-          <div>
-            <Tabs.Panel value="tqf3p1">
-              <div className="flex  w-full  justify-between    pt-6  flex-1">
-                <div className="flex gap-4 flex-col">
-                  <div
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                      overflowY: "auto",
-                    }}
-                    className="w-full h-fit items-center rounded-md gap-6  grid grid-cols-2 p-5 "
-                  >
-                    <div className="flex text-secondary pl-10  flex-col">
-                      <p className="font-semibold">ประเภทกระบวนวิชา</p>
-                      <p className="font-bold">Course Type</p>{" "}
-                    </div>
-
-                    <div className="flex text-[#333333] gap-3  flex-col">
-                      {Object.keys(COURSE_TYPE).map((key) => (
-                        <Radio
-                          classNames={{ label: "font-medium" }}
-                          label={key}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                      overflowY: "auto",
-                    }}
-                    className="w-full h-fit items-center rounded-md gap-6  grid grid-cols-2 p-5 "
-                  >
-                    <div className="flex text-secondary pl-10 flex-col">
-                      <p className="font-medium">ลักษณะของกระบวนวิชา</p>
-                      <p className="font-semibold">Teachig Method</p>
-                    </div>
-                    <div className="flex text-[#333333] gap-4  flex-col">
-                      {Object.keys(TEACHING_METHOD).map((key) => (
-                        <Checkbox
-                          classNames={{ label: "font-medium" }}
-                          label={key}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col">
-                  <div
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                      overflowY: "auto",
-                    }}
-                    className="w-full h-fit items-center rounded-md gap-12 justify-start flex p-6"
-                  >
-                    <div className="flex text-secondary gap-2  flex-row">
-                      <p className="font-semibold">ประเภทกระบวนวิชา</p>
-                      <p className="font-bold">(Course Type)</p>
-                    </div>
-                    <div className="flex text-[#333333] gap-4  flex-col">
-                      <Radio
-                        classNames={{ label: "font-medium" }}
-                        label="วิชาศึกษาทั่วไป (General Education)"
-                      />
-                      <Radio
-                        classNames={{ label: "font-medium" }}
-                        label="วิชาเฉพาะ (Field of specialization)"
-                      />
-                      <Radio
-                        classNames={{ label: "font-medium" }}
-                        label="วิชาเลือกเสรี (Free elective)"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div
+            style={{
+              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              overflowY: "auto",
+            }}
+            className=" h-full w-full bg-white flex mt-2 mb-4 px-5 py-2 rounded-md text-[14px] "
+          >
+            <Tabs.Panel className="w-full" value="tqf3p1">
+              <Part1TQF3 />
             </Tabs.Panel>
             <Tabs.Panel value="tqf3p2">
-              <div className="flex flex-col  flex-1 bg-slate-200 ">2</div>
+              <Part2TQF3 />
             </Tabs.Panel>{" "}
             <Tabs.Panel value="tqf3p3">
-              <div className="flex flex-col  flex-1 bg-slate-200 ">3</div>
+              <Part3TQF3 />
             </Tabs.Panel>{" "}
             <Tabs.Panel value="tqf3p4">
-              <div className="flex flex-col  flex-1 bg-slate-200 ">4</div>
+              <Part4TQF3 />
             </Tabs.Panel>{" "}
             <Tabs.Panel value="tqf3p5">
-              <div className="flex flex-col  flex-1 bg-slate-200 ">5</div>
+              <Part5TQF3 />
             </Tabs.Panel>
             <Tabs.Panel value="tqf3p6">
-              <div className="flex flex-col  flex-1 bg-slate-200 ">6</div>
+              <Part6TQF3 />
             </Tabs.Panel>
           </div>
         </Tabs>

@@ -1,5 +1,3 @@
-import cmulogo from "@/assets/image/cmuLogo.png";
-import entlogo from "@/assets/image/entLogo.png";
 import cmulogoLogin from "@/assets/image/cmuLogoLoginWhite.png";
 import loginImage from "@/assets/image/loginPage.png";
 import { Button } from "@mantine/core";
@@ -17,7 +15,6 @@ import {
   IconChevronLeft,
   IconChevronRight,
   IconPlus,
-  IconShare,
   IconShare2,
 } from "@tabler/icons-react";
 
