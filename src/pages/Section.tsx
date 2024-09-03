@@ -22,7 +22,7 @@ import {
 import PageError from "./PageError";
 import MainPopup from "@/components/Popup/MainPopup";
 import { COURSE_TYPE, NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
-import ModalEditSection from "@/components/Modal/ModalEditSection";
+import ModalEditSection from "@/components/Modal/CourseManage/ModalEditSection";
 import Icon from "@/components/Icon";
 import ExcelIcon from "@/assets/icons/excel.svg?react";
 import Loading from "@/components/Loading";
@@ -32,9 +32,9 @@ import {
   deleteSection,
   updateSectionActive,
 } from "@/services/section/section.service";
-import ModalAddSection from "@/components/Modal/ModalAddSection";
+import ModalAddSection from "@/components/Modal/CourseManage/ModalAddSection";
 import { IModelUser } from "@/models/ModelUser";
-import { setShowSidebar } from "@/store/showSidebar";
+import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
 
 export default function Section() {
   const navigate = useNavigate();
@@ -51,6 +51,7 @@ export default function Section() {
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
+  const [editCourse, setEditCourse] = useState<any>();
   const [editSec, setEditSec] = useState<
     Partial<IModelSection> & Record<string, any>
   >({});
@@ -58,6 +59,7 @@ export default function Section() {
   const [openMainPopupDelCourse, setOpenMainPopupDelCourse] = useState(false);
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
+  const [openModalManageIns, setOpenModalManageIns] = useState(false);
 
   const fetchOneCourse = async () => {
     const res = await getOneCourse({
@@ -168,7 +170,13 @@ export default function Section() {
         data={addSec!}
         fetchOneCourse={fetchOneCourse}
       />
-
+      <ModalManageIns
+        opened={openModalManageIns}
+        onClose={() => setOpenModalManageIns(false)}
+        type="course"
+        data={editCourse}
+        setNewData={setEditCourse}
+      />
       {error.statusCode ? (
         <PageError />
       ) : loading ? (
@@ -211,20 +219,34 @@ export default function Section() {
                         boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                       }}
                     >
-                      <>
+                      <Menu.Item
+                        className=" text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
+                        onClick={() => {
+                          setAddSec({ ...course });
+                          setOpenModalAddSec(true);
+                        }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <IconPlus stroke={2} className="h-4 w-4" />
+                          <span>Add section</span>
+                        </div>
+                      </Menu.Item>
+                      {course?.sections.find(
+                        (sec) => (sec.instructor as IModelUser).id == user.id
+                      ) && (
                         <Menu.Item
-                          className=" text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
+                          className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
                           onClick={() => {
-                            setAddSec({ ...course });
-                            setOpenModalAddSec(true);
+                            setEditCourse({
+                              ...course,
+                              sections: course?.sections.filter(
+                                (sec) =>
+                                  (sec.instructor as IModelUser)?.id == user.id
+                              ),
+                            });
+                            setOpenModalManageIns(true);
                           }}
                         >
-                          <div className="flex items-center gap-2">
-                            <IconPlus stroke={2} className="h-4 w-4" />
-                            <span>Add section</span>
-                          </div>
-                        </Menu.Item>
-                        <Menu.Item className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]">
                           <div className="flex items-center gap-2">
                             <Icon
                               className="h-4 w-4"
@@ -233,8 +255,7 @@ export default function Section() {
                             <span>Manage Co-Instructor</span>
                           </div>
                         </Menu.Item>
-                      </>
-
+                      )}
                       <Menu.Item className=" text-[#20884f] hover:bg-[#06B84D]/20 font-semibold text-[12px] h-7 w-[180px]">
                         <div className="flex items-center  gap-2">
                           <Icon
