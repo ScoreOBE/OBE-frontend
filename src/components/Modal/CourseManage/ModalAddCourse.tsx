@@ -82,7 +82,7 @@ export default function ModalAddCourse({
     },
   });
 
-  const nextStep = async (type?: COURSE_TYPE) => {
+  const nextStep = async (type?: string) => {
     setLoading(true);
     setFirstInput(false);
     let isValid = true;
@@ -108,7 +108,7 @@ export default function ModalAddCourse({
           !form.validateField("courseNo").hasError &&
           !form.validateField("courseName").hasError &&
           (!form.validateField("sections.0.topic").hasError ||
-            form.getValues().type !== COURSE_TYPE.SEL_TOPIC);
+            form.getValues().type !== COURSE_TYPE.SEL_TOPIC.en);
         if (isValid) {
           const res = await checkCanCreateCourse({
             courseNo: form.getValues().courseNo,
@@ -211,7 +211,7 @@ export default function ModalAddCourse({
     setSectionNoList(sectionNo.map((secNo) => getSectionNo(secNo)));
     // reset sections and instructors
     let initialSection: Partial<IModelSection> = { semester: [] };
-    if (type == COURSE_TYPE.SEL_TOPIC) {
+    if (type == COURSE_TYPE.SEL_TOPIC.en) {
       initialSection.topic = sections[0]?.topic;
     }
     if (!sectionNo.length) {
@@ -394,7 +394,7 @@ export default function ModalAddCourse({
 
           <div className="w-full mt-2 flex flex-col gap-3  bg-transparent rounded-md">
             <Button
-              onClick={() => nextStep(COURSE_TYPE.GENERAL)}
+              onClick={() => nextStep(COURSE_TYPE.GENERAL.en)}
               rightSection={
                 <IconChevronRight
                   color="#5768d5"
@@ -410,7 +410,7 @@ export default function ModalAddCourse({
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-default">
-                  {COURSE_TYPE.GENERAL}
+                  {COURSE_TYPE.GENERAL.en}
                 </span>
                 <br />
                 <span className="flex justify-start font-medium text-b3 text-secondary -mt-1">
@@ -419,7 +419,7 @@ export default function ModalAddCourse({
               </p>
             </Button>
             <Button
-              onClick={() => nextStep(COURSE_TYPE.SPECIAL)}
+              onClick={() => nextStep(COURSE_TYPE.SPECIAL.en)}
               rightSection={
                 <IconChevronRight
                   color="#5768d5"
@@ -435,7 +435,7 @@ export default function ModalAddCourse({
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-default">
-                  {COURSE_TYPE.SPECIAL}
+                  {COURSE_TYPE.SPECIAL.en}
                 </span>
                 <br />
                 <span className="flex justify-start font-medium text-b3 text-secondary -mt-1">
@@ -445,7 +445,7 @@ export default function ModalAddCourse({
               </p>
             </Button>
             <Button
-              onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC)}
+              onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC.en)}
               rightSection={
                 <IconChevronRight
                   color="#5768d5"
@@ -468,7 +468,7 @@ export default function ModalAddCourse({
               </p>
             </Button>
             <Button
-              onClick={() => nextStep(COURSE_TYPE.FREE)}
+              onClick={() => nextStep(COURSE_TYPE.FREE.en)}
               color="#ffffff"
               rightSection={
                 <IconChevronRight
@@ -483,7 +483,9 @@ export default function ModalAddCourse({
               className="w-full border-[1px] h-fit py-3 text-[13px]   border-secondary items-start  !text-default rounded-[6px] flex justify-start hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
-                <span className="flex justify-start">{COURSE_TYPE.FREE}</span>
+                <span className="flex justify-start">
+                  {COURSE_TYPE.FREE.en}
+                </span>
                 <br />
                 <span className="flex justify-start font-medium text-[12px] text-secondary -mt-1">
                   -
@@ -505,7 +507,7 @@ export default function ModalAddCourse({
                 size="xs"
                 withAsterisk
                 placeholder={
-                  form.getValues().type == COURSE_TYPE.SEL_TOPIC
+                  form.getValues().type == COURSE_TYPE.SEL_TOPIC.en
                     ? "Ex. 26X4XX"
                     : "Ex. 001102"
                 }
@@ -518,13 +520,13 @@ export default function ModalAddCourse({
                 size="xs"
                 classNames={{ input: "focus:border-primary " }}
                 placeholder={
-                  form.getValues().type == COURSE_TYPE.SEL_TOPIC
+                  form.getValues().type == COURSE_TYPE.SEL_TOPIC.en
                     ? "Ex. Select Topic in Comp Engr"
                     : "Ex. English 2"
                 }
                 {...form.getInputProps("courseName")}
               />
-              {form.getValues().type == COURSE_TYPE.SEL_TOPIC && (
+              {form.getValues().type == COURSE_TYPE.SEL_TOPIC.en && (
                 <TextInput
                   label="Course Topic"
                   withAsterisk

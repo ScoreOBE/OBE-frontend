@@ -7,7 +7,7 @@ export interface IModelCourseManagement {
   courseName: string;
   updatedYear: number;
   updatedSemester: number;
-  type: COURSE_TYPE;
+  type: string;
   sections: IModelSectionManagement[];
   createdAt: Date;
   updatedAt: Date;

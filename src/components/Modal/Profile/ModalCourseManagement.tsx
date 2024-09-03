@@ -525,7 +525,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                               <p className="font-medium text-[13px] text-black">
                                 Section {getSectionNo(sec.sectionNo)}
                               </p>
-                              {course.type === COURSE_TYPE.SEL_TOPIC && (
+                              {course.type === COURSE_TYPE.SEL_TOPIC.en && (
                                 <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">
                                   {sec.topic}
                                 </p>

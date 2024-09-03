@@ -1,9 +1,21 @@
-import { COURSE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
+import {
+  COURSE_TYPE,
+  EVALUATE_TYPE,
+  TEACHING_METHOD,
+} from "@/helpers/constants/enum";
 import { Radio, Checkbox, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 type Props = {};
 export default function Part1TQF3() {
+  const studentYear = [
+    { key: 1, en: "1st year", th: "ชั้นปีที่ 1" },
+    { key: 2, en: "2nd year", th: "ชั้นปีที่ 2" },
+    { key: 3, en: "3rd year", th: "ชั้นปีที่ 3" },
+    { key: 4, en: "4th year", th: "ชั้นปีที่ 4" },
+    { key: 5, en: "5th year", th: "ชั้นปีที่ 5" },
+    { key: 6, en: "6th year", th: "ชั้นปีที่ 6" },
+  ];
   const form = useForm();
   return (
     <div className="flex w-full flex-col text-[14px] max-h-full px-3 py-1">
@@ -16,10 +28,11 @@ export default function Part1TQF3() {
         </div>
 
         <div className="flex text-[#333333] gap-3  flex-col">
-          {Object.keys(COURSE_TYPE).map((key) => (
+          {Object.values(COURSE_TYPE).map((key) => (
             <Radio
+              key={key.en}
               classNames={{ label: "font-medium text-[13px]" }}
-              label={key}
+              label={`${key.th} ${key.en}`}
             />
           ))}
         </div>
@@ -32,10 +45,11 @@ export default function Part1TQF3() {
           <p className="font-semibold">Teachig Method</p>
         </div>
         <div className="flex text-[#333333] gap-4  flex-col">
-          {Object.keys(TEACHING_METHOD).map((key) => (
+          {Object.values(TEACHING_METHOD).map((key) => (
             <Checkbox
+              key={key.en}
               classNames={{ label: "font-medium text-[13px]" }}
-              label={key}
+              label={`${key.th} ${key.en}`}
             />
           ))}
         </div>
@@ -50,32 +64,13 @@ export default function Part1TQF3() {
 
         <div className="flex gap-8 text-[#333333]">
           <div className="flex flex-col gap-5">
-            <Checkbox
-              classNames={{ label: "font-medium text-[13px]" }}
-              label="ชั้นปีที่ 1 (1st year)"
-            />
-            <Checkbox
-              classNames={{ label: "font-medium text-[13px]" }}
-              label="ชั้นปีที่ 2 (2nd year)"
-            />{" "}
-            <Checkbox
-              classNames={{ label: "font-medium text-[13px]" }}
-              label="ชั้นปีที่ 3 (3rd year)"
-            />
-          </div>
-          <div className="flex flex-col gap-5">
-            <Checkbox
-              classNames={{ label: "font-medium text-[13px]" }}
-              label="ชั้นปีที่ 4 (4th year)"
-            />
-            <Checkbox
-              classNames={{ label: "font-medium text-[13px]" }}
-              label="ชั้นปีที่ 5 (5th year)"
-            />{" "}
-            <Checkbox
-              classNames={{ label: "font-medium text-[13px]" }}
-              label="ชั้นปีที่ 6 (6th year)"
-            />
+            {studentYear.map((item) => (
+              <Checkbox
+                key={item.key}
+                classNames={{ label: "font-medium text-[13px]" }}
+                label={`${item.th} (${item.en})`}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -88,15 +83,12 @@ export default function Part1TQF3() {
         </div>
 
         <div className="flex gap-8 text-[#333333]">
-          <Radio
-            classNames={{ label: "font-medium text-[13px]" }}
-            label="A-F"
-          />
-          <Radio
-            classNames={{ label: "font-medium text-[13px]" }}
-            label="S/U"
-          />{" "}
-          <Radio classNames={{ label: "font-medium text-[13px]" }} label="P" />
+          {Object.values(EVALUATE_TYPE).map((eva) => (
+            <Radio
+              classNames={{ label: "font-medium text-[13px]" }}
+              label={eva}
+            />
+          ))}
         </div>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">

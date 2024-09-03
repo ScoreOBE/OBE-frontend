@@ -63,7 +63,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
         console.log(res);
 
         res.forEach((course: IModelCourse) => {
-          if (course.type === COURSE_TYPE.SEL_TOPIC) {
+          if (course.type === COURSE_TYPE.SEL_TOPIC.en) {
             course.sections.forEach((section) => {
               if (section.isActive) {
                 courseList.push({
@@ -328,11 +328,11 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                           <div className="flex flex-col">
                             <p className="font-semibold text-[14px] text-secondary">
                               {e.courseNo}
-                              {e.type === COURSE_TYPE.SEL_TOPIC &&
+                              {e.type === COURSE_TYPE.SEL_TOPIC.en &&
                                 ` (Section ${getSectionNo(e.sectionNo)})`}
                             </p>
                             <p className="text-[12px] font-medium text-[#4E5150]">
-                              {e.type === COURSE_TYPE.SEL_TOPIC
+                              {e.type === COURSE_TYPE.SEL_TOPIC.en
                                 ? e.topic
                                 : e.courseName}
                             </p>

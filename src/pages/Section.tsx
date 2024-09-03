@@ -143,7 +143,7 @@ export default function Section() {
           the current semester. Data from previous semesters will not be affected. 
           "
               icon={<IconExclamationCircle />}
-              classNames={{ title: "-mt-[2px]", icon: 'size-6' }}
+              classNames={{ title: "-mt-[2px]", icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
@@ -381,7 +381,7 @@ export default function Section() {
                           {sec?.topic}
                         </p>
                       </div>
-                      {course?.type !== COURSE_TYPE.SEL_TOPIC && (
+                      {course?.type !== COURSE_TYPE.SEL_TOPIC.en && (
                         <div
                           className={` text-xs font-medium text-[#757575]  ${
                             !sec.isActive && "text-[#c8c8c8]"

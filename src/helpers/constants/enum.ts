@@ -20,12 +20,7 @@ export enum TITLE_ROLE {
   CO_INS = "Co-Instructor",
   OWNER_SEC = "Owner section",
 }
-export enum COURSE_TYPE {
-  GENERAL = "General Education",
-  SPECIAL = "Field of Specialization",
-  SEL_TOPIC = "Selected Topics",
-  FREE = "Free Elective",
-}
+
 export enum LOG_EVENT_TYPE {
   FILE = "File",
   COURSE_MANAGEMENT = "Course Management",
@@ -35,17 +30,26 @@ export enum LOG_EVENT_TYPE {
   TQF = "TQF",
   ADMIN = "Admin",
 }
-export enum TEACHING_METHOD {
-  LEC = "Lecture",
-  LAB = "Laboratory",
-  PRAC = "Practice",
-  COOP = "Co-operative",
-}
+
+export const COURSE_TYPE = {
+  GENERAL: { en: "General Education", th: "วิชาศึกษาทั่วไป" },
+  SPECIAL: { en: "Field of Specialization", th: "วิชาเฉพาะ" },
+  SEL_TOPIC: { en: "Selected Topics", th: "กลุ่มวิชาเลือก" },
+  FREE: { en: "Free Elective", th: "วิชาเลือกเสรี" },
+};
+export const TEACHING_METHOD = {
+  LEC: { en: "Lecture", th: "บรรยาย" },
+  LAB: { en: "Laboratory", th: "ปฏิบัติการ" },
+  PRAC: { en: "Practice", th: "ฝึกปฏิบัติ" },
+  COOP: { en: "Co-operative", th: "สหกิจศึกษา" },
+};
+
 export enum EVALUATE_TYPE {
   A_F = "A-F",
   S_U = "S/U",
   P = "P",
 }
+
 export enum TQF_TYPE {
   TQF3 = "TQF3",
   TQF5 = "TQF5",

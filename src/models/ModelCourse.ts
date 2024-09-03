@@ -7,7 +7,7 @@ export interface IModelCourse {
   academicYear: IModelAcademicYear | string;
   courseNo: string;
   courseName: string;
-  type: COURSE_TYPE;
+  type: string;
   sections: Partial<IModelSection>[];
   addFirstTime?: boolean;
   // TQF3: TQF;
