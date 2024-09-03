@@ -107,7 +107,6 @@ export default function CompoMangeIns({
         if (
           ["manageCo", "manageCoSec"].includes(type) &&
           openFirst &&
-          list.length &&
           setUserList
         ) {
           setOpenFirst(false);
