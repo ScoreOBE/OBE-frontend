@@ -29,15 +29,19 @@ import {
 import { cloneDeep, isEqual } from "lodash";
 import { editCourse } from "@/store/course";
 
+type actionType = "course" | "courseManagement";
+
 type Props = {
   opened: boolean;
   onClose: () => void;
+  type?: actionType;
   data: Partial<IModelCourseManagement>;
   setNewData?: React.Dispatch<React.SetStateAction<any>>;
 };
 export default function ModalManageIns({
   opened,
   onClose,
+  type = "courseManagement",
   data = {},
   setNewData = () => {},
 }: Props) {
@@ -118,19 +122,21 @@ export default function ModalManageIns({
         ),
       };
     });
-    const res = await updateCoInsSections(data.id!, {
+    const res = await updateCoInsSections({
       academicYear: academicYear.id,
       courseNo: data.courseNo,
       data: payload,
     });
     if (res) {
-      dispatch(editCourseManagement(res));
+      dispatch(editCourseManagement(res.courseManagement));
+      dispatch(editCourse(res.course));
       setCoInsList(cloneDeep(editCoInsList));
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Update Co-Instructor success",
         `Co-Instructor for ${data.courseNo} is update`
       );
+      if (type == "course") onClose();
     }
     setLoading(false);
   };
@@ -216,25 +222,153 @@ export default function ModalManageIns({
     setEditCoSec(updatedSections);
   };
 
+  const ManageCoInstructor = () => {
+    return (
+      <div
+        className={`flex flex-col flex-1 gap-5 ${
+          type == "courseManagement" && "mt-3"
+        }`}
+      >
+        <CompoMangeIns
+          opened={opened}
+          type={type == "course" ? "manageCoSec" : "manageCo"}
+          action={addCoIns}
+          sections={editCoSec}
+          setUserList={setEditCoInsList}
+        />
+        {!!editCoInsList.length && (
+          <div className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md">
+            <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
+              <IconUsers /> Added Co-Instructor
+            </div>
+            <div className="flex flex-col max-h-[300px] h-fit w-full   px-2   overflow-y-auto ">
+              <div className="flex flex-col max-h-[400px] h-fit p-1 ">
+                {editCoInsList.map((coIns, index) => (
+                  <div
+                    key={index}
+                    className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none "
+                  >
+                    <div className="flex w-full justify-between items-center">
+                      <div className="flex flex-col  font-medium text-[14px]">
+                        <span className=" -translate-y-1 font-semibold text-[13px]">
+                          {coIns?.label}
+                        </span>
+                      </div>
+                      <div className="flex justify-end gap-4 mt-1 ">
+                        <Menu shadow="md" width={200}>
+                          <Menu.Target>
+                            <Button
+                              variant="outline"
+                              size="xs"
+                              className=" transform-none text-[12px] h-7 px-3 rounded-[6px]"
+                            >
+                              Access
+                            </Button>
+                          </Menu.Target>
+
+                          <Menu.Dropdown className=" overflow-y-auto max-h-[220px] !w-[220px] h-fit border-b ">
+                            <Menu.Label className=" translate-x-1 mb-2">
+                              Can access
+                            </Menu.Label>
+                            <div className="flex flex-col pl-3  pb-2 h-fit gap-4 w-full">
+                              {data.sections?.map((sec, indexSec) => (
+                                <Checkbox
+                                  key={indexSec}
+                                  disabled={
+                                    coIns.value == sec.instructor.id ||
+                                    (coIns?.sections?.length == 1 &&
+                                      coIns?.sections?.includes(sec.sectionNo))
+                                  }
+                                  classNames={{
+                                    body: "mr-3",
+                                    input:
+                                      "bg-black bg-opacity-0 border-[1.5px] border-tertiary disabled:bg-gray-400",
+                                    label: "text-b2",
+                                  }}
+                                  size="xs"
+                                  label={`Section ${getSectionNo(
+                                    sec.sectionNo
+                                  )}`}
+                                  checked={coIns?.sections?.includes(
+                                    sec.sectionNo
+                                  )}
+                                  onChange={(event) =>
+                                    editCoInsInSec(
+                                      sec.sectionNo,
+                                      event.currentTarget.checked,
+                                      coIns
+                                    )
+                                  }
+                                />
+                              ))}
+                            </div>
+                          </Menu.Dropdown>
+                        </Menu>
+                        <Button
+                          className="text-[12px] transform-none h-7 px-3 rounded-[6px]"
+                          size="xs"
+                          variant="outline"
+                          color="#FF4747"
+                          onClick={() => removeCoIns(coIns)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[13px]">
+                      <div className=" font-semibold">Section:</div>
+                      <div className="flex gap-1  w-[60%]  flex-wrap">
+                        {coIns?.sections?.map(
+                          (sectionNo: any, indexSec: number) => (
+                            <p key={indexSec}>
+                              {getSectionNo(sectionNo)}
+                              {indexSec !== coIns?.sections?.length - 1 && ","}
+                            </p>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+        <Button
+          className="rounded-s-[4px] min-w-fit h-[36px] w-full "
+          onClick={onClickSave}
+          disabled={isEqual(coInsList, editCoInsList)}
+          loading={loading}
+        >
+          {type == "course" ? "Done" : "Save"}
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <Modal
       opened={opened}
       onClose={onClose}
       title={
-        <div className="flex gap-2 items-center">
-          {changeMainIns && (
-            <IconChevronLeft
-              className="hover:bg-[#f0f0f0] size-6 -translate-x-2 rounded-full"
-              onClick={() => setChangeMainIns(false)}
-            />
-          )}
-          <div className="flex flex-col gap-2">
-            <p>Management Instructor</p>{" "}
-            <p className="text-b3 font-medium text-[#575757]">
-              {data.courseNo} {data.courseName}
-            </p>
+        type == "course" ? (
+          "Management Co-instructor"
+        ) : (
+          <div className="flex gap-2 items-center">
+            {changeMainIns && (
+              <IconChevronLeft
+                className="hover:bg-[#f0f0f0] size-6 -translate-x-2 rounded-full"
+                onClick={() => setChangeMainIns(false)}
+              />
+            )}
+            <div className="flex flex-col gap-2">
+              <p>Management Instructor</p>{" "}
+              <p className="text-b3 font-medium text-[#575757]">
+                {data.courseNo} {data.courseName}
+              </p>
+            </div>
           </div>
-        </div>
+        )
       }
       size="45vw"
       centered
@@ -278,6 +412,8 @@ export default function ModalManageIns({
             action={(value) => onClickChangeMainIns(value)}
           />
         </div>
+      ) : type == "course" ? (
+        ManageCoInstructor()
       ) : (
         <Tabs defaultValue="mainInstructor">
           <Tabs.List>
@@ -331,126 +467,7 @@ export default function ModalManageIns({
               ))}
             </div>
           </Tabs.Panel>
-          <Tabs.Panel value="coInstructor">
-            <div className="flex flex-col mt-3 flex-1 gap-5">
-              <CompoMangeIns
-                opened={opened}
-                type="manage"
-                action={addCoIns}
-                sections={editCoSec}
-                setUserList={setEditCoInsList}
-              />
-              {!!editCoInsList.length && (
-                <div className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md">
-                  <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
-                    <IconUsers /> Added Co-Instructor
-                  </div>
-                  <div className="flex flex-col max-h-[300px] h-fit w-full   px-2   overflow-y-auto ">
-                    <div className="flex flex-col max-h-[400px] h-fit p-1 ">
-                      {editCoInsList.map((coIns, index) => (
-                        <div
-                          key={index}
-                          className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none "
-                        >
-                          <div className="flex w-full justify-between items-center">
-                            <div className="flex flex-col  font-medium text-[14px]">
-                              <span className=" -translate-y-1 font-semibold text-[13px]">
-                                {coIns?.label}
-                              </span>
-                            </div>
-                            <div className="flex justify-end gap-4 mt-1 ">
-                              <Menu shadow="md" width={200}>
-                                <Menu.Target>
-                                  <Button
-                                    variant="outline"
-                                    size="xs"
-                                    className=" transform-none text-[12px] h-7 px-3 rounded-[6px]"
-                                  >
-                                    Access
-                                  </Button>
-                                </Menu.Target>
-
-                                <Menu.Dropdown className=" overflow-y-auto max-h-[220px] !w-[220px] h-fit border-b ">
-                                  <Menu.Label className=" translate-x-1 mb-2">
-                                    Can access
-                                  </Menu.Label>
-                                  <div className="flex flex-col pl-3  pb-2 h-fit gap-4 w-full">
-                                    {data.sections?.map((sec, indexSec) => (
-                                      <Checkbox
-                                        key={indexSec}
-                                        disabled={
-                                          coIns.value == sec.instructor.id ||
-                                          (coIns?.sections?.length == 1 &&
-                                            coIns?.sections?.includes(
-                                              sec.sectionNo
-                                            ))
-                                        }
-                                        classNames={{
-                                          body: "mr-3",
-                                          input:
-                                            "bg-black bg-opacity-0 border-[1.5px] border-tertiary disabled:bg-gray-400",
-                                          label: "text-b2",
-                                        }}
-                                        size="xs"
-                                        label={`Section ${getSectionNo(
-                                          sec.sectionNo
-                                        )}`}
-                                        checked={coIns?.sections?.includes(
-                                          sec.sectionNo
-                                        )}
-                                        onChange={(event) =>
-                                          editCoInsInSec(
-                                            sec.sectionNo,
-                                            event.currentTarget.checked,
-                                            coIns
-                                          )
-                                        }
-                                      />
-                                    ))}
-                                  </div>
-                                </Menu.Dropdown>
-                              </Menu>
-                              <Button
-                                className="text-[12px] transform-none h-7 px-3 rounded-[6px]"
-                                size="xs"
-                                variant="outline"
-                                color="#FF4747"
-                                onClick={() => removeCoIns(coIns)}
-                              >
-                                Remove
-                              </Button>
-                            </div>
-                          </div>
-                          <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[13px]">
-                            <div className=" font-semibold">Section:</div>
-                            <div className="flex gap-1  w-[60%]  flex-wrap">
-                              {coIns?.sections?.map(
-                                (sectionNo: any, indexSec: number) => (
-                                  <p key={indexSec}>
-                                    {getSectionNo(sectionNo)}
-                                    {indexSec !== coIns?.sections?.length - 1 &&
-                                      ","}
-                                  </p>
-                                )
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-              <Button
-                className="rounded-s-[4px] min-w-fit h-[36px] w-full "
-                onClick={onClickSave}
-                disabled={isEqual(coInsList, editCoInsList)}
-                loading={loading}
-              >
-                Save
-              </Button>
-            </div>
-          </Tabs.Panel>
+          <Tabs.Panel value="coInstructor">{ManageCoInstructor()}</Tabs.Panel>
         </Tabs>
       )}
       {/* </div> */}

@@ -32,7 +32,7 @@ import {
   showNotifications,
   sortData,
 } from "@/helpers/functions/function";
-import CompoMangeIns from "../CompoManageIns";
+import CompoMangeIns from "@/components/CompoManageIns";
 import { IModelSection } from "@/models/ModelSection";
 import { IModelCourse } from "@/models/ModelCourse";
 import {

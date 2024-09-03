@@ -38,7 +38,7 @@ import {
   showNotifications,
   sortData,
 } from "@/helpers/functions/function";
-import CompoMangeIns from "../CompoManageIns";
+import CompoMangeIns from "@/components/CompoManageIns";
 import { IModelSection } from "@/models/ModelSection";
 
 type Props = {

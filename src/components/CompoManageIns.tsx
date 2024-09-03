@@ -11,11 +11,17 @@ import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
 import { IModelSection } from "@/models/ModelSection";
 
-type type = "add" | "manage" | "mainIns" | "changeMain" | "admin";
+type actionType =
+  | "add"
+  | "manageCo"
+  | "manageCoSec"
+  | "mainIns"
+  | "changeMain"
+  | "admin";
 
 type Props = {
   opened: boolean;
-  type: type;
+  type: actionType;
   newFetch?: boolean;
   setNewFetch?: (value: boolean) => void;
   currentMainIns?: string;
@@ -98,7 +104,12 @@ export default function CompoMangeIns({
             )
             .map((sec) => sec.sectionNo);
         });
-        if (type == "manage" && openFirst && list.length && setUserList) {
+        if (
+          ["manageCo", "manageCoSec"].includes(type) &&
+          openFirst &&
+          list.length &&
+          setUserList
+        ) {
           setOpenFirst(false);
           setUserList(list);
         }
@@ -119,7 +130,9 @@ export default function CompoMangeIns({
       setInstructorOption(
         res
           .filter((e: IModelUser) =>
-            ["add", "admin"].includes(type) ? e.id !== user.id : e
+            ["add", "admin", "manageCoSec"].includes(type)
+              ? e.id !== user.id
+              : e
           )
           .map((e: IModelUser) => {
             return {
@@ -173,8 +186,12 @@ export default function CompoMangeIns({
           );
         }
       }
-      // Add coIns (Add Course)
-      else if (type == "add" && sections && action) {
+      // Add coIns (Add Course, Section)
+      else if (
+        ["add", "manageCo", "manageCoSec"].includes(type) &&
+        sections &&
+        action
+      ) {
         action(
           { inputUser, instructorOption },
           { setInputUser, setInstructorOption }

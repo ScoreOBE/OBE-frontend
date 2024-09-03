@@ -35,15 +35,15 @@ import MainPopup from "@/components/Popup/MainPopup";
 import { IModelSection } from "@/models/ModelSection";
 import Loading from "@/components/Loading";
 import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
-import ModalEditCourse from "@/components/Modal/ModalEditCourse";
-import ModalEditSection from "@/components/Modal/ModalEditSection";
+import ModalEditCourse from "@/components/Modal/CourseManage/ModalEditCourse";
+import ModalEditSection from "@/components/Modal/CourseManage/ModalEditSection";
 import {
   removeCourseManagement,
   removeSectionManagement,
   setCourseManagementList,
 } from "@/store/courseManagement";
 import { removeCourse, removeSection } from "@/store/course";
-import ModalAddSection from "@/components/Modal/ModalAddSection";
+import ModalAddSection from "@/components/Modal/CourseManage/ModalAddSection";
 import { SearchInput } from "@/components/SearchInput";
 import { getDepartment } from "@/services/faculty/faculty.service";
 
@@ -399,8 +399,13 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
               <Loading />
             ) : courseManagement.courseManagements.length === 0 ? (
               <div className="text-center h-full gap-1 justify-center items-center flex flex-col ">
-                <p className=" text-secondary text-[18px] font-semibold">Oops, No Courses here!</p>
-                <p>Currently, No {selectDepartment.departmentEN} courses are added. </p>
+                <p className=" text-secondary text-[18px] font-semibold">
+                  Oops, No Courses here!
+                </p>
+                <p>
+                  Currently, No {selectDepartment.departmentEN} courses are
+                  added.
+                </p>
               </div>
             ) : (
               <div className="flex flex-col h-full  overflow-y-auto relative gap-4 pb-1 px-6 pt-1">
