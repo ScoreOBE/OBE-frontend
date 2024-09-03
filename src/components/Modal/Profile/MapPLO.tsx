@@ -774,7 +774,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                 >
                   <Table stickyHeader striped>
                     <Table.Thead>
-                      <Table.Tr className="bg-[#F4F5FE]">
+                      <Table.Tr className="bg-[#e5e7f6]">
                         <Table.Th>Course No.</Table.Th>
                         {ploList.data?.map((plo, index) => (
                           <Table.Th key={index}>PLO-{plo.no}</Table.Th>

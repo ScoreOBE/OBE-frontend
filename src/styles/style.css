@@ -178,13 +178,16 @@
 
 .mantine-Table-th {
   padding-left: 25px !important;
-  padding-block: 16px !important;
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
 }
 
 .mantine-Table-td {
   padding-left: 25px !important;
-  padding-block: 12px !important;
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
 }
+
 
 .mantine-Table-tbody {
   border-bottom: var(--color-secondary);

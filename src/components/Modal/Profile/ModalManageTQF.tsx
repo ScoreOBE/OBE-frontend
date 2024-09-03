@@ -142,7 +142,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
           variant="light"
           color="blue"
           title="Tips of TQF 5"
-          classNames={{ icon: 'size-6'}}
+          classNames={{ icon: "size-6" }}
           icon={<IconInfoCircle />}
         >
           <div className="flex flex-col text-[13px] font-medium text-[#333333] gap-3">
@@ -165,9 +165,9 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
             <Tabs.Tab value="EnableTQF3">TQF 3 Course Management</Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="EnableTQF">
-            <div className="flex flex-row w-full mt-3 items-end h-fit ">
+            <div className="flex flex-row w-full mt-4 items-end h-fit ">
               <div
-                className="flex flex-col gap-2  p-3 px-3 w-full bg-white border-[1px]  rounded-md"
+                className="flex flex-col gap-2  p-3 px-3 w-full bg-white  rounded-md"
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
@@ -247,7 +247,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                         </span>{" "}
                         As a result, instructors will not be able to edit TQF 5.
                       </List.Item>
-                     
                     </List>
                   </div>
                 )}
@@ -264,7 +263,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                 setSearchValue(event.currentTarget.value)
               }
               rightSectionPointerEvents="all"
-              className="mt-3"
+              className="mt-4"
             />
             <div
               className="w-full  flex flex-col bg-white  mt-3 rounded-md overflow-clip"
@@ -281,43 +280,33 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
 
                       <Table.Th className="w-[25%] ">
                         <div className="flex flex-row items-center gap-2">
-                        TQF3 Edit
-                        <Tooltip
-                          arrowOffset={10}
-                          arrowSize={8}
-                          arrowRadius={1}
-                          transitionProps={{
-                            transition: "fade",
-                            duration: 300,
-                          }}
-                          multiline
-                          withArrow
-                          label={
-                            <div className="text-default text-[13px] p-2 flex flex-col gap-2">
-                              <div className="flex gap-2">
-                                <p className="text-secondary font-semibold">
-                                  Active in:
-                                </p>
-                                <p className=" font-medium"></p>
+                          TQF3 Edit
+                          <Tooltip
+                            arrowOffset={10}
+                            arrowSize={8}
+                            arrowRadius={1}
+                            transitionProps={{
+                              transition: "fade",
+                              duration: 300,
+                            }}
+                            multiline
+                            withArrow
+                            label={
+                              <div className="text-default text-[12px] p-2 font-medium gap-2">
+                                The button will be disabled if TQF3 editing is
+                                turn on <br/> or the course has not completed TQF3.
                               </div>
-                              <div className="flex gap-2">
-                                <p className="text-secondary font-semibold">
-                                  Department:
-                                </p>
-
-                                <p className="font-medium flex flex-col gap-1 "></p>
-                              </div>
-                            </div>
-                          }
-                          color="#FCFCFC"
-                          className="w-fit border  rounded-md "
-                          position="bottom-start"
-                        >
-                          <IconInfoCircle
-                            size={16}
-                            className="-ml-0 text-secondary"
-                          />
-                        </Tooltip></div>
+                            }
+                            color="#FCFCFC"
+                            className="w-fit border  rounded-md "
+                            position="bottom-start"
+                          >
+                            <IconInfoCircle
+                              size={16}
+                              className="-ml-0 text-secondary"
+                            />
+                          </Tooltip>
+                        </div>
                       </Table.Th>
                     </Table.Tr>
                   </Table.Thead>
