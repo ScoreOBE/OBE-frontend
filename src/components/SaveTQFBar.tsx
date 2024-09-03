@@ -37,7 +37,7 @@ export default function SaveTQFbar({ tqf, part }: Props) {
           overflowY: "auto",
         }}
       >
-        <Button>Save {part}</Button>
+        <Button className="text-[13px] font-semibold h-[32px] rounded-md ">Save {part}</Button>
       </div>
     </>
   );

@@ -174,7 +174,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
           <div className="flex flex-col max-h-[520px] h-fit rounded-lg border overflow-y-auto  border-secondary">
             <Table verticalSpacing="sm" stickyHeader className="rounded-md">
               <Table.Thead>
-                <Table.Tr className="bg-[#F4F5FE]">
+                <Table.Tr className="bg-[#e5e7f6]">
                   <Table.Th>PLO</Table.Th>
                   <Table.Th>Description</Table.Th>
                 </Table.Tr>

@@ -103,7 +103,7 @@ export default function Assignment() {
         >
           <Table stickyHeader striped>
             <Table.Thead>
-              <Table.Tr className="bg-[#F4F5FE]">
+              <Table.Tr className="bg-[#e5e7f6]">
                 <Table.Th className="w-60">Name</Table.Th>
                 <Table.Th>Points</Table.Th>
                 <Table.Th>Mean</Table.Th>

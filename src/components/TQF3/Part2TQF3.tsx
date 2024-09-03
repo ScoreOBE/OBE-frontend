@@ -104,11 +104,12 @@ export default function Part2TQF3() {
       {/* Description */}
       <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6]  gap-5 pb-5">
         <div className="flex text-secondary items-center w-full justify-between">
-          <p className="font-semibold">
-            วัตถุประสงค์ของกระบวนวิชา <span className="font-bold">(CLO)</span>
+          <p className="font-semibold text-[15px]">
+            วัตถุประสงค์ของกระบวนวิชา <span className="font-bold">(CLO)</span>{" "}
+            <span className=" text-red-500">*</span>
           </p>
           <Button
-            className="rounded-[8px] text-[12px] w-fit font-medium h-8 px-4"
+            className="rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
             // onClick={() => setOpenAddModal(true)}
           >
             <IconPlus className="h-5 w-5 mr-1" stroke={1.5} color="#ffffff" />
@@ -125,9 +126,9 @@ export default function Part2TQF3() {
             body: " flex justify-center",
           }}
           title={
-            <p>
+            <p className="font-semibold">
               Making changes to CLOs?{" "}
-              <span>
+              <span className="font-extrabold">
                 Double-checking in TQF 3 (Parts 4 & 5 & 6) and TQF 5 (Parts 2 &
                 3)
               </span>{" "}
@@ -147,7 +148,7 @@ export default function Part2TQF3() {
           }}
         >
           <div
-            className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
+            className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
             style={{ height: "fit-content" }}
           >
             <Table stickyHeader striped className="w-full">
@@ -166,7 +167,7 @@ export default function Part2TQF3() {
                   <Table.Tbody
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="text-default text-[13px] font-medium w-full"
+                    className="text-default text-[13px] font-normal w-full"
                   >
                     {state.map((item, index) => (
                       <Draggable
@@ -239,12 +240,16 @@ export default function Part2TQF3() {
       {/* Planning */}
       <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6]  gap-5 pb-5">
         <div className="flex text-secondary items-center w-full justify-between">
-          <p className="font-semibold">
+          <p className="font-semibold text-[15px]">
             เนื้อหาวิชาและแผนการสอน
-            <span className="font-bold"> (Course content and Schedule)</span>
+            <span className="font-bold">
+              {" "}
+              (Course content and Schedule){" "}
+              <span className=" text-red-500">*</span>
+            </span>
           </p>
           <Button
-            className="rounded-[8px] text-[12px] w-fit font-medium h-8 px-4"
+            className="rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
             // onClick={() => setOpenAddModal(true)}
           >
             <IconPlus className="h-5 w-5 mr-1" stroke={1.5} color="#ffffff" />
@@ -262,7 +267,7 @@ export default function Part2TQF3() {
           }}
         >
           <div
-            className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
+            className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
             style={{ height: "fit-content" }}
           >
             <Table stickyHeader striped className="w-full">
@@ -284,7 +289,7 @@ export default function Part2TQF3() {
                   <Table.Tbody
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="text-default text-[13px] font-medium w-full"
+                    className="text-default text-[13px] font-normal w-full"
                   >
                     {statePlan.map((item, index) => (
                       <Draggable
