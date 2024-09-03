@@ -1,4 +1,14 @@
-import { Modal, TextInput, Switch, List, Alert, Tabs } from "@mantine/core";
+import {
+  Modal,
+  TextInput,
+  Switch,
+  List,
+  Alert,
+  Tabs,
+  Menu,
+  Table,
+  Tooltip,
+} from "@mantine/core";
 import checkedTQF3Completed from "@/assets/icons/checkedTQF3Completed.svg?react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
@@ -13,7 +23,15 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { updateProcessTqf3 } from "@/services/academicYear/academicYear.service";
 import { setProcessTQF3 } from "@/store/academicYear";
-import { IconExclamationCircle } from "@tabler/icons-react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import {
+  IconDots,
+  IconExclamationCircle,
+  IconInfoCircle,
+  IconPencilMinus,
+  IconTrash,
+} from "@tabler/icons-react";
+import dupTQF from "@/assets/icons/dupTQF.svg?react";
 
 type Props = {
   opened: boolean;
@@ -111,7 +129,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
       opened={opened && !!courseList.length}
       onClose={onClose}
       title="Management TQF"
-      size="45vw"
+      size="60vw"
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
@@ -119,21 +137,35 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
           "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-y-auto ",
       }}
     >
-      <div className="flex flex-col h-full gap-4   flex-1 ">
+      <div className="flex flex-col h-full gap-2   flex-1 ">
         <Alert
           variant="light"
-          color="red"
-          title="Lorem Ipsum."
-          icon={<IconExclamationCircle />}
-        ></Alert>
+          color="blue"
+          title="Tips of TQF 5"
+          classNames={{ icon: 'size-6'}}
+          icon={<IconInfoCircle />}
+        >
+          <div className="flex flex-col text-[13px] font-medium text-[#333333] gap-3">
+            <li>
+              If you've already turn on TQF 5 edit but need to make changes to a
+              specific course's detail in TQF 3, you can do so in the "TQF 3
+              Course Management" tab.
+            </li>
+            <li>
+              Turn on TQF 5 does not affect courses that have not yet completed
+              TQF 3. These courses are required to finalize TQF 3 before
+              progressing to TQF 5.
+            </li>
+          </div>
+        </Alert>
 
         <Tabs defaultValue="EnableTQF">
           <Tabs.List>
-            <Tabs.Tab value="EnableTQF">Enable TQF</Tabs.Tab>
-            <Tabs.Tab value="EnableTQF3">Enable TQF3 of Each Course</Tabs.Tab>
+            <Tabs.Tab value="EnableTQF">TQF 3&5 Settings</Tabs.Tab>
+            <Tabs.Tab value="EnableTQF3">TQF 3 Course Management</Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="EnableTQF">
-            <div className="flex flex-row w-full mt-5 items-end h-fit ">
+            <div className="flex flex-row w-full mt-3 items-end h-fit ">
               <div
                 className="flex flex-col gap-2  p-3 px-3 w-full bg-white border-[1px]  rounded-md"
                 style={{
@@ -180,8 +212,8 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                       className="ml-2 flex flex-1 flex-col text-[12px] text-[#575757] "
                     >
                       <List.Item>
-                        All CPE course instructors will gain access to edit TQF
-                        5.
+                        All courses in Faculty of Engineering, CMU instructors
+                        will gain access to edit TQF 5.
                       </List.Item>
                       <List.Item>
                         <span className="text-secondary">
@@ -191,8 +223,8 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                       </List.Item>
 
                       <List.Item className="text-secondary font-semibold w-full">
-                        You can select specific courses below to enable TQF 3
-                        editing.
+                        You can enable TQF 3 editing for specific courses in the
+                        'TQF 3 Course Management' tab.
                       </List.Item>
                     </List>
                   </div>
@@ -206,8 +238,8 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                       className="ml-2 flex flex-1 flex-col text-[12px] text-[#575757] "
                     >
                       <List.Item>
-                        All CPE course instructors will gain access to edit TQF
-                        3.
+                        All courses in Faculty of Engineering, CMU instructors
+                        will gain access to edit TQF 3.
                       </List.Item>
                       <List.Item>
                         <span className="text-secondary">
@@ -215,10 +247,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                         </span>{" "}
                         As a result, instructors will not be able to edit TQF 5.
                       </List.Item>
-                      {/* <List.Item className="text-secondary w-full">
-                    Courses without data or with incomplete TQF 3 will still be
-                    editable.
-                  </List.Item> */}
+                     
                     </List>
                   </div>
                 )}
@@ -226,76 +255,104 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
             </div>
           </Tabs.Panel>
           <Tabs.Panel value="EnableTQF3">
+            <TextInput
+              leftSection={<TbSearch />}
+              placeholder="Course No, Course name "
+              size="xs"
+              value={searchValue}
+              onChange={(event: any) =>
+                setSearchValue(event.currentTarget.value)
+              }
+              rightSectionPointerEvents="all"
+              className="mt-3"
+            />
             <div
-              className="w-full  flex flex-col bg-white border-secondary border-[1px] mt-5  rounded-md overflow-clip"
+              className="w-full  flex flex-col bg-white  mt-3 rounded-md overflow-clip"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
             >
-              {/* {!courseList.length ? (
-                <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md  px-4 py-3 text-secondary font-semibold">
-                  <div className="flex items-center gap-2">
-                    <Icon
-                      IconComponent={checkedTQF3Completed}
-                      className="h-5 w-5"
-                    />
-                    <span>All courses have completed TQF 3</span>
-                  </div>
-                </div>
-              ) : (
-                <> */}
-              <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
-                <div className="flex items-center gap-2">
-                  <Icon IconComponent={CourseIcon} className="h-5 w-5" />
-                  <span>List of Courses</span>
-                </div>
-                <p>
-                  {`${courseList.length} Course`}
-                  {`${courseList.length > 1 ? "s" : ""}`}
-                </p>
-              </div>
-              <div className="flex flex-col gap-2 w-full h-[400px] p-4 py-3 overflow-y-hidden">
-                <TextInput
-                  leftSection={<TbSearch />}
-                  placeholder="Course No, Course name "
-                  size="xs"
-                  value={searchValue}
-                  onChange={(event: any) =>
-                    setSearchValue(event.currentTarget.value)
-                  }
-                  rightSectionPointerEvents="all"
-                />
-                <div className="flex flex-col  overflow-y-scroll p-1">
-                  {courseList.map((e, index) => (
-                    <div
-                      key={index}
-                      className="w-full items-center justify-between last:border-none border-b-[1px]  py-3 px-4  flex"
-                    >
-                      <div className="gap-3 flex items-center">
-                        <div className="flex flex-col">
-                          <p className="font-semibold text-[14px] text-secondary">
-                            {e.courseNo}
-                            {e.type === COURSE_TYPE.SEL_TOPIC &&
-                              ` (Section ${getSectionNo(e.sectionNo)})`}
-                          </p>
-                          <p className="text-[12px] font-medium text-[#4E5150]">
-                            {e.type === COURSE_TYPE.SEL_TOPIC
-                              ? e.topic
-                              : e.courseName}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex flex-row items-center justify-between w-[50%] gap-1">
-                        <p className="mr-1 text-[#4E5150] text-[12px] font-medium">
-                          {e.instructor}
-                        </p>
+              <Table.ScrollContainer className="h-[420px] p-0" minWidth={500}>
+                <Table stickyHeader striped>
+                  <Table.Thead>
+                    <Table.Tr className="bg-[#e5e7f6]">
+                      <Table.Th className=" w-[40%]">Course no.</Table.Th>
+                      <Table.Th className=" w-[35%]">Instructor</Table.Th>
 
-                        {!academicYear?.isProcessTQF3 && (
+                      <Table.Th className="w-[25%] ">
+                        <div className="flex flex-row items-center gap-2">
+                        TQF3 Edit
+                        <Tooltip
+                          arrowOffset={10}
+                          arrowSize={8}
+                          arrowRadius={1}
+                          transitionProps={{
+                            transition: "fade",
+                            duration: 300,
+                          }}
+                          multiline
+                          withArrow
+                          label={
+                            <div className="text-default text-[13px] p-2 flex flex-col gap-2">
+                              <div className="flex gap-2">
+                                <p className="text-secondary font-semibold">
+                                  Active in:
+                                </p>
+                                <p className=" font-medium"></p>
+                              </div>
+                              <div className="flex gap-2">
+                                <p className="text-secondary font-semibold">
+                                  Department:
+                                </p>
+
+                                <p className="font-medium flex flex-col gap-1 "></p>
+                              </div>
+                            </div>
+                          }
+                          color="#FCFCFC"
+                          className="w-fit border  rounded-md "
+                          position="bottom-start"
+                        >
+                          <IconInfoCircle
+                            size={16}
+                            className="-ml-0 text-secondary"
+                          />
+                        </Tooltip></div>
+                      </Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {courseList.map((e, index) => (
+                      <Table.Tr key={index}>
+                        <Table.Td>
+                          <div className="flex flex-col">
+                            <p className="font-semibold text-[14px] text-secondary">
+                              {e.courseNo}
+                              {e.type === COURSE_TYPE.SEL_TOPIC &&
+                                ` (Section ${getSectionNo(e.sectionNo)})`}
+                            </p>
+                            <p className="text-[12px] font-medium text-[#4E5150]">
+                              {e.type === COURSE_TYPE.SEL_TOPIC
+                                ? e.topic
+                                : e.courseName}
+                            </p>
+                          </div>
+                        </Table.Td>
+                        <Table.Td className="text-[#4E5150] text-[12px] font-medium">
+                          {" "}
+                          {e.instructor}
+                        </Table.Td>
+                        <Table.Td>
                           <Switch
-                            size="lg"
+                            size="md"
                             onLabel="ON"
                             offLabel="OFF"
-                            checked={e.TQF3?.status !== TQF_STATUS.DONE}
+                            disabled={academicYear?.isProcessTQF3}
+                            checked={
+                              academicYear.isProcessTQF3
+                                ? true
+                                : e.TQF3?.status !== TQF_STATUS.DONE
+                            }
                             onChange={(event) => {
                               onClickToggleOne(
                                 event.currentTarget.checked,
@@ -303,14 +360,12 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                               );
                             }}
                           />
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              {/* </>
-              )} */}
+                        </Table.Td>
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              </Table.ScrollContainer>
             </div>
           </Tabs.Panel>
         </Tabs>

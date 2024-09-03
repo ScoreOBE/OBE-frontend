@@ -155,14 +155,14 @@
 }
 
 .mantine-Menu-dropdown {
-  border-radius: 10px !important;
+  border-radius: 5px !important;
 }
 
 .mantine-Menu-item {
   height: 30px !important;
   font-size: 12px !important;
   font-weight: 500 !important;
-  border-radius: 10px !important;
+  border-radius: 5px !important;
 }
 
 .mantine-Table-table {
@@ -177,13 +177,13 @@
 }
 
 .mantine-Table-th {
-  padding-left: 20px !important;
+  padding-left: 25px !important;
   padding-block: 16px !important;
 }
 
 .mantine-Table-td {
-  padding-left: 20px !important;
-  padding-block: 16px !important;
+  padding-left: 25px !important;
+  padding-block: 12px !important;
 }
 
 .mantine-Table-tbody {

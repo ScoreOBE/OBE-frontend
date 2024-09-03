@@ -13,10 +13,12 @@ import Part4TQF3 from "@/components/TQF3/Part4TQF3";
 import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
 import { IconExclamationCircle, IconInfoCircle } from "@tabler/icons-react";
+import SaveTQFbar from "@/components/SaveTQFBar";
 
 export default function TQF3() {
   const dispatch = useAppDispatch();
-  const [tqf3Part, setTqf3Part] = useState<string | null>("tqf3p1");
+  const partTab = ["Part 1", "Part 2", "Part 3", "Part 4", "Part 5", "Part 6"];
+  const [tqf3Part, setTqf3Part] = useState<string | null>("Part 1");
   const [openModalReuse, setOpenModalReuse] = useState(false);
 
   useEffect(() => {
@@ -25,17 +27,17 @@ export default function TQF3() {
 
   const topicPart = () => {
     switch (tqf3Part) {
-      case "tqf3p1":
+      case "Part 1":
         return "Part 1 - ข้อมูลกระบวนวิชา\nCourse Information";
-      case "tqf3p2":
+      case "Part 2":
         return "Part 2 - คำอธิบายลักษณะกระบวนวิชาและแผนการสอน\nDescription and Planning";
-      case "tqf3p3":
+      case "Part 3":
         return "Part 3 -  การประเมินผลคะแนนกระบวนวิชา\nCourse Evaluation";
-      case "tqf3p4":
+      case "Part 4":
         return "Part 4 - การเชื่อมโยงหัวข้อประเมิน\nAssessment Mapping";
-      case "tqf3p5":
+      case "Part 5":
         return "Part 5 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้\nCurriculum Mapping";
-      case "tqf3p6":
+      case "Part 6":
         return "Part 6 - การประเมินกระบวนวิชาและกระบวนการปรับปรุง\nCourse evaluation and improvement processes";
       default:
         return;
@@ -65,7 +67,7 @@ export default function TQF3() {
             color="blue"
             title={` lorem ipsum `}
             icon={<IconInfoCircle />}
-            classNames={{ title: "-mt-[2px]" }}
+            classNames={{ title: "-mt-[2px]", icon: "size-6" }}
           ></Alert>
           <Select
             rightSectionPointerEvents="all"
@@ -100,46 +102,23 @@ export default function TQF3() {
         <Tabs
           value={tqf3Part}
           onChange={setTqf3Part}
-          defaultValue="tqf3p1"
+          defaultValue="Part 1"
           variant="pills"
-          className="px-6 pt-4 flex flex-col  h-full "
+          className="px-6 pt-[14px] pb-1 flex flex-col  h-full "
         >
-          <div className="flex items-center w-full h-fit justify-between">
+          <div className="flex items-center  w-full h-fit justify-between">
             <div className=" text-secondary  overflow-y-auto font-semibold  whitespace-break-spaces">
               {topicPart()}
             </div>
             <div className="flex gap-2">
               <Tabs.List>
-                <Tabs.Tab value="tqf3p1">
-                  <div className="flex flex-row items-center gap-2 ">
-                    Part 1
-                  </div>
-                </Tabs.Tab>
-                <Tabs.Tab value="tqf3p2">
-                  <div className="flex flex-row items-center gap-2 ">
-                    Part 2
-                  </div>
-                </Tabs.Tab>
-                <Tabs.Tab value="tqf3p3">
-                  <div className="flex flex-row items-center gap-2 ">
-                    Part 3
-                  </div>
-                </Tabs.Tab>
-                <Tabs.Tab value="tqf3p4">
-                  <div className="flex flex-row items-center gap-2 ">
-                    Part 4
-                  </div>
-                </Tabs.Tab>
-                <Tabs.Tab value="tqf3p5">
-                  <div className="flex flex-row items-center gap-2 ">
-                    Part 5
-                  </div>
-                </Tabs.Tab>
-                <Tabs.Tab value="tqf3p6">
-                  <div className="flex flex-row items-center gap-2 ">
-                    Part 6
-                  </div>
-                </Tabs.Tab>
+                {partTab.map((part) => (
+                  <Tabs.Tab value={part}>
+                    <div className="flex flex-row items-center gap-2 ">
+                      {part}
+                    </div>
+                  </Tabs.Tab>
+                ))}
               </Tabs.List>
               <Tooltip
                 onClick={() => setOpenModalReuse(true)}
@@ -163,7 +142,7 @@ export default function TQF3() {
                 }
                 color="#FCFCFC"
               >
-                <div className="bg-[#F39D4E] hover:bg-[#e39246] w-fit px-3 rounded-[8px]">
+                <div className="bg-[#F39D4E] hover:bg-[#e39246] cursor-pointer w-fit px-3 rounded-[8px]">
                   <Icon IconComponent={dupTQF} />
                 </div>
               </Tooltip>
@@ -174,29 +153,30 @@ export default function TQF3() {
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               overflowY: "auto",
             }}
-            className=" h-full w-full bg-white flex mt-2 mb-4 px-5 py-2 rounded-md text-[14px] "
+            className=" h-full w-full bg-white flex mt-[10px] mb-4 px-5 py-2 rounded-md text-[14px] "
           >
-            <Tabs.Panel className="w-full" value="tqf3p1">
+            <Tabs.Panel className="w-full" value="Part 1">
               <Part1TQF3 />
             </Tabs.Panel>
-            <Tabs.Panel value="tqf3p2">
+            <Tabs.Panel value="Part 2">
               <Part2TQF3 />
             </Tabs.Panel>{" "}
-            <Tabs.Panel value="tqf3p3">
+            <Tabs.Panel value="Part 3">
               <Part3TQF3 />
             </Tabs.Panel>{" "}
-            <Tabs.Panel value="tqf3p4">
+            <Tabs.Panel value="Part 4">
               <Part4TQF3 />
             </Tabs.Panel>{" "}
-            <Tabs.Panel value="tqf3p5">
+            <Tabs.Panel value="Part 5">
               <Part5TQF3 />
             </Tabs.Panel>
-            <Tabs.Panel value="tqf3p6">
+            <Tabs.Panel value="Part 6">
               <Part6TQF3 />
             </Tabs.Panel>
           </div>
         </Tabs>
       </div>
+      <SaveTQFbar part={tqf3Part} />
     </>
   );
 }

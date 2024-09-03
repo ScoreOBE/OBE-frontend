@@ -68,7 +68,7 @@ export default function Navbar() {
         className={`min-h-14 border-b border-[#e0e0e0] px-6 inline-flex flex-wrap justify-between items-center z-50 ${
           [ROUTE_PATH.LOGIN].includes(location)
             ? "bg-white border-none"
-            : "bg-[#f5f5f5]"
+            : "bg-[#ffffff]"
         } text-secondary`}
         style={
           ![ROUTE_PATH.LOGIN].includes(location)
