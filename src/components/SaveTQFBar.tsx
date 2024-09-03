@@ -10,11 +10,18 @@ import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { SearchInput } from "./SearchInput";
 import { Button } from "@mantine/core";
 
-type part = "Part 1" | "Part 2" | "Part 3" | "Part 4" | "Part 5" | "Part 6";
+export type partType =
+  | "Part 1"
+  | "Part 2"
+  | "Part 3"
+  | "Part 4"
+  | "Part 5"
+  | "Part 6";
 type Props = {
-  part: part;
+  tqf: string;
+  part: partType;
 };
-export default function SaveTQFbar({ part }: Props) {
+export default function SaveTQFbar({ tqf, part }: Props) {
   const location = useLocation().pathname;
   const [params, setParams] = useSearchParams();
   const academicYear = useAppSelector((state) => state.academicYear);

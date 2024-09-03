@@ -13,11 +13,18 @@ import Part4TQF3 from "@/components/TQF3/Part4TQF3";
 import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
 import { IconExclamationCircle, IconInfoCircle } from "@tabler/icons-react";
-import SaveTQFbar from "@/components/SaveTQFBar";
+import SaveTQFbar, { partType } from "@/components/SaveTQFBar";
 
 export default function TQF3() {
   const dispatch = useAppDispatch();
-  const partTab = ["Part 1", "Part 2", "Part 3", "Part 4", "Part 5", "Part 6"];
+  const partTab = [
+    { tab: "Part 1", compo: <Part1TQF3 /> },
+    { tab: "Part 2", compo: <Part2TQF3 /> },
+    { tab: "Part 3", compo: <Part3TQF3 /> },
+    { tab: "Part 4", compo: <Part4TQF3 /> },
+    { tab: "Part 5", compo: <Part5TQF3 /> },
+    { tab: "Part 6", compo: <Part6TQF3 /> },
+  ];
   const [tqf3Part, setTqf3Part] = useState<string | null>("Part 1");
   const [openModalReuse, setOpenModalReuse] = useState(false);
 
@@ -104,7 +111,7 @@ export default function TQF3() {
           onChange={setTqf3Part}
           defaultValue="Part 1"
           variant="pills"
-          className="px-6 pt-[14px] pb-1 flex flex-col  h-full "
+          className="px-6 pt-[12px] pb-1 flex flex-col h-full w-full"
         >
           <div className="flex items-center  w-full h-fit justify-between">
             <div className=" text-secondary  overflow-y-auto font-semibold  whitespace-break-spaces">
@@ -113,9 +120,9 @@ export default function TQF3() {
             <div className="flex gap-2">
               <Tabs.List>
                 {partTab.map((part) => (
-                  <Tabs.Tab value={part}>
+                  <Tabs.Tab value={part.tab}>
                     <div className="flex flex-row items-center gap-2 ">
-                      {part}
+                      {part.tab}
                     </div>
                   </Tabs.Tab>
                 ))}
@@ -153,30 +160,17 @@ export default function TQF3() {
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               overflowY: "auto",
             }}
-            className=" h-full w-full bg-white flex mt-[10px] mb-4 px-5 py-2 rounded-md text-[14px] "
+            className=" h-full w-full bg-white flex my-4 px-6 py-4 rounded-md text-[14px] "
           >
-            <Tabs.Panel className="w-full" value="Part 1">
-              <Part1TQF3 />
-            </Tabs.Panel>
-            <Tabs.Panel value="Part 2">
-              <Part2TQF3 />
-            </Tabs.Panel>{" "}
-            <Tabs.Panel value="Part 3">
-              <Part3TQF3 />
-            </Tabs.Panel>{" "}
-            <Tabs.Panel value="Part 4">
-              <Part4TQF3 />
-            </Tabs.Panel>{" "}
-            <Tabs.Panel value="Part 5">
-              <Part5TQF3 />
-            </Tabs.Panel>
-            <Tabs.Panel value="Part 6">
-              <Part6TQF3 />
-            </Tabs.Panel>
+            {partTab.map((part, index) => (
+              <Tabs.Panel key={index} value={part.tab} className="w-full">
+                {part.compo}
+              </Tabs.Panel>
+            ))}
           </div>
         </Tabs>
       </div>
-      <SaveTQFbar part={tqf3Part} />
+      <SaveTQFbar tqf="3" part={tqf3Part as partType} />
     </>
   );
 }
