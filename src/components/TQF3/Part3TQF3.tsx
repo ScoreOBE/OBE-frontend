@@ -8,6 +8,7 @@ import {
   Button,
   Alert,
   Group,
+  Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import AddIcon from "@/assets/icons/plus.svg?react";
@@ -77,8 +78,8 @@ export default function Part3TQF3() {
   }, [dataTest]);
   return (
     <div className="flex w-full">
-      <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-3">
-        <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6]] pb-5 flex-col">
+      <div className="flex flex-col  w-full pb-2 gap-3">
+        <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6] pb-5 flex-col">
           <div className="flex flex-row gap-1 text-[15px]">
             <p className="font-semibold">การกำหนดเกรด</p>
             <p className="font-bold">
@@ -156,7 +157,35 @@ export default function Part3TQF3() {
                   <Table.Th className="w-[5%] !rounded-tl-md">No.</Table.Th>
                   <Table.Th className=" w-[15%]">Topic</Table.Th>
                   <Table.Th className="w-[65%]">Description</Table.Th>
-                  <Table.Th className="w-[5%] text-end">Evaluation</Table.Th>
+                  <Table.Th className="w-[5%] text-end">
+                    <div className="flex flex-row items-center gap-2">
+                      Evaluate
+                      <Tooltip
+                        arrowOffset={20}
+                        arrowSize={8}
+                        arrowRadius={1}
+                        transitionProps={{
+                          transition: "fade",
+                          duration: 300,
+                        }}
+                        multiline
+                        withArrow
+                        label={
+                          <div className="text-default text-[12px] p-2 font-medium gap-2">
+                            The total of all topic evaluations must added up to <span className=" font-bold text-secondary">100%</span> 
+                          </div>
+                        }
+                        color="#FCFCFC"
+                        className="w-fit border  rounded-md "
+                        position='bottom-end'
+                      >
+                        <IconInfoCircle
+                          size={16}
+                          className="-ml-0 text-secondary"
+                        />
+                      </Tooltip>
+                    </div>
+                  </Table.Th>
                   <Table.Th className="w-[20%]">Action</Table.Th>
                   <Table.Th className="w-[5%] !rounded-tr-md"></Table.Th>
                 </Table.Tr>
