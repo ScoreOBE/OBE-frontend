@@ -23,7 +23,7 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
       departmentCode: user.departmentCode,
     });
     if (res) {
-      setPloList(res.plos[0].collections[0]);
+      setPloList(res.plos[1].collections[1]);
     }
   };
 
@@ -46,7 +46,7 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
           <div className="flex flex-col gap-5 h-full overflow-hidden ">
             <Drawer.Header>
               <div className="flex flex-col w-full h-fit pt-4 gap-3">
-                <div className="flex justify-between w-full">
+                <div className="flex items-center justify-between w-full mt-2 ">
                   <Drawer.Title className="w-full">
                     <div className="flex flex-col gap-1 items-start">
                       <p className="text-secondary text-[16px] font-bold">
@@ -61,7 +61,7 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
                   <Drawer.CloseButton />
                 </div>
 
-                <div className="flex w-full justify-between items-start ">
+                <div className="flex w-full justify-between items-center ">
                   <p className="flex items-center font-medium text-tertiary h-9 text-[14px]">
                     {isTH === "TH" ? ploList.criteriaTH : ploList.criteriaEN}
                   </p>
