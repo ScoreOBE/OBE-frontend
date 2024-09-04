@@ -32,7 +32,12 @@ export default function Sidebar() {
     } else return;
   };
   useEffect(() => {
-    if (!params.get("id") || !params.get("year") || !params.get("semester"))
+    if (!localStorage.getItem("token")) navigate(ROUTE_PATH.LOGIN);
+    else if (
+      !params.get("id") ||
+      !params.get("year") ||
+      !params.get("semester")
+    )
       navigate(ROUTE_PATH.DASHBOARD_INS);
     else if (!courseList.length) fetchCourse();
   }, [academicYear, params]);

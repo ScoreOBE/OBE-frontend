@@ -13,13 +13,21 @@ export const isValidResponse = (res: any) => {
   if (res.message === RESPONSE_MESSAGE.SUCCESS) {
     return res.data;
   } else {
+    const path = window.location.pathname;
     const dispatch = store.dispatch;
+    if (path.includes(ROUTE_PATH.CMU_OAUTH_CALLBACK)) {
+      localStorage.clear();
+      dispatch(setErrorResponse(res));
+      return;
+    }
     switch (res.statusCode) {
       case STATUS_CODE.NOT_FOUND:
         // dispatch(setErrorResponse(res));
         break;
+      // case STATUS_CODE.FOR_BIDDEN:
       case STATUS_CODE.UNAUTHORIZED:
         localStorage.clear();
+        // dispatch(setErrorResponse(res));
         window.location.replace(ROUTE_PATH.LOGIN);
         break;
       default:
