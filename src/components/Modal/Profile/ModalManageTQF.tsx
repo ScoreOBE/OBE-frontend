@@ -266,12 +266,12 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
               className="mt-4"
             />
             <div
-              className="w-full  flex flex-col bg-white  mt-3 rounded-md overflow-clip"
+              className="w-full  flex flex-col bg-white  mt-4 rounded-md overflow-clip"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
             >
-              <Table.ScrollContainer className="h-[420px] p-0" minWidth={500}>
+              <Table.ScrollContainer className="h-[360px] p-0" minWidth={500}>
                 <Table stickyHeader striped>
                   <Table.Thead>
                     <Table.Tr className="bg-[#e5e7f6]">
@@ -294,7 +294,8 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                             label={
                               <div className="text-default text-[12px] p-2 font-medium gap-2">
                                 The button will be disabled if TQF3 editing is
-                                turn on <br/> or the course has not completed TQF3.
+                                turn on <br /> or the course has not completed
+                                TQF3.
                               </div>
                             }
                             color="#FCFCFC"

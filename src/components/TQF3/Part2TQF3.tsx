@@ -11,9 +11,12 @@ import {
 import { useForm } from "@mantine/form";
 import { Table, rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
-import { IconEdit, IconGripVertical, IconTrash } from "@tabler/icons-react";
+import AddIcon from "@/assets/icons/plus.svg?react";
+import Icon from "../Icon";
 import {
-  IconExclamationCircle,
+  IconEdit,
+  IconGripVertical,
+  IconTrash,
   IconInfoCircle,
   IconPlus,
 } from "@tabler/icons-react";
@@ -108,12 +111,11 @@ export default function Part2TQF3() {
             วัตถุประสงค์ของกระบวนวิชา <span className="font-bold">(CLO)</span>{" "}
             <span className=" text-red-500">*</span>
           </p>
-          <Button
-            className="rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
-            // onClick={() => setOpenAddModal(true)}
-          >
-            <IconPlus className="h-5 w-5 mr-1" stroke={1.5} color="#ffffff" />
-            Add CLO
+          <Button className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4">
+            <div className="flex gap-2">
+              <Icon IconComponent={AddIcon} />
+              Add CLO
+            </div>
           </Button>
         </div>
         <Alert
@@ -248,12 +250,12 @@ export default function Part2TQF3() {
               <span className=" text-red-500">*</span>
             </span>
           </p>
-          <Button
-            className="rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
-            // onClick={() => setOpenAddModal(true)}
-          >
-            <IconPlus className="h-5 w-5 mr-1" stroke={1.5} color="#ffffff" />
-            Add Topic
+
+          <Button className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4">
+            <div className="flex gap-2">
+              <Icon IconComponent={AddIcon} />
+              Add Topic
+            </div>
           </Button>
         </div>
         {/* Table */}
