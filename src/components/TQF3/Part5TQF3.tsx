@@ -37,8 +37,9 @@ export default function Part5TQF3() {
             <span className=" text-red-500">*</span>
           </span>
           <Button
-            className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4 bg-primary hover:bg-[#4f4f84]"
+            className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
             onClick={() => setOpenDrawerPLOdes(true)}
+            color="#5768d5"
           >
             <div className="flex gap-2">
               <Icon IconComponent={IconPLO} />

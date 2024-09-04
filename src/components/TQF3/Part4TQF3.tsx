@@ -83,8 +83,12 @@ export default function Part4TQF3() {
   return (
     <div className="flex w-full max-h-full overflow-hidden">
       <div className="flex flex-col w-full">
-        <Tabs>
-          <Tabs.List>
+        <Tabs  classNames={{
+              root: "overflow-hidden flex flex-col pt-4 pb-1",
+              tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
+              tabLabel: "!font-semibold",
+            }}>
+          <Tabs.List className="!gap-6 !bg-transparent">
             <Tabs.Tab value="TH">
               <div className="flex flex-row items-center gap-2 ">CLO 1</div>
             </Tabs.Tab>
