@@ -27,6 +27,8 @@ import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { IModelUser } from "@/models/ModelUser";
 import { setShowSidebar } from "@/store/showSidebar";
+import Icon from "@/components/Icon";
+import AddIcon from "@/assets/icons/plus.svg?react";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -141,7 +143,7 @@ export default function Dashboard() {
             the current semester. Data from previous semesters will not be affected. 
             "
               icon={icon}
-              classNames={{ title: "-mt-[2px]", icon: 'size-6' }}
+              classNames={{ title: "-mt-[2px]", icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
@@ -197,12 +199,13 @@ export default function Dashboard() {
           </div>
           {term?.isActive && !!course.courses.length && (
             <Button
-              size="xs"
-              leftSection={<IconPlus className=" size-5 -mr-1" stroke={1.5} />}
-              className=" rounded-[8px] text-[12px] h-[32px] w-fit "
+              className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
               onClick={() => setOpenAddModal(true)}
             >
-              Add Course
+              <div className="flex gap-2">
+                <Icon IconComponent={AddIcon} />
+                Add course
+              </div>
             </Button>
           )}
         </div>
@@ -230,16 +233,25 @@ export default function Dashboard() {
                   )}
                 </p>
                 {term?.isActive && !course.search.length && (
+                  // <Button
+                  //   className=" rounded-[8px] text-[12px] w-28 font-medium  h-8 px-2 "
+                  //   onClick={() => setOpenAddModal(true)}
+                  // >
+                  //   <IconPlus
+                  //     className="h-5 w-5 mr-1"
+                  //     stroke={1.5}
+                  //     color="#ffffff"
+                  //   />
+                  //   Add course
+                  // </Button>
                   <Button
-                    className=" rounded-[8px] text-[12px] w-28 font-medium  h-8 px-2 "
+                    className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
                     onClick={() => setOpenAddModal(true)}
                   >
-                    <IconPlus
-                      className="h-5 w-5 mr-1"
-                      stroke={1.5}
-                      color="#ffffff"
-                    />
-                    Add course
+                    <div className="flex gap-2">
+                      <Icon IconComponent={AddIcon} />
+                      Add course
+                    </div>
                   </Button>
                 )}
               </div>
