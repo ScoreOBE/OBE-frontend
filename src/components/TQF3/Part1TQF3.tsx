@@ -216,6 +216,25 @@ export default function Part1TQF3({ data }: Props) {
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
+          <p className="font-medium">
+            ผู้ประสานงานกระบวนวิชา<span className=" text-red-500">*</span>
+          </p>
+          <p className="font-semibold">Course Coordinator</p>
+        </div>
+
+        <div className="flex flex-col gap-3 text-[#333333]">
+          <TextInput
+            withAsterisk
+            size="xs"
+            label="Instructor"
+            classNames={{ label: "text-[#333333]" }}
+            className="w-[440px]"
+            placeholder="(required)"
+          />
+        </div>
+      </div>
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
+        <div className="flex text-secondary flex-col">
           <p className="font-medium">สถานที่สอนคาบบรรยาย</p>
           <p className="font-semibold">Lectures Venue</p>
         </div>
