@@ -32,7 +32,7 @@ import {
   showNotifications,
   sortData,
 } from "@/helpers/functions/function";
-import CompoMangeIns from "@/components/CompoManageIns";
+import CompoManageIns from "@/components/CompoManageIns";
 import { IModelSection } from "@/models/ModelSection";
 import { IModelCourse } from "@/models/ModelCourse";
 import {
@@ -453,7 +453,7 @@ export default function ModalAddSection({
               title={<p>Each section can only have one owner section.</p>}
             ></Alert>
             <div className="flex flex-col max-h-[380px] h-fit w-full mt-1 mb-5  p-[2px]    overflow-y-auto  ">
-              <div className="flex flex-col font-medium text-[14px]">
+              <div className="flex flex-col font-medium text-[14px] gap-5">
                 {form
                   .getValues()
                   .sections?.map((sec: Partial<IModelSection>, index) => (
@@ -466,7 +466,7 @@ export default function ModalAddSection({
                         {/* <span className="text-b3 text-[#a2a2a2] -mt-2">Only one instructor is allowed per section</span> */}
                       </span>
 
-                      <CompoMangeIns
+                      <CompoManageIns
                         opened={active == 1}
                         type="mainIns"
                         value={sec.instructor as string}
@@ -578,15 +578,13 @@ export default function ModalAddSection({
           description={`STEP ${isManage ? 4 : 3}`}
         >
           <div className="flex flex-col mt-3 flex-1 ">
-            <div className="mb-5">
-              <CompoMangeIns
-                opened={active == 2}
-                type="add"
-                action={addCoIns}
-                sections={form.getValues().sections}
-                setUserList={setCoInsList}
-              />
-            </div>
+            <CompoManageIns
+              opened={active == 2}
+              type="add"
+              action={addCoIns}
+              sections={form.getValues().sections}
+              setUserList={setCoInsList}
+            />
             {!!coInsList.length && (
               <div
                 className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md"

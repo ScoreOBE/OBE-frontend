@@ -209,7 +209,8 @@ export default function CompoMangeIns({
 
   return (
     <div
-      className="flex flex-col gap-3 max-h-[320px] rounded-md h-fit w-full mt-2 p-4  "
+      className={`flex flex-col gap-3 max-h-[320px] rounded-md h-fit w-full mt-2 p-4
+        ${["add","admin"].includes(type) && "mb-5"}`}
       style={{
         boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
       }}
