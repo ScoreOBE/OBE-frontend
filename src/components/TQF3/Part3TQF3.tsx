@@ -70,11 +70,12 @@ export default function Part3TQF3() {
   ];
   const [state, handlers] = useListState(dataTest);
 
-  useEffect(() => {
-    if (dataTest) {
-      handlers.setState(dataTest);
-    }
-  }, [dataTest]);
+  // useEffect(() => {
+  //   if (dataTest) {
+  //     handlers.setState(dataTest);
+  //   }
+  // }, [dataTest]);
+
   return (
     <div className="flex w-full">
       <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-3">
@@ -145,7 +146,7 @@ export default function Part3TQF3() {
           }}
         >
           <div
-            className=" w-full mb-3  flex flex-col rounded-md border border-secondary  "
+            className="overflow-x-auto w-full mb-3  flex flex-col rounded-md border border-secondary"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}

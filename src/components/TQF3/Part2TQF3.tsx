@@ -23,6 +23,7 @@ import {
 import { useEffect } from "react";
 
 type Props = {};
+
 export default function Part2TQF3() {
   const dataTest = [
     {
@@ -46,7 +47,6 @@ export default function Part2TQF3() {
       Lec: "Lecture (if any)",
       Lab: "Laboratory (if any)",
     },
-
     {
       no: 4,
       cloTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.",
@@ -90,17 +90,17 @@ export default function Part2TQF3() {
   const [state, handlers] = useListState(dataTest);
   const [statePlan, handlersPlan] = useListState(dataPlan);
 
-  useEffect(() => {
-    if (dataPlan) {
-      handlersPlan.setState(dataPlan);
-    }
-  }, [dataPlan]);
+  // useEffect(() => {
+  //   if (dataPlan) {
+  //     handlersPlan.setState(dataPlan);
+  //   }
+  // }, [dataPlan]);
 
-  useEffect(() => {
-    if (dataTest) {
-      handlers.setState(dataTest);
-    }
-  }, [dataTest]);
+  // useEffect(() => {
+  //   if (dataTest) {
+  //     handlers.setState(dataTest);
+  //   }
+  // }, [dataTest]);
 
   return (
     <div className="flex flex-col w-full max-h-full gap-5">
@@ -150,7 +150,7 @@ export default function Part2TQF3() {
           }}
         >
           <div
-            className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
+            className="overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
             style={{ height: "fit-content" }}
           >
             <Table stickyHeader striped className="w-full">
