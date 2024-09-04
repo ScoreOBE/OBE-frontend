@@ -2,6 +2,7 @@ import { ROLE } from "@/helpers/constants/enum";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { setErrorResponse } from "@/store/errorResponse";
+import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
 import { Button } from "@mantine/core";
 import { useEffect } from "react";
@@ -14,8 +15,9 @@ export default function PageError() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    dispatch(setLoading(false));
     dispatch(setShowSidebar(false));
-  }, [])
+  }, []);
 
   const goDashboard = () => {
     if (localStorage.getItem("token")) {
