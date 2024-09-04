@@ -105,7 +105,7 @@ export default function Part2TQF3() {
   return (
     <div className="flex flex-col w-full max-h-full gap-5">
       {/* Description */}
-      <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6]  gap-5 pb-5">
+      <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6]  gap-3 pb-5">
         <div className="flex text-secondary items-center w-full justify-between">
           <p className="font-semibold text-[15px]">
             วัตถุประสงค์ของกระบวนวิชา <span className="font-bold">(CLO)</span>{" "}
@@ -240,7 +240,7 @@ export default function Part2TQF3() {
       </div>
 
       {/* Planning */}
-      <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6]  gap-5 pb-5">
+      <div className="flex flex-col  w-full   gap-3 pb-5">
         <div className="flex text-secondary items-center w-full justify-between">
           <p className="font-semibold text-[15px]">
             เนื้อหาวิชาและแผนการสอน

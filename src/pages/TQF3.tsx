@@ -109,15 +109,15 @@ export default function TQF3() {
           </div>
         </div>
       </Modal>
-      <div className=" flex flex-col bg-[#f8f8f8] h-full gap-3 w-full overflow-hidden">
+      <div className=" flex flex-col  h-full  w-full overflow-hidden">
         <Tabs
           value={tqf3Part}
           onChange={setTqf3Part}
           defaultValue="Part 1"
           variant="pills"
-          className="px-6 pt-[12px] pb-1 flex flex-col h-full w-full"
+          className="px-6 pt-[12px]  flex flex-col h-full w-full"
         >
-          <div className="flex items-center  w-full h-fit justify-between">
+          <div className="flex items-center pb-3 border-b-[1px] w-full h-fit justify-between">
             <div className=" text-secondary  overflow-y-auto font-semibold  whitespace-break-spaces">
               {topicPart()}
             </div>
@@ -161,10 +161,10 @@ export default function TQF3() {
           </div>
           <div
             style={{
-              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+           
               overflowY: "auto",
             }}
-            className=" h-full w-full bg-white flex my-4 px-6 py-4 rounded-md text-[14px] "
+            className=" h-full w-full  flex  pt-3 rounded-md text-[14px] "
           >
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.tab} className="w-full">
