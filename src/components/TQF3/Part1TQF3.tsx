@@ -25,7 +25,7 @@ export default function Part1TQF3({ data }: Props) {
     { key: 6, en: "6th year", th: "ชั้นปีที่ 6" },
   ];
   const form = useForm({
-    mode: "uncontrolled",
+    mode: "controlled",
     initialValues: {} as Partial<IModelTQF3Part1>,
     validate: {},
     validateInputOnBlur: true,
@@ -70,7 +70,6 @@ export default function Part1TQF3({ data }: Props) {
 
         <Radio.Group
           {...form.getInputProps("courseType")}
-          value={form.getValues().courseType}
         >
           <div className="flex text-[#333333] gap-3 flex-col">
             {Object.values(COURSE_TYPE).map((key) => (
@@ -92,15 +91,20 @@ export default function Part1TQF3({ data }: Props) {
           </p>
           <p className="font-semibold">Teachig Method</p>
         </div>
-        <div className="flex text-[#333333] gap-4  flex-col">
-          {Object.values(TEACHING_METHOD).map((key) => (
-            <Checkbox
-              key={key.en}
-              classNames={{ label: "font-medium text-[13px]" }}
-              label={`${key.th} ${key.en}`}
-            />
-          ))}
-        </div>
+        <Checkbox.Group
+          {...form.getInputProps("teachingMethod")}
+        >
+          <div className="flex text-[#333333] gap-4  flex-col">
+            {Object.values(TEACHING_METHOD).map((key) => (
+              <Checkbox
+                key={key.en}
+                classNames={{ label: "font-medium text-[13px]" }}
+                label={`${key.th} ${key.en}`}
+                value={key.en}
+              />
+            ))}
+          </div>
+        </Checkbox.Group>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary pt-2 flex-col">
@@ -129,15 +133,18 @@ export default function Part1TQF3({ data }: Props) {
           </p>
           <p className="font-semibold">Evaluation</p>
         </div>
-
-        <div className="flex gap-8 text-[#333333]">
-          {Object.values(EVALUATE_TYPE).map((eva) => (
-            <Radio
-              classNames={{ label: "font-medium text-[13px]" }}
-              label={eva}
-            />
-          ))}
-        </div>
+        <Radio.Group {...form.getInputProps("evaluate")}>
+          <div className="flex gap-8 text-[#333333]">
+            {Object.values(EVALUATE_TYPE).map((item) => (
+              <Radio
+                key={item}
+                classNames={{ label: "font-medium text-[13px]" }}
+                label={item}
+                value={item}
+              />
+            ))}
+          </div>
+        </Radio.Group>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">

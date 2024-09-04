@@ -124,7 +124,7 @@ export default function TQF3() {
             <div className="flex gap-2">
               <Tabs.List>
                 {partTab.map((part) => (
-                  <Tabs.Tab value={part.tab}>
+                  <Tabs.Tab key={part.tab} value={part.tab}>
                     <div className="flex flex-row items-center gap-2 ">
                       {part.tab}
                     </div>
