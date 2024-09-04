@@ -10,6 +10,7 @@ import {
   Group,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import AddIcon from "@/assets/icons/plus.svg?react";
 import { Table, rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { IconEdit, IconGripVertical, IconTrash } from "@tabler/icons-react";
@@ -19,6 +20,7 @@ import {
   IconPlus,
 } from "@tabler/icons-react";
 import { useEffect } from "react";
+import Icon from "../Icon";
 
 type Props = {};
 export default function Part3TQF3() {
@@ -102,12 +104,12 @@ export default function Part3TQF3() {
               Course Syllabus<span className="ml-1 text-red-500">*</span>
             </p>
           </div>
-          <Button
-            className="rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
-            // onClick={() => setOpenAddModal(true)}
-          >
-            <IconPlus className="h-5 w-5 mr-1" stroke={1.5} color="#ffffff" />
-            Add Evaluation Topic
+
+          <Button className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4">
+            <div className="flex gap-2">
+              <Icon IconComponent={AddIcon} />
+              Add Evaluation Topic
+            </div>
           </Button>
         </div>
         <Alert
@@ -119,7 +121,6 @@ export default function Part3TQF3() {
             icon: "size-6",
             body: " flex justify-center",
           }}
-       
           title={
             <p className="font-semibold">
               Making changes to Evaluation Topic?{" "}
@@ -132,7 +133,7 @@ export default function Part3TQF3() {
             </p>
           }
         ></Alert>
-        
+
         {/* Table */}
         <DragDropContext
           onDragEnd={({ destination, source }) => {
@@ -224,28 +225,28 @@ export default function Part3TQF3() {
                               </div>
                             </Table.Td>
                           </Table.Tr>
-                          
                         )}
                       </Draggable>
                     ))}
                     {provided.placeholder}
-                    
                   </Table.Tbody>
-                  
                 )}
               </Droppable>
-              <Table.Tfoot  className="text-secondary   font-semibold  ">
+              <Table.Tfoot className="text-secondary   font-semibold  ">
                 <Table.Tr className="bg-[#e5e7f6] border-none">
-                <Table.Th className="w-[5%] text-[14px] !rounded-bl-md">Total </Table.Th>
+                  <Table.Th className="w-[5%] text-[14px] !rounded-bl-md">
+                    Total{" "}
+                  </Table.Th>
                   <Table.Th className=" w-[15%]"></Table.Th>
                   <Table.Th className="w-[65%]"></Table.Th>
-                  <Table.Th className="w-[5%] text-[16px] text-end">60%</Table.Th>
+                  <Table.Th className="w-[5%] text-[16px] text-end">
+                    60%
+                  </Table.Th>
                   <Table.Th className="w-[20%]"></Table.Th>
                   <Table.Th className="w-[5%] !rounded-br-md"></Table.Th>
                 </Table.Tr>
               </Table.Tfoot>
             </Table>
-            
           </div>
         </DragDropContext>
       </div>
