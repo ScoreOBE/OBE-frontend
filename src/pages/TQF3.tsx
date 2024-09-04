@@ -117,7 +117,11 @@ export default function TQF3() {
           variant="pills"
           className="px-6 pt-[12px]  flex flex-col h-full w-full"
         >
-          <div className="flex items-center pb-3 border-b-[1px] w-full h-fit justify-between">
+          <div
+            className={`flex items-center  w-full h-fit ${
+              tqf3Part === "Part 4" ? "pb-1" : "border-b-[1px] pb-3"
+            } justify-between`}
+          >
             <div className=" text-secondary  overflow-y-auto font-semibold  whitespace-break-spaces">
               {topicPart()}
             </div>
@@ -161,10 +165,11 @@ export default function TQF3() {
           </div>
           <div
             style={{
-           
               overflowY: "auto",
             }}
-            className=" h-full w-full  flex  pt-3 rounded-md text-[14px] "
+            className={`h-full w-full  flex ${
+              tqf3Part !== "Part 4" && "pt-4 px-3 "
+            }   rounded-md text-[14px]`}
           >
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.tab} className="w-full">

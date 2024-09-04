@@ -17,6 +17,7 @@ import AddIcon from "@/assets/icons/plus.svg?react";
 import { Table, rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { IconEdit, IconGripVertical, IconTrash } from "@tabler/icons-react";
+import DrawerPLOdes from "../DrawerPLO";
 import {
   IconExclamationCircle,
   IconInfoCircle,
@@ -81,8 +82,8 @@ export default function Part4TQF3() {
   }, [dataTest]);
   return (
     <div className="flex w-full max-h-full overflow-hidden">
-      <div className="flex flex-col -mt-2   w-full  gap-3">
-        <Tabs className="mb-1">
+      <div className="flex flex-col w-full">
+        <Tabs>
           <Tabs.List>
             <Tabs.Tab value="TH">
               <div className="flex flex-row items-center gap-2 ">CLO 1</div>
@@ -92,7 +93,8 @@ export default function Part4TQF3() {
             </Tabs.Tab>
           </Tabs.List>
         </Tabs>
-        <div className="flex text-secondary  max-h-full overflow-y-auto gap-4 items-start w-full pb-2 flex-col">
+        {/* CLO Map Assessmen Tool */}
+        <div className="flex text-secondary  max-h-full overflow-y-auto gap-4 items-start w-full pb-4 px-3 pt-3  pr-3 flex-col">
           <div className="flex flex-col text-[15px]">
             <p className="font-bold">
               CLO 1 -{" "}
@@ -131,7 +133,7 @@ export default function Part4TQF3() {
           </div>
 
           <div
-            className=" w-full mb-3 flex flex-col rounded-md border border-secondary  "
+            className=" w-full flex flex-col rounded-md border border-secondary  "
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
@@ -144,7 +146,7 @@ export default function Part4TQF3() {
                   <Table.Th className="w-[45%]">Description</Table.Th>
                   <Table.Th className="w-[20%]">Evaluation week</Table.Th>
                   <Table.Th className=" w-[16%] pr-6 text-end">
-                  <div className="flex flex-row items-center gap-2">
+                    <div className="flex flex-row items-center gap-2">
                       Evaluate CLO
                       <Tooltip
                         arrowOffset={20}
@@ -158,12 +160,13 @@ export default function Part4TQF3() {
                         withArrow
                         label={
                           <div className="text-default text-[12px] p-2 font-medium gap-2">
-                            "Fill the number of topic used to linked for CLO 1 and The total doesn't need added up to 100%. 
+                            "Fill the number of topic used to linked for CLO 1
+                            and The total doesn't need added up to 100%.
                           </div>
                         }
                         color="#FCFCFC"
                         className="w-fit border  rounded-md "
-                        position='bottom-end'
+                        position="bottom-end"
                       >
                         <IconInfoCircle
                           size={16}
@@ -190,10 +193,17 @@ export default function Part4TQF3() {
                       <p className="w-fit">{item.topicEN}</p>
                     </Table.Td>
                     <Table.Td className="w-[45%]">{item.des}</Table.Td>{" "}
-                    <Table.Td className="w-[20%]"> <Select></Select></Table.Td>
+                    <Table.Td className="w-[20%]">
+                      {" "}
+                      <Select></Select>
+                    </Table.Td>
                     <Table.Td className="w-[16%] pr-6 text-end text-b1 ">
                       <div className="flex font-semibold flex-row items-center gap-2">
-                    <TextInput classNames={{ input: '!rounded-[4px]'}}></TextInput>%</div>
+                        <TextInput
+                          classNames={{ input: "!rounded-[4px]" }}
+                        ></TextInput>
+                        %
+                      </div>
                     </Table.Td>
                     <Table.Td className=" w-[5%] pr-[30px]">
                       <div className="flex justify-start gap-4 items-center">

@@ -13,7 +13,7 @@ export default {
         done: "#0eb092",
         edit: "F39D4E",
         delete: "#FF4747",
-        bgSecond: "#e6e9ff",
+        bgTableHeader: "#e5e7f6",
         hover: "#efefef",
       },
       fontSize: {
