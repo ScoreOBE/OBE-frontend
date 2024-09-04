@@ -23,7 +23,7 @@ import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { SEMESTER } from "@/helpers/constants/enum";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
-  validateCourseNameorTopic,
+  validateTextInput,
   validateSectionNo,
 } from "@/helpers/functions/validation";
 import {
@@ -71,7 +71,7 @@ export default function ModalAddSection({
     initialValues: { sections: [{}] as Partial<IModelSection>[] },
     validate: {
       sections: {
-        topic: (value) => validateCourseNameorTopic(value, "Topic"),
+        topic: (value) => validateTextInput(value, "Topic"),
         sectionNo: (value) => validateSectionNo(value),
         semester: (value) => {
           return value?.length ? null : "Please choose at least one semester.";

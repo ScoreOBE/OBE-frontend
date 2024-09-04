@@ -50,19 +50,22 @@ export const validateCourseNo = (value: string | null | undefined) => {
   return isValid ? null : "Require number 6 digits";
 };
 
-export const validateCourseNameorTopic = (
+export const validateTextInput = (
   value: string | null | undefined,
-  title: string
+  title: string,
+  maxLength = 70,
+  checkCha = true
 ) => {
-  const maxLength = 70;
   if (!value) return `${title} is required`;
   if (!value.trim().length) return "Cannot have only spaces";
   if (value.length > maxLength)
     return `You have ${value.length - maxLength} characters too many`;
-  const isValid = /^[0-9A-Za-z "%&()*+,-./<=>?@[\]\\^_]+$/.test(value);
-  return isValid
-    ? null
-    : `only contain 0-9, a-z, A-Z, space, "%&()*+,-./<=>?@[]\\^_`;
+  if (checkCha) {
+    const isValid = /^[0-9A-Za-z "%&()*+,-./<=>?@[\]\\^_]+$/.test(value);
+    return isValid
+      ? null
+      : `only contain 0-9, a-z, A-Z, space, "%&()*+,-./<=>?@[]\\^_`;
+  }
 };
 
 export const validateSectionNo = (

@@ -66,7 +66,14 @@ export default function Sidebar() {
       className="w-[255px] border-r-[1px] h-screen flex p-5 sidebar-linear-gradient"
     >
       <div className="flex w-full flex-col gap-11">
-        <img src={cmulogo} alt="CMULogo" className="h-fit w-[155px]" />
+        <img
+          src={cmulogo}
+          alt="CMULogo"
+          className="h-fit w-[155px] cursor-pointer"
+          onClick={() =>
+            navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`)
+          }
+        />
         {getSidebar()}
       </div>
     </motion.div>

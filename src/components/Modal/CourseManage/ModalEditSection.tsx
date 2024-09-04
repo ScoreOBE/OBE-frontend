@@ -2,7 +2,7 @@ import { Button, Chip, Group, Modal, Switch, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import {
-  validateCourseNameorTopic,
+  validateTextInput,
   validateSectionNo,
 } from "@/helpers/functions/validation";
 import { showNotifications } from "@/helpers/functions/function";
@@ -46,7 +46,7 @@ export default function ModalEditSection({
     initialValues: {} as Partial<IModelSection | IModelSectionManagement> &
       Record<string, any>,
     validate: {
-      topic: (value) => validateCourseNameorTopic(value, "Topic"),
+      topic: (value) => validateTextInput(value, "Topic"),
       sectionNo: (value) => validateSectionNo(value),
     },
     validateInputOnBlur: true,

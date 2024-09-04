@@ -4,7 +4,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { useForm } from "@mantine/form";
 import {
-  validateCourseNameorTopic,
+  validateTextInput,
   validateCourseNo,
 } from "@/helpers/functions/validation";
 import { updateCourse } from "@/services/course/course.service";
@@ -34,7 +34,7 @@ export default function ModalEditCourse({
     initialValues: {} as Partial<IModelCourse> & Record<string, any>,
     validate: {
       courseNo: (value) => validateCourseNo(value),
-      courseName: (value) => validateCourseNameorTopic(value, "Course Name"),
+      courseName: (value) => validateTextInput(value, "Course Name"),
     },
     validateInputOnBlur: true,
   });
