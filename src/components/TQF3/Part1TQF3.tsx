@@ -3,11 +3,19 @@ import {
   EVALUATE_TYPE,
   TEACHING_METHOD,
 } from "@/helpers/constants/enum";
-import { Radio, Checkbox, TextInput, Textarea } from "@mantine/core";
+import { sortData } from "@/helpers/functions/function";
+import { IModelCourse } from "@/models/ModelCourse";
+import { IModelTQF3Part1 } from "@/models/ModelTQF3";
+import { IModelUser } from "@/models/ModelUser";
+import { Radio, Checkbox, TextInput, Textarea, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useEffect } from "react";
 
-type Props = {};
-export default function Part1TQF3() {
+type Props = {
+  data: Partial<IModelCourse>;
+};
+
+export default function Part1TQF3({ data }: Props) {
   const studentYear = [
     { key: 1, en: "1st year", th: "ชั้นปีที่ 1" },
     { key: 2, en: "2nd year", th: "ชั้นปีที่ 2" },
@@ -16,7 +24,40 @@ export default function Part1TQF3() {
     { key: 5, en: "5th year", th: "ชั้นปีที่ 5" },
     { key: 6, en: "6th year", th: "ชั้นปีที่ 6" },
   ];
-  const form = useForm();
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {} as Partial<IModelTQF3Part1>,
+    validate: {},
+    validateInputOnBlur: true,
+  });
+
+  useEffect(() => {
+    if (data?.TQF3?.part1) {
+      form.setValues(data.TQF3.part1);
+    } else if (data) {
+      form.setFieldValue("courseType", data.type);
+      const uniqueInstructors = [
+        ...new Map(
+          (data.sections?.flatMap((sec) => sec.instructor) as IModelUser[]).map(
+            (instructor) => [instructor.id, instructor]
+          )
+        ).values(),
+      ];
+      sortData(uniqueInstructors, "firstNameEN", "string");
+      form.setFieldValue("instructors", uniqueInstructors);
+      const uniqueCoInstructors = [
+        ...new Map(
+          (
+            data.sections?.flatMap((sec) => sec.coInstructors) as IModelUser[]
+          ).map((coInstructor) => [coInstructor.id, coInstructor])
+        ).values(),
+      ];
+      sortData(uniqueCoInstructors, "firstNameEN", "string");
+      form.setFieldValue("coInstructors", uniqueCoInstructors);
+    }
+    console.log(form.getValues());
+  }, [data]);
+
   return (
     <div className="flex w-full flex-col text-[14px] max-h-full px-3 py-1">
       <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3 pb-5">
@@ -24,18 +65,25 @@ export default function Part1TQF3() {
           <p className="font-medium">
             ประเภทกระบวนวิชา <span className=" text-red-500">*</span>
           </p>
-          <p className="font-semibold">Course Type</p>{" "}
+          <p className="font-semibold">Course Type</p>
         </div>
 
-        <div className="flex text-[#333333] gap-3  flex-col">
-          {Object.values(COURSE_TYPE).map((key) => (
-            <Radio
-              key={key.en}
-              classNames={{ label: "font-medium text-[13px]" }}
-              label={`${key.th} ${key.en}`}
-            />
-          ))}
-        </div>
+        <Radio.Group
+          {...form.getInputProps("courseType")}
+          value={form.getValues().courseType}
+        >
+          <div className="flex text-[#333333] gap-3 flex-col">
+            {Object.values(COURSE_TYPE).map((key) => (
+              <Radio
+                key={key.en}
+                classNames={{ label: "font-medium text-[13px]" }}
+                label={`${key.th} ${key.en}`}
+                disabled={true}
+                value={key.en}
+              />
+            ))}
+          </div>
+        </Radio.Group>
       </div>
       <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 py-5   ">
         <div className="flex text-secondary flex-col ">

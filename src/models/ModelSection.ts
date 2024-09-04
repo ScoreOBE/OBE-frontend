@@ -1,3 +1,4 @@
+import { IModelTQF3 } from "./ModelTQF3";
 import { IModelUser } from "./ModelUser";
 
 export interface IModelSection {
@@ -11,8 +12,6 @@ export interface IModelSection {
   isActive: boolean;
   addFirstTime?: boolean;
   assignments: any[];
-  // TQF3: TQF;
-  // TQF5: TQF;
-  TQF3?: any;
+  TQF3?: IModelTQF3;
   TQF5?: any;
 }
