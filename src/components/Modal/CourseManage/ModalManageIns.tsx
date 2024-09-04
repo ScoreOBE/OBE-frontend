@@ -14,7 +14,7 @@ import {
 } from "@/helpers/functions/function";
 import { Tabs } from "@mantine/core";
 import { IModelCourseManagement } from "@/models/ModelCourseManagement";
-import CompoMangeIns from "@/components/CompoManageIns";
+import CompoManageIns from "@/components/CompoManageIns";
 import {
   updateCoInsSections,
   updateSectionManagement,
@@ -54,12 +54,12 @@ export default function ModalManageIns({
   >();
   const [coInsList, setCoInsList] = useState<any[]>();
   const [editCoSec, setEditCoSec] = useState<any[]>([]);
-  const [editCoInsList, setEditCoInsList] = useState<any[]>([]);
+  const [editCoInsList, setEditCoInsList] = useState<any[]>();
 
   useEffect(() => {
     if (opened) {
       setCoInsList(undefined);
-      setEditCoInsList([]);
+      setEditCoInsList(undefined);
       setEditSec(undefined);
       setEditCoSec(data.sections!);
       setChangeMainIns(false);
@@ -67,7 +67,7 @@ export default function ModalManageIns({
   }, [opened]);
 
   useEffect(() => {
-    if (!coInsList && data.sections?.length) {
+    if (opened && !coInsList && data.sections?.length && editCoInsList) {
       setCoInsList(cloneDeep(editCoInsList));
     }
   }, [editCoInsList]);
@@ -228,14 +228,16 @@ export default function ModalManageIns({
           type == "courseManagement" && "mt-3"
         }`}
       >
-        <CompoMangeIns
+        <CompoManageIns
           opened={opened}
           type={type == "course" ? "manageCoSec" : "manageCo"}
           action={addCoIns}
           sections={editCoSec}
-          setUserList={setEditCoInsList}
+          setUserList={
+            setEditCoInsList as React.Dispatch<React.SetStateAction<any[]>>
+          }
         />
-        {!!editCoInsList.length && (
+        {!!editCoInsList?.length && (
           <div className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md">
             <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
               <IconUsers /> Added Co-Instructor
@@ -404,7 +406,7 @@ export default function ModalManageIns({
               </p>
             </div>
           </div>
-          <CompoMangeIns
+          <CompoManageIns
             opened={changeMainIns}
             type="changeMain"
             currentMainIns={(editSec.instructor as IModelUser)?.id}

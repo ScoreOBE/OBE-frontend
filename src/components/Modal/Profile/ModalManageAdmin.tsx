@@ -6,7 +6,7 @@ import { IModelUser } from "@/models/ModelUser";
 import { useAppSelector } from "@/store";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
-import CompoMangeIns from "@/components/CompoManageIns";
+import CompoManageIns from "@/components/CompoManageIns";
 import { updateAdmin } from "@/services/user/user.service";
 
 type Props = {
@@ -65,7 +65,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
       }}
     >
       <div className="flex flex-1 flex-col h-full ">
-        <CompoMangeIns
+        <CompoManageIns
           opened={opened}
           type="admin"
           newFetch={isNewFetch}
