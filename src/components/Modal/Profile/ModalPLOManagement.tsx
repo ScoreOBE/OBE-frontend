@@ -116,8 +116,9 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
 
   useEffect(() => {
     if (modalDuplicatePLO) {
+      setSelectPloDupli({});
       fetchPLO();
-    } 
+    }
   }, [modalAddPLO, modalDuplicatePLO]);
 
   const onClickDeletePLO = async () => {
@@ -198,7 +199,6 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             (collection?.year == academicYear?.year &&
               collection?.semester! > academicYear?.semester)) && (
             <Button
-            
               color="#FF4747"
               leftSection={<IconTrash className="h-5 w-5 -mr-1" stroke={1.5} />}
               onClick={() => {
@@ -227,7 +227,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               color="red"
               title="After you delete this PLO Collection, it will affect all courses that use it."
               icon={<IconExclamationCircle />}
-              classNames={{ title: "-mt-[2px]", icon: 'size-6' }}
+              classNames={{ title: "-mt-[2px]", icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">PLO Collection name</p>
@@ -261,7 +261,8 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             variant="light"
             color="blue"
             classNames={{
-              body: " flex justify-center gap-1", icon: 'size-6'
+              body: " flex justify-center gap-1",
+              icon: "size-6",
             }}
             title={
               <div className="flex items-center  gap-2">
