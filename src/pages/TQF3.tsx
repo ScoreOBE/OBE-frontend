@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { Alert, Button, Modal, Select, Tabs, Tooltip } from "@mantine/core";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
@@ -16,9 +16,13 @@ import { IconExclamationCircle, IconInfoCircle } from "@tabler/icons-react";
 import SaveTQFbar, { partType } from "@/components/SaveTQFBar";
 
 export default function TQF3() {
+  const { courseNo } = useParams();
+  const course = useAppSelector((state) =>
+    state.course.courses.find((c) => c.courseNo == courseNo)
+  );
   const dispatch = useAppDispatch();
   const partTab = [
-    { tab: "Part 1", compo: <Part1TQF3 /> },
+    { tab: "Part 1", compo: <Part1TQF3 data={course!} /> },
     { tab: "Part 2", compo: <Part2TQF3 /> },
     { tab: "Part 3", compo: <Part3TQF3 /> },
     { tab: "Part 4", compo: <Part4TQF3 /> },
