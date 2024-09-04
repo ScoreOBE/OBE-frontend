@@ -79,8 +79,8 @@ export default function Part3TQF3() {
 
   return (
     <div className="flex w-full">
-      <div className="flex flex-col  w-full pb-2 gap-3">
-        <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6] pb-5 flex-col">
+      <div className="flex flex-col  w-full pb-4 gap-4">
+        <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6] mt-1 pb-4 flex-col">
           <div className="flex flex-row gap-1 text-[15px]">
             <p className="font-semibold">การกำหนดเกรด</p>
             <p className="font-bold">
@@ -89,7 +89,7 @@ export default function Part3TQF3() {
           </div>
           <div className="flex flex-col font-medium  text-[#333333]">
             <Radio.Group>
-              <Group className="flex flex-col  items-start">
+              <Group className="flex flex-col items-start">
                 <Radio
                   size="sm"
                   label="แบบอิงกลุ่ม (Norm-Referenced Grading)"
@@ -147,7 +147,7 @@ export default function Part3TQF3() {
           }}
         >
           <div
-            className="overflow-x-auto w-full mb-3  flex flex-col rounded-md border border-secondary"
+            className="overflow-x-auto w-full flex flex-col rounded-md border border-secondary"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
@@ -173,12 +173,15 @@ export default function Part3TQF3() {
                         withArrow
                         label={
                           <div className="text-default text-[12px] p-2 font-medium gap-2">
-                            The total of all topic evaluations must added up to <span className=" font-bold text-secondary">100%</span> 
+                            The total of all topic evaluations must added up to{" "}
+                            <span className=" font-bold text-secondary">
+                              100%
+                            </span>
                           </div>
                         }
                         color="#FCFCFC"
                         className="w-fit border  rounded-md "
-                        position='bottom-end'
+                        position="bottom-end"
                       >
                         <IconInfoCircle
                           size={16}

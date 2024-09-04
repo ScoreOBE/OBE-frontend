@@ -188,7 +188,6 @@
   padding-bottom: 14px !important;
 }
 
-
 .mantine-Table-tbody {
   border-bottom: var(--color-secondary);
   color: var(--color-secondary);
@@ -198,7 +197,7 @@
   font-weight: 500 !important;
 }
 
-.mantine-Switch-trackLabel{
+.mantine-Switch-trackLabel {
   font-size: 9px;
 }
 
@@ -322,6 +321,19 @@ Button:disabled {
 .tqf-no-data {
   color: #79797a;
   background-color: #d8d8dd;
+}
+
+.mantine-Radio-label {
+  font-size: 13px;
+}
+
+.mantine-Drawer-header {
+  height: fit-content;
+}
+
+.mantine-Drawer-body {
+  height: 800px;
+  max-height: fit-content;
 }
 
 .gg1 {
