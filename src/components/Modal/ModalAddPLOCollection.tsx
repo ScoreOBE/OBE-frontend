@@ -8,7 +8,6 @@ import {
   Radio,
   RadioCard,
   rem,
-  Text,
   Stepper,
   Textarea,
   TextInput,
@@ -33,7 +32,7 @@ import { useForm } from "@mantine/form";
 import { isEmpty, isEqual } from "lodash";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { validateCourseNameorTopic } from "@/helpers/functions/validation";
+import { validateTextInput } from "@/helpers/functions/validation";
 import { checkCanCreatePLO, createPLO } from "@/services/plo/plo.service";
 
 type Props = {
@@ -43,6 +42,7 @@ type Props = {
   collection: Partial<IModelPLO>;
   fetchPLO: () => void;
 };
+
 export default function ModalAddPLOCollection({
   opened,
   onOpen,
@@ -63,6 +63,7 @@ export default function ModalAddPLOCollection({
   const [openModalSelectSemester, setOpenModalSelectSemester] = useState(false);
   const [semesterOption, setSemesterOption] = useState<any[]>([]);
   const [selectSemester, setSelectSemester] = useState("");
+
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -70,24 +71,12 @@ export default function ModalAddPLOCollection({
       data: [{ descTH: "", descEN: "" }] as Partial<IModelPLONo[]>,
     } as Partial<IModelPLO>,
     validate: {
-      name: (value) => {
-        if (!value) return `PLO Collection Name is required`;
-        if (!value.trim().length) return "Cannot have only spaces";
-        const maxLength = 70;
-        if (value.length > maxLength)
-          return `You have ${value.length - maxLength} characters too many`;
-      },
-      criteriaTH: (value) => {
-        if (!value) return `Criteria Thai language is required`;
-        if (!value.trim().length) return "Cannot have only spaces";
-        const maxLength = 105;
-        if (value.length > maxLength)
-          return `You have ${value.length - maxLength} characters too many`;
-      },
-      criteriaEN: (value) => {
-        return validateCourseNameorTopic(value, "Criteria English language");
-      },
-
+      name: (value) =>
+        validateTextInput(value, "PLO Collection Name", 70, false),
+      criteriaTH: (value) =>
+        validateTextInput(value, "Criteria Thai language", 105, false),
+      criteriaEN: (value) =>
+        validateTextInput(value, "Criteria English language", 70, false),
       departmentCode: (value) => {
         return !value?.length && "Select department at least one";
       },
@@ -95,14 +84,18 @@ export default function ModalAddPLOCollection({
         descTH: (value) => {
           if (form.getValues().data?.length! > 1 && firstInput && !isAddAnother)
             return false;
-          if (!value && (isAddAnother || firstInput))
-            return `PLO Thai language is required`;
+          if (isAddAnother || firstInput) {
+            if (!value) return `PLO Thai language is required`;
+            else if (!value.trim().length) return "Cannot have only spaces";
+          }
         },
         descEN: (value) => {
           if (form.getValues().data?.length! > 1 && firstInput && !isAddAnother)
             return false;
-          if (!value && (isAddAnother || firstInput))
-            return `PLO English language is required`;
+          if (isAddAnother || firstInput) {
+            if (!value) return `PLO English language is required`;
+            else if (!value.trim().length) return "Cannot have only spaces";
+          }
         },
       },
     },

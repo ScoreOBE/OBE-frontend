@@ -23,7 +23,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { SEMESTER } from "@/helpers/constants/enum";
 import { useAppSelector } from "@/store";
 import {
-  validateCourseNameorTopic,
+  validateTextInput,
   validateCourseNo,
   validateSectionNo,
 } from "@/helpers/functions/validation";
@@ -65,9 +65,9 @@ export default function ModalAddCourse({
     validate: {
       type: (value) => !value && "Course Type is required",
       courseNo: (value) => validateCourseNo(value),
-      courseName: (value) => validateCourseNameorTopic(value, "Course Name"),
+      courseName: (value) => validateTextInput(value, "Course Name"),
       sections: {
-        topic: (value) => validateCourseNameorTopic(value, "Topic"),
+        topic: (value) => validateTextInput(value, "Topic"),
         sectionNo: (value) => validateSectionNo(value),
         semester: (value) => {
           return value?.length ? null : "Please choose semester at least one.";
