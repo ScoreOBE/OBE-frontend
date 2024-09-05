@@ -3,6 +3,7 @@ import { IModelUser } from "./ModelUser";
 import { IModelPLONo } from "./ModelPLO";
 
 export interface IModelCourseManagement {
+  [key: string]: any;
   id: string;
   courseNo: string;
   courseName: string;
@@ -16,6 +17,7 @@ export interface IModelCourseManagement {
 }
 
 export interface IModelSectionManagement {
+  [key: string]: any;
   id: string;
   topic?: string;
   plos?: IModelPLONo[] | string[];

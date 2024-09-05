@@ -13,21 +13,23 @@ import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
 import { setShowSidebar } from "@/store/showSidebar";
 import { useParams } from "react-router-dom";
-
+import CheckIcon from "@/assets/icons/Check.svg?react";
 import Part1TQF3 from "@/components/TQF3/Part1TQF3";
 import Part2TQF3 from "@/components/TQF3/Part2TQF3";
 import Part3TQF3 from "@/components/TQF3/Part3TQF3";
 import Part4TQF3 from "@/components/TQF3/Part4TQF3";
 import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
-import { IconExclamationCircle, IconInfoCircle } from "@tabler/icons-react";
+import { IconInfoCircle } from "@tabler/icons-react";
 import SaveTQFbar, { partType } from "@/components/SaveTQFBar";
+import { IModelCourse } from "@/models/ModelCourse";
+import { isEmpty } from "lodash";
+import { getOneCourse } from "@/services/course/course.service";
 
 export default function TQF3() {
   const { courseNo } = useParams();
-  const course = useAppSelector((state) =>
-    state.course.courses.find((c) => c.courseNo == courseNo)
-  );
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [course, setCourse] = useState<Partial<IModelCourse>>({});
   const dispatch = useAppDispatch();
   const partTab = [
     { tab: "Part 1", compo: <Part1TQF3 data={course!} /> },
@@ -42,7 +44,17 @@ export default function TQF3() {
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
-  }, []);
+    const fetchOneCourse = async () => {
+      const res = await getOneCourse({
+        academicYear: academicYear.id,
+        courseNo,
+      });
+      if (res) {
+        setCourse(res);
+      }
+    };
+    if (isEmpty(course)) fetchOneCourse();
+  }, [academicYear]);
 
   const topicPart = () => {
     switch (tqf3Part) {
@@ -140,6 +152,19 @@ export default function TQF3() {
                 {partTab.map((part) => (
                   <Tabs.Tab key={part.tab} value={part.tab}>
                     <div className="flex flex-row items-center gap-2 ">
+                      <Icon
+                        IconComponent={CheckIcon}
+                        className={
+                          course?.TQF3 &&
+                          isEmpty(
+                            course?.TQF3[
+                              part.tab.replace(" ", "").toLowerCase()
+                            ]
+                          )
+                            ? "text-noData"
+                            : "text-done"
+                        }
+                      />
                       {part.tab}
                     </div>
                   </Tabs.Tab>

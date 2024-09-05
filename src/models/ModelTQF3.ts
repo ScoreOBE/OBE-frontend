@@ -3,6 +3,7 @@ import { IModelUser } from "./ModelUser";
 import { IModelPLONo } from "./ModelPLO";
 
 export interface IModelTQF3 {
+  [key: string]: any;
   id: string;
   status: TQF_STATUS;
   part1?: IModelTQF3Part1;
