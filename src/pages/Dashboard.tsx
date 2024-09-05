@@ -9,7 +9,7 @@ import {
   IconTrash,
   IconExclamationCircle,
 } from "@tabler/icons-react";
-import { showNotifications, statusColor } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/functions/function";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { deleteCourse, getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
@@ -21,7 +21,7 @@ import notFoundImage from "@/assets/image/notFound.png";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import MainPopup from "../components/Popup/MainPopup";
 import ModalEditCourse from "../components/Modal/CourseManage/ModalEditCourse";
-import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
+import { NOTI_TYPE, POPUP_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
@@ -270,8 +270,26 @@ export default function Dashboard() {
               style={{ height: "fit-content", maxHeight: "100%" }}
             >
               {course.courses.map((item) => {
-                const statusTQF3 = statusColor(item.TQF3?.status);
-                const statusTQF5 = statusColor(item.TQF5?.status);
+                const statusTqf3Sec: any[] = item.sections.map(
+                  (sec) => sec.TQF3?.status
+                );
+                const statusTqf5Sec: any[] = item.sections.map(
+                  (sec) => sec.TQF5?.status
+                );
+                const statusTqf3 =
+                  item.TQF3?.status ??
+                  (statusTqf3Sec.some((e) => e == TQF_STATUS.IN_PROGRESS)
+                    ? TQF_STATUS.IN_PROGRESS
+                    : statusTqf3Sec.every((e) => e == TQF_STATUS.DONE)
+                    ? TQF_STATUS.DONE
+                    : TQF_STATUS.NO_DATA);
+                const statusTqf5 =
+                  item.TQF5?.status ??
+                  (statusTqf5Sec.some((e) => e == TQF_STATUS.IN_PROGRESS)
+                    ? TQF_STATUS.IN_PROGRESS
+                    : statusTqf5Sec.every((e) => e == TQF_STATUS.DONE)
+                    ? TQF_STATUS.DONE
+                    : TQF_STATUS.NO_DATA);
                 return (
                   <div
                     key={item.id}
@@ -349,8 +367,12 @@ export default function Dashboard() {
                         {item.sections.length > 1 ? "s" : ""}
                       </p>
                       <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">
-                        <p className={`tag-tqf ${statusTQF3}`}>TQF 3</p>
-                        <p className={`tag-tqf ${statusTQF5}`}>TQF 5</p>
+                        <p className="tag-tqf" tqf-status={statusTqf3}>
+                          TQF 3
+                        </p>
+                        <p className="tag-tqf" tqf-status={statusTqf5}>
+                          TQF 5
+                        </p>
                       </div>
                     </div>
                   </div>

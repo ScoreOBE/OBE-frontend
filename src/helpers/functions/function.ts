@@ -60,26 +60,6 @@ export const getEnumByValue = (Enum: any, value: string): string => {
   return Object.keys(Enum)[Object.values(Enum).indexOf(value)] ?? "";
 };
 
-export const statusColor = (status: TQF_STATUS | undefined): string => {
-  const done = "tqf-done";
-  const inProgress = "tqf-in-progress";
-  const noData = "tqf-no-data";
-  let className = "";
-  switch (status) {
-    case TQF_STATUS.DONE:
-      className = done;
-      break;
-    case TQF_STATUS.IN_PROGRESS:
-      className = inProgress;
-      break;
-    default:
-      className = noData;
-      break;
-  }
-
-  return className;
-};
-
 export const showNotifications = (
   type: string,
   title: string,
