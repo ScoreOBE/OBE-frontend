@@ -51,8 +51,8 @@ export default function Part5TQF3() {
         <div className="overflow-y-auto overflow-x-auto w-full h-full max-h-full border flex flex-col rounded-lg border-secondary relative">
           <Table stickyHeader striped>
             <Table.Thead className="z-[2]">
-              <Table.Tr className="bg-bgTableHeader">
-                <Table.Th className="min-w-[480px] sticky left-0 bg-bgTableHeader !p-0">
+              <Table.Tr>
+                <Table.Th className="min-w-[480px] sticky left-0 !p-0">
                   <div className="w-full flex items-center px-[25px] h-[58px] border-r-[1px] border-[#DEE2E6]">
                     CLO Description
                   </div>

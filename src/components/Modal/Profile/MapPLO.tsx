@@ -913,7 +913,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                 >
                   <Table stickyHeader striped>
                     <Table.Thead className="z-[52]">
-                      <Table.Tr className="bg-bgTableHeader">
+                      <Table.Tr>
                         <Table.Th className="w-[30%] sticky left-0">
                           Course No.
                         </Table.Th>
