@@ -400,6 +400,22 @@ export default function Section() {
                             ? "Assignments"
                             : "No Assignment"}
                         </p>
+                        {course.type == COURSE_TYPE.SEL_TOPIC.en && (
+                          <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">
+                            <p
+                              className="tag-tqf"
+                              tqf-status={sec.TQF3?.status}
+                            >
+                              TQF 3
+                            </p>
+                            <p
+                              className="tag-tqf"
+                              tqf-status={sec.TQF5?.status}
+                            >
+                              TQF 5
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
