@@ -85,7 +85,7 @@ export default function Part4TQF3() {
       <div className="flex flex-col w-full">
         <Tabs
           classNames={{
-            root: "overflow-hidden flex flex-col pt-4 px-3 pb-1",
+            root: "overflow-hidden flex flex-col pt-4 px-3 pb-5",
             tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
             tabLabel: "!font-semibold",
           }}
@@ -100,7 +100,7 @@ export default function Part4TQF3() {
           </Tabs.List>
         </Tabs>
         {/* CLO Map Assessmen Tool */}
-        <div className="flex text-secondary  max-h-full overflow-y-auto gap-4 items-start w-full pb-6 px-3 pt-3  pr-3 flex-col">
+        <div className="flex text-secondary  max-h-full overflow-y-auto gap-4 items-start w-full pb-6 px-3   pr-3 flex-col">
           <div className="flex flex-col gap-[2px] text-[15px]">
             <p className="font-bold">
               CLO 1 -{" "}
