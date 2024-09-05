@@ -44,5 +44,8 @@ export const courseManagementController = (configService = {}) => {
     ) => {
       return service.delete(`${prefix}/${id}/${section}`, { ...params });
     },
+    ploMapping: async (params: any) => {
+      return service.put(`${prefix}/ploMapping`, { ...params });
+    },
   };
 };

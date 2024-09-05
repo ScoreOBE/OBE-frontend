@@ -30,7 +30,6 @@ export default function Part5TQF3() {
 
       <div className="flex flex-col w-full max-h-full gap-3 pb-4">
         {/* Topic */}
-
         <div className="flex text-secondary items-center w-full justify-between">
           <span className="text-[15px] font-bold">
             {"CLO Mapping "}
@@ -53,12 +52,11 @@ export default function Part5TQF3() {
           <Table stickyHeader striped>
             <Table.Thead className="z-[2]">
               <Table.Tr className="bg-bgTableHeader">
-                <Table.Th className="min-w-[480px] sticky left-0 bg-bgTableHeader !p-0 ">
+                <Table.Th className="min-w-[480px] sticky left-0 bg-bgTableHeader !p-0">
                   <div className="w-full flex items-center px-[25px] h-[58px] border-r-[1px] border-[#DEE2E6]">
                     CLO Description
                   </div>
                 </Table.Th>
-
                 {Array.from({ length: plo }).map((_, index) => (
                   <Table.Th key={index} className="min-w-[95px] w-fit">
                     PLO-{index + 1}
@@ -68,12 +66,12 @@ export default function Part5TQF3() {
             </Table.Thead>
             <Table.Tbody>
               {Array.from({ length: clo }).map((_, rowIndex) => (
-                <Table.Tr key={rowIndex} className="text-[13px] text-default">
-                  <Table.Td
-                    className={`!p-0  sticky left-0 z-[1] ${
-                      rowIndex % 2 === 0 ? "bg-inherit" : "bg-white"
-                    }`}
-                  >
+                <Table.Tr
+                  key={rowIndex}
+                  className="text-[13px] text-default"
+                  // data-striped={rowIndex % 2 ? "odd" : "even"}
+                >
+                  <Table.Td className="!p-0 sticky left-0 z-[1]">
                     <div className="flex flex-col gap-0.5 px-[25px] py-4 border-r-[1px] border-[#DEE2E6]">
                       <p>อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.</p>
                       <p>
@@ -89,14 +87,13 @@ export default function Part5TQF3() {
                     <Table.Td key={index}>
                       <div className="flex items-start">
                         <Checkbox
-                          __size="xs"
+                          size="xs"
                           classNames={{
                             input:
                               "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                             body: "mr-3 px-0",
                             label: "text-[14px] text-[#615F5F] cursor-pointer",
                           }}
-                          size="xs"
                         />
                       </div>
                     </Table.Td>

@@ -360,14 +360,12 @@ export default function Part2TQF3() {
                 )}
               </Droppable>
 
-              <Table.Tfoot className="text-secondary border-t border-[#DEE2E6] font-semibold !h-[10px] ">
-                <Table.Tr className="bg-[#e5e7f6]">
-                  <Table.Th className="w-[10%] ">Total</Table.Th>
-                  <Table.Th className="w-[30%]"></Table.Th>
-                  <Table.Th className="w-[20%] text-end">7.5</Table.Th>
-                  <Table.Th className="w-[20%] text-end !pr-24">0.0</Table.Th>
-                  <Table.Th className="w-[15%]"></Table.Th>
-                  <Table.Th className="w-[5%]"></Table.Th>
+              <Table.Tfoot className="text-secondary font-semibold !h-[10px] ">
+                <Table.Tr className="bg-[#e5e7f6] border-none">
+                  <Table.Th className="!rounded-bl-md" colSpan={2}>Total</Table.Th>
+                  <Table.Th className="text-end">7.5</Table.Th>
+                  <Table.Th className="text-end !pr-24">0.0</Table.Th>
+                  <Table.Th className="!rounded-br-md" colSpan={2}></Table.Th>
                 </Table.Tr>
               </Table.Tfoot>
             </Table>

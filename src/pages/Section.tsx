@@ -51,7 +51,7 @@ export default function Section() {
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
-  const [editCourse, setEditCourse] = useState<any>();
+  const [editCourseData, setEditCourseData] = useState<any>();
   const [editSec, setEditSec] = useState<
     Partial<IModelSection> & Record<string, any>
   >({});
@@ -174,8 +174,8 @@ export default function Section() {
         opened={openModalManageIns}
         onClose={() => setOpenModalManageIns(false)}
         type="course"
-        data={editCourse}
-        setNewData={setEditCourse}
+        data={editCourseData}
+        setNewData={setEditCourseData}
       />
       {error.statusCode ? (
         <PageError />
@@ -237,7 +237,7 @@ export default function Section() {
                         <Menu.Item
                           className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
                           onClick={() => {
-                            setEditCourse({
+                            setEditCourseData({
                               ...course,
                               sections: course?.sections.filter(
                                 (sec) =>

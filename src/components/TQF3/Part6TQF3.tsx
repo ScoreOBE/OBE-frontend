@@ -7,6 +7,7 @@ import {
   Button,
   Alert,
   Table,
+  Group,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconInfoCircle } from "@tabler/icons-react";
@@ -51,7 +52,10 @@ export default function Part6TQF3() {
         { label: "อื่นๆ (Other)" },
       ],
     },
-    { no: 3, en: "3rd year", th: "ชั้นปีที่ 3" ,
+    {
+      no: 3,
+      en: "3rd year",
+      th: "ชั้นปีที่ 3",
       list: [
         { label: "ไม่มี" },
         { label: "แบบประเมินกระบวนวิชา" },
@@ -62,8 +66,12 @@ export default function Part6TQF3() {
             "ข้อเสนอแนะผ่านเวบบอร์ดที่อาจารย์ผู้สอนได้จัดทำเป็นช่องทางการสื่อสารกับนักศึกษา",
         },
         { label: "อื่นๆ (Other)" },
-      ], },
-    { no: 4, en: "4th year", th: "ชั้นปีที่ 4" ,
+      ],
+    },
+    {
+      no: 4,
+      en: "4th year",
+      th: "ชั้นปีที่ 4",
       list: [
         { label: "ไม่มี" },
         { label: "แบบประเมินกระบวนวิชา" },
@@ -74,8 +82,12 @@ export default function Part6TQF3() {
             "ข้อเสนอแนะผ่านเวบบอร์ดที่อาจารย์ผู้สอนได้จัดทำเป็นช่องทางการสื่อสารกับนักศึกษา",
         },
         { label: "อื่นๆ (Other)" },
-      ], },
-    { no: 5, en: "5th year", th: "ชั้นปีที่ 5" ,
+      ],
+    },
+    {
+      no: 5,
+      en: "5th year",
+      th: "ชั้นปีที่ 5",
       list: [
         { label: "ไม่มี" },
         { label: "แบบประเมินกระบวนวิชา" },
@@ -86,8 +98,12 @@ export default function Part6TQF3() {
             "ข้อเสนอแนะผ่านเวบบอร์ดที่อาจารย์ผู้สอนได้จัดทำเป็นช่องทางการสื่อสารกับนักศึกษา",
         },
         { label: "อื่นๆ (Other)" },
-      ], },
-    { no: 6, en: "6th year", th: "ชั้นปีที่ 6" ,
+      ],
+    },
+    {
+      no: 6,
+      en: "6th year",
+      th: "ชั้นปีที่ 6",
       list: [
         { label: "ไม่มี" },
         { label: "แบบประเมินกระบวนวิชา" },
@@ -98,11 +114,17 @@ export default function Part6TQF3() {
             "ข้อเสนอแนะผ่านเวบบอร์ดที่อาจารย์ผู้สอนได้จัดทำเป็นช่องทางการสื่อสารกับนักศึกษา",
         },
         { label: "อื่นๆ (Other)" },
-      ], },
+      ],
+    },
   ];
 
   const [checkedItem, setCheckedItem] = useState([
     { no: 1, item: [] as string[] },
+    { no: 2, item: [] as string[] },
+    { no: 3, item: [] as string[] },
+    { no: 4, item: [] as string[] },
+    { no: 5, item: [] as string[] },
+    { no: 6, item: [] as string[] },
   ]);
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
 
@@ -131,7 +153,10 @@ export default function Part6TQF3() {
         <div className=" overflow-y-auto">
           {/* Table */}
           {topics.map((topic) => (
-            <div className="  w-full h-full max-h-full  flex flex-col   relative">
+            <div
+              key={topic.no}
+              className="  w-full h-full max-h-full  flex flex-col   relative"
+            >
               <div className="w-full text-secondary flex flex-row gap-4 items-center rounded-lg pl-6 py-3 bg-bgTableHeader">
                 <p className="flex flex-col font-medium text-[24px]">
                   {topic.no}.
@@ -150,29 +175,33 @@ export default function Part6TQF3() {
                   ])
                 }
               >
-                {topic.list?.map((item) => (
-                  <div className="border-b-[1px] px-6  py-4 items-center">
-                    <Checkbox
-                      classNames={{
-                        label: "font-medium text-[13px] text-[#333333]",
-                      }}
-                      size="sm"
-                      label={item.label}
-                      value={item.label}
-                      // checked={item.checked}
-                    ></Checkbox>
-                    {item.label == "อื่นๆ (Other)" &&
-                      checkedItem
-                        .find((item) => item.no == topic.no)
-                        ?.item.includes(item.label) && (
-                        <Textarea
-                          className="mt-3"
-                          placeholder="Description"
-                          classNames={{ input: "h-[100px]" }}
-                        />
-                      )}
-                  </div>
-                ))}
+                <Group className="flex flex-col">
+                  {topic.list?.map((item, index) => (
+                    <div
+                      key={index}
+                      className="border-b-[1px] px-6 py-4 items-center w-full"
+                    >
+                      <Checkbox
+                        classNames={{
+                          label: "font-medium text-[13px] text-[#333333]",
+                        }}
+                        size="sm"
+                        label={item.label}
+                        value={item.label}
+                      ></Checkbox>
+                      {item.label == "อื่นๆ (Other)" &&
+                        checkedItem
+                          .find((item) => item.no == topic.no)
+                          ?.item.includes(item.label) && (
+                          <Textarea
+                            className="mt-3"
+                            placeholder="Description"
+                            classNames={{ input: "h-[100px]" }}
+                          />
+                        )}
+                    </div>
+                  ))}
+                </Group>
               </Checkbox.Group>
             </div>
           ))}

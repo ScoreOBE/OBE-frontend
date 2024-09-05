@@ -64,3 +64,7 @@ export const deleteSectionManagement = async (
   );
   return isValidResponse(res);
 };
+export const ploMapping = async (params: any) => {
+  const res = await courseManagementService.ploMapping(params);
+  return isValidResponse(res);
+};

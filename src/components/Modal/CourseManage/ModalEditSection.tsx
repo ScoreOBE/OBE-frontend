@@ -1,4 +1,12 @@
-import { Button, Chip, Group, Modal, Switch, TextInput } from "@mantine/core";
+import {
+  Button,
+  Chip,
+  FocusTrap,
+  Group,
+  Modal,
+  Switch,
+  TextInput,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import {
@@ -65,14 +73,13 @@ export default function ModalEditSection({
     };
 
     if (opened && value) {
+      form.reset();
+      setOpenThisTerm(false);
+      setSemester([]);
       form.setValues(value.data);
       setOpenThisTerm(value.isActive!);
       if (value.data.semester) setSemester(value.data.semester as string[]);
       if (!isCourseManage) fetchCourseManagement();
-    } else {
-      form.reset();
-      setOpenThisTerm(false);
-      setSemester([]);
     }
   }, [opened, value]);
 
@@ -114,8 +121,6 @@ export default function ModalEditSection({
       }
     }
     if (res) {
-      setOpenThisTerm(false);
-      setSemester([]);
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Edit success",
@@ -126,6 +131,8 @@ export default function ModalEditSection({
         } is edited`
       );
       onClose();
+      setOpenThisTerm(false);
+      setSemester([]);
     }
   };
 
@@ -143,6 +150,7 @@ export default function ModalEditSection({
           "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center  overflow-hidden ",
       }}
     >
+      <FocusTrap.InitialFocus />
       <div className="flex flex-col mt-2 gap-5">
         {value?.type === COURSE_TYPE.SEL_TOPIC.en && (
           <TextInput

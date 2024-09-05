@@ -265,18 +265,13 @@ export default function Part3TQF3() {
                   </Table.Tbody>
                 )}
               </Droppable>
-              <Table.Tfoot className="text-secondary   font-semibold  ">
+              <Table.Tfoot className="text-secondary font-semibold">
                 <Table.Tr className="bg-[#e5e7f6] border-none">
-                  <Table.Th className="w-[5%] text-[14px] !rounded-bl-md">
-                    Total{" "}
+                  <Table.Th className="text-[14px] !rounded-bl-md" colSpan={3}>
+                    Total
                   </Table.Th>
-                  <Table.Th className=" w-[15%]"></Table.Th>
-                  <Table.Th className="w-[65%]"></Table.Th>
-                  <Table.Th className="w-[5%] text-[16px] text-end">
-                    60%
-                  </Table.Th>
-                  <Table.Th className="w-[20%]"></Table.Th>
-                  <Table.Th className="w-[5%] !rounded-br-md"></Table.Th>
+                  <Table.Th className="text-[16px] text-end">60%</Table.Th>
+                  <Table.Th className="!rounded-br-md" colSpan={2}></Table.Th>
                 </Table.Tr>
               </Table.Tfoot>
             </Table>
