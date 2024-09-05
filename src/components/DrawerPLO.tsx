@@ -39,26 +39,27 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
         position="right"
         opened={opened}
         onClose={onClose}
-        padding={"sm"}
+        padding={"xs"}
+        className=" !rounded-none"
       >
         <Drawer.Overlay />
-        <Drawer.Content>
-          <div className="flex flex-col gap-5 h-full overflow-hidden ">
+        <Drawer.Content  className=" !rounded-none">
+          <div className="flex flex-col gap-2 h-full overflow-y-auto ">
             <Drawer.Header>
-              <div className="flex flex-col w-full h-fit pt-4 gap-3">
+              <div className="flex flex-col w-full h-fit pt-4 gap-4">
                 <div className="flex items-center justify-between w-full mt-2 ">
                   <Drawer.Title className="w-full">
-                    <div className="flex flex-col gap-1 items-start">
+                    <div className="flex flex-col gap-2 items-start">
                       <p className="text-secondary text-[16px] font-bold">
                         PLO Description
                       </p>
 
-                      <p className="text-[#909090] text-[12px] font-medium">
+                      <p className="text-[#909090] text-[13px] font-medium">
                         PLO Collection
                       </p>
                     </div>
                   </Drawer.Title>
-                  <Drawer.CloseButton />
+                  <Drawer.CloseButton className=" -translate-y-2" />
                 </div>
 
                 <div className="flex w-full justify-between items-center ">
@@ -84,14 +85,14 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
                 </div>
               </div>
             </Drawer.Header>
-            <Drawer.Body className="flex flex-col gap-3 max-h-full overflow-y-auto ">
+            <Drawer.Body className="flex flex-col h-full  overflow-y-auto ">
               {/* <div className="flex flex-col gap-3 w-full h-full overflow-y-auto"> */}
               {ploList.data?.map((plo) => (
-                <div className="flex flex-col gap-2 bg-[#eff0ff] px-6 py-4 text-[13px]  rounded-lg ">
-                  <p className="text-[14px] font-semibold text-secondary">
+                <div className="flex flex-col gap-2 border-b-[1px] px-2  py-4 text-[13px]">
+                  <p className="text-[15px] font-semibold text-secondary">
                     PLO-{plo.no}
                   </p>
-                  <div className="flex flex-row">
+                  <div className="flex flex-row leading-6 font-normal text-[14px]">
                     {isTH === "TH" ? plo.descTH : plo.descEN}
                   </div>
                 </div>
