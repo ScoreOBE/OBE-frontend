@@ -140,14 +140,38 @@
   font-weight: 600 !important;
 }
 
+.mantine-TextInput-input {
+  border-color: var(--color-border-input) !important;
+  background-color: var(--color-background-input) !important;
+  border-radius: 6px !important;
+}
+
+.mantine-TextInput-description {
+  color: var(--color-secondary) !important;
+}
+
 .mantine-Textarea-label {
   font-size: 13px !important;
   color: #424242 !important;
   font-weight: 600 !important;
 }
 
-.mantine-TextInput-description {
-  color: var(--color-secondary) !important;
+.mantine-Textarea-input {
+  border-color: var(--color-border-input) !important;
+  background-color: var(--color-background-input) !important;
+  border-radius: 6px !important;
+}
+
+.mantine-NumberInput-label {
+  font-size: 13px !important;
+  color: #424242 !important;
+  font-weight: 600 !important;
+}
+
+.mantine-NumberInput-input {
+  border-color: var(--color-border-input) !important;
+  background-color: var(--color-background-input) !important;
+  border-radius: 6px !important;
 }
 
 .mantine-Menu-item:hover {
