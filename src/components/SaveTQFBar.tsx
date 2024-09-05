@@ -42,7 +42,7 @@ export default function SaveTQFbar({ tqf, part, data, onSave }: Props) {
             dateFormatter(data[part.replace(" ", "").toLowerCase()]?.updatedAt)}
         </p>
         <Button
-          className="text-[13px] font-semibold h-8 w-[128px] rounded-md bg-[#45b9b3] hover:bg-[#40a7a2]"
+          className="text-[13px] font-semibold h-8 w-[128px] rounded-md bg-save hover:bg-[#28958f]"
           onClick={onSave}
         >
           <div className="flex gap-2 items-center">
@@ -51,14 +51,12 @@ export default function SaveTQFbar({ tqf, part, data, onSave }: Props) {
           </div>
         </Button>
 
-        {user.role !== ROLE.INSTRUCTOR && (
-          <Button className="text-[13px] font-semibold h-8 px-4 rounded-md">
-            <div className="flex gap-2 items-center">
-              <Icon IconComponent={exportFile} />
-              Export TQF {tqf}
-            </div>
-          </Button>
-        )}
+        <Button className="text-[13px] font-semibold h-8 px-4 rounded-md">
+          <div className="flex gap-2 items-center">
+            <Icon IconComponent={exportFile} />
+            Export TQF {tqf}
+          </div>
+        </Button>
       </div>
     </>
   );

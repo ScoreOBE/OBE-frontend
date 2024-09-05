@@ -166,7 +166,7 @@ export default function Part4TQF3() {
                         withArrow
                         label={
                           <div className="text-default text-[12px] p-2 font-medium gap-2">
-                            "Fill the number of topic used to linked for CLO 1
+                            Fill the number of topic used to linked for CLO 1
                             and The total doesn't need added up to 100%.
                           </div>
                         }

@@ -198,7 +198,7 @@ export default function TQF3() {
                               ]
                             ))
                             ? "text-noData"
-                            : "text-done"
+                            : "text-save"
                         }
                       />
                       {part.tab}

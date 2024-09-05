@@ -11,6 +11,7 @@ export default {
         secondary: "#5768d5",
         tertiary: "#3e3e3e",
         done: "#059061",
+        save: "#13A9A1",
         noData: "#ababab",
         edit: "#f39d4e",
         delete: "#ff4747",
