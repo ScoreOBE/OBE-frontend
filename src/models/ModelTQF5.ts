@@ -7,4 +7,5 @@ export interface IModelTQF5 {
   part1?: any;
   part2?: any;
   part3?: any;
+  updatedAt: Date;
 }

@@ -3,59 +3,83 @@ import {
   EVALUATE_TYPE,
   TEACHING_METHOD,
 } from "@/helpers/constants/enum";
-import { sortData } from "@/helpers/functions/function";
+import { getUserName } from "@/helpers/functions/function";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelTQF3Part1 } from "@/models/ModelTQF3";
 import { IModelUser } from "@/models/ModelUser";
-import { Radio, Checkbox, TextInput, Textarea, Group } from "@mantine/core";
+import { Radio, Checkbox, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect } from "react";
 
 type Props = {
   data: Partial<IModelCourse>;
+  setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function Part1TQF3({ data }: Props) {
+export default function Part1TQF3({ data, setForm }: Props) {
   const studentYear = [
-    { key: 1, en: "1st year", th: "ชั้นปีที่ 1" },
-    { key: 2, en: "2nd year", th: "ชั้นปีที่ 2" },
-    { key: 3, en: "3rd year", th: "ชั้นปีที่ 3" },
-    { key: 4, en: "4th year", th: "ชั้นปีที่ 4" },
-    { key: 5, en: "5th year", th: "ชั้นปีที่ 5" },
-    { key: 6, en: "6th year", th: "ชั้นปีที่ 6" },
+    { year: 1, en: "1st year", th: "ชั้นปีที่ 1" },
+    { year: 2, en: "2nd year", th: "ชั้นปีที่ 2" },
+    { year: 3, en: "3rd year", th: "ชั้นปีที่ 3" },
+    { year: 4, en: "4th year", th: "ชั้นปีที่ 4" },
+    { year: 5, en: "5th year", th: "ชั้นปีที่ 5" },
+    { year: 6, en: "6th year", th: "ชั้นปีที่ 6" },
   ];
   const form = useForm({
-    mode: "controlled",
+    mode: "uncontrolled",
     initialValues: {} as Partial<IModelTQF3Part1>,
-    validate: {},
+    validate: {
+      teachingMethod: (value) =>
+        !value?.length && "Select Teaching Method at least one",
+      studentYear: (value) =>
+        !value?.length && "Select Student Year at least one",
+      evaluate: (value) => !value?.length && "Evaluation is required",
+      instructors: (value) => {
+        if (!value?.length) return "Input Instructors at least one";
+        const duplicates = value.filter(
+          (item, index) => value.indexOf(item) !== index
+        );
+        if (duplicates.length) {
+          const uniqueDuplicates = [...new Set(duplicates)];
+          return `Duplicate instructors "${uniqueDuplicates.join(", ")}"`;
+        }
+      },
+      coInstructors: (value) => null,
+    },
     validateInputOnBlur: true,
+    onValuesChange: (values) => {
+      values.studentYear = values.studentYear
+        ?.map((e: any) => parseInt(e))
+        .sort();
+      setForm(form);
+    },
   });
 
   useEffect(() => {
-    if (data?.TQF3?.part1) {
-      form.setValues(data.TQF3.part1);
-    } else if (data) {
-      form.setFieldValue("courseType", data.type);
-      // const uniqueInstructors = [
-      //   ...new Map(
-      //     (data.sections?.flatMap((sec) => sec.instructor) as IModelUser[]).map(
-      //       (instructor) => [instructor.id, instructor]
-      //     )
-      //   ).values(),
-      // ];
-      // sortData(uniqueInstructors, "firstNameEN", "string");
-      // form.setFieldValue("instructors", uniqueInstructors);
-      // const uniqueCoInstructors = [
-      //   ...new Map(
-      //     (
-      //       data.sections?.flatMap((sec) => sec.coInstructors) as IModelUser[]
-      //     ).map((coInstructor) => [coInstructor.id, coInstructor])
-      //   ).values(),
-      // ];
-      // sortData(uniqueCoInstructors, "firstNameEN", "string");
-      // form.setFieldValue("coInstructors", uniqueCoInstructors);
+    if (data) {
+      if (data?.TQF3?.part1) {
+        form.setValues(data.TQF3.part1);
+      } else {
+        form.setFieldValue("courseType", data.type);
+        const uniqueInstructors = [
+          ...(new Set(
+            (
+              data.sections?.flatMap((sec) => sec.instructor) as IModelUser[]
+            )?.map((instructor) => getUserName(instructor, 3)!)
+          ) || []),
+        ];
+        form.setFieldValue("instructors", uniqueInstructors);
+        // const uniqueCoInstructors = [
+        //   ...new Map(
+        //     (
+        //       data.sections?.flatMap((sec) => sec.coInstructors) as IModelUser[]
+        //     ).map((coInstructor) => [coInstructor.id, coInstructor])
+        //   ).values(),
+        // ];
+        // sortData(uniqueCoInstructors, "firstNameEN", "string");
+        // form.setFieldValue("coInstructors", uniqueCoInstructors);
+      }
     }
-    // console.log(form.getValues());
   }, [data]);
 
   return (
@@ -69,14 +93,15 @@ export default function Part1TQF3({ data }: Props) {
         </div>
 
         <Radio.Group
+          key={form.key("courseType")}
           {...form.getInputProps("courseType")}
         >
-          <div className="flex text-[#333333] gap-3 flex-col">
+          <div className="flex text-default gap-3 flex-col">
             {Object.values(COURSE_TYPE).map((key) => (
               <Radio
                 key={key.en}
                 classNames={{ label: "font-medium text-[13px]" }}
-                label={`${key.th} ${key.en}`}
+                label={`${key.th} (${key.en})`}
                 disabled={true}
                 value={key.en}
               />
@@ -92,14 +117,16 @@ export default function Part1TQF3({ data }: Props) {
           <p className="font-semibold">Teachig Method</p>
         </div>
         <Checkbox.Group
+          key={form.key("teachingMethod")}
+          classNames={{ error: "mt-2" }}
           {...form.getInputProps("teachingMethod")}
         >
-          <div className="flex text-[#333333] gap-4  flex-col">
+          <div className="flex flex-col text-default gap-4">
             {Object.values(TEACHING_METHOD).map((key) => (
               <Checkbox
                 key={key.en}
                 classNames={{ label: "font-medium text-[13px]" }}
-                label={`${key.th} ${key.en}`}
+                label={`${key.th} (${key.en})`}
                 value={key.en}
               />
             ))}
@@ -114,17 +141,23 @@ export default function Part1TQF3({ data }: Props) {
           <p className="font-semibold">Student Year</p>
         </div>
 
-        <div className="flex gap-8 text-[#333333]">
-          <div className="flex flex-col gap-5">
+        <Checkbox.Group
+          key={form.key("studentYear")}
+          classNames={{ error: "mt-2" }}
+          {...form.getInputProps("studentYear")}
+          value={form.getValues().studentYear?.map((e) => e.toString())}
+        >
+          <div className="flex flex-col text-default gap-5">
             {studentYear.map((item) => (
               <Checkbox
-                key={item.key}
+                key={item.year}
                 classNames={{ label: "font-medium text-[13px]" }}
                 label={`${item.th} (${item.en})`}
+                value={item.year.toString()}
               />
             ))}
           </div>
-        </div>
+        </Checkbox.Group>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
@@ -133,8 +166,12 @@ export default function Part1TQF3({ data }: Props) {
           </p>
           <p className="font-semibold">Evaluation</p>
         </div>
-        <Radio.Group {...form.getInputProps("evaluate")}>
-          <div className="flex gap-8 text-[#333333]">
+        <Radio.Group
+          key={form.key("evaluate")}
+          classNames={{ error: "mt-2" }}
+          {...form.getInputProps("evaluate")}
+        >
+          <div className="flex gap-8 text-default">
             {Object.values(EVALUATE_TYPE).map((item) => (
               <Radio
                 key={item}
@@ -154,64 +191,25 @@ export default function Part1TQF3({ data }: Props) {
           <p className="font-semibold">Lecturers</p>
         </div>
 
-        <div className="flex flex-col gap-3 text-[#333333]">
-          <TextInput
-            withAsterisk
-            size="xs"
-            label="Instructor 1"
-            classNames={{ label: "text-[#333333]" }}
-            className="w-[440px]"
-            placeholder="(required)"
-          />
-          <TextInput
-            label="Instructor 2"
-            size="xs"
-            classNames={{ label: "text-[#333333]" }}
-            className="w-[440px]"
-            placeholder="(optional)"
-          />
-          <TextInput
-            label="Instructor 3"
-            size="xs"
-            classNames={{ label: "text-[#333333]" }}
-            className="w-[440px]"
-            placeholder="(optional)"
-          />
-          <TextInput
-            label="Instructor 4"
-            size="xs"
-            classNames={{ label: "text-[#333333]" }}
-            className="w-[440px]"
-            placeholder="(optional)"
-          />
-          <TextInput
-            label="Instructor 5"
-            size="xs"
-            classNames={{ label: "text-[#333333]" }}
-            className="w-[440px]"
-            placeholder="(optional)"
-          />
-          <TextInput
-            label="Instructor 6"
-            size="xs"
-            classNames={{ label: "text-[#333333]" }}
-            className="w-[440px]"
-            placeholder="(optional)"
-          />
-          <TextInput
-            label="Instructor 7"
-            size="xs"
-            classNames={{ label: "text-[#333333]" }}
-            className="w-[440px]"
-            placeholder="(optional)"
-          />
-          <TextInput
-            label="Instructor 8"
-            size="xs"
-            classNames={{ label: "text-[#333333]" }}
-            className="w-[440px]"
-            placeholder="(optional)"
-          />
+        <div
+          className="flex flex-col gap-3 text-default"
+          {...form.getInputProps("instructors")}
+        >
+          {Array.from({ length: 8 }).map((_, index) => (
+            <TextInput
+              key={index}
+              withAsterisk={index == 0}
+              size="xs"
+              label={`Instructor ${index + 1}`}
+              classNames={{ label: "text-default" }}
+              className="w-[440px]"
+              placeholder={index == 0 ? "(required)" : "(optional)"}
+              {...form.getInputProps(`instructors.${index}`)}
+            />
+          ))}
+          <p className="text-error text-b3 -mt-1">
+            {form.getInputProps("instructors").error}
+          </p>
         </div>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
@@ -222,14 +220,16 @@ export default function Part1TQF3({ data }: Props) {
           <p className="font-semibold">Course Coordinator</p>
         </div>
 
-        <div className="flex flex-col gap-3 text-[#333333]">
+        <div className="flex flex-col gap-3 text-default">
           <TextInput
+            key={form.key("coInstructors")}
             withAsterisk
             size="xs"
             label="Instructor"
-            classNames={{ label: "text-[#333333]" }}
+            classNames={{ label: "text-default" }}
             className="w-[440px]"
             placeholder="(required)"
+            {...form.getInputProps("coInstructors")}
           />
         </div>
       </div>
@@ -239,13 +239,14 @@ export default function Part1TQF3({ data }: Props) {
           <p className="font-semibold">Lectures Venue</p>
         </div>
 
-        <div className="flex flex-col gap-3 text-[#333333]">
+        <div className="flex flex-col gap-3 text-default">
           <Textarea
             label="Description"
             size="xs"
             placeholder="(optional)"
             className="w-[440px]"
             classNames={{ input: "h-[180px] p-3" }}
+            {...form.getInputProps("lecPlace")}
           ></Textarea>
         </div>
       </div>
@@ -255,13 +256,14 @@ export default function Part1TQF3({ data }: Props) {
           <p className="font-semibold">Laboratory Venue</p>
         </div>
 
-        <div className="flex flex-col gap-3 text-[#333333]">
+        <div className="flex flex-col gap-3 text-default">
           <Textarea
             label="Description"
             size="xs"
             placeholder="(optional)"
             className="w-[440px]"
-            classNames={{ input: "h-[180px] p-3", label: "text-[#333333]" }}
+            classNames={{ input: "h-[180px] p-3", label: "text-default" }}
+            {...form.getInputProps("labPlace")}
           ></Textarea>
         </div>
       </div>
@@ -271,13 +273,14 @@ export default function Part1TQF3({ data }: Props) {
           <p className="font-semibold">Main Reference</p>
         </div>
 
-        <div className="flex flex-col gap-3 text-[#333333]">
+        <div className="flex flex-col gap-3 text-default">
           <Textarea
             label="Description"
             size="xs"
             placeholder="(optional)"
             className="w-[440px]"
-            classNames={{ input: "h-[180px] p-3", label: "text-[#333333]" }}
+            classNames={{ input: "h-[180px] p-3", label: "text-default" }}
+            {...form.getInputProps("mainRef")}
           ></Textarea>
         </div>
       </div>
@@ -289,13 +292,14 @@ export default function Part1TQF3({ data }: Props) {
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 text-[#333333]">
+        <div className="flex flex-col gap-3 text-default">
           <Textarea
             label="Description"
             size="xs"
             placeholder="(optional)"
             className="w-[440px]"
-            classNames={{ input: "h-[180px] p-3", label: "text-[#333333]" }}
+            classNames={{ input: "h-[180px] p-3", label: "text-default" }}
+            {...form.getInputProps("recDoc")}
           ></Textarea>
         </div>
       </div>

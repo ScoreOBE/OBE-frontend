@@ -16,6 +16,7 @@ export default {
         delete: "#ff4747",
         bgTableHeader: "#e5e7f6",
         hover: "#efefef",
+        error: "#fa5252",
       },
       fontSize: {
         h1: "20px",

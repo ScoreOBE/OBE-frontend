@@ -1,9 +1,10 @@
 import { notifications } from "@mantine/notifications";
-import { NOTI_TYPE, TQF_STATUS } from "../constants/enum";
+import { NOTI_TYPE } from "../constants/enum";
 import { IModelUser } from "@/models/ModelUser";
-import { IconX, IconCheck, icons, Icon } from "@tabler/icons-react";
-import React, { ReactElement, ReactNode } from "react";
+import { IconX, IconCheck } from "@tabler/icons-react";
+import React from "react";
 import { isEmpty } from "lodash";
+import moment from "moment";
 
 export const getSectionNo = (sectionNo: number | string | undefined) => {
   if (!sectionNo) return "";
@@ -21,9 +22,34 @@ export const getUserName = (
       return `${user.firstNameEN} ${user.lastNameEN}`; // John Doe
     case 2:
       return `${user.firstNameEN?.toLowerCase()} ${user.lastNameEN?.toLowerCase()}`; // john doe
+    case 3:
+      return `${user.firstNameTH} ${user.lastNameTH}`; // กข คง
     default:
       return `${user.firstNameEN} ${user.lastNameEN?.slice(0, 1)}.`; // John D.
   }
+};
+
+export const dateFormatter = (
+  date: string | Date | undefined,
+  format?: number
+) => {
+  if (!date) return;
+  switch (format) {
+    case 1:
+      return moment(date).format("DD/MM/YYYY"); // 25/09/2024
+    case 2:
+      return moment(date).format("MMMM DD, YYYY HH:mm"); // September 25, 2024 14:17
+    default:
+      return moment(date).format("MMM DD, YYYY HH:mm"); // Sep 25, 2024 14:42
+  }
+};
+
+export const getEnumByKey = (Enum: any, key: string): string => {
+  return Enum[key as keyof typeof Enum] ?? "";
+};
+
+export const getEnumByValue = (Enum: any, value: string): string => {
+  return Object.keys(Enum)[Object.values(Enum).indexOf(value)] ?? "";
 };
 
 export const sortData = (
@@ -50,14 +76,6 @@ export const sortData = (
         : Number(aValue) - Number(bValue);
     } else return 0;
   });
-};
-
-export const getEnumByKey = (Enum: any, key: string): string => {
-  return Enum[key as keyof typeof Enum] ?? "";
-};
-
-export const getEnumByValue = (Enum: any, value: string): string => {
-  return Object.keys(Enum)[Object.values(Enum).indexOf(value)] ?? "";
 };
 
 export const showNotifications = (

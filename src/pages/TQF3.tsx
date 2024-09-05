@@ -12,7 +12,7 @@ import {
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
 import { setShowSidebar } from "@/store/showSidebar";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import CheckIcon from "@/assets/icons/Check.svg?react";
 import Part1TQF3 from "@/components/TQF3/Part1TQF3";
 import Part2TQF3 from "@/components/TQF3/Part2TQF3";
@@ -25,22 +25,29 @@ import SaveTQFbar, { partType } from "@/components/SaveTQFBar";
 import { IModelCourse } from "@/models/ModelCourse";
 import { isEmpty } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
+import { saveTQF3 } from "@/services/tqf3/tqf3.service";
+import { showNotifications } from "@/helpers/functions/function";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { UseFormReturnType } from "@mantine/form";
+import { ROUTE_PATH } from "@/helpers/constants/route";
 
 export default function TQF3() {
+  const location = useLocation().pathname;
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [course, setCourse] = useState<Partial<IModelCourse>>({});
   const dispatch = useAppDispatch();
+  const [form, setForm] = useState<UseFormReturnType<any>>();
+  const [tqf3Part, setTqf3Part] = useState<string | null>("Part 1");
+  const [openModalReuse, setOpenModalReuse] = useState(false);
   const partTab = [
-    { tab: "Part 1", compo: <Part1TQF3 data={course!} /> },
+    { tab: "Part 1", compo: <Part1TQF3 data={course!} setForm={setForm} /> },
     { tab: "Part 2", compo: <Part2TQF3 /> },
     { tab: "Part 3", compo: <Part3TQF3 /> },
     { tab: "Part 4", compo: <Part4TQF3 /> },
     { tab: "Part 5", compo: <Part5TQF3 /> },
     { tab: "Part 6", compo: <Part6TQF3 /> },
   ];
-  const [tqf3Part, setTqf3Part] = useState<string | null>("Part 1");
-  const [openModalReuse, setOpenModalReuse] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -53,8 +60,8 @@ export default function TQF3() {
         setCourse(res);
       }
     };
-    if (isEmpty(course)) fetchOneCourse();
-  }, [academicYear]);
+    if (academicYear && location.includes(ROUTE_PATH.TQF3)) fetchOneCourse();
+  }, [academicYear, location]);
 
   const topicPart = () => {
     switch (tqf3Part) {
@@ -72,6 +79,34 @@ export default function TQF3() {
         return "Part 6 - การประเมินกระบวนวิชาและกระบวนการปรับปรุง\nCourse evaluation and improvement processes";
       default:
         return;
+    }
+  };
+
+  const onSave = async () => {
+    if (form) {
+      const validationResult = form.validate();
+      if (Object.keys(validationResult.errors).length > 0) {
+        const firstErrorPath = Object.keys(validationResult.errors)[0];
+        form
+          .getInputNode(firstErrorPath)
+          ?.scrollIntoView({ behavior: "smooth" });
+      } else {
+        const part = tqf3Part?.replace(" ", "").toLowerCase()!;
+        const payload = form.getValues();
+        payload.id = course.TQF3?.id;
+        payload.instructors = payload.instructors.filter((ins: any) => ins);
+        const res = await saveTQF3(part, payload);
+        if (res) {
+          form.reset();
+          form.setValues(res);
+          setCourse({ ...course, TQF3: res });
+          showNotifications(
+            NOTI_TYPE.SUCCESS,
+            "TQF 3, Part 1 save success",
+            "TQF 3 - Part 1 is saved"
+          );
+        }
+      }
     }
   };
 
@@ -155,12 +190,13 @@ export default function TQF3() {
                       <Icon
                         IconComponent={CheckIcon}
                         className={
-                          course?.TQF3 &&
-                          isEmpty(
-                            course?.TQF3[
-                              part.tab.replace(" ", "").toLowerCase()
-                            ]
-                          )
+                          !course.TQF3 ||
+                          (course?.TQF3 &&
+                            isEmpty(
+                              course?.TQF3[
+                                part.tab.replace(" ", "").toLowerCase()
+                              ]
+                            ))
                             ? "text-noData"
                             : "text-done"
                         }
@@ -225,7 +261,12 @@ export default function TQF3() {
           </div>
         </Tabs>
       </div>
-      <SaveTQFbar tqf="3" part={tqf3Part as partType} />
+      <SaveTQFbar
+        tqf="3"
+        part={tqf3Part as partType}
+        data={course.TQF3!}
+        onSave={onSave}
+      />
     </>
   );
 }
