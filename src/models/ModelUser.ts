@@ -1,4 +1,5 @@
 export interface IModelUser {
+  [key: string]: any;
   id: string;
   studentId?: string;
   firstNameTH: string;

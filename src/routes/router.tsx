@@ -34,7 +34,6 @@ const router = createBrowserRouter([
       },
       {
         path: `${ROUTE_PATH.COURSE}/:courseNo`,
-        errorElement: <Page404 />,
         children: [
           {
             path: ROUTE_PATH.SECTION,
