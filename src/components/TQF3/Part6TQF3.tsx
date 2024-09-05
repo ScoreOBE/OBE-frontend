@@ -167,7 +167,7 @@ export default function Part6TQF3() {
                 </p>
               </div>
               <Checkbox.Group
-                value={checkedItem.find((item) => item.no == topic.no)?.item}
+                value={checkedItem.find((item) =>item.no == topic.no)?.item}
                 onChange={(event) =>
                   setCheckedItem([
                     ...checkedItem.filter((item) => item.no !== topic.no),
