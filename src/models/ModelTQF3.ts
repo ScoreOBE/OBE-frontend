@@ -9,9 +9,10 @@ export interface IModelTQF3 {
   part1?: IModelTQF3Part1;
   part2?: IModelTQF3Part2;
   part3?: IModelTQF3Part3;
-  part4?: IModelTQF3Part4[];
-  part5?: IModelTQF3Part5[];
-  part6?: IModelTQF3Part6[];
+  part4?: { data: IModelTQF3Part4[]; updatedAt: Date };
+  part5?: { data: IModelTQF3Part5[]; updatedAt: Date };
+  part6?: { data: IModelTQF3Part6[]; updatedAt: Date };
+  updatedAt: Date;
 }
 
 export interface IModelTQF3Part1 {
@@ -25,6 +26,7 @@ export interface IModelTQF3Part1 {
   labPlace: string;
   mainRef: string;
   recDoc: string;
+  updatedAt: Date;
 }
 
 export interface IModelTQF3Part2 {
@@ -35,11 +37,13 @@ export interface IModelTQF3Part2 {
     lecHour: number;
     labHour: number;
   }[];
+  updatedAt: Date;
 }
 
 export interface IModelTQF3Part3 {
   gradingPolicy: string;
   eval: IModelEval[];
+  updatedAt: Date;
 }
 
 export interface IModelTQF3Part4 {

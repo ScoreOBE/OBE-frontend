@@ -77,9 +77,8 @@ export default function ModalAddPLOCollection({
         validateTextInput(value, "Criteria Thai language", 105, false),
       criteriaEN: (value) =>
         validateTextInput(value, "Criteria English language", 70, false),
-      departmentCode: (value) => {
-        return !value?.length && "Select department at least one";
-      },
+      departmentCode: (value) =>
+        !value?.length && "Select department at least one",
       data: {
         descTH: (value) => {
           if (form.getValues().data?.length! > 1 && firstInput && !isAddAnother)
