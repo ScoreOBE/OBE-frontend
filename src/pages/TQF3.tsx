@@ -197,7 +197,7 @@ export default function TQF3() {
                                 part.tab.replace(" ", "").toLowerCase()
                               ]
                             ))
-                            ? "text-noData"
+                            ? "text-[#DEE2E6]"
                             : "text-save"
                         }
                       />
