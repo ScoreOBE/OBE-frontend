@@ -22,6 +22,7 @@ import {
   IconPlus,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import ModalManageTopic from "../Modal/TQF3/ModalManageTopic";
 
 export default function Part2TQF3() {
   const dataTest = [
@@ -90,6 +91,8 @@ export default function Part2TQF3() {
   const [statePlan, handlersPlan] = useListState(dataPlan);
   const [openModalAddCLO, setOpenModalAddCLO] = useState(false);
   const [openModalEditCLO, setOpenModalEditCLO] = useState(false);
+  const [openModalAddTopic, setOpenModalAddTopic] = useState(false);
+  const [openModalEditTopic, setOpenModalEditTopic] = useState(false);
 
   return (
     <>
@@ -101,6 +104,16 @@ export default function Part2TQF3() {
       <ModalManageCLO
         opened={openModalEditCLO}
         onClose={() => setOpenModalEditCLO(false)}
+        type="edit"
+      />
+      <ModalManageTopic
+        opened={openModalAddTopic}
+        onClose={() => setOpenModalAddTopic(false)}
+        type="add"
+      />
+      <ModalManageTopic
+        opened={openModalEditTopic}
+        onClose={() => setOpenModalEditTopic(false)}
         type="edit"
       />
       <div className="flex flex-col w-full max-h-full gap-4">
@@ -206,7 +219,10 @@ export default function Part2TQF3() {
                               </Table.Td>
                               <Table.Td className="w-[15%]">
                                 <div className="flex justify-start gap-4 items-center">
-                                  <div className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10">
+                                  <div
+                                    className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                                    onClick={() => setOpenModalEditCLO(true)}
+                                  >
                                     <IconEdit className="size-4" stroke={1.5} />
                                   </div>
                                   <div className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10">
@@ -260,7 +276,10 @@ export default function Part2TQF3() {
               </span>
             </p>
 
-            <Button className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4">
+            <Button
+              className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
+              onClick={() => setOpenModalAddTopic(true)}
+            >
               <div className="flex gap-2">
                 <Icon IconComponent={AddIcon} />
                 Add Topic
@@ -333,7 +352,10 @@ export default function Part2TQF3() {
                               </Table.Td>
                               <Table.Td className="w-[15%]">
                                 <div className="flex justify-start gap-4 items-center">
-                                  <div className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10">
+                                  <div
+                                    className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                                    onClick={() => setOpenModalEditTopic(true)}
+                                  >
                                     <IconEdit className="size-4" stroke={1.5} />
                                   </div>
                                   <div className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10">

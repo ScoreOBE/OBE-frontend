@@ -19,21 +19,20 @@ type Props = {
   onClose: () => void;
   type: actionType;
 };
-export default function ModalManageTopic({ opened, onClose, type }: Props) {
+export default function ModalManageEvalTopic({ opened, onClose, type }: Props) {
   const height = type === "add" ? "h-full" : "h-fit";
-  const handlersLecRef = useRef<NumberInputHandlers>(null);
-  const handlersLabRef = useRef<NumberInputHandlers>(null);
+  const handlersRef = useRef<NumberInputHandlers>(null);
   const topicLenght = 6;
 
   return (
     <Modal
       opened={opened}
       onClose={onClose}
-      closeOnClickOutside={false}
-      title={`${upperFirst(type)} Topic 261405`}
-      size={type === "add" && topicLenght > 0 ? "70vw" : "35vw"}
-      centered
       withCloseButton={false}
+      closeOnClickOutside={false}
+      title={`${upperFirst(type)} Evaluation Topic 261405`}
+      size={type === "add" && topicLenght > 0 ? "70vw" : "45vw"}
+      centered
       transitionProps={{ transition: "pop" }}
       classNames={{
         content: `flex flex-col gap-1.5 bg-[#F6F7FA] overflow-hidden `,
@@ -47,7 +46,7 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
       >
         <div
           className={`flex gap-5 py-1 ${
-            type === "add" ? " h-[450px]" : "h-fit"
+            type === "add" ? " h-[500px]" : "h-fit"
           }`}
         >
           {/* Input Field */}
@@ -63,23 +62,55 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
             }}
           >
             <div className="flex flex-col gap-3 h-[80%]">
-              <Textarea
-                withAsterisk
+              <TextInput
+                withAsterisk={true}
                 autoFocus={false}
-                label={<p className="font-semibold flex gap-1">Topic</p>}
-                className="w-full border-none rounded-r-none"
+                label={
+                  <p className="font-semibold flex gap-1 h-full ">
+                    Evaluation Topic{" "}
+                    <span className="text-secondary">Thai language</span>
+                  </p>
+                }
+                className="w-full border-none   rounded-r-none "
                 classNames={{
-                  input: "flex h-[100px] p-3 text-[13px]",
+                  input: "flex p-3 text-[13px]",
                   label: "flex pb-1",
                 }}
-                placeholder="Ex. การอินทิเกรต"
+                placeholder="Ex. แบบทดสอบ 1"
+              />
+              <TextInput
+                autoFocus={false}
+                withAsterisk={true}
+                label={
+                  <p className="font-semibold flex gap-1">
+                    Evaluation Topic{" "}
+                    <span className="text-secondary">English language</span>
+                  </p>
+                }
+                className="w-full border-none rounded-r-none"
+                classNames={{
+                  input: "flex p-3 text-[13px]",
+                  label: "flex pb-1",
+                }}
+                placeholder="Ex. Test 1"
+              />
+
+              <Textarea
+                autoFocus={false}
+                label={<p className="font-semibold flex gap-1">Description</p>}
+                className="w-full border-none rounded-r-none"
+                classNames={{
+                  input: "flex h-[125px] p-3 text-[13px]",
+                  label: "flex pb-1",
+                }}
+                placeholder="(Optional)"
               />
 
               <NumberInput
                 withAsterisk
                 label={
                   <p className="font-semibold flex gap-1 h-full">
-                    Lecture hour
+                    Evaluation Percentage
                   </p>
                 }
                 classNames={{
@@ -87,7 +118,7 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
                   label: "flex pb-1",
                 }}
                 allowNegative={false}
-                handlersRef={handlersLecRef}
+                handlersRef={handlersRef}
                 defaultValue={0}
                 step={1}
                 max={100}
@@ -95,7 +126,7 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
                   <div className="flex gap-2 items-center mr-16">
                     <div
                       className="p-1 rounded-md hover:bg-bgTableHeader"
-                      onClick={() => handlersLecRef.current?.decrement()}
+                      onClick={() => handlersRef.current?.decrement()}
                       style={{ cursor: "pointer" }}
                     >
                       <IconMinus size={18} color="#5768d5" />
@@ -103,42 +134,7 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
                     <div className="h-8 border"></div>
                     <div
                       className=" p-1 rounded-md hover:bg-bgTableHeader"
-                      onClick={() => handlersLecRef.current?.increment()}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <IconPlus size={18} color="#5768d5" />
-                    </div>
-                  </div>
-                }
-              />
-
-              <NumberInput
-                withAsterisk
-                label={
-                  <p className="font-semibold flex gap-1 h-full">Lab hour</p>
-                }
-                classNames={{
-                  input: "flex px-3 py-5 text-[13px]",
-                  label: "flex pb-1",
-                }}
-                allowNegative={false}
-                handlersRef={handlersLabRef}
-                defaultValue={0}
-                step={1}
-                max={100}
-                rightSection={
-                  <div className="flex gap-2 items-center mr-16">
-                    <div
-                      className="p-1 rounded-md hover:bg-bgTableHeader"
-                      onClick={() => handlersLabRef.current?.decrement()}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <IconMinus size={18} color="#5768d5" />
-                    </div>
-                    <div className="h-8 border"></div>
-                    <div
-                      className=" p-1 rounded-md hover:bg-bgTableHeader"
-                      onClick={() => handlersLabRef.current?.increment()}
+                      onClick={() => handlersRef.current?.increment()}
                       style={{ cursor: "pointer" }}
                     >
                       <IconPlus size={18} color="#5768d5" />
@@ -165,7 +161,7 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
           {/* List CLO */}
           {!!topicLenght && type === "add" && (
             <div
-              className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-[442px]"
+              className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-[492px]"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 overflowY: "auto",
@@ -173,7 +169,7 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
-                  <span>List Topic Added</span>
+                  <span>List Evaluation Topic Added</span>
                 </div>
                 <p>
                   {topicLenght} Topic{topicLenght > 1 ? "s" : ""}
@@ -190,7 +186,7 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
                     <div className="flex flex-col gap-2 w-full">
                       <div className="flex items-center justify-between">
                         <p className="text-secondary font-semibold text-[14px]">
-                          Topic {index + 1}
+                          Eval Topic {index + 1}
                         </p>
 
                         <div className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer">
@@ -204,14 +200,16 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
                     </div>
 
                     <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
-                      <div className="flex text-pretty font-semibold">
-                        <li></li> Week {index + 1}: Operation-System Structures
+                      <div className="flex justify-between items-center text-primary mt-2">
+                        <div className="flex text-pretty">
+                          <li></li> สอบกลางภาค (Midterm Exam)
+                        </div>
+                        <p className="font-semibold text-[14px]">0 %</p>
                       </div>
                       <div className="flex text-pretty">
-                        <li></li> Lecture hour: 4 hrs
-                      </div>
-                      <div className="flex text-pretty">
-                        <li></li> Lab hour: 0 hrs
+                        <li></li>{" "}
+                        วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูง
+                        ครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ
                       </div>
                     </div>
                   </div>

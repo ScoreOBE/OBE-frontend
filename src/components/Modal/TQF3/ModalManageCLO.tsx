@@ -11,6 +11,8 @@ type Props = {
   type: actionType;
 };
 export default function ModalManageCLO({ opened, onClose, type }: Props) {
+  const height = type === "add" ? "h-full" : "h-fit";
+  const cloLength = 6;
   const [checkedItem, setCheckedItem] = useState<string[]>([]);
   let options = [
     { label: "บรรยาย (Lecture)" },
@@ -22,23 +24,31 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
     <Modal
       opened={opened}
       onClose={onClose}
+      withCloseButton={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} CLO 259194`}
-      size={type === "add" ? "70vw" : "50vw"}
+      size={type === "add" && cloLength > 0 ? "70vw" : "40vw"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
-        content: "flex flex-col  bg-[#F6F7FA] overflow-hidden h-full",
-        body: "overflow-hidden h-full",
+        content: `flex flex-col gap-1.5 bg-[#F6F7FA] overflow-hidden ${height}`,
+        body: `overflow-hidden ${height}`,
       }}
     >
-      <div className="flex flex-col h-full justify-between">
-        <div className="flex gap-5 py-1 max-h-[91%] ">
+      <div className={`flex flex-col ${height}  justify-between`}>
+        <div
+          className={`flex gap-5 py-1 ${type === "add" ? "h-[91%]" : "h-fit"}`}
+        >
           {/* Input Field */}
           <div
-            className={`flex flex-col p-5 gap-0 rounded-lg overflow-hidden w-[40%] h-full relative`}
+            className={`flex flex-col ${
+              type === "add" && "p-5"
+            } gap-0 rounded-lg overflow-hidden ${
+              cloLength > 0 && type === "add" ? "w-[45%]" : "w-full"
+            } h-full relative`}
             style={{
-              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              boxShadow:
+                type === "add" ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
             }}
           >
             <div className="flex flex-col gap-3 h-[80%]">
@@ -50,12 +60,12 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
                     CLO <span className="text-secondary">Thai language</span>
                   </p>
                 }
-                className="w-full border-none   rounded-r-none "
+                className="w-full border-none  rounded-r-none "
                 classNames={{
-                  input: "flex h-[100px] p-3 ",
+                  input: "flex h-[100px] p-3 text-[13px]",
                   label: "flex pb-1",
                 }}
-                placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
+                placeholder="Ex. อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
               />
               <Textarea
                 autoFocus={false}
@@ -67,10 +77,10 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
                 }
                 className="w-full border-none rounded-r-none"
                 classNames={{
-                  input: "flex h-[100px] p-3",
+                  input: "flex h-[100px] p-3 text-[13px]",
                   label: "flex pb-1",
                 }}
-                placeholder="Ex. An ability to solve complex engineering problems."
+                placeholder="Ex. Explain the working principle of computer operating systems."
               />
 
               <div className="flex flex-col gap-2 pb-1 ">
@@ -112,71 +122,77 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
 
             {/* Add More Button */}
 
-            <div className="absolute right-5 bottom-5">
-              <Button
-                //   onClick={() => setIsAddAnother(true)}
-                variant="outline"
-                className="rounded-[8px] text-[12px] h-[32px] w-fit "
-              >
-                Add more
-              </Button>
-            </div>
+            {type === "add" && (
+              <div className="absolute right-5 bottom-5">
+                <Button
+                  //   onClick={() => setIsAddAnother(true)}
+                  variant="outline"
+                  className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                >
+                  Add more
+                </Button>
+              </div>
+            )}
           </div>
           {/* List CLO */}
-          <div
-            className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[60%] h-auto"
-            style={{
-              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-              overflowY: "auto",
-            }}
-          >
-            <div className="sticky top-0 z-10 bg-[#e6e9ff] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
-              <div className="flex items-center gap-2">
-                <span>List CLO Added</span>
+          {!!cloLength && type === "add" && (
+            <div
+              className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-auto"
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                overflowY: "auto",
+              }}
+            >
+              <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
+                <div className="flex items-center gap-2">
+                  <span>List CLO Added</span>
+                </div>
+                <p>
+                  {cloLength} CLO{cloLength > 1 ? "s" : ""}
+                </p>
               </div>
-              <p>2 CLOs</p>
-            </div>
 
-            <div className="flex flex-col w-full h-fit px-4">
-              {Array.from({ length: 8 }).map((_, index) => (
-                <div
-                  className={`py-3 w-full border-b-[1px] px-3 ${
-                    Array.length > 1 ? "last:border-none last:pb-5" : ""
-                  } `}
-                >
-                  <div className="flex flex-col gap-2 w-full">
-                    <div className="flex items-center justify-between">
-                      <p className="text-secondary font-semibold text-[14px]">
-                        CLO-{index + 1}
-                      </p>
+              <div className="flex flex-col w-full h-fit px-4">
+                {Array.from({ length: cloLength }).map((_, index) => (
+                  <div
+                    className={`py-3 w-full border-b-[1px] px-3 ${
+                      Array.length > 1 ? "last:border-none last:pb-5" : ""
+                    } `}
+                  >
+                    <div className="flex flex-col gap-2 w-full">
+                      <div className="flex items-center justify-between">
+                        <p className="text-secondary font-semibold text-[14px]">
+                          CLO-{index + 1}
+                        </p>
 
-                      <div className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer">
-                        <IconTrash
-                          stroke={1.5}
-                          color="#FF4747"
-                          className="size-4 flex items-center"
-                        />
+                        <div className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer">
+                          <IconTrash
+                            stroke={1.5}
+                            color="#FF4747"
+                            className="size-4 flex items-center"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
+                      <div className="flex text-pretty">
+                        <li></li> อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์
+                      </div>
+                      <div className="flex text-pretty">
+                        <li></li> Explain the working principle of computer
+                        operating systems.
+                      </div>
+
+                      <div className="flex text-pretty">
+                        <li></li> Text
                       </div>
                     </div>
                   </div>
-
-                  <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
-                    <div className="flex text-pretty">
-                      <li></li> อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์
-                    </div>
-                    <div className="flex text-pretty">
-                      <li></li> Explain the working principle of computer
-                      operating systems.
-                    </div>
-
-                    <div className="flex text-pretty">
-                      <li></li> Text
-                    </div>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
         {/* Button */}
         <div className="flex gap-2  items-end  justify-end h-fit">
