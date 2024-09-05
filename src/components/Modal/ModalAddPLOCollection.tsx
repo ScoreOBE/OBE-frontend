@@ -546,7 +546,9 @@ export default function ModalAddPLOCollection({
                       <Icon IconComponent={IconSO} />
                       <span>List PLO Added</span>
                     </div>
-                    <p>{state.length} PLOs</p>
+                    <p>
+                      {state.length} PLO{state.length > 1 ? "s" : ""}
+                    </p>
                   </div>
                   <div className="flex flex-col w-full h-fit px-4">
                     <DragDropContext
@@ -684,7 +686,10 @@ export default function ModalAddPLOCollection({
 
                     <span>List of Departments</span>
                   </div>
-                  <p>{department.length} departments</p>
+                  <p>
+                    {department.length} Department
+                    {department.length > 1 ? "s" : ""}
+                  </p>
                 </div>
                 <div className="flex flex-col w-full h-[290px] px-3 overflow-y-auto">
                   <Checkbox
@@ -751,7 +756,10 @@ export default function ModalAddPLOCollection({
                 <div className="bg-[#e6e9ff] flex flex-col items-start justify-start rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
                   <div className="flex justify-between w-full">
                     <p>PLO Collection Name - {form.getValues().name}</p>
-                    <p>{form.getValues().departmentCode?.length} Departments</p>
+                    <p>
+                      {form.getValues().departmentCode?.length} Department
+                      {form.getValues().departmentCode?.length! > 1 ? "s" : ""}
+                    </p>
                   </div>
 
                   <div className="text-b3 flex gap-1">

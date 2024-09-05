@@ -303,7 +303,7 @@ Button:disabled {
   border-radius: 0px;
 }
 .mantine-Tabs-tab[data-variant="default"] {
-  color: #8c8c8c;
+  color: #bbb9b9;
 }
 .mantine-Tabs-tab[data-active][data-variant="default"] {
   color: var(--color-secondary);
@@ -324,6 +324,7 @@ Button:disabled {
 
 .mantine-Tabs-tabLabel[data-variant="pills"] {
   font-weight: 500;
+  color: red !important;
   font-size: 10px !important;
 }
 
