@@ -1,6 +1,14 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Alert, Button, FocusTrap, Modal, Select, Tabs, Tooltip } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  FocusTrap,
+  Modal,
+  Select,
+  Tabs,
+  Tooltip,
+} from "@mantine/core";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -110,24 +118,25 @@ export default function TQF3() {
           </div>
         </div>
       </Modal>
-      <div className=" flex flex-col  h-full  w-full overflow-hidden">
+      <div className=" flex flex-col   h-full  w-full overflow-hidden">
         <Tabs
           value={tqf3Part}
           onChange={setTqf3Part}
           defaultValue="Part 1"
-          variant="pills"
-          className="px-6 pt-[12px]  flex flex-col h-full w-full"
+          classNames={{
+            root: "overflow-hidden w-full flex flex-col h-full",
+            tab: "px-0 !bg-transparent hover:!text-tertiary",
+            tabLabel: "!font-semibold",
+          }}
+          className="px-6 pt-2 flex flex-col h-full w-full"
         >
           <div
-            className={`flex items-center  w-full h-fit ${
-              tqf3Part === "Part 4" ? "pb-1" : "border-b-[1px] pb-3"
-            } justify-between`}
+            className={`flex flex-col w-full h-fit ${
+              tqf3Part === "Part 4" ? "pb-1" : "border-b-[2px] pb-4"
+            } `}
           >
-            <div className=" text-secondary  overflow-y-auto font-semibold  whitespace-break-spaces">
-              {topicPart()}
-            </div>
             <div className="flex gap-2">
-              <Tabs.List>
+              <Tabs.List className="gap-7 w-full">
                 {partTab.map((part) => (
                   <Tabs.Tab key={part.tab} value={part.tab}>
                     <div className="flex flex-row items-center gap-2 ">
@@ -136,6 +145,11 @@ export default function TQF3() {
                   </Tabs.Tab>
                 ))}
               </Tabs.List>
+            </div>
+            <div className="flex justify-between pt-4 items-center">
+              <div className=" text-secondary  overflow-y-auto font-semibold  whitespace-break-spaces">
+                {topicPart()}
+              </div>
               <Tooltip
                 onClick={() => setOpenModalReuse(true)}
                 withArrow
@@ -158,9 +172,15 @@ export default function TQF3() {
                 }
                 color="#FCFCFC"
               >
-                <div className="bg-[#F39D4E] hover:bg-[#e39246] cursor-pointer w-fit px-3 rounded-[8px]">
-                  <Icon IconComponent={dupTQF} />
-                </div>
+                <Button
+                  leftSection={
+                    <Icon IconComponent={dupTQF} className="h-5 w-5 -mr-1" />
+                  }
+                  color="#F39D4E"
+                  className="  cursor-pointer pr-4 text-[12px] font-semibold w-fit px-3 h-[32px] rounded-[8px]"
+                >
+                  Reuse TQF3
+                </Button>
               </Tooltip>
             </div>
           </div>
@@ -169,7 +189,7 @@ export default function TQF3() {
               overflowY: "auto",
             }}
             className={`h-full w-full  flex ${
-              tqf3Part !== "Part 4" && "pt-4 px-3 "
+              tqf3Part !== "Part 4" && "pt-3 px-3 "
             }   rounded-md text-[14px]`}
           >
             {partTab.map((part, index) => (

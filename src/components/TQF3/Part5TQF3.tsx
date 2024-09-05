@@ -28,7 +28,7 @@ export default function Part5TQF3() {
         onClose={() => setOpenDrawerPLOdes(false)}
       />
 
-      <div className="flex flex-col w-full max-h-full gap-3 pb-4">
+      <div className="flex flex-col w-full max-h-full px-2 gap-4 pb-6">
         {/* Topic */}
         <div className="flex text-secondary items-center w-full justify-between">
           <span className="text-[15px] font-bold">

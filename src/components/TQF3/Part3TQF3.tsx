@@ -79,8 +79,8 @@ export default function Part3TQF3() {
 
   return (
     <div className="flex w-full">
-      <div className="flex flex-col  w-full pb-4 gap-4">
-        <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6] mt-1 pb-4 flex-col">
+      <div className="flex flex-col  w-full pb-8 gap-4">
+        <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6] mt-1 pb-6 flex-col">
           <div className="flex flex-row gap-1 text-[15px]">
             <p className="font-semibold">การกำหนดเกรด</p>
             <p className="font-bold">
