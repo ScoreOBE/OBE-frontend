@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/store";
+import store, { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import {
   Alert,
@@ -30,6 +30,7 @@ import { showNotifications } from "@/helpers/functions/function";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { UseFormReturnType } from "@mantine/form";
 import { ROUTE_PATH } from "@/helpers/constants/route";
+import { editCourse } from "@/store/course";
 
 export default function TQF3() {
   const location = useLocation().pathname;
@@ -100,10 +101,11 @@ export default function TQF3() {
           form.reset();
           form.setValues(res);
           setCourse({ ...course, TQF3: res });
+          dispatch(editCourse({ ...course, TQF3: { ...course.TQF3, ...res } }));
           showNotifications(
             NOTI_TYPE.SUCCESS,
-            "TQF 3, Part 1 save success",
-            "TQF 3 - Part 1 is saved"
+            `TQF 3, ${tqf3Part} save success`,
+            `TQF 3 - ${tqf3Part} is saved`
           );
         }
       }
