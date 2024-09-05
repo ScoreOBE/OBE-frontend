@@ -83,11 +83,13 @@ export default function Part4TQF3() {
   return (
     <div className="flex w-full max-h-full overflow-hidden">
       <div className="flex flex-col w-full">
-        <Tabs  classNames={{
-              root: "overflow-hidden flex flex-col pt-4 pb-1",
-              tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
-              tabLabel: "!font-semibold",
-            }}>
+        <Tabs
+          classNames={{
+            root: "overflow-hidden flex flex-col pt-4 pb-1",
+            tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
+            tabLabel: "!font-semibold",
+          }}
+        >
           <Tabs.List className="!gap-6 !bg-transparent">
             <Tabs.Tab value="TH">
               <div className="flex flex-row items-center gap-2 ">CLO 1</div>
@@ -137,13 +139,13 @@ export default function Part4TQF3() {
           </div>
 
           <div
-            className=" w-full flex flex-col rounded-md border border-secondary  "
+            className="overflow-x-auto w-full flex flex-col rounded-md border border-secondary  "
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
           >
-            <Table striped className="w-full">
-              <Table.Thead>
+            <Table stickyHeader striped className="w-full">
+              <Table.Thead className="z-[2]">
                 <Table.Tr className="bg-[#e5e7f6] ">
                   <Table.Th className="w-[1%] !rounded-tl-md"></Table.Th>
                   <Table.Th className="w-[13%]">Topic</Table.Th>
@@ -185,23 +187,38 @@ export default function Part4TQF3() {
 
               <Table.Tbody className="text-[13px] font-normal text-[#333333] ">
                 {state.map((item, index) => (
-                  <Table.Tr>
-                    <Table.Td className="w-[1%]">
+                  <Table.Tr key={index}>
+                    <Table.Td>
                       <Checkbox
                         aria-label="Select row"
+                        value={item.no}
                         checked={selectedRows.includes(item.no)}
+                        onChange={(event) => {
+                          if (
+                            event.target.checked &&
+                            !selectedRows.includes(item.no)
+                          ) {
+                            setSelectedRows((prev) => [...prev, item.no]);
+                          } else if (
+                            !event.target.checked &&
+                            selectedRows.includes(item.no)
+                          ) {
+                            setSelectedRows(
+                              selectedRows.filter((row) => row != item.no)
+                            );
+                          }
+                        }}
                       />
                     </Table.Td>
-                    <Table.Td className="w-[13%]">
+                    <Table.Td>
                       <p className="w-fit">{item.topicTH}</p>
                       <p className="w-fit">{item.topicEN}</p>
                     </Table.Td>
-                    <Table.Td className="w-[45%]">{item.des}</Table.Td>{" "}
-                    <Table.Td className="w-[20%]">
-                      {" "}
-                      <Select></Select>
+                    <Table.Td>{item.des}</Table.Td>
+                    <Table.Td>
+                      <Select />
                     </Table.Td>
-                    <Table.Td className="w-[16%] pr-6 text-end text-b1 ">
+                    <Table.Td className="pr-6 text-end text-b1 ">
                       <div className="flex font-semibold flex-row items-center gap-2">
                         <TextInput
                           classNames={{ input: "!rounded-[4px]" }}
@@ -209,7 +226,7 @@ export default function Part4TQF3() {
                         %
                       </div>
                     </Table.Td>
-                    <Table.Td className=" w-[5%] pr-[30px]">
+                    <Table.Td className="  pr-[30px]">
                       <div className="flex justify-start gap-4 items-center">
                         <div className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10">
                           <IconEdit className="size-4" stroke={1.5} />
@@ -225,16 +242,11 @@ export default function Part4TQF3() {
 
               <Table.Tfoot className="text-secondary   font-semibold  ">
                 <Table.Tr className="bg-[#e5e7f6] border-none">
-                  <Table.Th className="w-[1%] text-[14px] !rounded-bl-md">
+                  <Table.Th className="text-[14px] !rounded-bl-md" colSpan={4}>
                     Total
                   </Table.Th>
-                  <Table.Th className=" w-[13%]"></Table.Th>
-                  <Table.Th className=" w-[45%]"></Table.Th>
-                  <Table.Th className="w-[20%]"></Table.Th>
-                  <Table.Th className="w-[16%] text-[16px] text-end">
-                    60%
-                  </Table.Th>
-                  <Table.Th className="w-[5%] !rounded-br-md"></Table.Th>
+                  <Table.Th className="text-[16px] text-end pr-6">60%</Table.Th>
+                  <Table.Th className="!rounded-br-md"></Table.Th>
                 </Table.Tr>
               </Table.Tfoot>
             </Table>

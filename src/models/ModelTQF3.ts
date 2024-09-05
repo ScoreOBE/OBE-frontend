@@ -18,8 +18,8 @@ export interface IModelTQF3Part1 {
   teachingMethod: string[];
   studentYear: number[];
   evaluate: EVALUATE_TYPE;
-  instructors: IModelUser[] | string[];
-  coInstructors: IModelUser[] | string[];
+  instructors: string[];
+  coInstructors: string[];
   lecPlace: string;
   labPlace: string;
   mainRef: string;

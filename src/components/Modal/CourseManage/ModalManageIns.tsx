@@ -276,7 +276,7 @@ export default function ModalManageIns({
                                 <Checkbox
                                   key={indexSec}
                                   disabled={
-                                    coIns.value == sec.instructor.id ||
+                                    coIns.value == sec.instructor?.id ||
                                     (coIns?.sections?.length == 1 &&
                                       coIns?.sections?.includes(sec.sectionNo))
                                   }
@@ -295,7 +295,7 @@ export default function ModalManageIns({
                                   )}
                                   onChange={(event) =>
                                     editCoInsInSec(
-                                      sec.sectionNo,
+                                      sec.sectionNo!,
                                       event.currentTarget.checked,
                                       coIns
                                     )

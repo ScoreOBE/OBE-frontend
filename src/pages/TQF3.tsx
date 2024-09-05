@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Alert, Button, Modal, Select, Tabs, Tooltip } from "@mantine/core";
+import { Alert, Button, FocusTrap, Modal, Select, Tabs, Tooltip } from "@mantine/core";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -72,6 +72,7 @@ export default function TQF3() {
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
       >
+        <FocusTrap.InitialFocus />
         <div className="flex flex-col gap-3 ">
           <Alert
             variant="light"

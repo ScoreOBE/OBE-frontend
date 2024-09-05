@@ -36,26 +36,26 @@ export default function Part1TQF3({ data }: Props) {
       form.setValues(data.TQF3.part1);
     } else if (data) {
       form.setFieldValue("courseType", data.type);
-      const uniqueInstructors = [
-        ...new Map(
-          (data.sections?.flatMap((sec) => sec.instructor) as IModelUser[]).map(
-            (instructor) => [instructor.id, instructor]
-          )
-        ).values(),
-      ];
-      sortData(uniqueInstructors, "firstNameEN", "string");
-      form.setFieldValue("instructors", uniqueInstructors);
-      const uniqueCoInstructors = [
-        ...new Map(
-          (
-            data.sections?.flatMap((sec) => sec.coInstructors) as IModelUser[]
-          ).map((coInstructor) => [coInstructor.id, coInstructor])
-        ).values(),
-      ];
-      sortData(uniqueCoInstructors, "firstNameEN", "string");
-      form.setFieldValue("coInstructors", uniqueCoInstructors);
+      // const uniqueInstructors = [
+      //   ...new Map(
+      //     (data.sections?.flatMap((sec) => sec.instructor) as IModelUser[]).map(
+      //       (instructor) => [instructor.id, instructor]
+      //     )
+      //   ).values(),
+      // ];
+      // sortData(uniqueInstructors, "firstNameEN", "string");
+      // form.setFieldValue("instructors", uniqueInstructors);
+      // const uniqueCoInstructors = [
+      //   ...new Map(
+      //     (
+      //       data.sections?.flatMap((sec) => sec.coInstructors) as IModelUser[]
+      //     ).map((coInstructor) => [coInstructor.id, coInstructor])
+      //   ).values(),
+      // ];
+      // sortData(uniqueCoInstructors, "firstNameEN", "string");
+      // form.setFieldValue("coInstructors", uniqueCoInstructors);
     }
-    console.log(form.getValues());
+    // console.log(form.getValues());
   }, [data]);
 
   return (

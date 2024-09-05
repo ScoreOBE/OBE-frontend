@@ -9,6 +9,7 @@ import {
   Checkbox,
   Alert,
   Menu,
+  FocusTrap,
 } from "@mantine/core";
 import Icon from "@/components/Icon";
 import {
@@ -22,8 +23,14 @@ import {
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import CheckIcon from "@/assets/icons/Check.svg?react";
-import { IModelCourseManagement } from "@/models/ModelCourseManagement";
-import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
+import {
+  IModelCourseManagement,
+  IModelSectionManagement,
+} from "@/models/ModelCourseManagement";
+import {
+  getCourseManagement,
+  ploMapping,
+} from "@/services/courseManagement/courseManagement.service";
 import { useAppSelector } from "@/store";
 import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
 import Loading from "@/components/Loading";
@@ -32,7 +39,6 @@ import {
   createPLONo,
   deletePLONo,
   getOnePLO,
-  getPLOs,
   updatePLO,
 } from "@/services/plo/plo.service";
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
@@ -40,7 +46,7 @@ import { rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { IconGripVertical } from "@tabler/icons-react";
-import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import MainPopup from "@/components/Popup/MainPopup";
 import { validateCourseNo } from "@/helpers/functions/validation";
 import { useForm } from "@mantine/form";
@@ -66,7 +72,7 @@ export default function MapPLO({ ploName = "" }: Props) {
     ploList.semester === academicYear?.semester &&
     ploList.year === academicYear?.year;
   const [courseManagement, setCourseManagement] = useState<
-    IModelCourseManagement[]
+    Partial<IModelCourseManagement>[]
   >([]);
   const [openMainPopupDelPLO, setOpenMainPopupDelPLO] = useState(false);
   const [openModalAddPLONo, setOpenModalAddPLONo] = useState(false);
@@ -77,9 +83,7 @@ export default function MapPLO({ ploName = "" }: Props) {
     mode: "controlled",
     initialValues: { courseNo: "" },
     validate: {
-      courseNo: (value) => {
-        return validateCourseNo(value);
-      },
+      courseNo: (value) => validateCourseNo(value),
     },
     validateInputOnBlur: true,
   });
@@ -191,6 +195,7 @@ export default function MapPLO({ ploName = "" }: Props) {
         hasMore: res.courses.length >= payloadCourse.limit,
       });
       setTotalCourse(res.totalCount);
+      res.courses = filterSectionWithTopic(res.courses);
       setCourseManagement(res.courses);
     }
     setLoading(false);
@@ -232,11 +237,12 @@ export default function MapPLO({ ploName = "" }: Props) {
   };
 
   const onShowMore = async () => {
-    const res = await getCourseManagement({
+    let res = await getCourseManagement({
       ...payload,
       page: payload.page + 1,
     });
     if (res.length) {
+      res = filterSectionWithTopic(res);
       setCourseManagement([...courseManagement, ...res]);
       setPayload({
         ...payload,
@@ -246,6 +252,37 @@ export default function MapPLO({ ploName = "" }: Props) {
     } else {
       setPayload({ ...payload, hasMore: false });
     }
+  };
+
+  const filterSectionWithTopic = (courses: any) => {
+    let data: Partial<IModelCourseManagement>[] = [];
+    courses.map((course: IModelCourseManagement) => {
+      if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
+        const sections = course.sections.reduce((acc, sec) => {
+          if (sec.topic && !acc.some((item) => item.topic === sec.topic)) {
+            acc.push({
+              topic: sec.topic,
+              plos: (sec.plos ?? []) as string[],
+            });
+          }
+          return acc;
+        }, [] as Partial<IModelSectionManagement>[]);
+        data.push({
+          id: course.id,
+          courseNo: course.courseNo,
+          type: course.type,
+          sections,
+        });
+      } else {
+        data.push({
+          id: course.id,
+          courseNo: course.courseNo,
+          type: course.type,
+          plos: course.plos,
+        });
+      }
+    });
+    return data;
   };
 
   const searchCourse = async (searchValue: string, reset?: boolean) => {
@@ -258,6 +295,105 @@ export default function MapPLO({ ploName = "" }: Props) {
     if (reset) payloadCourse.search = "";
     else payloadCourse.search = searchValue;
     fetchCourse(payloadCourse);
+  };
+
+  const onSaveMapping = async () => {
+    const res = await ploMapping({ data: courseManagement });
+    if (res) {
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "PLO Mapping Success",
+        `PLO mapping completed for ${res.length} course${
+          res.length > 1 ? "s" : ""
+        }`
+      );
+      setIsMapPLO(false);
+    }
+  };
+
+  const courseMapPloTable = (
+    index: number,
+    course: Partial<IModelCourseManagement>,
+    sec?: Partial<IModelSectionManagement>
+  ) => {
+    return (
+      <Table.Tr key={index}>
+        <Table.Td className="py-4 text-b3 font-semibold pl-5 sticky left-0 z-[51]">
+          {course.courseNo} {sec && `(${sec.topic})`}
+        </Table.Td>
+
+        {ploList.data?.map((plo) => (
+          <Table.Td key={plo.id} className="z-50">
+            <div className="flex justify-start items-center">
+              {!isMapPLO ? (
+                ((sec ? sec.plos : course.plos) as string[])?.includes(
+                  plo.id
+                ) ? (
+                  <Icon IconComponent={CheckIcon} />
+                ) : (
+                  <p>-</p>
+                )
+              ) : (
+                <Checkbox
+                  size="xs"
+                  classNames={{
+                    input:
+                      "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                    body: "mr-3 px-0",
+                    label: "text-[14px] text-[#615F5F] cursor-pointer",
+                  }}
+                  value={plo.id}
+                  checked={(
+                    (sec ? sec.plos : course.plos) as string[]
+                  )?.includes(plo.id)}
+                  onChange={(event) => {
+                    const newData = { ...course };
+                    if (event.target.checked) {
+                      if (sec) {
+                        newData.sections?.forEach((e: any) => {
+                          if (
+                            e.topic === sec.topic &&
+                            !e.plos?.includes(plo.id)
+                          ) {
+                            e.plos?.push(plo.id);
+                          }
+                        });
+                      } else {
+                        if (!(newData.plos as string[])?.includes(plo.id)) {
+                          newData.plos = [
+                            ...(newData.plos || []),
+                            plo.id,
+                          ] as string[];
+                        }
+                      }
+                    } else {
+                      if (sec) {
+                        newData.sections?.forEach((e: any) => {
+                          if (e.topic === sec.topic) {
+                            const index = e.plos?.indexOf(plo.id);
+                            if (index !== -1) e.plos?.splice(index, 1);
+                          }
+                        });
+                      } else {
+                        const index = (newData.plos as string[])?.indexOf(
+                          plo.id
+                        );
+                        if (index !== -1) {
+                          (newData.plos as string[])?.splice(index, 1);
+                        }
+                      }
+                    }
+                    setCourseManagement((prev) =>
+                      prev.map((c) => (c.id === course.id ? { ...newData } : c))
+                    );
+                  }}
+                />
+              )}
+            </div>
+          </Table.Td>
+        ))}
+      </Table.Tr>
+    );
   };
 
   return (
@@ -277,6 +413,7 @@ export default function MapPLO({ ploName = "" }: Props) {
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
       >
+        <FocusTrap.InitialFocus />
         <div className="flex flex-col mt-2 gap-3">
           <Textarea
             withAsterisk={true}
@@ -342,6 +479,7 @@ export default function MapPLO({ ploName = "" }: Props) {
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
       >
+        <FocusTrap.InitialFocus />
         <div className="flex flex-col gap-3">
           <Textarea
             withAsterisk={true}
@@ -418,9 +556,9 @@ export default function MapPLO({ ploName = "" }: Props) {
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
       >
+        <FocusTrap.InitialFocus />
         <div className="flex flex-col gap-3">
           <TextInput
-            classNames={{ input: "focus:border-primary" }}
             label="Course No."
             size="xs"
             withAsterisk
@@ -461,7 +599,7 @@ export default function MapPLO({ ploName = "" }: Props) {
               color="red"
               title="After you delete this PLO, it will affect all courses that use this PLO collection."
               icon={<IconExclamationCircle />}
-              classNames={{ title: "-mt-[2px]", icon: 'size-6' }}
+              classNames={{ title: "-mt-[2px]", icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <p>
@@ -570,109 +708,113 @@ export default function MapPLO({ ploName = "" }: Props) {
                     </Button>
                   )}
                 </div>
-<div className=" overflow-y-auto max-h-full">
-                <DragDropContext
-                  onDragEnd={({ destination, source }) => {
-                    handlers.reorder({
-                      from: source.index,
-                      to: destination?.index || 0,
-                    });
-                    setReorder(true);
-                  }}
-                >
-                  <Droppable droppableId="dnd-list" direction="vertical">
-                    {(provided, snapshot) => (
-                      <div {...provided.droppableProps} ref={provided.innerRef}>
-                        {state.map((item, index) => (
-                          <Draggable
-                            key={item.no}
-                            index={index}
-                            draggableId={item.no.toString()}
-                          >
-                            {(provided, snapshot) => (
-                              <div
-                                className={`flex p-4 w-full justify-between first:-mt-2 border-b last:border-none ${
-                                  snapshot.isDragging
-                                    ? "bg-hover rounded-md"
-                                    : ""
-                                }`}
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                              >
-                                <div className="flex flex-col gap-2 w-[85%] ">
-                                  <p className="text-secondary font-semibold text-[14px]">
-                                    PLO-{item.no}
-                                  </p>
-                                  <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
-                                    <div className="flex  text-pretty ">
-                                      <li></li> {item.descTH}
-                                    </div>
-                                    <div className="flex  text-pretty ">
-                                      <li></li> {item.descEN}
+                <div className=" overflow-y-auto max-h-full">
+                  <DragDropContext
+                    onDragEnd={({ destination, source }) => {
+                      handlers.reorder({
+                        from: source.index,
+                        to: destination?.index || 0,
+                      });
+                      setReorder(true);
+                    }}
+                  >
+                    <Droppable droppableId="dnd-list" direction="vertical">
+                      {(provided, snapshot) => (
+                        <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                        >
+                          {state.map((item, index) => (
+                            <Draggable
+                              key={item.no}
+                              index={index}
+                              draggableId={item.no.toString()}
+                            >
+                              {(provided, snapshot) => (
+                                <div
+                                  className={`flex p-4 w-full justify-between first:-mt-2 border-b last:border-none ${
+                                    snapshot.isDragging
+                                      ? "bg-hover rounded-md"
+                                      : ""
+                                  }`}
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                >
+                                  <div className="flex flex-col gap-2 w-[85%] ">
+                                    <p className="text-secondary font-semibold text-[14px]">
+                                      PLO-{item.no}
+                                    </p>
+                                    <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
+                                      <div className="flex  text-pretty ">
+                                        <li></li> {item.descTH}
+                                      </div>
+                                      <div className="flex  text-pretty ">
+                                        <li></li> {item.descEN}
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
 
-                                <div className="flex gap-1 items-center">
-                                  {isFirstSemester && (
-                                    <>
-                                      <div
-                                        className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
-                                        onClick={() => {
-                                          formPLO.setValues(item);
-                                          setOpenModalEditPLONo(true);
-                                        }}
-                                      >
-                                        <IconEdit
-                                          stroke={1.5}
-                                          color="#F39D4E"
-                                          className="flex items-center size-4"
-                                        />
-                                      </div>
-
-                                      <div
-                                        className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
-                                        onClick={() => {
-                                          formPLO.setValues(item);
-                                          setOpenMainPopupDelPLO(true);
-                                        }}
-                                      >
-                                        <IconTrash
-                                          stroke={1.5}
-                                          color="#FF4747"
-                                          className=" size-4 flex items-center"
-                                        />
-                                      </div>
-
-                                      <div
-                                        className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
-                                        {...provided.dragHandleProps}
-                                      >
-                                        <IconGripVertical
-                                          style={{
-                                            width: rem(20),
-                                            height: rem(20),
+                                  <div className="flex gap-1 items-center">
+                                    {isFirstSemester && (
+                                      <>
+                                        <div
+                                          className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
+                                          onClick={() => {
+                                            formPLO.setValues(item);
+                                            setOpenModalEditPLONo(true);
                                           }}
-                                          stroke={1.5}
-                                        />
-                                      </div>
-                                    </>
-                                  )}
+                                        >
+                                          <IconEdit
+                                            stroke={1.5}
+                                            color="#F39D4E"
+                                            className="flex items-center size-4"
+                                          />
+                                        </div>
+
+                                        <div
+                                          className="flex items-center justify-center border-[#FF4747] size-8 rounded-full  hover:bg-[#FF4747]/10  cursor-pointer"
+                                          onClick={() => {
+                                            formPLO.setValues(item);
+                                            setOpenMainPopupDelPLO(true);
+                                          }}
+                                        >
+                                          <IconTrash
+                                            stroke={1.5}
+                                            color="#FF4747"
+                                            className=" size-4 flex items-center"
+                                          />
+                                        </div>
+
+                                        <div
+                                          className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
+                                          {...provided.dragHandleProps}
+                                        >
+                                          <IconGripVertical
+                                            style={{
+                                              width: rem(20),
+                                              height: rem(20),
+                                            }}
+                                            stroke={1.5}
+                                          />
+                                        </div>
+                                      </>
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext></div>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
+                </div>
               </div>
             </Tabs.Panel>
 
             <Tabs.Panel className="overflow-hidden mt-1" value="plomapping">
-              <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full p">
+              <div className="overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full p">
                 <div className="flex items-center  justify-between pt-4 pb-5">
                   <div className="flex flex-col items-start ">
                     <p className="text-secondary text-[16px] font-bold">
@@ -698,6 +840,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                               <IconDots />
                             </Menu.Target>
                             <Menu.Dropdown
+                              autoFocus={false}
                               className="rounded-md translate-y-1 backdrop-blur-xl bg-white "
                               style={{
                                 boxShadow:
@@ -739,9 +882,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                           variant="subtle"
                           color="#575757"
                           className="rounded-[8px] text-[12px] h-[32px] w-fit bg-[#e5e7eb] hover-[#e5e7eb]/10"
-                          onClick={() => {
-                            setIsMapPLO(false);
-                          }}
+                          onClick={() => setIsMapPLO(false)}
                         >
                           Cancel
                         </Button>
@@ -751,9 +892,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                             <IconCheck className="size-4" stroke={2} />
                           }
                           className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                          onClick={() => {
-                            setIsMapPLO(false);
-                          }}
+                          onClick={onSaveMapping}
                         >
                           Done
                         </Button>
@@ -773,11 +912,13 @@ export default function MapPLO({ ploName = "" }: Props) {
                   loader={<Loading />}
                 >
                   <Table stickyHeader striped>
-                    <Table.Thead>
-                      <Table.Tr className="bg-[#e5e7f6]">
-                        <Table.Th>Course No.</Table.Th>
+                    <Table.Thead className="z-[52]">
+                      <Table.Tr className="bg-bgTableHeader">
+                        <Table.Th className="w-[30%] sticky left-0">
+                          Course No.
+                        </Table.Th>
                         {ploList.data?.map((plo, index) => (
-                          <Table.Th key={index}>PLO-{plo.no}</Table.Th>
+                          <Table.Th key={index} >PLO-{plo.no}</Table.Th>
                         ))}
                       </Table.Tr>
                     </Table.Thead>
@@ -787,35 +928,13 @@ export default function MapPLO({ ploName = "" }: Props) {
                           No Course Found
                         </div>
                       ) : ( */}
-                      {courseManagement.map((course, index) => (
-                        <Table.Tr key={index}>
-                          <Table.Td className="py-4 text-b3 font-semibold pl-5">
-                            {course.courseNo}
-                          </Table.Td>
-
-                          {ploList.data?.map((plo, index) => (
-                            <Table.Td key={index}>
-                              <div className="flex items-start">
-                                {!isMapPLO ? (
-                                  <Icon IconComponent={CheckIcon} />
-                                ) : (
-                                  <Checkbox
-                                    __size="xs"
-                                    classNames={{
-                                      input:
-                                        "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                                      body: "mr-3 px-0",
-                                      label:
-                                        "text-[14px] text-[#615F5F] cursor-pointer",
-                                    }}
-                                    size="xs"
-                                  />
-                                )}
-                              </div>
-                            </Table.Td>
-                          ))}
-                        </Table.Tr>
-                      ))}
+                      {courseManagement.map((course, index) =>
+                        course.type == COURSE_TYPE.SEL_TOPIC.en
+                          ? course.sections?.map((sec) =>
+                              courseMapPloTable(sec.sectionNo!, course, sec)
+                            )
+                          : courseMapPloTable(index, course)
+                      )}
                       {/* )} */}
                     </Table.Tbody>
                   </Table>

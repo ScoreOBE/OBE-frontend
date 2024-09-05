@@ -188,6 +188,17 @@
   padding-bottom: 14px !important;
 }
 
+/* .mantine-Table-tr[data-striped="odd"] {
+  .mantine-Table-td {
+    background-color: white !important;
+  }
+}
+.mantine-Table-tr[data-striped="even"] {
+  .mantine-Table-td {
+    background-color: #f8f9fa !important;
+  }
+} */
+
 .mantine-Table-tbody {
   border-bottom: var(--color-secondary);
   color: var(--color-secondary);
