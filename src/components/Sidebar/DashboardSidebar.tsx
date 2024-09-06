@@ -67,7 +67,6 @@ export default function DashboardSidebar() {
     <>
       <Modal
         opened={openFilterTerm}
-        withCloseButton={false}
         onClose={() => setOpenFilterTerm(false)}
         title="Filter"
         size="400px"

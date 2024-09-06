@@ -8,6 +8,7 @@ import {
   IconPlus,
   IconTrash,
   IconExclamationCircle,
+  IconUpload,
 } from "@tabler/icons-react";
 import { showNotifications } from "@/helpers/functions/function";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -143,7 +144,7 @@ export default function Dashboard() {
             the current semester. Data from previous semesters will not be affected. 
             "
               icon={icon}
-              classNames={{ title: "-mt-[2px]", icon: "size-6" }}
+              classNames={{ icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
@@ -197,9 +198,10 @@ export default function Dashboard() {
               </p>
             )}
           </div>
-          {term?.isActive && !!course.courses.length && (
+          <div className="flex gap-3">
             <Button
-              className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
+              variant="outline"
+              className="text-center rounded-[6px] text-[12px] w-fit font-semibold h-8 px-4"
               onClick={() => setOpenAddModal(true)}
             >
               <div className="flex gap-2">
@@ -207,7 +209,15 @@ export default function Dashboard() {
                 Add course
               </div>
             </Button>
-          )}
+            {term?.isActive && !!course.courses.length && (
+              <Button
+                className="text-center rounded-[6px] text-[12px] w-fit font-semibold h-8 px-4"
+                leftSection={<IconUpload className="h-5 w-5" />}
+              >
+                <div className="flex gap-2">Upload score</div>
+              </Button>
+            )}
+          </div>
         </div>
         <div className="flex h-full w-full    overflow-hidden">
           {loading ? (
@@ -232,6 +242,7 @@ export default function Dashboard() {
                     </>
                   )}
                 </p>
+
                 {term?.isActive && !course.search.length && (
                   // <Button
                   //   className=" rounded-[8px] text-[12px] w-28 font-medium  h-8 px-2 "
@@ -244,6 +255,7 @@ export default function Dashboard() {
                   //   />
                   //   Add course
                   // </Button>
+
                   <Button
                     className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
                     onClick={() => setOpenAddModal(true)}

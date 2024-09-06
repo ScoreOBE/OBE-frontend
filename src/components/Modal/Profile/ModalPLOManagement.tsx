@@ -227,7 +227,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               color="red"
               title="After you delete this PLO Collection, it will affect all courses that use it."
               icon={<IconExclamationCircle />}
-              classNames={{ title: "-mt-[2px]", icon: "size-6" }}
+              classNames={{  icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">PLO Collection name</p>

@@ -140,7 +140,7 @@ export default function ModalEditSection({
     <Modal
       opened={opened}
       onClose={onClose}
-      withCloseButton={false}
+      closeOnClickOutside={false}
       title={title ?? "Edit section"}
       size="35vw"
       centered
@@ -165,6 +165,7 @@ export default function ModalEditSection({
           label="Section No."
           withAsterisk
           size="xs"
+          placeholder="001 or 1"
           maxLength={3}
           classNames={{ input: "focus:border-primary" }}
           {...form.getInputProps("sectionNo")}
@@ -245,7 +246,7 @@ export default function ModalEditSection({
             onClick={submit}
             className="rounded-[8px] text-[12px] h-[32px] w-fit "
           >
-            Done
+            Save Changes
           </Button>
         </div>
       </div>

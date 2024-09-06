@@ -119,7 +119,6 @@ export default function TQF3() {
         title="Reuse TQF3"
         opened={openModalReuse}
         closeOnClickOutside={false}
-        withCloseButton={false}
         onClose={() => setOpenModalReuse(false)}
         transitionProps={{ transition: "pop" }}
         size="35vw"
@@ -136,7 +135,7 @@ export default function TQF3() {
             color="blue"
             title={` lorem ipsum `}
             icon={<IconInfoCircle />}
-            classNames={{ title: "-mt-[2px]", icon: "size-6" }}
+            classNames={{ icon: "size-6" }}
           ></Alert>
           <Select
             rightSectionPointerEvents="all"
