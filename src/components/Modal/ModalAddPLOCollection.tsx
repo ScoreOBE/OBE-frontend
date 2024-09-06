@@ -289,7 +289,6 @@ export default function ModalAddPLOCollection({
           </div>
         }
         closeOnClickOutside={false}
-        withCloseButton={false}
         opened={openModalSelectSemester}
         onClose={closeModal}
         transitionProps={{ transition: "pop" }}

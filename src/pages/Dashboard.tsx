@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button, Menu } from "@mantine/core";
+import { Button, Group, Menu, Modal, Select } from "@mantine/core";
 import { Alert } from "@mantine/core";
 import {
   IconDots,
@@ -9,6 +9,8 @@ import {
   IconTrash,
   IconExclamationCircle,
   IconUpload,
+  IconChevronRight,
+  IconArrowRight,
 } from "@tabler/icons-react";
 import { showNotifications } from "@/helpers/functions/function";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -46,6 +48,7 @@ export default function Dashboard() {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openDelPopup, setOpenDelPopup] = useState(false);
   const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
+  const [openModalSelectCourse, setOpenModalSelectCourse] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -169,6 +172,56 @@ export default function Dashboard() {
         onClose={() => setOpenModalEditCourse(false)}
         value={editCourse}
       />
+      <Modal
+        title={
+          <div className="flex flex-col gap-1">
+            <p>Upload score</p>
+          </div>
+        }
+        transitionProps={{ transition: "pop" }}
+        size="39vw"
+        centered
+        classNames={{
+          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+          body: "flex flex-col overflow-hidden max-h-full h-fit",
+        }}
+        closeOnClickOutside={false}
+        opened={openModalSelectCourse}
+        onClose={() => setOpenModalSelectCourse(false)}
+      >
+        <div className="flex flex-col gap-8">
+        <Select
+          label="Select course to upload"
+          placeholder="Course"
+          size="xs"
+        ></Select>{" "}
+        <div className="flex justify-end w-full">
+          <Group className="flex w-full h-fit items-end justify-end">
+            <div>
+              <Button
+                color="#575757"
+                variant="subtle"
+                className="rounded-[8px] text-[12px] h-[32px] w-fit "
+             
+              >
+                Cancel
+              </Button>
+            </div>
+            <Button
+              rightSection={
+                <IconArrowRight
+                  color="#ffffff"
+                  className="size-5 items-center"
+                  stroke={2} size={20}
+                />
+              }
+              className="rounded-[8px] border-none text-[12px] h-[32px] w-fit"
+            >
+              Next
+            </Button>
+          </Group>
+        </div></div>
+      </Modal>
 
       <div className=" flex flex-col h-full w-full  overflow-hidden">
         <div className="flex flex-row px-6 pt-3   items-center justify-between">
@@ -213,6 +266,7 @@ export default function Dashboard() {
               <Button
                 className="text-center rounded-[6px] text-[12px] w-fit font-semibold h-8 px-4"
                 leftSection={<IconUpload className="h-5 w-5" />}
+                onClick={() => setOpenModalSelectCourse(true)}
               >
                 <div className="flex gap-2">Upload score</div>
               </Button>
