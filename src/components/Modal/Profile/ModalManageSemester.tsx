@@ -287,7 +287,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           color="red"
           title={` After you activate semester ${activateSemester?.semester}/${activateSemester?.year}, semester ${academicYear?.semester}/${academicYear?.year} cannot be reactivated. This means that instructor can't make any changes to them courses for that semester.  `}
           icon={<IconExclamationCircle />}
-          classNames={{ title: "-mt-[2px]", icon: 'size-6' }}
+          classNames={{ icon: 'size-6' }}
           className="mb-5"
         ></Alert>
         <TextInput

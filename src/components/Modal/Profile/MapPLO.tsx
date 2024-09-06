@@ -468,7 +468,6 @@ export default function MapPLO({ ploName = "" }: Props) {
       <Modal
         title={`Edit PLO-${formPLO.getValues().no}`}
         opened={openModalEditPLONo}
-        withCloseButton={false}
         closeOnClickOutside={false}
         onClose={() => setOpenModalEditPLONo(false)}
         transitionProps={{ transition: "pop" }}
@@ -488,10 +487,10 @@ export default function MapPLO({ ploName = "" }: Props) {
                 PLO <span className="text-secondary">Thai language</span>
               </p>
             }
-            className="w-full border-none rounded-r-none "
+            className="w-full border-none mt-2 rounded-md "
             style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
             classNames={{
-              input: "flex !rounded-r-none h-[150px] p-3",
+              input: "flex !rounded-md h-[150px] p-3",
               label: "flex pb-1",
             }}
             placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
@@ -508,10 +507,10 @@ export default function MapPLO({ ploName = "" }: Props) {
                 PLO <span className="text-secondary">English language</span>
               </p>
             }
-            className="w-full border-none rounded-r-none "
+            className="w-full border-none rounded-md "
             style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
             classNames={{
-              input: "flex !rounded-r-none h-[150px] p-3",
+              input: "flex !rounded-md h-[150px] p-3",
               label: "flex pb-1",
             }}
             placeholder="Ex. An ability to solve complex engineering problems."
@@ -537,7 +536,7 @@ export default function MapPLO({ ploName = "" }: Props) {
               }}
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
             >
-              Done
+              Save Changes
             </Button>
           </div>
         </div>
@@ -546,6 +545,7 @@ export default function MapPLO({ ploName = "" }: Props) {
       <Modal
         title={`Add Course`}
         opened={openModalAddCourse}
+        closeOnClickOutside={false}
         withCloseButton={false}
         onClose={() => setOpenModalAddCourse(false)}
         transitionProps={{ transition: "pop" }}
@@ -591,21 +591,38 @@ export default function MapPLO({ ploName = "" }: Props) {
         action={onClickDeletePLO}
         type={POPUP_TYPE.DELETE}
         labelButtonRight="Delete PLO"
-        title={`Delete PLO ${formPLO.getValues().no}`}
+        title={`Delete PLO`}
         message={
           <>
             <Alert
               variant="light"
               color="red"
-              title="After you delete this PLO, it will affect all courses that use this PLO collection."
+              title="After you delete this PLO, it will affect all courses that use it."
               icon={<IconExclamationCircle />}
-              classNames={{ title: "-mt-[2px]", icon: "size-6" }}
+              classNames={{ icon: "size-6" }}
             ></Alert>
-            <div className="flex flex-col mt-3 gap-2">
-              <p>
-                xxxxxxxxxxxxxxx
-                <br /> <span>Are you sure you want to deleted this PLO? </span>
-              </p>
+            <div className="flex flex-col mt-3 gap-2 text-[#333333]">
+              <div className="flex flex-col ">
+                <p className="text-b3  text-[#808080]">PLO Collection name</p>
+                <p className=" -translate-y-[2px] text-b1">{`${ploList.name}`}</p>
+              </div>
+              <div className="flex flex-col  ">
+                <p className="text-b3 text-[#808080]">PLO no.</p>
+                <p className="  -translate-y-[2px] text-b1">
+                  PLO-{`${formPLO.getValues().no}`}
+                </p>
+              </div>
+              <div className="flex flex-col ">
+                <p className="text-b3 text-[#808080]">PLO Description</p>
+                <p className=" text-[13px] flex flex-col gap-2 bg-[#f6f6f6] px-4 py-3 rounded-lg">
+                  <li className="  -translate-y-[2px] font-normal">{`${
+                    formPLO.getValues().descTH
+                  }`}</li>
+                  <li className="  -translate-y-[2px] font-medium">{`${
+                    formPLO.getValues().descEN
+                  }`}</li>
+                </p>
+              </div>
             </div>
           </>
         }
@@ -894,7 +911,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                           className="rounded-[8px] text-[12px] h-[32px] w-fit "
                           onClick={onSaveMapping}
                         >
-                          Done
+                          Save Changes
                         </Button>
                       </div>
                     )}
@@ -918,7 +935,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                           Course No.
                         </Table.Th>
                         {ploList.data?.map((plo, index) => (
-                          <Table.Th key={index} >PLO-{plo.no}</Table.Th>
+                          <Table.Th key={index}>PLO-{plo.no}</Table.Th>
                         ))}
                       </Table.Tr>
                     </Table.Thead>

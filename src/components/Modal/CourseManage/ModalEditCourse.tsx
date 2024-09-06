@@ -82,7 +82,7 @@ export default function ModalEditCourse({
       title="Edit course"
       size="39vw"
       centered
-      withCloseButton={false}
+      closeOnClickOutside={false}
       transitionProps={{ transition: "pop" }}
       classNames={{
         title: "",
@@ -131,7 +131,7 @@ export default function ModalEditCourse({
             onClick={submit}
             className="rounded-[8px] text-[12px] h-[32px] w-fit "
           >
-            Done
+            Save Changes
           </Button>
         </div>
       </div>
