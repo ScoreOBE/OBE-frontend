@@ -52,7 +52,6 @@ export default function MainPopup({
       }
       size="42vw"
       centered
-      withCloseButton={false}
       transitionProps={{ transition: "pop" }}
       classNames={{
         title: `${titleClassName()}`,

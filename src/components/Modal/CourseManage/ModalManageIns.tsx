@@ -341,7 +341,7 @@ export default function ModalManageIns({
           disabled={isEqual(coInsList, editCoInsList)}
           loading={loading}
         >
-          {type == "course" ? "Done" : "Save"}
+          {type == "course" ? "Save Changes" : "Save"}
         </Button>
       </div>
     );
