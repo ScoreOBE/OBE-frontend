@@ -40,6 +40,9 @@ export default function CourseSidebar() {
   useEffect(() => {
     if (courseList.length && courseNo) {
       const findCourse = courseList.find((e) => e.courseNo == courseNo);
+      if (!findCourse) {
+        navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`);
+      }
       setCourse(findCourse);
       const insList: any[] = [];
       const coInsList: any[] = [];
@@ -76,7 +79,7 @@ export default function CourseSidebar() {
       dispatch(removeCourse(res.id));
       closeMainPopup();
       showNotifications(NOTI_TYPE.SUCCESS, "Leave Course Success", ``);
-      navigate(ROUTE_PATH.DASHBOARD_INS);
+      navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`);
     }
   };
 
@@ -99,7 +102,7 @@ export default function CourseSidebar() {
               color="red"
               title={` After you leave ${course?.courseNo} course, you won't have access to Assignments, Score, TQF document and Grades in this course `}
               icon={<IconExclamationCircle />}
-              classNames={{ icon: 'size-6' }}
+              classNames={{ icon: "size-6" }}
               className="mb-5"
             ></Alert>
             <div className="flex flex-col  ">
