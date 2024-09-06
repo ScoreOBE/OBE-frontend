@@ -196,11 +196,12 @@ export default function Part1TQF3({ data, setForm }: Props) {
 
         <div
           className="flex flex-col gap-3 text-default"
+          key={form.key("instructors")}
           {...form.getInputProps("instructors")}
         >
           {Array.from({ length: 8 }).map((_, index) => (
             <TextInput
-              key={index}
+              key={form.key(`instructors.${index}`)}
               withAsterisk={index == 0}
               size="xs"
               label={`Instructor ${index + 1}`}
@@ -244,6 +245,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
 
         <div className="flex flex-col gap-3 text-default">
           <Textarea
+            key={form.key("lecPlace")}
             label="Description"
             size="xs"
             placeholder="(optional)"
@@ -261,6 +263,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
 
         <div className="flex flex-col gap-3 text-default">
           <Textarea
+            key={form.key("labPlace")}
             label="Description"
             size="xs"
             placeholder="(optional)"
@@ -278,6 +281,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
 
         <div className="flex flex-col gap-3 text-default">
           <Textarea
+            key={form.key("mainRef")}
             label="Description"
             size="xs"
             placeholder="(optional)"
@@ -297,6 +301,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
 
         <div className="flex flex-col gap-3 text-default">
           <Textarea
+            key={form.key("recDoc")}
             label="Description"
             size="xs"
             placeholder="(optional)"
