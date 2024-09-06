@@ -48,9 +48,6 @@ export default function Part1TQF3({ data, setForm }: Props) {
     },
     validateInputOnBlur: true,
     onValuesChange: (values) => {
-      values.studentYear = values.studentYear
-        ?.map((e: any) => parseInt(e))
-        .sort();
       setForm(form);
     },
   });
@@ -146,6 +143,12 @@ export default function Part1TQF3({ data, setForm }: Props) {
           classNames={{ error: "mt-2" }}
           {...form.getInputProps("studentYear")}
           value={form.getValues().studentYear?.map((e) => e.toString())}
+          onChange={(event) =>
+            form.setFieldValue(
+              "studentYear",
+              event.map((e) => parseInt(e))
+            )
+          }
         >
           <div className="flex flex-col text-default gap-5">
             {studentYear.map((item) => (
