@@ -60,19 +60,21 @@ export default function Part1TQF3({ data, setForm }: Props) {
       } else {
         if (
           data.type == COURSE_TYPE.SEL_TOPIC.en &&
-          // data.sections?.length == 1 &&
           data.sections![0].TQF3?.part1 // select first topic
         ) {
           form.setValues(data.sections![0].TQF3?.part1);
         }
         form.setFieldValue("courseType", data.type);
-        const uniqueInstructors = [
-          ...(new Set(
+        const uniqueInstructors = Array.from(
+          new Set(
             (
-              data.sections?.flatMap((sec) => sec.instructor) as IModelUser[]
+              data.sections?.flatMap((sec) => [
+                sec.instructor,
+                ...(sec.coInstructors as IModelUser[]),
+              ]) as IModelUser[]
             )?.map((instructor) => getUserName(instructor, 3)!)
-          ) || []),
-        ];
+          )
+        ).slice(0, 8);
         form.setFieldValue("instructors", uniqueInstructors);
       }
     }

@@ -27,7 +27,7 @@ import { isEmpty } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
 import { saveTQF3 } from "@/services/tqf3/tqf3.service";
 import { showNotifications } from "@/helpers/functions/function";
-import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { UseFormReturnType } from "@mantine/form";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { editCourse } from "@/store/course";
@@ -94,7 +94,11 @@ export default function TQF3() {
       } else {
         const part = tqf3Part?.replace(" ", "").toLowerCase()!;
         const payload = form.getValues();
-        payload.id = course.TQF3?.id;
+        if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
+          payload.id = course.sections![0].TQF3?.id; // select first topic
+        } else {
+          payload.id = course.TQF3?.id;
+        }
         payload.instructors = payload.instructors.filter((ins: any) => ins);
         const res = await saveTQF3(part, payload);
         if (res) {
