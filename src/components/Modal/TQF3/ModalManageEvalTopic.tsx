@@ -179,6 +179,7 @@ export default function ModalManageEvalTopic({ opened, onClose, type }: Props) {
               <div className="flex flex-col w-full h-fit px-4">
                 {Array.from({ length: topicLenght }).map((_, index) => (
                   <div
+                    key={index}
                     className={`py-3 w-full border-b-[1px] px-3 ${
                       Array.length > 1 ? "last:border-none last:pb-5" : ""
                     } `}
