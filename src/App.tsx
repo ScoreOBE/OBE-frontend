@@ -44,7 +44,6 @@ function App() {
   }, [user, path]);
 
   const fetchData = async () => {
-    dispatch(setLoading(true));
     if (!user.id) {
       const res = await getUserInfo();
       if (res) {
@@ -58,7 +57,6 @@ function App() {
         dispatch(setAcademicYear(rsAcademicYear));
       }
     }
-    // dispatch(setLoading(false));
   };
 
   return (

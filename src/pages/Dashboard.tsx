@@ -61,7 +61,6 @@ export default function Dashboard() {
       );
       if (acaYear && yearId != term.id) {
         setTerm(acaYear);
-        if (!course.courses.length) fetchCourse(acaYear.id);
       }
     }
   }, [academicYear, term, params]);
@@ -127,8 +126,6 @@ export default function Dashboard() {
     });
   };
 
-  const icon = <IconExclamationCircle />;
-
   return (
     <>
       <MainPopup
@@ -146,7 +143,7 @@ export default function Dashboard() {
               title=" After you delete this course, it's permanently deleted all data from
             the current semester. Data from previous semesters will not be affected. 
             "
-              icon={icon}
+              icon={<IconExclamationCircle />}
               classNames={{ icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
@@ -190,37 +187,38 @@ export default function Dashboard() {
         onClose={() => setOpenModalSelectCourse(false)}
       >
         <div className="flex flex-col gap-8">
-        <Select
-          label="Select course to upload"
-          placeholder="Course"
-          size="xs"
-        ></Select>{" "}
-        <div className="flex justify-end w-full">
-          <Group className="flex w-full h-fit items-end justify-end">
-            <div>
+          <Select
+            label="Select course to upload"
+            placeholder="Course"
+            size="xs"
+          ></Select>{" "}
+          <div className="flex justify-end w-full">
+            <Group className="flex w-full h-fit items-end justify-end">
+              <div>
+                <Button
+                  color="#575757"
+                  variant="subtle"
+                  className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                >
+                  Cancel
+                </Button>
+              </div>
               <Button
-                color="#575757"
-                variant="subtle"
-                className="rounded-[8px] text-[12px] h-[32px] w-fit "
-             
+                rightSection={
+                  <IconArrowRight
+                    color="#ffffff"
+                    className="size-5 items-center"
+                    stroke={2}
+                    size={20}
+                  />
+                }
+                className="rounded-[8px] border-none text-[12px] h-[32px] w-fit"
               >
-                Cancel
+                Next
               </Button>
-            </div>
-            <Button
-              rightSection={
-                <IconArrowRight
-                  color="#ffffff"
-                  className="size-5 items-center"
-                  stroke={2} size={20}
-                />
-              }
-              className="rounded-[8px] border-none text-[12px] h-[32px] w-fit"
-            >
-              Next
-            </Button>
-          </Group>
-        </div></div>
+            </Group>
+          </div>
+        </div>
       </Modal>
 
       <div className=" flex flex-col h-full w-full  overflow-hidden">
@@ -251,18 +249,18 @@ export default function Dashboard() {
               </p>
             )}
           </div>
-          <div className="flex gap-3">
-            <Button
-              variant="outline"
-              className="text-center rounded-[6px] text-[12px] w-fit font-semibold h-8 px-4"
-              onClick={() => setOpenAddModal(true)}
-            >
-              <div className="flex gap-2">
-                <Icon IconComponent={AddIcon} />
-                Add course
-              </div>
-            </Button>
-            {term?.isActive && !!course.courses.length && (
+          {term?.isActive && !!course.courses.length && (
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                className="text-center rounded-[6px] text-[12px] w-fit font-semibold h-8 px-4"
+                onClick={() => setOpenAddModal(true)}
+              >
+                <div className="flex gap-2">
+                  <Icon IconComponent={AddIcon} />
+                  Add course
+                </div>
+              </Button>
               <Button
                 className="text-center rounded-[6px] text-[12px] w-fit font-semibold h-8 px-4"
                 leftSection={<IconUpload className="h-5 w-5" />}
@@ -270,8 +268,8 @@ export default function Dashboard() {
               >
                 <div className="flex gap-2">Upload score</div>
               </Button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <div className="flex h-full w-full    overflow-hidden">
           {loading ? (

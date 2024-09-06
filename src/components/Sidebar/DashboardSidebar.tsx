@@ -9,6 +9,10 @@ import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { setAcademicYear } from "@/store/academicYear";
 import { useSearchParams } from "react-router-dom";
+import { getCourse } from "@/services/course/course.service";
+import { CourseRequestDTO } from "@/services/course/dto/course.dto";
+import { setCourseList } from "@/store/course";
+import { setLoading } from "@/store/loading";
 
 export default function DashboardSidebar() {
   const user = useAppSelector((state) => state.user);
@@ -30,13 +34,24 @@ export default function DashboardSidebar() {
     } else if (user && !academicYear.length) {
       fetchAcademicYear();
     }
-  }, [academicYear, termOption, params]);
+  }, [academicYear]);
 
   useEffect(() => {
     if (termOption && params.get("id") && !selectedTerm) {
       setSelectedTerm(termOption.find((e) => e.value == params.get("id")));
     }
   }, [termOption, params]);
+
+  const fetchCourse = async (id: string) => {
+    dispatch(setLoading(true));
+    const payloadCourse = new CourseRequestDTO();
+    payloadCourse.academicYear = id;
+    const res = await getCourse(payloadCourse);
+    if (res) {
+      dispatch(setCourseList(res));
+    }
+    dispatch(setLoading(false));
+  };
 
   const fetchAcademicYear = async () => {
     const res = await getAcademicYear(new AcademicYearRequestDTO());
@@ -61,6 +76,7 @@ export default function DashboardSidebar() {
     setOpenFilterTerm(false);
     const term = academicYear.find((e) => e.id == selectedTerm.value)!;
     setTerm(term);
+    fetchCourse(term.id);
   };
 
   return (

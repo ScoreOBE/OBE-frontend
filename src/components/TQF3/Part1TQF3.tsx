@@ -44,7 +44,8 @@ export default function Part1TQF3({ data, setForm }: Props) {
           return `Duplicate instructors "${uniqueDuplicates.join(", ")}"`;
         }
       },
-      coInstructors: (value) => null,
+      coordinator: (value) =>
+        !value?.length && "Course Coordinator is required",
     },
     validateInputOnBlur: true,
     onValuesChange: (values) => {
@@ -57,6 +58,13 @@ export default function Part1TQF3({ data, setForm }: Props) {
       if (data?.TQF3?.part1) {
         form.setValues(data.TQF3.part1);
       } else {
+        if (
+          data.type == COURSE_TYPE.SEL_TOPIC.en &&
+          // data.sections?.length == 1 &&
+          data.sections![0].TQF3?.part1 // select first topic
+        ) {
+          form.setValues(data.sections![0].TQF3?.part1);
+        }
         form.setFieldValue("courseType", data.type);
         const uniqueInstructors = [
           ...(new Set(
@@ -66,15 +74,6 @@ export default function Part1TQF3({ data, setForm }: Props) {
           ) || []),
         ];
         form.setFieldValue("instructors", uniqueInstructors);
-        // const uniqueCoInstructors = [
-        //   ...new Map(
-        //     (
-        //       data.sections?.flatMap((sec) => sec.coInstructors) as IModelUser[]
-        //     ).map((coInstructor) => [coInstructor.id, coInstructor])
-        //   ).values(),
-        // ];
-        // sortData(uniqueCoInstructors, "firstNameEN", "string");
-        // form.setFieldValue("coInstructors", uniqueCoInstructors);
       }
     }
   }, [data]);
@@ -226,14 +225,14 @@ export default function Part1TQF3({ data, setForm }: Props) {
 
         <div className="flex flex-col gap-3 text-default">
           <TextInput
-            key={form.key("coInstructors")}
+            key={form.key("coordinator")}
             withAsterisk
             size="xs"
             label="Instructor"
             classNames={{ label: "text-default" }}
             className="w-[440px]"
             placeholder="(required)"
-            {...form.getInputProps("coInstructors")}
+            {...form.getInputProps("coordinator")}
           />
         </div>
       </div>
