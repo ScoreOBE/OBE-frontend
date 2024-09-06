@@ -54,7 +54,7 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
           <div
             className={`flex flex-col ${
               type === "add" && "p-5"
-            } gap-1 rounded-lg overflow-hidden ${
+            } gap-1 rounded-md overflow-hidden ${
               topicLenght > 0 && type === "add" ? "w-[45%]" : "w-full"
             } h-full relative`}
             style={{
@@ -62,11 +62,14 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
                 type === "add" ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
             }}
           >
-            <div className="flex flex-col gap-3 h-[80%]">
+            <div className="flex flex-col gap-4 h-[80%]">
               <Textarea
-                withAsterisk
                 autoFocus={false}
-                label={<p className="font-semibold flex gap-1">Course Content</p>}
+                label={
+                  <p className="font-semibold flex gap-1">
+                    Course Content <span className=" text-error">*</span>
+                  </p>
+                }
                 className="w-full border-none rounded-r-none"
                 classNames={{
                   input: "flex h-[100px] p-3 text-[13px]",
@@ -76,10 +79,10 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
               />
 
               <NumberInput
-                withAsterisk
                 label={
                   <p className="font-semibold flex gap-1 h-full">
                     Lecture hour
+                    <span className=" text-error">*</span>
                   </p>
                 }
                 classNames={{
@@ -113,9 +116,10 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
               />
 
               <NumberInput
-                withAsterisk
                 label={
-                  <p className="font-semibold flex gap-1 h-full">Lab hour</p>
+                  <p className="font-semibold flex gap-1 h-full">
+                    Lab hour <span className=" text-error">*</span>
+                  </p>
                 }
                 classNames={{
                   input: "flex px-3 py-5 text-[13px]",

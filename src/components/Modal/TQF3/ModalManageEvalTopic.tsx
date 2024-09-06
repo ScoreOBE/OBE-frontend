@@ -22,7 +22,7 @@ type Props = {
 export default function ModalManageEvalTopic({ opened, onClose, type }: Props) {
   const height = type === "add" ? "h-full" : "h-fit";
   const handlersRef = useRef<NumberInputHandlers>(null);
-  const topicLenght = 6;
+  const topicLenght = 5;
 
   return (
     <Modal
@@ -51,24 +51,24 @@ export default function ModalManageEvalTopic({ opened, onClose, type }: Props) {
         >
           {/* Input Field */}
           <div
-            className={`flex flex-col ${
+            className={`flex flex-col justify-between ${
               type === "add" && "p-5"
-            } gap-1 rounded-lg overflow-hidden ${
+            } gap-1 overflow-hidden ${
               topicLenght > 0 && type === "add" ? "w-[45%]" : "w-full"
-            } h-full relative`}
+            } h-full`}
             style={{
               boxShadow:
                 type === "add" ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
             }}
           >
-            <div className="flex flex-col gap-3 h-[80%]">
+            <div className="flex flex-col gap-4 h-[88%]">
               <TextInput
-                withAsterisk={true}
                 autoFocus={false}
                 label={
                   <p className="font-semibold flex gap-1 h-full ">
                     Evaluation Topic{" "}
                     <span className="text-secondary">Thai language</span>
+                    <span className=" text-error">*</span>
                   </p>
                 }
                 className="w-full border-none   rounded-r-none "
@@ -80,11 +80,11 @@ export default function ModalManageEvalTopic({ opened, onClose, type }: Props) {
               />
               <TextInput
                 autoFocus={false}
-                withAsterisk={true}
                 label={
                   <p className="font-semibold flex gap-1">
                     Evaluation Topic{" "}
-                    <span className="text-secondary">English language</span>
+                    <span className="text-secondary">English language </span>
+                    <span className=" text-error">*</span>
                   </p>
                 }
                 className="w-full border-none rounded-r-none"
@@ -94,7 +94,6 @@ export default function ModalManageEvalTopic({ opened, onClose, type }: Props) {
                 }}
                 placeholder="Ex. Test 1"
               />
-
               <Textarea
                 autoFocus={false}
                 label={<p className="font-semibold flex gap-1">Description</p>}
@@ -105,17 +104,17 @@ export default function ModalManageEvalTopic({ opened, onClose, type }: Props) {
                 }}
                 placeholder="(Optional)"
               />
-
               <NumberInput
-                withAsterisk
                 label={
                   <p className="font-semibold flex gap-1 h-full">
                     Evaluation Percentage
+                    <span className=" text-error">*</span>
                   </p>
                 }
                 classNames={{
-                  input: "flex px-3 py-5 text-[13px]",
+                  input: "flex px-3 py-5 text-[13px]  ",
                   label: "flex pb-1",
+                  wrapper: "!border-none",
                 }}
                 allowNegative={false}
                 handlersRef={handlersRef}
@@ -145,13 +144,11 @@ export default function ModalManageEvalTopic({ opened, onClose, type }: Props) {
             </div>
 
             {/* Add More Button */}
-
             {type === "add" && (
-              <div className="absolute right-5 bottom-5">
+              <div className="flex justify-end">
                 <Button
-                  //   onClick={() => setIsAddAnother(true)}
                   variant="outline"
-                  className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                  className="rounded-[8px] text-[12px] h-[32px]"
                 >
                   Add more
                 </Button>
