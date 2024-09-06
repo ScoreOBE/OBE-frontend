@@ -180,7 +180,7 @@ export default function TQF3() {
         >
           <div
             className={`flex flex-col w-full h-fit ${
-              tqf3Part === "Part 4" ? "pb-1" : "border-b-[2px] pb-4"
+              tqf3Part === "Part 4" ? "pb-1" : "border-b-[2px] pb-4 mb-1"
             } `}
           >
             <div className="flex gap-2">

@@ -22,7 +22,7 @@ import {
   IconPlus,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import ModalManageTopic from "../Modal/TQF3/ModalManageTopic";
+import ModalManageTopic from "../Modal/TQF3/ModalManageCourseContent";
 
 export default function Part2TQF3() {
   const dataTest = [
@@ -118,7 +118,7 @@ export default function Part2TQF3() {
       />
       <div className="flex flex-col w-full max-h-full gap-4">
         {/* Description */}
-        <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6]  gap-4 pb-8">
+        <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 pb-8">
           <div className="flex text-secondary items-center w-full justify-between">
             <p className="font-semibold text-[15px]">
               วัตถุประสงค์ของกระบวนวิชา <span className="font-bold">(CLO)</span>{" "}
@@ -282,7 +282,7 @@ export default function Part2TQF3() {
             >
               <div className="flex gap-2">
                 <Icon IconComponent={AddIcon} />
-                Add Topic
+                Add course content 
               </div>
             </Button>
           </div>

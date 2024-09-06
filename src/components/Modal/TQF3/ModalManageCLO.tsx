@@ -31,7 +31,7 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
-        content: `flex flex-col gap-1.5 bg-[#F6F7FA] overflow-hidden ${height}`,
+        content: `flex flex-col bg-[#F6F7FA] overflow-hidden ${height}`,
         body: `overflow-hidden ${height}`,
       }}
     >

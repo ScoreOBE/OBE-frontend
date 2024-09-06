@@ -8,14 +8,17 @@ import {
   Alert,
   Table,
   Group,
+  Modal,
+  Select,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { IconArrowRight, IconInfoCircle } from "@tabler/icons-react";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import { useState } from "react";
+import ModalManageTopic from "../Modal/TQF3/ModalManageTopic";
 
 type Props = {};
 export default function Part6TQF3() {
@@ -27,8 +30,14 @@ export default function Part6TQF3() {
       list: [
         { label: "ไม่มี (None)" },
         { label: "แบบประเมินกระบวนวิชา \n(Course assessment form)" },
-        { label: "การสนทนากลุ่มระหว่างผู้สอนและผู้เรียน \n(Instructor-student group discussion)" },
-        { label: "การสะท้อนคิดจากพฤติกรรมของผู้เรียน \n(Student behavior reflection)" },
+        {
+          label:
+            "การสนทนากลุ่มระหว่างผู้สอนและผู้เรียน \n(Instructor-student group discussion)",
+        },
+        {
+          label:
+            "การสะท้อนคิดจากพฤติกรรมของผู้เรียน \n(Student behavior reflection)",
+        },
         {
           label:
             "ข้อเสนอแนะผ่านเวบบอร์ดที่อาจารย์ผู้สอนได้จัดทำเป็นช่องทางการสื่อสารกับนักศึกษา \n(Suggestions through the instructor's webboard for student communication.)",
@@ -44,11 +53,15 @@ export default function Part6TQF3() {
         { label: "ไม่มี (None)" },
         { label: "แบบประเมินผู้สอน \n(Instructor evaluation form)" },
         { label: "ผลการสอบ \n(Examination results)" },
-        { label: "การทวนสอบผลประเมินการเรียนรู้ \n(Review of assessment results)" },
+        {
+          label:
+            "การทวนสอบผลประเมินการเรียนรู้ \n(Review of assessment results)",
+        },
         {
           label:
             "การประเมินโดยคณะกรรมการประเมินข้อสอบ \n(Evaluation by the Exam Committee)",
-        }, {
+        },
+        {
           label:
             "การสังเกตการณ์สอนของผู้ร่วมทีมการสอน \n(Teaching observation by Co-Instructor)",
         },
@@ -62,8 +75,11 @@ export default function Part6TQF3() {
       list: [
         { label: "ไม่มี (None)" },
         { label: "สัมมนาการจัดการเรียนการสอน \n(Teaching Management Seminar)" },
-        { label: "การวิจัยในและนอกชั้นเรียน \n(Research in and out of the classroom)" },
-       
+        {
+          label:
+            "การวิจัยในและนอกชั้นเรียน \n(Research in and out of the classroom)",
+        },
+
         { label: "อื่นๆ (Other)" },
       ],
     },
@@ -72,9 +88,18 @@ export default function Part6TQF3() {
       en: "The process of reviewing the standards of student course achievement",
       th: "กระบวนการทวนสอบมาตรฐานผลสัมฤทธิ์กระบวนวิชาของนักศึกษา",
       list: [
-        { label: "มีการตั้งคณะกรรมการในสาขาวิชา ตรวจสอบผลการประเมินการเรียนรู้ของนักศึกษา โดยตรวจสอบข้อรายงาน วิธีการการให้คะแนนสอบ และการให้คะแนนพฤติกรรม \n(A department-specific committee reviews student assessments, reports, scoring methods and behavioral evaluations.)" },
-        { label: "การทวนสอบการให้คะแนนการตรวจผลงานของนักศึกษาโดยกรรมการวิชาการประจำภาควิชาและคณะ \n(Department and faculty committees review student grading.)" },
-        { label: "การทวนสอบการให้คะแนนจาก การสุ่มตรวจผลงานของนักศึกษาโดยอาจารย์ หรือผู้ทรงคุณวุฒิอื่นๆ \n(Random grading checks by teachers or qualified reviewers.)" },
+        {
+          label:
+            "มีการตั้งคณะกรรมการในสาขาวิชา ตรวจสอบผลการประเมินการเรียนรู้ของนักศึกษา โดยตรวจสอบข้อรายงาน วิธีการการให้คะแนนสอบ และการให้คะแนนพฤติกรรม \n(A department-specific committee reviews student assessments, reports, scoring methods and behavioral evaluations.)",
+        },
+        {
+          label:
+            "การทวนสอบการให้คะแนนการตรวจผลงานของนักศึกษาโดยกรรมการวิชาการประจำภาควิชาและคณะ \n(Department and faculty committees review student grading.)",
+        },
+        {
+          label:
+            "การทวนสอบการให้คะแนนจาก การสุ่มตรวจผลงานของนักศึกษาโดยอาจารย์ หรือผู้ทรงคุณวุฒิอื่นๆ \n(Random grading checks by teachers or qualified reviewers.)",
+        },
         { label: "อื่นๆ (Other)" },
       ],
     },
@@ -84,9 +109,18 @@ export default function Part6TQF3() {
       th: "การดำเนินการทบทวนและการวางแผนปรับปรุงประสิทธิผลของกระบวนวิชา",
       list: [
         { label: "ไม่มี (None)" },
-        { label: "ปรับปรุงกระบวนวิชาในแต่ละปี ตามข้อเสนอแนะและผลการทวนสอบมาตรฐานผลสัมฤทธิ์ตามข้อ 4 \n(Improve the course annually based on recommendations and No.4 - The standard of student course achievement )" },
-        { label: "ปรับปรุงกระบวนวิชาในแต่ละปี ตามผลการประเมินผู้สอนโดยนักศึกษา \n(Improve the course annually based on instructor evaluations from students.)" },
-        { label: "ปรับปรุงกระบวนวิชาช่วงเวลาการปรับปรุงหลักสูตร \n(Improving the course during the curriculum improvement period)" },
+        {
+          label:
+            "ปรับปรุงกระบวนวิชาในแต่ละปี ตามข้อเสนอแนะและผลการทวนสอบมาตรฐานผลสัมฤทธิ์ตามข้อ 4 \n(Improve the course annually based on recommendations and No.4 - The standard of student course achievement )",
+        },
+        {
+          label:
+            "ปรับปรุงกระบวนวิชาในแต่ละปี ตามผลการประเมินผู้สอนโดยนักศึกษา \n(Improve the course annually based on instructor evaluations from students.)",
+        },
+        {
+          label:
+            "ปรับปรุงกระบวนวิชาช่วงเวลาการปรับปรุงหลักสูตร \n(Improving the course during the curriculum improvement period)",
+        },
         { label: "อื่นๆ (Other)" },
       ],
     },
@@ -100,13 +134,20 @@ export default function Part6TQF3() {
     { no: 5, item: [] as string[] },
     { no: 6, item: [] as string[] },
   ]);
-  const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
+  const [openModalSelectTopic, setOpenModalSelectTopic] = useState(false);
+  const [openModalEditSelectTopic, setOpenModalEditSelectTopic] = useState(false);
 
   return (
     <>
-      <DrawerPLOdes
-        opened={openDrawerPLOdes}
-        onClose={() => setOpenDrawerPLOdes(false)}
+          <ModalManageTopic
+        opened={openModalSelectTopic}
+        onClose={() => setOpenModalSelectTopic(false)}
+        type="add"
+      />
+      <ModalManageTopic
+        opened={openModalEditSelectTopic}
+        onClose={() => setOpenModalEditSelectTopic(false)}
+        type="edit"
       />
 
       <div className="flex flex-col w-full max-h-full gap-4 ">
@@ -117,14 +158,17 @@ export default function Part6TQF3() {
             หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
             <span className=" font-bold">(Topic)</span>
           </p>
-          <Button className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4">
+          <Button
+            onClick={() => setOpenModalSelectTopic(true)}
+            className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
+          >
             <div className="flex gap-2">
               <Icon IconComponent={AddIcon} />
               Add Topic
             </div>
           </Button>
         </div>
-        <div className=" overflow-y-auto pb-6">
+        <div className="pb-6">
           {/* Table */}
           {topics.map((topic) => (
             <div
@@ -141,7 +185,7 @@ export default function Part6TQF3() {
                 </p>
               </div>
               <Checkbox.Group
-                value={checkedItem.find((item) =>item.no == topic.no)?.item}
+                value={checkedItem.find((item) => item.no == topic.no)?.item}
                 onChange={(event) =>
                   setCheckedItem([
                     ...checkedItem.filter((item) => item.no !== topic.no),
@@ -158,7 +202,8 @@ export default function Part6TQF3() {
                     >
                       <Checkbox
                         classNames={{
-                          label: "font-medium text-[14px] leading-6 text-[#333333]",
+                          label:
+                            "font-medium text-[14px] leading-6 text-[#333333]",
                           body: "flex flex-row gap-2 items-center ",
                         }}
                         className=" whitespace-break-spaces items-center"
