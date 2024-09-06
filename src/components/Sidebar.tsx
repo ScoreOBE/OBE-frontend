@@ -34,12 +34,12 @@ export default function Sidebar() {
   useEffect(() => {
     if (!localStorage.getItem("token")) navigate(ROUTE_PATH.LOGIN);
     else if (
-      !params.get("id") ||
-      !params.get("year") ||
-      !params.get("semester")
+      params.get("id") &&
+      params.get("year") &&
+      params.get("semester") &&
+      !courseList.length
     )
-      navigate(ROUTE_PATH.DASHBOARD_INS);
-    else if (!courseList.length) fetchCourse();
+      fetchCourse();
   }, [academicYear, params]);
 
   const fetchCourse = async () => {

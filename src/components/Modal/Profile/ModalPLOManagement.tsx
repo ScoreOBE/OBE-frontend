@@ -88,6 +88,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
       setDepartmentPLOCollection(resDep.plos);
     }
   };
+
   useEffect(() => {
     const fetchPLOTab = async () => {
       const res = await getPLOs({
@@ -101,18 +102,12 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
       }
     };
     if (opened) {
-      fetchPLOTab();
-    }
-  }, [opened]);
-
-  useEffect(() => {
-    dispatch(setShowSidebar(true));
-    if (user.id) {
       setLoading(true);
+      fetchPLOTab();
       fetchPLO();
       setLoading(false);
     }
-  }, [user]);
+  }, [opened]);
 
   useEffect(() => {
     if (modalDuplicatePLO) {
@@ -227,7 +222,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               color="red"
               title="After you delete this PLO Collection, it will affect all courses that use it."
               icon={<IconExclamationCircle />}
-              classNames={{  icon: "size-6" }}
+              classNames={{ icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">PLO Collection name</p>

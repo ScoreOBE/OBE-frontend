@@ -1,5 +1,4 @@
 import { EVALUATE_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
-import { IModelUser } from "./ModelUser";
 import { IModelPLONo } from "./ModelPLO";
 
 export interface IModelTQF3 {
@@ -21,7 +20,7 @@ export interface IModelTQF3Part1 {
   studentYear: number[];
   evaluate: EVALUATE_TYPE;
   instructors: string[];
-  coInstructors: string[];
+  coordinator: string;
   lecPlace: string;
   labPlace: string;
   mainRef: string;
