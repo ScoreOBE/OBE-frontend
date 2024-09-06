@@ -1,7 +1,7 @@
 import { Button, Checkbox, Group, Modal, Textarea } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 import { upperFirst } from "lodash";
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 type actionType = "add" | "edit";
 
@@ -11,14 +11,35 @@ type Props = {
   type: actionType;
 };
 export default function ModalManageCLO({ opened, onClose, type }: Props) {
-  const height = type === "add" ? "h-full" : "h-fit";
-  const cloLength = 6;
+  const height = type === "add" ? "h-full gap-5" : "h-fit gap-0";
+  const cloLength = 3;
   const [checkedItem, setCheckedItem] = useState<string[]>([]);
   let options = [
     { label: "บรรยาย (Lecture)" },
     { label: "ปฏิบัติการ (Laboratory)" },
     { label: "อื่นๆ (Other)" },
   ];
+
+  const [heightLeftSec, setHeightLeftSec] = useState(485);
+  const cloDescriptionRef = useRef<any>(null);
+
+  const updateHeight = () => {
+    if (cloDescriptionRef.current) {
+      const height = cloDescriptionRef.current.offsetHeight;
+      setHeightLeftSec(height);
+    }
+  };
+
+  useLayoutEffect(() => {
+    updateHeight();
+  });
+
+  useEffect(() => {
+    window.addEventListener("resize", updateHeight);
+    return () => {
+      window.removeEventListener("resize", updateHeight);
+    };
+  }, []);
 
   return (
     <Modal
@@ -31,33 +52,42 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
-        content: `flex flex-col bg-[#F6F7FA] overflow-hidden ${height}`,
-        body: `overflow-hidden ${height}`,
+        root: `!h-fit`,
+        content: `flex flex-col bg-[#F6F7FA] overflow-hidden`,
+        body: `overflow-hidden `,
       }}
     >
-      <div className={`flex flex-col ${height}  justify-between`}>
+      <div className={`flex flex-col ${height}`}>
         <div
-          className={`flex gap-5 py-1 ${type === "add" ? "h-[91%]" : "h-fit"}`}
+          className={`flex gap-5 py-1 ${
+            type === "add"
+              ? checkedItem.includes("อื่นๆ (Other)")
+                ? "max-h-[91%]"
+                : "max-h-[80%]"
+              : "h-fit"
+          }`}
         >
           {/* Input Field */}
           <div
-            className={`flex flex-col ${
+            id="cloDescription"
+            ref={cloDescriptionRef}
+            className={`flex flex-col rounded-md justify-between ${
               type === "add" && "p-5"
-            } gap-0 rounded-lg overflow-hidden ${
+            } gap-1 overflow-hidden ${
               cloLength > 0 && type === "add" ? "w-[45%]" : "w-full"
-            } h-full relative`}
+            } h-full`}
             style={{
               boxShadow:
                 type === "add" ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
             }}
           >
-            <div className="flex flex-col gap-3 h-[80%]">
+            <div className="flex flex-col gap-4 h-[80%]">
               <Textarea
-                withAsterisk={true}
                 autoFocus={false}
                 label={
                   <p className="font-semibold flex gap-1 h-full ">
                     CLO <span className="text-secondary">Thai language</span>
+                    <span className=" text-error">*</span>
                   </p>
                 }
                 className="w-full border-none  rounded-r-none "
@@ -69,10 +99,10 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
               />
               <Textarea
                 autoFocus={false}
-                withAsterisk={true}
                 label={
                   <p className="font-semibold flex gap-1">
                     CLO <span className="text-secondary">English language</span>
+                    <span className=" text-error">*</span>
                   </p>
                 }
                 className="w-full border-none rounded-r-none"
@@ -85,7 +115,7 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
 
               <div className="flex flex-col gap-2 pb-1 ">
                 <p className="text-secondary text-[13px] font-semibold">
-                  Learning Method <span className="text-delete">*</span>
+                  Learning Method <span className="text-error">*</span>
                 </p>
                 <Checkbox.Group
                   value={checkedItem}
@@ -104,16 +134,17 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
                         label={item.label}
                         value={item.label}
                       />
-                      {item.label === "อื่นๆ (Other)" && (
-                        <Textarea
-                          className="mt-2 pl-8"
-                          placeholder="(Required)"
-                          disabled={!checkedItem.includes("อื่นๆ (Other)")}
-                          classNames={{
-                            input: "text-[13px] text-[#333333] h-[70px]",
-                          }}
-                        />
-                      )}
+                      {item.label === "อื่นๆ (Other)" &&
+                        checkedItem.includes("อื่นๆ (Other)") && (
+                          <Textarea
+                            className="mt-2 pl-8"
+                            placeholder="(Required)"
+                            disabled={!checkedItem.includes("อื่นๆ (Other)")}
+                            classNames={{
+                              input: "text-[13px] text-[#333333] h-[70px]",
+                            }}
+                          />
+                        )}
                     </div>
                   ))}
                 </Checkbox.Group>
@@ -121,9 +152,8 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
             </div>
 
             {/* Add More Button */}
-
             {type === "add" && (
-              <div className="absolute right-5 bottom-5">
+              <div className="flex justify-end">
                 <Button
                   //   onClick={() => setIsAddAnother(true)}
                   variant="outline"
@@ -137,8 +167,9 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
           {/* List CLO */}
           {!!cloLength && type === "add" && (
             <div
-              className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-auto"
+              className={`flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] `}
               style={{
+                height: heightLeftSec,
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 overflowY: "auto",
               }}
@@ -196,7 +227,7 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
           )}
         </div>
         {/* Button */}
-        <div className="flex gap-2  items-end  justify-end h-fit">
+        <div className="flex gap-2 items-end justify-end h-fit">
           <Button
             onClick={onClose}
             variant="subtle"
