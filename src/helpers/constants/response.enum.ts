@@ -1,6 +1,7 @@
 export enum RESPONSE_MESSAGE {
   SUCCESS = "success",
   UNAUTHORIZED = "Unauthorized",
+  FOR_BIDDEN = "Forbidden",
 }
 
 export enum STATUS_CODE {
