@@ -19,7 +19,7 @@ export const isValidResponse = (res: any) => {
       case STATUS_CODE.NOT_FOUND:
         // dispatch(setErrorResponse(res));
         break;
-      case STATUS_CODE.FOR_BIDDEN:
+      case STATUS_CODE.FORBIDDEN:
       case STATUS_CODE.UNAUTHORIZED:
         localStorage.clear();
         dispatch(setErrorResponse(res));

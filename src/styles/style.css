@@ -387,3 +387,97 @@ Button:disabled {
 .bg-blur {
   filter: blur(90px);
 }
+
+.bodyError {
+  background: radial-gradient(circle at left, #2a2761 0%, #090a0f 100%);
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 1px;
+  background: transparent;
+}
+
+.stars {
+  box-shadow: 784px 148px #fff, 1271px 853px #fff, 1547px 629px #fff,
+    1720px 1799px #fff, 659px 1653px #fff, 1099px 793px #fff, 928px 740px #fff,
+    31px 1196px #fff, 1575px 622px #fff, 147px 1315px #fff, 1120px 121px #fff,
+    128px 122px #fff, 751px 548px #fff, 674px 1341px #fff, 1277px 263px #fff,
+    1040px 133px #fff, 722px 953px #fff, 1967px 1645px #fff, 860px 1595px #fff,
+    974px 1231px #fff, 456px 2100px #fff, 1300px 890px #fff, 1899px 1700px #fff,
+    400px 1100px #fff, 780px 1450px #fff, 1200px 1050px #fff, 1780px 1230px #fff,
+    950px 1750px #fff, 1430px 500px #fff, 1550px 1600px #fff, 450px 870px #fff,
+    800px 720px #fff, 620px 1420px #fff, 1300px 300px #fff, 1120px 50px #fff,
+    500px 1000px #fff, 1600px 1500px #fff, 210px 600px #fff, 1750px 2000px #fff,
+    920px 900px #fff, 1800px 2100px #fff, 1000px 750px #fff;
+  animation: animStar 50s linear infinite;
+}
+
+
+@keyframes animStar {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-2000px);
+  }
+}
+
+.nebula {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1200px;
+  height: 1200px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1),
+    transparent 70%
+  );
+  opacity: 0.4;
+  transform: translate(-50%, -50%) scale(1);
+  animation: nebulaMove 80s ease-in-out infinite alternate;
+}
+
+@keyframes nebulaMove {
+  from {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+  to {
+    transform: translate(-40%, -40%) scale(1.2);
+    opacity: 0.6;
+  }
+}
+
+.twinkling {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  box-shadow: 1000px 500px #fff, 1500px 600px #fff, 900px 200px #fff,
+    1200px 100px #fff, 700px 800px #fff, 200px 1100px #fff;
+  animation: animTwinkling 2s infinite ease-in-out;
+}
+
+@keyframes animTwinkling {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+

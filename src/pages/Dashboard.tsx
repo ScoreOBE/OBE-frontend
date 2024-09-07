@@ -30,6 +30,7 @@ import { IModelUser } from "@/models/ModelUser";
 import { setShowSidebar } from "@/store/showSidebar";
 import Icon from "@/components/Icon";
 import AddIcon from "@/assets/icons/plus.svg?react";
+import { setShowNavbar } from "@/store/showNavbar";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
+    dispatch(setShowNavbar(true))
     const yearId = params.get("id");
     const year = parseInt(params.get("year")!);
     const semester = parseInt(params.get("semester")!);
