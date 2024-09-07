@@ -47,7 +47,7 @@ export default function TQF3() {
     { tab: "Part 3", compo: <Part3TQF3 /> },
     { tab: "Part 4", compo: <Part4TQF3 /> },
     { tab: "Part 5", compo: <Part5TQF3 /> },
-    { tab: "Part 6", compo: <Part6TQF3 /> },
+    { tab: "Part 6", compo: <Part6TQF3 data={course!} setForm={setForm} /> },
   ];
 
   useEffect(() => {
@@ -148,7 +148,6 @@ export default function TQF3() {
             allowDeselect
             size="xs"
             label="Select course to reuse"
-            // nothingFoundMessage="No result"
             className="w-full border-none "
             classNames={{
               input: `rounded-md`,
@@ -185,7 +184,9 @@ export default function TQF3() {
           <div
             className={`flex flex-col w-full h-fit ${
               tqf3Part === "Part 4" ? "pb-1" : "border-b-[2px] pb-4 mb-1"
-            } `}
+            } 
+            ${tqf3Part === "Part 6" && "!mb-4"}
+            `}
           >
             <div className="flex gap-2">
               <Tabs.List className="gap-7 w-full">
@@ -255,8 +256,8 @@ export default function TQF3() {
               overflowY: "auto",
             }}
             className={`h-full w-full  flex ${
-              tqf3Part !== "Part 4" && "pt-3 px-3 "
-            }   rounded-md text-[14px]`}
+              tqf3Part !== "Part 4" && "pt-3 px-3"
+            }  ${tqf3Part === "Part 6" && "!pt-0"} rounded-md text-[14px]`}
           >
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.tab} className="w-full">

@@ -139,7 +139,6 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
                           <Textarea
                             className="mt-2 pl-8"
                             placeholder="(Required)"
-                            disabled={!checkedItem.includes("อื่นๆ (Other)")}
                             classNames={{
                               input: "text-[13px] text-[#333333] h-[70px]",
                             }}
