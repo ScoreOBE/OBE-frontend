@@ -175,7 +175,7 @@ export default function ModalAddPLOCollection({
   };
 
   useEffect(() => {
-    if (opened) {
+    if (opened && !form.getValues().name?.length) {
       fetchDep();
       if (!isEmpty(collection)) {
         setPloNo(collection.data?.length!);
@@ -206,7 +206,7 @@ export default function ModalAddPLOCollection({
         }
       }
     }
-  }, [opened, academicYear]);
+  }, [opened]);
 
   useEffect(() => {
     if (state) {
