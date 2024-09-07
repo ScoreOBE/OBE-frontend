@@ -7,9 +7,11 @@ import userReducer from "./user";
 import academicYearReducer from "./academicYear";
 import courseReducer from "./course";
 import courseManagementReducer from "./courseManagement";
+import showNavbarReducer from "./showNavbar";
 
 const store = configureStore({
   reducer: {
+    showNavbar: showNavbarReducer,
     showSidebar: showSidebarReducer,
     loading: loadingReducer,
     errorResponse: errorResponseReducer,
