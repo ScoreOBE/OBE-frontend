@@ -23,7 +23,6 @@ export default function DashboardSidebar() {
     return { label: `${e.semester}/${e.year}`, value: e.id };
   });
   const [openFilterTerm, setOpenFilterTerm] = useState(false);
-  const [openedDropdown, setOpenedDropdown] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState<any>(
     termOption.find((term) => term.value == params.get("id"))
   );
@@ -41,6 +40,12 @@ export default function DashboardSidebar() {
       setSelectedTerm(termOption.find((e) => e.value == params.get("id")));
     }
   }, [termOption, params]);
+
+  useEffect(() => {
+    if (!openFilterTerm) {
+      setSelectedTerm(termOption.find((e) => e.value == params.get("id")));
+    }
+  }, [openFilterTerm]);
 
   const fetchCourse = async (id: string) => {
     dispatch(setLoading(true));
@@ -102,16 +107,6 @@ export default function DashboardSidebar() {
             input: "text-primary font-medium",
             option: "hover:bg-[#DDDDF6] text-primary font-medium",
           }}
-          rightSectionPointerEvents="none"
-          rightSection={
-            <IconChevronDown
-              className={`${
-                openedDropdown ? "rotate-180" : ""
-              } stroke-primary stroke-2`}
-            />
-          }
-          onDropdownOpen={() => setOpenedDropdown(true)}
-          onDropdownClose={() => setOpenedDropdown(false)}
         />
         <Button className="w-full" onClick={() => confirmFilterTerm()}>
           OK

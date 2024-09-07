@@ -228,7 +228,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
           the current semester. Data from previous semesters will not be affected. 
           "
               icon={<IconExclamationCircle />}
-              classNames={{ icon: 'size-6' }}
+              classNames={{ icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
@@ -268,7 +268,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
           the current semester. Data from previous semesters will not be affected. 
           "
               icon={<IconExclamationCircle />}
-              classNames={{ icon: 'size-6' }}
+              classNames={{ icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
@@ -367,7 +367,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                     });
                     onChangePage(1, parseInt(event!));
                   }}
-                ></Select>
+                />
                 <div>
                   {startEndPage.start} - {startEndPage.end} of{" "}
                   {courseManagement.total}

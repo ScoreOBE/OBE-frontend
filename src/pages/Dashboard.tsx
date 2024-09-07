@@ -5,11 +5,9 @@ import { Alert } from "@mantine/core";
 import {
   IconDots,
   IconPencilMinus,
-  IconPlus,
   IconTrash,
   IconExclamationCircle,
   IconUpload,
-  IconChevronRight,
   IconArrowRight,
 } from "@tabler/icons-react";
 import { showNotifications } from "@/helpers/functions/function";
@@ -170,11 +168,12 @@ export default function Dashboard() {
         value={editCourse}
       />
       <Modal
-        title={
-          <div className="flex flex-col gap-1">
-            <p>Upload score</p>
-          </div>
-        }
+        // title={
+        //   <div className="flex flex-col gap-1">
+        //     <p>Upload score</p>
+        //   </div>
+        // }
+        title="Upload score"
         transitionProps={{ transition: "pop" }}
         size="39vw"
         centered
@@ -191,7 +190,9 @@ export default function Dashboard() {
             label="Select course to upload"
             placeholder="Course"
             size="xs"
-          ></Select>{" "}
+            searchable
+            data={course.courses.map((c) => c.courseNo)}
+          />
           <div className="flex justify-end w-full">
             <Group className="flex w-full h-fit items-end justify-end">
               <div>
