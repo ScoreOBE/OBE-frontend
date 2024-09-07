@@ -123,8 +123,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
       if (res) {
         dispatch(setCourseManagementList(res));
       }
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const searchCourse = async (searchValue: string, reset?: boolean) => {
@@ -309,7 +309,10 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   </p>
                 </div>
 
-                <SearchInput onSearch={searchCourse} />
+                <SearchInput
+                  onSearch={searchCourse}
+                  placeholder="Course No / Course Name"
+                />
               </div>
               <Tabs
                 classNames={{

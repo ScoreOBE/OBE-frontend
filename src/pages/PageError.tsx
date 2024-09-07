@@ -20,8 +20,8 @@ export default function PageError() {
   }, []);
 
   const goDashboard = () => {
+    dispatch(setErrorResponse({}));
     if (localStorage.getItem("token")) {
-      dispatch(setErrorResponse({}));
       navigate(
         user.role == ROLE.STUDENT
           ? ROUTE_PATH.DASHBOARD_STD

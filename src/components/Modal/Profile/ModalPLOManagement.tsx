@@ -26,7 +26,6 @@ import {
 } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { isEmpty } from "lodash";
-import { setShowSidebar } from "@/store/showSidebar";
 import MapPLO from "./MapPLO";
 import MainPopup from "@/components/Popup/MainPopup";
 import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
@@ -119,7 +118,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
   const onClickDeletePLO = async () => {
     const res = await deletePLO(collection.id!);
     if (res) {
-      setPloCollection(ploCollection.filter((plo) => plo.id !== collection.id));
+      fetchPLO();
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Delete success",
