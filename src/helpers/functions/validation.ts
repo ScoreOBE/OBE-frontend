@@ -15,20 +15,14 @@ export const isValidResponse = (res: any) => {
   } else {
     const path = window.location.pathname;
     const dispatch = store.dispatch;
-    if (path.includes(ROUTE_PATH.CMU_OAUTH_CALLBACK)) {
-      localStorage.clear();
-      dispatch(setErrorResponse(res));
-      return;
-    }
     switch (res.statusCode) {
       case STATUS_CODE.NOT_FOUND:
         // dispatch(setErrorResponse(res));
         break;
-      // case STATUS_CODE.FOR_BIDDEN:
+      case STATUS_CODE.FOR_BIDDEN:
       case STATUS_CODE.UNAUTHORIZED:
         localStorage.clear();
-        // dispatch(setErrorResponse(res));
-        window.location.replace(ROUTE_PATH.LOGIN);
+        dispatch(setErrorResponse(res));
         break;
       default:
         // dispatch(setErrorResponse(res));
@@ -43,10 +37,23 @@ export const isValidResponse = (res: any) => {
   }
 };
 
-export const validateCourseNo = (value: string | null | undefined) => {
+export const validateCourseNo = (
+  value: string | null | undefined,
+  courseCode?: { [key: string]: number }
+) => {
   if (!value) return "Course No. is required";
   if (!value.replace(/^[0]+$/, "").length) return "Cannot have only 0";
   const isValid = /^\d{6}$/.test(value.toString());
+  if (courseCode && isValid) {
+    const isValidCourse = Object.values(courseCode).some(
+      (code) => value.slice(0, 3) === code.toString()
+    );
+    return isValidCourse
+      ? null
+      : `Course No. must start with one of the following: ${Object.values(
+          courseCode
+        ).join(", ")}`;
+  }
   return isValid ? null : "Require number 6 digits";
 };
 

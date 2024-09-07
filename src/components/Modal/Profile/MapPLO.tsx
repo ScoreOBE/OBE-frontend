@@ -10,6 +10,8 @@ import {
   Alert,
   Menu,
   FocusTrap,
+  TagsInput,
+  Select,
 } from "@mantine/core";
 import Icon from "@/components/Icon";
 import {
@@ -48,10 +50,15 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { IconGripVertical } from "@tabler/icons-react";
 import { COURSE_TYPE, NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
 import MainPopup from "@/components/Popup/MainPopup";
-import { validateCourseNo } from "@/helpers/functions/validation";
+import {
+  validateCourseNo,
+  validateSectionNo,
+  validateTextInput,
+} from "@/helpers/functions/validation";
 import { useForm } from "@mantine/form";
 import { showNotifications } from "@/helpers/functions/function";
 import { SearchInput } from "@/components/SearchInput";
+import { IModelCourse } from "@/models/ModelCourse";
 
 type Props = {
   ploName: string;
@@ -65,9 +72,9 @@ export default function MapPLO({ ploName = "" }: Props) {
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
   const [reorder, setReorder] = useState(false);
   const [state, handlers] = useListState(ploList.data || []);
-  const [couresNo, setCouresNo] = useState("");
   const [isMapPLO, setIsMapPLO] = useState(false);
   const [totalCourse, setTotalCourse] = useState<number>(0);
+  const [courseCode, setCourseCode] = useState({});
   const isFirstSemester =
     ploList.semester === academicYear?.semester &&
     ploList.year === academicYear?.year;
@@ -81,9 +88,18 @@ export default function MapPLO({ ploName = "" }: Props) {
 
   const form = useForm({
     mode: "controlled",
-    initialValues: { courseNo: "" },
+    initialValues: {
+      type: COURSE_TYPE.GENERAL.en,
+      sections: [{}],
+    } as Partial<IModelCourse>,
     validate: {
-      courseNo: (value) => validateCourseNo(value),
+      type: (value) => !value && "Course Type is required",
+      courseNo: (value) => validateCourseNo(value, courseCode),
+      courseName: (value) => validateTextInput(value, "Course Name"),
+      sections: {
+        topic: (value) => validateTextInput(value, "Topic"),
+        sectionNo: (value) => validateSectionNo(value),
+      },
     },
     validateInputOnBlur: true,
   });
@@ -197,6 +213,7 @@ export default function MapPLO({ ploName = "" }: Props) {
       setTotalCourse(res.totalCount);
       res.courses = filterSectionWithTopic(res.courses);
       setCourseManagement(res.courses);
+      setCourseCode(res.courseCode);
     }
     setLoading(false);
   };
@@ -396,6 +413,11 @@ export default function MapPLO({ ploName = "" }: Props) {
     );
   };
 
+  const closeModalAddCourse = () => {
+    setOpenModalAddCourse(false);
+    form.reset();
+  };
+
   return (
     <>
       {/* Add PLO */}
@@ -547,7 +569,7 @@ export default function MapPLO({ ploName = "" }: Props) {
         opened={openModalAddCourse}
         closeOnClickOutside={false}
         withCloseButton={false}
-        onClose={() => setOpenModalAddCourse(false)}
+        onClose={closeModalAddCourse}
         transitionProps={{ transition: "pop" }}
         size="35vw"
         centered
@@ -557,19 +579,76 @@ export default function MapPLO({ ploName = "" }: Props) {
         }}
       >
         <FocusTrap.InitialFocus />
-        <div className="flex flex-col gap-3">
-          <TextInput
-            label="Course No."
-            size="xs"
-            withAsterisk
-            placeholder="Ex. 26X4XX"
-            maxLength={6}
-            {...form.getInputProps("courseNo")}
-          />
-
-          <div className="flex gap-2 mt-3 justify-end">
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-3">
+            <Select
+              defaultValue={COURSE_TYPE.GENERAL.en}
+              data={Object.values(COURSE_TYPE).map((e) => e.en)}
+              allowDeselect={false}
+              {...form.getInputProps("type")}
+            />
+            <TextInput
+              classNames={{ input: "focus:border-primary" }}
+              label="Course No."
+              size="xs"
+              withAsterisk
+              placeholder={
+                form.getValues().type == COURSE_TYPE.SEL_TOPIC.en
+                  ? "Ex. 26X4XX"
+                  : "Ex. 261XXX"
+              }
+              maxLength={6}
+              {...form.getInputProps("courseNo")}
+            />
+            <TextInput
+              label="Course Name"
+              withAsterisk
+              size="xs"
+              classNames={{ input: "focus:border-primary " }}
+              placeholder={
+                form.getValues().type == COURSE_TYPE.SEL_TOPIC.en
+                  ? "Ex. Select Topic in Comp Engr"
+                  : "Ex. English 2"
+              }
+              {...form.getInputProps("courseName")}
+            />
+            {form.getValues().type == COURSE_TYPE.SEL_TOPIC.en && (
+              <>
+                <TextInput
+                  label="Course Topic"
+                  withAsterisk
+                  size="xs"
+                  classNames={{ input: "focus:border-primary" }}
+                  placeholder="Ex. Full Stack Development"
+                  {...form.getInputProps("sections.0.topic")}
+                />
+                <TagsInput
+                  label="Section"
+                  withAsterisk
+                  classNames={{
+                    input:
+                      " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
+                    pill: "bg-secondary text-white font-bold",
+                    label: "font-semibold text-tertiary text-b2",
+                    error: "text-[10px] !border-none",
+                  }}
+                  placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
+                  splitChars={[",", " ", "|"]}
+                  {...form.getInputProps(`section.sectionNo`)}
+                  error={
+                    // !firstInput &&
+                    form.validateField(`sections.0.sectionNo`).error
+                  }
+                  // value={sectionNoList}
+                  // onChange={setSectionList}
+                />
+                <p>{form.validateField("sections.sectionNo").error}</p>{" "}
+              </>
+            )}
+          </div>
+          <div className="flex gap-2 justify-end">
             <Button
-              onClick={() => setOpenModalAddCourse(false)}
+              onClick={closeModalAddCourse}
               variant="subtle"
               color="#575757"
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
@@ -830,7 +909,10 @@ export default function MapPLO({ ploName = "" }: Props) {
               </div>
             </Tabs.Panel>
 
-            <Tabs.Panel className="overflow-hidden mt-1" value="plomapping">
+            <Tabs.Panel
+              className="overflow-hidden mt-1 h-full"
+              value="plomapping"
+            >
               <div className="overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full p">
                 <div className="flex items-center  justify-between pt-4 pb-5">
                   <div className="flex flex-col items-start ">
@@ -845,7 +927,10 @@ export default function MapPLO({ ploName = "" }: Props) {
                   <div className="flex gap-3">
                     {!isMapPLO ? (
                       <div className="flex gap-5">
-                        <SearchInput onSearch={searchCourse} />
+                        <SearchInput
+                          onSearch={searchCourse}
+                          placeholder="Course No / Course Name"
+                        />
 
                         <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
                           <Menu
@@ -919,43 +1004,53 @@ export default function MapPLO({ ploName = "" }: Props) {
                 </div>
 
                 {/* Table */}
-                <InfiniteScroll
-                  dataLength={courseManagement.length}
-                  next={onShowMore}
-                  height={"100%"}
-                  hasMore={payload?.hasMore}
-                  className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
-                  style={{ height: "fit-content" }}
-                  loader={<Loading />}
-                >
-                  <Table stickyHeader striped>
-                    <Table.Thead className="z-[52]">
-                      <Table.Tr>
-                        <Table.Th className="w-[30%] sticky left-0">
-                          Course No.
-                        </Table.Th>
-                        {ploList.data?.map((plo, index) => (
-                          <Table.Th key={index}>PLO-{plo.no}</Table.Th>
-                        ))}
-                      </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>
-                      {/* {!loading && !courseManagement.length ? (
+                {loading ? (
+                  <div className="flex w-full h-full justify-center items-center">
+                    <Loading />
+                  </div>
+                ) : !courseManagement.length ? (
+                  <div className="flex w-full h-full justify-center items-center">
+                    No course found
+                  </div>
+                ) : (
+                  <InfiniteScroll
+                    dataLength={courseManagement.length}
+                    next={onShowMore}
+                    height={"100%"}
+                    hasMore={payload?.hasMore}
+                    className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
+                    style={{ height: "fit-content" }}
+                    loader={<Loading />}
+                  >
+                    <Table stickyHeader striped>
+                      <Table.Thead className="z-[52]">
+                        <Table.Tr>
+                          <Table.Th className="w-[30%] sticky left-0">
+                            Course No.
+                          </Table.Th>
+                          {ploList.data?.map((plo, index) => (
+                            <Table.Th key={index}>PLO-{plo.no}</Table.Th>
+                          ))}
+                        </Table.Tr>
+                      </Table.Thead>
+                      <Table.Tbody>
+                        {/* {!loading && !courseManagement.length ? (
                         <div className="flex flex-col w-full items-center justify-center">
                           No Course Found
                         </div>
                       ) : ( */}
-                      {courseManagement.map((course, index) =>
-                        course.type == COURSE_TYPE.SEL_TOPIC.en
-                          ? course.sections?.map((sec) =>
-                              courseMapPloTable(sec.sectionNo!, course, sec)
-                            )
-                          : courseMapPloTable(index, course)
-                      )}
-                      {/* )} */}
-                    </Table.Tbody>
-                  </Table>
-                </InfiniteScroll>
+                        {courseManagement.map((course, index) =>
+                          course.type == COURSE_TYPE.SEL_TOPIC.en
+                            ? course.sections?.map((sec) =>
+                                courseMapPloTable(sec.sectionNo!, course, sec)
+                              )
+                            : courseMapPloTable(index, course)
+                        )}
+                        {/* )} */}
+                      </Table.Tbody>
+                    </Table>
+                  </InfiniteScroll>
+                )}
               </div>
             </Tabs.Panel>
           </Tabs>

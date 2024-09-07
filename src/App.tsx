@@ -10,7 +10,8 @@ import { isEmpty } from "lodash";
 import { getAcademicYear } from "./services/academicYear/academicYear.service";
 import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
-import { setLoading } from "@/store/loading";
+import { setShowSidebar } from "./store/showSidebar";
+import PageError from "./pages/PageError";
 
 function App() {
   const showSidebar = useAppSelector((state) => state.showSidebar);
@@ -54,12 +55,15 @@ function App() {
       const payload = new AcademicYearRequestDTO();
       const rsAcademicYear = await getAcademicYear(payload);
       if (rsAcademicYear) {
+        dispatch(setShowSidebar(true));
         dispatch(setAcademicYear(rsAcademicYear));
       }
     }
   };
 
-  return (
+  return error.statusCode ? (
+    <PageError />
+  ) : (
     <div
       className="flex h-screen w-screen"
       // className={`flex h-screen w-screen  ${
