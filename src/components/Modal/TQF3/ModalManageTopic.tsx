@@ -22,7 +22,7 @@ type Props = {
   opened: boolean;
   onClose: () => void;
   type: actionType;
-  action: (value?: any) => void;
+  action: (value?: any, option?: any) => void;
 };
 export default function ModalManageTopic({
   opened,
@@ -31,18 +31,30 @@ export default function ModalManageTopic({
   action,
 }: Props) {
   let options = [
-    { no: 1, label: "กลยุทธ์การประเมินประสิทธิผลของรายวิชาโดยนักศึกษา" },
-    { no: 2, label: "กลยุทธ์การประเมินการสอน" },
-    { no: 3, label: "อธิบายวิธีการปรับปรุงการสอน" },
+    {
+      no: 1,
+      th: "กลยุทธ์การประเมินประสิทธิผลของรายวิชาโดยนักศึกษา",
+      en: "Test You can provide a way better UX ",
+    },
+    {
+      no: 2,
+      th: "กลยุทธ์การประเมินการสอน",
+      en: "Test You can provide a way better UX ",
+    },
+    {
+      no: 3,
+      th: "อธิบายวิธีการปรับปรุงการสอน",
+      en: "Test You can provide a way better UX ",
+    },
     {
       no: 4,
-      label:
-        "อธิบายกระบวนการที่ใช้ในการทวนสอบมาตรฐานผมสัมฤทธิิ์ของนักศึกษาตามาตรฐานผลการเรียนรู้",
+      th: "อธิบายกระบวนการที่ใช้ในการทวนสอบมาตรฐานผมสัมฤทธิิ์ของนักศึกษาตามาตรฐานผลการเรียนรู้",
+      en: "Test You can provide a way better UX ",
     },
     {
       no: 5,
-      label:
-        "อธิบายกระบวนการในการนำข้อมูลที่ได้จากการประเมินข้อ 1 และ 2 มาวางแผนเพื่อปรับปรุงคุณภาพ",
+      th: "อธิบายกระบวนการในการนำข้อมูลที่ได้จากการประเมินข้อ 1 และ 2 มาวางแผนเพื่อปรับปรุงคุณภาพ",
+      en: "Test You can provide a way better UX ",
     },
   ];
 
@@ -83,10 +95,14 @@ export default function ModalManageTopic({
             size="sm"
             label="Select Topic"
             placeholder="Topic"
-            data={options.map((item) => `${item.no}. ${item.label}`)}
+            data={options.map((item) => ({
+              value: item.th,
+              label: `${" "}${item.th}\n${" "}${item.en}`,
+            }))}
             classNames={{
-              option: "text-[13px] py-1.5 px-2",
-              options: "",
+              option: "text-[13px] py-2 px-2 ",
+              options: "whitespace-break-spaces leading-5",
+              input: "whitespace-break-spaces flex flex-col flex-wrap",
             }}
             {...form.getInputProps("topic")}
           />
@@ -126,10 +142,13 @@ export default function ModalManageTopic({
           Cancel
         </Button>
         <Button
-          onClick={() => action(form.getValues())}
+          onClick={() => {
+            action(form.getValues(), options);
+            onClose();
+          }}
           className="rounded-[8px] text-[12px] h-8 w-fit "
         >
-          Done
+          Add
         </Button>
       </div>
     </Modal>

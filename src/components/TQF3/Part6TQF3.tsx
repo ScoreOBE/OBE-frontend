@@ -12,7 +12,12 @@ import {
   Select,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconArrowRight, IconInfoCircle } from "@tabler/icons-react";
+import {
+  IconArrowRight,
+  IconEdit,
+  IconInfoCircle,
+  IconTrash,
+} from "@tabler/icons-react";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
@@ -131,6 +136,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
       ],
     },
   ];
+  const [options, setOptions] = useState([]);
 
   const form = useForm({
     mode: "controlled",
@@ -154,6 +160,13 @@ export default function Part6TQF3({ data, setForm }: Props) {
     console.log(form.getValues());
   }, [form]);
 
+  const addTopic = (value: any, option: any) => {
+    if (!options.length) {
+      setOptions(option);
+    }
+    form.insertListItem("data", value);
+  };
+
   const editTopic = () => {};
 
   return (
@@ -162,7 +175,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
         opened={openModalSelectTopic}
         onClose={() => setOpenModalSelectTopic(false)}
         type="add"
-        action={(value) => form.insertListItem("data", value)}
+        action={addTopic}
       />
       <ModalManageTopic
         opened={openModalEditSelectTopic}
@@ -191,61 +204,112 @@ export default function Part6TQF3({ data, setForm }: Props) {
         </div>
         <div className="pb-6">
           {/* Table */}
-          {topics.map((topic, index) => (
-            <div
-              key={topic.no}
-              className="  w-full h-full max-h-full  flex flex-col "
-            >
-              <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader rounded-md">
-                <p className="flex flex-col font-medium text-[28px]">
-                  {topic.no}.
-                </p>
-                <p className="flex flex-col gap-1  text-[14px]">
-                  <span className="font-semibold">{topic.th}</span>
-                  <span className="font-bold ">{topic.en}</span>
-                </p>
-              </div>
-              <Checkbox.Group
-                {...form.getInputProps(`data.${index}.detail`)}
-                className="items-center"
+          {form.getValues().data.map((topic, index) => {
+            const option: any =
+              options.find((e: any) => e.th === topic.topic) || {};
+            return topics[index] ? (
+              <div
+                key={index}
+                className="  w-full h-full max-h-full  flex flex-col "
               >
-                <Group className="flex items-center flex-col gap-0">
-                  {topic.list?.map((item, checkIndex) => (
-                    <div
-                      key={checkIndex}
-                      className="border-b-[1px] last:border-none py-4 px-6 w-full"
-                    >
-                      <Checkbox
-                        classNames={{
-                          label:
-                            "font-medium text-[13px] leading-6 text-[#333333]",
-                          body: "flex flex-row gap-2 items-center ",
-                        }}
-                        className=" whitespace-break-spaces items-center"
-                        size="sm"
-                        label={item.label}
-                        value={item.label}
-                      ></Checkbox>
-                      {item.label == "อื่นๆ (Other)" &&
-                        form
-                          .getValues()
-                          .data[index] // ?.find((e) => e.topic == topic.th)
-                          ?.detail.includes(item.label) && (
-                          <Textarea
-                            className="mt-2 pl-10"
-                            placeholder="(Required)"
-                            classNames={{
-                              input: "text-[13px] text-[#333333] h-[100px]",
-                            }}
-                            {...form.getInputProps(`data.${index}.other`)}
-                          />
-                        )}
+                <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader rounded-md">
+                  <p className="flex flex-col font-medium text-[28px]">
+                    {index + 1}.
+                  </p>
+                  <p className="flex flex-col gap-1  text-[14px]">
+                    <span className="font-semibold">{topics[index].th}</span>
+                    <span className="font-bold ">{topics[index].en}</span>
+                  </p>
+                </div>
+                <Checkbox.Group
+                  {...form.getInputProps(`data.${index}.detail`)}
+                  className="items-center"
+                >
+                  <Group className="flex items-center flex-col gap-0">
+                    {topics[index].list?.map((item, checkIndex) => (
+                      <div
+                        key={checkIndex}
+                        className="border-b-[1px] last:border-none py-4 px-6 w-full"
+                      >
+                        <Checkbox
+                          classNames={{
+                            label:
+                              "font-medium text-[13px] leading-6 text-[#333333]",
+                            body: "flex flex-row gap-2 items-center ",
+                          }}
+                          className=" whitespace-break-spaces items-center"
+                          size="sm"
+                          label={item.label}
+                          value={item.label}
+                        ></Checkbox>
+                        {item.label == "อื่นๆ (Other)" &&
+                          form
+                            .getValues()
+                            .data[index] // ?.find((e) => e.topic == topic.th)
+                            ?.detail.includes(item.label) && (
+                            <Textarea
+                              className="mt-2 pl-10"
+                              placeholder="(Required)"
+                              classNames={{
+                                input: "text-[13px] text-[#333333] h-[100px]",
+                              }}
+                              {...form.getInputProps(`data.${index}.other`)}
+                            />
+                          )}
+                      </div>
+                    ))}
+                  </Group>
+                </Checkbox.Group>
+              </div>
+            ) : (
+              <div
+                key={index}
+                className="  w-full h-full max-h-full  flex flex-col "
+              >
+                <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader rounded-md">
+                  <p className="flex flex-col font-medium text-[28px]">
+                    {index + 1}.
+                  </p>
+                  <p className="flex flex-col gap-1  text-[14px]">
+                    <span className="font-semibold">{option.th}</span>
+                    <span className="font-bold ">{option.en}</span>
+                  </p>
+                </div>
+                <div className="text-default border-b-[1px] last:border-none py-4 px-6 w-full">
+                  <div className="flex justify-between items-center">
+                    {topic.detail}
+                    <div className="flex justify-start gap-4 items-center">
+                      <div className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10">
+                        <IconEdit className="size-4" stroke={1.5} />
+                      </div>
+                      <div className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10">
+                        <IconTrash className="size-4" stroke={1.5} />
+                      </div>
                     </div>
-                  ))}
-                </Group>
-              </Checkbox.Group>
-            </div>
-          ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          {/* Additional Topic */}
+          {/* {form.getValues().data.length > 5 &&
+            options.map((topic: any, index) => (
+              <div
+                key={index}
+                className="w-full h-full max-h-full flex flex-col"
+              >
+                <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader rounded-md">
+                  <p className="flex flex-col font-medium text-[28px]">
+                    {topic.no}.
+                  </p>
+                  <p className="flex flex-col gap-1 text-[14px]">
+                    <span className="font-semibold">{topic.th}</span>
+                    <span className="font-bold">{topic.en}</span>
+                  </p>
+                </div>
+                <div className="border-b-[1px] last:border-none py-4 px-6 w-full"></div>
+              </div>
+            ))} */}
         </div>
       </div>
     </>
