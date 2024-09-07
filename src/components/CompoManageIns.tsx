@@ -51,7 +51,6 @@ export default function CompoMangeIns({
   const user = useAppSelector((state) => state.user);
   const [openFirst, setOpenFirst] = useState(false);
   const [swapMethodAddUser, setSwapMethodAddUser] = useState(false);
-  const [openedDropdown, setOpenedDropdown] = useState(false);
   const [instructorOption, setInstructorOption] = useState<any[]>([]);
   const [inputUser, setInputUser] = useState<any>({ value: null });
   const [isFocus, setIsFocus] = useState(false);
@@ -70,7 +69,7 @@ export default function CompoMangeIns({
 
   useEffect(() => {
     if (swapMethodAddUser) {
-      if (inputUser.value) setInvalidEmail(!validateEmail(inputUser.value));
+      if (inputUser?.value) setInvalidEmail(!validateEmail(inputUser?.value));
       else setInvalidEmail(false);
     }
   }, [inputUser]);
@@ -163,7 +162,7 @@ export default function CompoMangeIns({
   };
 
   const addUser = async () => {
-    if (inputUser.value) {
+    if (inputUser?.value) {
       // Add Admin
       if (type == "admin") {
         const payload: Partial<IModelUser> = { role: ROLE.ADMIN };
@@ -210,7 +209,7 @@ export default function CompoMangeIns({
   return (
     <div
       className={`flex flex-col gap-3 max-h-[320px] rounded-md h-fit w-full mt-2 p-4
-        ${["add","admin"].includes(type) && "mb-5"}`}
+        ${["add", "admin"].includes(type) && "mb-5"}`}
       style={{
         boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
       }}
@@ -245,7 +244,7 @@ export default function CompoMangeIns({
             className={`w-full border-none`}
             classNames={{ input: `${type != "mainIns" && "!rounded-r-none"}` }}
             placeholder="example@cmu.ac.th"
-            value={type == "mainIns" ? value.value : inputUser.value!}
+            value={type == "mainIns" ? value.value : inputUser?.value!}
             onChange={(event) => {
               if (type == "mainIns" && action)
                 action({
@@ -281,6 +280,7 @@ export default function CompoMangeIns({
             data={instructorOption}
             allowDeselect
             searchable
+            clearable
             size="xs"
             nothingFoundMessage="No result"
             className="w-full border-none "
@@ -288,40 +288,19 @@ export default function CompoMangeIns({
               input: `rounded-md ${type != "mainIns" && "rounded-e-none"}`,
               option: `py-1  `,
             }}
-            rightSection={
-              <template className="flex items-center gap-2 absolute right-2">
-                {inputUser.value && (
-                  <IconX
-                    size={"1.25rem"}
-                    stroke={2}
-                    className={`cursor-pointer`}
-                    onClick={() => setInputUser({ value: null })}
-                  />
-                )}
-                <IconChevronDown
-                  stroke={2}
-                  className={`${
-                    openedDropdown ? "rotate-180" : ""
-                  } stroke-primary cursor-pointer`}
-                  onClick={() => setOpenedDropdown(!openedDropdown)}
-                />
-              </template>
-            }
-            dropdownOpened={openedDropdown}
-            onDropdownClose={() => setOpenedDropdown(false)}
-            value={type == "mainIns" ? value?.value : inputUser.value!}
+            value={type == "mainIns" ? value?.value : inputUser?.value!}
             onChange={(value, option) => {
               if (type == "mainIns" && action) action(option);
-              else setInputUser(option);
+              else if (value) setInputUser(option);
+              else setInputUser({ value: null });
             }}
-            error={type == "mainIns" && error}
-            onClick={() => setOpenedDropdown(!openedDropdown)}
+            onClear={() => setInputUser({ value: null })}
           />
         )}
         {type != "mainIns" && (
           <Button
             className="rounded-s-none min-w-fit text-b3 h-[30px] border-l-0 disabled:border-[#cecece]"
-            disabled={!inputUser.value || (swapMethodAddUser && invalidEmail)}
+            disabled={!inputUser?.value || (swapMethodAddUser && invalidEmail)}
             onClick={() =>
               type == "changeMain" && action ? action(inputUser) : addUser()
             }

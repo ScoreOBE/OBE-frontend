@@ -46,7 +46,7 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
         } `}
       >
         {" "}
-        <Select size="xs" label="Select Topic" placeholder="Topic"></Select>
+        <Select size="xs" label="Select Topic" placeholder="Topic" />
         {/* Input Field */}
         <div
           className={`flex h-fit mb-5 flex-col ${
