@@ -17,11 +17,17 @@ import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import DrawerPLOdes from "@/components/DrawerPLO";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalManageTopic from "../Modal/TQF3/ModalManageTopic";
+import { IModelCourse } from "@/models/ModelCourse";
+import { log } from "console";
+import { IModelTQF3Part6 } from "@/models/ModelTQF3";
 
-type Props = {};
-export default function Part6TQF3() {
+type Props = {
+  data: Partial<IModelCourse>;
+  setForm: React.Dispatch<React.SetStateAction<any>>;
+};
+export default function Part6TQF3({ data, setForm }: Props) {
   let topics = [
     {
       no: 1,
@@ -126,31 +132,46 @@ export default function Part6TQF3() {
     },
   ];
 
-  const [checkedItem, setCheckedItem] = useState([
-    { no: 1, item: [] as string[] },
-    { no: 2, item: [] as string[] },
-    { no: 3, item: [] as string[] },
-    { no: 4, item: [] as string[] },
-    { no: 5, item: [] as string[] },
-    { no: 6, item: [] as string[] },
-  ]);
+  const form = useForm({
+    mode: "controlled",
+    initialValues: {
+      data: [
+        ...topics.map(({ th }) => ({
+          topic: th,
+          detail: [],
+          other: "",
+        })),
+      ],
+    } as { data: IModelTQF3Part6[] },
+    validate: {},
+  });
+
   const [openModalSelectTopic, setOpenModalSelectTopic] = useState(false);
-  const [openModalEditSelectTopic, setOpenModalEditSelectTopic] = useState(false);
+  const [openModalEditSelectTopic, setOpenModalEditSelectTopic] =
+    useState(false);
+
+  useEffect(() => {
+    console.log(form.getValues());
+  }, [form]);
+
+  const editTopic = () => {};
 
   return (
     <>
-          <ModalManageTopic
+      <ModalManageTopic
         opened={openModalSelectTopic}
         onClose={() => setOpenModalSelectTopic(false)}
         type="add"
+        action={(value) => form.insertListItem("data", value)}
       />
       <ModalManageTopic
         opened={openModalEditSelectTopic}
         onClose={() => setOpenModalEditSelectTopic(false)}
         type="edit"
+        action={editTopic}
       />
 
-      <div className="flex flex-col w-full max-h-full gap-4 ">
+      <div className="flex flex-col w-full max-h-full gap-4">
         {/* Topic */}
 
         <div className="flex text-secondary items-center w-full justify-between">
@@ -170,12 +191,12 @@ export default function Part6TQF3() {
         </div>
         <div className="pb-6">
           {/* Table */}
-          {topics.map((topic) => (
+          {topics.map((topic, index) => (
             <div
               key={topic.no}
-              className="  w-full h-full max-h-full  flex flex-col   relative"
+              className="  w-full h-full max-h-full  flex flex-col "
             >
-              <div className="w-full text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-[#eaecf6]">
+              <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader rounded-md">
                 <p className="flex flex-col font-medium text-[28px]">
                   {topic.no}.
                 </p>
@@ -185,25 +206,19 @@ export default function Part6TQF3() {
                 </p>
               </div>
               <Checkbox.Group
-                value={checkedItem.find((item) => item.no == topic.no)?.item}
-                onChange={(event) =>
-                  setCheckedItem([
-                    ...checkedItem.filter((item) => item.no !== topic.no),
-                    { no: topic.no, item: event },
-                  ])
-                }
+                {...form.getInputProps(`data.${index}.detail`)}
                 className="items-center"
               >
                 <Group className="flex items-center flex-col gap-0">
-                  {topic.list?.map((item, index) => (
+                  {topic.list?.map((item, checkIndex) => (
                     <div
-                      key={index}
-                      className="border-b-[1px] py-4 px-6 w-full"
+                      key={checkIndex}
+                      className="border-b-[1px] last:border-none py-4 px-6 w-full"
                     >
                       <Checkbox
                         classNames={{
                           label:
-                            "font-medium text-[14px] leading-6 text-[#333333]",
+                            "font-medium text-[13px] leading-6 text-[#333333]",
                           body: "flex flex-row gap-2 items-center ",
                         }}
                         className=" whitespace-break-spaces items-center"
@@ -212,13 +227,17 @@ export default function Part6TQF3() {
                         value={item.label}
                       ></Checkbox>
                       {item.label == "อื่นๆ (Other)" &&
-                        checkedItem
-                          .find((item) => item.no == topic.no)
-                          ?.item.includes(item.label) && (
+                        form
+                          .getValues()
+                          .data[index] // ?.find((e) => e.topic == topic.th)
+                          ?.detail.includes(item.label) && (
                           <Textarea
-                            className="mt-3"
-                            placeholder="Description"
-                            classNames={{ input: "h-[100px]" }}
+                            className="mt-2 pl-10"
+                            placeholder="(Required)"
+                            classNames={{
+                              input: "text-[13px] text-[#333333] h-[100px]",
+                            }}
+                            {...form.getInputProps(`data.${index}.other`)}
                           />
                         )}
                     </div>
