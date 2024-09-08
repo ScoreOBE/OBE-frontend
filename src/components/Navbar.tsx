@@ -59,44 +59,34 @@ export default function Navbar() {
   };
 
   return (
-    <>
-      {![
-        ROUTE_PATH.CMU_OAUTH_CALLBACK,
-        ROUTE_PATH.SELECTED_DEPARTMENT,
-      ].includes(location) && (
-        <div
-          className={`min-h-14 border-b border-[#e0e0e0] px-6 inline-flex flex-wrap justify-between items-center z-50 ${
-            [ROUTE_PATH.LOGIN].includes(location)
-              ? "bg-white border-none"
-              : "bg-[#ffffff]"
-          } text-secondary`}
-          style={
-            ![ROUTE_PATH.LOGIN].includes(location)
-              ? {
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  overflowY: "auto",
-                }
-              : {}
-          }
-        >
-          <p className="font-semibold text-h2 md:w-fit max-w-[30%]">
-            {topicPath()}
-          </p>
-          {[ROUTE_PATH.DASHBOARD_INS].includes(location) && (
-            <SearchInput
-              onSearch={searchCourse}
-              placeholder="Course No / Course Name"
-            />
-          )}
-          {[ROUTE_PATH.LOGIN].includes(location) && (
-            <div className="bg-white items-center  mt-5 justify-between  flex flex-1">
-              <img src={cmulogo} alt="CMULogo" className=" h-[28px] ml-10" />
-              <img src={cpeLogoRed} alt="cpeLogo" className=" h-[80px] mr-10" />
-            </div>
-          )}
-          {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}
+    <div
+      className={`min-h-14 bg-[#ffffff] border-b border-[#e0e0e0] text-secondary px-6 inline-flex flex-wrap justify-between items-center z-50 ${
+        [ROUTE_PATH.LOGIN].includes(location)
+          ? "border-none overflow-y-auto"
+          : ""
+      }`}
+      style={
+        ![ROUTE_PATH.LOGIN].includes(location)
+          ? { boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }
+          : {}
+      }
+    >
+      <p className="font-semibold text-h2 md:w-fit max-w-[30%]">
+        {topicPath()}
+      </p>
+      {[ROUTE_PATH.DASHBOARD_INS].includes(location) && (
+        <SearchInput
+          onSearch={searchCourse}
+          placeholder="Course No / Course Name"
+        />
+      )}
+      {[ROUTE_PATH.LOGIN].includes(location) && (
+        <div className="bg-white items-center  mt-5 justify-between  flex flex-1">
+          <img src={cmulogo} alt="CMULogo" className=" h-[28px] ml-10" />
+          <img src={cpeLogoRed} alt="cpeLogo" className=" h-[80px] mr-10" />
         </div>
       )}
-    </>
+      {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}
+    </div>
   );
 }

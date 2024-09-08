@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import Icon from "@/components/Icon";
-import { setShowSidebar } from "@/store/showSidebar";
 import { IModelSection } from "@/models/ModelSection";
 import { Button, Menu, Table } from "@mantine/core";
 import eyePublish from "@/assets/icons/eyePublish.svg?react";
@@ -45,10 +44,6 @@ export default function Assignment() {
     { title: `Assignment Section ${getSectionNo(sectionNo)}` },
   ]);
 
-  useEffect(() => {
-    dispatch(setShowSidebar(true));
-  }, []);
-
   return (
     <>
       <div className="bg-white flex flex-col h-full w-full p-6 pb-3 pt-5 gap-3 overflow-hidden">
@@ -83,13 +78,13 @@ export default function Assignment() {
             >
               <Menu.Item className="text-[#3E3E3E] text-[14px] h-8 w-full ">
                 <div className="flex items-center gap-2">
-                <Icon IconComponent={publishEach} className="h-4 w-4" />
+                  <Icon IconComponent={publishEach} className="h-4 w-4" />
                   <span>Each Section</span>
                 </div>
               </Menu.Item>
               <Menu.Item className="text-[#3E3E3E] text-[14px] h-8 w-full ">
                 <div className="flex items-center gap-2">
-                <Icon IconComponent={publishAll} className="h-4 w-4" />
+                  <Icon IconComponent={publishAll} className="h-4 w-4" />
                   <span>All Sections</span>
                 </div>
               </Menu.Item>

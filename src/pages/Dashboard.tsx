@@ -51,7 +51,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
-    dispatch(setShowNavbar(true))
+    dispatch(setShowNavbar(true));
     const yearId = params.get("id");
     const year = parseInt(params.get("year")!);
     const semester = parseInt(params.get("semester")!);
@@ -193,7 +193,19 @@ export default function Dashboard() {
             placeholder="Course"
             size="xs"
             searchable
-            data={course.courses.map((c) => c.courseNo)}
+            data={course.courses.map((c) => {
+              return {
+                value: c.courseNo,
+                courseName: c.courseName,
+                label: `${c.courseNo} ${c.courseName}`,
+              };
+            })}
+            renderOption={(item: any) => (
+              <div className="flex w-full gap-2">
+                <p className="w-[9%] min-w-fit">{item.option.value}</p>
+                <p>{item.option.courseName}</p>
+              </div>
+            )}
           />
           <div className="flex justify-end w-full">
             <Group className="flex w-full h-fit items-end justify-end">

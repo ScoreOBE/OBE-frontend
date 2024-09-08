@@ -1,4 +1,4 @@
-import store, { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import {
   Alert,
@@ -11,7 +11,6 @@ import {
 } from "@mantine/core";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
-import { setShowSidebar } from "@/store/showSidebar";
 import { useLocation, useParams } from "react-router-dom";
 import CheckIcon from "@/assets/icons/Check.svg?react";
 import Part1TQF3 from "@/components/TQF3/Part1TQF3";
@@ -51,7 +50,6 @@ export default function TQF3() {
   ];
 
   useEffect(() => {
-    dispatch(setShowSidebar(true));
     const fetchOneCourse = async () => {
       const res = await getOneCourse({
         academicYear: academicYear.id,
