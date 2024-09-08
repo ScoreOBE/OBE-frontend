@@ -1,6 +1,7 @@
 import { ROLE } from "@/helpers/constants/enum";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
+import { setLoading } from "@/store/loading";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { Button } from "@mantine/core";
@@ -12,7 +13,9 @@ export default function NotFoundPage() {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  
   useEffect(() => {
+    dispatch(setLoading(false));
     dispatch(setShowSidebar(false));
     dispatch(setShowNavbar(false));
   }, []);
@@ -36,14 +39,10 @@ export default function NotFoundPage() {
       <div className="text-start text-white w-full items-center ">
         <div className="flex  items-center justify-between">
           <div className="flex flex-col gap-4">
-          <p className="text-3xl   font-semibold">
-            <span className="text-white font-normal ">
-              Ooops!{" "}
-            </span>
-          </p>
-            <p className="text-4xl mt-6 font-semibold">
-              You've lost in space
+            <p className="text-3xl   font-semibold">
+              <span className="text-white font-normal ">Ooops! </span>
             </p>
+            <p className="text-4xl mt-6 font-semibold">You've lost in space</p>
             <p className="text-lg  font-medium text-gray-400">
               The page you're looking for is now beyond the known universe.
             </p>{" "}

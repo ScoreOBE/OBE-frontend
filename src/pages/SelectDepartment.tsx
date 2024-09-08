@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { isEqual } from "lodash";
 import { setShowSidebar } from "@/store/showSidebar";
+import { setShowNavbar } from "@/store/showNavbar";
 
 export default function SelectDepartment() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function SelectDepartment() {
 
   useEffect(() => {
     dispatch(setShowSidebar(false));
+    dispatch(setShowNavbar(false));
     const fetchDep = async () => {
       const res = await getDepartment(user.facultyCode);
       if (res) {
@@ -79,7 +81,8 @@ export default function SelectDepartment() {
             transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
           >
             <div className=" text-[36px] translate-y-[-16px] font-semibold">
-              Welcome to <span className="text-[#d4d5dd]"> Score OBE </span> <span className=" text-[#FFCD1B]"> +</span>
+              Welcome to <span className="text-[#d4d5dd]"> Score OBE </span>{" "}
+              <span className=" text-[#FFCD1B]"> +</span>
             </div>
             <div className=" font-medium -mt-1 translate-y-[-4px] text-[22px]">
               {getUserName(user, 1)}

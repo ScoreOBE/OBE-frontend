@@ -32,8 +32,7 @@ export default function Sidebar() {
     } else return;
   };
   useEffect(() => {
-    if (!localStorage.getItem("token")) navigate(ROUTE_PATH.LOGIN);
-    else if (
+    if (
       params.get("id") &&
       params.get("year") &&
       params.get("semester") &&

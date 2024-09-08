@@ -6,20 +6,18 @@ import { Button } from "@mantine/core";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { setShowSidebar } from "@/store/showSidebar";
-import PageError from "./PageError";
-import { setLoading } from "@/store/loading";
+import { setShowNavbar } from "@/store/showNavbar";
 
 export default function CMUOAuthCallback() {
   const user = useAppSelector((state) => state.user);
-  const loading = useAppSelector((state) => state.loading);
   const dispatch = useAppDispatch();
   const queryParameters = new URLSearchParams(window.location.search);
   const code = queryParameters.get("code");
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(setLoading(true));
     dispatch(setShowSidebar(false));
+    dispatch(setShowNavbar(false));
     if (!code || user.id) return;
 
     const fetchData = async () => {
@@ -33,7 +31,6 @@ export default function CMUOAuthCallback() {
       }
     };
     fetchData();
-    dispatch(setLoading(false));
   }, [code]);
 
   return (

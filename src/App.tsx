@@ -10,9 +10,7 @@ import { isEmpty } from "lodash";
 import { getAcademicYear } from "./services/academicYear/academicYear.service";
 import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
-import { setShowSidebar } from "./store/showSidebar";
 import PageError from "./pages/PageError";
-import { setShowNavbar } from "./store/showNavbar";
 
 function App() {
   const showSidebar = useAppSelector((state) => state.showSidebar);
@@ -57,8 +55,6 @@ function App() {
       const payload = new AcademicYearRequestDTO();
       const rsAcademicYear = await getAcademicYear(payload);
       if (rsAcademicYear) {
-        // dispatch(setShowSidebar(true));
-        // dispatch(setShowNavbar(true));
         dispatch(setAcademicYear(rsAcademicYear));
       }
     }
@@ -76,7 +72,6 @@ function App() {
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-full w-full overflow-hidden">
         {showNavbar && <Navbar />}
-
         <Outlet />
       </div>
     </div>
