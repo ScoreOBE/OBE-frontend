@@ -81,7 +81,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
   }, [data]);
 
   return (
-    <div className="flex w-full flex-col text-[14px] max-h-full px-2 py-1">
+    <div className="flex w-full flex-col text-[15px] max-h-full px-2 py-1">
       <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3 pb-5">
         <div className="flex text-secondary  flex-col">
           <p className="font-medium">
@@ -112,7 +112,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
           <p className="font-medium">
             ลักษณะของกระบวนวิชา <span className=" text-red-500">*</span>
           </p>
-          <p className="font-semibold">Teachig Method</p>
+          <p className="font-semibold">Teaching Method</p>
         </div>
         <Checkbox.Group
           key={form.key("teachingMethod")}

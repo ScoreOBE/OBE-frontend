@@ -468,7 +468,7 @@ export default function ModalAddPLOCollection({
             <div className="flex gap-3 h-[440px] mt-3 ">
               <div
                 className={`flex flex-col  gap-3 p-5 rounded-lg h-full ${
-                  state.length ? "w-[40%]" : "w-full"
+                  state.length ? "w-[50%]" : "w-full"
                 } overflow-hidden relative`}
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -484,7 +484,7 @@ export default function ModalAddPLOCollection({
                   }
                   className="w-full border-none   rounded-r-none "
                   classNames={{
-                    input: "flex  h-[125px] p-3 ",
+                    input: "flex  h-[140px] p-3 ",
                     label: "flex pb-1",
                   }}
                   placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
@@ -508,7 +508,7 @@ export default function ModalAddPLOCollection({
                   }
                   className="w-full border-none rounded-r-none"
                   classNames={{
-                    input: "flex h-[125px] p-3",
+                    input: "flex h-[140px] p-3",
                     label: "flex pb-1",
                   }}
                   placeholder="Ex. An ability to solve complex engineering problems."
@@ -534,7 +534,7 @@ export default function ModalAddPLOCollection({
               </div>
               {form.getValues().data?.length! > 1 && (
                 <div
-                  className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[60%] h-full"
+                  className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[50%] h-full"
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                     overflowY: "auto",
@@ -549,7 +549,7 @@ export default function ModalAddPLOCollection({
                       {state.length} PLO{state.length > 1 ? "s" : ""}
                     </p>
                   </div>
-                  <div className="flex flex-col w-full h-fit px-4">
+                  <div className="flex flex-col w-full h-fit pl-2">
                     <DragDropContext
                       onDragEnd={({ destination, source }) => {
                         if (destination) {
@@ -587,7 +587,7 @@ export default function ModalAddPLOCollection({
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                   >
-                                    <div className="flex flex-col gap-2 w-full">
+                                    <div className="flex flex-col gap-1 w-full">
                                       <div className="flex items-center justify-between">
                                         <p className="text-secondary font-semibold text-[14px]">
                                           PLO-{item.no}
@@ -627,7 +627,7 @@ export default function ModalAddPLOCollection({
                                         </div>
                                       </div>
 
-                                      <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
+                                      <div className="text-tertiary text-[13px] font-medium flex flex-col gap-3">
                                         <div className="flex text-pretty">
                                           <li></li> {item.descTH}
                                         </div>

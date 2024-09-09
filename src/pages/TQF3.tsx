@@ -30,6 +30,7 @@ import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { UseFormReturnType } from "@mantine/form";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { editCourse } from "@/store/course";
+import exportFile from "@/assets/icons/exportFile.svg?react";
 import Loading from "@/components/Loading";
 
 export default function TQF3() {
@@ -236,7 +237,7 @@ export default function TQF3() {
                               ]
                             ))
                             ? "text-[#DEE2E6]"
-                            : "text-save"
+                            : "text-[#24b9a5]"
                         }
                       />
                       {part.tab}
@@ -249,38 +250,50 @@ export default function TQF3() {
               <div className=" text-secondary  overflow-y-auto font-semibold  whitespace-break-spaces">
                 {topicPart()}
               </div>
-              <Tooltip
-                onClick={() => setOpenModalReuse(true)}
-                withArrow
-                arrowPosition="side"
-                arrowOffset={15}
-                arrowSize={7}
-                position="bottom-end"
-                label={
-                  <div className="text-default text-[13px] p-2 flex flex-col gap-2">
-                    <p className=" font-medium">
-                      <span className="text-secondary font-bold">
-                        Reuse TQF 3
-                      </span>{" "}
-                      <br />
-                      Simplify your course TQF3. Choose any course, and we'll
-                      automatically fill <br />
-                      the TQF documentation for you. Saving your time!
-                    </p>
-                  </div>
-                }
-                color="#FCFCFC"
-              >
-                <Button
-                  leftSection={
-                    <Icon IconComponent={dupTQF} className="h-5 w-5 -mr-1" />
+              <div className="flex flex-row gap-3">
+                <Tooltip
+                  onClick={() => setOpenModalReuse(true)}
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={15}
+                  arrowSize={7}
+                  position="bottom-end"
+                  label={
+                    <div className="text-default text-[13px] p-2 flex flex-col gap-2">
+                      <p className=" font-medium">
+                        <span className="text-secondary font-bold">
+                          Reuse TQF 3
+                        </span>{" "}
+                        <br />
+                        Simplify your course TQF3. Choose any course, and we'll
+                        automatically fill <br />
+                        the TQF documentation for you. Saving your time!
+                      </p>
+                    </div>
                   }
-                  color="#F39D4E"
-                  className="  cursor-pointer pr-4 text-[12px] font-semibold w-fit px-3 h-[32px] rounded-[8px]"
+                  color="#FCFCFC"
                 >
-                  Reuse TQF3
+                  <Button
+                    variant="outline"
+                    leftSection={
+                      <Icon IconComponent={dupTQF} className="h-5  w-5 -mr-1" />
+                    }
+                    color="#ee933e"
+                    className=" cursor-pointer pr-4 text-[12px] font-semibold w-fit px-3 h-[32px] rounded-md"
+                  >
+                    Reuse TQF3
+                  </Button>
+                </Tooltip>
+                <Button
+                  color="#24b9a5"
+                  className="text-[12px] font-semibold h-8 px-4 rounded-md"
+                >
+                  <div className="flex gap-2 items-center">
+                    <Icon IconComponent={exportFile} />
+                    Export TQF3
+                  </div>
                 </Button>
-              </Tooltip>
+              </div>
             </div>
           </div>
           <div
@@ -301,7 +314,11 @@ export default function TQF3() {
       <SaveTQFbar
         tqf="3"
         part={tqf3Part as partType}
-        data={course.TQF3!}
+        data={
+          course.type == COURSE_TYPE.SEL_TOPIC.en
+            ? course.sections![0].TQF3!
+            : course.TQF3!
+        }
         onSave={onSave}
         canSave={true}
       />
