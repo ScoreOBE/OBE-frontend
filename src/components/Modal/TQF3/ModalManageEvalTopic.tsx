@@ -8,7 +8,7 @@ import {
   NumberInput,
   NumberInputHandlers,
 } from "@mantine/core";
-import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconList, IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import { upperFirst } from "lodash";
 import { useRef, useState } from "react";
 
@@ -172,7 +172,7 @@ export default function ModalManageEvalTopic({
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
-                  <span>List Evaluation Topic Added</span>
+                <span className="flex flex-row items-center gap-2"> <IconList />List Evaluation Topic Added</span>
                 </div>
                 <p>
                   {topicLenght} Topic{topicLenght > 1 ? "s" : ""}
@@ -183,15 +183,16 @@ export default function ModalManageEvalTopic({
                 {Array.from({ length: topicLenght }).map((_, index) => (
                   <div
                     key={index}
-                    className={`py-3 w-full border-b-[1px] px-3 ${
+                    className={`py-3 w-full border-b-[1px] pl-3 pr-1 ${
                       Array.length > 1 ? "last:border-none last:pb-5" : ""
                     } `}
                   >
                     <div className="flex flex-col gap-2 w-full">
                       <div className="flex items-center justify-between">
-                        <p className="text-secondary font-semibold text-[14px]">
-                          Eval Topic {index + 1}
+                        <p className="text-secondary mb-2 font-semibold text-[14px]">
+                          Eval Topic {index + 1} (0%)
                         </p>
+                        
 
                         <div className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer">
                           <IconTrash
@@ -204,11 +205,10 @@ export default function ModalManageEvalTopic({
                     </div>
 
                     <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
-                      <div className="flex justify-between items-center text-primary mt-2">
+                      <div className="flex justify-between items-center font-semibold">
                         <div className="flex text-pretty">
                           <li></li> สอบกลางภาค (Midterm Exam)
                         </div>
-                        <p className="font-semibold text-[14px]">0 %</p>
                       </div>
                       <div className="flex text-pretty">
                         <li></li>{" "}

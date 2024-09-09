@@ -90,7 +90,7 @@
 }
 
 .mantine-Select-option {
-  color: var(--color-primary) !important;
+  color: var(--color-secondary) !important;
   font-weight: 500 !important;
 }
 
@@ -100,7 +100,7 @@
 }
 
 .mantine-Select-input {
-  color: var(--color-primary) !important;
+  color: var(--color-secondary) !important;
   padding-inline: 16px !important;
   font-size: 12px !important;
   background-color: var(--color-background-input) !important;

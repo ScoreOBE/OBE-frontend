@@ -191,10 +191,10 @@ export default function Part6TQF3({ data, setForm }: Props) {
         editData={formEdit}
       />
 
-      <div className="flex flex-col w-full max-h-full gap-4">
+      <div className="flex flex-col w-full  max-h-full gap-4">
         {/* Topic */}
 
-        <div className="flex text-secondary items-center w-full justify-between">
+        <div className="flex text-secondary  items-center w-full justify-between">
           <p className="text-[15px] font-semibold">
             หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
             <span className=" font-bold">(Topic)</span>
@@ -242,7 +242,12 @@ export default function Part6TQF3({ data, setForm }: Props) {
             </Button>
           )}
         </div>
-        <div className="pb-6">
+        <div
+          style={{
+            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+          }}
+          className=" rounded-md border-[1px] overflow-y-auto mb-7 border-secondary"
+        >
           {/* Table */}
           {form.getValues().data.map((topic, index) => {
             const option: any =

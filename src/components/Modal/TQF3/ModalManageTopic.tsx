@@ -132,6 +132,7 @@ export default function ModalManageTopic({
               size="xs"
               label="Select Topic"
               placeholder="Topic"
+              className="mt-1 mb-2"
               data={options.map((item) => ({
                 value: item.th,
                 label: `${item.th}\n${item.en}`,
@@ -205,7 +206,7 @@ export default function ModalManageTopic({
           <Button
             onClick={addEditTopic}
             leftSection={type === "add" && <Icon IconComponent={AddIcon} />}
-            className="rounded-[8px] border-none text-[12px] h-[32px] w-fit"
+            className="rounded-[8px] pl-4 border-none text-[12px] h-[32px] w-fit"
           >
             {type === "add" ? "Add" : "Done"}
           </Button>

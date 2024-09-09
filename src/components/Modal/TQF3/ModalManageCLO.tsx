@@ -1,5 +1,5 @@
 import { Button, Checkbox, Group, Modal, Textarea } from "@mantine/core";
-import { IconTrash } from "@tabler/icons-react";
+import { IconList, IconTrash } from "@tabler/icons-react";
 import { upperFirst } from "lodash";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
@@ -87,7 +87,7 @@ export default function ModalManageCLO({
                 type === "add" ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
             }}
           >
-            <div className="flex flex-col gap-4 h-[80%]">
+            <div className="flex flex-col gap-4 h-[90%]">
               <Textarea
                 autoFocus={false}
                 label={
@@ -120,7 +120,7 @@ export default function ModalManageCLO({
               />
 
               <div className="flex flex-col gap-2 pb-1 ">
-                <p className="text-secondary text-[13px] font-semibold">
+                <p className="text-secondary text-[13px] mb-1 font-semibold">
                   Learning Method <span className="text-error">*</span>
                 </p>
                 <Checkbox.Group
@@ -181,7 +181,7 @@ export default function ModalManageCLO({
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
-                  <span>List CLO Added</span>
+                  <span className="flex flex-row items-center gap-2"> <IconList />List CLO Added</span>
                 </div>
                 <p>
                   {cloLength} CLO{cloLength > 1 ? "s" : ""}
@@ -192,7 +192,7 @@ export default function ModalManageCLO({
                 {Array.from({ length: cloLength }).map((_, index) => (
                   <div
                     key={index}
-                    className={`py-3 w-full border-b-[1px] px-3 ${
+                    className={`py-3 w-full border-b-[1px] pl-3 pr-1 ${
                       Array.length > 1 ? "last:border-none last:pb-5" : ""
                     } `}
                   >
