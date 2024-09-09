@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, Menu, Modal, Select, Tabs } from "@mantine/core";
 import {
   IconDots,
@@ -58,6 +58,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const courseManagement = useAppSelector((state) => state.courseManagement);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
+  const [maxTabs, setMaxTabs] = useState(0);
+  const [startEndTab, setStartEndTab] = useState({ start: 0, end: maxTabs });
   const [department, setDepartment] = useState<any[]>([]);
   const [payload, setPayload] = useState<any>({ page: 1, limit: 10 });
   const [startEndPage, setStartEndPage] = useState({ start: 1, end: 10 });
@@ -73,12 +75,38 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
   const [selectDepartment, setSelectDepartment] = useState<any>({});
 
+  useLayoutEffect(() => {
+    const updateSize = () => {
+      let tabs;
+      if (window.innerWidth >= 1440) {
+        tabs = 16;
+      } else if (window.innerWidth >= 1280) {
+        tabs = 14;
+      } else if (window.innerWidth >= 1024) {
+        tabs = 10;
+      } else if (window.innerWidth >= 768) {
+        tabs = 6;
+      } else if (window.innerWidth >= 640) {
+        tabs = 5;
+      } else {
+        tabs = 3;
+      }
+      setMaxTabs(tabs);
+      setStartEndTab(({ start, end }) => {
+        return { start: 0, end: tabs };
+      });
+    };
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
   useEffect(() => {
     if (opened) {
       fetchDep();
       setSelectDepartment({
-        departmentEN: "All Departments",
-        departmentCode: "All Departments",
+        departmentEN: "All Courses",
+        departmentCode: "All Courses",
       });
     }
   }, [opened]);
@@ -98,7 +126,12 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         );
       }
       setDepartment([
-        { departmentCode: "All Departments", departmentEN: "All Departments" },
+        { departmentCode: "All Courses", departmentEN: "All Courses" },
+        {
+          departmentCode: res.code,
+          departmentEN: res.facultyEN.replace("Faculty of ", "Genaral "),
+          courseCode: res.courseCode,
+        },
         ...dep,
       ]);
     }
@@ -308,7 +341,6 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                     Course Management
                   </p>
                 </div>
-
                 <SearchInput
                   onSearch={searchCourse}
                   placeholder="Course No / Course Name"
@@ -317,7 +349,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
               <Tabs
                 classNames={{
                   root: "w-full left-0",
-                  tab: "px-1  !bg-transparent hover:!text-tertiary",
+                  tab: "px-1 !bg-transparent hover:!text-tertiary",
                   tabLabel: "!font-semibold",
                 }}
                 value={selectDepartment.departmentCode}
@@ -328,15 +360,55 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   setPayload({ ...payload, searchDepartment: event });
                 }}
               >
-                <Tabs.List className="!gap-6 !bg-transparent px-[53px]">
-                  {department.map((dep) => (
-                    <Tabs.Tab
-                      key={dep.departmentCode}
-                      value={dep.departmentCode}
+                <Tabs.List
+                  grow
+                  className="!bg-transparent px-[53px] items-center flex w-full"
+                >
+                  {department.length > maxTabs && (
+                    <div
+                      aria-disabled={startEndTab.start == 0}
+                      onClick={() =>
+                        startEndTab.start > 0 &&
+                        setStartEndTab(({ start, end }) => {
+                          return { start: start - maxTabs, end: end - maxTabs };
+                        })
+                      }
+                      className={`justify-start cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                        startEndTab.start !== 1 && "hover:bg-[#eeeeee]"
+                      } rounded-full`}
                     >
-                      {dep.departmentCode}
-                    </Tabs.Tab>
-                  ))}
+                      <IconChevronLeft />
+                    </div>
+                  )}
+                  {department
+                    .slice(startEndTab.start, startEndTab.end)
+                    .map((dep) => (
+                      <Tabs.Tab
+                        key={dep.departmentCode}
+                        value={dep.departmentCode}
+                      >
+                        {dep.departmentCode}{" "}
+                        {dep.courseCode && `(${dep.courseCode})`}
+                      </Tabs.Tab>
+                    ))}
+                  {department.length > maxTabs && (
+                    <div
+                      aria-disabled={startEndTab.end == department.length}
+                      onClick={() =>
+                        startEndTab.end < department.length &&
+                        setStartEndTab(({ start, end }) => {
+                          return { start: start + maxTabs, end: end + maxTabs };
+                        })
+                      }
+                      className={`justify-end cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                        startEndTab.end !== courseManagement.total &&
+                        "hover:bg-[#eeeeee]"
+                      } rounded-full`}
+                    >
+                      <IconChevronRight />
+                    </div>
+                  )}
+                  {/* </div> */}
                 </Tabs.List>
               </Tabs>
             </div>
@@ -378,7 +450,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                 <div
                   aria-disabled={startEndPage.start == 1}
                   onClick={() => onChangePage(payload.page - 1)}
-                  className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                  className={`cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
                     startEndPage.start !== 1 && "hover:bg-[#eeeeee]"
                   } rounded-full`}
                 >
