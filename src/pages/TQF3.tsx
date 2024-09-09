@@ -20,7 +20,7 @@ import Part4TQF3 from "@/components/TQF3/Part4TQF3";
 import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
 import { IconInfoCircle } from "@tabler/icons-react";
-import SaveTQFbar, { partType } from "@/components/SaveTQFBar";
+import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { IModelCourse } from "@/models/ModelCourse";
 import { isEmpty } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
@@ -30,23 +30,49 @@ import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { UseFormReturnType } from "@mantine/form";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { editCourse } from "@/store/course";
+import Loading from "@/components/Loading";
 
 export default function TQF3() {
   const location = useLocation().pathname;
   const { courseNo } = useParams();
+  const loading = useAppSelector((state) => state.loading);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [course, setCourse] = useState<Partial<IModelCourse>>({});
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<UseFormReturnType<any>>();
-  const [tqf3Part, setTqf3Part] = useState<string | null>("Part 1");
+  const [tqf3Part, setTqf3Part] = useState<string | null>(partLabel.part1);
   const [openModalReuse, setOpenModalReuse] = useState(false);
   const partTab = [
-    { tab: "Part 1", compo: <Part1TQF3 data={course!} setForm={setForm} /> },
-    { tab: "Part 2", compo: <Part2TQF3 data={course!} setForm={setForm} /> },
-    { tab: "Part 3", compo: <Part3TQF3 data={course!} setForm={setForm} /> },
-    { tab: "Part 4", compo: <Part4TQF3 data={course!} setForm={setForm} /> },
-    { tab: "Part 5", compo: <Part5TQF3 data={course!} setForm={setForm} /> },
-    { tab: "Part 6", compo: <Part6TQF3 data={course!} setForm={setForm} /> },
+    {
+      value: partLabel.part1,
+      tab: "Part 1",
+      compo: <Part1TQF3 data={course!} setForm={setForm} />,
+    },
+    {
+      value: partLabel.part2,
+      tab: "Part 2",
+      compo: <Part2TQF3 data={course!} setForm={setForm} />,
+    },
+    {
+      value: partLabel.part3,
+      tab: "Part 3",
+      compo: <Part3TQF3 data={course!} setForm={setForm} />,
+    },
+    {
+      value: partLabel.part4,
+      tab: "Part 4",
+      compo: <Part4TQF3 data={course!} setForm={setForm} />,
+    },
+    {
+      value: partLabel.part5,
+      tab: "Part 5",
+      compo: <Part5TQF3 data={course!} setForm={setForm} />,
+    },
+    {
+      value: partLabel.part6,
+      tab: "Part 6",
+      compo: <Part6TQF3 data={course!} setForm={setForm} />,
+    },
   ];
 
   useEffect(() => {
@@ -70,17 +96,17 @@ export default function TQF3() {
 
   const topicPart = () => {
     switch (tqf3Part) {
-      case "Part 1":
+      case partLabel.part1:
         return "Part 1 - ข้อมูลกระบวนวิชา\nCourse Information";
-      case "Part 2":
+      case partLabel.part2:
         return "Part 2 - คำอธิบายลักษณะกระบวนวิชาและแผนการสอน\nDescription and Planning";
-      case "Part 3":
+      case partLabel.part3:
         return "Part 3 -  การประเมินผลคะแนนกระบวนวิชา\nCourse Evaluation";
-      case "Part 4":
+      case partLabel.part4:
         return "Part 4 - การเชื่อมโยงหัวข้อประเมิน\nAssessment Mapping";
-      case "Part 5":
+      case partLabel.part5:
         return "Part 5 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้\nCurriculum Mapping";
-      case "Part 6":
+      case partLabel.part6:
         return "Part 6 - การประเมินกระบวนวิชาและกระบวนการปรับปรุง\nCourse evaluation and improvement processes";
       default:
         return;
@@ -120,7 +146,9 @@ export default function TQF3() {
     }
   };
 
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <>
       {/* Reuse TQF3 */}
       <Modal
@@ -173,11 +201,11 @@ export default function TQF3() {
           </div>
         </div>
       </Modal>
-      <div className=" flex flex-col   h-full  w-full overflow-hidden">
+      <div className=" flex flex-col h-full  w-full overflow-hidden">
         <Tabs
           value={tqf3Part}
           onChange={setTqf3Part}
-          defaultValue="Part 1"
+          defaultValue={partLabel.part1}
           classNames={{
             root: "overflow-hidden w-full flex flex-col h-full",
             tab: "px-0 !bg-transparent hover:!text-tertiary",
@@ -187,15 +215,15 @@ export default function TQF3() {
         >
           <div
             className={`flex flex-col w-full h-fit ${
-              tqf3Part === "Part 4" ? "pb-1" : "border-b-[2px] pb-4 mb-1"
+              tqf3Part === partLabel.part4 ? "pb-1" : "border-b-[2px] pb-4 mb-1"
             } 
-            ${tqf3Part === "Part 6" && "!mb-4"}
+            ${tqf3Part === partLabel.part6 && "!mb-4"}
             `}
           >
             <div className="flex gap-2">
               <Tabs.List className="gap-7 w-full">
                 {partTab.map((part) => (
-                  <Tabs.Tab key={part.tab} value={part.tab}>
+                  <Tabs.Tab key={part.value} value={part.value}>
                     <div className="flex flex-row items-center gap-2 ">
                       <Icon
                         IconComponent={CheckIcon}
@@ -256,12 +284,11 @@ export default function TQF3() {
             </div>
           </div>
           <div
-            style={{
-              overflowY: "auto",
-            }}
-            className={`h-full w-full  flex ${
-              tqf3Part !== "Part 4" && "pt-3 px-3"
-            }  ${tqf3Part === "Part 6" && "!pt-0"} rounded-md text-[14px]`}
+            className={`h-full w-full flex overflow-y-auto ${
+              tqf3Part !== partLabel.part4 && "pt-3 px-3"
+            }  ${
+              tqf3Part === partLabel.part6 && "!pt-0"
+            } rounded-md text-[14px]`}
           >
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.tab} className="w-full">
@@ -276,6 +303,7 @@ export default function TQF3() {
         part={tqf3Part as partType}
         data={course.TQF3!}
         onSave={onSave}
+        canSave={true}
       />
     </>
   );
