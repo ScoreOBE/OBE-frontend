@@ -42,12 +42,18 @@ export default function TQF3() {
   const [openModalReuse, setOpenModalReuse] = useState(false);
   const partTab = [
     { tab: "Part 1", compo: <Part1TQF3 data={course!} setForm={setForm} /> },
-    { tab: "Part 2", compo: <Part2TQF3 /> },
-    { tab: "Part 3", compo: <Part3TQF3 /> },
-    { tab: "Part 4", compo: <Part4TQF3 /> },
-    { tab: "Part 5", compo: <Part5TQF3 /> },
+    { tab: "Part 2", compo: <Part2TQF3 data={course!} setForm={setForm} /> },
+    { tab: "Part 3", compo: <Part3TQF3 data={course!} setForm={setForm} /> },
+    { tab: "Part 4", compo: <Part4TQF3 data={course!} setForm={setForm} /> },
+    { tab: "Part 5", compo: <Part5TQF3 data={course!} setForm={setForm} /> },
     { tab: "Part 6", compo: <Part6TQF3 data={course!} setForm={setForm} /> },
   ];
+
+  useEffect(() => {
+    if (course) {
+      console.log(course);
+    }
+  }, [course]);
 
   useEffect(() => {
     const fetchOneCourse = async () => {

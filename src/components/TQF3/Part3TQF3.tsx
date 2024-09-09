@@ -23,9 +23,13 @@ import {
 import { useEffect, useState } from "react";
 import Icon from "../Icon";
 import ModalManageEvalTopic from "../Modal/TQF3/ModalManageEvalTopic";
+import { IModelCourse } from "@/models/ModelCourse";
 
-type Props = {};
-export default function Part3TQF3() {
+type Props = {
+  data: Partial<IModelCourse>;
+  setForm: React.Dispatch<React.SetStateAction<any>>;
+};
+export default function Part3TQF3({ data, setForm }: Props) {
   const dataTest = [
     {
       no: 1,
@@ -80,11 +84,13 @@ export default function Part3TQF3() {
         opened={openModalAddEvalTopic}
         onClose={() => setOpenModalAddEvalTopic(false)}
         type="add"
+        courseNo={data.courseNo!}
       />
       <ModalManageEvalTopic
         opened={openModalEditEvalTopic}
         onClose={() => setOpenModalEditEvalTopic(false)}
         type="edit"
+        courseNo={data.courseNo!}
       />
       <div className="flex w-full">
         <div className="flex flex-col  w-full pb-8 gap-4">
