@@ -10,6 +10,7 @@ import {
   Group,
   Modal,
   Select,
+  Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
@@ -33,6 +34,9 @@ type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 export default function Part6TQF3({ data, setForm }: Props) {
+  const [formEdit, setFormEdit] = useState<
+    Partial<IModelTQF3Part6> & Record<string, any>
+  >();
   let topics = [
     {
       no: 1,
@@ -137,7 +141,6 @@ export default function Part6TQF3({ data, setForm }: Props) {
     },
   ];
   const [options, setOptions] = useState([]);
-
   const form = useForm({
     mode: "controlled",
     initialValues: {
@@ -156,10 +159,6 @@ export default function Part6TQF3({ data, setForm }: Props) {
   const [openModalEditSelectTopic, setOpenModalEditSelectTopic] =
     useState(false);
 
-  useEffect(() => {
-    console.log(form.getValues());
-  }, [form]);
-
   const addTopic = (value: any, option: any) => {
     if (!options.length) {
       setOptions(option);
@@ -167,21 +166,28 @@ export default function Part6TQF3({ data, setForm }: Props) {
     form.insertListItem("data", value);
   };
 
-  const editTopic = () => {};
+  const editTopic = (value: any) => {
+    form.setFieldValue(`data.${formEdit?.index}`, value);
+  };
 
   return (
     <>
       <ModalManageTopic
         opened={openModalSelectTopic}
         onClose={() => setOpenModalSelectTopic(false)}
+        data={form.getValues().data}
         type="add"
         action={addTopic}
       />
       <ModalManageTopic
         opened={openModalEditSelectTopic}
-        onClose={() => setOpenModalEditSelectTopic(false)}
+        onClose={() => {
+          setOpenModalEditSelectTopic(false);
+          setFormEdit({});
+        }}
         type="edit"
         action={editTopic}
+        editData={formEdit}
       />
 
       <div className="flex flex-col w-full max-h-full gap-4">
@@ -192,15 +198,48 @@ export default function Part6TQF3({ data, setForm }: Props) {
             หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
             <span className=" font-bold">(Topic)</span>
           </p>
-          <Button
-            onClick={() => setOpenModalSelectTopic(true)}
-            className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
-          >
-            <div className="flex gap-2">
-              <Icon IconComponent={AddIcon} />
-              Add Topic
-            </div>
-          </Button>
+          {form.getValues().data.length === 10 ? (
+            <Tooltip
+              withArrow
+              arrowPosition="side"
+              arrowOffset={15}
+              arrowSize={7}
+              position="bottom-end"
+              label={
+                <div className="text-default text-[13px] p-2 flex flex-col gap-2">
+                  <p className="font-medium">
+                    <span className="text-secondary font-bold">
+                      Add Topic (Disabled)
+                    </span>{" "}
+                    <br />
+                    All topics have already been added. To make any changes,
+                    please edit the topics below.
+                  </p>
+                </div>
+              }
+              color="#FCFCFC"
+            >
+              <Button
+                disabled={form.getValues().data.length === 10}
+                className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
+              >
+                <div className="flex gap-2">
+                  <Icon IconComponent={AddIcon} />
+                  Add Topic
+                </div>
+              </Button>
+            </Tooltip>
+          ) : (
+            <Button
+              onClick={() => setOpenModalSelectTopic(true)}
+              className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
+            >
+              <div className="flex gap-2">
+                <Icon IconComponent={AddIcon} />
+                Add Topic
+              </div>
+            </Button>
+          )}
         </div>
         <div className="pb-6">
           {/* Table */}
@@ -245,8 +284,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
                         {item.label == "อื่นๆ (Other)" &&
                           form
                             .getValues()
-                            .data[index] // ?.find((e) => e.topic == topic.th)
-                            ?.detail.includes(item.label) && (
+                            .data[index]?.detail.includes(item.label) && (
                             <Textarea
                               className="mt-2 pl-10"
                               placeholder="(Required)"
@@ -266,23 +304,38 @@ export default function Part6TQF3({ data, setForm }: Props) {
                 key={index}
                 className="  w-full h-full max-h-full  flex flex-col "
               >
-                <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader rounded-md">
+                <div className="w-full sticky top-0 z-10 text-[#228BE6] flex flex-row gap-4 items-center pl-6 py-4 bg-[#E8F3FC] rounded-md">
                   <p className="flex flex-col font-medium text-[28px]">
                     {index + 1}.
                   </p>
                   <p className="flex flex-col gap-1  text-[14px]">
-                    <span className="font-semibold">{option.th}</span>
+                    <span className="font-semibold">
+                      {option.th}{" "}
+                      <span className="text-[#228BE6]">(Additional Topic)</span>
+                    </span>
                     <span className="font-bold ">{option.en}</span>
                   </p>
                 </div>
-                <div className="text-default border-b-[1px] last:border-none py-4 px-6 w-full">
-                  <div className="flex justify-between items-center">
+                <div className="text-default border-b-[1px] last:border-none py-4 px-6  w-full">
+                  <div className="flex justify-between items-center whitespace-pre-wrap gap-8">
                     {topic.detail}
                     <div className="flex justify-start gap-4 items-center">
-                      <div className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10">
+                      <div
+                        className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                        onClick={() => {
+                          setFormEdit({
+                            ...form.getValues().data[index],
+                            index,
+                          });
+                          setOpenModalEditSelectTopic(true);
+                        }}
+                      >
                         <IconEdit className="size-4" stroke={1.5} />
                       </div>
-                      <div className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10">
+                      <div
+                        className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                        onClick={() => form.removeListItem("data", index)}
+                      >
                         <IconTrash className="size-4" stroke={1.5} />
                       </div>
                     </div>
@@ -291,25 +344,6 @@ export default function Part6TQF3({ data, setForm }: Props) {
               </div>
             );
           })}
-          {/* Additional Topic */}
-          {/* {form.getValues().data.length > 5 &&
-            options.map((topic: any, index) => (
-              <div
-                key={index}
-                className="w-full h-full max-h-full flex flex-col"
-              >
-                <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader rounded-md">
-                  <p className="flex flex-col font-medium text-[28px]">
-                    {topic.no}.
-                  </p>
-                  <p className="flex flex-col gap-1 text-[14px]">
-                    <span className="font-semibold">{topic.th}</span>
-                    <span className="font-bold">{topic.en}</span>
-                  </p>
-                </div>
-                <div className="border-b-[1px] last:border-none py-4 px-6 w-full"></div>
-              </div>
-            ))} */}
         </div>
       </div>
     </>
