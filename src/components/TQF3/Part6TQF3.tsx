@@ -264,6 +264,16 @@ export default function Part6TQF3({ data, setForm }: Props) {
                 <Checkbox.Group
                   {...form.getInputProps(`data.${index}.detail`)}
                   className="items-center"
+                  onChange={(event) => {
+                    if (event.includes("ไม่มี (None)")) {
+                      form.setFieldValue(`data.${index}.detail`, [
+                        "ไม่มี (None)",
+                      ]);
+                      form.setFieldValue(`data.${index}.other`, "");
+                    } else {
+                      form.setFieldValue(`data.${index}.detail`, event);
+                    }
+                  }}
                 >
                   <Group className="flex items-center flex-col gap-0">
                     {topics[index].list?.map((item, checkIndex) => (
@@ -281,6 +291,12 @@ export default function Part6TQF3({ data, setForm }: Props) {
                           size="sm"
                           label={item.label}
                           value={item.label}
+                          disabled={
+                            form
+                              .getValues()
+                              .data[index]?.detail.includes("ไม่มี (None)") &&
+                            item.label !== "ไม่มี (None)"
+                          }
                         ></Checkbox>
                         {item.label == "อื่นๆ (Other)" &&
                           form

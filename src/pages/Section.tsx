@@ -191,8 +191,8 @@ export default function Section() {
             <div className="flex gap-5 items-center">
               {activeTerm ? (
                 <Button
-                  leftSection={<IconUpload className="h-5 w-5" />}
-                  className="rounded-[8px] text-[12px] w-fit font-semibold  h-8 px-3 "
+                  leftSection={<IconUpload className="h-4 w-4" />}
+                  className="rounded-[6px] text-[12px] w-fit font-semibold  h-8 px-3 "
                 >
                   Upload and Assets
                 </Button>
