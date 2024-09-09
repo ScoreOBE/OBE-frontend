@@ -14,7 +14,12 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
+import {
+  IconArrowRight,
+  IconMinus,
+  IconPlus,
+  IconTrash,
+} from "@tabler/icons-react";
 import { log } from "console";
 import { upperFirst } from "lodash";
 import { useEffect, useRef, useState } from "react";
@@ -101,23 +106,24 @@ export default function ModalManageTopic({
       opened={opened}
       onClose={onCloseModal}
       closeOnClickOutside={false}
-      withCloseButton={false}
-      title={`${upperFirst(type)} Topic`}
+      title={`${upperFirst(type)} Topic TQF3 Part 6`}
       size="43vw"
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
-        content: `flex flex-col bg-[#F6F7FA] overflow-hidden `,
-        body: `overflow-hidden ${type === "add" ? "h-full" : "h-fit"}`,
+        content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+        body: `${
+          type === "add" ? "h-full" : "h-fit"
+        } flex flex-col overflow-hidden max-h-full h-fit`,
       }}
     >
       <div
-        className={`flex flex-col !gap-5 ${
+        className={`flex flex-col !gap-8 ${
           type === "add" ? "h-full" : "h-fit"
         } `}
       >
         {/* Input Field */}
-        <div className={`flex h-fit mb-5 flex-col gap-4`}>
+        <div className={`flex h-fit mb-6 flex-col gap-4`}>
           {type === "add" ? (
             <Select
               size="xs"
@@ -181,22 +187,33 @@ export default function ModalManageTopic({
         </div>
       </div>
       {/* Button */}
-      <div className="flex gap-2  items-end  justify-end h-fit">
-        <Button
-          onClick={onCloseModal}
-          variant="subtle"
-          color="#575757"
-          className="rounded-[8px] text-[12px] h-8 w-fit "
-        >
-          Cancel
-        </Button>
-
-        <Button
-          onClick={addEditTopic}
-          className="rounded-[8px] text-[12px] h-8 w-fit "
-        >
-          {type === "add" ? "Add" : "Done"}
-        </Button>
+      <div className="flex justify-end w-full">
+        <Group className="flex w-full h-fit items-end justify-end">
+          <div>
+            <Button
+              onClick={onCloseModal}
+              color="#575757"
+              variant="subtle"
+              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+            >
+              Cancel
+            </Button>
+          </div>
+          <Button
+            onClick={addEditTopic}
+            leftSection={
+              <IconPlus
+                color="#ffffff"
+                className="size-5 items-center"
+                stroke={2}
+                size={20}
+              />
+            }
+            className="rounded-[8px] border-none text-[12px] h-[32px] w-fit"
+          >
+            {type === "add" ? "Add" : "Done"}
+          </Button>
+        </Group>
       </div>
     </Modal>
   );
