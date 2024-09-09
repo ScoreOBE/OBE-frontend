@@ -22,7 +22,9 @@ import {
 } from "@tabler/icons-react";
 import { log } from "console";
 import { upperFirst } from "lodash";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
+import AddIcon from "@/assets/icons/plus.svg?react";
+import Icon from "@/components/Icon";
 
 type actionType = "add" | "edit";
 
@@ -105,9 +107,10 @@ export default function ModalManageTopic({
     <Modal
       opened={opened}
       onClose={onCloseModal}
+      withCloseButton={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Topic TQF3 Part 6`}
-      size="43vw"
+      size={type === "add" ? "42vw" : "38vw"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
@@ -201,14 +204,7 @@ export default function ModalManageTopic({
           </div>
           <Button
             onClick={addEditTopic}
-            leftSection={
-              <IconPlus
-                color="#ffffff"
-                className="size-5 items-center"
-                stroke={2}
-                size={20}
-              />
-            }
+            leftSection={type === "add" && <Icon IconComponent={AddIcon} />}
             className="rounded-[8px] border-none text-[12px] h-[32px] w-fit"
           >
             {type === "add" ? "Add" : "Done"}

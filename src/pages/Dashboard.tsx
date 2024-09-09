@@ -279,7 +279,7 @@ export default function Dashboard() {
               </Button>
               <Button
                 className="text-center rounded-[6px] text-[12px] w-fit font-semibold h-8 px-4"
-                leftSection={<IconUpload className="h-5 w-5" />}
+                leftSection={<IconUpload className="h-4 w-4" />}
                 onClick={() => setOpenModalSelectCourse(true)}
               >
                 <div className="flex gap-2">Upload score</div>
