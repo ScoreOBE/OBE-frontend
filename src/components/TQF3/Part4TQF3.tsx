@@ -16,7 +16,7 @@ import { useForm } from "@mantine/form";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import { Table, rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
-import { IconEdit, IconGripVertical, IconTrash } from "@tabler/icons-react";
+import { IconCheck, IconCheckbox, IconEdit, IconGripVertical, IconMagnet, IconMarkdown, IconTrash } from "@tabler/icons-react";
 import DrawerPLOdes from "../DrawerPLO";
 import {
   IconExclamationCircle,
@@ -87,7 +87,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
   }, [dataTest]);
   return (
     <div className="flex w-full max-h-full overflow-hidden">
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full  overflow-y-auto">
         <Tabs
           classNames={{
             root: "overflow-hidden flex flex-col pt-4 px-3 pb-5",
@@ -105,7 +105,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
           </Tabs.List>
         </Tabs>
         {/* CLO Map Assessmen Tool */}
-        <div className="flex text-secondary  max-h-full overflow-y-auto gap-4 items-start w-full pb-6 px-3   pr-3 flex-col">
+        <div className="flex text-secondary overflow-y-auto  max-h-full  gap-4 items-start w-full px-3 pb-7  pr-3 flex-col">
           <div className="flex flex-col gap-[2px] text-[15px]">
             <p className="font-bold">
               CLO 1 -{" "}
@@ -121,9 +121,9 @@ export default function Part4TQF3({ data, setForm }: Props) {
           <div className="w-full">
             <Alert
               radius="md"
-              icon={<IconInfoCircle />}
-              variant="light"
-              color="blue"
+              icon={<IconCheckbox />}
+              variant='light'
+              color='teal'
               classNames={{
                 icon: "size-6",
                 body: " flex justify-center",
@@ -131,20 +131,33 @@ export default function Part4TQF3({ data, setForm }: Props) {
               className="w-full"
               title={
                 <p className="font-semibold">
-                  Making changes to Evaluation Topic?{" "}
-                  <span className=" font-extrabold">
-                    {" "}
-                    Double-checking in TQF 5 (Parts 2)
-                  </span>{" "}
-                  ensures all information in your 261405 course materials aligns
-                  seamlessly
+                 Each CSO must be linked to at least one evaluation topic.
+                </p>
+              }
+            ></Alert>
+          </div>
+          <div className="w-full">
+            <Alert
+              radius="md"
+              icon={<IconInfoCircle />}
+              variant="light"
+              color="blue"
+              classNames={{
+                icon: "size-6",
+                body: " flex justify-center",
+              }}
+              className="w-full -mt-2"
+              title={
+                <p className="font-semibold">
+                  Select the evaluation topics you'd like to link with your CSOs
+                  by checking the box in front of each topic in the table below.
                 </p>
               }
             ></Alert>
           </div>
 
           <div
-            className="overflow-x-auto w-full flex flex-col rounded-md border border-secondary  "
+            className=" w-full flex flex-col rounded-md border border-secondary  "
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
@@ -154,9 +167,9 @@ export default function Part4TQF3({ data, setForm }: Props) {
                 <Table.Tr className="bg-[#e5e7f6] ">
                   <Table.Th className="w-[1%] !rounded-tl-md"></Table.Th>
                   <Table.Th className="w-[13%]">Topic</Table.Th>
-                  <Table.Th className="w-[45%]">Description</Table.Th>
-                  <Table.Th className="w-[20%]">Evaluation week</Table.Th>
-                  <Table.Th className=" w-[16%] pr-6 text-end">
+                  <Table.Th className="w-[51%]">Description</Table.Th>
+                  <Table.Th className="w-[15%]">Evaluation week</Table.Th>
+                  <Table.Th className=" w-[15%] pr-6 text-end">
                     <div className="flex flex-row items-center gap-2">
                       Evaluate CLO
                       <Tooltip

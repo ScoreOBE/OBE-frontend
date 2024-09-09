@@ -8,7 +8,7 @@ import {
   NumberInput,
   NumberInputHandlers,
 } from "@mantine/core";
-import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconList, IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import { upperFirst } from "lodash";
 import { useRef, useState } from "react";
 
@@ -78,16 +78,16 @@ export default function ModalManageTopic({
                 }
                 className="w-full border-none rounded-r-none"
                 classNames={{
-                  input: "flex h-[100px] p-3 text-[13px]",
+                  input: "flex h-[140px] p-3 text-[13px]",
                   label: "flex pb-1",
                 }}
-                placeholder="Ex. การอินทิเกรต"
+                placeholder="Ex. การอินทิเกรต (Integration)"
               />
 
               <NumberInput
                 label={
                   <p className="font-semibold flex gap-1 h-full">
-                    Lecture hour
+                    Lecture hour (hr)
                     <span className=" text-error">*</span>
                   </p>
                 }
@@ -124,7 +124,7 @@ export default function ModalManageTopic({
               <NumberInput
                 label={
                   <p className="font-semibold flex gap-1 h-full">
-                    Lab hour <span className=" text-error">*</span>
+                    Lab hour (hr) <span className=" text-error">*</span>
                   </p>
                 }
                 classNames={{
@@ -183,7 +183,7 @@ export default function ModalManageTopic({
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
-                  <span>List Course Content Added</span>
+                <span className="flex flex-row items-center gap-2"> <IconList />List Course Content Added</span>
                 </div>
                 <p>
                   {topicLenght} Course Content{topicLenght > 1 ? "s" : ""}
@@ -194,13 +194,13 @@ export default function ModalManageTopic({
                 {Array.from({ length: topicLenght }).map((_, index) => (
                   <div
                     key={index}
-                    className={`py-3 w-full border-b-[1px] px-3 ${
+                    className={`py-3 w-full border-b-[1px] pl-3 pr-1 ${
                       Array.length > 1 ? "last:border-none last:pb-5" : ""
                     } `}
                   >
-                    <div className="flex flex-col gap-2 w-full">
+                    <div className="flex flex-col w-full">
                       <div className="flex items-center justify-between">
-                        <p className="text-secondary font-semibold text-[14px]">
+                        <p className="text-secondary mb-2 font-semibold text-[14px]">
                           Course Content {index + 1}
                         </p>
 
