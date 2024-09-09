@@ -107,21 +107,25 @@ export default function Part2TQF3({ data, setForm }: Props) {
         opened={openModalAddCLO}
         onClose={() => setOpenModalAddCLO(false)}
         type="add"
+        courseNo={data.courseNo!}
       />
       <ModalManageCLO
         opened={openModalEditCLO}
         onClose={() => setOpenModalEditCLO(false)}
         type="edit"
+        courseNo={data.courseNo!}
       />
       <ModalManageTopic
         opened={openModalAddTopic}
         onClose={() => setOpenModalAddTopic(false)}
         type="add"
+        courseNo={data.courseNo!}
       />
       <ModalManageTopic
         opened={openModalEditTopic}
         onClose={() => setOpenModalEditTopic(false)}
         type="edit"
+        courseNo={data.courseNo!}
       />
       {data.TQF3?.part1 ? (
         <div className="flex flex-col w-full max-h-full gap-4">

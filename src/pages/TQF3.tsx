@@ -51,6 +51,12 @@ export default function TQF3() {
   ];
 
   useEffect(() => {
+    if (course) {
+      console.log(course);
+    }
+  }, [course]);
+
+  useEffect(() => {
     const fetchOneCourse = async () => {
       const res = await getOneCourse({
         academicYear: academicYear.id,

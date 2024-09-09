@@ -9,8 +9,14 @@ type Props = {
   opened: boolean;
   onClose: () => void;
   type: actionType;
+  courseNo: string;
 };
-export default function ModalManageCLO({ opened, onClose, type }: Props) {
+export default function ModalManageCLO({
+  opened,
+  onClose,
+  type,
+  courseNo,
+}: Props) {
   const height = type === "add" ? "h-full gap-5" : "h-fit gap-0";
   const cloLength = 3;
   const [checkedItem, setCheckedItem] = useState<string[]>([]);
@@ -47,7 +53,7 @@ export default function ModalManageCLO({ opened, onClose, type }: Props) {
       onClose={onClose}
       withCloseButton={false}
       closeOnClickOutside={false}
-      title={`${upperFirst(type)} CLO 259194`}
+      title={`${upperFirst(type)} CLO ${courseNo}`}
       size={type === "add" && cloLength > 0 ? "70vw" : "40vw"}
       centered
       transitionProps={{ transition: "pop" }}

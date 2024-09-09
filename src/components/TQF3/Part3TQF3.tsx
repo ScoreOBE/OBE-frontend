@@ -85,11 +85,13 @@ export default function Part3TQF3({ data, setForm }: Props) {
         opened={openModalAddEvalTopic}
         onClose={() => setOpenModalAddEvalTopic(false)}
         type="add"
+        courseNo={data.courseNo!}
       />
       <ModalManageEvalTopic
         opened={openModalEditEvalTopic}
         onClose={() => setOpenModalEditEvalTopic(false)}
         type="edit"
+        courseNo={data.courseNo!}
       />
  
         <div className="flex w-full">
