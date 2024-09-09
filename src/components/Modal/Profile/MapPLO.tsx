@@ -30,11 +30,15 @@ import {
   IModelSectionManagement,
 } from "@/models/ModelCourseManagement";
 import {
+  createCourseManagement,
   getCourseManagement,
   ploMapping,
 } from "@/services/courseManagement/courseManagement.service";
 import { useAppSelector } from "@/store";
-import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
+import {
+  CourseManagementRequestDTO,
+  CourseManagementSearchDTO,
+} from "@/services/courseManagement/dto/courseManagement.dto";
 import Loading from "@/components/Loading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
@@ -56,7 +60,11 @@ import {
   validateTextInput,
 } from "@/helpers/functions/validation";
 import { useForm } from "@mantine/form";
-import { showNotifications } from "@/helpers/functions/function";
+import {
+  getSectionNo,
+  showNotifications,
+  sortData,
+} from "@/helpers/functions/function";
 import { SearchInput } from "@/components/SearchInput";
 import { IModelCourse } from "@/models/ModelCourse";
 
@@ -85,11 +93,15 @@ export default function MapPLO({ ploName = "" }: Props) {
   const [openModalAddPLONo, setOpenModalAddPLONo] = useState(false);
   const [openModalEditPLONo, setOpenModalEditPLONo] = useState(false);
   const [openModalAddCourse, setOpenModalAddCourse] = useState(false);
+  const [firstInput, setFirstInput] = useState(true);
+  const [sectionNoList, setSectionNoList] = useState<string[]>([]);
 
   const form = useForm({
     mode: "controlled",
     initialValues: {
       type: COURSE_TYPE.GENERAL.en,
+      courseNo: "",
+      courseName: "",
       sections: [{}],
     } as Partial<IModelCourse>,
     validate: {
@@ -97,8 +109,14 @@ export default function MapPLO({ ploName = "" }: Props) {
       courseNo: (value) => validateCourseNo(value, courseCode),
       courseName: (value) => validateTextInput(value, "Course Name"),
       sections: {
-        topic: (value) => validateTextInput(value, "Topic"),
-        sectionNo: (value) => validateSectionNo(value),
+        topic: (value) => {
+          if (form.getValues().type == COURSE_TYPE.SEL_TOPIC.en)
+            return validateTextInput(value, "Topic");
+        },
+        sectionNo: (value) => {
+          if (form.getValues().type == COURSE_TYPE.SEL_TOPIC.en)
+            return validateSectionNo(value);
+        },
       },
     },
     validateInputOnBlur: true,
@@ -150,7 +168,8 @@ export default function MapPLO({ ploName = "" }: Props) {
   useEffect(() => {
     if (ploList.departmentCode && !courseManagement.length) {
       const payloadCourse = {
-        ...new CourseManagementRequestDTO(),
+        ...new CourseManagementSearchDTO(),
+        isPloMapping: true,
         limit: 20,
         departmentCode: ploList.departmentCode,
       };
@@ -305,7 +324,8 @@ export default function MapPLO({ ploName = "" }: Props) {
   const searchCourse = async (searchValue: string, reset?: boolean) => {
     setCourseManagement([]);
     let payloadCourse: any = {
-      ...new CourseManagementRequestDTO(),
+      ...new CourseManagementSearchDTO(),
+      isPloMapping: true,
       limit: 20,
       departmentCode: ploList.departmentCode,
     };
@@ -416,6 +436,75 @@ export default function MapPLO({ ploName = "" }: Props) {
   const closeModalAddCourse = () => {
     setOpenModalAddCourse(false);
     form.reset();
+    setSectionNoList([]);
+    setFirstInput(true);
+  };
+
+  const setSectionList = (value: string[]) => {
+    let sections = form.getValues().sections ?? [];
+    const lastValue = value[value.length - 1];
+    // validate section No
+    if (value.length && value.length >= sections.length) {
+      if (
+        !parseInt(lastValue) ||
+        lastValue.length > 3 ||
+        sections.some((sec) => sec.sectionNo === parseInt(lastValue))
+      )
+        return;
+    }
+    const sectionNo: string[] = value.sort((a, b) => parseInt(a) - parseInt(b));
+    setSectionNoList(sectionNo.map((secNo) => getSectionNo(secNo)));
+
+    let initialSection = { topic: sections[0]?.topic };
+    if (!sectionNo.length) {
+      sections = [{ ...initialSection }];
+    } else if (sections?.length == sectionNo.length) {
+      sections[sectionNo.length - 1] = {
+        ...initialSection,
+        sectionNo: parseInt(lastValue),
+      };
+    } else if (sectionNo.length > sections?.length) {
+      sections.push({
+        ...initialSection,
+        sectionNo: parseInt(lastValue),
+      });
+    } else {
+      sections = sections.filter((sec) =>
+        sectionNo.includes(getSectionNo(sec.sectionNo))
+      );
+    }
+
+    sortData(sections, "sectionNo");
+    form.setFieldValue("sections", [...sections]);
+  };
+
+  const addCourse = async () => {
+    if (form.getValues().type == COURSE_TYPE.SEL_TOPIC.en) {
+      setFirstInput(false);
+      form.getValues().sections?.forEach((e: any) => {
+        e.topic = form.getValues().sections![0].topic;
+      });
+    }
+    if (!form.validate().hasErrors) {
+      const payload = {
+        ...form.getValues(),
+        updatedYear: academicYear.year,
+        updatedSemester: academicYear.semester,
+      } as CourseManagementRequestDTO & Record<string, any>;
+      if (payload.type !== COURSE_TYPE.SEL_TOPIC.en) {
+        delete payload.sections;
+      }
+      const res = await createCourseManagement(payload);
+      if (res) {
+        searchCourse("");
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Add success",
+          `${form.getValues().courseNo} is added`
+        );
+        closeModalAddCourse();
+      }
+    }
   };
 
   return (
@@ -627,7 +716,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                   withAsterisk
                   classNames={{
                     input:
-                      " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
+                      "h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
                     pill: "bg-secondary text-white font-bold",
                     label: "font-semibold text-tertiary text-b2",
                     error: "text-[10px] !border-none",
@@ -636,13 +725,13 @@ export default function MapPLO({ ploName = "" }: Props) {
                   splitChars={[",", " ", "|"]}
                   {...form.getInputProps(`section.sectionNo`)}
                   error={
-                    // !firstInput &&
+                    !firstInput &&
                     form.validateField(`sections.0.sectionNo`).error
                   }
-                  // value={sectionNoList}
-                  // onChange={setSectionList}
+                  value={sectionNoList}
+                  onChange={setSectionList}
                 />
-                <p>{form.validateField("sections.sectionNo").error}</p>{" "}
+                <p>{form.validateField("sections.sectionNo").error}</p>
               </>
             )}
           </div>
@@ -656,10 +745,10 @@ export default function MapPLO({ ploName = "" }: Props) {
               Cancel
             </Button>
             <Button
-              // onClick={submit}
+              onClick={addCourse}
               className="rounded-[8px] text-[12px] h-[32px] w-fit "
             >
-              Done
+              Add
             </Button>
           </div>
         </div>
