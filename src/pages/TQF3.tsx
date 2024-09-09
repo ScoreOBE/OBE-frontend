@@ -22,7 +22,7 @@ import Part6TQF3 from "@/components/TQF3/Part6TQF3";
 import { IconInfoCircle } from "@tabler/icons-react";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { IModelCourse } from "@/models/ModelCourse";
-import { isEmpty } from "lodash";
+import { isEmpty, isEqual } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
 import { saveTQF3 } from "@/services/tqf3/tqf3.service";
 import { showNotifications } from "@/helpers/functions/function";
