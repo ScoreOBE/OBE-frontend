@@ -12,7 +12,7 @@ import { useForm } from "@mantine/form";
 import { useEffect } from "react";
 
 type Props = {
-  data: Partial<IModelCourse>;
+  data: IModelCourse;
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 

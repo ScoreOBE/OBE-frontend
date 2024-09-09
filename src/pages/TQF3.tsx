@@ -32,55 +32,53 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import { editCourse } from "@/store/course";
 import exportFile from "@/assets/icons/exportFile.svg?react";
 import Loading from "@/components/Loading";
+import { IModelTQF3 } from "@/models/ModelTQF3";
 
 export default function TQF3() {
   const location = useLocation().pathname;
   const { courseNo } = useParams();
   const loading = useAppSelector((state) => state.loading);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const [course, setCourse] = useState<Partial<IModelCourse>>({});
+  const [course, setCourse] = useState<IModelCourse>();
+  const [tqf3, setTqf3] = useState<IModelTQF3>();
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<UseFormReturnType<any>>();
-  const [tqf3Part, setTqf3Part] = useState<string | null>(partLabel.part1);
+  const [tqf3Part, setTqf3Part] = useState<string | null>(
+    Object.keys(partLabel)[0]
+  );
   const [openModalReuse, setOpenModalReuse] = useState(false);
   const partTab = [
     {
-      value: partLabel.part1,
-      tab: "Part 1",
+      value: Object.keys(partLabel)[0],
+      tab: partLabel.part1,
       compo: <Part1TQF3 data={course!} setForm={setForm} />,
     },
     {
-      value: partLabel.part2,
-      tab: "Part 2",
+      value: Object.keys(partLabel)[1],
+      tab: partLabel.part2,
       compo: <Part2TQF3 data={course!} setForm={setForm} />,
     },
     {
-      value: partLabel.part3,
-      tab: "Part 3",
+      value: Object.keys(partLabel)[2],
+      tab: partLabel.part3,
       compo: <Part3TQF3 data={course!} setForm={setForm} />,
     },
     {
-      value: partLabel.part4,
-      tab: "Part 4",
+      value: Object.keys(partLabel)[3],
+      tab: partLabel.part4,
       compo: <Part4TQF3 data={course!} setForm={setForm} />,
     },
     {
-      value: partLabel.part5,
-      tab: "Part 5",
+      value: Object.keys(partLabel)[4],
+      tab: partLabel.part5,
       compo: <Part5TQF3 data={course!} setForm={setForm} />,
     },
     {
-      value: partLabel.part6,
-      tab: "Part 6",
+      value: Object.keys(partLabel)[5],
+      tab: partLabel.part6,
       compo: <Part6TQF3 data={course!} setForm={setForm} />,
     },
   ];
-
-  useEffect(() => {
-    if (course) {
-      console.log(course);
-    }
-  }, [course]);
 
   useEffect(() => {
     const fetchOneCourse = async () => {
@@ -90,6 +88,11 @@ export default function TQF3() {
       });
       if (res) {
         setCourse(res);
+        if (res.type == COURSE_TYPE.SEL_TOPIC.en) {
+          setTqf3(res.sections[0].TQF3);
+        } else {
+          setTqf3(res.TQF3);
+        }
       }
     };
     if (academicYear && location.includes(ROUTE_PATH.TQF3)) fetchOneCourse();
@@ -97,17 +100,17 @@ export default function TQF3() {
 
   const topicPart = () => {
     switch (tqf3Part) {
-      case partLabel.part1:
+      case Object.keys(partLabel)[0]:
         return "Part 1 - ข้อมูลกระบวนวิชา\nCourse Information";
-      case partLabel.part2:
+      case Object.keys(partLabel)[1]:
         return "Part 2 - คำอธิบายลักษณะกระบวนวิชาและแผนการสอน\nDescription and Planning";
-      case partLabel.part3:
+      case Object.keys(partLabel)[2]:
         return "Part 3 -  การประเมินผลคะแนนกระบวนวิชา\nCourse Evaluation";
-      case partLabel.part4:
+      case Object.keys(partLabel)[3]:
         return "Part 4 - การเชื่อมโยงหัวข้อประเมิน\nAssessment Mapping";
-      case partLabel.part5:
+      case Object.keys(partLabel)[4]:
         return "Part 5 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้\nCurriculum Mapping";
-      case partLabel.part6:
+      case Object.keys(partLabel)[5]:
         return "Part 6 - การประเมินกระบวนวิชาและกระบวนการปรับปรุง\nCourse evaluation and improvement processes";
       default:
         return;
@@ -115,7 +118,7 @@ export default function TQF3() {
   };
 
   const onSave = async () => {
-    if (form) {
+    if (form && course) {
       const validationResult = form.validate();
       if (Object.keys(validationResult.errors).length > 0) {
         const firstErrorPath = Object.keys(validationResult.errors)[0];
@@ -123,7 +126,6 @@ export default function TQF3() {
           .getInputNode(firstErrorPath)
           ?.scrollIntoView({ behavior: "smooth" });
       } else {
-        const part = tqf3Part?.replace(" ", "").toLowerCase()!;
         const payload = form.getValues();
         if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
           payload.id = course.sections![0].TQF3?.id; // select first topic
@@ -131,7 +133,7 @@ export default function TQF3() {
           payload.id = course.TQF3?.id;
         }
         payload.instructors = payload.instructors.filter((ins: any) => ins);
-        const res = await saveTQF3(part, payload);
+        const res = await saveTQF3(tqf3Part!, payload);
         if (res) {
           form.reset();
           form.setValues(res);
@@ -206,7 +208,7 @@ export default function TQF3() {
         <Tabs
           value={tqf3Part}
           onChange={setTqf3Part}
-          defaultValue={partLabel.part1}
+          defaultValue={"part1"}
           classNames={{
             root: "overflow-hidden w-full flex flex-col h-full",
             tab: "px-0 !bg-transparent hover:!text-tertiary",
@@ -216,9 +218,9 @@ export default function TQF3() {
         >
           <div
             className={`flex flex-col w-full h-fit ${
-              tqf3Part === partLabel.part4 ? "pb-1" : "border-b-[2px] pb-4 mb-1"
+              tqf3Part === "part4" ? "pb-1" : "border-b-[2px] pb-4 mb-1"
             } 
-            ${tqf3Part === partLabel.part6 && "!mb-4"}
+            ${tqf3Part === "part6" && "!mb-4"}
             `}
           >
             <div className="flex gap-2">
@@ -229,13 +231,7 @@ export default function TQF3() {
                       <Icon
                         IconComponent={CheckIcon}
                         className={
-                          !course.TQF3 ||
-                          (course?.TQF3 &&
-                            isEmpty(
-                              course?.TQF3[
-                                part.tab.replace(" ", "").toLowerCase()
-                              ]
-                            ))
+                          !tqf3 || isEmpty(tqf3[part.value])
                             ? "text-[#DEE2E6]"
                             : "text-[#24b9a5]"
                         }
@@ -298,30 +294,26 @@ export default function TQF3() {
           </div>
           <div
             className={`h-full w-full flex overflow-y-auto ${
-              tqf3Part !== partLabel.part4 && "pt-3 px-3"
-            }  ${
-              tqf3Part === partLabel.part6 && "!pt-0"
-            } rounded-md text-[14px]`}
+              tqf3Part !== "part4" && "pt-3 px-3"
+            }  ${tqf3Part === "part6" && "!pt-0"} rounded-md text-[14px]`}
           >
             {partTab.map((part, index) => (
-              <Tabs.Panel key={index} value={part.tab} className="w-full">
-                {part.compo}
+              <Tabs.Panel key={index} value={part.value} className="w-full">
+                {course && part.compo}
               </Tabs.Panel>
             ))}
           </div>
         </Tabs>
       </div>
-      <SaveTQFbar
-        tqf="3"
-        part={tqf3Part as partType}
-        data={
-          course.type == COURSE_TYPE.SEL_TOPIC.en
-            ? course.sections![0].TQF3!
-            : course.TQF3!
-        }
-        onSave={onSave}
-        canSave={true}
-      />
+      {tqf3 && (
+        <SaveTQFbar
+          tqf="3"
+          part={tqf3Part as partType}
+          data={tqf3[tqf3Part!]}
+          onSave={onSave}
+          disabledSave={isEqual(tqf3![tqf3Part!], form?.getValues())}
+        />
+      )}
     </>
   );
 }
