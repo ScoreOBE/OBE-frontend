@@ -36,11 +36,14 @@ export default function SaveTQFbar({ tqf, part, data, onSave }: Props) {
         className={`min-h-14 justify-end gap-4 overflow-y-auto bottom-0 w-full bg-white border-[#e0e0e0] px-6 inline-flex flex-wrap items-center z-50 text-secondary`}
         style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
       >
-        <p className="text-[13px] text-default font-medium">
-          <span className="font-semibold">Saved: </span>{" "}
-          {data &&
-            dateFormatter(data[part.replace(" ", "").toLowerCase()]?.updatedAt)}
-        </p>
+        {data && (
+          <p className="text-[13px] text-default font-medium">
+            <span className="font-semibold">Saved: </span>{" "}
+            {dateFormatter(
+              data[part.replace(" ", "").toLowerCase()]?.updatedAt
+            )}
+          </p>
+        )}
         <Button
           className="text-[13px] font-semibold h-8 w-[128px] rounded-md bg-save hover:bg-[#28958f]"
           onClick={onSave}
