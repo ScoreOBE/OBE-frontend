@@ -27,7 +27,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import unplug from "@/assets/image/unplug.png";
 
 type Props = {
-  data: Partial<IModelCourse>;
+  data: IModelCourse;
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 

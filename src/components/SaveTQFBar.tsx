@@ -1,33 +1,50 @@
-import { useLocation, useSearchParams } from "react-router-dom";
-import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { Button } from "@mantine/core";
 import saveIcon from "@/assets/icons/save.svg?react";
 import Icon from "./Icon";
-import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelTQF5 } from "@/models/ModelTQF5";
 import { dateFormatter } from "@/helpers/functions/function";
+import { useEffect } from "react";
+
+export const partLabel = {
+  part1: "Part 1",
+  part2: "Part 2",
+  part3: "Part 3",
+  part4: "Part 4",
+  part5: "Part 5",
+  part6: "Part 6",
+};
 
 export type partType =
-  | "Part 1"
-  | "Part 2"
-  | "Part 3"
-  | "Part 4"
-  | "Part 5"
-  | "Part 6";
+  | "part1"
+  | "part2"
+  | "part3"
+  | "part4"
+  | "part5"
+  | "part6";
 
 type Props = {
   tqf: string;
   part: partType;
   data: IModelTQF3 | IModelTQF5;
   onSave: () => void;
+  disabledSave: boolean;
 };
 
-export default function SaveTQFbar({ tqf, part, data, onSave }: Props) {
-  const location = useLocation().pathname;
+export default function SaveTQFbar({
+  tqf,
+  part,
+  data,
+  onSave,
+  disabledSave,
+}: Props) {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <>
@@ -37,20 +54,14 @@ export default function SaveTQFbar({ tqf, part, data, onSave }: Props) {
       >
         {data && (
           <p className="text-[11px] flex flex-col text-end text-secondary font-medium">
-            <span className="font-bold"></span>{" "}
-            <span>
-              {dateFormatter(
-                data[part.replace(" ", "").toLowerCase()]?.updatedAt
-              )}
-            </span>
+            <span className="font-bold">Saved:</span>{" "}
+            <span>{dateFormatter(data.updatedAt)}</span>
           </p>
         )}
         <Button
           className="text-[12px] font-semibold h-8 w-[128px] rounded-md disabled:bg-disable"
           onClick={onSave}
-          disabled={
-            part !== "Part 1" && !data[part.replace(" ", "").toLowerCase()]
-          }
+          disabled={disabledSave}
         >
           <div className="flex gap-2 items-center">
             <Icon IconComponent={saveIcon} />

@@ -18,7 +18,7 @@ import { useState } from "react";
 import { IModelCourse } from "@/models/ModelCourse";
 
 type Props = {
-  data: Partial<IModelCourse>;
+  data: IModelCourse;
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
@@ -33,7 +33,7 @@ export default function Part5TQF3({ data, setForm }: Props) {
         onClose={() => setOpenDrawerPLOdes(false)}
       />
 
-    <div className="flex flex-col w-full max-h-full gap-4 pb-6">
+      <div className="flex flex-col w-full max-h-full gap-4 pb-6">
         {/* Topic */}
         <div className="flex text-secondary items-center w-full justify-between">
           <span className="text-[15px] font-bold">
