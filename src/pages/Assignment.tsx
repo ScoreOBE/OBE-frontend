@@ -63,11 +63,10 @@ export default function Assignment() {
           >
             <Menu.Target>
               <Button
-                color="#20af65"
                 leftSection={
                   <Icon IconComponent={eyePublish} className="h-5 w-5" />
                 }
-                className="rounded-[8px] font-semibold text-[12px] w-fit  h-8 px-3 "
+                className="rounded-[8px] bg-save hover:bg-[#28958f] font-semibold text-[12px] w-fit  h-8 px-3 "
               >
                 Publish score
               </Button>

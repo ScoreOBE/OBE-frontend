@@ -299,7 +299,8 @@ export default function CompoMangeIns({
         )}
         {type != "mainIns" && (
           <Button
-            className="rounded-s-none min-w-fit text-b3 h-[30px] border-l-0 disabled:border-[#cecece]"
+          color="#13A9A1"
+            className="rounded-s-none min-w-fit text-b3  h-[30px] border-l-0 disabled:border-[#cecece]"
             disabled={!inputUser?.value || (swapMethodAddUser && invalidEmail)}
             onClick={() =>
               type == "changeMain" && action ? action(inputUser) : addUser()

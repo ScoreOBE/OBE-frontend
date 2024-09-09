@@ -33,6 +33,7 @@ type Props = {
   data: Partial<IModelCourse>;
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
+
 export default function Part6TQF3({ data, setForm }: Props) {
   const [formEdit, setFormEdit] = useState<
     Partial<IModelTQF3Part6> & Record<string, any>
@@ -190,7 +191,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
         editData={formEdit}
       />
 
-      <div className="flex flex-col w-full max-h-full gap-4">
+   <div className="flex flex-col w-full max-h-full gap-4">
         {/* Topic */}
 
         <div className="flex text-secondary items-center w-full justify-between">

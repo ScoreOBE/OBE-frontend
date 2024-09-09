@@ -19,6 +19,7 @@ export default {
         bgTableHeader: "#e5e7f6",
         hover: "#efefef",
         error: "#fa5252",
+        disable: '#f1f3f5'
       },
       fontSize: {
         h1: "20px",

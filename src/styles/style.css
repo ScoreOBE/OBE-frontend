@@ -22,8 +22,8 @@
 
 .mantine-Stepper-stepIcon[data-completed],
 .mantine-Stepper-separator[data-active] {
-  background-color: #1fc461;
-  border-color: #1fc461;
+  background-color: #17d0a8;
+  border-color: #17d0a8;
 }
 
 .mantine-TagsInput-input[data-error] {
