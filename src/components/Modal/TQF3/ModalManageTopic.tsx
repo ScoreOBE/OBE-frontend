@@ -1,4 +1,6 @@
+import { validateTextInput } from "@/helpers/functions/validation";
 import { IModelTQF3Part6 } from "@/models/ModelTQF3";
+import course from "@/store/course";
 import {
   Button,
   Checkbox,
@@ -9,6 +11,7 @@ import {
   NumberInput,
   NumberInputHandlers,
   Select,
+  Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
@@ -23,12 +26,16 @@ type Props = {
   onClose: () => void;
   type: actionType;
   action: (value?: any, option?: any) => void;
+  editData?: Partial<IModelTQF3Part6>;
+  data?: any;
 };
 export default function ModalManageTopic({
   opened,
   onClose,
   type,
   action,
+  editData,
+  data,
 }: Props) {
   let options = [
     {
@@ -59,14 +66,34 @@ export default function ModalManageTopic({
   ];
 
   const form = useForm({
-    mode: "uncontrolled",
-    initialValues: {} as Partial<IModelTQF3Part6>,
-    validate: {},
+    mode: "controlled",
+    initialValues: {} as any,
+    validate: {
+      topic: (value) => !value?.length && "Topic is required",
+      detail: (value) => validateTextInput(value, "Description", 1000, false),
+    },
   });
 
   const onCloseModal = () => {
-    form.reset();
     onClose();
+    setTimeout(() => {
+      form.reset();
+    }, 300);
+  };
+
+  useEffect(() => {
+    if (editData) {
+      form.setValues(editData);
+    }
+  }, [editData]);
+
+  const addEditTopic = () => {
+    if (!form.validateField("topic").hasError) {
+      if (!form.validateField("detail").hasError) {
+        action(form.getValues(), options);
+        onCloseModal();
+      }
+    }
   };
 
   return (
@@ -75,8 +102,8 @@ export default function ModalManageTopic({
       onClose={onCloseModal}
       closeOnClickOutside={false}
       withCloseButton={false}
-      title={`${upperFirst(type)} Topic 261405`}
-      size="40vw"
+      title={`${upperFirst(type)} Topic`}
+      size="43vw"
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
@@ -91,23 +118,47 @@ export default function ModalManageTopic({
       >
         {/* Input Field */}
         <div className={`flex h-fit mb-5 flex-col gap-4`}>
-          <Select
-            size="sm"
-            label="Select Topic"
-            placeholder="Topic"
-            data={options.map((item) => ({
-              value: item.th,
-              label: `${" "}${item.th}\n${" "}${item.en}`,
-            }))}
-            classNames={{
-              option: "text-[13px] py-2 px-2 ",
-              options: "whitespace-break-spaces leading-5",
-              input: "whitespace-break-spaces flex flex-col flex-wrap",
-            }}
-            {...form.getInputProps("topic")}
-          />
+          {type === "add" ? (
+            <Select
+              size="xs"
+              label="Select Topic"
+              placeholder="Topic"
+              data={options.map((item) => ({
+                value: item.th,
+                label: `${item.th}\n${item.en}`,
+                disabled: data
+                  .slice(5)
+                  .some((e: any) => e.topic.includes(item.th)),
+              }))}
+              classNames={{
+                option: "text-[13px] py-2 px-3",
+                options: "whitespace-pre-wrap leading-5 overflow-y-auto",
+                input: "whitespace-break-spaces flex flex-col flex-wrap",
+              }}
+              renderOption={(item: any) => (
+                <div className="flex w-full justify-between items-center">
+                  <p>{item.option.label}</p>
+                  {item.option.disabled && (
+                    <p className="text-[#615f77] font-semibold">Added</p>
+                  )}
+                </div>
+              )}
+              {...form.getInputProps("topic")}
+            />
+          ) : (
+            <div>
+              <label className="font-semibold text-label text-[13px]">
+                Topic
+              </label>
 
-          {form.getValues().topic && (
+              <div className="flex flex-col text-[13px] font-medium text-secondary">
+                <p>{editData?.topic}</p>
+                {options?.find(({ th }) => th === editData?.topic)?.en}
+              </div>
+            </div>
+          )}
+
+          {(form.getValues().topic || type === "edit") && (
             <>
               <Textarea
                 autoFocus={false}
@@ -123,9 +174,7 @@ export default function ModalManageTopic({
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. ใช้แบบสอบถามความพึงพอใจ"
-                onChange={(event) => {
-                  form.setFieldValue("detail", [event.target.value]);
-                }}
+                {...form.getInputProps("detail")}
               />
             </>
           )}
@@ -141,14 +190,12 @@ export default function ModalManageTopic({
         >
           Cancel
         </Button>
+
         <Button
-          onClick={() => {
-            action(form.getValues(), options);
-            onClose();
-          }}
+          onClick={addEditTopic}
           className="rounded-[8px] text-[12px] h-8 w-fit "
         >
-          Add
+          {type === "add" ? "Add" : "Done"}
         </Button>
       </div>
     </Modal>
