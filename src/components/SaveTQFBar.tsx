@@ -42,10 +42,6 @@ export default function SaveTQFbar({
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return (
     <>
       <div
