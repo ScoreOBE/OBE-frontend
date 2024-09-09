@@ -1,18 +1,21 @@
 import apiService from "@/services/apiService";
-import { CourseManagementRequestDTO } from "./dto/courseManagement.dto";
+import {
+  CourseManagementRequestDTO,
+  CourseManagementSearchDTO,
+} from "./dto/courseManagement.dto";
 
 export const courseManagementController = (configService = {}) => {
   const service = apiService(configService);
   const prefix = "/courseManagement";
 
   return {
-    getCourseManagement: async (params?: CourseManagementRequestDTO) => {
+    getCourseManagement: async (params?: CourseManagementSearchDTO) => {
       return service.get(`${prefix}`, { ...params });
     },
     getOneCourseManagement: async (courseNo: string) => {
       return service.get(`${prefix}/one`, { courseNo });
     },
-    createCourseManagement: async (params: any) => {
+    createCourseManagement: async (params: CourseManagementRequestDTO) => {
       return service.post(`${prefix}`, { ...params });
     },
     checkCanCreateSectionManagement: async (params: any) => {

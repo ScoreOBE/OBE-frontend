@@ -13,7 +13,7 @@ import {
 } from "@tabler/icons-react";
 import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
 import Icon from "@/components/Icon";
-import { CourseManagementRequestDTO } from "@/services/courseManagement/dto/courseManagement.dto";
+import { CourseManagementSearchDTO } from "@/services/courseManagement/dto/courseManagement.dto";
 import {
   deleteCourseManagement,
   deleteSectionManagement,
@@ -139,7 +139,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
 
   const initialPayload = () => {
     return {
-      ...new CourseManagementRequestDTO(),
+      ...new CourseManagementSearchDTO(),
       departmentCode: selectDepartment.departmentCode?.includes("All")
         ? department.map((dep) => dep.departmentCode)
         : [selectDepartment.departmentCode],

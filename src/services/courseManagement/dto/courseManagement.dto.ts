@@ -1,8 +1,16 @@
-export class CourseManagementRequestDTO {
+export class CourseManagementSearchDTO {
   departmentCode?: string[];
   orderBy: string = "courseNo";
   orderType: string = "asc";
   search: string = "";
   page: number = 1;
   limit: number = 10;
+}
+
+export class CourseManagementRequestDTO {
+  courseNo: string = "";
+  courseName: string = "";
+  updatedYear: number = 0;
+  updatedSemester: number = 0;
+  type: string = "";
 }
