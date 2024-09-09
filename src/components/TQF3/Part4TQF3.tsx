@@ -25,9 +25,13 @@ import {
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import Icon from "../Icon";
+import { IModelCourse } from "@/models/ModelCourse";
 
-type Props = {};
-export default function Part4TQF3() {
+type Props = {
+  data: Partial<IModelCourse>;
+  setForm: React.Dispatch<React.SetStateAction<any>>;
+};
+export default function Part4TQF3({ data, setForm }: Props) {
   const dataTest = [
     {
       no: 1,

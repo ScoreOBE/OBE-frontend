@@ -23,8 +23,13 @@ import {
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import ModalManageTopic from "../Modal/TQF3/ModalManageCourseContent";
+import { IModelCourse } from "@/models/ModelCourse";
 
-export default function Part2TQF3() {
+type Props = {
+  data: Partial<IModelCourse>;
+  setForm: React.Dispatch<React.SetStateAction<any>>;
+};
+export default function Part2TQF3({ data, setForm }: Props) {
   const dataTest = [
     {
       no: 1,
@@ -100,21 +105,25 @@ export default function Part2TQF3() {
         opened={openModalAddCLO}
         onClose={() => setOpenModalAddCLO(false)}
         type="add"
+        courseNo={data.courseNo!}
       />
       <ModalManageCLO
         opened={openModalEditCLO}
         onClose={() => setOpenModalEditCLO(false)}
         type="edit"
+        courseNo={data.courseNo!}
       />
       <ModalManageTopic
         opened={openModalAddTopic}
         onClose={() => setOpenModalAddTopic(false)}
         type="add"
+        courseNo={data.courseNo!}
       />
       <ModalManageTopic
         opened={openModalEditTopic}
         onClose={() => setOpenModalEditTopic(false)}
         type="edit"
+        courseNo={data.courseNo!}
       />
       <div className="flex flex-col w-full max-h-full gap-4">
         {/* Description */}
@@ -282,7 +291,7 @@ export default function Part2TQF3() {
             >
               <div className="flex gap-2">
                 <Icon IconComponent={AddIcon} />
-                Add course content 
+                Add course content
               </div>
             </Button>
           </div>

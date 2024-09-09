@@ -18,8 +18,14 @@ type Props = {
   opened: boolean;
   onClose: () => void;
   type: actionType;
+  courseNo: string;
 };
-export default function ModalManageTopic({ opened, onClose, type }: Props) {
+export default function ModalManageTopic({
+  opened,
+  onClose,
+  type,
+  courseNo,
+}: Props) {
   const height = type === "add" ? "h-full" : "h-fit";
   const handlersLecRef = useRef<NumberInputHandlers>(null);
   const handlersLabRef = useRef<NumberInputHandlers>(null);
@@ -30,7 +36,7 @@ export default function ModalManageTopic({ opened, onClose, type }: Props) {
       opened={opened}
       onClose={onClose}
       closeOnClickOutside={false}
-      title={`${upperFirst(type)} Course Content 261405`}
+      title={`${upperFirst(type)} Course Content ${courseNo}`}
       size={type === "add" && topicLenght > 0 ? "70vw" : "35vw"}
       centered
       withCloseButton={false}

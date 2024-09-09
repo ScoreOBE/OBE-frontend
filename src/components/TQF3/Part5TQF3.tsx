@@ -15,9 +15,13 @@ import Icon from "../Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import { useState } from "react";
+import { IModelCourse } from "@/models/ModelCourse";
 
-type Props = {};
-export default function Part5TQF3() {
+type Props = {
+  data: Partial<IModelCourse>;
+  setForm: React.Dispatch<React.SetStateAction<any>>;
+};
+export default function Part5TQF3({ data, setForm }: Props) {
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
   const plo = 12;
   const clo = 12;

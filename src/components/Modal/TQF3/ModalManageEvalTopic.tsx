@@ -18,8 +18,14 @@ type Props = {
   opened: boolean;
   onClose: () => void;
   type: actionType;
+  courseNo: string;
 };
-export default function ModalManageEvalTopic({ opened, onClose, type }: Props) {
+export default function ModalManageEvalTopic({
+  opened,
+  onClose,
+  type,
+  courseNo,
+}: Props) {
   const height = type === "add" ? "h-full" : "h-fit";
   const handlersRef = useRef<NumberInputHandlers>(null);
   const topicLenght = 5;
@@ -30,7 +36,7 @@ export default function ModalManageEvalTopic({ opened, onClose, type }: Props) {
       onClose={onClose}
       withCloseButton={false}
       closeOnClickOutside={false}
-      title={`${upperFirst(type)} Evaluation Topic 261405`}
+      title={`${upperFirst(type)} Evaluation Topic ${courseNo}`}
       size={type === "add" && topicLenght > 0 ? "70vw" : "45vw"}
       centered
       transitionProps={{ transition: "pop" }}
