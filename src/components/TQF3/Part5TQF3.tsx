@@ -15,9 +15,14 @@ import Icon from "../Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import { useState } from "react";
+import { IModelCourse } from "@/models/ModelCourse";
 
-type Props = {};
-export default function Part5TQF3() {
+type Props = {
+  data: Partial<IModelCourse>;
+  setForm: React.Dispatch<React.SetStateAction<any>>;
+};
+
+export default function Part5TQF3({ data, setForm }: Props) {
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
   const plo = 12;
   const clo = 12;
@@ -28,7 +33,7 @@ export default function Part5TQF3() {
         onClose={() => setOpenDrawerPLOdes(false)}
       />
 
-      <div className="flex flex-col w-full max-h-full gap-4 pb-6">
+    <div className="flex flex-col w-full max-h-full gap-4 pb-6">
         {/* Topic */}
         <div className="flex text-secondary items-center w-full justify-between">
           <span className="text-[15px] font-bold">
