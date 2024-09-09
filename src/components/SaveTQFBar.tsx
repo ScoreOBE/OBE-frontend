@@ -65,7 +65,7 @@ export default function SaveTQFbar({
         >
           <div className="flex gap-2 items-center">
             <Icon IconComponent={saveIcon} />
-            Save {part}
+            Save {partLabel[part]}
           </div>
         </Button>
       </div>
