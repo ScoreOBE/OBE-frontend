@@ -169,6 +169,9 @@ export default function ModalAddSection({
     delete payload.id;
 
     payload.sections?.forEach((sec: any) => {
+      if (payload.type == COURSE_TYPE.SEL_TOPIC.en) {
+        sec.topic = form.getValues().sections![0].topic;
+      }
       sec.semester = sec.semester?.map((term: string) => parseInt(term));
       if (isManage) {
         sec.instructor = sec.instructor.value;
