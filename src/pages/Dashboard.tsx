@@ -177,7 +177,7 @@ export default function Dashboard() {
         // }
         title="Upload score"
         transitionProps={{ transition: "pop" }}
-        size="39vw"
+        size="32vw"
         centered
         classNames={{
           content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
@@ -211,6 +211,7 @@ export default function Dashboard() {
             <Group className="flex w-full h-fit items-end justify-end">
               <div>
                 <Button
+                  onClick={() => setOpenModalSelectCourse(false)}
                   color="#575757"
                   variant="subtle"
                   className="rounded-[8px] text-[12px] h-[32px] w-fit "

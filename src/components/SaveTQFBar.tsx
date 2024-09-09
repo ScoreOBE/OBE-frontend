@@ -36,13 +36,13 @@ export default function SaveTQFbar({ tqf, part, data, onSave }: Props) {
         className={`min-h-14 justify-end gap-4 overflow-y-auto bottom-0 w-full bg-white border-[#e0e0e0] px-6 inline-flex flex-wrap items-center z-50 text-secondary`}
         style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
       >
-        <p className="text-[13px] text-default font-medium">
-          <span className="font-semibold">Saved: </span>{" "}
-          {data &&
-            dateFormatter(data[part.replace(" ", "").toLowerCase()]?.updatedAt)}
+        <p className="text-[11px] flex flex-col text-end text-save font-medium">
+          <span className="font-bold">Saved</span>{" "}
+          <span>{data &&
+            dateFormatter(data[part.replace(" ", "").toLowerCase()]?.updatedAt)}</span>
         </p>
         <Button
-          className="text-[13px] font-semibold h-8 w-[128px] rounded-md bg-save hover:bg-[#28958f]"
+          className="text-[12px] font-semibold h-8 w-[128px] rounded-md bg-save hover:bg-[#28958f]"
           onClick={onSave}
         >
           <div className="flex gap-2 items-center">
@@ -51,7 +51,7 @@ export default function SaveTQFbar({ tqf, part, data, onSave }: Props) {
           </div>
         </Button>
 
-        <Button className="text-[13px] font-semibold h-8 px-4 rounded-md">
+        <Button className="text-[12px] font-semibold h-8 px-4 rounded-md">
           <div className="flex gap-2 items-center">
             <Icon IconComponent={exportFile} />
             Export TQF {tqf}
