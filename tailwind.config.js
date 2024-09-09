@@ -12,6 +12,7 @@ export default {
         tertiary: "#3e3e3e",
         done: "#059061",
         save: "#13A9A1",
+        label: "#424242",
         noData: "#ababab",
         edit: "#f39d4e",
         delete: "#ff4747",
