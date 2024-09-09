@@ -305,15 +305,21 @@ export default function TQF3() {
           </div>
         </Tabs>
       </div>
-      {tqf3 && (
-        <SaveTQFbar
-          tqf="3"
-          part={tqf3Part as partType}
-          data={tqf3[tqf3Part!]}
-          onSave={onSave}
-          disabledSave={isEqual(tqf3![tqf3Part!], form?.getValues())}
-        />
-      )}
+      {tqf3 &&
+        (tqf3Part == "part1" ||
+          tqf3[
+            Object.keys(partLabel)[
+              Object.keys(partLabel).findIndex((e) => e == tqf3Part) - 1
+            ]
+          ]) && (
+          <SaveTQFbar
+            tqf="3"
+            part={tqf3Part as partType}
+            data={tqf3[tqf3Part!]}
+            onSave={onSave}
+            disabledSave={isEqual(tqf3![tqf3Part!], form?.getValues())}
+          />
+        )}
     </>
   );
 }
