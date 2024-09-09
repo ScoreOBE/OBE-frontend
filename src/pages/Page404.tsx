@@ -57,7 +57,7 @@ export default function NotFoundPage() {
             </Button>
           </div>
 
-          <p className="text-[180px] font-bold ">404</p>
+          <p className="text-[120px] font-medium ">404</p>
         </div>
       </div>
     </div>

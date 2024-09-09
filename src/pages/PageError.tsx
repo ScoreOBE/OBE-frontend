@@ -48,7 +48,7 @@ export default function PageError() {
               <span className=" text-amber-600 ">Bad Request</span>{" "}
             </p>
             <p className="text-lg  font-medium text-gray-600">
-              Something went wrong. We encountered an issue processing.
+              Something went wrong, we encountered an issue processing
             </p>{" "}
             <Button
               onClick={goDashboard}
@@ -61,7 +61,7 @@ export default function PageError() {
             </Button>
           </div>
 
-          <p className="text-[180px] text-amber-600 font-bold ">400</p>
+          <p className="text-[120px] text-amber-600 font-medium ">400</p>
         </div>
       )}
       {error.statusCode == STATUS_CODE.UNAUTHORIZED && (
@@ -74,8 +74,8 @@ export default function PageError() {
               Unauthorized
             </p>
             <p className="text-lg  font-medium text-gray-600">
-              We couldn't validate or support your credentials. <br /> Please
-              try again.
+              We couldn't validate or support your credentials <br /> Please
+              try again
             </p>{" "}
             <Button
               onClick={goDashboard}
@@ -88,7 +88,7 @@ export default function PageError() {
             </Button>
           </div>
 
-          <p className="text-[180px] text-pink-500 font-bold ">401</p>
+          <p className="text-[120px] text-pink-500 font-medium ">401</p>
         </div>
       )}
       {error.statusCode == STATUS_CODE.FORBIDDEN && (
@@ -97,13 +97,13 @@ export default function PageError() {
             <p className="text-3xl   font-semibold">
               <span className=" text-gray-600 font-normal ">Hold on... </span>
             </p>
-            <p className="text-4xl text-emerald-500 mt-6 font-semibold">
+            <p className="text-4xl text-[#24aa79] mt-6 font-semibold">
               Access Denied
             </p>
             <p className="text-lg  font-medium text-gray-600">
-              Look like your CMU account don't have permission to access Score
-              OBE+ <br />
-              Reach out system administrator to gain access
+              Look like your CMU account don't have permission to access <span className=" text-secondary "> Score OBE</span>
+              <span className=" text-[#dab531]"> +</span><br />
+              Reach out to the system administrator to gain access
             </p>{" "}
             <Button
               onClick={goDashboard}
@@ -116,11 +116,11 @@ export default function PageError() {
             </Button>
           </div>
 
-          <p className="text-[180px] text-emerald-400 font-bold ">403</p>
+          <p className="text-[120px] text-[#24aa79] font-medium ">403</p>
         </div>
       )}
-      {error.statusCode == STATUS_CODE.SERVER_ERROR && (
-        <div className="text-start bg-[#f1f0fd] text-white w-screen px-36 h-full flex justify-between items-center ">
+      {/* {error.statusCode == STATUS_CODE.SERVER_ERROR && ( */}
+        <div className="text-start bg-[#ecebfb] text-white w-screen px-36 h-full flex justify-between items-center ">
           <div className="flex flex-col gap-4">
             <p className="text-3xl   font-semibold">
               <span className=" text-gray-600 font-normal ">
@@ -132,9 +132,9 @@ export default function PageError() {
               <span className=" text-[#FFCD1B]"> +</span> Lost
             </p>
             <p className="text-lg  font-medium text-gray-600">
-              We're facing an internal server error. Oue team're trying to fix{" "}
+              We're facing an internal server error. Our team're trying to fix{" "}
               <br />
-              Please be patient or try again later.
+              Please be patient or try again later
             </p>{" "}
             <Button
               onClick={goDashboard}
@@ -147,9 +147,9 @@ export default function PageError() {
             </Button>
           </div>
 
-          <p className="text-[180px] text-secondary font-bold ">500</p>
+          <p className="text-[120px] text-secondary font-medium ">500</p>
         </div>
-      )}
+    
     </div>
   );
 }
