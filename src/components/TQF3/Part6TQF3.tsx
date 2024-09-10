@@ -262,7 +262,10 @@ export default function Part6TQF3({ data, setForm }: Props) {
                     {index + 1}.
                   </p>
                   <p className="flex flex-col gap-1  text-[14px]">
-                    <span className="font-semibold">{topics[index].th}</span>
+                    <span className="font-semibold">
+                      {topics[index].th}{" "}
+                      <span className=" text-red-500">*</span>
+                    </span>
                     <span className="font-bold ">{topics[index].en}</span>
                   </p>
                 </div>

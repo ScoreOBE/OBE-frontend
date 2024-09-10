@@ -14,7 +14,7 @@ import { useForm } from "@mantine/form";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import { Table, rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
-import { IconEdit, IconGripVertical, IconTrash } from "@tabler/icons-react";
+import { IconCheckbox, IconEdit, IconGripVertical, IconTrash } from "@tabler/icons-react";
 import {
   IconExclamationCircle,
   IconInfoCircle,
@@ -133,8 +133,27 @@ export default function Part3TQF3({ data, setForm }: Props) {
               </div>
             </Button>
           </div>
+          <div className="w-full">
+            <Alert
+              radius="md"
+              icon={<IconCheckbox />}
+              variant='light'
+              color="rgba(6, 158, 110, 1)"
+              classNames={{
+                icon: "size-6",
+                body: " flex justify-center",
+              }}
+              className="w-full"
+              title={
+                <p className="font-semibold">
+                The total of all topics in the course syllabus <span className=" font-extrabold">must equal 100%</span> .
+                </p>
+              }
+            ></Alert>
+          </div>
           <Alert
             radius="md"
+            className="-mt-2"
             icon={<IconInfoCircle />}
             variant="light"
             color="blue"
@@ -154,6 +173,7 @@ export default function Part3TQF3({ data, setForm }: Props) {
               </p>
             }
           ></Alert>
+          
 
           {/* Table */}
           <DragDropContext
@@ -192,11 +212,7 @@ export default function Part3TQF3({ data, setForm }: Props) {
                           withArrow
                           label={
                             <div className="text-default text-[12px] p-2 font-medium gap-2">
-                              The total of all topic evaluations must added up
-                              to{" "}
-                              <span className=" font-bold text-secondary">
-                                100%
-                              </span>
+                             Percentage of scores for each topic in the course syllabus.
                             </div>
                           }
                           color="#FCFCFC"
