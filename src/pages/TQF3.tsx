@@ -160,7 +160,7 @@ export default function TQF3() {
         closeOnClickOutside={false}
         onClose={() => setOpenModalReuse(false)}
         transitionProps={{ transition: "pop" }}
-        size="35vw"
+        size="32vw"
         centered
         classNames={{
           content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
@@ -172,7 +172,7 @@ export default function TQF3() {
           <Alert
             variant="light"
             color="blue"
-            title={` lorem ipsum `}
+            title={`Reusing TQF will import all 6 parts of TQF3 data from your selected course to automatically fill in the TQF3 for this course.`}
             icon={<IconInfoCircle />}
             classNames={{ icon: "size-6" }}
           ></Alert>

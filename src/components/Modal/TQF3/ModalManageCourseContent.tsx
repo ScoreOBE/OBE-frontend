@@ -44,6 +44,7 @@ export default function ModalManageTopic({
       classNames={{
         content: `flex flex-col bg-[#F6F7FA] overflow-hidden `,
         body: `overflow-hidden ${height}`,
+         header: `mb-1`
       }}
     >
       <div
@@ -53,7 +54,7 @@ export default function ModalManageTopic({
       >
         <div
           className={`flex gap-5 py-1 ${
-            type === "add" ? " h-[450px]" : "h-fit"
+            type === "add" ? " h-[500px]" : "h-fit"
           }`}
         >
           {/* Input Field */}
@@ -68,7 +69,7 @@ export default function ModalManageTopic({
                 type === "add" ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
             }}
           >
-            <div className="flex flex-col gap-4 h-[80%]">
+            <div className="flex flex-col gap-4  h-[80%]">
               <Textarea
                 autoFocus={false}
                 label={
@@ -78,7 +79,7 @@ export default function ModalManageTopic({
                 }
                 className="w-full border-none rounded-r-none"
                 classNames={{
-                  input: "flex h-[140px] p-3 text-[13px]",
+                  input: "flex h-[200px] p-3 text-[13px]",
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. การอินทิเกรต (Integration)"
@@ -95,6 +96,7 @@ export default function ModalManageTopic({
                   input: "flex px-3 py-5 text-[13px]",
                   label: "flex pb-1",
                 }}
+                size="xs"
                 allowNegative={false}
                 handlersRef={handlersLecRef}
                 defaultValue={0}
@@ -131,6 +133,7 @@ export default function ModalManageTopic({
                   input: "flex px-3 py-5 text-[13px]",
                   label: "flex pb-1",
                 }}
+                 size="xs"
                 allowNegative={false}
                 handlersRef={handlersLabRef}
                 defaultValue={0}
@@ -175,7 +178,7 @@ export default function ModalManageTopic({
           {/* List CLO */}
           {!!topicLenght && type === "add" && (
             <div
-              className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-[442px]"
+              className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-full"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 overflowY: "auto",
@@ -194,7 +197,7 @@ export default function ModalManageTopic({
                 {Array.from({ length: topicLenght }).map((_, index) => (
                   <div
                     key={index}
-                    className={`py-3 w-full border-b-[1px] pl-3 pr-1 ${
+                    className={`py-3 w-full border-b-[1px] pl-3 ${
                       Array.length > 1 ? "last:border-none last:pb-5" : ""
                     } `}
                   >

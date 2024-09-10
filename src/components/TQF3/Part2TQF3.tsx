@@ -300,7 +300,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
               >
                 <div className="flex gap-2">
                   <Icon IconComponent={AddIcon} />
-                  Add course content
+                  Add Course Content
                 </div>
               </Button>
             </div>

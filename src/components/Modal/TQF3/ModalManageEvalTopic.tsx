@@ -105,15 +105,16 @@ export default function ModalManageEvalTopic({
                 label={<p className="font-semibold flex gap-1">Description</p>}
                 className="w-full border-none rounded-r-none"
                 classNames={{
-                  input: "flex h-[125px] p-3 text-[13px]",
+                  input: "flex h-[125px] px-3 py-2 text-[13px]",
                   label: "flex pb-1",
                 }}
                 placeholder="(Optional)"
               />
               <NumberInput
+              size="xs"
                 label={
                   <p className="font-semibold flex gap-1 h-full">
-                    Evaluation Percentage
+                    Evaluation Percentage (%)
                     <span className=" text-error">*</span>
                   </p>
                 }
@@ -183,7 +184,7 @@ export default function ModalManageEvalTopic({
                 {Array.from({ length: topicLenght }).map((_, index) => (
                   <div
                     key={index}
-                    className={`py-3 w-full border-b-[1px] pl-3 pr-1 ${
+                    className={`py-3 w-full border-b-[1px] pl-3  ${
                       Array.length > 1 ? "last:border-none last:pb-5" : ""
                     } `}
                   >

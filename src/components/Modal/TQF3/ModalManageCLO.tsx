@@ -1,4 +1,4 @@
-import { Button, Checkbox, Group, Modal, Textarea } from "@mantine/core";
+import { Button, Checkbox, Group, Modal, Textarea, TextInput } from "@mantine/core";
 import { IconList, IconTrash } from "@tabler/icons-react";
 import { upperFirst } from "lodash";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -61,6 +61,7 @@ export default function ModalManageCLO({
         root: `!h-fit`,
         content: `flex flex-col bg-[#F6F7FA] overflow-hidden`,
         body: `overflow-hidden `,
+        header: `mb-1`
       }}
     >
       <div className={`flex flex-col ${height}`}>
@@ -96,9 +97,9 @@ export default function ModalManageCLO({
                     <span className=" text-error">*</span>
                   </p>
                 }
-                className="w-full border-none  rounded-r-none "
+                className="w-full border-none"
                 classNames={{
-                  input: "flex h-[100px] p-3 text-[13px]",
+                  input: "flex h-[110px] px-3 py-2 text-[13px]",
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
@@ -111,9 +112,9 @@ export default function ModalManageCLO({
                     <span className=" text-error">*</span>
                   </p>
                 }
-                className="w-full border-none rounded-r-none"
+                className="w-full border-none"
                 classNames={{
-                  input: "flex h-[100px] p-3 text-[13px]",
+                  input: "flex h-[110px] px-3 py-2 text-[13px]",
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. Explain the working principle of computer operating systems."
@@ -130,10 +131,10 @@ export default function ModalManageCLO({
                   {options.map((item, index) => (
                     <div
                       key={index}
-                      className="flex-col pb-3 items-center w-full"
+                      className="flex-col pb-[14px] items-center w-full"
                     >
                       <Checkbox
-                        size="sm"
+                        size="xs"
                         classNames={{
                           label: "font-medium text-[13px] text-[#333333]",
                         }}
@@ -143,10 +144,11 @@ export default function ModalManageCLO({
                       {item.label === "อื่นๆ (Other)" &&
                         checkedItem.includes("อื่นๆ (Other)") && (
                           <Textarea
+                          size="xs"
                             className="mt-2 pl-8"
                             placeholder="(Required)"
                             classNames={{
-                              input: "text-[13px] text-[#333333] h-[70px]",
+                              input: "text-[13px] text-[#333333] ",
                             }}
                           />
                         )}
@@ -192,7 +194,7 @@ export default function ModalManageCLO({
                 {Array.from({ length: cloLength }).map((_, index) => (
                   <div
                     key={index}
-                    className={`py-3 w-full border-b-[1px] pl-3 pr-1 ${
+                    className={`py-3 w-full border-b-[1px] pl-3 ${
                       Array.length > 1 ? "last:border-none last:pb-5" : ""
                     } `}
                   >
