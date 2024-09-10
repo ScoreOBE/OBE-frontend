@@ -47,28 +47,28 @@ export default function ModalManageTopic({
   let options = [
     {
       no: 1,
-      th: "กลยุทธ์การประเมินประสิทธิผลของรายวิชาโดยนักศึกษา",
-      en: "Test You can provide a way better UX ",
+      th: "- กลยุทธ์การประเมินประสิทธิผลของรายวิชาโดยนักศึกษา",
+      en: "- Strategies for evaluating course effectiveness by students",
     },
     {
       no: 2,
-      th: "กลยุทธ์การประเมินการสอน",
-      en: "Test You can provide a way better UX ",
+      th: "- กลยุทธ์การประเมินการสอน",
+      en: "- Strategies for teaching assessment",
     },
     {
       no: 3,
-      th: "อธิบายวิธีการปรับปรุงการสอน",
-      en: "Test You can provide a way better UX ",
+      th: "- อธิบายวิธีการปรับปรุงการสอน",
+      en: "- Describe teaching improvement ",
     },
     {
       no: 4,
-      th: "อธิบายกระบวนการที่ใช้ในการทวนสอบมาตรฐานผมสัมฤทธิิ์ของนักศึกษาตามาตรฐานผลการเรียนรู้",
-      en: "Test You can provide a way better UX ",
+      th: "- อธิบายกระบวนการที่ใช้ในการทวนสอบมาตรฐานผมสัมฤทธิิ์ของนักศึกษาตามมาตรฐานผลการเรียนรู้",
+      en: "- Describe the process used to verify student achievement standards based on course learning outcomes (CLO).",
     },
     {
       no: 5,
-      th: "อธิบายกระบวนการในการนำข้อมูลที่ได้จากการประเมินข้อ 1 และ 2 มาวางแผนเพื่อปรับปรุงคุณภาพ",
-      en: "Test You can provide a way better UX ",
+      th: "- อธิบายกระบวนการในการนำข้อมูลที่ได้จากการประเมินข้อ 1 และ 2 มาวางแผนเพื่อปรับปรุงคุณภาพ",
+      en: "- Describe the process of using the information obtained from Topic 1 and 2 to plan for quality improvement.",
     },
   ];
 
@@ -110,7 +110,7 @@ export default function ModalManageTopic({
       withCloseButton={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Topic TQF3 Part 6`}
-      size={type === "add" ? "42vw" : "38vw"}
+      size={type === "add" ? "w-fit" : "38vw"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
@@ -130,9 +130,9 @@ export default function ModalManageTopic({
           {type === "add" ? (
             <Select
               size="xs"
-              label="Select Topic"
+              label="Select Topic (If any)"
               placeholder="Topic"
-              className="mt-1 mb-2"
+              className="mt-1 mb-2 w-[400px]"
               data={options.map((item) => ({
                 value: item.th,
                 label: `${item.th}\n${item.en}`,
@@ -143,7 +143,7 @@ export default function ModalManageTopic({
               classNames={{
                 option: "text-[13px] py-2 px-3",
                 options: "whitespace-pre-wrap leading-5 overflow-y-auto",
-                input: "whitespace-break-spaces flex flex-col flex-wrap",
+                input: "whitespace-break-spaces  flex flex-col flex-wrap",
               }}
               renderOption={(item: any) => (
                 <div className="flex w-full justify-between items-center">
@@ -183,7 +183,7 @@ export default function ModalManageTopic({
                   input: "flex h-[150px] py-2 px-3 text-[13px]",
                   label: "flex pb-1",
                 }}
-                placeholder="Ex. ใช้แบบสอบถามความพึงพอใจ"
+                placeholder="Ex. แบบสอบถามความพึงพอใจให้นักศึกษาประเมิน (Student satisfaction questionnaire)"
                 {...form.getInputProps("detail")}
               />
             </>

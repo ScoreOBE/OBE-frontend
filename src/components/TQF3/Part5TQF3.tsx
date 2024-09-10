@@ -9,7 +9,7 @@ import {
   Table,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { IconCheckbox, IconInfoCircle } from "@tabler/icons-react";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
@@ -33,9 +33,9 @@ export default function Part5TQF3({ data, setForm }: Props) {
         onClose={() => setOpenDrawerPLOdes(false)}
       />
 
-      <div className="flex flex-col w-full max-h-full gap-4 pb-6">
+      <div className="flex flex-col  w-full max-h-full gap-4 pb-6">
         {/* Topic */}
-        <div className="flex text-secondary items-center w-full justify-between">
+        <div className="flex text-secondary   items-center w-full justify-between">
           <span className="text-[15px] font-bold">
             {"CLO Mapping "}
             <span className=" text-red-500">*</span>
@@ -51,19 +51,42 @@ export default function Part5TQF3({ data, setForm }: Props) {
             </div>
           </Button>
         </div>
+        <div className="w-full">
+          <Alert
+            radius="md"
+            icon={<IconCheckbox />}
+            variant="light"
+            color="rgba(6, 158, 110, 1)"
+            classNames={{
+              icon: "size-6",
+              body: " flex justify-center",
+            }}
+            className="w-full"
+            title={
+              <p className="font-semibold">
+                Each CSO must be linked to at least one PLO.
+              </p>
+            }
+          ></Alert>
+        </div>
 
         {/* Table */}
-        <div className="overflow-y-auto overflow-x-auto w-full h-full max-h-full border flex flex-col rounded-lg border-secondary relative">
+        <div
+          style={{
+            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+          }}
+          className=" overflow-x-auto w-full h-full max-h-full border flex flex-col rounded-lg border-secondary relative"
+        >
           <Table stickyHeader striped>
             <Table.Thead className="z-[2]">
               <Table.Tr>
-                <Table.Th className="min-w-[480px] sticky left-0 !p-0">
+                <Table.Th className="min-w-[550px] sticky left-0 !p-0">
                   <div className="w-full flex items-center px-[25px] h-[58px] border-r-[1px] border-[#DEE2E6]">
-                    CLO Description
+                    CLO Description (12 CLOs)
                   </div>
                 </Table.Th>
                 {Array.from({ length: plo }).map((_, index) => (
-                  <Table.Th key={index} className="min-w-[95px] w-fit">
+                  <Table.Th key={index} className="min-w-[100px] w-fit">
                     PLO-{index + 1}
                   </Table.Th>
                 ))}

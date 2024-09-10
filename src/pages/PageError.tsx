@@ -74,8 +74,8 @@ export default function PageError() {
               Unauthorized
             </p>
             <p className="text-lg  font-medium text-gray-600">
-              We couldn't validate or support your credentials <br /> Please
-              try again
+              We couldn't validate or support your credentials <br /> Please try
+              again
             </p>{" "}
             <Button
               onClick={goDashboard}
@@ -101,8 +101,10 @@ export default function PageError() {
               Access Denied
             </p>
             <p className="text-lg  font-medium text-gray-600">
-              Look like your CMU account don't have permission to access <span className=" text-secondary "> Score OBE</span>
-              <span className=" text-[#dab531]"> +</span><br />
+              Look like your CMU account don't have permission to access{" "}
+              <span className=" text-secondary "> Score OBE</span>
+              <span className=" text-[#dab531]"> +</span>
+              <br />
               Reach out to the system administrator to gain access
             </p>{" "}
             <Button
@@ -119,7 +121,7 @@ export default function PageError() {
           <p className="text-[120px] text-[#24aa79] font-medium ">403</p>
         </div>
       )}
-      {/* {error.statusCode == STATUS_CODE.SERVER_ERROR && ( */}
+      {error.statusCode == STATUS_CODE.SERVER_ERROR && (
         <div className="text-start bg-[#ecebfb] text-white w-screen px-36 h-full flex justify-between items-center ">
           <div className="flex flex-col gap-4">
             <p className="text-3xl   font-semibold">
@@ -149,7 +151,7 @@ export default function PageError() {
 
           <p className="text-[120px] text-secondary font-medium ">500</p>
         </div>
-    
+      )}
     </div>
   );
 }

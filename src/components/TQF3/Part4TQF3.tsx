@@ -110,12 +110,12 @@ export default function Part4TQF3({ data, setForm }: Props) {
             <p className="font-bold">
               CLO 1 -{" "}
               <span className="font-semibold">
-                อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์
+                อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์<span className=" text-red-500"> *</span>
               </span>
             </p>
             <p className="font-bold">
               Explain the working principle of computer operating systems.
-              <span className=" text-red-500">*</span>
+            
             </p>
           </div>
           <div className="w-full">
@@ -123,7 +123,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
               radius="md"
               icon={<IconCheckbox />}
               variant='light'
-              color='teal'
+              color="rgba(6, 158, 110, 1)"
               classNames={{
                 icon: "size-6",
                 body: " flex justify-center",

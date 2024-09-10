@@ -443,11 +443,15 @@ export default function Part2TQF3({ data, setForm }: Props) {
               Complete TQF3 Part 1 First
             </p>
             <p className=" text-[#333333] leading-6 font-medium text-[14px]">
-              Part 1 is required before you can begin Part 2 <br /> Please
-              complete it to continue
+              To start TQF3 Part 2, please complete and save TQF3 Part 1. <br />{" "}
+              Once done, you can continue to do it.
             </p>
           </div>{" "}
-          <img className=" z-50  w-[580px] h-[300px] " src={unplug} alt="loginImage" />
+          <img
+            className=" z-50  w-[580px] h-[300px] "
+            src={unplug}
+            alt="loginImage"
+          />
         </div>
       )}
     </>

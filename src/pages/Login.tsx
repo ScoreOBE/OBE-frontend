@@ -9,6 +9,7 @@ import { isEmpty } from "lodash";
 import { setShowSidebar } from "@/store/showSidebar";
 import lockIcon from "@/assets/icons/lockIcon.svg?react";
 import refresh from "@/assets/icons/refresh.svg?react";
+import { setShowNavbar } from "@/store/showNavbar";
 
 import Icon from "@/components/Icon";
 import {
@@ -24,6 +25,7 @@ export default function Login() {
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(setShowSidebar(false));
+    dispatch(setShowNavbar(true))
     if (!isEmpty(user)) {
       navigate(ROUTE_PATH.DASHBOARD_INS);
     }
