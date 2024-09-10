@@ -48,10 +48,11 @@ export default function Part1TQF3({ data, setForm }: Props) {
         !value?.length && "Course Coordinator is required",
     },
     validateInputOnBlur: true,
-    onValuesChange: (values) => {
-      setForm(form);
-    },
   });
+
+  useEffect(() => {
+    setForm(form);
+  }, [form.getValues()]);
 
   useEffect(() => {
     if (data) {
@@ -89,7 +90,6 @@ export default function Part1TQF3({ data, setForm }: Props) {
           </p>
           <p className="font-semibold">Course Type</p>
         </div>
-
         <Radio.Group
           key={form.key("courseType")}
           {...form.getInputProps("courseType")}
@@ -138,7 +138,6 @@ export default function Part1TQF3({ data, setForm }: Props) {
           </p>
           <p className="font-semibold">Student Year</p>
         </div>
-
         <Checkbox.Group
           key={form.key("studentYear")}
           classNames={{ error: "mt-2" }}
@@ -253,7 +252,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
             className="w-[440px]"
             classNames={{ input: "h-[180px] p-3" }}
             {...form.getInputProps("lecPlace")}
-          ></Textarea>
+          />
         </div>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
@@ -271,7 +270,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
             className="w-[440px]"
             classNames={{ input: "h-[180px] p-3", label: "text-default" }}
             {...form.getInputProps("labPlace")}
-          ></Textarea>
+          />
         </div>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
