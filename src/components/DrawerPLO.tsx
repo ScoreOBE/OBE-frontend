@@ -6,32 +6,30 @@ import { useEffect, useState } from "react";
 import { getPLOs } from "@/services/plo/plo.service";
 import { IModelPLO } from "@/models/ModelPLO";
 import { useAppSelector } from "@/store";
+import { getDepartment } from "@/services/faculty/faculty.service";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
+  data: Partial<IModelPLO>;
 };
 
-export default function DrawerPLOdes({ opened, onClose }: Props) {
-  const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
+export default function DrawerPLOdes({ opened, onClose, data }: Props) {
+  // const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
   const user = useAppSelector((state) => state.user);
   const [isTH, setIsTH] = useState<string | null>("TH");
 
-  const fetchPLO = async () => {
-    let res = await getPLOs({
-      role: user.role,
-      departmentCode: user.departmentCode,
-    });
-    if (res) {
-      setPloList(res.plos[1].collections[1]);
-    }
-  };
+  // useEffect(() => {
+  //   if (opened) {
+  //     setPloList(data);
+  //   }
+  // }, [opened]);
 
-  useEffect(() => {
-    if (opened) {
-      fetchPLO();
-    }
-  }, [opened]);
+  // useEffect(() => {
+  //   if (ploList) {
+  //     console.log(data);
+  //   }
+  // }, [ploList]);
 
   return (
     <>
@@ -43,7 +41,7 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
         className=" !rounded-none"
       >
         <Drawer.Overlay />
-        <Drawer.Content  className=" !rounded-none">
+        <Drawer.Content className=" !rounded-none">
           <div className="flex flex-col gap-2 h-full overflow-y-auto ">
             <Drawer.Header>
               <div className="flex flex-col w-full h-fit pt-4 gap-4">
@@ -62,11 +60,16 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
                   <Drawer.CloseButton className=" -translate-y-2" />
                 </div>
 
-                <div className="flex w-full justify-between items-center ">
-                  <p className="flex items-center font-medium text-tertiary h-9 text-[14px]">
-                    {isTH === "TH" ? ploList.criteriaTH : ploList.criteriaEN}
+                <div className="flex w-full justify-between items-center gap-4">
+                  <p className="flex flex-wrap items-center font-medium text-tertiary text-[14px] break-all ">
+                    {isTH === "TH" ? data.criteriaTH : data.criteriaEN}
                   </p>
-                  <Tabs value={isTH} onChange={setIsTH} variant="pills">
+                  <Tabs
+                    value={isTH}
+                    onChange={setIsTH}
+                    variant="pills"
+                    className="min-w-fit"
+                  >
                     <Tabs.List>
                       <Tabs.Tab value="TH">
                         <div className="flex flex-row items-center gap-2 ">
@@ -87,12 +90,15 @@ export default function DrawerPLOdes({ opened, onClose }: Props) {
             </Drawer.Header>
             <Drawer.Body className="flex flex-col h-full  overflow-y-auto ">
               {/* <div className="flex flex-col gap-3 w-full h-full overflow-y-auto"> */}
-              {ploList.data?.map((plo) => (
-                <div className="flex flex-col gap-2 border-b-[1px] px-2  py-4 text-[13px]">
+              {data.data?.map((plo, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col gap-2 border-b-[1px] px-2  py-4 text-[13px]"
+                >
                   <p className="text-[15px] font-semibold text-secondary">
                     PLO-{plo.no}
                   </p>
-                  <div className="flex flex-row leading-6 font-normal text-[14px]">
+                  <div className="flex flex-row leading-6 font-normal text-[13px]">
                     {isTH === "TH" ? plo.descTH : plo.descEN}
                   </div>
                 </div>

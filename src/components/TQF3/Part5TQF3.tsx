@@ -14,8 +14,12 @@ import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import DrawerPLOdes from "@/components/DrawerPLO";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IModelCourse } from "@/models/ModelCourse";
+import { IModelCLO, IModelTQF3Part5 } from "@/models/ModelTQF3";
+import { IModelPLO, IModelPLOCollection, IModelPLONo } from "@/models/ModelPLO";
+import { getPLOs } from "@/services/plo/plo.service";
+import { useAppSelector } from "@/store";
 
 type Props = {
   data: IModelCourse;
@@ -24,14 +28,96 @@ type Props = {
 
 export default function Part5TQF3({ data, setForm }: Props) {
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
-  const plo = 12;
-  const clo = 12;
+  const [coursePLO, setCoursePLO] = useState<Partial<IModelPLO>>();
+  const user = useAppSelector((state) => state.user);
+
+  // fixed Data
+  const courseCLO: IModelCLO[] = [
+    {
+      id: "kmskx",
+      cloNo: 1,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
+      cloDescEN:
+        "Explain the working principle of computer operating systems the working principle of computer operating systems 1",
+    },
+    {
+      id: "kmskx",
+      cloNo: 2,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.2",
+      cloDescEN:
+        "Explain the working principle of computer operating systems the working principle of computer operating systems 2",
+    },
+    {
+      id: "kmskx",
+      cloNo: 3,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.3",
+      cloDescEN:
+        "Explain the working principle of computer operating systems the working principle of computer operating systems 3",
+    },
+    {
+      id: "kmskx",
+      cloNo: 4,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.4",
+      cloDescEN:
+        "Explain the working principle of computer operating systems the working principle of computer operating systems 4",
+    },
+    {
+      id: "kmskx",
+      cloNo: 5,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.5",
+      cloDescEN:
+        "Explain the working principle of computer operating systems the working principle of computer operating systems 5",
+    },
+  ];
+
+  const form = useForm({
+    mode: "controlled",
+    initialValues: {
+      data: courseCLO.map((clo) => ({
+        clo: clo,
+        plo: [],
+      })) as IModelTQF3Part5[],
+    },
+    validate: {},
+  });
+
+  const fetchPLO = async () => {
+    const res = await getPLOs({
+      role: user.role,
+      departmentCode: user.departmentCode,
+    });
+
+    if (res) {
+      //fixed Data
+      const ploCol = res.plos
+        .find((dep: any) => dep.departmentCode.includes("CPE"))
+        .collections.find((col: any) => col.isActive === true);
+
+      setCoursePLO(ploCol);
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      fetchPLO();
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (form.getValues()) {
+      console.log(form.getValues());
+    }
+  }, [form]);
+
   return (
     <>
-      <DrawerPLOdes
-        opened={openDrawerPLOdes}
-        onClose={() => setOpenDrawerPLOdes(false)}
-      />
+      {coursePLO && (
+        <DrawerPLOdes
+          opened={openDrawerPLOdes}
+          onClose={() => setOpenDrawerPLOdes(false)}
+          data={coursePLO!}
+        />
+      )}
 
       <div className="flex flex-col  w-full max-h-full gap-4 pb-6">
         {/* Topic */}
@@ -82,36 +168,27 @@ export default function Part5TQF3({ data, setForm }: Props) {
               <Table.Tr>
                 <Table.Th className="min-w-[550px] sticky left-0 !p-0">
                   <div className="w-full flex items-center px-[25px] h-[58px] border-r-[1px] border-[#DEE2E6]">
-                    CLO Description (12 CLOs)
+                    CLO Description ( {courseCLO.length} CLO
+                    {courseCLO.length > 1 ? "s" : ""} )
                   </div>
                 </Table.Th>
-                {Array.from({ length: plo }).map((_, index) => (
-                  <Table.Th key={index} className="min-w-[100px] w-fit">
-                    PLO-{index + 1}
+                {coursePLO?.data!.map((plo: any) => (
+                  <Table.Th key={plo.no} className="min-w-[100px] w-fit">
+                    PLO-{plo.no}
                   </Table.Th>
                 ))}
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {Array.from({ length: clo }).map((_, rowIndex) => (
-                <Table.Tr
-                  key={rowIndex}
-                  className="text-[13px] text-default"
-                  // data-striped={rowIndex % 2 ? "odd" : "even"}
-                >
+              {courseCLO.map((clo, indexCLO) => (
+                <Table.Tr key={indexCLO} className="text-[13px] text-default">
                   <Table.Td className="!p-0 sticky left-0 z-[1]">
                     <div className="flex flex-col gap-0.5 px-[25px] py-4 border-r-[1px] border-[#DEE2E6]">
-                      <p>อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.</p>
-                      <p>
-                        Explain the working principle of computer operating
-                        systems the working principle of computer operating
-                        systems the working principle of computer operating
-                        systems the working principle of computer operating
-                        systems. systems.
-                      </p>
+                      <p>{clo.cloDescTH}</p>
+                      <p>{clo.cloDescEN}</p>
                     </div>
                   </Table.Td>
-                  {Array.from({ length: plo }).map((_, index) => (
+                  {coursePLO?.data!.map((plo: any, index: number) => (
                     <Table.Td key={index}>
                       <div className="flex items-start">
                         <Checkbox
@@ -121,6 +198,16 @@ export default function Part5TQF3({ data, setForm }: Props) {
                               "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                             body: "mr-3 px-0",
                             label: "text-[14px] text-[#615F5F] cursor-pointer",
+                          }}
+                          onChange={(event) => {
+                            if (event.target.checked) {
+                              form.insertListItem(`data.${indexCLO}.plo`, plo);
+                            } else {
+                              form.removeListItem(
+                                `data.${indexCLO}.plo`,
+                                index
+                              );
+                            }
                           }}
                         />
                       </div>
