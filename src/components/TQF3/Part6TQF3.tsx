@@ -1,4 +1,9 @@
-import { COURSE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
+import {
+  COURSE_TYPE,
+  NOTI_TYPE,
+  POPUP_TYPE,
+  TEACHING_METHOD,
+} from "@/helpers/constants/enum";
 import {
   Radio,
   Checkbox,
@@ -16,6 +21,7 @@ import { useForm } from "@mantine/form";
 import {
   IconArrowRight,
   IconEdit,
+  IconExclamationCircle,
   IconInfoCircle,
   IconTrash,
 } from "@tabler/icons-react";
@@ -28,6 +34,8 @@ import ModalManageTopic from "../Modal/TQF3/ModalManageTopic";
 import { IModelCourse } from "@/models/ModelCourse";
 import { log } from "console";
 import { IModelTQF3Part6 } from "@/models/ModelTQF3";
+import MainPopup from "../Popup/MainPopup";
+import { showNotifications } from "@/helpers/functions/function";
 
 type Props = {
   data: IModelCourse;
@@ -35,9 +43,8 @@ type Props = {
 };
 
 export default function Part6TQF3({ data, setForm }: Props) {
-  const [formEdit, setFormEdit] = useState<
-    Partial<IModelTQF3Part6> & Record<string, any>
-  >();
+  const [formEdit, setFormEdit] =
+    useState<Partial<IModelTQF3Part6 & { index: number }>>();
   let topics = [
     {
       no: 1,
@@ -104,6 +111,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
       en: "The process of reviewing the standards of student course achievement",
       th: "กระบวนการทวนสอบมาตรฐานผลสัมฤทธิ์กระบวนวิชาของนักศึกษา",
       list: [
+        { label: "ไม่มี (None)" },
         {
           label:
             "มีการตั้งคณะกรรมการในสาขาวิชา ตรวจสอบผลการประเมินการเรียนรู้ของนักศึกษา โดยตรวจสอบข้อรายงาน วิธีการการให้คะแนนสอบ และการให้คะแนนพฤติกรรม \n(A department-specific committee reviews student assessments, reports, scoring methods and behavioral evaluations.)",
@@ -155,10 +163,11 @@ export default function Part6TQF3({ data, setForm }: Props) {
     } as { data: IModelTQF3Part6[] },
     validate: {},
   });
-
+  const [openPopupDelAddiTopic, setOpenPopupDelAddiTopic] = useState(false);
   const [openModalSelectTopic, setOpenModalSelectTopic] = useState(false);
   const [openModalEditSelectTopic, setOpenModalEditSelectTopic] =
     useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(0);
 
   const addTopic = (value: any, option: any) => {
     if (!options.length) {
@@ -171,8 +180,34 @@ export default function Part6TQF3({ data, setForm }: Props) {
     form.setFieldValue(`data.${formEdit?.index}`, value);
   };
 
+  const onClickDeleteAddiTopic = () => {
+    form.removeListItem("data", deleteIndex);
+    setOpenPopupDelAddiTopic(false);
+    showNotifications(
+      NOTI_TYPE.SUCCESS,
+      "Delete Topic Success",
+      `Topic ${deleteIndex + 1} is deleted`
+    );
+  };
   return (
     <>
+      <MainPopup
+        opened={openPopupDelAddiTopic}
+        onClose={() => setOpenPopupDelAddiTopic(false)}
+        action={onClickDeleteAddiTopic}
+        type={POPUP_TYPE.DELETE}
+        labelButtonRight={`Delete Topic ${deleteIndex + 1}`}
+        title={`Delete Addition Topic ${deleteIndex + 1}`}
+        message={
+          <>
+            <div className="flex flex-col mt-3 ">
+              <p className=" -translate-y-[2px] text-b1 text-default">
+                Are you sure you want to delete this Addition Topic?
+              </p>
+            </div>
+          </>
+        }
+      />
       <ModalManageTopic
         opened={openModalSelectTopic}
         onClose={() => setOpenModalSelectTopic(false)}
@@ -257,7 +292,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
                 key={index}
                 className="  w-full h-full max-h-full  flex flex-col "
               >
-                <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader rounded-md">
+                <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader">
                   <p className="flex flex-col font-medium text-[28px]">
                     {index + 1}.
                   </p>
@@ -329,29 +364,30 @@ export default function Part6TQF3({ data, setForm }: Props) {
                 key={index}
                 className="  w-full h-full max-h-full  flex flex-col "
               >
-                <div className="w-full sticky top-0 z-10 text-[#228BE6] flex flex-row gap-4 items-center pl-6 py-4 bg-[#E8F3FC] rounded-md">
+                <div className="w-full sticky top-0 z-10 text-[#228BE6] flex flex-row gap-4 items-center pl-6 py-4 bg-[#E8F3FC]">
                   <p className="flex flex-col font-medium text-[28px]">
                     {index + 1}.
                   </p>
                   <p className="flex flex-col gap-1  text-[14px]">
                     <span className="font-semibold">
                       {option.th}{" "}
-                      <span className="text-[#228BE6]">(Additional Topic)</span>
+                      {/* <span className="text-[#228BE6]">(Additional Topic)</span> */}
                     </span>
                     <span className="font-bold ">{option.en}</span>
                   </p>
                 </div>
-                <div className="text-default border-b-[1px] last:border-none py-4 px-6  w-full">
+                <div className="text-default border-b-[1px] last:border-none py-4 px-6  w-full text-[13px] font-medium">
                   <div className="flex justify-between items-center whitespace-pre-wrap gap-8">
-                    {topic.detail}
+                    <div className="pl-10">{topic.detail}</div>
                     <div className="flex justify-start gap-4 items-center">
                       <div
                         className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
                         onClick={() => {
-                          setFormEdit({
-                            ...form.getValues().data[index],
-                            index,
-                          });
+                          setDeleteIndex(index),
+                            setFormEdit({
+                              ...form.getValues().data[index],
+                              index: index,
+                            });
                           setOpenModalEditSelectTopic(true);
                         }}
                       >
@@ -359,7 +395,9 @@ export default function Part6TQF3({ data, setForm }: Props) {
                       </div>
                       <div
                         className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
-                        onClick={() => form.removeListItem("data", index)}
+                        onClick={() => {
+                          setDeleteIndex(index), setOpenPopupDelAddiTopic(true);
+                        }}
                       >
                         <IconTrash className="size-4" stroke={1.5} />
                       </div>

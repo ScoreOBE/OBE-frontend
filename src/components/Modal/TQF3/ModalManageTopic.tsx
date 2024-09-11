@@ -25,6 +25,8 @@ import { upperFirst } from "lodash";
 import { useEffect } from "react";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "@/components/Icon";
+import { showNotifications } from "@/helpers/functions/function";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
 
 type actionType = "add" | "edit";
 
@@ -33,7 +35,7 @@ type Props = {
   onClose: () => void;
   type: actionType;
   action: (value?: any, option?: any) => void;
-  editData?: Partial<IModelTQF3Part6>;
+  editData?: Partial<IModelTQF3Part6 & { index: number }>;
   data?: any;
 };
 export default function ModalManageTopic({
@@ -47,28 +49,28 @@ export default function ModalManageTopic({
   let options = [
     {
       no: 1,
-      th: "- กลยุทธ์การประเมินประสิทธิผลของรายวิชาโดยนักศึกษา",
-      en: "- Strategies for evaluating course effectiveness by students",
+      th: "กลยุทธ์การประเมินประสิทธิผลของรายวิชาโดยนักศึกษา",
+      en: "Strategies for evaluating course effectiveness by students",
     },
     {
       no: 2,
-      th: "- กลยุทธ์การประเมินการสอน",
-      en: "- Strategies for teaching assessment",
+      th: "กลยุทธ์การประเมินการสอน",
+      en: "Strategies for teaching assessment",
     },
     {
       no: 3,
-      th: "- อธิบายวิธีการปรับปรุงการสอน",
-      en: "- Describe teaching improvement ",
+      th: "อธิบายวิธีการปรับปรุงการสอน",
+      en: "Describe teaching improvement ",
     },
     {
       no: 4,
-      th: "- อธิบายกระบวนการที่ใช้ในการทวนสอบมาตรฐานผมสัมฤทธิิ์ของนักศึกษาตามมาตรฐานผลการเรียนรู้",
-      en: "- Describe the process used to verify student achievement standards based on course learning outcomes (CLO).",
+      th: "อธิบายกระบวนการที่ใช้ในการทวนสอบมาตรฐานผมสัมฤทธิิ์ของนักศึกษาตามมาตรฐานผลการเรียนรู้",
+      en: "Describe the process used to verify student achievement standards based on course learning outcomes (CLO).",
     },
     {
       no: 5,
-      th: "- อธิบายกระบวนการในการนำข้อมูลที่ได้จากการประเมินข้อ 1 และ 2 มาวางแผนเพื่อปรับปรุงคุณภาพ",
-      en: "- Describe the process of using the information obtained from Topic 1 and 2 to plan for quality improvement.",
+      th: "อธิบายกระบวนการในการนำข้อมูลที่ได้จากการประเมินข้อ 1 และ 2 มาวางแผนเพื่อปรับปรุงคุณภาพ",
+      en: "Describe the process of using the information obtained from Topic 1 and 2 to plan for quality improvement.",
     },
   ];
 
@@ -99,6 +101,19 @@ export default function ModalManageTopic({
       if (!form.validateField("detail").hasError) {
         action(form.getValues(), options);
         onCloseModal();
+        if (type === "add") {
+          showNotifications(
+            NOTI_TYPE.SUCCESS,
+            "Add success",
+            `Additional topic is added`
+          );
+        } else {
+          showNotifications(
+            NOTI_TYPE.SUCCESS,
+            "Edit success",
+            `Topic ${editData?.index! + 1} is edited`
+          );
+        }
       }
     }
   };
@@ -110,7 +125,7 @@ export default function ModalManageTopic({
       withCloseButton={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Topic TQF3 Part 6`}
-      size={type === "add" ? "w-fit" : "38vw"}
+      size={type === "add" ? "w-fit" : "40vw"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
@@ -132,10 +147,12 @@ export default function ModalManageTopic({
               size="xs"
               label="Select Topic (If any)"
               placeholder="Topic"
-              className="mt-1 mb-2 w-[400px]"
+              className="mt-1 mb-2 w-[420px]"
               data={options.map((item) => ({
                 value: item.th,
-                label: `${item.th}\n${item.en}`,
+                label: `${item.th} \n ${item.en}`,
+                th: item.th,
+                en: item.en,
                 disabled: data
                   .slice(5)
                   .some((e: any) => e.topic.includes(item.th)),
@@ -146,10 +163,21 @@ export default function ModalManageTopic({
                 input: "whitespace-break-spaces  flex flex-col flex-wrap",
               }}
               renderOption={(item: any) => (
-                <div className="flex w-full justify-between items-center">
-                  <p>{item.option.label}</p>
+                <div className="flex w-full justify-between items-center gap-1">
+                  <div className="w-fit">
+                    <div className="flex gap-1 w-[90%]">
+                      <p>-</p>
+                      <p>{item.option.th}</p>
+                    </div>
+                    <div className="flex gap-1">
+                      <p>-</p>
+                      <p>{item.option.en}</p>
+                    </div>
+                  </div>
                   {item.option.disabled && (
-                    <p className="text-[#615f77] font-semibold">Added</p>
+                    <p className="text-[#615f77] font-semibold text-end w-[15%]">
+                      Added
+                    </p>
                   )}
                 </div>
               )}
@@ -162,8 +190,14 @@ export default function ModalManageTopic({
               </label>
 
               <div className="flex flex-col text-[13px] font-medium text-secondary">
-                <p>{editData?.topic}</p>
-                {options?.find(({ th }) => th === editData?.topic)?.en}
+                <div className="flex gap-1 ">
+                  <p>-</p>
+                  <p>{editData?.topic}</p>
+                </div>
+                <div className="flex gap-1 ">
+                  <p>-</p>
+                  <p>{options?.find(({ th }) => th === editData?.topic)?.en}</p>
+                </div>
               </div>
             </div>
           )}
