@@ -16,7 +16,15 @@ import { useForm } from "@mantine/form";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import { Table, rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
-import { IconCheck, IconCheckbox, IconEdit, IconGripVertical, IconMagnet, IconMarkdown, IconTrash } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconCheckbox,
+  IconEdit,
+  IconGripVertical,
+  IconMagnet,
+  IconMarkdown,
+  IconTrash,
+} from "@tabler/icons-react";
 import DrawerPLOdes from "../DrawerPLO";
 import {
   IconExclamationCircle,
@@ -26,6 +34,7 @@ import {
 import { useEffect, useState } from "react";
 import Icon from "../Icon";
 import { IModelCourse } from "@/models/ModelCourse";
+import { IModelCLO, IModelTQF3Part4 } from "@/models/ModelTQF3";
 
 type Props = {
   data: IModelCourse;
@@ -33,58 +42,110 @@ type Props = {
 };
 
 export default function Part4TQF3({ data, setForm }: Props) {
-  const dataTest = [
+  const evalTest = [
     {
-      no: 1,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
+      id: "1",
+      evalNo: 1,
+      evalTopicTH: "สอบกลางภาค",
+      evalTopicEN: "Midterm Exam",
+      evalDesc:
+        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
+      evalPercent: 10,
     },
     {
-      no: 2,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
+      id: "2",
+      evalNo: 2,
+      evalTopicTH: "สอบกลางภาค",
+      evalTopicEN: "Midterm Exam",
+      evalDesc:
+        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
+      evalPercent: 10,
     },
     {
-      no: 3,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
+      id: "3",
+      evalNo: 3,
+      evalTopicTH: "สอบกลางภาค",
+      evalTopicEN: "Midterm Exam",
+      evalDesc:
+        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
+      evalPercent: 10,
     },
     {
-      no: 4,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
+      id: "4",
+      evalNo: 4,
+      evalTopicTH: "สอบกลางภาค",
+      evalTopicEN: "Midterm Exam",
+      evalDesc:
+        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
+      evalPercent: 10,
     },
     {
-      no: 5,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
-    },
-    {
-      no: 6,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
+      id: "5",
+      evalNo: 5,
+      evalTopicTH: "สอบกลางภาค",
+      evalTopicEN: "Midterm Exam",
+      evalDesc:
+        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
+      evalPercent: 10,
     },
   ];
-  const [state, handlers] = useListState(dataTest);
+
+  // fixed Data
+  const courseCLO: IModelCLO[] = [
+    {
+      id: "kmskx",
+      cloNo: 1,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
+      cloDescEN:
+        "Explain the working principle of computer operating systems the working principle of computer operating systems 1",
+    },
+    {
+      id: "kmskx",
+      cloNo: 2,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.2",
+      cloDescEN:
+        "Explain the working principle of computer operating systems the working principle of computer operating systems 2",
+    },
+    {
+      id: "kmskx",
+      cloNo: 3,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.3",
+      cloDescEN:
+        "Explain the working principle of computer operating systems the working principle of computer operating systems 3",
+    },
+    {
+      id: "kmskx",
+      cloNo: 4,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.4",
+      cloDescEN:
+        "Explain the working principle of computer operating systems the working principle of computer operating systems 4",
+    },
+    {
+      id: "kmskx",
+      cloNo: 5,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.5",
+      cloDescEN:
+        "Explain the working principle of computer operating systems the working principle of computer operating systems 5",
+    },
+  ];
+
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const form = useForm({
+    mode: "controlled",
+    initialValues: {
+      data: courseCLO.map((clo) => ({
+        clo: clo,
+        evals: [{ eval: {}, evalWeek: [] as number[] }],
+      })) as IModelTQF3Part4[],
+    },
+    validate: {},
+  });
 
   useEffect(() => {
-    if (dataTest) {
-      handlers.setState(dataTest);
+    if (form.getValues()) {
+      console.log(form.getValues());
     }
-  }, [dataTest]);
+  }, [form]);
   return (
     <div className="flex w-full max-h-full overflow-hidden">
       <div className="flex flex-col w-full  overflow-y-auto">
@@ -110,19 +171,19 @@ export default function Part4TQF3({ data, setForm }: Props) {
             <p className="font-bold">
               CLO 1 -{" "}
               <span className="font-semibold">
-                อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์<span className=" text-red-500"> *</span>
+                อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์
+                <span className=" text-red-500"> *</span>
               </span>
             </p>
             <p className="font-bold">
               Explain the working principle of computer operating systems.
-            
             </p>
           </div>
           <div className="w-full">
             <Alert
               radius="md"
               icon={<IconCheckbox />}
-              variant='light'
+              variant="light"
               color="rgba(6, 158, 110, 1)"
               classNames={{
                 icon: "size-6",
@@ -131,7 +192,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
               className="w-full"
               title={
                 <p className="font-semibold">
-                 Each CSO must be linked to at least one evaluation topic.
+                  Each CSO must be linked to at least one evaluation topic.
                 </p>
               }
             ></Alert>
@@ -157,7 +218,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
           </div>
 
           <div
-            className=" w-full flex flex-col rounded-md border border-secondary  "
+            className=" w-full flex flex-col rounded-md border border-secondary  overflow-clip"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
@@ -166,8 +227,8 @@ export default function Part4TQF3({ data, setForm }: Props) {
               <Table.Thead className="z-[2]">
                 <Table.Tr className="bg-[#e5e7f6] ">
                   <Table.Th className="w-[1%] !rounded-tl-md"></Table.Th>
-                  <Table.Th className="w-[13%]">Topic</Table.Th>
-                  <Table.Th className="w-[51%]">Description</Table.Th>
+                  <Table.Th className="w-[14%]">Topic</Table.Th>
+                  <Table.Th className="w-[55%]">Description</Table.Th>
                   <Table.Th className="w-[15%]">Evaluation week</Table.Th>
                   <Table.Th className=" w-[15%] pr-6 text-end">
                     <div className="flex flex-row items-center gap-2">
@@ -199,59 +260,64 @@ export default function Part4TQF3({ data, setForm }: Props) {
                       </Tooltip>
                     </div>
                   </Table.Th>
-                  <Table.Th className=" w-[5%] !rounded-tr-md">Action</Table.Th>
                 </Table.Tr>
               </Table.Thead>
 
               <Table.Tbody className="text-[13px] font-normal text-[#333333] ">
-                {state.map((item, index) => (
+                {evalTest.map((item, index) => (
                   <Table.Tr key={index}>
                     <Table.Td>
                       <Checkbox
                         aria-label="Select row"
-                        value={item.no}
-                        checked={selectedRows.includes(item.no)}
+                        value={item.evalNo}
+                        checked={selectedRows.includes(item.evalNo)}
                         onChange={(event) => {
                           if (
                             event.target.checked &&
-                            !selectedRows.includes(item.no)
+                            !selectedRows.includes(item.evalNo)
                           ) {
-                            setSelectedRows((prev) => [...prev, item.no]);
+                            setSelectedRows((prev) => [...prev, item.evalNo]);
                           } else if (
                             !event.target.checked &&
-                            selectedRows.includes(item.no)
+                            selectedRows.includes(item.evalNo)
                           ) {
                             setSelectedRows(
-                              selectedRows.filter((row) => row != item.no)
+                              selectedRows.filter((row) => row != item.evalNo)
                             );
                           }
                         }}
                       />
                     </Table.Td>
                     <Table.Td>
-                      <p className="w-fit">{item.topicTH}</p>
-                      <p className="w-fit">{item.topicEN}</p>
+                      <p className="w-fit">{item.evalTopicTH}</p>
+                      <p className="w-fit">{item.evalTopicEN}</p>
                     </Table.Td>
-                    <Table.Td>{item.des}</Table.Td>
+                    <Table.Td>{item.evalDesc}</Table.Td>
                     <Table.Td>
-                      <Select />
+                      <Select
+                        disabled={!selectedRows.includes(item.evalNo)}
+                        data={[{ value: "test", label: "Test" }]}
+                        classNames={{
+                          option: "text-[13px] py-2 px-3",
+                          options:
+                            "whitespace-pre-wrap leading-5 overflow-y-auto",
+                          input: `whitespace-break-spaces flex flex-col flex-wrap ${
+                            !selectedRows.includes(item.evalNo) && "!bg-hover"
+                          }`,
+                        }}
+                      />
                     </Table.Td>
                     <Table.Td className="pr-6 text-end text-b1 ">
                       <div className="flex font-semibold flex-row items-center gap-2">
                         <TextInput
-                          classNames={{ input: "!rounded-[4px]" }}
+                          disabled={!selectedRows.includes(item.evalNo)}
+                          classNames={{
+                            input: `!rounded-[4px] ${
+                              !selectedRows.includes(item.evalNo) && "!bg-hover"
+                            }`,
+                          }}
                         ></TextInput>
                         %
-                      </div>
-                    </Table.Td>
-                    <Table.Td className="  pr-[30px]">
-                      <div className="flex justify-start gap-4 items-center">
-                        <div className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10">
-                          <IconEdit className="size-4" stroke={1.5} />
-                        </div>
-                        <div className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10">
-                          <IconTrash className="size-4" stroke={1.5} />
-                        </div>
                       </div>
                     </Table.Td>
                   </Table.Tr>
@@ -263,8 +329,9 @@ export default function Part4TQF3({ data, setForm }: Props) {
                   <Table.Th className="text-[14px] !rounded-bl-md" colSpan={4}>
                     Total
                   </Table.Th>
-                  <Table.Th className="text-[16px] text-end pr-6">60%</Table.Th>
-                  <Table.Th className="!rounded-br-md"></Table.Th>
+                  <Table.Th className="text-[16px] text-end pr-6">
+                    60 %
+                  </Table.Th>
                 </Table.Tr>
               </Table.Tfoot>
             </Table>

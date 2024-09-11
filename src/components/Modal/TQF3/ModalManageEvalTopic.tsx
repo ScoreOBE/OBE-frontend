@@ -34,7 +34,6 @@ export default function ModalManageEvalTopic({
     <Modal
       opened={opened}
       onClose={onClose}
-      withCloseButton={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Evaluation Topic ${courseNo}`}
       size={type === "add" && topicLenght > 0 ? "70vw" : "45vw"}
@@ -111,7 +110,7 @@ export default function ModalManageEvalTopic({
                 placeholder="(Optional)"
               />
               <NumberInput
-              size="xs"
+                size="xs"
                 label={
                   <p className="font-semibold flex gap-1 h-full">
                     Evaluation Percentage (%)
@@ -173,7 +172,11 @@ export default function ModalManageEvalTopic({
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
-                <span className="flex flex-row items-center gap-2"> <IconList />List Evaluation Topic Added</span>
+                  <span className="flex flex-row items-center gap-2">
+                    {" "}
+                    <IconList />
+                    List Evaluation Topic Added
+                  </span>
                 </div>
                 <p>
                   {topicLenght} Topic{topicLenght > 1 ? "s" : ""}
@@ -193,7 +196,6 @@ export default function ModalManageEvalTopic({
                         <p className="text-secondary mb-2 font-semibold text-[14px]">
                           Eval Topic {index + 1} (0%)
                         </p>
-                        
 
                         <div className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer">
                           <IconTrash

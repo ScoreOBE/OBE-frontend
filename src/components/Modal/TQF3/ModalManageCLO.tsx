@@ -1,4 +1,11 @@
-import { Button, Checkbox, Group, Modal, Textarea, TextInput } from "@mantine/core";
+import {
+  Button,
+  Checkbox,
+  Group,
+  Modal,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
 import { IconList, IconTrash } from "@tabler/icons-react";
 import { upperFirst } from "lodash";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -51,7 +58,6 @@ export default function ModalManageCLO({
     <Modal
       opened={opened}
       onClose={onClose}
-      withCloseButton={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} CLO ${courseNo}`}
       size={type === "add" && cloLength > 0 ? "70vw" : "40vw"}
@@ -61,7 +67,7 @@ export default function ModalManageCLO({
         root: `!h-fit`,
         content: `flex flex-col bg-[#F6F7FA] overflow-hidden`,
         body: `overflow-hidden `,
-        header: `mb-1`
+        header: `mb-1`,
       }}
     >
       <div className={`flex flex-col ${height}`}>
@@ -144,7 +150,7 @@ export default function ModalManageCLO({
                       {item.label === "อื่นๆ (Other)" &&
                         checkedItem.includes("อื่นๆ (Other)") && (
                           <Textarea
-                          size="xs"
+                            size="xs"
                             className="mt-2 pl-8"
                             placeholder="(Required)"
                             classNames={{
@@ -183,7 +189,11 @@ export default function ModalManageCLO({
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
-                  <span className="flex flex-row items-center gap-2"> <IconList />List CLO Added</span>
+                  <span className="flex flex-row items-center gap-2">
+                    {" "}
+                    <IconList />
+                    List CLO Added
+                  </span>
                 </div>
                 <p>
                   {cloLength} CLO{cloLength > 1 ? "s" : ""}
