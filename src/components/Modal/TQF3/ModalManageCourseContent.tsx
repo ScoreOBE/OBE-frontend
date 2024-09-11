@@ -39,12 +39,11 @@ export default function ModalManageTopic({
       title={`${upperFirst(type)} Course Content ${courseNo}`}
       size={type === "add" && topicLenght > 0 ? "70vw" : "35vw"}
       centered
-      withCloseButton={false}
       transitionProps={{ transition: "pop" }}
       classNames={{
         content: `flex flex-col bg-[#F6F7FA] overflow-hidden `,
         body: `overflow-hidden ${height}`,
-         header: `mb-1`
+        header: `mb-1`,
       }}
     >
       <div
@@ -133,7 +132,7 @@ export default function ModalManageTopic({
                   input: "flex px-3 py-5 text-[13px]",
                   label: "flex pb-1",
                 }}
-                 size="xs"
+                size="xs"
                 allowNegative={false}
                 handlersRef={handlersLabRef}
                 defaultValue={0}
@@ -186,7 +185,11 @@ export default function ModalManageTopic({
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
-                <span className="flex flex-row items-center gap-2"> <IconList />List Course Content Added</span>
+                  <span className="flex flex-row items-center gap-2">
+                    {" "}
+                    <IconList />
+                    List Course Content Added
+                  </span>
                 </div>
                 <p>
                   {topicLenght} Course Content{topicLenght > 1 ? "s" : ""}

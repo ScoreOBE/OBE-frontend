@@ -103,12 +103,6 @@ export default function Part5TQF3({ data, setForm }: Props) {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (form.getValues()) {
-      console.log(form.getValues());
-    }
-  }, [form]);
-
   return (
     <>
       {coursePLO && (

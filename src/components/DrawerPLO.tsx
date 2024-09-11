@@ -15,21 +15,7 @@ type Props = {
 };
 
 export default function DrawerPLOdes({ opened, onClose, data }: Props) {
-  // const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
-  const user = useAppSelector((state) => state.user);
   const [isTH, setIsTH] = useState<string | null>("TH");
-
-  // useEffect(() => {
-  //   if (opened) {
-  //     setPloList(data);
-  //   }
-  // }, [opened]);
-
-  // useEffect(() => {
-  //   if (ploList) {
-  //     console.log(data);
-  //   }
-  // }, [ploList]);
 
   return (
     <>
@@ -57,7 +43,7 @@ export default function DrawerPLOdes({ opened, onClose, data }: Props) {
                       </p>
                     </div>
                   </Drawer.Title>
-                  <Drawer.CloseButton className=" -translate-y-2" />
+                  <Drawer.CloseButton className="mb-4" />
                 </div>
 
                 <div className="flex w-full justify-between items-center gap-4">
