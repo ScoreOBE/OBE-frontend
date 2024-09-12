@@ -45,7 +45,7 @@ export default function SaveTQFbar({
   return (
     <>
       <div
-        className={`min-h-14 justify-end gap-4 overflow-y-auto bottom-0 w-full bg-white border-[#e0e0e0] px-6 inline-flex flex-wrap items-center z-50 text-secondary`}
+        className={`min-h-14 justify-end gap-x-4 overflow-y-auto bottom-0 w-full bg-white border-[#e0e0e0] px-6 inline-flex flex-wrap items-center z-50 text-secondary`}
         style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
       >
         {data && (
@@ -54,11 +54,7 @@ export default function SaveTQFbar({
             <span>{dateFormatter(data.updatedAt)}</span>
           </p>
         )}
-        <Button
-          className="text-[12px] font-semibold h-8 w-[128px] rounded-md disabled:bg-disable"
-          onClick={onSave}
-          disabled={disabledSave}
-        >
+        <Button className="!w-[128px]" onClick={onSave} disabled={disabledSave}>
           <div className="flex gap-2 items-center">
             <Icon IconComponent={saveIcon} />
             Save {partLabel[part]}

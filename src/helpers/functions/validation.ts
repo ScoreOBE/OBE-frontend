@@ -65,7 +65,7 @@ export const validateTextInput = (
 ) => {
   if (!value) return `${title} is required`;
   if (!value.trim().length) return "Cannot have only spaces";
-  if (value.length > maxLength)
+  if (maxLength != 0 && value.length > maxLength)
     return `You have ${value.length - maxLength} characters too many`;
   if (checkCha) {
     const isValid = /^[0-9A-Za-z "%&()*+,-./<=>?@[\]\\^_]+$/.test(value);

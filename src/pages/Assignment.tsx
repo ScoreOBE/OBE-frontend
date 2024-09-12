@@ -21,6 +21,8 @@ import {
 import { getCourse, getOneCourse } from "@/services/course/course.service";
 import { editCourse, setCourseList } from "@/store/course";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
+import { setShowNavbar } from "@/store/showNavbar";
+import { setShowSidebar } from "@/store/showSidebar";
 
 export default function Assignment() {
   const { courseNo, sectionNo } = useParams();
@@ -44,6 +46,11 @@ export default function Assignment() {
     { title: `Assignment Section ${getSectionNo(sectionNo)}` },
   ]);
 
+  useEffect(() => {
+    dispatch(setShowSidebar(true));
+    dispatch(setShowNavbar(true));
+  }, []);
+
   return (
     <>
       <div className="bg-white flex flex-col h-full w-full p-6 pb-3 pt-5 gap-3 overflow-hidden">
@@ -63,10 +70,11 @@ export default function Assignment() {
           >
             <Menu.Target>
               <Button
+                color="#13a9a1"
                 leftSection={
                   <Icon IconComponent={eyePublish} className="h-5 w-5" />
                 }
-                className="rounded-[8px] bg-save hover:bg-[#28958f] font-semibold text-[12px] w-fit  h-8 px-3 "
+                className="px-3"
               >
                 Publish score
               </Button>

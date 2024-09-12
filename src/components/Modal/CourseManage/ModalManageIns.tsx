@@ -255,20 +255,19 @@ export default function ModalManageIns({
                           {coIns?.label}
                         </span>
                       </div>
-                      <div className="flex justify-end gap-4 mt-1 ">
+                      <div className="flex justify-end gap-4 mt-1">
                         <Menu shadow="md" width={200}>
                           <Menu.Target>
                             <Button
                               variant="outline"
-                              size="xs"
-                              className=" transform-none text-[12px] h-7 px-3 rounded-[6px]"
+                              className="!h-7 !rounded-md px-3"
                             >
                               Access
                             </Button>
                           </Menu.Target>
 
-                          <Menu.Dropdown className=" overflow-y-auto max-h-[220px] !w-[220px] h-fit border-b ">
-                            <Menu.Label className=" translate-x-1 mb-2">
+                          <Menu.Dropdown className="overflow-y-auto max-h-[220px] !w-[220px] h-fit border-b ">
+                            <Menu.Label className="translate-x-1 mb-2">
                               Can access
                             </Menu.Label>
                             <div className="flex flex-col pl-3  pb-2 h-fit gap-4 w-full">
@@ -306,10 +305,9 @@ export default function ModalManageIns({
                           </Menu.Dropdown>
                         </Menu>
                         <Button
-                          className="text-[12px] transform-none h-7 px-3 rounded-[6px]"
-                          size="xs"
-                          variant="outline"
                           color="#FF4747"
+                          variant="outline"
+                          className="!h-7 !rounded-md px-3"
                           onClick={() => removeCoIns(coIns)}
                         >
                           Remove
@@ -336,7 +334,7 @@ export default function ModalManageIns({
           </div>
         )}
         <Button
-          className="rounded-s-[4px] min-w-fit h-[36px] w-full "
+          className="!rounded-s-[4px] !h-[36px] !w-full "
           onClick={onClickSave}
           disabled={isEqual(coInsList, editCoInsList)}
           loading={loading}
@@ -446,8 +444,6 @@ export default function ModalManageIns({
                   </div>
                   <Button
                     variant="outline"
-                    size="xs"
-                    className="rounded-[8px] font-semibold text-[12px]"
                     onClick={() => {
                       setEditSec({
                         id: data.id,

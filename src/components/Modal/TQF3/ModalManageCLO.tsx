@@ -1,14 +1,23 @@
+import { validateTextInput } from "@/helpers/functions/validation";
+import { IModelCLO, IModelTQF3Part2 } from "@/models/ModelTQF3";
 import {
   Button,
   Checkbox,
-  Group,
+  FocusTrapInitialFocus,
   Modal,
+  rem,
   Textarea,
-  TextInput,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { IconList, IconTrash } from "@tabler/icons-react";
 import { upperFirst } from "lodash";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+
+enum Method {
+  Lec = "บรรยาย (Lecture)",
+  Lab = "ปฏิบัติการ (Laboratory)",
+  Other = "อื่นๆ (Other)",
+}
 
 type actionType = "add" | "edit";
 
@@ -16,23 +25,24 @@ type Props = {
   opened: boolean;
   onClose: () => void;
   type: actionType;
-  courseNo: string;
+  data: IModelCLO[] | IModelCLO;
+  setCloList: (value: any) => void;
 };
+
 export default function ModalManageCLO({
   opened,
   onClose,
   type,
-  courseNo,
+  data,
+  setCloList,
 }: Props) {
   const height = type === "add" ? "h-full gap-5" : "h-fit gap-0";
-  const cloLength = 3;
-  const [checkedItem, setCheckedItem] = useState<string[]>([]);
-  let options = [
-    { label: "บรรยาย (Lecture)" },
-    { label: "ปฏิบัติการ (Laboratory)" },
-    { label: "อื่นๆ (Other)" },
+  const [cloLength, setCloLength] = useState(0);
+  const options = [
+    { label: Method.Lec },
+    { label: Method.Lab },
+    { label: Method.Other },
   ];
-
   const [heightLeftSec, setHeightLeftSec] = useState(485);
   const cloDescriptionRef = useRef<any>(null);
 
@@ -42,11 +52,9 @@ export default function ModalManageCLO({
       setHeightLeftSec(height);
     }
   };
-
   useLayoutEffect(() => {
     updateHeight();
   });
-
   useEffect(() => {
     window.addEventListener("resize", updateHeight);
     return () => {
@@ -54,27 +62,91 @@ export default function ModalManageCLO({
     };
   }, []);
 
+  const form = useForm({
+    mode: "controlled",
+    initialValues: { clo: [] } as Partial<IModelTQF3Part2>,
+  });
+
+  const formOneCLO = useForm({
+    mode: "controlled",
+    initialValues: {
+      cloNo: 0,
+      cloDescTH: "",
+      cloDescEN: "",
+      learningMethod: [],
+      other: "",
+    } as Partial<IModelCLO>,
+    validate: {
+      cloDescTH: (value) =>
+        validateTextInput(value, "CLO Thai language", 0, false),
+      cloDescEN: (value) =>
+        validateTextInput(value, "CLO English language", 0, false),
+      learningMethod: (value) =>
+        !value?.length && "Select Learning Method at least one",
+    },
+    validateInputOnBlur: true,
+  });
+
+  useEffect(() => {
+    if (data) {
+      if (type == "add") {
+        const length = (data as IModelCLO[]).length || 0;
+        form.setFieldValue("clo", data as IModelCLO[]);
+        formOneCLO.setFieldValue("cloNo", length + 1);
+        setCloLength(length);
+      } else {
+        formOneCLO.setValues(data as IModelCLO);
+      }
+    }
+  }, [data]);
+
+  const closeModal = () => {
+    onClose();
+    setCloLength(0);
+    form.reset();
+    formOneCLO.reset();
+  };
+
+  const addMore = () => {
+    if (!formOneCLO.validate().hasErrors) {
+      form.insertListItem("clo", formOneCLO.getValues());
+      setCloLength(cloLength + 1);
+      formOneCLO.setValues({
+        cloNo: formOneCLO.getValues().cloNo! + 1,
+        cloDescTH: "",
+        cloDescEN: "",
+        learningMethod: [],
+        other: "",
+      });
+    }
+  };
+
   return (
     <Modal
       opened={opened}
-      onClose={onClose}
+      onClose={closeModal}
       closeOnClickOutside={false}
-      title={`${upperFirst(type)} CLO ${courseNo}`}
+      title={`${upperFirst(type)} CLO`}
       size={type === "add" && cloLength > 0 ? "70vw" : "40vw"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
         root: `!h-fit`,
         content: `flex flex-col bg-[#F6F7FA] overflow-hidden`,
-        body: `overflow-hidden `,
+        body: `overflow-hidden`,
         header: `mb-1`,
       }}
     >
+      <FocusTrapInitialFocus />
       <div className={`flex flex-col ${height}`}>
         <div
           className={`flex gap-5 py-1 ${
             type === "add"
-              ? checkedItem.includes("อื่นๆ (Other)")
+              ? form
+                  .getValues()
+                  .clo![
+                    cloLength > 0 ? cloLength - 1 : 0
+                  ]?.learningMethod.includes(Method.Other)
                 ? "max-h-[91%]"
                 : "max-h-[80%]"
               : "h-fit"
@@ -109,6 +181,7 @@ export default function ModalManageCLO({
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
+                {...formOneCLO.getInputProps("cloDescTH")}
               />
               <Textarea
                 autoFocus={false}
@@ -124,16 +197,14 @@ export default function ModalManageCLO({
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. Explain the working principle of computer operating systems."
+                {...formOneCLO.getInputProps("cloDescEN")}
               />
 
               <div className="flex flex-col gap-2 pb-1 ">
                 <p className="text-secondary text-[13px] mb-1 font-semibold">
                   Learning Method <span className="text-error">*</span>
                 </p>
-                <Checkbox.Group
-                  value={checkedItem}
-                  onChange={(event) => setCheckedItem(event)}
-                >
+                <Checkbox.Group {...formOneCLO.getInputProps("learningMethod")}>
                   {options.map((item, index) => (
                     <div
                       key={index}
@@ -142,20 +213,23 @@ export default function ModalManageCLO({
                       <Checkbox
                         size="xs"
                         classNames={{
-                          label: "font-medium text-[13px] text-[#333333]",
+                          label: "font-medium text-[13px] text-default",
                         }}
                         label={item.label}
                         value={item.label}
                       />
-                      {item.label === "อื่นๆ (Other)" &&
-                        checkedItem.includes("อื่นๆ (Other)") && (
+                      {item.label === Method.Other &&
+                        formOneCLO
+                          .getValues()
+                          .learningMethod?.includes(Method.Other) && (
                           <Textarea
                             size="xs"
                             className="mt-2 pl-8"
                             placeholder="(Required)"
                             classNames={{
-                              input: "text-[13px] text-[#333333] ",
+                              input: "text-[13px] text-default",
                             }}
+                            {...formOneCLO.getInputProps("other")}
                           />
                         )}
                     </div>
@@ -167,18 +241,14 @@ export default function ModalManageCLO({
             {/* Add More Button */}
             {type === "add" && (
               <div className="flex justify-end">
-                <Button
-                  //   onClick={() => setIsAddAnother(true)}
-                  variant="outline"
-                  className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                >
+                <Button onClick={addMore} variant="outline">
                   Add more
                 </Button>
               </div>
             )}
           </div>
           {/* List CLO */}
-          {!!cloLength && type === "add" && (
+          {!!form.getValues().clo?.length && type === "add" && (
             <div
               className={`flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] `}
               style={{
@@ -189,9 +259,8 @@ export default function ModalManageCLO({
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
+                  <IconList style={{ width: rem(20), height: rem(20) }} />{" "}
                   <span className="flex flex-row items-center gap-2">
-                    {" "}
-                    <IconList />
                     List CLO Added
                   </span>
                 </div>
@@ -201,20 +270,25 @@ export default function ModalManageCLO({
               </div>
 
               <div className="flex flex-col w-full h-fit px-4">
-                {Array.from({ length: cloLength }).map((_, index) => (
+                {form.getValues().clo?.map((item, index) => (
                   <div
                     key={index}
                     className={`py-3 w-full border-b-[1px] pl-3 ${
-                      Array.length > 1 ? "last:border-none last:pb-5" : ""
-                    } `}
+                      cloLength > 1 ? "last:border-none last:pb-5" : ""
+                    }`}
                   >
                     <div className="flex flex-col gap-2 w-full">
                       <div className="flex items-center justify-between">
                         <p className="text-secondary font-semibold text-[14px]">
-                          CLO-{index + 1}
+                          CLO-{item.cloNo}
                         </p>
-
-                        <div className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer">
+                        <div
+                          className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer"
+                          onClick={() => {
+                            setCloLength(cloLength - 1);
+                            form.removeListItem("clo", index);
+                          }}
+                        >
                           <IconTrash
                             stroke={1.5}
                             color="#FF4747"
@@ -226,16 +300,21 @@ export default function ModalManageCLO({
 
                     <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
                       <div className="flex text-pretty">
-                        <li></li> อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์
+                        <li></li>
+                        {item.cloDescTH}
                       </div>
                       <div className="flex text-pretty">
-                        <li></li> Explain the working principle of computer
-                        operating systems.
+                        <li></li>
+                        {item.cloDescEN}
                       </div>
-
-                      <div className="flex text-pretty">
-                        <li></li> Text
-                      </div>
+                      {item.learningMethod.length > 0 && (
+                        <div className="flex text-pretty">
+                          <li></li>
+                          {item.learningMethod
+                            .join(", ")
+                            .replace(Method.Other, item.other || "")}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -245,17 +324,17 @@ export default function ModalManageCLO({
         </div>
         {/* Button */}
         <div className="flex gap-2 items-end justify-end h-fit">
-          <Button
-            onClick={onClose}
-            variant="subtle"
-            color="#575757"
-            className="rounded-[8px] text-[12px] h-8 w-fit "
-          >
+          <Button variant="subtle" onClick={closeModal}>
             Cancel
           </Button>
           <Button
-            // onClick={submit}
-            className="rounded-[8px] text-[12px] h-8 w-fit "
+            onClick={() => {
+              setCloList(
+                type == "add" ? form.getValues().clo : formOneCLO.getValues()
+              );
+              closeModal();
+            }}
+            disabled={form.getValues().clo?.length == 0}
           >
             Done
           </Button>

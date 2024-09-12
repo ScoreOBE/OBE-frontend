@@ -406,10 +406,10 @@ export default function ModalAddCourse({
                 />
               }
               classNames={{
-                inner: "flex justify-between items-center w-full ",
+                inner: "flex justify-between items-center w-full",
               }}
               color="#ffffff"
-              className="w-full border-[1px] text-[13px]  border-secondary h-fit py-3 ! items-center rounded-[6px] flex hover:bg-bgSecond "
+              className="!w-full !h-fit !text-[13px] !rounded-[6px] border-[1px] border-secondary py-3 items-center flex hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-default">
@@ -431,10 +431,10 @@ export default function ModalAddCourse({
                 />
               }
               classNames={{
-                inner: "flex justify-between items-center w-full ",
+                inner: "flex justify-between items-center w-full",
               }}
               color="#ffffff"
-              className="w-full border text-[13px]  border-secondary h-fit py-3 ! items-center rounded-[6px] flex hover:bg-bgSecond "
+              className="!w-full !h-fit !text-[13px] !rounded-[6px] border-[1px] border-secondary py-3 items-center flex hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-default">
@@ -460,10 +460,12 @@ export default function ModalAddCourse({
                 inner: "flex justify-between items-center w-full",
               }}
               color="#ffffff"
-              className="w-full border text-[13px] border-secondary  h-fit py-3 !text-default items-center rounded-[6px] flex justify-start hover:bg-bgSecond"
+              className="!w-full !h-fit !text-[13px] !rounded-[6px] border-[1px] border-secondary py-3 items-center flex hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
-                <span className="flex justify-start">Major Elective</span>{" "}
+                <span className="flex justify-start text-default">
+                  Major Elective
+                </span>
                 <br />
                 <span className="flex justify-start font-medium text-[12px] text-secondary -mt-1">
                   - Selected Topics Course
@@ -483,10 +485,10 @@ export default function ModalAddCourse({
               classNames={{
                 inner: "flex justify-between items-center w-full ",
               }}
-              className="w-full border-[1px] h-fit py-3 text-[13px]   border-secondary items-start  !text-default rounded-[6px] flex justify-start hover:bg-bgSecond"
+              className="!w-full !h-fit !text-[13px] !rounded-[6px] border-[1px] border-secondary py-3 items-center flex hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
-                <span className="flex justify-start">
+                <span className="flex justify-start text-default">
                   {COURSE_TYPE.FREE.en}
                 </span>
                 <br />
@@ -675,20 +677,19 @@ export default function ModalAddCourse({
                             {coIns.label}
                           </span>
 
-                          <div className="flex justify-end gap-4 mt-1 ">
+                          <div className="flex justify-end gap-4 mt-1">
                             <Menu shadow="md" width={200}>
                               <Menu.Target>
                                 <Button
                                   variant="outline"
-                                  size="xs"
-                                  className=" transform-none text-[12px] h-7 px-3 rounded-[6px]"
+                                  className="!h-7 !rounded-md px-3"
                                 >
                                   Access
                                 </Button>
                               </Menu.Target>
 
-                              <Menu.Dropdown className=" overflow-y-auto max-h-[220px] !w-[220px] h-fit border-b ">
-                                <Menu.Label className=" translate-x-1 mb-2">
+                              <Menu.Dropdown className="overflow-y-auto max-h-[220px] !w-[220px] h-fit border-b ">
+                                <Menu.Label className="translate-x-1 mb-2">
                                   Can access
                                 </Menu.Label>
                                 <div className="flex flex-col pl-3  pb-2 h-fit gap-4 w-full">
@@ -723,10 +724,9 @@ export default function ModalAddCourse({
                               </Menu.Dropdown>
                             </Menu>
                             <Button
-                              className="text-b3 transform-none h-7 px-3 rounded-[6px]"
-                              size="xs"
-                              variant="outline"
                               color="#FF4747"
+                              variant="outline"
+                              className="!h-7 !rounded-md px-3"
                               onClick={() => removeCoIns(coIns)}
                             >
                               Remove
@@ -851,19 +851,12 @@ export default function ModalAddCourse({
         <Group className="flex w-full h-fit items-end justify-between">
           <div>
             {active > 0 && (
-              <Button
-                color="#575757"
-                variant="subtle"
-                className="rounded-[8px] text-b3 h-[32px] w-fit "
-                justify="start"
-                onClick={prevStep}
-              >
+              <Button variant="subtle" onClick={prevStep}>
                 Back
               </Button>
             )}
           </div>
           <Button
-            className="rounded-[8px] text-b3 h-[32px] w-fit "
             loading={loading}
             onClick={() => nextStep()}
             rightSection={

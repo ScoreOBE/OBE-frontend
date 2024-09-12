@@ -25,6 +25,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
     { year: 5, en: "5th year", th: "ชั้นปีที่ 5" },
     { year: 6, en: "6th year", th: "ชั้นปีที่ 6" },
   ];
+
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {} as Partial<IModelTQF3Part1>,

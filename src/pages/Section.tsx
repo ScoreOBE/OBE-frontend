@@ -35,6 +35,8 @@ import {
 import ModalAddSection from "@/components/Modal/CourseManage/ModalAddSection";
 import { IModelUser } from "@/models/ModelUser";
 import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
+import { setShowNavbar } from "@/store/showNavbar";
+import { setShowSidebar } from "@/store/showSidebar";
 
 export default function Section() {
   const navigate = useNavigate();
@@ -60,6 +62,11 @@ export default function Section() {
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
   const [openModalManageIns, setOpenModalManageIns] = useState(false);
+
+  useEffect(() => {
+    dispatch(setShowSidebar(true));
+    dispatch(setShowNavbar(true));
+  }, []);
 
   const fetchOneCourse = async () => {
     const res = await getOneCourse({
@@ -191,8 +198,8 @@ export default function Section() {
             <div className="flex gap-5 items-center">
               {activeTerm ? (
                 <Button
-                  leftSection={<IconUpload className="h-4 w-4" />}
-                  className="rounded-[6px] text-[12px] w-fit font-semibold  h-8 px-3 "
+                  leftSection={<IconUpload className="size-4" />}
+                  className="px-3"
                 >
                   Upload and Assets
                 </Button>
@@ -200,9 +207,9 @@ export default function Section() {
                 <Button
                   color="#20884f"
                   leftSection={
-                    <Icon className="h-4 w-4 " IconComponent={ExcelIcon} />
+                    <Icon className="size-4" IconComponent={ExcelIcon} />
                   }
-                  className="rounded-[8px] text-[12px] w-fit font-medium  h-8 px-3 "
+                  className="!font-medium px-3"
                 >
                   Export score
                 </Button>

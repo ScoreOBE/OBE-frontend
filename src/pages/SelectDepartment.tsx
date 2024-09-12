@@ -63,7 +63,7 @@ export default function SelectDepartment() {
       <div className="absolute top-12 left-12 flex justify-between items-center gap-3">
         {!!user.departmentCode?.length && (
           <Button
-            className="rounded-full p-2 bg-white bg-opacity-0 hover:bg-[#d4d4d4] hover:bg-opacity-100 text-white hover:text-primary"
+            className="!rounded-full !h-fit p-2 bg-white bg-opacity-0 hover:bg-[#d4d4d4] hover:bg-opacity-100 text-white hover:text-primary"
             onClick={() => navigate(-1)}
           >
             <FaArrowLeftLong size={20} />
@@ -154,9 +154,10 @@ export default function SelectDepartment() {
                   boxShadow: "0px 0px 8px 0px rgb(255,255,255,255)",
                   textShadow: "0px 0px 8px 0px rgb(255,255,255,255)",
                 }}
+                className="rounded-[15px]"
               >
                 <Button
-                  className="rounded-[15px] w-full text-[#6C67A5] h-12 font-sf-pro text-[16px] bg-[#ffffff] bg-opacity-75 hover:bg-opacity-90 hover:bg-[#ffffff] hover:text-[#6C67A5]"
+                  className="!rounded-[15px] !w-full text-[#6C67A5] !h-12 !text-[16px] bg-[#ffffff] bg-opacity-75 hover:bg-opacity-90 hover:bg-[#ffffff] hover:text-[#6C67A5]"
                   onClick={() => getStart()}
                 >
                   Get Start

@@ -1,4 +1,4 @@
-import { Button, FocusTrap, Modal, TextInput } from "@mantine/core";
+import { Button, FocusTrapInitialFocus, Modal, TextInput } from "@mantine/core";
 import { useEffect } from "react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
@@ -90,7 +90,7 @@ export default function ModalEditCourse({
           "flex flex-col justify-start   font-medium leading-[24px] text-[14px] item-center  overflow-hidden ",
       }}
     >
-      <FocusTrap.InitialFocus />
+      <FocusTrapInitialFocus />
       <div className="flex flex-col mt-2 gap-3">
         <TextInput
           classNames={{ input: "focus:border-primary" }}
@@ -119,20 +119,10 @@ export default function ModalEditCourse({
         />
 
         <div className="flex gap-2 mt-3 justify-end">
-          <Button
-            onClick={onClose}
-            variant="subtle"
-            color="#575757"
-            className="rounded-[8px] text-[12px] h-[32px] w-fit "
-          >
+          <Button onClick={onClose} variant="subtle">
             Cancel
           </Button>
-          <Button
-            onClick={submit}
-            className="rounded-[8px] text-[12px] h-[32px] w-fit "
-          >
-            Save Changes
-          </Button>
+          <Button onClick={submit}>Save Changes</Button>
         </div>
       </div>
     </Modal>

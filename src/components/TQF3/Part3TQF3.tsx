@@ -14,7 +14,12 @@ import { useForm } from "@mantine/form";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import { Table, rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
-import { IconCheckbox, IconEdit, IconGripVertical, IconTrash } from "@tabler/icons-react";
+import {
+  IconCheckbox,
+  IconEdit,
+  IconGripVertical,
+  IconTrash,
+} from "@tabler/icons-react";
 import {
   IconExclamationCircle,
   IconInfoCircle,
@@ -122,9 +127,8 @@ export default function Part3TQF3({ data, setForm }: Props) {
                 Course Syllabus<span className="ml-1 text-red-500">*</span>
               </p>
             </div>
-
             <Button
-              className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
+              className="text-center px-4"
               onClick={() => setOpenModalAddEvalTopic(true)}
             >
               <div className="flex gap-2">
@@ -137,7 +141,7 @@ export default function Part3TQF3({ data, setForm }: Props) {
             <Alert
               radius="md"
               icon={<IconCheckbox />}
-              variant='light'
+              variant="light"
               color="rgba(6, 158, 110, 1)"
               classNames={{
                 icon: "size-6",
@@ -146,7 +150,8 @@ export default function Part3TQF3({ data, setForm }: Props) {
               className="w-full"
               title={
                 <p className="font-semibold">
-                The total of all topics in the course syllabus <span className=" font-extrabold">must equal 100%</span> .
+                  The total of all topics in the course syllabus{" "}
+                  <span className=" font-extrabold">must equal 100%</span> .
                 </p>
               }
             ></Alert>
@@ -173,7 +178,6 @@ export default function Part3TQF3({ data, setForm }: Props) {
               </p>
             }
           ></Alert>
-          
 
           {/* Table */}
           <DragDropContext
@@ -212,7 +216,8 @@ export default function Part3TQF3({ data, setForm }: Props) {
                           withArrow
                           label={
                             <div className="text-default text-[12px] p-2 font-medium gap-2">
-                             Percentage of scores for each topic in the course syllabus.
+                              Percentage of scores for each topic in the course
+                              syllabus.
                             </div>
                           }
                           color="#FCFCFC"

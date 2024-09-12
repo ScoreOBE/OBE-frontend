@@ -194,12 +194,12 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               collection?.semester! > academicYear?.semester)) && (
             <Button
               color="#FF4747"
-              leftSection={<IconTrash className="h-5 w-5 -mr-1" stroke={1.5} />}
+              leftSection={<IconTrash className="size-5 -mr-1" stroke={1.5} />}
               onClick={() => {
                 setOpenModal(false);
                 setOpenPopupDeletePLOCollection(true);
               }}
-              className=" rounded-md"
+              className="!rounded-md"
             >
               Delete {`${collection.name}`} Collection{" "}
             </Button>
@@ -303,9 +303,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
 
           <div className="flex gap-2 justify-end w-full">
             <Button
-              color="#575757"
               variant="subtle"
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
               onClick={() => {
                 setSelectPloDupli({});
                 openModalAddPLO();
@@ -319,7 +317,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 openModalAddPLO();
                 closeModalDuplicatePLO();
               }}
-              className="rounded-[8px] text-[12px] border-none h-[32px] w-fit "
+              className="border-none"
               disabled={isEmpty(selectPloDupli)}
             >
               Duplicate and Edit
@@ -395,9 +393,8 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 <div className="flex gap-4">
                   <Button
                     leftSection={
-                      <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
+                      <IconPlus className="size-5 -mr-1" stroke={1.5} />
                     }
-                    className="rounded-[8px] text-[12px] h-[32px] w-fit "
                     onClick={openModalDuplicatePLO}
                   >
                     Add Collection

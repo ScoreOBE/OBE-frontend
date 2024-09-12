@@ -25,7 +25,7 @@ export default function Login() {
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(setShowSidebar(false));
-    dispatch(setShowNavbar(true))
+    dispatch(setShowNavbar(true));
     if (!isEmpty(user)) {
       navigate(ROUTE_PATH.DASHBOARD_INS);
     }
@@ -36,7 +36,7 @@ export default function Login() {
         <p className=" drop-shadow-xl cursor-default mt-16 leading-[74px] font-[600] item-center -rounded text-[#000000] text-[60px]">
           The all-in-one{" "}
           <span className=" text-secondary font-[700]">
-            Score OBE  <span className=" text-[#FFCD1B]"> +</span>{" "}
+            Score OBE <span className=" text-[#FFCD1B]"> +</span>{" "}
           </span>{" "}
           <br />
           for instructor and student
@@ -46,7 +46,7 @@ export default function Login() {
         </p>
 
         <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
-          <Button className=" mt-8 rounded-[8px] drop-shadow-lg text-[#fffff] text-[14px] font-semibold h-[44px] ">
+          <Button className="mt-8 drop-shadow-lg !text-[14px] !h-[44px]">
             <img
               src={cmulogoLogin}
               alt="CMULogo"

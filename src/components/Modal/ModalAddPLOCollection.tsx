@@ -346,10 +346,7 @@ export default function ModalAddPLOCollection({
             <Group className="flex w-full h-fit items-end justify-between">
               <div>
                 <Button
-                  color="#575757"
                   variant="subtle"
-                  className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                  justify="start"
                   onClick={() => {
                     onOpen();
                     setOpenModalSelectSemester(false);
@@ -360,7 +357,6 @@ export default function ModalAddPLOCollection({
               </div>
               <Button
                 disabled={isEmpty(selectSemester)}
-                className="rounded-[8px] border-none text-[12px] h-[32px] w-fit"
                 onClick={addPLOCollection}
               >
                 Done
@@ -526,7 +522,6 @@ export default function ModalAddPLOCollection({
                   <Button
                     onClick={() => setIsAddAnother(true)}
                     variant="outline"
-                    className="rounded-[8px] text-[12px] h-[32px] w-fit "
                   >
                     Add more
                   </Button>
@@ -810,19 +805,12 @@ export default function ModalAddPLOCollection({
           <Group className="flex w-full h-fit items-end justify-between mt-7">
             <div>
               {active > 0 && (
-                <Button
-                  color="#575757"
-                  variant="subtle"
-                  className="rounded-[8px] text-[12px] h-[32px] w-fit "
-                  justify="start"
-                  onClick={prevStep}
-                >
+                <Button variant="subtle" onClick={prevStep}>
                   Back
                 </Button>
               )}
             </div>
             <Button
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
               loading={loading}
               onClick={() => {
                 nextStep();

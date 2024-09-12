@@ -159,8 +159,6 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                   </div>
                   <Button
                     variant="outline"
-                    size="xs"
-                    className=" rounded-[8px] font-semibold text-[12px]"
                     onClick={() => {
                       setSupremeAdmin(admin);
                       onClose();
@@ -189,7 +187,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           color="red"
           title={` After you change Supreme Admin, `}
           icon={<IconExclamationCircle />}
-          classNames={{ icon: 'size-6' }}
+          classNames={{ icon: "size-6" }}
           className="mb-5"
         ></Alert>
         <TextInput
@@ -199,7 +197,6 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           onChange={(event) => setTextActivate(event.target.value)}
         ></TextInput>
         <Button
-          color="#5768D5"
           disabled={
             !isEqual(
               `${supremeAdmin?.firstNameEN}${supremeAdmin?.lastNameEN}`,
@@ -207,7 +204,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
             )
           }
           onClick={() => editSAdmin(supremeAdmin.id!)}
-          className="rounded-s-[4px] mt-4 min-w-fit h-[36px]  border-none w-full"
+          className="!rounded-s-[4px] mt-4 min-w-fit !h-[36px] border-none !w-full"
         >
           Change Supreme Admin, Log Out
         </Button>

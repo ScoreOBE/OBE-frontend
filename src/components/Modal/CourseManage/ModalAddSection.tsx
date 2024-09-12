@@ -610,20 +610,18 @@ export default function ModalAddSection({
                             {coIns.label}
                           </span>
 
-                          <div className="flex justify-end gap-3 ">
+                          <div className="flex justify-end gap-4 mt-1">
                             <Menu shadow="md" width={200}>
                               <Menu.Target>
                                 <Button
                                   variant="outline"
-                                  size="xs"
-                                  className=" transform-none text-[12px] rounded-md"
+                                  className="!h-7 !rounded-md px-3"
                                 >
                                   Access
                                 </Button>
                               </Menu.Target>
-
-                              <Menu.Dropdown className=" overflow-y-auto max-h-[180px] h-fit">
-                                <Menu.Label className=" -translate-x-1">
+                              <Menu.Dropdown className="overflow-y-auto max-h-[180px] h-fit">
+                                <Menu.Label className="-translate-x-1">
                                   Can access
                                 </Menu.Label>
                                 <div className="flex flex-col pl-3  pb-2 h-fit gap-4 w-full">
@@ -658,10 +656,9 @@ export default function ModalAddSection({
                               </Menu.Dropdown>
                             </Menu>
                             <Button
-                              className="text-[12px] transform-none rounded-[8px]"
-                              size="xs"
-                              variant="outline"
                               color="#FF4747"
+                              variant="outline"
+                              className="!h-7 !rounded-md px-3"
                               onClick={() => removeCoIns(coIns)}
                             >
                               Remove
@@ -787,19 +784,12 @@ export default function ModalAddSection({
       <Group className="flex w-full h-fit items-end justify-between">
         <div>
           {active > 0 && (
-            <Button
-              color="#575757"
-              variant="subtle"
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
-              justify="start"
-              onClick={prevStep}
-            >
+            <Button variant="subtle" onClick={prevStep}>
               Back
             </Button>
           )}
         </div>
         <Button
-          className="rounded-[8px] text-[12px] h-[32px] w-fit "
           loading={loading}
           onClick={() => nextStep()}
           rightSection={active != 3 && <IconArrowRight stroke={2} size={20} />}

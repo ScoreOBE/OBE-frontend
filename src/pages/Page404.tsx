@@ -13,7 +13,7 @@ export default function NotFoundPage() {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     dispatch(setLoading(false));
     dispatch(setShowSidebar(false));
@@ -45,13 +45,13 @@ export default function NotFoundPage() {
             <p className="text-4xl mt-6 font-semibold">You've lost in space</p>
             <p className="text-lg  font-medium text-gray-400">
               The page you're looking for is now beyond the known universe.
-            </p>{" "}
+            </p>
             <Button
               onClick={goDashboard}
               leftSection={
-                <IconArrowLeft className="h-5 w-5 -mr-1" stroke={1.5} />
+                <IconArrowLeft className="size-5 -mr-1" stroke={1.5} />
               }
-              className="inline-block  -ml-4 mt-3 w-fit bg-transparent hover:bg-transparent hover:underline   text-white text-md font-bold rounded  transition"
+              className="inline-block -ml-4 mt-3 bg-transparent hover:bg-transparent hover:underline text-white !font-bold !rounded transition"
             >
               Back to home
             </Button>

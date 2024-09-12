@@ -108,7 +108,7 @@ export default function DashboardSidebar() {
             option: "hover:bg-[#DDDDF6] text-primary font-medium",
           }}
         />
-        <Button className="w-full" onClick={() => confirmFilterTerm()}>
+        <Button className="!w-full !rounded-md" onClick={() => confirmFilterTerm()}>
           OK
         </Button>
       </Modal>
@@ -129,7 +129,7 @@ export default function DashboardSidebar() {
         <div className="flex flex-col gap-3">
           <p className="text-b2 font-semibold">Course</p>
           <Button
-            className="bg-transparent w-full h-[50px] flex justify-start items-center  px-3 py-1 border-none rounded-[8px] text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none group"
+            className="bg-transparent !w-full !h-[50px] flex justify-start items-center px-3 py-1 border-none text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none group"
             leftSection={
               <Icon className="-mt-4 mr-1" IconComponent={CalendarIcon} />
             }

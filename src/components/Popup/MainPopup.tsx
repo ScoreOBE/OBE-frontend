@@ -65,19 +65,16 @@ export default function MainPopup({
           {type === POPUP_TYPE.DELETE ? (
             <>
               <Button
-                radius="10px"
-                onClick={onClose}
                 variant="subtle"
-                color="#575757"
-                className="text-[13px]"
+                className="!text-[13px] !rounded-[10px]"
+                onClick={onClose}
               >
                 Cancel
-              </Button>{" "}
+              </Button>
               <Button
-                radius="10px"
-                onClick={action}
-                className="text-[13px]"
                 color="#FF4747"
+                className="!text-[13px] !rounded-[10px]"
+                onClick={action}
               >
                 {labelButtonRight}
               </Button>

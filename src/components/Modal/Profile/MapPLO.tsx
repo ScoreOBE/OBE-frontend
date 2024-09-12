@@ -9,7 +9,7 @@ import {
   Checkbox,
   Alert,
   Menu,
-  FocusTrap,
+  FocusTrapInitialFocus,
   TagsInput,
   Select,
 } from "@mantine/core";
@@ -524,7 +524,7 @@ export default function MapPLO({ ploName = "" }: Props) {
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
       >
-        <FocusTrap.InitialFocus />
+        <FocusTrapInitialFocus />
         <div className="flex flex-col mt-2 gap-3">
           <Textarea
             withAsterisk={true}
@@ -559,19 +559,12 @@ export default function MapPLO({ ploName = "" }: Props) {
 
           <div className="flex gap-2 mt-3 justify-end">
             <Button
-              onClick={() => setOpenModalAddPLONo(false)}
               variant="subtle"
-              color="#575757"
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+              onClick={() => setOpenModalAddPLONo(false)}
             >
               Cancel
             </Button>
-            <Button
-              onClick={onClickAddPLONo}
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
-            >
-              Done
-            </Button>
+            <Button onClick={onClickAddPLONo}>Done</Button>
           </div>
         </div>
       </Modal>
@@ -589,7 +582,7 @@ export default function MapPLO({ ploName = "" }: Props) {
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
       >
-        <FocusTrap.InitialFocus />
+        <FocusTrapInitialFocus />
         <div className="flex flex-col gap-3">
           <Textarea
             withAsterisk={true}
@@ -634,21 +627,12 @@ export default function MapPLO({ ploName = "" }: Props) {
 
           <div className="flex gap-2 mt-3 justify-end">
             <Button
-              onClick={() => setOpenModalEditPLONo(false)}
               variant="subtle"
-              color="#575757"
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
+              onClick={() => setOpenModalEditPLONo(false)}
             >
               Cancel
             </Button>
-            <Button
-              onClick={() => {
-                editPLO();
-              }}
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
-            >
-              Save Changes
-            </Button>
+            <Button onClick={editPLO}>Save Changes</Button>
           </div>
         </div>
       </Modal>
@@ -667,7 +651,7 @@ export default function MapPLO({ ploName = "" }: Props) {
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
       >
-        <FocusTrap.InitialFocus />
+        <FocusTrapInitialFocus />
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-3">
             <Select
@@ -736,20 +720,10 @@ export default function MapPLO({ ploName = "" }: Props) {
             )}
           </div>
           <div className="flex gap-2 justify-end">
-            <Button
-              onClick={closeModalAddCourse}
-              variant="subtle"
-              color="#575757"
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
-            >
+            <Button variant="subtle" onClick={closeModalAddCourse}>
               Cancel
             </Button>
-            <Button
-              onClick={addCourse}
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
-            >
-              Add
-            </Button>
+            <Button onClick={addCourse}>Add</Button>
           </div>
         </div>
       </Modal>
@@ -886,7 +860,6 @@ export default function MapPLO({ ploName = "" }: Props) {
                       leftSection={
                         <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
                       }
-                      className="rounded-[8px] text-[12px] h-[32px] w-fit "
                       onClick={() => setOpenModalAddPLONo(true)}
                     >
                       Add PLO
@@ -1059,7 +1032,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                                 >
                                   <div className="flex items-center gap-2">
                                     <IconEdit className="size-4" stroke={1.5} />
-                                    <span>Mapping</span>
+                                    <span>Edit Mapping</span>
                                   </div>
                                 </Menu.Item>
                               </>
@@ -1071,8 +1044,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                       <div className="flex gap-3">
                         <Button
                           variant="subtle"
-                          color="#575757"
-                          className="rounded-[8px] text-[12px] h-[32px] w-fit bg-[#e5e7eb] hover-[#e5e7eb]/10"
+                          className="bg-[#e5e7eb] hover-[#e5e7eb]/10"
                           onClick={() => setIsMapPLO(false)}
                         >
                           Cancel
@@ -1082,7 +1054,6 @@ export default function MapPLO({ ploName = "" }: Props) {
                           leftSection={
                             <IconCheck className="size-4" stroke={2} />
                           }
-                          className="rounded-[8px] text-[12px] h-[32px] w-fit "
                           onClick={onSaveMapping}
                         >
                           Save Changes
