@@ -52,6 +52,9 @@ export default function Dashboard() {
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
+  }, []);
+
+  useEffect(() => {
     const yearId = params.get("id");
     const year = parseInt(params.get("year")!);
     const semester = parseInt(params.get("semester")!);
@@ -211,10 +214,8 @@ export default function Dashboard() {
             <Group className="flex w-full h-fit items-end justify-end">
               <div>
                 <Button
-                  onClick={() => setOpenModalSelectCourse(false)}
-                  color="#575757"
                   variant="subtle"
-                  className="rounded-[8px] text-[12px] h-[32px] w-fit "
+                  onClick={() => setOpenModalSelectCourse(false)}
                 >
                   Cancel
                 </Button>
@@ -228,7 +229,7 @@ export default function Dashboard() {
                     size={20}
                   />
                 }
-                className="rounded-[8px] border-none text-[12px] h-[32px] w-fit"
+                className="border-none"
               >
                 Next
               </Button>
@@ -266,10 +267,10 @@ export default function Dashboard() {
             )}
           </div>
           {term?.isActive && !!course.courses.length && (
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
               <Button
                 variant="outline"
-                className="text-center rounded-[6px] text-[12px] w-fit font-semibold h-8 px-4"
+                className="text-center px-4"
                 onClick={() => setOpenAddModal(true)}
               >
                 <div className="flex gap-2">
@@ -278,8 +279,8 @@ export default function Dashboard() {
                 </div>
               </Button>
               <Button
-                className="text-center rounded-[6px] text-[12px] w-fit font-semibold h-8 px-4"
-                leftSection={<IconUpload className="h-4 w-4" />}
+                className="text-center px-4"
+                leftSection={<IconUpload className="size-4" />}
                 onClick={() => setOpenModalSelectCourse(true)}
               >
                 <div className="flex gap-2">Upload score</div>
@@ -323,9 +324,8 @@ export default function Dashboard() {
                   //   />
                   //   Add course
                   // </Button>
-
                   <Button
-                    className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
+                    className="text-center px-4"
                     onClick={() => setOpenAddModal(true)}
                   >
                     <div className="flex gap-2">

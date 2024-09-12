@@ -30,12 +30,7 @@ export interface IModelTQF3Part1 {
 
 export interface IModelTQF3Part2 {
   clo: IModelCLO[];
-  schedule: {
-    weekNo: number;
-    topicDesc: string;
-    lecHour: number;
-    labHour: number;
-  }[];
+  schedule: IModelSchedule[];
   updatedAt: Date;
 }
 
@@ -68,6 +63,16 @@ export interface IModelCLO {
   cloNo: number;
   cloDescTH: string;
   cloDescEN: string;
+  learningMethod: string[];
+  other?: string;
+}
+
+export interface IModelSchedule {
+  id: string;
+  weekNo: number;
+  topicDesc: string;
+  lecHour: number;
+  labHour: number;
 }
 
 export interface IModelEval {

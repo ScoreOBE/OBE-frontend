@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import { createTheme, MantineProvider, virtualColor } from "@mantine/core";
+import { Button, createTheme, MantineProvider } from "@mantine/core";
 import "./index.css";
 import "@/styles/style.css";
 import "@mantine/core/styles.css";
@@ -15,7 +15,7 @@ import router from "./routes/router.tsx";
 quantum.register();
 
 const theme = createTheme({
-  cursorType: 'pointer',
+  cursorType: "pointer",
   fontFamily: `"Manrope", "NotoSansThai", Helvetica, Arial, sans-serif`,
   primaryColor: "slate-blue",
   colors: {
@@ -31,6 +31,23 @@ const theme = createTheme({
       "#3043bf",
       "#2a3aa6",
     ],
+  },
+  components: {
+    Button: Button.extend({
+      vars: (theme, props) => {
+        if (props.variant == "subtle") {
+          return {
+            root: {
+              "--button-bg": "transparent",
+              "--button-color": "#575757",
+              "--button-hover": "rgba(87, 87, 87, 0.12)",
+              "--button-bd": "transparent",
+            },
+          };
+        }
+        return { root: {} };
+      },
+    }),
   },
 });
 

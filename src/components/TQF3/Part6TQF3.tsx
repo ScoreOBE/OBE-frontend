@@ -257,7 +257,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
             >
               <Button
                 disabled={form.getValues().data.length === 10}
-                className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
+                className="text-center px-4"
               >
                 <div className="flex gap-2">
                   <Icon IconComponent={AddIcon} />
@@ -268,7 +268,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
           ) : (
             <Button
               onClick={() => setOpenModalSelectTopic(true)}
-              className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
+              className="text-center px-4"
             >
               <div className="flex gap-2">
                 <Icon IconComponent={AddIcon} />

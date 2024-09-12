@@ -62,7 +62,7 @@ export default function AssignmentSidebar() {
         <div className="flex flex-col gap-2">
           <Button
             leftSection={<Icon IconComponent={list} />}
-            className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
+            className={`!w-full !text-[13px] flex justify-start items-center border-none transition-colors duration-300 focus:border-none group
               ${
                 path.includes(ROUTE_PATH.ASSIGNMENT)
                   ? // ![ROUTE_PATH.TQF3, ROUTE_PATH.TQF5].includes(path)
@@ -72,13 +72,11 @@ export default function AssignmentSidebar() {
           >
             Assignment
           </Button>
-
           <Button
-            //
             leftSection={
               <Icon IconComponent={histogram} className="pl-1 pb-1" />
             }
-            className={`font-semibold w-full h-8 text-[13px] flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group
+            className={`!w-full !text-[13px] flex justify-start items-center border-none transition-colors duration-300 focus:border-none group
                 ${
                   path.includes(ROUTE_PATH.TQF3)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -123,7 +121,7 @@ export default function AssignmentSidebar() {
                 openedMainPopup();
               }}
               leftSection={<IconLogout className="h-5 w-5" stroke={1.5} />}
-              className="font-semibold text-[#ffffff] bg-transparent hover:bg-[#d55757] w-full h-9 flex justify-start items-center border-none rounded-[8px] transition-colors duration-300 focus:border-none group"
+              className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center border-none transition-colors duration-300 focus:border-none group"
             >
               <div className="flex flex-col justify-start w-full items-start gap-[7px]">
                 <p className="font-medium text-[13px]">Leave from Course</p>

@@ -1,7 +1,7 @@
 import {
   Button,
   Chip,
-  FocusTrap,
+  FocusTrapInitialFocus,
   Group,
   Modal,
   Switch,
@@ -150,7 +150,7 @@ export default function ModalEditSection({
           "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center  overflow-hidden ",
       }}
     >
-      <FocusTrap.InitialFocus />
+      <FocusTrapInitialFocus />
       <div className="flex flex-col mt-2 gap-5">
         {value?.type === COURSE_TYPE.SEL_TOPIC.en && (
           <TextInput
@@ -234,20 +234,10 @@ export default function ModalEditSection({
         </div>
 
         <div className="flex gap-2 justify-end w-full">
-          <Button
-            color="#575757"
-            variant="subtle"
-            className="rounded-[8px] text-[12px] h-[32px] w-fit "
-            onClick={onClose}
-          >
+          <Button variant="subtle" onClick={onClose}>
             Cancel
           </Button>
-          <Button
-            onClick={submit}
-            className="rounded-[8px] text-[12px] h-[32px] w-fit "
-          >
-            Save Changes
-          </Button>
+          <Button onClick={submit}>Save Changes</Button>
         </div>
       </div>
     </Modal>

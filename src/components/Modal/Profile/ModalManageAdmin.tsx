@@ -120,10 +120,8 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                     </p>
                   ) : (
                     <Button
-                      variant="outline"
                       color="red"
-                      size="xs"
-                      className="rounded-[8px] font-semibold text-[12px]"
+                      variant="outline"
                       onClick={() => deleteAdmin(admin.id)}
                     >
                       Delete

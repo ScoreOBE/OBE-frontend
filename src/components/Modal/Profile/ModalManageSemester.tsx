@@ -243,8 +243,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                           </div>
                           <Button
                             variant="outline"
-                            size="xs"
-                            className={`rounded-lg ${
+                            className={`${
                               semester.isActive &&
                               "border-none text-secondary bg-[#E5E8FF]"
                             }`}
@@ -266,7 +265,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             </div>
           </div>
           <Button
-            className="rounded-s-[4px] min-w-fit h-[36px] w-full "
+            className="!rounded-s-[4px] min-w-fit !h-[36px] !w-full "
             onClick={onClickAdd}
           >
             Add Semester {selectSemester?.semester}, {selectSemester?.year}
@@ -287,7 +286,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           color="red"
           title={` After you activate semester ${activateSemester?.semester}/${activateSemester?.year}, semester ${academicYear?.semester}/${academicYear?.year} cannot be reactivated. This means that instructor can't make any changes to them courses for that semester.  `}
           icon={<IconExclamationCircle />}
-          classNames={{ icon: 'size-6' }}
+          classNames={{ icon: "size-6" }}
           className="mb-5"
         ></Alert>
         <TextInput
@@ -304,7 +303,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             )
           }
           onClick={() => onClickActivate(activateSemester!)}
-          className="rounded-s-[4px] mt-4 min-w-fit h-[36px]  border-none w-full"
+          className="!rounded-s-[4px] mt-4 min-w-fit !h-[36px] border-none !w-full"
         >
           Activate this semester
         </Button>

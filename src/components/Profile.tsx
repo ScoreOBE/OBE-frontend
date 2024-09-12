@@ -90,8 +90,11 @@ export default function Profile() {
         classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
       >
         <Menu.Target>
-          <Button color="#ffffff" className="flex flex-row pl-4 justify-end  px-0 h-10 items-center rounded-lg  cursor-pointer">
-            <div className="flex flex-col gap-1 text-end mr-3 text-[12px]">
+          <Button
+            color="#ffffff"
+            className="flex flex-row pl-4 justify-end px-0 !h-10 items-center"
+          >
+            <div className="flex flex-col gap-1 text-end mr-3 text-b3">
               <p className="font-semibold text-default">{getUserName(user)}</p>
               <p
                 className="font-medium"
@@ -111,7 +114,7 @@ export default function Profile() {
             <>
               <div className="flex flex-row p-4 py-3 gap-3">
                 <Icon className="pt-[5px]" IconComponent={ProfileIcon} />
-                <div className="flex flex-col text-[12px]   ">
+                <div className="flex flex-col text-b3">
                   <p className=" font-semibold">{getUserName(user, 1)}</p>
                   <p
                     className="font-medium"
@@ -122,7 +125,7 @@ export default function Profile() {
                 </div>
               </div>
               <Menu.Divider />
-              <Menu.Item className="text-[#3E3E3E] text-[14px] h-8 w-full ">
+              <Menu.Item className="text-default text-[14px] h-8 w-full ">
                 <div className="flex items-center gap-2">
                   <IconList stroke={1.5} className="size-5" />
                   <span>Activity log</span>

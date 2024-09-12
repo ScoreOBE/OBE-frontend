@@ -39,6 +39,7 @@ export default function Part5TQF3({ data, setForm }: Props) {
       cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
       cloDescEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 1",
+      learningMethod: [],
     },
     {
       id: "kmskx",
@@ -46,6 +47,7 @@ export default function Part5TQF3({ data, setForm }: Props) {
       cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.2",
       cloDescEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 2",
+      learningMethod: [],
     },
     {
       id: "kmskx",
@@ -53,6 +55,7 @@ export default function Part5TQF3({ data, setForm }: Props) {
       cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.3",
       cloDescEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 3",
+      learningMethod: [],
     },
     {
       id: "kmskx",
@@ -60,6 +63,7 @@ export default function Part5TQF3({ data, setForm }: Props) {
       cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.4",
       cloDescEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 4",
+      learningMethod: [],
     },
     {
       id: "kmskx",
@@ -67,6 +71,7 @@ export default function Part5TQF3({ data, setForm }: Props) {
       cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.5",
       cloDescEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 5",
+      learningMethod: [],
     },
   ];
 
@@ -121,9 +126,8 @@ export default function Part5TQF3({ data, setForm }: Props) {
             <span className=" text-red-500">*</span>
           </span>
           <Button
-            className="text-center rounded-[8px] text-[12px] w-fit font-semibold h-8 px-4"
+            className="text-center px-4"
             onClick={() => setOpenDrawerPLOdes(true)}
-            color="#5768d5"
           >
             <div className="flex gap-2">
               <Icon IconComponent={IconPLO} />

@@ -1,16 +1,16 @@
+import { validateTextInput } from "@/helpers/functions/validation";
+import { IModelSchedule, IModelTQF3Part2 } from "@/models/ModelTQF3";
 import {
   Button,
-  Checkbox,
-  Group,
   Modal,
   Textarea,
-  TextInput,
   NumberInput,
   NumberInputHandlers,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { IconList, IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import { upperFirst } from "lodash";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type actionType = "add" | "edit";
 
@@ -18,26 +18,82 @@ type Props = {
   opened: boolean;
   onClose: () => void;
   type: actionType;
-  courseNo: string;
+  data: IModelSchedule[] | IModelSchedule;
+  setScheduleList: (value: any) => void;
 };
 export default function ModalManageTopic({
   opened,
   onClose,
   type,
-  courseNo,
+  data,
+  setScheduleList,
 }: Props) {
   const height = type === "add" ? "h-full" : "h-fit";
   const handlersLecRef = useRef<NumberInputHandlers>(null);
   const handlersLabRef = useRef<NumberInputHandlers>(null);
-  const topicLenght = 6;
+  const [topicLength, setTopicLenght] = useState(0);
+
+  const form = useForm({
+    mode: "controlled",
+    initialValues: { schedule: [] } as Partial<IModelTQF3Part2>,
+  });
+
+  const formOneWeek = useForm({
+    mode: "controlled",
+    initialValues: {
+      weekNo: 0,
+      topicDesc: "",
+      lecHour: 0,
+      labHour: 0,
+    } as Partial<IModelSchedule>,
+    validate: {
+      topicDesc: (value) =>
+        validateTextInput(value, "Course Content", 0, false),
+    },
+    validateInputOnBlur: true,
+  });
+
+  // useEffect(() => {
+  //   if (data) {
+  //     if (type == "add") {
+  //       const length = (data as IModelCLO[]).length || 0;
+  //       form.setFieldValue("clo", data as IModelCLO[]);
+  //       formOneCLO.setFieldValue("cloNo", length + 1);
+  //       setCloLength(length);
+  //     } else {
+  //       formOneCLO.setValues(data as IModelCLO);
+  //     }
+  //   }
+  // }, [data]);
+
+  const closeModal = () => {
+    onClose();
+    setTopicLenght(0);
+    form.reset();
+    formOneWeek.reset();
+  };
+
+  // const addMore = () => {
+  //   if (!formOneCLO.validate().hasErrors) {
+  //     form.insertListItem("clo", formOneCLO.getValues());
+  //     setCloLength(cloLength + 1);
+  //     formOneCLO.setValues({
+  //       cloNo: formOneCLO.getValues().cloNo! + 1,
+  //       cloDescTH: "",
+  //       cloDescEN: "",
+  //       learningMethod: [],
+  //       other: "",
+  //     });
+  //   }
+  // };
 
   return (
     <Modal
       opened={opened}
-      onClose={onClose}
+      onClose={closeModal}
       closeOnClickOutside={false}
-      title={`${upperFirst(type)} Course Content ${courseNo}`}
-      size={type === "add" && topicLenght > 0 ? "70vw" : "35vw"}
+      title={`${upperFirst(type)} Course Content`}
+      size={type === "add" && topicLength > 0 ? "70vw" : "35vw"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
@@ -61,7 +117,7 @@ export default function ModalManageTopic({
             className={`flex flex-col ${
               type === "add" && "p-5"
             } gap-1 rounded-md overflow-hidden ${
-              topicLenght > 0 && type === "add" ? "w-[45%]" : "w-full"
+              topicLength > 0 && type === "add" ? "w-[45%]" : "w-full"
             } h-full relative`}
             style={{
               boxShadow:
@@ -167,7 +223,6 @@ export default function ModalManageTopic({
                 <Button
                   //   onClick={() => setIsAddAnother(true)}
                   variant="outline"
-                  className="rounded-[8px] text-[12px] h-[32px] w-fit "
                 >
                   Add more
                 </Button>
@@ -175,7 +230,7 @@ export default function ModalManageTopic({
             )}
           </div>
           {/* List CLO */}
-          {!!topicLenght && type === "add" && (
+          {!!topicLength && type === "add" && (
             <div
               className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-full"
               style={{
@@ -192,12 +247,12 @@ export default function ModalManageTopic({
                   </span>
                 </div>
                 <p>
-                  {topicLenght} Course Content{topicLenght > 1 ? "s" : ""}
+                  {topicLength} Course Content{topicLength > 1 ? "s" : ""}
                 </p>
               </div>
 
               <div className="flex flex-col w-full h-fit px-4">
-                {Array.from({ length: topicLenght }).map((_, index) => (
+                {Array.from({ length: topicLength }).map((_, index) => (
                   <div
                     key={index}
                     className={`py-3 w-full border-b-[1px] pl-3 ${
@@ -239,17 +294,17 @@ export default function ModalManageTopic({
         </div>
         {/* Button */}
         <div className="flex gap-2  items-end  justify-end h-fit">
-          <Button
-            onClick={onClose}
-            variant="subtle"
-            color="#575757"
-            className="rounded-[8px] text-[12px] h-8 w-fit "
-          >
+          <Button variant="subtle" onClick={closeModal}>
             Cancel
           </Button>
           <Button
-            // onClick={submit}
-            className="rounded-[8px] text-[12px] h-8 w-fit "
+            onClick={() => {
+              setScheduleList(
+                type == "add" ? form.getValues().clo : formOneWeek.getValues()
+              );
+              closeModal();
+            }}
+            disabled={form.getValues().schedule?.length == 0}
           >
             Done
           </Button>

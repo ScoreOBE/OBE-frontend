@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   Alert,
   Button,
-  FocusTrap,
+  FocusTrapInitialFocus,
   Modal,
   Select,
   Tabs,
@@ -33,6 +33,8 @@ import { editCourse } from "@/store/course";
 import exportFile from "@/assets/icons/exportFile.svg?react";
 import Loading from "@/components/Loading";
 import { IModelTQF3 } from "@/models/ModelTQF3";
+import { setShowNavbar } from "@/store/showNavbar";
+import { setShowSidebar } from "@/store/showSidebar";
 
 export default function TQF3() {
   const location = useLocation().pathname;
@@ -79,6 +81,11 @@ export default function TQF3() {
       compo: <Part6TQF3 data={course!} setForm={setForm} />,
     },
   ];
+
+  useEffect(() => {
+    dispatch(setShowSidebar(true));
+    dispatch(setShowNavbar(true));
+  }, []);
 
   useEffect(() => {
     const fetchOneCourse = async () => {
@@ -139,6 +146,11 @@ export default function TQF3() {
           form.setValues(res);
           setCourse({ ...course, TQF3: res });
           dispatch(editCourse({ ...course, TQF3: { ...course.TQF3, ...res } }));
+          if (res.type == COURSE_TYPE.SEL_TOPIC.en) {
+            setTqf3({ ...course.sections[0].TQF3, ...res });
+          } else {
+            setTqf3({ ...course.TQF3, ...res });
+          }
           showNotifications(
             NOTI_TYPE.SUCCESS,
             `TQF 3, ${tqf3Part} save success`,
@@ -167,7 +179,7 @@ export default function TQF3() {
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
       >
-        <FocusTrap.InitialFocus />
+        <FocusTrapInitialFocus />
         <div className="flex flex-col gap-3 ">
           <Alert
             variant="light"
@@ -190,21 +202,14 @@ export default function TQF3() {
             }}
           ></Select>
           <div className="flex gap-2 mt-3 justify-end">
-            <Button
-              onClick={() => setOpenModalReuse(false)}
-              variant="subtle"
-              color="#575757"
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
-            >
+            <Button variant="subtle" onClick={() => setOpenModalReuse(false)}>
               Cancel
             </Button>
-            <Button className="rounded-[8px] text-[12px] h-[32px] w-fit ">
-              Reuse TQF3
-            </Button>
+            <Button>Reuse TQF3</Button>
           </div>
         </div>
       </Modal>
-      <div className=" flex flex-col h-full  w-full overflow-hidden">
+      <div className="flex flex-col h-full  w-full overflow-hidden">
         <Tabs
           value={tqf3Part}
           onChange={setTqf3Part}
@@ -223,30 +228,28 @@ export default function TQF3() {
             ${tqf3Part === "part6" && "!mb-4"}
             `}
           >
-            <div className="flex gap-2">
-              <Tabs.List className="gap-7 w-full">
-                {partTab.map((part) => (
-                  <Tabs.Tab key={part.value} value={part.value}>
-                    <div className="flex flex-row items-center gap-2 ">
-                      <Icon
-                        IconComponent={CheckIcon}
-                        className={
-                          !tqf3 || isEmpty(tqf3[part.value])
-                            ? "text-[#DEE2E6]"
-                            : "text-[#24b9a5]"
-                        }
-                      />
-                      {part.tab}
-                    </div>
-                  </Tabs.Tab>
-                ))}
-              </Tabs.List>
-            </div>
+            <Tabs.List className="md:gap-x-7 gap-x-4 w-full">
+              {partTab.map((part) => (
+                <Tabs.Tab key={part.value} value={part.value}>
+                  <div className="flex flex-row items-center gap-2">
+                    <Icon
+                      IconComponent={CheckIcon}
+                      className={
+                        !tqf3 || isEmpty(tqf3[part.value])
+                          ? "text-[#DEE2E6]"
+                          : "text-[#24b9a5]"
+                      }
+                    />
+                    {part.tab}
+                  </div>
+                </Tabs.Tab>
+              ))}
+            </Tabs.List>
             <div className="flex justify-between pt-4 items-center">
               <div className=" text-secondary  overflow-y-auto font-semibold  whitespace-break-spaces">
                 {topicPart()}
               </div>
-              <div className="flex flex-row gap-3">
+              <div className="flex flex-row flex-wrap gap-3">
                 <Tooltip
                   onClick={() => setOpenModalReuse(true)}
                   withArrow
@@ -259,7 +262,7 @@ export default function TQF3() {
                       <p className=" font-medium">
                         <span className="text-secondary font-bold">
                           Reuse TQF 3
-                        </span>{" "}
+                        </span>
                         <br />
                         Simplify your course TQF3. Choose any course, and we'll
                         automatically fill <br />
@@ -272,18 +275,15 @@ export default function TQF3() {
                   <Button
                     variant="outline"
                     leftSection={
-                      <Icon IconComponent={dupTQF} className="h-5  w-5 -mr-1" />
+                      <Icon IconComponent={dupTQF} className="size-5 -mr-1" />
                     }
                     color="#ee933e"
-                    className=" cursor-pointer pr-4 text-[12px] font-semibold w-fit px-3 h-[32px] rounded-md"
+                    className="pr-4 px-3"
                   >
                     Reuse TQF3
                   </Button>
                 </Tooltip>
-                <Button
-                  color="#24b9a5"
-                  className="text-[12px] font-semibold h-8 px-4 rounded-md"
-                >
+                <Button color="#24b9a5" className="px-4">
                   <div className="flex gap-2 items-center">
                     <Icon IconComponent={exportFile} />
                     Export TQF3

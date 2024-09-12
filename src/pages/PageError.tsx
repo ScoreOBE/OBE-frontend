@@ -53,14 +53,13 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <IconArrowLeft className="h-5 w-5 -mr-1" stroke={1.5} />
+                <IconArrowLeft className="size-5 -mr-1" stroke={1.5} />
               }
-              className="inline-block  -ml-4 mt-3 w-fit bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline   text-blue-500 text-md font-bold rounded  transition"
+              className="inline-block -ml-4 mt-3 bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
               Back to home
             </Button>
           </div>
-
           <p className="text-[120px] text-amber-600 font-medium ">400</p>
         </div>
       )}
@@ -76,18 +75,17 @@ export default function PageError() {
             <p className="text-lg  font-medium text-gray-600">
               We couldn't validate or support your credentials <br /> Please try
               again
-            </p>{" "}
+            </p>
             <Button
               onClick={goDashboard}
               leftSection={
-                <IconArrowLeft className="h-5 w-5 -mr-1" stroke={1.5} />
+                <IconArrowLeft className="size-5 -mr-1" stroke={1.5} />
               }
-              className="inline-block  -ml-4 mt-3 w-fit bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline   text-blue-500 text-md font-bold rounded  transition"
+              className="inline-block -ml-4 mt-3 bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
               Back to login
             </Button>
           </div>
-
           <p className="text-[120px] text-pink-500 font-medium ">401</p>
         </div>
       )}
@@ -106,18 +104,17 @@ export default function PageError() {
               <span className=" text-[#dab531]"> +</span>
               <br />
               Reach out to the system administrator to gain access
-            </p>{" "}
+            </p>
             <Button
               onClick={goDashboard}
               leftSection={
-                <IconArrowLeft className="h-5 w-5 -mr-1" stroke={1.5} />
+                <IconArrowLeft className="size-5 -mr-1" stroke={1.5} />
               }
-              className="inline-block  -ml-4 mt-3 w-fit bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline   text-blue-500 text-md font-bold rounded  transition"
+              className="inline-block -ml-4 mt-3 bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
               Back to login
             </Button>
           </div>
-
           <p className="text-[120px] text-[#24aa79] font-medium ">403</p>
         </div>
       )}
@@ -134,21 +131,20 @@ export default function PageError() {
               <span className=" text-[#FFCD1B]"> +</span> Lost
             </p>
             <p className="text-lg  font-medium text-gray-600">
-              We're facing an internal server error. Our team're trying to fix{" "}
+              We're facing an internal server error. Our team're trying to fix
               <br />
               Please be patient or try again later
-            </p>{" "}
+            </p>
             <Button
               onClick={goDashboard}
               leftSection={
-                <IconArrowLeft className="h-5 w-5 -mr-1" stroke={1.5} />
+                <IconArrowLeft className="size-5 -mr-1" stroke={1.5} />
               }
-              className="inline-block  -ml-4 mt-3 w-fit bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline   text-blue-500 text-md font-bold rounded  transition"
+              className="inline-block -ml-4 mt-3 bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
               Back to login
             </Button>
           </div>
-
           <p className="text-[120px] text-secondary font-medium ">500</p>
         </div>
       )}

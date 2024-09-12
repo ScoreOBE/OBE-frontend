@@ -152,12 +152,7 @@ export default function ModalManageEvalTopic({
             {/* Add More Button */}
             {type === "add" && (
               <div className="flex justify-end">
-                <Button
-                  variant="outline"
-                  className="rounded-[8px] text-[12px] h-[32px]"
-                >
-                  Add more
-                </Button>
+                <Button variant="outline">Add more</Button>
               </div>
             )}
           </div>
@@ -227,17 +222,11 @@ export default function ModalManageEvalTopic({
         </div>
         {/* Button */}
         <div className="flex gap-2  items-end  justify-end h-fit">
-          <Button
-            onClick={onClose}
-            variant="subtle"
-            color="#575757"
-            className="rounded-[8px] text-[12px] h-8 w-fit "
-          >
+          <Button variant="subtle" onClick={onClose}>
             Cancel
           </Button>
           <Button
-            // onClick={submit}
-            className="rounded-[8px] text-[12px] h-8 w-fit "
+          // onClick={submit}
           >
             Done
           </Button>

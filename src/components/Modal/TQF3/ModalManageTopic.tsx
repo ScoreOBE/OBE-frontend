@@ -227,19 +227,14 @@ export default function ModalManageTopic({
       <div className="flex justify-end w-full">
         <Group className="flex w-full h-fit items-end justify-end">
           <div>
-            <Button
-              onClick={onCloseModal}
-              color="#575757"
-              variant="subtle"
-              className="rounded-[8px] text-[12px] h-[32px] w-fit "
-            >
+            <Button variant="subtle" onClick={onCloseModal}>
               Cancel
             </Button>
           </div>
           <Button
             onClick={addEditTopic}
             leftSection={type === "add" && <Icon IconComponent={AddIcon} />}
-            className="rounded-[8px] pl-4 border-none text-[12px] h-[32px] w-fit"
+            className="pl-4 border-none"
           >
             {type === "add" ? "Add" : "Done"}
           </Button>

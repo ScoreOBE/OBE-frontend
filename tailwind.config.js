@@ -19,7 +19,7 @@ export default {
         bgTableHeader: "#e5e7f6",
         hover: "#efefef",
         error: "#fa5252",
-        disable: '#f1f3f5'
+        disable: "#f1f3f5",
       },
       fontSize: {
         h1: "20px",
@@ -28,6 +28,11 @@ export default {
         b2: "14px",
         b3: "12px",
       },
+      // screens: {
+      //   tablet: "640px",
+      //   laptop: "1024px",
+      //   desktop: "1280px",
+      // },
     },
     fontFamily: {
       notoThai: ["NotoSansThai"],
