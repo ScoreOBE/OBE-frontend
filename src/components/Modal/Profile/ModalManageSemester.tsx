@@ -264,10 +264,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
               </div>
             </div>
           </div>
-          <Button
-            className="!rounded-s-[4px] min-w-fit !h-[36px] !w-full "
-            onClick={onClickAdd}
-          >
+          <Button className="min-w-fit !h-[36px] !w-full" onClick={onClickAdd}>
             Add Semester {selectSemester?.semester}, {selectSemester?.year}
           </Button>
         </div>
@@ -292,7 +289,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
         <TextInput
           label={`To confirm, type "semester${activateSemester?.semester}year${activateSemester?.year}" in the box below`}
           value={textActivate}
-          classNames={{ label: " select-none" }}
+          classNames={{ label: "select-none" }}
           onChange={(event) => setTextActivate(event.target.value)}
         ></TextInput>
         <Button
@@ -303,7 +300,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             )
           }
           onClick={() => onClickActivate(activateSemester!)}
-          className="!rounded-s-[4px] mt-4 min-w-fit !h-[36px] border-none !w-full"
+          className="mt-4 min-w-fit !h-[36px] border-none !w-full"
         >
           Activate this semester
         </Button>
