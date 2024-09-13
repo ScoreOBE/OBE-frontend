@@ -12,6 +12,13 @@
   unicode-range: U+0E00- U+0E7F;
 }
 
+@font-face {
+  font-family: "Lexand";
+  src: url("assets/fonts/LexendDeca.ttf") format("opentype");
+  /* font-weight: normal;
+  font-style: normal; */
+}
+
 :root {
   font-family: "Manrope", "NotoSansThai", Helvetica, Arial, sans-serif;
   line-height: 1.5;

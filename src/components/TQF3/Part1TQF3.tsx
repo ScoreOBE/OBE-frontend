@@ -190,6 +190,27 @@ export default function Part1TQF3({ data, setForm }: Props) {
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
           <p className="font-medium">
+            ผู้ประสานงานกระบวนวิชา<span className=" text-red-500">*</span>
+          </p>
+          <p className="font-semibold">Course Coordinator</p>
+        </div>
+
+        <div className="flex flex-col gap-3 text-default">
+          <TextInput
+            key={form.key("coordinator")}
+            withAsterisk
+            size="xs"
+            label="Instructor"
+            classNames={{ label: "text-default" }}
+            className="w-[440px]"
+            placeholder="(required)"
+            {...form.getInputProps("coordinator")}
+          />
+        </div>
+      </div>
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
+        <div className="flex text-secondary flex-col">
+          <p className="font-medium">
             อาจารย์ผู้สอนทั้งหมด<span className=" text-red-500">*</span>
           </p>
           <p className="font-semibold">Lecturers</p>
@@ -217,27 +238,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
           </p>
         </div>
       </div>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
-        <div className="flex text-secondary flex-col">
-          <p className="font-medium">
-            ผู้ประสานงานกระบวนวิชา<span className=" text-red-500">*</span>
-          </p>
-          <p className="font-semibold">Course Coordinator</p>
-        </div>
-
-        <div className="flex flex-col gap-3 text-default">
-          <TextInput
-            key={form.key("coordinator")}
-            withAsterisk
-            size="xs"
-            label="Instructor"
-            classNames={{ label: "text-default" }}
-            className="w-[440px]"
-            placeholder="(required)"
-            {...form.getInputProps("coordinator")}
-          />
-        </div>
-      </div>
+      
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
           <p className="font-medium">สถานที่สอนคาบบรรยาย</p>
@@ -251,7 +252,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
             size="xs"
             placeholder="(optional)"
             className="w-[440px]"
-            classNames={{ input: "h-[180px] p-3" }}
+            classNames={{ input: "h-[80px] p-3" }}
             {...form.getInputProps("lecPlace")}
           />
         </div>
@@ -269,7 +270,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
             size="xs"
             placeholder="(optional)"
             className="w-[440px]"
-            classNames={{ input: "h-[180px] p-3", label: "text-default" }}
+            classNames={{ input: "h-[80px] p-3", label: "text-default" }}
             {...form.getInputProps("labPlace")}
           />
         </div>
@@ -287,7 +288,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
             size="xs"
             placeholder="(optional)"
             className="w-[440px]"
-            classNames={{ input: "h-[180px] p-3", label: "text-default" }}
+            classNames={{ input: "h-[80px] p-3", label: "text-default" }}
             {...form.getInputProps("mainRef")}
           ></Textarea>
         </div>
@@ -307,7 +308,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
             size="xs"
             placeholder="(optional)"
             className="w-[440px]"
-            classNames={{ input: "h-[180px] p-3", label: "text-default" }}
+            classNames={{ input: "h-[80px] p-3", label: "text-default" }}
             {...form.getInputProps("recDoc")}
           ></Textarea>
         </div>

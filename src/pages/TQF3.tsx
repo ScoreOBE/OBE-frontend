@@ -19,7 +19,7 @@ import Part3TQF3 from "@/components/TQF3/Part3TQF3";
 import Part4TQF3 from "@/components/TQF3/Part4TQF3";
 import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { IconExclamationCircle, IconInfoCircle } from "@tabler/icons-react";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { IModelCourse } from "@/models/ModelCourse";
 import { isEmpty, isEqual } from "lodash";
@@ -172,7 +172,7 @@ export default function TQF3() {
         closeOnClickOutside={false}
         onClose={() => setOpenModalReuse(false)}
         transitionProps={{ transition: "pop" }}
-        size="32vw"
+        size="34vw"
         centered
         classNames={{
           content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
@@ -186,6 +186,13 @@ export default function TQF3() {
             color="blue"
             title={`Reusing TQF will import all 6 parts of TQF3 data from your selected course to automatically fill in the TQF3 for this course.`}
             icon={<IconInfoCircle />}
+            classNames={{ icon: "size-6" }}
+          ></Alert>
+          <Alert
+            variant="light"
+            color="red"
+            title={`After reuse TQF 3, you should have to recheck data from course that you select again.`}
+            icon={<IconExclamationCircle />}
             classNames={{ icon: "size-6" }}
           ></Alert>
           <Select

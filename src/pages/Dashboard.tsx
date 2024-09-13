@@ -31,6 +31,7 @@ import { setShowSidebar } from "@/store/showSidebar";
 import Icon from "@/components/Icon";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
+import ModalUploadScore from "../components/Modal/ModalUploadScore";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -48,6 +49,8 @@ export default function Dashboard() {
   const [openDelPopup, setOpenDelPopup] = useState(false);
   const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
   const [openModalSelectCourse, setOpenModalSelectCourse] = useState(false);
+  const [openModalUploadScore, setOpenModalUploadScore] = useState(false);
+  const [uploadCourse, setUploadCourse] = useState<Partial<IModelCourse>>();
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -173,11 +176,6 @@ export default function Dashboard() {
         value={editCourse}
       />
       <Modal
-        // title={
-        //   <div className="flex flex-col gap-1">
-        //     <p>Upload score</p>
-        //   </div>
-        // }
         title="Upload score"
         transitionProps={{ transition: "pop" }}
         size="32vw"
@@ -199,10 +197,19 @@ export default function Dashboard() {
             data={course.courses.map((c) => {
               return {
                 value: c.courseNo,
+                id: c.id,
                 courseName: c.courseName,
                 label: `${c.courseNo} ${c.courseName}`,
               };
             })}
+            value={uploadCourse?.courseNo}
+            onChange={(value, option: any) =>
+              setUploadCourse({
+                id: option.id,
+                courseNo: option.value,
+                courseName: option.courseName,
+              })
+            }
             renderOption={(item: any) => (
               <div className="flex w-full gap-2">
                 <p className="w-[9%] min-w-fit">{item.option.value}</p>
@@ -221,6 +228,11 @@ export default function Dashboard() {
                 </Button>
               </div>
               <Button
+                onClick={() => {
+                  setOpenModalUploadScore(true),
+                    setOpenModalSelectCourse(false);
+                }}
+                disabled={!uploadCourse}
                 rightSection={
                   <IconArrowRight
                     color="#ffffff"
@@ -237,6 +249,11 @@ export default function Dashboard() {
           </div>
         </div>
       </Modal>
+      <ModalUploadScore
+        data={uploadCourse!}
+        opened={openModalUploadScore}
+        onClose={() => setOpenModalUploadScore(false)}
+      />
 
       <div className=" flex flex-col h-full w-full  overflow-hidden">
         <div className="flex flex-row px-6 pt-3   items-center justify-between">
