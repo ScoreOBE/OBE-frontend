@@ -34,6 +34,7 @@ import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { validateTextInput } from "@/helpers/functions/validation";
 import { checkCanCreatePLO, createPLO } from "@/services/plo/plo.service";
+import { IModelDepartment } from "@/models/ModelFaculty";
 
 type Props = {
   opened: boolean;
@@ -54,7 +55,7 @@ export default function ModalAddPLOCollection({
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(0);
-  const [department, setDepartment] = useState<any>([]);
+  const [department, setDepartment] = useState<IModelDepartment[]>([]);
   const [ploNo, setPloNo] = useState(0);
   const [state, handlers] = useListState<Partial<IModelPLONo>>([]);
   const [reorder, setReorder] = useState(false);
@@ -162,12 +163,12 @@ export default function ModalAddPLOCollection({
   const fetchDep = async () => {
     const res = await getDepartment(user.facultyCode);
     if (res) {
-      sortData(res.department, "departmentCode", "string");
+      sortData(res.department, "codeEN", "string");
       if (user.role === ROLE.SUPREME_ADMIN) {
         setDepartment(res.department);
       } else {
-        const dep = res.department.filter((e: any) =>
-          user.departmentCode.includes(e.departmentCode)
+        const dep = res.department.filter((e) =>
+          user.departmentCode.includes(e.codeEN)
         );
         setDepartment(dep);
       }
@@ -250,7 +251,7 @@ export default function ModalAddPLOCollection({
     if (value) {
       departmentCode = value.sort();
     } else if (checked) {
-      departmentCode = department.map((dep: any) => dep.departmentCode);
+      departmentCode = department.map((dep) => dep.codeEN);
     } else {
       departmentCode = [];
     }
@@ -520,8 +521,8 @@ export default function ModalAddPLOCollection({
 
                 <div className="flex gap-2 mt-3 w-full justify-end absolute right-5 bottom-5 ">
                   <Button
-                    onClick={() => setIsAddAnother(true)}
                     variant="outline"
+                    onClick={() => setIsAddAnother(true)}
                   >
                     Add more
                   </Button>
@@ -696,32 +697,30 @@ export default function ModalAddPLOCollection({
                     label="All"
                     checked={isEqual(
                       form.getValues().departmentCode,
-                      department.map((dep: any) => dep.departmentCode)
+                      department.map((dep) => dep.codeEN)
                     )}
                     onChange={(event) => {
                       setDepartmentCode(event.target.checked);
                     }}
                   />
                   <Checkbox.Group
-                    // {...form.getInputProps("departmentCode")}
                     value={form.getValues().departmentCode}
                     onChange={(event) => {
                       setDepartmentCode(false, event);
-                      // form.setFieldValue("departmentCode", event);
                     }}
                   >
                     <Group className="gap-0">
-                      {department.map((dep: any, index: any) => (
+                      {department.map((dep, index: number) => (
                         <Checkbox
                           size="xs"
                           key={index}
-                          value={dep.departmentCode}
+                          value={dep.codeEN}
                           className="p-3 py-4  w-full last:border-none border-b-[1px] "
                           classNames={{
                             label: "ml-2 text-[13px] font-medium",
                             input: "cursor-pointer",
                           }}
-                          label={`${dep.departmentEN} (${dep.departmentCode})`}
+                          label={`${dep.departmentEN} (${dep.codeEN})`}
                         />
                       ))}
                     </Group>

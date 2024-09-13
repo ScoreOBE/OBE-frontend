@@ -140,11 +140,11 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
         size="60vw"
         centered
         classNames={{
-          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
-          body: "flex flex-col overflow-hidden max-h-full h-fit",
+          content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
+          body: "flex flex-col max-h-full h-fit",
         }}
       >
-        <div className="flex flex-col gap-4 overflow-hidden  h-full">
+        <div className="flex flex-col gap-4 overflow-hidden h-full">
           <div className="flex justify-between items-center">
             <div>
               {isTH === "TH" ? collection.criteriaTH : collection.criteriaEN}
@@ -166,7 +166,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               </Tabs.List>
             </Tabs>
           </div>
-          <div className="flex flex-col max-h-[520px] h-fit rounded-lg border overflow-y-auto  border-secondary">
+          <div className="flex flex-col max-h-[520px] h-fit rounded-lg border overflow-y-auto border-secondary">
             <Table verticalSpacing="sm" stickyHeader className="rounded-md">
               <Table.Thead>
                 <Table.Tr className="bg-[#e5e7f6]">
@@ -193,13 +193,13 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             (collection?.year == academicYear?.year &&
               collection?.semester! > academicYear?.semester)) && (
             <Button
-              color="#FF4747"
+              color="red"
               leftSection={<IconTrash className="size-5 -mr-1" stroke={1.5} />}
               onClick={() => {
                 setOpenModal(false);
                 setOpenPopupDeletePLOCollection(true);
               }}
-              className="!rounded-md"
+              className="!w-full"
             >
               Delete {`${collection.name}`} Collection{" "}
             </Button>
@@ -317,7 +317,6 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 openModalAddPLO();
                 closeModalDuplicatePLO();
               }}
-              className="border-none"
               disabled={isEmpty(selectPloDupli)}
             >
               Duplicate and Edit

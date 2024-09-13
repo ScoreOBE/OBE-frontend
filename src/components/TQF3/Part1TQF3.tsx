@@ -7,9 +7,16 @@ import { getUserName } from "@/helpers/functions/function";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelTQF3Part1 } from "@/models/ModelTQF3";
 import { IModelUser } from "@/models/ModelUser";
-import { Radio, Checkbox, TextInput, Textarea } from "@mantine/core";
+import {
+  Radio,
+  Checkbox,
+  TextInput,
+  Textarea,
+  Group,
+  NumberInput,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   data: IModelCourse;
@@ -17,6 +24,7 @@ type Props = {
 };
 
 export default function Part1TQF3({ data, setForm }: Props) {
+  const [checked, setChecked] = useState<string[]>([]);
   const studentYear = [
     { year: 1, en: "1st year", th: "ชั้นปีที่ 1" },
     { year: 2, en: "2nd year", th: "ชั้นปีที่ 2" },
@@ -83,8 +91,28 @@ export default function Part1TQF3({ data, setForm }: Props) {
   }, [data]);
 
   return (
-    <div className="flex w-full flex-col text-[15px] max-h-full px-2 py-1">
+    <div className="flex w-full flex-col text-[15px] max-h-full px-2 py-1 text-default">
       <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3 pb-5">
+        <div className="flex text-secondary  flex-col">
+          <p className="font-medium">
+            หลักสูตร <span className=" text-red-500">*</span>
+          </p>
+          <p className="font-semibold">Curriculum</p>
+        </div>
+        <Radio.Group>
+          <div className="flex text-default gap-3 flex-col">
+            <Radio
+              classNames={{ label: "font-medium text-[13px]" }}
+              label="สำหรับหลักสูตร (Eng)"
+            />
+            <Radio
+              classNames={{ label: "font-medium text-[13px]" }}
+              label="สำหรับหลายหลักสูตร (Eng)"
+            />
+          </div>
+        </Radio.Group>
+      </div>
+      <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3 py-5">
         <div className="flex text-secondary  flex-col">
           <p className="font-medium">
             ประเภทกระบวนวิชา <span className=" text-red-500">*</span>
@@ -107,30 +135,6 @@ export default function Part1TQF3({ data, setForm }: Props) {
             ))}
           </div>
         </Radio.Group>
-      </div>
-      <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 py-5   ">
-        <div className="flex text-secondary flex-col ">
-          <p className="font-medium">
-            ลักษณะของกระบวนวิชา <span className=" text-red-500">*</span>
-          </p>
-          <p className="font-semibold">Teaching Method</p>
-        </div>
-        <Checkbox.Group
-          key={form.key("teachingMethod")}
-          classNames={{ error: "mt-2" }}
-          {...form.getInputProps("teachingMethod")}
-        >
-          <div className="flex flex-col text-default gap-4">
-            {Object.values(TEACHING_METHOD).map((key) => (
-              <Checkbox
-                key={key.en}
-                classNames={{ label: "font-medium text-[13px]" }}
-                label={`${key.th} (${key.en})`}
-                value={key.en}
-              />
-            ))}
-          </div>
-        </Checkbox.Group>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary pt-2 flex-col">
@@ -166,33 +170,9 @@ export default function Part1TQF3({ data, setForm }: Props) {
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
           <p className="font-medium">
-            การวัดและประเมินผล <span className=" text-red-500">*</span>
+          ชื่ออาจารย์ผู้รับผิดชอบ<span className=" text-red-500">*</span>
           </p>
-          <p className="font-semibold">Evaluation</p>
-        </div>
-        <Radio.Group
-          key={form.key("evaluate")}
-          classNames={{ error: "mt-2" }}
-          {...form.getInputProps("evaluate")}
-        >
-          <div className="flex gap-8 text-default">
-            {Object.values(EVALUATE_TYPE).map((item) => (
-              <Radio
-                key={item}
-                classNames={{ label: "font-medium text-[13px]" }}
-                label={item}
-                value={item}
-              />
-            ))}
-          </div>
-        </Radio.Group>
-      </div>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
-        <div className="flex text-secondary flex-col">
-          <p className="font-medium">
-            ผู้ประสานงานกระบวนวิชา<span className=" text-red-500">*</span>
-          </p>
-          <p className="font-semibold">Course Coordinator</p>
+          <p className="font-semibold">Main Instructor</p>
         </div>
 
         <div className="flex flex-col gap-3 text-default">
@@ -211,7 +191,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
           <p className="font-medium">
-            อาจารย์ผู้สอนทั้งหมด<span className=" text-red-500">*</span>
+            อาจารย์ผู้สอนทั้งหมด<span className=" text-red-500"> *</span>
           </p>
           <p className="font-semibold">Lecturers</p>
         </div>
@@ -238,44 +218,82 @@ export default function Part1TQF3({ data, setForm }: Props) {
           </p>
         </div>
       </div>
-      
+
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
-          <p className="font-medium">สถานที่สอนคาบบรรยาย</p>
-          <p className="font-semibold">Lectures Venue</p>
+          <p className="font-medium">
+            สถานที่เรียน<span className=" text-red-500"> *</span>
+          </p>
+          <p className="font-semibold">Teaching Location </p>
         </div>
 
         <div className="flex flex-col gap-3 text-default">
-          <Textarea
-            key={form.key("lecPlace")}
-            label="Description"
-            size="xs"
-            placeholder="(optional)"
-            className="w-[440px]"
-            classNames={{ input: "h-[80px] p-3" }}
-            {...form.getInputProps("lecPlace")}
-          />
+          <Checkbox.Group
+            className="items-center"
+            value={checked}
+            onChange={(event) => setChecked(event)}
+          >
+            <Group className="flex items-center flex-col gap-5">
+              <div className=" last:border-none w-[440px]">
+                <Checkbox
+                  classNames={{ label: "font-medium text-[13px]" }}
+                  label="ในสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่"
+                  value={"in"}
+                />
+
+                <Textarea
+                  className="mt-2 pl-8"
+                  placeholder="(optional)"
+                  classNames={{
+                    input: "text-[13px] text-[#333333] h-[80px]",
+                  }}
+                  disabled={!checked.includes("in")}
+                />
+              </div>
+              <div className="last:border-none w-[440px]">
+                <Checkbox
+                  value={"out"}
+                  classNames={{ label: "font-medium text-[13px]" }}
+                  label="นอกสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่"
+                />
+
+                <Textarea
+                  className="mt-2 pl-8"
+                  placeholder="(optional)"
+                  classNames={{
+                    input: "text-[13px] text-[#333333] h-[80px]",
+                  }}
+                  disabled={!checked.includes("out")}
+                />
+              </div>
+            </Group>
+          </Checkbox.Group>
         </div>
       </div>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
+
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
-          <p className="font-medium">สถานที่สอนคาบแลป</p>
-          <p className="font-semibold">Laboratory Venue</p>
+          <p className="font-medium">
+            ชั่วโมงต่อสัปดาห์ในการให้คำปรึกษาแก่นักศึกษารายบุคคล
+            <span className=" text-red-500"> *</span>
+          </p>
+          <p className="font-semibold">
+            Individual student consultation hours per week
+          </p>
         </div>
 
-        <div className="flex flex-col gap-3 text-default">
-          <Textarea
-            key={form.key("labPlace")}
-            label="Description"
-            size="xs"
-            placeholder="(optional)"
-            className="w-[440px]"
-            classNames={{ input: "h-[80px] p-3", label: "text-default" }}
-            {...form.getInputProps("labPlace")}
+        <div className="flex items-center text-[13px] font-medium gap-4">
+          <NumberInput
+            defaultValue={1}
+            max={168}
+            min={1}
+            className="w-[86px]"
           />
+          <p>hours / week</p>
         </div>
       </div>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
+      {/* Part 5 */}
+      {/* <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
           <p className="font-medium">ตำราและเอกสาร</p>
           <p className="font-semibold">Main Reference</p>
@@ -292,8 +310,8 @@ export default function Part1TQF3({ data, setForm }: Props) {
             {...form.getInputProps("mainRef")}
           ></Textarea>
         </div>
-      </div>
-      <div className="w-full justify-between h-fit  items-top  grid grid-cols-3 pt-5 pb-6  ">
+      </div> */}
+      {/* <div className="w-full justify-between h-fit  items-top  grid grid-cols-3 pt-5 pb-6  ">
         <div className="flex text-secondary flex-col">
           <p className="font-medium">เอกสารแนะนำ</p>
           <p className="font-semibold">
@@ -312,7 +330,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
             {...form.getInputProps("recDoc")}
           ></Textarea>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

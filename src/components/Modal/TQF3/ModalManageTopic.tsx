@@ -234,7 +234,7 @@ export default function ModalManageTopic({
           <Button
             onClick={addEditTopic}
             leftSection={type === "add" && <Icon IconComponent={AddIcon} />}
-            className="pl-4 border-none"
+            className="pl-4"
           >
             {type === "add" ? "Add" : "Done"}
           </Button>

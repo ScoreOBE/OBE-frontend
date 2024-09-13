@@ -4,12 +4,12 @@ import { IModelUser } from "@/models/ModelUser";
 
 const userService = userController();
 
-export const getUserInfo = async () => {
+export const getUserInfo = async (): Promise<IModelUser> => {
   const res = await userService.getUserInfo();
   return isValidResponse(res);
 };
 
-export const getInstructor = async () => {
+export const getInstructor = async (): Promise<IModelUser[]> => {
   const res = await userService.getInstructor();
   return isValidResponse(res);
 };

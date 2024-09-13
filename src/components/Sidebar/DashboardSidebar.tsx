@@ -101,14 +101,14 @@ export default function DashboardSidebar() {
           onChange={(value, option) => setSelectedTerm(option)}
           allowDeselect={false}
           withCheckIcon={false}
-          className="mb-7 border-none w-1/2"
+          className="mb-7 w-1/2"
           classNames={{
             label: "font-medium mb-1",
             input: "text-primary font-medium",
             option: "hover:bg-[#DDDDF6] text-primary font-medium",
           }}
         />
-        <Button className="!w-full !rounded-md" onClick={() => confirmFilterTerm()}>
+        <Button className="!w-full" onClick={() => confirmFilterTerm()}>
           OK
         </Button>
       </Modal>

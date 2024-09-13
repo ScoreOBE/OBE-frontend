@@ -241,7 +241,7 @@ export default function ModalManageCLO({
             {/* Add More Button */}
             {type === "add" && (
               <div className="flex justify-end">
-                <Button onClick={addMore} variant="outline">
+                <Button variant="outline" onClick={addMore}>
                   Add more
                 </Button>
               </div>

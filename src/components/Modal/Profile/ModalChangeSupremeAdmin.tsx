@@ -140,7 +140,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
             />
 
             {/* List of Admin */}
-            <div className="flex flex-1 flex-col gap-2  overflow-y-auto">
+            <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
               {adminFilter.map((admin) => (
                 <div
                   key={admin.id}
@@ -185,7 +185,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
         <Alert
           variant="light"
           color="red"
-          title={` After you change Supreme Admin, `}
+          title={`After you change Supreme Admin, `}
           icon={<IconExclamationCircle />}
           classNames={{ icon: "size-6" }}
           className="mb-5"
@@ -193,7 +193,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
         <TextInput
           label={`To confirm, type "${supremeAdmin?.firstNameEN}${supremeAdmin?.lastNameEN}"`}
           value={textActivate}
-          classNames={{ label: " select-none" }}
+          classNames={{ label: "select-none" }}
           onChange={(event) => setTextActivate(event.target.value)}
         ></TextInput>
         <Button
@@ -204,7 +204,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
             )
           }
           onClick={() => editSAdmin(supremeAdmin.id!)}
-          className="!rounded-s-[4px] mt-4 min-w-fit !h-[36px] border-none !w-full"
+          className="mt-4 min-w-fit !h-[36px] !w-full"
         >
           Change Supreme Admin, Log Out
         </Button>

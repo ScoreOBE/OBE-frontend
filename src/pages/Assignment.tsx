@@ -80,7 +80,7 @@ export default function Assignment() {
               </Button>
             </Menu.Target>
             <Menu.Dropdown
-              className="!z-50 rounded-md -translate-y-[3px] translate-x-[5px] bg-white"
+              className="!z-50 -translate-y-[3px] translate-x-[5px] bg-white"
               style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
             >
               <Menu.Item className="text-[#3E3E3E] text-[14px] h-8 w-full ">
