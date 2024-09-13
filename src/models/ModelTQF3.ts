@@ -56,6 +56,7 @@ export interface IModelTQF3Part5 {
 export interface IModelTQF3Part6 {
   topic: string;
   detail: string[];
+  other?: string;
 }
 
 export interface IModelCLO {

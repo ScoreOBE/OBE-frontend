@@ -204,7 +204,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
             )
           }
           onClick={() => editSAdmin(supremeAdmin.id!)}
-          className="mt-4 min-w-fit !h-[36px] border-none !w-full"
+          className="mt-4 min-w-fit !h-[36px] !w-full"
         >
           Change Supreme Admin, Log Out
         </Button>

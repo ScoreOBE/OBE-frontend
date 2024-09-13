@@ -139,7 +139,7 @@ export default function CourseSidebar() {
             <Button
               onClick={() => goToPage(ROUTE_PATH.SECTION)}
               leftSection={<RxDashboard size={18} />}
-              className={`!w-full !text-[13px] flex justify-start items-center border-none transition-colors duration-300 focus:border-none group
+              className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
                 !path.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
                   ? // ![ROUTE_PATH.TQF3, ROUTE_PATH.TQF5].includes(path)
@@ -152,7 +152,7 @@ export default function CourseSidebar() {
             <Button
               onClick={() => goToPage(ROUTE_PATH.TQF3)}
               leftSection={<Icon IconComponent={TQF3} className="h-5 w-5" />}
-              className={`!w-full !text-[13px] flex justify-start items-center border-none transition-colors duration-300 focus:border-none group
+              className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
                   path.includes(ROUTE_PATH.TQF3)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -163,7 +163,7 @@ export default function CourseSidebar() {
             </Button>
             <Button
               leftSection={<Icon IconComponent={TQF5} className="h-5 w-5" />}
-              className={`!w-full !text-[13px] mb-2 flex justify-start items-center border-none transition-colors duration-300 focus:border-none group
+              className={`!w-full !text-[13px] mb-2 flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
                   path.startsWith(ROUTE_PATH.TQF5)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -215,7 +215,7 @@ export default function CourseSidebar() {
                   openedMainPopup();
                 }}
                 leftSection={<IconLogout className="size-5" stroke={1.5} />}
-                className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center border-none transition-colors duration-300 focus:border-none group"
+                className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center transition-colors duration-300 focus:border-none group"
               >
                 <div className="flex flex-col justify-start w-full items-start gap-[7px]">
                   <p className="font-medium text-[13px]">Leave from Course</p>

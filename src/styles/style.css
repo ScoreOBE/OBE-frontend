@@ -18,13 +18,17 @@
 
 /* Button */
 .mantine-Button-root {
-  border-radius: 8px !important;
+  border-radius: 6px !important;
   width: fit-content !important;
   height: 32px !important;
   font-size: 12px !important;
+  border-width: 0 !important;
 }
 .mantine-Button-root:disabled {
   cursor: not-allowed;
+}
+.mantine-Button-root[data-variant="outline"] {
+  border-width: 1px !important;
 }
 
 /* Stepper */
