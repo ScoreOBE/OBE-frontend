@@ -39,7 +39,8 @@ export default function CMUOAuthCallback() {
       <div className="justify-center flex flex-row gap-10 text-xl">
         {!user.id && (
           <Button
-            className="bg-[#ED3838] !text-lg hover:bg-[#ff6c6c]"
+            color="red"
+            className="!text-lg"
             onClick={() => navigate(ROUTE_PATH.LOGIN)}
           >
             Back

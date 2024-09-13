@@ -221,8 +221,8 @@ export default function ModalManageTopic({
             {type === "add" && (
               <div className="absolute right-5 bottom-5">
                 <Button
-                  //   onClick={() => setIsAddAnother(true)}
                   variant="outline"
+                  //   onClick={() => setIsAddAnother(true)}
                 >
                   Add more
                 </Button>

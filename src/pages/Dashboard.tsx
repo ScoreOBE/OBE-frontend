@@ -229,7 +229,6 @@ export default function Dashboard() {
                     size={20}
                   />
                 }
-                className="border-none"
               >
                 Next
               </Button>
@@ -288,7 +287,7 @@ export default function Dashboard() {
             </div>
           )}
         </div>
-        <div className="flex h-full w-full    overflow-hidden">
+        <div className="flex h-full w-full overflow-hidden">
           {loading ? (
             <Loading />
           ) : course.courses.length === 0 ? (
@@ -314,7 +313,7 @@ export default function Dashboard() {
 
                 {term?.isActive && !course.search.length && (
                   // <Button
-                  //   className=" rounded-[8px] text-[12px] w-28 font-medium  h-8 px-2 "
+                  //   className="!w-28 px-2"
                   //   onClick={() => setOpenAddModal(true)}
                   // >
                   //   <IconPlus

@@ -409,7 +409,7 @@ export default function ModalAddCourse({
                 inner: "flex justify-between items-center w-full",
               }}
               color="#ffffff"
-              className="!w-full !h-fit !text-[13px] !rounded-[6px] border-[1px] border-secondary py-3 items-center flex hover:bg-bgSecond"
+              className="!w-full !h-fit !text-[13px] !border border-secondary py-3 items-center flex hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-default">
@@ -434,7 +434,7 @@ export default function ModalAddCourse({
                 inner: "flex justify-between items-center w-full",
               }}
               color="#ffffff"
-              className="!w-full !h-fit !text-[13px] !rounded-[6px] border-[1px] border-secondary py-3 items-center flex hover:bg-bgSecond"
+              className="!w-full !h-fit !text-[13px] !border border-secondary py-3 items-center flex hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-default">
@@ -460,7 +460,7 @@ export default function ModalAddCourse({
                 inner: "flex justify-between items-center w-full",
               }}
               color="#ffffff"
-              className="!w-full !h-fit !text-[13px] !rounded-[6px] border-[1px] border-secondary py-3 items-center flex hover:bg-bgSecond"
+              className="!w-full !h-fit !text-[13px] !border border-secondary py-3 items-center flex hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-default">
@@ -485,7 +485,7 @@ export default function ModalAddCourse({
               classNames={{
                 inner: "flex justify-between items-center w-full ",
               }}
-              className="!w-full !h-fit !text-[13px] !rounded-[6px] border-[1px] border-secondary py-3 items-center flex hover:bg-bgSecond"
+              className="!w-full !h-fit !text-[13px] !border border-secondary py-3 items-center flex hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
                 <span className="flex justify-start text-default">
@@ -680,10 +680,7 @@ export default function ModalAddCourse({
                           <div className="flex justify-end gap-4 mt-1">
                             <Menu shadow="md" width={200}>
                               <Menu.Target>
-                                <Button
-                                  variant="outline"
-                                  className="!h-7 !rounded-md px-3"
-                                >
+                                <Button variant="outline" className="!h-7 px-3">
                                   Access
                                 </Button>
                               </Menu.Target>
@@ -726,7 +723,7 @@ export default function ModalAddCourse({
                             <Button
                               color="#FF4747"
                               variant="outline"
-                              className="!h-7 !rounded-md px-3"
+                              className="!h-7 px-3"
                               onClick={() => removeCoIns(coIns)}
                             >
                               Remove

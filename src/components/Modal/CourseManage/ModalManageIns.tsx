@@ -258,10 +258,7 @@ export default function ModalManageIns({
                       <div className="flex justify-end gap-4 mt-1">
                         <Menu shadow="md" width={200}>
                           <Menu.Target>
-                            <Button
-                              variant="outline"
-                              className="!h-7 !rounded-md px-3"
-                            >
+                            <Button variant="outline" className="!h-7 px-3">
                               Access
                             </Button>
                           </Menu.Target>
@@ -305,9 +302,9 @@ export default function ModalManageIns({
                           </Menu.Dropdown>
                         </Menu>
                         <Button
-                          color="#FF4747"
+                          color="red"
                           variant="outline"
-                          className="!h-7 !rounded-md px-3"
+                          className="!h-7 px-3"
                           onClick={() => removeCoIns(coIns)}
                         >
                           Remove
@@ -334,7 +331,7 @@ export default function ModalManageIns({
           </div>
         )}
         <Button
-          className="!rounded-s-[4px] !h-[36px] !w-full "
+          className="!h-[36px] !w-full"
           onClick={onClickSave}
           disabled={isEqual(coInsList, editCoInsList)}
           loading={loading}

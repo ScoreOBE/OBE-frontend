@@ -115,6 +115,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       const res = await getAcademicYear(new AcademicYearRequestDTO());
       dispatch(setAcademicYear(res));
       setOpenActivateModal(false);
+      setTextActivate("");
       fetchSemester();
     }
   };
@@ -245,7 +246,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                             variant="outline"
                             className={`${
                               semester.isActive &&
-                              "border-none text-secondary bg-[#E5E8FF]"
+                              "text-secondary bg-[#E5E8FF] px-4"
                             }`}
                             disabled={semester.disabled}
                             onClick={() => {
@@ -271,17 +272,20 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       </Modal>
       <Modal
         opened={openActivateModal}
+        onClose={() => {
+          setOpenActivateModal(false);
+          setTextActivate("");
+        }}
         closeOnClickOutside={false}
         size="47vw"
         title={`Activate semester ${activateSemester?.semester}/${activateSemester?.year}`}
         transitionProps={{ transition: "pop" }}
         centered
-        onClose={() => setOpenActivateModal(false)}
       >
         <Alert
           variant="light"
           color="red"
-          title={` After you activate semester ${activateSemester?.semester}/${activateSemester?.year}, semester ${academicYear?.semester}/${academicYear?.year} cannot be reactivated. This means that instructor can't make any changes to them courses for that semester.  `}
+          title={`After you activate semester ${activateSemester?.semester}/${activateSemester?.year}, semester ${academicYear?.semester}/${academicYear?.year} cannot be reactivated. This means that instructor can't make any changes to them courses for that semester.  `}
           icon={<IconExclamationCircle />}
           classNames={{ icon: "size-6" }}
           className="mb-5"
@@ -300,7 +304,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             )
           }
           onClick={() => onClickActivate(activateSemester!)}
-          className="mt-4 min-w-fit !h-[36px] border-none !w-full"
+          className="mt-4 min-w-fit !h-[36px] !w-full"
         >
           Activate this semester
         </Button>

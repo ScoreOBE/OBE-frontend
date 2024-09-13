@@ -193,13 +193,13 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             (collection?.year == academicYear?.year &&
               collection?.semester! > academicYear?.semester)) && (
             <Button
-              color="#FF4747"
+              color="red"
               leftSection={<IconTrash className="size-5 -mr-1" stroke={1.5} />}
               onClick={() => {
                 setOpenModal(false);
                 setOpenPopupDeletePLOCollection(true);
               }}
-              className="!rounded-md !w-full"
+              className="!w-full"
             >
               Delete {`${collection.name}`} Collection{" "}
             </Button>
@@ -317,7 +317,6 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 openModalAddPLO();
                 closeModalDuplicatePLO();
               }}
-              className="border-none"
               disabled={isEmpty(selectPloDupli)}
             >
               Duplicate and Edit

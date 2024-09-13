@@ -520,8 +520,8 @@ export default function ModalAddPLOCollection({
 
                 <div className="flex gap-2 mt-3 w-full justify-end absolute right-5 bottom-5 ">
                   <Button
-                    onClick={() => setIsAddAnother(true)}
                     variant="outline"
+                    onClick={() => setIsAddAnother(true)}
                   >
                     Add more
                   </Button>
