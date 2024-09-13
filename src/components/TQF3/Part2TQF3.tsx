@@ -1,5 +1,5 @@
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { Button, Alert } from "@mantine/core";
+import { Button, Alert, Checkbox, Radio } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Table } from "@mantine/core";
 import AddIcon from "@/assets/icons/plus.svg?react";
@@ -17,6 +17,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import unplug from "@/assets/image/unplug.png";
 import { IModelCLO, IModelSchedule, IModelTQF3Part2 } from "@/models/ModelTQF3";
 import { isEqual } from "lodash";
+import { EVALUATE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
 
 type Props = {
   data: IModelCourse;
@@ -90,7 +91,56 @@ export default function Part2TQF3({ data, setForm }: Props) {
         }
       />
       {data.TQF3?.part1 ? (
-        <div className="flex flex-col w-full max-h-full gap-4">
+        <div className="flex flex-col w-full max-h-full gap-5 py-1">
+          <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 pb-5   ">
+            <div className="flex text-secondary flex-col ">
+              <p className="font-medium text-[15px]">
+                ลักษณะของกระบวนวิชา <span className=" text-red-500">*</span>
+              </p>
+              <p className="font-semibold">Teaching Method</p>
+            </div>
+            <Checkbox.Group
+              // key={form.key("teachingMethod")}
+              classNames={{ error: "mt-2" }}
+              // {...form.getInputProps("teachingMethod")}
+            >
+              <div className="flex flex-col text-default gap-4">
+                {Object.values(TEACHING_METHOD).map((key) => (
+                  <Checkbox
+                    key={key.en}
+                    classNames={{ label: "font-medium text-[13px]" }}
+                    label={`${key.th} (${key.en})`}
+                    value={key.en}
+                  />
+                ))}
+              </div>
+            </Checkbox.Group>
+          </div>
+
+          <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 pb-5  ">
+            <div className="flex text-secondary flex-col">
+              <p className="font-medium text-[15px]">
+                การวัดและประเมินผล <span className=" text-red-500">*</span>
+              </p>
+              <p className="font-semibold">Evaluation</p>
+            </div>
+            <Radio.Group
+              // key={form.key("evaluate")}
+              classNames={{ error: "mt-2" }}
+              // {...form.getInputProps("evaluate")}
+            >
+              <div className="flex gap-8 text-default">
+                {Object.values(EVALUATE_TYPE).map((item) => (
+                  <Radio
+                    key={item}
+                    classNames={{ label: "font-medium text-[13px]" }}
+                    label={item}
+                    value={item}
+                  />
+                ))}
+              </div>
+            </Radio.Group>
+          </div>
           {/* Description */}
           <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 pb-8">
             <div className="flex text-secondary items-center w-full justify-between">
