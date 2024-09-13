@@ -102,32 +102,32 @@ export default function Part4TQF3({ data, setForm }: Props) {
     },
     {
       id: "kmskx",
-      cloNo: 2,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.2",
+      cloNo: 1,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
       cloDescEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 2",
       learningMethod: [],
     },
     {
       id: "kmskx",
-      cloNo: 3,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.3",
+      cloNo: 1,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
       cloDescEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 3",
       learningMethod: [],
     },
     {
       id: "kmskx",
-      cloNo: 4,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.4",
+      cloNo: 1,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
       cloDescEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 4",
       learningMethod: [],
     },
     {
       id: "kmskx",
-      cloNo: 5,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.5",
+      cloNo: 1,
+      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
       cloDescEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 5",
       learningMethod: [],

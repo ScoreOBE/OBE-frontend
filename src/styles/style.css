@@ -174,6 +174,7 @@
 }
 .mantine-NumberInput-input {
   border-color: var(--color-border-input) !important;
+  color: #333333 !important;
   background-color: var(--color-background-input) !important;
   border-radius: 6px !important;
 }
