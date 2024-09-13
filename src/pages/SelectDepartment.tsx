@@ -13,12 +13,13 @@ import { getDepartment } from "@/services/faculty/faculty.service";
 import { isEqual } from "lodash";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
+import { IModelFaculty } from "@/models/ModelFaculty";
 
 export default function SelectDepartment() {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  const [faculty, setFaculty] = useState<any>({});
+  const [faculty, setFaculty] = useState<Partial<IModelFaculty>>({});
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const [notChange, setNotChange] = useState(true);
 
@@ -72,7 +73,7 @@ export default function SelectDepartment() {
         <img src={cmulogo} alt="CMULogo" className="h-[24px] " />
       </div>{" "}
       <div className="bg-[rgba(78,78,80,0.30)] h-screen w-screen flex justify-between px-36 items-center font-sf-pro">
-        <div className="  text-white cursor-default">
+        <div className="text-white">
           <motion.div
             initial={{
               x: -200,
@@ -102,21 +103,21 @@ export default function SelectDepartment() {
               className="bg-[rgba(78,78,80,0.30)] rounded-[25px] mb-5  flex-col  p-6 h-[640px] scroll-smooth  font-sf-pro"
               style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
             >
-              <div className="text-white font-medium text-[20px] cursor-default">
+              <div className="text-white font-medium text-[20px] mb-6">
                 Select department
               </div>
-              <div className="text-[#FFB876] font-normal mb-6 cursor-default">
+              {/* <div className="text-[#FFB876] font-normal mb-6">
                 Select up to 2 departments
-              </div>
+              </div> */}
               <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[515px]">
-                {faculty.department?.map((key: any) => {
-                  const isChecked = checkedItems.includes(key.departmentCode);
+                {faculty.department?.map((key) => {
+                  const isChecked = checkedItems.includes(key.codeEN);
                   const disabled =
                     checkedItems.length == 3 &&
-                    !checkedItems.includes(key.departmentCode);
+                    !checkedItems.includes(key.codeEN);
                   return (
                     <div
-                      key={key.departmentCode}
+                      key={key.codeEN}
                       className={`w-[540px] min-h-[55px] cursor-pointer text-[16px] font-medium rounded-[10px] pl-4 py-4 scroll-auto items-center flex hover:bg-[rgba(182,187,221,0.56)] ${
                         isChecked
                           ? "bg-[rgba(136,145,205,0.56)]"
@@ -125,10 +126,7 @@ export default function SelectDepartment() {
                       onClick={() => {
                         disabled
                           ? ""
-                          : handleCheckboxChange(
-                              key.departmentCode,
-                              !isChecked
-                            );
+                          : handleCheckboxChange(key.codeEN, !isChecked);
                       }}
                     >
                       <Checkbox
@@ -141,7 +139,7 @@ export default function SelectDepartment() {
                         disabled={disabled}
                         readOnly
                       />
-                      {key.departmentEN} ({key.departmentCode})
+                      {key.departmentEN} ({key.codeEN})
                     </div>
                   );
                 })}
