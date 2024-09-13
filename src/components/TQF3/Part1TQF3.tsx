@@ -167,10 +167,10 @@ export default function Part1TQF3({ data, setForm }: Props) {
           </div>
         </Checkbox.Group>
       </div>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
           <p className="font-medium">
-            ชื่ออาจารย์ผู้รับผิดชอบ<span className=" text-red-500"> *</span>
+          ชื่ออาจารย์ผู้รับผิดชอบ<span className=" text-red-500">*</span>
           </p>
           <p className="font-semibold">Main Instructor</p>
         </div>
@@ -306,7 +306,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
             size="xs"
             placeholder="(optional)"
             className="w-[440px]"
-            classNames={{ input: "h-[180px] p-3", label: "text-default" }}
+            classNames={{ input: "h-[80px] p-3", label: "text-default" }}
             {...form.getInputProps("mainRef")}
           ></Textarea>
         </div>
@@ -326,7 +326,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
             size="xs"
             placeholder="(optional)"
             className="w-[440px]"
-            classNames={{ input: "h-[180px] p-3", label: "text-default" }}
+            classNames={{ input: "h-[80px] p-3", label: "text-default" }}
             {...form.getInputProps("recDoc")}
           ></Textarea>
         </div>
