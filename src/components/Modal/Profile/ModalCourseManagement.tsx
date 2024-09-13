@@ -46,6 +46,7 @@ import { removeCourse, removeSection } from "@/store/course";
 import ModalAddSection from "@/components/Modal/CourseManage/ModalAddSection";
 import { SearchInput } from "@/components/SearchInput";
 import { getDepartment } from "@/services/faculty/faculty.service";
+import { IModelDepartment } from "@/models/ModelFaculty";
 
 type Props = {
   opened: boolean;
@@ -60,7 +61,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const [loading, setLoading] = useState(false);
   const [maxTabs, setMaxTabs] = useState(0);
   const [startEndTab, setStartEndTab] = useState({ start: 0, end: maxTabs });
-  const [department, setDepartment] = useState<any[]>([]);
+  const [department, setDepartment] = useState<Partial<IModelDepartment>[]>([]);
   const [payload, setPayload] = useState<any>({ page: 1, limit: 10 });
   const [startEndPage, setStartEndPage] = useState({ start: 1, end: 10 });
   const [editCourse, setEditCourse] = useState<any>();
@@ -73,7 +74,9 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
-  const [selectDepartment, setSelectDepartment] = useState<any>({});
+  const [selectDepartment, setSelectDepartment] = useState<
+    Partial<IModelDepartment>
+  >({});
 
   useLayoutEffect(() => {
     const updateSize = () => {
@@ -84,12 +87,12 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         tabs = 14;
       } else if (window.innerWidth >= 1024) {
         tabs = 10;
-      } else if (window.innerWidth >= 768) {
-        tabs = 6;
+      // } else if (window.innerWidth >= 768) {
+      //   tabs = 6;
       } else if (window.innerWidth >= 640) {
-        tabs = 5;
+        tabs = 6;
       } else {
-        tabs = 3;
+        tabs = 4;
       }
       setMaxTabs(tabs);
       setStartEndTab(({ start, end }) => {
@@ -106,7 +109,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
       fetchDep();
       setSelectDepartment({
         departmentEN: "All Courses",
-        departmentCode: "All Courses",
+        codeEN: "All Courses",
       });
     }
   }, [opened]);
@@ -118,19 +121,19 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const fetchDep = async () => {
     const res = await getDepartment(user.facultyCode);
     if (res) {
-      sortData(res.department, "departmentCode", "string");
+      sortData(res.department, "courseCode");
       let dep = res.department;
       if (user.role !== ROLE.SUPREME_ADMIN) {
-        dep = res.department.filter((e: any) =>
-          user.departmentCode.includes(e.departmentCode)
+        dep = res.department.filter((e) =>
+          user.departmentCode.includes(e.codeEN)
         );
       }
       setDepartment([
-        { departmentCode: "All Courses", departmentEN: "All Courses" },
+        { departmentEN: "All Courses", codeEN: "All Courses" },
         {
-          departmentCode: res.code,
           departmentEN: res.facultyEN.replace("Faculty of ", "Genaral "),
           courseCode: res.courseCode,
+          codeEN: res.codeEN,
         },
         ...dep,
       ]);
@@ -140,9 +143,9 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const initialPayload = () => {
     return {
       ...new CourseManagementSearchDTO(),
-      departmentCode: selectDepartment.departmentCode?.includes("All")
-        ? department.map((dep) => dep.departmentCode)
-        : [selectDepartment.departmentCode],
+      departmentCode: selectDepartment.codeEN?.includes("All")
+        ? department.map((dep) => dep.codeEN!)
+        : [selectDepartment.codeEN!],
       search: "",
     };
   };
@@ -352,10 +355,10 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   tab: "px-1 !bg-transparent hover:!text-tertiary",
                   tabLabel: "!font-semibold",
                 }}
-                value={selectDepartment.departmentCode}
+                value={selectDepartment.codeEN}
                 onChange={(event) => {
                   setSelectDepartment(
-                    department.find((dep) => dep.departmentCode == event)
+                    department.find((dep) => dep.codeEN == event)!
                   );
                   setPayload({ ...payload, searchDepartment: event });
                 }}
@@ -383,12 +386,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   {department
                     .slice(startEndTab.start, startEndTab.end)
                     .map((dep) => (
-                      <Tabs.Tab
-                        key={dep.departmentCode}
-                        value={dep.departmentCode}
-                      >
-                        {dep.departmentCode}{" "}
-                        {dep.courseCode && `(${dep.courseCode})`}
+                      <Tabs.Tab key={dep.codeEN} value={dep.codeEN!}>
+                        {dep.codeEN} {dep.courseCode && `(${dep.courseCode})`}
                       </Tabs.Tab>
                     ))}
                   {department.length > maxTabs && (
