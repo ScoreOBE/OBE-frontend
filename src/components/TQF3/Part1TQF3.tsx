@@ -106,7 +106,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
   }, [data]);
 
   return (
-    <div className="flex w-full flex-col text-[15px] max-h-full px-2 py-1 text-default">
+    <div className="flex w-full flex-col text-[15px] max-h-full px-2 py-1 text-default ">
       <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3 pb-5">
         <div className="flex text-secondary  flex-col">
           <p className="font-semibold">
@@ -242,7 +242,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
         </div>
       </div>
 
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-top grid grid-cols-[1fr_2fr] py-5  ">
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">
             สถานที่เรียน<span className=" text-red-500"> *</span>
@@ -250,52 +250,53 @@ export default function Part1TQF3({ data, setForm }: Props) {
           <p className="font-semibold">Teaching Location </p>
         </div>
 
-        <div className="flex flex-col gap-3 text-default">
-          <Checkbox.Group
-            className="items-center"
-            value={checked}
-            onChange={(event) => setChecked(event)}
-          >
-            <Group className="flex items-center flex-col gap-5">
-              <div className=" last:border-none w-[440px]">
-                <Checkbox
-                  classNames={{ label: "font-medium text-[13px]" }}
-                  label="ในสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่"
-                  value={"in"}
-                />
+        <Checkbox.Group
+          className="items-center"
+          value={checked}
+          onChange={(event) => setChecked(event)}
+        >
+          <Group className="flex flex-col gap-5 w-full items-start">
+            <div className=" last:border-none ">
+              <Checkbox
+                classNames={{ label: "font-medium text-[13px] w-full" }}
+                label={`ในสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Inside of Chiang Mai University)`}
+                value={"in"}
+              />
 
-                <Textarea
-                  key={form.key("teachingLocation.in")}
-                  className="mt-2 pl-8"
-                  placeholder="(optional)"
-                  classNames={{
-                    input: "text-[13px] text-[#333333] h-[80px]",
-                  }}
-                  disabled={!checked.includes("in")}
-                  {...form.getInputProps("teachingLocation.in")}
-                />
-              </div>
-              <div className="last:border-none w-[440px]">
-                <Checkbox
-                  value={"out"}
-                  classNames={{ label: "font-medium text-[13px]" }}
-                  label="นอกสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่"
-                />
+              <Textarea
+                key={form.key("teachingLocation.in")}
+                className="mt-2 pl-8"
+                placeholder="(optional)"
+                classNames={{
+                  input: "text-[13px] text-[#333333] h-[80px]  w-[408px]",
+                }}
+                disabled={!checked.includes("in")}
+                {...form.getInputProps("teachingLocation.in")}
+              />
+            </div>
+            <div className="last:border-none ">
+              <Checkbox
+                value={"out"}
+                classNames={{
+                  label: "font-medium text-[13px] flex flex-nowrap",
+                }}
+                label={`นอกสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Outside of Chiang Mai University)
+                   `}
+              />
 
-                <Textarea
-                  key={form.key("teachingLocation.out")}
-                  className="mt-2 pl-8"
-                  placeholder="(optional)"
-                  classNames={{
-                    input: "text-[13px] text-[#333333] h-[80px]",
-                  }}
-                  disabled={!checked.includes("out")}
-                  {...form.getInputProps("teachingLocation.out")}
-                />
-              </div>
-            </Group>
-          </Checkbox.Group>
-        </div>
+              <Textarea
+                key={form.key("teachingLocation.out")}
+                className="mt-2 pl-8"
+                placeholder="(optional)"
+                classNames={{
+                  input: "text-[13px] text-[#333333] h-[80px] w-[408px]",
+                }}
+                disabled={!checked.includes("out")}
+                {...form.getInputProps("teachingLocation.out")}
+              />
+            </div>
+          </Group>
+        </Checkbox.Group>
       </div>
 
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
