@@ -10,6 +10,7 @@ export interface IModelTQF3 {
   part4?: { data: IModelTQF3Part4[]; updatedAt: Date };
   part5?: { data: IModelTQF3Part5[]; updatedAt: Date };
   part6?: { data: IModelTQF3Part6[]; updatedAt: Date };
+  part7?: "";
   updatedAt: Date;
 }
 

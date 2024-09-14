@@ -35,6 +35,7 @@ import Loading from "@/components/Loading";
 import { IModelCLO, IModelTQF3 } from "@/models/ModelTQF3";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
+import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import { LearningMethod } from "@/components/Modal/TQF3/ModalManageCLO";
 
 export default function TQF3() {
@@ -80,6 +81,11 @@ export default function TQF3() {
       value: Object.keys(partLabel)[5],
       tab: partLabel.part6,
       compo: <Part6TQF3 data={course!} setForm={setForm} />,
+    },
+    {
+      value: Object.keys(partLabel)[6],
+      tab: partLabel.part7,
+      compo: <Part7TQF3 data={course!} setForm={setForm} />,
     },
   ];
 
@@ -141,13 +147,15 @@ export default function TQF3() {
       case Object.keys(partLabel)[1]:
         return "Part 2 - คำอธิบายลักษณะกระบวนวิชาและแผนการสอน\nDescription and Planning";
       case Object.keys(partLabel)[2]:
-        return "Part 3 -  การประเมินผลคะแนนกระบวนวิชา\nCourse Evaluation";
+        return "Part 3 - การประเมินผลคะแนนกระบวนวิชา\nCourse Evaluation";
       case Object.keys(partLabel)[3]:
         return "Part 4 - การเชื่อมโยงหัวข้อประเมิน\nAssessment Mapping";
       case Object.keys(partLabel)[4]:
-        return "Part 5 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้\nCurriculum Mapping";
+        return "Part 5 - ทรัพยากรประกอบการเรียนการสอน\nCourse Materials";
       case Object.keys(partLabel)[5]:
         return "Part 6 - การประเมินกระบวนวิชาและกระบวนการปรับปรุง\nCourse evaluation and improvement processes";
+      case Object.keys(partLabel)[6]:
+        return "Part 7 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้\nCurriculum Mapping";
       default:
         return;
     }

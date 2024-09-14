@@ -12,7 +12,6 @@ import {
   NumberInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { cloneDeep } from "lodash";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -65,7 +64,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
   useEffect(() => {
     if (data) {
       if (data?.TQF3?.part1) {
-        form.setValues(cloneDeep(data.TQF3.part1));
+        form.setValues(data.TQF3.part1);
         if (data.TQF3.part1.teachingLocation.in.length) {
           checked.push("in");
         }
@@ -77,7 +76,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
           data.type == COURSE_TYPE.SEL_TOPIC.en &&
           data.sections![0].TQF3?.part1 // select first topic
         ) {
-          form.setValues(cloneDeep(data.sections![0].TQF3?.part1));
+          form.setValues(data.sections![0].TQF3?.part1);
           if (data.sections![0].TQF3?.part1.teachingLocation.in.length) {
             checked.push("in");
           }
@@ -110,7 +109,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
     <div className="flex w-full flex-col text-[15px] max-h-full px-2 py-1 text-default">
       <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3 pb-5">
         <div className="flex text-secondary  flex-col">
-          <p className="font-medium">
+          <p className="font-semibold">
             หลักสูตร <span className=" text-red-500">*</span>
           </p>
           <p className="font-semibold">Curriculum</p>
@@ -137,7 +136,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3 py-5">
         <div className="flex text-secondary  flex-col">
-          <p className="font-medium">
+          <p className="font-semibold">
             ประเภทกระบวนวิชา <span className=" text-red-500">*</span>
           </p>
           <p className="font-semibold">Course Type</p>
@@ -161,7 +160,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary pt-2 flex-col">
-          <p className="font-medium">
+          <p className="font-semibold">
             ชั้นปีที่เรียน <span className=" text-red-500">*</span>
           </p>
           <p className="font-semibold">Student Year</p>
@@ -192,7 +191,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
-          <p className="font-medium">
+          <p className="font-semibold">
             ชื่ออาจารย์ผู้รับผิดชอบ<span className=" text-red-500">*</span>
           </p>
           <p className="font-semibold">Main Instructor</p>
@@ -211,9 +210,10 @@ export default function Part1TQF3({ data, setForm }: Props) {
           />
         </div>
       </div>
+
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
-          <p className="font-medium">
+          <p className="font-semibold">
             อาจารย์ผู้สอนทั้งหมด<span className=" text-red-500"> *</span>
           </p>
           <p className="font-semibold">Lecturers</p>
@@ -244,7 +244,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
 
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
-          <p className="font-medium">
+          <p className="font-semibold">
             สถานที่เรียน<span className=" text-red-500"> *</span>
           </p>
           <p className="font-semibold">Teaching Location </p>
@@ -300,7 +300,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
 
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
-          <p className="font-medium">
+          <p className="font-semibold">
             ชั่วโมงต่อสัปดาห์ในการให้คำปรึกษาแก่นักศึกษารายบุคคล
             <span className=" text-red-500"> *</span>
           </p>
@@ -320,45 +320,6 @@ export default function Part1TQF3({ data, setForm }: Props) {
           <p>hours / week</p>
         </div>
       </div>
-      {/* Part 5 */}
-      {/* <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
-        <div className="flex text-secondary flex-col">
-          <p className="font-medium">ตำราและเอกสาร</p>
-          <p className="font-semibold">Main Reference</p>
-        </div>
-
-        <div className="flex flex-col gap-3 text-default">
-          <Textarea
-            key={form.key("mainRef")}
-            label="Description"
-            size="xs"
-            placeholder="(optional)"
-            className="w-[440px]"
-            classNames={{ input: "h-[80px] p-3", label: "text-default" }}
-            {...form.getInputProps("mainRef")}
-          ></Textarea>
-        </div>
-      </div> */}
-      {/* <div className="w-full justify-between h-fit  items-top  grid grid-cols-3 pt-5 pb-6  ">
-        <div className="flex text-secondary flex-col">
-          <p className="font-medium">เอกสารแนะนำ</p>
-          <p className="font-semibold">
-            Recommended Documents, e.g. Lecture notes, E-documents, etc.
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-3 text-default">
-          <Textarea
-            key={form.key("recDoc")}
-            label="Description"
-            size="xs"
-            placeholder="(optional)"
-            className="w-[440px]"
-            classNames={{ input: "h-[80px] p-3", label: "text-default" }}
-            {...form.getInputProps("recDoc")}
-          ></Textarea>
-        </div>
-      </div> */}
     </div>
   );
 }
