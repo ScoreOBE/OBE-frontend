@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { Menu, Button } from "@mantine/core";
 import Icon from "./Icon";
-import ProfileIcon from "@/assets/icons/profile.svg?react";
+import ProfileIcon from "@/assets/icons/profile/profile.svg?react";
+import UserProfileIcon from "@/assets/icons/profile/userProfile.svg?react";
+import AdminProfileIcon from "@/assets/icons/profile/adminProfile.svg?react";
+import SAdminProfileIcon from "@/assets/icons/profile/s.AdminProfile.svg?react";
 import { IconChevronRight, IconList } from "@tabler/icons-react";
 import { IconUserScreen } from "@tabler/icons-react";
 import { IconStatusChange } from "@tabler/icons-react";
@@ -38,16 +41,45 @@ export default function Profile() {
   const [openModalPLOManagement, setOpenModalPLOManagement] = useState(false);
   const [openModalManageTQF, setOpenModalManageTQF] = useState(false);
 
-  const getRoleColor = (role: any) => {
+  const getRoleColor = (role: ROLE) => {
     switch (role) {
-      case ROLE.STUDENT:
-        return "#6869AD";
-      case ROLE.INSTRUCTOR:
-        return "#13A5A5";
-      case ROLE.ADMIN:
-        return "#009BCC";
       case ROLE.SUPREME_ADMIN:
         return "#1B75DF";
+      case ROLE.ADMIN:
+        return "#009BCC";
+      case ROLE.INSTRUCTOR:
+        return "#13A5A5";
+      case ROLE.STUDENT:
+        return "#6869AD";
+    }
+  };
+
+  const getProfileIcon = (role: ROLE) => {
+    switch (role) {
+      case ROLE.SUPREME_ADMIN:
+        return (
+          <Icon
+            IconComponent={SAdminProfileIcon}
+            className="size-8"
+            style={{ color: getRoleColor(user.role) }}
+          />
+        );
+      case ROLE.ADMIN:
+        return (
+          <Icon
+            IconComponent={AdminProfileIcon}
+            className="size-8"
+            style={{ color: getRoleColor(user.role) }}
+          />
+        );
+      default:
+        return (
+          <Icon
+            IconComponent={UserProfileIcon}
+            className="size-8"
+            style={{ color: getRoleColor(user.role) }}
+          />
+        );
     }
   };
 
@@ -103,7 +135,8 @@ export default function Profile() {
                 {user.role}
               </p>
             </div>
-            <Icon IconComponent={ProfileIcon} />
+            {/* <Icon IconComponent={ProfileIcon} /> */}
+            {getProfileIcon(user.role)}
           </Button>
         </Menu.Target>
         <Menu.Dropdown
@@ -112,8 +145,9 @@ export default function Profile() {
         >
           {user.role !== ROLE.STUDENT && (
             <>
-              <div className="flex flex-row p-4 py-3 gap-3">
-                <Icon className="pt-[5px]" IconComponent={ProfileIcon} />
+              <div className="flex items-center px-4 py-3 gap-3">
+                {/* <Icon className="pt-[5px]" IconComponent={ProfileIcon} /> */}
+                {getProfileIcon(user.role)}
                 <div className="flex flex-col text-b3">
                   <p className=" font-semibold">{getUserName(user, 1)}</p>
                   <p
@@ -182,7 +216,7 @@ export default function Profile() {
                       onMouseDown={() => setOpenModalChangeSupAdmin(true)}
                     >
                       <div className="flex items-center gap-2">
-                        <Icon IconComponent={SupremeIcon} className="size-5" />
+                        <Icon IconComponent={SupremeIcon} className="size-4" />
                         <span>Supreme Admin</span>
                       </div>
                     </Menu.Item>
@@ -190,7 +224,7 @@ export default function Profile() {
                       onMouseDown={() => setOpenModalManageSemester(true)}
                     >
                       <div className="flex items-center gap-2">
-                        <Icon IconComponent={SemesterIcon} className="size-5" />
+                        <Icon IconComponent={SemesterIcon} className="size-4" />
                         <span>Semester</span>
                       </div>
                     </Menu.Item>
@@ -198,7 +232,7 @@ export default function Profile() {
                 )}
                 <Menu.Item onMouseDown={() => setOpenModalManageAdmin(true)}>
                   <div className="flex items-center gap-2">
-                    <Icon IconComponent={AdminIcon} className="size-5" />
+                    <Icon IconComponent={AdminIcon} className="size-4" />
                     <span>Admin</span>
                   </div>
                 </Menu.Item>
@@ -207,7 +241,7 @@ export default function Profile() {
                   onMouseDown={() => setOpenModalCourseManagement(true)}
                 >
                   <div className="flex items-center gap-2">
-                    <Icon IconComponent={CourseIcon} className="size-5" />
+                    <Icon IconComponent={CourseIcon} className="size-4" />
                     <span>Course</span>
                   </div>
                 </Menu.Item>
@@ -216,7 +250,7 @@ export default function Profile() {
                   onMouseDown={() => setOpenModalPLOManagement(true)}
                 >
                   <div className="flex items-center gap-2">
-                    <Icon IconComponent={SOIcon} className="size-5" />
+                    <Icon IconComponent={SOIcon} className="size-4" />
                     <span>PLO</span>
                   </div>
                 </Menu.Item>
@@ -225,7 +259,7 @@ export default function Profile() {
                   onMouseDown={() => setOpenModalManageTQF(true)}
                 >
                   <div className="flex items-center gap-2">
-                    <Icon IconComponent={TQFIcon} className="size-5" />
+                    <Icon IconComponent={TQFIcon} className="size-4" />
                     <span>TQF</span>
                   </div>
                 </Menu.Item>

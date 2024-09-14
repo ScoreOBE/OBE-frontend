@@ -87,8 +87,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         tabs = 14;
       } else if (window.innerWidth >= 1024) {
         tabs = 10;
-      // } else if (window.innerWidth >= 768) {
-      //   tabs = 6;
+        // } else if (window.innerWidth >= 768) {
+        //   tabs = 6;
       } else if (window.innerWidth >= 640) {
         tabs = 6;
       } else {
@@ -523,10 +523,10 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                                 setEditCourse({ ...course });
                                 setOpenModalAddSec(true);
                               }}
-                              className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]"
+                              className="text-default font-semibold  text-b2  w-[180px]"
                             >
                               <div className="flex items-center gap-2">
-                                <IconPlus stroke={2} className="h-4 w-4" />
+                                <IconPlus stroke={2} className="size-4" />
                                 <span>Add section</span>
                               </div>
                             </Menu.Item>
@@ -540,12 +540,12 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                                 });
                                 setOpenModalEditCourse(true);
                               }}
-                              className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]"
+                              className="text-default font-semibold  text-b2  w-[180px]"
                             >
                               <div className="flex items-center gap-2">
                                 <IconPencilMinus
                                   stroke={1.5}
-                                  className="h-4 w-4"
+                                  className="size-4"
                                 />
                                 <span>Edit course</span>
                               </div>
@@ -555,11 +555,11 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                                 setEditCourse({ ...course });
                                 setOpenModalManageIns(true);
                               }}
-                              className="text-[#3E3E3E] font-semibold  text-b2  w-[180px]"
+                              className="text-default font-semibold  text-b2  w-[180px]"
                             >
                               <div className="flex items-center gap-2">
                                 <Icon
-                                  className="h-4 w-4"
+                                  className="size-4 "
                                   IconComponent={ManageAdminIcon}
                                 />
                                 <span>Manage instructor</span>
@@ -578,7 +578,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                               }}
                             >
                               <div className="flex items-center gap-2">
-                                <IconTrash className="h-4 w-4" stroke={1.5} />
+                                <IconTrash className="size-4" stroke={1.5} />
                                 <span>Delete course</span>
                               </div>
                             </Menu.Item>
