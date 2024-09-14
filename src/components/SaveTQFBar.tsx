@@ -7,7 +7,9 @@ import { IModelTQF5 } from "@/models/ModelTQF5";
 import { dateFormatter } from "@/helpers/functions/function";
 import { useEffect } from "react";
 
-export const partLabel: { [key in keyof IModelTQF3]?: string } = {
+export const partLabel: {
+  [key in keyof IModelTQF3 | keyof IModelTQF5]?: string;
+} = {
   part1: "Part 1",
   part2: "Part 2",
   part3: "Part 3",

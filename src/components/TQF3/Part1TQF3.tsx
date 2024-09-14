@@ -12,6 +12,7 @@ import {
   NumberInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { cloneDeep } from "lodash";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -64,7 +65,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
   useEffect(() => {
     if (data) {
       if (data?.TQF3?.part1) {
-        form.setValues(data.TQF3.part1);
+        form.setValues(cloneDeep(data.TQF3.part1));
         if (data.TQF3.part1.teachingLocation.in.length) {
           checked.push("in");
         }
@@ -76,7 +77,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
           data.type == COURSE_TYPE.SEL_TOPIC.en &&
           data.sections![0].TQF3?.part1 // select first topic
         ) {
-          form.setValues(data.sections![0].TQF3?.part1);
+          form.setValues(cloneDeep(data.sections![0].TQF3?.part1));
           if (data.sections![0].TQF3?.part1.teachingLocation.in.length) {
             checked.push("in");
           }
