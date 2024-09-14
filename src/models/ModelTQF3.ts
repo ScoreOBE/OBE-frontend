@@ -2,7 +2,6 @@ import { EVALUATE_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import { IModelPLONo } from "./ModelPLO";
 
 export interface IModelTQF3 {
-  [key: string]: any;
   id: string;
   status: TQF_STATUS;
   part1?: IModelTQF3Part1;
@@ -15,36 +14,31 @@ export interface IModelTQF3 {
 }
 
 export interface IModelTQF3Part1 {
-  [key: string]: any;
+  curriculum: string;
   courseType: string;
-  teachingMethod: string[];
   studentYear: number[];
-  evaluate: EVALUATE_TYPE;
+  mainInstructor: string;
   instructors: string[];
-  coordinator: string;
-  lecPlace: string;
-  labPlace: string;
-  mainRef: string;
-  recDoc: string;
+  teachingLocation: { in: string; out: string };
+  consultHoursWk: number;
   updatedAt: Date;
 }
 
 export interface IModelTQF3Part2 {
-  [key: string]: any;
+  teachingMethod: string[];
+  evaluate: EVALUATE_TYPE;
   clo: IModelCLO[];
   schedule: IModelSchedule[];
   updatedAt: Date;
 }
 
 export interface IModelTQF3Part3 {
-  [key: string]: any;
   gradingPolicy: string;
   eval: IModelEval[];
   updatedAt: Date;
 }
 
 export interface IModelTQF3Part4 {
-  [key: string]: any;
   clo: IModelCLO;
   evals: {
     eval: IModelEval;
@@ -53,20 +47,20 @@ export interface IModelTQF3Part4 {
 }
 
 export interface IModelTQF3Part5 {
-  [key: string]: any;
+  mainRef: string;
+  recDoc: string;
+
   clo: IModelCLO;
   plo: IModelPLONo[];
 }
 
 export interface IModelTQF3Part6 {
-  [key: string]: any;
   topic: string;
   detail: string[];
   other?: string;
 }
 
 export interface IModelCLO {
-  [key: string]: any;
   id: string;
   cloNo: number;
   cloDescTH: string;
@@ -76,7 +70,6 @@ export interface IModelCLO {
 }
 
 export interface IModelSchedule {
-  [key: string]: any;
   id: string;
   weekNo: number;
   topicDesc: string;
@@ -85,7 +78,6 @@ export interface IModelSchedule {
 }
 
 export interface IModelEval {
-  [key: string]: any;
   id: string;
   evalNo: number;
   evalTopicTH: string;

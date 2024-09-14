@@ -7,7 +7,7 @@ import { IModelTQF5 } from "@/models/ModelTQF5";
 import { dateFormatter } from "@/helpers/functions/function";
 import { useEffect } from "react";
 
-export const partLabel = {
+export const partLabel: { [key in keyof IModelTQF3]?: string } = {
   part1: "Part 1",
   part2: "Part 2",
   part3: "Part 3",
@@ -27,7 +27,7 @@ export type partType =
 type Props = {
   tqf: string;
   part: partType;
-  data: IModelTQF3 | IModelTQF5;
+  data: any;
   onSave: () => void;
   disabledSave: boolean;
 };
