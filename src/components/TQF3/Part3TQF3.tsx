@@ -108,7 +108,7 @@ export default function Part3TQF3({ data, setForm }: Props) {
                 (Grading) <span className=" text-red-500">*</span>
               </p>
             </div>
-            <div className="flex flex-col font-medium  text-[#333333]">
+            <div className="flex flex-col font-medium text-default">
               <Radio.Group>
                 <Group className="flex flex-col items-start">
                   <Radio
@@ -121,6 +121,24 @@ export default function Part3TQF3({ data, setForm }: Props) {
               </Radio.Group>
             </div>
           </div>
+          {/* <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3 pb-5">
+            <div className="flex text-secondary  flex-col  text-[15px]">
+              <p className="font-semibold">
+                การกำหนดเกรด <span className=" text-red-500">*</span>
+              </p>
+              <p className="font-semibold">Grading</p>
+            </div>
+            <Radio.Group>
+              <Group className="flex flex-col items-start">
+                <Radio
+                  size="sm"
+                  label="แบบอิงกลุ่ม (Norm-Referenced Grading)"
+                />
+                <Radio label="แบบอิงเกณฑ์ (Criterion-Referenced Grading)" />
+                <Radio label="แบบอิงเกณฑ์และอิงกลุ่ม (Criterion and Norm-Referenced Grading)" />
+              </Group>
+            </Radio.Group>
+          </div> */}
           <div className="flex text-secondary items-center w-full justify-between">
             <div className="flex flex-row gap-1 text-[15px]">
               <p className="font-bold">

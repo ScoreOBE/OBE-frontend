@@ -16,6 +16,7 @@ export const partLabel: {
   part4: "Part 4",
   part5: "Part 5",
   part6: "Part 6",
+  part7: "Part 7",
 };
 
 export type partType =
@@ -24,7 +25,8 @@ export type partType =
   | "part3"
   | "part4"
   | "part5"
-  | "part6";
+  | "part6"
+  | "part7";
 
 type Props = {
   tqf: string;

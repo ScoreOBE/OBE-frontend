@@ -50,7 +50,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
       evalTopicEN: "Midterm Exam",
       evalDesc:
         "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 10,
+      evalPercent: 30,
     },
     {
       id: "2",
@@ -59,7 +59,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
       evalTopicEN: "Midterm Exam",
       evalDesc:
         "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 10,
+      evalPercent: 30,
     },
     {
       id: "3",
@@ -68,7 +68,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
       evalTopicEN: "Midterm Exam",
       evalDesc:
         "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 10,
+      evalPercent: 30,
     },
     {
       id: "4",
@@ -86,7 +86,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
       evalTopicEN: "Midterm Exam",
       evalDesc:
         "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 10,
+      evalPercent: 20,
     },
   ];
 
@@ -146,11 +146,11 @@ export default function Part4TQF3({ data, setForm }: Props) {
     validate: {},
   });
 
-  // useEffect(() => {
-  //   if (form.getValues()) {
-  //     console.log(form.getValues());
-  //   }
-  // }, [form]);
+  useEffect(() => {
+    if (form.getValues()) {
+      console.log(form.getValues());
+    }
+  }, [form]);
 
   return (
     <div className="flex w-full max-h-full overflow-hidden">

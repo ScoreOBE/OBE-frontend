@@ -104,8 +104,8 @@ export default function Part2TQF3({ data, setForm }: Props) {
         <div className="flex flex-col w-full max-h-full gap-5 py-1">
           {/*  */}
           <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 pb-5   ">
-            <div className="flex text-secondary flex-col ">
-              <p className="font-medium text-[15px]">
+            <div className="flex text-secondary flex-col  text-[15px]">
+              <p className="font-semibold">
                 ลักษณะของกระบวนวิชา <span className=" text-red-500">*</span>
               </p>
               <p className="font-semibold">Teaching Method</p>
@@ -129,8 +129,8 @@ export default function Part2TQF3({ data, setForm }: Props) {
           </div>
           {/*  */}
           <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 pb-5  ">
-            <div className="flex text-secondary flex-col">
-              <p className="font-medium text-[15px]">
+            <div className="flex text-secondary flex-col text-[15px]">
+              <p className="font-semibold text-[15px]">
                 การวัดและประเมินผล <span className=" text-red-500">*</span>
               </p>
               <p className="font-semibold">Evaluation</p>
