@@ -13,7 +13,7 @@ import { IconList, IconTrash } from "@tabler/icons-react";
 import { upperFirst } from "lodash";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
-enum Method {
+export enum LearningMethod {
   Lec = "บรรยาย (Lecture)",
   Lab = "ปฏิบัติการ (Laboratory)",
   Other = "อื่นๆ (Other)",
@@ -39,9 +39,9 @@ export default function ModalManageCLO({
   const height = type === "add" ? "h-full gap-5" : "h-fit gap-0";
   const [cloLength, setCloLength] = useState(0);
   const options = [
-    { label: Method.Lec },
-    { label: Method.Lab },
-    { label: Method.Other },
+    { label: LearningMethod.Lec },
+    { label: LearningMethod.Lab },
+    { label: LearningMethod.Other },
   ];
   const [heightLeftSec, setHeightLeftSec] = useState(485);
   const cloDescriptionRef = useRef<any>(null);
@@ -70,7 +70,7 @@ export default function ModalManageCLO({
   const formOneCLO = useForm({
     mode: "controlled",
     initialValues: {
-      cloNo: 0,
+      cloNo: 1,
       cloDescTH: "",
       cloDescEN: "",
       learningMethod: [],
@@ -92,8 +92,8 @@ export default function ModalManageCLO({
       if (type == "add") {
         const length = (data as IModelCLO[]).length || 0;
         form.setFieldValue("clo", data as IModelCLO[]);
-        formOneCLO.setFieldValue("cloNo", length + 1);
         setCloLength(length);
+        formOneCLO.setFieldValue("cloNo", length + 1);
       } else {
         formOneCLO.setValues(data as IModelCLO);
       }
@@ -121,6 +121,16 @@ export default function ModalManageCLO({
     }
   };
 
+  const removeCLO = (index: number) => {
+    setCloLength(cloLength - 1);
+    form.removeListItem("clo", index);
+    const newCloList = form.getValues().clo;
+    newCloList?.forEach((clo, i) => {
+      clo.cloNo = i + 1;
+    });
+    formOneCLO.setFieldValue("cloNo", newCloList?.length! + 1);
+  };
+
   return (
     <Modal
       opened={opened}
@@ -146,7 +156,7 @@ export default function ModalManageCLO({
                   .getValues()
                   .clo![
                     cloLength > 0 ? cloLength - 1 : 0
-                  ]?.learningMethod.includes(Method.Other)
+                  ]?.learningMethod.includes(LearningMethod.Other)
                 ? "max-h-[91%]"
                 : "max-h-[80%]"
               : "h-fit"
@@ -218,10 +228,10 @@ export default function ModalManageCLO({
                         label={item.label}
                         value={item.label}
                       />
-                      {item.label === Method.Other &&
+                      {item.label === LearningMethod.Other &&
                         formOneCLO
                           .getValues()
-                          .learningMethod?.includes(Method.Other) && (
+                          .learningMethod?.includes(LearningMethod.Other) && (
                           <Textarea
                             size="xs"
                             className="mt-2 pl-8"
@@ -250,11 +260,10 @@ export default function ModalManageCLO({
           {/* List CLO */}
           {!!form.getValues().clo?.length && type === "add" && (
             <div
-              className={`flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] `}
+              className={`flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] overflow-y-auto overflow-x-hidden`}
               style={{
                 height: heightLeftSec,
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                overflowY: "auto",
               }}
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
@@ -268,7 +277,6 @@ export default function ModalManageCLO({
                   {cloLength} CLO{cloLength > 1 ? "s" : ""}
                 </p>
               </div>
-
               <div className="flex flex-col w-full h-fit px-4">
                 {form.getValues().clo?.map((item, index) => (
                   <div
@@ -284,10 +292,7 @@ export default function ModalManageCLO({
                         </p>
                         <div
                           className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer"
-                          onClick={() => {
-                            setCloLength(cloLength - 1);
-                            form.removeListItem("clo", index);
-                          }}
+                          onClick={() => removeCLO(index)}
                         >
                           <IconTrash
                             stroke={1.5}
@@ -312,7 +317,7 @@ export default function ModalManageCLO({
                           <li></li>
                           {item.learningMethod
                             .join(", ")
-                            .replace(Method.Other, item.other || "")}
+                            .replace(LearningMethod.Other, item.other || "")}
                         </div>
                       )}
                     </div>
@@ -334,7 +339,7 @@ export default function ModalManageCLO({
               );
               closeModal();
             }}
-            disabled={form.getValues().clo?.length == 0}
+            disabled={type == "add" ? form.getValues().clo?.length == 0 : false}
           >
             Done
           </Button>

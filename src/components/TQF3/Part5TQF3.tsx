@@ -81,7 +81,7 @@ export default function Part5TQF3({ data, setForm }: Props) {
       data: courseCLO.map((clo) => ({
         clo: clo,
         plo: [],
-      })) as IModelTQF3Part5[],
+      })) as Partial<IModelTQF3Part5>[],
     },
     validate: {},
   });

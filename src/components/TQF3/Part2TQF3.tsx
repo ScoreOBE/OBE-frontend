@@ -4,7 +4,6 @@ import { useForm } from "@mantine/form";
 import { Table } from "@mantine/core";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
-import ModalManageCLO from "../Modal/TQF3/ModalManageCLO";
 import {
   IconEdit,
   IconGripVertical,
@@ -12,11 +11,12 @@ import {
   IconInfoCircle,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import ModalManageTopic from "../Modal/TQF3/ModalManageCourseContent";
+import ModalManageCLO, { LearningMethod } from "../Modal/TQF3/ModalManageCLO";
+import ModalManageCourseContent from "../Modal/TQF3/ModalManageCourseContent";
 import { IModelCourse } from "@/models/ModelCourse";
 import unplug from "@/assets/image/unplug.png";
 import { IModelCLO, IModelSchedule, IModelTQF3Part2 } from "@/models/ModelTQF3";
-import { isEqual } from "lodash";
+import { cloneDeep, isEqual } from "lodash";
 import { EVALUATE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
 
 type Props = {
@@ -41,6 +41,8 @@ export default function Part2TQF3({ data, setForm }: Props) {
       teachingMethod: (value) =>
         !value?.length && "Select Teaching Method at least one",
       evaluate: (value) => !value?.length && "Evaluation is required",
+      clo: (value) => !value?.length && "Add CLO at least one",
+      // schedule: (value) => !value?.length && "Schedule is required",
     },
     validateInputOnBlur: true,
     onValuesChange: (values, prev) => {
@@ -53,8 +55,12 @@ export default function Part2TQF3({ data, setForm }: Props) {
   });
 
   useEffect(() => {
+    setForm(form);
+  }, [form.getValues()]);
+
+  useEffect(() => {
     if (data && data.TQF3?.part2) {
-      form.setValues(data.TQF3.part2);
+      form.setValues(cloneDeep(data.TQF3.part2));
     }
   }, [data]);
 
@@ -76,7 +82,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
           form.setFieldValue(`clo.${editData.cloNo - 1}`, value)
         }
       />
-      <ModalManageTopic
+      <ModalManageCourseContent
         opened={openModalAddTopic}
         onClose={() => setOpenModalAddTopic(false)}
         type="add"
@@ -85,7 +91,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
           form.setFieldValue("schedule", value)
         }
       />
-      <ModalManageTopic
+      <ModalManageCourseContent
         opened={openModalEditTopic}
         onClose={() => setOpenModalEditTopic(false)}
         type="edit"
@@ -96,6 +102,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
       />
       {data.TQF3?.part1 ? (
         <div className="flex flex-col w-full max-h-full gap-5 py-1">
+          {/*  */}
           <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 pb-5   ">
             <div className="flex text-secondary flex-col ">
               <p className="font-medium text-[15px]">
@@ -120,7 +127,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
               </div>
             </Checkbox.Group>
           </div>
-
+          {/*  */}
           <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 pb-5  ">
             <div className="flex text-secondary flex-col">
               <p className="font-medium text-[15px]">
@@ -145,7 +152,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
               </div>
             </Radio.Group>
           </div>
-          {/* Description */}
+          {/* CLO */}
           <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 pb-8">
             <div className="flex text-secondary items-center w-full justify-between">
               <p className="font-semibold text-[15px]">
@@ -254,7 +261,11 @@ export default function Part2TQF3({ data, setForm }: Props) {
                                   <Table.Td className="w-[20%]">
                                     <div className="flex flex-col gap-0.5">
                                       {item.learningMethod.map((method) => (
-                                        <p>{method}</p>
+                                        <p key={method}>
+                                          {method == LearningMethod.Other
+                                            ? item.other
+                                            : method}
+                                        </p>
                                       ))}
                                     </div>
                                   </Table.Td>
@@ -262,9 +273,10 @@ export default function Part2TQF3({ data, setForm }: Props) {
                                     <div className="flex justify-start gap-4 items-center">
                                       <div
                                         className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
-                                        onClick={() =>
-                                          setOpenModalEditCLO(true)
-                                        }
+                                        onClick={() => {
+                                          setEditData(item);
+                                          setOpenModalEditCLO(true);
+                                        }}
                                       >
                                         <IconEdit
                                           className="size-4"
@@ -309,10 +321,16 @@ export default function Part2TQF3({ data, setForm }: Props) {
                 </Table>
               </div>
             </DragDropContext>
+            <p className="text-error text-b3 -mt-1">
+              {form.getInputProps("clo").error}
+            </p>
           </div>
-
           {/* Planning */}
-          <div className="flex flex-col  w-full gap-4 pb-8">
+          <div
+            key={form.key("schedule")}
+            {...form.getInputProps("schedule")}
+            className="flex flex-col  w-full gap-4 pb-8"
+          >
             <div className="flex text-secondary items-center w-full justify-between">
               <p className="font-semibold text-[15px]">
                 เนื้อหาวิชาและแผนการสอน
@@ -490,6 +508,9 @@ export default function Part2TQF3({ data, setForm }: Props) {
                 </Table>
               </div>
             </DragDropContext>
+            <p className="text-error text-b3 -mt-1">
+              {form.getInputProps("schedule").error}
+            </p>
           </div>
         </div>
       ) : (

@@ -32,9 +32,10 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import { editCourse } from "@/store/course";
 import exportFile from "@/assets/icons/exportFile.svg?react";
 import Loading from "@/components/Loading";
-import { IModelTQF3 } from "@/models/ModelTQF3";
+import { IModelCLO, IModelTQF3 } from "@/models/ModelTQF3";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
+import { LearningMethod } from "@/components/Modal/TQF3/ModalManageCLO";
 
 export default function TQF3() {
   const location = useLocation().pathname;
@@ -96,14 +97,42 @@ export default function TQF3() {
       if (res) {
         setCourse(res);
         if (res.type == COURSE_TYPE.SEL_TOPIC.en) {
-          setTqf3(res.sections[0].TQF3);
+          setTqf3AndPart(res.sections[0].TQF3);
         } else {
-          setTqf3(res.TQF3);
+          setTqf3AndPart(res.TQF3);
         }
       }
     };
     if (academicYear && location.includes(ROUTE_PATH.TQF3)) fetchOneCourse();
   }, [academicYear, location]);
+
+  useEffect(() => {
+    if (course) {
+      if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
+        setTqf3(course.sections[0].TQF3!);
+      } else {
+        setTqf3(course.TQF3!);
+      }
+    }
+  }, [tqf3Part]);
+
+  const setTqf3AndPart = (tqf3: IModelTQF3) => {
+    setTqf3(tqf3);
+    const tqfParts = tqf3;
+    if (!tqfParts.part1) {
+      setTqf3Part("part1");
+    } else if (!tqfParts.part2) {
+      setTqf3Part("part2");
+    } else if (!tqfParts.part3) {
+      setTqf3Part("part3");
+    } else if (!tqfParts.part4) {
+      setTqf3Part("part4");
+    } else if (!tqfParts.part5) {
+      setTqf3Part("part5");
+    } else {
+      setTqf3Part("part6");
+    }
+  };
 
   const topicPart = () => {
     switch (tqf3Part) {
@@ -139,17 +168,39 @@ export default function TQF3() {
         } else {
           payload.id = course.TQF3?.id;
         }
-        payload.instructors = payload.instructors.filter((ins: any) => ins);
+        switch (tqf3Part) {
+          case Object.keys(partLabel)[0]:
+            payload.instructors = payload.instructors.filter((ins: any) => ins);
+          case Object.keys(partLabel)[1]:
+            payload.clo?.forEach((clo: IModelCLO) => {
+              if (!clo.learningMethod.includes(LearningMethod.Other)) {
+                delete clo.other;
+              }
+            });
+          case Object.keys(partLabel)[2]:
+          case Object.keys(partLabel)[3]:
+          case Object.keys(partLabel)[4]:
+          case Object.keys(partLabel)[5]:
+        }
         const res = await saveTQF3(tqf3Part!, payload);
         if (res) {
           form.reset();
           form.setValues(res);
-          setCourse({ ...course, TQF3: res });
-          dispatch(editCourse({ ...course, TQF3: { ...course.TQF3, ...res } }));
-          if (res.type == COURSE_TYPE.SEL_TOPIC.en) {
+          if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
             setTqf3({ ...course.sections[0].TQF3, ...res });
+            // setCourse({ ...course });
+            // dispatch(
+            //   editCourse({ ...course, sections: [] })
+            // );
           } else {
             setTqf3({ ...course.TQF3, ...res });
+            setCourse({
+              ...course,
+              TQF3: { ...course.TQF3, ...res },
+            });
+            dispatch(
+              editCourse({ ...course, TQF3: { ...course.TQF3, ...res } })
+            );
           }
           showNotifications(
             NOTI_TYPE.SUCCESS,
@@ -306,7 +357,7 @@ export default function TQF3() {
           >
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.value} className="w-full">
-                {course && part.compo}
+                {tqf3Part === part.value && course && part.compo}
               </Tabs.Panel>
             ))}
           </div>
@@ -325,7 +376,7 @@ export default function TQF3() {
             data={tqf3[tqf3Part as keyof IModelTQF3]}
             onSave={onSave}
             // disabledSave={isEqual(
-            //   tqf3![tqf3Part!],
+            //   tqf3![tqf3Part! as keyof IModelTQF3],
             //   form?.getValues()
             // )}
             disabledSave={false}
