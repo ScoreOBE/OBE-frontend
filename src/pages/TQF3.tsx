@@ -242,7 +242,7 @@ export default function TQF3() {
                     <Icon
                       IconComponent={CheckIcon}
                       className={
-                        !tqf3 || isEmpty(tqf3[part.value])
+                        !tqf3 || isEmpty(tqf3[part.value as keyof IModelTQF3])
                           ? "text-[#DEE2E6]"
                           : "text-[#24b9a5]"
                       }
@@ -317,12 +317,12 @@ export default function TQF3() {
           tqf3[
             Object.keys(partLabel)[
               Object.keys(partLabel).findIndex((e) => e == tqf3Part) - 1
-            ]
+            ] as keyof IModelTQF3
           ]) && (
           <SaveTQFbar
             tqf="3"
             part={tqf3Part as partType}
-            data={tqf3[tqf3Part!]}
+            data={tqf3[tqf3Part as keyof IModelTQF3]}
             onSave={onSave}
             // disabledSave={isEqual(
             //   tqf3![tqf3Part!],

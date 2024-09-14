@@ -3,7 +3,6 @@ import { IModelTQF5 } from "./ModelTQF5";
 import { IModelUser } from "./ModelUser";
 
 export interface IModelSection {
-  [key: string]: any;
   id: string;
   sectionNo: number;
   topic?: string;

@@ -1,8 +1,4 @@
-import {
-  COURSE_TYPE,
-  EVALUATE_TYPE,
-  TEACHING_METHOD,
-} from "@/helpers/constants/enum";
+import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { getUserName } from "@/helpers/functions/function";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelTQF3Part1 } from "@/models/ModelTQF3";
@@ -25,6 +21,7 @@ type Props = {
 
 export default function Part1TQF3({ data, setForm }: Props) {
   const [checked, setChecked] = useState<string[]>([]);
+  const curriculum = ["สำหรับหลักสูตร", "สำหรับหลายหลักสูตร"];
   const studentYear = [
     { year: 1, en: "1st year", th: "ชั้นปีที่ 1" },
     { year: 2, en: "2nd year", th: "ชั้นปีที่ 2" },
@@ -36,13 +33,16 @@ export default function Part1TQF3({ data, setForm }: Props) {
 
   const form = useForm({
     mode: "uncontrolled",
-    initialValues: {} as Partial<IModelTQF3Part1>,
+    initialValues: {
+      teachingLocation: { in: "", out: "" },
+      consultHoursWk: 1,
+    } as IModelTQF3Part1,
     validate: {
-      teachingMethod: (value) =>
-        !value?.length && "Select Teaching Method at least one",
+      curriculum: (value) => !value?.length && "Curriculum is required",
       studentYear: (value) =>
         !value?.length && "Select Student Year at least one",
-      evaluate: (value) => !value?.length && "Evaluation is required",
+      mainInstructor: (value) =>
+        !value?.length && "Main Instructor is required",
       instructors: (value) => {
         if (!value?.length) return "Input Instructors at least one";
         const duplicates = value.filter(
@@ -53,8 +53,6 @@ export default function Part1TQF3({ data, setForm }: Props) {
           return `Duplicate instructors "${uniqueDuplicates.join(", ")}"`;
         }
       },
-      coordinator: (value) =>
-        !value?.length && "Course Coordinator is required",
     },
     validateInputOnBlur: true,
   });
@@ -67,25 +65,42 @@ export default function Part1TQF3({ data, setForm }: Props) {
     if (data) {
       if (data?.TQF3?.part1) {
         form.setValues(data.TQF3.part1);
+        if (data.TQF3.part1.teachingLocation.in.length) {
+          checked.push("in");
+        }
+        if (data.TQF3.part1.teachingLocation.out.length) {
+          checked.push("out");
+        }
       } else {
         if (
           data.type == COURSE_TYPE.SEL_TOPIC.en &&
           data.sections![0].TQF3?.part1 // select first topic
         ) {
           form.setValues(data.sections![0].TQF3?.part1);
+          if (data.sections![0].TQF3?.part1.teachingLocation.in.length) {
+            checked.push("in");
+          }
+          if (data.sections![0].TQF3?.part1.teachingLocation.out.length) {
+            checked.push("out");
+          }
+        } else {
+          form.setFieldValue("courseType", data.type);
+          form.setFieldValue(
+            "mainInstructor",
+            getUserName(data.sections[0].instructor as IModelUser, 3)!
+          );
+          const uniqueInstructors = Array.from(
+            new Set(
+              (
+                data.sections?.flatMap((sec) => [
+                  sec.instructor,
+                  ...(sec.coInstructors as IModelUser[]),
+                ]) as IModelUser[]
+              )?.map((instructor) => getUserName(instructor, 3)!)
+            )
+          ).slice(0, 8);
+          form.setFieldValue("instructors", uniqueInstructors);
         }
-        form.setFieldValue("courseType", data.type);
-        const uniqueInstructors = Array.from(
-          new Set(
-            (
-              data.sections?.flatMap((sec) => [
-                sec.instructor,
-                ...(sec.coInstructors as IModelUser[]),
-              ]) as IModelUser[]
-            )?.map((instructor) => getUserName(instructor, 3)!)
-          )
-        ).slice(0, 8);
-        form.setFieldValue("instructors", uniqueInstructors);
       }
     }
   }, [data]);
@@ -99,15 +114,22 @@ export default function Part1TQF3({ data, setForm }: Props) {
           </p>
           <p className="font-semibold">Curriculum</p>
         </div>
-        <Radio.Group>
+        <Radio.Group
+          key={form.key("curriculum")}
+          {...form.getInputProps("curriculum")}
+          value={form.getValues().curriculum}
+          onChange={(event) => form.setFieldValue("curriculum", event)}
+        >
           <div className="flex text-default gap-3 flex-col">
             <Radio
               classNames={{ label: "font-medium text-[13px]" }}
               label="สำหรับหลักสูตร (Eng)"
+              value={curriculum[0]}
             />
             <Radio
               classNames={{ label: "font-medium text-[13px]" }}
               label="สำหรับหลายหลักสูตร (Eng)"
+              value={curriculum[1]}
             />
           </div>
         </Radio.Group>
@@ -170,21 +192,21 @@ export default function Part1TQF3({ data, setForm }: Props) {
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
           <p className="font-medium">
-          ชื่ออาจารย์ผู้รับผิดชอบ<span className=" text-red-500">*</span>
+            ชื่ออาจารย์ผู้รับผิดชอบ<span className=" text-red-500">*</span>
           </p>
           <p className="font-semibold">Main Instructor</p>
         </div>
 
         <div className="flex flex-col gap-3 text-default">
           <TextInput
-            key={form.key("coordinator")}
+            key={form.key("mainInstructor")}
             withAsterisk
             size="xs"
             label="Instructor"
             classNames={{ label: "text-default" }}
             className="w-[440px]"
             placeholder="(required)"
-            {...form.getInputProps("coordinator")}
+            {...form.getInputProps("mainInstructor")}
           />
         </div>
       </div>
@@ -242,12 +264,14 @@ export default function Part1TQF3({ data, setForm }: Props) {
                 />
 
                 <Textarea
+                  key={form.key("teachingLocation.in")}
                   className="mt-2 pl-8"
                   placeholder="(optional)"
                   classNames={{
                     input: "text-[13px] text-[#333333] h-[80px]",
                   }}
                   disabled={!checked.includes("in")}
+                  {...form.getInputProps("teachingLocation.in")}
                 />
               </div>
               <div className="last:border-none w-[440px]">
@@ -258,12 +282,14 @@ export default function Part1TQF3({ data, setForm }: Props) {
                 />
 
                 <Textarea
+                  key={form.key("teachingLocation.out")}
                   className="mt-2 pl-8"
                   placeholder="(optional)"
                   classNames={{
                     input: "text-[13px] text-[#333333] h-[80px]",
                   }}
                   disabled={!checked.includes("out")}
+                  {...form.getInputProps("teachingLocation.out")}
                 />
               </div>
             </Group>
@@ -284,10 +310,11 @@ export default function Part1TQF3({ data, setForm }: Props) {
 
         <div className="flex items-center text-[13px] font-medium gap-4">
           <NumberInput
-            defaultValue={1}
+            key={form.key("consultHoursWk")}
             max={168}
             min={1}
             className="w-[86px]"
+            {...form.getInputProps("consultHoursWk")}
           />
           <p>hours / week</p>
         </div>

@@ -146,11 +146,12 @@ export default function Part4TQF3({ data, setForm }: Props) {
     validate: {},
   });
 
-  useEffect(() => {
-    if (form.getValues()) {
-      console.log(form.getValues());
-    }
-  }, [form]);
+  // useEffect(() => {
+  //   if (form.getValues()) {
+  //     console.log(form.getValues());
+  //   }
+  // }, [form]);
+
   return (
     <div className="flex w-full max-h-full overflow-hidden">
       <div className="flex flex-col w-full  overflow-y-auto">

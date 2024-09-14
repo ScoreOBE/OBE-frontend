@@ -4,7 +4,6 @@ import { IModelTQF3 } from "./ModelTQF3";
 import { IModelTQF5 } from "./ModelTQF5";
 
 export interface IModelCourse {
-  [key: string]: any;
   id: string;
   academicYear: IModelAcademicYear | string;
   courseNo: string;

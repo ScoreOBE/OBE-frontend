@@ -1,5 +1,4 @@
 export interface IModelFaculty {
-  [key: string]: any;
   id: string;
   facultyCode: string;
   facultyTH: string;
@@ -11,7 +10,6 @@ export interface IModelFaculty {
 }
 
 export interface IModelDepartment {
-  [key: string]: any;
   departmentTH: string;
   departmentEN: string;
   courseCode: number;

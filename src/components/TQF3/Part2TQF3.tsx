@@ -37,7 +37,11 @@ export default function Part2TQF3({ data, setForm }: Props) {
       clo: [],
       schedule: [],
     } as Partial<IModelTQF3Part2>,
-    validate: {},
+    validate: {
+      teachingMethod: (value) =>
+        !value?.length && "Select Teaching Method at least one",
+      evaluate: (value) => !value?.length && "Evaluation is required",
+    },
     validateInputOnBlur: true,
     onValuesChange: (values, prev) => {
       if (!isEqual(values.clo, prev.clo)) {
@@ -100,9 +104,9 @@ export default function Part2TQF3({ data, setForm }: Props) {
               <p className="font-semibold">Teaching Method</p>
             </div>
             <Checkbox.Group
-              // key={form.key("teachingMethod")}
+              key={form.key("teachingMethod")}
               classNames={{ error: "mt-2" }}
-              // {...form.getInputProps("teachingMethod")}
+              {...form.getInputProps("teachingMethod")}
             >
               <div className="flex flex-col text-default gap-4">
                 {Object.values(TEACHING_METHOD).map((key) => (
@@ -125,9 +129,9 @@ export default function Part2TQF3({ data, setForm }: Props) {
               <p className="font-semibold">Evaluation</p>
             </div>
             <Radio.Group
-              // key={form.key("evaluate")}
+              key={form.key("evaluate")}
               classNames={{ error: "mt-2" }}
-              // {...form.getInputProps("evaluate")}
+              {...form.getInputProps("evaluate")}
             >
               <div className="flex gap-8 text-default">
                 {Object.values(EVALUATE_TYPE).map((item) => (
