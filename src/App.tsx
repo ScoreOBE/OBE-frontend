@@ -64,7 +64,7 @@ function App() {
     <PageError />
   ) : (
     <div
-      className="flex h-screen w-screen"
+      className="flex h-screen w-screen text-default"
       // className={`flex h-screen w-screen  ${
       //   showSidebar ? "sidebar-linear-gradient" : ""
       // }`}

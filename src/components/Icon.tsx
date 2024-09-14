@@ -1,13 +1,14 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
+
 type Props = {
   IconComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   className?: string;
+  style?: React.CSSProperties | undefined;
   outlined?: boolean;
   onClick?: () => void;
 };
 class Icon extends React.Component<Props, any> {
   static defaultProps = {
-    title: "",
     outlined: false,
   };
   constructor(props: any) {
@@ -15,13 +16,14 @@ class Icon extends React.Component<Props, any> {
   }
 
   render() {
-    const { IconComponent, className, outlined, onClick } = this.props;
+    const { IconComponent, className, style, outlined, onClick } = this.props;
     return (
       <div
-        className={`${className} flex justify-center items-center h-full`}
+        className="flex justify-center items-center h-full"
         onClick={onClick}
+        style={style}
       >
-        <IconComponent className={outlined ? "outline" : ""} />
+        <IconComponent className={`${className} ${outlined && "outline"}`} />
       </div>
     );
   }

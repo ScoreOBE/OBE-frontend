@@ -1,3 +1,5 @@
+import { ROLE } from "@/helpers/constants/enum";
+
 export interface IModelUser {
   [key: string]: any;
   id: string;
@@ -9,7 +11,7 @@ export interface IModelUser {
   email: string;
   facultyCode: string;
   departmentCode: string[];
-  role: string;
+  role: ROLE;
   // enrollCourses: Course[];
   // ownCourses: Course[];
   // coCourses: Course[];
