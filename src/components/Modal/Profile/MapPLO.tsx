@@ -834,9 +834,7 @@ export default function MapPLO({ ploName = "" }: Props) {
           >
             <Tabs.List className="!gap-6 !bg-transparent">
               <Tabs.Tab value="plodescription">PLO Description</Tabs.Tab>
-              <Tabs.Tab className="overflow-hidden" value="plomapping">
-                PLO Mapping
-              </Tabs.Tab>
+              <Tabs.Tab value="plomapping">PLO Mapping</Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel
