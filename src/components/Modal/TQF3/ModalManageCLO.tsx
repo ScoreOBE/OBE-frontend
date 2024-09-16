@@ -37,7 +37,6 @@ export default function ModalManageCLO({
   setCloList,
 }: Props) {
   const height = type === "add" ? "h-full gap-5" : "h-fit gap-0";
-  const [cloLength, setCloLength] = useState(0);
   const options = [
     { label: LearningMethod.Lec },
     { label: LearningMethod.Lab },
@@ -91,11 +90,10 @@ export default function ModalManageCLO({
 
   useEffect(() => {
     if (opened && data) {
+      form.reset();
       formOneCLO.reset();
       if (type == "add") {
         const length = (data as IModelCLO[]).length || 0;
-        form.setFieldValue("clo", data as IModelCLO[]);
-        setCloLength(length);
         formOneCLO.setFieldValue("cloNo", length + 1);
       } else {
         formOneCLO.setValues(data as IModelCLO);
@@ -114,7 +112,6 @@ export default function ModalManageCLO({
     if (!formOneCLO.validate().hasErrors) {
       form.insertListItem("clo", formOneCLO.getValues());
       setIsAdded(true);
-      setCloLength(cloLength + 1);
       formOneCLO.setValues({
         cloNo: formOneCLO.getValues().cloNo! + 1,
         cloDescTH: "",
@@ -126,11 +123,10 @@ export default function ModalManageCLO({
   };
 
   const removeCLO = (index: number) => {
-    setCloLength(cloLength - 1);
     form.removeListItem("clo", index);
     const newCloList = form.getValues().clo;
     newCloList?.forEach((clo, i) => {
-      clo.cloNo = i + 1;
+      clo.cloNo = (data as IModelCLO[]).length + i + 1;
     });
     formOneCLO.setFieldValue("cloNo", newCloList?.length! + 1);
   };
@@ -141,7 +137,9 @@ export default function ModalManageCLO({
       onClose={onClose}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} CLO`}
-      size={type === "add" && cloLength > 0 ? "70vw" : "40vw"}
+      size={
+        type === "add" && form.getValues().clo?.length! > 0 ? "70vw" : "40vw"
+      }
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
@@ -159,7 +157,9 @@ export default function ModalManageCLO({
               ? form
                   .getValues()
                   .clo![
-                    cloLength > 0 ? cloLength - 1 : 0
+                    form.getValues().clo?.length! > 0
+                      ? form.getValues().clo?.length! - 1
+                      : 0
                   ]?.learningMethod.includes(LearningMethod.Other)
                 ? "max-h-[91%]"
                 : "max-h-[80%]"
@@ -173,7 +173,9 @@ export default function ModalManageCLO({
             className={`flex flex-col rounded-md justify-between ${
               type === "add" && "p-5"
             } gap-1 overflow-hidden ${
-              cloLength > 0 && type === "add" ? "w-[45%]" : "w-full"
+              form.getValues().clo?.length! > 0 && type === "add"
+                ? "w-[45%]"
+                : "w-full"
             } h-full`}
             style={{
               boxShadow:
@@ -278,15 +280,22 @@ export default function ModalManageCLO({
                   </span>
                 </div>
                 <p>
-                  {cloLength} CLO{cloLength > 1 ? "s" : ""}
+                  {form.getValues().clo?.length!} CLO
+                  {form.getValues().clo?.length! > 1 ? "s" : ""}
                 </p>
               </div>
               <div className="flex flex-col w-full h-fit px-4">
                 {form.getValues().clo?.map((item, index) => (
                   <div
-                    ref={index === cloLength - 1 ? cloRef : undefined}
+                    ref={
+                      index === form.getValues().clo?.length! - 1
+                        ? cloRef
+                        : undefined
+                    }
                     className={`py-3 w-full border-b-[1px] pl-3 ${
-                      cloLength > 1 ? "last:border-none last:pb-5" : ""
+                      form.getValues().clo?.length! > 1
+                        ? "last:border-none last:pb-5"
+                        : ""
                     }`}
                   >
                     <div className="flex flex-col gap-2 w-full">

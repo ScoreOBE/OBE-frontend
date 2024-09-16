@@ -106,6 +106,7 @@ export default function TQF3() {
           setTqf3Original(res.sections[0].TQF3!);
           if (!course?.sections[0].TQF3?.updatedAt) {
             dispatch(editCourse(res));
+            setTqf3(res.sections[0].TQF3!);
           }
           setCurrentPartTQF3(res.sections[0].TQF3!);
         } else {
@@ -114,6 +115,7 @@ export default function TQF3() {
             dispatch(editCourse(res));
           }
           setCurrentPartTQF3(res.TQF3!);
+          setTqf3(res.TQF3!);
         }
       }
     };

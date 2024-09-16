@@ -89,7 +89,9 @@ export default function Part2TQF3({ data, setForm }: Props) {
         onClose={() => setOpenModalAddCLO(false)}
         type="add"
         data={form.getValues().clo!}
-        setCloList={(value: IModelCLO[]) => form.setFieldValue("clo", value)}
+        setCloList={(value: IModelCLO[]) =>
+          form.setFieldValue("clo", [...form.getValues().clo!, ...value])
+        }
       />
       <ModalManageCLO
         opened={openModalEditCLO}
@@ -107,7 +109,10 @@ export default function Part2TQF3({ data, setForm }: Props) {
         teachingMethod={form.getValues().teachingMethod ?? []}
         data={form.getValues().schedule!}
         setScheduleList={(value: IModelSchedule[]) =>
-          form.setFieldValue("schedule", value)
+          form.setFieldValue("schedule", [
+            ...form.getValues().schedule!,
+            ...value,
+          ])
         }
       />
       <ModalManageCourseContent
