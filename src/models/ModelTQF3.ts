@@ -8,9 +8,9 @@ export interface IModelTQF3 {
   part2?: IModelTQF3Part2;
   part3?: IModelTQF3Part3;
   part4?: { data: IModelTQF3Part4[]; updatedAt: Date };
-  part5?: { data: IModelTQF3Part5[]; updatedAt: Date };
+  part5?: IModelTQF3Part5;
   part6?: { data: IModelTQF3Part6[]; updatedAt: Date };
-  part7?: any;
+  part7?: { data: IModelTQF3Part7[]; updatedAt: Date };
   updatedAt: Date;
 }
 
@@ -44,15 +44,13 @@ export interface IModelTQF3Part4 {
   evals: {
     eval: IModelEval;
     evalWeek: number[];
+    percent: number;
   }[];
 }
 
 export interface IModelTQF3Part5 {
   mainRef: string;
   recDoc: string;
-
-  clo: IModelCLO;
-  plo: IModelPLONo[];
 }
 
 export interface IModelTQF3Part6 {
@@ -61,6 +59,10 @@ export interface IModelTQF3Part6 {
   other?: string;
 }
 
+export interface IModelTQF3Part7 {
+  clo: IModelCLO;
+  plo: IModelPLONo[];
+}
 export interface IModelCLO {
   id: string;
   no: number;
