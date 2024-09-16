@@ -29,54 +29,6 @@ type Props = {
 };
 
 export default function Part4TQF3({ data, setForm }: Props) {
-  const evalTest = [
-    {
-      id: "1",
-      evalNo: 1,
-      evalTopicTH: "สอบกลางภาค",
-      evalTopicEN: "Midterm Exam",
-      evalDesc:
-        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 30,
-    },
-    {
-      id: "2",
-      evalNo: 2,
-      evalTopicTH: "สอบกลางภาค",
-      evalTopicEN: "Midterm Exam",
-      evalDesc:
-        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 30,
-    },
-    {
-      id: "3",
-      evalNo: 3,
-      evalTopicTH: "สอบกลางภาค",
-      evalTopicEN: "Midterm Exam",
-      evalDesc:
-        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 30,
-    },
-    {
-      id: "4",
-      evalNo: 4,
-      evalTopicTH: "สอบกลางภาค",
-      evalTopicEN: "Midterm Exam",
-      evalDesc:
-        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 10,
-    },
-    {
-      id: "5",
-      evalNo: 5,
-      evalTopicTH: "สอบกลางภาค",
-      evalTopicEN: "Midterm Exam",
-      evalDesc:
-        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 20,
-    },
-  ];
-
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const form = useForm({
     mode: "controlled",
