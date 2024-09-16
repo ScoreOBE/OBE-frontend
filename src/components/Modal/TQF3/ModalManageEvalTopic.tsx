@@ -1,16 +1,17 @@
+import { validateTextInput } from "@/helpers/functions/validation";
+import { IModelEval, IModelTQF3Part3 } from "@/models/ModelTQF3";
 import {
   Button,
-  Checkbox,
-  Group,
   Modal,
   Textarea,
   TextInput,
   NumberInput,
   NumberInputHandlers,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { IconList, IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
-import { upperFirst } from "lodash";
-import { useRef, useState } from "react";
+import { upperFirst, values } from "lodash";
+import { useEffect, useRef, useState } from "react";
 
 type actionType = "add" | "edit";
 
@@ -18,34 +19,112 @@ type Props = {
   opened: boolean;
   onClose: () => void;
   type: actionType;
-  courseNo: string;
+  data: IModelEval[] | IModelEval;
+  setEvalList: (value: any) => void;
+  total: number;
 };
 export default function ModalManageEvalTopic({
   opened,
   onClose,
   type,
-  courseNo,
+  data,
+  setEvalList,
+  total = 0,
 }: Props) {
   const height = type === "add" ? "h-full" : "h-fit";
   const handlersRef = useRef<NumberInputHandlers>(null);
-  const topicLenght = 5;
+  const topicRef = useRef<HTMLDivElement>(null);
+  const [isAdded, setIsAdded] = useState(false);
+  const [percentTotal, setPercentTotal] = useState(0);
+
+  const form = useForm({
+    mode: "controlled",
+    initialValues: { eval: [] } as Partial<IModelTQF3Part3>,
+  });
+
+  const formOneTopic = useForm({
+    mode: "controlled",
+    initialValues: {
+      no: 1,
+      topicTH: "",
+      topicEN: "",
+      desc: "",
+      percent: 0,
+    } as Partial<IModelEval>,
+    validate: {
+      topicTH: (value) =>
+        validateTextInput(value, "Topic Thai language", 0, false),
+      topicEN: (value) =>
+        validateTextInput(value, "Topic English language", 0, false),
+      percent: (value) => !value && "Evaluation Percentage is required",
+    },
+    validateInputOnBlur: true,
+  });
+
+  useEffect(() => {
+    if (opened && data) {
+      form.reset();
+      formOneTopic.reset();
+      setPercentTotal(total);
+      if (type == "add") {
+        const length = (data as IModelEval[]).length || 0;
+        formOneTopic.setFieldValue("no", length + 1);
+      } else {
+        formOneTopic.setValues(data as IModelEval);
+      }
+    }
+  }, [data, opened]);
+
+  useEffect(() => {
+    if (topicRef.current && isAdded) {
+      topicRef.current.scrollIntoView({ behavior: "smooth" });
+      setIsAdded(false);
+    }
+  }, [isAdded]);
+
+  const addMore = () => {
+    if (!formOneTopic.validate().hasErrors) {
+      setPercentTotal(percentTotal + formOneTopic.getValues().percent!);
+      form.insertListItem("eval", formOneTopic.getValues());
+      setIsAdded(true);
+      formOneTopic.setValues({
+        no: formOneTopic.getValues().no! + 1,
+        topicTH: "",
+        topicEN: "",
+        desc: "",
+        percent: 0,
+      });
+    }
+  };
+
+  const removeTopic = (index: number) => {
+    setPercentTotal(percentTotal - form.getValues().eval![index].percent);
+    form.removeListItem("eval", index);
+    const newEvalList = form.getValues().eval;
+    newEvalList?.forEach((topic, i) => {
+      topic.no = (data as IModelEval[]).length + i + 1;
+    });
+    formOneTopic.setFieldValue("no", newEvalList?.length! + 1);
+  };
 
   return (
     <Modal
       opened={opened}
       onClose={onClose}
       closeOnClickOutside={false}
-      title={`${upperFirst(type)} Evaluation Topic ${courseNo}`}
-      size={type === "add" && topicLenght > 0 ? "70vw" : "45vw"}
+      title={`${upperFirst(type)} Evaluation Topic`}
+      size={
+        type === "add" && form.getValues().eval?.length! > 0 ? "70vw" : "45vw"
+      }
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
-        content: `flex flex-col bg-[#F6F7FA] overflow-hidden `,
+        content: `flex flex-col bg-[#F6F7FA] overflow-hidden`,
         body: `overflow-hidden ${height}`,
       }}
     >
       <div
-        className={`flex flex-col  !gap-5 ${
+        className={`flex flex-col !gap-5 ${
           type === "add" ? "h-full" : "h-fit  "
         } `}
       >
@@ -56,10 +135,12 @@ export default function ModalManageEvalTopic({
         >
           {/* Input Field */}
           <div
-            className={`flex flex-col justify-between ${
+            className={`flex flex-col justify-between rounded-md ${
               type === "add" && "p-5"
             } gap-1 overflow-hidden ${
-              topicLenght > 0 && type === "add" ? "w-[45%]" : "w-full"
+              form.getValues().eval?.length! > 0 && type === "add"
+                ? "w-[45%]"
+                : "w-full"
             } h-full`}
             style={{
               boxShadow:
@@ -82,13 +163,14 @@ export default function ModalManageEvalTopic({
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. แบบทดสอบ 1"
+                {...formOneTopic.getInputProps("topicTH")}
               />
               <TextInput
                 autoFocus={false}
                 label={
                   <p className="font-semibold flex gap-1">
                     Evaluation Topic{" "}
-                    <span className="text-secondary">English language </span>
+                    <span className="text-secondary">English language</span>
                     <span className=" text-error">*</span>
                   </p>
                 }
@@ -98,6 +180,7 @@ export default function ModalManageEvalTopic({
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. Test 1"
+                {...formOneTopic.getInputProps("topicEN")}
               />
               <Textarea
                 autoFocus={false}
@@ -108,13 +191,14 @@ export default function ModalManageEvalTopic({
                   label: "flex pb-1",
                 }}
                 placeholder="(Optional)"
+                {...formOneTopic.getInputProps("desc")}
               />
               <NumberInput
                 size="xs"
                 label={
                   <p className="font-semibold flex gap-1 h-full">
                     Evaluation Percentage (%)
-                    <span className=" text-error">*</span>
+                    <span className="text-error">*</span>
                   </p>
                 }
                 classNames={{
@@ -124,9 +208,9 @@ export default function ModalManageEvalTopic({
                 }}
                 allowNegative={false}
                 handlersRef={handlersRef}
-                defaultValue={0}
-                step={1}
-                max={100}
+                step={5}
+                min={0}
+                max={100 - percentTotal}
                 rightSection={
                   <div className="flex gap-2 items-center mr-16">
                     <div
@@ -146,18 +230,25 @@ export default function ModalManageEvalTopic({
                     </div>
                   </div>
                 }
+                {...formOneTopic.getInputProps("percent")}
               />
             </div>
 
             {/* Add More Button */}
             {type === "add" && (
               <div className="flex justify-end">
-                <Button variant="outline">Add more</Button>
+                <Button
+                  variant="outline"
+                  disabled={percentTotal == 100}
+                  onClick={addMore}
+                >
+                  Add more
+                </Button>
               </div>
             )}
           </div>
           {/* List CLO */}
-          {!!topicLenght && type === "add" && (
+          {!!form.getValues().eval?.length! && type === "add" && (
             <div
               className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-[492px]"
               style={{
@@ -168,31 +259,38 @@ export default function ModalManageEvalTopic({
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
                   <span className="flex flex-row items-center gap-2">
-                    {" "}
-                    <IconList />
-                    List Evaluation Topic Added
+                    <IconList /> List Evaluation Topic Added
                   </span>
                 </div>
                 <p>
-                  {topicLenght} Topic{topicLenght > 1 ? "s" : ""}
+                  {form.getValues().eval?.length!} Topic
+                  {form.getValues().eval?.length! > 1 ? "s" : ""}
                 </p>
               </div>
-
               <div className="flex flex-col w-full h-fit px-4">
-                {Array.from({ length: topicLenght }).map((_, index) => (
+                {form.getValues().eval?.map((item, index) => (
                   <div
-                    key={index}
+                    ref={
+                      index === form.getValues().eval?.length! - 1
+                        ? topicRef
+                        : undefined
+                    }
                     className={`py-3 w-full border-b-[1px] pl-3  ${
-                      Array.length > 1 ? "last:border-none last:pb-5" : ""
+                      form.getValues().eval?.length! > 1
+                        ? "last:border-none last:pb-5"
+                        : ""
                     } `}
                   >
                     <div className="flex flex-col gap-2 w-full">
                       <div className="flex items-center justify-between">
                         <p className="text-secondary mb-2 font-semibold text-[14px]">
-                          Eval Topic {index + 1} (0%)
+                          Eval Topic {item.no} ({item.percent}%)
                         </p>
 
-                        <div className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer">
+                        <div
+                          className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer"
+                          onClick={() => removeTopic(index)}
+                        >
                           <IconTrash
                             stroke={1.5}
                             color="#FF4747"
@@ -205,14 +303,14 @@ export default function ModalManageEvalTopic({
                     <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
                       <div className="flex justify-between items-center font-semibold">
                         <div className="flex text-pretty">
-                          <li></li> สอบกลางภาค (Midterm Exam)
+                          <li></li> {item.topicTH} ({item.topicEN})
                         </div>
                       </div>
-                      <div className="flex text-pretty">
-                        <li></li>{" "}
-                        วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูง
-                        ครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ
-                      </div>
+                      {!!item.desc.length && (
+                        <div className="flex text-pretty">
+                          <li></li> {item.desc}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -226,7 +324,15 @@ export default function ModalManageEvalTopic({
             Cancel
           </Button>
           <Button
-          // onClick={submit}
+            onClick={() => {
+              setEvalList(
+                type == "add" ? form.getValues().eval : formOneTopic.getValues()
+              );
+              onClose();
+            }}
+            disabled={
+              type == "add" ? form.getValues().eval?.length == 0 : false
+            }
           >
             Done
           </Button>

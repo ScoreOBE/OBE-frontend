@@ -1,15 +1,5 @@
-import { COURSE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import {
-  Radio,
-  Checkbox,
-  TextInput,
-  Textarea,
-  Button,
-  Alert,
-  Group,
-  Tooltip,
-} from "@mantine/core";
+import { Radio, Button, Alert, Group, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import { Table, rem } from "@mantine/core";
@@ -20,15 +10,13 @@ import {
   IconGripVertical,
   IconTrash,
 } from "@tabler/icons-react";
-import {
-  IconExclamationCircle,
-  IconInfoCircle,
-  IconPlus,
-} from "@tabler/icons-react";
+import { IconInfoCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import Icon from "../Icon";
 import ModalManageEvalTopic from "../Modal/TQF3/ModalManageEvalTopic";
 import { IModelCourse } from "@/models/ModelCourse";
+import { IModelEval, IModelTQF3Part3 } from "@/models/ModelTQF3";
+import { cloneDeep, isEqual } from "lodash";
 
 type Props = {
   data: IModelCourse;
@@ -36,53 +24,50 @@ type Props = {
 };
 
 export default function Part3TQF3({ data, setForm }: Props) {
-  const dataTest = [
-    {
-      no: 1,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
-    },
-    {
-      no: 2,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
-    },
-    {
-      no: 3,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
-    },
-    {
-      no: 4,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
-    },
-    {
-      no: 5,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
-    },
-    {
-      no: 6,
-      topicTH: "สอบกลางภาค",
-      topicEN: "Midterm Exam",
-      des: "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evaPercent: "10%",
-    },
-  ];
-  const [state, handlers] = useListState(dataTest);
+  const [percentTotal, setPercentTotal] = useState(0);
+  const [editData, setEditData] = useState<any>();
   const [openModalAddEvalTopic, setOpenModalAddEvalTopic] = useState(false);
   const [openModalEditEvalTopic, setOpenModalEditEvalTopic] = useState(false);
+  const [openPopupDelTopic, setOpenPopupDelTopic] = useState(false);
+  const [openedTooltip, setOpenedTooltip] = useState(false);
+
+  const form = useForm({
+    mode: "controlled",
+    initialValues: {
+      gradingPolicy: "",
+      eval: [],
+    } as Partial<IModelTQF3Part3>,
+    validate: {
+      gradingPolicy: (value) => !value?.length && "Grading Policy is required",
+      eval: (value) => !value?.length && "Add Evaluation at least one",
+    },
+    validateInputOnBlur: true,
+    onValuesChange: (values, previous) => {
+      if (!isEqual(values.eval, previous.eval)) {
+        values.eval?.forEach((item, index) => {
+          item.no = index + 1;
+        });
+      }
+      if (!isEqual(values, previous)) {
+        setForm(form);
+        setPercentTotal(
+          values.eval?.reduce((acc, { percent }) => acc + percent, 0) || 0
+        );
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (data.TQF3?.part3) {
+      form.setValues(cloneDeep(data.TQF3.part3));
+    }
+  }, [data]);
+
+  const onClickDeleteTopic = () => {
+    form.removeListItem("eval", editData.no - 1);
+    setOpenPopupDelTopic(false);
+    setEditData(undefined);
+  };
 
   return (
     <>
@@ -90,15 +75,22 @@ export default function Part3TQF3({ data, setForm }: Props) {
         opened={openModalAddEvalTopic}
         onClose={() => setOpenModalAddEvalTopic(false)}
         type="add"
-        courseNo={data.courseNo!}
+        data={form.getValues().eval!}
+        total={percentTotal}
+        setEvalList={(value: IModelEval[]) =>
+          form.setFieldValue("eval", [...form.getValues().eval!, ...value])
+        }
       />
       <ModalManageEvalTopic
         opened={openModalEditEvalTopic}
         onClose={() => setOpenModalEditEvalTopic(false)}
         type="edit"
-        courseNo={data.courseNo!}
+        data={editData}
+        total={percentTotal}
+        setEvalList={(value: IModelEval) =>
+          form.setFieldValue(`eval.${editData.no - 1}`, value)
+        }
       />
-
       <div className="flex w-full">
         <div className="flex flex-col  w-full pb-8 gap-4">
           <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6] mt-1 pb-6 flex-col">
@@ -109,51 +101,68 @@ export default function Part3TQF3({ data, setForm }: Props) {
               </p>
             </div>
             <div className="flex flex-col font-medium text-default">
-              <Radio.Group>
+              <Radio.Group
+                key={form.key("gradingPolicy")}
+                classNames={{ error: "mt-2" }}
+                {...form.getInputProps("gradingPolicy")}
+              >
                 <Group className="flex flex-col items-start">
                   <Radio
-                    size="sm"
                     label="แบบอิงกลุ่ม (Norm-Referenced Grading)"
+                    value="แบบอิงกลุ่ม (Norm-Referenced Grading)"
                   />
-                  <Radio label="แบบอิงเกณฑ์ (Criterion-Referenced Grading)" />
-                  <Radio label="แบบอิงเกณฑ์และอิงกลุ่ม (Criterion and Norm-Referenced Grading)" />
+                  <Radio
+                    label="แบบอิงเกณฑ์ (Criterion-Referenced Grading)"
+                    value="แบบอิงเกณฑ์ (Criterion-Referenced Grading)"
+                  />
+                  <Radio
+                    label="แบบอิงเกณฑ์และอิงกลุ่ม (Criterion and Norm-Referenced Grading)"
+                    value="แบบอิงเกณฑ์และอิงกลุ่ม (Criterion and Norm-Referenced Grading)"
+                  />
                 </Group>
               </Radio.Group>
             </div>
           </div>
-          {/* <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3 pb-5">
-            <div className="flex text-secondary  flex-col  text-[15px]">
-              <p className="font-semibold">
-                การกำหนดเกรด <span className=" text-red-500">*</span>
-              </p>
-              <p className="font-semibold">Grading</p>
-            </div>
-            <Radio.Group>
-              <Group className="flex flex-col items-start">
-                <Radio
-                  size="sm"
-                  label="แบบอิงกลุ่ม (Norm-Referenced Grading)"
-                />
-                <Radio label="แบบอิงเกณฑ์ (Criterion-Referenced Grading)" />
-                <Radio label="แบบอิงเกณฑ์และอิงกลุ่ม (Criterion and Norm-Referenced Grading)" />
-              </Group>
-            </Radio.Group>
-          </div> */}
           <div className="flex text-secondary items-center w-full justify-between">
             <div className="flex flex-row gap-1 text-[15px]">
               <p className="font-bold">
                 Course Syllabus<span className="ml-1 text-red-500">*</span>
               </p>
             </div>
-            <Button
-              className="text-center px-4"
-              onClick={() => setOpenModalAddEvalTopic(true)}
+            <Tooltip
+              withArrow
+              arrowPosition="side"
+              arrowOffset={15}
+              arrowSize={7}
+              position="bottom-end"
+              color="#FCFCFC"
+              label={
+                <div className="text-default text-[13px] p-2 flex flex-col gap-2">
+                  <p className="font-medium">
+                    <span className="text-secondary font-bold">
+                      Add Topic (Disabled)
+                    </span>{" "}
+                    <br />
+                    All topics have already been added. To make any changes,
+                    please edit the topics below.
+                  </p>
+                </div>
+              }
+              opened={percentTotal === 100 && openedTooltip}
             >
-              <div className="flex gap-2">
-                <Icon IconComponent={AddIcon} />
-                Add Evaluation Topic
-              </div>
-            </Button>
+              <Button
+                className="text-center px-4"
+                disabled={percentTotal === 100}
+                onClick={() => setOpenModalAddEvalTopic(true)}
+                onMouseOver={() => setOpenedTooltip(true)}
+                onMouseLeave={() => setOpenedTooltip(false)}
+              >
+                <div className="flex gap-2">
+                  <Icon IconComponent={AddIcon} />
+                  Add Evaluation Topic
+                </div>
+              </Button>
+            </Tooltip>
           </div>
           <div className="w-full">
             <Alert
@@ -201,7 +210,7 @@ export default function Part3TQF3({ data, setForm }: Props) {
           <DragDropContext
             onDragEnd={({ destination, source }) => {
               if (!destination) return; // Check if destination exists
-              handlers.reorder({
+              form.reorderListItem("eval", {
                 from: source.index,
                 to: destination.index,
               });
@@ -254,86 +263,102 @@ export default function Part3TQF3({ data, setForm }: Props) {
                   </Table.Tr>
                 </Table.Thead>
 
-                <Droppable droppableId="dnd-list" direction="vertical">
-                  {(provided) => (
-                    <Table.Tbody
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className="text-[13px] font-normal text-[#333333] w-full"
-                    >
-                      {state.map((item, index) => (
-                        <Draggable
-                          key={item.no.toString()}
-                          index={index}
-                          draggableId={item.no.toString()}
-                        >
-                          {(provided, snapshot) => (
-                            <Table.Tr
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              className={`table-row ${
-                                snapshot.isDragging ? "bg-hover " : ""
-                              }`}
-                              // style={{
-                              //   ...provided.draggableProps.style,
-                              //   display: "table-row",
-                              // }}
-                            >
-                              <Table.Td className="w-[5%] ">{item.no}</Table.Td>
-                              <Table.Td className="w-[15%] ">
-                                <p>{item.topicTH}</p>
-                                <p>{item.topicEN}</p>
-                              </Table.Td>
-                              <Table.Td className="w-[65%]">
-                                {item.des}
-                              </Table.Td>
-                              <Table.Td className="w-[5%] text-end text-b1 ">
-                                <p>{item.evaPercent}</p>
-                              </Table.Td>
-                              <Table.Td className="w-[20%]">
-                                <div className="flex justify-start gap-4 items-center">
-                                  <div
-                                    className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
-                                    onClick={() =>
-                                      setOpenModalEditEvalTopic(true)
-                                    }
-                                  >
-                                    <IconEdit className="size-4" stroke={1.5} />
+                {!form.getValues().eval?.length ? (
+                  <Table.Tbody>
+                    <Table.Tr>
+                      <Table.Td colSpan={6} className="text-center">
+                        No Course Syllabus
+                      </Table.Td>
+                    </Table.Tr>
+                  </Table.Tbody>
+                ) : (
+                  <Droppable droppableId="dnd-list" direction="vertical">
+                    {(provided) => (
+                      <Table.Tbody
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className="text-[13px] font-normal text-[#333333] w-full"
+                      >
+                        {form.getValues().eval?.map((item, index) => (
+                          <Draggable
+                            key={item.no.toString()}
+                            index={index}
+                            draggableId={item.no.toString()}
+                          >
+                            {(provided, snapshot) => (
+                              <Table.Tr
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                className={`table-row ${
+                                  snapshot.isDragging ? "bg-hover " : ""
+                                }`}
+                                // style={{
+                                //   ...provided.draggableProps.style,
+                                //   display: "table-row",
+                                // }}
+                              >
+                                <Table.Td className="w-[5%] ">
+                                  {item.no}
+                                </Table.Td>
+                                <Table.Td className="w-[15%] ">
+                                  <p>{item.topicTH}</p>
+                                  <p>{item.topicEN}</p>
+                                </Table.Td>
+                                <Table.Td className="w-[65%]">
+                                  {item.desc}
+                                </Table.Td>
+                                <Table.Td className="w-[5%] text-end text-b1 ">
+                                  <p>{item.percent}</p>
+                                </Table.Td>
+                                <Table.Td className="w-[20%]">
+                                  <div className="flex justify-start gap-4 items-center">
+                                    <div
+                                      className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                                      onClick={() =>
+                                        setOpenModalEditEvalTopic(true)
+                                      }
+                                    >
+                                      <IconEdit
+                                        className="size-4"
+                                        stroke={1.5}
+                                      />
+                                    </div>
+                                    <div className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10">
+                                      <IconTrash
+                                        className="size-4"
+                                        stroke={1.5}
+                                      />
+                                    </div>
                                   </div>
-                                  <div className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10">
-                                    <IconTrash
-                                      className="size-4"
+                                </Table.Td>
+                                <Table.Td
+                                  className={`${
+                                    snapshot.isDragging ? "w-[10%]" : ""
+                                  }`}
+                                >
+                                  <div
+                                    className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center "
+                                    {...provided.dragHandleProps}
+                                  >
+                                    <IconGripVertical
+                                      style={{
+                                        width: "20px",
+                                        height: "20px",
+                                      }}
                                       stroke={1.5}
                                     />
                                   </div>
-                                </div>
-                              </Table.Td>
-                              <Table.Td
-                                className={`${
-                                  snapshot.isDragging ? "w-[10%]" : ""
-                                }`}
-                              >
-                                <div
-                                  className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center "
-                                  {...provided.dragHandleProps}
-                                >
-                                  <IconGripVertical
-                                    style={{
-                                      width: "20px",
-                                      height: "20px",
-                                    }}
-                                    stroke={1.5}
-                                  />
-                                </div>
-                              </Table.Td>
-                            </Table.Tr>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </Table.Tbody>
-                  )}
-                </Droppable>
+                                </Table.Td>
+                              </Table.Tr>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </Table.Tbody>
+                    )}
+                  </Droppable>
+                )}
+
                 <Table.Tfoot className="text-secondary font-semibold">
                   <Table.Tr className="bg-[#e5e7f6] border-none">
                     <Table.Th
@@ -342,7 +367,9 @@ export default function Part3TQF3({ data, setForm }: Props) {
                     >
                       Total
                     </Table.Th>
-                    <Table.Th className="text-[16px] text-end">60%</Table.Th>
+                    <Table.Th className="text-[16px] text-end">
+                      {percentTotal}%
+                    </Table.Th>
                     <Table.Th className="!rounded-br-md" colSpan={2}></Table.Th>
                   </Table.Tr>
                 </Table.Tfoot>
