@@ -35,41 +35,41 @@ export default function Part5TQF3({ data, setForm }: Props) {
   const courseCLO: IModelCLO[] = [
     {
       id: "kmskx",
-      cloNo: 1,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
-      cloDescEN:
+      no: 1,
+      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
+      descEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 1",
       learningMethod: [],
     },
     {
       id: "kmskx",
-      cloNo: 2,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.2",
-      cloDescEN:
+      no: 2,
+      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.2",
+      descEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 2",
       learningMethod: [],
     },
     {
       id: "kmskx",
-      cloNo: 3,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.3",
-      cloDescEN:
+      no: 3,
+      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.3",
+      descEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 3",
       learningMethod: [],
     },
     {
       id: "kmskx",
-      cloNo: 4,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.4",
-      cloDescEN:
+      no: 4,
+      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.4",
+      descEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 4",
       learningMethod: [],
     },
     {
       id: "kmskx",
-      cloNo: 5,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.5",
-      cloDescEN:
+      no: 5,
+      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.5",
+      descEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 5",
       learningMethod: [],
     },
@@ -184,8 +184,8 @@ export default function Part5TQF3({ data, setForm }: Props) {
                 <Table.Tr key={indexCLO} className="text-[13px] text-default">
                   <Table.Td className="!p-0 sticky left-0 z-[1]">
                     <div className="flex flex-col gap-0.5 px-[25px] py-4 border-r-[1px] border-[#DEE2E6]">
-                      <p>{clo.cloDescTH}</p>
-                      <p>{clo.cloDescEN}</p>
+                      <p>{clo.descTH}</p>
+                      <p>{clo.descEN}</p>
                     </div>
                   </Table.Td>
                   {coursePLO?.data!.map((plo: any, index: number) => (
