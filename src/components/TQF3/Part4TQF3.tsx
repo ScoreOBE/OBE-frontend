@@ -29,105 +29,13 @@ type Props = {
 };
 
 export default function Part4TQF3({ data, setForm }: Props) {
-  const evalTest = [
-    {
-      id: "1",
-      evalNo: 1,
-      evalTopicTH: "สอบกลางภาค",
-      evalTopicEN: "Midterm Exam",
-      evalDesc:
-        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 30,
-    },
-    {
-      id: "2",
-      evalNo: 2,
-      evalTopicTH: "สอบกลางภาค",
-      evalTopicEN: "Midterm Exam",
-      evalDesc:
-        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 30,
-    },
-    {
-      id: "3",
-      evalNo: 3,
-      evalTopicTH: "สอบกลางภาค",
-      evalTopicEN: "Midterm Exam",
-      evalDesc:
-        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 30,
-    },
-    {
-      id: "4",
-      evalNo: 4,
-      evalTopicTH: "สอบกลางภาค",
-      evalTopicEN: "Midterm Exam",
-      evalDesc:
-        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 10,
-    },
-    {
-      id: "5",
-      evalNo: 5,
-      evalTopicTH: "สอบกลางภาค",
-      evalTopicEN: "Midterm Exam",
-      evalDesc:
-        "วัดผลความรู้ความเข้าใจเกี่ยวกับโครงสร้างและการทำงานของระบบปฏิบัติการขั้นสูงครอบคลุมทั้งภาคทฤษฎีและปฏิบัติ",
-      evalPercent: 20,
-    },
-  ];
-
-  // fixed Data
-  const courseCLO: IModelCLO[] = [
-    {
-      id: "kmskx",
-      cloNo: 1,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์",
-      cloDescEN:
-        "Explain the working principle of computer operating systems the working principle of computer operating systems 1",
-      learningMethod: [],
-    },
-    {
-      id: "kmskx",
-      cloNo: 2,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์",
-      cloDescEN:
-        "Explain the working principle of computer operating systems the working principle of computer operating systems 2",
-      learningMethod: [],
-    },
-    {
-      id: "kmskx",
-      cloNo: 3,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์",
-      cloDescEN:
-        "Explain the working principle of computer operating systems the working principle of computer operating systems 3",
-      learningMethod: [],
-    },
-    {
-      id: "kmskx",
-      cloNo: 4,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์",
-      cloDescEN:
-        "Explain the working principle of computer operating systems the working principle of computer operating systems 4",
-      learningMethod: [],
-    },
-    {
-      id: "kmskx",
-      cloNo: 5,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์",
-      cloDescEN:
-        "Explain the working principle of computer operating systems the working principle of computer operating systems 5",
-      learningMethod: [],
-    },
-  ];
-
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const form = useForm({
     mode: "controlled",
     initialValues: {
-      data: courseCLO.map((clo) => ({
+      data: data.TQF3?.part2?.clo.map((clo) => ({
         clo: clo,
-        evals: [{ eval: {}, evalWeek: [] as number[] }],
+        evals: [],
       })) as IModelTQF3Part4[],
     },
     validate: {},
@@ -143,7 +51,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
     <div className="flex w-full max-h-full overflow-hidden">
       <div className="flex flex-col w-full">
         <Tabs
-          defaultValue={courseCLO[0]?.cloNo.toString()}
+          defaultValue={form.getValues().data[0].clo?.id}
           classNames={{
             root: "overflow-hidden flex flex-col pt-4 w-full",
             tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
@@ -151,29 +59,29 @@ export default function Part4TQF3({ data, setForm }: Props) {
           }}
         >
           <Tabs.List className="!bg-transparent items-center flex w-full gap-5">
-            {courseCLO.map((clo) => (
-              <Tabs.Tab key={clo.cloNo} value={clo.cloNo.toString()}>
+            {form.getValues().data.map((item) => (
+              <Tabs.Tab key={item.clo.id} value={item.clo.id}>
                 <div className="flex flex-row items-center gap-2">
                   <Icon IconComponent={CheckIcon} className="text-[#24b9a5]" />
-                  <p>CLO {clo.cloNo}</p>
+                  <p>CLO {item.clo.no}</p>
                 </div>
               </Tabs.Tab>
             ))}
           </Tabs.List>
 
-          {courseCLO.map((clo) => (
+          {form.getValues().data.map((item, index) => (
             <Tabs.Panel
-              key={clo.cloNo}
-              value={clo.cloNo.toString()}
+              key={item.clo.id}
+              value={item.clo.id}
               className="overflow-hidden flex h-full"
             >
               <div className="flex text-secondary overflow-y-auto  max-h-full gap-4 items-start w-full px-3 pb-7 py-5 pr-3 flex-col">
                 <div className="flex flex-col gap-[2px] text-[15px]">
                   <p className="font-bold">
-                    CLO {clo.cloNo} -{" "}
-                    <span className="font-semibold">{clo.cloDescTH}</span>
+                    CLO {item.clo.no} -{" "}
+                    <span className="font-semibold">{item.clo.descTH}</span>
                   </p>
-                  <p className="font-bold">{clo.cloDescEN}</p>
+                  <p className="font-bold">{item.clo.descEN}</p>
                 </div>
                 <div className="w-full">
                   <Alert
@@ -263,71 +171,100 @@ export default function Part4TQF3({ data, setForm }: Props) {
                     </Table.Thead>
 
                     <Table.Tbody className="text-[13px] font-normal text-[#333333] ">
-                      {evalTest.map((item, index) => (
-                        <Table.Tr key={index}>
-                          <Table.Td>
-                            <Checkbox
-                              aria-label="Select row"
-                              value={item.evalNo}
-                              checked={selectedRows.includes(item.evalNo)}
-                              onChange={(event) => {
-                                if (
-                                  event.target.checked &&
-                                  !selectedRows.includes(item.evalNo)
-                                ) {
-                                  setSelectedRows((prev) => [
-                                    ...prev,
-                                    item.evalNo,
-                                  ]);
-                                } else if (
-                                  !event.target.checked &&
-                                  selectedRows.includes(item.evalNo)
-                                ) {
-                                  setSelectedRows(
-                                    selectedRows.filter(
-                                      (row) => row != item.evalNo
-                                    )
-                                  );
-                                }
-                              }}
-                            />
-                          </Table.Td>
-                          <Table.Td>
-                            <p className="w-fit">{item.evalTopicTH}</p>
-                            <p className="w-fit">{item.evalTopicEN}</p>
-                          </Table.Td>
-                          <Table.Td>{item.evalDesc}</Table.Td>
-                          <Table.Td>
-                            <Select
-                              disabled={!selectedRows.includes(item.evalNo)}
-                              data={[{ value: "test", label: "Test" }]}
-                              classNames={{
-                                option: "text-[13px] py-2 px-3",
-                                options:
-                                  "whitespace-pre-wrap leading-5 overflow-y-auto",
-                                input: `whitespace-break-spaces flex flex-col flex-wrap ${
-                                  !selectedRows.includes(item.evalNo) &&
-                                  "!bg-hover"
-                                }`,
-                              }}
-                            />
-                          </Table.Td>
-                          <Table.Td className="pr-6 text-end text-b1 ">
-                            <div className="flex font-semibold flex-row items-center gap-2">
-                              <TextInput
-                                disabled={!selectedRows.includes(item.evalNo)}
+                      {data.TQF3?.part3?.eval.map((evalItem) => {
+                        const evalIndex = form
+                          .getValues()
+                          .data[index].evals.map((e, i) => {
+                            if (e.eval.no === evalItem.no) return i;
+                          })[0]!;
+
+                        return (
+                          <Table.Tr key={evalItem.no}>
+                            <Table.Td>
+                              <Checkbox
+                                aria-label="Select row"
+                                value={evalItem.no}
+                                onChange={(event) => {
+                                  if (
+                                    event.target.checked &&
+                                    !selectedRows.includes(evalItem.no)
+                                  ) {
+                                    setSelectedRows((prev) => [
+                                      ...prev,
+                                      evalItem.no,
+                                    ]);
+                                    form.insertListItem(`data.${index}.evals`, {
+                                      eval: evalItem,
+                                      evalWeek: [],
+                                      percent: 0,
+                                    });
+                                  } else if (
+                                    !event.target.checked &&
+                                    selectedRows.includes(evalItem.no)
+                                  ) {
+                                    setSelectedRows(
+                                      selectedRows.filter(
+                                        (row) => row != evalItem.no
+                                      )
+                                    );
+                                    {
+                                      form.removeListItem(
+                                        `data.${index}.evals`,
+                                        evalIndex
+                                      );
+                                    }
+                                  }
+                                }}
+                              />
+                            </Table.Td>
+                            <Table.Td>
+                              <p className="w-fit">{evalItem.topicTH}</p>
+                              <p className="w-fit">{evalItem.topicEN}</p>
+                            </Table.Td>
+                            <Table.Td>{evalItem.desc}</Table.Td>
+                            <Table.Td>
+                              <Select
+                                data={[{ value: "test", label: "Test" }]}
                                 classNames={{
-                                  input: `!rounded-[4px] ${
-                                    !selectedRows.includes(item.evalNo) &&
+                                  option: "text-[13px] py-2 px-3",
+                                  options:
+                                    "whitespace-pre-wrap leading-5 overflow-y-auto",
+                                  input: `whitespace-break-spaces flex flex-col flex-wrap ${
+                                    !selectedRows.includes(evalItem.no) &&
                                     "!bg-hover"
                                   }`,
                                 }}
-                              ></TextInput>
-                              %
-                            </div>
-                          </Table.Td>
-                        </Table.Tr>
-                      ))}
+                              />
+                            </Table.Td>
+                            <Table.Td className="pr-6 text-end text-b1 ">
+                              <div className="flex font-semibold flex-row items-center gap-2">
+                                <TextInput
+                                  // disabled={
+                                  //   !form
+                                  //     .getValues()
+                                  //     .data[index].evals.find((e) => {
+                                  //       e.eval.no === evalItem.no;
+                                  //     })
+                                  // }
+                                  classNames={{
+                                    input: `!rounded-[4px] ${
+                                      !form
+                                        .getValues()
+                                        .data[index].evals.find((e) => {
+                                          e.eval.no === evalItem.no;
+                                        }) && "!bg-hover"
+                                    }`,
+                                  }}
+                                  {...form.getInputProps(
+                                    `data.${index}.evals.${evalIndex}.percent`
+                                  )}
+                                ></TextInput>
+                                %
+                              </div>
+                            </Table.Td>
+                          </Table.Tr>
+                        );
+                      })}
                     </Table.Tbody>
 
                     <Table.Tfoot className="text-secondary   font-semibold  ">

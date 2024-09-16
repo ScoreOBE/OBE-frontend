@@ -35,41 +35,41 @@ export default function Part5TQF3({ data, setForm }: Props) {
   const courseCLO: IModelCLO[] = [
     {
       id: "kmskx",
-      cloNo: 1,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
-      cloDescEN:
+      no: 1,
+      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
+      descEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 1",
       learningMethod: [],
     },
     {
       id: "kmskx",
-      cloNo: 2,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.2",
-      cloDescEN:
+      no: 2,
+      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.2",
+      descEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 2",
       learningMethod: [],
     },
     {
       id: "kmskx",
-      cloNo: 3,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.3",
-      cloDescEN:
+      no: 3,
+      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.3",
+      descEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 3",
       learningMethod: [],
     },
     {
       id: "kmskx",
-      cloNo: 4,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.4",
-      cloDescEN:
+      no: 4,
+      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.4",
+      descEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 4",
       learningMethod: [],
     },
     {
       id: "kmskx",
-      cloNo: 5,
-      cloDescTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.5",
-      cloDescEN:
+      no: 5,
+      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.5",
+      descEN:
         "Explain the working principle of computer operating systems the working principle of computer operating systems 5",
       learningMethod: [],
     },
