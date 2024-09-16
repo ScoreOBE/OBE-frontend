@@ -32,6 +32,7 @@ import Icon from "@/components/Icon";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
 import ModalUploadScore from "../components/Modal/ModalUploadScore";
+import ModalUploadStudentList from "@/components/Modal/ModalUploadStudentList";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -50,6 +51,8 @@ export default function Dashboard() {
   const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
   const [openModalSelectCourse, setOpenModalSelectCourse] = useState(false);
   const [openModalUploadScore, setOpenModalUploadScore] = useState(false);
+  const [openModalUploadStudentList, setOpenModalUploadStudentList] =
+    useState(false);
   const [uploadCourse, setUploadCourse] = useState<Partial<IModelCourse>>();
 
   useEffect(() => {
@@ -229,8 +232,8 @@ export default function Dashboard() {
               </div>
               <Button
                 onClick={() => {
-                  setOpenModalUploadScore(true),
-                    setOpenModalSelectCourse(false);
+                  setOpenModalUploadStudentList(true);
+                  setOpenModalSelectCourse(false);
                 }}
                 disabled={!uploadCourse}
                 rightSection={
@@ -252,6 +255,15 @@ export default function Dashboard() {
         data={uploadCourse!}
         opened={openModalUploadScore}
         onClose={() => setOpenModalUploadScore(false)}
+      />
+      <ModalUploadStudentList
+        data={uploadCourse!}
+        opened={openModalUploadStudentList}
+        onClose={() => setOpenModalUploadStudentList(false)}
+        onBack={() => {
+          setOpenModalUploadStudentList(false), setOpenModalSelectCourse(true);
+        }}
+        onNext={() => {setOpenModalUploadScore(true), setOpenModalUploadStudentList(false)}}
       />
 
       <div className=" flex flex-col h-full w-full  overflow-hidden">
