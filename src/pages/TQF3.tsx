@@ -383,11 +383,11 @@ export default function TQF3() {
             part={tqf3Part as partType}
             data={tqf3[tqf3Part as keyof IModelTQF3]}
             onSave={onSave}
-            // disabledSave={isEqual(
-            //   tqf3![tqf3Part! as keyof IModelTQF3],
-            //   form?.getValues()
-            // )}
-            disabledSave={false}
+            disabledSave={isEqual(
+              tqf3![tqf3Part! as keyof IModelTQF3],
+              form?.getValues()
+            )}
+            // disabledSave={false}
           />
         )}
     </>

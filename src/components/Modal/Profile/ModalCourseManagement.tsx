@@ -19,12 +19,7 @@ import {
   deleteSectionManagement,
   getCourseManagement,
 } from "@/services/courseManagement/courseManagement.service";
-import {
-  COURSE_TYPE,
-  NOTI_TYPE,
-  POPUP_TYPE,
-  ROLE,
-} from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import {
   getSectionNo,
   getUserName,
@@ -252,7 +247,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         opened={openMainPopupDelCourse}
         onClose={() => setOpenMainPopupDelCourse(false)}
         action={() => onClickDeleteCourse(editCourse)}
-        type={POPUP_TYPE.DELETE}
+        type="delete"
         labelButtonRight="Delete course"
         title={`Delete course`}
         message={
@@ -292,7 +287,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         opened={openMainPopupDelSec}
         onClose={() => setOpenMainPopupDelSec(false)}
         action={() => onClickDeleteSec(editSec)}
-        type={POPUP_TYPE.DELETE}
+        type="delete"
         labelButtonRight="Delete section"
         title={`Delete section`}
         message={

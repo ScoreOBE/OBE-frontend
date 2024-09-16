@@ -18,6 +18,7 @@ import unplug from "@/assets/image/unplug.png";
 import { IModelCLO, IModelSchedule, IModelTQF3Part2 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
 import { EVALUATE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
+import MainPopup from "../Popup/MainPopup";
 
 type Props = {
   data: IModelCourse;
@@ -28,6 +29,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
   const [editData, setEditData] = useState<any>();
   const [openModalAddCLO, setOpenModalAddCLO] = useState(false);
   const [openModalEditCLO, setOpenModalEditCLO] = useState(false);
+  const [openPopupDelCLO, setOpenPopupDelCLO] = useState(false);
   const [openModalAddTopic, setOpenModalAddTopic] = useState(false);
   const [openModalEditTopic, setOpenModalEditTopic] = useState(false);
 
@@ -63,6 +65,12 @@ export default function Part2TQF3({ data, setForm }: Props) {
       form.setValues(cloneDeep(data.TQF3.part2));
     }
   }, [data]);
+
+  const onClickDeleteCLO = () => {
+    form.removeListItem("clo", editData.cloNo - 1);
+    setOpenPopupDelCLO(false);
+    setEditData(undefined);
+  };
 
   return (
     <>
@@ -100,9 +108,17 @@ export default function Part2TQF3({ data, setForm }: Props) {
           form.setFieldValue(`schedule.${editData.cloNo - 1}`, value)
         }
       />
+      <MainPopup
+        opened={openPopupDelCLO}
+        onClose={() => setOpenPopupDelCLO(false)}
+        type="delete"
+        title={`Delete CLO ${editData?.cloNo}`}
+        message="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        labelButtonRight="Delete CLO"
+        action={onClickDeleteCLO}
+      />
       {data.TQF3?.part1 ? (
         <div className="flex flex-col w-full max-h-full gap-5 py-1">
-          {/*  */}
           <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 pb-5   ">
             <div className="flex text-secondary flex-col  text-[15px]">
               <p className="font-semibold">
@@ -127,7 +143,6 @@ export default function Part2TQF3({ data, setForm }: Props) {
               </div>
             </Checkbox.Group>
           </div>
-          {/*  */}
           <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 pb-5  ">
             <div className="flex text-secondary flex-col text-[15px]">
               <p className="font-semibold text-[15px]">
@@ -191,7 +206,6 @@ export default function Part2TQF3({ data, setForm }: Props) {
                 </p>
               }
             ></Alert>
-            {/* Table */}
             <DragDropContext
               onDragEnd={({ destination, source }) => {
                 if (!destination) return;
@@ -283,7 +297,13 @@ export default function Part2TQF3({ data, setForm }: Props) {
                                           stroke={1.5}
                                         />
                                       </div>
-                                      <div className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10">
+                                      <div
+                                        className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                                        onClick={() => {
+                                          setEditData(item);
+                                          setOpenPopupDelCLO(true);
+                                        }}
+                                      >
                                         <IconTrash
                                           className="size-4"
                                           stroke={1.5}
@@ -333,14 +353,12 @@ export default function Part2TQF3({ data, setForm }: Props) {
           >
             <div className="flex text-secondary items-center w-full justify-between">
               <p className="font-semibold text-[15px]">
-                เนื้อหาวิชาและแผนการสอน
+                เนื้อหาวิชาและแผนการสอน{" "}
                 <span className="font-bold">
-                  {" "}
                   (Course content and Schedule){" "}
                   <span className=" text-red-500">*</span>
                 </span>
               </p>
-
               <Button
                 className="text-center px-4"
                 onClick={() => setOpenModalAddTopic(true)}
@@ -351,7 +369,6 @@ export default function Part2TQF3({ data, setForm }: Props) {
                 </div>
               </Button>
             </div>
-            {/* Table */}
             <DragDropContext
               onDragEnd={({ destination, source }) => {
                 if (!destination) return;
@@ -523,7 +540,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
               To start TQF3 Part 2, please complete and save TQF3 Part 1. <br />{" "}
               Once done, you can continue to do it.
             </p>
-          </div>{" "}
+          </div>
           <img
             className=" z-50  w-[580px] h-[300px] "
             src={unplug}

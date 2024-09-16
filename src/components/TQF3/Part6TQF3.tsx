@@ -1,38 +1,12 @@
-import {
-  COURSE_TYPE,
-  NOTI_TYPE,
-  POPUP_TYPE,
-  TEACHING_METHOD,
-} from "@/helpers/constants/enum";
-import {
-  Radio,
-  Checkbox,
-  TextInput,
-  Textarea,
-  Button,
-  Alert,
-  Table,
-  Group,
-  Modal,
-  Select,
-  Tooltip,
-} from "@mantine/core";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { Checkbox, Textarea, Button, Group, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import {
-  IconArrowRight,
-  IconEdit,
-  IconExclamationCircle,
-  IconInfoCircle,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
-import IconPLO from "@/assets/icons/PLOdescription.svg?react";
-import DrawerPLOdes from "@/components/DrawerPLO";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ModalManageTopic from "../Modal/TQF3/ModalManageTopic";
 import { IModelCourse } from "@/models/ModelCourse";
-import { log } from "console";
 import { IModelTQF3Part6 } from "@/models/ModelTQF3";
 import MainPopup from "../Popup/MainPopup";
 import { showNotifications } from "@/helpers/functions/function";
@@ -195,7 +169,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
         opened={openPopupDelAddiTopic}
         onClose={() => setOpenPopupDelAddiTopic(false)}
         action={onClickDeleteAddiTopic}
-        type={POPUP_TYPE.DELETE}
+        type="delete"
         labelButtonRight={`Delete Topic ${deleteIndex + 1}`}
         title={`Delete Addition Topic ${deleteIndex + 1}`}
         message={

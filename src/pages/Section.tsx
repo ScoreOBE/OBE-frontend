@@ -21,7 +21,7 @@ import {
 } from "@/helpers/functions/function";
 import PageError from "./PageError";
 import MainPopup from "@/components/Popup/MainPopup";
-import { COURSE_TYPE, NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import ModalEditSection from "@/components/Modal/CourseManage/ModalEditSection";
 import Icon from "@/components/Icon";
 import ExcelIcon from "@/assets/icons/excel.svg?react";
@@ -138,7 +138,7 @@ export default function Section() {
         opened={openMainPopupDelCourse}
         onClose={() => setOpenMainPopupDelCourse(false)}
         action={() => onClickDeleteSec()}
-        type={POPUP_TYPE.DELETE}
+        type="delete"
         labelButtonRight="Delete section"
         title={`Delete section`}
         message={

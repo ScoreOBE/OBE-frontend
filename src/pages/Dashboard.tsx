@@ -22,7 +22,7 @@ import notFoundImage from "@/assets/image/notFound.png";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import MainPopup from "../components/Popup/MainPopup";
 import ModalEditCourse from "../components/Modal/CourseManage/ModalEditCourse";
-import { NOTI_TYPE, POPUP_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
+import { NOTI_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
@@ -138,7 +138,7 @@ export default function Dashboard() {
         opened={openDelPopup}
         onClose={() => setOpenDelPopup(false)}
         action={() => onClickDeleteCourse(delCourse?.id!)}
-        type={POPUP_TYPE.DELETE}
+        type="delete"
         labelButtonRight="Delete course"
         title={`Delete course`}
         message={

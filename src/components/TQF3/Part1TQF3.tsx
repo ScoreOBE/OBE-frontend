@@ -12,6 +12,7 @@ import {
   NumberInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { isEqual } from "lodash";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -55,11 +56,13 @@ export default function Part1TQF3({ data, setForm }: Props) {
       },
     },
     validateInputOnBlur: true,
+    onValuesChange(values, previous) {
+      if (!isEqual(values, previous)) {
+        values.instructors = values.instructors.filter((ins) => ins.length);
+        setForm(form);
+      }
+    },
   });
-
-  useEffect(() => {
-    setForm(form);
-  }, [form.getValues()]);
 
   useEffect(() => {
     if (data) {
