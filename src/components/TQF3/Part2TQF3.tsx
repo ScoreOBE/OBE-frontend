@@ -32,6 +32,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
   const [openPopupDelCLO, setOpenPopupDelCLO] = useState(false);
   const [openModalAddTopic, setOpenModalAddTopic] = useState(false);
   const [openModalEditTopic, setOpenModalEditTopic] = useState(false);
+  const [openPopupDelTopic, setOpenPopupDelTopic] = useState(false);
 
   const form = useForm({
     mode: "controlled",
@@ -44,13 +45,17 @@ export default function Part2TQF3({ data, setForm }: Props) {
         !value?.length && "Select Teaching Method at least one",
       evaluate: (value) => !value?.length && "Evaluation is required",
       clo: (value) => !value?.length && "Add CLO at least one",
-      // schedule: (value) => !value?.length && "Schedule is required",
+      schedule: (value) => !value?.length && "Schedule is required",
     },
     validateInputOnBlur: true,
     onValuesChange: (values, prev) => {
       if (!isEqual(values.clo, prev.clo)) {
         values.clo?.forEach((clo, index) => {
           clo.cloNo = index + 1;
+        });
+      } else if (!isEqual(values.schedule, prev.schedule)) {
+        values.schedule?.forEach((week, index) => {
+          week.weekNo = index + 1;
         });
       }
     },
@@ -69,6 +74,12 @@ export default function Part2TQF3({ data, setForm }: Props) {
   const onClickDeleteCLO = () => {
     form.removeListItem("clo", editData.cloNo - 1);
     setOpenPopupDelCLO(false);
+    setEditData(undefined);
+  };
+
+  const onClickDeleteTopic = () => {
+    form.removeListItem("schedule", editData.weekNo - 1);
+    setOpenPopupDelTopic(false);
     setEditData(undefined);
   };
 
@@ -94,6 +105,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
         opened={openModalAddTopic}
         onClose={() => setOpenModalAddTopic(false)}
         type="add"
+        teachingMethod={form.getValues().teachingMethod ?? []}
         data={form.getValues().schedule!}
         setScheduleList={(value: IModelSchedule[]) =>
           form.setFieldValue("schedule", value)
@@ -103,9 +115,10 @@ export default function Part2TQF3({ data, setForm }: Props) {
         opened={openModalEditTopic}
         onClose={() => setOpenModalEditTopic(false)}
         type="edit"
+        teachingMethod={form.getValues().teachingMethod ?? []}
         data={editData}
         setScheduleList={(value: IModelSchedule) =>
-          form.setFieldValue(`schedule.${editData.cloNo - 1}`, value)
+          form.setFieldValue(`schedule.${editData.weekNo - 1}`, value)
         }
       />
       <MainPopup
@@ -116,6 +129,15 @@ export default function Part2TQF3({ data, setForm }: Props) {
         message="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         labelButtonRight="Delete CLO"
         action={onClickDeleteCLO}
+      />
+      <MainPopup
+        opened={openPopupDelTopic}
+        onClose={() => setOpenPopupDelTopic(false)}
+        type="delete"
+        title={`Delete Course Content Week ${editData?.weekNo}`}
+        message="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        labelButtonRight="Delete Course Content"
+        action={onClickDeleteTopic}
       />
       {data.TQF3?.part1 ? (
         <div className="flex flex-col w-full max-h-full gap-5 py-1">
@@ -168,7 +190,11 @@ export default function Part2TQF3({ data, setForm }: Props) {
             </Radio.Group>
           </div>
           {/* CLO */}
-          <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 pb-8">
+          <div
+            key={form.key("clo")}
+            {...form.getInputProps("clo")}
+            className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 pb-8"
+          >
             <div className="flex text-secondary items-center w-full justify-between">
               <p className="font-semibold text-[15px]">
                 วัตถุประสงค์ของกระบวนวิชา{" "}
@@ -435,7 +461,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
                                     {item.weekNo}
                                   </Table.Td>
                                   <Table.Td className="w-[30%]">
-                                    <p>{item.topicDesc}</p>
+                                    <p>{item.topic}</p>
                                   </Table.Td>
                                   <Table.Td className="w-[20%] text-end">
                                     <p>{item.lecHour}</p>
@@ -457,7 +483,13 @@ export default function Part2TQF3({ data, setForm }: Props) {
                                           stroke={1.5}
                                         />
                                       </div>
-                                      <div className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10">
+                                      <div
+                                        className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                                        onClick={() => {
+                                          setEditData(item);
+                                          setOpenPopupDelTopic(true);
+                                        }}
+                                      >
                                         <IconTrash
                                           className="size-4"
                                           stroke={1.5}

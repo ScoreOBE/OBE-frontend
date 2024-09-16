@@ -73,7 +73,7 @@ export interface IModelCLO {
 export interface IModelSchedule {
   id: string;
   weekNo: number;
-  topicDesc: string;
+  topic: string;
   lecHour: number;
   labHour: number;
 }
