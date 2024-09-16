@@ -1,3 +1,4 @@
+import { TEACHING_METHOD } from "@/helpers/constants/enum";
 import { validateTextInput } from "@/helpers/functions/validation";
 import { IModelSchedule, IModelTQF3Part2 } from "@/models/ModelTQF3";
 import {
@@ -6,6 +7,8 @@ import {
   Textarea,
   NumberInput,
   NumberInputHandlers,
+  FocusTrapInitialFocus,
+  rem,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconList, IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
@@ -18,6 +21,7 @@ type Props = {
   opened: boolean;
   onClose: () => void;
   type: actionType;
+  teachingMethod: string[];
   data: IModelSchedule[] | IModelSchedule;
   setScheduleList: (value: any) => void;
 };
@@ -25,6 +29,7 @@ export default function ModalManageTopic({
   opened,
   onClose,
   type,
+  teachingMethod,
   data,
   setScheduleList,
 }: Props) {
@@ -41,30 +46,34 @@ export default function ModalManageTopic({
   const formOneWeek = useForm({
     mode: "controlled",
     initialValues: {
-      weekNo: 0,
-      topicDesc: "",
+      weekNo: 1,
+      topic: "",
       lecHour: 0,
       labHour: 0,
     } as Partial<IModelSchedule>,
     validate: {
-      topicDesc: (value) =>
-        validateTextInput(value, "Course Content", 0, false),
+      topic: (value) => validateTextInput(value, "Course Content", 0, false),
     },
     validateInputOnBlur: true,
   });
 
-  // useEffect(() => {
-  //   if (data) {
-  //     if (type == "add") {
-  //       const length = (data as IModelCLO[]).length || 0;
-  //       form.setFieldValue("clo", data as IModelCLO[]);
-  //       formOneCLO.setFieldValue("cloNo", length + 1);
-  //       setCloLength(length);
-  //     } else {
-  //       formOneCLO.setValues(data as IModelCLO);
-  //     }
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data) {
+      if (type == "add") {
+        const length = (data as IModelSchedule[]).length || 0;
+        form.setFieldValue("schedule", data as IModelSchedule[]);
+        formOneWeek.setValues({
+          weekNo: length + 1,
+          topic: "",
+          lecHour: teachingMethod.includes(TEACHING_METHOD.LEC.en) ? 3 : 0,
+          labHour: teachingMethod.includes(TEACHING_METHOD.LAB.en) ? 3 : 0,
+        });
+        setTopicLenght(length);
+      } else {
+        formOneWeek.setValues(data as IModelSchedule);
+      }
+    }
+  }, [data]);
 
   const closeModal = () => {
     onClose();
@@ -73,19 +82,28 @@ export default function ModalManageTopic({
     formOneWeek.reset();
   };
 
-  // const addMore = () => {
-  //   if (!formOneCLO.validate().hasErrors) {
-  //     form.insertListItem("clo", formOneCLO.getValues());
-  //     setCloLength(cloLength + 1);
-  //     formOneCLO.setValues({
-  //       cloNo: formOneCLO.getValues().cloNo! + 1,
-  //       cloDescTH: "",
-  //       cloDescEN: "",
-  //       learningMethod: [],
-  //       other: "",
-  //     });
-  //   }
-  // };
+  const addMore = () => {
+    if (!formOneWeek.validate().hasErrors) {
+      form.insertListItem("schedule", formOneWeek.getValues());
+      setTopicLenght(topicLength + 1);
+      formOneWeek.setValues({
+        weekNo: formOneWeek.getValues().weekNo! + 1,
+        topic: "",
+        lecHour: teachingMethod.includes(TEACHING_METHOD.LEC.en) ? 3 : 0,
+        labHour: teachingMethod.includes(TEACHING_METHOD.LAB.en) ? 3 : 0,
+      });
+    }
+  };
+
+  const removeTopic = (index: number) => {
+    setTopicLenght(topicLength - 1);
+    form.removeListItem("schedule", index);
+    const newTopicList = form.getValues().schedule;
+    newTopicList?.forEach((week, i) => {
+      week.weekNo = i + 1;
+    });
+    formOneWeek.setFieldValue("weekNo", newTopicList?.length! + 1);
+  };
 
   return (
     <Modal
@@ -102,6 +120,7 @@ export default function ModalManageTopic({
         header: `mb-1`,
       }}
     >
+      <FocusTrapInitialFocus />
       <div
         className={`flex flex-col  !gap-5 ${
           type === "add" ? "h-full" : "h-fit  "
@@ -138,6 +157,7 @@ export default function ModalManageTopic({
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. การอินทิเกรต (Integration)"
+                {...formOneWeek.getInputProps("topic")}
               />
 
               <NumberInput
@@ -154,8 +174,9 @@ export default function ModalManageTopic({
                 size="xs"
                 allowNegative={false}
                 handlersRef={handlersLecRef}
-                defaultValue={0}
+                decimalScale={2}
                 step={1}
+                min={0}
                 max={100}
                 rightSection={
                   <div className="flex gap-2 items-center mr-16">
@@ -176,6 +197,7 @@ export default function ModalManageTopic({
                     </div>
                   </div>
                 }
+                {...formOneWeek.getInputProps("lecHour")}
               />
 
               <NumberInput
@@ -191,8 +213,9 @@ export default function ModalManageTopic({
                 size="xs"
                 allowNegative={false}
                 handlersRef={handlersLabRef}
-                defaultValue={0}
+                decimalScale={2}
                 step={1}
+                min={0}
                 max={100}
                 rightSection={
                   <div className="flex gap-2 items-center mr-16">
@@ -213,24 +236,21 @@ export default function ModalManageTopic({
                     </div>
                   </div>
                 }
+                {...formOneWeek.getInputProps("labHour")}
               />
             </div>
 
             {/* Add More Button */}
-
             {type === "add" && (
               <div className="absolute right-5 bottom-5">
-                <Button
-                  variant="outline"
-                  //   onClick={() => setIsAddAnother(true)}
-                >
+                <Button variant="outline" onClick={addMore}>
                   Add more
                 </Button>
               </div>
             )}
           </div>
-          {/* List CLO */}
-          {!!topicLength && type === "add" && (
+          {/* List Course Content */}
+          {!!form.getValues().schedule?.length && type === "add" && (
             <div
               className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-full"
               style={{
@@ -240,9 +260,8 @@ export default function ModalManageTopic({
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
+                  <IconList style={{ width: rem(20), height: rem(20) }} />{" "}
                   <span className="flex flex-row items-center gap-2">
-                    {" "}
-                    <IconList />
                     List Course Content Added
                   </span>
                 </div>
@@ -252,20 +271,24 @@ export default function ModalManageTopic({
               </div>
 
               <div className="flex flex-col w-full h-fit px-4">
-                {Array.from({ length: topicLength }).map((_, index) => (
+                {form.getValues().schedule?.map((item, index) => (
                   <div
                     key={index}
                     className={`py-3 w-full border-b-[1px] pl-3 ${
-                      Array.length > 1 ? "last:border-none last:pb-5" : ""
+                      topicLength > 1 ? "last:border-none last:pb-5" : ""
                     } `}
                   >
                     <div className="flex flex-col w-full">
                       <div className="flex items-center justify-between">
                         <p className="text-secondary mb-2 font-semibold text-[14px]">
-                          Course Content {index + 1}
+                          {/* Course Content {item.weekNo} */}
+                          Week {item.weekNo}
                         </p>
 
-                        <div className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer">
+                        <div
+                          className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer"
+                          onClick={() => removeTopic(index)}
+                        >
                           <IconTrash
                             stroke={1.5}
                             color="#FF4747"
@@ -277,13 +300,16 @@ export default function ModalManageTopic({
 
                     <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
                       <div className="flex text-pretty font-semibold">
-                        <li></li> Week {index + 1}: Operation-System Structures
+                        {/* <li></li> Week {item.weekNo}: {item.topic} */}
+                        <li></li> Topic: {item.topic}
                       </div>
                       <div className="flex text-pretty">
-                        <li></li> Lecture hour: 4 hrs
+                        <li></li> Lecture hour: {item.lecHour} hr
+                        {!!item.lecHour && "s"}
                       </div>
                       <div className="flex text-pretty">
-                        <li></li> Lab hour: 0 hrs
+                        <li></li> Lab hour: {item.labHour} hr
+                        {!!item.labHour && "s"}
                       </div>
                     </div>
                   </div>
@@ -300,11 +326,15 @@ export default function ModalManageTopic({
           <Button
             onClick={() => {
               setScheduleList(
-                type == "add" ? form.getValues().clo : formOneWeek.getValues()
+                type == "add"
+                  ? form.getValues().schedule
+                  : formOneWeek.getValues()
               );
               closeModal();
             }}
-            disabled={form.getValues().schedule?.length == 0}
+            disabled={
+              type == "add" ? form.getValues().schedule?.length == 0 : false
+            }
           >
             Done
           </Button>
