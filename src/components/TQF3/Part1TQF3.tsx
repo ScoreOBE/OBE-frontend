@@ -46,7 +46,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
         !value?.length && "Main Instructor is required",
       instructors: (value) => {
         if (!value?.length) return "Input Instructors at least one";
-        const duplicates = value.filter(
+        const duplicates = value?.filter(
           (item, index) => value.indexOf(item) !== index
         );
         if (duplicates.length) {
@@ -58,7 +58,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
     validateInputOnBlur: true,
     onValuesChange(values, previous) {
       if (!isEqual(values, previous)) {
-        values.instructors = values.instructors.filter((ins) => ins.length);
+        values.instructors = values.instructors?.filter((ins) => ins.length);
         setForm(form);
       }
     },

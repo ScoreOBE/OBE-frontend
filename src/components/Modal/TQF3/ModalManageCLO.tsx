@@ -45,6 +45,8 @@ export default function ModalManageCLO({
   ];
   const [heightLeftSec, setHeightLeftSec] = useState(485);
   const cloDescriptionRef = useRef<any>(null);
+  const cloRef = useRef<HTMLDivElement>(null);
+  const [isAdded, setIsAdded] = useState(false);
 
   const updateHeight = () => {
     if (cloDescriptionRef.current) {
@@ -88,7 +90,8 @@ export default function ModalManageCLO({
   });
 
   useEffect(() => {
-    if (data) {
+    if (opened && data) {
+      formOneCLO.reset();
       if (type == "add") {
         const length = (data as IModelCLO[]).length || 0;
         form.setFieldValue("clo", data as IModelCLO[]);
@@ -98,18 +101,19 @@ export default function ModalManageCLO({
         formOneCLO.setValues(data as IModelCLO);
       }
     }
-  }, [data]);
+  }, [data, opened]);
 
-  const closeModal = () => {
-    onClose();
-    setCloLength(0);
-    form.reset();
-    formOneCLO.reset();
-  };
+  useEffect(() => {
+    if (cloRef.current && isAdded) {
+      cloRef.current.scrollIntoView({ behavior: "smooth" });
+      setIsAdded(false);
+    }
+  }, [isAdded]);
 
   const addMore = () => {
     if (!formOneCLO.validate().hasErrors) {
       form.insertListItem("clo", formOneCLO.getValues());
+      setIsAdded(true);
       setCloLength(cloLength + 1);
       formOneCLO.setValues({
         cloNo: formOneCLO.getValues().cloNo! + 1,
@@ -134,7 +138,7 @@ export default function ModalManageCLO({
   return (
     <Modal
       opened={opened}
-      onClose={closeModal}
+      onClose={onClose}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} CLO`}
       size={type === "add" && cloLength > 0 ? "70vw" : "40vw"}
@@ -280,7 +284,7 @@ export default function ModalManageCLO({
               <div className="flex flex-col w-full h-fit px-4">
                 {form.getValues().clo?.map((item, index) => (
                   <div
-                    key={index}
+                    ref={index === cloLength - 1 ? cloRef : undefined}
                     className={`py-3 w-full border-b-[1px] pl-3 ${
                       cloLength > 1 ? "last:border-none last:pb-5" : ""
                     }`}
@@ -329,7 +333,7 @@ export default function ModalManageCLO({
         </div>
         {/* Button */}
         <div className="flex gap-2 items-end justify-end h-fit">
-          <Button variant="subtle" onClick={closeModal}>
+          <Button variant="subtle" onClick={onClose}>
             Cancel
           </Button>
           <Button
@@ -337,7 +341,7 @@ export default function ModalManageCLO({
               setCloList(
                 type == "add" ? form.getValues().clo : formOneCLO.getValues()
               );
-              closeModal();
+              onClose();
             }}
             disabled={type == "add" ? form.getValues().clo?.length == 0 : false}
           >

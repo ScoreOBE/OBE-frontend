@@ -37,7 +37,9 @@ export default function ModalManageTopic({
   const handlersLecRef = useRef<NumberInputHandlers>(null);
   const handlersLabRef = useRef<NumberInputHandlers>(null);
   const [topicLength, setTopicLenght] = useState(0);
-
+  const topicRef = useRef<HTMLDivElement>(null);
+  const [isAdded, setIsAdded] = useState(false);
+  
   const form = useForm({
     mode: "controlled",
     initialValues: { schedule: [] } as Partial<IModelTQF3Part2>,
@@ -53,12 +55,24 @@ export default function ModalManageTopic({
     } as Partial<IModelSchedule>,
     validate: {
       topic: (value) => validateTextInput(value, "Course Content", 0, false),
+      lecHour: (value, values) =>
+        !value && !values.labHour && "Lecture hour or Lab hour is required",
+      labHour: (value, values) =>
+        !value && !values.lecHour && "Lecture hour or Lab hour is required",
     },
     validateInputOnBlur: true,
+    onValuesChange(values, previous) {
+      if (values.lecHour != previous.lecHour) {
+        formOneWeek.validateField("labHour");
+      } else if (values.labHour != previous.labHour) {
+        formOneWeek.validateField("lecHour");
+      }
+    },
   });
 
   useEffect(() => {
-    if (data) {
+    if (opened && data) {
+      formOneWeek.reset();
       if (type == "add") {
         const length = (data as IModelSchedule[]).length || 0;
         form.setFieldValue("schedule", data as IModelSchedule[]);
@@ -73,18 +87,19 @@ export default function ModalManageTopic({
         formOneWeek.setValues(data as IModelSchedule);
       }
     }
-  }, [data]);
+  }, [data, opened]);
 
-  const closeModal = () => {
-    onClose();
-    setTopicLenght(0);
-    form.reset();
-    formOneWeek.reset();
-  };
+  useEffect(() => {
+    if (topicRef.current && isAdded) {
+      topicRef.current.scrollIntoView({ behavior: "smooth" });
+      setIsAdded(false);
+    }
+  }, [isAdded]);
 
   const addMore = () => {
     if (!formOneWeek.validate().hasErrors) {
       form.insertListItem("schedule", formOneWeek.getValues());
+      setIsAdded(true);
       setTopicLenght(topicLength + 1);
       formOneWeek.setValues({
         weekNo: formOneWeek.getValues().weekNo! + 1,
@@ -108,7 +123,7 @@ export default function ModalManageTopic({
   return (
     <Modal
       opened={opened}
-      onClose={closeModal}
+      onClose={onClose}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Course Content`}
       size={type === "add" && topicLength > 0 ? "70vw" : "35vw"}
@@ -198,6 +213,7 @@ export default function ModalManageTopic({
                   </div>
                 }
                 {...formOneWeek.getInputProps("lecHour")}
+                error=""
               />
 
               <NumberInput
@@ -237,7 +253,12 @@ export default function ModalManageTopic({
                   </div>
                 }
                 {...formOneWeek.getInputProps("labHour")}
+                error=""
               />
+              <p className="text-error text-b3 -mt-1">
+                {formOneWeek.getInputProps("lecHour").error ||
+                  formOneWeek.getInputProps("labHour").error}
+              </p>
             </div>
 
             {/* Add More Button */}
@@ -273,7 +294,7 @@ export default function ModalManageTopic({
               <div className="flex flex-col w-full h-fit px-4">
                 {form.getValues().schedule?.map((item, index) => (
                   <div
-                    key={index}
+                    ref={index === topicLength - 1 ? topicRef : undefined}
                     className={`py-3 w-full border-b-[1px] pl-3 ${
                       topicLength > 1 ? "last:border-none last:pb-5" : ""
                     } `}
@@ -320,7 +341,7 @@ export default function ModalManageTopic({
         </div>
         {/* Button */}
         <div className="flex gap-2  items-end  justify-end h-fit">
-          <Button variant="subtle" onClick={closeModal}>
+          <Button variant="subtle" onClick={onClose}>
             Cancel
           </Button>
           <Button
@@ -330,7 +351,7 @@ export default function ModalManageTopic({
                   ? form.getValues().schedule
                   : formOneWeek.getValues()
               );
-              closeModal();
+              onClose();
             }}
             disabled={
               type == "add" ? form.getValues().schedule?.length == 0 : false
