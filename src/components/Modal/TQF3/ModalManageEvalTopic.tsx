@@ -7,6 +7,7 @@ import {
   TextInput,
   NumberInput,
   NumberInputHandlers,
+  Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconList, IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
@@ -36,6 +37,7 @@ export default function ModalManageEvalTopic({
   const topicRef = useRef<HTMLDivElement>(null);
   const [isAdded, setIsAdded] = useState(false);
   const [percentTotal, setPercentTotal] = useState(0);
+  const [openedTooltip, setOpenedTooltip] = useState(false);
 
   const form = useForm({
     mode: "controlled",
@@ -98,13 +100,14 @@ export default function ModalManageEvalTopic({
   };
 
   const removeTopic = (index: number) => {
+    const length = (data as IModelEval[]).length;
     setPercentTotal(percentTotal - form.getValues().eval![index].percent);
     form.removeListItem("eval", index);
     const newEvalList = form.getValues().eval;
     newEvalList?.forEach((topic, i) => {
-      topic.no = (data as IModelEval[]).length + i + 1;
+      topic.no = length + i + 1;
     });
-    formOneTopic.setFieldValue("no", newEvalList?.length! + 1);
+    formOneTopic.setFieldValue("no", length + newEvalList?.length! + 1);
   };
 
   return (
@@ -237,13 +240,37 @@ export default function ModalManageEvalTopic({
             {/* Add More Button */}
             {type === "add" && (
               <div className="flex justify-end">
-                <Button
-                  variant="outline"
-                  disabled={percentTotal == 100}
-                  onClick={addMore}
+                <Tooltip
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={15}
+                  arrowSize={7}
+                  position="bottom-end"
+                  color="#FCFCFC"
+                  label={
+                    <div className="text-default text-[13px] p-2 flex flex-col gap-2">
+                      <p className="font-medium">
+                        <span className="text-secondary font-bold">
+                          Add Evaluation Topic (Disabled)
+                        </span>{" "}
+                        <br />
+                        The total of all topics in the course syllabus is equal
+                        100%.
+                      </p>
+                    </div>
+                  }
+                  opened={percentTotal === 100 && openedTooltip}
                 >
-                  Add more
-                </Button>
+                  <Button
+                    variant="outline"
+                    disabled={percentTotal == 100}
+                    onClick={addMore}
+                    onMouseOver={() => setOpenedTooltip(true)}
+                    onMouseLeave={() => setOpenedTooltip(false)}
+                  >
+                    Add more
+                  </Button>
+                </Tooltip>
               </div>
             )}
           </div>

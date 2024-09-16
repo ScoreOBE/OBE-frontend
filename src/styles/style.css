@@ -9,9 +9,9 @@
   --input-radius: 20px;
 }
 
-.mantine-focus-auto:focus-visible {
+/* .mantine-focus-auto:focus-visible {
   outline: none !important;
-}
+} */
 .mantine-active:active {
   transform: none !important;
 }
