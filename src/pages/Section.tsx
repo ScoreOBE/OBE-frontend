@@ -216,7 +216,7 @@ export default function Section() {
               )}
               {activeTerm && (
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
-                  <Menu trigger="click" position="bottom-end" offset={6}>
+                  <Menu trigger="click" position="bottom-end" >
                     <Menu.Target>
                       <IconDots />
                     </Menu.Target>
@@ -227,7 +227,7 @@ export default function Section() {
                       }}
                     >
                       <Menu.Item
-                        className=" text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
+                        className=" text-[#3e3e3e] font-semibold text-[12px] h-7 "
                         onClick={() => {
                           setAddSec({ ...course });
                           setOpenModalAddSec(true);
@@ -242,7 +242,7 @@ export default function Section() {
                         (sec) => (sec.instructor as IModelUser).id == user.id
                       ) && (
                         <Menu.Item
-                          className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[180px]"
+                          className="text-[#3e3e3e] font-semibold text-[12px] h-7 "
                           onClick={() => {
                             setEditCourseData({
                               ...course,
@@ -263,7 +263,16 @@ export default function Section() {
                           </div>
                         </Menu.Item>
                       )}
-                      <Menu.Item className=" text-[#20884f] hover:bg-[#06B84D]/20 font-semibold text-[12px] h-7 w-[180px]">
+                       <Menu.Item className=" text-secondary hover:bg-[#5768d5]/10 font-semibold text-[12px] h-7 w-[210px]">
+                        <div className="flex items-center  gap-2">
+                          <Icon
+                            className="h-4 w-4 "
+                            IconComponent={ExcelIcon}
+                          />
+                          <span>Import Student from Reg CMU</span>
+                        </div>
+                      </Menu.Item>
+                      <Menu.Item className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-[12px] h-7 ">
                         <div className="flex items-center  gap-2">
                           <Icon
                             className="h-4 w-4 "
