@@ -44,6 +44,12 @@ export const dateFormatter = (
   }
 };
 
+export const getKeyByValue = (object: any, value: any) => {
+  return Object.keys(object).find(
+    (key) => object[key] == value
+  ) as keyof object;
+};
+
 export const getEnumByKey = (Enum: any, key: string): string => {
   return Enum[key as keyof typeof Enum] ?? "";
 };

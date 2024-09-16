@@ -44,20 +44,24 @@ export default function SaveTQFbar({
   disabledSave,
 }: Props) {
   const user = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
-
+  
   return (
     <>
       <div
         className={`min-h-14 justify-end gap-x-4 overflow-y-auto bottom-0 w-full bg-white border-[#e0e0e0] px-6 inline-flex flex-wrap items-center z-50 text-secondary`}
         style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
       >
-        {data && (
-          <p className="text-[11px] flex flex-col text-end text-secondary font-medium">
-            <span className="font-bold">Saved:</span>{" "}
-            <span>{dateFormatter(data.updatedAt)}</span>
-          </p>
-        )}
+        <p className="text-[11px] flex flex-col text-end text-secondary font-medium">
+          {data ? (
+            <>
+              <span className="font-bold">Saved:</span>{" "}
+              <span>{dateFormatter(data.updatedAt)}</span>
+            </>
+          ) : (
+            <>Not Saved</>
+          )}
+        </p>
+
         <Button className="!w-[128px]" onClick={onSave} disabled={disabledSave}>
           <div className="flex gap-2 items-center">
             <Icon IconComponent={saveIcon} />
