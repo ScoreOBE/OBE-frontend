@@ -108,12 +108,13 @@ export default function ModalManageTopic({
   };
 
   const removeTopic = (index: number) => {
+    const length = (data as IModelSchedule[]).length;
     form.removeListItem("schedule", index);
     const newTopicList = form.getValues().schedule;
     newTopicList?.forEach((week, i) => {
-      week.weekNo = (data as IModelSchedule[]).length + i + 1;
+      week.weekNo = length + i + 1;
     });
-    formOneWeek.setFieldValue("weekNo", newTopicList?.length! + 1);
+    formOneWeek.setFieldValue("weekNo", length + newTopicList?.length! + 1);
   };
 
   return (

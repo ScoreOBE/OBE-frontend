@@ -123,12 +123,13 @@ export default function ModalManageCLO({
   };
 
   const removeCLO = (index: number) => {
+    const length = (data as IModelCLO[]).length;
     form.removeListItem("clo", index);
     const newCloList = form.getValues().clo;
     newCloList?.forEach((clo, i) => {
-      clo.no = (data as IModelCLO[]).length + i + 1;
+      clo.no = length + i + 1;
     });
-    formOneCLO.setFieldValue("no", newCloList?.length! + 1);
+    formOneCLO.setFieldValue("no", length + newCloList?.length! + 1);
   };
 
   return (

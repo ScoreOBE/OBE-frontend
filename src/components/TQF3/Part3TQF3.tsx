@@ -17,6 +17,7 @@ import ModalManageEvalTopic from "../Modal/TQF3/ModalManageEvalTopic";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelEval, IModelTQF3Part3 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
+import MainPopup from "../Popup/MainPopup";
 
 type Props = {
   data: IModelCourse;
@@ -28,7 +29,7 @@ export default function Part3TQF3({ data, setForm }: Props) {
   const [editData, setEditData] = useState<any>();
   const [openModalAddEvalTopic, setOpenModalAddEvalTopic] = useState(false);
   const [openModalEditEvalTopic, setOpenModalEditEvalTopic] = useState(false);
-  const [openPopupDelTopic, setOpenPopupDelTopic] = useState(false);
+  const [openPopupDelEvalTopic, setOpenPopupDelEvalTopic] = useState(false);
   const [openedTooltip, setOpenedTooltip] = useState(false);
 
   const form = useForm({
@@ -65,7 +66,7 @@ export default function Part3TQF3({ data, setForm }: Props) {
 
   const onClickDeleteTopic = () => {
     form.removeListItem("eval", editData.no - 1);
-    setOpenPopupDelTopic(false);
+    setOpenPopupDelEvalTopic(false);
     setEditData(undefined);
   };
 
@@ -86,10 +87,19 @@ export default function Part3TQF3({ data, setForm }: Props) {
         onClose={() => setOpenModalEditEvalTopic(false)}
         type="edit"
         data={editData}
-        total={percentTotal}
+        total={percentTotal - editData?.percent}
         setEvalList={(value: IModelEval) =>
           form.setFieldValue(`eval.${editData.no - 1}`, value)
         }
+      />
+      <MainPopup
+        opened={openPopupDelEvalTopic}
+        onClose={() => setOpenPopupDelEvalTopic(false)}
+        type="delete"
+        title={`Delete Topic ${editData?.no}`}
+        message="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        labelButtonRight="Delete Topic"
+        action={onClickDeleteTopic}
       />
       <div className="flex w-full">
         <div className="flex flex-col  w-full pb-8 gap-4">
@@ -140,11 +150,11 @@ export default function Part3TQF3({ data, setForm }: Props) {
                 <div className="text-default text-[13px] p-2 flex flex-col gap-2">
                   <p className="font-medium">
                     <span className="text-secondary font-bold">
-                      Add Topic (Disabled)
+                      Add Evaluation Topic (Disabled)
                     </span>{" "}
                     <br />
-                    All topics have already been added. To make any changes,
-                    please edit the topics below.
+                    The total of all topics in the course syllabus is equal
+                    100%.
                   </p>
                 </div>
               }
@@ -307,23 +317,30 @@ export default function Part3TQF3({ data, setForm }: Props) {
                                 <Table.Td className="w-[65%]">
                                   {item.desc}
                                 </Table.Td>
-                                <Table.Td className="w-[5%] text-end text-b1 ">
-                                  <p>{item.percent}</p>
+                                <Table.Td className="w-[5%] text-end text-b1">
+                                  <p>{item.percent}%</p>
                                 </Table.Td>
                                 <Table.Td className="w-[20%]">
                                   <div className="flex justify-start gap-4 items-center">
                                     <div
                                       className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
-                                      onClick={() =>
-                                        setOpenModalEditEvalTopic(true)
-                                      }
+                                      onClick={() => {
+                                        setEditData(item);
+                                        setOpenModalEditEvalTopic(true);
+                                      }}
                                     >
                                       <IconEdit
                                         className="size-4"
                                         stroke={1.5}
                                       />
                                     </div>
-                                    <div className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10">
+                                    <div
+                                      className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                                      onClick={() => {
+                                        setEditData(item);
+                                        setOpenPopupDelEvalTopic(true);
+                                      }}
+                                    >
                                       <IconTrash
                                         className="size-4"
                                         stroke={1.5}
