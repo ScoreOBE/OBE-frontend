@@ -142,6 +142,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
   const [openModalEditSelectTopic, setOpenModalEditSelectTopic] =
     useState(false);
   const [deleteIndex, setDeleteIndex] = useState(0);
+  const [openedTooltip, setOpenedTooltip] = useState(false);
 
   const addTopic = (value: any, option: any) => {
     if (!options.length) {
@@ -208,40 +209,32 @@ export default function Part6TQF3({ data, setForm }: Props) {
             หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
             <span className=" font-bold">(Topic)</span>
           </p>
-          {form.getValues().data.length === 10 ? (
-            <Tooltip
-              withArrow
-              arrowPosition="side"
-              arrowOffset={15}
-              arrowSize={7}
-              position="bottom-end"
-              label={
-                <div className="text-default text-[13px] p-2 flex flex-col gap-2">
-                  <p className="font-medium">
-                    <span className="text-secondary font-bold">
-                      Add Topic (Disabled)
-                    </span>{" "}
-                    <br />
-                    All topics have already been added. To make any changes,
-                    please edit the topics below.
-                  </p>
-                </div>
-              }
-              color="#FCFCFC"
-            >
-              <Button
-                disabled={form.getValues().data.length === 10}
-                className="text-center px-4"
-              >
-                <div className="flex gap-2">
-                  <Icon IconComponent={AddIcon} />
-                  Add Topic
-                </div>
-              </Button>
-            </Tooltip>
-          ) : (
+          <Tooltip
+            withArrow
+            arrowPosition="side"
+            arrowOffset={15}
+            arrowSize={7}
+            position="bottom-end"
+            color="#FCFCFC"
+            label={
+              <div className="text-default text-[13px] p-2 flex flex-col gap-2">
+                <p className="font-medium">
+                  <span className="text-secondary font-bold">
+                    Add Topic (Disabled)
+                  </span>{" "}
+                  <br />
+                  All topics have already been added. To make any changes,
+                  please edit the topics below.
+                </p>
+              </div>
+            }
+            opened={form.getValues().data.length === 10 && openedTooltip}
+          >
             <Button
+              disabled={form.getValues().data.length === 10}
               onClick={() => setOpenModalSelectTopic(true)}
+              onMouseOver={() => setOpenedTooltip(true)}
+              onMouseLeave={() => setOpenedTooltip(false)}
               className="text-center px-4"
             >
               <div className="flex gap-2">
@@ -249,7 +242,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
                 Add Topic
               </div>
             </Button>
-          )}
+          </Tooltip>
         </div>
         <div
           style={{

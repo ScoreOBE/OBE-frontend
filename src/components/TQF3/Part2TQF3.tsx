@@ -51,7 +51,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
     onValuesChange: (values, previous) => {
       if (!isEqual(values.clo, previous.clo)) {
         values.clo?.forEach((clo, index) => {
-          clo.cloNo = index + 1;
+          clo.no = index + 1;
         });
       } else if (!isEqual(values.schedule, previous.schedule)) {
         values.schedule?.forEach((week, index) => {
@@ -71,7 +71,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
   }, [data]);
 
   const onClickDeleteCLO = () => {
-    form.removeListItem("clo", editData.cloNo - 1);
+    form.removeListItem("clo", editData.no - 1);
     setOpenPopupDelCLO(false);
     setEditData(undefined);
   };
@@ -99,7 +99,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
         type="edit"
         data={editData}
         setCloList={(value: IModelCLO) =>
-          form.setFieldValue(`clo.${editData.cloNo - 1}`, value)
+          form.setFieldValue(`clo.${editData.no - 1}`, value)
         }
       />
       <ModalManageCourseContent
@@ -129,7 +129,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
         opened={openPopupDelCLO}
         onClose={() => setOpenPopupDelCLO(false)}
         type="delete"
-        title={`Delete CLO ${editData?.cloNo}`}
+        title={`Delete CLO ${editData?.no}`}
         message="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         labelButtonRight="Delete CLO"
         action={onClickDeleteCLO}
@@ -281,9 +281,9 @@ export default function Part2TQF3({ data, setForm }: Props) {
                         >
                           {form.getValues().clo?.map((item, index) => (
                             <Draggable
-                              key={item.cloNo.toString()}
+                              key={item.no.toString()}
                               index={index}
-                              draggableId={item.cloNo.toString()}
+                              draggableId={item.no.toString()}
                             >
                               {(provided, snapshot) => (
                                 <Table.Tr
@@ -294,12 +294,12 @@ export default function Part2TQF3({ data, setForm }: Props) {
                                   }`}
                                 >
                                   <Table.Td className="w-[10%]">
-                                    {item.cloNo}
+                                    {item.no}
                                   </Table.Td>
                                   <Table.Td className="w-[50%]">
                                     <div className="flex flex-col gap-0.5">
-                                      <p>{item.cloDescTH}</p>
-                                      <p>{item.cloDescEN}</p>
+                                      <p>{item.descTH}</p>
+                                      <p>{item.descEN}</p>
                                     </div>
                                   </Table.Td>
                                   <Table.Td className="w-[20%]">

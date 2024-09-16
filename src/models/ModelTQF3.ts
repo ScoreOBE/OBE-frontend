@@ -10,7 +10,7 @@ export interface IModelTQF3 {
   part4?: { data: IModelTQF3Part4[]; updatedAt: Date };
   part5?: { data: IModelTQF3Part5[]; updatedAt: Date };
   part6?: { data: IModelTQF3Part6[]; updatedAt: Date };
-  part7?: "";
+  part7?: any;
   updatedAt: Date;
 }
 
@@ -63,9 +63,9 @@ export interface IModelTQF3Part6 {
 
 export interface IModelCLO {
   id: string;
-  cloNo: number;
-  cloDescTH: string;
-  cloDescEN: string;
+  no: number;
+  descTH: string;
+  descEN: string;
   learningMethod: string[];
   other?: string;
 }
@@ -80,9 +80,9 @@ export interface IModelSchedule {
 
 export interface IModelEval {
   id: string;
-  evalNo: number;
-  evalTopicTH: string;
-  evalTopicEN: string;
-  evalDesc: string;
-  evalPercent: number;
+  no: number;
+  topicTH: string;
+  topicEN: string;
+  desc: string;
+  percent: number;
 }

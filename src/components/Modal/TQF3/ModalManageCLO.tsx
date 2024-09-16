@@ -43,13 +43,13 @@ export default function ModalManageCLO({
     { label: LearningMethod.Other },
   ];
   const [heightLeftSec, setHeightLeftSec] = useState(485);
-  const cloDescriptionRef = useRef<any>(null);
+  const descriptionRef = useRef<any>(null);
   const cloRef = useRef<HTMLDivElement>(null);
   const [isAdded, setIsAdded] = useState(false);
 
   const updateHeight = () => {
-    if (cloDescriptionRef.current) {
-      const height = cloDescriptionRef.current.offsetHeight;
+    if (descriptionRef.current) {
+      const height = descriptionRef.current.offsetHeight;
       setHeightLeftSec(height);
     }
   };
@@ -71,16 +71,16 @@ export default function ModalManageCLO({
   const formOneCLO = useForm({
     mode: "controlled",
     initialValues: {
-      cloNo: 1,
-      cloDescTH: "",
-      cloDescEN: "",
+      no: 1,
+      descTH: "",
+      descEN: "",
       learningMethod: [],
       other: "",
     } as Partial<IModelCLO>,
     validate: {
-      cloDescTH: (value) =>
+      descTH: (value) =>
         validateTextInput(value, "CLO Thai language", 0, false),
-      cloDescEN: (value) =>
+      descEN: (value) =>
         validateTextInput(value, "CLO English language", 0, false),
       learningMethod: (value) =>
         !value?.length && "Select Learning Method at least one",
@@ -94,7 +94,7 @@ export default function ModalManageCLO({
       formOneCLO.reset();
       if (type == "add") {
         const length = (data as IModelCLO[]).length || 0;
-        formOneCLO.setFieldValue("cloNo", length + 1);
+        formOneCLO.setFieldValue("no", length + 1);
       } else {
         formOneCLO.setValues(data as IModelCLO);
       }
@@ -113,9 +113,9 @@ export default function ModalManageCLO({
       form.insertListItem("clo", formOneCLO.getValues());
       setIsAdded(true);
       formOneCLO.setValues({
-        cloNo: formOneCLO.getValues().cloNo! + 1,
-        cloDescTH: "",
-        cloDescEN: "",
+        no: formOneCLO.getValues().no! + 1,
+        descTH: "",
+        descEN: "",
         learningMethod: [],
         other: "",
       });
@@ -126,9 +126,9 @@ export default function ModalManageCLO({
     form.removeListItem("clo", index);
     const newCloList = form.getValues().clo;
     newCloList?.forEach((clo, i) => {
-      clo.cloNo = (data as IModelCLO[]).length + i + 1;
+      clo.no = (data as IModelCLO[]).length + i + 1;
     });
-    formOneCLO.setFieldValue("cloNo", newCloList?.length! + 1);
+    formOneCLO.setFieldValue("no", newCloList?.length! + 1);
   };
 
   return (
@@ -168,8 +168,8 @@ export default function ModalManageCLO({
         >
           {/* Input Field */}
           <div
-            id="cloDescription"
-            ref={cloDescriptionRef}
+            id="description"
+            ref={descriptionRef}
             className={`flex flex-col rounded-md justify-between ${
               type === "add" && "p-5"
             } gap-1 overflow-hidden ${
@@ -197,7 +197,7 @@ export default function ModalManageCLO({
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
-                {...formOneCLO.getInputProps("cloDescTH")}
+                {...formOneCLO.getInputProps("descTH")}
               />
               <Textarea
                 autoFocus={false}
@@ -213,7 +213,7 @@ export default function ModalManageCLO({
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. Explain the working principle of computer operating systems."
-                {...formOneCLO.getInputProps("cloDescEN")}
+                {...formOneCLO.getInputProps("descEN")}
               />
 
               <div className="flex flex-col gap-2 pb-1 ">
@@ -301,7 +301,7 @@ export default function ModalManageCLO({
                     <div className="flex flex-col gap-2 w-full">
                       <div className="flex items-center justify-between">
                         <p className="text-secondary font-semibold text-[14px]">
-                          CLO-{item.cloNo}
+                          CLO-{item.no}
                         </p>
                         <div
                           className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer"
@@ -319,11 +319,11 @@ export default function ModalManageCLO({
                     <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
                       <div className="flex text-pretty">
                         <li></li>
-                        {item.cloDescTH}
+                        {item.descTH}
                       </div>
                       <div className="flex text-pretty">
                         <li></li>
-                        {item.cloDescEN}
+                        {item.descEN}
                       </div>
                       {item.learningMethod.length > 0 && (
                         <div className="flex text-pretty">

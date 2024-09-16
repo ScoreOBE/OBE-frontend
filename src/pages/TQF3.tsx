@@ -106,7 +106,6 @@ export default function TQF3() {
           setTqf3Original(res.sections[0].TQF3!);
           if (!course?.sections[0].TQF3?.updatedAt) {
             dispatch(editCourse(res));
-            setTqf3(res.sections[0].TQF3!);
           }
           setCurrentPartTQF3(res.sections[0].TQF3!);
         } else {
@@ -115,7 +114,6 @@ export default function TQF3() {
             dispatch(editCourse(res));
           }
           setCurrentPartTQF3(res.TQF3!);
-          setTqf3(res.TQF3!);
         }
       }
     };
@@ -133,7 +131,7 @@ export default function TQF3() {
   }, [course]);
 
   useEffect(() => {
-    if (course && tqf3 && tqf3Part) {
+    if (tqf3 && !isEqual(form, tqf3[tqf3Part as keyof IModelTQF3])) {
       updateTQF3(tqf3Part as keyof IModelTQF3);
     }
   }, [form]);
@@ -143,12 +141,12 @@ export default function TQF3() {
       if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
         dispatch(
           editCourse({
-            ...course,
+            id: course.id,
             sections: course.sections.map((sec) => {
               if (sec.TQF3?.id == tqf3.id) {
                 sec.TQF3 = {
-                  ...sec.TQF3!,
-                  [part]: { ...form?.getValues() },
+                  ...sec.TQF3,
+                  [part]: { ...sec.TQF3![part], ...form?.getValues() },
                 };
               }
               return sec;
@@ -158,8 +156,11 @@ export default function TQF3() {
       } else {
         dispatch(
           editCourse({
-            ...course,
-            TQF3: { ...course.TQF3, [part]: { ...form?.getValues() } },
+            id: course.id,
+            TQF3: {
+              ...course.TQF3,
+              [part]: { ...course.TQF3![part], ...form?.getValues() },
+            },
           })
         );
       }

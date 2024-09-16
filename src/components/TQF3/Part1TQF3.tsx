@@ -12,7 +12,7 @@ import {
   NumberInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { isEqual } from "lodash";
+import { cloneDeep, isEqual } from "lodash";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -67,7 +67,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
   useEffect(() => {
     if (data) {
       if (data?.TQF3?.part1) {
-        form.setValues(data.TQF3.part1);
+        form.setValues(cloneDeep(data.TQF3.part1));
         if (data.TQF3.part1.teachingLocation.in.length) {
           checked.push("in");
         }
@@ -119,6 +119,7 @@ export default function Part1TQF3({ data, setForm }: Props) {
         </div>
         <Radio.Group
           key={form.key("curriculum")}
+          classNames={{ error: "mt-2" }}
           {...form.getInputProps("curriculum")}
           value={form.getValues().curriculum}
           onChange={(event) => form.setFieldValue("curriculum", event)}
