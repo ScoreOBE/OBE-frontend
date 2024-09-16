@@ -36,10 +36,9 @@ export default function ModalManageTopic({
   const height = type === "add" ? "h-full" : "h-fit";
   const handlersLecRef = useRef<NumberInputHandlers>(null);
   const handlersLabRef = useRef<NumberInputHandlers>(null);
-  const [topicLength, setTopicLenght] = useState(0);
   const topicRef = useRef<HTMLDivElement>(null);
   const [isAdded, setIsAdded] = useState(false);
-  
+
   const form = useForm({
     mode: "controlled",
     initialValues: { schedule: [] } as Partial<IModelTQF3Part2>,
@@ -72,17 +71,16 @@ export default function ModalManageTopic({
 
   useEffect(() => {
     if (opened && data) {
+      form.reset();
       formOneWeek.reset();
       if (type == "add") {
         const length = (data as IModelSchedule[]).length || 0;
-        form.setFieldValue("schedule", data as IModelSchedule[]);
         formOneWeek.setValues({
           weekNo: length + 1,
           topic: "",
           lecHour: teachingMethod.includes(TEACHING_METHOD.LEC.en) ? 3 : 0,
           labHour: teachingMethod.includes(TEACHING_METHOD.LAB.en) ? 3 : 0,
         });
-        setTopicLenght(length);
       } else {
         formOneWeek.setValues(data as IModelSchedule);
       }
@@ -100,7 +98,6 @@ export default function ModalManageTopic({
     if (!formOneWeek.validate().hasErrors) {
       form.insertListItem("schedule", formOneWeek.getValues());
       setIsAdded(true);
-      setTopicLenght(topicLength + 1);
       formOneWeek.setValues({
         weekNo: formOneWeek.getValues().weekNo! + 1,
         topic: "",
@@ -111,11 +108,10 @@ export default function ModalManageTopic({
   };
 
   const removeTopic = (index: number) => {
-    setTopicLenght(topicLength - 1);
     form.removeListItem("schedule", index);
     const newTopicList = form.getValues().schedule;
     newTopicList?.forEach((week, i) => {
-      week.weekNo = i + 1;
+      week.weekNo = (data as IModelSchedule[]).length + i + 1;
     });
     formOneWeek.setFieldValue("weekNo", newTopicList?.length! + 1);
   };
@@ -126,7 +122,11 @@ export default function ModalManageTopic({
       onClose={onClose}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Course Content`}
-      size={type === "add" && topicLength > 0 ? "70vw" : "35vw"}
+      size={
+        type === "add" && form.getValues().schedule?.length! > 0
+          ? "70vw"
+          : "35vw"
+      }
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
@@ -151,7 +151,9 @@ export default function ModalManageTopic({
             className={`flex flex-col ${
               type === "add" && "p-5"
             } gap-1 rounded-md overflow-hidden ${
-              topicLength > 0 && type === "add" ? "w-[45%]" : "w-full"
+              form.getValues().schedule?.length! > 0 && type === "add"
+                ? "w-[45%]"
+                : "w-full"
             } h-full relative`}
             style={{
               boxShadow:
@@ -287,16 +289,23 @@ export default function ModalManageTopic({
                   </span>
                 </div>
                 <p>
-                  {topicLength} Course Content{topicLength > 1 ? "s" : ""}
+                  {form.getValues().schedule?.length!} Course Content
+                  {form.getValues().schedule?.length! > 1 ? "s" : ""}
                 </p>
               </div>
 
               <div className="flex flex-col w-full h-fit px-4">
                 {form.getValues().schedule?.map((item, index) => (
                   <div
-                    ref={index === topicLength - 1 ? topicRef : undefined}
+                    ref={
+                      index === form.getValues().schedule?.length! - 1
+                        ? topicRef
+                        : undefined
+                    }
                     className={`py-3 w-full border-b-[1px] pl-3 ${
-                      topicLength > 1 ? "last:border-none last:pb-5" : ""
+                      form.getValues().schedule?.length! > 1
+                        ? "last:border-none last:pb-5"
+                        : ""
                     } `}
                   >
                     <div className="flex flex-col w-full">
