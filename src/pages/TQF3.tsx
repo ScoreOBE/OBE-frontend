@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import CheckIcon from "@/assets/icons/Check.svg?react";
 import Part1TQF3 from "@/components/TQF3/Part1TQF3";
 import Part2TQF3 from "@/components/TQF3/Part2TQF3";
@@ -25,10 +25,9 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { isEmpty, isEqual } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
 import { saveTQF3 } from "@/services/tqf3/tqf3.service";
-import { showNotifications } from "@/helpers/functions/function";
+import { getKeyByValue, showNotifications } from "@/helpers/functions/function";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { UseFormReturnType } from "@mantine/form";
-import { ROUTE_PATH } from "@/helpers/constants/route";
 import { editCourse } from "@/store/course";
 import exportFile from "@/assets/icons/exportFile.svg?react";
 import Loading from "@/components/Loading";
@@ -39,11 +38,13 @@ import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import { LearningMethod } from "@/components/Modal/TQF3/ModalManageCLO";
 
 export default function TQF3() {
-  const location = useLocation().pathname;
   const { courseNo } = useParams();
   const loading = useAppSelector((state) => state.loading);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const [course, setCourse] = useState<IModelCourse>();
+  const course = useAppSelector((state) =>
+    state.course.courses.find((c) => c.courseNo == courseNo)
+  );
+  const [tqf3Original, setTqf3Original] = useState<IModelTQF3>();
   const [tqf3, setTqf3] = useState<IModelTQF3>();
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<UseFormReturnType<any>>();
@@ -101,16 +102,23 @@ export default function TQF3() {
         courseNo,
       });
       if (res) {
-        setCourse(res);
         if (res.type == COURSE_TYPE.SEL_TOPIC.en) {
-          setTqf3AndPart(res.sections[0].TQF3);
+          setTqf3Original(res.sections[0].TQF3!);
+          if (!course?.sections[0].TQF3?.updatedAt) {
+            dispatch(editCourse(res));
+          }
+          setCurrentPartTQF3(res.sections[0].TQF3!);
         } else {
-          setTqf3AndPart(res.TQF3);
+          setTqf3Original(res.TQF3!);
+          if (!course?.TQF3?.updatedAt) {
+            dispatch(editCourse(res));
+          }
+          setCurrentPartTQF3(res.TQF3!);
         }
       }
     };
-    if (academicYear && location.includes(ROUTE_PATH.TQF3)) fetchOneCourse();
-  }, [academicYear, location]);
+    if (academicYear) fetchOneCourse();
+  }, [academicYear]);
 
   useEffect(() => {
     if (course) {
@@ -120,20 +128,52 @@ export default function TQF3() {
         setTqf3(course.TQF3!);
       }
     }
-  }, [tqf3Part]);
+  }, [course]);
 
-  const setTqf3AndPart = (tqf3: IModelTQF3) => {
-    setTqf3(tqf3);
-    const tqfParts = tqf3;
-    if (!tqfParts.part1) {
+  useEffect(() => {
+    if (course && tqf3 && tqf3Part) {
+      updateTQF3(tqf3Part as keyof IModelTQF3);
+    }
+  }, [form]);
+
+  const updateTQF3 = (part: keyof IModelTQF3) => {
+    if (course && tqf3) {
+      if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
+        dispatch(
+          editCourse({
+            ...course,
+            sections: course.sections.map((sec) => {
+              if (sec.TQF3?.id == tqf3.id) {
+                sec.TQF3 = {
+                  ...sec.TQF3!,
+                  [part]: { ...form?.getValues() },
+                };
+              }
+              return sec;
+            }),
+          })
+        );
+      } else {
+        dispatch(
+          editCourse({
+            ...course,
+            TQF3: { ...course.TQF3, [part]: { ...form?.getValues() } },
+          })
+        );
+      }
+    }
+  };
+
+  const setCurrentPartTQF3 = (tqf3: IModelTQF3) => {
+    if (!tqf3.part1) {
       setTqf3Part("part1");
-    } else if (!tqfParts.part2) {
+    } else if (!tqf3.part2) {
       setTqf3Part("part2");
-    } else if (!tqfParts.part3) {
+    } else if (!tqf3.part3) {
       setTqf3Part("part3");
-    } else if (!tqfParts.part4) {
+    } else if (!tqf3.part4) {
       setTqf3Part("part4");
-    } else if (!tqfParts.part5) {
+    } else if (!tqf3.part5) {
       setTqf3Part("part5");
     } else {
       setTqf3Part("part6");
@@ -194,18 +234,20 @@ export default function TQF3() {
         if (res) {
           form.reset();
           form.setValues(res);
+          setTqf3Original({ ...tqf3Original, ...res });
           if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
-            setTqf3({ ...course.sections[0].TQF3, ...res });
-            // setCourse({ ...course });
-            // dispatch(
-            //   editCourse({ ...course, sections: [] })
-            // );
+            dispatch(
+              editCourse({
+                ...course,
+                sections: course.sections.map((sec) => {
+                  if (sec.TQF3?.id == res.id) {
+                    sec.TQF3 = { ...sec.TQF3!, ...res };
+                  }
+                  return sec;
+                }),
+              })
+            );
           } else {
-            setTqf3({ ...course.TQF3, ...res });
-            setCourse({
-              ...course,
-              TQF3: { ...course.TQF3, ...res },
-            });
             dispatch(
               editCourse({ ...course, TQF3: { ...course.TQF3, ...res } })
             );
@@ -301,8 +343,15 @@ export default function TQF3() {
                     <Icon
                       IconComponent={CheckIcon}
                       className={
-                        !tqf3 || isEmpty(tqf3[part.value as keyof IModelTQF3])
+                        !tqf3Original ||
+                        !tqf3 ||
+                        isEmpty(tqf3Original[part.value as keyof IModelTQF3])
                           ? "text-[#DEE2E6]"
+                          : !isEqual(
+                              tqf3Original[part.value as keyof IModelTQF3],
+                              tqf3[part.value as keyof IModelTQF3]
+                            )
+                          ? "text-edit"
                           : "text-[#24b9a5]"
                       }
                     />
@@ -371,9 +420,10 @@ export default function TQF3() {
           </div>
         </Tabs>
       </div>
-      {tqf3 &&
+      {tqf3Original &&
+        tqf3 &&
         (tqf3Part == "part1" ||
-          tqf3[
+          tqf3Original[
             Object.keys(partLabel)[
               Object.keys(partLabel).findIndex((e) => e == tqf3Part) - 1
             ] as keyof IModelTQF3
@@ -381,13 +431,12 @@ export default function TQF3() {
           <SaveTQFbar
             tqf="3"
             part={tqf3Part as partType}
-            data={tqf3[tqf3Part as keyof IModelTQF3]}
+            data={tqf3Original[tqf3Part as keyof IModelTQF3]}
             onSave={onSave}
             disabledSave={isEqual(
-              tqf3![tqf3Part! as keyof IModelTQF3],
-              form?.getValues()
+              tqf3Original[tqf3Part as keyof IModelTQF3],
+              tqf3[tqf3Part as keyof IModelTQF3]
             )}
-            // disabledSave={false}
           />
         )}
     </>

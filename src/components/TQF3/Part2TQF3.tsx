@@ -48,25 +48,24 @@ export default function Part2TQF3({ data, setForm }: Props) {
       schedule: (value) => !value?.length && "Schedule is required",
     },
     validateInputOnBlur: true,
-    onValuesChange: (values, prev) => {
-      if (!isEqual(values.clo, prev.clo)) {
+    onValuesChange: (values, previous) => {
+      if (!isEqual(values.clo, previous.clo)) {
         values.clo?.forEach((clo, index) => {
           clo.cloNo = index + 1;
         });
-      } else if (!isEqual(values.schedule, prev.schedule)) {
+      } else if (!isEqual(values.schedule, previous.schedule)) {
         values.schedule?.forEach((week, index) => {
           week.weekNo = index + 1;
         });
+      }
+      if (!isEqual(values, previous)) {
+        setForm(form);
       }
     },
   });
 
   useEffect(() => {
-    setForm(form);
-  }, [form.getValues()]);
-
-  useEffect(() => {
-    if (data && data.TQF3?.part2) {
+    if (data.TQF3?.part2) {
       form.setValues(cloneDeep(data.TQF3.part2));
     }
   }, [data]);
