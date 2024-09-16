@@ -28,7 +28,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { isEmpty } from "lodash";
 import MapPLO from "./MapPLO";
 import MainPopup from "@/components/Popup/MainPopup";
-import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { showNotifications } from "@/helpers/functions/function";
 
 type Props = {
@@ -211,7 +211,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
         opened={openPopupDeletePLOCollection}
         onClose={() => setOpenPopupDeletePLOCollection(false)}
         action={onClickDeletePLO}
-        type={POPUP_TYPE.DELETE}
+        type="delete"
         labelButtonRight="Delete PLO Collection"
         title={`Delete PLO Collection`}
         message={

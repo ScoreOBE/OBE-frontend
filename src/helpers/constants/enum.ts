@@ -1,9 +1,5 @@
 export const SEMESTER = [1, 2, 3];
 
-export enum POPUP_TYPE {
-  DELETE = "Delete",
-  WARNING = "Warning",
-}
 export enum NOTI_TYPE {
   SUCCESS = "Success",
   ERROR = "Error",

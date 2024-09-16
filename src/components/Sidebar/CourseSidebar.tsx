@@ -18,7 +18,7 @@ import { removeCourse } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
-import { NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { leaveCourse } from "@/services/course/course.service";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -89,7 +89,7 @@ export default function CourseSidebar() {
         opened={openMainPopup}
         onClose={closeMainPopup}
         action={() => onClickLeaveCourse(course?.id!)}
-        type={POPUP_TYPE.DELETE}
+        type="delete"
         labelButtonRight={`Leave ${course?.courseNo}`}
         icon={
           <Icon IconComponent={LeaveIcon} className=" -translate-x-1 size-8" />

@@ -52,7 +52,7 @@ import { rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { IconGripVertical } from "@tabler/icons-react";
-import { COURSE_TYPE, NOTI_TYPE, POPUP_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import MainPopup from "@/components/Popup/MainPopup";
 import {
   validateCourseNo,
@@ -731,7 +731,7 @@ export default function MapPLO({ ploName = "" }: Props) {
         opened={openMainPopupDelPLO}
         onClose={() => setOpenMainPopupDelPLO(false)}
         action={onClickDeletePLO}
-        type={POPUP_TYPE.DELETE}
+        type="delete"
         labelButtonRight="Delete PLO"
         title={`Delete PLO`}
         message={
