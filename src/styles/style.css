@@ -6,6 +6,7 @@
   --color-hover: #efefef;
   --color-border-input: #cecece;
   --color-background-input: #ffffff;
+  --color-background-disabled: #efefef;
   --input-radius: 20px;
 }
 
@@ -124,6 +125,10 @@
 .mantine-TagsInput-input:focus-within {
   border-color: var(--color-secondary) !important;
 }
+.mantine-Select-input:disabled {
+  cursor: not-allowed !important;
+  background-color: var(--color-background-disabled) !important;
+}
 
 /* Input */
 .mantine-Input-input:focus {
@@ -153,6 +158,10 @@
 .mantine-TextInput-description {
   color: var(--color-secondary) !important;
 }
+.mantine-TextInput-input:disabled {
+  background-color: var(--color-background-disabled) !important;
+}
+
 
 /* Textarea */
 .mantine-Textarea-label {
