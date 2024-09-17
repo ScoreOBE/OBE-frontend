@@ -40,7 +40,12 @@ export default function Part3TQF3({ data, setForm }: Props) {
     } as Partial<IModelTQF3Part3>,
     validate: {
       gradingPolicy: (value) => !value?.length && "Grading Policy is required",
-      eval: (value) => !value?.length && "Add Evaluation at least one",
+      eval: (value) =>
+        !value?.length
+          ? "Add Evaluation at least one"
+          : value.reduce((acc, cur) => acc + cur.percent, 0) !== 100
+          ? "Percentage must equal 100%"
+          : null,
     },
     validateInputOnBlur: true,
     onValuesChange: (values, previous) => {
@@ -215,9 +220,10 @@ export default function Part3TQF3({ data, setForm }: Props) {
               </p>
             }
           ></Alert>
-
           {/* Table */}
           <DragDropContext
+            key={form.key("eval")}
+            {...form.getInputProps("eval")}
             onDragEnd={({ destination, source }) => {
               if (!destination) return; // Check if destination exists
               form.reorderListItem("eval", {
@@ -227,13 +233,13 @@ export default function Part3TQF3({ data, setForm }: Props) {
             }}
           >
             <div
-              className="overflow-x-auto w-full flex flex-col rounded-md border border-secondary"
+              className="overflow-auto w-full flex flex-col rounded-md border border-secondary"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
             >
               <Table stickyHeader striped className="w-full">
-                <Table.Thead className="">
+                <Table.Thead>
                   <Table.Tr className="bg-[#e5e7f6] ">
                     <Table.Th className="w-[5%] !rounded-tl-md">No.</Table.Th>
                     <Table.Th className=" w-[15%]">Topic</Table.Th>
@@ -302,10 +308,6 @@ export default function Part3TQF3({ data, setForm }: Props) {
                                 className={`table-row ${
                                   snapshot.isDragging ? "bg-hover " : ""
                                 }`}
-                                // style={{
-                                //   ...provided.draggableProps.style,
-                                //   display: "table-row",
-                                // }}
                               >
                                 <Table.Td className="w-[5%] ">
                                   {item.no}
@@ -315,7 +317,7 @@ export default function Part3TQF3({ data, setForm }: Props) {
                                   <p>{item.topicEN}</p>
                                 </Table.Td>
                                 <Table.Td className="w-[65%]">
-                                  {item.desc}
+                                  {item.desc.length ? item.desc : "-"}
                                 </Table.Td>
                                 <Table.Td className="w-[5%] text-end text-b1">
                                   <p>{item.percent}%</p>
@@ -392,6 +394,9 @@ export default function Part3TQF3({ data, setForm }: Props) {
                 </Table.Tfoot>
               </Table>
             </div>
+            <p className="text-error text-b3 -mt-1">
+              {form.getInputProps("eval").error}
+            </p>
           </DragDropContext>
         </div>
       </div>
