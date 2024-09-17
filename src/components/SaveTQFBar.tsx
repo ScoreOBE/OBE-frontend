@@ -8,7 +8,10 @@ import { dateFormatter } from "@/helpers/functions/function";
 import { useEffect } from "react";
 
 export const partLabel: {
-  [key in keyof IModelTQF3 | keyof IModelTQF5]?: string;
+  [key in keyof Pick<
+    IModelTQF3,
+    "part1" | "part2" | "part3" | "part4" | "part5" | "part6" | "part7"
+  >]: string;
 } = {
   part1: "Part 1",
   part2: "Part 2",
@@ -44,7 +47,7 @@ export default function SaveTQFbar({
   disabledSave,
 }: Props) {
   const user = useAppSelector((state) => state.user);
-  
+
   return (
     <>
       <div
