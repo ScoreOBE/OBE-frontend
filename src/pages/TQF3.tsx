@@ -21,7 +21,6 @@ import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
 import { IconExclamationCircle, IconInfoCircle } from "@tabler/icons-react";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
-import { IModelCourse } from "@/models/ModelCourse";
 import { isEmpty, isEqual } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
 import { saveTQF3 } from "@/services/tqf3/tqf3.service";
@@ -44,8 +43,9 @@ export default function TQF3() {
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
+  // const [course, setCourse] = useState<IModelCourse>();
   const [tqf3Original, setTqf3Original] = useState<IModelTQF3>();
-  const [tqf3, setTqf3] = useState<IModelTQF3>();
+  const [tqf3, setTqf3] = useState<Partial<IModelTQF3>>();
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<UseFormReturnType<any>>();
   const [tqf3Part, setTqf3Part] = useState<string | null>(
@@ -96,74 +96,82 @@ export default function TQF3() {
   }, []);
 
   useEffect(() => {
-    const fetchOneCourse = async () => {
-      const res = await getOneCourse({
-        academicYear: academicYear.id,
-        courseNo,
-      });
-      if (res) {
-        if (res.type == COURSE_TYPE.SEL_TOPIC.en) {
-          setTqf3Original(res.sections[0].TQF3!);
-          if (!course?.sections[0].TQF3?.updatedAt) {
-            dispatch(editCourse(res));
-          }
-          setCurrentPartTQF3(res.sections[0].TQF3!);
-        } else {
-          setTqf3Original(res.TQF3!);
-          if (!course?.TQF3?.updatedAt) {
-            dispatch(editCourse(res));
-          }
-          setCurrentPartTQF3(res.TQF3!);
-        }
-      }
-    };
-    if (academicYear) fetchOneCourse();
+    if (academicYear) fetchOneCourse(true);
   }, [academicYear]);
 
   useEffect(() => {
-    if (course) {
-      if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
-        setTqf3(course.sections[0].TQF3!);
-      } else {
-        setTqf3(course.TQF3!);
-      }
-    }
-  }, [course]);
-
-  useEffect(() => {
-    if (tqf3 && !isEqual(form, tqf3[tqf3Part as keyof IModelTQF3])) {
-      updateTQF3(tqf3Part as keyof IModelTQF3);
+    if (tqf3 && form && !isEqual(form, tqf3[tqf3Part as keyof IModelTQF3])) {
+      updateTQF3();
     }
   }, [form]);
 
-  const updateTQF3 = (part: keyof IModelTQF3) => {
-    if (course && tqf3) {
+  const fetchOneCourse = async (firstFetch: boolean = false) => {
+    const res = await getOneCourse({
+      academicYear: academicYear.id,
+      courseNo,
+    });
+    if (res) {
+      if (res.type == COURSE_TYPE.SEL_TOPIC.en) {
+        setTqf3Original(res.sections[0].TQF3!);
+        setTqf3(res.sections[0].TQF3!);
+        if (firstFetch) {
+          setCurrentPartTQF3(res.sections[0].TQF3!);
+        }
+        if (!course?.sections[0].TQF3?.updatedAt) {
+          dispatch(editCourse(res));
+        }
+      } else {
+        setTqf3Original(res.TQF3!);
+        setTqf3(res.TQF3!);
+        if (firstFetch) {
+          setCurrentPartTQF3(res.TQF3!);
+        }
+        if (!course?.TQF3?.updatedAt) {
+          dispatch(editCourse(res));
+        }
+      }
+    }
+  };
+
+  const updateTQF3 = () => {
+    const part = tqf3Part as keyof Pick<
+      IModelTQF3,
+      "part1" | "part2" | "part3" | "part4" | "part5" | "part6" | "part7"
+    >;
+    if (course && tqf3 && part && tqf3Original && tqf3Original[part]) {
+      let newTqf3;
       if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
         dispatch(
           editCourse({
             id: course.id,
             sections: course.sections.map((sec) => {
               if (sec.TQF3?.id == tqf3.id) {
-                sec.TQF3 = {
-                  ...sec.TQF3,
-                  [part]: { ...sec.TQF3![part], ...form?.getValues() },
+                newTqf3 = {
+                  ...sec.TQF3!,
+                  [part]: {
+                    ...sec.TQF3![part],
+                    ...form?.getValues(),
+                  },
                 };
+                sec.TQF3 = { ...newTqf3 };
               }
               return sec;
             }),
           })
         );
       } else {
+        newTqf3 = {
+          ...course.TQF3,
+          [part]: { ...course.TQF3![part], ...form?.getValues() },
+        };
         dispatch(
           editCourse({
             id: course.id,
-            TQF3: {
-              ...course.TQF3,
-              [part]: { ...course.TQF3![part], ...form?.getValues() },
-            },
+            TQF3: { ...newTqf3 },
           })
         );
       }
+      setTqf3(newTqf3);
     }
   };
 
@@ -235,26 +243,9 @@ export default function TQF3() {
         }
         const res = await saveTQF3(tqf3Part!, payload);
         if (res) {
-          form.reset();
-          form.setValues(res);
           setTqf3Original({ ...tqf3Original, ...res });
-          if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
-            dispatch(
-              editCourse({
-                ...course,
-                sections: course.sections.map((sec) => {
-                  if (sec.TQF3?.id == res.id) {
-                    sec.TQF3 = { ...sec.TQF3!, ...res };
-                  }
-                  return sec;
-                }),
-              })
-            );
-          } else {
-            dispatch(
-              editCourse({ ...course, TQF3: { ...course.TQF3, ...res } })
-            );
-          }
+          form.setValues(res[tqf3Part!]);
+          updateTQF3();
           showNotifications(
             NOTI_TYPE.SUCCESS,
             `TQF 3, ${tqf3Part} save success`,
@@ -340,25 +331,25 @@ export default function TQF3() {
             `}
           >
             <Tabs.List className="md:gap-x-7 gap-x-4 w-full">
-              {partTab.map((part) => (
-                <Tabs.Tab key={part.value} value={part.value}>
+              {partTab.map(({ tab, value }) => (
+                <Tabs.Tab key={value} value={value}>
                   <div className="flex flex-row items-center gap-2">
                     <Icon
                       IconComponent={CheckIcon}
                       className={
                         !tqf3Original ||
                         !tqf3 ||
-                        isEmpty(tqf3Original[part.value as keyof IModelTQF3])
+                        isEmpty(tqf3Original[value as keyof IModelTQF3])
                           ? "text-[#DEE2E6]"
                           : !isEqual(
-                              tqf3Original[part.value as keyof IModelTQF3],
-                              tqf3[part.value as keyof IModelTQF3]
+                              tqf3Original[value as keyof IModelTQF3],
+                              tqf3[value as keyof IModelTQF3]
                             )
                           ? "text-edit"
                           : "text-[#24b9a5]"
                       }
                     />
-                    {part.tab}
+                    {tab}
                   </div>
                 </Tabs.Tab>
               ))}

@@ -1,13 +1,7 @@
-import { COURSE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import {
-  Radio,
   Checkbox,
   TextInput,
-  Textarea,
-  Button,
   Alert,
-  Group,
   Tabs,
   Select,
   Tooltip,
@@ -16,12 +10,12 @@ import { useForm } from "@mantine/form";
 import CheckIcon from "@/assets/icons/Check.svg?react";
 import { Table, rem } from "@mantine/core";
 import { IconCheckbox } from "@tabler/icons-react";
-import { IconInfoCircle, IconPlus } from "@tabler/icons-react";
+import { IconInfoCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import Icon from "../Icon";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelCLO, IModelTQF3Part4 } from "@/models/ModelTQF3";
-import { values } from "lodash";
+import { cloneDeep } from "lodash";
 
 type Props = {
   data: IModelCourse;
@@ -33,25 +27,32 @@ export default function Part4TQF3({ data, setForm }: Props) {
   const form = useForm({
     mode: "controlled",
     initialValues: {
-      data: data.TQF3?.part2?.clo.map((clo) => ({
-        clo: clo,
-        evals: [],
-      })) as IModelTQF3Part4[],
+      data: [] as IModelTQF3Part4[],
     },
     validate: {},
   });
 
   useEffect(() => {
-    if (form.getValues()) {
-      console.log(form.getValues());
+    if (data) {
+      form.setFieldValue(
+        "data",
+        cloneDeep(data.TQF3?.part2?.clo?.map((clo) => ({ clo, evals: [] }))) ??
+          []
+      );
     }
-  }, [form]);
+  }, [data]);
+
+  // useEffect(() => {
+  //   if (form.getValues()) {
+  //     console.log(form.getValues());
+  //   }
+  // }, [form]);
 
   return (
     <div className="flex w-full max-h-full overflow-hidden">
       <div className="flex flex-col w-full">
         <Tabs
-          defaultValue={form.getValues().data[0].clo?.id}
+          defaultValue={data.TQF3?.part2?.clo[0].id}
           classNames={{
             root: "overflow-hidden flex flex-col pt-4 w-full",
             tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
