@@ -5,15 +5,11 @@ import {
   List,
   Alert,
   Tabs,
-  Menu,
   Table,
   Tooltip,
 } from "@mantine/core";
-import checkedTQF3Completed from "@/assets/icons/checkedTQF3Completed.svg?react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
-import Icon from "@/components/Icon";
-import CourseIcon from "@/assets/icons/course.svg?react";
 import { IModelUser } from "@/models/ModelUser";
 import { getCourse } from "@/services/course/course.service";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -23,15 +19,10 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { updateProcessTqf3 } from "@/services/academicYear/academicYear.service";
 import { setProcessTQF3 } from "@/store/academicYear";
-import InfiniteScroll from "react-infinite-scroll-component";
+
 import {
-  IconDots,
-  IconExclamationCircle,
   IconInfoCircle,
-  IconPencilMinus,
-  IconTrash,
 } from "@tabler/icons-react";
-import dupTQF from "@/assets/icons/dupTQF.svg?react";
 
 type Props = {
   opened: boolean;
