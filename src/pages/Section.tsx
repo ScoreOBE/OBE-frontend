@@ -9,6 +9,7 @@ import {
   IconPlus,
   IconTrash,
   IconUpload,
+  IconUsersGroup,
 } from "@tabler/icons-react";
 import ManageAdminIcon from "@/assets/icons/addCo.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
@@ -37,6 +38,7 @@ import { IModelUser } from "@/models/ModelUser";
 import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
+import ModalStudentList from "@/components/Modal/ModalStudentList";
 
 export default function Section() {
   const navigate = useNavigate();
@@ -62,6 +64,7 @@ export default function Section() {
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
   const [openModalManageIns, setOpenModalManageIns] = useState(false);
+  const [openModalStudentList, setOpenModalStudentList] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -184,6 +187,12 @@ export default function Section() {
         data={editCourseData}
         setNewData={setEditCourseData}
       />
+      <ModalStudentList
+        opened={openModalStudentList}
+        onClose={() => setOpenModalStudentList(false)}
+        data={course!}
+        type='studentList'
+      />
       {error.statusCode ? (
         <PageError />
       ) : loading ? (
@@ -216,7 +225,7 @@ export default function Section() {
               )}
               {activeTerm && (
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
-                  <Menu trigger="click" position="bottom-end" >
+                  <Menu trigger="click" position="bottom-end">
                     <Menu.Target>
                       <IconDots />
                     </Menu.Target>
@@ -263,13 +272,13 @@ export default function Section() {
                           </div>
                         </Menu.Item>
                       )}
-                       <Menu.Item className=" text-secondary hover:bg-[#5768d5]/10 font-semibold text-[12px] h-7 w-[210px]">
+                      <Menu.Item
+                        onClick={() => setOpenModalStudentList(true)}
+                        className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[210px]"
+                      >
                         <div className="flex items-center  gap-2">
-                          <Icon
-                            className="h-4 w-4 "
-                            IconComponent={ExcelIcon}
-                          />
-                          <span>Import Student from Reg CMU</span>
+                          <IconUsersGroup className="h-4 w-4 " />
+                          <span>Student list {course?.courseNo}</span>
                         </div>
                       </Menu.Item>
                       <Menu.Item className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-[12px] h-7 ">
