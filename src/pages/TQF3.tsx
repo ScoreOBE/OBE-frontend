@@ -138,7 +138,13 @@ export default function TQF3() {
       IModelTQF3,
       "part1" | "part2" | "part3" | "part4" | "part5" | "part6" | "part7"
     >;
-    if (course && tqf3 && part && tqf3Original && tqf3Original[part]) {
+    if (
+      course &&
+      tqf3 &&
+      part &&
+      tqf3Original &&
+      (part == "part1" || tqf3Original[part])
+    ) {
       let newTqf3;
       if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
         dispatch(
