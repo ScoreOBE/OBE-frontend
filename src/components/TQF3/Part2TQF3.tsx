@@ -202,7 +202,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
             <div className="flex text-secondary items-center w-full justify-between">
               <p className="font-semibold text-[15px]">
                 วัตถุประสงค์ของกระบวนวิชา{" "}
-                <span className="font-bold">(CLO)</span>{" "}
+                <span className="font-bold">(Course Learning Objective: CLO)</span>{" "}
                 <span className=" text-red-500">*</span>
               </p>
               <Button

@@ -81,9 +81,9 @@ export default function Navbar() {
         />
       )}
       {[ROUTE_PATH.LOGIN].includes(location) && (
-        <div className="bg-white items-center  mt-5 justify-between  flex flex-1">
+        <div className="bg-white items-center  mt-5 pb-1 justify-between  flex flex-1">
           <img src={cmulogo} alt="CMULogo" className=" h-[28px] ml-10" />
-          <img src={cpeLogoRed} alt="cpeLogo" className=" h-[80px] mr-10" />
+          <img src={cpeLogoRed} alt="cpeLogo" className=" h-[75px] mr-10" />
         </div>
       )}
       {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}

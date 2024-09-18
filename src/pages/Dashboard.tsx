@@ -22,7 +22,7 @@ import notFoundImage from "@/assets/image/notFound.png";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import MainPopup from "../components/Popup/MainPopup";
 import ModalEditCourse from "../components/Modal/CourseManage/ModalEditCourse";
-import { NOTI_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
@@ -33,6 +33,7 @@ import AddIcon from "@/assets/icons/plus.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
 import ModalUploadScore from "../components/Modal/ModalUploadScore";
 import ModalUploadStudentList from "@/components/Modal/ModalUploadStudentList";
+import { IModelSection } from "@/models/ModelSection";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -53,7 +54,8 @@ export default function Dashboard() {
   const [openModalUploadScore, setOpenModalUploadScore] = useState(false);
   const [openModalUploadStudentList, setOpenModalUploadStudentList] =
     useState(false);
-  const [uploadCourse, setUploadCourse] = useState<Partial<IModelCourse>>();
+  const [uploadCourse, setUploadCourse] =
+    useState<Partial<IModelCourse & IModelSection>>();
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -198,6 +200,22 @@ export default function Dashboard() {
             size="xs"
             searchable
             data={course.courses.map((c) => {
+              if (c.type == COURSE_TYPE.SEL_TOPIC.en) {
+                let detailSec = []
+                const sectionNo = uploadCourse?.sectionNo
+                const topic = uploadCourse?.topic
+                if(sectionNo && topic){
+                  detailSec.push({sectionNo, topic})
+                }
+                return {
+                  value: c.courseNo,
+                  id: c.id,
+                  courseName: c.courseName,
+                  section: sectionNo,
+                  topic: topic,
+                  label: `${c.courseNo} ${c.courseName}`,
+                };
+              }
               return {
                 value: c.courseNo,
                 id: c.id,
@@ -205,18 +223,26 @@ export default function Dashboard() {
                 label: `${c.courseNo} ${c.courseName}`,
               };
             })}
+            
             value={uploadCourse?.courseNo}
             onChange={(value, option: any) =>
               setUploadCourse({
                 id: option.id,
                 courseNo: option.value,
                 courseName: option.courseName,
+                sectionNo: option.secNo,
+                topic: option.topic,
               })
             }
             renderOption={(item: any) => (
               <div className="flex w-full gap-2">
                 <p className="w-[9%] min-w-fit">{item.option.value}</p>
-                <p>{item.option.courseName}</p>
+                <p>
+                  {item.option.courseName} <br /> {item.option.topic}
+                </p>
+                <p>
+                  {item.option.topic} 
+                </p>
               </div>
             )}
           />
@@ -263,7 +289,9 @@ export default function Dashboard() {
         onBack={() => {
           setOpenModalUploadStudentList(false), setOpenModalSelectCourse(true);
         }}
-        onNext={() => {setOpenModalUploadScore(true), setOpenModalUploadStudentList(false)}}
+        onNext={() => {
+          setOpenModalUploadScore(true), setOpenModalUploadStudentList(false);
+        }}
       />
 
       <div className=" flex flex-col h-full w-full  overflow-hidden">

@@ -59,7 +59,7 @@ export default function SaveTQFbar({
               <span>{dateFormatter(data.updatedAt)}</span>
             </>
           ) : (
-            <>Not Saved</>
+            <>Unsaved Changes</>
           )}
         </p>
 

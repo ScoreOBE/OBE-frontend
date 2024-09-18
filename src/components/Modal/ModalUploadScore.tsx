@@ -1,45 +1,22 @@
-import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { Group, Text, rem } from "@mantine/core";
-import Loading from "@/components/Loading";
-import { deletePLO, getPLOs } from "@/services/plo/plo.service";
-import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
-import ModalAddPLOCollection from "@/components/Modal/ModalAddPLOCollection";
-import {
-  Alert,
-  Button,
-  Modal,
-  Radio,
-  RadioCard,
-  Table,
-  Tabs,
-} from "@mantine/core";
-import ThIcon from "@/assets/icons/thai.svg?react";
-import EngIcon from "@/assets/icons/eng.svg?react";
-import Icon from "@/components/Icon";
+import { Alert, Button, Modal } from "@mantine/core";
 import {
   IconBulb,
-  IconChevronRight,
   IconDownload,
   IconExclamationCircle,
   IconFile,
   IconFileExcel,
   IconFileImport,
   IconInfoCircle,
-  IconLighter,
-  IconPaperBag,
-  IconPhoto,
-  IconPlus,
-  IconTipJar,
-  IconTrash,
   IconUpload,
+  IconUsersGroup,
   IconX,
 } from "@tabler/icons-react";
-import { useDisclosure } from "@mantine/hooks";
-import { isEmpty } from "lodash";
 import { IModelCourse } from "@/models/ModelCourse";
 import gradescope from "@/assets/image/gradescope.png";
+import ModalStudentList from "./ModalStudentList";
 
 type Props = {
   opened: boolean;
@@ -48,27 +25,16 @@ type Props = {
 };
 
 export default function ModalUploadScore({ opened, onClose, data }: Props) {
-  const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
-  const [selectPlo, setSelectPlo] = useState<string | null>("Dashboard");
-  const [ploCollection, setPloCollection] = useState<IModelPLO[]>([]);
-  const [departmentPloCollection, setDepartmentPLOCollection] = useState<
-    IModelPLOCollection[]
-  >([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [isTH, setIsTH] = useState<string | null>("TH");
-  const [selectView, setSelectView] = useState<string | null>("ploview");
-  const [collection, setCollection] = useState<
-    Partial<IModelPLO> & Record<string, any>
-  >({});
-  const [
-    modalDuplicatePLO,
-    { open: openModalDuplicatePLO, close: closeModalDuplicatePLO },
-  ] = useDisclosure(false);
+  const [openModalStudentList, setOpenModalStudentList] = useState(false);
 
   return (
     <>
+      <ModalStudentList
+        data={data}
+        opened={openModalStudentList}
+        onClose={() => setOpenModalStudentList(false)}
+        type="import"
+      />
       {/* Main Modal */}
       <Modal.Root
         opened={opened}
@@ -85,23 +51,32 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
             }}
             className="!pt-4  flex w-full rounded-none   pb-4 !px-0"
           >
-            <div className="flex flex-col gap-5 items-start w-full ">
-              <div className="inline-flex px-12 w-full gap-2 items-center font-semibold text-h2 text-secondary">
+            <div className="flex px-12 items-center  justify-between  w-full ">
+              <div className="inline-flex  gap-2 items-center font-semibold text-h2 text-secondary">
                 <Modal.CloseButton className="!m-0" />
                 <div className="flex flex-col">
-                  <p>Upload Score  </p>
+                  <p>Upload Score </p>
                   <p className=" text-[12px] text-noData">
                     {" "}
                     {data?.courseNo} {data?.courseName}
                   </p>
                 </div>
               </div>
+              <Button
+                leftSection={<IconFileImport className="size-4" />}
+                color="#5268d5"
+                variant="outline"
+                className="w-28"
+                onClick={() => setOpenModalStudentList(true)}
+              >
+                Import student list
+              </Button>
             </div>
           </Modal.Header>
 
           <Modal.Body className="    flex flex-col h-full w-full  ">
             {/* Topic */}
-            <div className="flex flex-col gap-3 px-40 py-6 ">
+            <div className="flex flex-col gap-3 px-44 py-6 ">
               <Alert
                 radius="md"
                 variant="light"
@@ -147,7 +122,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   </div>
                 }
               >
-                <div className="flex mt-2 mb-2">
+                <div className="flex items-center mt-2 mb-2">
                   <img
                     src={gradescope}
                     alt="CMULogo"
@@ -233,7 +208,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 onReject={(files) => console.log("rejected files", files)}
                 maxSize={5 * 1024 ** 2}
                 accept={IMAGE_MIME_TYPE}
-                className=" py-12 border-[#8f9ae37f] border-dashed bg-gray-50 cursor-pointer border-[2px] rounded-md"
+                className=" hover:bg-gray-100 py-12 border-[#8f9ae37f] border-dashed bg-gray-50 cursor-pointer border-[2px] rounded-md"
               >
                 <Group
                   justify="center"
@@ -276,7 +251,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                       or drag and drop
                     </p>
                     <p className="-mt-2 font-medium items-center justify-center text-center text-secondary text-b2">
-                      CSV format only (up to 10MB)
+                      CSV or XLSX format only (up to 10MB)
                     </p>
                     <div className="flex flex-col font-medium  text-b2 text-red-500  items-center text-center justify-center">
                       <div className="flex gap-2 items-center justify-center">
@@ -288,12 +263,42 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   </div>
                 </Group>
               </Dropzone>
-              <div className=" rounded-md border-[2px] border-[#8f9ae37f] py-6 gap-3 px-8 flex">
-                {" "}
-                <IconFileExcel color="#058A3A" className="size-8" />{" "}
-                <div className="flex flex-col">
-                <p className=" text-secondary font-semibold">File name.csv</p>
-                <p className=" text-b3 text-default">88KB</p></div>
+              <div className=" rounded-md items-center border-[2px] border-[#8f9ae37f] py-6 gap-3 px-8 flex">
+                <div className="flex flex-col w-full">
+                  <div className="flex items-center gap-2">
+                    <IconFileExcel color="#058A3A" className="size-7" />{" "}
+                    <div className="flex flex-col">
+                      <p className=" text-secondary font-semibold">
+                        File name.xlsx
+                      </p>
+                      <p className=" text-b3 text-default">88 KB</p>
+                    </div>
+                  </div>
+                  <div className=" ml-9 mt-2 rounded-md h-2 bg-slate-300">
+                    {" "}
+                    <div className="bg-secondary rounded-md w-72 h-2"></div>
+                  </div>
+                </div>
+              </div>
+              <div className=" rounded-md items-center border-[2px] border-[#8f9ae37f] py-6 gap-3 px-8 flex">
+                <div className="flex justify-between items-center w-full">
+                  <div className="flex items-center gap-2">
+                    <IconFileExcel color="#058A3A" className="size-7" />{" "}
+                    <div className="flex flex-col">
+                      <p className=" text-secondary font-semibold">
+                        File name.xlsx
+                      </p>
+                      <p className=" text-b3 text-default">88 KB</p>
+                    </div>
+                  </div>
+                  <Button
+                    color="#DDE0FF"
+                    className=" text-secondary pl-4 font-extrabold hover:text-[#4a58b4] text-b3 rounded-md"
+                    leftSection={<IconUpload className="size-4" />}
+                  >
+                    Upload
+                  </Button>
+                </div>
               </div>
             </div>
           </Modal.Body>
