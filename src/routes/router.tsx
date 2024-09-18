@@ -11,6 +11,7 @@ import {
 } from "@/pages";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import App from "@/App";
+import PageError from "@/pages/PageError";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
           {
             path: ROUTE_PATH.TQF3,
             element: <TQF3 />,
+            errorElement: <></>
           },
         ],
       },

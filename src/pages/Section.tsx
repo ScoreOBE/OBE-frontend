@@ -39,6 +39,7 @@ import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
+import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 
 export default function Section() {
   const navigate = useNavigate();
@@ -65,6 +66,7 @@ export default function Section() {
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
   const [openModalManageIns, setOpenModalManageIns] = useState(false);
   const [openModalStudentList, setOpenModalStudentList] = useState(false);
+
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -191,8 +193,9 @@ export default function Section() {
         opened={openModalStudentList}
         onClose={() => setOpenModalStudentList(false)}
         data={course!}
-        type='studentList'
+        type="studentList"
       />
+
       {error.statusCode ? (
         <PageError />
       ) : loading ? (

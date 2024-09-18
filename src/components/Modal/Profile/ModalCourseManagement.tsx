@@ -196,7 +196,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const onClickDeleteCourse = async (course: any) => {
     const res = await deleteCourseManagement(course.id, course);
     if (res) {
-      setOpenMainPopupDelSec(false);
+      setOpenMainPopupDelCourse(false);
       dispatch(removeCourseManagement(res.id));
       dispatch(removeCourse(res.courseId));
       showNotifications(
@@ -331,9 +331,9 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         <Modal.Overlay />
         <Modal.Content className="overflow-hidden !rounded-none !px-0">
           <Modal.Header className="flex w-full !pb-0 !px-0 !pt-4 rounded-none">
-            <div className="flex flex-col gap-[6px] items-start w-full">
-              <div className="inline-flex px-12 w-full gap-2 justify-between">
-                <div className="flex gap-2">
+            <div className="flex  flex-col gap-[6px] items-start w-full">
+              <div className="inline-flex relative px-12 w-full items-center justify-center gap-2  ">
+                <div className="flex absolute left-12 gap-2">
                   <Modal.CloseButton className="ml-0" />
                   <p className="font-semibold text-h2 text-secondary">
                     Course Management

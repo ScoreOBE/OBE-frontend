@@ -50,11 +50,11 @@ export const getKeyByValue = (object: any, value: any) => {
   ) as keyof object;
 };
 
-export const getEnumByKey = (Enum: any, key: string): string => {
+export const getValueEnumByKey = (Enum: any, key: string): string => {
   return Enum[key as keyof typeof Enum] ?? "";
 };
 
-export const getEnumByValue = (Enum: any, value: string): string => {
+export const getKeyEnumByValue = (Enum: any, value: string): string => {
   return Object.keys(Enum)[Object.values(Enum).indexOf(value)] ?? "";
 };
 

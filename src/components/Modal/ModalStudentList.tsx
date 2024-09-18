@@ -139,7 +139,7 @@ export default function ModalStudentList({ opened, onClose, data, type }: Props)
           placeholder="Section No, Student No, Name"
           size="xs"
           rightSectionPointerEvents="all"
-          className="mx-1 mb-1 mt-1"
+          className="mx-1 "
         ></TextInput>
         <div
           className=" mx-1 max-h-[500px] h-fit  flex flex-col bg-white mb-1  mt-2 rounded-md overflow-y-auto"
@@ -154,8 +154,8 @@ export default function ModalStudentList({ opened, onClose, data, type }: Props)
                 <Table.Th className=" w-[5%]">No.</Table.Th>
                 <Table.Th className=" w-[10%]">SECLEC</Table.Th>
                 <Table.Th className=" w-[10%]">SECLAB</Table.Th>
-                <Table.Th className=" w-[15%]">Student No.</Table.Th>
-                <Table.Th className=" w-[60%]">Name</Table.Th>
+                <Table.Th className=" w-[17%]">Student No.</Table.Th>
+                <Table.Th className=" w-[58%]">Name</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>{rows}</Table.Tbody>
@@ -182,7 +182,7 @@ export default function ModalStudentList({ opened, onClose, data, type }: Props)
             </p>
           </div>
         }
-        size="65vw"
+        size="55vw"
         opened={opened}
         onClose={onClose}
         centered
@@ -210,10 +210,10 @@ export default function ModalStudentList({ opened, onClose, data, type }: Props)
             {studentTable()}
           </Tabs.Panel>
           <Tabs.Panel
-            className="flex-col overflow-auto "
+            className=" overflow-hidden flex  "
             value="importStudentList"
           >
-            <div className=" overflow-y-auto flex flex-col  h-full gap-3">
+            <div className=" overflow-y-auto   max-h-[502px]  gap-3">
               <Alert
                 radius="md"
                 variant="light"
@@ -263,7 +263,7 @@ export default function ModalStudentList({ opened, onClose, data, type }: Props)
                 onReject={(files) => console.log("rejected files", files)}
                 maxSize={5 * 1024 ** 2}
                 accept={IMAGE_MIME_TYPE}
-                className="  border-[#8f9ae37f] hover:bg-gray-100 border-dashed bg-gray-50 cursor-pointer border-[2px] rounded-md"
+                className="  border-[#8f9ae37f] mt-3 hover:bg-gray-100 border-dashed bg-gray-50 cursor-pointer border-[2px] rounded-md"
               >
                 <Group
                   justify="center"
