@@ -32,6 +32,11 @@
   border-width: 1px !important;
 }
 
+.mantine-CheckboxCard-card{
+  align-items: center;
+  display: flex;
+}
+
 /* Stepper */
 .mantine-Stepper-stepIcon[data-completed],
 .mantine-Stepper-separator[data-active] {

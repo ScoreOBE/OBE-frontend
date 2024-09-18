@@ -24,7 +24,7 @@ import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { isEmpty, isEqual } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
 import { saveTQF3 } from "@/services/tqf3/tqf3.service";
-import { getKeyByValue, showNotifications } from "@/helpers/functions/function";
+import { getValueEnumByKey, getKeyByValue, showNotifications } from "@/helpers/functions/function";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { UseFormReturnType } from "@mantine/form";
 import { editCourse } from "@/store/course";
@@ -35,10 +35,13 @@ import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import { LearningMethod } from "@/components/Modal/TQF3/ModalManageCLO";
+import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
+import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
 import { IModelCourse } from "@/models/ModelCourse";
 
 export default function TQF3() {
   const { courseNo } = useParams();
+  const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
   const loading = useAppSelector((state) => state.loading);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   // const course = useAppSelector((state) =>
@@ -196,27 +199,6 @@ export default function TQF3() {
     }
   };
 
-  const topicPart = () => {
-    switch (tqf3Part) {
-      case Object.keys(partLabel)[0]:
-        return "Part 1 - ข้อมูลกระบวนวิชา\nCourse Information";
-      case Object.keys(partLabel)[1]:
-        return "Part 2 - คำอธิบายลักษณะกระบวนวิชาและแผนการสอน\nDescription and Planning";
-      case Object.keys(partLabel)[2]:
-        return "Part 3 - การประเมินผลคะแนนกระบวนวิชา\nCourse Evaluation";
-      case Object.keys(partLabel)[3]:
-        return "Part 4 - การเชื่อมโยงหัวข้อประเมิน\nAssessment Mapping";
-      case Object.keys(partLabel)[4]:
-        return "Part 5 - ทรัพยากรประกอบการเรียนการสอน\nCourse Materials";
-      case Object.keys(partLabel)[5]:
-        return "Part 6 - การประเมินกระบวนวิชาและกระบวนการปรับปรุง\nCourse evaluation and improvement processes";
-      case Object.keys(partLabel)[6]:
-        return "Part 7 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้\nCurriculum Mapping";
-      default:
-        return;
-    }
-  };
-
   const onSave = async () => {
     if (form && course && tqf3Part) {
       const validationResult = form.validate();
@@ -264,6 +246,11 @@ export default function TQF3() {
     <Loading />
   ) : (
     <>
+    {/* Modal Export TQF3 */}
+          <ModalExportTQF3
+        opened={openModalExportTQF3}
+        onClose={() => setOpenModalExportTQF3(false)}
+      />
       {/* Reuse TQF3 */}
       <Modal
         title="Reuse TQF3"
@@ -360,7 +347,7 @@ export default function TQF3() {
             </Tabs.List>
             <div className="flex justify-between pt-4 items-center">
               <div className=" text-secondary  overflow-y-auto font-semibold  whitespace-break-spaces">
-                {topicPart()}
+                {getValueEnumByKey(PartTopicTQF3, tqf3Part!)}
               </div>
               <div className="flex flex-row flex-wrap gap-3">
                 <Tooltip
@@ -396,7 +383,7 @@ export default function TQF3() {
                     Reuse TQF3
                   </Button>
                 </Tooltip>
-                <Button color="#24b9a5" className="px-4">
+                <Button onClick={() => setOpenModalExportTQF3(true)} color="#24b9a5" className="px-4">
                   <div className="flex gap-2 items-center">
                     <Icon IconComponent={exportFile} />
                     Export TQF3
