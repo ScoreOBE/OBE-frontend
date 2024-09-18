@@ -128,7 +128,7 @@ export default function ModalManageIns({
     });
     if (res) {
       dispatch(editCourseManagement(res.courseManagement));
-      dispatch(editCourse(res.course));
+      if (res.course) dispatch(editCourse(res.course));
       setCoInsList(cloneDeep(editCoInsList));
       showNotifications(
         NOTI_TYPE.SUCCESS,
@@ -397,7 +397,7 @@ export default function ModalManageIns({
                 {getUserName(editSec?.instructor as IModelUser, 1)}
               </p>
               <p className="text-secondary text-[12px] font-normal">
-                Owner Section {getSectionNo(editSec.sectionNo)}{" "}
+                Owner Section {getSectionNo(editSec.data.sectionNo)}{" "}
               </p>
             </div>
           </div>
