@@ -37,15 +37,17 @@ import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import { LearningMethod } from "@/components/Modal/TQF3/ModalManageCLO";
 import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
+import { IModelCourse } from "@/models/ModelCourse";
 
 export default function TQF3() {
   const { courseNo } = useParams();
   const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
   const loading = useAppSelector((state) => state.loading);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const course = useAppSelector((state) =>
-    state.course.courses.find((c) => c.courseNo == courseNo)
-  );
+  // const course = useAppSelector((state) =>
+  //   state.course.courses.find((c) => c.courseNo == courseNo)
+  // );
+  const [course, setCourse] = useState<IModelCourse>();
   const [tqf3Original, setTqf3Original] = useState<IModelTQF3>();
   const [tqf3, setTqf3] = useState<Partial<IModelTQF3>>();
   const dispatch = useAppDispatch();
@@ -58,37 +60,37 @@ export default function TQF3() {
     {
       value: Object.keys(partLabel)[0],
       tab: partLabel.part1,
-      compo: course && <Part1TQF3 data={course} setForm={setForm} />,
+      compo: <Part1TQF3 data={course!} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[1],
       tab: partLabel.part2,
-      compo: course && <Part2TQF3 data={course} setForm={setForm} />,
+      compo: <Part2TQF3 data={course!} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[2],
       tab: partLabel.part3,
-      compo: course && <Part3TQF3 data={course} setForm={setForm} />,
+      compo: <Part3TQF3 data={course!} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[3],
       tab: partLabel.part4,
-      compo: course && <Part4TQF3 data={course} setForm={setForm} />,
+      compo: <Part4TQF3 data={course!} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[4],
       tab: partLabel.part5,
-      compo: course && <Part5TQF3 data={course} setForm={setForm} />,
+      compo: <Part5TQF3 data={course!} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[5],
       tab: partLabel.part6,
-      compo: course && <Part6TQF3 data={course} setForm={setForm} />,
+      compo: <Part6TQF3 data={course!} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[6],
       tab: partLabel.part7,
-      compo: course && <Part7TQF3 data={course} setForm={setForm} />,
+      compo: <Part7TQF3 data={course!} setForm={setForm} />,
     },
   ];
 
@@ -102,9 +104,15 @@ export default function TQF3() {
   }, [academicYear]);
 
   useEffect(() => {
-    if (tqf3 && form && !isEqual(form, tqf3[tqf3Part as keyof IModelTQF3])) {
+    if (
+      course &&
+      tqf3 &&
+      form &&
+      !isEqual(form, tqf3[tqf3Part as keyof IModelTQF3])
+    ) {
       updateTQF3();
     }
+    // console.log(course, tqf3Original, tqf3);
   }, [form]);
 
   const fetchOneCourse = async (firstFetch: boolean = false) => {
@@ -116,20 +124,16 @@ export default function TQF3() {
       if (res.type == COURSE_TYPE.SEL_TOPIC.en) {
         setTqf3Original(res.sections[0].TQF3!);
         setTqf3(res.sections[0].TQF3!);
+        setCourse(res);
         if (firstFetch) {
           setCurrentPartTQF3(res.sections[0].TQF3!);
-        }
-        if (!course?.sections[0].TQF3?.updatedAt) {
-          dispatch(editCourse(res));
         }
       } else {
         setTqf3Original(res.TQF3!);
         setTqf3(res.TQF3!);
+        setCourse(res);
         if (firstFetch) {
           setCurrentPartTQF3(res.TQF3!);
-        }
-        if (!course?.TQF3?.updatedAt) {
-          dispatch(editCourse(res));
         }
       }
     }
@@ -147,39 +151,35 @@ export default function TQF3() {
       tqf3Original &&
       (["part1", "part5"].includes(part) || tqf3Original[part])
     ) {
-      let newTqf3;
+      let newTqf3: IModelTQF3;
       if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
-        dispatch(
-          editCourse({
-            id: course.id,
-            sections: course.sections.map((sec) => {
-              if (sec.TQF3?.id == tqf3.id) {
-                newTqf3 = {
-                  ...sec.TQF3!,
-                  [part]: {
-                    ...sec.TQF3![part],
-                    ...form?.getValues(),
-                  },
-                };
-                sec.TQF3 = { ...newTqf3 };
-              }
-              return sec;
-            }),
-          })
-        );
+        setCourse({
+          ...course,
+          sections: course.sections.map((sec) => {
+            if (sec.TQF3?.id == tqf3.id) {
+              newTqf3 = {
+                ...sec.TQF3!,
+                [part]: {
+                  ...sec.TQF3![part],
+                  ...form?.getValues(),
+                },
+              };
+              sec.TQF3 = { ...newTqf3 };
+            }
+            return sec;
+          }),
+        });
       } else {
         newTqf3 = {
-          ...course.TQF3,
+          ...course.TQF3!,
           [part]: { ...course.TQF3![part], ...form?.getValues() },
         };
-        dispatch(
-          editCourse({
-            id: course.id,
-            TQF3: { ...newTqf3 },
-          })
-        );
+        setCourse({
+          ...course,
+          TQF3: { ...newTqf3 },
+        });
       }
-      setTqf3(newTqf3);
+      setTqf3(newTqf3!);
     }
   };
 
@@ -200,7 +200,7 @@ export default function TQF3() {
   };
 
   const onSave = async () => {
-    if (form && course) {
+    if (form && course && tqf3Part) {
       const validationResult = form.validate();
       if (Object.keys(validationResult.errors).length > 0) {
         const firstErrorPath = Object.keys(validationResult.errors)[0];
@@ -228,10 +228,9 @@ export default function TQF3() {
           case Object.keys(partLabel)[4]:
           case Object.keys(partLabel)[5]:
         }
-        const res = await saveTQF3(tqf3Part!, payload);
+        const res = await saveTQF3(tqf3Part, payload);
         if (res) {
           setTqf3Original({ ...tqf3Original, ...res });
-          form.setValues(res[tqf3Part!]);
           updateTQF3();
           showNotifications(
             NOTI_TYPE.SUCCESS,
@@ -400,7 +399,13 @@ export default function TQF3() {
           >
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.value} className="w-full">
-                {tqf3Part === part.value && part.compo}
+                {tqf3Part === part.value && course ? (
+                  part.compo
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <Loading />
+                  </div>
+                )}
               </Tabs.Panel>
             ))}
           </div>
