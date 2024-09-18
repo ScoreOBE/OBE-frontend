@@ -41,8 +41,9 @@ export interface IModelTQF3Part3 {
 
 export interface IModelTQF3Part4 {
   clo: IModelCLO;
+  percent: number;
   evals: {
-    eval: IModelEval;
+    eval: IModelEval | string;
     evalWeek: number[];
     percent: number;
   }[];
