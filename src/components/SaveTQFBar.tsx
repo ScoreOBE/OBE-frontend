@@ -1,11 +1,9 @@
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppSelector } from "@/store";
 import { Button } from "@mantine/core";
 import saveIcon from "@/assets/icons/save.svg?react";
 import Icon from "./Icon";
 import { IModelTQF3 } from "@/models/ModelTQF3";
-import { IModelTQF5 } from "@/models/ModelTQF5";
 import { dateFormatter } from "@/helpers/functions/function";
-import { useEffect } from "react";
 
 export const partLabel: {
   [key in keyof Pick<

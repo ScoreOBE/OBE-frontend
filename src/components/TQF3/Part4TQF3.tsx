@@ -14,8 +14,8 @@ import { IconInfoCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import Icon from "../Icon";
 import { IModelCourse } from "@/models/ModelCourse";
-import { IModelCLO, IModelTQF3Part4 } from "@/models/ModelTQF3";
-import { cloneDeep } from "lodash";
+import { IModelTQF3Part4 } from "@/models/ModelTQF3";
+import { cloneDeep, isEqual } from "lodash";
 
 type Props = {
   data: IModelCourse;
@@ -23,17 +23,26 @@ type Props = {
 };
 
 export default function Part4TQF3({ data, setForm }: Props) {
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const form = useForm({
     mode: "controlled",
     initialValues: {
       data: [] as IModelTQF3Part4[],
     },
     validate: {},
+    onValuesChange(values, previous) {
+      values.data.forEach((item) => {
+        item.evals.forEach((e) => (e.percent = parseInt(e.percent as any)));
+      });
+      if (!isEqual(values, previous)) {
+        setForm(form);
+      }
+    },
   });
 
   useEffect(() => {
-    if (data) {
+    if (data.TQF3?.part4) {
+      form.setValues(cloneDeep(data.TQF3.part4));
+    } else if (data.TQF3?.part2) {
       form.setFieldValue(
         "data",
         cloneDeep(data.TQF3?.part2?.clo?.map((clo) => ({ clo, evals: [] }))) ??
@@ -49,34 +58,29 @@ export default function Part4TQF3({ data, setForm }: Props) {
   // }, [form]);
 
   return (
-    <div className="flex w-full max-h-full overflow-hidden">
-      <div className="flex flex-col w-full">
-        <Tabs
-          defaultValue={data.TQF3?.part2?.clo[0].id}
-          classNames={{
-            root: "overflow-hidden flex flex-col pt-4 w-full",
-            tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
-            tabLabel: "!font-semibold",
-          }}
-        >
-          <Tabs.List className="!bg-transparent items-center flex w-full gap-5">
-            {form.getValues().data.map((item) => (
-              <Tabs.Tab key={item.clo.id} value={item.clo.id}>
-                <div className="flex flex-row items-center gap-2">
-                  <Icon IconComponent={CheckIcon} className="text-[#24b9a5]" />
-                  <p>CLO {item.clo.no}</p>
-                </div>
-              </Tabs.Tab>
-            ))}
-          </Tabs.List>
-
+    <div className="flex w-full h-full overflow-hidden">
+      <Tabs
+        defaultValue={data.TQF3?.part2?.clo[0].id}
+        classNames={{
+          root: "overflow-hidden flex flex-col pt-4 w-full h-full",
+          tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
+          tabLabel: "!font-semibold",
+        }}
+      >
+        <Tabs.List className="!bg-transparent items-center flex w-full gap-5">
+          {form.getValues().data.map((item) => (
+            <Tabs.Tab key={item.clo.id} value={item.clo.id}>
+              <div className="flex flex-row items-center gap-2">
+                <Icon IconComponent={CheckIcon} className="text-[#24b9a5]" />
+                <p>CLO {item.clo.no}</p>
+              </div>
+            </Tabs.Tab>
+          ))}
+        </Tabs.List>
+        <div className="overflow-y-auto w-full max-h-full">
           {form.getValues().data.map((item, index) => (
-            <Tabs.Panel
-              key={item.clo.id}
-              value={item.clo.id}
-              className="overflow-hidden flex h-full"
-            >
-              <div className="flex text-secondary overflow-y-auto  max-h-full gap-4 items-start w-full px-3 pb-7 py-5 pr-3 flex-col">
+            <Tabs.Panel key={item.clo.id} value={item.clo.id}>
+              <div className="flex flex-col text-secondary gap-4 items-start w-full px-3 py-5">
                 <div className="flex flex-col gap-[2px] text-[15px]">
                   <p className="font-bold">
                     CLO {item.clo.no} -{" "}
@@ -123,9 +127,8 @@ export default function Part4TQF3({ data, setForm }: Props) {
                     }
                   ></Alert>
                 </div>
-
                 <div
-                  className=" w-full flex flex-col rounded-md border border-secondary  overflow-clip"
+                  className="overflow-auto w-full flex flex-col rounded-md border border-secondary"
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                   }}
@@ -170,17 +173,24 @@ export default function Part4TQF3({ data, setForm }: Props) {
                         </Table.Th>
                       </Table.Tr>
                     </Table.Thead>
-
-                    <Table.Tbody className="text-[13px] font-normal text-[#333333] ">
+                    <Table.Tbody className="text-[13px] font-semibold">
                       {data.TQF3?.part3?.eval.map((evalItem) => {
-                        const evalIndex = form
-                          .getValues()
-                          .data[index].evals.map((e, i) => {
-                            if (e.eval.no === evalItem.no) return i;
-                          })[0]!;
+                        const evalIndex =
+                          item.evals.map((e: any, i) => {
+                            if (e === evalItem.id) return i;
+                          })[0] || 0;
 
                         return (
-                          <Table.Tr key={evalItem.no}>
+                          <Table.Tr
+                            key={evalItem.no}
+                            className={`${
+                              item.evals.find(
+                                (e) => e.eval == (evalItem.id as any)
+                              )
+                                ? "text-[#333333]"
+                                : "text-noData"
+                            }`}
+                          >
                             <Table.Td>
                               <Checkbox
                                 aria-label="Select row"
@@ -188,32 +198,25 @@ export default function Part4TQF3({ data, setForm }: Props) {
                                 onChange={(event) => {
                                   if (
                                     event.target.checked &&
-                                    !selectedRows.includes(evalItem.no)
+                                    !item.evals.find(
+                                      (e) => e.eval == (evalItem.id as any)
+                                    )
                                   ) {
-                                    setSelectedRows((prev) => [
-                                      ...prev,
-                                      evalItem.no,
-                                    ]);
                                     form.insertListItem(`data.${index}.evals`, {
-                                      eval: evalItem,
+                                      eval: evalItem.id,
                                       evalWeek: [],
                                       percent: 0,
                                     });
                                   } else if (
                                     !event.target.checked &&
-                                    selectedRows.includes(evalItem.no)
+                                    item.evals.find(
+                                      (e) => e.eval == (evalItem.id as any)
+                                    )
                                   ) {
-                                    setSelectedRows(
-                                      selectedRows.filter(
-                                        (row) => row != evalItem.no
-                                      )
+                                    form.removeListItem(
+                                      `data.${index}.evals`,
+                                      evalIndex
                                     );
-                                    {
-                                      form.removeListItem(
-                                        `data.${index}.evals`,
-                                        evalIndex
-                                      );
-                                    }
                                   }
                                 }}
                               />
@@ -222,7 +225,9 @@ export default function Part4TQF3({ data, setForm }: Props) {
                               <p className="w-fit">{evalItem.topicTH}</p>
                               <p className="w-fit">{evalItem.topicEN}</p>
                             </Table.Td>
-                            <Table.Td>{evalItem.desc}</Table.Td>
+                            <Table.Td>
+                              {evalItem.desc.length ? evalItem.desc : "-"}
+                            </Table.Td>
                             <Table.Td>
                               <Select
                                 data={[{ value: "test", label: "Test" }]}
@@ -230,32 +235,23 @@ export default function Part4TQF3({ data, setForm }: Props) {
                                   option: "text-[13px] py-2 px-3",
                                   options:
                                     "whitespace-pre-wrap leading-5 overflow-y-auto",
-                                  input: `whitespace-break-spaces flex flex-col flex-wrap ${
-                                    !selectedRows.includes(evalItem.no) &&
-                                    "!bg-hover"
-                                  }`,
+                                  input: `whitespace-break-spaces flex flex-col flex-wrap`,
                                 }}
+                                disabled={
+                                  !item.evals.find(
+                                    (e) => e.eval == (evalItem.id as any)
+                                  )
+                                }
                               />
                             </Table.Td>
                             <Table.Td className="pr-6 text-end text-b1 ">
                               <div className="flex font-semibold flex-row items-center gap-2">
                                 <TextInput
-                                  // disabled={
-                                  //   !form
-                                  //     .getValues()
-                                  //     .data[index].evals.find((e) => {
-                                  //       e.eval.no === evalItem.no;
-                                  //     })
-                                  // }
-                                  classNames={{
-                                    input: `!rounded-[4px] ${
-                                      !form
-                                        .getValues()
-                                        .data[index].evals.find((e) => {
-                                          e.eval.no === evalItem.no;
-                                        }) && "!bg-hover"
-                                    }`,
-                                  }}
+                                  disabled={
+                                    !item.evals.find(
+                                      (e) => e.eval == (evalItem.id as any)
+                                    )
+                                  }
                                   {...form.getInputProps(
                                     `data.${index}.evals.${evalIndex}.percent`
                                   )}
@@ -268,7 +264,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
                       })}
                     </Table.Tbody>
 
-                    <Table.Tfoot className="text-secondary   font-semibold  ">
+                    <Table.Tfoot className="text-secondary font-semibold  ">
                       <Table.Tr className="bg-[#e5e7f6] border-none">
                         <Table.Th
                           className="text-[14px] !rounded-bl-md"
@@ -277,7 +273,11 @@ export default function Part4TQF3({ data, setForm }: Props) {
                           Total
                         </Table.Th>
                         <Table.Th className="text-[16px] text-end pr-6">
-                          60 %
+                          {item.evals.reduce(
+                            (acc, cur) => acc + cur.percent,
+                            0
+                          )}
+                          %
                         </Table.Th>
                       </Table.Tr>
                     </Table.Tfoot>
@@ -286,10 +286,8 @@ export default function Part4TQF3({ data, setForm }: Props) {
               </div>
             </Tabs.Panel>
           ))}
-        </Tabs>
-
-        {/* CLO Map Assessmen Tool */}
-      </div>
+        </div>
+      </Tabs>
     </div>
   );
 }
