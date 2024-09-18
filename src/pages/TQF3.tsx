@@ -43,7 +43,6 @@ export default function TQF3() {
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
-  // const [course, setCourse] = useState<IModelCourse>();
   const [tqf3Original, setTqf3Original] = useState<IModelTQF3>();
   const [tqf3, setTqf3] = useState<Partial<IModelTQF3>>();
   const dispatch = useAppDispatch();
@@ -56,37 +55,37 @@ export default function TQF3() {
     {
       value: Object.keys(partLabel)[0],
       tab: partLabel.part1,
-      compo: <Part1TQF3 data={course!} setForm={setForm} />,
+      compo: course && <Part1TQF3 data={course} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[1],
       tab: partLabel.part2,
-      compo: <Part2TQF3 data={course!} setForm={setForm} />,
+      compo: course && <Part2TQF3 data={course} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[2],
       tab: partLabel.part3,
-      compo: <Part3TQF3 data={course!} setForm={setForm} />,
+      compo: course && <Part3TQF3 data={course} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[3],
       tab: partLabel.part4,
-      compo: <Part4TQF3 data={course!} setForm={setForm} />,
+      compo: course && <Part4TQF3 data={course} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[4],
       tab: partLabel.part5,
-      compo: <Part5TQF3 data={course!} setForm={setForm} />,
+      compo: course && <Part5TQF3 data={course} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[5],
       tab: partLabel.part6,
-      compo: <Part6TQF3 data={course!} setForm={setForm} />,
+      compo: course && <Part6TQF3 data={course} setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[6],
       tab: partLabel.part7,
-      compo: <Part7TQF3 data={course!} setForm={setForm} />,
+      compo: course && <Part7TQF3 data={course} setForm={setForm} />,
     },
   ];
 
@@ -143,7 +142,7 @@ export default function TQF3() {
       tqf3 &&
       part &&
       tqf3Original &&
-      (part == "part1" || tqf3Original[part])
+      (["part1", "part5"].includes(part) || tqf3Original[part])
     ) {
       let newTqf3;
       if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
@@ -317,7 +316,7 @@ export default function TQF3() {
           </div>
         </div>
       </Modal>
-      <div className="flex flex-col h-full  w-full overflow-hidden">
+      <div className="flex flex-col h-full w-full overflow-hidden">
         <Tabs
           value={tqf3Part}
           onChange={setTqf3Part}
@@ -414,7 +413,7 @@ export default function TQF3() {
           >
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.value} className="w-full">
-                {tqf3Part === part.value && course && part.compo}
+                {tqf3Part === part.value && part.compo}
               </Tabs.Panel>
             ))}
           </div>
@@ -433,10 +432,12 @@ export default function TQF3() {
             part={tqf3Part as partType}
             data={tqf3Original[tqf3Part as keyof IModelTQF3]}
             onSave={onSave}
-            disabledSave={isEqual(
-              tqf3Original[tqf3Part as keyof IModelTQF3],
-              tqf3[tqf3Part as keyof IModelTQF3]
-            )}
+            disabledSave={
+              isEqual(
+                tqf3Original[tqf3Part as keyof IModelTQF3],
+                tqf3[tqf3Part as keyof IModelTQF3]
+              ) && tqf3Part !== "part5"
+            }
           />
         )}
     </>
