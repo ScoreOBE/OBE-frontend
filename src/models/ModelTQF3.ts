@@ -52,6 +52,7 @@ export interface IModelTQF3Part4 {
 export interface IModelTQF3Part5 {
   mainRef: string;
   recDoc: string;
+  updatedAt: Date;
 }
 
 export interface IModelTQF3Part6 {
