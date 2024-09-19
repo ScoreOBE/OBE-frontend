@@ -316,9 +316,9 @@ export default function TQF3() {
         >
           <div
             className={`flex flex-col w-full h-fit ${
-              tqf3Part === "part4" ? "pb-1" : "border-b-[2px] pb-4 mb-1"
+              tqf3Part === "part4" && tqf3Original![tqf3Part] ? "pb-1" : "border-b-[2px] pb-4 mb-1"
             } 
-            ${tqf3Part === "part6" && "!mb-4"}
+           
             `}
           >
             <Tabs.List className="md:gap-x-7 gap-x-4 w-full">
@@ -394,8 +394,8 @@ export default function TQF3() {
           </div>
           <div
             className={`h-full w-full flex overflow-y-auto ${
-              tqf3Part !== "part4" && "pt-3 px-3"
-            }  ${tqf3Part === "part6" && "!pt-0"} rounded-md text-[14px]`}
+              tqf3Part !== "part4"  && tqf3Original && tqf3Original[tqf3Part! as keyof IModelTQF3] && "pt-3 px-3"
+            }   rounded-md text-[14px]`}
           >
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.value} className="w-full">

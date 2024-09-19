@@ -17,6 +17,7 @@ import Icon from "../Icon";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelEval, IModelTQF3Part4 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
+import unplug from "@/assets/image/unplug.png";
 
 type Props = {
   data: IModelCourse;
@@ -81,7 +82,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
   }, [form]);
 
   return (
-    <div className="flex w-full h-full pt-3 pb-3">
+    data.TQF3?.part3?.updatedAt ? (<div className="flex w-full h-full pt-3 pb-3">
       <Tabs
         defaultValue="percent"
         classNames={{
@@ -127,7 +128,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
                     <Table.Th
                       className="min-w-[400px] z-[3] sticky left-0 !p-0"
                       style={{
-                        boxShadow: "0px 0px 10px -5px rgba(0, 0, 0, 0.5)",
+                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.3))",
                       }}
                     >
                       <div className="w-full flex items-center px-[25px] h-[58px] border-r-[1px] border-bgTableHeader">
@@ -137,7 +138,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
                     {data.TQF3?.part3?.eval.map((item) => (
                       <Table.Th
                         key={item.no}
-                        className="min-w-[120px] max-w-[160px] !py-3.5 !px-2.5 z-0"
+                        className="min-w-[120px] max-w-[160px] !py-3.5 !px-4.5 z-0"
                       >
                         <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                           {item.topicTH}
@@ -147,9 +148,14 @@ export default function Part4TQF3({ data, setForm }: Props) {
                         </p>
                       </Table.Th>
                     ))}
-                    <Table.Th className="w-[25x] sticky right-0 !p-0">
-                      <div className="w-full flex items-center px-[25px] h-[58px] border-l-[1px] border-bgTableHeader">
-                        Evaluate CLO
+                    <Table.Th
+                      style={{
+                        filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.3))",
+                      }}
+                      className="w-[55px] sticky right-0 !p-0"
+                    >
+                      <div className="w-[90px] text-nowrap flex items-center justify-center h-[58px] border-l-[1px]  border-bgTableHeader">
+                        Total <br /> CLO (%)
                       </div>
                     </Table.Th>
                   </Table.Tr>
@@ -158,8 +164,17 @@ export default function Part4TQF3({ data, setForm }: Props) {
                   {form
                     .getValues()
                     .data.map(({ clo, percent, evals }, cloIndex) => (
-                      <Table.Tr key={cloIndex} className="text-b3 text-default">
-                        <Table.Td className="!p-0 sticky left-0 z-[1]">
+                      <Table.Tr
+                        key={cloIndex}
+                        className="text-b3 table-row h-full text-default"
+                      >
+                        <Table.Td
+                          style={{
+                            filter:
+                              "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.3))",
+                          }}
+                          className="!p-0 sticky left-0 z-[1]"
+                        >
                           <div className="flex flex-col gap-0.5 px-[25px] py-3 border-r-[1px] border-[#DEE2E6]">
                             <p className="text-secondary font-semibold">
                               CLO-{clo.no}
@@ -171,7 +186,7 @@ export default function Part4TQF3({ data, setForm }: Props) {
                         {evals.map((item, evalIndex: number) => (
                           <Table.Td
                             key={evalIndex}
-                            className="!px-2.5 max-w-[200px]"
+                            className="!px-4.5 max-w-[200px]"
                           >
                             <div className="flex flex-col gap-2 max-w-full">
                               <NumberInput
@@ -192,20 +207,30 @@ export default function Part4TQF3({ data, setForm }: Props) {
                             </div>
                           </Table.Td>
                         ))}
-                        <td className="!p-0 sticky right-0 z-[1] !bg-bgTableHeader">
-                          {/* <Table.Td className="!p-0 sticky right-0 z-[1] !bg-bgTableHeader"> */}
-                          <div className="flex h-full px-[25px] font-semibold text-b2 border-l-[1px] border-[#DEE2E6]">
+
+                        <td
+                          style={{
+                            filter:
+                              "drop-shadow(-2px 0px 2px rgba(0, 0, 0, 0.3))",
+                          }}
+                          className="!bg-bgTableHeader !p-0 !h-full sticky z-[1] right-0 "
+                        >
+                          <div className="  max-h-full items-center justify-center px-[25px]  font-semibold text-b2 border-l-[1px] border-[#DEE2E6]">
                             {percent}%
                           </div>
-                          {/* </Table.Td> */}
                         </td>
                       </Table.Tr>
                     ))}
                 </Table.Tbody>
                 <Table.Tfoot className="z-[2] sticky bottom-0">
                   <Table.Tr className="border-none text-secondary font-semibold">
-                    <Table.Th className="!bg-bgTableHeader sticky left-0 text-b2 !rounded-bl-md border-r-[1px] border-[#DEE2E6]">
-                      Total (Percentage)
+                    <Table.Th
+                      style={{
+                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.3))",
+                      }}
+                      className="!bg-bgTableHeader sticky left-0 text-b2 !rounded-bl-md border-r-[1px] border-[#DEE2E6]"
+                    >
+                      Total Assessment (%)
                     </Table.Th>
                     {data.TQF3?.part3?.eval.map((item, evalIndex) => {
                       const totalPercent = form
@@ -225,7 +250,12 @@ export default function Part4TQF3({ data, setForm }: Props) {
                         </Table.Th>
                       );
                     })}
-                    <Table.Th className="!bg-[#34d9c3] text-default sticky right-0 text-b2 !rounded-br-md">
+                    <Table.Th
+                      style={{
+                        filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.3))",
+                      }}
+                      className="!bg-[#ccd1fb] text-default sticky right-0 text-b1 font-extrabold !rounded-br-md"
+                    >
                       {form
                         .getValues()
                         .data.reduce((acc, cur) => acc + cur.percent, 0)}
@@ -525,6 +555,23 @@ export default function Part4TQF3({ data, setForm }: Props) {
           ))}
         </div>
       </Tabs> */}
+    </div>)
+  : (
+    <div className="flex px-16  flex-row items-center justify-between h-full">
+      <div className="flex justify-center  h-full items-start gap-2 flex-col">
+        <p className="   text-secondary font-semibold text-[18px]">
+          Complete TQF3 Part 3 First
+        </p>
+        <p className=" text-[#333333] leading-6 font-medium text-[14px]">
+          To start TQF3 Part 4, please complete and save TQF3 Part 3. <br />{" "}
+          Once done, you can continue to do it.
+        </p>
+      </div>
+      <img
+        className=" z-50  w-[580px] h-[300px] "
+        src={unplug}
+        alt="loginImage"
+      />
     </div>
-  );
+  ));
 }

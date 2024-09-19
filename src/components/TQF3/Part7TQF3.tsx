@@ -20,6 +20,7 @@ import { IModelCLO, IModelTQF3Part5 } from "@/models/ModelTQF3";
 import { IModelPLO } from "@/models/ModelPLO";
 import { getPLOs } from "@/services/plo/plo.service";
 import { useAppSelector } from "@/store";
+import unplug from "@/assets/image/unplug.png";
 
 type Props = {
   data: IModelCourse;
@@ -111,7 +112,7 @@ export default function Part5TQF3({ data, setForm }: Props) {
   }, [data]);
 
   return (
-    <>
+    data.TQF3?.part5?.updatedAt ? (  <>
       {coursePLO && (
         <DrawerPLOdes
           opened={openDrawerPLOdes}
@@ -220,5 +221,22 @@ export default function Part5TQF3({ data, setForm }: Props) {
         </div>
       </div>
     </>
-  );
+  ) : (
+    <div className="flex px-16  flex-row items-center justify-between h-full">
+      <div className="flex justify-center  h-full items-start gap-2 flex-col">
+        <p className="   text-secondary font-semibold text-[18px]">
+          Complete TQF3 Part 6 First
+        </p>
+        <p className=" text-[#333333] leading-6 font-medium text-[14px]">
+          To start TQF3 Part 7, please complete and save TQF3 Part 6. <br />{" "}
+          Once done, you can continue to do it.
+        </p>
+      </div>
+      <img
+        className=" z-50  w-[580px] h-[300px] "
+        src={unplug}
+        alt="loginImage"
+      />
+    </div>)
+  ) ;
 }

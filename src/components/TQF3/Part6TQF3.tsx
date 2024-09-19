@@ -10,6 +10,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { IModelTQF3Part6 } from "@/models/ModelTQF3";
 import MainPopup from "../Popup/MainPopup";
 import { showNotifications } from "@/helpers/functions/function";
+import unplug from "@/assets/image/unplug.png";
 
 type Props = {
   data: IModelCourse;
@@ -201,181 +202,201 @@ export default function Part6TQF3({ data, setForm }: Props) {
         editData={formEdit}
       />
 
-      <div className="flex flex-col w-full  max-h-full gap-4">
-        {/* Topic */}
+      {data.TQF3?.part5?.updatedAt ? (
+        <div className="flex flex-col w-full  max-h-full gap-4">
+          {/* Topic */}
 
-        <div className="flex text-secondary  items-center w-full justify-between">
-          <p className="text-[15px] font-semibold">
-            หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
-            <span className=" font-bold">(Topic)</span>
-          </p>
-          <Tooltip
-            withArrow
-            arrowPosition="side"
-            arrowOffset={15}
-            arrowSize={7}
-            position="bottom-end"
-            color="#FCFCFC"
-            label={
-              <div className="text-default text-[13px] p-2 flex flex-col gap-2">
-                <p className="font-medium">
-                  <span className="text-secondary font-bold">
-                    Add Topic (Disabled)
-                  </span>{" "}
-                  <br />
-                  All topics have already been added. To make any changes,
-                  please edit the topics below.
-                </p>
-              </div>
-            }
-            opened={form.getValues().data.length === 10 && openedTooltip}
-          >
-            <Button
-              disabled={form.getValues().data.length === 10}
-              onClick={() => setOpenModalSelectTopic(true)}
-              onMouseOver={() => setOpenedTooltip(true)}
-              onMouseLeave={() => setOpenedTooltip(false)}
-              className="text-center px-4"
-            >
-              <div className="flex gap-2">
-                <Icon IconComponent={AddIcon} />
-                Add Topic
-              </div>
-            </Button>
-          </Tooltip>
-        </div>
-        <div
-          style={{
-            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-          }}
-          className=" rounded-md border-[1px] overflow-y-auto mb-7 border-secondary"
-        >
-          {/* Table */}
-          {form.getValues().data.map((topic, index) => {
-            const option: any =
-              options.find((e: any) => e.th === topic.topic) || {};
-            return topics[index] ? (
-              <div
-                key={index}
-                className="  w-full h-full max-h-full  flex flex-col "
-              >
-                <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader">
-                  <p className="flex flex-col font-medium text-[28px]">
-                    {index + 1}.
-                  </p>
-                  <p className="flex flex-col gap-1  text-[14px]">
-                    <span className="font-semibold">
-                      {topics[index].th}{" "}
-                      <span className=" text-red-500">*</span>
-                    </span>
-                    <span className="font-bold ">{topics[index].en}</span>
+          <div className="flex text-secondary  items-center w-full justify-between">
+            <p className="text-[15px] font-semibold">
+              หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
+              <span className=" font-bold">(Topic)</span>
+            </p>
+            <Tooltip
+              withArrow
+              arrowPosition="side"
+              arrowOffset={15}
+              arrowSize={7}
+              position="bottom-end"
+              color="#FCFCFC"
+              label={
+                <div className="text-default text-[13px] p-2 flex flex-col gap-2">
+                  <p className="font-medium">
+                    <span className="text-secondary font-bold">
+                      Add Topic (Disabled)
+                    </span>{" "}
+                    <br />
+                    All topics have already been added. To make any changes,
+                    please edit the topics below.
                   </p>
                 </div>
-                <Checkbox.Group
-                  {...form.getInputProps(`data.${index}.detail`)}
-                  className="items-center"
-                  onChange={(event) => {
-                    if (event.includes("ไม่มี (None)")) {
-                      form.setFieldValue(`data.${index}.detail`, [
-                        "ไม่มี (None)",
-                      ]);
-                      form.setFieldValue(`data.${index}.other`, "");
-                    } else {
-                      form.setFieldValue(`data.${index}.detail`, event);
-                    }
-                  }}
+              }
+              opened={form.getValues().data.length === 10 && openedTooltip}
+            >
+              <Button
+                disabled={form.getValues().data.length === 10}
+                onClick={() => setOpenModalSelectTopic(true)}
+                onMouseOver={() => setOpenedTooltip(true)}
+                onMouseLeave={() => setOpenedTooltip(false)}
+                className="text-center px-4"
+              >
+                <div className="flex gap-2">
+                  <Icon IconComponent={AddIcon} />
+                  Add Topic
+                </div>
+              </Button>
+            </Tooltip>
+          </div>
+          <div
+            style={{
+              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
+            className=" rounded-md border-[1px] overflow-y-auto mb-7 border-secondary"
+          >
+            {/* Table */}
+            {form.getValues().data.map((topic, index) => {
+              const option: any =
+                options.find((e: any) => e.th === topic.topic) || {};
+              return topics[index] ? (
+                <div
+                  key={index}
+                  className="  w-full h-full max-h-full  flex flex-col "
                 >
-                  <Group className="flex items-center flex-col gap-0">
-                    {topics[index].list?.map((item, checkIndex) => (
-                      <div
-                        key={checkIndex}
-                        className="border-b-[1px] last:border-none py-4 px-6 w-full"
-                      >
-                        <Checkbox
-                          classNames={{
-                            label:
-                              "font-medium text-[13px] leading-6 text-[#333333]",
-                            body: "flex flex-row gap-2 items-center ",
-                          }}
-                          className=" whitespace-break-spaces items-center"
-                          size="sm"
-                          label={item.label}
-                          value={item.label}
-                          disabled={
+                  <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader">
+                    <p className="flex flex-col font-medium text-[28px]">
+                      {index + 1}.
+                    </p>
+                    <p className="flex flex-col gap-1  text-[14px]">
+                      <span className="font-semibold">
+                        {topics[index].th}{" "}
+                        <span className=" text-red-500">*</span>
+                      </span>
+                      <span className="font-bold ">{topics[index].en}</span>
+                    </p>
+                  </div>
+                  <Checkbox.Group
+                    {...form.getInputProps(`data.${index}.detail`)}
+                    className="items-center"
+                    onChange={(event) => {
+                      if (event.includes("ไม่มี (None)")) {
+                        form.setFieldValue(`data.${index}.detail`, [
+                          "ไม่มี (None)",
+                        ]);
+                        form.setFieldValue(`data.${index}.other`, "");
+                      } else {
+                        form.setFieldValue(`data.${index}.detail`, event);
+                      }
+                    }}
+                  >
+                    <Group className="flex items-center flex-col gap-0">
+                      {topics[index].list?.map((item, checkIndex) => (
+                        <div
+                          key={checkIndex}
+                          className="border-b-[1px] last:border-none py-4 px-6 w-full"
+                        >
+                          <Checkbox
+                            classNames={{
+                              label:
+                                "font-medium text-[13px] leading-6 text-[#333333]",
+                              body: "flex flex-row gap-2 items-center ",
+                            }}
+                            className=" whitespace-break-spaces items-center"
+                            size="sm"
+                            label={item.label}
+                            value={item.label}
+                            disabled={
+                              form
+                                .getValues()
+                                .data[index]?.detail.includes("ไม่มี (None)") &&
+                              item.label !== "ไม่มี (None)"
+                            }
+                          ></Checkbox>
+                          {item.label == "อื่นๆ (Other)" &&
                             form
                               .getValues()
-                              .data[index]?.detail.includes("ไม่มี (None)") &&
-                            item.label !== "ไม่มี (None)"
-                          }
-                        ></Checkbox>
-                        {item.label == "อื่นๆ (Other)" &&
-                          form
-                            .getValues()
-                            .data[index]?.detail.includes(item.label) && (
-                            <Textarea
-                              className="mt-2 pl-10"
-                              placeholder="(Required)"
-                              classNames={{
-                                input: "text-[13px] text-[#333333] h-[100px]",
-                              }}
-                              {...form.getInputProps(`data.${index}.other`)}
-                            />
-                          )}
-                      </div>
-                    ))}
-                  </Group>
-                </Checkbox.Group>
-              </div>
-            ) : (
-              <div
-                key={index}
-                className="  w-full h-full max-h-full  flex flex-col "
-              >
-                <div className="w-full sticky top-0 z-10 text-[#228BE6] flex flex-row gap-4 items-center pl-6 py-4 bg-[#E8F3FC]">
-                  <p className="flex flex-col font-medium text-[28px]">
-                    {index + 1}.
-                  </p>
-                  <p className="flex flex-col gap-1  text-[14px]">
-                    <span className="font-semibold">
-                      {option.th}{" "}
-                      {/* <span className="text-[#228BE6]">(Additional Topic)</span> */}
-                    </span>
-                    <span className="font-bold ">{option.en}</span>
-                  </p>
+                              .data[index]?.detail.includes(item.label) && (
+                              <Textarea
+                                className="mt-2 pl-10"
+                                placeholder="(Required)"
+                                classNames={{
+                                  input: "text-[13px] text-[#333333] h-[100px]",
+                                }}
+                                {...form.getInputProps(`data.${index}.other`)}
+                              />
+                            )}
+                        </div>
+                      ))}
+                    </Group>
+                  </Checkbox.Group>
                 </div>
-                <div className="text-default border-b-[1px] last:border-none py-4 px-6  w-full text-[13px] font-medium">
-                  <div className="flex justify-between items-center whitespace-pre-wrap gap-8">
-                    <div className="pl-10">{topic.detail}</div>
-                    <div className="flex justify-start gap-4 items-center">
-                      <div
-                        className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
-                        onClick={() => {
-                          setDeleteIndex(index),
-                            setFormEdit({
-                              ...form.getValues().data[index],
-                              index: index,
-                            });
-                          setOpenModalEditSelectTopic(true);
-                        }}
-                      >
-                        <IconEdit className="size-4" stroke={1.5} />
-                      </div>
-                      <div
-                        className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
-                        onClick={() => {
-                          setDeleteIndex(index), setOpenPopupDelAddiTopic(true);
-                        }}
-                      >
-                        <IconTrash className="size-4" stroke={1.5} />
+              ) : (
+                <div
+                  key={index}
+                  className="  w-full h-full max-h-full  flex flex-col "
+                >
+                  <div className="w-full sticky top-0 z-10 text-[#228BE6] flex flex-row gap-4 items-center pl-6 py-4 bg-[#E8F3FC]">
+                    <p className="flex flex-col font-medium text-[28px]">
+                      {index + 1}.
+                    </p>
+                    <p className="flex flex-col gap-1  text-[14px]">
+                      <span className="font-semibold">
+                        {option.th}{" "}
+                        {/* <span className="text-[#228BE6]">(Additional Topic)</span> */}
+                      </span>
+                      <span className="font-bold ">{option.en}</span>
+                    </p>
+                  </div>
+                  <div className="text-default border-b-[1px] last:border-none py-4 px-6  w-full text-[13px] font-medium">
+                    <div className="flex justify-between items-center whitespace-pre-wrap gap-8">
+                      <div className="pl-10">{topic.detail}</div>
+                      <div className="flex justify-start gap-4 items-center">
+                        <div
+                          className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                          onClick={() => {
+                            setDeleteIndex(index),
+                              setFormEdit({
+                                ...form.getValues().data[index],
+                                index: index,
+                              });
+                            setOpenModalEditSelectTopic(true);
+                          }}
+                        >
+                          <IconEdit className="size-4" stroke={1.5} />
+                        </div>
+                        <div
+                          className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                          onClick={() => {
+                            setDeleteIndex(index),
+                              setOpenPopupDelAddiTopic(true);
+                          }}
+                        >
+                          <IconTrash className="size-4" stroke={1.5} />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex px-16  flex-row items-center justify-between h-full">
+          <div className="flex justify-center  h-full items-start gap-2 flex-col">
+            <p className="   text-secondary font-semibold text-[18px]">
+              Complete TQF3 Part 5 First
+            </p>
+            <p className=" text-[#333333] leading-6 font-medium text-[14px]">
+              To start TQF3 Part 6, please complete and save TQF3 Part 5. <br />{" "}
+              Once done, you can continue to do it.
+            </p>
+          </div>
+          <img
+            className=" z-50  w-[580px] h-[300px] "
+            src={unplug}
+            alt="loginImage"
+          />
+        </div>
+      )}
     </>
   );
 }
