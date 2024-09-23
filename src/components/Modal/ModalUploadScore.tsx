@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { Group, Text, rem } from "@mantine/core";
+import { Group, Table, Text, TextInput, rem } from "@mantine/core";
 import { Alert, Button, Modal } from "@mantine/core";
 import {
   IconBulb,
@@ -17,6 +17,15 @@ import {
 import { IModelCourse } from "@/models/ModelCourse";
 import gradescope from "@/assets/image/gradescope.png";
 import ModalStudentList from "./ModalStudentList";
+import { SearchInput } from "../SearchInput";
+import { ROUTE_PATH } from "@/helpers/constants/route";
+import { CourseRequestDTO } from "@/services/course/dto/course.dto";
+import academicYear from "@/store/academicYear";
+import { getCourse } from "@/services/course/course.service";
+import { setCourseList } from "@/store/course";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { TbSearch } from "react-icons/tb";
 
 type Props = {
   opened: boolean;
@@ -25,7 +34,102 @@ type Props = {
 };
 
 export default function ModalUploadScore({ opened, onClose, data }: Props) {
+  const [params, setParams] = useSearchParams();
   const [openModalStudentList, setOpenModalStudentList] = useState(false);
+  const location = useLocation().pathname;
+  const academicYear = useAppSelector((state) => state.academicYear);
+  const dispatch = useAppDispatch();
+  const searchCourse = async (searchValue: string, reset?: boolean) => {};
+  const studentData = [
+    {
+      filename: "Prelim 1",
+      dateupload: "Jan 8, 2024",
+      uploadby: "Dome P.",
+      section: "001, 002, 003, 004, 005, 006, 007, 008, 801, 802, 803, 804",
+    },
+    {
+      filename: 2,
+      dateupload: "Jan 9, 2024",
+      uploadby: "Navadon K.",
+      section: "001, 002, 801",
+    },
+    {
+      filename: "Homework 1",
+      dateupload: "Feb 7, 2024",
+      uploadby: "Thanatip C.",
+      section: "001, 002, 801",
+    },
+
+    {
+      filename: "Project",
+      dateupload: "Feb 22, 2024",
+      uploadby: "Kampol W.",
+      section: "001, 002, 801",
+    },
+    {
+      filename: "Homework 2",
+      dateupload: "Feb 26, 2024",
+      uploadby: "Kanok K.",
+      section: "001, 002, 801",
+    },
+    {
+      filename: "Prelim 2",
+      dateupload: "Mar 4, 2024",
+      uploadby: "Karn P.",
+      section: "001, 002, 801",
+    },
+    {
+      filename: "Assignment",
+      dateupload: "Mar 8, 2024",
+      uploadby: "Yutthapong S.",
+      section: "001, 002, 801",
+    },
+  ];
+  const rows = studentData.map((element) => (
+    <Table.Tr
+      className="font-medium text-default text-[13px]"
+      key={element.filename}
+    >
+      <Table.Td>{element.filename}</Table.Td>
+      <Table.Td>{element.dateupload}</Table.Td>
+      <Table.Td>{element.uploadby}</Table.Td>
+      <Table.Td>{element.section}</Table.Td>
+    </Table.Tr>
+  ));
+
+  const studentTable = () => {
+    return (
+      <>
+        <TextInput
+          leftSection={<TbSearch />}
+          placeholder="File name, Uploader, Section"
+          size="xs"
+          rightSectionPointerEvents="all"
+          className=" w-[40%] "
+        ></TextInput>
+        <div
+          className="  max-h-[500px]  h-fit  flex flex-col bg-white mb-1  my-4 rounded-md overflow-y-auto"
+          style={{
+            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+          }}
+        >
+          {/* <Table.ScrollContainer className="!max-h-[400px] " minWidth={500}> */}
+          <Table stickyHeader  striped>
+            <Table.Thead>
+              <Table.Tr className="bg-[#e5e7f6]">
+                <Table.Th className=" w-[30%]">File name</Table.Th>
+                <Table.Th className=" w-[20%]">Date upload</Table.Th>
+                <Table.Th className=" w-[20%]">Upload by</Table.Th>
+                <Table.Th className=" w-[30%]">Section detect</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>{rows}</Table.Tbody>
+          </Table>
+          {/* </Table.ScrollContainer> */}
+        </div>
+      </>
+    );
+  };
 
   return (
     <>
@@ -44,7 +148,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         zIndex={50}
       >
         <Modal.Overlay />
-        <Modal.Content className=" pt-0 !rounded-none !px-0">
+        <Modal.Content className="!bg-[#fbfbfb] pt-0  !rounded-none !px-0">
           <Modal.Header
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -69,7 +173,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 className="w-28"
                 onClick={() => setOpenModalStudentList(true)}
               >
-                Import student list
+                Import Student list
               </Button>
             </div>
           </Modal.Header>
@@ -145,7 +249,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
                 }}
-                className="py-14 px-[76px] rounded-md"
+                className="py-14 bg-white px-[76px] rounded-md"
               >
                 <div className="flex flex-col gap-10">
                   <div className="flex gap-3">
@@ -208,7 +312,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 onReject={(files) => console.log("rejected files", files)}
                 maxSize={5 * 1024 ** 2}
                 accept={IMAGE_MIME_TYPE}
-                className=" hover:bg-gray-100 py-12 border-[#8f9ae37f] border-dashed bg-gray-50 cursor-pointer border-[2px] rounded-md"
+                className=" hover:bg-gray-50 py-12 border-[#8f9ae37f] border-dashed bg-white cursor-pointer border-[2px] rounded-md"
               >
                 <Group
                   justify="center"
@@ -263,15 +367,15 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   </div>
                 </Group>
               </Dropzone>
-              <div className=" rounded-md items-center border-[2px] border-[#8f9ae37f] py-6 gap-3 px-8 flex">
+              <div className=" rounded-md items-center border-[2px] border-[#8f9ae37f] py-4 gap-3 px-5 flex">
                 <div className="flex flex-col w-full">
                   <div className="flex items-center gap-2">
                     <IconFileExcel color="#058A3A" className="size-7" />{" "}
                     <div className="flex flex-col">
-                      <p className=" text-secondary font-semibold">
+                      <p className=" text-secondary text-b2 font-semibold">
                         File name.xlsx
                       </p>
-                      <p className=" text-b3 text-default">88 KB</p>
+                      <p className=" text-[11px] text-default">88 KB</p>
                     </div>
                   </div>
                   <div className=" ml-9 mt-2 rounded-md h-2 bg-slate-300">
@@ -280,15 +384,15 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   </div>
                 </div>
               </div>
-              <div className=" rounded-md items-center border-[2px] border-[#8f9ae37f] py-6 gap-3 px-8 flex">
+              <div className=" rounded-md items-center border-[2px] border-[#8f9ae37f] py-4 gap-3 px-5 flex">
                 <div className="flex justify-between items-center w-full">
                   <div className="flex items-center gap-2">
                     <IconFileExcel color="#058A3A" className="size-7" />{" "}
                     <div className="flex flex-col">
-                      <p className=" text-secondary font-semibold">
+                      <p className=" text-secondary text-b2 font-semibold">
                         File name.xlsx
                       </p>
-                      <p className=" text-b3 text-default">88 KB</p>
+                      <p className=" text-[11px] text-default">88 KB</p>
                     </div>
                   </div>
                   <Button
@@ -299,6 +403,19 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     Upload
                   </Button>
                 </div>
+              </div>
+              <div
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
+                }}
+                className="w-full bg-white rounded-md p-6 flex  flex-col"
+              >
+                <p className=" text-secondary font-semibold">Attached files</p>
+                <p className=" text-b3 mb-3 font-medium text-default">
+                  Files and assets that have been attached to {data?.courseNo}{" "}
+                  Course
+                </p>{" "}
+                {studentTable()}
               </div>
             </div>
           </Modal.Body>

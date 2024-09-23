@@ -80,11 +80,9 @@ export default function Part5TQF3({ data, setForm }: Props) {
     mode: "controlled",
     initialValues: {
       data: courseCLO.map((clo) => ({
-        mainRef: "",
-        recDoc: "",
         clo: clo,
         plo: [],
-      })) as IModelTQF3Part5[],
+      })) as Partial<IModelTQF3Part5>[],
     },
     validate: {},
   });
