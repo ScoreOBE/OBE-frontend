@@ -28,11 +28,13 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       part1: "",
     });
     if (res) {
+      const contentType = res.headers["content-type"];
       const disposition = res.headers["content-disposition"];
+      const fileType = contentType === "application/zip" ? "zip" : "pdf";
       const filename = disposition
         ? disposition.split("filename=")[1]
-        : "TQF3.pdf";
-      const blob = new Blob([res.data], { type: "application/pdf" });
+        : `TQF3.${fileType}`;
+      const blob = new Blob([res.data], { type: contentType });
       const url = window.URL.createObjectURL(blob);
       window.open(url);
       const a = document.createElement("a");
@@ -41,6 +43,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       document.body.appendChild(a);
       a.click();
       a.remove();
+      window.URL.revokeObjectURL(url);
     }
   };
 
