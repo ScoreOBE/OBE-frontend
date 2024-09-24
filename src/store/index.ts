@@ -8,6 +8,7 @@ import academicYearReducer from "./academicYear";
 import courseReducer from "./course";
 import courseManagementReducer from "./courseManagement";
 import showNavbarReducer from "./showNavbar";
+import tqf3Reducer from "./tqf3";
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
     academicYear: academicYearReducer,
     course: courseReducer,
     courseManagement: courseManagementReducer,
+    tqf3: tqf3Reducer,
   },
 });
 

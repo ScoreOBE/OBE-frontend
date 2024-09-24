@@ -14,18 +14,20 @@ import { IconInfoCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import Icon from "../Icon";
 import ModalManageEvalTopic from "../Modal/TQF3/ModalManageEvalTopic";
-import { IModelCourse } from "@/models/ModelCourse";
 import { IModelEval, IModelTQF3Part3 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
 import MainPopup from "../Popup/MainPopup";
 import unplug from "@/assets/image/unplug.png";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { updatePartTQF3 } from "@/store/tqf3";
 
 type Props = {
-  data: IModelCourse;
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function Part3TQF3({ data, setForm }: Props) {
+export default function Part3TQF3({ setForm }: Props) {
+  const tqf3 = useAppSelector((state) => state.tqf3);
+  const dispatch = useAppDispatch();
   const [percentTotal, setPercentTotal] = useState(0);
   const [editData, setEditData] = useState<any>();
   const [openModalAddEvalTopic, setOpenModalAddEvalTopic] = useState(false);
@@ -56,6 +58,9 @@ export default function Part3TQF3({ data, setForm }: Props) {
         });
       }
       if (!isEqual(values, previous)) {
+        dispatch(
+          updatePartTQF3({ part: "part3", data: cloneDeep(form.getValues()) })
+        );
         setForm(form);
         setPercentTotal(
           values.eval?.reduce((acc, { percent }) => acc + percent, 0) || 0
@@ -65,10 +70,10 @@ export default function Part3TQF3({ data, setForm }: Props) {
   });
 
   useEffect(() => {
-    if (data.TQF3?.part3) {
-      form.setValues(cloneDeep(data.TQF3.part3));
+    if (tqf3.part3) {
+      form.setValues(cloneDeep(tqf3.part3));
     }
-  }, [data]);
+  }, []);
 
   const onClickDeleteTopic = () => {
     form.removeListItem("eval", editData.no - 1);
@@ -107,7 +112,7 @@ export default function Part3TQF3({ data, setForm }: Props) {
         labelButtonRight="Delete Topic"
         action={onClickDeleteTopic}
       />
-      {data.TQF3?.part2?.updatedAt ? (
+      {tqf3.part2?.updatedAt ? (
         <div className="flex flex-col w-full">
           <div className="flex flex-col w-full h-full pb-8 gap-4">
             <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6] mt-1 pb-6 flex-col">

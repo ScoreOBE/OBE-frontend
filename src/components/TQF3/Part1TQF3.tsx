@@ -1,8 +1,9 @@
 import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { getUserName } from "@/helpers/functions/function";
-import { IModelCourse } from "@/models/ModelCourse";
 import { IModelTQF3Part1 } from "@/models/ModelTQF3";
 import { IModelUser } from "@/models/ModelUser";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { updatePartTQF3 } from "@/store/tqf3";
 import {
   Radio,
   Checkbox,
@@ -16,11 +17,12 @@ import { cloneDeep, isEqual } from "lodash";
 import { useEffect, useState } from "react";
 
 type Props = {
-  data: IModelCourse;
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function Part1TQF3({ data, setForm }: Props) {
+export default function Part1TQF3({ setForm }: Props) {
+  const tqf3 = useAppSelector((state) => state.tqf3);
+  const dispatch = useAppDispatch();
   const [checked, setChecked] = useState<string[]>([]);
   const curriculum = ["สำหรับหลักสูตร", "สำหรับหลายหลักสูตร"];
   const studentYear = [
@@ -59,59 +61,49 @@ export default function Part1TQF3({ data, setForm }: Props) {
     onValuesChange(values, previous) {
       if (!isEqual(values, previous)) {
         values.instructors = values.instructors?.filter((ins) => ins.length);
+        dispatch(
+          updatePartTQF3({ part: "part1", data: cloneDeep(form.getValues()) })
+        );
         setForm(form);
       }
     },
   });
 
   useEffect(() => {
-    if (data) {
-      if (data?.TQF3?.part1) {
-        form.setValues(cloneDeep(data.TQF3.part1));
-        if (data.TQF3.part1.teachingLocation.in.length) {
+    if (tqf3.id && !form.getValues().courseType) {
+      if (tqf3.part1) {
+        form.setValues(cloneDeep(tqf3.part1));
+        if (tqf3.part1.teachingLocation.in.length) {
           checked.push("in");
         }
-        if (data.TQF3.part1.teachingLocation.out.length) {
+        if (tqf3.part1.teachingLocation.out.length) {
           checked.push("out");
         }
       } else {
-        if (
-          data.type == COURSE_TYPE.SEL_TOPIC.en &&
-          data.sections![0].TQF3?.part1 // select first topic
-        ) {
-          form.setValues(data.sections![0].TQF3?.part1);
-          if (data.sections![0].TQF3?.part1.teachingLocation.in.length) {
-            checked.push("in");
-          }
-          if (data.sections![0].TQF3?.part1.teachingLocation.out.length) {
-            checked.push("out");
-          }
-        } else {
-          form.setFieldValue("courseType", data.type);
-          form.setFieldValue(
-            "mainInstructor",
-            getUserName(data.sections[0].instructor as IModelUser, 3)!
-          );
-          const uniqueInstructors = Array.from(
-            new Set(
-              (
-                data.sections?.flatMap((sec) => [
-                  sec.instructor,
-                  ...(sec.coInstructors as IModelUser[]),
-                ]) as IModelUser[]
-              )?.map((instructor) => getUserName(instructor, 3)!)
-            )
-          ).slice(0, 8);
-          form.setFieldValue("instructors", uniqueInstructors);
-        }
+        form.setFieldValue("courseType", tqf3.type);
+        form.setFieldValue(
+          "mainInstructor",
+          getUserName(tqf3.sections[0].instructor as IModelUser, 3)!
+        );
+        const uniqueInstructors = Array.from(
+          new Set(
+            (
+              tqf3.sections?.flatMap((sec) => [
+                sec.instructor,
+                ...(sec.coInstructors as IModelUser[]),
+              ]) as IModelUser[]
+            )?.map((instructor) => getUserName(instructor, 3)!)
+          )
+        ).slice(0, 8);
+        form.setFieldValue("instructors", uniqueInstructors);
       }
     }
-  }, [data]);
+  }, []);
 
   return (
     <div className="flex w-full flex-col text-[15px] max-h-full px-2 py-1 text-default ">
       <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3 pb-5">
-        <div className="flex text-secondary  flex-col">
+        <div className="flex text-secondary flex-col">
           <p className="font-semibold">
             หลักสูตร <span className=" text-red-500">*</span>
           </p>
@@ -284,10 +276,8 @@ export default function Part1TQF3({ data, setForm }: Props) {
                 classNames={{
                   label: "font-medium text-[13px] flex flex-nowrap",
                 }}
-                label={`นอกสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Outside of Chiang Mai University)
-                   `}
+                label={`นอกสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Outside of Chiang Mai University)`}
               />
-
               <Textarea
                 key={form.key("teachingLocation.out")}
                 className="mt-2 pl-8"

@@ -1,17 +1,19 @@
 import { Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IModelCourse } from "@/models/ModelCourse";
 import { IModelTQF3Part5 } from "@/models/ModelTQF3";
 import { isEqual } from "lodash";
 import { useEffect } from "react";
 import unplug from "@/assets/image/unplug.png";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { updatePartTQF3 } from "@/store/tqf3";
 
 type Props = {
-  data: IModelCourse;
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function Part5TQF3({ data, setForm }: Props) {
+export default function Part5TQF3({ setForm }: Props) {
+  const tqf3 = useAppSelector((state) => state.tqf3);
+  const dispatch = useAppDispatch();
   const form = useForm({
     mode: "controlled",
     initialValues: {
@@ -20,19 +22,22 @@ export default function Part5TQF3({ data, setForm }: Props) {
     } as IModelTQF3Part5,
     onValuesChange(values, previous) {
       if (!isEqual(values, previous)) {
+        dispatch(updatePartTQF3({ part: "part5", data: form.getValues() }));
         setForm(form);
       }
     },
   });
 
   useEffect(() => {
-    if (data.TQF3?.part5) {
-      form.setValues(data.TQF3.part5);
+    if (tqf3.part5) {
+      form.setValues(tqf3.part5);
+    } else {
+      dispatch(updatePartTQF3({ part: "part5", data: form.getValues() }));
     }
-  }, [data]);
+  }, []);
 
-  return (
-    data.TQF3?.part4?.updatedAt ? (<>
+  return tqf3?.part3?.updatedAt ? (
+    <>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 pb-5 mt-1 ">
         <div className="flex text-secondary flex-col text-[15px]">
           <p className="font-semibold">ตำราและเอกสาร</p>
@@ -71,8 +76,8 @@ export default function Part5TQF3({ data, setForm }: Props) {
           ></Textarea>
         </div>
       </div>
-    </>)
-  :(
+    </>
+  ) : (
     <div className="flex px-16  flex-row items-center justify-between h-full">
       <div className="flex justify-center  h-full items-start gap-2 flex-col">
         <p className="   text-secondary font-semibold text-[18px]">
@@ -89,5 +94,5 @@ export default function Part5TQF3({ data, setForm }: Props) {
         alt="loginImage"
       />
     </div>
-  ) );
+  );
 }

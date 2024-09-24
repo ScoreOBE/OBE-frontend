@@ -39,6 +39,9 @@ const getConfig = (configService: any, params?: any) => {
 };
 
 const axiosSuccess = (res: any, configService?: any) => {
+  if (configService.responseType === "blob") {
+    return res;
+  }
   return res.data;
 };
 
