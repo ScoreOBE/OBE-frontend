@@ -15,17 +15,25 @@ import ModalManageCLO, { LearningMethod } from "../Modal/TQF3/ModalManageCLO";
 import ModalManageCourseContent from "../Modal/TQF3/ModalManageCourseContent";
 import { IModelCourse } from "@/models/ModelCourse";
 import unplug from "@/assets/image/unplug.png";
-import { IModelCLO, IModelSchedule, IModelTQF3Part2 } from "@/models/ModelTQF3";
+import {
+  IModelCLO,
+  IModelSchedule,
+  IModelTQF3,
+  IModelTQF3Part2,
+} from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
 import { EVALUATE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
 import MainPopup from "../Popup/MainPopup";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { updatePartTQF3 } from "@/store/tqf3";
 
 type Props = {
-  data: IModelCourse;
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function Part2TQF3({ data, setForm }: Props) {
+export default function Part2TQF3({ setForm }: Props) {
+  const tqf3 = useAppSelector((state) => state.tqf3);
+  const dispatch = useAppDispatch();
   const [editData, setEditData] = useState<any>();
   const [openModalAddCLO, setOpenModalAddCLO] = useState(false);
   const [openModalEditCLO, setOpenModalEditCLO] = useState(false);
@@ -59,16 +67,19 @@ export default function Part2TQF3({ data, setForm }: Props) {
         });
       }
       if (!isEqual(values, previous)) {
+        dispatch(
+          updatePartTQF3({ part: "part2", data: cloneDeep(form.getValues()) })
+        );
         setForm(form);
       }
     },
   });
 
   useEffect(() => {
-    if (data.TQF3?.part2) {
-      form.setValues(cloneDeep(data.TQF3.part2));
+    if (tqf3.part2) {
+      form.setValues(cloneDeep(tqf3.part2));
     }
-  }, [data]);
+  }, []);
 
   const onClickDeleteCLO = () => {
     form.removeListItem("clo", editData.no - 1);
@@ -143,7 +154,7 @@ export default function Part2TQF3({ data, setForm }: Props) {
         labelButtonRight="Delete Course Content"
         action={onClickDeleteTopic}
       />
-      {data.TQF3?.part1?.updatedAt ? (
+      {tqf3.part1?.updatedAt ? (
         <div className="flex flex-col w-full max-h-full gap-5 py-1">
           <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 pb-5   ">
             <div className="flex text-secondary flex-col  text-[15px]">

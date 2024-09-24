@@ -7,17 +7,19 @@ import Icon from "../Icon";
 import { useState } from "react";
 import ModalManageTopic from "../Modal/TQF3/ModalManageTopic";
 import { IModelCourse } from "@/models/ModelCourse";
-import { IModelTQF3Part6 } from "@/models/ModelTQF3";
+import { IModelTQF3, IModelTQF3Part6 } from "@/models/ModelTQF3";
 import MainPopup from "../Popup/MainPopup";
 import { showNotifications } from "@/helpers/functions/function";
 import unplug from "@/assets/image/unplug.png";
+import { useAppDispatch, useAppSelector } from "@/store";
 
 type Props = {
-  data: IModelCourse;
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function Part6TQF3({ data, setForm }: Props) {
+export default function Part6TQF3({ setForm }: Props) {
+  const tqf3 = useAppSelector((state) => state.tqf3);
+  const dispatch = useAppDispatch();
   const [formEdit, setFormEdit] =
     useState<Partial<IModelTQF3Part6 & { index: number }>>();
   let topics = [
@@ -202,7 +204,7 @@ export default function Part6TQF3({ data, setForm }: Props) {
         editData={formEdit}
       />
 
-      {data.TQF3?.part5?.updatedAt ? (
+      {tqf3.part5?.updatedAt ? (
         <div className="flex flex-col w-full  max-h-full gap-4">
           {/* Topic */}
 

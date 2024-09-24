@@ -1,40 +1,13 @@
-import { validateTextInput } from "@/helpers/functions/validation";
-import { IModelTQF3Part6 } from "@/models/ModelTQF3";
-import course from "@/store/course";
-import {
-  Button,
-  Checkbox,
-  Group,
-  Modal,
-  Textarea,
-  TextInput,
-  NumberInput,
-  NumberInputHandlers,
-  Select,
-  Tooltip,
-  CheckboxCard,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import {
-  IconArrowRight,
-  IconFileExport,
-  IconMinus,
-  IconPdf,
-  IconPlus,
-  IconTrash,
-} from "@tabler/icons-react";
-import { log } from "console";
-import { upperFirst } from "lodash";
+import { Button, Checkbox, Group, Modal } from "@mantine/core";
+import { IconFileExport, IconPdf } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import AddIcon from "@/assets/icons/plus.svg?react";
-import Icon from "@/components/Icon";
 import {
   getKeyEnumByValue,
   showNotifications,
 } from "@/helpers/functions/function";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
-import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
+import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 
 type Props = {
   opened: boolean;
@@ -42,25 +15,33 @@ type Props = {
 };
 
 export default function ModalExportTQF3({ opened, onClose }: Props) {
-  const [tqf3Part, setTqf3Part] = useState<string | null>(
-    Object.keys(partLabel)[0]
-  );
   const [value, setValue] = useState<string[]>([]);
-
-  const form = useForm({
-    mode: "controlled",
-    initialValues: {} as any,
-    validate: {
-      topic: (value) => !value?.length && "Topic is required",
-      detail: (value) => validateTextInput(value, "Description", 1000, false),
-    },
-  });
 
   const onCloseModal = () => {
     onClose();
-    setTimeout(() => {
-      form.reset();
-    }, 300);
+    setValue([]);
+  };
+
+  const generatePDF = async () => {
+    const res = await genPdfTQF3({
+      tqf3: "66d91fded3dbd0f70f1b2133",
+      part1: "",
+    });
+    if (res) {
+      const disposition = res.headers["content-disposition"];
+      const filename = disposition
+        ? disposition.split("filename=")[1]
+        : "TQF3.pdf";
+      const blob = new Blob([res.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename.replace(/"/g, "");
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
   };
 
   return (
@@ -100,11 +81,16 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
-              
               >
-                <Group wrap="nowrap" className="item-center flex" align="flex-start">
+                <Group
+                  wrap="nowrap"
+                  className="item-center flex"
+                  align="flex-start"
+                >
                   <Checkbox.Indicator className="mt-1" />
-                  <div className=" text-default whitespace-break-spaces font-medium text-[13px]">{item}</div>
+                  <div className=" text-default whitespace-break-spaces font-medium text-[13px]">
+                    {item}
+                  </div>
                 </Group>
               </Checkbox.Card>
             </div>
@@ -126,6 +112,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
                 size={20}
               />
             }
+            onClick={generatePDF}
           >
             Export TQF3
           </Button>

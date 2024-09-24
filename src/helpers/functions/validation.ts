@@ -10,6 +10,7 @@ import { setErrorResponse } from "@/store/errorResponse";
 import { isNumber } from "lodash";
 
 export const isValidResponse = (res: any) => {
+  if (res.data.type === "application/pdf") return res;
   if (res.message === RESPONSE_MESSAGE.SUCCESS) {
     return res.data;
   } else {

@@ -40,7 +40,7 @@ export interface IModelTQF3Part3 {
 }
 
 export interface IModelTQF3Part4 {
-  clo: IModelCLO;
+  clo: IModelCLO | string;
   percent: number;
   evals: {
     eval: IModelEval | string;

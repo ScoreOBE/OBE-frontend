@@ -9,25 +9,24 @@ import {
   Table,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconCheckbox, IconInfoCircle } from "@tabler/icons-react";
-import AddIcon from "@/assets/icons/plus.svg?react";
+import { IconCheckbox } from "@tabler/icons-react";
 import Icon from "../Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import { useEffect, useState } from "react";
-import { IModelCourse } from "@/models/ModelCourse";
 import { IModelCLO, IModelTQF3Part5 } from "@/models/ModelTQF3";
 import { IModelPLO } from "@/models/ModelPLO";
 import { getPLOs } from "@/services/plo/plo.service";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import unplug from "@/assets/image/unplug.png";
 
 type Props = {
-  data: IModelCourse;
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function Part5TQF3({ data, setForm }: Props) {
+export default function Part7TQF3({ setForm }: Props) {
+  const tqf3 = useAppSelector((state) => state.tqf3);
+  const dispatch = useAppDispatch();
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
   const [coursePLO, setCoursePLO] = useState<Partial<IModelPLO>>();
   const user = useAppSelector((state) => state.user);
@@ -80,11 +79,9 @@ export default function Part5TQF3({ data, setForm }: Props) {
     mode: "controlled",
     initialValues: {
       data: courseCLO.map((clo) => ({
-        mainRef: "",
-        recDoc: "",
         clo: clo,
         plo: [],
-      })) as IModelTQF3Part5[],
+      })) as Partial<IModelTQF3Part5>[],
     },
     validate: {},
   });
@@ -106,13 +103,11 @@ export default function Part5TQF3({ data, setForm }: Props) {
   };
 
   useEffect(() => {
-    if (data) {
-      fetchPLO();
-    }
-  }, [data]);
+    fetchPLO();
+  }, []);
 
-  return (
-    data.TQF3?.part5?.updatedAt ? (  <>
+  return tqf3?.part5?.updatedAt ? (
+    <>
       {coursePLO && (
         <DrawerPLOdes
           opened={openDrawerPLOdes}
@@ -237,6 +232,6 @@ export default function Part5TQF3({ data, setForm }: Props) {
         src={unplug}
         alt="loginImage"
       />
-    </div>)
-  ) ;
+    </div>
+  );
 }
