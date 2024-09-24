@@ -6,23 +6,25 @@ import { useEffect, useState } from "react";
 import { IModelTQF3Part4 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
 import unplug from "@/assets/image/unplug.png";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { updatePartTQF3 } from "@/store/tqf3";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export default function Part4TQF3({ setForm }: Props) {
+  // const [evalList, setEvalList] = useState<Partial<IModelTQF3Part4>[]>([]);
   const tqf3 = useAppSelector((state) => state.tqf3);
+  const dispatch = useAppDispatch();
   const form = useForm({
     mode: "controlled",
     initialValues: {
       data: [] as IModelTQF3Part4[],
     },
     validate: {
-      // data: (value) => {
-      //   return value.reduce((acc, cur) => acc + cur.percent, 0) != 100 && "";
-      // },
+      // data: (value) =>
+      //   value.reduce((acc, cur) => acc + cur.percent, 0) != 100 && "",
       data: {
         percent: (value) =>
           value == 0 && "CLO must be linked to at least one evaluation topic",
@@ -38,7 +40,10 @@ export default function Part4TQF3({ setForm }: Props) {
         item.percent = item.evals.reduce((acc, cur) => acc + cur.percent, 0);
       });
       if (!isEqual(values, previous)) {
-        // setForm(form);
+        dispatch(
+          updatePartTQF3({ part: "part4", data: cloneDeep(form.getValues()) })
+        );
+        setForm(form);
       }
     },
   });
@@ -53,6 +58,13 @@ export default function Part4TQF3({ setForm }: Props) {
           evalWeek: [],
           percent: 0,
         })) ?? [];
+      // setEvalList(
+      //   tqf3.part3?.eval.map((e) => ({
+      //     eval: e.id,
+      //     evalWeek: [],
+      //     percent: 0,
+      //   })) ?? []
+      // );
       form.setFieldValue(
         "data",
         cloneDeep(
@@ -197,6 +209,15 @@ export default function Part4TQF3({ setForm }: Props) {
                                       (e) => e.id == item.eval
                                     )?.percent
                                   }
+                                  classNames={{
+                                    input: `${
+                                      form.getValues().data[cloIndex].evals[
+                                        evalIndex
+                                      ].percent === 0
+                                        ? ""
+                                        : "!border-[#404040] border-2"
+                                    }`,
+                                  }}
                                   {...form.getInputProps(
                                     `data.${cloIndex}.evals.${evalIndex}.percent`
                                   )}
@@ -265,6 +286,28 @@ export default function Part4TQF3({ setForm }: Props) {
             </div>
           </Tabs.Panel>
           <Tabs.Panel value="week">
+            {/* <div></div> */}
+            {/* {form.getValues().data.map(({ clo, evals }, cloIndex) => {
+              const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo)!;
+              return (
+                <div className="flex border-b">
+                  <div className="w-[30%]">
+                    <p>CLO-{cloItem.no}</p>
+                    <p>{cloItem.descTH}</p>
+                    <p>{cloItem.descEN}</p>
+                  </div>
+                  <div className="flex flex-col w-[70%]">
+                    {evals.map((item, evalIndex) => {
+                      const evelItem = tqf3?.part3?.eval.find(
+                        (e) => e.id == item.eval
+                      )!;
+
+                      return <div>{evelItem.topicTH}</div>;
+                    })}
+                  </div>
+                </div>
+              );
+            })} */}
             <div
               className="overflow-auto border border-secondary rounded-lg relative"
               style={{
@@ -322,7 +365,7 @@ export default function Part4TQF3({ setForm }: Props) {
                             <p>{cloItem.descEN}</p>
                           </div>
                         </Table.Td>
-                        {evals.map((item, evalIndex: number) => (
+                        {evals.map((item, evalIndex) => (
                           <Table.Td
                             key={evalIndex}
                             className="!px-4.5 max-w-[200px]"
@@ -344,6 +387,11 @@ export default function Part4TQF3({ setForm }: Props) {
                                 {...form.getInputProps(
                                   `data.${cloIndex}.evals.${evalIndex}.evalWeek`
                                 )}
+                                value={form
+                                  .getValues()
+                                  .data[cloIndex].evals[evalIndex].evalWeek.map(
+                                    (e) => e.toString()
+                                  )}
                               />
                             </div>
                           </Table.Td>
