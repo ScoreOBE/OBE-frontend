@@ -11,6 +11,7 @@ import { isNumber } from "lodash";
 
 export const isValidResponse = (res: any) => {
   if (
+    res.headers &&
     ["application/pdf", "application/zip"].includes(res.headers["content-type"])
   )
     return res;
