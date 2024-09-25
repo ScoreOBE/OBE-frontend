@@ -13,8 +13,8 @@ export const getOneCourse = async (params?: any) => {
   const res = await courseService.getOneCourse(params);
   return isValidResponse(res);
 };
-export const getExistsCourseName = async (courseNo: string) => {
-  const res = await courseService.getExistsCourseName(courseNo);
+export const getExistsCourseName = async (courseNo: string, params: any) => {
+  const res = await courseService.getExistsCourseName(courseNo, params);
   return isValidResponse(res);
 };
 export const checkCanCreateCourse = async (params: any) => {

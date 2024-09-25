@@ -163,7 +163,10 @@ export default function ModalAddCourse({
   };
 
   const getCourseName = async (courseNo: string) => {
-    const res = await getExistsCourseName(courseNo);
+    const res = await getExistsCourseName(courseNo, {
+      academicyear: academicYear.year,
+      academicterm: academicYear.semester,
+    });
     form.setFieldValue("courseName", res);
   };
 
