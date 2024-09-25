@@ -376,7 +376,8 @@ export default function TQF3() {
       </div>
       {tqf3Original &&
         tqf3.id &&
-        (tqf3Part == "part1" ||tqf3Part == "part5" ||
+        (tqf3Part == "part1" ||
+          tqf3Part == "part5" ||
           tqf3Original[
             Object.keys(partLabel)[
               Object.keys(partLabel).findIndex((e) => e == tqf3Part) - 1
