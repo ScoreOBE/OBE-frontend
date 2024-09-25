@@ -8,6 +8,8 @@ import {
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
 import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
+import { useAppSelector } from "@/store";
+import { useParams } from "react-router-dom";
 
 type Props = {
   opened: boolean;
@@ -15,6 +17,8 @@ type Props = {
 };
 
 export default function ModalExportTQF3({ opened, onClose }: Props) {
+  const { courseNo } = useParams();
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [value, setValue] = useState<string[]>([]);
 
   const onCloseModal = () => {
@@ -24,6 +28,9 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
 
   const generatePDF = async () => {
     const res = await genPdfTQF3({
+      courseNo,
+      academicYear: academicYear.year,
+      academicTerm: academicYear.semester,
       tqf3: "66d91fded3dbd0f70f1b2133",
       part1: "",
     });
