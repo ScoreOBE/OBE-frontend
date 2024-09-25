@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { Alert, Button } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  ComboboxData,
+  Group,
+  Modal,
+  Select,
+} from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { RxDashboard } from "react-icons/rx";
 import {
+  IconArrowRight,
   IconChevronLeft,
   IconExclamationCircle,
   IconLogout,
+  IconArrowsExchange,
 } from "@tabler/icons-react";
 import Icon from "@/components/Icon";
 import LeaveIcon from "@/assets/icons/leave.svg?react";
@@ -18,7 +27,7 @@ import { removeCourse } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
-import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { leaveCourse } from "@/services/course/course.service";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -34,6 +43,10 @@ export default function CourseSidebar() {
   const [course, setCourse] = useState<IModelCourse>();
   const [instructors, setInstructors] = useState<IModelUser[]>([]);
   const [coInstructors, setCoInstructors] = useState<IModelUser[]>([]);
+  const [openModalSelectTopic, setOpenModalSelectTopic] = useState(false);
+  const [uniqTopic, setUniqTopic] = useState<string[]>([]);
+  const [selectedTopic, setSelectedTopic] = useState<string>();
+  const [confirmTopic, setConfirmTopic] = useState<string>();
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
 
@@ -44,6 +57,17 @@ export default function CourseSidebar() {
         navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`);
       }
       setCourse(findCourse);
+
+      const temp: string[] = [];
+
+      findCourse?.sections?.filter((sec) => {
+        if (sec.topic && !temp.includes(sec.topic)) {
+          temp.push(sec.topic);
+        }
+      });
+
+      setUniqTopic(temp);
+      setConfirmTopic(temp[0]);
       const insList: any[] = [];
       const coInsList: any[] = [];
       findCourse?.sections.forEach((e: any) => {
@@ -83,6 +107,12 @@ export default function CourseSidebar() {
     }
   };
 
+  useEffect(() => {
+    if (course) {
+      console.log(course);
+    }
+  }, [course]);
+
   return (
     <>
       <MainPopup
@@ -116,6 +146,52 @@ export default function CourseSidebar() {
           </>
         }
       />
+      <Modal
+        title="Select Topic"
+        transitionProps={{ transition: "pop" }}
+        size="32vw"
+        centered
+        classNames={{
+          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+          body: "flex flex-col overflow-hidden max-h-full h-fit",
+        }}
+        closeOnClickOutside={false}
+        opened={openModalSelectTopic}
+        onClose={() => setOpenModalSelectTopic(false)}
+      >
+        <div className="flex flex-col gap-8">
+          <Select
+            label="Select topic to manage TQF"
+            placeholder="Course"
+            size="xs"
+            searchable
+            data={uniqTopic}
+            value={selectedTopic}
+            onChange={(event) => setSelectedTopic(event!)}
+          />
+          <div className="flex justify-end w-full">
+            <Group className="flex w-full h-fit items-end justify-end">
+              <div>
+                <Button
+                  variant="subtle"
+                  onClick={() => setOpenModalSelectTopic(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+              <Button
+                onClick={() => {
+                  setConfirmTopic(selectedTopic);
+                  setOpenModalSelectTopic(false);
+                }}
+                // disabled={!uploadCourse}
+              >
+                Change
+              </Button>
+            </Group>
+          </div>
+        </div>
+      </Modal>
       <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
           className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
@@ -149,8 +225,28 @@ export default function CourseSidebar() {
             >
               Sections
             </Button>
+
+            {uniqTopic.length > 1 && (
+              <div className="flex flex-col gap-2 mt-2 ">
+                <p className="text-[13px] font-semibold">TQF</p>
+                <Button
+                  className="justify-between bg-transparent !w-full !h-[50px] flex items-center px-3 py-1 border-white text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
+                  rightSection={<IconArrowsExchange className="h-5 w-5" />}
+                  variant="outline"
+                  classNames={{ inner: "w-full justify-between" }}
+                  onClick={() => setOpenModalSelectTopic(true)}
+                >
+                  <div className="flex flex-col justify-start items-start gap-[7px]">
+                    <p className="font-medium text-[14px]">Topic</p>
+                    <p className="font-normal text-[12px]">{confirmTopic}</p>
+                  </div>
+                </Button>
+              </div>
+            )}
             <Button
-              onClick={() => goToPage(ROUTE_PATH.TQF3)}
+              onClick={() => {
+                goToPage(ROUTE_PATH.TQF3);
+              }}
               leftSection={<Icon IconComponent={TQF3} className="h-5 w-5" />}
               className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
