@@ -201,11 +201,11 @@ export default function Dashboard() {
             searchable
             data={course.courses.map((c) => {
               if (c.type == COURSE_TYPE.SEL_TOPIC.en) {
-                let detailSec = []
-                const sectionNo = uploadCourse?.sectionNo
-                const topic = uploadCourse?.topic
-                if(sectionNo && topic){
-                  detailSec.push({sectionNo, topic})
+                let detailSec = [];
+                const sectionNo = uploadCourse?.sectionNo;
+                const topic = uploadCourse?.topic;
+                if (sectionNo && topic) {
+                  detailSec.push({ sectionNo, topic });
                 }
                 return {
                   value: c.courseNo,
@@ -223,7 +223,6 @@ export default function Dashboard() {
                 label: `${c.courseNo} ${c.courseName}`,
               };
             })}
-            
             value={uploadCourse?.courseNo}
             onChange={(value, option: any) =>
               setUploadCourse({
@@ -240,9 +239,7 @@ export default function Dashboard() {
                 <p>
                   {item.option.courseName} <br /> {item.option.topic}
                 </p>
-                <p>
-                  {item.option.topic} 
-                </p>
+                <p>{item.option.topic}</p>
               </div>
             )}
           />
@@ -264,7 +261,7 @@ export default function Dashboard() {
                 disabled={!uploadCourse}
                 rightSection={
                   <IconArrowRight
-                    color="#ffffff"
+                    color={!uploadCourse ? "#BCC3CA" : "#ffffff"}
                     className="size-5 items-center"
                     stroke={2}
                     size={20}
