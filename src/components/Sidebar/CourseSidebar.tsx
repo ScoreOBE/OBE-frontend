@@ -227,18 +227,18 @@ export default function CourseSidebar() {
             </Button>
 
             {uniqTopic.length > 1 && (
-              <div className="flex flex-col gap-2 mt-2 ">
+              <div className="flex  flex-col gap-2 mt-2 ">
                 <p className="text-[13px] font-semibold">TQF</p>
                 <Button
-                  className="justify-between bg-transparent !w-full !h-[50px] flex items-center px-3 py-1 border-white text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
-                  rightSection={<IconArrowsExchange className="h-5 w-5" />}
+                  className="justify-between bg-transparent !max-w-[180px] px-3 !min-w-[180px]  !h-[50px] flex items-center py-1 border-white text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
+                  // rightSection={<IconArrowsExchange className="h-5 w-5" />}
                   variant="outline"
-                  classNames={{ inner: "w-full justify-between" }}
+                  classNames={{ inner: "w-full   justify-between" }}
                   onClick={() => setOpenModalSelectTopic(true)}
                 >
-                  <div className="flex flex-col justify-start items-start gap-[7px]">
+                  <div className=" flex min-w-[120px] max-w-[160px]  flex-col justify-start items-start gap-[7px]">
                     <p className="font-medium text-[14px]">Topic</p>
-                    <p className="font-normal text-[12px]">{confirmTopic}</p>
+                    <p className="text-ellipsis overflow-hidden whitespace-nowrap font-normal text-[12px]">{confirmTopic}</p>
                   </div>
                 </Button>
               </div>

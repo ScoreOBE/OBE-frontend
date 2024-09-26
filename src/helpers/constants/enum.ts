@@ -13,7 +13,7 @@ export enum ROLE {
   SUPREME_ADMIN = "S. Admin",
 }
 export enum TITLE_ROLE {
-  CO_INS = "Co-Instructor",
+  CO_INS = "Co-Instructor (Optional)",
   OWNER_SEC = "Owner section",
 }
 
