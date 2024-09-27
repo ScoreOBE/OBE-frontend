@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
-  Alert,
-  Button,
-  ComboboxData,
-  Group,
-  Modal,
-  Select,
-} from "@mantine/core";
-import { useAppDispatch, useAppSelector } from "@/store";
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import { Alert, Button, Group, Modal, Select } from "@mantine/core";
+import store, { useAppDispatch, useAppSelector } from "@/store";
 import { RxDashboard } from "react-icons/rx";
 import {
-  IconArrowRight,
   IconChevronLeft,
   IconExclamationCircle,
   IconLogout,
@@ -22,64 +19,58 @@ import LeaveIcon from "@/assets/icons/leave.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import TQF3 from "@/assets/icons/TQF3.svg?react";
 import TQF5 from "@/assets/icons/TQF5.svg?react";
-import { IModelCourse } from "@/models/ModelCourse";
 import { removeCourse } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
-import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { leaveCourse } from "@/services/course/course.service";
 import { useDisclosure } from "@mantine/hooks";
+import { setDataTQF3 } from "@/store/tqf3";
 
 export default function CourseSidebar() {
   const navigate = useNavigate();
+  const { courseNo } = useParams();
   const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
-  const courseNo = path.split("/")[2];
   const prefix = `${ROUTE_PATH.COURSE}/${courseNo}`;
   const user = useAppSelector((state) => state.user);
-  const courseList = useAppSelector((state) => state.course.courses);
+  const course = useAppSelector((state) =>
+    state.course.courses.find((e) => e.courseNo == courseNo)
+  );
   const dispatch = useAppDispatch();
-  const [course, setCourse] = useState<IModelCourse>();
   const [instructors, setInstructors] = useState<IModelUser[]>([]);
   const [coInstructors, setCoInstructors] = useState<IModelUser[]>([]);
   const [openModalSelectTopic, setOpenModalSelectTopic] = useState(false);
   const [uniqTopic, setUniqTopic] = useState<string[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<string>();
-  const [confirmTopic, setConfirmTopic] = useState<string>();
+  const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
 
   useEffect(() => {
-    if (courseList.length && courseNo) {
-      const findCourse = courseList.find((e) => e.courseNo == courseNo);
-      if (!findCourse) {
-        navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`);
-      }
-      setCourse(findCourse);
-
+    if (course) {
       const temp: string[] = [];
-
-      findCourse?.sections?.filter((sec) => {
+      course.sections?.filter((sec) => {
         if (sec.topic && !temp.includes(sec.topic)) {
           temp.push(sec.topic);
         }
       });
-
       setUniqTopic(temp);
-      setConfirmTopic(temp[0]);
+      setSelectedTopic(temp[0]);
+      dispatch(setDataTQF3({ topic: temp[0] }));
       const insList: any[] = [];
       const coInsList: any[] = [];
-      findCourse?.sections.forEach((e: any) => {
-        if (!insList.map((p: any) => p.id).includes(e.instructor.id)) {
+      course.sections.forEach((e: any) => {
+        if (!insList.some((p: any) => p.id === e.instructor.id)) {
           insList.push({ ...e.instructor });
         }
       });
-      findCourse?.sections.forEach((e: any) => {
+      course.sections.forEach((e: any) => {
         e.coInstructors.forEach((p: any) => {
           if (
-            !insList.map((p: any) => p.id).includes(p.id) &&
-            !coInsList.map((p: any) => p.id).includes(p.id)
+            !insList.some((ins: any) => ins.id === p.id) &&
+            !coInsList.some((coIns: any) => coIns.id === p.id)
           ) {
             coInsList.push({ ...p });
           }
@@ -87,8 +78,10 @@ export default function CourseSidebar() {
       });
       setInstructors(insList);
       setCoInstructors(coInsList);
+    } else if (store.getState().course.courses.length && !course) {
+      navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`);
     }
-  }, [courseList, courseNo]);
+  }, [course]);
 
   const goToPage = (pathname: string, back?: boolean) => {
     navigate({
@@ -106,12 +99,6 @@ export default function CourseSidebar() {
       navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`);
     }
   };
-
-  useEffect(() => {
-    if (course) {
-      console.log(course);
-    }
-  }, [course]);
 
   return (
     <>
@@ -174,17 +161,22 @@ export default function CourseSidebar() {
               <div>
                 <Button
                   variant="subtle"
-                  onClick={() => setOpenModalSelectTopic(false)}
+                  onClick={() => {
+                    setOpenModalSelectTopic(false);
+                    setSelectedTopic(tqf3Topic);
+                  }}
                 >
                   Cancel
                 </Button>
               </div>
               <Button
                 onClick={() => {
-                  setConfirmTopic(selectedTopic);
+                  if (selectedTopic !== tqf3Topic) {
+                    dispatch(setDataTQF3({ topic: selectedTopic }));
+                  }
                   setOpenModalSelectTopic(false);
                 }}
-                // disabled={!uploadCourse}
+                disabled={selectedTopic === tqf3Topic}
               >
                 Change
               </Button>
@@ -238,7 +230,7 @@ export default function CourseSidebar() {
                 >
                   <div className="flex flex-col justify-start items-start gap-[7px]">
                     <p className="font-medium text-[14px]">Topic</p>
-                    <p className="font-normal text-[12px]">{confirmTopic}</p>
+                    <p className="font-normal text-[12px]">{tqf3Topic}</p>
                   </div>
                 </Button>
               </div>

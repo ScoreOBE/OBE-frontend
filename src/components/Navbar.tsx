@@ -13,6 +13,7 @@ export default function Navbar() {
   const location = useLocation().pathname;
   const [params, setParams] = useSearchParams();
   const academicYear = useAppSelector((state) => state.academicYear);
+  const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
   const dispatch = useAppDispatch();
 
   const searchCourse = async (searchValue: string, reset?: boolean) => {
@@ -49,8 +50,10 @@ export default function Navbar() {
       case ROUTE_PATH.DASHBOARD_INS:
         return "Your Courses";
       case ROUTE_PATH.COURSE:
-        if (location.includes(ROUTE_PATH.TQF3)) return "TQF 3";
-        else if (location.includes(ROUTE_PATH.TQF5)) return "TQF 5";
+        if (location.includes(ROUTE_PATH.TQF3))
+          return `TQF 3${tqf3Topic ? ` - ${tqf3Topic}` : ""}`;
+        else if (location.includes(ROUTE_PATH.TQF5))
+          return `TQF 5${tqf3Topic ? ` - ${tqf3Topic}` : ""}`;
         else if (location.includes(ROUTE_PATH.ASSIGNMENT)) return "Assignment";
         else return "Section";
       default:
@@ -71,7 +74,13 @@ export default function Navbar() {
           : {}
       }
     >
-      <p className="font-semibold text-h2 md:w-fit max-w-[30%]">
+      <p
+        className={`font-semibold text-h2 ${
+          location.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
+            ? ""
+            : "md:w-fit max-w-[30%]"
+        }`}
+      >
         {topicPath()}
       </p>
       {[ROUTE_PATH.DASHBOARD_INS].includes(location) && (
