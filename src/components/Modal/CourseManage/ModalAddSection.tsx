@@ -582,7 +582,7 @@ export default function ModalAddSection({
         >
           <div className="flex flex-col mt-3 flex-1 ">
             <CompoManageIns
-              opened={active == 2}
+              opened={(active == 2 && !isManage) || (active == 3 && isManage)}
               type="add"
               action={addCoIns}
               sections={form.getValues().sections}
@@ -789,9 +789,15 @@ export default function ModalAddSection({
         <Button
           loading={loading}
           onClick={() => nextStep()}
-          rightSection={active != 3 && <IconArrowRight stroke={2} size={20} />}
+          rightSection={
+            ((active != 3 && !isManage) || (active != 4 && isManage)) && (
+              <IconArrowRight stroke={2} size={20} />
+            )
+          }
         >
-          {active == 3 ? "Done" : "Next step"}
+          {(active == 3 && !isManage) || (active == 4 && isManage)
+            ? "Done"
+            : "Next step"}
         </Button>
       </Group>
     </Modal>
