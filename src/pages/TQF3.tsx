@@ -39,15 +39,18 @@ import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import { LearningMethod } from "@/components/Modal/TQF3/ModalManageCLO";
 import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
-import { setDataTQF3, updatePartTQF3 } from "@/store/tqf3";
+import { setDataTQF3 } from "@/store/tqf3";
+import { IModelSection } from "@/models/ModelSection";
 
 export default function TQF3() {
   const { courseNo } = useParams();
   const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
   const loading = useAppSelector((state) => state.loading);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [tqf3Original, setTqf3Original] = useState<
+    IModelTQF3 & { topic?: string }
+  >();
   const tqf3 = useAppSelector((state) => state.tqf3);
-  const [tqf3Original, setTqf3Original] = useState<IModelTQF3>();
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<UseFormReturnType<any>>();
   const [tqf3Part, setTqf3Part] = useState<string | null>(
@@ -101,9 +104,11 @@ export default function TQF3() {
     if (academicYear) fetchOneCourse(true);
   }, [academicYear]);
 
-  // useEffect(() => {
-  //   console.log(tqf3Original, tqf3);
-  // }, [form]);
+  useEffect(() => {
+    if (tqf3.topic !== tqf3Original?.topic) {
+      fetchOneCourse(true);
+    }
+  }, [tqf3.topic]);
 
   const fetchOneCourse = async (firstFetch: boolean = false) => {
     const res = await getOneCourse({
@@ -112,21 +117,26 @@ export default function TQF3() {
     });
     if (res) {
       if (res.type == COURSE_TYPE.SEL_TOPIC.en) {
-        setTqf3Original(res.sections[0].TQF3!);
+        const sectionTdf3 = res.sections.find(
+          (sec: IModelSection) => sec.topic == tqf3.topic
+        ).TQF3;
+        setTqf3Original({ topic: tqf3.topic, ...sectionTdf3 });
         dispatch(
           setDataTQF3({
-            ...res.sections[0].TQF3!,
+            topic: tqf3.topic,
+            ...sectionTdf3,
             type: res.type,
             sections: [...res.sections],
           })
         );
         if (firstFetch) {
-          setCurrentPartTQF3(res.sections[0].TQF3!);
+          setCurrentPartTQF3(sectionTdf3);
         }
       } else {
-        setTqf3Original(res.TQF3!);
+        setTqf3Original({ topic: tqf3.topic, ...res.TQF3! });
         dispatch(
           setDataTQF3({
+            topic: tqf3.topic,
             ...res.TQF3!,
             type: res.type,
             sections: [...res.sections],

@@ -29,10 +29,10 @@ export const checkCanCreateSectionManagement = async (params: any) => {
   );
   return isValidResponse(res);
 };
-export const createSectionManagement = async (id: string, params: any) => {
-  const res = await courseManagementService.createSectionManagement(id, params);
-  return isValidResponse(res);
-};
+// export const createSectionManagement = async (id: string, params: any) => {
+//   const res = await courseManagementService.createSectionManagement(id, params);
+//   return isValidResponse(res);
+// };
 export const updateCourseManagement = async (id: string, params: any) => {
   const res = await courseManagementService.updateCourseManagement(id, params);
   return isValidResponse(res);

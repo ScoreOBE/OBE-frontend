@@ -67,7 +67,6 @@ export default function Section() {
   const [openModalManageIns, setOpenModalManageIns] = useState(false);
   const [openModalStudentList, setOpenModalStudentList] = useState(false);
 
-
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
@@ -138,6 +137,7 @@ export default function Section() {
         opened={openModalEditSec}
         onClose={() => setOpenModalEditSec(false)}
         value={editSec}
+        fetchOneCourse={fetchOneCourse}
       />
       <MainPopup
         opened={openMainPopupDelCourse}
@@ -334,6 +334,7 @@ export default function Section() {
                                 onClick={() => {
                                   setEditSec({
                                     id: sec.id,
+                                    academicYear: params.get("id"),
                                     courseId: course.id,
                                     oldSectionNo: sec.sectionNo,
                                     courseNo: course.courseNo,
