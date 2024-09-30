@@ -323,7 +323,7 @@ export default function Part3TQF3({ setForm }: Props) {
                                     <p>{item.topicTH}</p>
                                     <p>{item.topicEN}</p>
                                   </Table.Td>
-                                  <Table.Td className="w-[65%]">
+                                  <Table.Td className="w-[65%] max-w-[65%] flex-wrap">
                                     {item.desc.length ? item.desc : "-"}
                                   </Table.Td>
                                   <Table.Td className="w-[5%] text-end text-b1">
