@@ -5,7 +5,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { Alert, Button, Group, Modal, Select } from "@mantine/core";
+import { Alert, Button, Group, Menu, Modal, Select } from "@mantine/core";
 import store, { useAppDispatch, useAppSelector } from "@/store";
 import { RxDashboard } from "react-icons/rx";
 import {
@@ -13,6 +13,7 @@ import {
   IconExclamationCircle,
   IconLogout,
   IconArrowsExchange,
+  IconChevronRight,
 } from "@tabler/icons-react";
 import Icon from "@/components/Icon";
 import LeaveIcon from "@/assets/icons/leave.svg?react";
@@ -23,7 +24,7 @@ import { removeCourse } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
-import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { leaveCourse } from "@/services/course/course.service";
 import { useDisclosure } from "@mantine/hooks";
 import { setDataTQF3 } from "@/store/tqf3";
@@ -133,7 +134,7 @@ export default function CourseSidebar() {
           </>
         }
       />
-      <Modal
+      {/* <Modal
         title="Select Topic"
         transitionProps={{ transition: "pop" }}
         size="32vw"
@@ -183,7 +184,7 @@ export default function CourseSidebar() {
             </Group>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
       <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
           className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
@@ -218,48 +219,134 @@ export default function CourseSidebar() {
               Sections
             </Button>
 
-            {uniqTopic.length > 1 && (
-              <div className="flex  flex-col gap-2 mt-2 ">
-                <p className="text-[13px] font-semibold">TQF</p>
+            <Menu
+              trigger="hover"
+              openDelay={100}
+              clickOutsideEvents={["mousedown"]}
+              classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+              position="right"
+              transitionProps={{ transition: "pop", duration: 0 }}
+            >
+              <Menu.Target>
                 <Button
-                  className="justify-between bg-transparent !max-w-[180px] px-3 !min-w-[180px]  !h-[50px] flex items-center py-1 border-white text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
-                  // rightSection={<IconArrowsExchange className="h-5 w-5" />}
-                  variant="outline"
-                  classNames={{ inner: "w-full   justify-between" }}
-                  onClick={() => setOpenModalSelectTopic(true)}
-                >
-                  <div className=" flex min-w-[120px] max-w-[160px]  flex-col justify-start items-start gap-[7px]">
-                    <p className="font-medium text-[14px]">Topic</p>
-                    <p className="text-ellipsis overflow-hidden whitespace-nowrap font-normal text-[12px]">{tqf3Topic}</p>
-                  </div>
-                </Button>
-              </div>
-            )}
-            <Button
-              onClick={() => {
-                goToPage(ROUTE_PATH.TQF3);
-              }}
-              leftSection={<Icon IconComponent={TQF3} className="h-5 w-5" />}
-              className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+                  onClick={() => {
+                    goToPage(ROUTE_PATH.TQF3);
+                  }}
+                  leftSection={
+                    <Icon IconComponent={TQF3} className="h-5 w-5" />
+                  }
+                  rightSection={ course?.type == COURSE_TYPE.SEL_TOPIC.en &&
+                    <IconChevronRight
+                    
+                      className="h-5 right-2 absolute  flex  w-5"
+                    /> 
+                  }
+                  className={`!w-full !text-[13px]  flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
                   path.includes(ROUTE_PATH.TQF3)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                 }`}
+                >
+                  TQF 3
+                </Button>
+              </Menu.Target>
+              {course?.type == COURSE_TYPE.SEL_TOPIC.en && (
+                <Menu.Dropdown
+                  className="!z-50 py-2 !font-semibold max-w-fit translate-x-[22px]  bg-white"
+                  style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 2px 8px" }}
+                >
+                  {uniqTopic.length > 1 && (
+                    <div className="flex gap-[2px] flex-col  ">
+                      <p className="my-1 text-[14px] pl-2">
+                        TQF 3 Topic in {courseNo}
+                      </p>
+                      {uniqTopic.map((topic) => (
+                        <Menu.Item
+                          className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
+                          variant="outline"
+                          onClick={() => {
+                            if (topic !== tqf3Topic) {
+                              dispatch(setDataTQF3({ topic }));
+                            }
+                            goToPage(ROUTE_PATH.TQF3);
+                          }}
+                        >
+                          <div className=" flex  !font-semibold  flex-col justify-start items-start gap-[7px]">
+                            <p className="text-ellipsis overflow-hidden whitespace-nowrap !font-semibold text-[12px]">
+                             {topic}
+                            </p>
+                          </div>
+                        </Menu.Item>
+                      ))}
+                    </div>
+                  )}
+                </Menu.Dropdown>
+              )}
+               </Menu>
+               <Menu
+              trigger="hover"
+              openDelay={100}
+              clickOutsideEvents={["mousedown"]}
+              classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+              position="right"
+              transitionProps={{ transition: "pop", duration: 0 }}
             >
-              TQF 3
-            </Button>
-            <Button
-              leftSection={<Icon IconComponent={TQF5} className="h-5 w-5" />}
-              className={`!w-full !text-[13px] mb-2 flex justify-start items-center transition-colors duration-300 focus:border-none group
+              <Menu.Target>
+                <Button
+                  leftSection={
+                    <Icon IconComponent={TQF5} className="h-5 w-5" />
+                  }
+                  rightSection={ course?.type == COURSE_TYPE.SEL_TOPIC.en &&
+                    <IconChevronRight
+                    
+                      className="h-5 right-2 absolute  flex  w-5"
+                    /> 
+                  }
+                  className={`!w-full !text-[13px] mb-2 flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
                   path.startsWith(ROUTE_PATH.TQF5)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                 }`}
-            >
-              TQF 5
-            </Button>
+                >
+                  TQF 5
+                </Button>
+                
+              </Menu.Target>
+              {course?.type == COURSE_TYPE.SEL_TOPIC.en && (
+                <Menu.Dropdown
+                  className="!z-50 py-2 !font-semibold max-w-fit translate-x-[22px] bg-white"
+                  style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 2px 8px" }}
+                >
+                  {uniqTopic.length > 1 && (
+                    <div className="flex gap-[2px] flex-col  ">
+                      <p className="my-1 text-[14px] pl-2">
+                        TQF 5 Topic in {courseNo}
+                      </p>
+                      {uniqTopic.map((topic) => (
+                        <Menu.Item
+                          className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
+                          variant="outline"
+                          onClick={() => {
+                            if (topic !== tqf3Topic) {
+                              dispatch(setDataTQF3({ topic }));
+                            }
+                            goToPage(ROUTE_PATH.TQF5);
+                          }}
+                        >
+                          <div className=" flex  !font-semibold  flex-col justify-start items-start gap-[7px]">
+                            <p className="text-ellipsis overflow-hidden whitespace-nowrap !font-semibold text-[12px]">
+                             {topic}
+                            </p>
+                          </div>
+                        </Menu.Item>
+                      ))}
+                    </div>
+                  )}
+                </Menu.Dropdown>
+              )}
+           </Menu>
           </div>
         </div>
 
