@@ -108,11 +108,14 @@ export default function Part1TQF3({ setForm }: Props) {
             หลักสูตร <span className=" text-red-500">*</span>
           </p>
           <p className="font-semibold">Curriculum</p>
+          <p className="error-text mt-1">
+            {form.getInputProps("curriculum").error}
+          </p>
         </div>
         <Radio.Group
           key={form.key("curriculum")}
-          classNames={{ error: "mt-2" }}
           {...form.getInputProps("curriculum")}
+          error={<></>}
           value={form.getValues().curriculum}
           onChange={(event) => form.setFieldValue("curriculum", event)}
         >
@@ -160,11 +163,14 @@ export default function Part1TQF3({ setForm }: Props) {
             ชั้นปีที่เรียน <span className=" text-red-500">*</span>
           </p>
           <p className="font-semibold">Student Year</p>
+          <p className="error-text mt-1">
+            {form.getInputProps("studentYear").error}
+          </p>
         </div>
         <Checkbox.Group
           key={form.key("studentYear")}
-          classNames={{ error: "mt-2" }}
           {...form.getInputProps("studentYear")}
+          error={<></>}
           value={form.getValues().studentYear?.map((e) => e.toString())}
           onChange={(event) =>
             form.setFieldValue(
@@ -191,8 +197,10 @@ export default function Part1TQF3({ setForm }: Props) {
             ชื่ออาจารย์ผู้รับผิดชอบ<span className=" text-red-500">*</span>
           </p>
           <p className="font-semibold">Main Instructor</p>
+          <p className="error-text mt-1">
+            {form.getInputProps("mainInstructor").error}
+          </p>
         </div>
-
         <div className="flex flex-col gap-3 text-default">
           <TextInput
             key={form.key("mainInstructor")}
@@ -203,6 +211,7 @@ export default function Part1TQF3({ setForm }: Props) {
             className="w-[440px]"
             placeholder="(required)"
             {...form.getInputProps("mainInstructor")}
+            error={form.getInputProps("mainInstructor").error && <></>}
           />
         </div>
       </div>
@@ -212,9 +221,11 @@ export default function Part1TQF3({ setForm }: Props) {
           <p className="font-semibold">
             อาจารย์ผู้สอนทั้งหมด<span className=" text-red-500"> *</span>
           </p>
-          <p className="font-semibold">Lecturers</p>
+          <p className="font-semibold">Lecturers</p>{" "}
+          <p className="error-text mt-1">
+            {form.getInputProps("instructors").error}
+          </p>
         </div>
-
         <div
           className="flex flex-col gap-3 text-default"
           key={form.key("instructors")}
@@ -232,13 +243,10 @@ export default function Part1TQF3({ setForm }: Props) {
               {...form.getInputProps(`instructors.${index}`)}
             />
           ))}
-          <p className="text-error text-b3 -mt-1">
-            {form.getInputProps("instructors").error}
-          </p>
         </div>
       </div>
 
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-top grid grid-cols-[1fr_2fr] py-5  ">
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-top grid grid-cols-[1fr_2fr] py-5">
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">
             สถานที่เรียน<span className=" text-red-500"> *</span>
@@ -264,7 +272,7 @@ export default function Part1TQF3({ setForm }: Props) {
                 className="mt-2 pl-8"
                 placeholder="(optional)"
                 classNames={{
-                  input: "text-[13px] text-[#333333] h-[80px]  w-[408px]",
+                  input: "text-[13px] text-default h-[80px]  w-[408px]",
                 }}
                 disabled={!checked.includes("in")}
                 {...form.getInputProps("teachingLocation.in")}
@@ -283,7 +291,7 @@ export default function Part1TQF3({ setForm }: Props) {
                 className="mt-2 pl-8"
                 placeholder="(optional)"
                 classNames={{
-                  input: "text-[13px] text-[#333333] h-[80px] w-[408px]",
+                  input: "text-[13px] text-default h-[80px] w-[408px]",
                 }}
                 disabled={!checked.includes("out")}
                 {...form.getInputProps("teachingLocation.out")}
@@ -297,7 +305,7 @@ export default function Part1TQF3({ setForm }: Props) {
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">
             ชั่วโมงต่อสัปดาห์ในการให้คำปรึกษาแก่นักศึกษารายบุคคล
-            <span className=" text-red-500"> *</span>
+            <span className="text-red-500"> *</span>
           </p>
           <p className="font-semibold">
             Individual student consultation hours per week

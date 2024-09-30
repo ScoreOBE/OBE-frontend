@@ -184,7 +184,7 @@ export default function Part4TQF3({ setForm }: Props) {
                               </p>
                               <p>{cloItem.descTH}</p>
                               <p>{cloItem.descEN}</p>
-                              <p className="text-error text-b3 -mt-1">
+                              <p className="error-text">
                                 {
                                   form.getInputProps(`data.${cloIndex}.percent`)
                                     .error

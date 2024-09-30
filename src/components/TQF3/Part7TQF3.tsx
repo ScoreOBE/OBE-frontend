@@ -1,13 +1,4 @@
-import { COURSE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
-import {
-  Radio,
-  Checkbox,
-  TextInput,
-  Textarea,
-  Button,
-  Alert,
-  Table,
-} from "@mantine/core";
+import { Checkbox, Button, Alert, Table } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCheckbox } from "@tabler/icons-react";
 import Icon from "../Icon";
