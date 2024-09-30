@@ -1,9 +1,13 @@
 import { Button, Checkbox, Group, Modal } from "@mantine/core";
 import { IconFileExport, IconPdf } from "@tabler/icons-react";
-import { useState } from "react";
-import { getKeyEnumByValue, showNotifications } from "@/helpers/functions/function";
+import { useEffect, useState } from "react";
+import { showNotifications } from "@/helpers/functions/function";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
-import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
+import {
+  getKeyPartTopicTQF3,
+  PartTopicTQF3,
+  ValidPartTopics,
+} from "@/helpers/constants/TQF3.enum";
 import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
@@ -18,18 +22,31 @@ type Props = {
 export default function ModalExportTQF3({ opened, onClose }: Props) {
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const tqf3 = useAppSelector((state) => state.tqf3);
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
 
-  // Function to close the modal and reset state
+  useEffect(() => {
+    if (opened) {
+      Object.keys(tqf3).forEach((part) => {
+        if (part as ValidPartTopics) {
+          selectedParts.push(part);
+        }
+      });
+    }
+  }, [opened]);
+
   const onCloseModal = () => {
     onClose();
     setSelectedParts([]);
   };
 
-  // Function to generate and export each selected part of the TQF3 as a ZIP file
   const generatePDF = async () => {
     if (selectedParts.length === 0) {
-      showNotifications(NOTI_TYPE.ERROR, "Error", "Please select at least one part to export.");
+      showNotifications(
+        NOTI_TYPE.ERROR,
+        "Error",
+        "Please select at least one part to export."
+      );
       return;
     }
 
@@ -42,7 +59,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
           courseNo,
           academicYear: academicYear.year,
           academicTerm: academicYear.semester,
-          tqf3: "66d91fded3dbd0f70f1b2133",
+          tqf3: tqf3.id,
           [part]: "", // Use the part as a dynamic key for the payload
         });
 
@@ -71,13 +88,17 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       }
 
       zip.generateAsync({ type: "blob" }).then((zipBlob: any) => {
-        saveAs(zipBlob, `TQF3_Parts_${academicYear.year}_${academicYear.semester}.zip`);
+        saveAs(
+          zipBlob,
+          `TQF3_Parts_${academicYear.year}_${academicYear.semester}.zip`
+        );
       });
     } catch (error) {
       const errorMessage = "An error occurred while generating the PDF.";
       showNotifications(NOTI_TYPE.ERROR, "Export Error", errorMessage);
       console.error("Error during PDF generation:", error);
     }
+    onCloseModal();
   };
 
   return (
@@ -108,22 +129,37 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
           value={selectedParts}
           onChange={setSelectedParts}
         >
-          {Object.values(PartTopicTQF3).map((item, index) => (
-            <div key={index} className="flex p-1 mb-1 w-full h-full flex-col overflow-y-auto">
-              <Checkbox.Card
-                value={getKeyEnumByValue(PartTopicTQF3, item)}
-                className="p-3 items-center px-4 flex border-none h-fit rounded-md w-full"
-                style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
+          {Object.values(PartTopicTQF3).map((item, index) => {
+            const disabled =
+              tqf3 && !tqf3[getKeyPartTopicTQF3(item)!]?.updatedAt;
+            return (
+              <div
+                key={index}
+                className="flex p-1 mb-1 w-full h-full flex-col overflow-y-auto"
               >
-                <Group wrap="nowrap" className="item-center flex" align="flex-start">
-                  <Checkbox.Indicator className="mt-1" />
-                  <div className="text-default whitespace-break-spaces font-medium text-[13px]">
-                    {item}
-                  </div>
-                </Group>
-              </Checkbox.Card>
-            </div>
-          ))}
+                <Checkbox.Card
+                  className="p-3 items-center px-4 flex border-none h-fit rounded-md w-full"
+                  classNames={{
+                    card: `${disabled && " bg-disable cursor-not-allowed"}`,
+                  }}
+                  style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
+                  value={getKeyPartTopicTQF3(item)}
+                  disabled={disabled}
+                >
+                  <Group
+                    wrap="nowrap"
+                    className="item-center flex"
+                    align="flex-start"
+                  >
+                    <Checkbox.Indicator className="mt-1" disabled={disabled} />
+                    <div className="text-default whitespace-break-spaces font-medium text-[13px]">
+                      {item}
+                    </div>
+                  </Group>
+                </Checkbox.Card>
+              </div>
+            );
+          })}
         </Checkbox.Group>
       </div>
       <div className="flex justify-end mt-2 sticky w-full">
@@ -132,7 +168,14 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
             Cancel
           </Button>
           <Button
-            rightSection={<IconFileExport color="#ffffff" className="size-5 items-center" stroke={2} size={20} />}
+            rightSection={
+              <IconFileExport
+                color="#ffffff"
+                className="size-5 items-center"
+                stroke={2}
+                size={20}
+              />
+            }
             onClick={generatePDF}
           >
             Export TQF3
