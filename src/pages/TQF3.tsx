@@ -222,7 +222,7 @@ export default function TQF3() {
         closeOnClickOutside={false}
         onClose={() => setOpenModalReuse(false)}
         transitionProps={{ transition: "pop" }}
-        size="34vw"
+        size="39vw"
         centered
         classNames={{
           content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
@@ -234,14 +234,14 @@ export default function TQF3() {
           <Alert
             variant="light"
             color="blue"
-            title={`Reusing TQF will import all 6 parts of TQF3 data from your selected course to automatically fill in the TQF3 for this course.`}
+            title={`Reusing TQF 3 will import all 6 parts of TQF 3 data from your selected course to automatically fill in the TQF 3 for this course.`}
             icon={<IconInfoCircle />}
             classNames={{ icon: "size-6" }}
           ></Alert>
           <Alert
             variant="light"
             color="red"
-            title={`After reuse TQF 3, you should have to recheck data from course that you select again.`}
+            title={`After reuse TQF 3, you should have to recheck and save data all 6 parts from course that you select again.`}
             icon={<IconExclamationCircle />}
             classNames={{ icon: "size-6" }}
           ></Alert>
@@ -387,7 +387,7 @@ export default function TQF3() {
       {tqf3Original &&
         tqf3.id &&
         (tqf3Part == "part1" ||
-          tqf3Part == "part5" ||
+          (tqf3Part == "part5" && tqf3Original.part4) ||
           tqf3Original[
             Object.keys(partLabel)[
               Object.keys(partLabel).findIndex((e) => e == tqf3Part) - 1
