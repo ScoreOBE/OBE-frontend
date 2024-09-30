@@ -162,11 +162,14 @@ export default function Part2TQF3({ setForm }: Props) {
                 ลักษณะของกระบวนวิชา <span className=" text-red-500">*</span>
               </p>
               <p className="font-semibold">Teaching Method</p>
+              <p className="error-text mt-1">
+                {form.getInputProps("teachingMethod").error}
+              </p>
             </div>
             <Checkbox.Group
               key={form.key("teachingMethod")}
-              classNames={{ error: "mt-2" }}
               {...form.getInputProps("teachingMethod")}
+              error={<></>}
             >
               <div className="flex flex-col text-default gap-4">
                 {Object.values(TEACHING_METHOD).map((key) => (
@@ -186,11 +189,14 @@ export default function Part2TQF3({ setForm }: Props) {
                 การวัดและประเมินผล <span className=" text-red-500">*</span>
               </p>
               <p className="font-semibold">Evaluation</p>
+              <p className="error-text mt-1">
+                {form.getInputProps("evaluate").error}
+              </p>
             </div>
             <Radio.Group
               key={form.key("evaluate")}
-              classNames={{ error: "mt-2" }}
               {...form.getInputProps("evaluate")}
+              error={<></>}
             >
               <div className="flex gap-8 text-default">
                 {Object.values(EVALUATE_TYPE).map((item) => (
@@ -384,7 +390,7 @@ export default function Part2TQF3({ setForm }: Props) {
                 </Table>
               </div>
             </DragDropContext>
-            <p className="text-error text-b3 -mt-1">
+            <p className="error-text -mt-1">
               {form.getInputProps("clo").error}
             </p>
           </div>
@@ -574,7 +580,7 @@ export default function Part2TQF3({ setForm }: Props) {
                 </Table>
               </div>
             </DragDropContext>
-            <p className="text-error text-b3 -mt-1">
+            <p className="error-text -mt-1">
               {form.getInputProps("schedule").error}
             </p>
           </div>

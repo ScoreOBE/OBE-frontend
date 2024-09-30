@@ -172,7 +172,7 @@ export default function TQF3() {
         const firstErrorPath = Object.keys(validationResult.errors)[0];
         form
           .getInputNode(firstErrorPath)
-          ?.scrollIntoView({ behavior: "smooth" });
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
       } else {
         const payload = form.getValues();
         payload.id = tqf3.id;

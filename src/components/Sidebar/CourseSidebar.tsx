@@ -12,7 +12,6 @@ import {
   IconChevronLeft,
   IconExclamationCircle,
   IconLogout,
-  IconArrowsExchange,
   IconChevronRight,
 } from "@tabler/icons-react";
 import Icon from "@/components/Icon";
@@ -59,7 +58,9 @@ export default function CourseSidebar() {
       });
       setUniqTopic(temp);
       setSelectedTopic(temp[0]);
-      dispatch(setDataTQF3({ topic: temp[0] }));
+      if (tqf3Topic != temp[0]) {
+        dispatch(setDataTQF3({ topic: temp[0] }));
+      }
       const insList: any[] = [];
       const coInsList: any[] = [];
       course.sections.forEach((e: any) => {

@@ -404,7 +404,7 @@ export default function Part3TQF3({ setForm }: Props) {
                   </Table.Tfoot>
                 </Table>
               </div>
-              <p className="text-error text-b3 -mt-1">
+              <p className="error-text -mt-1">
                 {form.getInputProps("eval").error}
               </p>
             </DragDropContext>

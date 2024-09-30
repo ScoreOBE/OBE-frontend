@@ -3,11 +3,18 @@
   --color-secondary: #5768d5;
   --color-tertiary: #3e3e3e;
   --color-edit: #f39d4e;
+  --color-error: #fa5252;
   --color-hover: #efefef;
   --color-border-input: #cecece;
   --color-background-input: #ffffff;
   --color-background-disabled: #efefef;
   --input-radius: 20px;
+}
+
+.error-text {
+  color: var(--color-error);
+  font-size: 12px;
+  font-weight: 600;
 }
 
 /* .mantine-focus-auto:focus-visible {
@@ -32,7 +39,7 @@
   border-width: 1px !important;
 }
 
-.mantine-CheckboxCard-card{
+.mantine-CheckboxCard-card {
   align-items: center;
   display: flex;
 }
@@ -166,7 +173,6 @@
 .mantine-TextInput-input:disabled {
   background-color: var(--color-background-disabled) !important;
 }
-
 
 /* Textarea */
 .mantine-Textarea-label {

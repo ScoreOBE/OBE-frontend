@@ -4,14 +4,15 @@ import { useForm } from "@mantine/form";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalManageTopic from "../Modal/TQF3/ModalManageTopic";
-import { IModelCourse } from "@/models/ModelCourse";
-import { IModelTQF3, IModelTQF3Part6 } from "@/models/ModelTQF3";
+import { IModelTQF3Part6 } from "@/models/ModelTQF3";
 import MainPopup from "../Popup/MainPopup";
 import { showNotifications } from "@/helpers/functions/function";
 import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
+import { updatePartTQF3 } from "@/store/tqf3";
+import { cloneDeep, isEqual } from "lodash";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -127,6 +128,12 @@ export default function Part6TQF3({ setForm }: Props) {
     },
   ];
   const [options, setOptions] = useState([]);
+  const [openPopupDelAddTopic, setOpenPopupDelAddTopic] = useState(false);
+  const [openModalSelectTopic, setOpenModalSelectTopic] = useState(false);
+  const [openModalEditSelectTopic, setOpenModalEditSelectTopic] =
+    useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(0);
+  const [openedTooltip, setOpenedTooltip] = useState(false);
   const form = useForm({
     mode: "controlled",
     initialValues: {
@@ -138,14 +145,32 @@ export default function Part6TQF3({ setForm }: Props) {
         })),
       ],
     } as { data: IModelTQF3Part6[] },
-    validate: {},
+    validate: {
+      data: {
+        detail: (value) => !value.length && "Select at least one",
+        other: (value, values, path) =>
+          values.data[parseInt(path.split(".")[1])].detail.includes(
+            "อื่นๆ (Other)"
+          ) &&
+          !value?.length &&
+          "This field is required",
+      },
+    },
+    onValuesChange(values, previous) {
+      if (!isEqual(values, previous)) {
+        dispatch(
+          updatePartTQF3({ part: "part6", data: cloneDeep(form.getValues()) })
+        );
+        setForm(form);
+      }
+    },
   });
-  const [openPopupDelAddiTopic, setOpenPopupDelAddiTopic] = useState(false);
-  const [openModalSelectTopic, setOpenModalSelectTopic] = useState(false);
-  const [openModalEditSelectTopic, setOpenModalEditSelectTopic] =
-    useState(false);
-  const [deleteIndex, setDeleteIndex] = useState(0);
-  const [openedTooltip, setOpenedTooltip] = useState(false);
+
+  useEffect(() => {
+    if (tqf3.part6) {
+      form.setValues(tqf3.part6);
+    }
+  }, []);
 
   const addTopic = (value: any, option: any) => {
     if (!options.length) {
@@ -160,18 +185,19 @@ export default function Part6TQF3({ setForm }: Props) {
 
   const onClickDeleteAddiTopic = () => {
     form.removeListItem("data", deleteIndex);
-    setOpenPopupDelAddiTopic(false);
+    setOpenPopupDelAddTopic(false);
     showNotifications(
       NOTI_TYPE.SUCCESS,
       "Delete Topic Success",
       `Topic ${deleteIndex + 1} is deleted`
     );
   };
+
   return (
     <>
       <MainPopup
-        opened={openPopupDelAddiTopic}
-        onClose={() => setOpenPopupDelAddiTopic(false)}
+        opened={openPopupDelAddTopic}
+        onClose={() => setOpenPopupDelAddTopic(false)}
         action={onClickDeleteAddiTopic}
         type="delete"
         labelButtonRight={`Delete Topic ${deleteIndex + 1}`}
@@ -207,7 +233,6 @@ export default function Part6TQF3({ setForm }: Props) {
       {tqf3.part5?.updatedAt ? (
         <div className="flex flex-col w-full  max-h-full gap-4">
           {/* Topic */}
-
           <div className="flex text-secondary  items-center w-full justify-between">
             <p className="text-[15px] font-semibold">
               หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
@@ -261,23 +286,27 @@ export default function Part6TQF3({ setForm }: Props) {
               return topics[index] ? (
                 <div
                   key={index}
-                  className="  w-full h-full max-h-full  flex flex-col "
+                  className="w-full h-full max-h-full flex flex-col"
                 >
                   <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader">
                     <p className="flex flex-col font-medium text-[28px]">
                       {index + 1}.
                     </p>
-                    <p className="flex flex-col gap-1  text-[14px]">
+                    <p className="flex flex-col gap-1 text-[14px]">
                       <span className="font-semibold">
                         {topics[index].th}{" "}
-                        <span className=" text-red-500">*</span>
+                        <span className="text-red-500">*</span>
                       </span>
                       <span className="font-bold ">{topics[index].en}</span>
+                      <p className="error-text">
+                        {form.getInputProps(`data.${index}.detail`).error}
+                      </p>
                     </p>
                   </div>
                   <Checkbox.Group
                     {...form.getInputProps(`data.${index}.detail`)}
                     className="items-center"
+                    error={<></>}
                     onChange={(event) => {
                       if (event.includes("ไม่มี (None)")) {
                         form.setFieldValue(`data.${index}.detail`, [
@@ -367,8 +396,8 @@ export default function Part6TQF3({ setForm }: Props) {
                         <div
                           className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
                           onClick={() => {
-                            setDeleteIndex(index),
-                              setOpenPopupDelAddiTopic(true);
+                            setDeleteIndex(index);
+                            setOpenPopupDelAddTopic(true);
                           }}
                         >
                           <IconTrash className="size-4" stroke={1.5} />
