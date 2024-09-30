@@ -49,7 +49,7 @@ export default function Part5TQF3({ setForm }: Props) {
             label="Description"
             size="xs"
             placeholder="(optional)"
-            className="w-[440px]"
+            className="w-[500px]"
             classNames={{ input: "h-[150px] p-3", label: "text-default" }}
             {...form.getInputProps("mainRef")}
           ></Textarea>
@@ -70,7 +70,7 @@ export default function Part5TQF3({ setForm }: Props) {
             label="Description"
             size="xs"
             placeholder="(optional)"
-            className="w-[440px]"
+            className="w-[500px]"
             classNames={{ input: "h-[150px] p-3", label: "text-default" }}
             {...form.getInputProps("recDoc")}
           ></Textarea>

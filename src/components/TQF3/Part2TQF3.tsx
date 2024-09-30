@@ -214,7 +214,7 @@ export default function Part2TQF3({ setForm }: Props) {
           <div
             key={form.key("clo")}
             {...form.getInputProps("clo")}
-            className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 pb-8"
+            className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 pb-2"
           >
             <div className="flex text-secondary items-center w-full justify-between">
               <p className="font-semibold text-[15px]">
@@ -398,7 +398,7 @@ export default function Part2TQF3({ setForm }: Props) {
           <div
             key={form.key("schedule")}
             {...form.getInputProps("schedule")}
-            className="flex flex-col  w-full gap-4 pb-8"
+            className="flex flex-col  w-full gap-4 pb-2"
           >
             <div className="flex text-secondary items-center w-full justify-between">
               <p className="font-semibold text-[15px]">
@@ -428,7 +428,7 @@ export default function Part2TQF3({ setForm }: Props) {
               }}
             >
               <div
-                className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
+                className="overflow-y-auto mt-1 overflow-x-auto w-full  h-fit max-h-full border flex flex-col rounded-md border-secondary"
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                   height: "fit-content",
