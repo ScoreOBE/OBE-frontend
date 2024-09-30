@@ -75,7 +75,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
         body: `flex flex-col overflow-hidden max-h-full h-fit`,
       }}
     >
-      <div className="flex flex-col ">
+      <div className="flex flex-col">
         <Checkbox.Group
           label="Select part to export"
           classNames={{ label: "mb-1 font-semibold text-default" }}
