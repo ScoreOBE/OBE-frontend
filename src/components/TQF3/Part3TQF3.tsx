@@ -114,7 +114,7 @@ export default function Part3TQF3({ setForm }: Props) {
       />
       {tqf3.part2?.updatedAt ? (
         <div className="flex flex-col w-full">
-          <div className="flex flex-col w-full h-full pb-8 gap-4">
+          <div className="flex flex-col w-full h-full pb-2 gap-4">
             <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6] mt-1 pb-6 flex-col">
               <div className="flex flex-row gap-1 text-[15px]">
                 <p className="font-semibold">การกำหนดเกรด</p>
@@ -151,7 +151,7 @@ export default function Part3TQF3({ setForm }: Props) {
                   Course Syllabus<span className="ml-1 text-red-500">*</span>
                 </p>
               </div>
-              <Tooltip
+              {/* <Tooltip
                 withArrow
                 arrowPosition="side"
                 arrowOffset={15}
@@ -171,10 +171,11 @@ export default function Part3TQF3({ setForm }: Props) {
                   </div>
                 }
                 opened={percentTotal === 100 && openedTooltip}
-              >
+              > */}
+              
                 <Button
                   className="text-center px-4"
-                  disabled={percentTotal === 100}
+                  // disabled={percentTotal === 100}
                   onClick={() => setOpenModalAddEvalTopic(true)}
                   onMouseOver={() => setOpenedTooltip(true)}
                   onMouseLeave={() => setOpenedTooltip(false)}
@@ -184,7 +185,7 @@ export default function Part3TQF3({ setForm }: Props) {
                     Add Evaluation Topic
                   </div>
                 </Button>
-              </Tooltip>
+              {/* </Tooltip> */}
             </div>
             <div className="w-full">
               <Alert
@@ -200,7 +201,7 @@ export default function Part3TQF3({ setForm }: Props) {
                 title={
                   <p className="font-semibold">
                     The total of all topics in the course syllabus{" "}
-                    <span className=" font-extrabold">must equal 100%</span> .
+                    <span className=" font-extrabold">must add up to 100%</span> .
                   </p>
                 }
               ></Alert>
@@ -323,7 +324,7 @@ export default function Part3TQF3({ setForm }: Props) {
                                     <p>{item.topicTH}</p>
                                     <p>{item.topicEN}</p>
                                   </Table.Td>
-                                  <Table.Td className="w-[65%]">
+                                  <Table.Td className="w-[65%] max-w-[65%] flex-wrap">
                                     {item.desc.length ? item.desc : "-"}
                                   </Table.Td>
                                   <Table.Td className="w-[5%] text-end text-b1">

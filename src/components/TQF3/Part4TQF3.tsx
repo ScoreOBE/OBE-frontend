@@ -1,4 +1,13 @@
-import { Alert, Tabs, NumberInput, MultiSelect } from "@mantine/core";
+import {
+  Alert,
+  Tabs,
+  NumberInput,
+  MultiSelect,
+  Group,
+  Checkbox,
+  Textarea,
+  Chip,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Table } from "@mantine/core";
 import { IconCheckbox } from "@tabler/icons-react";
@@ -17,6 +26,21 @@ export default function Part4TQF3({ setForm }: Props) {
   // const [evalList, setEvalList] = useState<Partial<IModelTQF3Part4>[]>([]);
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
+  const week = [
+    "Week 1",
+    "Week 2",
+    "Week 3",
+    "Week 4",
+    "Week 5",
+    "Week 6",
+    "Week 7",
+    "Week 8",
+    "Week 9",
+    "Week 10",
+    "Week 11",
+    "Week 12",
+  ];
+  const [checked, setChecked] = useState(false);
   const form = useForm({
     mode: "controlled",
     initialValues: {
@@ -90,10 +114,12 @@ export default function Part4TQF3({ setForm }: Props) {
         }}
       >
         <Tabs.List className="!bg-transparent items-center flex w-full gap-5">
-          <Tabs.Tab value="percent">Evaluate</Tabs.Tab>
+          <Tabs.Tab value="percent">
+            Evaluate <span className="text-red-500">*</span>
+          </Tabs.Tab>
           <Tabs.Tab value="week">Evaluation Week</Tabs.Tab>
         </Tabs.List>
-        <div className="overflow-auto flex w-full max-h-full mt-3">
+        <div className="overflow-auto flex w-full max-h-full px-3 mt-3">
           <Tabs.Panel value="percent">
             <div className="w-full">
               <Alert
@@ -108,7 +134,13 @@ export default function Part4TQF3({ setForm }: Props) {
                 className="w-full"
                 title={
                   <p className="font-semibold">
-                    Each CLO must be linked to at least one evaluation topic.
+                    Each CLO must be linked to at least one evaluation topic,
+                    and{" "}
+                    <span className="font-extrabold">
+                      {" "}
+                      the total CLO percentage (shown at the bottom-right corner
+                      of the table) must add up to 100%.
+                    </span>
                   </p>
                 }
               />
@@ -129,7 +161,7 @@ export default function Part4TQF3({ setForm }: Props) {
                       }}
                     >
                       <div className="w-full flex items-center px-[25px] h-[58px] border-r-[1px] border-bgTableHeader">
-                        CLO Description
+                        CLO Description / Evaluation Topic
                       </div>
                     </Table.Th>
                     {tqf3?.part3?.eval.map((item) => (
@@ -149,9 +181,9 @@ export default function Part4TQF3({ setForm }: Props) {
                       style={{
                         filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.3))",
                       }}
-                      className="w-[55px] sticky right-0 !p-0"
+                      className="w-[55px] !bg-[#e4f5ff] sticky right-0 !p-0"
                     >
-                      <div className="w-[90px] text-nowrap flex items-center justify-center h-[58px] border-l-[1px]  border-bgTableHeader">
+                      <div className="w-[90px] text-nowrap flex items-center justify-center h-[58px] border-l-[1px]   border-bgTableHeader">
                         Total <br /> CLO (%)
                       </div>
                     </Table.Th>
@@ -167,7 +199,7 @@ export default function Part4TQF3({ setForm }: Props) {
                       return (
                         <Table.Tr
                           key={cloIndex}
-                          className="text-b3 table-row h-full text-default"
+                          className="text-b3  table-row h-full text-default"
                         >
                           <Table.Td
                             key={form.key(`data.${cloIndex}.percent`)}
@@ -178,17 +210,20 @@ export default function Part4TQF3({ setForm }: Props) {
                             className="!p-0 sticky left-0 z-[1]"
                             {...form.getInputProps(`data.${cloIndex}.percent`)}
                           >
-                            <div className="flex flex-col gap-0.5 px-[25px] py-3 border-r-[1px] border-[#DEE2E6]">
-                              <p className="text-secondary font-semibold">
+                            <div className="flex gap-5 justify-start  items-center  px-[20px] py-2 border-r-[1px] border-[#DEE2E6]">
+                              <div className="text-secondary min-w-fit font-bold">
                                 CLO-{cloItem.no}
-                              </p>
-                              <p>{cloItem.descTH}</p>
-                              <p>{cloItem.descEN}</p>
-                              <p className="error-text">
-                                {
-                                  form.getInputProps(`data.${cloIndex}.percent`)
-                                    .error
-                                }
+                              </div>
+                              <p className="flex w-fit   font-medium justify-between flex-col ">
+                                <span>{cloItem.descTH}</span>
+                                <span>{cloItem.descEN}</span>
+                                <p className="error-text">
+                                  {
+                                    form.getInputProps(
+                                      `data.${cloIndex}.percent`
+                                    ).error
+                                  }
+                                </p>
                               </p>
                             </div>
                           </Table.Td>
@@ -215,7 +250,7 @@ export default function Part4TQF3({ setForm }: Props) {
                                         evalIndex
                                       ].percent === 0
                                         ? ""
-                                        : "!border-[#404040] border-2"
+                                        : "!border-secondary border-[2px]"
                                     }`,
                                   }}
                                   {...form.getInputProps(
@@ -231,7 +266,7 @@ export default function Part4TQF3({ setForm }: Props) {
                               filter:
                                 "drop-shadow(-2px 0px 2px rgba(0, 0, 0, 0.3))",
                             }}
-                            className="!bg-bgTableHeader !p-0 !h-full sticky z-[1] right-0 "
+                            className="!bg-[#e4f5ff] !p-0 !h-full sticky z-[1] right-0 "
                           >
                             <div className="  max-h-full items-center justify-center px-[25px]  font-semibold text-b2 border-l-[1px] border-[#DEE2E6]">
                               {percent}%
@@ -273,7 +308,7 @@ export default function Part4TQF3({ setForm }: Props) {
                       style={{
                         filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.3))",
                       }}
-                      className="!bg-[#ccd1fb] text-default sticky right-0 text-b1 font-extrabold !rounded-br-md"
+                      className="!bg-[#bae0f7] text-default sticky right-0 text-b1 font-extrabold !rounded-br-md"
                     >
                       {form
                         .getValues()
@@ -309,6 +344,61 @@ export default function Part4TQF3({ setForm }: Props) {
               );
             })} */}
             <div
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
+              className=" rounded-md border-[1px] overflow-y-auto  border-secondary"
+            >
+              {form.getValues().data.map(({ clo, evals }, cloIndex) => {
+                const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
+                return (
+                  <div
+                    key={cloIndex}
+                    className="w-full h-full max-h-full flex flex-col"
+                  >
+                    <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-6 items-center pl-6 py-4 bg-bgTableHeader">
+                      <div className="text-secondary min-w-fit font-bold">
+                        CLO-{cloItem?.no}
+                      </div>
+                      <p className="flex w-fit gap-1   font-medium justify-between flex-col ">
+                        <span>{cloItem?.descTH}</span>
+                        <span>{cloItem?.descEN}</span>
+                      </p>
+                    </div>
+                    {tqf3?.part3?.eval.map((item) => (
+                      <div className="border-b-[1px] justify-center items-center flex last:border-none py-4 px-6 w-full">
+                        <div className="flex font-medium w-48 gap-1 flex-col">
+                          <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                            {item.topicTH}
+                          </p>
+                          <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                            {item.topicEN}
+                          </p>
+                        </div>
+                        <Chip.Group>
+                          <Group justify="start">
+                            {week.map((weekLabel) => (
+                              <Chip
+                                defaultChecked
+                                checked={checked}
+                                onChange={() => setChecked((state) => !state)}
+                                color="#5768d5"
+                               
+                               
+                                classNames={{ label: "py-4 text-[13px]" }}
+                              >
+                                {weekLabel}
+                              </Chip>
+                            ))}
+                          </Group>
+                        </Chip.Group>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+            {/* <div
               className="overflow-auto border border-secondary rounded-lg relative"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -357,12 +447,14 @@ export default function Part4TQF3({ setForm }: Props) {
                           }}
                           className="!p-0 sticky left-0 z-[1]"
                         >
-                          <div className="flex flex-col gap-0.5 px-[25px] py-3 border-r-[1px] border-[#DEE2E6]">
-                            <p className="text-secondary font-semibold">
+                          <div className="flex gap-5 justify-start  items-center  px-[20px] py-2 border-r-[1px] border-[#DEE2E6]">
+                            <div className="text-secondary min-w-fit font-bold">
                               CLO-{cloItem.no}
+                            </div>
+                            <p className="flex w-fit   font-medium justify-between flex-col ">
+                              <span>{cloItem.descTH}</span>
+                              <span>{cloItem.descEN}</span>
                             </p>
-                            <p>{cloItem.descTH}</p>
-                            <p>{cloItem.descEN}</p>
                           </div>
                         </Table.Td>
                         {evals.map((item, evalIndex) => (
@@ -401,7 +493,7 @@ export default function Part4TQF3({ setForm }: Props) {
                   })}
                 </Table.Tbody>
               </Table>
-            </div>
+            </div> */}
           </Tabs.Panel>
         </div>
       </Tabs>

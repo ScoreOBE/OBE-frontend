@@ -8,9 +8,17 @@ import {
   NumberInput,
   NumberInputHandlers,
   Tooltip,
+  Alert,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconList, IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
+import {
+  IconExclamationCircle,
+  IconInfoCircle,
+  IconList,
+  IconMinus,
+  IconPlus,
+  IconTrash,
+} from "@tabler/icons-react";
 import { upperFirst, values } from "lodash";
 import { useEffect, useRef, useState } from "react";
 
@@ -126,6 +134,26 @@ export default function ModalManageEvalTopic({
         body: `overflow-hidden ${height}`,
       }}
     >
+      {percentTotal == 100 && (
+        <Alert
+          radius="md"
+          variant="light"
+          color="blue"
+          classNames={{
+            body: " flex justify-center",
+          }}
+          className="mb-2"
+          title={
+            <div className="flex items-center  gap-2">
+              <IconInfoCircle />
+              <p className="pl-2">
+                Your Evaluation topics in your course now add up to 100%. You cannot add more
+                evaluation topics.
+              </p>
+            </div>
+          }
+        ></Alert>
+      )}
       <div
         className={`flex flex-col !gap-5 ${
           type === "add" ? "h-full" : "h-fit  "
@@ -152,6 +180,7 @@ export default function ModalManageEvalTopic({
           >
             <div className="flex flex-col gap-4 h-[88%]">
               <TextInput
+                disabled={percentTotal == 100}
                 autoFocus={false}
                 label={
                   <p className="font-semibold flex gap-1 h-full ">
@@ -169,6 +198,7 @@ export default function ModalManageEvalTopic({
                 {...formOneTopic.getInputProps("topicTH")}
               />
               <TextInput
+                disabled={percentTotal == 100}
                 autoFocus={false}
                 label={
                   <p className="font-semibold flex gap-1">
@@ -186,6 +216,7 @@ export default function ModalManageEvalTopic({
                 {...formOneTopic.getInputProps("topicEN")}
               />
               <Textarea
+                disabled={percentTotal == 100}
                 autoFocus={false}
                 label={<p className="font-semibold flex gap-1">Description</p>}
                 className="w-full border-none rounded-r-none"
@@ -198,6 +229,7 @@ export default function ModalManageEvalTopic({
               />
               <NumberInput
                 size="xs"
+                disabled={percentTotal == 100}
                 label={
                   <p className="font-semibold flex gap-1 h-full">
                     Evaluation Percentage (%)
@@ -240,27 +272,7 @@ export default function ModalManageEvalTopic({
             {/* Add More Button */}
             {type === "add" && (
               <div className="flex justify-end">
-                <Tooltip
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={15}
-                  arrowSize={7}
-                  position="bottom-end"
-                  color="#FCFCFC"
-                  label={
-                    <div className="text-default text-[13px] p-2 flex flex-col gap-2">
-                      <p className="font-medium">
-                        <span className="text-secondary font-bold">
-                          Add Evaluation Topic (Disabled)
-                        </span>{" "}
-                        <br />
-                        The total of all topics in the course syllabus is equal
-                        100%.
-                      </p>
-                    </div>
-                  }
-                  opened={percentTotal === 100 && openedTooltip}
-                >
+  
                   <Button
                     variant="outline"
                     disabled={percentTotal == 100}
@@ -270,7 +282,7 @@ export default function ModalManageEvalTopic({
                   >
                     Add more
                   </Button>
-                </Tooltip>
+               
               </div>
             )}
           </div>
