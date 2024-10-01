@@ -1,4 +1,4 @@
-import { Button, Checkbox, Group, Modal } from "@mantine/core";
+import { Button, Checkbox, Group, Modal, Progress } from "@mantine/core";
 import { IconFileExport, IconPdf } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/functions/function";
@@ -6,13 +6,10 @@ import { NOTI_TYPE } from "@/helpers/constants/enum";
 import {
   getKeyPartTopicTQF3,
   PartTopicTQF3,
-  ValidPartTopics,
 } from "@/helpers/constants/TQF3.enum";
 import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
-import JSZip from "jszip";
-import { saveAs } from "file-saver";
 
 type Props = {
   opened: boolean;
@@ -28,7 +25,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
   useEffect(() => {
     if (opened) {
       Object.keys(tqf3).forEach((part) => {
-        if (part as ValidPartTopics) {
+        if (part.includes("part")) {
           selectedParts.push(part);
         }
       });
@@ -50,54 +47,85 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       return;
     }
 
-    const zip = new JSZip(); // Create a new JSZip instance
+    const payload: any = {
+      courseNo,
+      academicYear: academicYear.year,
+      academicTerm: academicYear.semester,
+      tqf3: tqf3.id,
+    };
+    selectedParts.forEach((part) => (payload[part] = ""));
 
-    try {
-      for (const part of selectedParts) {
-        console.log(`Generating PDF for ${part}...`);
-        const res = await genPdfTQF3({
-          courseNo,
-          academicYear: academicYear.year,
-          academicTerm: academicYear.semester,
-          tqf3: tqf3.id,
-          [part]: "", // Use the part as a dynamic key for the payload
-        });
-
-        if (res && res.headers && res.data) {
-          const contentType = res.headers["content-type"];
-          const disposition = res.headers["content-disposition"];
-          const fileType = contentType === "application/zip" ? "zip" : "pdf";
-          const filename = disposition
-            ? disposition.split("filename=")[1].replace(/"/g, "")
-            : `TQF3_${part}.${fileType}`;
-
-          const blob = new Blob([res.data], { type: contentType });
-          // Read the blob as array buffer to add to the zip
-          const arrayBuffer = await blob.arrayBuffer();
-
-          // Add file to zip (using filename as key and array buffer as content)
-          zip.file(filename, arrayBuffer);
-
-          // Notify success for each part added
-          showNotifications(
-            NOTI_TYPE.SUCCESS,
-            "Success",
-            `Part "${part}" exported successfully as "${filename}".`
-          );
-        }
-      }
-
-      zip.generateAsync({ type: "blob" }).then((zipBlob: any) => {
-        saveAs(
-          zipBlob,
-          `TQF3_Parts_${academicYear.year}_${academicYear.semester}.zip`
-        );
-      });
-    } catch (error) {
-      const errorMessage = "An error occurred while generating the PDF.";
-      showNotifications(NOTI_TYPE.ERROR, "Export Error", errorMessage);
-      console.error("Error during PDF generation:", error);
+    const res = await genPdfTQF3(payload);
+    if (res) {
+      const contentType = res.headers["content-type"];
+      const disposition = res.headers["content-disposition"];
+      const filename = disposition
+        ? disposition.split("filename=")[1]
+        : `TQF3_Parts_${academicYear.year}_${academicYear.semester}.zip`;
+      const blob = new Blob([res.data], { type: contentType });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename.replace(/"/g, "");
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Success",
+        `TQF3 exported successfully as "${filename}".`
+      );
     }
+
+    // const zip = new JSZip(); // Create a new JSZip instance
+
+    // try {
+    //   for (const part of selectedParts) {
+    //     console.log(`Generating PDF for ${part}...`);
+    //     const res = await genPdfTQF3({
+    //       courseNo,
+    //       academicYear: academicYear.year,
+    //       academicTerm: academicYear.semester,
+    //       tqf3: tqf3.id,
+    //       [part]: "", // Use the part as a dynamic key for the payload
+    //     });
+
+    //     if (res && res.headers && res.data) {
+    //       const contentType = res.headers["content-type"];
+    //       const disposition = res.headers["content-disposition"];
+    //       const fileType = contentType === "application/zip" ? "zip" : "pdf";
+    //       const filename = disposition
+    //         ? disposition.split("filename=")[1].replace(/"/g, "")
+    //         : `TQF3_${part}.${fileType}`;
+
+    //       const blob = new Blob([res.data], { type: contentType });
+    //       // Read the blob as array buffer to add to the zip
+    //       const arrayBuffer = await blob.arrayBuffer();
+
+    //       // Add file to zip (using filename as key and array buffer as content)
+    //       zip.file(filename, arrayBuffer);
+
+    //       // Notify success for each part added
+    //       showNotifications(
+    //         NOTI_TYPE.SUCCESS,
+    //         "Success",
+    //         `Part "${part}" exported successfully as "${filename}".`
+    //       );
+    //     }
+    //   }
+
+    //   zip.generateAsync({ type: "blob" }).then((zipBlob: any) => {
+    //     saveAs(
+    //       zipBlob,
+    //       `TQF3_Parts_${academicYear.year}_${academicYear.semester}.zip`
+    //     );
+    //   });
+    // } catch (error) {
+    //   const errorMessage = "An error occurred while generating the PDF.";
+    //   showNotifications(NOTI_TYPE.ERROR, "Export Error", errorMessage);
+    //   console.error("Error during PDF generation:", error);
+    // }
     onCloseModal();
   };
 

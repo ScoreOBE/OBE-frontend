@@ -19,9 +19,7 @@
     "@reduxjs/toolkit": "^2.2.5",
     "@tabler/icons-react": "^3.5.0",
     "axios": "^1.7.2",
-    "file-saver": "^2.0.5",
     "framer-motion": "^11.2.10",
-    "jszip": "^3.10.1",
     "ldrs": "^1.0.2",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
@@ -34,7 +32,6 @@
     "react-router-dom": "^6.23.1"
   },
   "devDependencies": {
-    "@types/file-saver": "^2.0.7",
     "@types/lodash": "^4.17.4",
     "@types/node": "^20.14.0",
     "@types/react": "^18.3.3",
