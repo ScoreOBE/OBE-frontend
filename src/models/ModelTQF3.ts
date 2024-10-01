@@ -44,7 +44,7 @@ export interface IModelTQF3Part4 {
   percent: number;
   evals: {
     eval: IModelEval | string;
-    evalWeek: number[];
+    evalWeek: string[];
     percent: number;
   }[];
 }
