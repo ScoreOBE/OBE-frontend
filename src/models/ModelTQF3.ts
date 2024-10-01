@@ -20,7 +20,7 @@ export interface IModelTQF3Part1 {
   studentYear: number[];
   mainInstructor: string;
   instructors: string[];
-  teachingLocation: { in: string; out: string };
+  teachingLocation: { in?: string; out?: string };
   consultHoursWk: number;
   updatedAt: Date;
 }
@@ -44,7 +44,7 @@ export interface IModelTQF3Part4 {
   percent: number;
   evals: {
     eval: IModelEval | string;
-    evalWeek: number[];
+    evalWeek: string[];
     percent: number;
   }[];
 }

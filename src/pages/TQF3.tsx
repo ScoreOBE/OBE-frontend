@@ -160,8 +160,10 @@ export default function TQF3() {
       setTqf3Part("part4");
     } else if (!tqf3.part5) {
       setTqf3Part("part5");
-    } else {
+    } else if (!tqf3.part6)  {
       setTqf3Part("part6");
+    } else {
+      setTqf3Part("part7");
     }
   };
 

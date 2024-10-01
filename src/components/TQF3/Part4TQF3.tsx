@@ -1,18 +1,9 @@
-import {
-  Alert,
-  Tabs,
-  NumberInput,
-  MultiSelect,
-  Group,
-  Checkbox,
-  Textarea,
-  Chip,
-} from "@mantine/core";
+import { Alert, Tabs, NumberInput, Group, Chip } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Table } from "@mantine/core";
 import { IconCheckbox } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { IModelTQF3Part4 } from "@/models/ModelTQF3";
+import { IModelEval, IModelTQF3Part4 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
 import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -23,45 +14,27 @@ type Props = {
 };
 
 export default function Part4TQF3({ setForm }: Props) {
-  // const [evalList, setEvalList] = useState<Partial<IModelTQF3Part4>[]>([]);
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
-  const week = [
-    "Week 1",
-    "Week 2",
-    "Week 3",
-    "Week 4",
-    "Week 5",
-    "Week 6",
-    "Week 7",
-    "Week 8",
-    "Week 9",
-    "Week 10",
-    "Week 11",
-    "Week 12",
-  ];
-  const [checked, setChecked] = useState(false);
   const form = useForm({
     mode: "controlled",
-    initialValues: {
-      data: [] as IModelTQF3Part4[],
-    },
+    initialValues: { data: [] as IModelTQF3Part4[] },
     validate: {
-      // data: (value) =>
-      //   value.reduce((acc, cur) => acc + cur.percent, 0) != 100 && "",
       data: {
-        percent: (value) =>
-          value == 0 && "CLO must be linked to at least one evaluation topic",
+        percent: (value) => {
+          const evalFormError = evalForm.validate();
+          return value == 0
+            ? "CLO must be linked to at least one evaluation topic"
+            : evalFormError.hasErrors
+            ? ""
+            : null;
+        },
       },
     },
     onValuesChange(values, previous) {
       values.data.forEach((item) => {
-        item.evals.forEach((e) => {
-          e.percent = !e.percent.toString().length
-            ? 0
-            : parseInt(e.percent as any);
-        });
-        item.percent = item.evals.reduce((acc, cur) => acc + cur.percent, 0);
+        item.percent =
+          item.evals.reduce((acc, cur) => acc + cur.percent, 0) || 0;
       });
       if (!isEqual(values, previous)) {
         dispatch(
@@ -72,35 +45,91 @@ export default function Part4TQF3({ setForm }: Props) {
     },
   });
 
+  const evalForm = useForm({
+    mode: "controlled",
+    initialValues: { data: [] as (IModelEval & { curPercent: number })[] },
+    validate: {
+      data: {
+        curPercent: (value, values, path) => {
+          const percent = values.data[parseInt(path.split(".")[1])].percent;
+          return (
+            value !== percent && `Total percent must equal ${percent}%`
+          );
+        },
+      },
+    },
+  });
+
   useEffect(() => {
     if (tqf3.part4) {
       form.setValues(cloneDeep(tqf3.part4));
-    } else if (tqf3.part2) {
-      const evalList =
-        tqf3.part3?.eval.map((e) => ({
-          eval: e.id,
-          evalWeek: [],
-          percent: 0,
-        })) ?? [];
-      // setEvalList(
-      //   tqf3.part3?.eval.map((e) => ({
-      //     eval: e.id,
-      //     evalWeek: [],
-      //     percent: 0,
-      //   })) ?? []
-      // );
-      form.setFieldValue(
-        "data",
-        cloneDeep(
-          tqf3?.part2?.clo?.map((clo) => ({
-            clo: clo.id,
-            percent: 0,
-            evals: evalList,
-          }))
-        ) ?? []
-      );
+      setEvalForm();
+      tqf3.part4.data.forEach((item, cloIndex) => {
+        item.evals.forEach((e, evalIndex) => {
+          setPercentEval(cloIndex, evalIndex, e.eval as string, e, e.percent);
+        });
+      });
+    } else {
+      if (tqf3.part2) {
+        form.setFieldValue(
+          "data",
+          cloneDeep(
+            tqf3?.part2?.clo?.map((clo) => ({
+              clo: clo.id,
+              percent: 0,
+              evals: [],
+            }))
+          ) ?? []
+        );
+      }
+      if (tqf3.part3) setEvalForm();
     }
   }, []);
+
+  const setEvalForm = () => {
+    const evalData = cloneDeep(tqf3.part3?.eval || []).map((item) => ({
+      ...item,
+      curPercent: 0,
+    }));
+    evalForm.setFieldValue("data", evalData);
+  };
+
+  const setPercentEval = (
+    cloIndex: number,
+    evalIndex: number,
+    evalId: string,
+    evalItem: any,
+    value: string | number
+  ) => {
+    const percent = typeof value == "number" ? value : parseInt(value);
+    const index = evalForm.getValues().data.findIndex((e) => e.id == evalId);
+    if (percent > 0) {
+      if (evalItem) {
+        form.setFieldValue(
+          `data.${cloIndex}.evals.${evalIndex}.percent`,
+          percent
+        );
+      } else {
+        form.insertListItem(`data.${cloIndex}.evals`, {
+          eval: evalId,
+          evalWeek: [],
+          percent: percent,
+        });
+      }
+      evalForm.setFieldValue(
+        `data.${index}.curPercent`,
+        evalForm.getValues().data[index].curPercent + percent
+      );
+    } else {
+      const percentDel =
+        form.getValues().data[cloIndex].evals[evalIndex]?.percent || 0;
+      form.removeListItem(`data.${cloIndex}.evals`, evalIndex);
+      evalForm.setFieldValue(
+        `data.${index}.curPercent`,
+        evalForm.getValues().data[index].curPercent - percentDel
+      );
+    }
+  };
 
   return tqf3?.part3?.updatedAt ? (
     <div className="flex w-full h-full pt-3 pb-3">
@@ -155,25 +184,35 @@ export default function Part4TQF3({ setForm }: Props) {
                 <Table.Thead className="z-[2]">
                   <Table.Tr>
                     <Table.Th
-                      className="min-w-[400px] z-[3] sticky left-0 !p-0"
+                      className="min-w-[400px] sticky left-0 !p-0"
                       style={{
                         filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.3))",
                       }}
                     >
-                      <div className="w-full flex items-center px-[25px] h-[58px] border-r-[1px] border-bgTableHeader">
+                      <div className="w-full flex items-center px-[25px] h-[58px]">
                         CLO Description / Evaluation Topic
                       </div>
                     </Table.Th>
-                    {tqf3?.part3?.eval.map((item) => (
+                    {evalForm.getValues().data.map((item, evalIndex) => (
                       <Table.Th
-                        key={item.no}
+                        key={evalForm.key(`data.${evalIndex}.curPercent`)}
                         className="min-w-[120px] max-w-[160px] !py-3.5 !px-4.5 z-0"
+                        {...evalForm.getInputProps(
+                          `data.${evalIndex}.curPercent`
+                        )}
                       >
                         <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                           {item.topicTH}
                         </p>
                         <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                           {item.topicEN}
+                        </p>
+                        <p className="error-text">
+                          {
+                            evalForm.getInputProps(
+                              `data.${evalIndex}.curPercent`
+                            ).error
+                          }
                         </p>
                       </Table.Th>
                     ))}
@@ -183,7 +222,7 @@ export default function Part4TQF3({ setForm }: Props) {
                       }}
                       className="w-[55px] !bg-[#e4f5ff] sticky right-0 !p-0"
                     >
-                      <div className="w-[90px] text-nowrap flex items-center justify-center h-[58px] border-l-[1px]   border-bgTableHeader">
+                      <div className="w-[90px] text-nowrap flex items-center justify-center h-[58px]">
                         Total <br /> CLO (%)
                       </div>
                     </Table.Th>
@@ -193,13 +232,11 @@ export default function Part4TQF3({ setForm }: Props) {
                   {form
                     .getValues()
                     .data.map(({ clo, percent, evals }, cloIndex) => {
-                      const cloItem = tqf3?.part2?.clo.find(
-                        (e) => e.id == clo
-                      )!;
+                      const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
                       return (
                         <Table.Tr
                           key={cloIndex}
-                          className="text-b3  table-row h-full text-default"
+                          className="text-b3 table-row h-full text-default"
                         >
                           <Table.Td
                             key={form.key(`data.${cloIndex}.percent`)}
@@ -210,57 +247,68 @@ export default function Part4TQF3({ setForm }: Props) {
                             className="!p-0 sticky left-0 z-[1]"
                             {...form.getInputProps(`data.${cloIndex}.percent`)}
                           >
-                            <div className="flex gap-5 justify-start  items-center  px-[20px] py-2 border-r-[1px] border-[#DEE2E6]">
+                            <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
                               <div className="text-secondary min-w-fit font-bold">
-                                CLO-{cloItem.no}
+                                CLO-{cloItem?.no}
                               </div>
                               <p className="flex w-fit   font-medium justify-between flex-col ">
-                                <span>{cloItem.descTH}</span>
-                                <span>{cloItem.descEN}</span>
-                                <p className="error-text">
+                                <span>{cloItem?.descTH}</span>
+                                <span>{cloItem?.descEN}</span>
+                                <span className="error-text">
                                   {
                                     form.getInputProps(
                                       `data.${cloIndex}.percent`
                                     ).error
                                   }
-                                </p>
+                                </span>
                               </p>
                             </div>
                           </Table.Td>
-                          {evals.map((item, evalIndex) => (
-                            <Table.Td
-                              key={evalIndex}
-                              className="!px-4.5 max-w-[200px]"
-                            >
-                              <div className="flex flex-col gap-2 max-w-full">
-                                <NumberInput
-                                  className="w-[80px]"
-                                  hideControls
-                                  suffix="%"
-                                  allowNegative={false}
-                                  min={0}
-                                  max={
-                                    tqf3?.part3?.eval.find(
-                                      (e) => e.id == item.eval
-                                    )?.percent
-                                  }
-                                  classNames={{
-                                    input: `${
-                                      form.getValues().data[cloIndex].evals[
-                                        evalIndex
-                                      ].percent === 0
-                                        ? ""
-                                        : "!border-secondary border-[2px]"
-                                    }`,
-                                  }}
-                                  {...form.getInputProps(
-                                    `data.${cloIndex}.evals.${evalIndex}.percent`
-                                  )}
-                                />
-                              </div>
-                            </Table.Td>
-                          ))}
-
+                          {evalForm.getValues().data.map((item, index) => {
+                            const evalItem = evals.find(
+                              (e) => e.eval === item.id
+                            );
+                            const i = evals.findIndex(
+                              (e) => e.eval === item.id
+                            );
+                            return (
+                              <Table.Td
+                                key={index}
+                                className="!px-4.5 max-w-[200px]"
+                              >
+                                <div className="flex flex-col gap-2 max-w-full">
+                                  <NumberInput
+                                    className="w-[80px]"
+                                    hideControls
+                                    suffix="%"
+                                    allowNegative={false}
+                                    min={0}
+                                    max={item.percent}
+                                    classNames={{
+                                      input: `${
+                                        evalItem &&
+                                        "!border-secondary border-[2px]"
+                                      }`,
+                                    }}
+                                    value={
+                                      typeof evalItem?.percent == "number"
+                                        ? evalItem.percent
+                                        : 0
+                                    }
+                                    onChange={(value) =>
+                                      setPercentEval(
+                                        cloIndex,
+                                        i,
+                                        item.id,
+                                        evalItem,
+                                        value
+                                      )
+                                    }
+                                  />
+                                </div>
+                              </Table.Td>
+                            );
+                          })}
                           <td
                             style={{
                               filter:
@@ -268,7 +316,7 @@ export default function Part4TQF3({ setForm }: Props) {
                             }}
                             className="!bg-[#e4f5ff] !p-0 !h-full sticky z-[1] right-0 "
                           >
-                            <div className="  max-h-full items-center justify-center px-[25px]  font-semibold text-b2 border-l-[1px] border-[#DEE2E6]">
+                            <div className="  max-h-full items-center justify-center px-[25px]  font-semibold text-b2">
                               {percent}%
                             </div>
                           </td>
@@ -282,25 +330,17 @@ export default function Part4TQF3({ setForm }: Props) {
                       style={{
                         filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.3))",
                       }}
-                      className="!bg-bgTableHeader sticky left-0 text-b2 !rounded-bl-md border-r-[1px] border-[#DEE2E6]"
+                      className="!bg-bgTableHeader sticky left-0 text-b2 !rounded-bl-md"
                     >
                       Total Assessment (%)
                     </Table.Th>
-                    {tqf3?.part3?.eval.map((item, evalIndex) => {
-                      const totalPercent = form
-                        .getValues()
-                        .data.reduce(
-                          (acc, cur) =>
-                            acc + (cur.evals[evalIndex]?.percent || 0),
-                          0
-                        );
-
+                    {evalForm.getValues().data.map((item, evalIndex) => {
                       return (
                         <Table.Th
                           key={evalIndex}
                           className="!bg-bgTableHeader text-b2"
                         >
-                          {totalPercent} / {item.percent}%
+                          {item.curPercent} / {item.percent}%
                         </Table.Th>
                       );
                     })}
@@ -321,28 +361,6 @@ export default function Part4TQF3({ setForm }: Props) {
             </div>
           </Tabs.Panel>
           <Tabs.Panel value="week">
-            {/* <div></div> */}
-            {/* {form.getValues().data.map(({ clo, evals }, cloIndex) => {
-              const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo)!;
-              return (
-                <div className="flex border-b">
-                  <div className="w-[30%]">
-                    <p>CLO-{cloItem.no}</p>
-                    <p>{cloItem.descTH}</p>
-                    <p>{cloItem.descEN}</p>
-                  </div>
-                  <div className="flex flex-col w-[70%]">
-                    {evals.map((item, evalIndex) => {
-                      const evelItem = tqf3?.part3?.eval.find(
-                        (e) => e.id == item.eval
-                      )!;
-
-                      return <div>{evelItem.topicTH}</div>;
-                    })}
-                  </div>
-                </div>
-              );
-            })} */}
             <div
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -365,135 +383,64 @@ export default function Part4TQF3({ setForm }: Props) {
                         <span>{cloItem?.descEN}</span>
                       </p>
                     </div>
-                    {tqf3?.part3?.eval.map((item) => (
-                      <div className="border-b-[1px] justify-center items-center flex last:border-none py-4 px-6 w-full">
-                        <div className="flex font-medium w-48 gap-1 flex-col">
-                          <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                            {item.topicTH}
-                          </p>
-                          <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                            {item.topicEN}
-                          </p>
-                        </div>
-                        <Chip.Group>
-                          <Group justify="start">
-                            {week.map((weekLabel) => (
-                              <Chip
-                                defaultChecked
-                                checked={checked}
-                                onChange={() => setChecked((state) => !state)}
-                                color="#5768d5"
-                               
-                               
-                                classNames={{ label: "py-4 text-[13px]" }}
-                              >
-                                {weekLabel}
-                              </Chip>
-                            ))}
-                          </Group>
-                        </Chip.Group>
+                    {evals.length > 0 ? (
+                      evals.map((item, evalIndex) => {
+                        const evalTopic = evalForm
+                          .getValues()
+                          .data.find(({ id }) => id == item.eval);
+                        return (
+                          <div
+                            key={item.eval as string}
+                            className="border-b-[1px] justify-center items-center flex last:border-none py-4 px-6 w-full"
+                          >
+                            <div className="flex font-medium w-48 gap-1 flex-col">
+                              <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                                {evalTopic?.topicTH}
+                              </p>
+                              <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                                {evalTopic?.topicEN}
+                              </p>
+                            </div>
+                            <Chip.Group
+                              multiple
+                              {...form.getInputProps(
+                                `data.${cloIndex}.evals.${evalIndex}.evalWeek`
+                              )}
+                              onChange={(event) =>
+                                form.setFieldValue(
+                                  `data.${cloIndex}.evals.${evalIndex}.evalWeek`,
+                                  event.sort()
+                                )
+                              }
+                            >
+                              <Group justify="start">
+                                {tqf3.part2?.schedule.map(({ weekNo }) => (
+                                  <Chip
+                                    key={weekNo}
+                                    color="#5768d5"
+                                    classNames={{ label: "py-4 text-[13px]" }}
+                                    value={weekNo}
+                                    checked={item.evalWeek.includes(
+                                      weekNo.toString()
+                                    )}
+                                  >
+                                    week {weekNo}
+                                  </Chip>
+                                ))}
+                              </Group>
+                            </Chip.Group>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="justify-center items-center flex py-4 px-6 w-full">
+                        No Topics
                       </div>
-                    ))}
+                    )}
                   </div>
                 );
               })}
             </div>
-            {/* <div
-              className="overflow-auto border border-secondary rounded-lg relative"
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              <Table stickyHeader striped>
-                <Table.Thead className="z-[2]">
-                  <Table.Tr>
-                    <Table.Th
-                      className="min-w-[400px] z-[3] sticky left-0 !p-0"
-                      style={{
-                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.3))",
-                      }}
-                    >
-                      <div className="w-full flex items-center px-[25px] h-[58px] border-r-[1px] border-bgTableHeader">
-                        CLO Description
-                      </div>
-                    </Table.Th>
-                    {tqf3?.part3?.eval.map((item) => (
-                      <Table.Th
-                        key={item.no}
-                        className="min-w-[120px] max-w-[160px] !py-3.5 !px-4.5 z-0"
-                      >
-                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                          {item.topicTH}
-                        </p>
-                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                          {item.topicEN}
-                        </p>
-                      </Table.Th>
-                    ))}
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                  {form.getValues().data.map(({ clo, evals }, cloIndex) => {
-                    const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo)!;
-                    return (
-                      <Table.Tr
-                        key={cloIndex}
-                        className="text-b3 table-row h-full text-default"
-                      >
-                        <Table.Td
-                          style={{
-                            filter:
-                              "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.3))",
-                          }}
-                          className="!p-0 sticky left-0 z-[1]"
-                        >
-                          <div className="flex gap-5 justify-start  items-center  px-[20px] py-2 border-r-[1px] border-[#DEE2E6]">
-                            <div className="text-secondary min-w-fit font-bold">
-                              CLO-{cloItem.no}
-                            </div>
-                            <p className="flex w-fit   font-medium justify-between flex-col ">
-                              <span>{cloItem.descTH}</span>
-                              <span>{cloItem.descEN}</span>
-                            </p>
-                          </div>
-                        </Table.Td>
-                        {evals.map((item, evalIndex) => (
-                          <Table.Td
-                            key={evalIndex}
-                            className="!px-4.5 max-w-[200px]"
-                          >
-                            <div className="flex flex-col gap-2 max-w-full">
-                              <MultiSelect
-                                className="z-0"
-                                classNames={{
-                                  input: "overflow-hidden",
-                                  pillsList: "overflow-auto",
-                                }}
-                                data={tqf3?.part2?.schedule.map(({ weekNo }) =>
-                                  weekNo.toString()
-                                )}
-                                disabled={
-                                  evals.find((e) => e.eval == item.eval)
-                                    ?.percent == 0
-                                }
-                                {...form.getInputProps(
-                                  `data.${cloIndex}.evals.${evalIndex}.evalWeek`
-                                )}
-                                value={form
-                                  .getValues()
-                                  .data[cloIndex].evals[evalIndex].evalWeek.map(
-                                    (e) => e.toString()
-                                  )}
-                              />
-                            </div>
-                          </Table.Td>
-                        ))}
-                      </Table.Tr>
-                    );
-                  })}
-                </Table.Tbody>
-              </Table>
-            </div> */}
           </Tabs.Panel>
         </div>
       </Tabs>

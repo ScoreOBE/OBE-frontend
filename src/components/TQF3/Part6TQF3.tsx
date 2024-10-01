@@ -5,7 +5,9 @@ import { IconEdit, IconTrash } from "@tabler/icons-react";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
 import { useEffect, useState } from "react";
-import ModalManageTopic from "../Modal/TQF3/ModalManageTopic";
+import ModalManageTopic, {
+  optionsTopicPart6,
+} from "../Modal/TQF3/ModalManageTopic";
 import { IModelTQF3Part6 } from "@/models/ModelTQF3";
 import MainPopup from "../Popup/MainPopup";
 import { showNotifications } from "@/helpers/functions/function";
@@ -127,7 +129,6 @@ export default function Part6TQF3({ setForm }: Props) {
       ],
     },
   ];
-  const [options, setOptions] = useState([]);
   const [openPopupDelAddTopic, setOpenPopupDelAddTopic] = useState(false);
   const [openModalSelectTopic, setOpenModalSelectTopic] = useState(false);
   const [openModalEditSelectTopic, setOpenModalEditSelectTopic] =
@@ -168,14 +169,11 @@ export default function Part6TQF3({ setForm }: Props) {
 
   useEffect(() => {
     if (tqf3.part6) {
-      form.setValues(tqf3.part6);
+      form.setValues(cloneDeep(tqf3.part6));
     }
   }, []);
 
-  const addTopic = (value: any, option: any) => {
-    if (!options.length) {
-      setOptions(option);
-    }
+  const addTopic = (value: any) => {
     form.insertListItem("data", value);
   };
 
@@ -281,8 +279,9 @@ export default function Part6TQF3({ setForm }: Props) {
           >
             {/* Table */}
             {form.getValues().data.map((topic, index) => {
-              const option: any =
-                options.find((e: any) => e.th === topic.topic) || {};
+              const option = optionsTopicPart6.find(
+                (e: any) => e.th === topic.topic
+              )!;
               return topics[index] ? (
                 <div
                   key={index}

@@ -1,26 +1,7 @@
 import { validateTextInput } from "@/helpers/functions/validation";
 import { IModelTQF3Part6 } from "@/models/ModelTQF3";
-import course from "@/store/course";
-import {
-  Button,
-  Checkbox,
-  Group,
-  Modal,
-  Textarea,
-  TextInput,
-  NumberInput,
-  NumberInputHandlers,
-  Select,
-  Tooltip,
-} from "@mantine/core";
+import { Button, Group, Modal, Textarea, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import {
-  IconArrowRight,
-  IconMinus,
-  IconPlus,
-  IconTrash,
-} from "@tabler/icons-react";
-import { log } from "console";
 import { upperFirst } from "lodash";
 import { useEffect } from "react";
 import AddIcon from "@/assets/icons/plus.svg?react";
@@ -28,13 +9,41 @@ import Icon from "@/components/Icon";
 import { showNotifications } from "@/helpers/functions/function";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 
+export const optionsTopicPart6 = [
+  {
+    no: 1,
+    th: "กลยุทธ์การประเมินประสิทธิผลของรายวิชาโดยนักศึกษา",
+    en: "Strategies for evaluating course effectiveness by students",
+  },
+  {
+    no: 2,
+    th: "กลยุทธ์การประเมินการสอน",
+    en: "Strategies for teaching assessment",
+  },
+  {
+    no: 3,
+    th: "อธิบายวิธีการปรับปรุงการสอน",
+    en: "Describe teaching improvement ",
+  },
+  {
+    no: 4,
+    th: "อธิบายกระบวนการที่ใช้ในการทวนสอบมาตรฐานผมสัมฤทธิิ์ของนักศึกษาตามมาตรฐานผลการเรียนรู้",
+    en: "Describe the process used to verify student achievement standards based on course learning outcomes (CLO).",
+  },
+  {
+    no: 5,
+    th: "อธิบายกระบวนการในการนำข้อมูลที่ได้จากการประเมินข้อ 1 และ 2 มาวางแผนเพื่อปรับปรุงคุณภาพ",
+    en: "Describe the process of using the information obtained from Topic 1 and 2 to plan for quality improvement.",
+  },
+];
+
 type actionType = "add" | "edit";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
   type: actionType;
-  action: (value?: any, option?: any) => void;
+  action: (value?: any) => void;
   editData?: Partial<IModelTQF3Part6 & { index: number }>;
   data?: any;
 };
@@ -46,34 +55,6 @@ export default function ModalManageTopic({
   editData,
   data,
 }: Props) {
-  let options = [
-    {
-      no: 1,
-      th: "กลยุทธ์การประเมินประสิทธิผลของรายวิชาโดยนักศึกษา",
-      en: "Strategies for evaluating course effectiveness by students",
-    },
-    {
-      no: 2,
-      th: "กลยุทธ์การประเมินการสอน",
-      en: "Strategies for teaching assessment",
-    },
-    {
-      no: 3,
-      th: "อธิบายวิธีการปรับปรุงการสอน",
-      en: "Describe teaching improvement ",
-    },
-    {
-      no: 4,
-      th: "อธิบายกระบวนการที่ใช้ในการทวนสอบมาตรฐานผมสัมฤทธิิ์ของนักศึกษาตามมาตรฐานผลการเรียนรู้",
-      en: "Describe the process used to verify student achievement standards based on course learning outcomes (CLO).",
-    },
-    {
-      no: 5,
-      th: "อธิบายกระบวนการในการนำข้อมูลที่ได้จากการประเมินข้อ 1 และ 2 มาวางแผนเพื่อปรับปรุงคุณภาพ",
-      en: "Describe the process of using the information obtained from Topic 1 and 2 to plan for quality improvement.",
-    },
-  ];
-
   const form = useForm({
     mode: "controlled",
     initialValues: {} as any,
@@ -99,7 +80,7 @@ export default function ModalManageTopic({
   const addEditTopic = () => {
     if (!form.validateField("topic").hasError) {
       if (!form.validateField("detail").hasError) {
-        action(form.getValues(), options);
+        action(form.getValues());
         onCloseModal();
         if (type === "add") {
           showNotifications(
@@ -147,7 +128,7 @@ export default function ModalManageTopic({
               label="Select Topic (If any)"
               placeholder="Topic"
               className="mt-1 mb-2 w-[420px]"
-              data={options.map((item) => ({
+              data={optionsTopicPart6.map((item) => ({
                 value: item.th,
                 label: `${item.th} \n ${item.en}`,
                 th: item.th,
@@ -195,7 +176,13 @@ export default function ModalManageTopic({
                 </div>
                 <div className="flex gap-1 ">
                   <p>-</p>
-                  <p>{options?.find(({ th }) => th === editData?.topic)?.en}</p>
+                  <p>
+                    {
+                      optionsTopicPart6?.find(
+                        ({ th }) => th === editData?.topic
+                      )?.en
+                    }
+                  </p>
                 </div>
               </div>
             </div>

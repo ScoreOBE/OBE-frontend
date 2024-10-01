@@ -37,7 +37,6 @@ export default function Part1TQF3({ setForm }: Props) {
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
-      teachingLocation: { in: "", out: "" },
       consultHoursWk: 1,
     } as IModelTQF3Part1,
     validate: {
@@ -56,6 +55,10 @@ export default function Part1TQF3({ setForm }: Props) {
           return `Duplicate instructors "${uniqueDuplicates.join(", ")}"`;
         }
       },
+      teachingLocation: (value) =>
+        value.in === undefined &&
+        value.out === undefined &&
+        "Select Teaching Location at least one",
     },
     validateInputOnBlur: true,
     onValuesChange(values, previous) {
@@ -70,35 +73,48 @@ export default function Part1TQF3({ setForm }: Props) {
   });
 
   useEffect(() => {
-    if (tqf3.id && !form.getValues().courseType) {
-      if (tqf3.part1) {
-        form.setValues(cloneDeep(tqf3.part1));
-        if (tqf3.part1.teachingLocation.in.length) {
-          checked.push("in");
-        }
-        if (tqf3.part1.teachingLocation.out.length) {
-          checked.push("out");
-        }
-      } else {
-        form.setFieldValue("courseType", tqf3.type);
-        form.setFieldValue(
-          "mainInstructor",
-          getUserName(tqf3.sections[0].instructor as IModelUser, 3)!
-        );
-        const uniqueInstructors = Array.from(
-          new Set(
-            (
-              tqf3.sections?.flatMap((sec) => [
-                sec.instructor,
-                ...(sec.coInstructors as IModelUser[]),
-              ]) as IModelUser[]
-            )?.map((instructor) => getUserName(instructor, 3)!)
-          )
-        ).slice(0, 8);
-        form.setFieldValue("instructors", uniqueInstructors);
+    if (tqf3.part1) {
+      form.setValues(cloneDeep(tqf3.part1));
+      if (tqf3.part1.teachingLocation.in !== undefined) {
+        checked.push("in");
       }
+      if (tqf3.part1.teachingLocation.out !== undefined) {
+        checked.push("out");
+      }
+    } else {
+      form.setFieldValue("courseType", tqf3.type);
+      form.setFieldValue(
+        "mainInstructor",
+        getUserName(tqf3.sections[0].instructor as IModelUser, 3)!
+      );
+      const uniqueInstructors = Array.from(
+        new Set(
+          (
+            tqf3.sections?.flatMap((sec) => [
+              sec.instructor,
+              ...(sec.coInstructors as IModelUser[]),
+            ]) as IModelUser[]
+          )?.map((instructor) => getUserName(instructor, 3)!)
+        )
+      ).slice(0, 8);
+      form.setFieldValue("instructors", uniqueInstructors);
     }
   }, []);
+
+  useEffect(() => {
+    let teachingLocation = { ...form.getValues().teachingLocation };
+    if (checked.includes("in") && !teachingLocation.in) {
+      teachingLocation.in = "";
+    } else if (!checked.includes("in")) {
+      delete teachingLocation.in;
+    }
+    if (checked.includes("out") && !teachingLocation.out) {
+      teachingLocation.out = "";
+    } else if (!checked.includes("out")) {
+      delete teachingLocation.out;
+    }
+    form.setFieldValue("teachingLocation", teachingLocation);
+  }, [checked]);
 
   return (
     <div className="flex w-full flex-col text-[15px] max-h-full px-2 py-1 text-default ">
@@ -252,9 +268,13 @@ export default function Part1TQF3({ setForm }: Props) {
             สถานที่เรียน<span className=" text-red-500"> *</span>
           </p>
           <p className="font-semibold">Teaching Location </p>
+          <p className="error-text mt-1">
+            {form.getInputProps("teachingLocation").error}
+          </p>
         </div>
 
         <Checkbox.Group
+          key={form.key("teachingLocation")}
           className="items-center"
           value={checked}
           onChange={(event) => setChecked(event)}
