@@ -219,7 +219,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             <Alert
               variant="light"
               color="red"
-              title="After you delete this PLO Collection, it will affect all courses that use it."
+              title={<p>This action cannot be undone. After you delete this PLO Collection, <br/> it will affect all courses that use it.</p>}
               icon={<IconExclamationCircle />}
               classNames={{ icon: "size-6" }}
             ></Alert>

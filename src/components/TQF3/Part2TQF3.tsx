@@ -9,6 +9,7 @@ import {
   IconGripVertical,
   IconTrash,
   IconInfoCircle,
+  IconExclamationCircle,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import ModalManageCLO, { LearningMethod } from "../Modal/TQF3/ModalManageCLO";
@@ -141,7 +142,26 @@ export default function Part2TQF3({ setForm }: Props) {
         onClose={() => setOpenPopupDelCLO(false)}
         type="delete"
         title={`Delete CLO ${editData?.no}`}
-        message="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        message={
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title={
+                <p>
+                  This action cannot be undone. After you delete this CLO,{" "}
+                  <br /> it will be permanently deleted from this course.
+                </p>
+              }
+              icon={<IconExclamationCircle />}
+              classNames={{ icon: "size-6" }}
+            ></Alert>
+            <div className="flex flex-col mt-3 ">
+              <p className="text-b3  text-[#808080]">CLO Description</p>
+              <p className=" -translate-y-[2px] text-b1">{`mffmmf`}</p>
+            </div>
+          </>
+        }
         labelButtonRight="Delete CLO"
         action={onClickDeleteCLO}
       />
@@ -150,7 +170,27 @@ export default function Part2TQF3({ setForm }: Props) {
         onClose={() => setOpenPopupDelTopic(false)}
         type="delete"
         title={`Delete Course Content Week ${editData?.weekNo}`}
-        message="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        message={
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title={
+                <p>
+                  This action cannot be undone. After you delete this Course
+                  Content, <br /> it will be permanently deleted from this
+                  course.
+                </p>
+              }
+              icon={<IconExclamationCircle />}
+              classNames={{ icon: "size-6" }}
+            ></Alert>
+            <div className="flex flex-col mt-3 ">
+              <p className="text-b3  text-[#808080]">Course Content Topic</p>
+              <p className=" -translate-y-[2px] text-b1">{`mffmmf`}</p>
+            </div>
+          </>
+        }
         labelButtonRight="Delete Course Content"
         action={onClickDeleteTopic}
       />
@@ -234,7 +274,7 @@ export default function Part2TQF3({ setForm }: Props) {
                 </div>
               </Button>
             </div>
-            <Alert
+            {/* <Alert
               radius="md"
               icon={<IconInfoCircle />}
               variant="light"
@@ -254,7 +294,7 @@ export default function Part2TQF3({ setForm }: Props) {
                   seamlessly
                 </p>
               }
-            ></Alert>
+            ></Alert> */}
             <DragDropContext
               onDragEnd={({ destination, source }) => {
                 if (!destination) return;
@@ -265,7 +305,7 @@ export default function Part2TQF3({ setForm }: Props) {
               }}
             >
               <div
-                className="overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
+                className="overflow-x-auto mt-1 w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                   height: "fit-content",

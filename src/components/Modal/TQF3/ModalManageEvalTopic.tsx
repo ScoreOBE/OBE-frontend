@@ -147,8 +147,7 @@ export default function ModalManageEvalTopic({
             <div className="flex items-center  gap-2">
               <IconInfoCircle />
               <p className="pl-2">
-                Your Evaluation topics in your course now add up to 100%. You cannot add more
-                evaluation topics.
+                Your Evaluation topics in your course now add up to 100%.
               </p>
             </div>
           }

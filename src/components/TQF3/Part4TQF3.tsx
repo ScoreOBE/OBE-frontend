@@ -8,6 +8,7 @@ import { cloneDeep, isEqual } from "lodash";
 import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
+import React from "react";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -52,9 +53,7 @@ export default function Part4TQF3({ setForm }: Props) {
       data: {
         curPercent: (value, values, path) => {
           const percent = values.data[parseInt(path.split(".")[1])].percent;
-          return (
-            value !== percent && `Total percent must equal ${percent}%`
-          );
+          return value !== percent && `Total percent must equal ${percent}%`;
         },
       },
     },
@@ -160,7 +159,7 @@ export default function Part4TQF3({ setForm }: Props) {
                   icon: "size-6",
                   body: " flex justify-center",
                 }}
-                className="w-full"
+                className="w-full mb-1"
                 title={
                   <p className="font-semibold">
                     Each CLO must be linked to at least one evaluation topic,
@@ -361,7 +360,7 @@ export default function Part4TQF3({ setForm }: Props) {
             </div>
           </Tabs.Panel>
           <Tabs.Panel value="week">
-            <div
+            {/* <div
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
@@ -391,9 +390,9 @@ export default function Part4TQF3({ setForm }: Props) {
                         return (
                           <div
                             key={item.eval as string}
-                            className="border-b-[1px] justify-center items-center flex last:border-none py-4 px-6 w-full"
+                            className="border-b-[1px] justify-start items-center flex last:border-none py-4 px-6 w-full"
                           >
-                            <div className="flex font-medium w-48 gap-1 flex-col">
+                            <div className="flex font-medium  translate-x-16 mr-24 gap-1 flex-col">
                               <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                                 {evalTopic?.topicTH}
                               </p>
@@ -424,7 +423,7 @@ export default function Part4TQF3({ setForm }: Props) {
                                       weekNo.toString()
                                     )}
                                   >
-                                    week {weekNo}
+                                    Week {weekNo}
                                   </Chip>
                                 ))}
                               </Group>
@@ -440,6 +439,164 @@ export default function Part4TQF3({ setForm }: Props) {
                   </div>
                 );
               })}
+            </div> */}
+            <div className="overflow-auto border border-secondary rounded-lg relative">
+              <Table stickyHeader className="!w-full">
+                <Table.Thead className=" z-[2]">
+                  <Table.Tr>
+                    <Table.Th className="w-[25%] sticky left-0 !p-0">
+                      <div className="w-full flex items-center px-[25px] h-[24px]">
+                        CLO Description
+                      </div>
+                    </Table.Th>
+                    <Table.Th className="!w-[12%]  !max-w-[12%] px-2 !py-3.5  z-0">
+                      <div className=" flex items-center  h-[24px]">
+                        Evaluation Topic
+                      </div>
+                    </Table.Th>
+                    <Table.Th className="w-[40%]  !py-3.5 z-0">
+                      <div className=" flex items-center  translate-x-3  h-[24px]">Evaluation Week</div>
+                    </Table.Th>
+                    {/* {evalForm.getValues().data.map((item, evalIndex) => (
+                      <Table.Th
+                        key={evalForm.key(`data.${evalIndex}.curPercent`)}
+                        className="min-w-[120px] max-w-[160px] !py-3.5 !px-4.5 z-0"
+                        {...evalForm.getInputProps(
+                          `data.${evalIndex}.curPercent`
+                        )}
+                      >
+                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                          {item.topicTH}
+                        </p>
+                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                          {item.topicEN}
+                        </p>
+                        <p className="error-text">
+                          {
+                            evalForm.getInputProps(
+                              `data.${evalIndex}.curPercent`
+                            ).error
+                          }
+                        </p>
+                      </Table.Th>
+                    ))} */}
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {form.getValues().data.map(({ clo, evals }, cloIndex) => {
+                    const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
+                    return (
+                      <React.Fragment key={cloIndex}>
+                        {/* Main Row */}
+                        <Table.Tr className="text-b3 table-row h-full text-default">
+                          {/* CLO Description Column */}
+                          <Table.Td
+                            key={form.key(`data.${cloIndex}.percent`)}
+                            className="!p-0 sticky left-0 border-r-[1px] z-[1]"
+                            {...form.getInputProps(`data.${cloIndex}.percent`)}
+                          >
+                            <div className="flex gap-5 justify-start items-center px-[20px] py-2">
+                              <div className="text-secondary min-w-fit font-bold">
+                                CLO-{cloItem?.no}
+                              </div>
+                              <p className="flex w-fit font-medium justify-between flex-col">
+                                <span>{cloItem?.descTH}</span>
+                                <span>{cloItem?.descEN}</span>
+                                <span className="error-text">
+                                  {
+                                    form.getInputProps(
+                                      `data.${cloIndex}.percent`
+                                    ).error
+                                  }
+                                </span>
+                              </p>
+                            </div>
+                          </Table.Td>
+                          {/* Evaluations Column */}
+                          <Table.Td
+                            className="!p-0  !w-full !h-full "
+                            colSpan={2}
+                          >
+                            {/* Nested Row for Evaluations */}
+                            <Table.Tbody className="flex flex-col py !w-full ">
+                              {evals.length > 0 ? (
+                                evals.map((item, evalIndex) => {
+                                  const evalTopic = evalForm
+                                    .getValues()
+                                    .data.find(({ id }) => id == item.eval);
+                                  return (
+                                    <Table.Tr
+                                      key={evalIndex}
+                                      className="!p-0 flex !h-full !w-full"
+                                    >
+                                      {/* Evaluation Topic Column */}
+                                      <Table.Td className="!w-[24%]  !h-ful text-default font-medium  flex flex-col justify-center  !min-w-[24%] ">
+                                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                                          {evalTopic?.topicTH}
+                                        </p>
+                                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                                          {evalTopic?.topicEN}
+                                        </p>
+                                      </Table.Td>
+                                      {/* Evaluation Weeks Column */}
+                                      <Table.Td className="  !w-[100%]">
+                                        <Chip.Group
+                                          multiple
+                                          {...form.getInputProps(
+                                            `data.${cloIndex}.evals.${evalIndex}.evalWeek`
+                                          )}
+                                          onChange={(event) =>
+                                            form.setFieldValue(
+                                              `data.${cloIndex}.evals.${evalIndex}.evalWeek`,
+                                              event.sort()
+                                            )
+                                          }
+                                        >
+                                          <Group
+                                            className="w-full"
+                                            justify="start"
+                                          >
+                                            {tqf3.part2?.schedule.map(
+                                              ({ weekNo }) => (
+                                                <Chip
+                                                  key={weekNo}
+                                                  color="#5768d5"
+                                                  classNames={{
+                                                    label: "py-4 font-medium text-[13px]",
+                                                  }}
+                                                  value={weekNo}
+                                                  checked={item.evalWeek.includes(
+                                                    weekNo.toString()
+                                                  )}
+                                                >
+                                                   Week {weekNo}
+                                                </Chip>
+                                              )
+                                            )}
+                                          </Group>
+                                        </Chip.Group>
+                                      </Table.Td>
+                                    </Table.Tr>
+                                  );
+                                })
+                              ) : (
+                                <Table.Tr>
+                                  <Table.Td
+                                    colSpan={2}
+                                    className="justify-center items-center flex py-4 px-6 w-full"
+                                  >
+                                    No Topics
+                                  </Table.Td>
+                                </Table.Tr>
+                              )}
+                            </Table.Tbody>
+                          </Table.Td>
+                        </Table.Tr>
+                      </React.Fragment>
+                    );
+                  })}
+                </Table.Tbody>
+              </Table>
             </div>
           </Tabs.Panel>
         </div>

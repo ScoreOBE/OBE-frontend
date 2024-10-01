@@ -255,9 +255,9 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
             <Alert
               variant="light"
               color="red"
-              title=" After you delete this course, it's permanently deleted all data from
+              title={ <p> After you delete this course, it's permanently deleted all data from
           the current semester. Data from previous semesters will not be affected. 
-          "
+          </p> }
               icon={<IconExclamationCircle />}
               classNames={{ icon: "size-6" }}
             ></Alert>

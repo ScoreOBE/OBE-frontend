@@ -151,9 +151,14 @@ export default function Dashboard() {
             <Alert
               variant="light"
               color="red"
-              title=" After you delete this course, it's permanently deleted all data from
-            the current semester. Data from previous semesters will not be affected. 
-            "
+              title={
+                <p>
+                  {" "}
+                  This action cannot be undone. After you delete this
+                  course, <br/> it will be permanently deleted all data from the current
+                  semester. Data from previous semesters will not be affected.{" "}
+                </p>
+              }
               icon={<IconExclamationCircle />}
               classNames={{ icon: "size-6" }}
             ></Alert>
