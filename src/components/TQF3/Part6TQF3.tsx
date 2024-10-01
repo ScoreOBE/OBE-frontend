@@ -1,7 +1,18 @@
 import { NOTI_TYPE } from "@/helpers/constants/enum";
-import { Checkbox, Textarea, Button, Group, Tooltip } from "@mantine/core";
+import {
+  Checkbox,
+  Textarea,
+  Button,
+  Group,
+  Tooltip,
+  Alert,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+import {
+  IconEdit,
+  IconExclamationCircle,
+  IconTrash,
+} from "@tabler/icons-react";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
 import { useEffect, useState } from "react";
@@ -202,10 +213,21 @@ export default function Part6TQF3({ setForm }: Props) {
         title={`Delete Addition Topic ${deleteIndex + 1}`}
         message={
           <>
+            <Alert
+              variant="light"
+              color="red"
+              title={
+                <p>
+                  This action cannot be undone. After you delete this Topic,{" "}
+                  <br /> it will be permanently deleted from this course.
+                </p>
+              }
+              icon={<IconExclamationCircle />}
+              classNames={{ icon: "size-6" }}
+            ></Alert>
             <div className="flex flex-col mt-3 ">
-              <p className=" -translate-y-[2px] text-b1 text-default">
-                Are you sure you want to delete this Addition Topic?
-              </p>
+              <p className="text-b3  text-[#808080]">Topic Description</p>
+              <p className=" -translate-y-[2px] text-b1">{`mffmmf`}</p>
             </div>
           </>
         }
@@ -236,7 +258,7 @@ export default function Part6TQF3({ setForm }: Props) {
               หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
               <span className=" font-bold">(Topic)</span>
             </p>
-            <Tooltip
+            {/* <Tooltip
               withArrow
               arrowPosition="side"
               arrowOffset={15}
@@ -256,26 +278,26 @@ export default function Part6TQF3({ setForm }: Props) {
                 </div>
               }
               opened={form.getValues().data.length === 10 && openedTooltip}
+            > */}
+            <Button
+              // disabled={form.getValues().data.length === 10}
+              onClick={() => setOpenModalSelectTopic(true)}
+              onMouseOver={() => setOpenedTooltip(true)}
+              onMouseLeave={() => setOpenedTooltip(false)}
+              className="text-center px-4"
             >
-              <Button
-                disabled={form.getValues().data.length === 10}
-                onClick={() => setOpenModalSelectTopic(true)}
-                onMouseOver={() => setOpenedTooltip(true)}
-                onMouseLeave={() => setOpenedTooltip(false)}
-                className="text-center px-4"
-              >
-                <div className="flex gap-2">
-                  <Icon IconComponent={AddIcon} />
-                  Add Topic
-                </div>
-              </Button>
-            </Tooltip>
+              <div className="flex gap-2">
+                <Icon IconComponent={AddIcon} />
+                Add Topic
+              </div>
+            </Button>
+            {/* </Tooltip> */}
           </div>
           <div
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
-            className=" rounded-md border-[1px] overflow-y-auto mb-7 border-secondary"
+            className=" rounded-md border-[1px] overflow-y-auto mb-4 border-secondary"
           >
             {/* Table */}
             {form.getValues().data.map((topic, index) => {

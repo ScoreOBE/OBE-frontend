@@ -107,11 +107,11 @@ export default function Part7TQF3({ setForm }: Props) {
         />
       )}
 
-      <div className="flex flex-col  w-full max-h-full gap-4 pb-6">
+      <div className="flex flex-col  w-full max-h-full px-3 gap-4 pb-4">
         {/* Topic */}
-        <div className="flex text-secondary   items-center w-full justify-between">
+        <div className="flex text-secondary   items-center mt-3 w-full justify-between">
           <span className="text-[15px] font-semibold">
-            {"CLO Mapping "}
+            CLO Mapping
             <span className=" text-red-500">*</span>
           </span>
           <Button
@@ -179,7 +179,7 @@ export default function Part7TQF3({ setForm }: Props) {
                     <Table.Td key={index}>
                       <div className="flex items-start">
                         <Checkbox
-                          size="xs"
+                          size="sm"
                           classNames={{
                             input:
                               "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",

@@ -7,6 +7,7 @@ import { Alert, Button, Modal } from "@mantine/core";
 import {
   IconArrowRight,
   IconExclamationCircle,
+  IconExternalLink,
   IconUpload,
   IconX,
 } from "@tabler/icons-react";
@@ -89,10 +90,12 @@ export default function ModalUploadStudentList({
                     href="https://www1.reg.cmu.ac.th/registrationoffice/searchcourse.php"
                     target="_blank"
                   >
-                    {" "}
-                    <span className="text-secondary font-semibold hover:text-[#394cc9] underline">
-                      Click here to go to Reg CMU
-                    </span>
+                    <p className="text-secondary font-semibold hover:text-[#394cc9] hover:underline inline-flex items-center">
+                      Reg CMU
+                      <span className="ml-1">
+                        <IconExternalLink className="size-4" />
+                      </span>
+                    </p>
                   </a>
                 </p>
               </div>

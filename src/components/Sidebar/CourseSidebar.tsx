@@ -259,9 +259,7 @@ export default function CourseSidebar() {
                 >
                   {uniqTopic.length > 1 && (
                     <div className="flex gap-[2px] flex-col  ">
-                      <p className="my-1 text-[14px] pl-2">
-                        TQF 3 Topic in {courseNo}
-                      </p>
+                     
                       {uniqTopic.map((topic) => (
                         <Menu.Item
                           className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"

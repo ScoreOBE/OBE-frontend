@@ -7,6 +7,7 @@ import { useListState } from "@mantine/hooks";
 import {
   IconCheckbox,
   IconEdit,
+  IconExclamationCircle,
   IconGripVertical,
   IconTrash,
 } from "@tabler/icons-react";
@@ -108,7 +109,26 @@ export default function Part3TQF3({ setForm }: Props) {
         onClose={() => setOpenPopupDelEvalTopic(false)}
         type="delete"
         title={`Delete Topic ${editData?.no}`}
-        message="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        message={
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title={
+                <p>
+                  This action cannot be undone. After you delete this Evaluation Topic, <br /> it will be permanently deleted from this
+                  course.
+                </p>
+              }
+              icon={<IconExclamationCircle />}
+              classNames={{ icon: "size-6" }}
+            ></Alert>
+            <div className="flex flex-col mt-3 ">
+              <p className="text-b3  text-[#808080]">Evaluation Topic</p>
+              <p className=" -translate-y-[2px] text-b1">{`dkdk`}</p>
+            </div>
+          </>
+        }
         labelButtonRight="Delete Topic"
         action={onClickDeleteTopic}
       />
@@ -206,7 +226,7 @@ export default function Part3TQF3({ setForm }: Props) {
                 }
               ></Alert>
             </div>
-            <Alert
+            {/* <Alert
               radius="md"
               className="-mt-2"
               icon={<IconInfoCircle />}
@@ -227,7 +247,7 @@ export default function Part3TQF3({ setForm }: Props) {
                   seamlessly
                 </p>
               }
-            ></Alert>
+            ></Alert> */}
             {/* Table */}
             <DragDropContext
               key={form.key("eval")}

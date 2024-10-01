@@ -160,7 +160,7 @@ export default function TQF3() {
       setTqf3Part("part4");
     } else if (!tqf3.part5) {
       setTqf3Part("part5");
-    } else if (!tqf3.part6)  {
+    } else if (!tqf3.part6) {
       setTqf3Part("part6");
     } else {
       setTqf3Part("part7");
@@ -219,7 +219,7 @@ export default function TQF3() {
       />
       {/* Reuse TQF3 */}
       <Modal
-        title="Reuse TQF3"
+        title="Reuse TQF 3"
         opened={openModalReuse}
         closeOnClickOutside={false}
         onClose={() => setOpenModalReuse(false)}
@@ -233,23 +233,23 @@ export default function TQF3() {
       >
         <FocusTrapInitialFocus />
         <div className="flex flex-col gap-3 ">
-          <Alert
+          {/* <Alert
             variant="light"
             color="blue"
-            title={`Reusing TQF 3 will import all 6 parts of TQF 3 data from your selected course to automatically fill in the TQF 3 for this course.`}
+            title={`Reusing TQF 3 will import all 6 parts of TQF 3 data from your selected course to automatically fill in the TQF 3 for ${courseNo}`}
             icon={<IconInfoCircle />}
             classNames={{ icon: "size-6" }}
-          ></Alert>
+          ></Alert> */}
           <Alert
             variant="light"
             color="red"
-            title={`After reuse TQF 3, you should have to recheck and save data all 6 parts from course that you select again.`}
+            title="After reusing TQF 3, please remember to double-check and save the data for all 6 parts of the course you selected"
             icon={<IconExclamationCircle />}
             classNames={{ icon: "size-6" }}
           ></Alert>
           <Select
             rightSectionPointerEvents="all"
-            placeholder="course"
+            placeholder="Select course"
             searchable
             allowDeselect
             size="xs"
@@ -264,7 +264,7 @@ export default function TQF3() {
             <Button variant="subtle" onClick={() => setOpenModalReuse(false)}>
               Cancel
             </Button>
-            <Button>Reuse TQF3</Button>
+            <Button>Reuse TQF 3</Button>
           </div>
         </div>
       </Modal>
@@ -322,7 +322,7 @@ export default function TQF3() {
                   onClick={() => setOpenModalReuse(true)}
                   withArrow
                   arrowPosition="side"
-                  arrowOffset={15}
+                  arrowOffset={50}
                   arrowSize={7}
                   position="bottom-end"
                   label={
@@ -332,9 +332,7 @@ export default function TQF3() {
                           Reuse TQF 3
                         </span>
                         <br />
-                        Simplify your course TQF3. Choose any course, and we'll
-                        automatically fill <br />
-                        the TQF documentation for you. Saving your time!
+                         We'll automatically import all 6 parts of the TQF 3 data from your selected course.
                       </p>
                     </div>
                   }
@@ -348,7 +346,7 @@ export default function TQF3() {
                     color="#ee933e"
                     className="pr-4 px-3"
                   >
-                    Reuse TQF3
+                    Reuse TQF 3
                   </Button>
                 </Tooltip>
                 <Button

@@ -1,6 +1,6 @@
 import { validateTextInput } from "@/helpers/functions/validation";
 import { IModelTQF3Part6 } from "@/models/ModelTQF3";
-import { Button, Group, Modal, Textarea, Select } from "@mantine/core";
+import { Button, Group, Modal, Textarea, Select, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { upperFirst } from "lodash";
 import { useEffect } from "react";
@@ -8,6 +8,7 @@ import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "@/components/Icon";
 import { showNotifications } from "@/helpers/functions/function";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { IconInfoCircle } from "@tabler/icons-react";
 
 export const optionsTopicPart6 = [
   {
@@ -105,7 +106,7 @@ export default function ModalManageTopic({
       onClose={onCloseModal}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Topic TQF3 Part 6`}
-      size={type === "add" ? "w-fit" : "40vw"}
+      size={type === "add" ? "45vw" : "40vw"}
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
@@ -115,6 +116,30 @@ export default function ModalManageTopic({
         } flex flex-col overflow-hidden max-h-full h-fit`,
       }}
     >
+      {optionsTopicPart6.every((e) =>
+        data
+          ?.slice(5)
+          .map((item: any) => item.topic)
+          .includes(e.th)
+      ) && (
+        <Alert
+          radius="md"
+          variant="light"
+          color="blue"
+          className="mb-2"
+          classNames={{
+            body: " flex justify-center",
+          }}
+          title={
+            <div className="flex items-center  gap-2">
+              <IconInfoCircle />
+              <p>
+              You've already added 10 topics for course evaluation and improvement process.
+              </p>
+            </div>
+          }
+        ></Alert>
+      )}
       <div
         className={`flex flex-col !gap-8 ${
           type === "add" ? "h-full" : "h-fit"
@@ -125,9 +150,15 @@ export default function ModalManageTopic({
           {type === "add" ? (
             <Select
               size="xs"
+              disabled={optionsTopicPart6.every((e) =>
+                data
+                  ?.slice(5)
+                  .map((item: any) => item.topic)
+                  .includes(e.th)
+              )}
               label="Select Topic (If any)"
               placeholder="Topic"
-              className="mt-1 mb-2 w-[420px]"
+              className="mt-1 mb-2 "
               data={optionsTopicPart6.map((item) => ({
                 value: item.th,
                 label: `${item.th} \n ${item.en}`,
@@ -200,7 +231,7 @@ export default function ModalManageTopic({
                 }
                 className="w-full border-none rounded-r-none"
                 classNames={{
-                  input: "flex h-[150px] py-2 px-3 text-[13px]",
+                  input: "flex h-[200px] py-2 px-3 text-[13px]",
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. แบบสอบถามความพึงพอใจให้นักศึกษาประเมิน (Student satisfaction questionnaire)"
@@ -222,6 +253,12 @@ export default function ModalManageTopic({
             onClick={addEditTopic}
             leftSection={type === "add" && <Icon IconComponent={AddIcon} />}
             className="pl-4"
+            disabled={optionsTopicPart6.every((e) =>
+              data
+                ?.slice(5)
+                .map((item: any) => item.topic)
+                .includes(e.th)
+            )}
           >
             {type === "add" ? "Add" : "Done"}
           </Button>
