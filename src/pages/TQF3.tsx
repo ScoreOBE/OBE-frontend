@@ -41,6 +41,7 @@ import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
 import { setDataTQF3 } from "@/store/tqf3";
 import { IModelSection } from "@/models/ModelSection";
+import { setLoading } from "@/store/loading";
 
 export default function TQF3() {
   const { courseNo } = useParams();
@@ -56,6 +57,9 @@ export default function TQF3() {
   const [tqf3Part, setTqf3Part] = useState<string | null>(
     Object.keys(partLabel)[0]
   );
+  const [openWarningEditDataTQF2Or3, setOpenWarningEditDataTQF2Or3] =
+    useState(false);
+  const [confirmToEditData, setConfirmToEditData] = useState(false);
   const [openModalReuse, setOpenModalReuse] = useState(false);
   const partTab = [
     {
@@ -167,6 +171,13 @@ export default function TQF3() {
     }
   };
 
+  useEffect(() => {
+    if (!openWarningEditDataTQF2Or3 && confirmToEditData) {
+      onSave();
+      setConfirmToEditData(false);
+    }
+  }, [openWarningEditDataTQF2Or3, confirmToEditData]);
+
   const onSave = async () => {
     if (form && tqf3.id && tqf3Part) {
       const validationResult = form.validate();
@@ -174,7 +185,7 @@ export default function TQF3() {
         const firstErrorPath = Object.keys(validationResult.errors)[0];
         form
           .getInputNode(firstErrorPath)
-          ?.scrollIntoView({ behavior: "smooth", block: "center" });
+          ?.scrollIntoView({ behavior: "smooth", block: "end" });
       } else {
         const payload = form.getValues();
         payload.id = tqf3.id;
@@ -192,6 +203,22 @@ export default function TQF3() {
             });
             break;
         }
+        if (
+          !confirmToEditData &&
+          tqf3Original &&
+          tqf3Part &&
+          ["part2", "part3"].includes(tqf3Part) &&
+          tqf3Original.part4 &&
+          (tqf3Original.part2?.clo.length !== tqf3.part2?.clo.length ||
+            tqf3Original.part3?.eval.length !== tqf3.part3?.eval.length ||
+            tqf3Original.part3?.eval.some(
+              ({ id, percent }) =>
+                percent !== tqf3.part3?.eval.find((e) => e.id == id)?.percent
+            ))
+        ) {
+          setOpenWarningEditDataTQF2Or3(true);
+          return;
+        }
         const res = await saveTQF3(tqf3Part, payload);
         if (res) {
           setTqf3Original({ ...tqf3Original, ...res });
@@ -206,7 +233,7 @@ export default function TQF3() {
     }
   };
 
-  return loading ? (
+  return loading || !tqf3Original ? (
     <Loading />
   ) : (
     <>
@@ -266,6 +293,60 @@ export default function TQF3() {
           </div>
         </div>
       </Modal>
+      {/* Modal Confirm Change Data */}
+      <Modal
+        opened={openWarningEditDataTQF2Or3}
+        onClose={() => setOpenWarningEditDataTQF2Or3(false)}
+        closeOnClickOutside={false}
+        title="Save Changes"
+        size="35vw"
+        centered
+        transitionProps={{ transition: "pop" }}
+        classNames={{
+          content:
+            "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center  overflow-hidden ",
+        }}
+      >
+        <div className={`w-full  bg-white  rounded-md gap-2 flex flex-col`}>
+          <Alert
+            radius="md"
+            variant="light"
+            color="red"
+            classNames={{
+              body: " flex justify-center",
+            }}
+            title={
+              <div className="flex items-center  gap-2">
+                <IconExclamationCircle />
+                <p>Your changes affected in TQF 3 Part 4</p>
+              </div>
+            }
+            className="mb-4"
+          >
+            <p className="pl-8 text-default -mt-1 leading-6 font-medium ">
+              After you save this changes, you will need to update data in TQF 3
+              Part 4 again. Do you want to save this changes?
+            </p>
+          </Alert>
+        </div>
+
+        <div className="flex gap-2 mt-2 justify-end w-full">
+          <Button
+            onClick={() => setOpenWarningEditDataTQF2Or3(false)}
+            variant="subtle"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              setConfirmToEditData(true);
+              setOpenWarningEditDataTQF2Or3(false);
+            }}
+          >
+            Save Changes
+          </Button>
+        </div>
+      </Modal>
       <div className="flex flex-col h-full w-full overflow-hidden">
         <Tabs
           value={tqf3Part}
@@ -303,18 +384,24 @@ export default function TQF3() {
                               tqf3[value as keyof IModelTQF3]
                             ) ||
                             (value === "part4" &&
-                              tqf3Original.part3?.eval.some(
-                                ({ id, percent }) =>
-                                  percent !==
-                                  tqf3Original.part4?.data
-                                    .map(({ evals }) =>
-                                      evals.find((e) => e.eval == id)
-                                    )
-                                    .reduce(
-                                      (acc, cur) => acc + (cur?.percent || 0),
-                                      0
-                                    )
-                              ))
+                              (tqf3Original.part2?.clo.some(
+                                ({ id }) =>
+                                  !tqf3Original.part4?.data
+                                    .map(({ clo }) => clo)
+                                    .includes(id)
+                              ) ||
+                                tqf3Original.part3?.eval.some(
+                                  ({ id, percent }) =>
+                                    percent !==
+                                    tqf3Original.part4?.data
+                                      .map(({ evals }) =>
+                                        evals.find((e) => e.eval == id)
+                                      )
+                                      .reduce(
+                                        (acc, cur) => acc + (cur?.percent || 0),
+                                        0
+                                      )
+                                )))
                           ? "text-edit"
                           : "text-[#24b9a5]"
                       }

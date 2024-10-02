@@ -25,6 +25,13 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
     setStep((prevStep) => prevStep - 1);
   };
 
+  const close = () => {
+    onClose();
+    setTimeout(() => {
+      setStep(1);
+    }, 300);
+  };
+
   const renderStepContent = () => {
     switch (step) {
       case 1:
@@ -34,8 +41,7 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
               CMU OBE <br /> Template Guide <br /> for Upload Score
             </p>
             <p className="text-[14px] mb-16 text-default font-medium">
-              This template helps you easily upload student grades for your
-              assignments.
+            Follow these 7 simple steps to easily upload student grades for your assignments.
             </p>
           </>
         );
@@ -139,7 +145,6 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
         onClose={onClose}
         centered
         transitionProps={{ transition: "pop" }}
-        closeOnClickOutside={true}
         withCloseButton={false}
         classNames={{
           content: "flex flex-col !p-0 overflow-hidden",
@@ -151,7 +156,7 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
             {renderStepContent()}
             <div className="flex gap-4 mt-4">
               {step === 1 ? (
-                <Button variant="outline" onClick={onClose}>
+                <Button variant="outline" onClick={close}>
                   Close
                 </Button>
               ) : (
@@ -164,7 +169,7 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
                   Next
                 </Button>
               )}
-              {step === 7 && <Button onClick={onClose}>Got it!</Button>}
+              {step === 7 && <Button onClick={close}>Got it!</Button>}
             </div>
           </div>
           <img
