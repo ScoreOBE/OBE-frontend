@@ -183,16 +183,14 @@ export default function TQF3() {
             payload.instructors = payload.instructors.filter(
               (ins: any) => ins.length
             );
+            break;
           case Object.keys(partLabel)[1]:
             payload.clo?.forEach((clo: IModelCLO) => {
               if (!clo.learningMethod.includes(LearningMethod.Other)) {
                 delete clo.other;
               }
             });
-          case Object.keys(partLabel)[2]:
-          case Object.keys(partLabel)[3]:
-          case Object.keys(partLabel)[4]:
-          case Object.keys(partLabel)[5]:
+            break;
         }
         const res = await saveTQF3(tqf3Part, payload);
         if (res) {
@@ -303,7 +301,12 @@ export default function TQF3() {
                           : !isEqual(
                               tqf3Original[value as keyof IModelTQF3],
                               tqf3[value as keyof IModelTQF3]
-                            )
+                            ) ||
+                            (tqf3Part === "part4" &&
+                              tqf3Original.part4?.data.reduce(
+                                (acc, cur) => acc + cur.percent,
+                                0
+                              ) !== 100)
                           ? "text-edit"
                           : "text-[#24b9a5]"
                       }

@@ -46,6 +46,8 @@ export default function Part2TQF3({ setForm }: Props) {
   const form = useForm({
     mode: "controlled",
     initialValues: {
+      teachingMethod: [],
+      evaluate: undefined,
       clo: [],
       schedule: [],
     } as Partial<IModelTQF3Part2>,
