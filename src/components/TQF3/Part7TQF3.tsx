@@ -5,11 +5,12 @@ import Icon from "../Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import { useEffect, useState } from "react";
-import { IModelCLO, IModelTQF3Part5 } from "@/models/ModelTQF3";
+import { IModelTQF3Part7 } from "@/models/ModelTQF3";
 import { IModelPLO } from "@/models/ModelPLO";
 import { getPLOs } from "@/services/plo/plo.service";
 import { useAppDispatch, useAppSelector } from "@/store";
 import unplug from "@/assets/image/unplug.png";
+import { cloneDeep } from "lodash";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -22,58 +23,9 @@ export default function Part7TQF3({ setForm }: Props) {
   const [coursePLO, setCoursePLO] = useState<Partial<IModelPLO>>();
   const user = useAppSelector((state) => state.user);
 
-  // fixed Data
-  const courseCLO: IModelCLO[] = [
-    {
-      id: "kmskx",
-      no: 1,
-      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.1",
-      descEN:
-        "Explain the working principle of computer operating systems the working principle of computer operating systems 1",
-      learningMethod: [],
-    },
-    {
-      id: "kmskx",
-      no: 2,
-      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.2",
-      descEN:
-        "Explain the working principle of computer operating systems the working principle of computer operating systems 2",
-      learningMethod: [],
-    },
-    {
-      id: "kmskx",
-      no: 3,
-      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.3",
-      descEN:
-        "Explain the working principle of computer operating systems the working principle of computer operating systems 3",
-      learningMethod: [],
-    },
-    {
-      id: "kmskx",
-      no: 4,
-      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.4",
-      descEN:
-        "Explain the working principle of computer operating systems the working principle of computer operating systems 4",
-      learningMethod: [],
-    },
-    {
-      id: "kmskx",
-      no: 5,
-      descTH: "อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์.5",
-      descEN:
-        "Explain the working principle of computer operating systems the working principle of computer operating systems 5",
-      learningMethod: [],
-    },
-  ];
-
   const form = useForm({
     mode: "controlled",
-    initialValues: {
-      data: courseCLO.map((clo) => ({
-        clo: clo,
-        plo: [],
-      })) as Partial<IModelTQF3Part5>[],
-    },
+    initialValues: { data: [] as IModelTQF3Part7[] },
     validate: {},
   });
 
@@ -95,6 +47,22 @@ export default function Part7TQF3({ setForm }: Props) {
 
   useEffect(() => {
     fetchPLO();
+    if (tqf3.part7) {
+      form.setFieldValue(
+        "data",
+        cloneDeep(
+          tqf3?.part2?.clo?.map((cloItem) => {
+            const item = tqf3.part7?.data.find(({ clo }) => clo == cloItem.id);
+            return { clo: cloItem.id, plo: cloneDeep(item?.plo)! };
+          })
+        ) ?? []
+      );
+    } else if (tqf3.part2) {
+      form.setFieldValue(
+        "data",
+        cloneDeep(tqf3.part2.clo?.map(({ id }) => ({ clo: id, plo: [] }))) ?? []
+      );
+    }
   }, []);
 
   return tqf3?.part5?.updatedAt ? (
@@ -107,9 +75,9 @@ export default function Part7TQF3({ setForm }: Props) {
         />
       )}
 
-      <div className="flex flex-col  w-full max-h-full px-3 gap-4 pb-4">
+      <div className="flex flex-col w-full max-h-full gap-4 pb-4">
         {/* Topic */}
-        <div className="flex text-secondary   items-center mt-3 w-full justify-between">
+        <div className="flex text-secondary items-center w-full justify-between">
           <span className="text-[15px] font-semibold">
             CLO Mapping
             <span className=" text-red-500">*</span>
@@ -155,8 +123,8 @@ export default function Part7TQF3({ setForm }: Props) {
               <Table.Tr>
                 <Table.Th className="min-w-[550px] sticky left-0 !p-0">
                   <div className="w-full flex items-center px-[25px] h-[58px] border-r-[1px] border-[#DEE2E6]">
-                    CLO Description ( {courseCLO.length} CLO
-                    {courseCLO.length > 1 ? "s" : ""} )
+                    CLO Description ( {tqf3.part2?.clo.length} CLO
+                    {tqf3.part2?.clo.length! > 1 ? "s" : ""} )
                   </div>
                 </Table.Th>
                 {coursePLO?.data!.map((plo: any) => (
@@ -167,7 +135,7 @@ export default function Part7TQF3({ setForm }: Props) {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {courseCLO.map((clo, indexCLO) => (
+              {tqf3.part2?.clo.map((clo, indexCLO) => (
                 <Table.Tr key={indexCLO} className="text-[13px] text-default">
                   <Table.Td className="!p-0 sticky left-0 z-[1]">
                     <div className="flex flex-col gap-0.5 px-[25px] py-4 border-r-[1px] border-[#DEE2E6]">
