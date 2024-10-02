@@ -8,8 +8,8 @@ export const ploController = (configService = {}) => {
     getPLOs: async (params: any) => {
       return service.get(`${prefix}`, { ...params });
     },
-    getOnePLO: async (name: string) => {
-      return service.get(`${prefix}/one`, { name });
+    getOnePLO: async (params: any) => {
+      return service.get(`${prefix}/one`, { ...params });
     },
     checkCanCreatePLO: async (name: string) => {
       return service.get(`${prefix}/check`, { name });

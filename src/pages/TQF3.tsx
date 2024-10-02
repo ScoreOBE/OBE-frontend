@@ -302,11 +302,19 @@ export default function TQF3() {
                               tqf3Original[value as keyof IModelTQF3],
                               tqf3[value as keyof IModelTQF3]
                             ) ||
-                            (tqf3Part === "part4" &&
-                              tqf3Original.part4?.data.reduce(
-                                (acc, cur) => acc + cur.percent,
-                                0
-                              ) !== 100)
+                            (value === "part4" &&
+                              tqf3Original.part3?.eval.some(
+                                ({ id, percent }) =>
+                                  percent !==
+                                  tqf3Original.part4?.data
+                                    .map(({ evals }) =>
+                                      evals.find((e) => e.eval == id)
+                                    )
+                                    .reduce(
+                                      (acc, cur) => acc + (cur?.percent || 0),
+                                      0
+                                    )
+                              ))
                           ? "text-edit"
                           : "text-[#24b9a5]"
                       }

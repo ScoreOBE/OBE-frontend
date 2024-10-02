@@ -70,7 +70,14 @@ export default function Part4TQF3({ setForm }: Props) {
             return {
               clo: cloItem.id,
               percent: item?.percent || 0,
-              evals: cloneDeep(item?.evals) || [],
+              evals:
+                cloneDeep(
+                  item?.evals.filter((item) =>
+                    tqf3.part3?.eval
+                      .map(({ id }) => id)
+                      .includes(item.eval as string)
+                  )
+                ) || [],
             };
           })
         ) ?? []
