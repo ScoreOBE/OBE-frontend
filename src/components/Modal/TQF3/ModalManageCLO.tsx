@@ -353,11 +353,17 @@ export default function ModalManageCLO({
           <Button
             onClick={() => {
               setCloList(
-                type == "add" ? form.getValues().clo : formOneCLO.getValues()
+                type == "add" && form.getValues().clo?.length! > 0
+                  ? form.getValues().clo
+                  : formOneCLO.getValues()
               );
               onClose();
             }}
-            disabled={type == "add" ? form.getValues().clo?.length == 0 : false}
+            disabled={
+              type == "add"
+                ? form.getValues().clo?.length == 0 && !formOneCLO.getValues()
+                : false
+            }
           >
             Done
           </Button>

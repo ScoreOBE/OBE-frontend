@@ -21,7 +21,11 @@ import TQF3 from "@/assets/icons/TQF3.svg?react";
 import TQF5 from "@/assets/icons/TQF5.svg?react";
 import { removeCourse } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
-import { getUserName, showNotifications } from "@/helpers/functions/function";
+import {
+  getUserName,
+  showNotifications,
+  sortData,
+} from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { leaveCourse } from "@/services/course/course.service";
@@ -78,6 +82,8 @@ export default function CourseSidebar() {
           }
         });
       });
+      sortData(insList, "firstNameEN", "string");
+      sortData(coInsList, "firstNameEN", "string");
       setInstructors(insList);
       setCoInstructors(coInsList);
     } else if (store.getState().course.courses.length && !course) {
@@ -135,57 +141,6 @@ export default function CourseSidebar() {
           </>
         }
       />
-      {/* <Modal
-        title="Select Topic"
-        transitionProps={{ transition: "pop" }}
-        size="32vw"
-        centered
-        classNames={{
-          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
-          body: "flex flex-col overflow-hidden max-h-full h-fit",
-        }}
-        closeOnClickOutside={false}
-        opened={openModalSelectTopic}
-        onClose={() => setOpenModalSelectTopic(false)}
-      >
-        <div className="flex flex-col gap-8">
-          <Select
-            label="Select topic to manage TQF"
-            placeholder="Course"
-            size="xs"
-            searchable
-            data={uniqTopic}
-            value={selectedTopic}
-            onChange={(event) => setSelectedTopic(event!)}
-          />
-          <div className="flex justify-end w-full">
-            <Group className="flex w-full h-fit items-end justify-end">
-              <div>
-                <Button
-                  variant="subtle"
-                  onClick={() => {
-                    setOpenModalSelectTopic(false);
-                    setSelectedTopic(tqf3Topic);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </div>
-              <Button
-                onClick={() => {
-                  if (selectedTopic !== tqf3Topic) {
-                    dispatch(setDataTQF3({ topic: selectedTopic }));
-                  }
-                  setOpenModalSelectTopic(false);
-                }}
-                disabled={selectedTopic === tqf3Topic}
-              >
-                Change
-              </Button>
-            </Group>
-          </div>
-        </div>
-      </Modal> */}
       <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
           className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
@@ -236,11 +191,11 @@ export default function CourseSidebar() {
                   leftSection={
                     <Icon IconComponent={TQF3} className="h-5 w-5" />
                   }
-                  rightSection={ course?.type == COURSE_TYPE.SEL_TOPIC.en &&
-                    <IconChevronRight
-                    
-                      className="h-5 right-2 absolute  flex  w-5"
-                    /> 
+                  rightSection={
+                    course?.type == COURSE_TYPE.SEL_TOPIC.en &&
+                    uniqTopic.length > 1 && (
+                      <IconChevronRight className="h-5 right-2 absolute  flex  w-5" />
+                    )
                   }
                   className={`!w-full !text-[13px]  flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
@@ -252,38 +207,40 @@ export default function CourseSidebar() {
                   TQF 3
                 </Button>
               </Menu.Target>
-              {course?.type == COURSE_TYPE.SEL_TOPIC.en && (
-                <Menu.Dropdown
-                  className="!z-50 py-2 !font-semibold max-w-fit translate-x-[22px]  bg-white"
-                  style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 2px 8px" }}
-                >
-                  {uniqTopic.length > 1 && (
-                    <div className="flex gap-[2px] flex-col  ">
-                     
-                      {uniqTopic.map((topic) => (
-                        <Menu.Item
-                          className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
-                          variant="outline"
-                          onClick={() => {
-                            if (topic !== tqf3Topic) {
-                              dispatch(setDataTQF3({ topic }));
-                            }
-                            goToPage(ROUTE_PATH.TQF3);
-                          }}
-                        >
-                          <div className=" flex  !font-semibold  flex-col justify-start items-start gap-[7px]">
-                            <p className="text-ellipsis overflow-hidden whitespace-nowrap !font-semibold text-[12px]">
-                             {topic}
-                            </p>
-                          </div>
-                        </Menu.Item>
-                      ))}
-                    </div>
-                  )}
-                </Menu.Dropdown>
-              )}
-               </Menu>
-               <Menu
+              {course?.type == COURSE_TYPE.SEL_TOPIC.en &&
+                uniqTopic.length > 1 && (
+                  <Menu.Dropdown
+                    className="!z-50 py-2 !font-semibold max-w-fit translate-x-[22px]  bg-white"
+                    style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 2px 8px" }}
+                  >
+                    {uniqTopic.length > 1 && (
+                      <div className="flex gap-[2px] flex-col  ">
+                        <p className="my-1 text-[14px] pl-2">TQF 3</p>
+                        <Menu.Divider />
+                        {uniqTopic.map((topic) => (
+                          <Menu.Item
+                            className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
+                            variant="outline"
+                            onClick={() => {
+                              if (topic !== tqf3Topic) {
+                                dispatch(setDataTQF3({ topic }));
+                              }
+                              goToPage(ROUTE_PATH.TQF3);
+                            }}
+                          >
+                            <div className=" flex  !font-semibold  flex-col justify-start items-start gap-[7px]">
+                              <p className="text-ellipsis overflow-hidden whitespace-nowrap !font-semibold text-[12px]">
+                                {topic}
+                              </p>
+                            </div>
+                          </Menu.Item>
+                        ))}
+                      </div>
+                    )}
+                  </Menu.Dropdown>
+                )}
+            </Menu>
+            <Menu
               trigger="hover"
               openDelay={100}
               clickOutsideEvents={["mousedown"]}
@@ -296,11 +253,11 @@ export default function CourseSidebar() {
                   leftSection={
                     <Icon IconComponent={TQF5} className="h-5 w-5" />
                   }
-                  rightSection={ course?.type == COURSE_TYPE.SEL_TOPIC.en &&
-                    <IconChevronRight
-                    
-                      className="h-5 right-2 absolute  flex  w-5"
-                    /> 
+                  rightSection={
+                    course?.type == COURSE_TYPE.SEL_TOPIC.en &&
+                    uniqTopic.length > 1 && (
+                      <IconChevronRight className="h-5 right-2 absolute  flex  w-5" />
+                    )
                   }
                   className={`!w-full !text-[13px] mb-2 flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
@@ -311,41 +268,40 @@ export default function CourseSidebar() {
                 >
                   TQF 5
                 </Button>
-                
               </Menu.Target>
-              {course?.type == COURSE_TYPE.SEL_TOPIC.en && (
-                <Menu.Dropdown
-                  className="!z-50 py-2 !font-semibold max-w-fit translate-x-[22px] bg-white"
-                  style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 2px 8px" }}
-                >
-                  {uniqTopic.length > 1 && (
-                    <div className="flex gap-[2px] flex-col  ">
-                      <p className="my-1 text-[14px] pl-2">
-                        TQF 5 Topic in {courseNo}
-                      </p>
-                      {uniqTopic.map((topic) => (
-                        <Menu.Item
-                          className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
-                          variant="outline"
-                          onClick={() => {
-                            if (topic !== tqf3Topic) {
-                              dispatch(setDataTQF3({ topic }));
-                            }
-                            goToPage(ROUTE_PATH.TQF5);
-                          }}
-                        >
-                          <div className=" flex  !font-semibold  flex-col justify-start items-start gap-[7px]">
-                            <p className="text-ellipsis overflow-hidden whitespace-nowrap !font-semibold text-[12px]">
-                             {topic}
-                            </p>
-                          </div>
-                        </Menu.Item>
-                      ))}
-                    </div>
-                  )}
-                </Menu.Dropdown>
-              )}
-           </Menu>
+              {course?.type == COURSE_TYPE.SEL_TOPIC.en &&
+                uniqTopic.length > 1 && (
+                  <Menu.Dropdown
+                    className="!z-50 py-2 !font-semibold max-w-fit translate-x-[22px] bg-white"
+                    style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 2px 8px" }}
+                  >
+                    {uniqTopic.length > 1 && (
+                      <div className="flex gap-[2px] flex-col  ">
+                        <p className="my-1 text-[14px] pl-2">TQF 5</p>
+                        <Menu.Divider />
+                        {uniqTopic.map((topic) => (
+                          <Menu.Item
+                            className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
+                            variant="outline"
+                            onClick={() => {
+                              if (topic !== tqf3Topic) {
+                                dispatch(setDataTQF3({ topic }));
+                              }
+                              goToPage(ROUTE_PATH.TQF5);
+                            }}
+                          >
+                            <div className=" flex  !font-semibold  flex-col justify-start items-start gap-[7px]">
+                              <p className="text-ellipsis overflow-hidden whitespace-nowrap !font-semibold text-[12px]">
+                                {topic}
+                              </p>
+                            </div>
+                          </Menu.Item>
+                        ))}
+                      </div>
+                    )}
+                  </Menu.Dropdown>
+                )}
+            </Menu>
           </div>
         </div>
 
