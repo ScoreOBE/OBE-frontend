@@ -21,6 +21,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const tqf3 = useAppSelector((state) => state.tqf3);
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (opened) {
@@ -39,6 +40,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
 
   const generatePDF = async () => {
     if (selectedParts.length === 0) {
+      setLoading(false);
       showNotifications(
         NOTI_TYPE.ERROR,
         "Error",
@@ -57,6 +59,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
 
     const res = await genPdfTQF3(payload);
     if (res) {
+      setLoading(true);
       const contentType = res.headers["content-type"];
       const disposition = res.headers["content-disposition"];
       const filename = disposition
@@ -73,60 +76,12 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       window.URL.revokeObjectURL(url);
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Success",
-        `TQF3 exported successfully as "${filename}".`
+        "Export Success",
+        `TQF3 exported successfully as ${filename}.`
       );
     }
-
-    // const zip = new JSZip(); // Create a new JSZip instance
-
-    // try {
-    //   for (const part of selectedParts) {
-    //     console.log(`Generating PDF for ${part}...`);
-    //     const res = await genPdfTQF3({
-    //       courseNo,
-    //       academicYear: academicYear.year,
-    //       academicTerm: academicYear.semester,
-    //       tqf3: tqf3.id,
-    //       [part]: "", // Use the part as a dynamic key for the payload
-    //     });
-
-    //     if (res && res.headers && res.data) {
-    //       const contentType = res.headers["content-type"];
-    //       const disposition = res.headers["content-disposition"];
-    //       const fileType = contentType === "application/zip" ? "zip" : "pdf";
-    //       const filename = disposition
-    //         ? disposition.split("filename=")[1].replace(/"/g, "")
-    //         : `TQF3_${part}.${fileType}`;
-
-    //       const blob = new Blob([res.data], { type: contentType });
-    //       // Read the blob as array buffer to add to the zip
-    //       const arrayBuffer = await blob.arrayBuffer();
-
-    //       // Add file to zip (using filename as key and array buffer as content)
-    //       zip.file(filename, arrayBuffer);
-
-    //       // Notify success for each part added
-    //       showNotifications(
-    //         NOTI_TYPE.SUCCESS,
-    //         "Success",
-    //         `Part "${part}" exported successfully as "${filename}".`
-    //       );
-    //     }
-    //   }
-
-    //   zip.generateAsync({ type: "blob" }).then((zipBlob: any) => {
-    //     saveAs(
-    //       zipBlob,
-    //       `TQF3_Parts_${academicYear.year}_${academicYear.semester}.zip`
-    //     );
-    //   });
-    // } catch (error) {
-    //   const errorMessage = "An error occurred while generating the PDF.";
-    //   showNotifications(NOTI_TYPE.ERROR, "Export Error", errorMessage);
-    //   console.error("Error during PDF generation:", error);
-    // }
     onCloseModal();
+    setLoading(false);
   };
 
   return (
@@ -168,7 +123,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
                 <Checkbox.Card
                   className="p-3 items-center px-4 flex border-none h-fit rounded-md w-full"
                   classNames={{
-                    card: `${disabled && " bg-disable cursor-not-allowed"}`,
+                    card: `${disabled && "    cursor-not-allowed"}`,
                   }}
                   style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
                   value={getKeyPartTopicTQF3(item)}
@@ -180,7 +135,11 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
                     align="flex-start"
                   >
                     <Checkbox.Indicator className="mt-1" disabled={disabled} />
-                    <div className="text-default whitespace-break-spaces font-medium text-[13px]">
+                    <div
+                      className={`text-default whitespace-break-spaces font-medium text-[13px] ${
+                        disabled ? " text-[#b5b5b5] cursor-not-allowed" : ""
+                      }`}
+                    >
                       {item}
                     </div>
                   </Group>
@@ -196,6 +155,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
             Cancel
           </Button>
           <Button
+            loading={loading}
             rightSection={
               <IconFileExport
                 color="#ffffff"
