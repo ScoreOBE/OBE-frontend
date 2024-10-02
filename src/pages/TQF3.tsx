@@ -302,7 +302,7 @@ export default function TQF3() {
                               tqf3Original[value as keyof IModelTQF3],
                               tqf3[value as keyof IModelTQF3]
                             ) ||
-                            (tqf3Part === "part4" &&
+                            (value === "part4" &&
                               tqf3Original.part4?.data.reduce(
                                 (acc, cur) => acc + cur.percent,
                                 0

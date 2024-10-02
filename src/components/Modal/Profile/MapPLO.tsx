@@ -215,7 +215,7 @@ export default function MapPLO({ ploName = "" }: Props) {
   }, [reorder]);
 
   const fetchOnePLO = async () => {
-    const res = await getOnePLO(ploName);
+    const res = await getOnePLO({ name: ploName });
     if (res) {
       setPloList(res);
     }
@@ -739,7 +739,12 @@ export default function MapPLO({ ploName = "" }: Props) {
             <Alert
               variant="light"
               color="red"
-              title={ <p>This action cannot be undone. After you delete this PLO, <br/> it will affect all courses that use it.</p>}
+              title={
+                <p>
+                  This action cannot be undone. After you delete this PLO,{" "}
+                  <br /> it will affect all courses that use it.
+                </p>
+              }
               icon={<IconExclamationCircle />}
               classNames={{ icon: "size-6" }}
             ></Alert>
