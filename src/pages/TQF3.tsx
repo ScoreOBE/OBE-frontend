@@ -276,7 +276,7 @@ export default function TQF3() {
           classNames={{
             root: "overflow-hidden w-full flex flex-col h-full",
             tab: "px-0 !bg-transparent hover:!text-tertiary",
-            tabLabel: "!font-semibold",
+            tabLabel: "!font-semibold text-[12px]",
           }}
           className="px-6 pt-2 flex flex-col h-full w-full"
         >
@@ -289,7 +289,7 @@ export default function TQF3() {
            
             `}
           >
-            <Tabs.List className="md:gap-x-7 gap-x-4 w-full">
+            <Tabs.List className="md:gap-x-5 gap-x-3 w-full">
               {partTab.map(({ tab, value }) => (
                 <Tabs.Tab key={value} value={value}>
                   <div className="flex flex-row items-center gap-2">
@@ -304,8 +304,8 @@ export default function TQF3() {
                               tqf3Original[value as keyof IModelTQF3],
                               tqf3[value as keyof IModelTQF3]
                             )
-                          ? "text-edit"
-                          : "text-[#24b9a5]"
+                          ? "text-edit size-4"
+                          : "text-[#24b9a5] size-4"
                       }
                     />
                     {tab}
@@ -314,7 +314,7 @@ export default function TQF3() {
               ))}
             </Tabs.List>
             <div className="flex justify-between pt-4 items-center">
-              <div className=" text-secondary  overflow-y-auto font-semibold  whitespace-break-spaces">
+              <div className=" text-secondary   overflow-y-auto font-semibold  whitespace-break-spaces">
                 {getValueEnumByKey(PartTopicTQF3, tqf3Part!)}
               </div>
               <div className="flex flex-row flex-wrap gap-3">

@@ -253,7 +253,7 @@ export default function Part6TQF3({ setForm }: Props) {
       {tqf3.part5?.updatedAt ? (
         <div className="flex flex-col w-full  max-h-full gap-4">
           {/* Topic */}
-          <div className="flex text-secondary  items-center w-full justify-between">
+          <div className="flex text-secondary  items-center -mt-1 w-full justify-between">
             <p className="text-[15px] font-semibold">
               หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
               <span className=" font-bold">(Topic)</span>

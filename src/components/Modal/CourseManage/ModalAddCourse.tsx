@@ -573,10 +573,6 @@ export default function ModalAddCourse({
           label="Semester"
           description="STEP 3"
         >
-          {/* <Alert
-            icon={<IconInfoCircle />}
-            title={<p>Each section can only have one owner section.</p>}
-          ></Alert> */}
           <div className="flex flex-col max-h-[420px] h-fit w-full mt-2 mb-5 p-[2px] overflow-y-auto">
             <div className="flex flex-col font-medium text-[14px] gap-4">
               {form.getValues().sections?.map((sec: any, index) => (

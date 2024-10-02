@@ -216,16 +216,16 @@
 }
 
 /* Table */
-.mantine-Table-table  {
+.mantine-Table-table   {
   border-color: var(--color-secondary) !important;
   border-bottom-color: var(--color-secondary);
 }
-.mantine-Table-thead {
+.mantine-Table-thead  {
   border-bottom-color: var(--color-secondary);
   color: var(--color-secondary);
   height: 45px !important;
 }
-.mantine-Table-th {
+.mantine-Table-th  {
   padding-left: 25px !important;
   padding-top: 18px !important;
   padding-bottom: 18px !important;
@@ -236,6 +236,7 @@
   padding-left: 25px !important;
   padding-top: 14px !important;
   padding-bottom: 14px !important;
+ 
 }
 .mantine-Table-thead {
   .mantine-Table-tr {

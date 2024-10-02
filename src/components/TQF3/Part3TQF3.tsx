@@ -135,7 +135,7 @@ export default function Part3TQF3({ setForm }: Props) {
       {tqf3.part2?.updatedAt ? (
         <div className="flex flex-col w-full">
           <div className="flex flex-col w-full h-full pb-2 gap-4">
-            <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6] mt-1 pb-6 flex-col">
+            <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6] pb-6 flex-col">
               <div className="flex flex-row gap-1 text-[15px]">
                 <p className="font-semibold">การกำหนดเกรด</p>
                 <p className="font-bold">
