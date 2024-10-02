@@ -19,7 +19,7 @@ import Part3TQF3 from "@/components/TQF3/Part3TQF3";
 import Part4TQF3 from "@/components/TQF3/Part4TQF3";
 import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
-import { IconExclamationCircle, IconInfoCircle } from "@tabler/icons-react";
+import { IconExclamationCircle } from "@tabler/icons-react";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { isEmpty, isEqual } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
@@ -332,7 +332,8 @@ export default function TQF3() {
                           Reuse TQF 3
                         </span>
                         <br />
-                         We'll automatically import all 6 parts of the TQF 3 data from your selected course.
+                        We'll automatically import all 6 parts of the TQF 3 data
+                        from your selected course.
                       </p>
                     </div>
                   }
@@ -363,12 +364,11 @@ export default function TQF3() {
             </div>
           </div>
           <div
-            className={`h-full w-full flex overflow-y-auto ${
-              tqf3Part !== "part4" &&
-              tqf3Original &&
-              tqf3Original[tqf3Part! as keyof IModelTQF3] &&
-              "pt-3 px-3"
-            }   rounded-md text-[14px]`}
+            className={`h-full w-full flex overflow-y-auto rounded-md text-[14px]
+              ${
+                tqf3Original &&
+                (tqf3Original.part3 && tqf3Part === "part4" ? "" : "pt-3 px-3")
+              }`}
           >
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.value} className="w-full">

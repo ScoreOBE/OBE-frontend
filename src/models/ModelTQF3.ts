@@ -62,8 +62,8 @@ export interface IModelTQF3Part6 {
 }
 
 export interface IModelTQF3Part7 {
-  clo: IModelCLO;
-  plo: IModelPLONo[];
+  clo: IModelCLO | string;
+  plo: IModelPLONo[] | string[];
 }
 export interface IModelCLO {
   id: string;
