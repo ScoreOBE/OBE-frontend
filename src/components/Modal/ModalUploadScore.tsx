@@ -26,6 +26,7 @@ import { setCourseList } from "@/store/course";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { TbSearch } from "react-icons/tb";
+import ModalTemplateGuide from "./ModalTemplateGuide";
 
 type Props = {
   opened: boolean;
@@ -36,9 +37,7 @@ type Props = {
 export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const [params, setParams] = useSearchParams();
   const [openModalStudentList, setOpenModalStudentList] = useState(false);
-  const location = useLocation().pathname;
-  const academicYear = useAppSelector((state) => state.academicYear);
-  const dispatch = useAppDispatch();
+  const [openModalTemplateGuide, setOpenModalTemplateGuide] = useState(false);
   const searchCourse = async (searchValue: string, reset?: boolean) => {};
   const studentData = [
     {
@@ -114,7 +113,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
           }}
         >
           {/* <Table.ScrollContainer className="!max-h-[400px] " minWidth={500}> */}
-          <Table stickyHeader  striped>
+          <Table stickyHeader striped>
             <Table.Thead>
               <Table.Tr className="bg-[#e5e7f6]">
                 <Table.Th className=" w-[30%]">File name</Table.Th>
@@ -133,6 +132,11 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
 
   return (
     <>
+      <ModalTemplateGuide
+        opened={openModalTemplateGuide}
+        onClose={() => setOpenModalTemplateGuide(false)}
+      />
+
       <ModalStudentList
         data={data}
         opened={openModalStudentList}
@@ -271,6 +275,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     <Button
                       leftSection={<IconFile className="size-4" />}
                       variant="outline"
+                      onClick={() => setOpenModalTemplateGuide(true)}
                     >
                       Template guide
                     </Button>

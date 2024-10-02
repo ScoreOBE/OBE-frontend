@@ -149,7 +149,7 @@ export default function Part4TQF3({ setForm }: Props) {
         classNames={{
           root: "flex flex-col w-full h-full",
           tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
-          tabLabel: "!font-semibold",
+          tabLabel: "!font-semibold text-[13px]",
           panel: "w-full h-fit max-h-full flex flex-col gap-2 rounded-lg",
         }}
       >
@@ -159,7 +159,7 @@ export default function Part4TQF3({ setForm }: Props) {
           </Tabs.Tab>
           <Tabs.Tab value="week">Evaluation Week</Tabs.Tab>
         </Tabs.List>
-        <div className="overflow-auto flex w-full max-h-full px-3 mt-3">
+        <div className="overflow-auto flex w-full max-h-full  mt-3">
           <Tabs.Panel value="percent">
             <div className="w-full">
               <Alert
@@ -197,7 +197,7 @@ export default function Part4TQF3({ setForm }: Props) {
                     <Table.Th
                       className="min-w-[400px] sticky left-0 !p-0"
                       style={{
-                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.3))",
+                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
                       }}
                     >
                       <div className="w-full flex items-center px-[25px] h-[58px]">
@@ -229,7 +229,7 @@ export default function Part4TQF3({ setForm }: Props) {
                     ))}
                     <Table.Th
                       style={{
-                        filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.3))",
+                        filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.1))",
                       }}
                       className="w-[55px] !bg-[#e4f5ff] sticky right-0 !p-0"
                     >
@@ -247,13 +247,13 @@ export default function Part4TQF3({ setForm }: Props) {
                       return (
                         <Table.Tr
                           key={cloIndex}
-                          className="text-b3 table-row h-full text-default"
+                          className="text-[13px] table-row h-full text-default"
                         >
                           <Table.Td
                             key={form.key(`data.${cloIndex}.percent`)}
                             style={{
                               filter:
-                                "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.3))",
+                                "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
                             }}
                             className="!p-0 sticky left-0 z-[1]"
                             {...form.getInputProps(`data.${cloIndex}.percent`)}
@@ -263,7 +263,7 @@ export default function Part4TQF3({ setForm }: Props) {
                                 CLO-{cloItem?.no}
                               </div>
                               <p className="flex w-fit   font-medium justify-between flex-col ">
-                                <span>{cloItem?.descTH}</span>
+                                <span className="mb-1">{cloItem?.descTH}</span>
                                 <span>{cloItem?.descEN}</span>
                                 <span className="error-text">
                                   {
@@ -323,7 +323,7 @@ export default function Part4TQF3({ setForm }: Props) {
                           <td
                             style={{
                               filter:
-                                "drop-shadow(-2px 0px 2px rgba(0, 0, 0, 0.3))",
+                                "drop-shadow(-2px 0px 2px rgba(0, 0, 0, 0.1))",
                             }}
                             className="!bg-[#e4f5ff] !p-0 !h-full sticky z-[1] right-0 "
                           >
@@ -339,7 +339,7 @@ export default function Part4TQF3({ setForm }: Props) {
                   <Table.Tr className="border-none text-secondary font-semibold">
                     <Table.Th
                       style={{
-                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.3))",
+                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
                       }}
                       className="!bg-bgTableHeader sticky left-0 text-b2 !rounded-bl-md"
                     >
@@ -357,7 +357,7 @@ export default function Part4TQF3({ setForm }: Props) {
                     })}
                     <Table.Th
                       style={{
-                        filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.3))",
+                        filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.1))",
                       }}
                       className="!bg-[#bae0f7] text-default sticky right-0 text-b1 font-extrabold !rounded-br-md"
                     >
@@ -502,18 +502,18 @@ export default function Part4TQF3({ setForm }: Props) {
                     return (
                       <React.Fragment key={cloIndex}>
                         {/* Main Row */}
-                        <Table.Tr className="text-b3 table-row h-full text-default">
+                        <Table.Tr className="text-b3 border-[#d9d9d9] border-b-[1px] table-row h-full text-default">
                           {/* CLO Description Column */}
                           <Table.Td
                             key={form.key(`data.${cloIndex}.percent`)}
-                            className="!p-0 sticky left-0 border-r-[1px] z-[1]"
+                            className="!p-0 sticky left-0 border-r-[1px] border-[#d9d9d9] z-[1]"
                             {...form.getInputProps(`data.${cloIndex}.percent`)}
                           >
-                            <div className="flex gap-5 justify-start items-center px-[20px] py-2">
+                            <div className="flex gap-5 justify-start  items-center px-[20px] py-2">
                               <div className="text-secondary min-w-fit font-bold">
                                 CLO-{cloItem?.no}
                               </div>
-                              <p className="flex w-fit font-medium justify-between flex-col">
+                              <p className="flex w-fit font-medium  justify-between flex-col">
                                 <span>{cloItem?.descTH}</span>
                                 <span>{cloItem?.descEN}</span>
                                 <span className="error-text">
@@ -532,7 +532,7 @@ export default function Part4TQF3({ setForm }: Props) {
                             colSpan={2}
                           >
                             {/* Nested Row for Evaluations */}
-                            <Table.Tbody className="flex flex-col py !w-full ">
+                            <Table.Tbody className="flex  flex-col py !w-full ">
                               {evals.length > 0 ? (
                                 evals.map((item, evalIndex) => {
                                   const evalTopic = evalForm
@@ -541,10 +541,10 @@ export default function Part4TQF3({ setForm }: Props) {
                                   return (
                                     <Table.Tr
                                       key={evalIndex}
-                                      className="!p-0 flex !h-full !w-full"
+                                      className="!p-0 border-[#d9d9d9] border-b-[1px] flex !h-full !w-full"
                                     >
                                       {/* Evaluation Topic Column */}
-                                      <Table.Td className="!w-[24%]  !h-ful text-default font-medium  flex flex-col justify-center  !min-w-[24%] ">
+                                      <Table.Td className="!w-[24%]   !h-ful text-default font-medium  flex flex-col justify-center  !min-w-[24%] ">
                                         <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                                           {evalTopic?.topicTH}
                                         </p>

@@ -117,7 +117,7 @@ export default function Part1TQF3({ setForm }: Props) {
   }, [checked]);
 
   return (
-    <div className="flex w-full flex-col text-[15px] max-h-full px-2 py-1 text-default ">
+    <div className="flex w-full flex-col text-[15px] max-h-full   text-default ">
       <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3  pb-4">
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">

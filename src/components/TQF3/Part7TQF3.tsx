@@ -75,7 +75,7 @@ export default function Part7TQF3({ setForm }: Props) {
         />
       )}
 
-      <div className="flex flex-col w-full max-h-full gap-4 pb-4">
+      <div className="flex flex-col w-full max-h-full gap-4 -mt-1 pb-4">
         {/* Topic */}
         <div className="flex text-secondary items-center w-full justify-between">
           <span className="text-[15px] font-semibold">
@@ -121,7 +121,12 @@ export default function Part7TQF3({ setForm }: Props) {
           <Table stickyHeader striped>
             <Table.Thead className="z-[2]">
               <Table.Tr>
-                <Table.Th className="min-w-[550px] sticky left-0 !p-0">
+                <Table.Th
+                  style={{
+                    filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
+                  }}
+                  className="min-w-[500px] sticky left-0 !p-0"
+                >
                   <div className="w-full flex items-center px-[25px] h-[58px] border-r-[1px] border-[#DEE2E6]">
                     CLO Description ( {tqf3.part2?.clo.length} CLO
                     {tqf3.part2?.clo.length! > 1 ? "s" : ""} )
@@ -137,10 +142,20 @@ export default function Part7TQF3({ setForm }: Props) {
             <Table.Tbody>
               {tqf3.part2?.clo.map((clo, indexCLO) => (
                 <Table.Tr key={indexCLO} className="text-[13px] text-default">
-                  <Table.Td className="!p-0 sticky left-0 z-[1]">
-                    <div className="flex flex-col gap-0.5 px-[25px] py-4 border-r-[1px] border-[#DEE2E6]">
-                      <p>{clo.descTH}</p>
-                      <p>{clo.descEN}</p>
+                  <Table.Td
+                    style={{
+                      filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
+                    }}
+                    className="!p-0 !py-1 sticky left-0 z-[1]"
+                  >
+                    <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
+                      <div className="text-secondary min-w-fit font-bold">
+                        CLO-{clo?.no}
+                      </div>
+                      <p className="flex w-fit   font-medium justify-between flex-col ">
+                        <span className="mb-2">{clo?.descTH}</span>
+                        <span>{clo?.descEN}</span>
+                      </p>
                     </div>
                   </Table.Td>
                   {coursePLO?.data!.map((plo: any, index: number) => (
