@@ -61,9 +61,22 @@ export default function Part4TQF3({ setForm }: Props) {
 
   useEffect(() => {
     if (tqf3.part4) {
-      form.setValues(cloneDeep(tqf3.part4));
+      form.setFieldValue("updatedAt", tqf3.part4.updatedAt);
+      form.setFieldValue(
+        "data",
+        cloneDeep(
+          tqf3?.part2?.clo?.map((cloItem) => {
+            const item = tqf3.part4?.data.find(({ clo }) => clo == cloItem.id);
+            return {
+              clo: cloItem.id,
+              percent: item?.percent || 0,
+              evals: cloneDeep(item?.evals) || [],
+            };
+          })
+        ) ?? []
+      );
       setEvalForm();
-      tqf3.part4.data.forEach((item, cloIndex) => {
+      form.getValues().data.forEach((item, cloIndex) => {
         item.evals.forEach((e, evalIndex) => {
           setPercentEval(cloIndex, evalIndex, e.eval as string, e, e.percent);
         });
@@ -455,7 +468,9 @@ export default function Part4TQF3({ setForm }: Props) {
                       </div>
                     </Table.Th>
                     <Table.Th className="w-[40%]  !py-3.5 z-0">
-                      <div className=" flex items-center  translate-x-3  h-[24px]">Evaluation Week</div>
+                      <div className=" flex items-center  translate-x-3  h-[24px]">
+                        Evaluation Week
+                      </div>
                     </Table.Th>
                     {/* {evalForm.getValues().data.map((item, evalIndex) => (
                       <Table.Th
@@ -562,14 +577,15 @@ export default function Part4TQF3({ setForm }: Props) {
                                                   key={weekNo}
                                                   color="#5768d5"
                                                   classNames={{
-                                                    label: "py-4 font-medium text-[13px]",
+                                                    label:
+                                                      "py-4 font-medium text-[13px]",
                                                   }}
                                                   value={weekNo}
                                                   checked={item.evalWeek.includes(
                                                     weekNo.toString()
                                                   )}
                                                 >
-                                                   Week {weekNo}
+                                                  Week {weekNo}
                                                 </Chip>
                                               )
                                             )}
