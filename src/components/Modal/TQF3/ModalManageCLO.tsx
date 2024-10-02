@@ -84,6 +84,10 @@ export default function ModalManageCLO({
         validateTextInput(value, "CLO English language", 0, false),
       learningMethod: (value) =>
         !value?.length && "Select Learning Method at least one",
+      other: (value, values) =>
+        !value?.length &&
+        values.learningMethod?.includes(LearningMethod.Other) &&
+        "Other is required",
     },
     validateInputOnBlur: true,
   });
