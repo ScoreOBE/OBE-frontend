@@ -128,19 +128,18 @@ export default function Part4TQF3({ setForm }: Props) {
           percent: percent,
         });
       }
-      evalForm.setFieldValue(
-        `data.${index}.curPercent`,
-        evalForm.getValues().data[index].curPercent + percent
-      );
     } else {
-      const percentDel =
-        form.getValues().data[cloIndex].evals[evalIndex]?.percent || 0;
       form.removeListItem(`data.${cloIndex}.evals`, evalIndex);
-      evalForm.setFieldValue(
-        `data.${index}.curPercent`,
-        evalForm.getValues().data[index].curPercent - percentDel
-      );
     }
+    evalForm.setFieldValue(
+      `data.${index}.curPercent`,
+      form
+        .getValues()
+        .data.map(({ evals }) =>
+          evals.find((e) => e.eval == evalForm.getValues().data[index].id)
+        )
+        .reduce((acc, cur) => acc + (cur?.percent || 0), 0)
+    );
   };
 
   return tqf3?.part3?.updatedAt ? (
