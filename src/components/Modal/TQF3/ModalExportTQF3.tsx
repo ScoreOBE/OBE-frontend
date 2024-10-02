@@ -40,7 +40,6 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
 
   const generatePDF = async () => {
     if (selectedParts.length === 0) {
-      setLoading(false);
       showNotifications(
         NOTI_TYPE.ERROR,
         "Error",
@@ -48,8 +47,10 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       );
       return;
     }
+    setLoading(true)
 
     const payload: any = {
+
       courseNo,
       academicYear: academicYear.year,
       academicTerm: academicYear.semester,
@@ -59,7 +60,6 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
 
     const res = await genPdfTQF3(payload);
     if (res) {
-      setLoading(true);
       const contentType = res.headers["content-type"];
       const disposition = res.headers["content-disposition"];
       const filename = disposition
@@ -80,8 +80,9 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
         `TQF3 exported successfully as ${filename}.`
       );
     }
+    setLoading(false); 
     onCloseModal();
-    setLoading(false);
+   
   };
 
   return (

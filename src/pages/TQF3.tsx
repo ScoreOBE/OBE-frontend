@@ -208,13 +208,15 @@ export default function TQF3() {
           tqf3Original &&
           tqf3Part &&
           ["part2", "part3"].includes(tqf3Part) &&
-          tqf3Original.part4 &&
-          (tqf3Original.part2?.clo.length !== tqf3.part2?.clo.length ||
-            tqf3Original.part3?.eval.length !== tqf3.part3?.eval.length ||
-            tqf3Original.part3?.eval.some(
-              ({ id, percent }) =>
-                percent !== tqf3.part3?.eval.find((e) => e.id == id)?.percent
-            ))
+          ((tqf3Original.part4 &&
+            (tqf3Original.part2?.clo.length !== tqf3.part2?.clo.length ||
+              tqf3Original.part3?.eval.length !== tqf3.part3?.eval.length ||
+              tqf3Original.part3?.eval.some(
+                ({ id, percent }) =>
+                  percent !== tqf3.part3?.eval.find((e) => e.id == id)?.percent
+              ))) ||
+            (tqf3Original.part7 &&
+              tqf3.part2?.clo.length !== tqf3Original.part7.data.length))
         ) {
           setOpenWarningEditDataTQF2Or3(true);
           return;
@@ -318,14 +320,23 @@ export default function TQF3() {
             title={
               <div className="flex items-center  gap-2">
                 <IconExclamationCircle />
-                <p>Your changes affected in TQF 3 Part 4</p>
+                <p>
+                  Your changes affected in TQF 3 Part
+                  {[tqf3Original.part4 && " 4 ", tqf3Original.part7 && " 7 "]
+                    .filter(Boolean)
+                    .join("&")}
+                </p>
               </div>
             }
             className="mb-4"
           >
             <p className="pl-8 text-default -mt-1 leading-6 font-medium ">
               After you save this changes, you will need to update data in TQF 3
-              Part 4 again. Do you want to save this changes?
+              Part
+              {[tqf3Original.part4 && " 4 ", tqf3Original.part7 && " 7 "]
+                .filter(Boolean)
+                .join("&")}
+               again. Do you want to save this changes?
             </p>
           </Alert>
         </div>
