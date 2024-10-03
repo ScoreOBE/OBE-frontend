@@ -6,12 +6,16 @@ import { useEffect } from "react";
 import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
+import { useSearchParams } from "react-router-dom";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export default function Part5TQF3({ setForm }: Props) {
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [params, setParams] = useSearchParams({});
+  const disabled = params.get("id") !== academicYear.id;
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const form = useForm({
@@ -50,7 +54,11 @@ export default function Part5TQF3({ setForm }: Props) {
             size="xs"
             placeholder="(optional)"
             className="w-[500px]"
-            classNames={{ input: "h-[150px] p-3", label: "text-default" }}
+            classNames={{
+              input: `h-[150px] p-3 ${disabled && "!cursor-default"}`,
+              label: "text-default",
+            }}
+            disabled={disabled}
             {...form.getInputProps("mainRef")}
           ></Textarea>
         </div>
@@ -71,7 +79,11 @@ export default function Part5TQF3({ setForm }: Props) {
             size="xs"
             placeholder="(optional)"
             className="w-[500px]"
-            classNames={{ input: "h-[150px] p-3", label: "text-default" }}
+            classNames={{
+              input: `h-[150px] p-3 ${disabled && "!cursor-default"}`,
+              label: "text-default",
+            }}
+            disabled={disabled}
             {...form.getInputProps("recDoc")}
           ></Textarea>
         </div>

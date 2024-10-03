@@ -9,12 +9,16 @@ import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export default function Part4TQF3({ setForm }: Props) {
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [params, setParams] = useSearchParams({});
+  const disabled = params.get("id") !== academicYear.id;
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const form = useForm({
@@ -168,30 +172,32 @@ export default function Part4TQF3({ setForm }: Props) {
         </Tabs.List>
         <div className="overflow-auto flex w-full max-h-full  mt-3">
           <Tabs.Panel value="percent">
-            <div className="w-full">
-              <Alert
-                radius="md"
-                icon={<IconCheckbox />}
-                variant="light"
-                color="rgba(6, 158, 110, 1)"
-                classNames={{
-                  icon: "size-6",
-                  body: " flex justify-center",
-                }}
-                className="w-full mb-1"
-                title={
-                  <p className="font-semibold">
-                    Each CLO must be linked to at least one evaluation topic,
-                    and{" "}
-                    <span className="font-extrabold">
-                      {" "}
-                      the total CLO percentage (shown at the bottom-right corner
-                      of the table) must add up to 100%.
-                    </span>
-                  </p>
-                }
-              />
-            </div>
+            {!disabled && (
+              <div className="w-full">
+                <Alert
+                  radius="md"
+                  icon={<IconCheckbox />}
+                  variant="light"
+                  color="rgba(6, 158, 110, 1)"
+                  classNames={{
+                    icon: "size-6",
+                    body: " flex justify-center",
+                  }}
+                  className="w-full mb-1"
+                  title={
+                    <p className="font-semibold">
+                      Each CLO must be linked to at least one evaluation topic,
+                      and{" "}
+                      <span className="font-extrabold">
+                        {" "}
+                        the total CLO percentage (shown at the bottom-right
+                        corner of the table) must add up to 100%.
+                      </span>
+                    </p>
+                  }
+                />
+              </div>
+            )}
             <div
               className="overflow-auto border border-secondary rounded-lg relative"
               style={{
@@ -306,8 +312,9 @@ export default function Part4TQF3({ setForm }: Props) {
                                       input: `${
                                         evalItem &&
                                         "!border-secondary border-[2px]"
-                                      }`,
+                                      } ${disabled && "!cursor-default"}`,
                                     }}
+                                    disabled={disabled}
                                     value={
                                       typeof evalItem?.percent == "number"
                                         ? evalItem.percent
@@ -383,17 +390,17 @@ export default function Part4TQF3({ setForm }: Props) {
               <Table stickyHeader className="!w-full">
                 <Table.Thead className=" z-[2]">
                   <Table.Tr>
-                    <Table.Th className="w-[25%] sticky left-0 !p-0">
+                    <Table.Th className="w-[25%] !p-0">
                       <div className="w-full flex items-center px-[25px] h-[24px]">
                         CLO Description
                       </div>
                     </Table.Th>
-                    <Table.Th className="!w-[12%]  !max-w-[12%] px-2 !py-3.5  z-0">
+                    <Table.Th className="!w-[12%] !max-w-[12%] px-2 !py-3.5  z-0">
                       <div className=" flex items-center  h-[24px]">
                         Evaluation Topic
                       </div>
                     </Table.Th>
-                    <Table.Th className="w-[40%]  !py-3.5 z-0">
+                    <Table.Th className="w-[40%] !py-3.5 z-0">
                       <div className=" flex items-center  translate-x-3  h-[24px]">
                         Evaluation Week
                       </div>
@@ -410,7 +417,7 @@ export default function Part4TQF3({ setForm }: Props) {
                           {/* CLO Description Column */}
                           <Table.Td
                             key={form.key(`data.${cloIndex}.percent`)}
-                            className="!p-0 sticky left-0 border-r-[1px] border-[#d9d9d9] z-[1]"
+                            className="!p-0 border-r-[1px] border-[#d9d9d9] z-[1]"
                             {...form.getInputProps(`data.${cloIndex}.percent`)}
                           >
                             <div className="flex gap-5 justify-start  items-center px-[20px] py-2">
@@ -436,7 +443,7 @@ export default function Part4TQF3({ setForm }: Props) {
                             colSpan={2}
                           >
                             {/* Nested Row for Evaluations */}
-                            <Table.Tbody className="flex  flex-col py !w-full ">
+                            <Table.Tbody className="flex flex-col py !w-full">
                               {evals.length > 0 ? (
                                 evals.map((item, evalIndex) => {
                                   const evalTopic = evalForm
@@ -448,7 +455,7 @@ export default function Part4TQF3({ setForm }: Props) {
                                       className="!p-0 border-[#d9d9d9] border-b-[1px] flex !h-full !w-full"
                                     >
                                       {/* Evaluation Topic Column */}
-                                      <Table.Td className="!w-[24%]   !h-ful text-default font-medium  flex flex-col justify-center  !min-w-[24%] ">
+                                      <Table.Td className="!w-[24%] !h-ful text-default font-medium flex flex-col justify-center !min-w-[24%] ">
                                         <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                                           {evalTopic?.topicTH}
                                         </p>
@@ -457,7 +464,7 @@ export default function Part4TQF3({ setForm }: Props) {
                                         </p>
                                       </Table.Td>
                                       {/* Evaluation Weeks Column */}
-                                      <Table.Td className="  !w-[100%]">
+                                      <Table.Td className="!w-[100%]">
                                         <Chip.Group
                                           multiple
                                           {...form.getInputProps(
@@ -480,9 +487,12 @@ export default function Part4TQF3({ setForm }: Props) {
                                                   key={weekNo}
                                                   color="#5768d5"
                                                   classNames={{
-                                                    label:
-                                                      "py-4 font-medium text-[13px]",
+                                                    label: `${
+                                                      disabled &&
+                                                      `!cursor-default`
+                                                    } py-4 font-medium text-[13px]`,
                                                   }}
+                                                  disabled={disabled}
                                                   value={weekNo}
                                                   checked={item.evalWeek.includes(
                                                     weekNo.toString()

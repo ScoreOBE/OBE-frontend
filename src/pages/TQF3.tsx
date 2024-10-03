@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import CheckIcon from "@/assets/icons/Check.svg?react";
 import Part1TQF3 from "@/components/TQF3/Part1TQF3";
 import Part2TQF3 from "@/components/TQF3/Part2TQF3";
@@ -41,10 +41,10 @@ import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
 import { setDataTQF3 } from "@/store/tqf3";
 import { IModelSection } from "@/models/ModelSection";
-import { setLoading } from "@/store/loading";
 
 export default function TQF3() {
   const { courseNo } = useParams();
+  const [params, setParams] = useSearchParams();
   const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
   const loading = useAppSelector((state) => state.loading);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
@@ -336,7 +336,7 @@ export default function TQF3() {
               {[tqf3Original.part4 && " 4 ", tqf3Original.part7 && " 7 "]
                 .filter(Boolean)
                 .join("&")}
-               again. Do you want to save this changes?
+              again. Do you want to save this changes?
             </p>
           </Alert>
         </div>
@@ -358,7 +358,11 @@ export default function TQF3() {
           </Button>
         </div>
       </Modal>
-      <div className="flex flex-col h-full w-full overflow-hidden">
+      <div
+        className={`flex flex-col h-full w-full overflow-hidden ${
+          params.get("id") != academicYear.id && "pb-2"
+        }`}
+      >
         <Tabs
           value={tqf3Part}
           onChange={setTqf3Part}
@@ -427,38 +431,40 @@ export default function TQF3() {
                 {getValueEnumByKey(PartTopicTQF3, tqf3Part!)}
               </div>
               <div className="flex flex-row flex-wrap gap-3">
-                <Tooltip
-                  onClick={() => setOpenModalReuse(true)}
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={50}
-                  arrowSize={7}
-                  position="bottom-end"
-                  label={
-                    <div className="text-default text-[13px] p-2 flex flex-col gap-2">
-                      <p className=" font-medium">
-                        <span className="text-secondary font-bold">
-                          Reuse TQF 3
-                        </span>
-                        <br />
-                        We'll automatically import all 6 parts of the TQF 3 data
-                        from your selected course.
-                      </p>
-                    </div>
-                  }
-                  color="#FCFCFC"
-                >
-                  <Button
-                    variant="outline"
-                    leftSection={
-                      <Icon IconComponent={dupTQF} className="size-5 -mr-1" />
+                {params.get("id") == academicYear.id && (
+                  <Tooltip
+                    onClick={() => setOpenModalReuse(true)}
+                    withArrow
+                    arrowPosition="side"
+                    arrowOffset={50}
+                    arrowSize={7}
+                    position="bottom-end"
+                    label={
+                      <div className="text-default text-[13px] p-2 flex flex-col gap-2">
+                        <p className=" font-medium">
+                          <span className="text-secondary font-bold">
+                            Reuse TQF 3
+                          </span>
+                          <br />
+                          We'll automatically import all 6 parts of the TQF 3
+                          data from your selected course.
+                        </p>
+                      </div>
                     }
-                    color="#ee933e"
-                    className="pr-4 px-3"
+                    color="#FCFCFC"
                   >
-                    Reuse TQF 3
-                  </Button>
-                </Tooltip>
+                    <Button
+                      variant="outline"
+                      leftSection={
+                        <Icon IconComponent={dupTQF} className="size-5 -mr-1" />
+                      }
+                      color="#ee933e"
+                      className="pr-4 px-3"
+                    >
+                      Reuse TQF 3
+                    </Button>
+                  </Tooltip>
+                )}
                 <Button
                   onClick={() => setOpenModalExportTQF3(true)}
                   color="#24b9a5"
@@ -493,7 +499,8 @@ export default function TQF3() {
           </div>
         </Tabs>
       </div>
-      {tqf3Original &&
+      {params.get("id") == academicYear.id &&
+        tqf3Original &&
         tqf3.id &&
         (tqf3Part == "part1" ||
           (tqf3Part == "part5" && tqf3Original.part4) ||

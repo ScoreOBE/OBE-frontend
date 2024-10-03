@@ -12,8 +12,9 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import unplug from "@/assets/image/unplug.png";
 import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF3 } from "@/store/tqf3";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
+import Loading from "../Loading";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -22,8 +23,11 @@ type Props = {
 export default function Part7TQF3({ setForm }: Props) {
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [params, setParams] = useSearchParams({});
+  const disabled = params.get("id") !== academicYear.id;
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
   const [ploRequired, setPloRequired] = useState<string[]>([]);
   const [coursePLO, setCoursePLO] = useState<Partial<IModelPLO>>();
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
@@ -65,6 +69,7 @@ export default function Part7TQF3({ setForm }: Props) {
   }, []);
 
   const fetchPLO = async () => {
+    setLoading(true);
     const [resPloCol, resPloRequired] = await Promise.all([
       getOnePLO({
         year: academicYear.year,
@@ -80,17 +85,19 @@ export default function Part7TQF3({ setForm }: Props) {
     if (resPloRequired) {
       setPloRequired(resPloRequired.plos);
     }
+    setLoading(false);
   };
 
   return tqf3?.part5?.updatedAt ? (
-    <>
-      {coursePLO && (
-        <DrawerPLOdes
-          opened={openDrawerPLOdes}
-          onClose={() => setOpenDrawerPLOdes(false)}
-          data={coursePLO}
-        />
-      )}
+    coursePLO?.data?.length ? (
+      <>
+        {coursePLO && (
+          <DrawerPLOdes
+            opened={openDrawerPLOdes}
+            onClose={() => setOpenDrawerPLOdes(false)}
+            data={coursePLO}
+          />
+        )}
 
       <div className="flex flex-col w-full max-h-full gap-4 -mt-1 pb-4">
         {/* Topic */}
