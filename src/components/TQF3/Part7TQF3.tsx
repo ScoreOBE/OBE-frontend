@@ -103,8 +103,7 @@ export default function Part7TQF3({ setForm }: Props) {
           {/* Topic */}
           <div className="flex text-secondary items-center w-full justify-between">
             <span className="text-[15px] font-semibold">
-              CLO Mapping
-              <span className=" text-red-500">*</span>
+              CLO Mapping <span className=" text-red-500">*</span>
             </span>
             <Button
               className="text-center px-4"
