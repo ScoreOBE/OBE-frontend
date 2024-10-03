@@ -15,12 +15,16 @@ import {
 import { useForm } from "@mantine/form";
 import { cloneDeep, isEqual } from "lodash";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export default function Part1TQF3({ setForm }: Props) {
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [params, setParams] = useSearchParams({});
+  const disabled = params.get("id") !== academicYear.id;
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const [checked, setChecked] = useState<string[]>([]);
@@ -136,16 +140,19 @@ export default function Part1TQF3({ setForm }: Props) {
           onChange={(event) => form.setFieldValue("curriculum", event)}
         >
           <div className="flex text-default gap-3 flex-col">
-            <Radio
-              classNames={{ label: "font-medium text-[13px]" }}
-              label="สำหรับหลักสูตร (Eng)"
-              value={curriculum[0]}
-            />
-            <Radio
-              classNames={{ label: "font-medium text-[13px]" }}
-              label="สำหรับหลายหลักสูตร (Eng)"
-              value={curriculum[1]}
-            />
+            {curriculum.map((item) => (
+              <Radio
+                classNames={{
+                  radio: `${disabled && "!cursor-default"}`,
+                  label: `${
+                    disabled && "!cursor-default"
+                  } font-medium text-[13px]`,
+                }}
+                label={item}
+                value={item}
+                disabled={disabled}
+              />
+            ))}
           </div>
         </Radio.Group>
       </div>
@@ -164,7 +171,12 @@ export default function Part1TQF3({ setForm }: Props) {
             {Object.values(COURSE_TYPE).map((key) => (
               <Radio
                 key={key.en}
-                classNames={{ label: "font-medium text-[13px]" }}
+                classNames={{
+                  radio: `${disabled && "!cursor-default"}`,
+                  label: `${
+                    disabled && "!cursor-default"
+                  } font-medium text-[13px]`,
+                }}
                 label={`${key.th} (${key.en})`}
                 disabled={true}
                 value={key.en}
@@ -199,9 +211,10 @@ export default function Part1TQF3({ setForm }: Props) {
             {studentYear.map((item) => (
               <Checkbox
                 key={item.year}
-                classNames={{ label: "font-medium text-[13px]" }}
+                classNames={{ label: `font-medium text-[13px]` }}
                 label={`${item.th} (${item.en})`}
                 value={item.year.toString()}
+                disabled={disabled}
               />
             ))}
           </div>
@@ -223,9 +236,13 @@ export default function Part1TQF3({ setForm }: Props) {
             withAsterisk
             size="xs"
             label="Instructor"
-            classNames={{ label: "text-default" }}
-            className="w-[440px]"
+            classNames={{
+              label: "text-default",
+              input: `${disabled && "!cursor-default"}`,
+            }}
+            className={`w-[440px]`}
             placeholder="(required)"
+            disabled={disabled}
             {...form.getInputProps("mainInstructor")}
             error={form.getInputProps("mainInstructor").error && <></>}
           />
@@ -253,9 +270,13 @@ export default function Part1TQF3({ setForm }: Props) {
               withAsterisk={index == 0}
               size="xs"
               label={`Instructor ${index + 1}`}
-              classNames={{ label: "text-default" }}
+              classNames={{
+                label: "text-default",
+                input: `${disabled && "!cursor-default"}`,
+              }}
               className="w-[440px]"
               placeholder={index == 0 ? "(required)" : "(optional)"}
+              disabled={disabled}
               {...form.getInputProps(`instructors.${index}`)}
             />
           ))}
@@ -285,6 +306,7 @@ export default function Part1TQF3({ setForm }: Props) {
                 classNames={{ label: "font-medium text-[13px] w-full" }}
                 label={`ในสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Inside of Chiang Mai University)`}
                 value={"in"}
+                disabled={disabled}
               />
 
               <Textarea
@@ -292,28 +314,33 @@ export default function Part1TQF3({ setForm }: Props) {
                 className="mt-2 pl-8"
                 placeholder="(optional)"
                 classNames={{
-                  input: "text-[13px] text-default h-[80px]  w-[408px]",
+                  input: `text-[13px] text-default h-[80px] w-[408px] ${
+                    disabled && "!cursor-default"
+                  }`,
                 }}
-                disabled={!checked.includes("in")}
+                disabled={disabled || !checked.includes("in")}
                 {...form.getInputProps("teachingLocation.in")}
               />
             </div>
             <div className="last:border-none ">
               <Checkbox
-                value={"out"}
                 classNames={{
                   label: "font-medium text-[13px] flex flex-nowrap",
                 }}
                 label={`นอกสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Outside of Chiang Mai University)`}
+                value={"out"}
+                disabled={disabled}
               />
               <Textarea
                 key={form.key("teachingLocation.out")}
                 className="mt-2 pl-8"
                 placeholder="(optional)"
                 classNames={{
-                  input: "text-[13px] text-default h-[80px] w-[408px]",
+                  input: `text-[13px] text-default h-[80px] w-[408px] ${
+                    disabled && "!cursor-default"
+                  }`,
                 }}
-                disabled={!checked.includes("out")}
+                disabled={disabled || !checked.includes("out")}
                 {...form.getInputProps("teachingLocation.out")}
               />
             </div>
@@ -334,10 +361,14 @@ export default function Part1TQF3({ setForm }: Props) {
 
         <div className="flex items-center text-[13px] font-medium gap-4">
           <NumberInput
+            classNames={{
+              input: `${disabled && "!cursor-default"}`,
+            }}
             key={form.key("consultHoursWk")}
             max={168}
             min={1}
             className="w-[86px]"
+            disabled={disabled}
             {...form.getInputProps("consultHoursWk")}
           />
           <p>hours / week</p>
