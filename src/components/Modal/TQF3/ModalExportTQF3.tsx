@@ -64,7 +64,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       const disposition = res.headers["content-disposition"];
       const filename = disposition
         ? disposition.split("filename=")[1]
-        : `TQF3_Parts_${academicYear.year}_${academicYear.semester}.zip`;
+        : `TQF3_Parts_${courseNo}_${academicYear.year}_${academicYear.semester}.zip`;
       const blob = new Blob([res.data], { type: contentType });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
