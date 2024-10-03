@@ -112,6 +112,23 @@ export default function ModalManageCLO({
     }
   }, [isAdded]);
 
+  const onClickDone = () => {
+    if (type == "add") {
+      if (form.getValues().clo?.length! > 0) {
+        setCloList(form.getValues().clo);
+      } else if (!formOneCLO.validate().hasErrors) {
+        setCloList([{ ...formOneCLO.getValues() }]);
+      } else {
+        return;
+      }
+    } else if (!formOneCLO.validate().hasErrors) {
+      setCloList(formOneCLO.getValues());
+    } else {
+      return;
+    }
+    onClose();
+  };
+
   const addMore = () => {
     if (!formOneCLO.validate().hasErrors) {
       form.insertListItem("clo", formOneCLO.getValues());
@@ -351,19 +368,8 @@ export default function ModalManageCLO({
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              setCloList(
-                type == "add" && form.getValues().clo?.length! > 0
-                  ? form.getValues().clo
-                  : formOneCLO.getValues()
-              );
-              onClose();
-            }}
-            disabled={
-              type == "add"
-                ? form.getValues().clo?.length == 0 && !formOneCLO.getValues()
-                : false
-            }
+            onClick={onClickDone}
+            disabled={form.getValues().clo?.length == 0 && !formOneCLO.errors}
           >
             Done
           </Button>

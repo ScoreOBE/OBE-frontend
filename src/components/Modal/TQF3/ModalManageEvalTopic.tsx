@@ -7,19 +7,17 @@ import {
   TextInput,
   NumberInput,
   NumberInputHandlers,
-  Tooltip,
   Alert,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
-  IconExclamationCircle,
   IconInfoCircle,
   IconList,
   IconMinus,
   IconPlus,
   IconTrash,
 } from "@tabler/icons-react";
-import { upperFirst, values } from "lodash";
+import { upperFirst } from "lodash";
 import { useEffect, useRef, useState } from "react";
 
 type actionType = "add" | "edit";
@@ -91,6 +89,23 @@ export default function ModalManageEvalTopic({
       setIsAdded(false);
     }
   }, [isAdded]);
+
+  const onClickDone = () => {
+    if (type == "add") {
+      if (form.getValues().eval?.length! > 0) {
+        setEvalList(form.getValues().eval);
+      } else if (!formOneTopic.validate().hasErrors) {
+        setEvalList([{ ...formOneTopic.getValues() }]);
+      } else {
+        return;
+      }
+    } else if (!formOneTopic.validate().hasErrors) {
+      setEvalList(formOneTopic.getValues());
+    } else {
+      return;
+    }
+    onClose();
+  };
 
   const addMore = () => {
     if (!formOneTopic.validate().hasErrors) {
@@ -271,17 +286,15 @@ export default function ModalManageEvalTopic({
             {/* Add More Button */}
             {type === "add" && (
               <div className="flex justify-end">
-  
-                  <Button
-                    variant="outline"
-                    disabled={percentTotal == 100}
-                    onClick={addMore}
-                    onMouseOver={() => setOpenedTooltip(true)}
-                    onMouseLeave={() => setOpenedTooltip(false)}
-                  >
-                    Add more
-                  </Button>
-               
+                <Button
+                  variant="outline"
+                  disabled={percentTotal == 100}
+                  onClick={addMore}
+                  onMouseOver={() => setOpenedTooltip(true)}
+                  onMouseLeave={() => setOpenedTooltip(false)}
+                >
+                  Add more
+                </Button>
               </div>
             )}
           </div>
@@ -362,14 +375,9 @@ export default function ModalManageEvalTopic({
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              setEvalList(
-                type == "add" ? form.getValues().eval : formOneTopic.getValues()
-              );
-              onClose();
-            }}
+            onClick={onClickDone}
             disabled={
-              type == "add" ? form.getValues().eval?.length == 0 : false
+              form.getValues().eval?.length == 0 && !formOneTopic.errors
             }
           >
             Done
