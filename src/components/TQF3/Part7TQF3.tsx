@@ -7,63 +7,80 @@ import DrawerPLOdes from "@/components/DrawerPLO";
 import { useEffect, useState } from "react";
 import { IModelTQF3Part7 } from "@/models/ModelTQF3";
 import { IModelPLO } from "@/models/ModelPLO";
-import { getPLOs } from "@/services/plo/plo.service";
+import { getOnePLO } from "@/services/plo/plo.service";
 import { useAppDispatch, useAppSelector } from "@/store";
 import unplug from "@/assets/image/unplug.png";
-import { cloneDeep } from "lodash";
+import { cloneDeep, isEqual } from "lodash";
+import { updatePartTQF3 } from "@/store/tqf3";
+import { useParams } from "react-router-dom";
+import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export default function Part7TQF3({ setForm }: Props) {
+  const { courseNo } = useParams();
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
-  const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
+  const [ploRequired, setPloRequired] = useState<string[]>([]);
   const [coursePLO, setCoursePLO] = useState<Partial<IModelPLO>>();
-  const user = useAppSelector((state) => state.user);
+  const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
+  const [validatePloRequired, setValidatePloRequired] = useState(false);
 
   const form = useForm({
     mode: "controlled",
     initialValues: { data: [] as IModelTQF3Part7[] },
-    validate: {},
+    validate: {
+      data: {
+        plos: (value) => {
+          setValidatePloRequired(true);
+          return !value.length && "CLO must be linked to at least one PLO";
+        },
+      },
+    },
+    onValuesChange(values, previous) {
+      setValidatePloRequired(false);
+      if (!isEqual(values, previous)) {
+        dispatch(
+          updatePartTQF3({ part: "part7", data: cloneDeep(form.getValues()) })
+        );
+        setForm(form);
+      }
+    },
   });
-
-  const fetchPLO = async () => {
-    const res = await getPLOs({
-      role: user.role,
-      departmentCode: user.departmentCode,
-    });
-
-    if (res) {
-      //fixed Data
-      const ploCol = res.plos
-        .find((dep: any) => dep.departmentCode.includes("CPE"))
-        .collections.find((col: any) => col.isActive === true);
-
-      setCoursePLO(ploCol);
-    }
-  };
 
   useEffect(() => {
     fetchPLO();
     if (tqf3.part7) {
-      form.setFieldValue(
-        "data",
-        cloneDeep(
-          tqf3?.part2?.clo?.map((cloItem) => {
-            const item = tqf3.part7?.data.find(({ clo }) => clo == cloItem.id);
-            return { clo: cloItem.id, plo: cloneDeep(item?.plo)! };
-          })
-        ) ?? []
-      );
+      form.setFieldValue("updatedAt", tqf3.part7.updatedAt);
+      form.setFieldValue("data", cloneDeep(tqf3.part7.data));
     } else if (tqf3.part2) {
       form.setFieldValue(
         "data",
-        cloneDeep(tqf3.part2.clo?.map(({ id }) => ({ clo: id, plo: [] }))) ?? []
+        cloneDeep(tqf3.part2.clo.map(({ id }) => ({ clo: id, plos: [] })))
       );
     }
   }, []);
+
+  const fetchPLO = async () => {
+    const [resPloCol, resPloRequired] = await Promise.all([
+      getOnePLO({
+        year: academicYear.year,
+        semester: academicYear.semester,
+        courseCode: courseNo?.slice(0, -3),
+      }),
+      getOneCourseManagement(courseNo!),
+    ]);
+
+    if (resPloCol) {
+      setCoursePLO(resPloCol);
+    }
+    if (resPloRequired) {
+      setPloRequired(resPloRequired.plos);
+    }
+  };
 
   return tqf3?.part5?.updatedAt ? (
     <>
@@ -71,7 +88,7 @@ export default function Part7TQF3({ setForm }: Props) {
         <DrawerPLOdes
           opened={openDrawerPLOdes}
           onClose={() => setOpenDrawerPLOdes(false)}
-          data={coursePLO!}
+          data={coursePLO}
         />
       )}
 
@@ -105,7 +122,7 @@ export default function Part7TQF3({ setForm }: Props) {
             className="w-full"
             title={
               <p className="font-semibold">
-                Each CSO must be linked to at least one PLO.
+                Each CLO must be linked to at least one PLO.
               </p>
             }
           ></Alert>
@@ -113,6 +130,7 @@ export default function Part7TQF3({ setForm }: Props) {
 
         {/* Table */}
         <div
+          key={form.key("data")}
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
@@ -132,59 +150,94 @@ export default function Part7TQF3({ setForm }: Props) {
                     {tqf3.part2?.clo.length! > 1 ? "s" : ""} )
                   </div>
                 </Table.Th>
-                {coursePLO?.data!.map((plo: any) => (
-                  <Table.Th key={plo.no} className="min-w-[100px] w-fit">
-                    PLO-{plo.no}
+                {coursePLO?.data?.map(({ no, id }) => (
+                  <Table.Th key={id} className="min-w-[100px] w-fit">
+                    <p>
+                      PLO-{no}{" "}
+                      <span className="text-red-500">
+                        {ploRequired.includes(id) && "*"}
+                      </span>
+                    </p>
+                    <p className="error-text mt-1">
+                      {validatePloRequired &&
+                        ploRequired.includes(id) &&
+                        !form
+                          .getValues()
+                          .data.some(({ plos }) =>
+                            (plos as string[]).includes(id)
+                          ) &&
+                        "Select CLO at least one"}
+                    </p>
                   </Table.Th>
                 ))}
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {tqf3.part2?.clo.map((clo, indexCLO) => (
-                <Table.Tr key={indexCLO} className="text-[13px] text-default">
-                  <Table.Td
-                    style={{
-                      filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
-                    }}
-                    className="!p-0 !py-1 sticky left-0 z-[1]"
-                  >
-                    <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
-                      <div className="text-secondary min-w-fit font-bold">
-                        CLO-{clo?.no}
-                      </div>
-                      <p className="flex w-fit   font-medium justify-between flex-col ">
-                        <span className="mb-2">{clo?.descTH}</span>
-                        <span>{clo?.descEN}</span>
-                      </p>
-                    </div>
-                  </Table.Td>
-                  {coursePLO?.data!.map((plo: any, index: number) => (
-                    <Table.Td key={index}>
-                      <div className="flex items-start">
-                        <Checkbox
-                          size="sm"
-                          classNames={{
-                            input:
-                              "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                            body: "mr-3 px-0",
-                            label: "text-[14px] text-[#615F5F] cursor-pointer",
-                          }}
-                          onChange={(event) => {
-                            if (event.target.checked) {
-                              form.insertListItem(`data.${indexCLO}.plo`, plo);
-                            } else {
-                              form.removeListItem(
-                                `data.${indexCLO}.plo`,
-                                index
-                              );
-                            }
-                          }}
-                        />
+              {form.getValues().data.map(({ clo }, cloIndex) => {
+                const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
+                return (
+                  <Table.Tr key={cloIndex} className="text-[13px] text-default">
+                    <Table.Td
+                      key={form.key(`data.${cloIndex}.plos`)}
+                      style={{
+                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
+                      }}
+                      className="!p-0 !py-1 sticky left-0 z-[1]"
+                      {...form.getInputProps(`data.${cloIndex}.plos`)}
+                    >
+                      <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
+                        <div className="text-secondary min-w-fit font-bold">
+                          CLO-{cloItem?.no}
+                        </div>
+                        <p className="flex w-fit font-medium justify-between flex-col ">
+                          <span className="mb-2">{cloItem?.descTH}</span>
+                          <span>{cloItem?.descEN}</span>
+                          <span className="error-text mt-1">
+                            {form.getInputProps(`data.${cloIndex}.plos`).error}
+                          </span>
+                        </p>
                       </div>
                     </Table.Td>
-                  ))}
-                </Table.Tr>
-              ))}
+                    {coursePLO?.data?.map(({ id }, index) => {
+                      const ploIndex = form
+                        .getValues()
+                        .data[cloIndex].plos?.findIndex((plo) => plo == id);
+                      return (
+                        <Table.Td key={index}>
+                          <div className="flex items-start">
+                            <Checkbox
+                              size="sm"
+                              classNames={{
+                                input:
+                                  "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                                body: "mr-3 px-0",
+                                label:
+                                  "text-[14px] text-[#615F5F] cursor-pointer",
+                              }}
+                              checked={(
+                                form.getValues().data[cloIndex].plos as string[]
+                              ).includes(id)}
+                              onChange={(event) => {
+                                if (event.target.checked) {
+                                  form.insertListItem(
+                                    `data.${cloIndex}.plos`,
+                                    id
+                                  );
+                                } else if (ploIndex >= 0) {
+                                  form.removeListItem(
+                                    `data.${cloIndex}.plos`,
+                                    ploIndex
+                                  );
+                                }
+                              }}
+                            />
+                          </div>
+                        </Table.Td>
+                      );
+                    })}
+                  </Table.Tr>
+                );
+              })}
             </Table.Tbody>
           </Table>
         </div>
