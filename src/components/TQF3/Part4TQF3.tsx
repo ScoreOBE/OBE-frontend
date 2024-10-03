@@ -2,7 +2,7 @@ import { Alert, Tabs, NumberInput, Group, Chip } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Table } from "@mantine/core";
 import { IconCheckbox } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { IModelEval, IModelTQF3Part4 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
 import unplug from "@/assets/image/unplug.png";
@@ -379,86 +379,6 @@ export default function Part4TQF3({ setForm }: Props) {
             </div>
           </Tabs.Panel>
           <Tabs.Panel value="week">
-            {/* <div
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-              }}
-              className=" rounded-md border-[1px] overflow-y-auto  border-secondary"
-            >
-              {form.getValues().data.map(({ clo, evals }, cloIndex) => {
-                const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
-                return (
-                  <div
-                    key={cloIndex}
-                    className="w-full h-full max-h-full flex flex-col"
-                  >
-                    <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-6 items-center pl-6 py-4 bg-bgTableHeader">
-                      <div className="text-secondary min-w-fit font-bold">
-                        CLO-{cloItem?.no}
-                      </div>
-                      <p className="flex w-fit gap-1   font-medium justify-between flex-col ">
-                        <span>{cloItem?.descTH}</span>
-                        <span>{cloItem?.descEN}</span>
-                      </p>
-                    </div>
-                    {evals.length > 0 ? (
-                      evals.map((item, evalIndex) => {
-                        const evalTopic = evalForm
-                          .getValues()
-                          .data.find(({ id }) => id == item.eval);
-                        return (
-                          <div
-                            key={item.eval as string}
-                            className="border-b-[1px] justify-start items-center flex last:border-none py-4 px-6 w-full"
-                          >
-                            <div className="flex font-medium  translate-x-16 mr-24 gap-1 flex-col">
-                              <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                                {evalTopic?.topicTH}
-                              </p>
-                              <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                                {evalTopic?.topicEN}
-                              </p>
-                            </div>
-                            <Chip.Group
-                              multiple
-                              {...form.getInputProps(
-                                `data.${cloIndex}.evals.${evalIndex}.evalWeek`
-                              )}
-                              onChange={(event) =>
-                                form.setFieldValue(
-                                  `data.${cloIndex}.evals.${evalIndex}.evalWeek`,
-                                  event.sort()
-                                )
-                              }
-                            >
-                              <Group justify="start">
-                                {tqf3.part2?.schedule.map(({ weekNo }) => (
-                                  <Chip
-                                    key={weekNo}
-                                    color="#5768d5"
-                                    classNames={{ label: "py-4 text-[13px]" }}
-                                    value={weekNo}
-                                    checked={item.evalWeek.includes(
-                                      weekNo.toString()
-                                    )}
-                                  >
-                                    Week {weekNo}
-                                  </Chip>
-                                ))}
-                              </Group>
-                            </Chip.Group>
-                          </div>
-                        );
-                      })
-                    ) : (
-                      <div className="justify-center items-center flex py-4 px-6 w-full">
-                        No Topics
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div> */}
             <div className="overflow-auto border border-secondary rounded-lg relative">
               <Table stickyHeader className="!w-full">
                 <Table.Thead className=" z-[2]">
@@ -478,29 +398,6 @@ export default function Part4TQF3({ setForm }: Props) {
                         Evaluation Week
                       </div>
                     </Table.Th>
-                    {/* {evalForm.getValues().data.map((item, evalIndex) => (
-                      <Table.Th
-                        key={evalForm.key(`data.${evalIndex}.curPercent`)}
-                        className="min-w-[120px] max-w-[160px] !py-3.5 !px-4.5 z-0"
-                        {...evalForm.getInputProps(
-                          `data.${evalIndex}.curPercent`
-                        )}
-                      >
-                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                          {item.topicTH}
-                        </p>
-                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                          {item.topicEN}
-                        </p>
-                        <p className="error-text">
-                          {
-                            evalForm.getInputProps(
-                              `data.${evalIndex}.curPercent`
-                            ).error
-                          }
-                        </p>
-                      </Table.Th>
-                    ))} */}
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
