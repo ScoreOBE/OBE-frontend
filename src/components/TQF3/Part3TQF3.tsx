@@ -21,14 +21,23 @@ import MainPopup from "../Popup/MainPopup";
 import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
+import { useSearchParams } from "react-router-dom";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export default function Part3TQF3({ setForm }: Props) {
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [params, setParams] = useSearchParams({});
+  const disabled = params.get("id") !== academicYear.id;
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
+  const optionGrading = [
+    "แบบอิงกลุ่ม (Norm-Referenced Grading)",
+    "แบบอิงเกณฑ์ (Criterion-Referenced Grading)",
+    "แบบอิงเกณฑ์และอิงกลุ่ม (Criterion and Norm-Referenced Grading)",
+  ];
   const [percentTotal, setPercentTotal] = useState(0);
   const [editData, setEditData] = useState<any>();
   const [openModalAddEvalTopic, setOpenModalAddEvalTopic] = useState(false);
@@ -116,8 +125,8 @@ export default function Part3TQF3({ setForm }: Props) {
               color="red"
               title={
                 <p>
-                  This action cannot be undone. After you delete this Evaluation Topic, <br /> it will be permanently deleted from this
-                  course.
+                  This action cannot be undone. After you delete this Evaluation
+                  Topic, <br /> it will be permanently deleted from this course.
                 </p>
               }
               icon={<IconExclamationCircle />}
@@ -149,18 +158,17 @@ export default function Part3TQF3({ setForm }: Props) {
                   {...form.getInputProps("gradingPolicy")}
                 >
                   <Group className="flex flex-col items-start">
-                    <Radio
-                      label="แบบอิงกลุ่ม (Norm-Referenced Grading)"
-                      value="แบบอิงกลุ่ม (Norm-Referenced Grading)"
-                    />
-                    <Radio
-                      label="แบบอิงเกณฑ์ (Criterion-Referenced Grading)"
-                      value="แบบอิงเกณฑ์ (Criterion-Referenced Grading)"
-                    />
-                    <Radio
-                      label="แบบอิงเกณฑ์และอิงกลุ่ม (Criterion and Norm-Referenced Grading)"
-                      value="แบบอิงเกณฑ์และอิงกลุ่ม (Criterion and Norm-Referenced Grading)"
-                    />
+                    {optionGrading.map((item) => (
+                      <Radio
+                        classNames={{
+                          radio: `${disabled && "!cursor-default"}`,
+                          label: `${disabled && "!cursor-default"}`,
+                        }}
+                        label={item}
+                        value={item}
+                        disabled={disabled}
+                      />
+                    ))}
                   </Group>
                 </Radio.Group>
               </div>
@@ -171,31 +179,9 @@ export default function Part3TQF3({ setForm }: Props) {
                   Course Syllabus<span className="ml-1 text-red-500">*</span>
                 </p>
               </div>
-              {/* <Tooltip
-                withArrow
-                arrowPosition="side"
-                arrowOffset={15}
-                arrowSize={7}
-                position="bottom-end"
-                color="#FCFCFC"
-                label={
-                  <div className="text-default text-[13px] p-2 flex flex-col gap-2">
-                    <p className="font-medium">
-                      <span className="text-secondary font-bold">
-                        Add Evaluation Topic (Disabled)
-                      </span>{" "}
-                      <br />
-                      The total of all topics in the course syllabus is equal
-                      100%.
-                    </p>
-                  </div>
-                }
-                opened={percentTotal === 100 && openedTooltip}
-              > */}
-              
+              {!disabled && (
                 <Button
                   className="text-center px-4"
-                  // disabled={percentTotal === 100}
                   onClick={() => setOpenModalAddEvalTopic(true)}
                   onMouseOver={() => setOpenedTooltip(true)}
                   onMouseLeave={() => setOpenedTooltip(false)}
@@ -205,49 +191,33 @@ export default function Part3TQF3({ setForm }: Props) {
                     Add Evaluation Topic
                   </div>
                 </Button>
+              )}
               {/* </Tooltip> */}
             </div>
-            <div className="w-full">
-              <Alert
-                radius="md"
-                icon={<IconCheckbox />}
-                variant="light"
-                color="rgba(6, 158, 110, 1)"
-                classNames={{
-                  icon: "size-6",
-                  body: " flex justify-center",
-                }}
-                className="w-full"
-                title={
-                  <p className="font-semibold">
-                    The total of all topics in the course syllabus{" "}
-                    <span className=" font-extrabold">must add up to 100%</span> .
-                  </p>
-                }
-              ></Alert>
-            </div>
-            {/* <Alert
-              radius="md"
-              className="-mt-2"
-              icon={<IconInfoCircle />}
-              variant="light"
-              color="blue"
-              classNames={{
-                icon: "size-6",
-                body: " flex justify-center",
-              }}
-              title={
-                <p className="font-semibold">
-                  Making changes to Evaluation Topic?{" "}
-                  <span className=" font-extrabold">
-                    {" "}
-                    Double-checking in TQF 5 (Parts 2)
-                  </span>{" "}
-                  ensures all information in your 261405 course materials aligns
-                  seamlessly
-                </p>
-              }
-            ></Alert> */}
+            {!disabled && (
+              <div className="w-full">
+                <Alert
+                  radius="md"
+                  icon={<IconCheckbox />}
+                  variant="light"
+                  color="rgba(6, 158, 110, 1)"
+                  classNames={{
+                    icon: "size-6",
+                    body: " flex justify-center",
+                  }}
+                  className="w-full"
+                  title={
+                    <p className="font-semibold">
+                      The total of all topics in the course syllabus{" "}
+                      <span className=" font-extrabold">
+                        must add up to 100%
+                      </span>{" "}
+                      .
+                    </p>
+                  }
+                ></Alert>
+              </div>
+            )}
             {/* Table */}
             <DragDropContext
               key={form.key("eval")}
@@ -302,11 +272,16 @@ export default function Part3TQF3({ setForm }: Props) {
                           </Tooltip>
                         </div>
                       </Table.Th>
-                      <Table.Th className="w-[20%]">Action</Table.Th>
-                      <Table.Th className="w-[5%] !rounded-tr-md"></Table.Th>
+                      {disabled ? (
+                        <Table.Th className="w-[5%] !rounded-tr-md"></Table.Th>
+                      ) : (
+                        <>
+                          <Table.Th className="w-[20%]">Action</Table.Th>
+                          <Table.Th className="w-[5%] !rounded-tr-md"></Table.Th>
+                        </>
+                      )}
                     </Table.Tr>
                   </Table.Thead>
-
                   {!form.getValues().eval?.length ? (
                     <Table.Tbody>
                       <Table.Tr>
@@ -350,52 +325,58 @@ export default function Part3TQF3({ setForm }: Props) {
                                   <Table.Td className="w-[5%] text-end text-b1">
                                     <p>{item.percent}%</p>
                                   </Table.Td>
-                                  <Table.Td className="w-[20%]">
-                                    <div className="flex justify-start gap-4 items-center">
-                                      <div
-                                        className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
-                                        onClick={() => {
-                                          setEditData(item);
-                                          setOpenModalEditEvalTopic(true);
-                                        }}
+                                  {disabled ? (
+                                    <Table.Td></Table.Td>
+                                  ) : (
+                                    <>
+                                      <Table.Td className="w-[20%]">
+                                        <div className="flex justify-start gap-4 items-center">
+                                          <div
+                                            className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                                            onClick={() => {
+                                              setEditData(item);
+                                              setOpenModalEditEvalTopic(true);
+                                            }}
+                                          >
+                                            <IconEdit
+                                              className="size-4"
+                                              stroke={1.5}
+                                            />
+                                          </div>
+                                          <div
+                                            className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                                            onClick={() => {
+                                              setEditData(item);
+                                              setOpenPopupDelEvalTopic(true);
+                                            }}
+                                          >
+                                            <IconTrash
+                                              className="size-4"
+                                              stroke={1.5}
+                                            />
+                                          </div>
+                                        </div>
+                                      </Table.Td>
+                                      <Table.Td
+                                        className={`${
+                                          snapshot.isDragging ? "w-[10%]" : ""
+                                        }`}
                                       >
-                                        <IconEdit
-                                          className="size-4"
-                                          stroke={1.5}
-                                        />
-                                      </div>
-                                      <div
-                                        className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
-                                        onClick={() => {
-                                          setEditData(item);
-                                          setOpenPopupDelEvalTopic(true);
-                                        }}
-                                      >
-                                        <IconTrash
-                                          className="size-4"
-                                          stroke={1.5}
-                                        />
-                                      </div>
-                                    </div>
-                                  </Table.Td>
-                                  <Table.Td
-                                    className={`${
-                                      snapshot.isDragging ? "w-[10%]" : ""
-                                    }`}
-                                  >
-                                    <div
-                                      className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center "
-                                      {...provided.dragHandleProps}
-                                    >
-                                      <IconGripVertical
-                                        style={{
-                                          width: "20px",
-                                          height: "20px",
-                                        }}
-                                        stroke={1.5}
-                                      />
-                                    </div>
-                                  </Table.Td>
+                                        <div
+                                          className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center "
+                                          {...provided.dragHandleProps}
+                                        >
+                                          <IconGripVertical
+                                            style={{
+                                              width: "20px",
+                                              height: "20px",
+                                            }}
+                                            stroke={1.5}
+                                          />
+                                        </div>
+                                      </Table.Td>
+                                    </>
+                                  )}
                                 </Table.Tr>
                               )}
                             </Draggable>

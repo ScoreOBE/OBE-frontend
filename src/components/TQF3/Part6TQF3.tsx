@@ -26,12 +26,16 @@ import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { cloneDeep, isEqual } from "lodash";
+import { useSearchParams } from "react-router-dom";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export default function Part6TQF3({ setForm }: Props) {
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [params, setParams] = useSearchParams({});
+  const disabled = params.get("id") !== academicYear.id;
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const [formEdit, setFormEdit] =
@@ -258,39 +262,19 @@ export default function Part6TQF3({ setForm }: Props) {
               หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
               <span className=" font-bold">(Topic)</span>
             </p>
-            {/* <Tooltip
-              withArrow
-              arrowPosition="side"
-              arrowOffset={15}
-              arrowSize={7}
-              position="bottom-end"
-              color="#FCFCFC"
-              label={
-                <div className="text-default text-[13px] p-2 flex flex-col gap-2">
-                  <p className="font-medium">
-                    <span className="text-secondary font-bold">
-                      Add Topic (Disabled)
-                    </span>{" "}
-                    <br />
-                    All topics have already been added. To make any changes,
-                    please edit the topics below.
-                  </p>
+            {!disabled && (
+              <Button
+                onClick={() => setOpenModalSelectTopic(true)}
+                onMouseOver={() => setOpenedTooltip(true)}
+                onMouseLeave={() => setOpenedTooltip(false)}
+                className="text-center px-4"
+              >
+                <div className="flex gap-2">
+                  <Icon IconComponent={AddIcon} />
+                  Add Topic
                 </div>
-              }
-              opened={form.getValues().data.length === 10 && openedTooltip}
-            > */}
-            <Button
-              // disabled={form.getValues().data.length === 10}
-              onClick={() => setOpenModalSelectTopic(true)}
-              onMouseOver={() => setOpenedTooltip(true)}
-              onMouseLeave={() => setOpenedTooltip(false)}
-              className="text-center px-4"
-            >
-              <div className="flex gap-2">
-                <Icon IconComponent={AddIcon} />
-                Add Topic
-              </div>
-            </Button>
+              </Button>
+            )}
             {/* </Tooltip> */}
           </div>
           <div
@@ -356,10 +340,11 @@ export default function Part6TQF3({ setForm }: Props) {
                             label={item.label}
                             value={item.label}
                             disabled={
-                              form
+                              disabled ||
+                              (form
                                 .getValues()
                                 .data[index]?.detail.includes("ไม่มี (None)") &&
-                              item.label !== "ไม่มี (None)"
+                                item.label !== "ไม่มี (None)")
                             }
                           ></Checkbox>
                           {item.label == "อื่นๆ (Other)" &&
@@ -370,8 +355,11 @@ export default function Part6TQF3({ setForm }: Props) {
                                 className="mt-2 pl-10"
                                 placeholder="(Required)"
                                 classNames={{
-                                  input: "text-[13px] text-[#333333] h-[100px]",
+                                  input: `text-[13px] text-[#333333] h-[100px] ${
+                                    disabled && "!cursor-default"
+                                  }`,
                                 }}
+                                disabled={disabled}
                                 {...form.getInputProps(`data.${index}.other`)}
                               />
                             )}
@@ -389,41 +377,40 @@ export default function Part6TQF3({ setForm }: Props) {
                     <p className="flex flex-col font-medium text-[28px]">
                       {index + 1}.
                     </p>
-                    <p className="flex flex-col gap-1  text-[14px]">
-                      <span className="font-semibold">
-                        {option.th}{" "}
-                        {/* <span className="text-[#228BE6]">(Additional Topic)</span> */}
-                      </span>
+                    <p className="flex flex-col gap-1 text-[14px]">
+                      <span className="font-semibold">{option.th}</span>
                       <span className="font-bold ">{option.en}</span>
                     </p>
                   </div>
                   <div className="text-default border-b-[1px] last:border-none py-4 px-6  w-full text-[13px] font-medium">
                     <div className="flex justify-between items-center whitespace-pre-wrap gap-8">
                       <div className="pl-10">{topic.detail}</div>
-                      <div className="flex justify-start gap-4 items-center">
-                        <div
-                          className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
-                          onClick={() => {
-                            setDeleteIndex(index),
-                              setFormEdit({
-                                ...form.getValues().data[index],
-                                index: index,
-                              });
-                            setOpenModalEditSelectTopic(true);
-                          }}
-                        >
-                          <IconEdit className="size-4" stroke={1.5} />
+                      {!disabled && (
+                        <div className="flex justify-start gap-4 items-center">
+                          <div
+                            className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                            onClick={() => {
+                              setDeleteIndex(index),
+                                setFormEdit({
+                                  ...form.getValues().data[index],
+                                  index: index,
+                                });
+                              setOpenModalEditSelectTopic(true);
+                            }}
+                          >
+                            <IconEdit className="size-4" stroke={1.5} />
+                          </div>
+                          <div
+                            className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                            onClick={() => {
+                              setDeleteIndex(index);
+                              setOpenPopupDelAddTopic(true);
+                            }}
+                          >
+                            <IconTrash className="size-4" stroke={1.5} />
+                          </div>
                         </div>
-                        <div
-                          className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
-                          onClick={() => {
-                            setDeleteIndex(index);
-                            setOpenPopupDelAddTopic(true);
-                          }}
-                        >
-                          <IconTrash className="size-4" stroke={1.5} />
-                        </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </div>

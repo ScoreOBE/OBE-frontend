@@ -27,12 +27,16 @@ import { EVALUATE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
 import MainPopup from "../Popup/MainPopup";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
+import { useSearchParams } from "react-router-dom";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export default function Part2TQF3({ setForm }: Props) {
+  const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [params, setParams] = useSearchParams({});
+  const disabled = params.get("id") !== academicYear.id;
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const [editData, setEditData] = useState<any>();
@@ -220,6 +224,7 @@ export default function Part2TQF3({ setForm }: Props) {
                     classNames={{ label: "font-medium text-[13px]" }}
                     label={`${key.th} (${key.en})`}
                     value={key.en}
+                    disabled={disabled}
                   />
                 ))}
               </div>
@@ -244,9 +249,15 @@ export default function Part2TQF3({ setForm }: Props) {
                 {Object.values(EVALUATE_TYPE).map((item) => (
                   <Radio
                     key={item}
-                    classNames={{ label: "font-medium text-[13px]" }}
+                    classNames={{
+                      radio: `${disabled && "!cursor-default"}`,
+                      label: `${
+                        disabled && "!cursor-default"
+                      } font-medium text-[13px]`,
+                    }}
                     label={item}
                     value={item}
+                    disabled={disabled}
                   />
                 ))}
               </div>
@@ -263,40 +274,21 @@ export default function Part2TQF3({ setForm }: Props) {
                 วัตถุประสงค์ของกระบวนวิชา{" "}
                 <span className="font-bold">
                   (Course Learning Objective: CLO)
-                </span>{" "}
+                </span>
                 <span className=" text-red-500">*</span>
               </p>
-              <Button
-                className="text-center px-4"
-                onClick={() => setOpenModalAddCLO(true)}
-              >
-                <div className="flex gap-2">
-                  <Icon IconComponent={AddIcon} />
-                  Add CLO
-                </div>
-              </Button>
+              {!disabled && (
+                <Button
+                  className="text-center px-4"
+                  onClick={() => setOpenModalAddCLO(true)}
+                >
+                  <div className="flex gap-2">
+                    <Icon IconComponent={AddIcon} />
+                    Add CLO
+                  </div>
+                </Button>
+              )}
             </div>
-            {/* <Alert
-              radius="md"
-              icon={<IconInfoCircle />}
-              variant="light"
-              color="blue"
-              classNames={{
-                icon: "size-6",
-                body: " flex justify-center",
-              }}
-              title={
-                <p className="font-semibold">
-                  Making changes to CLOs?{" "}
-                  <span className="font-extrabold">
-                    Double-checking in TQF 3 (Parts 4 & 5 & 6) and TQF 5 (Parts
-                    2 & 3)
-                  </span>{" "}
-                  ensures all information in your 261405 course materials aligns
-                  seamlessly
-                </p>
-              }
-            ></Alert> */}
             <DragDropContext
               onDragEnd={({ destination, source }) => {
                 if (!destination) return;
@@ -319,8 +311,12 @@ export default function Part2TQF3({ setForm }: Props) {
                       <Table.Th className="w-[10%]">CLO No.</Table.Th>
                       <Table.Th className="w-[50%]">CLO Description</Table.Th>
                       <Table.Th className="w-[20%]">Learning Method</Table.Th>
-                      <Table.Th className="w-[15%]">Action</Table.Th>
-                      <Table.Th className="w-[5%]"></Table.Th>
+                      {!disabled && (
+                        <>
+                          <Table.Th className="w-[15%]">Action</Table.Th>
+                          <Table.Th className="w-[5%]"></Table.Th>
+                        </>
+                      )}
                     </Table.Tr>
                   </Table.Thead>
 
@@ -374,52 +370,56 @@ export default function Part2TQF3({ setForm }: Props) {
                                       ))}
                                     </div>
                                   </Table.Td>
-                                  <Table.Td className="w-[15%]">
-                                    <div className="flex justify-start gap-4 items-center">
-                                      <div
-                                        className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
-                                        onClick={() => {
-                                          setEditData(item);
-                                          setOpenModalEditCLO(true);
-                                        }}
+                                  {!disabled && (
+                                    <>
+                                      <Table.Td className="w-[15%]">
+                                        <div className="flex justify-start gap-4 items-center">
+                                          <div
+                                            className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                                            onClick={() => {
+                                              setEditData(item);
+                                              setOpenModalEditCLO(true);
+                                            }}
+                                          >
+                                            <IconEdit
+                                              className="size-4"
+                                              stroke={1.5}
+                                            />
+                                          </div>
+                                          <div
+                                            className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                                            onClick={() => {
+                                              setEditData(item);
+                                              setOpenPopupDelCLO(true);
+                                            }}
+                                          >
+                                            <IconTrash
+                                              className="size-4"
+                                              stroke={1.5}
+                                            />
+                                          </div>
+                                        </div>
+                                      </Table.Td>
+                                      <Table.Td
+                                        className={`${
+                                          snapshot.isDragging ? "w-[5%]" : ""
+                                        }`}
                                       >
-                                        <IconEdit
-                                          className="size-4"
-                                          stroke={1.5}
-                                        />
-                                      </div>
-                                      <div
-                                        className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
-                                        onClick={() => {
-                                          setEditData(item);
-                                          setOpenPopupDelCLO(true);
-                                        }}
-                                      >
-                                        <IconTrash
-                                          className="size-4"
-                                          stroke={1.5}
-                                        />
-                                      </div>
-                                    </div>
-                                  </Table.Td>
-                                  <Table.Td
-                                    className={`${
-                                      snapshot.isDragging ? "w-[5%]" : ""
-                                    }`}
-                                  >
-                                    <div
-                                      className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
-                                      {...provided.dragHandleProps}
-                                    >
-                                      <IconGripVertical
-                                        style={{
-                                          width: "20px",
-                                          height: "20px",
-                                        }}
-                                        stroke={1.5}
-                                      />
-                                    </div>
-                                  </Table.Td>
+                                        <div
+                                          className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
+                                          {...provided.dragHandleProps}
+                                        >
+                                          <IconGripVertical
+                                            style={{
+                                              width: "20px",
+                                              height: "20px",
+                                            }}
+                                            stroke={1.5}
+                                          />
+                                        </div>
+                                      </Table.Td>
+                                    </>
+                                  )}
                                 </Table.Tr>
                               )}
                             </Draggable>
@@ -450,15 +450,17 @@ export default function Part2TQF3({ setForm }: Props) {
                   <span className=" text-red-500">*</span>
                 </span>
               </p>
-              <Button
-                className="text-center px-4"
-                onClick={() => setOpenModalAddTopic(true)}
-              >
-                <div className="flex gap-2">
-                  <Icon IconComponent={AddIcon} />
-                  Add Course Content
-                </div>
-              </Button>
+              {!disabled && (
+                <Button
+                  className="text-center px-4"
+                  onClick={() => setOpenModalAddTopic(true)}
+                >
+                  <div className="flex gap-2">
+                    <Icon IconComponent={AddIcon} />
+                    Add Course Content
+                  </div>
+                </Button>
+              )}
             </div>
             <DragDropContext
               onDragEnd={({ destination, source }) => {
@@ -487,8 +489,12 @@ export default function Part2TQF3({ setForm }: Props) {
                       <Table.Th className="w-[20%] text-end !pr-24">
                         Lab Hour
                       </Table.Th>
-                      <Table.Th className="w-[15%]">Action</Table.Th>
-                      <Table.Th className="w-[5%]"></Table.Th>
+                      {!disabled && (
+                        <>
+                          <Table.Th className="w-[15%]">Action</Table.Th>
+                          <Table.Th className="w-[5%]"></Table.Th>
+                        </>
+                      )}
                     </Table.Tr>
                   </Table.Thead>
 
@@ -534,52 +540,56 @@ export default function Part2TQF3({ setForm }: Props) {
                                   <Table.Td className="w-[20%] text-end !pr-24">
                                     <p>{item.labHour}</p>
                                   </Table.Td>
-                                  <Table.Td className="w-[15%]">
-                                    <div className="flex justify-start gap-4 items-center">
-                                      <div
-                                        className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
-                                        onClick={() => {
-                                          setEditData(item);
-                                          setOpenModalEditTopic(true);
-                                        }}
+                                  {!disabled && (
+                                    <>
+                                      <Table.Td className="w-[15%]">
+                                        <div className="flex justify-start gap-4 items-center">
+                                          <div
+                                            className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                                            onClick={() => {
+                                              setEditData(item);
+                                              setOpenModalEditTopic(true);
+                                            }}
+                                          >
+                                            <IconEdit
+                                              className="size-4"
+                                              stroke={1.5}
+                                            />
+                                          </div>
+                                          <div
+                                            className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                                            onClick={() => {
+                                              setEditData(item);
+                                              setOpenPopupDelTopic(true);
+                                            }}
+                                          >
+                                            <IconTrash
+                                              className="size-4"
+                                              stroke={1.5}
+                                            />
+                                          </div>
+                                        </div>
+                                      </Table.Td>
+                                      <Table.Td
+                                        className={`${
+                                          snapshot.isDragging ? "w-[5%]" : ""
+                                        }`}
                                       >
-                                        <IconEdit
-                                          className="size-4"
-                                          stroke={1.5}
-                                        />
-                                      </div>
-                                      <div
-                                        className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
-                                        onClick={() => {
-                                          setEditData(item);
-                                          setOpenPopupDelTopic(true);
-                                        }}
-                                      >
-                                        <IconTrash
-                                          className="size-4"
-                                          stroke={1.5}
-                                        />
-                                      </div>
-                                    </div>
-                                  </Table.Td>
-                                  <Table.Td
-                                    className={`${
-                                      snapshot.isDragging ? "w-[5%]" : ""
-                                    }`}
-                                  >
-                                    <div
-                                      className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
-                                      {...provided.dragHandleProps}
-                                    >
-                                      <IconGripVertical
-                                        style={{
-                                          width: "20px",
-                                          height: "20px",
-                                        }}
-                                        stroke={1.5}
-                                      />
-                                    </div>
-                                  </Table.Td>
+                                        <div
+                                          className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
+                                          {...provided.dragHandleProps}
+                                        >
+                                          <IconGripVertical
+                                            style={{
+                                              width: "20px",
+                                              height: "20px",
+                                            }}
+                                            stroke={1.5}
+                                          />
+                                        </div>
+                                      </Table.Td>
+                                    </>
+                                  )}
                                 </Table.Tr>
                               )}
                             </Draggable>
@@ -613,10 +623,12 @@ export default function Part2TQF3({ setForm }: Props) {
                           )
                           .toFixed(1)}
                       </Table.Th>
-                      <Table.Th
-                        className="!rounded-br-md"
-                        colSpan={2}
-                      ></Table.Th>
+                      {!disabled && (
+                        <Table.Th
+                          className="!rounded-br-md"
+                          colSpan={2}
+                        ></Table.Th>
+                      )}
                     </Table.Tr>
                   </Table.Tfoot>
                 </Table>
