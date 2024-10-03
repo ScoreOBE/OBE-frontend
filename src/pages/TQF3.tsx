@@ -279,7 +279,7 @@ export default function TQF3() {
             placeholder="Select course"
             searchable
             allowDeselect
-            size="xs"
+            size="sm"
             label="Select course to reuse"
             className="w-full border-none "
             classNames={{

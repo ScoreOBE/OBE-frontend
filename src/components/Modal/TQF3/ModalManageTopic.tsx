@@ -149,7 +149,7 @@ export default function ModalManageTopic({
         <div className={`flex h-fit mb-6 flex-col gap-4`}>
           {type === "add" ? (
             <Select
-              size="xs"
+              size="sm"
               disabled={optionsTopicPart6.every((e) =>
                 data
                   ?.slice(5)
