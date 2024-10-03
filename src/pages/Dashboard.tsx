@@ -202,7 +202,7 @@ export default function Dashboard() {
           <Select
             label="Select course to upload"
             placeholder="Course"
-            size="xs"
+            size="sm"
             searchable
             data={course.courses.map((c) => {
               if (c.type == COURSE_TYPE.SEL_TOPIC.en) {

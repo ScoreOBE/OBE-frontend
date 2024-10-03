@@ -103,7 +103,8 @@ export default function Part7TQF3({ setForm }: Props) {
           {/* Topic */}
           <div className="flex text-secondary items-center w-full justify-between">
             <span className="text-[15px] font-semibold">
-              CLO Mapping <span className=" text-red-500">*</span>
+              CLO Mapping
+              <span className=" text-red-500">*</span>
             </span>
             <Button
               className="text-center px-4"
@@ -129,6 +130,16 @@ export default function Part7TQF3({ setForm }: Props) {
               title={
                 <p className="font-semibold">
                   Each CLO must be linked to at least one PLO.
+                  {ploRequired.length > 0 && (
+                    <>
+                      If you see
+                      <span className="text-red-500 font-bold">
+                        'required'
+                      </span>{" "}
+                      in a PLO column, at least one of your CLOs must be linked
+                      to that required PLO.
+                    </>
+                  )}
                 </p>
               }
             ></Alert>
@@ -157,11 +168,14 @@ export default function Part7TQF3({ setForm }: Props) {
                     </div>
                   </Table.Th>
                   {coursePLO?.data?.map(({ no, id }) => (
-                    <Table.Th key={id} className="min-w-[100px] w-fit">
-                      <p>
+                    <Table.Th
+                      key={id}
+                      className="min-w-[100px] !pt-3 !pb-2 w-fit"
+                    >
+                      <p className="">
                         PLO-{no}{" "}
                         <span className="text-red-500">
-                          {ploRequired.includes(id) && "*"}
+                          {ploRequired.includes(id) && "required"}
                         </span>
                       </p>
                       <p className="error-text mt-1">
@@ -220,11 +234,12 @@ export default function Part7TQF3({ setForm }: Props) {
                               <Checkbox
                                 size="sm"
                                 classNames={{
+                                  input:
+                                    "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                                   body: "mr-3 px-0",
                                   label:
                                     "text-[14px] text-[#615F5F] cursor-pointer",
                                 }}
-                                disabled={disabled}
                                 checked={(
                                   form.getValues().data[cloIndex]
                                     .plos as string[]

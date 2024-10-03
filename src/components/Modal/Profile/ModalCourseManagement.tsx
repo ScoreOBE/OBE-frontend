@@ -421,11 +421,12 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
               <div className="text-b3 gap-3 font-medium flex flex-row justify-end items-center">
                 Courses per page:{" "}
                 <Select
-                  size="xs"
+                  size="sm"
                   allowDeselect={false}
                   classNames={{
                     input: "border-none !h-[32px]",
                     wrapper: "!h-[32px]",
+                  
                   }}
                   className=" w-[74px] mr-3 h-[32px]"
                   data={["10", "20", "50"]}

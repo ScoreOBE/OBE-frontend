@@ -238,7 +238,7 @@ export default function CompoMangeIns({
         {swapMethodAddUser ? (
           <TextInput
             withAsterisk={true}
-            size="xs"
+            size="sm"
             description="Make sure CMU account correct"
             label="CMU account"
             className={`w-full border-none`}
@@ -281,7 +281,7 @@ export default function CompoMangeIns({
             allowDeselect
             searchable
             clearable
-            size="xs"
+            size="sm"
             nothingFoundMessage="No result"
             className="w-full border-none "
             classNames={{
@@ -300,7 +300,7 @@ export default function CompoMangeIns({
         {type != "mainIns" && (
           <Button
             color="#13A9A1"
-            className="!rounded-s-none !rounded-e-md !h-[30px] min-w-fit border-l-0 disabled:border-[#cecece]"
+            className="!rounded-s-none !rounded-e-md !h-[36px] min-w-fit border-l-0 disabled:border-[#cecece]"
             disabled={!inputUser?.value || (swapMethodAddUser && invalidEmail)}
             onClick={() =>
               type == "changeMain" && action ? action(inputUser) : addUser()
