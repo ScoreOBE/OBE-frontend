@@ -225,12 +225,11 @@ export default function Part7TQF3({ setForm }: Props) {
                               <Checkbox
                                 size="sm"
                                 classNames={{
-                                  input:
-                                    "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                                   body: "mr-3 px-0",
                                   label:
                                     "text-[14px] text-[#615F5F] cursor-pointer",
                                 }}
+                                disabled={disabled}
                                 checked={(
                                   form.getValues().data[cloIndex]
                                     .plos as string[]
