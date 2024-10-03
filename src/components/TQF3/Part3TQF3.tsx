@@ -134,7 +134,8 @@ export default function Part3TQF3({ setForm }: Props) {
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">Evaluation Topic</p>
-              <p className=" -translate-y-[2px] text-b1">{`dkdk`}</p>
+              <p className="-translate-y-[2px] text-b1">{editData?.topicTH}</p>
+              <p className="-translate-y-[2px] text-b1">{editData?.topicEN}</p>
             </div>
           </>
         }

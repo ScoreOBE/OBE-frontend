@@ -94,6 +94,23 @@ export default function ModalManageTopic({
     }
   }, [isAdded]);
 
+  const onClickDone = () => {
+    if (type == "add") {
+      if (form.getValues().schedule?.length! > 0) {
+        setScheduleList(form.getValues().schedule);
+      } else if (!formOneWeek.validate().hasErrors) {
+        setScheduleList([{ ...formOneWeek.getValues() }]);
+      } else {
+        return;
+      }
+    } else if (!formOneWeek.validate().hasErrors) {
+      setScheduleList(formOneWeek.getValues());
+    } else {
+      return;
+    }
+    onClose();
+  };
+
   const addMore = () => {
     if (!formOneWeek.validate().hasErrors) {
       form.insertListItem("schedule", formOneWeek.getValues());
@@ -355,16 +372,9 @@ export default function ModalManageTopic({
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              setScheduleList(
-                type == "add"
-                  ? form.getValues().schedule
-                  : formOneWeek.getValues()
-              );
-              onClose();
-            }}
+            onClick={onClickDone}
             disabled={
-              type == "add" ? form.getValues().schedule?.length == 0 : false
+              form.getValues().schedule?.length == 0 && !formOneWeek.errors
             }
           >
             Done
