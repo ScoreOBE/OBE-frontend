@@ -28,7 +28,6 @@ export default function Part7TQF3({ setForm }: Props) {
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
-  const [ploRequired, setPloRequired] = useState<string[]>([]);
   const [coursePLO, setCoursePLO] = useState<Partial<IModelPLO>>();
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
   const [validatePloRequired, setValidatePloRequired] = useState(false);
@@ -70,20 +69,13 @@ export default function Part7TQF3({ setForm }: Props) {
 
   const fetchPLO = async () => {
     setLoading(true);
-    const [resPloCol, resPloRequired] = await Promise.all([
-      getOnePLO({
-        year: academicYear.year,
-        semester: academicYear.semester,
-        courseCode: courseNo?.slice(0, -3),
-      }),
-      getOneCourseManagement(courseNo!),
-    ]);
-
+    const resPloCol = await getOnePLO({
+      year: academicYear.year,
+      semester: academicYear.semester,
+      courseCode: courseNo?.slice(0, -3),
+    });
     if (resPloCol) {
       setCoursePLO(resPloCol);
-    }
-    if (resPloRequired) {
-      setPloRequired(resPloRequired.plos);
     }
     setLoading(false);
   };
@@ -129,7 +121,7 @@ export default function Part7TQF3({ setForm }: Props) {
               title={
                 <p className="font-semibold">
                   Each CLO must be linked to at least one PLO.
-                  {ploRequired.length > 0 && (
+                  {tqf3.ploRequired?.length && (
                     <>
                       If you see
                       <span className="text-red-500 font-bold">
@@ -174,12 +166,12 @@ export default function Part7TQF3({ setForm }: Props) {
                       <p className="">
                         PLO-{no}{" "}
                         <span className="text-red-500">
-                          {ploRequired.includes(id) && "required"}
+                          {tqf3.ploRequired?.includes(id) && "required"}
                         </span>
                       </p>
                       <p className="error-text mt-1">
                         {validatePloRequired &&
-                          ploRequired.includes(id) &&
+                          tqf3.ploRequired?.includes(id) &&
                           !form
                             .getValues()
                             .data.some(({ plos }) =>

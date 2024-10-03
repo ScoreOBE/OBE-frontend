@@ -41,6 +41,7 @@ import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
 import { setDataTQF3 } from "@/store/tqf3";
 import { IModelSection } from "@/models/ModelSection";
+import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 
 export default function TQF3() {
   const { courseNo } = useParams();
@@ -115,39 +116,48 @@ export default function TQF3() {
   }, [tqf3.topic]);
 
   const fetchOneCourse = async (firstFetch: boolean = false) => {
-    const res = await getOneCourse({
-      academicYear: academicYear.id,
-      courseNo,
-    });
-    if (res) {
-      if (res.type == COURSE_TYPE.SEL_TOPIC.en) {
-        const sectionTdf3 = res.sections.find(
+    const [resCourse, resPloRequired] = await Promise.all([
+      getOneCourse({
+        academicYear: academicYear.id,
+        courseNo,
+      }),
+      getOneCourseManagement(courseNo!),
+    ]);
+    if (resCourse) {
+      if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
+        const sectionTdf3 = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf3.topic
         ).TQF3;
         setTqf3Original({ topic: tqf3.topic, ...sectionTdf3 });
         dispatch(
           setDataTQF3({
             topic: tqf3.topic,
+            ploRequired: resPloRequired.plos,
             ...sectionTdf3,
-            type: res.type,
-            sections: [...res.sections],
+            type: resCourse.type,
+            sections: [...resCourse.sections],
           })
         );
         if (firstFetch) {
           setCurrentPartTQF3(sectionTdf3);
         }
       } else {
-        setTqf3Original({ topic: tqf3.topic, ...res.TQF3! });
+        setTqf3Original({
+          topic: tqf3.topic,
+          ploRequired: resPloRequired.plos,
+          ...resCourse.TQF3!,
+        });
         dispatch(
           setDataTQF3({
             topic: tqf3.topic,
-            ...res.TQF3!,
-            type: res.type,
-            sections: [...res.sections],
+            ploRequired: resPloRequired.plos,
+            ...resCourse.TQF3!,
+            type: resCourse.type,
+            sections: [...resCourse.sections],
           })
         );
         if (firstFetch) {
-          setCurrentPartTQF3(res.TQF3!);
+          setCurrentPartTQF3(resCourse.TQF3!);
         }
       }
     }
@@ -416,6 +426,15 @@ export default function TQF3() {
                                         (acc, cur) => acc + (cur?.percent || 0),
                                         0
                                       )
+                                ))) ||
+                            (value === "part7" &&
+                              (tqf3.part7?.data.some(
+                                ({ plos }) => plos.length == 0
+                              ) ||
+                                !tqf3.ploRequired?.every((plo) =>
+                                  tqf3.part7?.data.some(({ plos }) =>
+                                    (plos as string[]).includes(plo)
+                                  )
                                 )))
                           ? "text-edit"
                           : "text-[#24b9a5]"

@@ -4,7 +4,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const tqf3Slice = createSlice({
   name: "tqf3",
-  initialState: {} as IModelTQF3 & IModelCourse & { topic?: string },
+  initialState: {} as IModelTQF3 &
+    IModelCourse & { topic?: string; ploRequired?: string[] },
   reducers: {
     setDataTQF3: (state, action) => {
       return { ...action.payload };
