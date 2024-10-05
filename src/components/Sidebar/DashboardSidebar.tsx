@@ -22,6 +22,13 @@ export default function DashboardSidebar() {
     return `${e.semester}/${e.year}`;
   });
   const [openFilterTerm, setOpenFilterTerm] = useState(false);
+  const checkAcademic = (term: string, data?: IModelAcademicYear) => {
+    return (
+      term.split("/")[0] ==
+        (data ? data.semester.toString() : params.get("semester")) &&
+      term.split("/")[1] == (data ? data.year.toString() : params.get("year"))
+    );
+  };
   const [selectedTerm, setSelectedTerm] = useState<any>(
     termOption.find((term) => checkAcademic(term))
   );
@@ -74,14 +81,6 @@ export default function DashboardSidebar() {
         setTerm(res[0]);
       }
     }
-  };
-
-  const checkAcademic = (term: string, data?: IModelAcademicYear) => {
-    return (
-      term.split("/")[0] ==
-        (data ? data.semester.toString() : params.get("semester")) &&
-      term.split("/")[1] == (data ? data.year.toString() : params.get("year"))
-    );
   };
 
   const setTerm = (data: IModelAcademicYear) => {
