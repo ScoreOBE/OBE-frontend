@@ -1,5 +1,6 @@
 export class CourseRequestDTO {
-  academicYear: string = "";
+  year: number = 2567;
+  semester: number = 1;
   manage: boolean = false;
   orderBy: string = "courseNo";
   orderType: string = "asc";

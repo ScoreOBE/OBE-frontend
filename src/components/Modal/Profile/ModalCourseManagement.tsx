@@ -255,9 +255,13 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
             <Alert
               variant="light"
               color="red"
-              title={ <p> After you delete this course, it's permanently deleted all data from
-          the current semester. Data from previous semesters will not be affected. 
-          </p> }
+              title={
+                <p>
+                  After you delete this course, it's permanently deleted all
+                  data from the current semester. Data from previous semesters
+                  will not be affected.
+                </p>
+              }
               icon={<IconExclamationCircle />}
               classNames={{ icon: "size-6" }}
             ></Alert>
@@ -426,7 +430,6 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   classNames={{
                     input: "border-none !h-[32px]",
                     wrapper: "!h-[32px]",
-                  
                   }}
                   className=" w-[74px] mr-3 h-[32px]"
                   data={["10", "20", "50"]}
@@ -566,7 +569,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                               onClick={() => {
                                 setEditCourse({
                                   id: course.id,
-                                  academicYear: academicYear.id,
+                                  year: academicYear.year,
+                                  semester: academicYear.semester,
                                   courseNo: course.courseNo,
                                   courseName: course.courseName,
                                 });
@@ -643,7 +647,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                                 onClick={() => {
                                   setEditSec({
                                     id: course.id,
-                                    academicYear: academicYear.id,
+                                    year: academicYear.year,
+                                    semester: academicYear.semester as any,
                                     courseNo: course.courseNo,
                                     secId: sec.id,
                                     oldSectionNo: sec.sectionNo,
@@ -668,7 +673,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                                   if (course.sections.length > 1) {
                                     setEditSec({
                                       id: course.id,
-                                      academicYear: academicYear.id,
+                                      year: academicYear.year,
+                                      semester: academicYear.semester as any,
                                       courseNo: course.courseNo,
                                       courseName: course.courseName,
                                       secId: sec.id,

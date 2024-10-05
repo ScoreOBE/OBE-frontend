@@ -32,12 +32,7 @@ export default function Sidebar() {
     } else return;
   };
   useEffect(() => {
-    if (
-      params.get("id") &&
-      params.get("year") &&
-      params.get("semester") &&
-      !courseList.length
-    )
+    if (params.get("year") && params.get("semester") && !courseList.length)
       fetchCourse();
   }, [academicYear, params]);
 
@@ -45,7 +40,8 @@ export default function Sidebar() {
     dispatch(setLoading(true));
     const res = await getCourse({
       ...new CourseRequestDTO(),
-      academicYear: params.get("id")!,
+      year: parseInt(params.get("year") || ""),
+      semester: parseInt(params.get("semester") || ""),
     });
     if (res) {
       dispatch(setCourseList(res));

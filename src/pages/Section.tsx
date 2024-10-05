@@ -50,7 +50,9 @@ export default function Section() {
   const dispatch = useAppDispatch();
   const academicYear = useAppSelector((state) => state.academicYear);
   const activeTerm = academicYear.find(
-    (term) => term.id == params.get("id")
+    (term) =>
+      term.year == parseInt(params.get("year") || "") &&
+      term.semester == parseInt(params.get("semester") || "")
   )?.isActive;
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
@@ -73,7 +75,8 @@ export default function Section() {
 
   const fetchOneCourse = async () => {
     const res = await getOneCourse({
-      academicYear: params.get("id"),
+      year: parseInt(params.get("year") || ""),
+      semester: parseInt(params.get("semester") || ""),
       courseNo,
     });
     if (res) {
@@ -152,11 +155,10 @@ export default function Section() {
               color="red"
               title={
                 <p>
-                  {" "}
-                  This action cannot be undone.  After you delete this
-                  section, <br /> it will be permanently deleted all data from the
+                  This action cannot be undone. After you delete this section,{" "}
+                  <br /> it will be permanently deleted all data from the
                   current semester. Data from previous semesters will not be
-                  affected.{" "}
+                  affected.
                 </p>
               }
               icon={<IconExclamationCircle />}
@@ -339,7 +341,6 @@ export default function Section() {
                                 onClick={() => {
                                   setEditSec({
                                     id: sec.id,
-                                    academicYear: params.get("id"),
                                     courseId: course.id,
                                     oldSectionNo: sec.sectionNo,
                                     courseNo: course.courseNo,

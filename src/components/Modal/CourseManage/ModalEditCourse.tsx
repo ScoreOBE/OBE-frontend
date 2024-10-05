@@ -53,7 +53,8 @@ export default function ModalEditCourse({
     delete payload.id;
     let res;
     if (isCourseManage) {
-      payload.academicYear = academicYear.id;
+      payload.year = academicYear.year;
+      payload.semester = academicYear.semester;
       res = await updateCourseManagement(id, payload);
       if (res) {
         dispatch(editCourseManagement(res));

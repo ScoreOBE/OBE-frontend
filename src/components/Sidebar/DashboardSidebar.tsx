@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Button, Modal, Select } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import Icon from "@/components/Icon";
-import { IconChevronDown } from "@tabler/icons-react";
 import CalendarIcon from "@/assets/icons/calendar.svg?react";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
@@ -20,15 +19,20 @@ export default function DashboardSidebar() {
   const academicYear = useAppSelector((state) => state.academicYear);
   const dispatch = useAppDispatch();
   const termOption = academicYear.map((e) => {
-    return { label: `${e.semester}/${e.year}`, value: e.id };
+    return `${e.semester}/${e.year}`;
   });
   const [openFilterTerm, setOpenFilterTerm] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState<any>(
-    termOption.find((term) => term.value == params.get("id"))
+    termOption.find((term) => checkAcademic(term))
   );
 
   useEffect(() => {
-    if (academicYear.length && !params.get("id") && !selectedTerm) {
+    if (
+      academicYear.length &&
+      !params.get("year") &&
+      !params.get("semester") &&
+      !selectedTerm
+    ) {
       setTerm(academicYear[0]);
     } else if (user && !academicYear.length) {
       fetchAcademicYear();
@@ -36,22 +40,26 @@ export default function DashboardSidebar() {
   }, [academicYear]);
 
   useEffect(() => {
-    if (termOption && params.get("id") && !selectedTerm) {
-      setSelectedTerm(termOption.find((e) => e.value == params.get("id")));
+    if (
+      termOption &&
+      params.get("year") &&
+      params.get("semester") &&
+      !selectedTerm
+    ) {
+      setSelectedTerm(termOption.find((term) => checkAcademic(term)));
     }
   }, [termOption, params]);
 
   useEffect(() => {
     if (!openFilterTerm) {
-      setSelectedTerm(termOption.find((e) => e.value == params.get("id")));
+      setSelectedTerm(termOption.find((term) => checkAcademic(term)));
     }
   }, [openFilterTerm]);
 
-  const fetchCourse = async (id: string) => {
+  const fetchCourse = async (year: number, semester: number) => {
     dispatch(setLoading(true));
     const payloadCourse = new CourseRequestDTO();
-    payloadCourse.academicYear = id;
-    const res = await getCourse(payloadCourse);
+    const res = await getCourse({ ...payloadCourse, year, semester });
     if (res) {
       dispatch(setCourseList(res));
     }
@@ -62,26 +70,33 @@ export default function DashboardSidebar() {
     const res = await getAcademicYear(new AcademicYearRequestDTO());
     if (res) {
       dispatch(setAcademicYear(res));
-      if (!params.get("id") && !selectedTerm) {
+      if (!params.get("year") && !params.get("semester") && !selectedTerm) {
         setTerm(res[0]);
       }
     }
   };
 
+  const checkAcademic = (term: string, data?: IModelAcademicYear) => {
+    return (
+      term.split("/")[0] ==
+        (data ? data.semester.toString() : params.get("semester")) &&
+      term.split("/")[1] == (data ? data.year.toString() : params.get("year"))
+    );
+  };
+
   const setTerm = (data: IModelAcademicYear) => {
     setParams({
-      id: data.id,
       year: data.year.toString(),
       semester: data.semester.toString(),
     });
-    setSelectedTerm(termOption.find((term) => term.value == data.id));
+    setSelectedTerm(termOption.find((term) => checkAcademic(term, data)));
   };
 
   const confirmFilterTerm = async () => {
     setOpenFilterTerm(false);
-    const term = academicYear.find((e) => e.id == selectedTerm.value)!;
+    const term = academicYear.find((e) => checkAcademic(selectedTerm, e))!;
     setTerm(term);
-    fetchCourse(term.id);
+    fetchCourse(term.year, term.semester);
   };
 
   return (
@@ -97,8 +112,8 @@ export default function DashboardSidebar() {
         <Select
           label="Semester"
           data={termOption}
-          value={selectedTerm?.value}
-          onChange={(value, option) => setSelectedTerm(option)}
+          value={selectedTerm}
+          onChange={setSelectedTerm}
           allowDeselect={false}
           withCheckIcon={false}
           className="mb-7 w-1/2"
@@ -140,8 +155,8 @@ export default function DashboardSidebar() {
               <p className="font-medium text-[14px]">Semester</p>
               <p className="font-normal text-[12px]">
                 Course (
-                {`${params.get("semester") ?? ""}/${
-                  params.get("year")?.slice(-2) ?? ""
+                {`${params.get("semester") || ""}/${
+                  params.get("year")?.slice(-2) || ""
                 }`}
                 )
               </p>

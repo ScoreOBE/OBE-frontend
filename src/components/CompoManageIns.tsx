@@ -295,6 +295,7 @@ export default function CompoMangeIns({
               else setInputUser({ value: null });
             }}
             onClear={() => setInputUser({ value: null })}
+            error={type == "mainIns" && error && "Please select the instructor"}
           />
         )}
         {type != "mainIns" && (

@@ -20,9 +20,7 @@ import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { updateProcessTqf3 } from "@/services/academicYear/academicYear.service";
 import { setProcessTQF3 } from "@/store/academicYear";
 
-import {
-  IconInfoCircle,
-} from "@tabler/icons-react";
+import { IconInfoCircle } from "@tabler/icons-react";
 
 type Props = {
   opened: boolean;
@@ -45,7 +43,8 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   const fetchCourse = async () => {
     if (academicYear) {
       const initialPayload = new CourseRequestDTO();
-      initialPayload.academicYear = academicYear.id;
+      initialPayload.year = academicYear.year;
+      initialPayload.semester = academicYear.semester;
       initialPayload.manage = true;
       setPayload(initialPayload);
       const res = await getCourse(initialPayload);

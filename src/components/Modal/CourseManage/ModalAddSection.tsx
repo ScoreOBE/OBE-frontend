@@ -74,7 +74,7 @@ export default function ModalAddSection({
         topic: (value) => validateTextInput(value, "Topic"),
         sectionNo: (value) => validateSectionNo(value),
         semester: (value) => {
-          return value?.length ? null : "Please choose at least one semester.";
+          return value?.length || !isManage ? null : "Please choose at least one semester.";
         },
         instructor: (value: any) =>
           value?.value?.length ? null : "Please select one owner section.",
@@ -162,9 +162,8 @@ export default function ModalAddSection({
     let payload = {
       ...data,
       sections: [...form.getValues().sections],
-      academicYear: academicYear.id,
-      updatedYear: academicYear.year,
-      updatedSemester: academicYear.semester,
+      year: academicYear.year,
+      semester: academicYear.semester,
     };
     delete payload.id;
 
@@ -353,14 +352,14 @@ export default function ModalAddSection({
       form.getValues().sections?.at(index)?.semester ?? [];
     if (!semester) {
       form.setFieldValue(`sections.${index}.openThisTerm`, checked);
-      if (
-        checked &&
-        !semesterList?.includes(academicYear?.semester.toString())
-      ) {
-        semesterList.push(academicYear?.semester.toString());
-        semesterList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
-        form.setFieldValue(`sections.${index}.semester`, semesterList);
-      }
+      // if (
+      //   checked &&
+      //   !semesterList?.includes(academicYear?.semester.toString())
+      // ) {
+      //   semesterList.push(academicYear?.semester.toString());
+      //   semesterList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+      //   form.setFieldValue(`sections.${index}.semester`, semesterList);
+      // }
     } else {
       form.setFieldValue(`sections.${index}.semester`, semester.sort());
     }

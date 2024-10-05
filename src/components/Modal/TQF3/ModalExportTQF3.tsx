@@ -47,10 +47,9 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       );
       return;
     }
-    setLoading(true)
+    setLoading(true);
 
     const payload: any = {
-
       courseNo,
       academicYear: academicYear.year,
       academicTerm: academicYear.semester,
@@ -80,9 +79,8 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
         `TQF3 exported successfully as ${filename}.`
       );
     }
-    setLoading(false); 
+    setLoading(false);
     onCloseModal();
-   
   };
 
   return (

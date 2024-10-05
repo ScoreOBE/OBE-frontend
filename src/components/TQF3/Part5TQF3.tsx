@@ -15,7 +15,9 @@ type Props = {
 export default function Part5TQF3({ setForm }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [params, setParams] = useSearchParams({});
-  const disabled = params.get("id") !== academicYear.id;
+  const disabled =
+    parseInt(params.get("year") || "") !== academicYear.year &&
+    parseInt(params.get("semester") || "") !== academicYear.semester;
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const form = useForm({

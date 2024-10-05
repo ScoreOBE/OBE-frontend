@@ -122,7 +122,8 @@ export default function ModalManageIns({
       };
     });
     const res = await updateCoInsSections({
-      academicYear: academicYear.id,
+      year: academicYear.year,
+      semester: academicYear.semester,
       courseNo: data.courseNo,
       data: payload,
     });
@@ -444,7 +445,6 @@ export default function ModalManageIns({
                     onClick={() => {
                       setEditSec({
                         id: data.id,
-                        academicYear: academicYear.id,
                         courseNo: data.courseNo,
                         secId: sec.id,
                         instructor: sec.instructor,
