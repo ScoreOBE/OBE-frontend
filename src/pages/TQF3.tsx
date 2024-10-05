@@ -118,7 +118,8 @@ export default function TQF3() {
   const fetchOneCourse = async (firstFetch: boolean = false) => {
     const [resCourse, resPloRequired] = await Promise.all([
       getOneCourse({
-        academicYear: academicYear.id,
+        year: academicYear.year,
+        semester: academicYear.semester,
         courseNo,
       }),
       getOneCourseManagement(courseNo!),
@@ -243,6 +244,13 @@ export default function TQF3() {
         }
       }
     }
+  };
+
+  const checkActiveTerm = () => {
+    return (
+      parseInt(params.get("year") || "") === academicYear.year &&
+      parseInt(params.get("semester") || "") === academicYear.semester
+    );
   };
 
   return loading || !tqf3Original ? (
@@ -370,7 +378,7 @@ export default function TQF3() {
       </Modal>
       <div
         className={`flex flex-col h-full w-full overflow-hidden ${
-          params.get("id") != academicYear.id && "pb-2"
+          !checkActiveTerm() && "pb-2"
         }`}
       >
         <Tabs
@@ -450,7 +458,7 @@ export default function TQF3() {
                 {getValueEnumByKey(PartTopicTQF3, tqf3Part!)}
               </div>
               <div className="flex flex-row flex-wrap gap-3">
-                {params.get("id") == academicYear.id && (
+                {checkActiveTerm() && (
                   <Tooltip
                     onClick={() => setOpenModalReuse(true)}
                     withArrow
@@ -518,7 +526,7 @@ export default function TQF3() {
           </div>
         </Tabs>
       </div>
-      {params.get("id") == academicYear.id &&
+      {checkActiveTerm() &&
         tqf3Original &&
         tqf3.id &&
         (tqf3Part == "part1" ||

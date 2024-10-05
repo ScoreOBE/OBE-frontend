@@ -106,7 +106,8 @@ export default function ModalEditSection({
         dispatch(editCourseManagement(res2));
         if (openThisTerm) {
           const payloadCourse = {
-            academicYear: academicYear.id,
+            year: academicYear.year,
+            semester: academicYear.semester,
             courseNo: value?.courseNo,
           };
           const resCourse = await getOneCourse(payloadCourse);

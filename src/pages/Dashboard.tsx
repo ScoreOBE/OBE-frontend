@@ -63,14 +63,13 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    const yearId = params.get("id");
     const year = parseInt(params.get("year")!);
     const semester = parseInt(params.get("semester")!);
     if (academicYear.length) {
       const acaYear = academicYear.find(
-        (e) => e.id == yearId && e.semester == semester && e.year == year
+        (e) => e.semester == semester && e.year == year
       );
-      if (acaYear && yearId != term.id) {
+      if (acaYear && acaYear.id != term.id) {
         setTerm(acaYear);
       }
     }
@@ -80,7 +79,8 @@ export default function Dashboard() {
     if (term) {
       setPayload({
         ...new CourseRequestDTO(),
-        academicYear: term.id,
+        year: term.year,
+        semester: term.semester,
         search: course.search,
         hasMore: true,
       });
@@ -88,11 +88,10 @@ export default function Dashboard() {
     }
   }, [localStorage.getItem("search")]);
 
-  const fetchCourse = async (id: string) => {
+  const fetchCourse = async (year: number, semester: number) => {
     dispatch(setLoading(true));
     const payloadCourse = new CourseRequestDTO();
-    payloadCourse.academicYear = id;
-    setPayload({ ...payloadCourse, hasMore: true });
+    setPayload({ ...payloadCourse, year, semester, hasMore: true });
     const res = await getCourse(payloadCourse);
     if (res) {
       dispatch(setCourseList(res));
@@ -101,7 +100,7 @@ export default function Dashboard() {
   };
 
   const onShowMore = async () => {
-    if (payload.academicYear) {
+    if (payload.year && payload.semester) {
       const res = await getCourse({ ...payload, page: payload.page + 1 });
       if (res.length) {
         dispatch(addLoadMoreCourse(res));
@@ -154,9 +153,10 @@ export default function Dashboard() {
               title={
                 <p>
                   {" "}
-                  This action cannot be undone. After you delete this
-                  course, <br/> it will be permanently deleted all data from the current
-                  semester. Data from previous semesters will not be affected.{" "}
+                  This action cannot be undone. After you delete this course,{" "}
+                  <br /> it will be permanently deleted all data from the
+                  current semester. Data from previous semesters will not be
+                  affected.
                 </p>
               }
               icon={<IconExclamationCircle />}
@@ -178,7 +178,7 @@ export default function Dashboard() {
       <ModalAddCourse
         opened={openAddModal}
         onClose={() => setOpenAddModal(false)}
-        fetchCourse={(id) => fetchCourse(id)}
+        fetchCourse={(year, semester) => fetchCourse(year, semester)}
       />
       <ModalEditCourse
         opened={openModalEditCourse}

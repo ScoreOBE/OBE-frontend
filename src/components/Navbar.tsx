@@ -12,7 +12,6 @@ import { SearchInput } from "./SearchInput";
 export default function Navbar() {
   const location = useLocation().pathname;
   const [params, setParams] = useSearchParams();
-  const academicYear = useAppSelector((state) => state.academicYear);
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
   const dispatch = useAppDispatch();
 
@@ -25,13 +24,8 @@ export default function Navbar() {
     switch (path) {
       case ROUTE_PATH.DASHBOARD_INS:
         payloadCourse = { ...new CourseRequestDTO(), ...payloadCourse };
-        payloadCourse.academicYear =
-          academicYear.find(
-            (e) =>
-              e.id == params.get("id") &&
-              e.year == parseInt(params.get("year") ?? "") &&
-              e.semester == parseInt(params.get("semester") ?? "")
-          )?.id ?? "";
+        payloadCourse.year = parseInt(params.get("year") ?? "");
+        payloadCourse.semester = parseInt(params.get("semester") ?? "");
         res = await getCourse(payloadCourse);
         if (res) {
           res.search = payloadCourse.search;

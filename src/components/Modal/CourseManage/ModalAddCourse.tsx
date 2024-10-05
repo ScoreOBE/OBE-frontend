@@ -44,7 +44,7 @@ import { IModelSection } from "@/models/ModelSection";
 type Props = {
   opened: boolean;
   onClose: () => void;
-  fetchCourse: (id: string) => void;
+  fetchCourse: (year: number, semester: number) => void;
 };
 export default function ModalAddCourse({
   opened,
@@ -173,9 +173,8 @@ export default function ModalAddCourse({
   const setPayload = () => {
     let payload = {
       ...form.getValues(),
-      academicYear: academicYear.id,
-      updatedYear: academicYear.year,
-      updatedSemester: academicYear.semester,
+      year: academicYear.year,
+      semester: academicYear.semester,
     };
     payload.sections?.forEach((sec: any) => {
       if (payload.type == COURSE_TYPE.SEL_TOPIC.en) {
@@ -196,7 +195,7 @@ export default function ModalAddCourse({
         `${form.getValues().courseNo} is added`
       );
       closeModal();
-      fetchCourse(academicYear.id);
+      fetchCourse(academicYear.year, academicYear.semester);
     }
   };
 
