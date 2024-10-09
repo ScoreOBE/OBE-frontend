@@ -23,13 +23,17 @@ import { IconExclamationCircle } from "@tabler/icons-react";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { isEmpty, isEqual } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
-import { saveTQF3 } from "@/services/tqf3/tqf3.service";
+import {
+  getCourseReuseTQF3,
+  reuseTQF3,
+  saveTQF3,
+} from "@/services/tqf3/tqf3.service";
 import {
   getValueEnumByKey,
   showNotifications,
 } from "@/helpers/functions/function";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
-import { UseFormReturnType } from "@mantine/form";
+import { useForm, UseFormReturnType } from "@mantine/form";
 import exportFile from "@/assets/icons/exportFile.svg?react";
 import Loading from "@/components/Loading";
 import { IModelCLO, IModelTQF3 } from "@/models/ModelTQF3";
@@ -39,9 +43,10 @@ import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import { LearningMethod } from "@/components/Modal/TQF3/ModalManageCLO";
 import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
-import { setDataTQF3 } from "@/store/tqf3";
+import { setDataTQF3, updatePartTQF3 } from "@/store/tqf3";
 import { IModelSection } from "@/models/ModelSection";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
+import { IModelCourse } from "@/models/ModelCourse";
 
 export default function TQF3() {
   const { courseNo } = useParams();
@@ -50,7 +55,7 @@ export default function TQF3() {
   const loading = useAppSelector((state) => state.loading);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [tqf3Original, setTqf3Original] = useState<
-    IModelTQF3 & { topic?: string }
+    Partial<IModelTQF3> & { topic?: string; ploRequired?: string[] }
   >();
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
@@ -62,6 +67,8 @@ export default function TQF3() {
     useState(false);
   const [confirmToEditData, setConfirmToEditData] = useState(false);
   const [openModalReuse, setOpenModalReuse] = useState(false);
+  const [courseReuseTqf3List, setCourseReuseTqf3List] = useState<any[]>([]);
+  const [loadingRes, setLoadingRes] = useState(false);
   const partTab = [
     {
       value: Object.keys(partLabel)[0],
@@ -106,20 +113,84 @@ export default function TQF3() {
   }, []);
 
   useEffect(() => {
-    if (academicYear) fetchOneCourse(true);
+    if (academicYear && params.get("year") && params.get("semester")) {
+      if (checkActiveTerm()) fetchTqf3Reuse();
+    }
   }, [academicYear]);
 
   useEffect(() => {
-    if (tqf3.topic !== tqf3Original?.topic) {
+    if (academicYear && (tqf3.topic !== tqf3Original?.topic || !tqf3Original)) {
       fetchOneCourse(true);
     }
-  }, [tqf3.topic]);
+  }, [tqf3.topic, courseNo]);
+
+  useEffect(() => {
+    replaceReuseTQF3();
+  }, [tqf3.id]);
+
+  useEffect(() => {
+    if (!openWarningEditDataTQF2Or3 && confirmToEditData) {
+      onSave();
+      setConfirmToEditData(false);
+    }
+  }, [openWarningEditDataTQF2Or3, confirmToEditData]);
+
+  const checkActiveTerm = () => {
+    return (
+      parseInt(params.get("year") || "") === academicYear.year &&
+      parseInt(params.get("semester") || "") === academicYear.semester
+    );
+  };
+
+  const fetchTqf3Reuse = async () => {
+    const res = await getCourseReuseTQF3({
+      year: academicYear.year,
+      semester: academicYear.semester,
+    });
+    if (res) {
+      let uniqueTopicList: any[] = [];
+      res.map((course: IModelCourse) => {
+        const data = {
+          year: course.year,
+          semester: course.semester,
+          courseNo: course.courseNo,
+          type: course.type,
+        };
+        if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
+          course.sections.map((sec) => {
+            if (
+              sec.topic &&
+              !uniqueTopicList.some((item) => item.topic === sec.topic)
+            ) {
+              uniqueTopicList.push({
+                ...data,
+                value: sec.TQF3?.id,
+                topic: sec.topic,
+                label: `${course.courseNo} - ${sec.topic} (${
+                  course.semester
+                }/${course.year.toString().slice(-2)})`,
+              });
+            }
+          });
+        } else {
+          uniqueTopicList.push({
+            ...data,
+            value: course.TQF3?.id,
+            label: `${course.courseNo} - ${course.courseName} (${
+              course.semester
+            }/${course.year.toString().slice(-2)})`,
+          });
+        }
+      });
+      setCourseReuseTqf3List(uniqueTopicList);
+    }
+  };
 
   const fetchOneCourse = async (firstFetch: boolean = false) => {
     const [resCourse, resPloRequired] = await Promise.all([
       getOneCourse({
-        year: academicYear.year,
-        semester: academicYear.semester,
+        year: params.get("year"),
+        semester: params.get("semester"),
         courseNo,
       }),
       getOneCourseManagement(courseNo!),
@@ -128,12 +199,17 @@ export default function TQF3() {
       if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
         const sectionTdf3 = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf3.topic
-        ).TQF3;
-        setTqf3Original({ topic: tqf3.topic, ...sectionTdf3 });
+        )?.TQF3;
+        setTqf3Original({
+          topic: tqf3.topic,
+          ploRequired: resPloRequired?.plos || [],
+          part7: {},
+          ...sectionTdf3,
+        });
         dispatch(
           setDataTQF3({
             topic: tqf3.topic,
-            ploRequired: resPloRequired.plos,
+            ploRequired: resPloRequired?.plos || [],
             ...sectionTdf3,
             type: resCourse.type,
             sections: [...resCourse.sections],
@@ -145,13 +221,14 @@ export default function TQF3() {
       } else {
         setTqf3Original({
           topic: tqf3.topic,
-          ploRequired: resPloRequired.plos,
+          ploRequired: resPloRequired?.plos || [],
+          part7: {},
           ...resCourse.TQF3!,
         });
         dispatch(
           setDataTQF3({
             topic: tqf3.topic,
-            ploRequired: resPloRequired.plos,
+            ploRequired: resPloRequired?.plos || [],
             ...resCourse.TQF3!,
             type: resCourse.type,
             sections: [...resCourse.sections],
@@ -164,8 +241,21 @@ export default function TQF3() {
     }
   };
 
+  const replaceReuseTQF3 = () => {
+    for (let i = 1; i <= 7; i++) {
+      if (localStorage.getItem(`reuse${tqf3.id}-part${i}`)) {
+        dispatch(
+          updatePartTQF3({
+            part: `part${i}`,
+            data: JSON.parse(localStorage.getItem(`reuse${tqf3.id}-part${i}`)!),
+          })
+        );
+      }
+    }
+  };
+
   const setCurrentPartTQF3 = (tqf3: IModelTQF3) => {
-    if (!tqf3.part1) {
+    if (!tqf3 || !tqf3.part1) {
       setTqf3Part("part1");
     } else if (!tqf3.part2) {
       setTqf3Part("part2");
@@ -181,13 +271,6 @@ export default function TQF3() {
       setTqf3Part("part7");
     }
   };
-
-  useEffect(() => {
-    if (!openWarningEditDataTQF2Or3 && confirmToEditData) {
-      onSave();
-      setConfirmToEditData(false);
-    }
-  }, [openWarningEditDataTQF2Or3, confirmToEditData]);
 
   const onSave = async () => {
     if (form && tqf3.id && tqf3Part) {
@@ -227,13 +310,15 @@ export default function TQF3() {
                   percent !== tqf3.part3?.eval.find((e) => e.id == id)?.percent
               ))) ||
             (tqf3Original.part7 &&
-              tqf3.part2?.clo.length !== tqf3Original.part7.data.length))
+              tqf3.part2?.clo.length !== tqf3Original.part7.data?.length))
         ) {
           setOpenWarningEditDataTQF2Or3(true);
           return;
         }
+        if (confirmToEditData) payload.inProgress = true;
         const res = await saveTQF3(tqf3Part, payload);
         if (res) {
+          localStorage.removeItem(`reuse${tqf3.id}-${tqf3Part}`);
           setTqf3Original({ ...tqf3Original, ...res });
           dispatch(setDataTQF3({ ...tqf3, ...res }));
           showNotifications(
@@ -246,11 +331,75 @@ export default function TQF3() {
     }
   };
 
-  const checkActiveTerm = () => {
-    return (
-      parseInt(params.get("year") || "") === academicYear.year &&
-      parseInt(params.get("semester") || "") === academicYear.semester
-    );
+  const selectTqf3Reuse = useForm({
+    mode: "controlled",
+    initialValues: { value: "" },
+    validate: {
+      value: (value) => !value.length && "Select one course to reuse",
+    },
+    validateInputOnBlur: true,
+  });
+
+  const onClickReuseTQF3 = async () => {
+    if (!selectTqf3Reuse.validate().hasErrors && tqf3Original) {
+      setLoadingRes(true);
+      const res = await reuseTQF3({
+        id: tqf3Original.id,
+        reuseId: selectTqf3Reuse.getValues().value,
+      });
+      if (res) {
+        setTqf3Original({
+          id: tqf3.id,
+          topic: tqf3.topic,
+          ploRequired: tqf3.ploRequired,
+          part7: {} as any,
+        });
+        delete res.status;
+        delete res.updatedAt;
+        Object.keys(res).map((key) => {
+          if (key.includes("part")) {
+            delete res[key].updatedAt;
+            localStorage.setItem(
+              `reuse${tqf3.id}-${key}`,
+              JSON.stringify(res[key])
+            );
+          }
+        });
+        showNotifications(NOTI_TYPE.SUCCESS, "Reuse TQF3", "xxxxxxxxxxxx");
+      }
+      setLoadingRes(false);
+      setOpenModalReuse(false);
+      selectTqf3Reuse.reset();
+    }
+  };
+
+  const checkPartStatus = (value: keyof IModelTQF3) => {
+    return (!tqf3Original || !tqf3.id || isEmpty(tqf3Original[value])) &&
+      !localStorage.getItem(`reuse${tqf3.id}-${value}`)
+      ? "text-[#DEE2E6]" // No Data
+      : !isEqual(tqf3Original![value], tqf3[value]) ||
+        (value === "part4" &&
+          (tqf3Original!.part2?.clo.some(
+            ({ id }) =>
+              !tqf3Original!.part4?.data.map(({ clo }) => clo).includes(id)
+          ) ||
+            tqf3Original!.part3?.eval.some(
+              ({ id, percent }) =>
+                percent !==
+                tqf3Original!.part4?.data
+                  .map(({ evals }) => evals.find((e) => e.eval == id))
+                  .reduce((acc, cur) => acc + (cur?.percent || 0), 0)
+            ))) ||
+        (value === "part7" &&
+          (tqf3.part7?.data?.some(({ plos }) => plos.length == 0) ||
+            !tqf3.ploRequired?.every((plo) =>
+              tqf3.part7?.data?.some(({ plos }) =>
+                (plos as string[]).includes(plo)
+              )
+            ))) ||
+        localStorage.getItem(`reuse${tqf3.id}-${value}`)
+      ? "text-edit" // In Progress
+      : "text-[#24b9a5]"; // Done
   };
 
   return loading || !tqf3Original ? (
@@ -304,12 +453,22 @@ export default function TQF3() {
               input: `rounded-md`,
               option: `py-1  `,
             }}
-          ></Select>
+            data={courseReuseTqf3List}
+            {...selectTqf3Reuse.getInputProps("value")}
+          />
           <div className="flex gap-2 mt-3 justify-end">
-            <Button variant="subtle" onClick={() => setOpenModalReuse(false)}>
+            <Button
+              variant="subtle"
+              onClick={() => {
+                setOpenModalReuse(false);
+                selectTqf3Reuse.reset();
+              }}
+            >
               Cancel
             </Button>
-            <Button>Reuse TQF 3</Button>
+            <Button loading={loadingRes} onClick={onClickReuseTQF3}>
+              Reuse
+            </Button>
           </div>
         </div>
       </Modal>
@@ -397,9 +556,7 @@ export default function TQF3() {
               tqf3Part === "part4" && tqf3Original![tqf3Part]
                 ? "pb-1"
                 : "border-b-[2px] pb-4 mb-1"
-            } 
-           
-            `}
+            }`}
           >
             <Tabs.List className="md:gap-x-5 gap-x-3 w-full">
               {partTab.map(({ tab, value }) => (
@@ -407,46 +564,7 @@ export default function TQF3() {
                   <div className="flex flex-row items-center gap-2">
                     <Icon
                       IconComponent={CheckIcon}
-                      className={
-                        !tqf3Original ||
-                        !tqf3.id ||
-                        isEmpty(tqf3Original[value as keyof IModelTQF3])
-                          ? "text-[#DEE2E6]"
-                          : !isEqual(
-                              tqf3Original[value as keyof IModelTQF3],
-                              tqf3[value as keyof IModelTQF3]
-                            ) ||
-                            (value === "part4" &&
-                              (tqf3Original.part2?.clo.some(
-                                ({ id }) =>
-                                  !tqf3Original.part4?.data
-                                    .map(({ clo }) => clo)
-                                    .includes(id)
-                              ) ||
-                                tqf3Original.part3?.eval.some(
-                                  ({ id, percent }) =>
-                                    percent !==
-                                    tqf3Original.part4?.data
-                                      .map(({ evals }) =>
-                                        evals.find((e) => e.eval == id)
-                                      )
-                                      .reduce(
-                                        (acc, cur) => acc + (cur?.percent || 0),
-                                        0
-                                      )
-                                ))) ||
-                            (value === "part7" &&
-                              (tqf3.part7?.data.some(
-                                ({ plos }) => plos.length == 0
-                              ) ||
-                                !tqf3.ploRequired?.every((plo) =>
-                                  tqf3.part7?.data.some(({ plos }) =>
-                                    (plos as string[]).includes(plo)
-                                  )
-                                )))
-                          ? "text-edit"
-                          : "text-[#24b9a5]"
-                      }
+                      className={checkPartStatus(value as keyof IModelTQF3)}
                     />
                     {tab}
                   </div>

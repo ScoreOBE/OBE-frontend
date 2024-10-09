@@ -153,8 +153,8 @@ export default function CourseSidebar() {
         <div className="flex flex-col gap-5 ">
           <div className="flex flex-col flex-1 font-bold gap-1 ">
             <p className="text-lg">
-              {course?.courseNo} ({params.get("semester")}/
-              {params.get("year")?.slice(-2)})
+              {course?.courseNo} ({course?.semester}/
+              {course?.year.toString().slice(-2)})
             </p>
             <p className="text-[13px] font-semibold text-pretty max-w-full">
               {course?.courseName}
@@ -219,6 +219,7 @@ export default function CourseSidebar() {
                         <Menu.Divider />
                         {uniqTopic.map((topic) => (
                           <Menu.Item
+                            key={topic}
                             className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
                             variant="outline"
                             onClick={() => {
@@ -276,11 +277,12 @@ export default function CourseSidebar() {
                     style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 2px 8px" }}
                   >
                     {uniqTopic.length > 1 && (
-                      <div className="flex gap-[2px] flex-col  ">
+                      <div className="flex gap-[2px] flex-col">
                         <p className="my-1 text-[14px] pl-2">TQF 5</p>
                         <Menu.Divider />
                         {uniqTopic.map((topic) => (
                           <Menu.Item
+                            key={topic}
                             className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
                             variant="outline"
                             onClick={() => {

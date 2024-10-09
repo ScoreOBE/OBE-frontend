@@ -81,6 +81,7 @@ export default function Part1TQF3({ setForm }: Props) {
   useEffect(() => {
     if (tqf3.part1) {
       form.setValues(cloneDeep(tqf3.part1));
+      form.setFieldValue("courseType", tqf3.type);
       if (tqf3.part1.teachingLocation.in !== undefined) {
         checked.push("in");
       }
@@ -144,6 +145,7 @@ export default function Part1TQF3({ setForm }: Props) {
           <div className="flex text-default gap-3 flex-col">
             {curriculum.map((item) => (
               <Radio
+                key={item}
                 classNames={{
                   radio: `${disabled && "!cursor-default"}`,
                   label: `${

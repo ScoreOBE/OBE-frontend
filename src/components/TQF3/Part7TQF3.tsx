@@ -13,7 +13,6 @@ import unplug from "@/assets/image/unplug.png";
 import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useParams, useSearchParams } from "react-router-dom";
-import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import Loading from "../Loading";
 
 type Props = {
@@ -78,6 +77,10 @@ export default function Part7TQF3({ setForm }: Props) {
     });
     if (resPloCol) {
       setCoursePLO(resPloCol);
+      if (!resPloCol.data) {
+        localStorage.removeItem(`reuse${tqf3.id}-part7`);
+        dispatch(updatePartTQF3({ part: "part7", data: {} }));
+      }
     }
     setLoading(false);
   };
