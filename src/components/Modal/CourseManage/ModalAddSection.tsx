@@ -77,7 +77,7 @@ export default function ModalAddSection({
           return value?.length || !isManage ? null : "Please choose at least one semester.";
         },
         instructor: (value: any) =>
-          value?.value?.length ? null : "Please select one owner section.",
+          value?.value?.length ? null : "Please select one Section owner.",
       },
     },
     validateInputOnBlur: true,
@@ -439,7 +439,7 @@ export default function ModalAddSection({
         {isManage && (
           <Stepper.Step
             allowStepSelect={false}
-            label="Owner section"
+            label="Section owner"
             description="STEP 2"
           >
             <Alert
@@ -452,7 +452,7 @@ export default function ModalAddSection({
                 icon: "size-6",
                 body: " flex justify-center",
               }}
-              title={<p>Each section can only have one owner section.</p>}
+              title={<p>Each section can only have one Section owner.</p>}
             ></Alert>
             <div className="flex flex-col max-h-[380px] h-fit w-full mt-1 mb-5  p-[2px]    overflow-y-auto  ">
               <div className="flex flex-col font-medium text-[14px] gap-5">
@@ -461,7 +461,7 @@ export default function ModalAddSection({
                   .sections?.map((sec: Partial<IModelSection>, index) => (
                     <div className="flex flex-col" key={index}>
                       <span className="text-secondary font-semibold">
-                        Select Owner Section for Section{" "}
+                        Select Section owner for Section{" "}
                         {getSectionNo(sec.sectionNo)}
                         <span className="text-red-500"> *</span>
                         <br />
@@ -716,7 +716,7 @@ export default function ModalAddSection({
 
                     <div className="flex flex-col gap-1">
                       <span className="text-[#3E3E3E] font-semibold">
-                        Owner Section
+                        Section owner
                       </span>
                       <div className="ps-1.5 text-secondary">
                         <List size="sm" listStyleType="disc">

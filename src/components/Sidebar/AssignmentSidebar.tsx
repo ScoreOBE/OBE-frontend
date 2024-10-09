@@ -108,7 +108,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
       </div>
 
       <div className="flex  flex-col gap-2 mt-5">
-        <p className="text-b2 font-bold mb-1">Owner Section</p>
+        <p className="text-b2 font-bold mb-1">Section owner</p>
         <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
           <p className="text-pretty font-medium text-[12px]">
             {getUserName(section?.instructor as IModelUser, 1)}

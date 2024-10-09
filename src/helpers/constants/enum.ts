@@ -14,7 +14,7 @@ export enum ROLE {
 }
 export enum TITLE_ROLE {
   CO_INS = "Co-Instructor (Optional)",
-  OWNER_SEC = "Owner section",
+  OWNER_SEC = "Section owner",
 }
 
 export enum LOG_EVENT_TYPE {
