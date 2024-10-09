@@ -10,29 +10,26 @@ import store, { useAppDispatch, useAppSelector } from "@/store";
 import { RxDashboard } from "react-icons/rx";
 import {
   IconChevronLeft,
-  IconExclamationCircle,
   IconLogout,
   IconChevronRight,
 } from "@tabler/icons-react";
 import Icon from "@/components/Icon";
-import LeaveIcon from "@/assets/icons/leave.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import TQF3 from "@/assets/icons/TQF3.svg?react";
 import TQF5 from "@/assets/icons/TQF5.svg?react";
-import { removeCourse } from "@/store/course";
 import { IModelUser } from "@/models/ModelUser";
 import {
   getUserName,
-  showNotifications,
   sortData,
 } from "@/helpers/functions/function";
-import MainPopup from "../Popup/MainPopup";
-import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
-import { leaveCourse } from "@/services/course/course.service";
-import { useDisclosure } from "@mantine/hooks";
+import { COURSE_TYPE} from "@/helpers/constants/enum";
 import { setDataTQF3 } from "@/store/tqf3";
 
-export default function CourseSidebar() {
+type Props = {
+  onClickLeaveCourse: () => void;
+};
+
+export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const navigate = useNavigate();
   const { courseNo } = useParams();
   const [params, setParams] = useSearchParams();
@@ -45,12 +42,9 @@ export default function CourseSidebar() {
   const dispatch = useAppDispatch();
   const [instructors, setInstructors] = useState<IModelUser[]>([]);
   const [coInstructors, setCoInstructors] = useState<IModelUser[]>([]);
-  const [openModalSelectTopic, setOpenModalSelectTopic] = useState(false);
   const [uniqTopic, setUniqTopic] = useState<string[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<string>();
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
-  const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
-    useDisclosure(false);
 
   useEffect(() => {
     if (course) {
@@ -98,49 +92,8 @@ export default function CourseSidebar() {
     });
   };
 
-  const onClickLeaveCourse = async (id: string) => {
-    const res = await leaveCourse(id);
-    if (res) {
-      dispatch(removeCourse(res.id));
-      closeMainPopup();
-      showNotifications(NOTI_TYPE.SUCCESS, "Leave Course Success", ``);
-      navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`);
-    }
-  };
-
   return (
     <>
-      <MainPopup
-        opened={openMainPopup}
-        onClose={closeMainPopup}
-        action={() => onClickLeaveCourse(course?.id!)}
-        type="delete"
-        labelButtonRight={`Leave ${course?.courseNo}`}
-        icon={
-          <Icon IconComponent={LeaveIcon} className=" -translate-x-1 size-8" />
-        }
-        title={`Leaving ${course?.courseNo} Course`}
-        message={
-          <>
-            <Alert
-              variant="light"
-              color="red"
-              title={` After you leave ${course?.courseNo} course, you won't have access to Assignments, Score, TQF document and Grades in this course `}
-              icon={<IconExclamationCircle />}
-              classNames={{ icon: "size-6" }}
-              className="mb-5"
-            ></Alert>
-            <div className="flex flex-col  ">
-              <p className="text-b3  text-[#808080]">Course no.</p>
-              <p className=" -translate-y-[2px] text-b1">{`${course?.courseNo}`}</p>
-            </div>
-            <div className="flex flex-col mt-3 ">
-              <p className="text-b3  text-[#808080]">Course name</p>
-              <p className=" -translate-y-[2px] text-b1">{`${course?.courseName}`}</p>
-            </div>
-          </>
-        }
-      />
       <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
           className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
@@ -343,9 +296,7 @@ export default function CourseSidebar() {
             <div className="flex w-full gap-2 justify-end flex-col flex-1">
               <p className="text-b2 text-white font-bold">Course Action</p>
               <Button
-                onClick={() => {
-                  openedMainPopup();
-                }}
+                onClick={onClickLeaveCourse}
                 leftSection={<IconLogout className="size-5" stroke={1.5} />}
                 className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center transition-colors duration-300 focus:border-none group"
               >
