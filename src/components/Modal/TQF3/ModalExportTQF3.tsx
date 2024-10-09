@@ -87,7 +87,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
     <Modal
       opened={opened}
       onClose={onCloseModal}
-      closeOnClickOutside={false}
+      closeOnClickOutside={true}
       title={
         <div className="flex flex-col gap-2">
           <p>Export TQF3</p>
@@ -111,41 +111,43 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
           value={selectedParts}
           onChange={setSelectedParts}
         >
-          {Object.values(PartTopicTQF3).map((item, index) => {
-            const disabled =
-              tqf3 && !tqf3[getKeyPartTopicTQF3(item)!]?.updatedAt;
-            return (
-              <div
-                key={index}
-                className="flex p-1 mb-1 w-full h-full flex-col overflow-y-auto"
-              >
-                <Checkbox.Card
-                  className="p-3 items-center px-4 flex border-none h-fit rounded-md w-full"
-                  classNames={{
-                    card: `${disabled && "    cursor-not-allowed"}`,
-                  }}
-                  style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
-                  value={getKeyPartTopicTQF3(item)}
-                  disabled={disabled}
+          {Object.values(PartTopicTQF3)
+            .slice(0, 6)
+            .map((item, index) => {
+              const disabled =
+                tqf3 && !tqf3[getKeyPartTopicTQF3(item)!]?.updatedAt;
+              return (
+                <div
+                  key={index}
+                  className="flex p-1 mb-1 w-full h-full flex-col overflow-y-auto"
                 >
-                  <Group
-                    wrap="nowrap"
-                    className="item-center flex"
-                    align="flex-start"
-                  >
-                    <Checkbox.Indicator className="mt-1" disabled={disabled} />
-                    <div
-                      className={`text-default whitespace-break-spaces font-medium text-[13px] ${
-                        disabled ? " text-[#b5b5b5] cursor-not-allowed" : ""
-                      }`}
+                  {!disabled && (
+                    <Checkbox.Card
+                      className="p-3 items-center px-4 flex border-none h-fit rounded-md w-full"
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      }}
+                      value={getKeyPartTopicTQF3(item)}
                     >
-                      {item}
-                    </div>
-                  </Group>
-                </Checkbox.Card>
-              </div>
-            );
-          })}
+                      <Group
+                        wrap="nowrap"
+                        className="item-center flex"
+                        align="flex-start"
+                      >
+                        <Checkbox.Indicator className="mt-1 cursor-default" />
+                        <div
+                          className={`text-default whitespace-break-spaces font-medium text-[13px] ${
+                            disabled ? " text-[#b5b5b5] cursor-default" : ""
+                          }`}
+                        >
+                          {item}
+                        </div>
+                      </Group>
+                    </Checkbox.Card>
+                  )}
+                </div>
+              );
+            })}
         </Checkbox.Group>
       </div>
       <div className="flex justify-end mt-2 sticky w-full">

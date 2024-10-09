@@ -125,9 +125,9 @@ export default function Part7TQF3({ setForm }: Props) {
                   Each CLO must be linked to at least one PLO.
                   {tqf3.ploRequired?.length && (
                     <>
-                      If you see
+                      And if you see
                       <span className="text-red-500 font-bold">
-                        'required'
+                        {" "}'required' {" "}
                       </span>{" "}
                       in a PLO column, at least one of your CLOs must be linked
                       to that required PLO.
