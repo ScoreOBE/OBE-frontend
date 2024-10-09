@@ -73,7 +73,7 @@ export default function AssignmentSidebar() {
           </Button>
           <Button
             leftSection={
-              <Icon IconComponent={histogram} className="pl-1 pb-1" />
+              <Icon IconComponent={histogram} className="pb-1 pl-[2px] size-[22px]" />
             }
             className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
@@ -82,7 +82,7 @@ export default function AssignmentSidebar() {
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                 }`}
           >
-            <p className="pl-1">Histogram</p>
+            <p className="pl-[3px]">Histogram</p>
           </Button>
         </div>
       </div>

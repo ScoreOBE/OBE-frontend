@@ -87,7 +87,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
     <Modal
       opened={opened}
       onClose={onCloseModal}
-      closeOnClickOutside={false}
+      closeOnClickOutside={true}
       title={
         <div className="flex flex-col gap-2">
           <p>Export TQF3</p>
