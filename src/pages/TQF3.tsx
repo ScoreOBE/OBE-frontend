@@ -427,13 +427,6 @@ export default function TQF3() {
       >
         <FocusTrapInitialFocus />
         <div className="flex flex-col gap-3 ">
-          {/* <Alert
-            variant="light"
-            color="blue"
-            title={`Reusing TQF 3 will import all 6 parts of TQF 3 data from your selected course to automatically fill in the TQF 3 for ${courseNo}`}
-            icon={<IconInfoCircle />}
-            classNames={{ icon: "size-6" }}
-          ></Alert> */}
           <Alert
             variant="light"
             color="red"
