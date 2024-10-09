@@ -133,6 +133,9 @@ export default function Section() {
     });
   };
 
+
+
+
   return (
     <>
       <ModalEditSection
@@ -257,9 +260,7 @@ export default function Section() {
                           <span>Add section</span>
                         </div>
                       </Menu.Item>
-                      {course?.sections.find(
-                        (sec) => (sec.instructor as IModelUser).id == user.id
-                      ) && (
+                       
                         <Menu.Item
                           className="text-[#3e3e3e] font-semibold text-[12px] h-7 "
                           onClick={() => {
@@ -281,7 +282,7 @@ export default function Section() {
                             <span>Manage Co-Instructor</span>
                           </div>
                         </Menu.Item>
-                      )}
+                      
                       <Menu.Item
                         onClick={() => setOpenModalStudentList(true)}
                         className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[210px]"

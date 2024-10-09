@@ -782,7 +782,7 @@ export default function ModalAddCourse({
                     </span>
                     <div className="flex flex-col gap-1">
                       <span className="text-tertiary font-semibold">
-                        Owner Section
+                        Section owner
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">
                         <List size="sm" listStyleType="disc">

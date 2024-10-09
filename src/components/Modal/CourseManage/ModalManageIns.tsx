@@ -1,11 +1,12 @@
-import { Button, Checkbox, Menu, Modal } from "@mantine/core";
+import { Alert, Button, Checkbox, Menu, Modal } from "@mantine/core";
 import {
   IconUserCircle,
   IconChevronLeft,
   IconUsers,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/store";
+import store, { useAppDispatch, useAppSelector } from "@/store";
 import {
   getSectionNo,
   getUserName,
@@ -55,6 +56,7 @@ export default function ModalManageIns({
   const [coInsList, setCoInsList] = useState<any[]>();
   const [editCoSec, setEditCoSec] = useState<any[]>([]);
   const [editCoInsList, setEditCoInsList] = useState<any[]>();
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     if (opened) {
@@ -104,7 +106,7 @@ export default function ModalManageIns({
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Change Owener section success",
-        `${value.label} is an owner section ${getSectionNo(
+        `${value.label} is an Section owner ${getSectionNo(
           editSec?.data.sectionNo
         )}.`
       );
@@ -229,15 +231,43 @@ export default function ModalManageIns({
           type == "courseManagement" && "mt-3"
         }`}
       >
-        <CompoManageIns
-          opened={opened}
-          type={type == "course" ? "manageCoSec" : "manageCo"}
-          action={addCoIns}
-          sections={editCoSec}
-          setUserList={
-            setEditCoInsList as React.Dispatch<React.SetStateAction<any[]>>
-          }
-        />
+        {!data?.sections?.find(
+          (sec: any) =>
+            (sec.instructor as IModelUser).id == store.getState().user.id
+        ) ? (
+          <div>
+            <Alert
+              radius="md"
+              icon={<IconInfoCircle />}
+              variant="light"
+              color="blue"
+              className="mb-5"
+              classNames={{
+                icon: "size-6",
+                body: " flex justify-center",
+              }}
+              title={
+                <p>
+                  You don't have permission to manage co-instructors in this
+                  course. <br /> Please reach out to the section owner for help!
+                </p>
+              }
+            ></Alert>
+            <Button className="mt-1 min-w-fit !h-[36px] !text-[14px] !w-full">
+              I understood
+            </Button>
+          </div>
+        ) : (
+          <CompoManageIns
+            opened={opened}
+            type={type == "course" ? "manageCoSec" : "manageCo"}
+            action={addCoIns}
+            sections={editCoSec}
+            setUserList={
+              setEditCoInsList as React.Dispatch<React.SetStateAction<any[]>>
+            }
+          />
+        )}
         {!!editCoInsList?.length && (
           <div className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md">
             <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
@@ -331,14 +361,19 @@ export default function ModalManageIns({
             </div>
           </div>
         )}
-        <Button
-          className="!h-[36px] !w-full"
-          onClick={onClickSave}
-          disabled={isEqual(coInsList, editCoInsList)}
-          loading={loading}
-        >
-          {type == "course" ? "Save Changes" : "Save"}
-        </Button>
+        {data?.sections?.find(
+          (sec: any) =>
+            (sec.instructor as IModelUser).id == store.getState().user.id
+        ) && (
+          <Button
+            className="!h-[36px] !w-full"
+            onClick={onClickSave}
+            disabled={isEqual(coInsList, editCoInsList)}
+            loading={loading}
+          >
+            {type == "course" ? "Save Changes" : "Save"}
+          </Button>
+        )}
       </div>
     );
   };
@@ -375,15 +410,6 @@ export default function ModalManageIns({
           "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden ",
       }}
     >
-      {/* <motion.div
-        initial={{ height: !changeMainIns ? "h-fit" : "240px" }}
-        animate={{ height: changeMainIns ? "240px" : "h-fit" }} // Adjust height based on state
-        transition={{ duration: 0.3 }}
-        key={changeMainIns.toString()}
-      > */}
-      {/* <div
-        className={`height-animation ${changeMainIns ? "collaps" : "expand"}`}
-      > */}
       {changeMainIns && editSec ? (
         <div className="flex flex-col gap-2">
           <div
@@ -398,7 +424,7 @@ export default function ModalManageIns({
                 {getUserName(editSec?.instructor as IModelUser, 1)}
               </p>
               <p className="text-secondary text-[12px] font-normal">
-                Owner Section {getSectionNo(editSec.data.sectionNo)}{" "}
+                Section owner {getSectionNo(editSec.data.sectionNo)}{" "}
               </p>
             </div>
           </div>
@@ -414,7 +440,7 @@ export default function ModalManageIns({
       ) : (
         <Tabs defaultValue="mainInstructor">
           <Tabs.List>
-            <Tabs.Tab value="mainInstructor">Owner section</Tabs.Tab>
+            <Tabs.Tab value="mainInstructor">Section owner</Tabs.Tab>
             <Tabs.Tab value="coInstructor">Co-Instructor section</Tabs.Tab>
           </Tabs.List>
 
@@ -436,7 +462,7 @@ export default function ModalManageIns({
                         {getUserName(sec.instructor, 1)}
                       </p>
                       <p className="text-secondary text-[12px] font-normal">
-                        Owner Section {getSectionNo(sec.sectionNo)}{" "}
+                        Section owner {getSectionNo(sec.sectionNo)}{" "}
                       </p>
                     </div>
                   </div>

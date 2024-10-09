@@ -9,10 +9,14 @@ import { Provider } from "react-redux";
 import store from "@/store/index.ts";
 import { BrowserRouter as Router, RouterProvider } from "react-router-dom";
 import { Notifications } from "@mantine/notifications";
-import { quantum } from "ldrs";
+import { quantum, grid, infinity, ping, hourglass } from "ldrs";
 import router from "./routes/router.tsx";
 
 quantum.register();
+grid.register();
+infinity.register();
+ping.register();
+hourglass.register();
 
 const theme = createTheme({
   cursorType: "pointer",

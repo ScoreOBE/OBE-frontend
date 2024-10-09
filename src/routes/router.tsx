@@ -12,6 +12,7 @@ import {
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import App from "@/App";
 import PageError from "@/pages/PageError";
+import Histogram from "@/pages/Histogram";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,11 @@ const router = createBrowserRouter([
               {
                 path: `:sectionNo/${ROUTE_PATH.ASSIGNMENT}`,
                 element: <Assignment />,
+                errorElement: <></>,
+              },
+              {
+                path: `:sectionNo/${ROUTE_PATH.HISTOGRAM}`,
+                element: <Histogram />,
                 errorElement: <></>,
               },
             ],
