@@ -161,8 +161,9 @@ export default function Part3TQF3({ setForm }: Props) {
                   {...form.getInputProps("gradingPolicy")}
                 >
                   <Group className="flex flex-col items-start">
-                    {optionGrading.map((item) => (
+                    {optionGrading.map((item, index) => (
                       <Radio
+                        key={index}
                         classNames={{
                           radio: `${disabled && "!cursor-default"}`,
                           label: `${disabled && "!cursor-default"}`,

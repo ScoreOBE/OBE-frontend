@@ -105,48 +105,45 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       }}
     >
       <div className="flex flex-col">
-        <Checkbox.Group
-          label="Select parts to export"
-          classNames={{ label: "mb-1 font-semibold text-default" }}
-          value={selectedParts}
-          onChange={setSelectedParts}
-        >
-          {Object.values(PartTopicTQF3).map((item, index) => {
-            const disabled =
-              tqf3 && !tqf3[getKeyPartTopicTQF3(item)!]?.updatedAt;
-            return (
-              <div
-                key={index}
-                className="flex p-1 mb-1 w-full h-full flex-col overflow-y-auto"
-              >
-                <Checkbox.Card
-                  className="p-3 items-center px-4 flex border-none h-fit rounded-md w-full"
-                  classNames={{
-                    card: `${disabled && "    cursor-not-allowed"}`,
-                  }}
-                  style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
-                  value={getKeyPartTopicTQF3(item)}
-                  disabled={disabled}
+        {!tqf3.part1?.updatedAt ? (
+          <div>xxxxxxxxxxxxxxxxxxxxxxx</div>
+        ) : (
+          <Checkbox.Group
+            label="Select parts to export"
+            classNames={{ label: "mb-1 font-semibold text-default" }}
+            value={selectedParts}
+            onChange={setSelectedParts}
+          >
+            {Object.values(PartTopicTQF3)
+              .slice(0, 6)
+              .filter(
+                (item) => tqf3 && tqf3[getKeyPartTopicTQF3(item)!]?.updatedAt
+              )
+              .map((item, index) => (
+                <div
+                  key={index}
+                  className="flex p-1 mb-1 w-full h-full flex-col overflow-y-auto"
                 >
-                  <Group
-                    wrap="nowrap"
-                    className="item-center flex"
-                    align="flex-start"
+                  <Checkbox.Card
+                    className="p-3 items-center px-4 flex border-none h-fit rounded-md w-full"
+                    style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
+                    value={getKeyPartTopicTQF3(item)}
                   >
-                    <Checkbox.Indicator className="mt-1" disabled={disabled} />
-                    <div
-                      className={`text-default whitespace-break-spaces font-medium text-[13px] ${
-                        disabled ? " text-[#b5b5b5] cursor-not-allowed" : ""
-                      }`}
+                    <Group
+                      wrap="nowrap"
+                      className="item-center flex"
+                      align="flex-start"
                     >
-                      {item}
-                    </div>
-                  </Group>
-                </Checkbox.Card>
-              </div>
-            );
-          })}
-        </Checkbox.Group>
+                      <Checkbox.Indicator className="mt-1" />
+                      <div className="text-default whitespace-break-spaces font-medium text-[13px]">
+                        {item}
+                      </div>
+                    </Group>
+                  </Checkbox.Card>
+                </div>
+              ))}
+          </Checkbox.Group>
+        )}
       </div>
       <div className="flex justify-end mt-2 sticky w-full">
         <Group className="flex w-full gap-2 h-fit items-end justify-end">
@@ -157,13 +154,14 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
             loading={loading}
             rightSection={
               <IconFileExport
-                color="#ffffff"
+                color={!tqf3.part1?.updatedAt ? "#adb5bd" : "#ffffff"}
                 className="size-5 items-center"
                 stroke={2}
                 size={20}
               />
             }
             onClick={generatePDF}
+            disabled={!tqf3.part1?.updatedAt}
           >
             Export TQF3
           </Button>

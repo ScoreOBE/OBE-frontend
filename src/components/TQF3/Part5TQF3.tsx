@@ -42,7 +42,7 @@ export default function Part5TQF3({ setForm }: Props) {
     }
   }, []);
 
-  return tqf3?.part3?.updatedAt ? (
+  return tqf3?.part4?.updatedAt ? (
     <>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 pb-5  ">
         <div className="flex text-secondary flex-col text-[15px]">
