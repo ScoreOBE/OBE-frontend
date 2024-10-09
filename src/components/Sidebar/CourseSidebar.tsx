@@ -12,18 +12,24 @@ import {
   IconChevronLeft,
   IconLogout,
   IconChevronRight,
+  IconAlertTriangle,
+  IconExclamationCircle,
 } from "@tabler/icons-react";
 import Icon from "@/components/Icon";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import TQF3 from "@/assets/icons/TQF3.svg?react";
 import TQF5 from "@/assets/icons/TQF5.svg?react";
 import { IModelUser } from "@/models/ModelUser";
-import {
-  getUserName,
-  sortData,
-} from "@/helpers/functions/function";
-import { COURSE_TYPE} from "@/helpers/constants/enum";
+import { getUserName, sortData } from "@/helpers/functions/function";
+import MainPopup from "../Popup/MainPopup";
+import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
+import { getOneCourse, leaveCourse } from "@/services/course/course.service";
+import { useDisclosure } from "@mantine/hooks";
 import { setDataTQF3 } from "@/store/tqf3";
+import { IModelTQF3 } from "@/models/ModelTQF3";
+import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
+import { IModelSection } from "@/models/ModelSection";
+import { isEqual } from "lodash";
 
 type Props = {
   onClickLeaveCourse: () => void;
@@ -44,7 +50,13 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const [coInstructors, setCoInstructors] = useState<IModelUser[]>([]);
   const [uniqTopic, setUniqTopic] = useState<string[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<string>();
-  const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
+  const tqf3 = useAppSelector((state) => state.tqf3);
+  const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
+    useDisclosure(false);
+  const [openAlertPopup, setOpenAlertPopup] = useState(false);
+  const [tqf3Original, setTqf3Original] = useState<
+    Partial<IModelTQF3> & { topic?: string; ploRequired?: string[] }
+  >();
 
   useEffect(() => {
     if (course) {
@@ -56,7 +68,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       });
       setUniqTopic(temp);
       setSelectedTopic(temp[0]);
-      if (tqf3Topic != temp[0]) {
+      if (tqf3.topic != temp[0]) {
         dispatch(setDataTQF3({ topic: temp[0] }));
       }
       const insList: any[] = [];
@@ -92,12 +104,86 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
     });
   };
 
+  const fetchOneCourse = async (firstFetch: boolean = false) => {
+    const [resCourse, resPloRequired] = await Promise.all([
+      getOneCourse({
+        year: params.get("year"),
+        semester: params.get("semester"),
+        courseNo,
+      }),
+      getOneCourseManagement(courseNo!),
+    ]);
+    if (resCourse) {
+      if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
+        const sectionTdf3 = resCourse.sections.find(
+          (sec: IModelSection) => sec.topic == tqf3.topic
+        )?.TQF3;
+        setTqf3Original({
+          topic: tqf3.topic,
+          ...sectionTdf3,
+        });
+      } else {
+        setTqf3Original({
+          topic: tqf3.topic,
+          ...resCourse.TQF3!,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    const changePart: string[] = [];
+
+    if (tqf3Original && tqf3.id) {
+      for (let i = 1; i <= 7; i++) {
+        const part = `part${i}` as keyof IModelTQF3;
+
+        if (!isEqual(tqf3Original[part], tqf3[part])) {
+          changePart.push(part);
+        }
+      }
+      if (changePart.length) {
+        setOpenAlertPopup(true);
+      } else {
+        goToPage(ROUTE_PATH.DASHBOARD_INS, true);
+      }
+      console.log(changePart);
+    }
+  }, [tqf3Original]);
+
+  const checkTQF3status = () => {
+    fetchOneCourse();
+  };
+
   return (
     <>
+      <MainPopup
+        opened={openAlertPopup}
+        onClose={() => setOpenAlertPopup(false)}
+        action={() => {
+          setOpenAlertPopup(false), goToPage(ROUTE_PATH.DASHBOARD_INS, true);
+        }}
+        type="warning"
+        labelButtonRight={`Keep editing`}
+        labelButtonLeft="Leave without saving"
+        title={`TQF3 Unsaved changes ?`}
+        message={
+          <>
+            <Alert
+              variant="light"
+              color="#F58722"
+              title={`You have unsaved changes will be lost if you decide to leave without saving.`}
+              icon={<IconExclamationCircle />}
+              classNames={{ icon: "size-6" }}
+            ></Alert>
+          </>
+        }
+      />
       <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
           className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
-          onClick={() => goToPage(ROUTE_PATH.DASHBOARD_INS, true)}
+          // onClick={() => goToPage(ROUTE_PATH.DASHBOARD_INS, true)}
+          onClick={checkTQF3status}
         >
           <IconChevronLeft size={20} viewBox="8 0 24 24" />
           Back to Your Course
@@ -106,8 +192,8 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         <div className="flex flex-col gap-5 ">
           <div className="flex flex-col flex-1 font-bold gap-1 ">
             <p className="text-lg">
-              {course?.courseNo} ({course?.semester}/
-              {course?.year.toString().slice(-2)})
+              {course?.courseNo} ({params.get("semester")}/
+              {params.get("year")?.slice(-2)})
             </p>
             <p className="text-[13px] font-semibold text-pretty max-w-full">
               {course?.courseName}
@@ -172,11 +258,10 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                         <Menu.Divider />
                         {uniqTopic.map((topic) => (
                           <Menu.Item
-                            key={topic}
                             className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
                             variant="outline"
                             onClick={() => {
-                              if (topic !== tqf3Topic) {
+                              if (topic !== tqf3.topic) {
                                 dispatch(setDataTQF3({ topic }));
                               }
                               goToPage(ROUTE_PATH.TQF3);
@@ -230,16 +315,15 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                     style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 2px 8px" }}
                   >
                     {uniqTopic.length > 1 && (
-                      <div className="flex gap-[2px] flex-col">
+                      <div className="flex gap-[2px] flex-col  ">
                         <p className="my-1 text-[14px] pl-2">TQF 5</p>
                         <Menu.Divider />
                         {uniqTopic.map((topic) => (
                           <Menu.Item
-                            key={topic}
                             className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
                             variant="outline"
                             onClick={() => {
-                              if (topic !== tqf3Topic) {
+                              if (topic !== tqf3.topic) {
                                 dispatch(setDataTQF3({ topic }));
                               }
                               goToPage(ROUTE_PATH.TQF5);

@@ -4,6 +4,7 @@ import { IModelTQF3Part1 } from "@/models/ModelTQF3";
 import { IModelUser } from "@/models/ModelUser";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
+import AddIcon from "@/assets/icons/plus.svg?react";
 import {
   Radio,
   Checkbox,
@@ -11,11 +12,14 @@ import {
   Textarea,
   Group,
   NumberInput,
+  Button,
 } from "@mantine/core";
+import { IconTrash } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { cloneDeep, isEqual } from "lodash";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import Icon from "../Icon";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -39,7 +43,6 @@ export default function Part1TQF3({ setForm }: Props) {
     { year: 5, en: "5th year", th: "ชั้นปีที่ 5" },
     { year: 6, en: "6th year", th: "ชั้นปีที่ 6" },
   ];
-
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -60,6 +63,7 @@ export default function Part1TQF3({ setForm }: Props) {
           const uniqueDuplicates = [...new Set(duplicates)];
           return `Duplicate instructors "${uniqueDuplicates.join(", ")}"`;
         }
+        if (value.find((e) => e === "")) return "Input instructor name";
       },
       teachingLocation: (value) =>
         value.in === undefined &&
@@ -69,7 +73,6 @@ export default function Part1TQF3({ setForm }: Props) {
     validateInputOnBlur: true,
     onValuesChange(values, previous) {
       if (!isEqual(values, previous)) {
-        values.instructors = values.instructors?.filter((ins) => ins.length);
         dispatch(
           updatePartTQF3({ part: "part1", data: cloneDeep(form.getValues()) })
         );
@@ -103,7 +106,7 @@ export default function Part1TQF3({ setForm }: Props) {
             ]) as IModelUser[]
           )?.map((instructor) => getUserName(instructor, 3)!)
         )
-      ).slice(0, 8);
+      );
       form.setFieldValue("instructors", uniqueInstructors);
     }
   }, []);
@@ -252,38 +255,62 @@ export default function Part1TQF3({ setForm }: Props) {
           />
         </div>
       </div>
-
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
+      {/* อาจารย์ผู้สอนทั้งหมด  */}
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-top grid grid-cols-3 py-5">
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">
-            อาจารย์ผู้สอนทั้งหมด<span className=" text-red-500"> *</span>
+            อาจารย์ผู้สอนทั้งหมด<span className="text-red-500"> *</span>
           </p>
-          <p className="font-semibold">Lecturers</p>{" "}
+          <p className="font-semibold">Lecturers</p>
           <p className="error-text mt-1">
             {form.getInputProps("instructors").error}
           </p>
         </div>
-        <div
-          className="flex flex-col gap-3 text-default"
-          key={form.key("instructors")}
-          {...form.getInputProps("instructors")}
-        >
-          {Array.from({ length: 8 }).map((_, index) => (
-            <TextInput
+
+        <div className="flex flex-col gap-3 text-default w-fit ">
+          {form.getValues().instructors?.map((item, index) => (
+            <div
               key={form.key(`instructors.${index}`)}
-              withAsterisk={index == 0}
-              size="xs"
-              label={`Instructor ${index + 1}`}
-              classNames={{
-                label: "text-default",
-                input: `${disabled && "!cursor-default"}`,
-              }}
-              className="w-[440px]"
-              placeholder={index == 0 ? "(required)" : "(optional)"}
-              disabled={disabled}
-              {...form.getInputProps(`instructors.${index}`)}
-            />
+              className="flex gap-2 items-end"
+            >
+              <TextInput
+                withAsterisk={index === 0}
+                size="xs"
+                label={`Instructor ${index + 1}`}
+                classNames={{
+                  label: "text-default",
+                  input: `${disabled && "!cursor-default"}`,
+                }}
+                className="w-[440px]"
+                placeholder={index === 0 ? "(required)" : "(optional)"}
+                disabled={disabled}
+                {...form.getInputProps(`instructors.${index}`)}
+                value={form.getValues().instructors[index]}
+              />
+              {index !== 0 && (
+                <Button
+                  className="text-center px-2 border-none hover:bg-[#ff4747]/10"
+                  variant="outline"
+                  color="#ff4747"
+                  onClick={() => form.removeListItem("instructors", index)}
+                >
+                  <IconTrash size={18} stroke={1.5} />
+                </Button>
+              )}
+            </div>
           ))}
+          <div className=" w-[440px] flex ">
+            <Button
+              className="text-center px-4  mt-2"
+              variant="outline"
+              onClick={() => form.insertListItem("instructors", "")}
+            >
+              <div className="flex gap-2">
+                <Icon IconComponent={AddIcon} />
+                Add
+              </div>
+            </Button>
+          </div>
         </div>
       </div>
 

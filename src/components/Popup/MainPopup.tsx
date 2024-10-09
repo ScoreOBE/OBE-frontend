@@ -13,6 +13,7 @@ type Props = {
   title: ReactNode;
   message: ReactNode;
   labelButtonRight?: string;
+  labelButtonLeft?: string;
   icon?: ReactElement;
 };
 
@@ -23,6 +24,7 @@ export default function MainPopup({
   title,
   message,
   labelButtonRight,
+  labelButtonLeft,
   icon,
   type,
 }: Props) {
@@ -77,7 +79,24 @@ export default function MainPopup({
               </Button>
             </>
           ) : type == "warning" ? (
-            <></>
+            <>
+              <Button
+                variant="subtle"
+                className="!text-[13px]"
+                onClick={
+                  labelButtonLeft === "Leave without saving" ? action : onClose
+                }
+              >
+                {labelButtonLeft ? labelButtonLeft : "Cancel"}
+              </Button>
+              <Button
+                color="#F58722"
+                className="!text-[13px]"
+                onClick={labelButtonRight === "Keep editing" ? onClose : action}
+              >
+                {labelButtonRight}
+              </Button>
+            </>
           ) : (
             <></>
           )}{" "}
