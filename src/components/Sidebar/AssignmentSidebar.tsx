@@ -19,7 +19,11 @@ import { useDisclosure } from "@mantine/hooks";
 import { IModelSection } from "@/models/ModelSection";
 import Loading from "../Loading";
 
-export default function AssignmentSidebar() {
+type Props = {
+  onClickLeaveCourse: () => void;
+};
+
+export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
   const { courseNo, sectionNo } = useParams();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
@@ -45,6 +49,16 @@ export default function AssignmentSidebar() {
     }
   }, [courseList, courseNo]);
 
+  const gotoPage = (newPath: string) => {
+    navigate({
+      pathname: location.pathname.replace(
+        location.pathname.split("/")[5],
+        newPath
+      ),
+      search: "?" + params.toString(),
+    });
+  };
+
   return loading ? (
     <Loading />
   ) : (
@@ -60,6 +74,7 @@ export default function AssignmentSidebar() {
         </div>
         <div className="flex flex-col gap-2">
           <Button
+            onClick={() => gotoPage(ROUTE_PATH.ASSIGNMENT)}
             leftSection={<Icon IconComponent={list} />}
             className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
@@ -72,15 +87,20 @@ export default function AssignmentSidebar() {
             Assignment
           </Button>
           <Button
+            onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
             leftSection={
-              <Icon IconComponent={histogram} className="pb-1 pl-[2px] size-[22px]" />
+              <Icon
+                IconComponent={histogram}
+                className="pb-1 pl-[2px] size-[22px]"
+              />
             }
             className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
-                ${
-                  path.includes(ROUTE_PATH.TQF3)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                }`}
+                 ${
+                   path.includes(ROUTE_PATH.HISTOGRAM)
+                     ? // ![ROUTE_PATH.TQF3, ROUTE_PATH.TQF5].includes(path)
+                       "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                 }`}
           >
             <p className="pl-[3px]">Histogram</p>
           </Button>
@@ -116,9 +136,7 @@ export default function AssignmentSidebar() {
           <div className="flex  w-full gap-2 justify-end flex-col flex-1">
             <p className="text-b2 text-white font-bold">Course Action</p>
             <Button
-              onClick={() => {
-                openedMainPopup();
-              }}
+              onClick={onClickLeaveCourse}
               leftSection={<IconLogout className="h-5 w-5" stroke={1.5} />}
               className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center transition-colors duration-300 focus:border-none group"
             >

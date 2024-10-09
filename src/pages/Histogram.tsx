@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import Icon from "@/components/Icon";
 import { IModelSection } from "@/models/ModelSection";
-import { Alert, Button, Menu, Modal, Pill, Table } from "@mantine/core";
+import { Button, Menu, Table } from "@mantine/core";
 import eyePublish from "@/assets/icons/eyePublish.svg?react";
 import publish from "@/assets/icons/publish.svg?react";
 import publishEach from "@/assets/icons/publishEach.svg?react";
@@ -12,23 +12,22 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import {
-  IconArrowRight,
   IconDots,
-  IconInfoCircle,
+  IconList,
   IconPencilMinus,
   IconTrash,
 } from "@tabler/icons-react";
+
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 
-export default function Assignment() {
+export default function Histogram() {
   const { courseNo, sectionNo } = useParams();
-  const course = useAppSelector((state) =>
-    state.course.courses.find((e) => e.courseNo == courseNo)
-  );
+  const course = useAppSelector((state) => state.course.courses);
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
   const [section, setSection] = useState<IModelSection>();
   const [items, setItems] = useState<any[]>([
     {
@@ -41,183 +40,24 @@ export default function Assignment() {
         ROUTE_PATH.SECTION
       }?${params.toString()}`,
     },
-    { title: `Assignment Section ${getSectionNo(sectionNo)}` },
+    { title: `Histogram Section ${getSectionNo(sectionNo)}` },
   ]);
-  const [openAllPublishModal, setOpenAllPublishModal] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
   }, []);
 
+ 
+
   return (
     <>
-      <Modal
-        opened={openAllPublishModal}
-        closeOnClickOutside={false}
-        size="38vw"
-        title={
-          <div className="flex flex-col gap-2">
-            <p>Publish score all sections</p>
-            <p className=" text-[12px] text-noData">
-              {courseNo} {course?.courseName}
-            </p>
-          </div>
-        }
-        transitionProps={{ transition: "pop" }}
-        centered
-        onClose={() => setOpenAllPublishModal(false)}
-      >
-        <Alert
-          variant="light"
-          color="blue"
-          title={
-            <p>
-              <span className="font-extrabold underline">All students</span>
-              {` enrolled in this course will be able to see the assignments score you publish.`}
-            </p>
-          }
-          icon={<IconInfoCircle />}
-          classNames={{ icon: "size-6" }}
-          className="mb-5"
-        ></Alert>
-        <div className="-mt-1 gap-2 flex flex-col mb-6">
-          <p className="text-[14px] mb-1 font-semibold text-default">
-            Select assignment to publish
-          </p>
-          <div className=" flex flex-col gap-3">
-            <div>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 w-36 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-semibold translate-y-[3px]",
-                }}
-                size="md"
-              >
-                All assignments
-              </Pill>
-            </div>
-            <div className=" flex gap-3">
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 1
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Test
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 2
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 3
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 4
-              </Pill>
-            </div>
-            <div className=" flex gap-3">
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Prelim 1
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 4
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 5
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 6
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Midterm
-              </Pill>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex gap-2 justify-end w-full">
-          <Button variant="subtle">Cancel</Button>
-          <Button rightSection={<IconArrowRight stroke={2} size={20} />}>
-            Next
-          </Button>
-        </div>
-      </Modal>
       <div className="bg-white flex flex-col h-full w-full p-6 pb-3 pt-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
         {/* <Breadcrumbs /> */}
         <div className="flex flex-row  py-2  items-center justify-between">
           <p className="text-secondary text-[16px] font-semibold">
-            {section?.assignments.length} 1 Assignment
+            {section?.assignments.length} Histogram
             {section?.assignments.length! > 1 && "s"}
           </p>
 
@@ -242,16 +82,13 @@ export default function Assignment() {
               className="!z-50 -translate-y-[3px] translate-x-[5px] bg-white"
               style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
             >
-              <Menu.Item
-                
-                className="text-[#3E3E3E] text-[14px] h-8 w-full "
-              >
+              <Menu.Item className="text-[#3E3E3E] text-[14px] h-8 w-full ">
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={publishEach} className="h-4 w-4" />
                   <span>Each Section</span>
                 </div>
               </Menu.Item>
-              <Menu.Item onClick={() => setOpenAllPublishModal(true)} className="text-[#3E3E3E] text-[14px] h-8 w-full ">
+              <Menu.Item className="text-[#3E3E3E] text-[14px] h-8 w-full ">
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={publishAll} className="h-4 w-4" />
                   <span>All Sections</span>

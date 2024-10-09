@@ -1,5 +1,10 @@
 import cmulogo from "@/assets/image/cmuLogo.png";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import DashboardSidebar from "./Sidebar/DashboardSidebar";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import CourseSidebar from "./Sidebar/CourseSidebar";
@@ -7,27 +12,41 @@ import { motion } from "framer-motion";
 import AssignmentSidebar from "./Sidebar/AssignmentSidebar";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { getCourse } from "@/services/course/course.service";
+import { getCourse, leaveCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import { setCourseList } from "@/store/course";
+import { removeCourse, setCourseList } from "@/store/course";
 import { setLoading } from "@/store/loading";
+import { Alert } from "@mantine/core";
+import { IconExclamationCircle } from "@tabler/icons-react";
+import MainPopup from "./Popup/MainPopup";
+import Icon from "./Icon";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { showNotifications } from "@/helpers/functions/function";
+import { useDisclosure } from "@mantine/hooks";
+import LeaveIcon from "@/assets/icons/leave.svg?react";
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const { courseNo } = useParams();
+  const course = useAppSelector((state) =>
+    state.course.courses.find((e) => e.courseNo == courseNo)
+  );
   const path = useLocation().pathname;
   const [params, setParams] = useSearchParams();
   const loading = useAppSelector((state) => state.loading);
   const academicYear = useAppSelector((state) => state.academicYear);
   const courseList = useAppSelector((state) => state.course.courses);
   const dispatch = useAppDispatch();
+  const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
+    useDisclosure(false);
   const getSidebar = () => {
     if (path.includes(ROUTE_PATH.DASHBOARD_INS)) {
       return <DashboardSidebar />;
     } else if (!loading) {
       if (path.includes(ROUTE_PATH.COURSE)) {
-        if (path.includes(ROUTE_PATH.ASSIGNMENT)) {
-          return <AssignmentSidebar />;
-        } else return <CourseSidebar />;
+        if ([ROUTE_PATH.ASSIGNMENT, ROUTE_PATH.HISTOGRAM].some(route => path.includes(route))) {
+          return <AssignmentSidebar onClickLeaveCourse={openedMainPopup} />;
+        } else return <CourseSidebar onClickLeaveCourse={openedMainPopup} />;
       }
     } else return;
   };
@@ -51,6 +70,16 @@ export default function Sidebar() {
     dispatch(setLoading(false));
   };
 
+  const onClickLeaveCourse = async (id: string) => {
+    const res = await leaveCourse(id);
+    if (res) {
+      dispatch(removeCourse(res.id));
+      closeMainPopup();
+      showNotifications(NOTI_TYPE.SUCCESS, "Leave Course Success", ``);
+      navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`);
+    }
+  };
+
   return (
     <motion.div
       initial={{
@@ -71,6 +100,37 @@ export default function Sidebar() {
         />
         {getSidebar()}
       </div>
+      <MainPopup
+        opened={openMainPopup}
+        onClose={closeMainPopup}
+        action={() => onClickLeaveCourse(course?.id!)}
+        type="delete"
+        labelButtonRight={`Leave ${course?.courseNo}`}
+        icon={
+          <Icon IconComponent={LeaveIcon} className=" -translate-x-1 size-8" />
+        }
+        title={`Leaving ${course?.courseNo} Course`}
+        message={
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title={` After you leave ${course?.courseNo} course, you won't have access to Assignments, Score, TQF document and Grades in this course `}
+              icon={<IconExclamationCircle />}
+              classNames={{ icon: "size-6" }}
+              className="mb-5"
+            ></Alert>
+            <div className="flex flex-col  ">
+              <p className="text-b3  text-[#808080]">Course no.</p>
+              <p className=" -translate-y-[2px] text-b1">{`${course?.courseNo}`}</p>
+            </div>
+            <div className="flex flex-col mt-3 ">
+              <p className="text-b3  text-[#808080]">Course name</p>
+              <p className=" -translate-y-[2px] text-b1">{`${course?.courseName}`}</p>
+            </div>
+          </>
+        }
+      />
     </motion.div>
   );
 }

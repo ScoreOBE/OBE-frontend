@@ -9,4 +9,5 @@ export const ROUTE_PATH = {
   TQF3: "tqf3",
   TQF5: "tqf5",
   ASSIGNMENT: "assignment",
+  HISTOGRAM: "histogram",
 };

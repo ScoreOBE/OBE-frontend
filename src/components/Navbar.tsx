@@ -49,6 +49,7 @@ export default function Navbar() {
         else if (location.includes(ROUTE_PATH.TQF5))
           return `TQF 5${tqf3Topic ? ` - ${tqf3Topic}` : ""}`;
         else if (location.includes(ROUTE_PATH.ASSIGNMENT)) return "Assignment";
+        else if (location.includes(ROUTE_PATH.HISTOGRAM)) return "Histogram";
         else return "Section";
       default:
         return;
