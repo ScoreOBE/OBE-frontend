@@ -159,12 +159,12 @@ export default function Profile() {
                 </div>
               </div>
               <Menu.Divider />
-              <Menu.Item className="text-default text-[14px] h-8 w-full ">
+              {/* <Menu.Item className="text-default text-[14px] h-8 w-full ">
                 <div className="flex items-center gap-2">
                   <IconList stroke={1.5} className="size-5" />
                   <span>Activity log</span>
                 </div>
-              </Menu.Item>
+              </Menu.Item> */}
               <Menu.Item>
                 <div className="flex items-center gap-2">
                   <IconUserScreen className="size-5" stroke={1.5} />

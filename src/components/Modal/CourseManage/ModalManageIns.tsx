@@ -249,7 +249,7 @@ export default function ModalManageIns({
               title={
                 <p>
                   You don't have permission to manage co-instructors in this
-                  course. <br /> Please reach out to the section owner for help!
+                  course. <br /> Please contact to the section owner for help!
                 </p>
               }
             ></Alert>

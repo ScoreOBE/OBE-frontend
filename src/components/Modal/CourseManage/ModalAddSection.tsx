@@ -422,7 +422,7 @@ export default function ModalAddSection({
                   label: "font-semibold text-tertiary text-b2",
                   error: "text-[10px] !border-none",
                 }}
-                placeholder="Ex. 001 or 1 (Press Enter for fill the next section)"
+                placeholder="Ex. 001 or 1 (Press Enter or Spacebar for fill the next section)"
                 splitChars={[",", " ", "|"]}
                 {...form.getInputProps(`section.sectionNo`)}
                 error={

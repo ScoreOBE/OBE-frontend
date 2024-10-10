@@ -118,6 +118,7 @@
 .mantine-Select-dropdown {
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px !important;
 }
+
 * [data-combobox-selected],
 .mantine-Select-option:hover {
   background-color: var(--color-hover) !important;

@@ -419,7 +419,7 @@ export default function Part3TQF3({ setForm }: Props) {
       ) : (
         <div className="flex px-16  flex-row items-center justify-between h-full">
           <div className="flex justify-center  h-full items-start gap-2 flex-col">
-            <p className="   text-secondary font-semibold text-[18px]">
+            <p className="   text-secondary font-semibold text-[22px]">
               Complete TQF3 Part 2 First
             </p>
             <p className=" text-[#333333] leading-6 font-medium text-[14px]">

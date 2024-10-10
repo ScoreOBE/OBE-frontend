@@ -103,7 +103,7 @@ export default function PageError() {
               <span className=" text-secondary "> Score OBE</span>
               <span className=" text-[#dab531]"> +</span>
               <br />
-              Reach out to the system administrator to gain access
+              contact to the system administrator to gain access
             </p>
             <Button
               onClick={goDashboard}

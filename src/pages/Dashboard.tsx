@@ -352,13 +352,13 @@ export default function Dashboard() {
           ) : course.courses.length === 0 ? (
             <div className=" flex flex-row flex-1 justify-between">
               <div className="h-full px-[60px] justify-center flex flex-col">
-                <p className="text-primary text-h2 font-semibold">
+                <p className="text-secondary text-[22px] font-semibold">
                   {course.search.length
                     ? `No results for "${course.search}" `
                     : "No course found"}
                 </p>
                 <br />
-                <p className=" -mt-4 mb-6   text-b2 break-words font-400 leading-relaxed">
+                <p className=" -mt-4 mb-6 text-b2 break-words font-400 leading-relaxed">
                   {course.search.length ? (
                     <>Check the spelling or try a new search.</>
                   ) : (

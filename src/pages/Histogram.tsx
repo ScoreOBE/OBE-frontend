@@ -11,6 +11,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
+import needAccess from "@/assets/image/needAccess.jpg";
 import {
   IconDots,
   IconList,
@@ -20,10 +21,13 @@ import {
 
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
+import Loading from "@/components/Loading";
+import { IModelUser } from "@/models/ModelUser";
 
 export default function Histogram() {
   const { courseNo, sectionNo } = useParams();
   const course = useAppSelector((state) => state.course.courses);
+  const user = useAppSelector((state) => state.user);
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -51,10 +55,17 @@ export default function Histogram() {
  
 
   return (
-    <>
+    
       <div className="bg-white flex flex-col h-full w-full p-6 pb-3 pt-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
         {/* <Breadcrumbs /> */}
+        {loading ? (
+          <Loading />
+        ) : (section?.instructor as IModelUser)?.id === user.id ||
+          (section?.coInstructors as IModelUser[])
+            ?.map(({ id }) => id)
+            .includes(user.id) ? (
+          <>
         <div className="flex flex-row  py-2  items-center justify-between">
           <p className="text-secondary text-[16px] font-semibold">
             {section?.assignments.length} Histogram
@@ -158,11 +169,26 @@ export default function Histogram() {
               </Table.Tr>
             </Table.Tbody>
           </Table>
-        </div>
+        </div></>) : (
+           <div className="flex px-16  flex-row items-center justify-between h-full">
+           <div className="flex justify-center  h-full items-start gap-2 flex-col">
+             <p className="   text-secondary font-semibold text-[22px]">
+               You need access
+             </p>
+             <p className=" text-[#333333] leading-6 font-medium text-[14px]">
+               You're not listed as a Co-Instructor. <br /> Please contact the
+               section owner for access.
+             </p>
+           </div>
+           <img
+             className=" z-50  size-[560px] "
+             src={needAccess}
+             alt="loginImage"
+           />
+         </div>
+        )}
       </div>
-      <div className=" text-secondary font-semibold  whitespace-break-spaces">
-        u need access na
-      </div>
-    </>
+      
+    
   );
 }
