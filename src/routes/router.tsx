@@ -21,22 +21,18 @@ const router = createBrowserRouter([
       {
         path: ROUTE_PATH.LOGIN,
         element: <Login />,
-        errorElement: <></>,
       },
       {
         path: ROUTE_PATH.CMU_OAUTH_CALLBACK,
         element: <CMUOAuthCallback />,
-        errorElement: <></>,
       },
       {
         path: ROUTE_PATH.SELECTED_DEPARTMENT,
         element: <SelectDepartment />,
-        errorElement: <></>,
       },
       {
         path: ROUTE_PATH.DASHBOARD_INS,
         element: <Dashboard />,
-        errorElement: <></>,
       },
       {
         path: `${ROUTE_PATH.COURSE}/:courseNo`,
@@ -47,31 +43,31 @@ const router = createBrowserRouter([
               {
                 path: "",
                 element: <Section />,
-                errorElement: <></>,
+      
               },
               {
                 path: `:sectionNo/${ROUTE_PATH.ASSIGNMENT}`,
                 element: <Assignment />,
-                errorElement: <></>,
+      
               },
               {
                 path: `:sectionNo/${ROUTE_PATH.HISTOGRAM}`,
                 element: <Histogram />,
-                errorElement: <></>,
+      
               },
             ],
           },
           {
             path: ROUTE_PATH.TQF3,
             element: <TQF3 />,
-            errorElement: <></>,
+  
           },
         ],
       },
       {
         path: "*",
         element: <Page404 />,
-        errorElement: <></>,
+       
       },
     ],
   },

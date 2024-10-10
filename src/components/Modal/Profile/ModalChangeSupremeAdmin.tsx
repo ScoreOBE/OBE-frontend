@@ -104,9 +104,9 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       >
         <Alert
           radius="md"
-          icon={<IconInfoCircle />}
+          icon={<IconExclamationCircle />}
           variant="light"
-          color="blue"
+          color="red"
           className="mb-5"
           classNames={{
             icon: "size-6",

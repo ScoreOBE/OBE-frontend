@@ -105,7 +105,7 @@ export default function ModalManageTopic({
       opened={opened}
       onClose={onCloseModal}
       closeOnClickOutside={false}
-      title={`${upperFirst(type)} Topic TQF3 Part 6`}
+      title={`${upperFirst(type)} Topic TQF 3 Part 6`}
       size={type === "add" ? "45vw" : "40vw"}
       centered
       transitionProps={{ transition: "pop" }}
@@ -251,7 +251,7 @@ export default function ModalManageTopic({
           </div>
           <Button
             onClick={addEditTopic}
-            leftSection={type === "add" && <Icon IconComponent={AddIcon} />}
+            // leftSection={type === "add" && <Icon IconComponent={AddIcon} />}
             className="pl-4"
             disabled={optionsTopicPart6.every((e) =>
               data
@@ -260,7 +260,7 @@ export default function ModalManageTopic({
                 .includes(e.th)
             )}
           >
-            {type === "add" ? "Add" : "Done"}
+            {type === "add" ? "Done" : "Done"}
           </Button>
         </Group>
       </div>
