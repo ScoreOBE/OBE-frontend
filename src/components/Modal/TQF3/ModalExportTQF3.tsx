@@ -10,6 +10,7 @@ import {
 import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
+import { IModelTQF3 } from "@/models/ModelTQF3";
 
 type Props = {
   opened: boolean;
@@ -26,7 +27,10 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
   useEffect(() => {
     if (opened) {
       Object.keys(tqf3).forEach((part) => {
-        if (part.includes("part")) {
+        if (
+          part.includes("part") &&
+          (tqf3[part as keyof IModelTQF3] as any)?.updatedAt
+        ) {
           selectedParts.push(part);
         }
       });
