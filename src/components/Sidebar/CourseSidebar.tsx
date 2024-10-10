@@ -163,16 +163,16 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         action={() => {
           setOpenAlertPopup(false), goToPage(ROUTE_PATH.DASHBOARD_INS, true);
         }}
-        type="warning"
+        type='unsaved'
         labelButtonRight={`Keep editing`}
         labelButtonLeft="Leave without saving"
-        title={`TQF3 Unsaved changes ?`}
+        title={`TQF 3 Unsaved changes ?`}
         message={
           <>
             <Alert
               variant="light"
-              color="#F58722"
-              title={`You have unsaved changes will be lost if you decide to leave without saving.`}
+              color='red'
+              title={`You have unsaved changes. If you leave now, these changes will be lost.`}
               icon={<IconExclamationCircle />}
               classNames={{ icon: "size-6" }}
             ></Alert>

@@ -14,6 +14,7 @@ import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useParams, useSearchParams } from "react-router-dom";
 import Loading from "../Loading";
+import notFoundImage from "@/assets/image/notFound.png";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -130,7 +131,8 @@ export default function Part7TQF3({ setForm }: Props) {
                     <>
                       And if you see
                       <span className="text-red-500 font-bold">
-                        {" "}'required' {" "}
+                        {" "}
+                        'required'{" "}
                       </span>{" "}
                       in a PLO column, at least one of your CLOs must be linked
                       to that required PLO.
@@ -267,13 +269,31 @@ export default function Part7TQF3({ setForm }: Props) {
       </>
     ) : (
       <div className="flex flex-col w-full h-full justify-center items-center">
-        {loading ? <Loading /> : "PLO Collection Not Found"}
+        {loading ? (
+          <Loading />
+        ) : (
+          <div className="flex px-16 flex-row items-center justify-between h-full">
+            <div className="flex justify-center  h-full items-start gap-2 flex-col">
+              <p className="   text-secondary font-semibold text-[22px]">
+                Course Not Linked to PLO Collection
+              </p>
+              <p className=" text-[#333333] leading-6 font-medium text-[14px]">
+              This course is currently not linked to any PLO collection. <br/> If you need to do this part, please contact your department administrator.
+              </p>
+            </div>
+            <img
+              className=" z-50  w-[580px] h-[300px] "
+              src={unplug}
+              alt="loginImage"
+            />
+          </div>
+        )}
       </div>
     )
   ) : (
     <div className="flex px-16  flex-row items-center justify-between h-full">
       <div className="flex justify-center  h-full items-start gap-2 flex-col">
-        <p className="   text-secondary font-semibold text-[18px]">
+        <p className="   text-secondary font-semibold text-[22px]">
           Complete TQF3 Part 6 First
         </p>
         <p className=" text-[#333333] leading-6 font-medium text-[14px]">

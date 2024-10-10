@@ -3,7 +3,7 @@ import { ReactElement, ReactNode } from "react";
 import Icon from "@/components/Icon";
 import DeleteIcon from "@/assets/icons/delete.svg?react";
 
-type popupType = "delete" | "warning";
+type popupType = "delete" | "warning" | "unsaved";
 
 type Props = {
   opened: boolean;
@@ -34,6 +34,8 @@ export default function MainPopup({
         return "text-[#FF4747]";
       case "warning":
         return "text-[#F58722]";
+      case "unsaved":
+        return "text-[#5768d5]";
     }
   };
   return (
@@ -78,7 +80,7 @@ export default function MainPopup({
                 {labelButtonRight}
               </Button>
             </>
-          ) : type == "warning" ? (
+          ) : type == "unsaved" ? (
             <>
               <Button
                 variant="subtle"
@@ -90,7 +92,7 @@ export default function MainPopup({
                 {labelButtonLeft ? labelButtonLeft : "Cancel"}
               </Button>
               <Button
-                color="#F58722"
+                color="#5768d5"
                 className="!text-[13px]"
                 onClick={labelButtonRight === "Keep editing" ? onClose : action}
               >
