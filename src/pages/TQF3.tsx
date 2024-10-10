@@ -374,7 +374,9 @@ export default function TQF3() {
   };
 
   const checkPartStatus = (value: keyof IModelTQF3) => {
-    return (!tqf3Original || !tqf3.id || isEmpty(tqf3Original[value])) &&
+    return (!tqf3Original ||
+      !tqf3.id ||
+      (isEmpty(tqf3Original[value]) && !tqf3[value])) &&
       !localStorage.getItem(`reuse${tqf3.id}-${value}`)
       ? "text-[#DEE2E6]" // No Data
       : !isEqual(tqf3Original![value], tqf3[value]) ||
