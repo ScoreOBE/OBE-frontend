@@ -51,8 +51,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const [uniqTopic, setUniqTopic] = useState<string[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<string>();
   const tqf3 = useAppSelector((state) => state.tqf3);
-  const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
-    useDisclosure(false);
   const [openAlertPopup, setOpenAlertPopup] = useState(false);
   const [tqf3Original, setTqf3Original] = useState<
     Partial<IModelTQF3> & { topic?: string; ploRequired?: string[] }
@@ -105,14 +103,11 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   };
 
   const fetchOneCourse = async (firstFetch: boolean = false) => {
-    const [resCourse, resPloRequired] = await Promise.all([
-      getOneCourse({
-        year: params.get("year"),
-        semester: params.get("semester"),
-        courseNo,
-      }),
-      getOneCourseManagement(courseNo!),
-    ]);
+    const resCourse = await getOneCourse({
+      year: params.get("year"),
+      semester: params.get("semester"),
+      courseNo,
+    });
     if (resCourse) {
       if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
         const sectionTdf3 = resCourse.sections.find(
@@ -134,20 +129,20 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   useEffect(() => {
     const changePart: string[] = [];
 
-    if (tqf3Original && tqf3.id) {
+    if (tqf3Original) {
       for (let i = 1; i <= 7; i++) {
         const part = `part${i}` as keyof IModelTQF3;
 
-        if (!isEqual(tqf3Original[part], tqf3[part])) {
+        if (!isEqual(tqf3Original?.[part], tqf3[part])) {
           changePart.push(part);
         }
       }
-      if (changePart.length) {
+
+      if (changePart.length && tqf3.id) {
         setOpenAlertPopup(true);
       } else {
         goToPage(ROUTE_PATH.DASHBOARD_INS, true);
       }
-      console.log(changePart);
     }
   }, [tqf3Original]);
 
@@ -161,7 +156,9 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         opened={openAlertPopup}
         onClose={() => setOpenAlertPopup(false)}
         action={() => {
-          setOpenAlertPopup(false), goToPage(ROUTE_PATH.DASHBOARD_INS, true);
+          dispatch(setDataTQF3({}));
+          setOpenAlertPopup(false);
+          goToPage(ROUTE_PATH.DASHBOARD_INS, true);
         }}
         type="warning"
         labelButtonRight={`Keep editing`}
@@ -182,7 +179,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
           className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
-          // onClick={() => goToPage(ROUTE_PATH.DASHBOARD_INS, true)}
           onClick={checkTQF3status}
         >
           <IconChevronLeft size={20} viewBox="8 0 24 24" />
