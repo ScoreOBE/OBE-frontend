@@ -249,7 +249,7 @@ export default function ModalManageIns({
               title={
                 <p>
                   You don't have permission to manage co-instructors in this
-                  course. <br /> Please contact to the section owner for help!
+                  course. <br /> Please contact to the section owner for manage.
                 </p>
               }
             ></Alert>
@@ -384,7 +384,7 @@ export default function ModalManageIns({
       onClose={onClose}
       title={
         type == "course" ? (
-          "Management Co-instructor"
+          "Management Co-Instructor"
         ) : (
           <div className="flex gap-2 items-center">
             {changeMainIns && (

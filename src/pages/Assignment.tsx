@@ -236,10 +236,11 @@ export default function Assignment() {
             .includes(user.id) ? (
           <>
             <div className="flex flex-row  py-2  items-center justify-between">
-              <p className="text-secondary text-[16px] font-semibold">
+              <p className="text-secondary text-[18px] font-semibold">
                 {section?.assignments?.length} 1 Assignment
                 {section?.assignments?.length! > 1 && "s"}
               </p>
+            
 
               <Menu
                 trigger="click"
@@ -655,17 +656,13 @@ export default function Assignment() {
               </p>
             </div>
             <img
-              className=" z-50  size-[560px] "
+              className=" z-50  size-[460px] "
               src={needAccess}
               alt="loginImage"
             />
           </div>
         )}
       </div>
-
-      {/* <div className=" text-secondary font-semibold  whitespace-break-spaces">
-        
-      </div> */}
     </>
   );
 }
