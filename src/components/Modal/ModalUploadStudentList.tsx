@@ -16,6 +16,7 @@ import regcmu from "@/assets/image/regCMULogo.png";
 import exStudentList from "@/assets/image/exStudentList.png";
 
 type Props = {
+  selectCourse?: boolean;
   opened: boolean;
   onClose: () => void;
   data: Partial<IModelCourse>;
@@ -24,6 +25,7 @@ type Props = {
 };
 
 export default function ModalUploadStudentList({
+  selectCourse = true,
   opened,
   onClose,
   data,
@@ -172,7 +174,7 @@ export default function ModalUploadStudentList({
         <div className="flex justify-end sticky w-full">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
             <Button onClick={onBack} variant="subtle">
-              Back
+              {selectCourse ? "Back" : "Cancel"}
             </Button>
 
             <Button

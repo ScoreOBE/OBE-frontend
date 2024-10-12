@@ -17,16 +17,6 @@ export enum TITLE_ROLE {
   OWNER_SEC = "Section owner",
 }
 
-export enum LOG_EVENT_TYPE {
-  FILE = "File",
-  COURSE_MANAGEMENT = "Course Management",
-  ASSIGNMENT = "Assignment",
-  SCORE = "Score",
-  CO_INS = "Co-Instructor",
-  TQF = "TQF",
-  ADMIN = "Admin",
-}
-
 export const COURSE_TYPE = {
   GENERAL: { en: "General Education", th: "วิชาศึกษาทั่วไป" },
   SPECIAL: { en: "Field of Specialization", th: "วิชาเฉพาะ" },

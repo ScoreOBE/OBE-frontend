@@ -136,6 +136,11 @@ export default function Dashboard() {
     });
   };
 
+  const closeModalSelectCourse = () => {
+    setOpenModalSelectCourse(false);
+    setUploadCourse({});
+  };
+
   return (
     <>
       <MainPopup
@@ -188,15 +193,15 @@ export default function Dashboard() {
       <Modal
         title="Upload score"
         transitionProps={{ transition: "pop" }}
-        size="32vw"
+        // size="32vw"
         centered
         classNames={{
-          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+          content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
         closeOnClickOutside={false}
         opened={openModalSelectCourse}
-        onClose={() => setOpenModalSelectCourse(false)}
+        onClose={closeModalSelectCourse}
       >
         <div className="flex flex-col gap-8">
           <Select
@@ -250,14 +255,9 @@ export default function Dashboard() {
           />
           <div className="flex justify-end w-full">
             <Group className="flex w-full h-fit items-end justify-end">
-              <div>
-                <Button
-                  variant="subtle"
-                  onClick={() => setOpenModalSelectCourse(false)}
-                >
-                  Cancel
-                </Button>
-              </div>
+              <Button variant="subtle" onClick={closeModalSelectCourse}>
+                Cancel
+              </Button>
               <Button
                 onClick={() => {
                   setOpenModalUploadStudentList(true);
@@ -287,15 +287,20 @@ export default function Dashboard() {
       <ModalUploadStudentList
         data={uploadCourse!}
         opened={openModalUploadStudentList}
-        onClose={() => setOpenModalUploadStudentList(false)}
+        onClose={() => {
+          closeModalSelectCourse();
+          setOpenModalUploadStudentList(false);
+        }}
         onBack={() => {
-          setOpenModalUploadStudentList(false), setOpenModalSelectCourse(true);
+          setOpenModalUploadStudentList(false);
+          setOpenModalSelectCourse(true);
         }}
         onNext={() => {
-          setOpenModalUploadScore(true), setOpenModalUploadStudentList(false);
+          closeModalSelectCourse();
+          setOpenModalUploadScore(true);
+          setOpenModalUploadStudentList(false);
         }}
       />
-
       <div className=" flex flex-col h-full w-full  overflow-hidden">
         <div className="flex flex-row px-6 pt-3   items-center justify-between">
           <div className="flex flex-col">
@@ -329,19 +334,17 @@ export default function Dashboard() {
               <Button
                 variant="outline"
                 className="text-center px-4"
+                leftSection={<Icon IconComponent={AddIcon} />}
                 onClick={() => setOpenAddModal(true)}
               >
-                <div className="flex gap-2">
-                  <Icon IconComponent={AddIcon} />
-                  Add course
-                </div>
+                Add course
               </Button>
               <Button
                 className="text-center px-4"
                 leftSection={<IconUpload className="size-4" />}
                 onClick={() => setOpenModalSelectCourse(true)}
               >
-                <div className="flex gap-2">Upload score</div>
+                Upload score
               </Button>
             </div>
           )}
