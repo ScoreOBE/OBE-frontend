@@ -252,12 +252,12 @@ export default function ModalStudentList({
                           href="https://www1.reg.cmu.ac.th/registrationoffice/searchcourse.php"
                           target="_blank"
                         >
-                          <p className="text-secondary font-semibold hover:text-[#394cc9] hover:underline inline-flex items-center">
+                          <span className="text-secondary font-semibold hover:text-[#394cc9] hover:underline inline-flex items-center">
                             Reg CMU{" "}
                             <span className="ml-1">
                               <IconExternalLink className="size-4" />
                             </span>
-                          </p>
+                          </span>
                         </a>
                       </p>
                     </div>
