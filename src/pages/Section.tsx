@@ -39,6 +39,7 @@ import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
+import ModalExportScore from "@/components/Modal/ModalExportScore";
 
 export default function Section() {
   const navigate = useNavigate();
@@ -67,6 +68,7 @@ export default function Section() {
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
   const [openModalManageIns, setOpenModalManageIns] = useState(false);
   const [openModalStudentList, setOpenModalStudentList] = useState(false);
+  const [openModalExportScore, setOpenModalExportScore] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -132,9 +134,6 @@ export default function Section() {
       search: "?" + params.toString(),
     });
   };
-
-
-
 
   return (
     <>
@@ -206,6 +205,11 @@ export default function Section() {
         type="studentList"
       />
 
+      <ModalExportScore
+        opened={openModalExportScore}
+        onClose={() => setOpenModalExportScore(false)}
+      />
+
       {error.statusCode ? (
         <PageError />
       ) : loading ? (
@@ -260,29 +264,29 @@ export default function Section() {
                           <span>Add section</span>
                         </div>
                       </Menu.Item>
-                       
-                        <Menu.Item
-                          className="text-[#3e3e3e] font-semibold text-[12px] h-7 "
-                          onClick={() => {
-                            setEditCourseData({
-                              ...course,
-                              sections: course?.sections.filter(
-                                (sec) =>
-                                  (sec.instructor as IModelUser)?.id == user.id
-                              ),
-                            });
-                            setOpenModalManageIns(true);
-                          }}
-                        >
-                          <div className="flex items-center gap-2">
-                            <Icon
-                              className="h-4 w-4"
-                              IconComponent={ManageAdminIcon}
-                            />
-                            <span>Manage Co-Instructor</span>
-                          </div>
-                        </Menu.Item>
-                      
+
+                      <Menu.Item
+                        className="text-[#3e3e3e] font-semibold text-[12px] h-7 "
+                        onClick={() => {
+                          setEditCourseData({
+                            ...course,
+                            sections: course?.sections.filter(
+                              (sec) =>
+                                (sec.instructor as IModelUser)?.id == user.id
+                            ),
+                          });
+                          setOpenModalManageIns(true);
+                        }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Icon
+                            className="h-4 w-4"
+                            IconComponent={ManageAdminIcon}
+                          />
+                          <span>Manage Co-Instructor</span>
+                        </div>
+                      </Menu.Item>
+
                       <Menu.Item
                         onClick={() => setOpenModalStudentList(true)}
                         className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[210px]"
@@ -292,7 +296,10 @@ export default function Section() {
                           <span>Student list {course?.courseNo}</span>
                         </div>
                       </Menu.Item>
-                      <Menu.Item className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-[12px] h-7 ">
+                      <Menu.Item
+                        onClick={() => setOpenModalExportScore(true)}
+                        className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-[12px] h-7 "
+                      >
                         <div className="flex items-center  gap-2">
                           <Icon
                             className="h-4 w-4 "

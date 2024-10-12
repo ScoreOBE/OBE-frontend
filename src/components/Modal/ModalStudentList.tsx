@@ -145,10 +145,10 @@ export default function ModalStudentList({
           placeholder="Section No, Student No, Name"
           size="xs"
           rightSectionPointerEvents="all"
-          className="mx-1 "
+          className="mx-1"
         ></TextInput>
         <div
-          className=" mx-1 max-h-[500px] h-fit  flex flex-col bg-white mb-1  mt-2 rounded-md overflow-y-auto"
+          className=" mx-1  max-h-[500px] h-fit  flex flex-col bg-white mb-1  mt-4 rounded-md overflow-y-auto"
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}

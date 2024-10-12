@@ -78,7 +78,7 @@ export default function Histogram() {
 
   return (
     <>
-      <div className="bg-white flex flex-col h-full w-full p-6 pb-3 pt-5 gap-3 overflow-hidden">
+      <div className="bg-white flex flex-col h-full w-full px-6 pt-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
         {/* <Breadcrumbs /> */}
         {loading ? (
@@ -87,17 +87,20 @@ export default function Histogram() {
           (section?.coInstructors as IModelUser[])
             ?.map(({ id }) => id)
             .includes(user.id) ? (
-          <div className="flex overflow-hidden w-full h-full  ">
+          <div className="flex overflow-y-hidden w-full h-full  ">
             <Scrollspy sectionRefs={sectionRefs}>
               {({ currentElementIndexInViewport }) => {
                 return (
-                  <div className=" flex w-full h-full overflow-hidden">
-                    <div className=" flex flex-col w-[93%] max-h-full overflow-y-auto">
+                  <div className="flex gap-1  w-full h-full ">
+                    <div className=" gap-6 flex flex-col my-1 w-[90%] overflow-y-auto overflow-x-visible px-1 pt-1   max-h-full ">
                       {mockData.map((item, i) => {
                         console.log(item.name, sectionRefs[i]);
                         return (
                           <div
-                            className={`flex flex-col gap-24
+                            style={{
+                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                            }}
+                            className={` last:mb-4 flex flex-col rounded-md gap-10 px-5 py-3
                           ${currentElementIndexInViewport === i ? "active" : ""}
                           `}
                             id={`${item.name}`}
@@ -168,9 +171,10 @@ export default function Histogram() {
                               </div>
                             </div>
                             {/* Chart */}
-                            <div className=" bg-slate-300 h-full w-full">
+                            <div className="h-full w-full">
                               <BarChart
-                                h={300}
+                                h={450}
+                                  tickLine="x"
                                 data={data}
                                 dataKey="month"
                                 series={[
@@ -178,7 +182,7 @@ export default function Histogram() {
                                   { name: "Laptops", color: "blue.6" },
                                   { name: "Tablets", color: "teal.6" },
                                 ]}
-                                tickLine="y"
+                          
                               />
                             </div>
                           </div>

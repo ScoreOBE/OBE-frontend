@@ -1,8 +1,14 @@
 import { Button, Checkbox, Group, Modal, Progress } from "@mantine/core";
-import { IconFileExport, IconPdf } from "@tabler/icons-react";
+import {
+  IconFileExcel,
+  IconFileExport,
+  IconFileSpreadsheet,
+  IconPdf,
+} from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/functions/function";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
+import ExcelIcon from "@/assets/icons/excel.svg?react";
 import {
   getKeyPartTopicTQF3,
   PartTopicTQF3,
@@ -10,18 +16,22 @@ import {
 import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
+import Icon from "../Icon";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
 };
 
-export default function ModalExportTQF3({ opened, onClose }: Props) {
+export default function ModalExportScore({ opened, onClose }: Props) {
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const tqf3 = useAppSelector((state) => state.tqf3);
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const course = useAppSelector((state) =>
+    state.course.courses.find((c) => c.courseNo == courseNo)
+  );
 
   useEffect(() => {
     if (opened) {
@@ -90,9 +100,10 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       closeOnClickOutside={true}
       title={
         <div className="flex flex-col gap-2">
-          <p>Export TQF3</p>
-          <p className="text-[12px] inline-flex items-center text-[#e13b3b] -mt-[6px]">
-            File format: <IconPdf className="ml-1" color="#e13b3b" />
+          <p>Export score {courseNo}</p>
+          <p className="text-[12px] inline-flex items-center text-[#20884f] ">
+            File format:{" "}
+            <Icon IconComponent={ExcelIcon} className="ml-1 size-4" />
           </p>
         </div>
       }
@@ -105,45 +116,37 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       }}
     >
       <div className="flex flex-col">
-        {!tqf3.part1?.updatedAt ? (
-          <div>xxxxxxxxxxxxxxxxxxxxxxx</div>
-        ) : (
-          <Checkbox.Group
-            label="Select part to export"
-            classNames={{ label: "mb-1 font-semibold text-default" }}
-            value={selectedParts}
-            onChange={setSelectedParts}
-          >
-            {Object.values(PartTopicTQF3)
-              .slice(0, 6)
-              .filter(
-                (item) => tqf3 && tqf3[getKeyPartTopicTQF3(item)!]?.updatedAt
-              )
-              .map((item, index) => (
-                <div
-                  key={index}
-                  className="flex p-1 mb-1 w-full h-full flex-col overflow-y-auto"
+        <Checkbox.Group
+          label={`Select section to export`}
+          classNames={{ label: "mb-1 font-semibold text-default" }}
+          value={selectedParts}
+          onChange={setSelectedParts}
+        >
+          {course?.sections.map((sec, index) => {
+            return (
+              <div
+                key={index}
+                className="flex p-1 mb-1 w-full h-full flex-col overflow-y-auto"
+              >
+                <Checkbox.Card
+                  className="p-3 items-center px-4 flex border-none h-fit rounded-md w-full"
+                  style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
                 >
-                  <Checkbox.Card
-                    className="p-3 items-center px-4 flex border-none h-fit rounded-md w-full"
-                    style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
-                    value={getKeyPartTopicTQF3(item)}
+                  <Group
+                    wrap="nowrap"
+                    className="item-center flex"
+                    align="flex-start"
                   >
-                    <Group
-                      wrap="nowrap"
-                      className="item-center flex"
-                      align="flex-start"
-                    >
-                      <Checkbox.Indicator className="mt-1" />
-                      <div className="text-default whitespace-break-spaces font-medium text-[13px]">
-                        {item}
-                      </div>
-                    </Group>
-                  </Checkbox.Card>
-                </div>
-              ))}
-          </Checkbox.Group>
-        )}
+                    <Checkbox.Indicator className="mt-1" />
+                    <div className="text-default whitespace-break-spaces font-medium text-[13px]">
+                      Section {sec.sectionNo}
+                    </div>
+                  </Group>
+                </Checkbox.Card>
+              </div>
+            );
+          })}
+        </Checkbox.Group>
       </div>
       <div className="flex justify-end mt-2 sticky w-full">
         <Group className="flex w-full gap-2 h-fit items-end justify-end">
