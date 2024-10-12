@@ -83,10 +83,10 @@ export default function Sidebar() {
   return (
     <motion.div
       initial={{
-        x: -120,
+        x: -220,
       }}
       animate={{ x: 0 }}
-      transition={{ duration: 0.3, type: "keyframes", stiffness: 80 }}
+      transition={{ duration: 0.3, type: "keyframes", stiffness: 100, delay: 0.35 }}
       className="w-[255px] border-r-[1px] h-screen flex p-5 sidebar-linear-gradient"
     >
       <div className="flex w-full flex-col gap-11">
