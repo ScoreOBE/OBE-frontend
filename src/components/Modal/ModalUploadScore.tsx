@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { Group, Table, Text, TextInput, rem } from "@mantine/core";
+import { Group, Table, TextInput, rem } from "@mantine/core";
 import { Alert, Button, Modal } from "@mantine/core";
 import {
   IconBulb,
@@ -11,21 +11,12 @@ import {
   IconFileImport,
   IconInfoCircle,
   IconUpload,
-  IconUsersGroup,
   IconX,
 } from "@tabler/icons-react";
 import { IModelCourse } from "@/models/ModelCourse";
 import gradescope from "@/assets/image/gradescope.png";
 import ModalStudentList from "./ModalStudentList";
-import { SearchInput } from "../SearchInput";
-import { ROUTE_PATH } from "@/helpers/constants/route";
-import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import academicYear from "@/store/academicYear";
-import { getCourse } from "@/services/course/course.service";
-import { setCourseList } from "@/store/course";
-import { useLocation, useSearchParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/store";
-import { TbSearch } from "react-icons/tb";
+import { useSearchParams } from "react-router-dom";
 import ModalTemplateGuide from "./ModalTemplateGuide";
 
 type Props = {
@@ -38,97 +29,96 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const [params, setParams] = useSearchParams();
   const [openModalStudentList, setOpenModalStudentList] = useState(false);
   const [openModalTemplateGuide, setOpenModalTemplateGuide] = useState(false);
-  const searchCourse = async (searchValue: string, reset?: boolean) => {};
-  const studentData = [
-    {
-      filename: "Prelim 1",
-      dateupload: "Jan 8, 2024",
-      uploadby: "Dome P.",
-      section: "001, 002, 003, 004, 005, 006, 007, 008, 801, 802, 803, 804",
-    },
-    {
-      filename: 2,
-      dateupload: "Jan 9, 2024",
-      uploadby: "Navadon K.",
-      section: "001, 002, 801",
-    },
-    {
-      filename: "Homework 1",
-      dateupload: "Feb 7, 2024",
-      uploadby: "Thanatip C.",
-      section: "001, 002, 801",
-    },
+  // const studentData = [
+  //   {
+  //     filename: "Prelim 1",
+  //     dateupload: "Jan 8, 2024",
+  //     uploadby: "Dome P.",
+  //     section: "001, 002, 003, 004, 005, 006, 007, 008, 801, 802, 803, 804",
+  //   },
+  //   {
+  //     filename: 2,
+  //     dateupload: "Jan 9, 2024",
+  //     uploadby: "Navadon K.",
+  //     section: "001, 002, 801",
+  //   },
+  //   {
+  //     filename: "Homework 1",
+  //     dateupload: "Feb 7, 2024",
+  //     uploadby: "Thanatip C.",
+  //     section: "001, 002, 801",
+  //   },
 
-    {
-      filename: "Project",
-      dateupload: "Feb 22, 2024",
-      uploadby: "Kampol W.",
-      section: "001, 002, 801",
-    },
-    {
-      filename: "Homework 2",
-      dateupload: "Feb 26, 2024",
-      uploadby: "Kanok K.",
-      section: "001, 002, 801",
-    },
-    {
-      filename: "Prelim 2",
-      dateupload: "Mar 4, 2024",
-      uploadby: "Karn P.",
-      section: "001, 002, 801",
-    },
-    {
-      filename: "Assignment",
-      dateupload: "Mar 8, 2024",
-      uploadby: "Yutthapong S.",
-      section: "001, 002, 801",
-    },
-  ];
-  const rows = studentData.map((element) => (
-    <Table.Tr
-      className="font-medium text-default text-[13px]"
-      key={element.filename}
-    >
-      <Table.Td>{element.filename}</Table.Td>
-      <Table.Td>{element.dateupload}</Table.Td>
-      <Table.Td>{element.uploadby}</Table.Td>
-      <Table.Td>{element.section}</Table.Td>
-    </Table.Tr>
-  ));
+  //   {
+  //     filename: "Project",
+  //     dateupload: "Feb 22, 2024",
+  //     uploadby: "Kampol W.",
+  //     section: "001, 002, 801",
+  //   },
+  //   {
+  //     filename: "Homework 2",
+  //     dateupload: "Feb 26, 2024",
+  //     uploadby: "Kanok K.",
+  //     section: "001, 002, 801",
+  //   },
+  //   {
+  //     filename: "Prelim 2",
+  //     dateupload: "Mar 4, 2024",
+  //     uploadby: "Karn P.",
+  //     section: "001, 002, 801",
+  //   },
+  //   {
+  //     filename: "Assignment",
+  //     dateupload: "Mar 8, 2024",
+  //     uploadby: "Yutthapong S.",
+  //     section: "001, 002, 801",
+  //   },
+  // ];
+  // const rows = studentData.map((element) => (
+  //   <Table.Tr
+  //     className="font-medium text-default text-[13px]"
+  //     key={element.filename}
+  //   >
+  //     <Table.Td>{element.filename}</Table.Td>
+  //     <Table.Td>{element.dateupload}</Table.Td>
+  //     <Table.Td>{element.uploadby}</Table.Td>
+  //     <Table.Td>{element.section}</Table.Td>
+  //   </Table.Tr>
+  // ));
 
-  const studentTable = () => {
-    return (
-      <>
-        <TextInput
-          leftSection={<TbSearch />}
-          placeholder="File name, Uploader, Section"
-          size="xs"
-          rightSectionPointerEvents="all"
-          className=" w-[40%] "
-        ></TextInput>
-        <div
-          className="  max-h-[500px]  h-fit  flex flex-col bg-white mb-1  my-4 rounded-md overflow-y-auto"
-          style={{
-            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-          }}
-        >
-          {/* <Table.ScrollContainer className="!max-h-[400px] " minWidth={500}> */}
-          <Table stickyHeader striped>
-            <Table.Thead>
-              <Table.Tr className="bg-[#e5e7f6]">
-                <Table.Th className=" w-[30%]">File name</Table.Th>
-                <Table.Th className=" w-[20%]">Date upload</Table.Th>
-                <Table.Th className=" w-[20%]">Upload by</Table.Th>
-                <Table.Th className=" w-[30%]">Section detect</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
-          </Table>
-          {/* </Table.ScrollContainer> */}
-        </div>
-      </>
-    );
-  };
+  // const studentTable = () => {
+  //   return (
+  //     <>
+  //       <TextInput
+  //         leftSection={<TbSearch />}
+  //         placeholder="File name, Uploader, Section"
+  //         size="xs"
+  //         rightSectionPointerEvents="all"
+  //         className=" w-[40%] "
+  //       ></TextInput>
+  //       <div
+  //         className="  max-h-[500px]  h-fit  flex flex-col bg-white mb-1  my-4 rounded-md overflow-y-auto"
+  //         style={{
+  //           boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+  //         }}
+  //       >
+  //         {/* <Table.ScrollContainer className="!max-h-[400px] " minWidth={500}> */}
+  //         <Table stickyHeader striped>
+  //           <Table.Thead>
+  //             <Table.Tr className="bg-[#e5e7f6]">
+  //               <Table.Th className=" w-[30%]">File name</Table.Th>
+  //               <Table.Th className=" w-[20%]">Date upload</Table.Th>
+  //               <Table.Th className=" w-[20%]">Upload by</Table.Th>
+  //               <Table.Th className=" w-[30%]">Section detect</Table.Th>
+  //             </Table.Tr>
+  //           </Table.Thead>
+  //           <Table.Tbody>{rows}</Table.Tbody>
+  //         </Table>
+  //         {/* </Table.ScrollContainer> */}
+  //       </div>
+  //     </>
+  //   );
+  // };
 
   return (
     <>
@@ -136,7 +126,6 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         opened={openModalTemplateGuide}
         onClose={() => setOpenModalTemplateGuide(false)}
       />
-
       <ModalStudentList
         data={data}
         opened={openModalStudentList}
@@ -152,20 +141,19 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         zIndex={50}
       >
         <Modal.Overlay />
-        <Modal.Content className="!bg-[#fbfbfb] pt-0  !rounded-none !px-0">
+        <Modal.Content className="!bg-[#fbfbfb] pt-0 !rounded-none !px-0">
           <Modal.Header
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
-            className="!pt-4  flex w-full rounded-none   pb-4 !px-0"
+            className="!pt-4 flex w-full rounded-none pb-4 !px-0"
           >
-            <div className="flex px-12 items-center  justify-between  w-full ">
-              <div className="inline-flex  gap-2 items-center font-semibold text-h2 text-secondary">
+            <div className="flex px-12 items-center justify-between w-full">
+              <div className="inline-flex gap-2 items-center font-semibold text-h2 text-secondary">
                 <Modal.CloseButton className="!m-0" />
                 <div className="flex flex-col">
-                  <p>Upload Score </p>
+                  <p>Upload Score</p>
                   <p className=" text-[12px] text-noData">
-                    {" "}
                     {data?.courseNo} {data?.courseName}
                   </p>
                 </div>
@@ -182,29 +170,26 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
             </div>
           </Modal.Header>
 
-          <Modal.Body className="    flex flex-col h-full w-full  ">
+          <Modal.Body className="flex flex-col h-full w-full">
             {/* Topic */}
-            <div className="flex flex-col gap-3 px-44 py-6 ">
+            <div className="flex flex-col gap-3 lg:px-44 px-10 py-6 ">
               <Alert
                 radius="md"
                 variant="light"
                 color="red"
                 classNames={{
-                  body: " flex justify-center",
+                  body: "flex justify-center",
                 }}
                 title={
-                  <div className="flex items-center  gap-2">
+                  <div className="flex items-center gap-2">
                     <IconExclamationCircle />
                     <p>Important: Score OBE+ required</p>
                   </div>
                 }
               >
                 <p className="pl-8 text-default font-medium -mt-1">
-                  Use only{" "}
-                  <span className="  font-extrabold">
-                    {" "}
-                    Score OBE+ template{" "}
-                  </span>
+                  Use only
+                  <span className="font-extrabold"> Score OBE+ template </span>
                   provided below to submit your scores. Please read the template
                   guide carefully, then download the template to upload your
                   score.
@@ -240,8 +225,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     To upload scores from Gradescope to the Score OBE+ system,
                     simply{" "}
                     <span className="font-extrabold">
-                      {" "}
-                      export the assignment scores{" "}
+                      export the assignment scores
                     </span>{" "}
                     as a CSV file from Gradescope. <br /> Then, upload the CSV
                     file directly. This quick process ensures seamless
@@ -288,7 +272,6 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   </div>
                 </div>
               </div>
-
               <Alert
                 radius="md"
                 variant="light"
@@ -409,7 +392,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   </Button>
                 </div>
               </div>
-              <div
+              {/* <div
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
                 }}
@@ -421,7 +404,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   Course
                 </p>{" "}
                 {studentTable()}
-              </div>
+              </div> */}
             </div>
           </Modal.Body>
         </Modal.Content>
