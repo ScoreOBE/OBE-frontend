@@ -40,6 +40,8 @@ import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 import ModalExportScore from "@/components/Modal/ModalExportScore";
+import ModalUploadScore from "@/components/Modal/ModalUploadScore";
+import ModalUploadStudentList from "@/components/Modal/ModalUploadStudentList";
 
 export default function Section() {
   const navigate = useNavigate();
@@ -64,6 +66,9 @@ export default function Section() {
   >({});
   const [addSec, setAddSec] = useState<Partial<IModelCourse>>();
   const [openMainPopupDelCourse, setOpenMainPopupDelCourse] = useState(false);
+  const [openModalUploadStudentList, setOpenModalUploadStudentList] =
+    useState(false);
+  const [openModalUploadScore, setOpenModalUploadScore] = useState(false);
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
   const [openModalManageIns, setOpenModalManageIns] = useState(false);
@@ -137,6 +142,24 @@ export default function Section() {
 
   return (
     <>
+      <ModalUploadStudentList
+        selectCourse={false}
+        data={course!}
+        opened={openModalUploadStudentList}
+        onClose={() => setOpenModalUploadStudentList(false)}
+        onBack={() => {
+          setOpenModalUploadStudentList(false);
+        }}
+        onNext={() => {
+          setOpenModalUploadStudentList(false);
+          setOpenModalUploadScore(true);
+        }}
+      />
+      <ModalUploadScore
+        data={course!}
+        opened={openModalUploadScore}
+        onClose={() => setOpenModalUploadScore(false)}
+      />
       <ModalEditSection
         opened={openModalEditSec}
         onClose={() => setOpenModalEditSec(false)}
@@ -204,12 +227,10 @@ export default function Section() {
         data={course!}
         type="studentList"
       />
-
       <ModalExportScore
         opened={openModalExportScore}
         onClose={() => setOpenModalExportScore(false)}
       />
-
       {error.statusCode ? (
         <PageError />
       ) : loading ? (
@@ -224,10 +245,17 @@ export default function Section() {
             <div className="flex gap-5 items-center">
               {activeTerm ? (
                 <Button
+                  className="text-center px-4"
                   leftSection={<IconUpload className="size-4" />}
-                  className="px-3"
+                  onClick={() =>
+                    course?.sections.find(
+                      ({ assignments }) => assignments?.length
+                    )
+                      ? setOpenModalUploadScore(true)
+                      : setOpenModalUploadStudentList(true)
+                  }
                 >
-                  Upload and Assets
+                  Upload score
                 </Button>
               ) : (
                 <Button

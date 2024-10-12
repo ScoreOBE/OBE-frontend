@@ -12,7 +12,27 @@ export interface IModelSection {
   coInstructors: IModelUser[] | any[];
   isActive: boolean;
   addFirstTime?: boolean;
-  assignments: any[];
+  assignments?: IModelAssignment[];
   TQF3?: IModelTQF3;
   TQF5?: IModelTQF5;
+}
+
+export interface IModelAssignment {
+  name: string;
+  desc: string;
+  isPublish: boolean;
+  weight: number;
+  questions: IModelQuestion[];
+}
+
+export interface IModelQuestion {
+  no: number;
+  desc: string;
+  fullScore: number;
+  scores: IModelScore[];
+}
+
+export interface IModelScore {
+  student: IModelUser;
+  point: number;
 }
