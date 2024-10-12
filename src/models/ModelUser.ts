@@ -11,10 +11,7 @@ export interface IModelUser {
   facultyCode: string;
   departmentCode: string[];
   role: ROLE;
-  // enrollCourses: Course[];
-  // ownCourses: Course[];
-  // coCourses: Course[];
   enrollCourses?: any[];
-  ownCourses?: any[];
-  coCourses?: any[];
+  // ownCourses?: any[];
+  // coCourses?: any[];
 }

@@ -170,11 +170,10 @@ export default function Histogram() {
                                 </div>
                               </div>
                             </div>
-                            {/* Chart */}
                             <div className="h-full w-full">
                               <BarChart
                                 h={450}
-                                  tickLine="x"
+                                tickLine="x"
                                 data={data}
                                 dataKey="month"
                                 series={[
@@ -182,7 +181,6 @@ export default function Histogram() {
                                   { name: "Laptops", color: "blue.6" },
                                   { name: "Tablets", color: "teal.6" },
                                 ]}
-                          
                               />
                             </div>
                           </div>
