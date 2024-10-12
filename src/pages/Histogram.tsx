@@ -40,7 +40,11 @@ export default function Histogram() {
     { title: `Histogram Section ${getSectionNo(sectionNo)}` },
   ]);
 
-  const mockData = [{ name: "สอบกลางภาค" }, { name: "สอบเก็บคะแนนครั้งที่ 1 mmmmmmmและ 2" }, { name: "Quiz 3" }];
+  const mockData = [
+    { name: "สอบกลางภาค" },
+    { name: "สอบเก็บคะแนนครั้งที่ 1 hhhmmmmmmmและ 2" },
+    { name: "Quiz 3" },
+  ];
 
   const sectionRefs = useRef(
     mockData.map(() => React.createRef<HTMLDivElement>())
@@ -77,8 +81,8 @@ export default function Histogram() {
         });
       },
       {
-        root: null, 
-        threshold: 0.5, 
+        root: null,
+        threshold: 0.5,
       }
     );
 
@@ -204,20 +208,18 @@ export default function Histogram() {
               {mockData.map((item, i) => (
                 <div
                   key={i}
-                  className={`max-w-fit  ${ 
+                  className={`max-w-fit  ${
                     activeSection === i ? "active" : ""
                   }`}
                 >
-                  <p
-                  
-                    className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
-                      activeSection === i
-                        ? "text-secondary"
-                        : "text-noData "
-                    }`}
+                  <a
+                    href={`#${item.name}`}
+                    
                   >
-                    {item.name}
-                  </p>
+                    <p className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
+                      activeSection === i ? "text-secondary" : "text-noData "
+                    }`}>{item.name}</p>
+                  </a>
                 </div>
               ))}
             </div>
