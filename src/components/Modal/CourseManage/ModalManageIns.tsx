@@ -106,7 +106,7 @@ export default function ModalManageIns({
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Change Owener section success",
-        `${value.label} is an Section owner ${getSectionNo(
+        `${value.label} is an Owner section ${getSectionNo(
           editSec?.data.sectionNo
         )}.`
       );
@@ -249,7 +249,7 @@ export default function ModalManageIns({
               title={
                 <p>
                   You don't have permission to manage co-instructors in this
-                  course. <br /> Please contact to the section owner for manage.
+                  course. <br /> Please contact to the Owner section for manage.
                 </p>
               }
             ></Alert>
@@ -343,8 +343,8 @@ export default function ModalManageIns({
                       </div>
                     </div>
                     <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[13px]">
-                      <div className=" font-semibold">Section:</div>
-                      <div className="flex gap-1  w-[60%]  flex-wrap">
+                      <div className=" font-semibold">Can access section:</div>
+                      <div className="flex gap-1  w-[50%]  flex-wrap">
                         {coIns?.sections?.map(
                           (sectionNo: any, indexSec: number) => (
                             <p key={indexSec}>
@@ -424,7 +424,7 @@ export default function ModalManageIns({
                 {getUserName(editSec?.instructor as IModelUser, 1)}
               </p>
               <p className="text-secondary text-[12px] font-normal">
-                Section owner {getSectionNo(editSec.data.sectionNo)}{" "}
+                Owner section {getSectionNo(editSec.data.sectionNo)}{" "}
               </p>
             </div>
           </div>
@@ -440,7 +440,7 @@ export default function ModalManageIns({
       ) : (
         <Tabs defaultValue="mainInstructor">
           <Tabs.List>
-            <Tabs.Tab value="mainInstructor">Section owner</Tabs.Tab>
+            <Tabs.Tab value="mainInstructor">Owner section</Tabs.Tab>
             <Tabs.Tab value="coInstructor">Co-Instructor section</Tabs.Tab>
           </Tabs.List>
 
@@ -462,7 +462,7 @@ export default function ModalManageIns({
                         {getUserName(sec.instructor, 1)}
                       </p>
                       <p className="text-secondary text-[12px] font-normal">
-                        Section owner {getSectionNo(sec.sectionNo)}{" "}
+                        Owner section {getSectionNo(sec.sectionNo)}{" "}
                       </p>
                     </div>
                   </div>

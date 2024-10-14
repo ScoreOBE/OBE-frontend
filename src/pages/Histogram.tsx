@@ -233,7 +233,7 @@ export default function Histogram() {
             </p>
             <p className="text-[#333333] leading-6 font-medium text-[14px]">
               You're not listed as a Co-Instructor. <br /> Please contact the
-              section owner for access.
+              Owner section for access.
             </p>
           </div>
           <img

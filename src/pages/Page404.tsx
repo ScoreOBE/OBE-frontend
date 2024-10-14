@@ -40,7 +40,7 @@ export default function NotFoundPage() {
         <div className="flex  items-center justify-between">
           <div className="flex flex-col gap-4">
             <p className="text-3xl   font-semibold">
-              <span className="text-white font-normal ">Ooops! </span>
+              <span className="text-white font-normal ">Ooops ! </span>
             </p>
             <p className="text-4xl mt-6 font-semibold">You've lost in space</p>
             <p className="text-lg  font-medium text-gray-400">
@@ -49,9 +49,9 @@ export default function NotFoundPage() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <IconArrowLeft className="size-5 -mr-1" stroke={1.5} />
+                <IconArrowLeft className="size-6 -mr-1" stroke={2} />
               }
-              className="inline-block -ml-4 mt-3 bg-transparent hover:bg-transparent hover:underline text-white !font-bold !rounded transition"
+              className="inline-block !text-[16px] -ml-4 mt-3 bg-transparent hover:bg-transparent hover:underline text-white !font-bold !rounded transition"
             >
               Back to home
             </Button>

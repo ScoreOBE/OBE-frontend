@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dropzone,
   FileRejection,
@@ -212,6 +212,11 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   //   );
   // };
 
+  useEffect(() => {
+    console.log(data?.courseName);
+    
+  })
+
   return (
     <>
       <ModalTemplateGuide
@@ -259,7 +264,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 <div className="flex flex-col">
                   <p>Upload Score</p>
                   <p className=" text-[12px] text-noData">
-                    {data?.courseNo} {data?.courseName}
+                    {data?.courseNo}
                   </p>
                 </div>
               </div>

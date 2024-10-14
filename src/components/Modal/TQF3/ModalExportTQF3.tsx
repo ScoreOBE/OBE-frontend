@@ -110,7 +110,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
     >
       <div className="flex flex-col">
         {!tqf3.part1?.updatedAt ? (
-          <div>xxxxxxxxxxxxxxxxxxxxxxx</div>
+          <div>No part to export</div>
         ) : (
           <Checkbox.Group
             label="Select part to export"
