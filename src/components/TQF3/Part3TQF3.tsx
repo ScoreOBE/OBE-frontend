@@ -247,7 +247,7 @@ export default function Part3TQF3({ setForm }: Props) {
                       <Table.Th className=" w-[15%]">Topic</Table.Th>
                       <Table.Th className="w-[65%]">Description</Table.Th>
                       <Table.Th className="w-[5%] text-end">
-                        <div className="flex flex-row items-center gap-2">
+                        <div className="flex flex-row !justify-end items-center gap-2">
                           Evaluate
                           <Tooltip
                             arrowOffset={20}
