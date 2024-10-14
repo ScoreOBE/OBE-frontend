@@ -122,7 +122,7 @@ export default function TQF3() {
     if (academicYear && (tqf3.topic !== tqf3Original?.topic || !tqf3Original)) {
       fetchOneCourse(true);
     }
-  }, [tqf3.topic, courseNo]);
+  }, [academicYear, tqf3.topic, courseNo]);
 
   useEffect(() => {
     replaceReuseTQF3();
@@ -310,7 +310,7 @@ export default function TQF3() {
                   percent !== tqf3.part3?.eval.find((e) => e.id == id)?.percent
               ))) ||
             (tqf3Original.part7 &&
-              tqf3.part2?.clo.length !== tqf3Original.part7.data?.length))
+              tqf3.part2?.clo.length !== tqf3.part2?.clo.length))
         ) {
           setOpenWarningEditDataTQF2Or3(true);
           return;
