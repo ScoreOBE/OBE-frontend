@@ -365,7 +365,7 @@ export default function TQF3() {
             );
           }
         });
-        showNotifications(NOTI_TYPE.SUCCESS, "Reuse TQF3", "xxxxxxxxxxxx");
+        showNotifications(NOTI_TYPE.SUCCESS, "Reuse TQF 3 Success", "thinking");
       }
       setLoadingRes(false);
       setOpenModalReuse(false);

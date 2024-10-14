@@ -341,7 +341,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         </div>
 
         <div className="flex  flex-col gap-2 mt-5">
-          <p className="text-b2 font-bold mb-1">Section owner</p>
+          <p className="text-b2 font-bold mb-1">Owner section</p>
           <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
             {instructors.map((item, index) => {
               return (

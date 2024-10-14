@@ -53,9 +53,9 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <IconArrowLeft className="size-8 -mr-1" stroke={1.5} />
+                <IconArrowLeft className="size-6 -mr-1" stroke={1.5} />
               }
-              className="inline-block -ml-4 mt-3 text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
+              className="inline-block -ml-4 mt-3 !text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
               Back to Dashboard
             </Button>
@@ -79,9 +79,9 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <IconArrowLeft className="size-8 -mr-1" stroke={1.5} />
+                <IconArrowLeft className="size-6 -mr-1" stroke={1.5} />
               }
-              className="inline-block -ml-4 mt-3 text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
+              className="inline-block -ml-4 mt-3 !text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
               Back to login
             </Button>
@@ -108,9 +108,9 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <IconArrowLeft className="size-8 -mr-1" stroke={1.5} />
+                <IconArrowLeft className="size-6 -mr-1" stroke={1.5} />
               }
-              className="inline-block -ml-4 mt-3 text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
+              className="inline-block -ml-4 mt-3 !text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
               Back to login
             </Button>
@@ -138,9 +138,9 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <IconArrowLeft className="size-8 -mr-1" stroke={1.5} />
+                <IconArrowLeft className="size-6 -mr-1" stroke={2} />
               }
-              className="inline-block -ml-4 mt-3 text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
+              className="inline-block -ml-4 mt-3 !!text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
               Back to login
             </Button>

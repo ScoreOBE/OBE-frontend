@@ -577,19 +577,17 @@ export default function ModalAddCourse({
             <div className="flex flex-col font-medium text-[14px] gap-4">
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
-                  <span className="text-secondary font-semibold">
-                    Recurrence semester for section{" "}
+                  <span className="text-secondary text-[14px] font-bold">
+                    Custom recurrence semester for Section{" "}
                     {getSectionNo(sec.sectionNo)}
                     <span className="text-red-500"> *</span>
                   </span>
                   <div
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                    }}
-                    className="w-full justify-center pl-5 pr-[18px] pt-4 pb-5 bg-white rounded-md  flex flex-col "
+                   
+                    className="w-full justify-center pr-[18px] border-b-2 pt-1 pb-5   flex flex-col "
                   >
                     <div className="gap-2 flex flex-col">
-                      <span className="font-medium ">Repeat on semester</span>
+                      <span className="font-medium text-default text-b2 ">Repeat on semester</span>
                       <Chip.Group
                         {...form.getInputProps(`sections.${index}.semester`)}
                         value={sec.semester}
@@ -627,7 +625,7 @@ export default function ModalAddCourse({
                           input:
                             "bg-[black] bg-opacity-0 border-[1.5px] border-tertiary cursor-pointer disabled:bg-gray-400",
                           body: "mr-3 px-0",
-                          label: "text-b2  cursor-pointer",
+                          label: "text-[13px]  cursor-pointer text-default",
                         }}
                         className="mt-3 ml-1"
                         size="xs"
@@ -672,7 +670,7 @@ export default function ModalAddCourse({
                         className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none"
                       >
                         <div className="flex w-full justify-between items-center">
-                          <span className="text-tertiary -translate-y-1 font-semibold text-[13px]">
+                          <span className="text-tertiary -translate-y-1 font-semibold text-b2">
                             {coIns.label}
                           </span>
 
@@ -730,8 +728,8 @@ export default function ModalAddCourse({
                           </div>
                         </div>
                         <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-b3">
-                          <div className=" font-semibold">Section:</div>
-                          <div className="flex gap-1 w-[60%] flex-wrap ">
+                          <div className=" font-semibold">Can access section:</div>
+                          <div className="flex gap-1 w-[50%] flex-wrap ">
                             {coIns.sections?.map(
                               (sectionNo: any, index: number) => (
                                 <p key={index}>
@@ -771,7 +769,7 @@ export default function ModalAddCourse({
                 </p>
               )}
             </div>
-            <div className="flex flex-col max-h-[320px] h-fit w-full px-2 overflow-y-auto ">
+            <div className="flex flex-col max-h-[380px] h-fit w-full px-2 overflow-y-auto ">
               <div className="flex flex-col gap-3 mt-3 font-medium text-b3">
                 {form.getValues().sections?.map((sec, index) => (
                   <div
@@ -782,8 +780,8 @@ export default function ModalAddCourse({
                       Section {getSectionNo(sec.sectionNo)}
                     </span>
                     <div className="flex flex-col gap-1">
-                      <span className="text-tertiary font-semibold">
-                        Section owner
+                      <span className="text-tertiary text-b2 font-semibold">
+                    Owner Section
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">
                         <List size="sm" listStyleType="disc">
@@ -796,7 +794,7 @@ export default function ModalAddCourse({
 
                     {!!sec.coInstructors?.length && (
                       <div className="flex flex-col gap-1">
-                        <span className="text-tertiary font-semibold">
+                        <span className="text-tertiary text-b2 font-semibold">
                           Co-Instructor
                         </span>
                         <div className="ps-1.5 text-secondary mb-2">
@@ -812,8 +810,8 @@ export default function ModalAddCourse({
                     )}
 
                     <div className="flex flex-col gap-1">
-                      <span className="text-tertiary font-semibold">
-                        Open in Semester
+                      <span className="text-tertiary text-b2 font-semibold">
+                        Recurrence semester
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">
                         <List
@@ -822,7 +820,7 @@ export default function ModalAddCourse({
                           className="flex flex-col gap-1"
                         >
                           <List.Item>
-                            {sec.semester
+                          Repeat on semester {sec.semester
                               ?.join(", ")
                               .replace(/, ([^,]*)$/, " and $1")}
                           </List.Item>
