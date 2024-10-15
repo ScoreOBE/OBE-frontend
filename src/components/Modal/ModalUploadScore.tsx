@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Dropzone,
   FileRejection,
@@ -121,102 +121,6 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
     showNotifications(NOTI_TYPE.ERROR, title, message);
   };
 
-  // const studentData = [
-  //   {
-  //     filename: "Prelim 1",
-  //     dateupload: "Jan 8, 2024",
-  //     uploadby: "Dome P.",
-  //     section: "001, 002, 003, 004, 005, 006, 007, 008, 801, 802, 803, 804",
-  //   },
-  //   {
-  //     filename: 2,
-  //     dateupload: "Jan 9, 2024",
-  //     uploadby: "Navadon K.",
-  //     section: "001, 002, 801",
-  //   },
-  //   {
-  //     filename: "Homework 1",
-  //     dateupload: "Feb 7, 2024",
-  //     uploadby: "Thanatip C.",
-  //     section: "001, 002, 801",
-  //   },
-
-  //   {
-  //     filename: "Project",
-  //     dateupload: "Feb 22, 2024",
-  //     uploadby: "Kampol W.",
-  //     section: "001, 002, 801",
-  //   },
-  //   {
-  //     filename: "Homework 2",
-  //     dateupload: "Feb 26, 2024",
-  //     uploadby: "Kanok K.",
-  //     section: "001, 002, 801",
-  //   },
-  //   {
-  //     filename: "Prelim 2",
-  //     dateupload: "Mar 4, 2024",
-  //     uploadby: "Karn P.",
-  //     section: "001, 002, 801",
-  //   },
-  //   {
-  //     filename: "Assignment",
-  //     dateupload: "Mar 8, 2024",
-  //     uploadby: "Yutthapong S.",
-  //     section: "001, 002, 801",
-  //   },
-  // ];
-  // const rows = studentData.map((element) => (
-  //   <Table.Tr
-  //     className="font-medium text-default text-[13px]"
-  //     key={element.filename}
-  //   >
-  //     <Table.Td>{element.filename}</Table.Td>
-  //     <Table.Td>{element.dateupload}</Table.Td>
-  //     <Table.Td>{element.uploadby}</Table.Td>
-  //     <Table.Td>{element.section}</Table.Td>
-  //   </Table.Tr>
-  // ));
-
-  // const studentTable = () => {
-  //   return (
-  //     <>
-  //       <TextInput
-  //         leftSection={<TbSearch />}
-  //         placeholder="File name, Uploader, Section"
-  //         size="xs"
-  //         rightSectionPointerEvents="all"
-  //         className=" w-[40%] "
-  //       ></TextInput>
-  //       <div
-  //         className="  max-h-[500px]  h-fit  flex flex-col bg-white mb-1  my-4 rounded-md overflow-y-auto"
-  //         style={{
-  //           boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-  //         }}
-  //       >
-  //         {/* <Table.ScrollContainer className="!max-h-[400px] " minWidth={500}> */}
-  //         <Table stickyHeader striped>
-  //           <Table.Thead>
-  //             <Table.Tr className="bg-[#e5e7f6]">
-  //               <Table.Th className=" w-[30%]">File name</Table.Th>
-  //               <Table.Th className=" w-[20%]">Date upload</Table.Th>
-  //               <Table.Th className=" w-[20%]">Upload by</Table.Th>
-  //               <Table.Th className=" w-[30%]">Section detect</Table.Th>
-  //             </Table.Tr>
-  //           </Table.Thead>
-  //           <Table.Tbody>{rows}</Table.Tbody>
-  //         </Table>
-  //         {/* </Table.ScrollContainer> */}
-  //       </div>
-  //     </>
-  //   );
-  // };
-
-  useEffect(() => {
-    console.log(data?.courseName);
-    
-  })
-
   return (
     <>
       <ModalTemplateGuide
@@ -263,9 +167,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 <Modal.CloseButton className="!m-0" />
                 <div className="flex flex-col">
                   <p>Upload Score</p>
-                  <p className=" text-[12px] text-noData">
-                    {data?.courseNo}
-                  </p>
+                  <p className=" text-[12px] text-noData">{data?.courseNo}</p>
                 </div>
               </div>
               <Button
@@ -435,12 +337,6 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                       className="bg-[#DDE0FF] size-16 p-3 rounded-full"
                     />
                   </Dropzone.Idle>
-
-                  {/* <IconUpload
-                      color="#5768d5"
-                      stroke={1.5}
-                      className=" bg-[#DDE0FF] size-16 p-3 rounded-full"
-                    /> */}
                   <p className="font-semibold text-default">
                     <span className="text-secondary underline">
                       Click to upload
@@ -495,19 +391,6 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   </Button>
                 </div>
               </div>
-              {/* <div
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-                }}
-                className="w-full bg-white rounded-md p-6 flex  flex-col"
-              >
-                <p className=" text-secondary font-semibold">Attached files</p>
-                <p className=" text-b3 mb-3 font-medium text-default">
-                  Files and assets that have been attached to {data?.courseNo}{" "}
-                  Course
-                </p>{" "}
-                {studentTable()}
-              </div> */}
             </div>
           </Modal.Body>
         </Modal.Content>

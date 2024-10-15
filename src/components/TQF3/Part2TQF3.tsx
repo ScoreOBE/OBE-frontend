@@ -8,20 +8,13 @@ import {
   IconEdit,
   IconGripVertical,
   IconTrash,
-  IconInfoCircle,
   IconExclamationCircle,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import ModalManageCLO, { LearningMethod } from "../Modal/TQF3/ModalManageCLO";
 import ModalManageCourseContent from "../Modal/TQF3/ModalManageCourseContent";
-import { IModelCourse } from "@/models/ModelCourse";
 import unplug from "@/assets/image/unplug.png";
-import {
-  IModelCLO,
-  IModelSchedule,
-  IModelTQF3,
-  IModelTQF3Part2,
-} from "@/models/ModelTQF3";
+import { IModelCLO, IModelSchedule, IModelTQF3Part2 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
 import { EVALUATE_TYPE, TEACHING_METHOD } from "@/helpers/constants/enum";
 import MainPopup from "../Popup/MainPopup";

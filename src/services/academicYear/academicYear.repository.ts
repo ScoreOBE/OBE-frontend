@@ -1,4 +1,3 @@
-import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import apiService from "@/services/apiService";
 import {
   AcademicYearRequestDTO,

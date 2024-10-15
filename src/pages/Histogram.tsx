@@ -1,14 +1,11 @@
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import { BarChart } from "@mantine/charts";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
-import { setShowNavbar } from "@/store/showNavbar";
-import { setShowSidebar } from "@/store/showSidebar";
 import Loading from "@/components/Loading";
 import React from "react";
 
@@ -212,13 +209,14 @@ export default function Histogram() {
                     activeSection === i ? "active" : ""
                   }`}
                 >
-                  <a
-                    href={`#${item.name}`}
-                    
-                  >
-                    <p className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
-                      activeSection === i ? "text-secondary" : "text-noData "
-                    }`}>{item.name}</p>
+                  <a href={`#${item.name}`}>
+                    <p
+                      className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
+                        activeSection === i ? "text-secondary" : "text-noData "
+                      }`}
+                    >
+                      {item.name}
+                    </p>
                   </a>
                 </div>
               ))}

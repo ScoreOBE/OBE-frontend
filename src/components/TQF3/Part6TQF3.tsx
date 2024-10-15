@@ -1,12 +1,5 @@
 import { NOTI_TYPE } from "@/helpers/constants/enum";
-import {
-  Checkbox,
-  Textarea,
-  Button,
-  Group,
-  Tooltip,
-  Alert,
-} from "@mantine/core";
+import { Checkbox, Textarea, Button, Group, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
   IconEdit,

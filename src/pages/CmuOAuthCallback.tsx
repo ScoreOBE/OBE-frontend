@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "@/store/user";
 import { login } from "@/services/authentication/authentication.service";

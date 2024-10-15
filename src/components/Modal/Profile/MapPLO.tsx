@@ -73,7 +73,6 @@ type Props = {
 };
 
 export default function MapPLO({ ploName = "" }: Props) {
-  const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState<any>({});

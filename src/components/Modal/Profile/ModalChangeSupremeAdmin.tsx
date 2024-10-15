@@ -1,9 +1,5 @@
 import { Alert, Button, Modal, TextInput } from "@mantine/core";
-import {
-  IconExclamationCircle,
-  IconInfoCircle,
-  IconUserCircle,
-} from "@tabler/icons-react";
+import { IconExclamationCircle, IconUserCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { IModelUser } from "@/models/ModelUser";

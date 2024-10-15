@@ -1,18 +1,9 @@
-import { Button, Checkbox, Group, Modal, Progress } from "@mantine/core";
-import {
-  IconFileExcel,
-  IconFileExport,
-  IconFileSpreadsheet,
-  IconPdf,
-} from "@tabler/icons-react";
+import { Button, Checkbox, Group, Modal } from "@mantine/core";
+import { IconFileExport } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/functions/function";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import ExcelIcon from "@/assets/icons/excel.svg?react";
-import {
-  getKeyPartTopicTQF3,
-  PartTopicTQF3,
-} from "@/helpers/constants/TQF3.enum";
 import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";

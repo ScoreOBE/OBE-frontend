@@ -1,6 +1,6 @@
 import { Button, Select, TextInput } from "@mantine/core";
 import AddCoIcon from "@/assets/icons/addCo.svg?react";
-import { IconChevronRight, IconChevronDown, IconX } from "@tabler/icons-react";
+import { IconChevronRight } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import Icon from "./Icon";
 import { useAppSelector } from "@/store";

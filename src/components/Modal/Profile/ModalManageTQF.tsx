@@ -19,7 +19,6 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { updateProcessTqf3 } from "@/services/academicYear/academicYear.service";
 import { setProcessTQF3 } from "@/store/academicYear";
-
 import { IconInfoCircle } from "@tabler/icons-react";
 
 type Props = {

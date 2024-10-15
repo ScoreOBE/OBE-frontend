@@ -1,8 +1,7 @@
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { Group, rem, Table, Tabs, TextInput, Tooltip } from "@mantine/core";
+import { Group, rem, Table, Tabs, TextInput } from "@mantine/core";
 import { Alert, Button, Modal } from "@mantine/core";
 import {
-  IconArrowRight,
   IconExclamationCircle,
   IconExternalLink,
   IconFileImport,
