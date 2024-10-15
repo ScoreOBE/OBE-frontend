@@ -1,12 +1,10 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { IconChevronRight } from "@tabler/icons-react";
 type Props = {
   items: any[];
 };
 
 export default function Breadcrumbs({ items = [] }: Props) {
-  const location = useLocation();
-
   return (
     <div className="flex gap-3 bg-[#f1f3fe] px-4 py-[10px] rounded-md">
       {items.map((item, index) => (

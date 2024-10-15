@@ -5,14 +5,13 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { Alert, Button, Group, Menu, Modal, Select } from "@mantine/core";
+import { Alert, Button, Menu } from "@mantine/core";
 import store, { useAppDispatch, useAppSelector } from "@/store";
 import { RxDashboard } from "react-icons/rx";
 import {
   IconChevronLeft,
   IconLogout,
   IconChevronRight,
-  IconAlertTriangle,
   IconExclamationCircle,
 } from "@tabler/icons-react";
 import Icon from "@/components/Icon";
@@ -22,12 +21,10 @@ import TQF5 from "@/assets/icons/TQF5.svg?react";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName, sortData } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
-import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
-import { getOneCourse, leaveCourse } from "@/services/course/course.service";
-import { useDisclosure } from "@mantine/hooks";
+import { COURSE_TYPE } from "@/helpers/constants/enum";
+import { getOneCourse } from "@/services/course/course.service";
 import { setDataTQF3 } from "@/store/tqf3";
 import { IModelTQF3 } from "@/models/ModelTQF3";
-import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { IModelSection } from "@/models/ModelSection";
 import { isEqual } from "lodash";
 
@@ -160,7 +157,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           setOpenAlertPopup(false);
           goToPage(ROUTE_PATH.DASHBOARD_INS, true);
         }}
-        type='unsaved'
+        type="unsaved"
         labelButtonRight={`Keep editing`}
         labelButtonLeft="Leave without saving"
         title={`TQF 3 Unsaved changes ?`}
@@ -168,7 +165,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           <>
             <Alert
               variant="light"
-              color='red'
+              color="red"
               title={`You have unsaved changes. If you leave now, these changes will be lost.`}
               icon={<IconExclamationCircle />}
               classNames={{ icon: "size-6" }}

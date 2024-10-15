@@ -1,38 +1,59 @@
 import { createBrowserRouter } from "react-router-dom";
-import {
-  Login,
-  CMUOAuthCallback,
-  SelectDepartment,
-  Dashboard,
-  Section,
-  Assignment,
-  TQF3,
-  Page404,
-} from "@/pages";
+import { Suspense, lazy } from "react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import App from "@/App";
-import PageError from "@/pages/PageError";
-import Histogram from "@/pages/Histogram";
+import Loading from "@/components/Loading";
+
+const Login = lazy(() => import("@/pages/Login"));
+const CMUOAuthCallback = lazy(() => import("@/pages/CmuOAuthCallback"));
+const SelectDepartment = lazy(() => import("@/pages/SelectDepartment"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const Section = lazy(() => import("@/pages/Section"));
+const TQF3 = lazy(() => import("@/pages/TQF3"));
+const Assignment = lazy(() => import("@/pages/Assignment"));
+const Histogram = lazy(() => import("@/pages/Histogram"));
+const Page404 = lazy(() => import("@/pages/Page404"));
+// const PageError = lazy(() => import("@/pages/PageError"));
 
 const router = createBrowserRouter([
   {
-    element: <App />,
+    element: (
+      <Suspense fallback={<Loading />}>
+        <App />
+      </Suspense>
+    ),
     children: [
       {
         path: ROUTE_PATH.LOGIN,
-        element: <Login />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Login />
+          </Suspense>
+        ),
       },
       {
         path: ROUTE_PATH.CMU_OAUTH_CALLBACK,
-        element: <CMUOAuthCallback />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CMUOAuthCallback />
+          </Suspense>
+        ),
       },
       {
         path: ROUTE_PATH.SELECTED_DEPARTMENT,
-        element: <SelectDepartment />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <SelectDepartment />
+          </Suspense>
+        ),
       },
       {
         path: ROUTE_PATH.DASHBOARD_INS,
-        element: <Dashboard />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Dashboard />
+          </Suspense>
+        ),
       },
       {
         path: `${ROUTE_PATH.COURSE}/:courseNo`,
@@ -42,32 +63,47 @@ const router = createBrowserRouter([
             children: [
               {
                 path: "",
-                element: <Section />,
-      
+                element: (
+                  <Suspense fallback={<Loading />}>
+                    <Section />
+                  </Suspense>
+                ),
               },
               {
                 path: `:sectionNo/${ROUTE_PATH.ASSIGNMENT}`,
-                element: <Assignment />,
-      
+                element: (
+                  <Suspense fallback={<Loading />}>
+                    <Assignment />
+                  </Suspense>
+                ),
               },
               {
                 path: `:sectionNo/${ROUTE_PATH.HISTOGRAM}`,
-                element: <Histogram />,
-      
+                element: (
+                  <Suspense fallback={<Loading />}>
+                    <Histogram />
+                  </Suspense>
+                ),
               },
             ],
           },
           {
             path: ROUTE_PATH.TQF3,
-            element: <TQF3 />,
-  
+            element: (
+              <Suspense fallback={<Loading />}>
+                <TQF3 />
+              </Suspense>
+            ),
           },
         ],
       },
       {
         path: "*",
-        element: <Page404 />,
-       
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Page404 />
+          </Suspense>
+        ),
       },
     ],
   },

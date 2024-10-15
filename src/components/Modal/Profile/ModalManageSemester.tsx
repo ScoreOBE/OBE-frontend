@@ -1,5 +1,5 @@
-import { Alert, Button, Modal, PasswordInput, TextInput } from "@mantine/core";
-import { IconExclamationCircle, IconPlus, IconUsers } from "@tabler/icons-react";
+import { Alert, Button, Modal, TextInput } from "@mantine/core";
+import { IconExclamationCircle, IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import {
@@ -266,9 +266,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             </div>
           </div>
           <Button
-               leftSection={
-                <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
-              }
+            leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
             className="!rounded-s-[4px] font-semibold  min-w-fit !h-[36px] !w-full "
             onClick={onClickAdd}
           >

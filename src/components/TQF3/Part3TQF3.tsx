@@ -2,8 +2,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { Radio, Button, Alert, Group, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import AddIcon from "@/assets/icons/plus.svg?react";
-import { Table, rem } from "@mantine/core";
-import { useListState } from "@mantine/hooks";
+import { Table } from "@mantine/core";
 import {
   IconCheckbox,
   IconEdit,

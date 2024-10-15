@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Stepper,
   Button,
@@ -74,7 +74,9 @@ export default function ModalAddSection({
         topic: (value) => validateTextInput(value, "Topic"),
         sectionNo: (value) => validateSectionNo(value),
         semester: (value) => {
-          return value?.length || !isManage ? null : "Please choose at least one semester.";
+          return value?.length || !isManage
+            ? null
+            : "Please choose at least one semester.";
         },
         instructor: (value: any) =>
           value?.value?.length ? null : "Please select one Owner Section.",
@@ -505,16 +507,15 @@ export default function ModalAddSection({
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary text-[14px] font-bold">
-                  Custom recurrence semester for Section{" "}
+                    Custom recurrence semester for Section{" "}
                     {getSectionNo(sec.sectionNo)}{" "}
                     <span className="text-red-500">*</span>
                   </span>
-                  <div
-                    
-                    className="w-full justify-center border-b-2 pl-5 pr-[18px] pt-4 pb-1  flex flex-col "
-                  >
+                  <div className="w-full justify-center border-b-2 pl-5 pr-[18px] pt-4 pb-1  flex flex-col ">
                     <div className="gap-2 flex flex-col">
-                      <span className="font-medium text-default text-b2 ">Repeat on semester</span>{" "}
+                      <span className="font-medium text-default text-b2 ">
+                        Repeat on semester
+                      </span>{" "}
                       <Chip.Group
                         {...form.getInputProps(`sections.${index}.semester`)}
                         value={sec.semester}
@@ -660,7 +661,9 @@ export default function ModalAddSection({
                           </div>
                         </div>
                         <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[12px]">
-                          <div className=" font-semibold">Can access section:</div>
+                          <div className=" font-semibold">
+                            Can access section:
+                          </div>
                           <div className="flex gap-1 w-[60%] flex-wrap ">
                             {coIns.sections?.map(
                               (sectionNo: any, index: number) => (

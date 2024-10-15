@@ -63,12 +63,7 @@ function App() {
   return error.statusCode ? (
     <PageError />
   ) : (
-    <div
-      className="flex h-screen w-screen text-default"
-      // className={`flex h-screen w-screen  ${
-      //   showSidebar ? "sidebar-linear-gradient" : ""
-      // }`}
-    >
+    <div className="flex h-screen w-screen text-default">
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-full w-full overflow-hidden">
         {showNavbar && <Navbar />}

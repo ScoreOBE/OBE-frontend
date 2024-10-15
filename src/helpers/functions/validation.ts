@@ -2,7 +2,6 @@ import {
   RESPONSE_MESSAGE,
   STATUS_CODE,
 } from "@/helpers/constants/response.enum";
-import { ROUTE_PATH } from "../constants/route";
 import { showNotifications } from "./function";
 import { NOTI_TYPE } from "../constants/enum";
 import store from "@/store";

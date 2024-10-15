@@ -4,8 +4,6 @@ import { Button, Group, Modal, Textarea, Select, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { upperFirst } from "lodash";
 import { useEffect } from "react";
-import AddIcon from "@/assets/icons/plus.svg?react";
-import Icon from "@/components/Icon";
 import { showNotifications } from "@/helpers/functions/function";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { IconInfoCircle } from "@tabler/icons-react";

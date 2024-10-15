@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Modal } from "@mantine/core";
-import { IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
+import { IconArrowRight } from "@tabler/icons-react";
 import templateGuideStep1 from "@/assets/image/templateGuideStep1.png";
 import templateGuideStep2 from "@/assets/image/templateGuideStep2.png";
 import templateGuideStep3 from "@/assets/image/templateGuideStep3.png";
@@ -41,7 +41,8 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
               CMU OBE <br /> Template Guide <br /> for Upload Score
             </p>
             <p className="text-[14px] mb-16 text-default font-medium">
-            Follow these 7 simple steps to easily upload student grades for your assignments.
+              Follow these 7 simple steps to easily upload student grades for
+              your assignments.
             </p>
           </>
         );

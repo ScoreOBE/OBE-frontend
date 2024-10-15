@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import Icon from "@/components/Icon";
-import { IModelSection } from "@/models/ModelSection";
 import { Alert, Button, Menu, Modal, Pill, Table } from "@mantine/core";
 import eyePublish from "@/assets/icons/eyePublish.svg?react";
 import publish from "@/assets/icons/publish.svg?react";
@@ -240,8 +239,6 @@ export default function Assignment() {
                 {section?.assignments?.length} 1 Assignment
                 {section?.assignments?.length! > 1 && "s"}
               </p>
-            
-
               <Menu
                 trigger="click"
                 openDelay={100}

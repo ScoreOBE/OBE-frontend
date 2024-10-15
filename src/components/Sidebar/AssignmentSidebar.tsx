@@ -14,8 +14,7 @@ import list from "@/assets/icons/list.svg?react";
 import histogram from "@/assets/icons/histogram.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
-import { getUserName, showNotifications } from "@/helpers/functions/function";
-import { useDisclosure } from "@mantine/hooks";
+import { getUserName } from "@/helpers/functions/function";
 import { IModelSection } from "@/models/ModelSection";
 import Loading from "../Loading";
 
@@ -34,8 +33,6 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
   const dispatch = useAppDispatch();
   const [course, setCourse] = useState<IModelCourse>();
   const [section, setSection] = useState<Partial<IModelSection>>();
-  const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
-    useDisclosure(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -79,8 +76,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
                 path.includes(ROUTE_PATH.ASSIGNMENT)
-                  ? // ![ROUTE_PATH.TQF3, ROUTE_PATH.TQF5].includes(path)
-                    "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               }`}
           >
@@ -97,8 +93,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
                    path.includes(ROUTE_PATH.HISTOGRAM)
-                     ? // ![ROUTE_PATH.TQF3, ROUTE_PATH.TQF5].includes(path)
-                       "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                  }`}
           >

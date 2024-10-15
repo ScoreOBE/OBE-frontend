@@ -2,11 +2,8 @@ import { Drawer, Tabs } from "@mantine/core";
 import ThIcon from "@/assets/icons/thai.svg?react";
 import EngIcon from "@/assets/icons/eng.svg?react";
 import Icon from "./Icon";
-import { useEffect, useState } from "react";
-import { getPLOs } from "@/services/plo/plo.service";
+import { useState } from "react";
 import { IModelPLO } from "@/models/ModelPLO";
-import { useAppSelector } from "@/store";
-import { getDepartment } from "@/services/faculty/faculty.service";
 
 type Props = {
   opened: boolean;
