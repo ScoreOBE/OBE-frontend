@@ -69,6 +69,7 @@ export default function TQF3() {
   const [openModalReuse, setOpenModalReuse] = useState(false);
   const [courseReuseTqf3List, setCourseReuseTqf3List] = useState<any[]>([]);
   const [loadingRes, setLoadingRes] = useState(false);
+  const [openAlertDataTQF3Part4, setOpenAlertDataTQF3Part4] = useState(false);
   const partTab = [
     {
       value: Object.keys(partLabel)[0],
@@ -88,7 +89,13 @@ export default function TQF3() {
     {
       value: Object.keys(partLabel)[3],
       tab: partLabel.part4,
-      compo: <Part4TQF3 setForm={setForm} />,
+      compo: (
+        <Part4TQF3
+          setForm={setForm}
+          openedAlert={openAlertDataTQF3Part4}
+          onCloseAlert={() => setOpenAlertDataTQF3Part4(false)}
+        />
+      ),
     },
     {
       value: Object.keys(partLabel)[4],
@@ -280,6 +287,7 @@ export default function TQF3() {
         form
           .getInputNode(firstErrorPath)
           ?.scrollIntoView({ behavior: "smooth", block: "end" });
+        setOpenAlertDataTQF3Part4(true);
       } else {
         const payload = form.getValues();
         payload.id = tqf3.id;
@@ -467,69 +475,7 @@ export default function TQF3() {
           </div>
         </div>
       </Modal>
-      {/* Modal Confirm Change Data */}
-      <Modal
-        opened={openWarningEditDataTQF2Or3}
-        onClose={() => setOpenWarningEditDataTQF2Or3(false)}
-        closeOnClickOutside={false}
-        title="Save Changes"
-        size="35vw"
-        centered
-        transitionProps={{ transition: "pop" }}
-        classNames={{
-          content:
-            "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center  overflow-hidden ",
-        }}
-      >
-        <div className={`w-full  bg-white  rounded-md gap-2 flex flex-col`}>
-          <Alert
-            radius="md"
-            variant="light"
-            color="red"
-            classNames={{
-              body: " flex justify-center",
-            }}
-            title={
-              <div className="flex items-center  gap-2">
-                <IconExclamationCircle />
-                <p>
-                  Your changes affected in TQF 3 Part
-                  {[tqf3Original.part4 && " 4 ", tqf3Original.part7 && " 7 "]
-                    .filter(Boolean)
-                    .join("&")}
-                </p>
-              </div>
-            }
-            className="mb-4"
-          >
-            <p className="pl-8 text-default -mt-1 leading-6 font-medium ">
-              After you save this changes, you will need to update data in TQF 3
-              Part
-              {[tqf3Original.part4 && " 4 ", tqf3Original.part7 && " 7 "]
-                .filter(Boolean)
-                .join("&")}
-              again. Do you want to save this changes?
-            </p>
-          </Alert>
-        </div>
 
-        <div className="flex gap-2 mt-2 justify-end w-full">
-          <Button
-            onClick={() => setOpenWarningEditDataTQF2Or3(false)}
-            variant="subtle"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              setConfirmToEditData(true);
-              setOpenWarningEditDataTQF2Or3(false);
-            }}
-          >
-            Save Changes
-          </Button>
-        </div>
-      </Modal>
       <div
         className={`flex flex-col h-full w-full overflow-hidden ${
           !checkActiveTerm() && "pb-2"
