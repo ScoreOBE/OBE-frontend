@@ -16,14 +16,12 @@ import {
 } from "@mantine/core";
 import ThIcon from "@/assets/icons/thai.svg?react";
 import EngIcon from "@/assets/icons/eng.svg?react";
+import Info2 from "@/assets/icons/Info2.svg?react";
+import plus2 from "@/assets/icons/plus2.svg?react";
+import trash from "@/assets/icons/trash.svg?react";
+import chevronRight from "@/assets/icons/chevronRight.svg?react";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import Icon from "@/components/Icon";
-import {
-  IconChevronRight,
-  IconExclamationCircle,
-  IconInfoCircle,
-  IconPlus,
-  IconTrash,
-} from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { isEmpty } from "lodash";
 import MapPLO from "./MapPLO";
@@ -194,7 +192,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               collection?.semester! > academicYear?.semester)) && (
             <Button
               color="red"
-              leftSection={<IconTrash className="size-5 -mr-1" stroke={1.5} />}
+              leftSection={<Icon IconComponent={trash} className="size-5 -mr-1 stroke-[2px]" />}
               onClick={() => {
                 setOpenModal(false);
                 setOpenPopupDeletePLOCollection(true);
@@ -219,9 +217,15 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             <Alert
               variant="light"
               color="red"
-              title={<p>This action cannot be undone. After you delete this PLO Collection, <br/> it will affect all courses that use it.</p>}
-              icon={<IconExclamationCircle />}
-              classNames={{ icon: "size-6" }}
+              title={
+                <p>
+                  This action cannot be undone. After you delete this PLO
+                  Collection, <br /> it will affect all courses that use it.
+                </p>
+              }
+              icon={
+                <Icon IconComponent={exclamationCircle} className="size-6" />
+              }
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">PLO Collection name</p>
@@ -260,7 +264,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             }}
             title={
               <div className="flex items-center  gap-2">
-                <IconInfoCircle />
+                <Icon IconComponent={Info2} />
                 <p>Duplicate PLO Collection </p>
               </div>
             }
@@ -392,7 +396,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 <div className="flex gap-4">
                   <Button
                     leftSection={
-                      <IconPlus className="size-5 -mr-1" stroke={1.5} />
+                      <Icon IconComponent={plus2} className="size-5 -mr-1 stroke-[2px]" />
                     }
                     onClick={openModalDuplicatePLO}
                   >
@@ -457,7 +461,10 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                           <div className="flex gap-1"></div>
                         </div>
                         <div className="flex w-full justify-end items-center   text-[#858585]   size-8 ">
-                          <IconChevronRight className="size-4" stroke={3} />
+                          <Icon
+                            IconComponent={chevronRight}
+                            className="size-4 stroke-3"
+                          />
                         </div>
                       </div>
                     ))
@@ -514,9 +521,9 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                               </div>
 
                               <div className="flex w-full justify-end items-center   text-[#858585]   size-8 ">
-                                <IconChevronRight
-                                  className="size-4"
-                                  stroke={3}
+                                <Icon
+                                  IconComponent={chevronRight}
+                                  className="size-4 stroke-3"
                                 />
                               </div>
                             </div>

@@ -1,6 +1,6 @@
 import { Button, Select, TextInput } from "@mantine/core";
 import AddCoIcon from "@/assets/icons/addCo.svg?react";
-import { IconChevronRight } from "@tabler/icons-react";
+import chevronRight from "@/assets/icons/chevronRight.svg?react";
 import { useEffect, useState } from "react";
 import Icon from "./Icon";
 import { useAppSelector } from "@/store";
@@ -231,7 +231,7 @@ export default function CompoMangeIns({
             </span>
           </p>
         </div>
-        <IconChevronRight stroke={2} />
+        <Icon IconComponent={chevronRight} className=" strole-2" />
       </div>
 
       <div className="flex w-full  items-end h-fit ">

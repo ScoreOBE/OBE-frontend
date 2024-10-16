@@ -1,5 +1,5 @@
 import { Alert, Button, Modal, TextInput } from "@mantine/core";
-import { IconExclamationCircle, IconUserCircle } from "@tabler/icons-react";
+import userCicle from "@/assets/icons/userCircle.svg?react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { IModelUser } from "@/models/ModelUser";
@@ -11,6 +11,8 @@ import { getUserName, showNotifications } from "@/helpers/functions/function";
 import { isEqual } from "lodash";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useNavigate } from "react-router-dom";
+import Icon from "@/components/Icon";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 
 type Props = {
   opened: boolean;
@@ -100,12 +102,11 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       >
         <Alert
           radius="md"
-          icon={<IconExclamationCircle />}
+         icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
           variant="light"
           color="red"
           className="mb-5"
           classNames={{
-            icon: "size-6",
             body: " flex justify-center",
           }}
           title={
@@ -143,7 +144,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                   className="flex flex-1 items-center justify-between last:border-none border-b-[1px]  p-3 "
                 >
                   <div className="gap-3 flex items-center">
-                    <IconUserCircle size={32} stroke={1} />
+                  <Icon IconComponent={userCicle} className=" size-8 stoke-1"  />
                     <div className="flex flex-col">
                       <p className="font-semibold text-[14px] text-tertiary">
                         {getUserName(admin, 1)}
@@ -182,8 +183,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           variant="light"
           color="red"
           title={`After you change Supreme Admin, `}
-          icon={<IconExclamationCircle />}
-          classNames={{ icon: "size-6" }}
+         icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
           className="mb-5"
         ></Alert>
         <TextInput

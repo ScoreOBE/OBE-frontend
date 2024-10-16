@@ -14,15 +14,14 @@ import {
   Select,
 } from "@mantine/core";
 import Icon from "@/components/Icon";
-import {
-  IconEdit,
-  IconPlus,
-  IconInfoCircle,
-  IconTrash,
-  IconCheck,
-  IconExclamationCircle,
-  IconDots,
-} from "@tabler/icons-react";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import plus from "@/assets/icons/plus.svg?react";
+import edit from "@/assets/icons/edit.svg?react";
+import info2 from "@/assets/icons/Info2.svg?react";
+import check from "@/assets/icons/Check2.svg?react";
+import trash from "@/assets/icons/trash.svg?react";
+import dots from "@/assets/icons/dots.svg?react";
+import gripVertical from "@/assets/icons/verticalGrip.svg?react";
 import { useEffect, useState } from "react";
 import CheckIcon from "@/assets/icons/Check.svg?react";
 import {
@@ -51,7 +50,6 @@ import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { IconGripVertical } from "@tabler/icons-react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import MainPopup from "@/components/Popup/MainPopup";
 import {
@@ -744,7 +742,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                   <br /> it will affect all courses that use it.
                 </p>
               }
-              icon={<IconExclamationCircle />}
+              icon={<Icon IconComponent={exclamationCircle} />}
               classNames={{ icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2 text-[#333333]">
@@ -819,7 +817,10 @@ export default function MapPLO({ ploName = "" }: Props) {
                   className="w-fit border  rounded-md "
                   position="bottom-start"
                 >
-                  <IconInfoCircle size={16} className="-ml-0 text-secondary" />
+                  <Icon
+                    IconComponent={info2}
+                    className="-ml-0 size-5 text-secondary"
+                  />
                 </Tooltip>
               </div>
 
@@ -860,7 +861,10 @@ export default function MapPLO({ ploName = "" }: Props) {
                   {isFirstSemester && (
                     <Button
                       leftSection={
-                        <IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />
+                        <Icon
+                          IconComponent={plus}
+                          className="h-5 w-5 -mr-1 stroke-[2px]"
+                        />
                       }
                       onClick={() => setOpenModalAddPLONo(true)}
                     >
@@ -924,10 +928,9 @@ export default function MapPLO({ ploName = "" }: Props) {
                                             setOpenModalEditPLONo(true);
                                           }}
                                         >
-                                          <IconEdit
-                                            stroke={1.5}
-                                            color="#F39D4E"
-                                            className="flex items-center size-4"
+                                          <Icon
+                                            IconComponent={edit}
+                                            className="flex stroke-[#f39d4e] stroke-[2px] items-center size-4"
                                           />
                                         </div>
 
@@ -938,10 +941,9 @@ export default function MapPLO({ ploName = "" }: Props) {
                                             setOpenMainPopupDelPLO(true);
                                           }}
                                         >
-                                          <IconTrash
-                                            stroke={1.5}
-                                            color="#FF4747"
-                                            className=" size-4 flex items-center"
+                                          <Icon
+                                            IconComponent={trash}
+                                            className=" stroke-[#ff4747] stroke-[2px] size-4 flex items-center"
                                           />
                                         </div>
 
@@ -949,12 +951,13 @@ export default function MapPLO({ ploName = "" }: Props) {
                                           className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
                                           {...provided.dragHandleProps}
                                         >
-                                          <IconGripVertical
+                                          <Icon IconComponent={gripVertical}
                                             style={{
                                               width: rem(20),
                                               height: rem(20),
                                             }}
-                                            stroke={1.5}
+                                            className=" stroke-[2px]"
+                                          
                                           />
                                         </div>
                                       </>
@@ -1003,7 +1006,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                             offset={6}
                           >
                             <Menu.Target>
-                              <IconDots />
+                              <Icon IconComponent={dots} />
                             </Menu.Target>
                             <Menu.Dropdown
                               autoFocus={false}
@@ -1019,9 +1022,9 @@ export default function MapPLO({ ploName = "" }: Props) {
                                   onClick={() => setOpenModalAddCourse(true)}
                                 >
                                   <div className="flex items-center gap-2">
-                                    <IconPlus
-                                      className="h-5 w-5 -mr-1"
-                                      stroke={1.5}
+                                    <Icon
+                                      IconComponent={plus}
+                                      className="h-5 w-5 -mr-1 stroke-[2px]"
                                     />
                                     <span>Add Course</span>
                                   </div>
@@ -1033,7 +1036,10 @@ export default function MapPLO({ ploName = "" }: Props) {
                                   }}
                                 >
                                   <div className="flex items-center gap-2">
-                                    <IconEdit className="size-4" stroke={1.5} />
+                                    <Icon
+                                      IconComponent={edit}
+                                      className="size-4 stroke-[2px]"
+                                    />
                                     <span>Edit Mapping</span>
                                   </div>
                                 </Menu.Item>
@@ -1054,7 +1060,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                         <Button
                           color="#0eb092"
                           leftSection={
-                            <IconCheck className="size-4" stroke={2} />
+                            <Icon IconComponent={check} className="size-4 stroke-[2px]" />
                           }
                           onClick={onSaveMapping}
                         >

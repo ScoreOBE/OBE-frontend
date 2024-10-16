@@ -1,5 +1,4 @@
 import { Button, Checkbox, Group, Modal } from "@mantine/core";
-import { IconFileExport } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/functions/function";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
@@ -8,6 +7,7 @@ import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
 import Icon from "../Icon";
+import fileExport from "@/assets/icons/fileExport.svg?react";
 
 type Props = {
   opened: boolean;
@@ -147,11 +147,9 @@ export default function ModalExportScore({ opened, onClose }: Props) {
           <Button
             loading={loading}
             rightSection={
-              <IconFileExport
-                color={!tqf3.part1?.updatedAt ? "#adb5bd" : "#ffffff"}
-                className="size-5 items-center"
-                stroke={2}
-                size={20}
+              <Icon IconComponent={fileExport}
+                className={`${!tqf3.part1?.updatedAt ? "text-[#adb5bd]" : "text-[#ffffff]" } size-5 items-center stroke-[2px]`}
+              
               />
             }
             onClick={generatePDF}

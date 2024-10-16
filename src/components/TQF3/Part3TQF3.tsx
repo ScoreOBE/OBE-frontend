@@ -1,16 +1,12 @@
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { Radio, Button, Alert, Group, Tooltip } from "@mantine/core";
+import { Radio, Button, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import AddIcon from "@/assets/icons/plus.svg?react";
+import trash from "@/assets/icons/trash.svg?react";
+import edit from "@/assets/icons/edit.svg?react";
+import verticalGrip from "@/assets/icons/verticalGrip.svg?react";
+import checkbox from "@/assets/icons/checkbox.svg?react";
 import { Table } from "@mantine/core";
-import {
-  IconCheckbox,
-  IconEdit,
-  IconExclamationCircle,
-  IconGripVertical,
-  IconTrash,
-} from "@tabler/icons-react";
-import { IconInfoCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import Icon from "../Icon";
 import ModalManageEvalTopic from "../Modal/TQF3/ModalManageEvalTopic";
@@ -21,6 +17,7 @@ import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useSearchParams } from "react-router-dom";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -130,8 +127,9 @@ export default function Part3TQF3({ setForm }: Props) {
                   Topic, <br /> it will be permanently deleted from this course.
                 </p>
               }
-              icon={<IconExclamationCircle />}
-              classNames={{ icon: "size-6" }}
+              icon={
+                <Icon IconComponent={exclamationCircle} className="size-6" />
+              }
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">Evaluation Topic</p>
@@ -201,7 +199,7 @@ export default function Part3TQF3({ setForm }: Props) {
               <div className="w-full">
                 <Alert
                   radius="md"
-                  icon={<IconCheckbox />}
+                  icon={<Icon IconComponent={checkbox} />}
                   variant="light"
                   color="rgba(6, 158, 110, 1)"
                   classNames={{
@@ -248,31 +246,7 @@ export default function Part3TQF3({ setForm }: Props) {
                       <Table.Th className="w-[5%] text-end">
                         <div className="flex flex-row !justify-end items-center gap-2">
                           Evaluate
-                          <Tooltip
-                            arrowOffset={20}
-                            arrowSize={8}
-                            arrowRadius={1}
-                            transitionProps={{
-                              transition: "fade",
-                              duration: 300,
-                            }}
-                            multiline
-                            withArrow
-                            label={
-                              <div className="text-default text-[12px] p-2 font-medium gap-2">
-                                Percentage of scores for each topic in the
-                                course syllabus.
-                              </div>
-                            }
-                            color="#FCFCFC"
-                            className="w-fit border  rounded-md "
-                            position="bottom-end"
-                          >
-                            <IconInfoCircle
-                              size={16}
-                              className="-ml-0 text-secondary"
-                            />
-                          </Tooltip>
+                         
                         </div>
                       </Table.Th>
                       {disabled ? (
@@ -341,9 +315,9 @@ export default function Part3TQF3({ setForm }: Props) {
                                               setOpenModalEditEvalTopic(true);
                                             }}
                                           >
-                                            <IconEdit
-                                              className="size-4"
-                                              stroke={1.5}
+                                            <Icon
+                                              IconComponent={edit}
+                                              className="size-4 stroke-2"
                                             />
                                           </div>
                                           <div
@@ -353,9 +327,9 @@ export default function Part3TQF3({ setForm }: Props) {
                                               setOpenPopupDelEvalTopic(true);
                                             }}
                                           >
-                                            <IconTrash
-                                              className="size-4"
-                                              stroke={1.5}
+                                            <Icon
+                                              IconComponent={trash}
+                                              className="size-4 stroke-2"
                                             />
                                           </div>
                                         </div>
@@ -369,12 +343,13 @@ export default function Part3TQF3({ setForm }: Props) {
                                           className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center "
                                           {...provided.dragHandleProps}
                                         >
-                                          <IconGripVertical
+                                          <Icon IconComponent={verticalGrip}
+                                          className="stroke-[2px]"
                                             style={{
                                               width: "20px",
                                               height: "20px",
                                             }}
-                                            stroke={1.5}
+                                          
                                           />
                                         </div>
                                       </Table.Td>

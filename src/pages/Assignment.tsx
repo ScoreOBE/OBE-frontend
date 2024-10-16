@@ -6,22 +6,20 @@ import eyePublish from "@/assets/icons/eyePublish.svg?react";
 import publish from "@/assets/icons/publish.svg?react";
 import publishEach from "@/assets/icons/publishEach.svg?react";
 import publishAll from "@/assets/icons/publishAll.svg?react";
+import dots from "@/assets/icons/dots.svg?react";
+import trash from "@/assets/icons/trash.svg?react";
+import pencilMinus from "@/assets/icons/pencilMinus.svg?react";
+import arrowRight from "@/assets/icons/arrowRight.svg?react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
-import {
-  IconArrowRight,
-  IconDots,
-  IconInfoCircle,
-  IconPencilMinus,
-  IconTrash,
-} from "@tabler/icons-react";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading";
+import Info2 from "@/assets/icons/Info2.svg?react";
 
 export default function Assignment() {
   const { courseNo, sectionNo } = useParams();
@@ -83,7 +81,7 @@ export default function Assignment() {
               {` enrolled in this course will be able to see the assignments score you publish.`}
             </p>
           }
-          icon={<IconInfoCircle />}
+          icon={<Icon IconComponent={Info2} />}
           classNames={{ icon: "size-6" }}
           className="mb-5"
         ></Alert>
@@ -218,7 +216,11 @@ export default function Assignment() {
           >
             Cancel
           </Button>
-          <Button rightSection={<IconArrowRight stroke={2} size={20} />}>
+          <Button
+            rightSection={
+              <Icon IconComponent={arrowRight} className="size-8 stroke-2" />
+            }
+          >
             Next
           </Button>
         </div>
@@ -315,7 +317,10 @@ export default function Assignment() {
                       <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
                         <Menu trigger="click" position="bottom-end" offset={2}>
                           <Menu.Target>
-                            <IconDots className=" rounded-full w-fit hover:bg-gray-300" />
+                            <Icon
+                              IconComponent={dots}
+                              className=" rounded-full w-fit hover:bg-gray-300"
+                            />
                           </Menu.Target>
                           <Menu.Dropdown
                             className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -325,16 +330,16 @@ export default function Assignment() {
                           >
                             <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconPencilMinus
-                                  stroke={1.5}
-                                  className="h-4 w-4"
+                                <Icon
+                                  IconComponent={pencilMinus}
+                                  className="h-4 w-4 stroke-[2px]"
                                 />
                                 <span>Edit Assignment Name</span>
                               </div>
                             </Menu.Item>
                             <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconTrash className="h-4 w-4" stroke={1.5} />
+                                <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
                                 <span>Delete Assignment</span>
                               </div>
                             </Menu.Item>
@@ -357,7 +362,10 @@ export default function Assignment() {
                       <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
                         <Menu trigger="click" position="bottom-end" offset={2}>
                           <Menu.Target>
-                            <IconDots className=" rounded-full w-fit hover:bg-gray-300" />
+                            <Icon
+                              IconComponent={dots}
+                              className=" rounded-full w-fit hover:bg-gray-300"
+                            />
                           </Menu.Target>
                           <Menu.Dropdown
                             className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -367,16 +375,16 @@ export default function Assignment() {
                           >
                             <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconPencilMinus
-                                  stroke={1.5}
-                                  className="h-4 w-4"
+                              <Icon
+                                  IconComponent={pencilMinus}
+                                  className="h-4 w-4 stroke-[2px]"
                                 />
                                 <span>Edit Assignment Name</span>
                               </div>
                             </Menu.Item>
                             <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconTrash className="h-4 w-4" stroke={1.5} />
+                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
                                 <span>Delete Assignment</span>
                               </div>
                             </Menu.Item>
@@ -399,7 +407,10 @@ export default function Assignment() {
                       <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
                         <Menu trigger="click" position="bottom-end" offset={2}>
                           <Menu.Target>
-                            <IconDots className=" rounded-full w-fit hover:bg-gray-300" />
+                            <Icon
+                              IconComponent={dots}
+                              className=" rounded-full w-fit hover:bg-gray-300"
+                            />
                           </Menu.Target>
                           <Menu.Dropdown
                             className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -409,16 +420,16 @@ export default function Assignment() {
                           >
                             <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconPencilMinus
-                                  stroke={1.5}
-                                  className="h-4 w-4"
+                              <Icon
+                                  IconComponent={pencilMinus}
+                                  className="h-4 w-4 stroke-[2px]"
                                 />
                                 <span>Edit Assignment Name</span>
                               </div>
                             </Menu.Item>
                             <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconTrash className="h-4 w-4" stroke={1.5} />
+                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
                                 <span>Delete Assignment</span>
                               </div>
                             </Menu.Item>
@@ -441,7 +452,10 @@ export default function Assignment() {
                       <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
                         <Menu trigger="click" position="bottom-end" offset={2}>
                           <Menu.Target>
-                            <IconDots className=" rounded-full w-fit hover:bg-gray-300" />
+                            <Icon
+                              IconComponent={dots}
+                              className=" rounded-full w-fit hover:bg-gray-300"
+                            />
                           </Menu.Target>
                           <Menu.Dropdown
                             className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -451,16 +465,16 @@ export default function Assignment() {
                           >
                             <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconPencilMinus
-                                  stroke={1.5}
-                                  className="h-4 w-4"
+                              <Icon
+                                  IconComponent={pencilMinus}
+                                  className="h-4 w-4 stroke-[2px]"
                                 />
                                 <span>Edit Assignment Name</span>
                               </div>
                             </Menu.Item>
                             <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconTrash className="h-4 w-4" stroke={1.5} />
+                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
                                 <span>Delete Assignment</span>
                               </div>
                             </Menu.Item>
@@ -483,7 +497,10 @@ export default function Assignment() {
                       <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
                         <Menu trigger="click" position="bottom-end" offset={2}>
                           <Menu.Target>
-                            <IconDots className=" rounded-full w-fit hover:bg-gray-300" />
+                            <Icon
+                              IconComponent={dots}
+                              className=" rounded-full w-fit hover:bg-gray-300"
+                            />
                           </Menu.Target>
                           <Menu.Dropdown
                             className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -493,16 +510,16 @@ export default function Assignment() {
                           >
                             <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconPencilMinus
-                                  stroke={1.5}
-                                  className="h-4 w-4"
+                              <Icon
+                                  IconComponent={pencilMinus}
+                                  className="h-4 w-4 stroke-[2px]"
                                 />
                                 <span>Edit Assignment Name</span>
                               </div>
                             </Menu.Item>
                             <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconTrash className="h-4 w-4" stroke={1.5} />
+                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
                                 <span>Delete Assignment</span>
                               </div>
                             </Menu.Item>
@@ -525,7 +542,10 @@ export default function Assignment() {
                       <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
                         <Menu trigger="click" position="bottom-end" offset={2}>
                           <Menu.Target>
-                            <IconDots className=" rounded-full w-fit hover:bg-gray-300" />
+                            <Icon
+                              IconComponent={dots}
+                              className=" rounded-full w-fit hover:bg-gray-300"
+                            />
                           </Menu.Target>
                           <Menu.Dropdown
                             className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -535,16 +555,16 @@ export default function Assignment() {
                           >
                             <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconPencilMinus
-                                  stroke={1.5}
-                                  className="h-4 w-4"
+                              <Icon
+                                  IconComponent={pencilMinus}
+                                  className="h-4 w-4 stroke-[2px]"
                                 />
                                 <span>Edit Assignment Name</span>
                               </div>
                             </Menu.Item>
                             <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconTrash className="h-4 w-4" stroke={1.5} />
+                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
                                 <span>Delete Assignment</span>
                               </div>
                             </Menu.Item>
@@ -567,7 +587,10 @@ export default function Assignment() {
                       <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
                         <Menu trigger="click" position="bottom-end" offset={2}>
                           <Menu.Target>
-                            <IconDots className=" rounded-full w-fit hover:bg-gray-300" />
+                            <Icon
+                              IconComponent={dots}
+                              className=" rounded-full w-fit hover:bg-gray-300"
+                            />
                           </Menu.Target>
                           <Menu.Dropdown
                             className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -577,16 +600,16 @@ export default function Assignment() {
                           >
                             <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconPencilMinus
-                                  stroke={1.5}
-                                  className="h-4 w-4"
+                              <Icon
+                                  IconComponent={pencilMinus}
+                                  className="h-4 w-4 stroke-[2px]"
                                 />
                                 <span>Edit Assignment Name</span>
                               </div>
                             </Menu.Item>
                             <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconTrash className="h-4 w-4" stroke={1.5} />
+                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
                                 <span>Delete Assignment</span>
                               </div>
                             </Menu.Item>
@@ -609,7 +632,10 @@ export default function Assignment() {
                       <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
                         <Menu trigger="click" position="bottom-end" offset={2}>
                           <Menu.Target>
-                            <IconDots className=" rounded-full w-fit hover:bg-gray-300" />
+                            <Icon
+                              IconComponent={dots}
+                              className=" rounded-full w-fit hover:bg-gray-300"
+                            />
                           </Menu.Target>
                           <Menu.Dropdown
                             className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -619,16 +645,16 @@ export default function Assignment() {
                           >
                             <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconPencilMinus
-                                  stroke={1.5}
-                                  className="h-4 w-4"
+                              <Icon
+                                  IconComponent={pencilMinus}
+                                  className="h-4 w-4 stroke-[2px]"
                                 />
                                 <span>Edit Assignment Name</span>
                               </div>
                             </Menu.Item>
                             <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
                               <div className="flex items-center gap-2">
-                                <IconTrash className="h-4 w-4" stroke={1.5} />
+                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
                                 <span>Delete Assignment</span>
                               </div>
                             </Menu.Item>
