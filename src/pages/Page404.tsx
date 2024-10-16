@@ -21,13 +21,9 @@ export default function NotFoundPage() {
     dispatch(setShowNavbar(false));
   }, []);
 
-  const goDashboard = () => {
+  const goBack = () => {
     if (localStorage.getItem("token")) {
-      navigate(
-        user.role == ROLE.STUDENT
-          ? ROUTE_PATH.DASHBOARD_STD
-          : ROUTE_PATH.DASHBOARD_INS
-      );
+      navigate(-1);
     } else {
       navigate(ROUTE_PATH.LOGIN);
     }
@@ -48,13 +44,13 @@ export default function NotFoundPage() {
               The page you're looking for is now beyond the known universe.
             </p>
             <Button
-              onClick={goDashboard}
+              onClick={goBack}
               leftSection={
                 <Icon IconComponent={arrowLeft} className="size-6 -mr-1 stroke-2" />
               }
               className="inline-block !text-[16px] -ml-4 mt-3 bg-transparent hover:bg-transparent hover:underline text-white !font-bold !rounded transition"
             >
-              Back to home
+              Back
             </Button>
           </div>
 

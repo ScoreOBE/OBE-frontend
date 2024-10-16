@@ -7,10 +7,10 @@ import {
 } from "react-router-dom";
 import { Button } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
-import logout from "@/assets/icons/logout.svg?react";
 import Icon from "@/components/Icon";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import list from "@/assets/icons/list.svg?react";
+import logout from "@/assets/icons/logout.svg?react";
 import histogram from "@/assets/icons/histogram.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
@@ -48,7 +48,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
 
   const gotoPage = (newPath: string) => {
     navigate({
-      pathname: path.replace(path.split("/")[5], newPath),
+      pathname: path.replace(path.split("/")[7], newPath),
       search: "?" + params.toString(),
     });
   };
@@ -68,19 +68,19 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
         </div>
         <div className="flex flex-col gap-2">
           <Button
-            onClick={() => gotoPage(ROUTE_PATH.ASSIGNMENT)}
+            onClick={() => gotoPage(ROUTE_PATH.OVERALL)}
             leftSection={<Icon IconComponent={list} />}
             className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
-                path.includes(ROUTE_PATH.ASSIGNMENT)
+                path.includes(ROUTE_PATH.OVERALL)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               }`}
           >
-            Assignment
+            Score
           </Button>
           <Button
-            onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
+            onClick={() => gotoPage(ROUTE_PATH.STUDENTS)}
             leftSection={
               <Icon
                 IconComponent={histogram}
@@ -89,12 +89,12 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             }
             className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
-                   path.includes(ROUTE_PATH.HISTOGRAM)
+                   path.includes(ROUTE_PATH.STUDENTS)
                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                  }`}
           >
-            <p className="pl-[3px]">Histogram</p>
+            <p className="pl-[3px]">Students</p>
           </Button>
         </div>
       </div>
