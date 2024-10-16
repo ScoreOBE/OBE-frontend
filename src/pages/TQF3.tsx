@@ -9,11 +9,11 @@ import {
   Tabs,
   Tooltip,
 } from "@mantine/core";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconDupTQF from "@/assets/icons/dupTQF.svg?react";
+import IconCheck from "@/assets/icons/Check.svg?react";
 import { useParams, useSearchParams } from "react-router-dom";
-import CheckIcon from "@/assets/icons/Check.svg?react";
 import Part1TQF3 from "@/components/TQF3/Part1TQF3";
 import Part2TQF3 from "@/components/TQF3/Part2TQF3";
 import Part3TQF3 from "@/components/TQF3/Part3TQF3";
@@ -29,10 +29,8 @@ import {
   reuseTQF3,
   saveTQF3,
 } from "@/services/tqf3/tqf3.service";
-import {
-  getValueEnumByKey,
-  showNotifications,
-} from "@/helpers/functions/function";
+import { getValueEnumByKey } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { useForm, UseFormReturnType } from "@mantine/form";
 import exportFile from "@/assets/icons/exportFile.svg?react";
@@ -444,8 +442,7 @@ export default function TQF3() {
             variant="light"
             color="red"
             title="After reusing TQF 3, please remember to double-check and save the data for all 6 parts of the course you selected"
-           icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
-            
+            icon={<Icon IconComponent={IconExclamationCircle} className="size-6" />}
           ></Alert>
           <Select
             rightSectionPointerEvents="all"
@@ -507,7 +504,7 @@ export default function TQF3() {
                 <Tabs.Tab key={value} value={value}>
                   <div className="flex flex-row items-center gap-2">
                     <Icon
-                      IconComponent={CheckIcon}
+                      IconComponent={IconCheck}
                       className={checkPartStatus(value as keyof IModelTQF3)}
                     />
                     {tab}
@@ -545,7 +542,10 @@ export default function TQF3() {
                     <Button
                       variant="outline"
                       leftSection={
-                        <Icon IconComponent={dupTQF} className="size-5 -mr-1" />
+                        <Icon
+                          IconComponent={IconDupTQF}
+                          className="text-[#ee933e] size-5 -mr-1"
+                        />
                       }
                       color="#ee933e"
                       className="pr-4 px-3"

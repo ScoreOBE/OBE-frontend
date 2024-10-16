@@ -6,23 +6,23 @@ import {
   MS_EXCEL_MIME_TYPE,
 } from "@mantine/dropzone";
 import { Alert, Button, Modal } from "@mantine/core";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import Info2 from "@/assets/icons/Info2.svg?react";
-import upload from "@/assets/icons/upload.svg?react";
-import fileImport from "@/assets/icons/fileImport.svg?react";
-import bulb from "@/assets/icons/bulb.svg?react";
-import download from "@/assets/icons/download.svg?react";
-import fileExcel from "@/assets/icons/excelFile.svg?react";
-import x from "@/assets/icons/x.svg?react";
-import file from "@/assets/icons/file.svg?react";
+import Icon from "../Icon";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
+import IconUpload from "@/assets/icons/upload.svg?react";
+import IconFileImport from "@/assets/icons/fileImport.svg?react";
+import IconBulb from "@/assets/icons/bulb.svg?react";
+import IconDownload from "@/assets/icons/download.svg?react";
+import IconFileExcel from "@/assets/icons/excelFile.svg?react";
+import IconX from "@/assets/icons/x.svg?react";
+import IconFile from "@/assets/icons/file.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import gradescope from "@/assets/image/gradescope.png";
 import ModalStudentList from "./ModalStudentList";
 import ModalTemplateGuide from "./ModalTemplateGuide";
-import { showNotifications } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import * as XLSX from "xlsx";
-import Icon from "../Icon";
 
 type Props = {
   opened: boolean;
@@ -171,7 +171,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               </div>
               <Button
                 leftSection={
-                  <Icon IconComponent={fileImport} className="size-4" />
+                  <Icon IconComponent={IconFileImport} className="size-4" />
                 }
                 color="#5268d5"
                 variant="outline"
@@ -195,7 +195,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 }}
                 title={
                   <div className="flex items-center gap-2">
-                    <Icon IconComponent={exclamationCircle} />
+                    <Icon IconComponent={IconExclamationCircle} />
                     <p>Important: Score OBE+ required</p>
                   </div>
                 }
@@ -217,7 +217,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 }}
                 title={
                   <div className="flex items-center  gap-2">
-                    <Icon IconComponent={bulb} />
+                    <Icon IconComponent={IconBulb} />
                     <p>
                       Tips: Score OBE+ support{" "}
                       <span style={{ fontFamily: "Lexand" }}>
@@ -271,7 +271,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   <div className="flex flex-col gap-2">
                     <Button
                       leftSection={
-                        <Icon IconComponent={file} className="size-4" />
+                        <Icon IconComponent={IconFile} className="size-4" />
                       }
                       variant="outline"
                       onClick={() => setOpenModalTemplateGuide(true)}
@@ -280,7 +280,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     </Button>
                     <Button
                       leftSection={
-                        <Icon IconComponent={download} className="size-4" />
+                        <Icon IconComponent={IconDownload} className="size-4" />
                       }
                       className="size-4"
                     >
@@ -298,7 +298,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 }}
                 title={
                   <div className="flex items-center  gap-2">
-                    <Icon IconComponent={Info2} />
+                    <Icon IconComponent={IconInfo2} />
                     <p>Upload Existing Score</p>
                   </div>
                 }
@@ -323,21 +323,21 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 <div className="flex flex-col gap-3 justify-center items-center pointer-events-none">
                   <Dropzone.Accept>
                     <Icon
-                      IconComponent={upload}
+                      IconComponent={IconUpload}
                       style={{ color: "var(--mantine-color-green-6)" }}
                       className="bg-green-100 stroke-[2px] size-16 p-3 rounded-full"
                     />
                   </Dropzone.Accept>
                   <Dropzone.Reject>
                     <Icon
-                      IconComponent={x}
+                      IconComponent={IconX}
                       style={{ color: "var(--mantine-color-red-6)" }}
                       className="bg-red-200 stroke-[2px] size-16 p-3 rounded-full"
                     />
                   </Dropzone.Reject>
                   <Dropzone.Idle>
                     <Icon
-                      IconComponent={upload}
+                      IconComponent={IconUpload}
                       className="bg-[#DDE0FF] stroke-[2px] stroke-[#5768d5] size-16 p-3 rounded-full"
                     />
                   </Dropzone.Idle>
@@ -353,7 +353,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   <div className="flex flex-col font-medium  text-b2 text-red-500  items-center text-center justify-center">
                     <div className="flex gap-2 items-center justify-center">
                       <Icon
-                        IconComponent={exclamationCircle}
+                        IconComponent={IconExclamationCircle}
                         className="size-4 stroke-red-600"
                       />
                       <p>Supports only Score OBE+</p>
@@ -366,7 +366,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 <div className="flex flex-col w-full">
                   <div className="flex items-center gap-2">
                     <Icon
-                      IconComponent={fileExcel}
+                      IconComponent={IconFileExcel}
                       className="size-7 stroke-[#058a3a]"
                     />{" "}
                     <div className="flex flex-col">
@@ -385,7 +385,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 <div className="flex justify-between items-center w-full">
                   <div className="flex items-center gap-2">
                     <Icon
-                      IconComponent={fileExcel}
+                      IconComponent={IconFileExcel}
                       className="size-7 stroke-[#058A3A]"
                     />{" "}
                     <div className="flex flex-col">
@@ -399,7 +399,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     color="#DDE0FF"
                     className=" text-secondary pl-4 font-extrabold hover:text-[#4a58b4] text-b3 rounded-md"
                     leftSection={
-                      <Icon IconComponent={upload} className="size-4" />
+                      <Icon IconComponent={IconUpload} className="size-4" />
                     }
                   >
                     Upload

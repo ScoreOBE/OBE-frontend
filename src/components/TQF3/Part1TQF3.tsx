@@ -2,7 +2,6 @@ import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { IModelTQF3Part1 } from "@/models/ModelTQF3";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
-import AddIcon from "@/assets/icons/plus.svg?react";
 import {
   Radio,
   Checkbox,
@@ -12,12 +11,13 @@ import {
   NumberInput,
   Button,
 } from "@mantine/core";
-import trash from "@/assets/icons/trash.svg?react";
+import Icon from "../Icon";
+import IconAdd from "@/assets/icons/plus.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
 import { useForm } from "@mantine/form";
 import { cloneDeep, isEqual } from "lodash";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import Icon from "../Icon";
 import { initialTqf3Part1 } from "@/helpers/functions/tqf3";
 
 type Props = {
@@ -278,7 +278,10 @@ export default function Part1TQF3({ setForm }: Props) {
                   color="#ff4747"
                   onClick={() => form.removeListItem("instructors", index)}
                 >
-                  <Icon IconComponent={trash} className=" stroke-[2px] size-5"  />
+                  <Icon
+                    IconComponent={IconTrash}
+                    className=" stroke-[2px] size-5"
+                  />
                 </Button>
               )}
             </div>
@@ -290,7 +293,7 @@ export default function Part1TQF3({ setForm }: Props) {
               onClick={() => form.insertListItem("instructors", "")}
             >
               <div className="flex gap-2">
-                <Icon IconComponent={AddIcon} />
+                <Icon IconComponent={IconAdd} />
                 Add
               </div>
             </Button>

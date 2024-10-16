@@ -14,20 +14,20 @@ import {
   Table,
   Tabs,
 } from "@mantine/core";
-import ThIcon from "@/assets/icons/thai.svg?react";
-import EngIcon from "@/assets/icons/eng.svg?react";
-import Info2 from "@/assets/icons/Info2.svg?react";
-import plus2 from "@/assets/icons/plus2.svg?react";
-import trash from "@/assets/icons/trash.svg?react";
-import chevronRight from "@/assets/icons/chevronRight.svg?react";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import Icon from "@/components/Icon";
+import IconTh from "@/assets/icons/thai.svg?react";
+import IconEng from "@/assets/icons/eng.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
+import IconPlus2 from "@/assets/icons/plus2.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
+import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { useDisclosure } from "@mantine/hooks";
 import { isEmpty } from "lodash";
 import MapPLO from "./MapPLO";
 import MainPopup from "@/components/Popup/MainPopup";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
-import { showNotifications } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 
 type Props = {
   opened: boolean;
@@ -151,13 +151,13 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               <Tabs.List>
                 <Tabs.Tab value="TH">
                   <div className="flex flex-row items-center gap-2 ">
-                    <Icon IconComponent={ThIcon} />
+                    <Icon IconComponent={IconTh} />
                     ไทย
                   </div>
                 </Tabs.Tab>
                 <Tabs.Tab value="EN">
                   <div className="flex flex-row items-center gap-2 ">
-                    <Icon IconComponent={EngIcon} />
+                    <Icon IconComponent={IconEng} />
                     Eng
                   </div>
                 </Tabs.Tab>
@@ -192,7 +192,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               collection?.semester! > academicYear?.semester)) && (
             <Button
               color="red"
-              leftSection={<Icon IconComponent={trash} className="size-5 -mr-1 stroke-[2px]" />}
+              leftSection={<Icon IconComponent={IconTrash} className="size-5 -mr-1 stroke-[2px]" />}
               onClick={() => {
                 setOpenModal(false);
                 setOpenPopupDeletePLOCollection(true);
@@ -224,7 +224,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 </p>
               }
               icon={
-                <Icon IconComponent={exclamationCircle} className="size-6" />
+                <Icon IconComponent={IconExclamationCircle} className="size-6" />
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
@@ -264,7 +264,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             }}
             title={
               <div className="flex items-center  gap-2">
-                <Icon IconComponent={Info2} />
+                <Icon IconComponent={IconInfo2} />
                 <p>Duplicate PLO Collection </p>
               </div>
             }
@@ -396,7 +396,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 <div className="flex gap-4">
                   <Button
                     leftSection={
-                      <Icon IconComponent={plus2} className="size-5 -mr-1 stroke-[2px]" />
+                      <Icon IconComponent={IconPlus2} className="size-5 -mr-1 stroke-[2px]" />
                     }
                     onClick={openModalDuplicatePLO}
                   >
@@ -462,8 +462,8 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                         </div>
                         <div className="flex w-full justify-end items-center   text-[#858585]   size-8 ">
                           <Icon
-                            IconComponent={chevronRight}
-                            className="size-4 stroke-3"
+                            IconComponent={IconChevronRight}
+                            className="size-4 stroke-[2px]"
                           />
                         </div>
                       </div>
@@ -522,8 +522,8 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
 
                               <div className="flex w-full justify-end items-center   text-[#858585]   size-8 ">
                                 <Icon
-                                  IconComponent={chevronRight}
-                                  className="size-4 stroke-3"
+                                  IconComponent={IconChevronRight}
+                                  className="size-4 stroke-[2px]"
                                 />
                               </div>
                             </div>

@@ -5,16 +5,17 @@ import store, { useAppDispatch, useAppSelector } from "@/store";
 import {
   getSectionNo,
   getUserName,
-  showNotifications,
   sortData,
 } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { Tabs } from "@mantine/core";
 import { IModelCourseManagement } from "@/models/ModelCourseManagement";
 import CompoManageIns from "@/components/CompoManageIns";
-import Info2 from "@/assets/icons/Info2.svg?react";
-import userCicle from "@/assets/icons/userCircle.svg?react";
-import chevronLeft from "@/assets/icons/chevronLeft.svg?react";
-import users from "@/assets/icons/users.svg?react";
+import Icon from "@/components/Icon";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
+import IconUserCicle from "@/assets/icons/userCircle.svg?react";
+import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
+import IconUsers from "@/assets/icons/users.svg?react";
 import {
   updateCoInsSections,
   updateSectionManagement,
@@ -28,7 +29,6 @@ import {
 } from "@/store/courseManagement";
 import { cloneDeep, isEqual } from "lodash";
 import { editCourse } from "@/store/course";
-import Icon from "@/components/Icon";
 
 type actionType = "course" | "courseManagement";
 
@@ -238,7 +238,7 @@ export default function ModalManageIns({
           <div>
             <Alert
               radius="md"
-              icon={<Icon IconComponent={Info2} />}
+              icon={<Icon IconComponent={IconInfo2} />}
               variant="light"
               color="blue"
               className="mb-5"
@@ -271,7 +271,7 @@ export default function ModalManageIns({
         {!!editCoInsList?.length && (
           <div className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md">
             <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
-              <Icon IconComponent={users} /> Added Co-Instructor
+              <Icon IconComponent={IconUsers} /> Added Co-Instructor
             </div>
             <div className="flex flex-col max-h-[300px] h-fit w-full   px-2   overflow-y-auto ">
               <div className="flex flex-col max-h-[400px] h-fit p-1 ">
@@ -388,7 +388,8 @@ export default function ModalManageIns({
         ) : (
           <div className="flex gap-2 items-center">
             {changeMainIns && (
-              <Icon IconComponent={chevronLeft}
+              <Icon
+                IconComponent={IconChevronLeft}
                 className="hover:bg-[#f0f0f0] size-6 -translate-x-2 rounded-full"
                 onClick={() => setChangeMainIns(false)}
               />
@@ -418,7 +419,10 @@ export default function ModalManageIns({
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
           >
-            <Icon IconComponent={userCicle} className=" size-8 -translate-x-1 stoke-1"  />
+            <Icon
+              IconComponent={IconUserCicle}
+              className=" size-8 -translate-x-1 stoke-1"
+            />
             <div className="flex flex-col">
               <p className="font-semibold text-[14px] text-tertiary">
                 {getUserName(editSec?.instructor as IModelUser, 1)}
@@ -452,7 +456,10 @@ export default function ModalManageIns({
                   className="w-full items-center last:border-none border-b-[1px] justify-between  p-3  flex"
                 >
                   <div className="gap-3 flex items-center">
-                  <Icon IconComponent={userCicle} className=" size-8 -translate-x-1 stoke-1"  />
+                    <Icon
+                      IconComponent={IconUserCicle}
+                      className=" size-8 -translate-x-1 stoke-1"
+                    />
                     <div className="flex flex-col">
                       <p className="font-semibold text-[14px] text-tertiary">
                         {getUserName(sec.instructor, 1)}

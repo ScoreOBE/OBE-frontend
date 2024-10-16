@@ -1,15 +1,16 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, Menu, Modal, Select, Tabs } from "@mantine/core";
-import ManageAdminIcon from "@/assets/icons/manageAdmin.svg?react";
-import dots from "@/assets/icons/dots.svg?react";
-import trash from "@/assets/icons/trash.svg?react";
-import edit from "@/assets/icons/edit.svg?react";
-import pencilMinus from "@/assets/icons/pencilMinus.svg?react";
-import plus from "@/assets/icons/plus2.svg?react";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import chevronLeft from "@/assets/icons/chevronLeft.svg?react";
 import Icon from "@/components/Icon";
+import IconManageAdmin from "@/assets/icons/manageAdmin.svg?react";
+import IconDots from "@/assets/icons/dots.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
+import IconEdit from "@/assets/icons/edit.svg?react";
+import IconPencilMinus from "@/assets/icons/pencilMinus.svg?react";
+import IconPlus from "@/assets/icons/plus2.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
+import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import { CourseManagementSearchDTO } from "@/services/courseManagement/dto/courseManagement.dto";
 import {
   deleteCourseManagement,
@@ -20,9 +21,9 @@ import { COURSE_TYPE, NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import {
   getSectionNo,
   getUserName,
-  showNotifications,
   sortData,
 } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import MainPopup from "@/components/Popup/MainPopup";
 import { IModelSection } from "@/models/ModelSection";
 import Loading from "@/components/Loading";
@@ -39,7 +40,6 @@ import ModalAddSection from "@/components/Modal/CourseManage/ModalAddSection";
 import { SearchInput } from "@/components/SearchInput";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { IModelDepartment } from "@/models/ModelFaculty";
-import chevronRight from "@/assets/icons/chevronRight.svg?react";
 
 type Props = {
   opened: boolean;
@@ -260,7 +260,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   will not be affected.
                 </p>
               }
-              icon={<Icon IconComponent={exclamationCircle} />}
+              icon={<Icon IconComponent={IconExclamationCircle} />}
               classNames={{ icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
@@ -300,7 +300,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
               title=" After you delete this section, it's permanently deleted all data from
           the current semester. Data from previous semesters will not be affected. 
           "
-              icon={<Icon IconComponent={exclamationCircle} />}
+              icon={<Icon IconComponent={IconExclamationCircle} />}
               classNames={{ icon: "size-6" }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
@@ -377,7 +377,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                         startEndTab.start !== 1 && "hover:bg-[#eeeeee]"
                       } rounded-full`}
                     >
-                      <Icon IconComponent={chevronLeft} />
+                      <Icon IconComponent={IconChevronLeft} />
                     </div>
                   )}
                   {department
@@ -401,7 +401,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                         "hover:bg-[#eeeeee]"
                       } rounded-full`}
                     >
-                      <Icon IconComponent={chevronRight} />
+                      <Icon IconComponent={IconChevronRight} />
                     </div>
                   )}
                   {/* </div> */}
@@ -450,7 +450,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                     startEndPage.start !== 1 && "hover:bg-[#eeeeee]"
                   } rounded-full`}
                 >
-                  <Icon IconComponent={chevronLeft} />
+                  <Icon IconComponent={IconChevronLeft} />
                 </div>
                 <div
                   aria-disabled={startEndPage.end == courseManagement.total}
@@ -460,7 +460,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                     "hover:bg-[#eeeeee]"
                   } rounded-full`}
                 >
-                  <Icon IconComponent={chevronRight} />
+                  <Icon IconComponent={IconChevronRight} />
                 </div>
               </div>
             </div>
@@ -508,7 +508,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                         >
                           <Menu.Target>
                             <Icon
-                              IconComponent={dots}
+                              IconComponent={IconDots}
                               className="rounded-full hover:bg-gray-200"
                             />
                           </Menu.Target>
@@ -526,7 +526,10 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                               className="text-default font-semibold  text-b2  w-[180px]"
                             >
                               <div className="flex items-center gap-2">
-                                <Icon IconComponent={plus} className=" stroke-[2px] size-4" />
+                                <Icon
+                                  IconComponent={IconPlus}
+                                  className=" stroke-[2px] size-4"
+                                />
                                 <span>Add section</span>
                               </div>
                             </Menu.Item>
@@ -544,7 +547,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                             >
                               <div className="flex items-center gap-2">
                                 <Icon
-                                  IconComponent={pencilMinus}
+                                  IconComponent={IconPencilMinus}
                                   className="size-4 stroke-[2px]"
                                 />
                                 <span>Edit course</span>
@@ -560,7 +563,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                               <div className="flex items-center gap-2">
                                 <Icon
                                   className="size-4 "
-                                  IconComponent={ManageAdminIcon}
+                                  IconComponent={IconManageAdmin}
                                 />
                                 <span>Manage instructor</span>
                               </div>
@@ -580,7 +583,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                             >
                               <div className="flex items-center gap-2">
                                 <Icon
-                                  IconComponent={trash}
+                                  IconComponent={IconTrash}
                                   className="size-4 stroke-[2px]"
                                 />
                                 <span>Delete course</span>
@@ -671,7 +674,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                                 className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full  cursor-pointer hover:bg-[#F39D4E]/10"
                               >
                                 <Icon
-                                  IconComponent={edit}
+                                  IconComponent={IconEdit}
                                   className="size-4 stroke-[2px]"
                                 />
                               </div>
@@ -698,7 +701,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                               }`}
                               >
                                 <Icon
-                                  IconComponent={trash}
+                                  IconComponent={IconTrash}
                                   className="size-4 stroke-[2px]"
                                 />
                               </div>

@@ -9,12 +9,14 @@ import courseReducer from "./course";
 import courseManagementReducer from "./courseManagement";
 import showNavbarReducer from "./showNavbar";
 import tqf3Reducer from "./tqf3";
+import progressReducer from "./progress";
 
 const store = configureStore({
   reducer: {
     showNavbar: showNavbarReducer,
     showSidebar: showSidebarReducer,
     loading: loadingReducer,
+    progress: progressReducer,
     errorResponse: errorResponseReducer,
     user: userReducer,
     academicYear: academicYearReducer,

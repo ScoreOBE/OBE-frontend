@@ -9,8 +9,9 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Table } from "@mantine/core";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import checkbox from "@/assets/icons/checkbox.svg?react";
+import Icon from "../Icon";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconCheckbox from "@/assets/icons/checkbox.svg?react";
 import { useEffect } from "react";
 import { IModelEval, IModelTQF3Part4 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
@@ -20,7 +21,6 @@ import { updatePartTQF3 } from "@/store/tqf3";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { initialTqf3Part4 } from "@/helpers/functions/tqf3";
-import Icon from "../Icon";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -189,7 +189,7 @@ export default function Part4TQF3({
             }}
             title={
               <div className="flex items-center  gap-2">
-                <Icon IconComponent={exclamationCircle} />
+                <Icon IconComponent={IconExclamationCircle} />
                 <p>text</p>
                 ''
               </div>
@@ -239,7 +239,7 @@ export default function Part4TQF3({
                 <div className="w-full">
                   <Alert
                     radius="md"
-                    icon={<Icon IconComponent={checkbox} />}
+                    icon={<Icon IconComponent={IconCheckbox} />}
                     variant="light"
                     color="rgba(6, 158, 110, 1)"
                     classNames={{

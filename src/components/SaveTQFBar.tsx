@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/store";
 import { Button } from "@mantine/core";
-import saveIcon from "@/assets/icons/save.svg?react";
+import Iconsave from "@/assets/icons/save.svg?react";
 import Icon from "./Icon";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { dateFormatter } from "@/helpers/functions/function";
@@ -65,7 +65,7 @@ export default function SaveTQFbar({
 
         <Button className="!w-[128px]" onClick={onSave} disabled={disabledSave}>
           <div className="flex gap-2 items-center">
-            <Icon IconComponent={saveIcon} />
+            <Icon IconComponent={Iconsave} />
             Save {partLabel[part]}
           </div>
         </Button>

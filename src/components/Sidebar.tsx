@@ -17,14 +17,13 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { removeCourse, setCourseList } from "@/store/course";
 import { setLoading } from "@/store/loading";
 import { Alert } from "@mantine/core";
-
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import MainPopup from "./Popup/MainPopup";
 import Icon from "./Icon";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconLeave from "@/assets/icons/leave.svg?react";
+import MainPopup from "./Popup/MainPopup";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
-import { showNotifications } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { useDisclosure } from "@mantine/hooks";
-import LeaveIcon from "@/assets/icons/leave.svg?react";
 import OverallSidebar from "./Sidebar/ScoreSidebar";
 
 export default function Sidebar() {
@@ -120,7 +119,10 @@ export default function Sidebar() {
         type="delete"
         labelButtonRight={`Leave ${course?.courseNo}`}
         icon={
-          <Icon IconComponent={LeaveIcon} className=" -translate-x-1 size-8" />
+          <Icon
+            IconComponent={IconLeave}
+            className="text-[#ff4747] -translate-x-1 size-8"
+          />
         }
         title={`Leaving ${course?.courseNo} Course`}
         message={
@@ -131,7 +133,7 @@ export default function Sidebar() {
               title={` After you leave ${course?.courseNo} course, you won't have access to Assignments, Score, TQF document and Grades in this course `}
               icon={
                 <Icon
-                  IconComponent={exclamationCircle}
+                  IconComponent={IconExclamationCircle}
                   className="size-6 mb-5"
                 />
               }

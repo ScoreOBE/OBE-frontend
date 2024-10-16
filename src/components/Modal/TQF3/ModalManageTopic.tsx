@@ -4,10 +4,9 @@ import { Button, Group, Modal, Textarea, Select, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { upperFirst } from "lodash";
 import { useEffect } from "react";
-import { showNotifications } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
-
-import Info2 from "@/assets/icons/Info2.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import Icon from "@/components/Icon";
 
 export const optionsTopicPart6 = [
@@ -132,7 +131,7 @@ export default function ModalManageTopic({
           }}
           title={
             <div className="flex items-center  gap-2">
-              <Icon IconComponent={Info2} />
+              <Icon IconComponent={IconInfo2} />
               <p>
               You've already added 10 topics for course evaluation and improvement process.
               </p>

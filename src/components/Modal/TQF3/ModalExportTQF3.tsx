@@ -1,6 +1,6 @@
-import { Button, Checkbox, Group, Modal, Progress } from "@mantine/core";
+import { Button, Checkbox, Group, Modal } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { showNotifications } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import {
   getKeyPartTopicTQF3,
@@ -11,8 +11,8 @@ import { useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import noData from "@/assets/image/noData.jpg";
-import pdfIcon from "@/assets/icons/pdf.svg?react";
-import fileExport from "@/assets/icons/fileExport.svg?react";
+import IconPDF from "@/assets/icons/pdf.svg?react";
+import IconFileExport from "@/assets/icons/fileExport.svg?react";
 import Icon from "@/components/Icon";
 
 type Props = {
@@ -99,7 +99,8 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
         <div className="flex flex-col gap-2">
           <p>Export TQF3</p>
           <p className="text-[12px] inline-flex items-center text-[#e13b3b] -mt-[6px]">
-            File format: <Icon IconComponent={pdfIcon} className="ml-1 stroke-[#e13b3b]"  />
+            File format:{" "}
+            <Icon IconComponent={IconPDF} className="ml-1 stroke-[#e13b3b]" />
           </p>
         </div>
       }
@@ -171,7 +172,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
               loading={loading}
               rightSection={
                 <Icon
-                  IconComponent={fileExport}
+                  IconComponent={IconFileExport}
                   className={` ${
                     !tqf3.part1?.updatedAt ? "text-[#adb5bd]" : "text-[#ffffff]"
                   } stroke-[2px] size-5 items-center`}

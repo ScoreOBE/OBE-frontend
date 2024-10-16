@@ -1,5 +1,4 @@
 import { Alert, Button, Modal, TextInput } from "@mantine/core";
-import userCicle from "@/assets/icons/userCircle.svg?react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { IModelUser } from "@/models/ModelUser";
@@ -7,12 +6,14 @@ import { getInstructor, updateSAdmin } from "@/services/user/user.service";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { setUser } from "@/store/user";
-import { getUserName, showNotifications } from "@/helpers/functions/function";
+import { getUserName } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { isEqual } from "lodash";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/Icon";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconUserCicle from "@/assets/icons/userCircle.svg?react";
 
 type Props = {
   opened: boolean;
@@ -102,7 +103,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       >
         <Alert
           radius="md"
-         icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
+         icon={<Icon IconComponent={IconExclamationCircle} className="size-6" />}
           variant="light"
           color="red"
           className="mb-5"
@@ -144,7 +145,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                   className="flex flex-1 items-center justify-between last:border-none border-b-[1px]  p-3 "
                 >
                   <div className="gap-3 flex items-center">
-                  <Icon IconComponent={userCicle} className=" size-8 stoke-1"  />
+                  <Icon IconComponent={IconUserCicle} className=" size-8 stoke-1"  />
                     <div className="flex flex-col">
                       <p className="font-semibold text-[14px] text-tertiary">
                         {getUserName(admin, 1)}
@@ -183,7 +184,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           variant="light"
           color="red"
           title={`After you change Supreme Admin, `}
-         icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
+         icon={<Icon IconComponent={IconExclamationCircle} className="size-6" />}
           className="mb-5"
         ></Alert>
         <TextInput

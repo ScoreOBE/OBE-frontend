@@ -1,14 +1,15 @@
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { Radio, Button, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import AddIcon from "@/assets/icons/plus.svg?react";
-import trash from "@/assets/icons/trash.svg?react";
-import edit from "@/assets/icons/edit.svg?react";
-import verticalGrip from "@/assets/icons/verticalGrip.svg?react";
-import checkbox from "@/assets/icons/checkbox.svg?react";
+import Icon from "../Icon";
+import IconAdd from "@/assets/icons/plus.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
+import IconEdit from "@/assets/icons/edit.svg?react";
+import IconVerticalGrip from "@/assets/icons/verticalGrip.svg?react";
+import IconCheckbox from "@/assets/icons/checkbox.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { Table } from "@mantine/core";
 import { useEffect, useState } from "react";
-import Icon from "../Icon";
 import ModalManageEvalTopic from "../Modal/TQF3/ModalManageEvalTopic";
 import { IModelEval, IModelTQF3Part3 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
@@ -17,7 +18,6 @@ import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useSearchParams } from "react-router-dom";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -128,7 +128,7 @@ export default function Part3TQF3({ setForm }: Props) {
                 </p>
               }
               icon={
-                <Icon IconComponent={exclamationCircle} className="size-6" />
+                <Icon IconComponent={IconExclamationCircle} className="size-6" />
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
@@ -188,7 +188,7 @@ export default function Part3TQF3({ setForm }: Props) {
                   onMouseLeave={() => setOpenedTooltip(false)}
                 >
                   <div className="flex gap-2">
-                    <Icon IconComponent={AddIcon} />
+                    <Icon IconComponent={IconAdd} />
                     Add Evaluation Topic
                   </div>
                 </Button>
@@ -199,7 +199,7 @@ export default function Part3TQF3({ setForm }: Props) {
               <div className="w-full">
                 <Alert
                   radius="md"
-                  icon={<Icon IconComponent={checkbox} />}
+                  icon={<Icon IconComponent={IconCheckbox} />}
                   variant="light"
                   color="rgba(6, 158, 110, 1)"
                   classNames={{
@@ -316,7 +316,7 @@ export default function Part3TQF3({ setForm }: Props) {
                                             }}
                                           >
                                             <Icon
-                                              IconComponent={edit}
+                                              IconComponent={IconEdit}
                                               className="size-4 stroke-2"
                                             />
                                           </div>
@@ -328,7 +328,7 @@ export default function Part3TQF3({ setForm }: Props) {
                                             }}
                                           >
                                             <Icon
-                                              IconComponent={trash}
+                                              IconComponent={IconTrash}
                                               className="size-4 stroke-2"
                                             />
                                           </div>
@@ -343,7 +343,7 @@ export default function Part3TQF3({ setForm }: Props) {
                                           className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center "
                                           {...provided.dragHandleProps}
                                         >
-                                          <Icon IconComponent={verticalGrip}
+                                          <Icon IconComponent={IconVerticalGrip}
                                           className="stroke-[2px]"
                                             style={{
                                               width: "20px",

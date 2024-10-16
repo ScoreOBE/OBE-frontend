@@ -13,7 +13,7 @@ import {
   validateTextInput,
   validateSectionNo,
 } from "@/helpers/functions/validation";
-import { showNotifications } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { IModelSection } from "@/models/ModelSection";
 import { updateSection } from "@/services/section/section.service";

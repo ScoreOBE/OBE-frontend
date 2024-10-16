@@ -1,18 +1,18 @@
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { Group, rem, Table, Tabs, TextInput } from "@mantine/core";
 import { Alert, Button, Modal } from "@mantine/core";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import regcmu from "@/assets/image/regCMULogo.png";
 import exStudentList from "@/assets/image/exStudentList.png";
 import { useState } from "react";
 import { TbSearch } from "react-icons/tb";
-import Info2 from "@/assets/icons/Info2.svg?react";
-import fileImport from "@/assets/icons/fileImport.svg?react";
-import x from "@/assets/icons/x.svg?react";
-import externalLink from "@/assets/icons/externalLink.svg?react";
 import Icon from "../Icon";
-import upload from "@/assets/icons/upload.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
+import IconFileImport from "@/assets/icons/fileImport.svg?react";
+import IconX from "@/assets/icons/x.svg?react";
+import IconExternalLink from "@/assets/icons/externalLink.svg?react";
+import IconUpload from "@/assets/icons/upload.svg?react";
 
 type modalType = "import" | "studentList";
 type Props = {
@@ -229,7 +229,7 @@ export default function ModalStudentList({
                   }}
                   title={
                     <div className="flex items-center  gap-2">
-                      <Icon IconComponent={Info2} />
+                      <Icon IconComponent={IconInfo2} />
                       <p>
                         How to import Student List for Course {data?.courseNo}
                       </p>
@@ -255,7 +255,7 @@ export default function ModalStudentList({
                             Reg CMU{" "}
                             <span className="ml-1">
                               <Icon
-                                IconComponent={externalLink}
+                                IconComponent={IconExternalLink}
                                 className="size-4"
                               />
                             </span>
@@ -287,7 +287,7 @@ export default function ModalStudentList({
                   >
                     <Dropzone.Accept>
                       <Icon
-                        IconComponent={upload}
+                        IconComponent={IconUpload}
                         style={{
                           width: rem(52),
                           height: rem(52),
@@ -298,7 +298,7 @@ export default function ModalStudentList({
                     </Dropzone.Accept>
                     <Dropzone.Reject>
                       <Icon
-                        IconComponent={x}
+                        IconComponent={IconX}
                         style={{
                           width: rem(52),
                           height: rem(52),
@@ -310,7 +310,7 @@ export default function ModalStudentList({
 
                     <div className=" flex flex-col gap-3 justify-center items-center">
                       <Icon
-                        IconComponent={upload}
+                        IconComponent={IconUpload}
                         className=" bg-[#DDE0FF] stroke-[#5768d5] stroke-[2px] hover:bg-[#cfd2f8] size-16 p-3 rounded-full"
                       />
                       <p className="font-semibold text-b2 text-default">
@@ -326,7 +326,7 @@ export default function ModalStudentList({
                       <div className="flex flex-col text-b3 font-medium  text-red-500  items-center text-center justify-center">
                         <div className="flex gap-2 items-center justify-center">
                           <Icon
-                            IconComponent={exclamationCircle}
+                            IconComponent={IconExclamationCircle}
                             className="size-4 stroke-red-600"
                           />
                           <p>
@@ -346,7 +346,7 @@ export default function ModalStudentList({
                 <Button
                   leftSection={
                     <Icon
-                      IconComponent={fileImport}
+                      IconComponent={IconFileImport}
                       className="size-5 stroke-[2px] stroke-[#ffffff] items-center"
                     />
                   }
