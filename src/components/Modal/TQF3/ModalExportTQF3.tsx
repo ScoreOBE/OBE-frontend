@@ -1,4 +1,4 @@
-import { Button, Checkbox, Group, Modal, Progress } from "@mantine/core";
+import { Button, Checkbox, Group, Modal } from "@mantine/core";
 import { IconFileExport, IconPdf } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/functions/function";

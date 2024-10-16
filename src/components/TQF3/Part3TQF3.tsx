@@ -9,8 +9,8 @@ import {
   IconExclamationCircle,
   IconGripVertical,
   IconTrash,
+  IconInfoCircle,
 } from "@tabler/icons-react";
-import { IconInfoCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import Icon from "../Icon";
 import ModalManageEvalTopic from "../Modal/TQF3/ModalManageEvalTopic";
