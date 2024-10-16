@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Modal, Select } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import Icon from "@/components/Icon";
-import CalendarIcon from "@/assets/icons/calendar.svg?react";
+import IconCalendar from "@/assets/icons/calendar.svg?react";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
@@ -145,7 +145,7 @@ export default function DashboardSidebar() {
           <Button
             className="bg-transparent !w-full !h-[50px] flex justify-start items-center px-3 py-1 border-none text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none group"
             leftSection={
-              <Icon className="-mt-4 mr-1" IconComponent={CalendarIcon} />
+              <Icon className="-mt-4 mr-1" IconComponent={IconCalendar} />
             }
             variant="default"
             onClick={() => setOpenFilterTerm(true)}

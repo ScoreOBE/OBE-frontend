@@ -7,11 +7,11 @@ import {
 } from "react-router-dom";
 import { Button } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
-import logout from "@/assets/icons/logout.svg?react";
 import Icon from "@/components/Icon";
+import IconLogout from "@/assets/icons/logout.svg?react";
+import IconList from "@/assets/icons/list.svg?react";
+import IconHistogram from "@/assets/icons/histogram.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import list from "@/assets/icons/list.svg?react";
-import histogram from "@/assets/icons/histogram.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName } from "@/helpers/functions/function";
@@ -69,7 +69,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
         <div className="flex flex-col gap-2">
           <Button
             onClick={() => gotoPage(ROUTE_PATH.ASSIGNMENT)}
-            leftSection={<Icon IconComponent={list} />}
+            leftSection={<Icon IconComponent={IconList} />}
             className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
                 path.includes(ROUTE_PATH.ASSIGNMENT)
@@ -83,7 +83,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
             leftSection={
               <Icon
-                IconComponent={histogram}
+                IconComponent={IconHistogram}
                 className="pb-1 pl-[2px] size-[22px]"
               />
             }
@@ -130,7 +130,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             <Button
               onClick={onClickLeaveCourse}
               leftSection={
-                <Icon IconComponent={logout} className="h-5 w-5 stroke-[2px]" />
+                <Icon IconComponent={IconLogout} className="h-5 w-5 stroke-[2px]" />
               }
               className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center transition-colors duration-300 focus:border-none group"
             >

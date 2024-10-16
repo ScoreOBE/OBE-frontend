@@ -12,10 +12,10 @@ import {
   Chip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import chevronRight from "@/assets/icons/chevronRight.svg?react";
-import circleFilled from "@/assets/icons/circleFilled.svg?react";
-import arrowRight from "@/assets/icons/arrowRight.svg?react";
-import users from "@/assets/icons/users.svg?react";
+import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
+import IconCircleFilled from "@/assets/icons/circleFilled.svg?react";
+import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
+import IconUsers from "@/assets/icons/users.svg?react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import { SEMESTER } from "@/helpers/constants/enum";
@@ -33,9 +33,9 @@ import {
 import {
   getSectionNo,
   getUserName,
-  showNotifications,
   sortData,
 } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import CompoManageIns from "@/components/CompoManageIns";
 import { IModelSection } from "@/models/ModelSection";
 import Icon from "@/components/Icon";
@@ -376,7 +376,7 @@ export default function ModalAddCourse({
         color="#6869AD"
         onStepClick={setActive}
         allowNextStepsSelect={false}
-        icon={<Icon IconComponent={circleFilled} />}
+        icon={<Icon IconComponent={IconCircleFilled} />}
         classNames={{
           separator: `text-primary mb-12 h-[3px] `,
           step: "flex flex-col items-start w-[42px]",
@@ -401,8 +401,8 @@ export default function ModalAddCourse({
               onClick={() => nextStep(COURSE_TYPE.GENERAL.en)}
               rightSection={
                 <Icon
-                  IconComponent={chevronRight}
-                  className="size-5 stroke-[#5768d5] stroke-3 items-center pt-1"
+                  IconComponent={IconChevronRight}
+                  className="size-5 stroke-[#5768d5] stroke-[2px] items-center pt-1"
                 />
               }
               classNames={{
@@ -425,9 +425,9 @@ export default function ModalAddCourse({
               onClick={() => nextStep(COURSE_TYPE.SPECIAL.en)}
               rightSection={
                 <Icon
-                IconComponent={chevronRight}
-                className="size-5 stroke-[#5768d5] stroke-3 items-center pt-1"
-              />
+                  IconComponent={IconChevronRight}
+                  className="size-5 stroke-[#5768d5] stroke-[2px] items-center pt-1"
+                />
               }
               classNames={{
                 inner: "flex justify-between items-center w-full",
@@ -450,9 +450,9 @@ export default function ModalAddCourse({
               onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC.en)}
               rightSection={
                 <Icon
-                IconComponent={chevronRight}
-                className="size-5 stroke-[#5768d5] stroke-3 items-center pt-1"
-              />
+                  IconComponent={IconChevronRight}
+                  className="size-5 stroke-[#5768d5] stroke-[2px] items-center pt-1"
+                />
               }
               classNames={{
                 inner: "flex justify-between items-center w-full",
@@ -475,9 +475,9 @@ export default function ModalAddCourse({
               color="#ffffff"
               rightSection={
                 <Icon
-                IconComponent={chevronRight}
-                className="size-5 stroke-[#5768d5] stroke-3 items-center pt-1"
-              />
+                  IconComponent={IconChevronRight}
+                  className="size-5 stroke-[#5768d5] stroke-[2px] items-center pt-1"
+                />
               }
               classNames={{
                 inner: "flex justify-between items-center w-full ",
@@ -653,7 +653,7 @@ export default function ModalAddCourse({
             {!!coInsList.length && (
               <div className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md">
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
-                  <Icon IconComponent={users} /> Added Co-Instructor
+                  <Icon IconComponent={IconUsers} /> Added Co-Instructor
                 </div>
                 <div className="flex flex-col max-h-[220px] h-fit w-full   px-2   overflow-y-auto ">
                   <div className="flex flex-col h-fit p-1 ">
@@ -850,7 +850,12 @@ export default function ModalAddCourse({
             loading={loading}
             onClick={() => nextStep()}
             rightSection={
-              active != 4 && <Icon IconComponent={arrowRight} className=" stroke-[2px] size-5"  />
+              active != 4 && (
+                <Icon
+                  IconComponent={IconArrowRight}
+                  className=" stroke-[2px] size-5"
+                />
+              )
             }
           >
             {active == 4 ? "Done" : "Next step"}

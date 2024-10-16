@@ -2,12 +2,12 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { Button, Alert, Checkbox, Radio } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Table } from "@mantine/core";
-import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import trash from "@/assets/icons/trash.svg?react";
-import edit from "@/assets/icons/edit.svg?react";
-import gripVertical from "@/assets/icons/verticalGrip.svg?react";
+import IconAdd from "@/assets/icons/plus.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
+import IconEdit from "@/assets/icons/edit.svg?react";
+import IconGripVertical from "@/assets/icons/verticalGrip.svg?react";
 import { useEffect, useState } from "react";
 import ModalManageCLO, { LearningMethod } from "../Modal/TQF3/ModalManageCLO";
 import ModalManageCourseContent from "../Modal/TQF3/ModalManageCourseContent";
@@ -153,7 +153,7 @@ export default function Part2TQF3({ setForm }: Props) {
                 </p>
               }
               icon={
-                <Icon IconComponent={exclamationCircle} className="size-6" />
+                <Icon IconComponent={IconExclamationCircle} className="size-6" />
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
@@ -184,7 +184,7 @@ export default function Part2TQF3({ setForm }: Props) {
                 </p>
               }
               icon={
-                <Icon IconComponent={exclamationCircle} className="size-6" />
+                <Icon IconComponent={IconExclamationCircle} className="size-6" />
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
@@ -279,7 +279,7 @@ export default function Part2TQF3({ setForm }: Props) {
                   onClick={() => setOpenModalAddCLO(true)}
                 >
                   <div className="flex gap-2">
-                    <Icon IconComponent={AddIcon} />
+                    <Icon IconComponent={IconAdd} />
                     Add CLO
                   </div>
                 </Button>
@@ -378,7 +378,7 @@ export default function Part2TQF3({ setForm }: Props) {
                                             }}
                                           >
                                             <Icon
-                                              IconComponent={edit}
+                                              IconComponent={IconEdit}
                                               className="size-4 stroke-[2px]"
                                             />
                                           </div>
@@ -390,7 +390,7 @@ export default function Part2TQF3({ setForm }: Props) {
                                             }}
                                           >
                                             <Icon
-                                              IconComponent={trash}
+                                              IconComponent={IconTrash}
                                               className="size-4 stroke-[2px]"
                                             />
                                           </div>
@@ -406,7 +406,7 @@ export default function Part2TQF3({ setForm }: Props) {
                                           {...provided.dragHandleProps}
                                         >
                                           <Icon
-                                            IconComponent={gripVertical}
+                                            IconComponent={IconGripVertical}
                                             style={{
                                               width: "20px",
                                               height: "20px",
@@ -453,7 +453,7 @@ export default function Part2TQF3({ setForm }: Props) {
                   onClick={() => setOpenModalAddTopic(true)}
                 >
                   <div className="flex gap-2">
-                    <Icon IconComponent={AddIcon} />
+                    <Icon IconComponent={IconAdd} />
                     Add Course Content
                   </div>
                 </Button>
@@ -549,7 +549,7 @@ export default function Part2TQF3({ setForm }: Props) {
                                             }}
                                           >
                                             <Icon
-                                              IconComponent={edit}
+                                              IconComponent={IconEdit}
                                               className="size-4 stroke-[2px]"
                                             />
                                           </div>
@@ -561,7 +561,7 @@ export default function Part2TQF3({ setForm }: Props) {
                                             }}
                                           >
                                              <Icon
-                                              IconComponent={trash}
+                                              IconComponent={IconTrash}
                                               className="size-4 stroke-[2px]"
                                             />
                                           </div>
@@ -577,7 +577,7 @@ export default function Part2TQF3({ setForm }: Props) {
                                           {...provided.dragHandleProps}
                                         >
                                           <Icon
-                                            IconComponent={gripVertical}
+                                            IconComponent={IconGripVertical}
                                             style={{
                                               width: "20px",
                                               height: "20px",

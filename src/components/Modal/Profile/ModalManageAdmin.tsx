@@ -4,11 +4,12 @@ import { TbSearch } from "react-icons/tb";
 import { IModelUser } from "@/models/ModelUser";
 import { useAppSelector } from "@/store";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
-import { getUserName, showNotifications } from "@/helpers/functions/function";
+import { getUserName } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import CompoManageIns from "@/components/CompoManageIns";
 import { updateAdmin } from "@/services/user/user.service";
-import userCicle from "@/assets/icons/userCircle.svg?react";
-import users from "@/assets/icons/users.svg?react";
+import IconUserCicle from "@/assets/icons/userCircle.svg?react";
+import IconUsers from "@/assets/icons/users.svg?react";
 import Icon from "@/components/Icon";
 
 type Props = {
@@ -79,7 +80,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
         {/* Added Admin */}
         <div className="w-full  flex flex-col bg-white border-secondary border-[1px]  rounded-md">
           <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
-            <Icon IconComponent={users} /> Added Admin
+            <Icon IconComponent={IconUsers} /> Added Admin
           </div>
           {/* Show List Of Admin */}
           <div className="flex flex-col gap-2 w-full h-[400px]   p-4 py-3  overflow-y-hidden">
@@ -102,7 +103,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                 >
                   <div className="gap-3 flex items-center">
                     <Icon
-                      IconComponent={userCicle}
+                      IconComponent={IconUserCicle}
                       className=" size-8 stroke-1 -translate-x-1"
                     />
                     <div className="flex flex-col">

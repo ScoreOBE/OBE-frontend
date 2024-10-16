@@ -2,20 +2,20 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { Menu, Button } from "@mantine/core";
 import Icon from "./Icon";
-import UserProfileIcon from "@/assets/icons/profile/userProfile.svg?react";
-import AdminProfileIcon from "@/assets/icons/profile/adminProfile.svg?react";
-import SAdminProfileIcon from "@/assets/icons/profile/s.AdminProfile.svg?react";
-import logout from "@/assets/icons/logout.svg?react";
-import chevronRight from "@/assets/icons/chevronRight.svg?react";
-import SupremeIcon from "@/assets/icons/supremeAdmin.svg?react";
-import CourseIcon from "@/assets/icons/course.svg?react";
-import userScreen from "@/assets/icons/userScreen.svg?react";
-import adjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
-import statusChange from "@/assets/icons/statusChange.svg?react";
-import SOIcon from "@/assets/icons/SO.svg?react";
-import TQFIcon from "@/assets/icons/TQF.svg?react";
-import AdminIcon from "@/assets/icons/admin.svg?react";
-import SemesterIcon from "@/assets/icons/calendar.svg?react";
+import IconUserProfile from "@/assets/icons/profile/userProfile.svg?react";
+import IconAdminProfile from "@/assets/icons/profile/adminProfile.svg?react";
+import IconSAdminProfile from "@/assets/icons/profile/s.AdminProfile.svg?react";
+import IconLogout from "@/assets/icons/logout.svg?react";
+import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
+import IconSupreme from "@/assets/icons/supremeAdmin.svg?react";
+import IconCourse from "@/assets/icons/course.svg?react";
+import IconUserScreen from "@/assets/icons/userScreen.svg?react";
+import IconAdjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
+import IconStatusChange from "@/assets/icons/statusChange.svg?react";
+import IconSO from "@/assets/icons/SO.svg?react";
+import IconTQF from "@/assets/icons/TQF.svg?react";
+import IconAdmin from "@/assets/icons/admin.svg?react";
+import IconSemester from "@/assets/icons/calendar.svg?react";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setUser } from "@/store/user";
@@ -58,7 +58,7 @@ export default function Profile() {
       case ROLE.SUPREME_ADMIN:
         return (
           <Icon
-            IconComponent={SAdminProfileIcon}
+            IconComponent={IconSAdminProfile}
             className="size-8"
             style={{ color: getRoleColor(user.role) }}
           />
@@ -66,7 +66,7 @@ export default function Profile() {
       case ROLE.ADMIN:
         return (
           <Icon
-            IconComponent={AdminProfileIcon}
+            IconComponent={IconAdminProfile}
             className="size-8"
             style={{ color: getRoleColor(user.role) }}
           />
@@ -74,7 +74,7 @@ export default function Profile() {
       default:
         return (
           <Icon
-            IconComponent={UserProfileIcon}
+            IconComponent={IconUserProfile}
             className="size-8"
             style={{ color: getRoleColor(user.role) }}
           />
@@ -167,8 +167,8 @@ export default function Profile() {
               <Menu.Item>
                 <div className="flex items-center gap-2">
                   <Icon
-                    IconComponent={userScreen}
-                    className=" stroke-[2px] size-5"
+                    IconComponent={IconUserScreen}
+                    className=" stroke-[1.5px] size-4"
                   />
                   <span>Instructor view</span>
                 </div>
@@ -179,8 +179,8 @@ export default function Profile() {
           <Menu.Item onClick={() => navigate(ROUTE_PATH.SELECTED_DEPARTMENT)}>
             <div className="flex items-center gap-2">
               <Icon
-                IconComponent={statusChange}
-                className="size-5 stroke-[2px]"
+                IconComponent={IconStatusChange}
+                className="size-4 stroke-[1.5px]"
               />
               <span>Department</span>
             </div>
@@ -199,13 +199,13 @@ export default function Profile() {
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex gap-2 items-center">
                       <Icon
-                        IconComponent={adjustmentsHorizontal}
-                        className="size-5 stroke-[2px]"
+                        IconComponent={IconAdjustmentsHorizontal}
+                        className="size-4 stroke-[1.5px]"
                       />
                       <span>Management</span>
                     </div>
                     <Icon
-                      IconComponent={chevronRight}
+                      IconComponent={IconChevronRight}
                       className="size-4 stroke-[2px]"
                     />
                   </div>
@@ -224,7 +224,7 @@ export default function Profile() {
                       onMouseDown={() => setOpenModalChangeSupAdmin(true)}
                     >
                       <div className="flex items-center gap-2">
-                        <Icon IconComponent={SupremeIcon} className="size-4" />
+                        <Icon IconComponent={IconSupreme} className="size-4" />
                         <span>Supreme Admin</span>
                       </div>
                     </Menu.Item>
@@ -232,7 +232,7 @@ export default function Profile() {
                       onMouseDown={() => setOpenModalManageSemester(true)}
                     >
                       <div className="flex items-center gap-2">
-                        <Icon IconComponent={SemesterIcon} className="size-4" />
+                        <Icon IconComponent={IconSemester} className="size-4" />
                         <span>Semester</span>
                       </div>
                     </Menu.Item>
@@ -240,7 +240,7 @@ export default function Profile() {
                 )}
                 <Menu.Item onMouseDown={() => setOpenModalManageAdmin(true)}>
                   <div className="flex items-center gap-2">
-                    <Icon IconComponent={AdminIcon} className="size-4" />
+                    <Icon IconComponent={IconAdmin} className="size-4" />
                     <span>Admin</span>
                   </div>
                 </Menu.Item>
@@ -249,7 +249,7 @@ export default function Profile() {
                   onMouseDown={() => setOpenModalCourseManagement(true)}
                 >
                   <div className="flex items-center gap-2">
-                    <Icon IconComponent={CourseIcon} className="size-4" />
+                    <Icon IconComponent={IconCourse} className="size-4" />
                     <span>Course</span>
                   </div>
                 </Menu.Item>
@@ -258,7 +258,7 @@ export default function Profile() {
                   onMouseDown={() => setOpenModalPLOManagement(true)}
                 >
                   <div className="flex items-center gap-2">
-                    <Icon IconComponent={SOIcon} className="size-4" />
+                    <Icon IconComponent={IconSO} className="size-4" />
                     <span>PLO</span>
                   </div>
                 </Menu.Item>
@@ -267,7 +267,7 @@ export default function Profile() {
                   onMouseDown={() => setOpenModalManageTQF(true)}
                 >
                   <div className="flex items-center gap-2">
-                    <Icon IconComponent={TQFIcon} className="size-4" />
+                    <Icon IconComponent={IconTQF} className="size-4 stroke-[0.5px]" />
                     <span>TQF</span>
                   </div>
                 </Menu.Item>
@@ -282,8 +282,8 @@ export default function Profile() {
           >
             <div className="flex items-center gap-2">
               <Icon
-                IconComponent={logout}
-                className="size-5 stroke-[2px] stroke-[#ff4747]"
+                IconComponent={IconLogout}
+                className="size-4 stroke-[1.5px] stroke-[#ff4747]"
               />
               <span>Log out</span>
             </div>

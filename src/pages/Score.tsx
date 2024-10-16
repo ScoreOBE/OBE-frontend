@@ -1,19 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import Icon from "@/components/Icon";
-import {
-  Accordion,
-  Alert,
-  Button,
-  Menu,
-  Modal,
-  Pill,
-  Table,
-} from "@mantine/core";
-import eyePublish from "@/assets/icons/eyePublish.svg?react";
-import publish from "@/assets/icons/publish.svg?react";
-import publishEach from "@/assets/icons/publishEach.svg?react";
-import publishAll from "@/assets/icons/publishAll.svg?react";
+import { Accordion, Table } from "@mantine/core";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";

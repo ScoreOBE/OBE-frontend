@@ -1,6 +1,6 @@
 import { Button, Select, TextInput } from "@mantine/core";
-import AddCoIcon from "@/assets/icons/addCo.svg?react";
-import chevronRight from "@/assets/icons/chevronRight.svg?react";
+import IconAddCo from "@/assets/icons/addCo.svg?react";
+import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import { useEffect, useState } from "react";
 import Icon from "./Icon";
 import { useAppSelector } from "@/store";
@@ -8,8 +8,9 @@ import { validateEmail } from "@/helpers/functions/validation";
 import { NOTI_TYPE, ROLE, TITLE_ROLE } from "@/helpers/constants/enum";
 import { IModelUser } from "@/models/ModelUser";
 import { getInstructor, updateAdmin } from "@/services/user/user.service";
-import { getUserName, showNotifications } from "@/helpers/functions/function";
+import { getUserName } from "@/helpers/functions/function";
 import { IModelSection } from "@/models/ModelSection";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 
 type actionType =
   | "add"
@@ -223,7 +224,7 @@ export default function CompoMangeIns({
         className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center py-3 px-5  "
       >
         <div className="flex gap-6 items-center">
-          <Icon IconComponent={AddCoIcon} className="text-secondary" />
+          <Icon IconComponent={IconAddCo} className="text-secondary" />
           <p className="font-semibold">
             {type == "changeMain" ? "Change" : "Add"} {getLabel()} by using
             <span className="font-extrabold">
@@ -231,7 +232,7 @@ export default function CompoMangeIns({
             </span>
           </p>
         </div>
-        <Icon IconComponent={chevronRight} className=" strole-2" />
+        <Icon IconComponent={IconChevronRight} className=" stroke-[2px]" />
       </div>
 
       <div className="flex w-full  items-end h-fit ">

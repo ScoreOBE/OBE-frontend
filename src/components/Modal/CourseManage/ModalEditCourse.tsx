@@ -8,7 +8,7 @@ import {
   validateCourseNo,
 } from "@/helpers/functions/validation";
 import { updateCourse } from "@/services/course/course.service";
-import { showNotifications } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { editCourse } from "@/store/course";
 import { updateCourseManagement } from "@/services/courseManagement/courseManagement.service";

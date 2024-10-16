@@ -1,18 +1,18 @@
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { Checkbox, Textarea, Button, Group, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import AddIcon from "@/assets/icons/plus.svg?react";
-import edit from "@/assets/icons/edit.svg?react";
-import trash from "@/assets/icons/trash.svg?react";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import Icon from "../Icon";
+import IconAdd from "@/assets/icons/plus.svg?react";
+import IconEdit from "@/assets/icons/edit.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { useEffect, useState } from "react";
 import ModalManageTopic, {
   optionsTopicPart6,
 } from "../Modal/TQF3/ModalManageTopic";
 import { IModelTQF3Part6 } from "@/models/ModelTQF3";
 import MainPopup from "../Popup/MainPopup";
-import { showNotifications } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
@@ -219,7 +219,12 @@ export default function Part6TQF3({ setForm }: Props) {
                   <br /> it will be permanently deleted from this course.
                 </p>
               }
-             icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
+              icon={
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="size-6"
+                />
+              }
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">Topic Description</p>
@@ -262,7 +267,7 @@ export default function Part6TQF3({ setForm }: Props) {
                 className="text-center px-4"
               >
                 <div className="flex gap-2">
-                  <Icon IconComponent={AddIcon} />
+                  <Icon IconComponent={IconAdd} />
                   Add Topic
                 </div>
               </Button>
@@ -390,7 +395,10 @@ export default function Part6TQF3({ setForm }: Props) {
                               setOpenModalEditSelectTopic(true);
                             }}
                           >
-                            <Icon IconComponent={edit} className="size-4 stroke-2"  />
+                            <Icon
+                              IconComponent={IconEdit}
+                              className="size-4 stroke-2"
+                            />
                           </div>
                           <div
                             className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
@@ -399,7 +407,10 @@ export default function Part6TQF3({ setForm }: Props) {
                               setOpenPopupDelAddTopic(true);
                             }}
                           >
-                            <Icon IconComponent={trash} className="size-4 stroke-2"  />
+                            <Icon
+                              IconComponent={IconTrash}
+                              className="size-4 stroke-2"
+                            />
                           </div>
                         </div>
                       )}

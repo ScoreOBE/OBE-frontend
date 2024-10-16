@@ -12,14 +12,14 @@ import {
   AcademicYearRequestDTO,
   CreateAcademicYearRequestDTO,
 } from "@/services/academicYear/dto/academicYear.dto";
-import { showNotifications } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { setAcademicYear } from "@/store/academicYear";
 import { isEqual } from "lodash";
 import Icon from "@/components/Icon";
-import CalendarIcon from "@/assets/icons/calendar.svg?react";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import plus from "@/assets/icons/plus2.svg?react";
+import IconCalendar from "@/assets/icons/calendar.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconPlus from "@/assets/icons/plus2.svg?react";
 
 type Props = {
   opened: boolean;
@@ -188,7 +188,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             }}
           >
             <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] py-3 px-5 text-secondary font-semibold">
-              <Icon IconComponent={CalendarIcon} /> Added Semester
+              <Icon IconComponent={IconCalendar} /> Added Semester
             </div>
             {/* Show List Of Semester */}
             <div className="flex flex-col gap-2  w-full h-[400px]  p-4  overflow-y-hidden">
@@ -267,7 +267,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             </div>
           </div>
           <Button
-            leftSection={<Icon IconComponent={plus} className="h-5 w-5 -mr-1 stroke-[2px]" />}
+            leftSection={<Icon IconComponent={IconPlus} className="h-5 w-5 -mr-1 stroke-[2px]" />}
             className="!rounded-s-[4px] font-semibold  min-w-fit !h-[36px] !w-full "
             onClick={onClickAdd}
           >
@@ -291,7 +291,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           variant="light"
           color="red"
           title={`After you activate semester ${activateSemester?.semester}/${activateSemester?.year}, semester ${academicYear?.semester}/${academicYear?.year} cannot be reactivated. This means that instructor can't make any changes to them courses for that semester.  `}
-         icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
+         icon={<Icon IconComponent={IconExclamationCircle} className="size-6" />}
         
           className="mb-5"
         ></Alert>

@@ -1,13 +1,13 @@
 import { Button, Checkbox, Group, Modal } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { showNotifications } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
-import ExcelIcon from "@/assets/icons/excel.svg?react";
 import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
 import Icon from "../Icon";
-import fileExport from "@/assets/icons/fileExport.svg?react";
+import IconExcel from "@/assets/icons/excel.svg?react";
+import IconFileExport from "@/assets/icons/fileExport.svg?react";
 
 type Props = {
   opened: boolean;
@@ -94,7 +94,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
           <p>Export score {courseNo}</p>
           <p className="text-[12px] inline-flex items-center text-[#20884f] ">
             File format:{" "}
-            <Icon IconComponent={ExcelIcon} className="ml-1 size-4" />
+            <Icon IconComponent={IconExcel} className="ml-1 size-4" />
           </p>
         </div>
       }
@@ -147,7 +147,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
           <Button
             loading={loading}
             rightSection={
-              <Icon IconComponent={fileExport}
+              <Icon IconComponent={IconFileExport}
                 className={`${!tqf3.part1?.updatedAt ? "text-[#adb5bd]" : "text-[#ffffff]" } size-5 items-center stroke-[2px]`}
               
               />

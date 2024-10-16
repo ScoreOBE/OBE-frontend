@@ -2,7 +2,7 @@ import {
   RESPONSE_MESSAGE,
   STATUS_CODE,
 } from "@/helpers/constants/response.enum";
-import { showNotifications } from "./function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "../constants/enum";
 import store from "@/store";
 import { setErrorResponse } from "@/store/errorResponse";

@@ -20,7 +20,7 @@ import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { updateProcessTqf3 } from "@/services/academicYear/academicYear.service";
 import { setProcessTQF3 } from "@/store/academicYear";
 import Icon from "@/components/Icon";
-import Info2 from "@/assets/icons/Info2.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 
 type Props = {
   opened: boolean;
@@ -133,7 +133,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
           color="blue"
           title="Tips of TQF 5"
           classNames={{ icon: "size-5" }}
-          icon={<Icon IconComponent={Info2} />}
+          icon={<Icon IconComponent={IconInfo2} />}
         >
           <div className="flex flex-col text-[13px] font-medium text-[#333333] gap-3">
             <li>
@@ -292,7 +292,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                             className="w-fit border  rounded-md "
                             position="bottom-start"
                           >
-                            <div><Icon IconComponent={Info2}
+                            <div><Icon IconComponent={IconInfo2}
                              
                               className="-ml-0 size-5 text-secondary"
                             /></div>

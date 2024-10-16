@@ -2,13 +2,15 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { Button, Group, Menu, Modal, Select } from "@mantine/core";
 import { Alert } from "@mantine/core";
-import dots from "@/assets/icons/dots.svg?react";
-import trash from "@/assets/icons/trash.svg?react";
-import upload from "@/assets/icons/upload.svg?react";
-import pencilMinus from "@/assets/icons/pencilMinus.svg?react";
-import arrowRight from "@/assets/icons/arrowRight.svg?react";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import { showNotifications } from "@/helpers/functions/function";
+import Icon from "@/components/Icon";
+import IconAdd from "@/assets/icons/plus.svg?react";
+import IconDots from "@/assets/icons/dots.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
+import IconUpload from "@/assets/icons/upload.svg?react";
+import IconPencilMinus from "@/assets/icons/pencilMinus.svg?react";
+import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { deleteCourse, getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
@@ -26,8 +28,6 @@ import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { IModelUser } from "@/models/ModelUser";
 import { setShowSidebar } from "@/store/showSidebar";
-import Icon from "@/components/Icon";
-import AddIcon from "@/assets/icons/plus.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
 import ModalUploadScore from "../components/Modal/ModalUploadScore";
 import ModalUploadStudentList from "@/components/Modal/ModalUploadStudentList";
@@ -162,7 +162,7 @@ export default function Dashboard() {
                   affected.
                 </p>
               }
-             icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
+             icon={<Icon IconComponent={IconExclamationCircle} className="size-6" />}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
@@ -262,7 +262,7 @@ export default function Dashboard() {
                 }}
                 disabled={!uploadCourse}
                 rightSection={
-                  <Icon IconComponent={arrowRight}
+                  <Icon IconComponent={IconArrowRight}
                    
                     className={`${!uploadCourse ? 'text-[#BCC3CA]' : 'text-[#ffffff]' } stroke-2  size-5 items-center`}
                    
@@ -330,14 +330,14 @@ export default function Dashboard() {
               <Button
                 variant="outline"
                 className="text-center px-4"
-                leftSection={<Icon IconComponent={AddIcon} />}
+                leftSection={<Icon IconComponent={IconAdd} />}
                 onClick={() => setOpenAddModal(true)}
               >
                 Add course
               </Button>
               <Button
                 className="text-center px-4"
-                leftSection={<Icon IconComponent={upload} className="size-4" />}
+                leftSection={<Icon IconComponent={IconUpload} className="size-4" />}
                 onClick={() => setOpenModalSelectCourse(true)}
               >
                 Upload score
@@ -386,7 +386,7 @@ export default function Dashboard() {
                     onClick={() => setOpenAddModal(true)}
                   >
                     <div className="flex gap-2">
-                      <Icon IconComponent={AddIcon} />
+                      <Icon IconComponent={IconAdd} />
                       Add course
                     </div>
                   </Button>
@@ -450,7 +450,7 @@ export default function Dashboard() {
                               offset={-15}
                             >
                               <Menu.Target>
-                                <div><Icon IconComponent={dots} className="absolute top-2 right-2 rounded-full hover:bg-gray-300" /></div>
+                                <div><Icon IconComponent={IconDots} className="absolute top-2 right-2 rounded-full hover:bg-gray-300" /></div>
                               </Menu.Target>
                               <Menu.Dropdown
                                 className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -471,7 +471,7 @@ export default function Dashboard() {
                                   className="text-[#3E3E3E] font-semibold  text-b3 h-7 w-[180px]"
                                 >
                                   <div className="flex items-center gap-2">
-                                    <Icon IconComponent={pencilMinus}
+                                    <Icon IconComponent={IconPencilMinus}
                                  
                                       className="h-4 w-4 stroke-[2px]"
                                     />
@@ -486,7 +486,7 @@ export default function Dashboard() {
                                   }}
                                 >
                                   <div className="flex items-center gap-2">
-                                    <Icon IconComponent={trash}
+                                    <Icon IconComponent={IconTrash}
                                       className="h-4 w-4 stroke-[2px]"
                                     
                                     />

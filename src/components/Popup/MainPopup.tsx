@@ -1,7 +1,7 @@
 import { Button, Modal } from "@mantine/core";
 import { ReactElement, ReactNode } from "react";
 import Icon from "@/components/Icon";
-import DeleteIcon from "@/assets/icons/delete.svg?react";
+import IconDelete from "@/assets/icons/delete.svg?react";
 
 type popupType = "delete" | "warning" | "unsaved";
 
@@ -48,7 +48,7 @@ export default function MainPopup({
           {icon ? (
             icon
           ) : type == "delete" ? (
-            <Icon IconComponent={DeleteIcon} className=" size-6 mr-2" />
+            <Icon IconComponent={IconDelete} className=" size-6 mr-2" />
           ) : (
             <></>
           )}

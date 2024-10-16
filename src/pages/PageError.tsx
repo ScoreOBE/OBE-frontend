@@ -7,7 +7,7 @@ import { setLoading } from "@/store/loading";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { Button } from "@mantine/core";
-import arrowLeft from "@/assets/icons/arrowLeft.svg?react";
+import IconArrowLeft from "@/assets/icons/arrowLeft.svg?react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/Icon";
@@ -54,7 +54,7 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <Icon IconComponent={arrowLeft} className="size-6 -mr-1 stoke-[3px]" />
+                <Icon IconComponent={IconArrowLeft} className="size-6 -mr-1 stoke-[3px]" />
               }
               className="inline-block -ml-4 mt-3 !text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
@@ -80,7 +80,7 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <Icon IconComponent={arrowLeft} className="size-6 -mr-1 stoke-[3px]" />
+                <Icon IconComponent={IconArrowLeft} className="size-6 -mr-1 stoke-[3px]" />
               }
               className="inline-block -ml-4 mt-3 !text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
@@ -109,7 +109,7 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <Icon IconComponent={arrowLeft} className="size-6 -mr-1 stoke-[3px]" />
+                <Icon IconComponent={IconArrowLeft} className="size-6 -mr-1 stoke-[3px]" />
               }
               className="inline-block -ml-4 mt-3 !text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
@@ -139,7 +139,7 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <Icon IconComponent={arrowLeft} className="size-6 -mr-1 stoke-[3px]" />
+                <Icon IconComponent={IconArrowLeft} className="size-6 -mr-1 stoke-[3px]" />
               }
               className="inline-block -ml-4 mt-3 !!text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >

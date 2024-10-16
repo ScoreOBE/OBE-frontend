@@ -2,28 +2,25 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Alert, Button, Menu, Switch } from "@mantine/core";
-import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import pencilMinus from "@/assets/icons/pencilMinus.svg?react";
-import upload from "@/assets/icons/upload.svg?react";
-import dots from "@/assets/icons/dots.svg?react";
-import userGroup from "@/assets/icons/usersGroup.svg?react";
-import trash from "@/assets/icons/trash.svg?react";
-import ManageAdminIcon from "@/assets/icons/addCo.svg?react";
-import plus2 from "@/assets/icons/plus2.svg?react";
+import Icon from "@/components/Icon";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconPencilMinus from "@/assets/icons/pencilMinus.svg?react";
+import IconUpload from "@/assets/icons/upload.svg?react";
+import IconDots from "@/assets/icons/dots.svg?react";
+import IconUserGroup from "@/assets/icons/usersGroup.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
+import IconManageAdmin from "@/assets/icons/addCo.svg?react";
+import IconPlus2 from "@/assets/icons/plus2.svg?react";
+import IconExcel from "@/assets/icons/excel.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { getOneCourse } from "@/services/course/course.service";
 import { editCourse, editSection, removeSection } from "@/store/course";
-import {
-  getSectionNo,
-  getUserName,
-  showNotifications,
-} from "@/helpers/functions/function";
+import { getSectionNo, getUserName } from "@/helpers/functions/function";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 import PageError from "./PageError";
 import MainPopup from "@/components/Popup/MainPopup";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import ModalEditSection from "@/components/Modal/CourseManage/ModalEditSection";
-import Icon from "@/components/Icon";
-import ExcelIcon from "@/assets/icons/excel.svg?react";
 import Loading from "@/components/Loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { IModelSection } from "@/models/ModelSection";
@@ -185,7 +182,10 @@ export default function Section() {
                 </p>
               }
               icon={
-                <Icon IconComponent={exclamationCircle} className="size-6" />
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="size-6"
+                />
               }
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
@@ -246,7 +246,7 @@ export default function Section() {
                 <Button
                   className="text-center px-4"
                   leftSection={
-                    <Icon IconComponent={upload} className="size-4" />
+                    <Icon IconComponent={IconUpload} className="size-4" />
                   }
                   onClick={() =>
                     course?.sections.find(
@@ -262,7 +262,7 @@ export default function Section() {
                 <Button
                   color="#20884f"
                   leftSection={
-                    <Icon className="size-4" IconComponent={ExcelIcon} />
+                    <Icon className="size-4" IconComponent={IconExcel} />
                   }
                   className="!font-medium px-3"
                 >
@@ -274,7 +274,7 @@ export default function Section() {
                   <Menu trigger="click" position="bottom-end">
                     <Menu.Target>
                       <div>
-                        <Icon IconComponent={dots} />
+                        <Icon IconComponent={IconDots} />
                       </div>
                     </Menu.Target>
                     <Menu.Dropdown
@@ -292,7 +292,7 @@ export default function Section() {
                       >
                         <div className="flex items-center gap-2">
                           <Icon
-                            IconComponent={plus2}
+                            IconComponent={IconPlus2}
                             className="stroke-2 h-4 w-4"
                           />
                           <span>Add section</span>
@@ -315,7 +315,7 @@ export default function Section() {
                         <div className="flex items-center gap-2">
                           <Icon
                             className="h-4 w-4"
-                            IconComponent={ManageAdminIcon}
+                            IconComponent={IconManageAdmin}
                           />
                           <span>Manage Co-Instructor</span>
                         </div>
@@ -327,7 +327,7 @@ export default function Section() {
                       >
                         <div className="flex items-center  gap-2">
                           <Icon
-                            IconComponent={userGroup}
+                            IconComponent={IconUserGroup}
                             className="h-4 w-4 "
                           />
                           <span>Student list {course?.courseNo}</span>
@@ -340,7 +340,7 @@ export default function Section() {
                         <div className="flex items-center  gap-2">
                           <Icon
                             className="h-4 w-4 "
-                            IconComponent={ExcelIcon}
+                            IconComponent={IconExcel}
                           />
                           <span>Export score</span>
                         </div>
@@ -374,7 +374,7 @@ export default function Section() {
                             <Menu.Target>
                               <div>
                                 <Icon
-                                  IconComponent={dots}
+                                  IconComponent={IconDots}
                                   className="absolute top-2 right-2 rounded-full hover:bg-gray-300"
                                 />
                               </div>
@@ -409,7 +409,7 @@ export default function Section() {
                               >
                                 <div className="flex items-center gap-2">
                                   <Icon
-                                    IconComponent={pencilMinus}
+                                    IconComponent={IconPencilMinus}
                                     className="h-4 w-4 stroke-2"
                                   />
                                   <span>Edit Section</span>
@@ -431,7 +431,7 @@ export default function Section() {
                               >
                                 <div className="flex items-center gap-2">
                                   <Icon
-                                    IconComponent={trash}
+                                    IconComponent={IconTrash}
                                     className="h-4 w-4 stroke-2"
                                   />
                                   <span>Delete Section</span>

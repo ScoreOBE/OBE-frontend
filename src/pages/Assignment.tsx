@@ -1,18 +1,18 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import Icon from "@/components/Icon";
 import { Alert, Button, Menu, Modal, Pill, Table } from "@mantine/core";
-import eyePublish from "@/assets/icons/eyePublish.svg?react";
-import publish from "@/assets/icons/publish.svg?react";
-import publishEach from "@/assets/icons/publishEach.svg?react";
-import publishAll from "@/assets/icons/publishAll.svg?react";
-import dots from "@/assets/icons/dots.svg?react";
-import trash from "@/assets/icons/trash.svg?react";
-import pencilMinus from "@/assets/icons/pencilMinus.svg?react";
-import arrowRight from "@/assets/icons/arrowRight.svg?react";
+import Icon from "@/components/Icon";
+import IconEyePublish from "@/assets/icons/eyePublish.svg?react";
+import IconPublish from "@/assets/icons/publish.svg?react";
+import IconPublishEach from "@/assets/icons/publishEach.svg?react";
+import IconPublishAll from "@/assets/icons/publishAll.svg?react";
+import IconDots from "@/assets/icons/dots.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
+import IconPencilMinus from "@/assets/icons/pencilMinus.svg?react";
+import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import {
-  Route,
   useLocation,
   useNavigate,
   useParams,
@@ -25,7 +25,6 @@ import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading";
-import Info2 from "@/assets/icons/Info2.svg?react";
 
 export default function Assignment() {
   const { courseNo, sectionNo } = useParams();
@@ -96,7 +95,7 @@ export default function Assignment() {
               {` enrolled in this course will be able to see the assignments score you publish.`}
             </p>
           }
-          icon={<Icon IconComponent={Info2} />}
+          icon={<Icon IconComponent={IconInfo2} />}
           classNames={{ icon: "size-6" }}
           className="mb-5"
         ></Alert>
@@ -233,7 +232,7 @@ export default function Assignment() {
           </Button>
           <Button
             rightSection={
-              <Icon IconComponent={arrowRight} className="size-8 stroke-2" />
+              <Icon IconComponent={IconArrowRight} className="size-8 stroke-2" />
             }
           >
             Next
@@ -266,7 +265,7 @@ export default function Assignment() {
                   <Button
                     color="#13a9a1"
                     leftSection={
-                      <Icon IconComponent={eyePublish} className="h-5 w-5" />
+                      <Icon IconComponent={IconEyePublish} className="h-5 w-5" />
                     }
                     className="px-3"
                   >
@@ -279,7 +278,10 @@ export default function Assignment() {
                 >
                   <Menu.Item className="text-[#3E3E3E] text-[14px] h-8 w-full ">
                     <div className="flex items-center gap-2">
-                      <Icon IconComponent={publishEach} className="h-4 w-4" />
+                      <Icon
+                        IconComponent={IconPublishEach}
+                        className="size-4 text-[#000000]"
+                      />
                       <span>Each Section</span>
                     </div>
                   </Menu.Item>
@@ -288,7 +290,10 @@ export default function Assignment() {
                     className="text-[#3E3E3E] text-[14px] h-8 w-full "
                   >
                     <div className="flex items-center gap-2">
-                      <Icon IconComponent={publishAll} className="h-4 w-4" />
+                      <Icon
+                        IconComponent={IconPublishAll}
+                        className="size-4 text-[#000000]"
+                      />
                       <span>All Sections</span>
                     </div>
                   </Menu.Item>
@@ -333,7 +338,7 @@ export default function Assignment() {
                       <Table.Td>25</Table.Td>
                       <Table.Td className="text-center">
                         <Icon
-                          IconComponent={publish}
+                          IconComponent={IconPublish}
                           className="text-default"
                         />
                         {/* <Icon IconComponent={unPublish} className="text-default" /> */}
@@ -347,7 +352,7 @@ export default function Assignment() {
                           >
                             <Menu.Target>
                               <Icon
-                                IconComponent={dots}
+                                IconComponent={IconDots}
                                 className=" rounded-full w-fit hover:bg-gray-300"
                               />
                             </Menu.Target>
@@ -361,7 +366,7 @@ export default function Assignment() {
                               <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
                                 <div className="flex items-center gap-2">
                                   <Icon
-                                    IconComponent={pencilMinus}
+                                    IconComponent={IconPencilMinus}
                                     className="h-4 w-4 stroke-[2px]"
                                   />
                                   <span>Edit Assignment Name</span>
@@ -370,7 +375,7 @@ export default function Assignment() {
                               <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
                                 <div className="flex items-center gap-2">
                                   <Icon
-                                    IconComponent={trash}
+                                    IconComponent={IconTrash}
                                     className="h-4 w-4 stroke-[2px]"
                                   />
                                   <span>Delete Assignment</span>

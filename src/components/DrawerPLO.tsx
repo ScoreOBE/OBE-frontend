@@ -1,6 +1,6 @@
 import { Drawer, Tabs } from "@mantine/core";
-import ThIcon from "@/assets/icons/thai.svg?react";
-import EngIcon from "@/assets/icons/eng.svg?react";
+import IconTh from "@/assets/icons/thai.svg?react";
+import IconEng from "@/assets/icons/eng.svg?react";
 import Icon from "./Icon";
 import { useState } from "react";
 import { IModelPLO } from "@/models/ModelPLO";
@@ -56,13 +56,13 @@ export default function DrawerPLOdes({ opened, onClose, data }: Props) {
                     <Tabs.List>
                       <Tabs.Tab value="TH">
                         <div className="flex flex-row items-center gap-2 ">
-                          <Icon IconComponent={ThIcon} />
+                          <Icon IconComponent={IconTh} />
                           ไทย
                         </div>
                       </Tabs.Tab>
                       <Tabs.Tab value="EN">
                         <div className="flex flex-row items-center gap-2 ">
-                          <Icon IconComponent={EngIcon} />
+                          <Icon IconComponent={IconEng} />
                           Eng
                         </div>
                       </Tabs.Tab>

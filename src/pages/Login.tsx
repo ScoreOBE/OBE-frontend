@@ -7,15 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { isEmpty } from "lodash";
 import { setShowSidebar } from "@/store/showSidebar";
-import lockIcon from "@/assets/icons/lockIcon.svg?react";
-import refresh from "@/assets/icons/refresh.svg?react";
-import chevronRight from "@/assets/icons/chevronRight.svg?react";
-import chevronLeft from "@/assets/icons/chevronLeft.svg?react";
-import plus2 from "@/assets/icons/plus2.svg?react";
-import share2 from "@/assets/icons/share2.svg?react";
-import { setShowNavbar } from "@/store/showNavbar";
-
 import Icon from "@/components/Icon";
+import IconLock from "@/assets/icons/lockIcon.svg?react";
+import IconRefresh from "@/assets/icons/refresh.svg?react";
+import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
+import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
+import IconPlus2 from "@/assets/icons/plus2.svg?react";
+import IconShare2 from "@/assets/icons/share2.svg?react";
+import { setShowNavbar } from "@/store/showNavbar";
 
 export default function Login() {
   const user = useAppSelector((state) => state.user);
@@ -67,25 +66,40 @@ export default function Login() {
                 <div className=" rounded-full w-[12px] h-[12px] bg-[#61C554]"></div>
               </div>
               <div className="flex flex-row gap-2">
-                <Icon IconComponent={chevronLeft} className="text-[#8c8c8c] size-[22px]"/>
-                <Icon IconComponent={chevronRight} className="text-[#8c8c8c] size-[22px]"/>
+                <Icon
+                  IconComponent={IconChevronLeft}
+                  className="text-[#8c8c8c] size-[22px]"
+                />
+                <Icon
+                  IconComponent={IconChevronRight}
+                  className="text-[#8c8c8c] size-[22px]"
+                />
               </div>
             </div>
             <div className="flex w-[30%] flex-row gap-2">
               <div className=" h-[28px] relative rounded-lg w-full text-[12px] gap-2 font-medium flex  items-center bg-[#F1F1F1]">
                 <div className="justify-center gap-2 items-center w-full flex">
-                  <Icon IconComponent={lockIcon} className=" size-[14px]" />
+                  <Icon
+                    IconComponent={IconLock}
+                    className="text-[#8c8c8c] size-[14px]"
+                  />
                   score-obe.cpe.eng.cmu.ac.th
                 </div>
                 <Icon
-                  IconComponent={refresh}
-                  className="absolute right-3 justify-end size-[12px] "
+                  IconComponent={IconRefresh}
+                  className="absolute right-3 justify-end size-[12px] text-[#3c3c3c]"
                 />
               </div>
             </div>
             <div className="flex w-[35%] justify-end items-center flex-row gap-2">
-              <Icon IconComponent={share2} className="text-[#8c8c8c] size-[20px]" />
-              <Icon IconComponent={plus2} className="text-[#8c8c8c] size-[20px]" />
+              <Icon
+                IconComponent={IconShare2}
+                className="text-[#8c8c8c] size-[20px]"
+              />
+              <Icon
+                IconComponent={IconPlus2}
+                className="text-[#8c8c8c] size-[20px]"
+              />
             </div>
           </div>
 
