@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
+import { initialTqf3Part4 } from "@/helpers/functions/tqf3";
 import Icon from "../Icon";
 
 type Props = {
@@ -112,16 +113,7 @@ export default function Part4TQF3({
       });
     } else {
       if (tqf3.part2) {
-        form.setFieldValue(
-          "data",
-          cloneDeep(
-            tqf3?.part2?.clo?.map((clo) => ({
-              clo: clo.id,
-              percent: 0,
-              evals: [],
-            }))
-          ) ?? []
-        );
+        form.setValues(initialTqf3Part4(tqf3.part2));
       }
       if (tqf3.part3) setEvalForm();
     }
