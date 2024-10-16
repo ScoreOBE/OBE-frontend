@@ -26,7 +26,8 @@ import { getOneCourse } from "@/services/course/course.service";
 import { setDataTQF3 } from "@/store/tqf3";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelSection } from "@/models/ModelSection";
-import { isEqual } from "lodash";
+import { isEmpty, isEqual } from "lodash";
+import { initialTqf3Part } from "@/helpers/functions/tqf3";
 
 type Props = {
   onClickLeaveCourse: () => void;
@@ -46,7 +47,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const [instructors, setInstructors] = useState<IModelUser[]>([]);
   const [coInstructors, setCoInstructors] = useState<IModelUser[]>([]);
   const [uniqTopic, setUniqTopic] = useState<string[]>([]);
-  const [selectedTopic, setSelectedTopic] = useState<string>();
   const tqf3 = useAppSelector((state) => state.tqf3);
   const [openAlertPopup, setOpenAlertPopup] = useState(false);
   const [tqf3Original, setTqf3Original] = useState<
@@ -62,7 +62,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         }
       });
       setUniqTopic(temp);
-      setSelectedTopic(temp[0]);
       if (tqf3.topic != temp[0]) {
         dispatch(setDataTQF3({ topic: temp[0] }));
       }
@@ -99,7 +98,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
     });
   };
 
-  const fetchOneCourse = async (firstFetch: boolean = false) => {
+  const fetchTqf3 = async () => {
     const resCourse = await getOneCourse({
       year: params.get("year"),
       semester: params.get("semester"),
@@ -125,12 +124,15 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
 
   useEffect(() => {
     const changePart: string[] = [];
-
     if (tqf3Original) {
       for (let i = 1; i <= 7; i++) {
         const part = `part${i}` as keyof IModelTQF3;
-
-        if (!isEqual(tqf3Original?.[part], tqf3[part])) {
+        if (
+          !isEmpty(tqf3[part]) &&
+          ((isEmpty(tqf3Original[part]) &&
+            !isEqual(tqf3[part], initialTqf3Part(tqf3, part))) ||
+            (tqf3Original[part] && !isEqual(tqf3Original[part], tqf3[part])))
+        ) {
           changePart.push(part);
         }
       }
@@ -142,10 +144,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       }
     }
   }, [tqf3Original]);
-
-  const checkTQF3status = () => {
-    fetchOneCourse();
-  };
 
   return (
     <>
@@ -176,7 +174,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
           className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
-          onClick={checkTQF3status}
+          onClick={fetchTqf3}
         >
           <IconChevronLeft size={20} viewBox="8 0 24 24" />
           Back to Your Course
@@ -199,8 +197,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
                 !path.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
-                  ? // ![ROUTE_PATH.TQF3, ROUTE_PATH.TQF5].includes(path)
-                    "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               }`}
             >

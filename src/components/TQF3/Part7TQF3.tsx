@@ -14,7 +14,7 @@ import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useParams, useSearchParams } from "react-router-dom";
 import Loading from "../Loading";
-import notFoundImage from "@/assets/image/notFound.png";
+import { initialTqf3Part7 } from "@/helpers/functions/tqf3";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -62,10 +62,7 @@ export default function Part7TQF3({ setForm }: Props) {
       form.setFieldValue("updatedAt", tqf3.part7.updatedAt);
       form.setFieldValue("data", cloneDeep(tqf3.part7.data));
     } else if (tqf3.part2) {
-      form.setFieldValue(
-        "data",
-        cloneDeep(tqf3.part2.clo.map(({ id }) => ({ clo: id, plos: [] })))
-      );
+      form.setValues(initialTqf3Part7(tqf3.part2));
     }
   }, []);
 
@@ -80,7 +77,7 @@ export default function Part7TQF3({ setForm }: Props) {
       setCoursePLO(resPloCol);
       if (!resPloCol.data) {
         localStorage.removeItem(`reuse${tqf3.id}-part7`);
-        dispatch(updatePartTQF3({ part: "part7", data: {} }));
+        form.setValues(initialTqf3Part7(tqf3.part2));
       }
     }
     setLoading(false);
@@ -278,7 +275,9 @@ export default function Part7TQF3({ setForm }: Props) {
                 Course Not Linked to PLO Collection
               </p>
               <p className=" text-[#333333] leading-6 font-medium text-[14px]">
-              This course is currently not linked to any PLO collection. <br/> If you need to do this part, please contact your department administrator.
+                This course is currently not linked to any PLO collection.{" "}
+                <br /> If you need to do this part, please contact your
+                department administrator.
               </p>
             </div>
             <img

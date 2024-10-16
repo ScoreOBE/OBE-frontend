@@ -19,6 +19,7 @@ import Part3TQF3 from "@/components/TQF3/Part3TQF3";
 import Part4TQF3 from "@/components/TQF3/Part4TQF3";
 import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
+import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import { IconExclamationCircle } from "@tabler/icons-react";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { isEmpty, isEqual } from "lodash";
@@ -39,7 +40,6 @@ import Loading from "@/components/Loading";
 import { IModelCLO, IModelTQF3 } from "@/models/ModelTQF3";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
-import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import { LearningMethod } from "@/components/Modal/TQF3/ModalManageCLO";
 import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
@@ -47,6 +47,7 @@ import { setDataTQF3, updatePartTQF3 } from "@/store/tqf3";
 import { IModelSection } from "@/models/ModelSection";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { IModelCourse } from "@/models/ModelCourse";
+import { initialTqf3Part } from "@/helpers/functions/tqf3";
 
 export default function TQF3() {
   const { courseNo } = useParams();
@@ -384,7 +385,9 @@ export default function TQF3() {
   const checkPartStatus = (value: keyof IModelTQF3) => {
     return (!tqf3Original ||
       !tqf3.id ||
-      (isEmpty(tqf3Original[value]) && !tqf3[value])) &&
+      isEmpty(tqf3[value]) ||
+      (isEmpty(tqf3Original[value]) &&
+        isEqual(tqf3[value], initialTqf3Part(tqf3, value)))) &&
       !localStorage.getItem(`reuse${tqf3.id}-${value}`)
       ? "text-[#DEE2E6]" // No Data
       : !isEqual(tqf3Original![value], tqf3[value]) ||

@@ -1,7 +1,5 @@
 import { COURSE_TYPE } from "@/helpers/constants/enum";
-import { getUserName } from "@/helpers/functions/function";
 import { IModelTQF3Part1 } from "@/models/ModelTQF3";
-import { IModelUser } from "@/models/ModelUser";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
 import AddIcon from "@/assets/icons/plus.svg?react";
@@ -20,6 +18,7 @@ import { cloneDeep, isEqual } from "lodash";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Icon from "../Icon";
+import { initialTqf3Part1 } from "@/helpers/functions/tqf3";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -92,22 +91,7 @@ export default function Part1TQF3({ setForm }: Props) {
         checked.push("out");
       }
     } else {
-      form.setFieldValue("courseType", tqf3.type);
-      form.setFieldValue(
-        "mainInstructor",
-        getUserName(tqf3.sections[0].instructor as IModelUser, 3)!
-      );
-      const uniqueInstructors = Array.from(
-        new Set(
-          (
-            tqf3.sections?.flatMap((sec) => [
-              sec.instructor,
-              ...(sec.coInstructors as IModelUser[]),
-            ]) as IModelUser[]
-          )?.map((instructor) => getUserName(instructor, 3)!)
-        )
-      );
-      form.setFieldValue("instructors", uniqueInstructors);
+      form.setValues({ ...initialTqf3Part1(tqf3) });
     }
   }, []);
 
