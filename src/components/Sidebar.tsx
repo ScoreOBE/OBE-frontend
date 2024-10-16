@@ -17,7 +17,8 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { removeCourse, setCourseList } from "@/store/course";
 import { setLoading } from "@/store/loading";
 import { Alert } from "@mantine/core";
-import { IconExclamationCircle } from "@tabler/icons-react";
+
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import MainPopup from "./Popup/MainPopup";
 import Icon from "./Icon";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
@@ -83,10 +84,10 @@ export default function Sidebar() {
   return (
     <motion.div
       initial={{
-        x: -220,
+        x: -160,
       }}
       animate={{ x: 0 }}
-      transition={{ duration: 0.3, type: "keyframes", stiffness: 100, delay: 0.35 }}
+      transition={{ duration: 0.3, type: "keyframes", stiffness: 100, }}
       className="w-[255px] border-r-[1px] h-screen flex p-5 sidebar-linear-gradient"
     >
       <div className="flex w-full flex-col gap-11">
@@ -116,9 +117,8 @@ export default function Sidebar() {
               variant="light"
               color="red"
               title={` After you leave ${course?.courseNo} course, you won't have access to Assignments, Score, TQF document and Grades in this course `}
-              icon={<IconExclamationCircle />}
-              classNames={{ icon: "size-6" }}
-              className="mb-5"
+             icon={<Icon IconComponent={exclamationCircle} className="size-6 mb-5" />}
+             
             ></Alert>
             <div className="flex flex-col  ">
               <p className="text-b3  text-[#808080]">Course no.</p>

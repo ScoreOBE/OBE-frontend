@@ -12,12 +12,10 @@ import {
   Chip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import {
-  IconCircleFilled,
-  IconArrowRight,
-  IconUsers,
-  IconChevronRight,
-} from "@tabler/icons-react";
+import chevronRight from "@/assets/icons/chevronRight.svg?react";
+import circleFilled from "@/assets/icons/circleFilled.svg?react";
+import arrowRight from "@/assets/icons/arrowRight.svg?react";
+import users from "@/assets/icons/users.svg?react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import { SEMESTER } from "@/helpers/constants/enum";
@@ -40,6 +38,7 @@ import {
 } from "@/helpers/functions/function";
 import CompoManageIns from "@/components/CompoManageIns";
 import { IModelSection } from "@/models/ModelSection";
+import Icon from "@/components/Icon";
 
 type Props = {
   opened: boolean;
@@ -377,7 +376,7 @@ export default function ModalAddCourse({
         color="#6869AD"
         onStepClick={setActive}
         allowNextStepsSelect={false}
-        icon={<IconCircleFilled />}
+        icon={<Icon IconComponent={circleFilled} />}
         classNames={{
           separator: `text-primary mb-12 h-[3px] `,
           step: "flex flex-col items-start w-[42px]",
@@ -401,10 +400,9 @@ export default function ModalAddCourse({
             <Button
               onClick={() => nextStep(COURSE_TYPE.GENERAL.en)}
               rightSection={
-                <IconChevronRight
-                  color="#5768d5"
-                  className="size-5 items-center pt-1"
-                  stroke={3}
+                <Icon
+                  IconComponent={chevronRight}
+                  className="size-5 stroke-[#5768d5] stroke-3 items-center pt-1"
                 />
               }
               classNames={{
@@ -426,11 +424,10 @@ export default function ModalAddCourse({
             <Button
               onClick={() => nextStep(COURSE_TYPE.SPECIAL.en)}
               rightSection={
-                <IconChevronRight
-                  color="#5768d5"
-                  className="size-5 items-center pt-1"
-                  stroke={3}
-                />
+                <Icon
+                IconComponent={chevronRight}
+                className="size-5 stroke-[#5768d5] stroke-3 items-center pt-1"
+              />
               }
               classNames={{
                 inner: "flex justify-between items-center w-full",
@@ -452,11 +449,10 @@ export default function ModalAddCourse({
             <Button
               onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC.en)}
               rightSection={
-                <IconChevronRight
-                  color="#5768d5"
-                  className="size-5 items-center pt-1"
-                  stroke={3}
-                />
+                <Icon
+                IconComponent={chevronRight}
+                className="size-5 stroke-[#5768d5] stroke-3 items-center pt-1"
+              />
               }
               classNames={{
                 inner: "flex justify-between items-center w-full",
@@ -478,11 +474,10 @@ export default function ModalAddCourse({
               onClick={() => nextStep(COURSE_TYPE.FREE.en)}
               color="#ffffff"
               rightSection={
-                <IconChevronRight
-                  color="#5768d5"
-                  className="size-5 items-center pt-1"
-                  stroke={3}
-                />
+                <Icon
+                IconComponent={chevronRight}
+                className="size-5 stroke-[#5768d5] stroke-3 items-center pt-1"
+              />
               }
               classNames={{
                 inner: "flex justify-between items-center w-full ",
@@ -552,7 +547,6 @@ export default function ModalAddCourse({
                   pill: "bg-secondary text-white font-bold",
                   label: "font-semibold text-tertiary text-b2",
                   error: "text-[10px] !border-none",
-                  
                 }}
                 placeholder="Ex. 001 or 1 (Press Enter or Spacebar for fill the next section)"
                 splitChars={[",", " ", "|"]}
@@ -582,12 +576,11 @@ export default function ModalAddCourse({
                     {getSectionNo(sec.sectionNo)}
                     <span className="text-red-500"> *</span>
                   </span>
-                  <div
-                   
-                    className="w-full justify-center pr-[18px] border-b-2 pt-1 pb-5   flex flex-col "
-                  >
+                  <div className="w-full justify-center pr-[18px] border-b-2 pt-1 pb-5   flex flex-col ">
                     <div className="gap-2 flex flex-col">
-                      <span className="font-medium text-default text-b2 ">Repeat on semester</span>
+                      <span className="font-medium text-default text-b2 ">
+                        Repeat on semester
+                      </span>
                       <Chip.Group
                         {...form.getInputProps(`sections.${index}.semester`)}
                         value={sec.semester}
@@ -660,7 +653,7 @@ export default function ModalAddCourse({
             {!!coInsList.length && (
               <div className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md">
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
-                  <IconUsers /> Added Co-Instructor
+                  <Icon IconComponent={users} /> Added Co-Instructor
                 </div>
                 <div className="flex flex-col max-h-[220px] h-fit w-full   px-2   overflow-y-auto ">
                   <div className="flex flex-col h-fit p-1 ">
@@ -728,7 +721,9 @@ export default function ModalAddCourse({
                           </div>
                         </div>
                         <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-b3">
-                          <div className=" font-semibold">Can access section:</div>
+                          <div className=" font-semibold">
+                            Can access section:
+                          </div>
                           <div className="flex gap-1 w-[50%] flex-wrap ">
                             {coIns.sections?.map(
                               (sectionNo: any, index: number) => (
@@ -781,7 +776,7 @@ export default function ModalAddCourse({
                     </span>
                     <div className="flex flex-col gap-1">
                       <span className="text-tertiary text-b2 font-semibold">
-                    Owner Section
+                        Owner Section
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">
                         <List size="sm" listStyleType="disc">
@@ -820,7 +815,8 @@ export default function ModalAddCourse({
                           className="flex flex-col gap-1"
                         >
                           <List.Item>
-                          Repeat on semester {sec.semester
+                            Repeat on semester{" "}
+                            {sec.semester
                               ?.join(", ")
                               .replace(/, ([^,]*)$/, " and $1")}
                           </List.Item>
@@ -854,7 +850,7 @@ export default function ModalAddCourse({
             loading={loading}
             onClick={() => nextStep()}
             rightSection={
-              active != 4 && <IconArrowRight stroke={2} size={20} />
+              active != 4 && <Icon IconComponent={arrowRight} className=" stroke-[2px] size-5"  />
             }
           >
             {active == 4 ? "Done" : "Next step"}

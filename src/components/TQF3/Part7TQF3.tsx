@@ -1,6 +1,6 @@
 import { Checkbox, Button, Alert, Table } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconCheckbox } from "@tabler/icons-react";
+import checkbox from "@/assets/icons/checkbox.svg?react";
 import Icon from "../Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import DrawerPLOdes from "@/components/DrawerPLO";
@@ -14,7 +14,6 @@ import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useParams, useSearchParams } from "react-router-dom";
 import Loading from "../Loading";
-import notFoundImage from "@/assets/image/notFound.png";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -116,7 +115,7 @@ export default function Part7TQF3({ setForm }: Props) {
           <div className="w-full">
             <Alert
               radius="md"
-              icon={<IconCheckbox />}
+              icon={<Icon IconComponent={checkbox} />}
               variant="light"
               color="rgba(6, 158, 110, 1)"
               classNames={{

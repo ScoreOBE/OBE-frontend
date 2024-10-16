@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { IconChevronRight } from "@tabler/icons-react";
+import chevronRight from "@/assets/icons/chevronRight.svg?react";
+import Icon from "./Icon";
 type Props = {
   items: any[];
 };
@@ -24,7 +25,7 @@ export default function Breadcrumbs({ items = [] }: Props) {
           </Link>
           {index !== items.length - 1 && (
             <div>
-              <IconChevronRight color="#8F9AE3" size={13} stroke={3} />
+              <Icon IconComponent={chevronRight} className=" stroke-[#6674d3] size-4 stroke-3"    />
             </div>
           )}
         </div>

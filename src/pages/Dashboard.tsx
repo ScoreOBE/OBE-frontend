@@ -2,14 +2,12 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { Button, Group, Menu, Modal, Select } from "@mantine/core";
 import { Alert } from "@mantine/core";
-import {
-  IconDots,
-  IconPencilMinus,
-  IconTrash,
-  IconExclamationCircle,
-  IconUpload,
-  IconArrowRight,
-} from "@tabler/icons-react";
+import dots from "@/assets/icons/dots.svg?react";
+import trash from "@/assets/icons/trash.svg?react";
+import upload from "@/assets/icons/upload.svg?react";
+import pencilMinus from "@/assets/icons/pencilMinus.svg?react";
+import arrowRight from "@/assets/icons/arrowRight.svg?react";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { showNotifications } from "@/helpers/functions/function";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { deleteCourse, getCourse } from "@/services/course/course.service";
@@ -164,8 +162,7 @@ export default function Dashboard() {
                   affected.
                 </p>
               }
-              icon={<IconExclamationCircle />}
-              classNames={{ icon: "size-6" }}
+             icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
@@ -265,11 +262,10 @@ export default function Dashboard() {
                 }}
                 disabled={!uploadCourse}
                 rightSection={
-                  <IconArrowRight
-                    color={!uploadCourse ? "#BCC3CA" : "#ffffff"}
-                    className="size-5 items-center"
-                    stroke={2}
-                    size={20}
+                  <Icon IconComponent={arrowRight}
+                   
+                    className={`${!uploadCourse ? 'text-[#BCC3CA]' : 'text-[#ffffff]' } stroke-2  size-5 items-center`}
+                   
                   />
                 }
               >
@@ -341,7 +337,7 @@ export default function Dashboard() {
               </Button>
               <Button
                 className="text-center px-4"
-                leftSection={<IconUpload className="size-4" />}
+                leftSection={<Icon IconComponent={upload} className="size-4" />}
                 onClick={() => setOpenModalSelectCourse(true)}
               >
                 Upload score
@@ -451,10 +447,10 @@ export default function Dashboard() {
                             <Menu
                               trigger="click"
                               position="bottom-end"
-                              offset={2}
+                              offset={-15}
                             >
                               <Menu.Target>
-                                <IconDots className="absolute top-2 right-2 rounded-full hover:bg-gray-300" />
+                                <div><Icon IconComponent={dots} className="absolute top-2 right-2 rounded-full hover:bg-gray-300" /></div>
                               </Menu.Target>
                               <Menu.Dropdown
                                 className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -475,9 +471,9 @@ export default function Dashboard() {
                                   className="text-[#3E3E3E] font-semibold  text-b3 h-7 w-[180px]"
                                 >
                                   <div className="flex items-center gap-2">
-                                    <IconPencilMinus
-                                      stroke={1.5}
-                                      className="h-4 w-4"
+                                    <Icon IconComponent={pencilMinus}
+                                 
+                                      className="h-4 w-4 stroke-[2px]"
                                     />
                                     <span>Edit Course</span>
                                   </div>
@@ -490,9 +486,9 @@ export default function Dashboard() {
                                   }}
                                 >
                                   <div className="flex items-center gap-2">
-                                    <IconTrash
-                                      className="h-4 w-4"
-                                      stroke={1.5}
+                                    <Icon IconComponent={trash}
+                                      className="h-4 w-4 stroke-[2px]"
+                                    
                                     />
                                     <span>Delete Course</span>
                                   </div>

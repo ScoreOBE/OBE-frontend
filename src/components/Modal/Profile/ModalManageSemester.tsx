@@ -1,5 +1,4 @@
 import { Alert, Button, Modal, TextInput } from "@mantine/core";
-import { IconExclamationCircle, IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import {
@@ -19,6 +18,8 @@ import { setAcademicYear } from "@/store/academicYear";
 import { isEqual } from "lodash";
 import Icon from "@/components/Icon";
 import CalendarIcon from "@/assets/icons/calendar.svg?react";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import plus from "@/assets/icons/plus2.svg?react";
 
 type Props = {
   opened: boolean;
@@ -266,7 +267,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             </div>
           </div>
           <Button
-            leftSection={<IconPlus className="h-5 w-5 -mr-1" stroke={1.5} />}
+            leftSection={<Icon IconComponent={plus} className="h-5 w-5 -mr-1 stroke-[2px]" />}
             className="!rounded-s-[4px] font-semibold  min-w-fit !h-[36px] !w-full "
             onClick={onClickAdd}
           >
@@ -290,8 +291,8 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           variant="light"
           color="red"
           title={`After you activate semester ${activateSemester?.semester}/${activateSemester?.year}, semester ${academicYear?.semester}/${academicYear?.year} cannot be reactivated. This means that instructor can't make any changes to them courses for that semester.  `}
-          icon={<IconExclamationCircle />}
-          classNames={{ icon: "size-6" }}
+         icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
+        
           className="mb-5"
         ></Alert>
         <TextInput

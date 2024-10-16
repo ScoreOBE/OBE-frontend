@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Modal } from "@mantine/core";
-import { IconArrowRight } from "@tabler/icons-react";
+import arrowRight from "@/assets/icons/arrowRight.svg?react";
 import templateGuideStep1 from "@/assets/image/templateGuideStep1.png";
 import templateGuideStep2 from "@/assets/image/templateGuideStep2.png";
 import templateGuideStep3 from "@/assets/image/templateGuideStep3.png";
@@ -8,6 +8,7 @@ import templateGuideStep4 from "@/assets/image/templateGuideStep4.png";
 import templateGuideStep5 from "@/assets/image/templateGuideStep5.png";
 import templateGuideStep6 from "@/assets/image/templateGuideStep6.png";
 import templateGuideStep7 from "@/assets/image/templateGuideStep7.png";
+import Icon from "../Icon";
 
 type Props = {
   opened: boolean;
@@ -166,7 +167,7 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
                 </Button>
               )}
               {step < 7 && (
-                <Button rightSection={<IconArrowRight />} onClick={next}>
+                <Button rightSection={<Icon IconComponent={arrowRight} />} onClick={next}>
                   Next
                 </Button>
               )}

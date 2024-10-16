@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { Button } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { IconLogout } from "@tabler/icons-react";
+import logout from "@/assets/icons/logout.svg?react";
 import Icon from "@/components/Icon";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import list from "@/assets/icons/list.svg?react";
@@ -132,7 +132,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             <p className="text-b2 text-white font-bold">Course Action</p>
             <Button
               onClick={onClickLeaveCourse}
-              leftSection={<IconLogout className="h-5 w-5" stroke={1.5} />}
+              leftSection={<Icon IconComponent={logout} className="h-5 w-5 stroke-[2px]" />}
               className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center transition-colors duration-300 focus:border-none group"
             >
               <div className="flex flex-col justify-start w-full items-start gap-[7px]">

@@ -1,19 +1,19 @@
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { Group, rem, Table, Tabs, TextInput } from "@mantine/core";
 import { Alert, Button, Modal } from "@mantine/core";
-import {
-  IconExclamationCircle,
-  IconExternalLink,
-  IconFileImport,
-  IconInfoCircle,
-  IconUpload,
-  IconX,
-} from "@tabler/icons-react";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import regcmu from "@/assets/image/regCMULogo.png";
 import exStudentList from "@/assets/image/exStudentList.png";
 import { useState } from "react";
 import { TbSearch } from "react-icons/tb";
+import Info2 from "@/assets/icons/Info2.svg?react";
+import fileImport from "@/assets/icons/fileImport.svg?react";
+import x from "@/assets/icons/x.svg?react";
+import externalLink from "@/assets/icons/externalLink.svg?react";
+import Icon from "../Icon";
+import upload from "@/assets/icons/upload.svg?react";
+
 type modalType = "import" | "studentList";
 type Props = {
   opened: boolean;
@@ -229,7 +229,7 @@ export default function ModalStudentList({
                   }}
                   title={
                     <div className="flex items-center  gap-2">
-                      <IconInfoCircle />
+                      <Icon IconComponent={Info2} />
                       <p>
                         How to import Student List for Course {data?.courseNo}
                       </p>
@@ -254,7 +254,10 @@ export default function ModalStudentList({
                           <span className="text-secondary font-semibold hover:text-[#394cc9] hover:underline inline-flex items-center">
                             Reg CMU{" "}
                             <span className="ml-1">
-                              <IconExternalLink className="size-4" />
+                              <Icon
+                                IconComponent={externalLink}
+                                className="size-4"
+                              />
                             </span>
                           </span>
                         </a>
@@ -283,31 +286,32 @@ export default function ModalStudentList({
                     style={{ pointerEvents: "none" }}
                   >
                     <Dropzone.Accept>
-                      <IconUpload
+                      <Icon
+                        IconComponent={upload}
                         style={{
                           width: rem(52),
                           height: rem(52),
                           color: "var(--mantine-color-blue-6)",
                         }}
-                        stroke={1.5}
+                        className=" stroke-[2px]"
                       />
                     </Dropzone.Accept>
                     <Dropzone.Reject>
-                      <IconX
+                      <Icon
+                        IconComponent={x}
                         style={{
                           width: rem(52),
                           height: rem(52),
                           color: "var(--mantine-color-red-6)",
                         }}
-                        stroke={1.5}
+                        className=" stroke-[2px]"
                       />
                     </Dropzone.Reject>
 
                     <div className=" flex flex-col gap-3 justify-center items-center">
-                      <IconUpload
-                        color="#5768d5"
-                        stroke={1.5}
-                        className=" bg-[#DDE0FF] hover:bg-[#cfd2f8] size-16 p-3 rounded-full"
+                      <Icon
+                        IconComponent={upload}
+                        className=" bg-[#DDE0FF] stroke-[#5768d5] stroke-[2px] hover:bg-[#cfd2f8] size-16 p-3 rounded-full"
                       />
                       <p className="font-semibold text-b2 text-default">
                         <span className="text-secondary underline">
@@ -321,9 +325,9 @@ export default function ModalStudentList({
                       </p>
                       <div className="flex flex-col text-b3 font-medium  text-red-500  items-center text-center justify-center">
                         <div className="flex gap-2 items-center justify-center">
-                          <IconExclamationCircle
-                            color="red"
-                            className="size-4"
+                          <Icon
+                            IconComponent={exclamationCircle}
+                            className="size-4 stroke-red-600"
                           />
                           <p>
                             Supports only Student List ({data?.courseNo})
@@ -341,11 +345,9 @@ export default function ModalStudentList({
               <div className="flex justify-end mt-3 sticky w-full">
                 <Button
                   leftSection={
-                    <IconFileImport
-                      color="#ffffff"
-                      className="size-5 items-center"
-                      stroke={2}
-                      size={20}
+                    <Icon
+                      IconComponent={fileImport}
+                      className="size-5 stroke-[2px] stroke-[#ffffff] items-center"
                     />
                   }
                 >

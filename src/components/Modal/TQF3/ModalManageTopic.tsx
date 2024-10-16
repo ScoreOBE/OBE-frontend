@@ -6,7 +6,9 @@ import { upperFirst } from "lodash";
 import { useEffect } from "react";
 import { showNotifications } from "@/helpers/functions/function";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
-import { IconInfoCircle } from "@tabler/icons-react";
+
+import Info2 from "@/assets/icons/Info2.svg?react";
+import Icon from "@/components/Icon";
 
 export const optionsTopicPart6 = [
   {
@@ -130,7 +132,7 @@ export default function ModalManageTopic({
           }}
           title={
             <div className="flex items-center  gap-2">
-              <IconInfoCircle />
+              <Icon IconComponent={Info2} />
               <p>
               You've already added 10 topics for course evaluation and improvement process.
               </p>

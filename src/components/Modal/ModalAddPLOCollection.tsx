@@ -12,14 +12,12 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
-import {
-  IconArrowRight,
-  IconCircleFilled,
-  IconHome2,
-  IconInfoCircle,
-  IconTrash,
-  IconGripVertical,
-} from "@tabler/icons-react";
+import Info2 from "@/assets/icons/Info2.svg?react";
+import circleFilled from "@/assets/icons/circleFilled.svg?react";
+import home from "@/assets/icons/home.svg?react";
+import gripVertical from "@/assets/icons/verticalGrip.svg?react";
+import arrowRight from "@/assets/icons/arrowRight.svg?react";
+import trash from "@/assets/icons/trash.svg?react"
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { useAppSelector } from "@/store";
@@ -309,7 +307,7 @@ export default function ModalAddPLOCollection({
             }}
             title={
               <div className="flex items-center  gap-2">
-                <IconInfoCircle />
+                <Icon IconComponent={Info2} />
                 <p>
                   Select semester you would like to begin using the PLO
                   Collection.
@@ -389,7 +387,7 @@ export default function ModalAddPLOCollection({
           color="#6869AD"
           onStepClick={setActive}
           allowNextStepsSelect={false}
-          icon={<IconCircleFilled />}
+          icon={<Icon IconComponent={circleFilled} />}
           classNames={{
             separator: `text-primary mb-12 h-[3px] `,
             step: "flex flex-col  items-start  w-[42px] ",
@@ -600,10 +598,9 @@ export default function ModalAddPLOCollection({
                                               setReorder(true);
                                             }}
                                           >
-                                            <IconTrash
-                                              stroke={1.5}
-                                              color="#FF4747"
-                                              className="size-4 flex items-center"
+                                            <Icon IconComponent={trash}
+                                            
+                                              className="size-4 stroke-[2px] stroke-[#ff4747] flex items-center"
                                             />
                                           </div>
 
@@ -611,12 +608,13 @@ export default function ModalAddPLOCollection({
                                             className="cursor-pointer hover:bg-hover  text-tertiary size-8 rounded-full flex items-center justify-center"
                                             {...provided.dragHandleProps}
                                           >
-                                            <IconGripVertical
+                                            <Icon IconComponent={gripVertical}
                                               style={{
                                                 width: rem(20),
                                                 height: rem(20),
                                               }}
-                                              stroke={1.5}
+                                              className="stroke-[2px]"
+                                             
                                             />
                                           </div>
                                         </div>
@@ -653,7 +651,7 @@ export default function ModalAddPLOCollection({
             <div className="mt-3 flex flex-col">
               <Alert
                 radius="md"
-                icon={<IconInfoCircle />}
+                icon={<Icon IconComponent={Info2} />}
                 variant="light"
                 color="blue"
                 className="mb-5"
@@ -676,7 +674,7 @@ export default function ModalAddPLOCollection({
               >
                 <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
                   <div className="flex items-center gap-2">
-                    <IconHome2 className="text-secondary" size={19} />
+                    <Icon IconComponent={home} className="text-secondary size-5"  />
 
                     <span>List of Departments</span>
                   </div>
@@ -814,7 +812,7 @@ export default function ModalAddPLOCollection({
                 nextStep();
               }}
               rightSection={
-                active != 4 && <IconArrowRight stroke={2} size={20} />
+                active != 4 && <Icon IconComponent={arrowRight} className=" stroke-[2px] size-5"  />
               }
             >
               {active == 3 ? "Select semester" : "Next step"}

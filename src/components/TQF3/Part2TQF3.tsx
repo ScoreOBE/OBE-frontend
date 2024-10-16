@@ -4,12 +4,10 @@ import { useForm } from "@mantine/form";
 import { Table } from "@mantine/core";
 import AddIcon from "@/assets/icons/plus.svg?react";
 import Icon from "../Icon";
-import {
-  IconEdit,
-  IconGripVertical,
-  IconTrash,
-  IconExclamationCircle,
-} from "@tabler/icons-react";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import trash from "@/assets/icons/trash.svg?react";
+import edit from "@/assets/icons/edit.svg?react";
+import gripVertical from "@/assets/icons/verticalGrip.svg?react";
 import { useEffect, useState } from "react";
 import ModalManageCLO, { LearningMethod } from "../Modal/TQF3/ModalManageCLO";
 import ModalManageCourseContent from "../Modal/TQF3/ModalManageCourseContent";
@@ -154,8 +152,9 @@ export default function Part2TQF3({ setForm }: Props) {
                   <br /> it will be permanently deleted from this course.
                 </p>
               }
-              icon={<IconExclamationCircle />}
-              classNames={{ icon: "size-6" }}
+              icon={
+                <Icon IconComponent={exclamationCircle} className="size-6" />
+              }
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">CLO Description</p>
@@ -184,8 +183,9 @@ export default function Part2TQF3({ setForm }: Props) {
                   course.
                 </p>
               }
-              icon={<IconExclamationCircle />}
-              classNames={{ icon: "size-6" }}
+              icon={
+                <Icon IconComponent={exclamationCircle} className="size-6" />
+              }
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">Course Content Topic</p>
@@ -377,9 +377,9 @@ export default function Part2TQF3({ setForm }: Props) {
                                               setOpenModalEditCLO(true);
                                             }}
                                           >
-                                            <IconEdit
-                                              className="size-4"
-                                              stroke={1.5}
+                                            <Icon
+                                              IconComponent={edit}
+                                              className="size-4 stroke-[2px]"
                                             />
                                           </div>
                                           <div
@@ -389,9 +389,9 @@ export default function Part2TQF3({ setForm }: Props) {
                                               setOpenPopupDelCLO(true);
                                             }}
                                           >
-                                            <IconTrash
-                                              className="size-4"
-                                              stroke={1.5}
+                                            <Icon
+                                              IconComponent={trash}
+                                              className="size-4 stroke-[2px]"
                                             />
                                           </div>
                                         </div>
@@ -405,12 +405,13 @@ export default function Part2TQF3({ setForm }: Props) {
                                           className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
                                           {...provided.dragHandleProps}
                                         >
-                                          <IconGripVertical
+                                          <Icon
+                                            IconComponent={gripVertical}
                                             style={{
                                               width: "20px",
                                               height: "20px",
                                             }}
-                                            stroke={1.5}
+                                            className=" stroke-[2px]"
                                           />
                                         </div>
                                       </Table.Td>
@@ -547,9 +548,9 @@ export default function Part2TQF3({ setForm }: Props) {
                                               setOpenModalEditTopic(true);
                                             }}
                                           >
-                                            <IconEdit
-                                              className="size-4"
-                                              stroke={1.5}
+                                            <Icon
+                                              IconComponent={edit}
+                                              className="size-4 stroke-[2px]"
                                             />
                                           </div>
                                           <div
@@ -559,9 +560,9 @@ export default function Part2TQF3({ setForm }: Props) {
                                               setOpenPopupDelTopic(true);
                                             }}
                                           >
-                                            <IconTrash
-                                              className="size-4"
-                                              stroke={1.5}
+                                             <Icon
+                                              IconComponent={trash}
+                                              className="size-4 stroke-[2px]"
                                             />
                                           </div>
                                         </div>
@@ -575,12 +576,13 @@ export default function Part2TQF3({ setForm }: Props) {
                                           className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
                                           {...provided.dragHandleProps}
                                         >
-                                          <IconGripVertical
+                                          <Icon
+                                            IconComponent={gripVertical}
                                             style={{
                                               width: "20px",
                                               height: "20px",
                                             }}
-                                            stroke={1.5}
+                                            className=" stroke-[2px]"
                                           />
                                         </div>
                                       </Table.Td>

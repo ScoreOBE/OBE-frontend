@@ -13,12 +13,11 @@ import {
   Chip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import {
-  IconCircleFilled,
-  IconArrowRight,
-  IconUsers,
-  IconInfoCircle,
-} from "@tabler/icons-react";
+import Info2 from "@/assets/icons/Info2.svg?react";
+
+import circleFilled from "@/assets/icons/circleFilled.svg?react";
+import arrowRight from "@/assets/icons/arrowRight.svg?react";
+import users from "@/assets/icons/users.svg?react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { SEMESTER } from "@/helpers/constants/enum";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -42,6 +41,7 @@ import {
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { editCourse } from "@/store/course";
 import { editCourseManagement } from "@/store/courseManagement";
+import Icon from "@/components/Icon";
 
 type Props = {
   opened: boolean;
@@ -386,7 +386,7 @@ export default function ModalAddSection({
         color="#6869AD"
         onStepClick={setActive}
         allowNextStepsSelect={false}
-        icon={<IconCircleFilled />}
+        icon={<Icon IconComponent={circleFilled} />}
         classNames={{
           separator: `text-primary mb-12 h-[3px] `,
           step: "flex flex-col  items-start  w-[42px] ",
@@ -446,7 +446,7 @@ export default function ModalAddSection({
           >
             <Alert
               radius="md"
-              icon={<IconInfoCircle />}
+              icon={<Icon IconComponent={Info2} />}
               variant="light"
               color="blue"
               className="mb-5"
@@ -594,7 +594,7 @@ export default function ModalAddSection({
                 }}
               >
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
-                  <IconUsers /> Added Co-Instructor
+                  <Icon IconComponent={users} /> Added Co-Instructor
                 </div>
                 <div className="flex flex-col max-h-[220px] h-fit w-full   px-2   overflow-y-auto ">
                   <div className="flex flex-col  h-fit p-1">
@@ -791,7 +791,7 @@ export default function ModalAddSection({
           onClick={() => nextStep()}
           rightSection={
             ((active != 3 && !isManage) || (active != 4 && isManage)) && (
-              <IconArrowRight stroke={2} size={20} />
+              <Icon IconComponent={arrowRight} className=" stroke-[2px] size-5" />
             )
           }
         >
