@@ -1,5 +1,5 @@
 import Profile from "./Profile";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { setCourseList } from "@/store/course";
@@ -10,6 +10,7 @@ import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { SearchInput } from "./SearchInput";
 
 export default function Navbar() {
+  const { name } = useParams();
   const location = useLocation().pathname;
   const [params, setParams] = useSearchParams();
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
@@ -48,6 +49,7 @@ export default function Navbar() {
           return `TQF 3${tqf3Topic ? ` - ${tqf3Topic}` : ""}`;
         else if (location.includes(ROUTE_PATH.TQF5))
           return `TQF 5${tqf3Topic ? ` - ${tqf3Topic}` : ""}`;
+        else if (location.includes(ROUTE_PATH.OVERALL)) return `${name}`;
         else if (location.includes(ROUTE_PATH.ASSIGNMENT)) return "Assignment";
         else if (location.includes(ROUTE_PATH.HISTOGRAM)) return "Histogram";
         else return "Section";

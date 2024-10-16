@@ -11,7 +11,13 @@ import trash from "@/assets/icons/trash.svg?react";
 import pencilMinus from "@/assets/icons/pencilMinus.svg?react";
 import arrowRight from "@/assets/icons/arrowRight.svg?react";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  Route,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
@@ -23,6 +29,7 @@ import Info2 from "@/assets/icons/Info2.svg?react";
 
 export default function Assignment() {
   const { courseNo, sectionNo } = useParams();
+  const path = useLocation().pathname;
   const loading = useAppSelector((state) => state.loading);
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
@@ -49,10 +56,18 @@ export default function Assignment() {
   ]);
   const [openAllPublishModal, setOpenAllPublishModal] = useState(false);
 
+  const goToOverall = (name: string) => {
+    navigate({
+      pathname: `${path}/${name}/${ROUTE_PATH.OVERALL}`,
+      search: "?" + params.toString(),
+    });
+  };
+
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
   }, []);
+  console.log("assignment");
 
   return (
     <>
@@ -238,7 +253,7 @@ export default function Assignment() {
           <>
             <div className="flex flex-row  py-2  items-center justify-between">
               <p className="text-secondary text-[18px] font-semibold">
-                {section?.assignments?.length} 1 Assignment
+                {section?.assignments?.length} Assignment
                 {section?.assignments?.length! > 1 && "s"}
               </p>
               <Menu
@@ -288,7 +303,7 @@ export default function Assignment() {
                 height: "fit-content",
               }}
             >
-              <Table stickyHeader striped>
+              <Table stickyHeader>
                 <Table.Thead>
                   <Table.Tr className="bg-[#e5e7f6]">
                     <Table.Th className="w-60">Name</Table.Th>
@@ -302,367 +317,71 @@ export default function Assignment() {
                     <Table.Th className="w-50"></Table.Th>
                   </Table.Tr>
                 </Table.Thead>
-                <Table.Tbody className="text-default text-b3">
-                  <Table.Tr className=" hover:bg-hover">
-                    <Table.Td>Quiz 1</Table.Td>
-                    <Table.Td>5.0</Table.Td>
-                    <Table.Td>2.0</Table.Td>
-                    <Table.Td>8 Dec 2023</Table.Td>
-                    <Table.Td>25</Table.Td>
-                    <Table.Td className="text-center">
-                      <Icon IconComponent={publish} className="text-default" />
-                      {/* <Icon IconComponent={unPublish} className="text-default" /> */}
-                    </Table.Td>
-                    <Table.Td className="text-center flex  items-center justify-center">
-                      <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
-                        <Menu trigger="click" position="bottom-end" offset={2}>
-                          <Menu.Target>
-                            <Icon
-                              IconComponent={dots}
-                              className=" rounded-full w-fit hover:bg-gray-300"
-                            />
-                          </Menu.Target>
-                          <Menu.Dropdown
-                            className="rounded-md backdrop-blur-xl bg-white/70 "
-                            style={{
-                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                            }}
+
+                <Table.Tbody className="text-default text-b3 ">
+                  {Array.from({ length: 12 }).map((_, index) => (
+                    <Table.Tr
+                      className={`hover:bg-[#F3F3F3] cursor-pointer ${
+                        index % 2 === 0 && "bg-[#F8F9FA]"
+                      }`}
+                      onClick={() => goToOverall(`Quiz${index + 1}`)}
+                    >
+                      <Table.Td>Quiz {index + 1}</Table.Td>
+                      <Table.Td>5.0</Table.Td>
+                      <Table.Td>2.0</Table.Td>
+                      <Table.Td>8 Dec 2023</Table.Td>
+                      <Table.Td>25</Table.Td>
+                      <Table.Td className="text-center">
+                        <Icon
+                          IconComponent={publish}
+                          className="text-default"
+                        />
+                        {/* <Icon IconComponent={unPublish} className="text-default" /> */}
+                      </Table.Td>
+                      <Table.Td className="text-center flex  items-center justify-center">
+                        <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
+                          <Menu
+                            trigger="click"
+                            position="bottom-end"
+                            offset={2}
                           >
-                            <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                                <Icon
-                                  IconComponent={pencilMinus}
-                                  className="h-4 w-4 stroke-[2px]"
-                                />
-                                <span>Edit Assignment Name</span>
-                              </div>
-                            </Menu.Item>
-                            <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                                <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
-                                <span>Delete Assignment</span>
-                              </div>
-                            </Menu.Item>
-                          </Menu.Dropdown>
-                        </Menu>
-                      </div>
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr className=" hover:bg-hover">
-                    <Table.Td>Quiz 1</Table.Td>
-                    <Table.Td>5.0</Table.Td>
-                    <Table.Td>2.0</Table.Td>
-                    <Table.Td>8 Dec 2023</Table.Td>
-                    <Table.Td>25</Table.Td>
-                    <Table.Td className="text-center">
-                      <Icon IconComponent={publish} className="text-default" />
-                      {/* <Icon IconComponent={unPublish} className="text-default" /> */}
-                    </Table.Td>
-                    <Table.Td className="text-center flex  items-center justify-center">
-                      <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
-                        <Menu trigger="click" position="bottom-end" offset={2}>
-                          <Menu.Target>
-                            <Icon
-                              IconComponent={dots}
-                              className=" rounded-full w-fit hover:bg-gray-300"
-                            />
-                          </Menu.Target>
-                          <Menu.Dropdown
-                            className="rounded-md backdrop-blur-xl bg-white/70 "
-                            style={{
-                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                            }}
-                          >
-                            <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
+                            <Menu.Target>
                               <Icon
-                                  IconComponent={pencilMinus}
-                                  className="h-4 w-4 stroke-[2px]"
-                                />
-                                <span>Edit Assignment Name</span>
-                              </div>
-                            </Menu.Item>
-                            <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
-                                <span>Delete Assignment</span>
-                              </div>
-                            </Menu.Item>
-                          </Menu.Dropdown>
-                        </Menu>
-                      </div>
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr className=" hover:bg-hover">
-                    <Table.Td>Quiz 1</Table.Td>
-                    <Table.Td>5.0</Table.Td>
-                    <Table.Td>2.0</Table.Td>
-                    <Table.Td>8 Dec 2023</Table.Td>
-                    <Table.Td>25</Table.Td>
-                    <Table.Td className="text-center">
-                      <Icon IconComponent={publish} className="text-default" />
-                      {/* <Icon IconComponent={unPublish} className="text-default" /> */}
-                    </Table.Td>
-                    <Table.Td className="text-center flex  items-center justify-center">
-                      <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
-                        <Menu trigger="click" position="bottom-end" offset={2}>
-                          <Menu.Target>
-                            <Icon
-                              IconComponent={dots}
-                              className=" rounded-full w-fit hover:bg-gray-300"
-                            />
-                          </Menu.Target>
-                          <Menu.Dropdown
-                            className="rounded-md backdrop-blur-xl bg-white/70 "
-                            style={{
-                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                            }}
-                          >
-                            <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon
-                                  IconComponent={pencilMinus}
-                                  className="h-4 w-4 stroke-[2px]"
-                                />
-                                <span>Edit Assignment Name</span>
-                              </div>
-                            </Menu.Item>
-                            <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
-                                <span>Delete Assignment</span>
-                              </div>
-                            </Menu.Item>
-                          </Menu.Dropdown>
-                        </Menu>
-                      </div>
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr className=" hover:bg-hover">
-                    <Table.Td>Quiz 1</Table.Td>
-                    <Table.Td>5.0</Table.Td>
-                    <Table.Td>2.0</Table.Td>
-                    <Table.Td>8 Dec 2023</Table.Td>
-                    <Table.Td>25</Table.Td>
-                    <Table.Td className="text-center">
-                      <Icon IconComponent={publish} className="text-default" />
-                      {/* <Icon IconComponent={unPublish} className="text-default" /> */}
-                    </Table.Td>
-                    <Table.Td className="text-center flex  items-center justify-center">
-                      <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
-                        <Menu trigger="click" position="bottom-end" offset={2}>
-                          <Menu.Target>
-                            <Icon
-                              IconComponent={dots}
-                              className=" rounded-full w-fit hover:bg-gray-300"
-                            />
-                          </Menu.Target>
-                          <Menu.Dropdown
-                            className="rounded-md backdrop-blur-xl bg-white/70 "
-                            style={{
-                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                            }}
-                          >
-                            <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon
-                                  IconComponent={pencilMinus}
-                                  className="h-4 w-4 stroke-[2px]"
-                                />
-                                <span>Edit Assignment Name</span>
-                              </div>
-                            </Menu.Item>
-                            <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
-                                <span>Delete Assignment</span>
-                              </div>
-                            </Menu.Item>
-                          </Menu.Dropdown>
-                        </Menu>
-                      </div>
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr className=" hover:bg-hover">
-                    <Table.Td>Quiz 1</Table.Td>
-                    <Table.Td>5.0</Table.Td>
-                    <Table.Td>2.0</Table.Td>
-                    <Table.Td>8 Dec 2023</Table.Td>
-                    <Table.Td>25</Table.Td>
-                    <Table.Td className="text-center">
-                      <Icon IconComponent={publish} className="text-default" />
-                      {/* <Icon IconComponent={unPublish} className="text-default" /> */}
-                    </Table.Td>
-                    <Table.Td className="text-center flex  items-center justify-center">
-                      <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
-                        <Menu trigger="click" position="bottom-end" offset={2}>
-                          <Menu.Target>
-                            <Icon
-                              IconComponent={dots}
-                              className=" rounded-full w-fit hover:bg-gray-300"
-                            />
-                          </Menu.Target>
-                          <Menu.Dropdown
-                            className="rounded-md backdrop-blur-xl bg-white/70 "
-                            style={{
-                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                            }}
-                          >
-                            <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon
-                                  IconComponent={pencilMinus}
-                                  className="h-4 w-4 stroke-[2px]"
-                                />
-                                <span>Edit Assignment Name</span>
-                              </div>
-                            </Menu.Item>
-                            <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
-                                <span>Delete Assignment</span>
-                              </div>
-                            </Menu.Item>
-                          </Menu.Dropdown>
-                        </Menu>
-                      </div>
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr className=" hover:bg-hover">
-                    <Table.Td>Quiz 1</Table.Td>
-                    <Table.Td>5.0</Table.Td>
-                    <Table.Td>2.0</Table.Td>
-                    <Table.Td>8 Dec 2023</Table.Td>
-                    <Table.Td>25</Table.Td>
-                    <Table.Td className="text-center">
-                      <Icon IconComponent={publish} className="text-default" />
-                      {/* <Icon IconComponent={unPublish} className="text-default" /> */}
-                    </Table.Td>
-                    <Table.Td className="text-center flex  items-center justify-center">
-                      <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
-                        <Menu trigger="click" position="bottom-end" offset={2}>
-                          <Menu.Target>
-                            <Icon
-                              IconComponent={dots}
-                              className=" rounded-full w-fit hover:bg-gray-300"
-                            />
-                          </Menu.Target>
-                          <Menu.Dropdown
-                            className="rounded-md backdrop-blur-xl bg-white/70 "
-                            style={{
-                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                            }}
-                          >
-                            <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon
-                                  IconComponent={pencilMinus}
-                                  className="h-4 w-4 stroke-[2px]"
-                                />
-                                <span>Edit Assignment Name</span>
-                              </div>
-                            </Menu.Item>
-                            <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
-                                <span>Delete Assignment</span>
-                              </div>
-                            </Menu.Item>
-                          </Menu.Dropdown>
-                        </Menu>
-                      </div>
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr className=" hover:bg-hover">
-                    <Table.Td>Quiz 1</Table.Td>
-                    <Table.Td>5.0</Table.Td>
-                    <Table.Td>2.0</Table.Td>
-                    <Table.Td>8 Dec 2023</Table.Td>
-                    <Table.Td>25</Table.Td>
-                    <Table.Td className="text-center">
-                      <Icon IconComponent={publish} className="text-default" />
-                      {/* <Icon IconComponent={unPublish} className="text-default" /> */}
-                    </Table.Td>
-                    <Table.Td className="text-center flex  items-center justify-center">
-                      <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
-                        <Menu trigger="click" position="bottom-end" offset={2}>
-                          <Menu.Target>
-                            <Icon
-                              IconComponent={dots}
-                              className=" rounded-full w-fit hover:bg-gray-300"
-                            />
-                          </Menu.Target>
-                          <Menu.Dropdown
-                            className="rounded-md backdrop-blur-xl bg-white/70 "
-                            style={{
-                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                            }}
-                          >
-                            <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon
-                                  IconComponent={pencilMinus}
-                                  className="h-4 w-4 stroke-[2px]"
-                                />
-                                <span>Edit Assignment Name</span>
-                              </div>
-                            </Menu.Item>
-                            <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
-                                <span>Delete Assignment</span>
-                              </div>
-                            </Menu.Item>
-                          </Menu.Dropdown>
-                        </Menu>
-                      </div>
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr className=" hover:bg-hover">
-                    <Table.Td>Quiz 1</Table.Td>
-                    <Table.Td>5.0</Table.Td>
-                    <Table.Td>2.0</Table.Td>
-                    <Table.Td>8 Dec 2023</Table.Td>
-                    <Table.Td>25</Table.Td>
-                    <Table.Td className="text-center">
-                      <Icon IconComponent={publish} className="text-default" />
-                      {/* <Icon IconComponent={unPublish} className="text-default" /> */}
-                    </Table.Td>
-                    <Table.Td className="text-center flex  items-center justify-center">
-                      <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
-                        <Menu trigger="click" position="bottom-end" offset={2}>
-                          <Menu.Target>
-                            <Icon
-                              IconComponent={dots}
-                              className=" rounded-full w-fit hover:bg-gray-300"
-                            />
-                          </Menu.Target>
-                          <Menu.Dropdown
-                            className="rounded-md backdrop-blur-xl bg-white/70 "
-                            style={{
-                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                            }}
-                          >
-                            <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon
-                                  IconComponent={pencilMinus}
-                                  className="h-4 w-4 stroke-[2px]"
-                                />
-                                <span>Edit Assignment Name</span>
-                              </div>
-                            </Menu.Item>
-                            <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
-                              <div className="flex items-center gap-2">
-                              <Icon IconComponent={trash} className="h-4 w-4 stroke-[2px]"  />
-                                <span>Delete Assignment</span>
-                              </div>
-                            </Menu.Item>
-                          </Menu.Dropdown>
-                        </Menu>
-                      </div>
-                    </Table.Td>
-                  </Table.Tr>
+                                IconComponent={dots}
+                                className=" rounded-full w-fit hover:bg-gray-300"
+                              />
+                            </Menu.Target>
+                            <Menu.Dropdown
+                              className="rounded-md backdrop-blur-xl bg-white/70 "
+                              style={{
+                                boxShadow:
+                                  "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                              }}
+                            >
+                              <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
+                                <div className="flex items-center gap-2">
+                                  <Icon
+                                    IconComponent={pencilMinus}
+                                    className="h-4 w-4 stroke-[2px]"
+                                  />
+                                  <span>Edit Assignment Name</span>
+                                </div>
+                              </Menu.Item>
+                              <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
+                                <div className="flex items-center gap-2">
+                                  <Icon
+                                    IconComponent={trash}
+                                    className="h-4 w-4 stroke-[2px]"
+                                  />
+                                  <span>Delete Assignment</span>
+                                </div>
+                              </Menu.Item>
+                            </Menu.Dropdown>
+                          </Menu>
+                        </div>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
                 </Table.Tbody>
               </Table>
             </div>

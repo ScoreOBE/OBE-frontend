@@ -25,6 +25,7 @@ import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { showNotifications } from "@/helpers/functions/function";
 import { useDisclosure } from "@mantine/hooks";
 import LeaveIcon from "@/assets/icons/leave.svg?react";
+import OverallSidebar from "./Sidebar/ScoreSidebar";
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -45,7 +46,18 @@ export default function Sidebar() {
       return <DashboardSidebar />;
     } else if (!loading) {
       if (path.includes(ROUTE_PATH.COURSE)) {
-        if ([ROUTE_PATH.ASSIGNMENT, ROUTE_PATH.HISTOGRAM].some(route => path.includes(route))) {
+        if (
+          [ROUTE_PATH.ASSIGNMENT, ROUTE_PATH.HISTOGRAM].some((route) =>
+            path.includes(route)
+          )
+        ) {
+          if (
+            [ROUTE_PATH.OVERALL, ROUTE_PATH.STUDENTS].some((route) =>
+              path.includes(route)
+            )
+          ) {
+            return <OverallSidebar onClickLeaveCourse={openedMainPopup} />;
+          }
           return <AssignmentSidebar onClickLeaveCourse={openedMainPopup} />;
         } else return <CourseSidebar onClickLeaveCourse={openedMainPopup} />;
       }
@@ -87,7 +99,7 @@ export default function Sidebar() {
         x: -160,
       }}
       animate={{ x: 0 }}
-      transition={{ duration: 0.3, type: "keyframes", stiffness: 100, }}
+      transition={{ duration: 0.3, type: "keyframes", stiffness: 100 }}
       className="w-[255px] border-r-[1px] h-screen flex p-5 sidebar-linear-gradient"
     >
       <div className="flex w-full flex-col gap-11">
@@ -117,8 +129,12 @@ export default function Sidebar() {
               variant="light"
               color="red"
               title={` After you leave ${course?.courseNo} course, you won't have access to Assignments, Score, TQF document and Grades in this course `}
-             icon={<Icon IconComponent={exclamationCircle} className="size-6 mb-5" />}
-             
+              icon={
+                <Icon
+                  IconComponent={exclamationCircle}
+                  className="size-6 mb-5"
+                />
+              }
             ></Alert>
             <div className="flex flex-col  ">
               <p className="text-b3  text-[#808080]">Course no.</p>
