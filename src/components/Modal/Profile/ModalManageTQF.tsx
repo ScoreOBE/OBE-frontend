@@ -19,7 +19,8 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { updateProcessTqf3 } from "@/services/academicYear/academicYear.service";
 import { setProcessTQF3 } from "@/store/academicYear";
-import { IconInfoCircle } from "@tabler/icons-react";
+import Icon from "@/components/Icon";
+import Info2 from "@/assets/icons/Info2.svg?react";
 
 type Props = {
   opened: boolean;
@@ -131,8 +132,8 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
           variant="light"
           color="blue"
           title="Tips of TQF 5"
-          classNames={{ icon: "size-6" }}
-          icon={<IconInfoCircle />}
+          classNames={{ icon: "size-5" }}
+          icon={<Icon IconComponent={Info2} />}
         >
           <div className="flex flex-col text-[13px] font-medium text-[#333333] gap-3">
             <li>
@@ -291,10 +292,10 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                             className="w-fit border  rounded-md "
                             position="bottom-start"
                           >
-                            <IconInfoCircle
-                              size={16}
-                              className="-ml-0 text-secondary"
-                            />
+                            <div><Icon IconComponent={Info2}
+                             
+                              className="-ml-0 size-5 text-secondary"
+                            /></div>
                           </Tooltip>
                         </div>
                       </Table.Th>

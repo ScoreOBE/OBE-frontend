@@ -9,7 +9,8 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Table } from "@mantine/core";
-import { IconCheckbox, IconExclamationCircle } from "@tabler/icons-react";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import checkbox from "@/assets/icons/checkbox.svg?react";
 import { useEffect } from "react";
 import { IModelEval, IModelTQF3Part4 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
@@ -19,6 +20,7 @@ import { updatePartTQF3 } from "@/store/tqf3";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { initialTqf3Part4 } from "@/helpers/functions/tqf3";
+import Icon from "../Icon";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -187,7 +189,7 @@ export default function Part4TQF3({
             }}
             title={
               <div className="flex items-center  gap-2">
-                <IconExclamationCircle />
+                <Icon IconComponent={exclamationCircle} />
                 <p>text</p>
                 ''
               </div>
@@ -237,7 +239,7 @@ export default function Part4TQF3({
                 <div className="w-full">
                   <Alert
                     radius="md"
-                    icon={<IconCheckbox />}
+                    icon={<Icon IconComponent={checkbox} />}
                     variant="light"
                     color="rgba(6, 158, 110, 1)"
                     classNames={{
@@ -516,7 +518,7 @@ export default function Part4TQF3({
                                 `data.${cloIndex}.percent`
                               )}
                             >
-                              <div className="flex gap-5 justify-start  items-center px-[20px] py-2">
+                              <div className="flex gap-5 text-[13px] !justify-start !items-start !text-start  !h-full !flex-1 !self-start !snap-start  px-[20px] ">
                                 <div className="text-secondary min-w-fit font-bold">
                                   CLO-{cloItem?.no}
                                 </div>
@@ -551,7 +553,7 @@ export default function Part4TQF3({
                                         className="!p-0 border-[#d9d9d9] border-b-[1px] flex !h-full !w-full"
                                       >
                                         {/* Evaluation Topic Column */}
-                                        <Table.Td className="!w-[24%] !h-ful text-default font-medium flex flex-col justify-center !min-w-[24%] ">
+                                        <Table.Td className="!w-[24%] text-[13px] !h-ful text-default font-medium flex flex-col justify-center !min-w-[24%] ">
                                           <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                                             {evalTopic?.topicTH}
                                           </p>

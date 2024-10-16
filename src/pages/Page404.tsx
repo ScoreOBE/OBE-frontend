@@ -1,3 +1,4 @@
+import Icon from "@/components/Icon";
 import { ROLE } from "@/helpers/constants/enum";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -5,7 +6,7 @@ import { setLoading } from "@/store/loading";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { Button } from "@mantine/core";
-import { IconArrowLeft } from "@tabler/icons-react";
+import arrowLeft from "@/assets/icons/arrowLeft.svg?react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -49,7 +50,7 @@ export default function NotFoundPage() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <IconArrowLeft className="size-6 -mr-1" stroke={2} />
+                <Icon IconComponent={arrowLeft} className="size-6 -mr-1 stroke-2" />
               }
               className="inline-block !text-[16px] -ml-4 mt-3 bg-transparent hover:bg-transparent hover:underline text-white !font-bold !rounded transition"
             >

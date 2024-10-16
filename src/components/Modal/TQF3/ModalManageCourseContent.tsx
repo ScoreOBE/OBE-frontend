@@ -11,9 +11,13 @@ import {
   rem,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconList, IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
+import trash from "@/assets/icons/trash.svg?react";
+import list2 from "@/assets/icons/list2.svg?react";
+import minus from "@/assets/icons/minus.svg?react";
+import plus2 from "@/assets/icons/plus2.svg?react";
 import { upperFirst } from "lodash";
 import { useEffect, useRef, useState } from "react";
+import Icon from "@/components/Icon";
 
 type actionType = "add" | "edit";
 
@@ -220,7 +224,10 @@ export default function ModalManageTopic({
                       onClick={() => handlersLecRef.current?.decrement()}
                       style={{ cursor: "pointer" }}
                     >
-                      <IconMinus size={18} color="#5768d5" />
+                      <Icon
+                        IconComponent={minus}
+                        className="size-4 stroke-[#5768d5]"
+                      />
                     </div>
                     <div className="h-8 border"></div>
                     <div
@@ -228,7 +235,10 @@ export default function ModalManageTopic({
                       onClick={() => handlersLecRef.current?.increment()}
                       style={{ cursor: "pointer" }}
                     >
-                      <IconPlus size={18} color="#5768d5" />
+                      <Icon
+                        IconComponent={plus2}
+                        className="size-4 stroke-[#5768d5]"
+                      />
                     </div>
                   </div>
                 }
@@ -260,7 +270,10 @@ export default function ModalManageTopic({
                       onClick={() => handlersLabRef.current?.decrement()}
                       style={{ cursor: "pointer" }}
                     >
-                      <IconMinus size={18} color="#5768d5" />
+                      <Icon
+                        IconComponent={minus}
+                        className="size-4 stroke-[#5768d5]"
+                      />
                     </div>
                     <div className="h-8 border"></div>
                     <div
@@ -268,7 +281,10 @@ export default function ModalManageTopic({
                       onClick={() => handlersLabRef.current?.increment()}
                       style={{ cursor: "pointer" }}
                     >
-                      <IconPlus size={18} color="#5768d5" />
+                      <Icon
+                        IconComponent={plus2}
+                        className="size-4 stroke-[#5768d5]"
+                      />
                     </div>
                   </div>
                 }
@@ -301,7 +317,10 @@ export default function ModalManageTopic({
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
-                  <IconList style={{ width: rem(20), height: rem(20) }} />{" "}
+                  <Icon
+                    IconComponent={list2}
+                    style={{ width: rem(20), height: rem(20) }}
+                  />{" "}
                   <span className="flex flex-row items-center gap-2">
                     List Course Content Added
                   </span>
@@ -337,10 +356,9 @@ export default function ModalManageTopic({
                           className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer"
                           onClick={() => removeTopic(index)}
                         >
-                          <IconTrash
-                            stroke={1.5}
-                            color="#FF4747"
-                            className="size-4 flex items-center"
+                          <Icon
+                            IconComponent={trash}
+                            className="size-4 stroke-[#ff4747] stroke-[2px] flex items-center"
                           />
                         </div>
                       </div>

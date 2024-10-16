@@ -1,5 +1,4 @@
 import { Button, Modal, TextInput } from "@mantine/core";
-import { IconUsers, IconUserCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { IModelUser } from "@/models/ModelUser";
@@ -8,6 +7,9 @@ import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { getUserName, showNotifications } from "@/helpers/functions/function";
 import CompoManageIns from "@/components/CompoManageIns";
 import { updateAdmin } from "@/services/user/user.service";
+import userCicle from "@/assets/icons/userCircle.svg?react";
+import users from "@/assets/icons/users.svg?react";
+import Icon from "@/components/Icon";
 
 type Props = {
   opened: boolean;
@@ -77,7 +79,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
         {/* Added Admin */}
         <div className="w-full  flex flex-col bg-white border-secondary border-[1px]  rounded-md">
           <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
-            <IconUsers /> Added Admin
+            <Icon IconComponent={users} /> Added Admin
           </div>
           {/* Show List Of Admin */}
           <div className="flex flex-col gap-2 w-full h-[400px]   p-4 py-3  overflow-y-hidden">
@@ -99,10 +101,9 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                   className="w-full items-center last:border-none border-b-[1px] justify-between  p-3  flex"
                 >
                   <div className="gap-3 flex items-center">
-                    <IconUserCircle
-                      size={32}
-                      className=" -translate-x-1"
-                      stroke={1}
+                    <Icon
+                      IconComponent={userCicle}
+                      className=" size-8 stroke-1 -translate-x-1"
                     />
                     <div className="flex flex-col">
                       <p className="font-semibold text-[14px] text-tertiary">

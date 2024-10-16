@@ -5,13 +5,13 @@ import Icon from "./Icon";
 import UserProfileIcon from "@/assets/icons/profile/userProfile.svg?react";
 import AdminProfileIcon from "@/assets/icons/profile/adminProfile.svg?react";
 import SAdminProfileIcon from "@/assets/icons/profile/s.AdminProfile.svg?react";
-import { IconChevronRight } from "@tabler/icons-react";
-import { IconUserScreen } from "@tabler/icons-react";
-import { IconStatusChange } from "@tabler/icons-react";
-import { IconAdjustmentsHorizontal } from "@tabler/icons-react";
-import { IconLogout } from "@tabler/icons-react";
+import logout from "@/assets/icons/logout.svg?react";
+import chevronRight from "@/assets/icons/chevronRight.svg?react";
 import SupremeIcon from "@/assets/icons/supremeAdmin.svg?react";
 import CourseIcon from "@/assets/icons/course.svg?react";
+import userScreen from "@/assets/icons/userScreen.svg?react";
+import adjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
+import statusChange from "@/assets/icons/statusChange.svg?react";
 import SOIcon from "@/assets/icons/SO.svg?react";
 import TQFIcon from "@/assets/icons/TQF.svg?react";
 import AdminIcon from "@/assets/icons/admin.svg?react";
@@ -166,7 +166,10 @@ export default function Profile() {
               </Menu.Item> */}
               <Menu.Item>
                 <div className="flex items-center gap-2">
-                  <IconUserScreen className="size-5" stroke={1.5} />
+                  <Icon
+                    IconComponent={userScreen}
+                    className=" stroke-[2px] size-5"
+                  />
                   <span>Instructor view</span>
                 </div>
               </Menu.Item>
@@ -175,7 +178,10 @@ export default function Profile() {
           )}
           <Menu.Item onClick={() => navigate(ROUTE_PATH.SELECTED_DEPARTMENT)}>
             <div className="flex items-center gap-2">
-              <IconStatusChange className="size-5" stroke={1.5} />
+              <Icon
+                IconComponent={statusChange}
+                className="size-5 stroke-[2px]"
+              />
               <span>Department</span>
             </div>
           </Menu.Item>
@@ -192,13 +198,16 @@ export default function Profile() {
                 <Menu.Item>
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex gap-2 items-center">
-                      <IconAdjustmentsHorizontal
-                        className="size-5"
-                        stroke={1.5}
+                      <Icon
+                        IconComponent={adjustmentsHorizontal}
+                        className="size-5 stroke-[2px]"
                       />
                       <span>Management</span>
                     </div>
-                    <IconChevronRight className="size-5" stroke={1.5} />
+                    <Icon
+                      IconComponent={chevronRight}
+                      className="size-4 stroke-[2px]"
+                    />
                   </div>
                 </Menu.Item>
               </Menu.Target>
@@ -272,7 +281,10 @@ export default function Profile() {
             onClick={Logout}
           >
             <div className="flex items-center gap-2">
-              <IconLogout className="size-5" stroke={1.5} color="#FF4747" />
+              <Icon
+                IconComponent={logout}
+                className="size-5 stroke-[2px] stroke-[#ff4747]"
+              />
               <span>Log out</span>
             </div>
           </Menu.Item>

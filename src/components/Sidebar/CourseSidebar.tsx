@@ -8,16 +8,14 @@ import {
 import { Alert, Button, Menu } from "@mantine/core";
 import store, { useAppDispatch, useAppSelector } from "@/store";
 import { RxDashboard } from "react-icons/rx";
-import {
-  IconChevronLeft,
-  IconLogout,
-  IconChevronRight,
-  IconExclamationCircle,
-} from "@tabler/icons-react";
 import Icon from "@/components/Icon";
 import { ROUTE_PATH } from "@/helpers/constants/route";
+import logout from "@/assets/icons/logout.svg?react";
 import TQF3 from "@/assets/icons/TQF3.svg?react";
 import TQF5 from "@/assets/icons/TQF5.svg?react";
+import chevronLeft from "@/assets/icons/chevronLeft.svg?react";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import chevronRight from "@/assets/icons/chevronRight.svg?react";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName, sortData } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
@@ -165,18 +163,18 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               variant="light"
               color="red"
               title={`You have unsaved changes. If you leave now, these changes will be lost.`}
-              icon={<IconExclamationCircle />}
-              classNames={{ icon: "size-6" }}
+              icon={<Icon IconComponent={exclamationCircle} />}
+            classNames={{ icon: "size-6" }}
             ></Alert>
           </>
         }
       />
       <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
-          className="hover:underline cursor-pointer font-bold  text-[13px] p-0 flex justify-start"
+          className="hover:underline cursor-pointer font-bold gap-2  text-[13px] p-0 flex justify-start"
           onClick={fetchTqf3}
         >
-          <IconChevronLeft size={20} viewBox="8 0 24 24" />
+          <Icon IconComponent={chevronLeft} className="size-5"  />
           Back to Your Course
         </div>
 
@@ -223,7 +221,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                   rightSection={
                     course?.type == COURSE_TYPE.SEL_TOPIC.en &&
                     uniqTopic.length > 1 && (
-                      <IconChevronRight className="h-5 right-2 absolute  flex  w-5" />
+                      <Icon IconComponent={chevronRight} className="h-5 right-2 absolute  flex  w-5" />
                     )
                   }
                   className={`!w-full !text-[13px]  flex justify-start items-center transition-colors duration-300 focus:border-none group
@@ -285,7 +283,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                   rightSection={
                     course?.type == COURSE_TYPE.SEL_TOPIC.en &&
                     uniqTopic.length > 1 && (
-                      <IconChevronRight className="h-5 right-2 absolute  flex  w-5" />
+                      <Icon IconComponent={chevronRight} className="h-5 right-2 absolute  flex  w-5" />
                     )
                   }
                   className={`!w-full !text-[13px] mb-2 flex justify-start items-center transition-colors duration-300 focus:border-none group
@@ -371,7 +369,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               <p className="text-b2 text-white font-bold">Course Action</p>
               <Button
                 onClick={onClickLeaveCourse}
-                leftSection={<IconLogout className="size-5" stroke={1.5} />}
+                leftSection={<Icon IconComponent={logout} className="size-5 stroke-[2px]" />}
                 className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center transition-colors duration-300 focus:border-none group"
               >
                 <div className="flex flex-col justify-start w-full items-start gap-[7px]">

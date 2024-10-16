@@ -2,16 +2,14 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Alert, Button, Menu, Switch } from "@mantine/core";
-import {
-  IconDots,
-  IconExclamationCircle,
-  IconPencilMinus,
-  IconPlus,
-  IconTrash,
-  IconUpload,
-  IconUsersGroup,
-} from "@tabler/icons-react";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import pencilMinus from "@/assets/icons/pencilMinus.svg?react";
+import upload from "@/assets/icons/upload.svg?react";
+import dots from "@/assets/icons/dots.svg?react";
+import userGroup from "@/assets/icons/usersGroup.svg?react";
+import trash from "@/assets/icons/trash.svg?react";
 import ManageAdminIcon from "@/assets/icons/addCo.svg?react";
+import plus2 from "@/assets/icons/plus2.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { getOneCourse } from "@/services/course/course.service";
 import { editCourse, editSection, removeSection } from "@/store/course";
@@ -186,8 +184,9 @@ export default function Section() {
                   affected.
                 </p>
               }
-              icon={<IconExclamationCircle />}
-              classNames={{ icon: "size-6" }}
+              icon={
+                <Icon IconComponent={exclamationCircle} className="size-6" />
+              }
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
@@ -246,7 +245,9 @@ export default function Section() {
               {activeTerm ? (
                 <Button
                   className="text-center px-4"
-                  leftSection={<IconUpload className="size-4" />}
+                  leftSection={
+                    <Icon IconComponent={upload} className="size-4" />
+                  }
                   onClick={() =>
                     course?.sections.find(
                       ({ assignments }) => assignments?.length
@@ -272,7 +273,9 @@ export default function Section() {
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
                   <Menu trigger="click" position="bottom-end">
                     <Menu.Target>
-                      <IconDots />
+                      <div>
+                        <Icon IconComponent={dots} />
+                      </div>
                     </Menu.Target>
                     <Menu.Dropdown
                       className="rounded-md translate-y-1 backdrop-blur-xl bg-white "
@@ -288,7 +291,10 @@ export default function Section() {
                         }}
                       >
                         <div className="flex items-center gap-2">
-                          <IconPlus stroke={2} className="h-4 w-4" />
+                          <Icon
+                            IconComponent={plus2}
+                            className="stroke-2 h-4 w-4"
+                          />
                           <span>Add section</span>
                         </div>
                       </Menu.Item>
@@ -320,7 +326,10 @@ export default function Section() {
                         className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[210px]"
                       >
                         <div className="flex items-center  gap-2">
-                          <IconUsersGroup className="h-4 w-4 " />
+                          <Icon
+                            IconComponent={userGroup}
+                            className="h-4 w-4 "
+                          />
                           <span>Student list {course?.courseNo}</span>
                         </div>
                       </Menu.Item>
@@ -360,13 +369,18 @@ export default function Section() {
                           <Menu
                             trigger="click"
                             position="bottom-end"
-                            offset={2}
+                            offset={30}
                           >
                             <Menu.Target>
-                              <IconDots className="absolute top-2 right-2 rounded-full hover:bg-gray-300" />
+                              <div>
+                                <Icon
+                                  IconComponent={dots}
+                                  className="absolute top-2 right-2 rounded-full hover:bg-gray-300"
+                                />
+                              </div>
                             </Menu.Target>
                             <Menu.Dropdown
-                              className="rounded-md backdrop-blur-xl bg-white/70 "
+                              className="rounded-md -translate-x-2 backdrop-blur-xl bg-white/70 "
                               style={{
                                 boxShadow:
                                   "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -394,9 +408,9 @@ export default function Section() {
                                 }}
                               >
                                 <div className="flex items-center gap-2">
-                                  <IconPencilMinus
-                                    stroke={1.5}
-                                    className="h-4 w-4"
+                                  <Icon
+                                    IconComponent={pencilMinus}
+                                    className="h-4 w-4 stroke-2"
                                   />
                                   <span>Edit Section</span>
                                 </div>
@@ -416,7 +430,10 @@ export default function Section() {
                                 }}
                               >
                                 <div className="flex items-center gap-2">
-                                  <IconTrash className="h-4 w-4" stroke={1.5} />
+                                  <Icon
+                                    IconComponent={trash}
+                                    className="h-4 w-4 stroke-2"
+                                  />
                                   <span>Delete Section</span>
                                 </div>
                               </Menu.Item>

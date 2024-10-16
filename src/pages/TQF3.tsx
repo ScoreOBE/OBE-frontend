@@ -9,6 +9,7 @@ import {
   Tabs,
   Tooltip,
 } from "@mantine/core";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import dupTQF from "@/assets/icons/dupTQF.svg?react";
 import Icon from "@/components/Icon";
 import { useParams, useSearchParams } from "react-router-dom";
@@ -20,7 +21,6 @@ import Part4TQF3 from "@/components/TQF3/Part4TQF3";
 import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
 import Part7TQF3 from "@/components/TQF3/Part7TQF3";
-import { IconExclamationCircle } from "@tabler/icons-react";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { isEmpty, isEqual } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
@@ -444,8 +444,8 @@ export default function TQF3() {
             variant="light"
             color="red"
             title="After reusing TQF 3, please remember to double-check and save the data for all 6 parts of the course you selected"
-            icon={<IconExclamationCircle />}
-            classNames={{ icon: "size-6" }}
+           icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
+            
           ></Alert>
           <Select
             rightSectionPointerEvents="all"

@@ -1,8 +1,6 @@
 import { notifications } from "@mantine/notifications";
 import { NOTI_TYPE } from "../constants/enum";
 import { IModelUser } from "@/models/ModelUser";
-import { IconX, IconCheck } from "@tabler/icons-react";
-import React from "react";
 import { isEmpty } from "lodash";
 import moment from "moment";
 
@@ -95,12 +93,12 @@ export const showNotifications = (
     case NOTI_TYPE.SUCCESS:
       // className = "bg-green-500 bg-opacity-50 rounded-md";
       color = "green";
-      icon = React.createElement(IconCheck);
+      // icon = React.createElement(IconCheck);
       break;
     case NOTI_TYPE.ERROR:
       // className = "bg-red-500 bg-opacity-75 rounded-md";
       color = "red";
-      icon = React.createElement(IconX);
+      // icon = React.createElement(IconX);
       break;
     default:
       break;

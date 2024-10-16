@@ -1,6 +1,6 @@
 import { Checkbox, Button, Alert, Table } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconCheckbox } from "@tabler/icons-react";
+import checkbox from "@/assets/icons/checkbox.svg?react";
 import Icon from "../Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import DrawerPLOdes from "@/components/DrawerPLO";
@@ -113,7 +113,7 @@ export default function Part7TQF3({ setForm }: Props) {
           <div className="w-full">
             <Alert
               radius="md"
-              icon={<IconCheckbox />}
+              icon={<Icon IconComponent={checkbox} />}
               variant="light"
               color="rgba(6, 158, 110, 1)"
               classNames={{

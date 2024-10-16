@@ -1,5 +1,4 @@
-import { Button, Checkbox, Group, Modal } from "@mantine/core";
-import { IconFileExport, IconPdf } from "@tabler/icons-react";
+import { Button, Checkbox, Group, Modal, Progress } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/functions/function";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
@@ -11,6 +10,10 @@ import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
 import { IModelTQF3 } from "@/models/ModelTQF3";
+import noData from "@/assets/image/noData.jpg";
+import pdfIcon from "@/assets/icons/pdf.svg?react";
+import fileExport from "@/assets/icons/fileExport.svg?react";
+import Icon from "@/components/Icon";
 
 type Props = {
   opened: boolean;
@@ -96,7 +99,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
         <div className="flex flex-col gap-2">
           <p>Export TQF3</p>
           <p className="text-[12px] inline-flex items-center text-[#e13b3b] -mt-[6px]">
-            File format: <IconPdf className="ml-1" color="#e13b3b" />
+            File format: <Icon IconComponent={pdfIcon} className="ml-1 stroke-[#e13b3b]"  />
           </p>
         </div>
       }
@@ -110,7 +113,16 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
     >
       <div className="flex flex-col">
         {!tqf3.part1?.updatedAt ? (
-          <div>No part to export</div>
+          <div className="flex flex-col mt-3  items-center  ">
+            <p className=" text-[14px] font-semibold">
+              No parts of TQF3 are available for export.
+            </p>
+            <img
+              className=" z-50  w-[320px] h-[220px] "
+              src={noData}
+              alt="loginImage"
+            />
+          </div>
         ) : (
           <Checkbox.Group
             label="Select part to export"
@@ -149,28 +161,30 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
           </Checkbox.Group>
         )}
       </div>
-      <div className="flex justify-end mt-2 sticky w-full">
-        <Group className="flex w-full gap-2 h-fit items-end justify-end">
-          <Button onClick={onClose} variant="subtle">
-            Cancel
-          </Button>
-          <Button
-            loading={loading}
-            rightSection={
-              <IconFileExport
-                color={!tqf3.part1?.updatedAt ? "#adb5bd" : "#ffffff"}
-                className="size-5 items-center"
-                stroke={2}
-                size={20}
-              />
-            }
-            onClick={generatePDF}
-            disabled={!tqf3.part1?.updatedAt}
-          >
-            Export TQF3
-          </Button>
-        </Group>
-      </div>
+      {tqf3.part1?.updatedAt && (
+        <div className="flex justify-end mt-4 sticky w-full">
+          <Group className="flex w-full gap-2 h-fit items-end justify-end">
+            <Button onClick={onClose} variant="subtle">
+              Cancel
+            </Button>
+            <Button
+              loading={loading}
+              rightSection={
+                <Icon
+                  IconComponent={fileExport}
+                  className={` ${
+                    !tqf3.part1?.updatedAt ? "text-[#adb5bd]" : "text-[#ffffff]"
+                  } stroke-[2px] size-5 items-center`}
+                />
+              }
+              onClick={generatePDF}
+              disabled={!tqf3.part1?.updatedAt}
+            >
+              Export TQF3
+            </Button>
+          </Group>
+        </div>
+      )}
     </Modal>
   );
 }

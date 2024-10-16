@@ -12,7 +12,7 @@ import {
   NumberInput,
   Button,
 } from "@mantine/core";
-import { IconTrash } from "@tabler/icons-react";
+import trash from "@/assets/icons/trash.svg?react";
 import { useForm } from "@mantine/form";
 import { cloneDeep, isEqual } from "lodash";
 import { useEffect, useState } from "react";
@@ -278,7 +278,7 @@ export default function Part1TQF3({ setForm }: Props) {
                   color="#ff4747"
                   onClick={() => form.removeListItem("instructors", index)}
                 >
-                  <IconTrash size={18} stroke={1.5} />
+                  <Icon IconComponent={trash} className=" stroke-[2px] size-5"  />
                 </Button>
               )}
             </div>

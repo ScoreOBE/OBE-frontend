@@ -1,12 +1,10 @@
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { Checkbox, Textarea, Button, Group, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import {
-  IconEdit,
-  IconExclamationCircle,
-  IconTrash,
-} from "@tabler/icons-react";
 import AddIcon from "@/assets/icons/plus.svg?react";
+import edit from "@/assets/icons/edit.svg?react";
+import trash from "@/assets/icons/trash.svg?react";
+import exclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import Icon from "../Icon";
 import { useEffect, useState } from "react";
 import ModalManageTopic, {
@@ -221,8 +219,7 @@ export default function Part6TQF3({ setForm }: Props) {
                   <br /> it will be permanently deleted from this course.
                 </p>
               }
-              icon={<IconExclamationCircle />}
-              classNames={{ icon: "size-6" }}
+             icon={<Icon IconComponent={exclamationCircle} className="size-6" />}
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">Topic Description</p>
@@ -393,7 +390,7 @@ export default function Part6TQF3({ setForm }: Props) {
                               setOpenModalEditSelectTopic(true);
                             }}
                           >
-                            <IconEdit className="size-4" stroke={1.5} />
+                            <Icon IconComponent={edit} className="size-4 stroke-2"  />
                           </div>
                           <div
                             className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
@@ -402,7 +399,7 @@ export default function Part6TQF3({ setForm }: Props) {
                               setOpenPopupDelAddTopic(true);
                             }}
                           >
-                            <IconTrash className="size-4" stroke={1.5} />
+                            <Icon IconComponent={trash} className="size-4 stroke-2"  />
                           </div>
                         </div>
                       )}

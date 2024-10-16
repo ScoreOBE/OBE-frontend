@@ -9,15 +9,13 @@ import { isEmpty } from "lodash";
 import { setShowSidebar } from "@/store/showSidebar";
 import lockIcon from "@/assets/icons/lockIcon.svg?react";
 import refresh from "@/assets/icons/refresh.svg?react";
+import chevronRight from "@/assets/icons/chevronRight.svg?react";
+import chevronLeft from "@/assets/icons/chevronLeft.svg?react";
+import plus2 from "@/assets/icons/plus2.svg?react";
+import share2 from "@/assets/icons/share2.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
 
 import Icon from "@/components/Icon";
-import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconPlus,
-  IconShare2,
-} from "@tabler/icons-react";
 
 export default function Login() {
   const user = useAppSelector((state) => state.user);
@@ -69,8 +67,8 @@ export default function Login() {
                 <div className=" rounded-full w-[12px] h-[12px] bg-[#61C554]"></div>
               </div>
               <div className="flex flex-row gap-2">
-                <IconChevronLeft className="text-[#8c8c8c] size-[22px]"></IconChevronLeft>
-                <IconChevronRight className="text-[#8c8c8c] size-[22px]"></IconChevronRight>
+                <Icon IconComponent={chevronLeft} className="text-[#8c8c8c] size-[22px]"/>
+                <Icon IconComponent={chevronRight} className="text-[#8c8c8c] size-[22px]"/>
               </div>
             </div>
             <div className="flex w-[30%] flex-row gap-2">
@@ -86,8 +84,8 @@ export default function Login() {
               </div>
             </div>
             <div className="flex w-[35%] justify-end items-center flex-row gap-2">
-              <IconShare2 className="text-[#8c8c8c] size-[20px]" />
-              <IconPlus className="text-[#8c8c8c] size-[20px]" />
+              <Icon IconComponent={share2} className="text-[#8c8c8c] size-[20px]" />
+              <Icon IconComponent={plus2} className="text-[#8c8c8c] size-[20px]" />
             </div>
           </div>
 
