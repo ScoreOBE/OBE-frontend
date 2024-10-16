@@ -20,7 +20,6 @@ import {
   IconTrash,
   IconGripVertical,
 } from "@tabler/icons-react";
-
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { useAppSelector } from "@/store";

@@ -4,6 +4,14 @@ import svgr from "vite-plugin-svgr";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  server: { port: 3000 },
+  server: { host: true, port: 3000 },
+  preview: { host: true, port: 3000 },
   plugins: [react(), svgr(), tsconfigPaths()],
+  optimizeDeps: {
+    include: ["@tabler/icons-react"],
+  },
+  build: {
+    target: "esnext",
+    sourcemap: false,
+  },
 });
