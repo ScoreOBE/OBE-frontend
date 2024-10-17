@@ -36,9 +36,9 @@ export const onUploadFile = async (
       const fullScore = resultsData.shift();
       const description = resultsData.shift();
 
-      // console.log(fullScore);
-      // console.log(description);
-      // console.log(resultsData);
+      console.log(fullScore);
+      console.log(description);
+      console.log(resultsData);
 
       // Validate the studentId
       const errorStudentIdList: string[] = [];
@@ -71,6 +71,90 @@ export const onUploadFile = async (
         setErrorPoint(errorPointList);
         setOpenModalUploadError(true);
       }
+    }
+  }
+};
+
+export const gradescopeFile = async (
+  files: FileWithPath[],
+  setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
+  setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>,
+  setErrorPoint: React.Dispatch<React.SetStateAction<string[]>>
+) => {
+  const file = files[0];
+  if (file) {
+    const dataExcel = await file.arrayBuffer();
+    const workbook = XLSX.read(dataExcel);
+    for (const sheet of workbook.SheetNames) {
+      const worksheet = workbook.Sheets[sheet];
+      const resultsData: any[] = XLSX.utils.sheet_to_json(worksheet, {
+        // defval: "",
+        // header: 1,
+        // raw: true
+      });
+
+      const assignmentName = sheet;
+
+      // Validate the studentId
+      const errorStudentIdList: string[] = [];
+      resultsData.forEach(({ SID }, index) => {
+        if (SID && (!isNumeric(SID) || SID.toString().length !== 9)) {
+          const row = index + 2;
+          const column = getColumnAlphabet(2);
+          errorStudentIdList.push(`${column}${row}`);
+        }
+      });
+
+      // Validate the "point" field
+      const errorPointList: string[] = [];
+      const scoreDataArray: any[] = [];
+      const fullScoreDataArray: (string | number | null)[] = [];
+      const formattedResults: string[] = [];
+      resultsData.forEach((data, i) => {
+        scoreDataArray.push({
+          studentId: data.SID,
+          firstName: data["First Name"],
+          lastName: data["Last Name"],
+          email: data.Email,
+          assignments: {},
+        });
+        Object.keys(data)
+          .slice(12)
+          .map((key, j) => {
+            if (data[key] && !isNumeric(data[key])) {
+              const row = i + 2;
+              const column = getColumnAlphabet(j + 12);
+              errorPointList.push(`${column}${row}`);
+            }
+            const formatted = key.split(" ");
+            formatted.pop();
+            const fullScore = formatted.pop()?.slice(1);
+            const assignmentNo = formatted.join(" ");
+            fullScoreDataArray.push(parseFloat(fullScore!));
+            formattedResults.push(assignmentNo);
+            scoreDataArray[i].assignments[assignmentNo] = data[key];
+          });
+      });
+
+      if (errorStudentIdList.length || errorPointList.length) {
+        files = [];
+        setErrorStudentId(errorStudentIdList);
+        setErrorPoint(errorPointList);
+        setOpenModalUploadError(true);
+      }
+
+      const data = formattedResults.map((question, index) => {
+        return {
+          no: question,
+          fullScore: fullScoreDataArray[index],
+        };
+      });
+
+      console.log({
+        name: assignmentName,
+        assignments: data,
+        scores: scoreDataArray,
+      });
     }
   }
 };

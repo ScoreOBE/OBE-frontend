@@ -15,7 +15,11 @@ import { IModelCourse } from "@/models/ModelCourse";
 import gradescope from "@/assets/image/gradescope.png";
 import ModalStudentList from "./ModalStudentList";
 import ModalTemplateGuide from "./ModalTemplateGuide";
-import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
+import {
+  onUploadFile,
+  onRejectFile,
+  gradescopeFile,
+} from "@/helpers/functions/uploadFile";
 
 type Props = {
   opened: boolean;
@@ -225,14 +229,21 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               </Alert>
 
               <Dropzone
-                onDrop={(files) =>
+                onDrop={(files) => {
                   onUploadFile(
                     files,
                     setOpenModalUploadError,
                     setErrorStudentId,
                     setErrorPoint
-                  )
-                }
+                  );
+
+                  gradescopeFile(
+                    files,
+                    setOpenModalUploadError,
+                    setErrorStudentId,
+                    setErrorPoint
+                  );
+                }}
                 onReject={(files) => onRejectFile(files)}
                 maxFiles={1}
                 maxSize={5 * 1024 ** 2}
