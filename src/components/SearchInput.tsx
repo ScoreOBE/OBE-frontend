@@ -14,7 +14,7 @@ export function SearchInput({ onSearch, placeholder }: Props) {
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const dispatch = useAppDispatch();
-  
+
   // useEffect(() => {
   //   setIsFocused(false);
   //   setSearchValue("");
@@ -49,7 +49,9 @@ export function SearchInput({ onSearch, placeholder }: Props) {
         rightSection={
           !!searchValue.length && (
             <Tooltip className="text-b3" label="Reset">
-              <CloseButton size="sm" onClick={reset} />
+              <div className="border-none">
+                <CloseButton size="sm" onClick={reset} />
+              </div>
             </Tooltip>
           )
         }

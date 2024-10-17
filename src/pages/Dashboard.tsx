@@ -162,7 +162,12 @@ export default function Dashboard() {
                   affected.
                 </p>
               }
-             icon={<Icon IconComponent={IconExclamationCircle} className="size-6" />}
+              icon={
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="size-6"
+                />
+              }
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
@@ -262,10 +267,11 @@ export default function Dashboard() {
                 }}
                 disabled={!uploadCourse}
                 rightSection={
-                  <Icon IconComponent={IconArrowRight}
-                   
-                    className={`${!uploadCourse ? 'text-[#BCC3CA]' : 'text-[#ffffff]' } stroke-2  size-5 items-center`}
-                   
+                  <Icon
+                    IconComponent={IconArrowRight}
+                    className={`${
+                      !uploadCourse ? "text-[#BCC3CA]" : "text-[#ffffff]"
+                    } stroke-2  size-5 items-center`}
                   />
                 }
               >
@@ -337,7 +343,9 @@ export default function Dashboard() {
               </Button>
               <Button
                 className="text-center px-4"
-                leftSection={<Icon IconComponent={IconUpload} className="size-4" />}
+                leftSection={
+                  <Icon IconComponent={IconUpload} className="size-4" />
+                }
                 onClick={() => setOpenModalSelectCourse(true)}
               >
                 Upload score
@@ -370,17 +378,6 @@ export default function Dashboard() {
                 </p>
 
                 {term?.isActive && !course.search.length && (
-                  // <Button
-                  //   className="!w-28 px-2"
-                  //   onClick={() => setOpenAddModal(true)}
-                  // >
-                  //   <IconPlus
-                  //     className="h-5 w-5 mr-1"
-                  //     stroke={1.5}
-                  //     color="#ffffff"
-                  //   />
-                  //   Add course
-                  // </Button>
                   <Button
                     className="text-center px-4"
                     onClick={() => setOpenAddModal(true)}
@@ -450,7 +447,12 @@ export default function Dashboard() {
                               offset={-15}
                             >
                               <Menu.Target>
-                                <div><Icon IconComponent={IconDots} className="absolute top-2 right-2 rounded-full hover:bg-gray-300" /></div>
+                                <div>
+                                  <Icon
+                                    IconComponent={IconDots}
+                                    className="absolute top-2 right-2 rounded-full hover:bg-gray-300"
+                                  />
+                                </div>
                               </Menu.Target>
                               <Menu.Dropdown
                                 className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -471,9 +473,9 @@ export default function Dashboard() {
                                   className="text-[#3E3E3E] font-semibold  text-b3 h-7 w-[180px]"
                                 >
                                   <div className="flex items-center gap-2">
-                                    <Icon IconComponent={IconPencilMinus}
-                                 
-                                      className="h-4 w-4 stroke-[2px]"
+                                    <Icon
+                                      IconComponent={IconPencilMinus}
+                                      className="size-4 stroke-[2px]"
                                     />
                                     <span>Edit Course</span>
                                   </div>
@@ -486,9 +488,9 @@ export default function Dashboard() {
                                   }}
                                 >
                                   <div className="flex items-center gap-2">
-                                    <Icon IconComponent={IconTrash}
-                                      className="h-4 w-4 stroke-[2px]"
-                                    
+                                    <Icon
+                                      IconComponent={IconTrash}
+                                      className="size-4 stroke-[2px]"
                                     />
                                     <span>Delete Course</span>
                                   </div>

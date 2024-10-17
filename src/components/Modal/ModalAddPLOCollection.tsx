@@ -611,11 +611,7 @@ export default function ModalAddPLOCollection({
                                           >
                                             <Icon
                                               IconComponent={IconGripVertical}
-                                              style={{
-                                                width: rem(20),
-                                                height: rem(20),
-                                              }}
-                                              className="stroke-[2px]"
+                                              className="stroke-[2px] size-5"
                                             />
                                           </div>
                                         </div>

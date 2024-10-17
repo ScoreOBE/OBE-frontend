@@ -442,7 +442,9 @@ export default function TQF3() {
             variant="light"
             color="red"
             title="After reusing TQF 3, please remember to double-check and save the data for all 6 parts of the course you selected"
-            icon={<Icon IconComponent={IconExclamationCircle} className="size-6" />}
+            icon={
+              <Icon IconComponent={IconExclamationCircle} className="size-6" />
+            }
           ></Alert>
           <Select
             rightSectionPointerEvents="all"

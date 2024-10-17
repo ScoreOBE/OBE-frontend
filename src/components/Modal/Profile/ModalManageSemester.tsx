@@ -19,7 +19,7 @@ import { isEqual } from "lodash";
 import Icon from "@/components/Icon";
 import IconCalendar from "@/assets/icons/calendar.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import IconPlus from "@/assets/icons/plus2.svg?react";
+import IconPlus2 from "@/assets/icons/plus2.svg?react";
 
 type Props = {
   opened: boolean;
@@ -267,7 +267,9 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             </div>
           </div>
           <Button
-            leftSection={<Icon IconComponent={IconPlus} className="h-5 w-5 -mr-1 stroke-[2px]" />}
+            leftSection={
+              <Icon IconComponent={IconPlus2} className="size-5 stroke-[2px]" />
+            }
             className="!rounded-s-[4px] font-semibold  min-w-fit !h-[36px] !w-full "
             onClick={onClickAdd}
           >
@@ -291,8 +293,9 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           variant="light"
           color="red"
           title={`After you activate semester ${activateSemester?.semester}/${activateSemester?.year}, semester ${academicYear?.semester}/${academicYear?.year} cannot be reactivated. This means that instructor can't make any changes to them courses for that semester.  `}
-         icon={<Icon IconComponent={IconExclamationCircle} className="size-6" />}
-        
+          icon={
+            <Icon IconComponent={IconExclamationCircle} className="size-6" />
+          }
           className="mb-5"
         ></Alert>
         <TextInput

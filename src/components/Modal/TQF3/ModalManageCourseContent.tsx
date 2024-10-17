@@ -220,9 +220,8 @@ export default function ModalManageTopic({
                 rightSection={
                   <div className="flex gap-2 items-center mr-16">
                     <div
-                      className="p-1 rounded-md hover:bg-bgTableHeader"
+                      className="p-1 rounded-md hover:bg-bgTableHeader cursor-pointer"
                       onClick={() => handlersLecRef.current?.decrement()}
-                      style={{ cursor: "pointer" }}
                     >
                       <Icon
                         IconComponent={IconMinus}
@@ -231,9 +230,8 @@ export default function ModalManageTopic({
                     </div>
                     <div className="h-8 border"></div>
                     <div
-                      className=" p-1 rounded-md hover:bg-bgTableHeader"
+                      className=" p-1 rounded-md hover:bg-bgTableHeader cursor-pointer"
                       onClick={() => handlersLecRef.current?.increment()}
-                      style={{ cursor: "pointer" }}
                     >
                       <Icon
                         IconComponent={IconPlus2}
@@ -266,9 +264,8 @@ export default function ModalManageTopic({
                 rightSection={
                   <div className="flex gap-2 items-center mr-16">
                     <div
-                      className="p-1 rounded-md hover:bg-bgTableHeader"
+                      className="p-1 rounded-md hover:bg-bgTableHeader cursor-pointer"
                       onClick={() => handlersLabRef.current?.decrement()}
-                      style={{ cursor: "pointer" }}
                     >
                       <Icon
                         IconComponent={IconMinus}
@@ -277,9 +274,8 @@ export default function ModalManageTopic({
                     </div>
                     <div className="h-8 border"></div>
                     <div
-                      className=" p-1 rounded-md hover:bg-bgTableHeader"
+                      className=" p-1 rounded-md hover:bg-bgTableHeader cursor-pointer"
                       onClick={() => handlersLabRef.current?.increment()}
-                      style={{ cursor: "pointer" }}
                     >
                       <Icon
                         IconComponent={IconPlus2}
@@ -317,10 +313,7 @@ export default function ModalManageTopic({
             >
               <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
-                  <Icon
-                    IconComponent={IconList2}
-                    style={{ width: rem(20), height: rem(20) }}
-                  />{" "}
+                  <Icon IconComponent={IconList2} className="size-5" />
                   <span className="flex flex-row items-center gap-2">
                     List Course Content Added
                   </span>

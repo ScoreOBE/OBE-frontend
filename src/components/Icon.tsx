@@ -21,9 +21,11 @@ class Icon extends React.Component<Props, any> {
       <div
         className="flex justify-center items-center h-full"
         onClick={onClick}
-        style={style}
       >
-        <IconComponent className={`${className} ${outlined && "outline"}`} />
+        <IconComponent
+          className={`${className} ${outlined && "outline"}`}
+          style={style}
+        />
       </div>
     );
   }

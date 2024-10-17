@@ -216,7 +216,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                     goToPage(ROUTE_PATH.TQF3);
                   }}
                   leftSection={
-                    <Icon IconComponent={IconTQF3} className="h-5 w-5" />
+                    <Icon IconComponent={IconTQF3} className="size-5" />
                   }
                   rightSection={
                     course?.type == COURSE_TYPE.SEL_TOPIC.en &&
@@ -281,7 +281,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               <Menu.Target>
                 <Button
                   leftSection={
-                    <Icon IconComponent={IconTQF5} className="h-5 w-5" />
+                    <Icon IconComponent={IconTQF5} className="size-5" />
                   }
                   rightSection={
                     course?.type == COURSE_TYPE.SEL_TOPIC.en &&

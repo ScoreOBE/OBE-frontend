@@ -293,7 +293,7 @@ export default function Section() {
                         <div className="flex items-center gap-2">
                           <Icon
                             IconComponent={IconPlus2}
-                            className="stroke-2 h-4 w-4"
+                            className="stroke-2 size-4"
                           />
                           <span>Add section</span>
                         </div>
@@ -314,7 +314,7 @@ export default function Section() {
                       >
                         <div className="flex items-center gap-2">
                           <Icon
-                            className="h-4 w-4"
+                            className="size-4"
                             IconComponent={IconManageAdmin}
                           />
                           <span>Manage Co-Instructor</span>
@@ -328,7 +328,7 @@ export default function Section() {
                         <div className="flex items-center  gap-2">
                           <Icon
                             IconComponent={IconUserGroup}
-                            className="h-4 w-4 "
+                            className="size-4"
                           />
                           <span>Student list {course?.courseNo}</span>
                         </div>
@@ -338,10 +338,7 @@ export default function Section() {
                         className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-[12px] h-7 "
                       >
                         <div className="flex items-center  gap-2">
-                          <Icon
-                            className="h-4 w-4 "
-                            IconComponent={IconExcel}
-                          />
+                          <Icon className="size-4" IconComponent={IconExcel} />
                           <span>Export score</span>
                         </div>
                       </Menu.Item>
@@ -410,7 +407,7 @@ export default function Section() {
                                 <div className="flex items-center gap-2">
                                   <Icon
                                     IconComponent={IconPencilMinus}
-                                    className="h-4 w-4 stroke-2"
+                                    className="size-4 stroke-2"
                                   />
                                   <span>Edit Section</span>
                                 </div>
@@ -432,7 +429,7 @@ export default function Section() {
                                 <div className="flex items-center gap-2">
                                   <Icon
                                     IconComponent={IconTrash}
-                                    className="h-4 w-4 stroke-2"
+                                    className="size-4 stroke-2"
                                   />
                                   <span>Delete Section</span>
                                 </div>

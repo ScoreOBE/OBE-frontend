@@ -91,7 +91,10 @@ export default function ModalUploadStudentList({
                     <span className="text-secondary font-semibold hover:text-[#394cc9] hover:underline inline-flex items-center">
                       Reg CMU
                       <span className="ml-1">
-                        <Icon IconComponent={IconExternalLink} className="size-4" />
+                        <Icon
+                          IconComponent={IconExternalLink}
+                          className="size-4"
+                        />
                       </span>
                     </span>
                   </a>
@@ -121,22 +124,18 @@ export default function ModalUploadStudentList({
                 <Icon
                   IconComponent={IconUpload}
                   style={{
-                    width: rem(52),
-                    height: rem(52),
                     color: "var(--mantine-color-blue-6)",
                   }}
-                  className=" stroke-[2px]"
+                  className=" stroke-[2px] size-16"
                 />
               </Dropzone.Accept>
               <Dropzone.Reject>
                 <Icon
                   IconComponent={IconX}
                   style={{
-                    width: rem(52),
-                    height: rem(52),
                     color: "var(--mantine-color-red-6)",
                   }}
-                  className=" stroke-[2px]"
+                  className=" stroke-[2px] size-16"
                 />
               </Dropzone.Reject>
 

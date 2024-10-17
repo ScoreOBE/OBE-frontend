@@ -232,7 +232,10 @@ export default function Assignment() {
           </Button>
           <Button
             rightSection={
-              <Icon IconComponent={IconArrowRight} className="size-8 stroke-2" />
+              <Icon
+                IconComponent={IconArrowRight}
+                className="size-8 stroke-2"
+              />
             }
           >
             Next
@@ -265,7 +268,7 @@ export default function Assignment() {
                   <Button
                     color="#13a9a1"
                     leftSection={
-                      <Icon IconComponent={IconEyePublish} className="h-5 w-5" />
+                      <Icon IconComponent={IconEyePublish} className="size-5" />
                     }
                     className="px-3"
                   >
@@ -344,17 +347,22 @@ export default function Assignment() {
                         {/* <Icon IconComponent={unPublish} className="text-default" /> */}
                       </Table.Td>
                       <Table.Td className="text-center flex  items-center justify-center">
-                        <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
+                        <div
+                          className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                          onClick={(event) => event.stopPropagation()}
+                        >
                           <Menu
                             trigger="click"
                             position="bottom-end"
                             offset={2}
                           >
                             <Menu.Target>
-                              <Icon
-                                IconComponent={IconDots}
-                                className=" rounded-full w-fit hover:bg-gray-300"
-                              />
+                              <div>
+                                <Icon
+                                  IconComponent={IconDots}
+                                  className=" rounded-full w-fit hover:bg-gray-300"
+                                />
+                              </div>
                             </Menu.Target>
                             <Menu.Dropdown
                               className="rounded-md backdrop-blur-xl bg-white/70 "
@@ -367,7 +375,7 @@ export default function Assignment() {
                                 <div className="flex items-center gap-2">
                                   <Icon
                                     IconComponent={IconPencilMinus}
-                                    className="h-4 w-4 stroke-[2px]"
+                                    className="size-4 stroke-[2px]"
                                   />
                                   <span>Edit Assignment Name</span>
                                 </div>
@@ -376,7 +384,7 @@ export default function Assignment() {
                                 <div className="flex items-center gap-2">
                                   <Icon
                                     IconComponent={IconTrash}
-                                    className="h-4 w-4 stroke-[2px]"
+                                    className="size-4 stroke-[2px]"
                                   />
                                   <span>Delete Assignment</span>
                                 </div>
