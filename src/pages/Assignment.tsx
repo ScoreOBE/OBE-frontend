@@ -1,6 +1,15 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Alert, Button, Menu, Modal, Pill, Table } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Chip,
+  Group,
+  Menu,
+  Modal,
+  Pill,
+  Table,
+} from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEyePublish from "@/assets/icons/eyePublish.svg?react";
 import IconPublish from "@/assets/icons/publish.svg?react";
@@ -25,6 +34,7 @@ import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 
 export default function Assignment() {
   const { courseNo, sectionNo } = useParams();
@@ -53,11 +63,13 @@ export default function Assignment() {
     },
     { title: `Assignment Section ${getSectionNo(sectionNo)}` },
   ]);
-  const [openAllPublishModal, setOpenAllPublishModal] = useState(false);
+  const [openPublishScoreModal, setOpenPublishScoreModal] = useState(false);
+  const [openSelectSecModal, setOpenSelectSecModal] = useState(false);
+  const [isPublishAll, setIsPublishAll] = useState(false);
 
   const goToOverall = (name: string) => {
     navigate({
-      pathname: `${path}/${name}/${ROUTE_PATH.OVERALL}`,
+      pathname: `${path}/${name}/${ROUTE_PATH.SCORE}`,
       search: "?" + params.toString(),
     });
   };
@@ -66,17 +78,18 @@ export default function Assignment() {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
   }, []);
-  console.log("assignment");
+  console.log(course);
 
   return (
     <>
+      {/* Select assignment to publish */}
       <Modal
-        opened={openAllPublishModal}
+        opened={openPublishScoreModal}
         closeOnClickOutside={false}
         size="38vw"
         title={
           <div className="flex flex-col gap-2">
-            <p>Publish score all sections</p>
+            <p>Publish score {isPublishAll ? "all" : "each"} sections</p>
             <p className=" text-[12px] text-noData">
               {courseNo} {course?.courseName}
             </p>
@@ -84,23 +97,29 @@ export default function Assignment() {
         }
         transitionProps={{ transition: "pop" }}
         centered
-        onClose={() => setOpenAllPublishModal(false)}
+        onClose={() => setOpenPublishScoreModal(false)}
       >
-        <Alert
-          variant="light"
-          color="blue"
-          title={
-            <p>
-              <span className="font-extrabold underline">All students</span>
-              {` enrolled in this course will be able to see the assignments score you publish.`}
-            </p>
-          }
-          icon={<Icon IconComponent={IconInfo2} />}
-          classNames={{ icon: "size-6" }}
-          className="mb-5"
-        ></Alert>
+        {isPublishAll && (
+          <Alert
+            variant="light"
+            color="blue"
+            title={
+              <p>
+                <span className="font-extrabold underline">All students</span>
+                {` enrolled in this course will be able to see the assignments score you publish.`}
+              </p>
+            }
+            icon={<Icon IconComponent={IconInfo2} />}
+            classNames={{ icon: "size-6" }}
+            className="mb-5"
+          ></Alert>
+        )}
         <div className="-mt-1 gap-2 flex flex-col mb-6">
-          <p className="text-[14px] mb-1 font-semibold text-secondary">
+          <p
+            className={`text-[14px] mb-1 font-semibold text-secondary ${
+              !isPublishAll && "mt-4"
+            }`}
+          >
             Select assignment to publish
           </p>
           <div className=" flex flex-col gap-3">
@@ -225,21 +244,125 @@ export default function Assignment() {
 
         <div className="flex gap-2 justify-end w-full">
           <Button
-            onClick={() => setOpenAllPublishModal(false)}
+            onClick={() => setOpenPublishScoreModal(false)}
             variant="subtle"
           >
             Cancel
           </Button>
+          {!isPublishAll ? (
+            <Button
+              rightSection={
+                <Icon
+                  IconComponent={IconArrowRight}
+                  className="size-5 stroke-2"
+                />
+              }
+              onClick={() => {
+                setOpenPublishScoreModal(false);
+                setOpenSelectSecModal(true);
+              }}
+            >
+              Next
+            </Button>
+          ) : (
+            <Button>Publish</Button>
+          )}
+        </div>
+      </Modal>
+      {/* Select section to publish */}
+      <Modal
+        opened={openSelectSecModal}
+        closeOnClickOutside={false}
+        size="38vw"
+        title={
+          <div className="flex flex-col gap-2">
+            <p>Publish score {isPublishAll ? "all" : "each"} sections</p>
+            <p className=" text-[12px] text-noData">
+              {courseNo} {course?.courseName}
+            </p>
+          </div>
+        }
+        transitionProps={{ transition: "pop" }}
+        centered
+        onClose={() => setOpenSelectSecModal(false)}
+      >
+        <Alert
+          variant="light"
+          color="blue"
+          title={<p>You choose Quiz 1, Quiz 4 and Prelim 2 to publish.</p>}
+          icon={<Icon IconComponent={IconInfo2} />}
+          classNames={{ icon: "size-6" }}
+          className="mb-5"
+        ></Alert>
+
+        <Alert
+          variant="light"
+          color="#D0820C"
+          title={
+            <p className="font-medium">
+              <span className="font-extrabold text-[#D0820C]">
+                Oops! Looks like Quiz 1 and Prelim 2 couldn't find in section
+                801.
+              </span>
+            </p>
+          }
+          icon={<Icon IconComponent={IconExclamationCircle} />}
+          classNames={{ icon: "size-6" }}
+          className="mb-5 -mt-2"
+        ></Alert>
+
+        <div className="-mt-1 gap-2 flex flex-col mb-6">
+          <p className="text-[14px] mb-1 font-semibold text-secondary">
+            Select section to publish
+          </p>
+
+          <div className=" ">
+            <Chip.Group onChange={(event) => {}}>
+              <Group className="flex gap-3">
+                {course?.sections.length! > 1 && (
+                  <Chip
+                    classNames={{
+                      root: "h-8 min-w-[114px] rounded-[10px] text-center justify-center items-center",
+                      label:
+                        "text-[13px] text-default font-semibold translate-y-[3px]",
+                    }}
+                    size="md"
+                  >
+                    All Sections
+                  </Chip>
+                )}
+                <div className="flex gap-3">
+                  {course?.sections.map((sec) => (
+                    <Chip
+                      key={sec.id}
+                      classNames={{
+                        root: "h-8 min-w-[114px]  !rounded-[10px] text-center justify-center items-center",
+                        label:
+                          "text-[13px] text-default font-semibold translate-y-[3px] ",
+                      }}
+                      size="md"
+                    >
+                      Section {sec.sectionNo}
+                    </Chip>
+                  ))}
+                </div>
+              </Group>
+            </Chip.Group>
+          </div>
+        </div>
+
+        <div className="flex gap-2 justify-end w-full">
           <Button
-            rightSection={
-              <Icon
-                IconComponent={IconArrowRight}
-                className="size-8 stroke-2"
-              />
-            }
+            onClick={() => {
+              setOpenSelectSecModal(false);
+              setOpenPublishScoreModal(true);
+            }}
+            variant="subtle"
           >
-            Next
+            Back
           </Button>
+
+          <Button>Publish</Button>
         </div>
       </Modal>
 
@@ -279,7 +402,13 @@ export default function Assignment() {
                   className="!z-50 -translate-y-[3px] translate-x-[5px] bg-white"
                   style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
                 >
-                  <Menu.Item className="text-[#3E3E3E] text-[14px] h-8 w-full ">
+                  <Menu.Item
+                    className="text-[#3E3E3E] text-[14px] h-8 w-full "
+                    onClick={() => {
+                      setIsPublishAll(false);
+                      setOpenPublishScoreModal(true);
+                    }}
+                  >
                     <div className="flex items-center gap-2">
                       <Icon
                         IconComponent={IconPublishEach}
@@ -289,7 +418,10 @@ export default function Assignment() {
                     </div>
                   </Menu.Item>
                   <Menu.Item
-                    onClick={() => setOpenAllPublishModal(true)}
+                    onClick={() => {
+                      setIsPublishAll(true);
+                      setOpenPublishScoreModal(true);
+                    }}
                     className="text-[#3E3E3E] text-[14px] h-8 w-full "
                   >
                     <div className="flex items-center gap-2">
@@ -315,9 +447,13 @@ export default function Assignment() {
                 <Table.Thead>
                   <Table.Tr className="bg-[#e5e7f6]">
                     <Table.Th className="w-60">Name</Table.Th>
-                    <Table.Th>Points</Table.Th>
-                    <Table.Th>Mean</Table.Th>
-                    <Table.Th>Created</Table.Th>
+                    <Table.Th className="w-40 text-end pr-14 !pl-0">
+                      Points
+                    </Table.Th>
+                    <Table.Th className="w-40 text-end pr-20 !pl-0">
+                      Mean
+                    </Table.Th>
+                    <Table.Th className="!pl-12">Created</Table.Th>
                     <Table.Th className="w-40">Student(s)</Table.Th>
                     <Table.Th className="w-40 !px-4 text-center">
                       Published
@@ -326,7 +462,7 @@ export default function Assignment() {
                   </Table.Tr>
                 </Table.Thead>
 
-                <Table.Tbody className="text-default text-b3 ">
+                <Table.Tbody className="text-default text-[13px] ">
                   {Array.from({ length: 12 }).map((_, index) => (
                     <Table.Tr
                       className={`hover:bg-[#F3F3F3] cursor-pointer ${
@@ -335,11 +471,11 @@ export default function Assignment() {
                       onClick={() => goToOverall(`Quiz${index + 1}`)}
                     >
                       <Table.Td>Quiz {index + 1}</Table.Td>
-                      <Table.Td>5.0</Table.Td>
-                      <Table.Td>2.0</Table.Td>
-                      <Table.Td>8 Dec 2023</Table.Td>
+                      <Table.Td className="text-end pr-14 !pl-0">5.0</Table.Td>
+                      <Table.Td className="text-end pr-20 !pl-0">2.0</Table.Td>
+                      <Table.Td className="!pl-12">8 Dec 2023</Table.Td>
                       <Table.Td>25</Table.Td>
-                      <Table.Td className="text-center">
+                      <Table.Td className="text-center !pl-3">
                         <Icon
                           IconComponent={IconPublish}
                           className="text-default"

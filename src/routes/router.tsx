@@ -12,7 +12,7 @@ const Section = lazy(() => import("@/pages/Section"));
 const TQF3 = lazy(() => import("@/pages/TQF3"));
 const Assignment = lazy(() => import("@/pages/Assignment"));
 const Histogram = lazy(() => import("@/pages/Histogram"));
-const Overall = lazy(() => import("@/pages/Score"));
+const Score = lazy(() => import("@/pages/Score"));
 const Students = lazy(() => import("@/pages/Students"));
 const Page404 = lazy(() => import("@/pages/Page404"));
 // const PageError = lazy(() => import("@/pages/PageError"));
@@ -83,10 +83,10 @@ const router = createBrowserRouter([
                     ),
                   },
                   {
-                    path: `:name/${ROUTE_PATH.OVERALL}`,
+                    path: `:name/${ROUTE_PATH.SCORE}`,
                     element: (
                       <Suspense fallback={<Loading />}>
-                        <Overall />
+                        <Score />
                       </Suspense>
                     ),
                   },

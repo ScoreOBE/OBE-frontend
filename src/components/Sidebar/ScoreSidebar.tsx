@@ -11,7 +11,7 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import Icon from "@/components/Icon";
 import IconList from "@/assets/icons/list.svg?react";
 import IconLogout from "@/assets/icons/logout.svg?react";
-import IconHistogram from "@/assets/icons/histogram.svg?react";
+import IconStudent from "@/assets/icons/student.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName } from "@/helpers/functions/function";
@@ -68,11 +68,11 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
         </div>
         <div className="flex flex-col gap-2">
           <Button
-            onClick={() => gotoPage(ROUTE_PATH.OVERALL)}
+            onClick={() => gotoPage(ROUTE_PATH.SCORE)}
             leftSection={<Icon IconComponent={IconList} />}
             className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
-                path.includes(ROUTE_PATH.OVERALL)
+                path.includes(ROUTE_PATH.SCORE)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               }`}
@@ -83,7 +83,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             onClick={() => gotoPage(ROUTE_PATH.STUDENTS)}
             leftSection={
               <Icon
-                IconComponent={IconHistogram}
+                IconComponent={IconStudent}
                 className="pb-1 pl-[2px] size-[22px]"
               />
             }

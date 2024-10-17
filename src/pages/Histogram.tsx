@@ -132,7 +132,7 @@ export default function Histogram() {
                         <p className="font-semibold text-[16px] text-[#777777]">
                           Mean
                         </p>
-                        <p className="font-bold text-[28px] text-secondary">
+                        <p className="font-bold text-[28px] text-default">
                           2.0
                         </p>
                       </div>
@@ -140,7 +140,7 @@ export default function Histogram() {
                         <p className="font-semibold text-[16px] text-[#777777]">
                           SD
                         </p>
-                        <p className="font-bold text-[28px] text-secondary">
+                        <p className="font-bold text-[28px] text-default">
                           2.15
                         </p>
                       </div>
