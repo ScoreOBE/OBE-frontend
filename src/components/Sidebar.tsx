@@ -51,7 +51,7 @@ export default function Sidebar() {
           )
         ) {
           if (
-            [ROUTE_PATH.OVERALL, ROUTE_PATH.STUDENTS].some((route) =>
+            [ROUTE_PATH.SCORE, ROUTE_PATH.STUDENTS].some((route) =>
               path.includes(route)
             )
           ) {

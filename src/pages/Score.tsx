@@ -44,6 +44,7 @@ export default function Overall() {
     },
     { title: `${name}` },
   ]);
+
   const [openAllPublishModal, setOpenAllPublishModal] = useState(false);
 
   const data = [
@@ -83,11 +84,11 @@ export default function Overall() {
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Mean
                   </p>
-                  <p className="font-bold text-[28px] text-secondary">2.0</p>
+                  <p className="font-bold text-[28px] text-default">2.0</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-                  <p className="font-bold text-[28px] text-secondary">2.15</p>
+                  <p className="font-bold text-[28px] text-default">2.15</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
@@ -148,26 +149,23 @@ export default function Overall() {
                   </Table.Tr>
                 </Table.Thead>
               </Table>
-              <Table>
-                <Table.Tbody className="text-default text-b3">
-                  {Array.from({ length: 12 }).map((_, index) => (
-                    <Accordion
-                      key={index}
-                      variant="default"
-                      multiple={false}
-                      className={`hover:bg-[#F3F3F3] ${
-                        index % 2 === 0 ? "bg-[#F8F9FA]" : ""
-                      }`}
-                    >
-                      <Accordion.Item value={`${index + 1}`} key={index}>
+              <Accordion>
+                <Table>
+                  <Table.Tbody className="text-default">
+                    {Array.from({ length: 12 }).map((_, index) => (
+                      <Accordion.Item
+                        value={`${index + 1}`}
+                        key={index}
+                        className={` ${index % 2 === 0 ? "bg-[#F8F9FA]" : ""}`}
+                      >
                         <Accordion.Control
-                          className="pl-0 pr-12 hover:bg-[#F3F3F3]"
+                          className="pl-0 pr-12 !py-0 "
                           classNames={{
-                            label: `py-2`,
+                            label: `py-1.5`,
                           }}
                         >
                           {/* Entire Table Row as Control */}
-                          <Table.Tr className="text-[12px] font-normal py-[14px] w-full">
+                          <Table.Tr className="text-[13px] font-normal py-[14px] w-full">
                             <Table.Td className="w-[220px]">
                               No. {index + 1}
                             </Table.Td>
@@ -195,17 +193,17 @@ export default function Overall() {
                           </Table.Tr>
                         </Accordion.Control>
 
-                        <Accordion.Panel className="pb-4">
-                          <div className="flex justify-between px-20 pb-4">
+                        <Accordion.Panel className="!py-0">
+                          <div className="flex justify-between px-20 pb-6 pt-0">
                             <p className="text-secondary text-[16px] font-semibold">
-                              No. {index + 1} - 5.0 Points
+                              No.{index + 1} - 5.0 Points
                             </p>
                             <p className="text-secondary text-[16px] font-semibold">
                               120 Students
                             </p>
                           </div>
 
-                          <div className="h-full w-full px-20 ">
+                          <div className="h-full w-full px-20 pb-6">
                             <BarChart
                               h={300}
                               tickLine="x"
@@ -220,10 +218,10 @@ export default function Overall() {
                           </div>
                         </Accordion.Panel>
                       </Accordion.Item>
-                    </Accordion>
-                  ))}
-                </Table.Tbody>
-              </Table>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              </Accordion>
             </div>
           </>
         ) : (

@@ -562,7 +562,7 @@ export default function ModalAddSection({
                           body: "mr-3 px-0",
                           label: "text-[14px] text-default cursor-pointer",
                         }}
-                        className="mt-3"
+                        className="mt-3 mb-3"
                         size="xs"
                         label={`Open in this semester (${
                           academicYear?.semester

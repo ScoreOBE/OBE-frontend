@@ -9,6 +9,10 @@ import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading";
+import { Button, Modal, NumberInput, Table, TextInput } from "@mantine/core";
+import Icon from "@/components/Icon";
+import IconEdit from "@/assets/icons/edit.svg?react";
+import { SearchInput } from "@/components/SearchInput";
 
 export default function Students() {
   const { name } = useParams();
@@ -24,6 +28,7 @@ export default function Students() {
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [openEditScore, setOpenEditScore] = useState(false);
   const [items, setItems] = useState<any[]>([
     {
       title: "Your Course",
@@ -41,7 +46,7 @@ export default function Students() {
         ROUTE_PATH.SECTION
       }/${sectionNo}/${ROUTE_PATH.ASSIGNMENT}?${params.toString()}`,
     },
-    { title: `Students` },
+    { title: `${name}` },
   ]);
   const [openAllPublishModal, setOpenAllPublishModal] = useState(false);
 
@@ -52,6 +57,45 @@ export default function Students() {
 
   return (
     <>
+      <Modal
+        opened={openEditScore}
+        onClose={() => setOpenEditScore(false)}
+        title="Edit Score 640610653"
+        size="22vw"
+        centered
+        closeOnClickOutside={false}
+        transitionProps={{ transition: "pop" }}
+        className="flex items-center justify-center"
+        classNames={{
+          title: "",
+          content:
+            "flex flex-col justify-center w-full font-medium leading-[24px] text-[14px] item-center  overflow-hidden ",
+        }}
+      >
+        <div className="flex flex-col  gap-5 w-full">
+          <div className="flex items-center justify-center w-full">
+            <TextInput
+              label="Score"
+              size="sm"
+              withAsterisk
+              value={2.0}
+              classNames={{
+                input:
+                  "focus:border-primary text-[16px] w-28 h-10 text-center text-default ",
+              }}
+            />
+          </div>
+
+          <div className="flex gap-2 mt-3 justify-end">
+            <Button onClick={() => setOpenEditScore(false)} variant="subtle">
+              Cancel
+            </Button>
+            <Button onClick={() => setOpenEditScore(false)}>
+              Save Changes
+            </Button>
+          </div>
+        </div>
+      </Modal>
       <div className="bg-white flex flex-col h-full w-full p-6 pb-3 pt-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
         {/* <Breadcrumbs /> */}
@@ -71,11 +115,11 @@ export default function Students() {
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Mean
                   </p>
-                  <p className="font-bold text-[28px] text-secondary">2.0</p>
+                  <p className="font-bold text-[28px] text-defa">2.0</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-                  <p className="font-bold text-[28px] text-secondary">2.15</p>
+                  <p className="font-bold text-[28px] text-defa">2.15</p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
@@ -105,6 +149,12 @@ export default function Students() {
                 </div>
               </div>
             </div>
+
+            <SearchInput
+              onSearch={() => "test"}
+              placeholder="Student ID / Name"
+            />
+
             {/* Table */}
             <div
               className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
@@ -112,7 +162,40 @@ export default function Students() {
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
                 height: "fit-content",
               }}
-            ></div>
+            >
+              <Table stickyHeader>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th className="w-[15%]">Student ID</Table.Th>
+                    <Table.Th className="w-[25%]">Name</Table.Th>
+                    <Table.Th className=" text-end pr-28">Score</Table.Th>
+                    <Table.Th className="w-[40%]"></Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+
+                <Table.Tbody className="text-default text-[13px] ">
+                  {Array.from({ length: 12 }).map((_, index) => (
+                    <Table.Tr className="">
+                      <Table.Td className="!py-[19px]">
+                        {640610653 + index}
+                      </Table.Td>
+                      <Table.Td className="w-[25%]">ลาลิซ่า มโนบาล</Table.Td>
+                      <Table.Td className="flex gap-4 items-center justify-end pr-28">
+                        <p className="mt-0.5">2.0</p>
+                        <Icon
+                          IconComponent={IconEdit}
+                          onClick={() => setOpenEditScore(true)}
+                          className="size-4 cursor-pointer text-default"
+                        />
+                      </Table.Td>
+                      <Table.Td className="text-[#D8751A] font-medium">
+                        Score is edited
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            </div>
           </>
         ) : (
           <div className="flex px-16  flex-row items-center justify-between h-full">
