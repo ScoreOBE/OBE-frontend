@@ -244,6 +244,10 @@ export default function ModalAddSection({
         coIns.sections = coIns.sections.filter((sec: string) =>
           sectionNo.includes(sec)
         );
+        if (!coIns.sections.includes(lastValue)) {
+          coIns.sections.push(getSectionNo(lastValue));
+          coIns.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+        }
       });
       setCoInsList(coInsList.filter((coIns) => coIns.sections.length > 0));
       sections.push({
@@ -257,13 +261,16 @@ export default function ModalAddSection({
         coIns.sections = coIns.sections.filter((sec: string) =>
           sectionNo.includes(sec)
         );
+        if (!coIns.sections.includes(lastValue)) {
+          coIns.sections.push(getSectionNo(lastValue));
+          coIns.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+        }
       });
       setCoInsList(coInsList.filter((coIns) => coIns.sections.length > 0));
       sections = sections.filter((sec) =>
         sectionNo.includes(getSectionNo(sec.sectionNo))
       );
     }
-
     sections.forEach((sec) => sortData(sec.coInstructors!, "label", "string"));
     sortData(sections, "sectionNo");
     form.setFieldValue("sections", [...sections]);
