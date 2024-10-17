@@ -29,14 +29,17 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
 
   useEffect(() => {
     if (opened) {
+      const select: string[] = [];
       Object.keys(tqf3).forEach((part) => {
         if (
+          part !== "part7" &&
           part.includes("part") &&
           (tqf3[part as keyof IModelTQF3] as any)?.updatedAt
         ) {
-          selectedParts.push(part);
+          select.push(part);
         }
       });
+      setSelectedParts(select);
     }
   }, [opened]);
 
@@ -142,8 +145,11 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
                   className="flex p-1 mb-1 w-full h-full flex-col overflow-y-auto"
                 >
                   <Checkbox.Card
-                    className="p-3 items-center px-4 flex border-none h-fit rounded-md w-full"
-                    style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
+                    className={`p-3 items-center px-4 flex  h-fit rounded-md w-full ${
+                      selectedParts.includes(getKeyPartTopicTQF3(item)!) &&
+                      "!border-[1px] !border-secondary "
+                    }`}
+                    style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)" }}
                     value={getKeyPartTopicTQF3(item)}
                   >
                     <Group
@@ -179,7 +185,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
                 />
               }
               onClick={generatePDF}
-              disabled={!tqf3.part1?.updatedAt}
+              disabled={!tqf3.part1?.updatedAt || selectedParts.length === 0}
             >
               Export TQF3
             </Button>
