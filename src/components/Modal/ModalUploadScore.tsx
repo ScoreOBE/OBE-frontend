@@ -53,8 +53,8 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const onUploadFile = async (files: FileWithPath[]) => {
     const file = files[0];
     if (file) {
-      const data = await file.arrayBuffer();
-      const workbook = XLSX.read(data);
+      const dataExcel = await file.arrayBuffer();
+      const workbook = XLSX.read(dataExcel);
       for (const sheet of workbook.SheetNames) {
         const worksheet = workbook.Sheets[sheet];
         const resultsData: any[] = XLSX.utils.sheet_to_json(worksheet, {
@@ -130,7 +130,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         data={data}
         opened={openModalStudentList}
         onClose={() => setOpenModalStudentList(false)}
-        type="import"
+        type="import_list"
       />
       <Modal
         opened={openModalUploadError}
@@ -166,7 +166,9 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 <Modal.CloseButton className="!m-0" />
                 <div className="flex flex-col">
                   <p>Upload Score</p>
-                  <p className=" text-[12px] text-noData">{data?.courseNo}</p>
+                  <p className=" text-[12px] text-noData">
+                    {data.courseNo} {data.courseName}
+                  </p>
                 </div>
               </div>
               <Button
@@ -338,7 +340,8 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   <Dropzone.Idle>
                     <Icon
                       IconComponent={IconUpload}
-                      className="bg-[#DDE0FF] stroke-[2px] stroke-[#5768d5] size-16 p-3 rounded-full"
+                      style={{ color: "var(--color-secondary)" }}
+                      className="bg-[#DDE0FF] stroke-[2px] size-16 p-3 rounded-full"
                     />
                   </Dropzone.Idle>
                   <p className="font-semibold text-default">
