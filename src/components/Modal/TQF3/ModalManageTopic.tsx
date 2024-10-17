@@ -133,7 +133,8 @@ export default function ModalManageTopic({
             <div className="flex items-center  gap-2">
               <Icon IconComponent={IconInfo2} />
               <p>
-              You've already added 10 topics for course evaluation and improvement process.
+                You've already added 10 topics for course evaluation and
+                improvement process.
               </p>
             </div>
           }
@@ -250,7 +251,6 @@ export default function ModalManageTopic({
           </div>
           <Button
             onClick={addEditTopic}
-            // leftSection={type === "add" && <Icon IconComponent={AddIcon} />}
             className="pl-4"
             disabled={optionsTopicPart6.every((e) =>
               data

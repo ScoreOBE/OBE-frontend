@@ -130,7 +130,10 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             <Button
               onClick={onClickLeaveCourse}
               leftSection={
-                <Icon IconComponent={IconLogout} className="h-5 w-5 stroke-[2px]" />
+                <Icon
+                  IconComponent={IconLogout}
+                  className="size-5 stroke-[2px]"
+                />
               }
               className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center transition-colors duration-300 focus:border-none group"
             >

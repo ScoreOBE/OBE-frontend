@@ -153,7 +153,10 @@ export default function Part2TQF3({ setForm }: Props) {
                 </p>
               }
               icon={
-                <Icon IconComponent={IconExclamationCircle} className="size-6" />
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="size-6"
+                />
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
@@ -184,7 +187,10 @@ export default function Part2TQF3({ setForm }: Props) {
                 </p>
               }
               icon={
-                <Icon IconComponent={IconExclamationCircle} className="size-6" />
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="size-6"
+                />
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
@@ -407,11 +413,7 @@ export default function Part2TQF3({ setForm }: Props) {
                                         >
                                           <Icon
                                             IconComponent={IconGripVertical}
-                                            style={{
-                                              width: "20px",
-                                              height: "20px",
-                                            }}
-                                            className=" stroke-[2px]"
+                                            className="size-5 stroke-[2px]"
                                           />
                                         </div>
                                       </Table.Td>
@@ -560,7 +562,7 @@ export default function Part2TQF3({ setForm }: Props) {
                                               setOpenPopupDelTopic(true);
                                             }}
                                           >
-                                             <Icon
+                                            <Icon
                                               IconComponent={IconTrash}
                                               className="size-4 stroke-[2px]"
                                             />
@@ -578,11 +580,7 @@ export default function Part2TQF3({ setForm }: Props) {
                                         >
                                           <Icon
                                             IconComponent={IconGripVertical}
-                                            style={{
-                                              width: "20px",
-                                              height: "20px",
-                                            }}
-                                            className=" stroke-[2px]"
+                                            className="size-5 stroke-[2px]"
                                           />
                                         </div>
                                       </Table.Td>

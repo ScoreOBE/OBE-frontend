@@ -289,22 +289,18 @@ export default function ModalStudentList({
                       <Icon
                         IconComponent={IconUpload}
                         style={{
-                          width: rem(52),
-                          height: rem(52),
                           color: "var(--mantine-color-blue-6)",
                         }}
-                        className=" stroke-[2px]"
+                        className=" stroke-[2px] size-16"
                       />
                     </Dropzone.Accept>
                     <Dropzone.Reject>
                       <Icon
                         IconComponent={IconX}
                         style={{
-                          width: rem(52),
-                          height: rem(52),
                           color: "var(--mantine-color-red-6)",
                         }}
-                        className=" stroke-[2px]"
+                        className=" stroke-[2px] size-16"
                       />
                     </Dropzone.Reject>
 

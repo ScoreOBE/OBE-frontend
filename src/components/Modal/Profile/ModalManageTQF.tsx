@@ -292,10 +292,12 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                             className="w-fit border  rounded-md "
                             position="bottom-start"
                           >
-                            <div><Icon IconComponent={IconInfo2}
-                             
-                              className="-ml-0 size-5 text-secondary"
-                            /></div>
+                            <div className="border-none">
+                              <Icon
+                                IconComponent={IconInfo2}
+                                className="-ml-0 size-5 text-secondary"
+                              />
+                            </div>
                           </Tooltip>
                         </div>
                       </Table.Th>

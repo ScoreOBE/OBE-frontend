@@ -7,7 +7,7 @@ import IconDots from "@/assets/icons/dots.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconPencilMinus from "@/assets/icons/pencilMinus.svg?react";
-import IconPlus from "@/assets/icons/plus2.svg?react";
+import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
@@ -507,10 +507,12 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                           zIndex={50}
                         >
                           <Menu.Target>
-                            <Icon
-                              IconComponent={IconDots}
-                              className="rounded-full hover:bg-gray-200"
-                            />
+                            <div>
+                              <Icon
+                                IconComponent={IconDots}
+                                className="rounded-full hover:bg-gray-200"
+                              />
+                            </div>
                           </Menu.Target>
                           <Menu.Dropdown
                             className="rounded-md backdrop-blur-xl bg-white/70"
@@ -527,7 +529,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                             >
                               <div className="flex items-center gap-2">
                                 <Icon
-                                  IconComponent={IconPlus}
+                                  IconComponent={IconPlus2}
                                   className=" stroke-[2px] size-4"
                                 />
                                 <span>Add section</span>
