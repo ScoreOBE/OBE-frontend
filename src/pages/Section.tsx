@@ -36,7 +36,6 @@ import { setShowSidebar } from "@/store/showSidebar";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 import ModalExportScore from "@/components/Modal/ModalExportScore";
 import ModalUploadScore from "@/components/Modal/ModalUploadScore";
-import ModalUploadStudentList from "@/components/Modal/ModalUploadStudentList";
 
 export default function Section() {
   const navigate = useNavigate();
@@ -137,24 +136,13 @@ export default function Section() {
 
   return (
     <>
-      <ModalUploadStudentList
-        selectCourse={false}
-        data={course!}
-        opened={openModalUploadStudentList}
-        onClose={() => setOpenModalUploadStudentList(false)}
-        onBack={() => {
-          setOpenModalUploadStudentList(false);
-        }}
-        onNext={() => {
-          setOpenModalUploadStudentList(false);
-          setOpenModalUploadScore(true);
-        }}
-      />
-      <ModalUploadScore
-        data={course!}
-        opened={openModalUploadScore}
-        onClose={() => setOpenModalUploadScore(false)}
-      />
+      {course && (
+        <ModalUploadScore
+          data={course}
+          opened={openModalUploadScore}
+          onClose={() => setOpenModalUploadScore(false)}
+        />
+      )}
       <ModalEditSection
         opened={openModalEditSec}
         onClose={() => setOpenModalEditSec(false)}
@@ -220,12 +208,30 @@ export default function Section() {
         data={editCourseData}
         setNewData={setEditCourseData}
       />
-      <ModalStudentList
-        opened={openModalStudentList}
-        onClose={() => setOpenModalStudentList(false)}
-        data={course!}
-        type="studentList"
-      />
+      {course && (
+        <ModalStudentList
+          type="import"
+          opened={openModalUploadStudentList}
+          onClose={() => setOpenModalUploadStudentList(false)}
+          data={course}
+          selectCourse={false}
+          onBack={() => {
+            setOpenModalUploadStudentList(false);
+          }}
+          onNext={() => {
+            setOpenModalUploadStudentList(false);
+            setOpenModalUploadScore(true);
+          }}
+        />
+      )}
+      {course && (
+        <ModalStudentList
+          type="list"
+          opened={openModalStudentList}
+          onClose={() => setOpenModalStudentList(false)}
+          data={course}
+        />
+      )}
       <ModalExportScore
         opened={openModalExportScore}
         onClose={() => setOpenModalExportScore(false)}

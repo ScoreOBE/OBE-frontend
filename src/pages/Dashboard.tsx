@@ -30,15 +30,15 @@ import { IModelUser } from "@/models/ModelUser";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
 import ModalUploadScore from "../components/Modal/ModalUploadScore";
-import ModalUploadStudentList from "@/components/Modal/ModalUploadStudentList";
 import { IModelSection } from "@/models/ModelSection";
+import ModalStudentList from "@/components/Modal/ModalStudentList";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
-  const course = useAppSelector((state) => state.course);
+  const courseList = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
@@ -52,8 +52,9 @@ export default function Dashboard() {
   const [openModalUploadScore, setOpenModalUploadScore] = useState(false);
   const [openModalUploadStudentList, setOpenModalUploadStudentList] =
     useState(false);
-  const [uploadCourse, setUploadCourse] =
-    useState<Partial<IModelCourse & IModelSection>>();
+  const [uploadCourse, setUploadCourse] = useState<
+    Partial<IModelCourse & IModelSection> & { value?: string | null }
+  >();
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -79,7 +80,7 @@ export default function Dashboard() {
         ...new CourseRequestDTO(),
         year: term.year,
         semester: term.semester,
-        search: course.search,
+        search: courseList.search,
         hasMore: true,
       });
       localStorage.removeItem("search");
@@ -132,11 +133,6 @@ export default function Dashboard() {
       pathname,
       search: "?" + params.toString(),
     });
-  };
-
-  const closeModalSelectCourse = () => {
-    setOpenModalSelectCourse(false);
-    setUploadCourse({});
   };
 
   return (
@@ -203,7 +199,7 @@ export default function Dashboard() {
         }}
         closeOnClickOutside={false}
         opened={openModalSelectCourse}
-        onClose={closeModalSelectCourse}
+        onClose={() => setOpenModalSelectCourse(false)}
       >
         <div className="flex flex-col gap-8">
           <Select
@@ -211,53 +207,69 @@ export default function Dashboard() {
             placeholder="Course"
             size="sm"
             searchable
-            data={course.courses.map((c) => {
-              if (c.type == COURSE_TYPE.SEL_TOPIC.en) {
-                let detailSec = [];
-                const sectionNo = uploadCourse?.sectionNo;
-                const topic = uploadCourse?.topic;
-                if (sectionNo && topic) {
-                  detailSec.push({ sectionNo, topic });
-                }
-                return {
-                  value: c.courseNo,
-                  id: c.id,
-                  courseName: c.courseName,
-                  section: sectionNo,
-                  topic: topic,
-                  label: `${c.courseNo} ${c.courseName}`,
-                };
-              }
+            data={courseList.courses.flatMap((course) => {
+              // if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
+              //   let uniqueTopicList: any[] = [];
+              //   course.sections.map((sec) => {
+              //     if (
+              //       sec.topic &&
+              //       !uniqueTopicList.some((item) => item.topic === sec.topic)
+              //     ) {
+              //       uniqueTopicList.push({
+              //         value: `${course.id}-${sec.topic}`,
+              //         id: course.id,
+              //         courseNo: course.courseNo,
+              //         courseName: course.courseName,
+              //         topic: sec.topic,
+              //         label: `${course.courseNo} - ${sec.topic}`,
+              //       });
+              //     }
+              //   });
+              //   return uniqueTopicList;
+              // } else {
               return {
-                value: c.courseNo,
-                id: c.id,
-                courseName: c.courseName,
-                label: `${c.courseNo} ${c.courseName}`,
+                value: course.id,
+                id: course.id,
+                courseNo: course.courseNo,
+                courseName: course.courseName,
+                label: `${course.courseNo} - ${course.courseName}`,
               };
+              // }
             })}
-            value={uploadCourse?.courseNo}
+            value={uploadCourse?.value}
             onChange={(value, option: any) =>
               setUploadCourse({
+                value: value,
                 id: option.id,
-                courseNo: option.value,
+                courseNo: option.courseNo,
                 courseName: option.courseName,
-                sectionNo: option.secNo,
-                topic: option.topic,
+                // topic: option.topic,
               })
             }
             renderOption={(item: any) => (
               <div className="flex w-full gap-2">
-                <p className="w-[9%] min-w-fit">{item.option.value}</p>
+                <p className="w-[9%] min-w-fit">{item.option.courseNo}</p>
                 <p>
-                  {item.option.courseName} <br /> {item.option.topic}
+                  {item.option.courseName}
+                  {/* {item.option.topic && (
+                    <>
+                      <br />
+                      {item.option.topic}
+                    </>
+                  )} */}
                 </p>
-                <p>{item.option.topic}</p>
               </div>
             )}
           />
           <div className="flex justify-end w-full">
             <Group className="flex w-full h-fit items-end justify-end">
-              <Button variant="subtle" onClick={closeModalSelectCourse}>
+              <Button
+                variant="subtle"
+                onClick={() => {
+                  setOpenModalSelectCourse(false);
+                  setUploadCourse(undefined);
+                }}
+              >
                 Cancel
               </Button>
               <Button
@@ -281,49 +293,54 @@ export default function Dashboard() {
           </div>
         </div>
       </Modal>
-      <ModalUploadScore
-        data={uploadCourse!}
-        opened={openModalUploadScore}
-        onClose={() => setOpenModalUploadScore(false)}
-      />
-      <ModalUploadStudentList
-        data={uploadCourse!}
-        opened={openModalUploadStudentList}
-        onClose={() => {
-          closeModalSelectCourse();
-          setOpenModalUploadStudentList(false);
-        }}
-        onBack={() => {
-          setOpenModalUploadStudentList(false);
-          setOpenModalSelectCourse(true);
-        }}
-        onNext={() => {
-          closeModalSelectCourse();
-          setOpenModalUploadScore(true);
-          setOpenModalUploadStudentList(false);
-        }}
-      />
+      {uploadCourse && (
+        <ModalUploadScore
+          data={uploadCourse}
+          opened={openModalUploadScore}
+          onClose={() => {
+            setOpenModalUploadScore(false);
+            setUploadCourse(undefined);
+          }}
+        />
+      )}
+      {uploadCourse && (
+        <ModalStudentList
+          type="import"
+          data={uploadCourse}
+          opened={openModalUploadStudentList}
+          onClose={() => setOpenModalUploadStudentList(false)}
+          onBack={() => {
+            setOpenModalUploadStudentList(false);
+            setOpenModalSelectCourse(true);
+          }}
+          onNext={() => {
+            setOpenModalUploadScore(true);
+            setOpenModalUploadStudentList(false);
+          }}
+        />
+      )}
       <div className=" flex flex-col h-full w-full  overflow-hidden">
         <div className="flex flex-row px-6 pt-3   items-center justify-between">
           <div className="flex flex-col">
             <p className="text-secondary text-[18px] font-semibold ">
               Hi there, {user.firstNameEN}
             </p>
-            {course.search.length ? (
+            {courseList.search.length ? (
               <p className="text-[#575757] text-[14px]">
-                {course.total} result{course.total > 1 ? "s " : " "} found
+                {courseList.total} result{courseList.total > 1 ? "s " : " "}{" "}
+                found
               </p>
             ) : (
               <p className="text-[#575757] text-[14px]">
                 In semester {term?.semester ?? ""}, {term?.year ?? ""}!{" "}
-                {course.courses.length === 0 ? (
+                {courseList.courses.length === 0 ? (
                   <span>Your course card is currently empty</span>
                 ) : (
                   <span>
                     You have{" "}
                     <span className="text-[#5768D5] font-semibold">
-                      {course.total} Course
-                      {course.total > 1 ? "s " : " "}
+                      {courseList.total} Course
+                      {courseList.total > 1 ? "s " : " "}
                     </span>
                     on your plate.
                   </span>
@@ -331,7 +348,7 @@ export default function Dashboard() {
               </p>
             )}
           </div>
-          {term?.isActive && !!course.courses.length && (
+          {term?.isActive && !!courseList.courses.length && (
             <div className="flex gap-3 flex-wrap">
               <Button
                 variant="outline"
@@ -346,7 +363,10 @@ export default function Dashboard() {
                 leftSection={
                   <Icon IconComponent={IconUpload} className="size-4" />
                 }
-                onClick={() => setOpenModalSelectCourse(true)}
+                onClick={() => {
+                  setUploadCourse(undefined);
+                  setOpenModalSelectCourse(true);
+                }}
               >
                 Upload score
               </Button>
@@ -356,17 +376,17 @@ export default function Dashboard() {
         <div className="flex h-full w-full overflow-hidden">
           {loading ? (
             <Loading />
-          ) : course.courses.length === 0 ? (
+          ) : courseList.courses.length === 0 ? (
             <div className=" flex flex-row flex-1 justify-between">
               <div className="h-full px-[60px] justify-center flex flex-col">
                 <p className="text-secondary text-[22px] font-semibold">
-                  {course.search.length
-                    ? `No results for "${course.search}" `
+                  {courseList.search.length
+                    ? `No results for "${courseList.search}" `
                     : "No course found"}
                 </p>
                 <br />
                 <p className=" -mt-4 mb-6 text-b2 break-words font-400 leading-relaxed">
-                  {course.search.length ? (
+                  {courseList.search.length ? (
                     <>Check the spelling or try a new search.</>
                   ) : (
                     <>
@@ -377,7 +397,7 @@ export default function Dashboard() {
                   )}
                 </p>
 
-                {term?.isActive && !course.search.length && (
+                {term?.isActive && !courseList.search.length && (
                   <Button
                     className="text-center px-4"
                     onClick={() => setOpenAddModal(true)}
@@ -395,7 +415,7 @@ export default function Dashboard() {
             </div>
           ) : (
             <InfiniteScroll
-              dataLength={course.courses.length}
+              dataLength={courseList.courses.length}
               next={onShowMore}
               height={"100%"}
               loader={<Loading />}
@@ -403,7 +423,7 @@ export default function Dashboard() {
               className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 px-6 p-3"
               style={{ height: "fit-content", maxHeight: "100%" }}
             >
-              {course.courses.map((item) => {
+              {courseList.courses.map((item) => {
                 const statusTqf3Sec: any[] = item.sections.map(
                   (sec) => sec.TQF3?.status
                 );
