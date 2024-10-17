@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  Dropzone,
-  FileRejection,
-  FileWithPath,
-  MS_EXCEL_MIME_TYPE,
-} from "@mantine/dropzone";
+import { Dropzone, MS_EXCEL_MIME_TYPE } from "@mantine/dropzone";
 import { Alert, Button, Modal } from "@mantine/core";
 import Icon from "../Icon";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -20,9 +15,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import gradescope from "@/assets/image/gradescope.png";
 import ModalStudentList from "./ModalStudentList";
 import ModalTemplateGuide from "./ModalTemplateGuide";
-import { showNotifications } from "@/helpers/notifications/showNotifications";
-import { NOTI_TYPE } from "@/helpers/constants/enum";
-import * as XLSX from "xlsx";
+import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
 
 type Props = {
   opened: boolean;
@@ -36,89 +29,6 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
   const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
   const [errorPoint, setErrorPoint] = useState<string[]>([]);
-
-  function isNumeric(value: any) {
-    return !isNaN(parseFloat(value)) && isFinite(value);
-  }
-
-  const getColumnAlphabet = (columnIndex: number) => {
-    let alphabet = "";
-    while (columnIndex >= 0) {
-      alphabet = String.fromCharCode((columnIndex % 26) + 65) + alphabet;
-      columnIndex = Math.floor(columnIndex / 26) - 1;
-    }
-    return alphabet;
-  };
-
-  const onUploadFile = async (files: FileWithPath[]) => {
-    const file = files[0];
-    if (file) {
-      const dataExcel = await file.arrayBuffer();
-      const workbook = XLSX.read(dataExcel);
-      for (const sheet of workbook.SheetNames) {
-        const worksheet = workbook.Sheets[sheet];
-        const resultsData: any[] = XLSX.utils.sheet_to_json(worksheet, {
-          // defval: "",
-          // header: 1,
-          // raw: true
-        });
-        const fullScore = resultsData.shift();
-        const description = resultsData.shift();
-
-        // console.log(fullScore);
-        // console.log(description);
-        // console.log(resultsData);
-
-        // Validate the studentId
-        const errorStudentIdList: string[] = [];
-        resultsData.forEach(({ studentId }, index) => {
-          if (
-            studentId &&
-            (!isNumeric(studentId) || studentId.toString().length !== 9)
-          ) {
-            const row = index + 4;
-            const column = getColumnAlphabet(1);
-            errorStudentIdList.push(`${column}${row}`);
-          }
-        });
-        // Validate the "point" field
-        const errorPointList: string[] = [];
-        resultsData.forEach((data, i) => {
-          Object.keys(data)
-            .slice(4)
-            .map((key, j) => {
-              if (data[key] && !isNumeric(data[key])) {
-                const row = i + 4;
-                const column = getColumnAlphabet(j + 5);
-                errorPointList.push(`${column}${row}`);
-              }
-            });
-        });
-        if (errorStudentIdList.length || errorPointList.length) {
-          files = [];
-          setErrorStudentId(errorStudentIdList);
-          setErrorPoint(errorPointList);
-          setOpenModalUploadError(true);
-        }
-      }
-    }
-  };
-
-  const onRejectFile = (files: FileRejection[]) => {
-    let title = "";
-    let message = "";
-    switch (files[0].errors[0].code) {
-      case "file-invalid-type":
-        title = "Invalid file type";
-        message = "File type must be .csv, xls or .xlsx";
-        break;
-      case "file-too-large":
-        title = "";
-        message = "";
-        break;
-    }
-    showNotifications(NOTI_TYPE.ERROR, title, message);
-  };
 
   return (
     <>
@@ -315,7 +225,14 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               </Alert>
 
               <Dropzone
-                onDrop={(files) => onUploadFile(files)}
+                onDrop={(files) =>
+                  onUploadFile(
+                    files,
+                    setOpenModalUploadError,
+                    setErrorStudentId,
+                    setErrorPoint
+                  )
+                }
                 onReject={(files) => onRejectFile(files)}
                 maxFiles={1}
                 maxSize={5 * 1024 ** 2}
