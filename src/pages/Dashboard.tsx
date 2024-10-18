@@ -70,7 +70,6 @@ export default function Dashboard() {
       );
       if (acaYear && acaYear.id != term.id) {
         setTerm(acaYear);
-        fetchCourse(year, semester);
       }
     }
   }, [academicYear, term, params]);
