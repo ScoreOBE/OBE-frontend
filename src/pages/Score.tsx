@@ -11,6 +11,8 @@ import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading";
 import { BarChart } from "@mantine/charts";
+import Icon from "@/components/Icon";
+import IconChevronDown from "@/assets/icons/chevronDown.svg?react";
 
 export default function Overall() {
   const { courseNo, sectionNo, name } = useParams();
@@ -126,101 +128,114 @@ export default function Overall() {
                 height: "fit-content",
               }}
             >
-              <Table stickyHeader className="sticky top-0 bg-white z-10">
+              <Table stickyHeader className="">
                 <Table.Thead>
                   <Table.Tr className="bg-[#e5e7f6]">
-                    <Table.Th className="w-[220px]">Question</Table.Th>
-                    <Table.Th className="text-end pr-10 w-[130px]">
+                    <Table.Th className="w-[15%] ">Question</Table.Th>
+                    <Table.Th className="text-end pr-[70px] w-[11%]">
                       Points
                     </Table.Th>
-                    <Table.Th className="text-end pr-10 w-[130px]">
+                    <Table.Th className="text-end pr-[70px]  w-[11%]">
                       Mean
                     </Table.Th>
-                    <Table.Th className="text-end pr-10 w-[130px]">SD</Table.Th>
-                    <Table.Th className="text-end pr-10 w-[130px]">
+                    <Table.Th className="text-end pr-[70px]  w-[11%]">
+                      SD
+                    </Table.Th>
+                    <Table.Th className="text-end pr-[70px]  w-[11%]">
                       Median
                     </Table.Th>
-                    <Table.Th className="text-end pr-10 w-[130px]">
+                    <Table.Th className="text-end pr-[70px] w-[11%]">
                       Max
                     </Table.Th>
-                    <Table.Th className="text-end pr-10 w-[130px]">Q3</Table.Th>
-                    <Table.Th className="text-end pr-10 w-[130px]">Q1</Table.Th>
-                    <Table.Th className="text-end pr-10"></Table.Th>
+                    <Table.Th className="text-end pr-[70px] w-[11%]">
+                      Q3
+                    </Table.Th>
+                    <Table.Th className="text-end pr-[70px] w-[11%] ">
+                      Q1
+                    </Table.Th>
+                    <Table.Th className="text-end pr-[70px] w-[8%]"></Table.Th>
                   </Table.Tr>
                 </Table.Thead>
               </Table>
-              <Accordion>
-                <Table>
-                  <Table.Tbody className="text-default">
-                    {Array.from({ length: 12 }).map((_, index) => (
-                      <Accordion.Item
-                        value={`${index + 1}`}
-                        key={index}
-                        className={` ${index % 2 === 0 ? "bg-[#F8F9FA]" : ""}`}
-                      >
-                        <Accordion.Control
-                          className="pl-0 pr-12 !py-0 "
-                          classNames={{
-                            label: `py-1.5`,
-                          }}
-                        >
+
+              <Accordion chevron={false} unstyled>
+                {Array.from({ length: 12 }).map((_, index) => (
+                  <Accordion.Item
+                    value={`${index + 1}`}
+                    key={index}
+                    className={`!px-0 ${index % 2 === 0 ? "bg-[#F8F9FA]" : ""}`}
+                  >
+                    <Accordion.Control
+                      className="pl-0 py-1.5 w-full"
+                      classNames={{
+                        label: `flex-itemstart w-full`,
+                      }}
+                    >
+                      <Table>
+                        <Table.Tbody className="text-default">
                           {/* Entire Table Row as Control */}
-                          <Table.Tr className="text-[13px] font-normal py-[14px] w-full">
-                            <Table.Td className="w-[220px]">
+                          <Table.Tr className="text-[13px] font-normal py-[14px] w-full ">
+                            <Table.Td className="text-start w-[15%] ">
                               No. {index + 1}
                             </Table.Td>
-                            <Table.Td className="text-end pr-10 w-[130px]">
+                            <Table.Td className="text-end pr-[70px] w-[11%]">
                               5.0
                             </Table.Td>
-                            <Table.Td className="text-end pr-10 w-[130px]">
+                            <Table.Td className="text-end pr-[70px] w-[11%]">
                               2.0
                             </Table.Td>
-                            <Table.Td className="text-end pr-10 w-[130px]">
+                            <Table.Td className="text-end pr-[70px] w-[11%]">
                               10.0
                             </Table.Td>
-                            <Table.Td className="text-end pr-10 w-[130px]">
+                            <Table.Td className="text-end pr-[70px] w-[11%]">
                               25
                             </Table.Td>
-                            <Table.Td className="text-end pr-10 w-[130px]">
+                            <Table.Td className="text-end pr-[70px]  w-[11%]">
                               5.0
                             </Table.Td>
-                            <Table.Td className="text-end pr-10 w-[130px]">
+                            <Table.Td className="text-end pr-[70px] w-[11%]">
                               2.0
                             </Table.Td>
-                            <Table.Td className="text-end pr-10 w-[130px]">
+                            <Table.Td className="text-end pr-[70px] w-[11%]">
                               10.0
                             </Table.Td>
+                            <Table.Th className="text-end pr-[70px] w-[8%]">
+                              <Icon
+                                IconComponent={IconChevronDown}
+                                className="size-4"
+                              />
+                            </Table.Th>
                           </Table.Tr>
-                        </Accordion.Control>
+                        </Table.Tbody>
+                      </Table>
+                    </Accordion.Control>
 
-                        <Accordion.Panel className="!py-0">
-                          <div className="flex justify-between px-20 pb-6 pt-0">
-                            <p className="text-secondary text-[16px] font-semibold">
-                              No.{index + 1} - 5.0 Points
-                            </p>
-                            <p className="text-secondary text-[16px] font-semibold">
-                              120 Students
-                            </p>
-                          </div>
+                    <Accordion.Panel className="!py-0">
+                      <div className="flex justify-between px-20 pb-6 pt-0">
+                        <p className="text-secondary text-[16px] font-semibold">
+                          No.{index + 1} - 5.0 Points
+                        </p>
+                        <p className="text-secondary text-[16px] font-semibold">
+                          120 Students
+                        </p>
+                      </div>
 
-                          <div className="h-full w-full px-20 pb-6">
-                            <BarChart
-                              h={300}
-                              tickLine="x"
-                              data={data}
-                              dataKey="month"
-                              series={[
-                                { name: "Smartphones", color: "violet.6" },
-                                { name: "Laptops", color: "blue.6" },
-                                { name: "Tablets", color: "teal.6" },
-                              ]}
-                            />
-                          </div>
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                    ))}
-                  </Table.Tbody>
-                </Table>
+                      <div className="h-full w-full px-20 pb-6">
+                        <BarChart
+                          h={300}
+                          tickLine="x"
+                          data={data}
+                          dataKey="month"
+                          series={[
+                            { name: "Smartphones", color: "violet.6" },
+                            { name: "Laptops", color: "blue.6" },
+                            { name: "Tablets", color: "teal.6" },
+                          ]}
+                        />
+                      </div>
+                    </Accordion.Panel>
+                  </Accordion.Item>
+                ))}
               </Accordion>
             </div>
           </>

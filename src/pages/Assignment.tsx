@@ -36,6 +36,9 @@ import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 
+import { useForm } from "@mantine/form";
+import { IModelAssignment } from "@/models/ModelSection";
+
 export default function Assignment() {
   const { courseNo, sectionNo } = useParams();
   const path = useLocation().pathname;
@@ -66,6 +69,44 @@ export default function Assignment() {
   const [openPublishScoreModal, setOpenPublishScoreModal] = useState(false);
   const [openSelectSecModal, setOpenSelectSecModal] = useState(false);
   const [isPublishAll, setIsPublishAll] = useState(false);
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      isPublish: false,
+      sections: [] as string[],
+      assignments: [] as string[],
+    },
+    validate: {},
+  });
+
+  const assign: IModelAssignment[] = [
+    {
+      name: "Math Quiz 1",
+      desc: "Basic arithmetic quiz covering addition, subtraction, multiplication, and division.",
+      isPublish: true,
+      weight: 10,
+      questions: [],
+    },
+    {
+      name: "History Test",
+      desc: "A short test on the history of World War II.",
+      isPublish: false,
+      weight: 15,
+      questions: [],
+    },
+    {
+      name: "Science Assignment",
+      desc: "Assignment covering basic physics and chemistry concepts.",
+      isPublish: true,
+      weight: 20,
+      questions: [],
+    },
+  ];
+
+  const onClosePublishModal = () => {
+    setOpenPublishScoreModal(false);
+    form.reset();
+  };
 
   const goToOverall = (name: string) => {
     navigate({
@@ -78,7 +119,10 @@ export default function Assignment() {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
   }, []);
-  console.log(course);
+
+  useEffect(() => {
+    console.log(form.getValues());
+  }, [form]);
 
   return (
     <>
@@ -97,7 +141,7 @@ export default function Assignment() {
         }
         transitionProps={{ transition: "pop" }}
         centered
-        onClose={() => setOpenPublishScoreModal(false)}
+        onClose={onClosePublishModal}
       >
         {isPublishAll && (
           <Alert
@@ -114,139 +158,64 @@ export default function Assignment() {
             className="mb-5"
           ></Alert>
         )}
-        <div className="-mt-1 gap-2 flex flex-col mb-6">
-          <p
-            className={`text-[14px] mb-1 font-semibold text-secondary ${
-              !isPublishAll && "mt-4"
-            }`}
+        <div className="mb-6">
+          <Chip.Group
+            {...form.getInputProps("assignments")}
+            multiple
+            onChange={(event) => {
+              const allAssignments = assign.map((as) => as.name);
+
+              if (event.includes("all assignments")) {
+                if (form.getValues().assignments.length === assign.length) {
+                  form.setFieldValue("assignments", []);
+                } else {
+                  form.setFieldValue("assignments", allAssignments);
+                }
+              } else {
+                form.setFieldValue("assignments", event);
+              }
+            }}
           >
-            Select assignment to publish
-          </p>
-          <div className=" flex flex-col gap-3">
-            <div>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 w-36 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-semibold translate-y-[3px]",
-                }}
-                size="md"
-              >
-                All assignments
-              </Pill>
-            </div>
-            <div className=" flex gap-3">
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 1
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Test
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 2
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 3
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 4
-              </Pill>
-            </div>
-            <div className=" flex gap-3">
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Prelim 1
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 4
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 5
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Quiz 6
-              </Pill>
-              <Pill
-                classNames={{
-                  root: "px-4 h-8 rounded-[10px] text-center justify-center items-center",
-                  label:
-                    "text-[13px] text-default font-medium translate-y-[3px]",
-                }}
-                size="md"
-              >
-                Midterm
-              </Pill>
-            </div>
-          </div>
+            <Group className="flex gap-3">
+              {course?.sections.length! > 1 && (
+                <Chip
+                  classNames={{
+                    root: "h-8 min-w-[114px] rounded-[10px] text-center justify-center items-center",
+                    label:
+                      "text-[13px] text-default font-semibold translate-y-[3px]",
+                  }}
+                  checked={
+                    form.getValues().assignments.length === assign.length
+                  }
+                  size="md"
+                  value={"all assignments"}
+                >
+                  All Assignment
+                </Chip>
+              )}
+              <div className="flex gap-3">
+                {assign.map((as, index) => (
+                  <Chip
+                    key={index}
+                    classNames={{
+                      root: "h-8 min-w-[114px]  !rounded-[10px] text-center justify-center items-center",
+                      label:
+                        "text-[13px] text-default font-semibold translate-y-[3px] ",
+                    }}
+                    checked={form.getValues().assignments.includes(as.name)}
+                    size="md"
+                    value={as.name}
+                  >
+                    {as.name}
+                  </Chip>
+                ))}
+              </div>
+            </Group>
+          </Chip.Group>
         </div>
 
         <div className="flex gap-2 justify-end w-full">
-          <Button
-            onClick={() => setOpenPublishScoreModal(false)}
-            variant="subtle"
-          >
+          <Button onClick={onClosePublishModal} variant="subtle">
             Cancel
           </Button>
           {!isPublishAll ? (
@@ -316,39 +285,39 @@ export default function Assignment() {
             Select section to publish
           </p>
 
-          <div className=" ">
-            <Chip.Group onChange={(event) => {}}>
-              <Group className="flex gap-3">
-                {course?.sections.length! > 1 && (
+          <Chip.Group {...form.getInputProps("sections")}>
+            <Group className="flex gap-3">
+              {course?.sections.length! > 1 && (
+                <Chip
+                  classNames={{
+                    root: "h-8 min-w-[114px] rounded-[10px] text-center justify-center items-center",
+                    label:
+                      "text-[13px] text-default font-semibold translate-y-[3px]",
+                  }}
+                  size="md"
+                  value={"all"}
+                >
+                  All Sections
+                </Chip>
+              )}
+              <div className="flex gap-3">
+                {course?.sections.map((sec) => (
                   <Chip
+                    key={sec.id}
                     classNames={{
-                      root: "h-8 min-w-[114px] rounded-[10px] text-center justify-center items-center",
+                      root: "h-8 min-w-[114px]  !rounded-[10px] text-center justify-center items-center",
                       label:
-                        "text-[13px] text-default font-semibold translate-y-[3px]",
+                        "text-[13px] text-default font-semibold translate-y-[3px] ",
                     }}
                     size="md"
+                    value={sec.sectionNo}
                   >
-                    All Sections
+                    Section {sec.sectionNo}
                   </Chip>
-                )}
-                <div className="flex gap-3">
-                  {course?.sections.map((sec) => (
-                    <Chip
-                      key={sec.id}
-                      classNames={{
-                        root: "h-8 min-w-[114px]  !rounded-[10px] text-center justify-center items-center",
-                        label:
-                          "text-[13px] text-default font-semibold translate-y-[3px] ",
-                      }}
-                      size="md"
-                    >
-                      Section {sec.sectionNo}
-                    </Chip>
-                  ))}
-                </div>
-              </Group>
-            </Chip.Group>
-          </div>
+                ))}
+              </div>
+            </Group>
+          </Chip.Group>
         </div>
 
         <div className="flex gap-2 justify-end w-full">
