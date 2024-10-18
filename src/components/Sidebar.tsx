@@ -10,12 +10,9 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import CourseSidebar from "./Sidebar/CourseSidebar";
 import { motion } from "framer-motion";
 import AssignmentSidebar from "./Sidebar/AssignmentSidebar";
-import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { getCourse, leaveCourse } from "@/services/course/course.service";
-import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import { removeCourse, setCourseList } from "@/store/course";
-import { setLoading } from "@/store/loading";
+import { leaveCourse } from "@/services/course/course.service";
+import { removeCourse } from "@/store/course";
 import { Alert } from "@mantine/core";
 import Icon from "./Icon";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -35,8 +32,6 @@ export default function Sidebar() {
   const path = useLocation().pathname;
   const [params, setParams] = useSearchParams();
   const loading = useAppSelector((state) => state.loading);
-  const academicYear = useAppSelector((state) => state.academicYear);
-  const courseList = useAppSelector((state) => state.course.courses);
   const dispatch = useAppDispatch();
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
@@ -61,25 +56,6 @@ export default function Sidebar() {
         } else return <CourseSidebar onClickLeaveCourse={openedMainPopup} />;
       }
     } else return;
-  };
-  useEffect(() => {
-    if (params.get("year") && params.get("semester") && !courseList.length)
-      fetchCourse();
-  }, [academicYear, params]);
-
-  const fetchCourse = async () => {
-    dispatch(setLoading(true));
-    const res = await getCourse({
-      ...new CourseRequestDTO(),
-      year: parseInt(params.get("year") || ""),
-      semester: parseInt(params.get("semester") || ""),
-    });
-    if (res) {
-      dispatch(setCourseList(res));
-    } else {
-      navigate(ROUTE_PATH.DASHBOARD_INS);
-    }
-    dispatch(setLoading(false));
   };
 
   const onClickLeaveCourse = async (id: string) => {

@@ -11,6 +11,7 @@ import { getAcademicYear } from "./services/academicYear/academicYear.service";
 import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
 import PageError from "./pages/PageError";
+import { setLoading } from "./store/loading";
 
 function App() {
   const showSidebar = useAppSelector((state) => state.showSidebar);
@@ -45,10 +46,13 @@ function App() {
   }, [user, path]);
 
   const fetchData = async () => {
+    dispatch(setLoading(true));
     if (!user.id) {
       const res = await getUserInfo();
       if (res) {
         dispatch(setUser(res));
+      } else {
+        dispatch(setLoading(false));
       }
     }
     if (user.id && !academicYear.length && path !== ROUTE_PATH.DASHBOARD_INS) {

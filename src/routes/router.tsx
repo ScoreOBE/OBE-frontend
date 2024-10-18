@@ -27,19 +27,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: ROUTE_PATH.LOGIN,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <Login />
-          </Suspense>
-        ),
+        element: <Login />,
       },
       {
         path: ROUTE_PATH.CMU_OAUTH_CALLBACK,
-        element: (
-          <Suspense fallback={<Loading />}>
-            <CMUOAuthCallback />
-          </Suspense>
-        ),
+        element: <CMUOAuthCallback />,
       },
       {
         path: ROUTE_PATH.SELECTED_DEPARTMENT,

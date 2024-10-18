@@ -7,6 +7,7 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
+import { ROLE } from "@/helpers/constants/enum";
 
 export default function CMUOAuthCallback() {
   const user = useAppSelector((state) => state.user);
@@ -18,7 +19,23 @@ export default function CMUOAuthCallback() {
   useEffect(() => {
     dispatch(setShowSidebar(false));
     dispatch(setShowNavbar(false));
-    if (!code || user.id) return;
+    if (!code) {
+      navigate(ROUTE_PATH.LOGIN);
+      return;
+    } else if (user.id) {
+      switch (user.role) {
+        case ROLE.STUDENT:
+          navigate(ROUTE_PATH.DASHBOARD_STD);
+          return;
+        case ROLE.SUPREME_ADMIN:
+        case ROLE.ADMIN:
+          navigate(ROUTE_PATH.DASHBOARD_ADMIN);
+          return;
+        default:
+          navigate(ROUTE_PATH.DASHBOARD_INS);
+          return;
+      }
+    }
 
     const fetchData = async () => {
       const res = await login(code);
@@ -31,7 +48,7 @@ export default function CMUOAuthCallback() {
       }
     };
     fetchData();
-  }, [code]);
+  }, [code, user]);
 
   return (
     <div className="flex flex-col w-screen h-screen gap-10 -rounded font-extrabold justify-center items-center">

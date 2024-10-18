@@ -15,8 +15,10 @@ import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
 import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import IconShare2 from "@/assets/icons/share2.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
+import Loading from "@/components/Loading";
 
 export default function Login() {
+  const loading = useAppSelector((state) => state.loading);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -27,7 +29,9 @@ export default function Login() {
       navigate(ROUTE_PATH.DASHBOARD_INS);
     }
   }, [user]);
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <div className=" overflow-hidden  h-screen w-screen  items-center  flex">
       <div className=" items-center text-center   rounded-xl  overflow-hidden  h-full  max-h-full  flex flex-col w-full   ">
         <p className=" drop-shadow-xl cursor-default mt-16 leading-[74px] font-[600] item-center -rounded text-[#000000] text-[60px]">
