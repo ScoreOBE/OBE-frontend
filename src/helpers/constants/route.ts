@@ -3,6 +3,7 @@ export const ROUTE_PATH = {
   CMU_OAUTH_CALLBACK: "/cmuOAuthCallback",
   SELECTED_DEPARTMENT: "/select-department",
   DASHBOARD_INS: "/dashboard",
+  DASHBOARD_ADMIN: "/dashboard-admin",
   DASHBOARD_STD: "/dashboard-student",
   COURSE: "/course",
   SECTION: "sections",

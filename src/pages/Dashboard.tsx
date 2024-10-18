@@ -22,7 +22,7 @@ import notFoundImage from "@/assets/image/notFound.png";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import MainPopup from "../components/Popup/MainPopup";
 import ModalEditCourse from "../components/Modal/CourseManage/ModalEditCourse";
-import { COURSE_TYPE, NOTI_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
+import { NOTI_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
@@ -70,6 +70,7 @@ export default function Dashboard() {
       );
       if (acaYear && acaYear.id != term.id) {
         setTerm(acaYear);
+        fetchCourse(year, semester);
       }
     }
   }, [academicYear, term, params]);
@@ -376,44 +377,7 @@ export default function Dashboard() {
         <div className="flex h-full w-full overflow-hidden">
           {loading ? (
             <Loading />
-          ) : courseList.courses.length === 0 ? (
-            <div className=" flex flex-row flex-1 justify-between">
-              <div className="h-full px-[60px] justify-center flex flex-col">
-                <p className="text-secondary text-[22px] font-semibold">
-                  {courseList.search.length
-                    ? `No results for "${courseList.search}" `
-                    : "No course found"}
-                </p>
-                <br />
-                <p className=" -mt-4 mb-6 text-b2 break-words font-400 leading-relaxed">
-                  {courseList.search.length ? (
-                    <>Check the spelling or try a new search.</>
-                  ) : (
-                    <>
-                      It looks like you haven't added any courses yet.
-                      <br />
-                      Click 'Add Course' button below to get started!
-                    </>
-                  )}
-                </p>
-
-                {term?.isActive && !courseList.search.length && (
-                  <Button
-                    className="text-center px-4"
-                    onClick={() => setOpenAddModal(true)}
-                  >
-                    <div className="flex gap-2">
-                      <Icon IconComponent={IconAdd} />
-                      Add course
-                    </div>
-                  </Button>
-                )}
-              </div>
-              <div className="h-full px-[60px] bg-slate-300  justify-center flex flex-col">
-                <img src={notFoundImage} alt="notFound"></img>
-              </div>
-            </div>
-          ) : (
+          ) : courseList.total ? (
             <InfiniteScroll
               dataLength={courseList.courses.length}
               next={onShowMore}
@@ -538,6 +502,43 @@ export default function Dashboard() {
                 );
               })}
             </InfiniteScroll>
+          ) : (
+            <div className=" flex flex-row flex-1 justify-between">
+              <div className="h-full px-[60px] justify-center flex flex-col">
+                <p className="text-secondary text-[22px] font-semibold">
+                  {courseList.search.length
+                    ? `No results for "${courseList.search}" `
+                    : "No course found"}
+                </p>
+                <br />
+                <p className=" -mt-4 mb-6 text-b2 break-words font-400 leading-relaxed">
+                  {courseList.search.length ? (
+                    <>Check the spelling or try a new search.</>
+                  ) : (
+                    <>
+                      It looks like you haven't added any courses yet.
+                      <br />
+                      Click 'Add Course' button below to get started!
+                    </>
+                  )}
+                </p>
+
+                {term?.isActive && !courseList.search.length && (
+                  <Button
+                    className="text-center px-4"
+                    onClick={() => setOpenAddModal(true)}
+                  >
+                    <div className="flex gap-2">
+                      <Icon IconComponent={IconAdd} />
+                      Add course
+                    </div>
+                  </Button>
+                )}
+              </div>
+              <div className="h-full px-[60px] bg-slate-300  justify-center flex flex-col">
+                <img src={notFoundImage} alt="notFound"></img>
+              </div>
+            </div>
           )}
         </div>
       </div>
