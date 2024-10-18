@@ -6,7 +6,7 @@ import {
 
 export const academicYearController = (configService = {}) => {
   const service = apiService(configService);
-  const prefix = "/academicYear";
+  const prefix = "/academic-year";
 
   return {
     getAcademicYear: async (params?: AcademicYearRequestDTO) => {

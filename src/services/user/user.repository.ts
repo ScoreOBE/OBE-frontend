@@ -19,7 +19,7 @@ export const userController = (configService = {}) => {
       return service.put(`${prefix}/admin`, { ...params });
     },
     updateSAdmin: async (params: Partial<IModelUser>) => {
-      return service.put(`${prefix}/s.admin`, { ...params });
+      return service.put(`${prefix}/s-admin`, { ...params });
     },
   };
 };
