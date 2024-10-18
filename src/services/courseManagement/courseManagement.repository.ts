@@ -6,7 +6,7 @@ import {
 
 export const courseManagementController = (configService = {}) => {
   const service = apiService(configService);
-  const prefix = "/courseManagement";
+  const prefix = "/course-management";
 
   return {
     getCourseManagement: async (params?: CourseManagementSearchDTO) => {
@@ -35,7 +35,7 @@ export const courseManagementController = (configService = {}) => {
       return service.put(`${prefix}/${id}/${section}`, { ...params });
     },
     updateCoInsSections: async (params: any) => {
-      return service.put(`${prefix}/coIns`, { ...params });
+      return service.put(`${prefix}/co-instructor`, { ...params });
     },
     deleteCourseManagement: async (id: string, params: any) => {
       return service.delete(`${prefix}/${id}`, { ...params });
@@ -48,7 +48,7 @@ export const courseManagementController = (configService = {}) => {
       return service.delete(`${prefix}/${id}/${section}`, { ...params });
     },
     ploMapping: async (params: any) => {
-      return service.put(`${prefix}/ploMapping`, { ...params });
+      return service.put(`${prefix}/plo-mapping`, { ...params });
     },
   };
 };

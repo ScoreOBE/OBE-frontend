@@ -14,7 +14,7 @@ export const courseController = (configService = {}) => {
       return service.get(`${prefix}/one`, { ...params });
     },
     getExistsCourseName: async (courseNo: string, params: any) => {
-      return service.get(`${prefix}/courseName/${courseNo}`, { ...params });
+      return service.get(`${prefix}/name/${courseNo}`, { ...params });
     },
     checkCanCreateCourse: async (params: Partial<IModelCourse>) => {
       return service.get(`${prefix}/check`, { ...params });

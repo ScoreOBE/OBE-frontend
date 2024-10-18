@@ -10,6 +10,7 @@ export interface IModelSection {
   openThisTerm?: boolean;
   instructor: IModelUser | string;
   coInstructors: IModelUser[] | any[];
+  students?: IModelUser[];
   isActive: boolean;
   addFirstTime?: boolean;
   assignments?: IModelAssignment[];
