@@ -311,7 +311,7 @@ export default function ModalStudentList({
                       />
                       <p className="pl-5 text-default leading-6 font-medium ">
                         ou must import the student list (.xlsx) in this course
-                        for all sections from <br /> the CMU Registration
+                        for all sections from the CMU Registration
                         System.
                         <a
                           href="https://www1.reg.cmu.ac.th/registrationoffice/searchcourse.php"
@@ -358,7 +358,7 @@ export default function ModalStudentList({
           </Tabs>
         ) : type == "list" ? (
           studentTable()
-        ) : (
+        ) : (     
           <div className="flex flex-col gap-2 overflow-hidden">
             <div className=" flex-col overflow-y-auto h-full gap-3">
               <Alert
@@ -391,7 +391,7 @@ export default function ModalStudentList({
                         {data?.courseName}
                       </span>
                       , <br /> you must import the student list (.xlsx) in this
-                      course for all sections from <br /> the CMU Registration
+                      course for all sections from the CMU Registration
                       System.
                       <a
                         href="https://www1.reg.cmu.ac.th/registrationoffice/searchcourse.php"

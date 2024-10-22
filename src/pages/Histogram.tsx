@@ -76,16 +76,15 @@ export default function Histogram() {
       },
       {
         root: null,
-        threshold: 0.5,
+        threshold: 0.6,
       }
     );
 
-    // sectionRefs.current.forEach((ref, i) => {
-    //   if (ref.current) {
-    //     console.log(`Observing section ${i}`);
-    //     observer.observe(ref.current);
-    //   }
-    // });
+    sectionRefs.current.forEach((ref, i) => {
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+    });
 
     return () => {
       sectionRefs.current.forEach((ref) => {
@@ -97,7 +96,7 @@ export default function Histogram() {
   }, [section, sectionRefs, mockData.length]);
 
   return (
-    <div className="bg-white flex flex-col h-full w-full px-6 pt-5 gap-3 overflow-hidden">
+    <div className="bg-white flex flex-col h-full w-full px-6 pt-5  gap-3 overflow-hidden">
       <Breadcrumbs items={items} />
       {loading ? (
         <Loading />
@@ -218,7 +217,7 @@ export default function Histogram() {
               ))}
             </div>
 
-            <div className="max-w-[12%] flex flex-col  ">
+            <div className="max-w-[12%] mt-3 flex flex-col  ">
               {mockData.map((item, i) => (
                 <div
                   key={i}
@@ -229,7 +228,7 @@ export default function Histogram() {
                   <a href={`#${item.name}`}>
                     <p
                       className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
-                        activeSection === i ? "text-secondary" : "text-noData "
+                        activeSection === i ? "text-secondary" : "text-[#D2C9C9] "
                       }`}
                     >
                       {item.name}
