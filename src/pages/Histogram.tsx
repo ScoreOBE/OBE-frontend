@@ -47,15 +47,12 @@ export default function Histogram() {
     mockData.map(() => React.createRef<HTMLDivElement>())
   );
   const [activeSection, setActiveSection] = useState<number>(0);
-
-  const data = [
-    { month: "January", Smartphones: 1200, Laptops: 900, Tablets: 200 },
-    { month: "February", Smartphones: 1900, Laptops: 1200, Tablets: 400 },
-    { month: "March", Smartphones: 400, Laptops: 1000, Tablets: 200 },
-    { month: "April", Smartphones: 1000, Laptops: 200, Tablets: 800 },
-    { month: "May", Smartphones: 800, Laptops: 1400, Tablets: 1200 },
-    { month: "June", Smartphones: 750, Laptops: 600, Tablets: 1000 },
-  ];
+  const data = Array.from({ length: 20 }, (_, index) => {
+    return {
+      month: index + 1,
+      Students: 500 + 480 * Math.sin((index / 33) * Math.PI),
+    };
+  });
 
   useEffect(() => {
     sectionRefs.current = mockData.map(
@@ -83,12 +80,12 @@ export default function Histogram() {
       }
     );
 
-    sectionRefs.current.forEach((ref, i) => {
-      if (ref.current) {
-        console.log(`Observing section ${i}`);
-        observer.observe(ref.current);
-      }
-    });
+    // sectionRefs.current.forEach((ref, i) => {
+    //   if (ref.current) {
+    //     console.log(`Observing section ${i}`);
+    //     observer.observe(ref.current);
+    //   }
+    // });
 
     return () => {
       sectionRefs.current.forEach((ref) => {
@@ -116,14 +113,14 @@ export default function Histogram() {
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                   }}
-                  className={`last:mb-4 flex flex-col rounded-md gap-10 px-5 py-3 ${
+                  className={`last:mb-4 flex flex-col rounded-md gap-10 py-3 ${
                     activeSection === i ? "active" : ""
                   }`}
                   id={`${item.name}`}
                   key={i}
                   ref={sectionRefs.current[i]} // Dynamic refs
                 >
-                  <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-5 text-start">
+                  <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-5 text-start mx-5">
                     <p className="text-secondary text-[18px] text-start justify-start font-semibold">
                       {item.name} - 5.0 Points
                     </p>
@@ -184,17 +181,37 @@ export default function Histogram() {
                       </div>
                     </div>
                   </div>
-                  <div className="h-full w-full">
+                  <div className="h-full w-full pl-3 pr-5 ">
                     <BarChart
+                      style={{
+                        "--chart-cursor-fill": "#E6EAFF",
+                        // "--chart-grid-color": "",
+                        // "--chart-text-color": "",
+                      }}
                       h={420}
                       tickLine="x"
+                      xAxisLabel="Score"
+                      yAxisLabel="Number of Students"
                       data={data}
                       dataKey="month"
                       series={[
-                        { name: "Smartphones", color: "violet.6" },
-                        { name: "Laptops", color: "blue.6" },
-                        { name: "Tablets", color: "teal.6" },
+                        { name: "Students", color: "var(--color-secondary)" },
                       ]}
+                      barChartProps={{
+                        barGap: 0,
+                        stackOffset: "none",
+                        barCategoryGap: 0,
+                      }}
+                      barProps={{ stroke: "#000000", strokeWidth: 1 }}
+                      classNames={{
+                        axisLabel: "font-medium text-[12px] border-[#000000]",
+                        bar: "border !border-1-[#000000] hover:!bg-red-500 stroke",
+                        // tooltipBody:
+                        //   "bg-[#E6EAFF] border-[#000000] p-3 rounded-8",
+                        // tooltipItemData: "",
+                        // tooltipItem: "",
+                        // axis: "bg-red-500 hover:bg-red-500",
+                      }}
                     />
                   </div>
                 </div>
