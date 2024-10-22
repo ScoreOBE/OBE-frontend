@@ -370,7 +370,7 @@ export default function Assignment() {
         </div>
       </Modal>
 
-      <div className="bg-white flex flex-col h-full w-full p-6 pb-3 pt-5 gap-3 overflow-hidden">
+      <div className="bg-white flex flex-col h-full w-full px-6  pt-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
         {/* <Breadcrumbs /> */}
         {loading ? (
