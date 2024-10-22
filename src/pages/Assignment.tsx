@@ -73,7 +73,7 @@ export default function Assignment() {
     mode: "uncontrolled",
     initialValues: {
       isPublish: false,
-      sections: [] as string[],
+      sections: [] as any[],
       assignments: [] as string[],
     },
     validate: {},
@@ -105,6 +105,7 @@ export default function Assignment() {
 
   const onClosePublishModal = () => {
     setOpenPublishScoreModal(false);
+    setOpenSelectSecModal(false);
     form.reset();
   };
 
@@ -115,14 +116,22 @@ export default function Assignment() {
     });
   };
 
+  const publishScore = (isPublishAll: boolean) => {
+    form.setFieldValue("isPublish", true);
+    if (isPublishAll) {
+      const allSec = course?.sections?.map((sec) => sec.sectionNo) || [];
+      form.setFieldValue("sections", allSec);
+    }
+    const sectionsToNum = form
+      .getValues()
+      .sections.map((sec: string) => Number(sec));
+    form.setFieldValue("sections", sectionsToNum);
+  };
+
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
   }, []);
-
-  useEffect(() => {
-    console.log(form.getValues());
-  }, [form]);
 
   return (
     <>
@@ -158,41 +167,36 @@ export default function Assignment() {
             className="mb-5"
           ></Alert>
         )}
-        <div className="mb-6">
-          <Chip.Group
-            {...form.getInputProps("assignments")}
-            multiple
-            onChange={(event) => {
-              const allAssignments = assign.map((as) => as.name);
-
-              if (event.includes("all assignments")) {
+        <div className="mb-6 flex flex-col gap-3">
+          {course?.sections.length! > 1 && (
+            <Chip
+              classNames={{
+                label:
+                  "text-[13px] text-default font-semibold translate-y-[3px]",
+              }}
+              size="md"
+              checked={form.getValues().assignments.length === assign.length}
+              onChange={() => {
                 if (form.getValues().assignments.length === assign.length) {
                   form.setFieldValue("assignments", []);
                 } else {
-                  form.setFieldValue("assignments", allAssignments);
+                  const allAssign = assign.map((as) => as.name);
+                  form.setFieldValue("assignments", [...allAssign]);
                 }
-              } else {
-                form.setFieldValue("assignments", event);
-              }
+              }}
+            >
+              All Assignment
+            </Chip>
+          )}
+          <Chip.Group
+            {...form.getInputProps("assignments")}
+            multiple
+            value={form.getValues().assignments?.map((as) => as)}
+            onChange={(event) => {
+              form.setFieldValue("assignments", event);
             }}
           >
-            <Group className="flex gap-3">
-              {course?.sections.length! > 1 && (
-                <Chip
-                  classNames={{
-                    root: "h-8 min-w-[114px] rounded-[10px] text-center justify-center items-center",
-                    label:
-                      "text-[13px] text-default font-semibold translate-y-[3px]",
-                  }}
-                  checked={
-                    form.getValues().assignments.length === assign.length
-                  }
-                  size="md"
-                  value={"all assignments"}
-                >
-                  All Assignment
-                </Chip>
-              )}
+            <Group>
               <div className="flex gap-3">
                 {assign.map((as, index) => (
                   <Chip
@@ -202,7 +206,6 @@ export default function Assignment() {
                       label:
                         "text-[13px] text-default font-semibold translate-y-[3px] ",
                     }}
-                    checked={form.getValues().assignments.includes(as.name)}
                     size="md"
                     value={as.name}
                   >
@@ -226,15 +229,22 @@ export default function Assignment() {
                   className="size-5 stroke-2"
                 />
               }
+              disabled={!form.getValues().assignments.length}
               onClick={() => {
                 setOpenPublishScoreModal(false);
                 setOpenSelectSecModal(true);
+                form.setFieldValue("sections", []);
               }}
             >
               Next
             </Button>
           ) : (
-            <Button>Publish</Button>
+            <Button
+              onClick={() => publishScore(true)}
+              disabled={!form.getValues().assignments.length}
+            >
+              Publish
+            </Button>
           )}
         </div>
       </Modal>
@@ -253,7 +263,7 @@ export default function Assignment() {
         }
         transitionProps={{ transition: "pop" }}
         centered
-        onClose={() => setOpenSelectSecModal(false)}
+        onClose={onClosePublishModal}
       >
         <Alert
           variant="light"
@@ -284,22 +294,42 @@ export default function Assignment() {
           <p className="text-[14px] mb-1 font-semibold text-secondary">
             Select section to publish
           </p>
-
-          <Chip.Group {...form.getInputProps("sections")}>
+          {/* Chip */}
+          {course?.sections.length! > 1 && (
+            <Chip
+              classNames={{
+                label:
+                  "text-[13px] text-default font-semibold translate-y-[3px]",
+              }}
+              size="md"
+              checked={
+                form.getValues().sections.length === course?.sections.length
+              }
+              onChange={() => {
+                if (
+                  form.getValues().sections.length === course?.sections.length
+                ) {
+                  form.setFieldValue("sections", []);
+                } else {
+                  const allSec =
+                    course?.sections?.map((sec) => sec.sectionNo!.toString()) ||
+                    [];
+                  form.setFieldValue("sections", allSec);
+                }
+              }}
+            >
+              All Sections
+            </Chip>
+          )}
+          <Chip.Group
+            {...form.getInputProps("sections")}
+            multiple
+            value={form.getValues().sections.map((sec) => sec.toString())}
+            onChange={(event) => {
+              form.setFieldValue("sections", event);
+            }}
+          >
             <Group className="flex gap-3">
-              {course?.sections.length! > 1 && (
-                <Chip
-                  classNames={{
-                    root: "h-8 min-w-[114px] rounded-[10px] text-center justify-center items-center",
-                    label:
-                      "text-[13px] text-default font-semibold translate-y-[3px]",
-                  }}
-                  size="md"
-                  value={"all"}
-                >
-                  All Sections
-                </Chip>
-              )}
               <div className="flex gap-3">
                 {course?.sections.map((sec) => (
                   <Chip
@@ -310,7 +340,7 @@ export default function Assignment() {
                         "text-[13px] text-default font-semibold translate-y-[3px] ",
                     }}
                     size="md"
-                    value={sec.sectionNo}
+                    value={sec.sectionNo?.toString()}
                   >
                     Section {sec.sectionNo}
                   </Chip>
@@ -331,7 +361,12 @@ export default function Assignment() {
             Back
           </Button>
 
-          <Button>Publish</Button>
+          <Button
+            onClick={() => publishScore(false)}
+            disabled={!form.getValues().sections.length}
+          >
+            Publish
+          </Button>
         </div>
       </Modal>
 
@@ -434,6 +469,7 @@ export default function Assignment() {
                 <Table.Tbody className="text-default text-[13px] ">
                   {Array.from({ length: 12 }).map((_, index) => (
                     <Table.Tr
+                      key={index}
                       className={`hover:bg-[#F3F3F3] cursor-pointer ${
                         index % 2 === 0 && "bg-[#F8F9FA]"
                       }`}
