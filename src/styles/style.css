@@ -486,3 +486,13 @@
     opacity: 0;
   }
 }
+
+.recharts-xAxis {
+  align-content: end;
+  margin-right: 10;
+  text-align: start;
+  text-anchor: start;
+  transform: translateX(-2.5%);
+  /* Not done Test */
+  opacity: 1;
+}

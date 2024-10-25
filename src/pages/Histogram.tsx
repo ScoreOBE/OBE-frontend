@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useRef, useState } from "react";
-import { BarChart } from "@mantine/charts";
+import HistogramChart from "@/components/HistogramChart";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
@@ -8,6 +8,13 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
 import Loading from "@/components/Loading";
 import React from "react";
+import {
+  IModelAssignment,
+  IModelQuestion,
+  IModelScore,
+} from "@/models/ModelSection";
+import { IModelUser } from "@/models/ModelUser";
+import { ROLE } from "@/helpers/constants/enum";
 
 export default function Histogram() {
   const { courseNo, sectionNo } = useParams();
@@ -43,16 +50,50 @@ export default function Histogram() {
     { name: "Quiz 3" },
   ];
 
+  // Mock Data for HistogramChart Component
+  const generateMockUser = (index: number): IModelUser => ({
+    id: `user-${index + 1}`,
+    studentId: `student-${index + 1}`,
+    firstNameTH: `ชื่อ${index + 1}`,
+    lastNameTH: `นามสกุล${index + 1}`,
+    firstNameEN: `FirstName${index + 1}`,
+    lastNameEN: `LastName${index + 1}`,
+    email: `student${index + 1}@example.com`,
+    facultyCode: `FAC${index % 5}`, // Example faculty code
+    departmentCode: [`DEP${index % 3}`], // Example department codes
+    role: index % 2 === 0 ? ROLE.STUDENT : ROLE.ADMIN, // Use the ROLE enum
+    enrollCourses: [], // Can add specific courses if needed
+  });
+
+  // Generate assignments mock data
+  const assignments: IModelAssignment[] = Array.from(
+    { length: 12 },
+    (_, index) => ({
+      name: `Assignment ${index + 1}`,
+      desc: `Description for Assignment ${index + 1}`,
+      isPublish: index % 2 === 0,
+      weight: Math.floor(index) + 1,
+      questions: Array.from(
+        { length: 5 },
+        (_, qIndex): IModelQuestion => ({
+          no: qIndex + 1,
+          desc: `Question ${qIndex + 1} Description`,
+          fullScore: 100,
+          scores: Array.from(
+            { length: 30 },
+            (_, sIndex): IModelScore => ({
+              student: generateMockUser(sIndex), // Generate a mock user for each score
+              point: Math.floor(Math.random() * 100),
+            })
+          ),
+        })
+      ),
+    })
+  );
   const sectionRefs = useRef(
     mockData.map(() => React.createRef<HTMLDivElement>())
   );
   const [activeSection, setActiveSection] = useState<number>(0);
-  const data = Array.from({ length: 20 }, (_, index) => {
-    return {
-      month: index + 1,
-      Students: 500 + 480 * Math.sin((index / 33) * Math.PI),
-    };
-  });
 
   useEffect(() => {
     sectionRefs.current = mockData.map(
@@ -107,7 +148,7 @@ export default function Histogram() {
         <div className="flex overflow-y-auto overflow-x-hidden  max-w-full h-full">
           <div className="flex gap-6 w-full h-full">
             <div className="gap-4 flex flex-col my-1  min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
-              {mockData.map((item, i) => (
+              {assignments.map((item, i) => (
                 <div
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -119,100 +160,7 @@ export default function Histogram() {
                   key={i}
                   ref={sectionRefs.current[i]} // Dynamic refs
                 >
-                  <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-5 text-start mx-5">
-                    <p className="text-secondary text-[18px] text-start justify-start font-semibold">
-                      {item.name} - 5.0 Points
-                    </p>
-                    <div className="flex px-8 flex-row justify-between w-full">
-                      <div className="flex flex-col">
-                        <p className="font-semibold text-[16px] text-[#777777]">
-                          Mean
-                        </p>
-                        <p className="font-bold text-[28px] text-default">
-                          2.0
-                        </p>
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-semibold text-[16px] text-[#777777]">
-                          SD
-                        </p>
-                        <p className="font-bold text-[28px] text-default">
-                          2.15
-                        </p>
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-semibold text-[16px] text-[#777777]">
-                          Median
-                        </p>
-                        <p className="font-bold text-[28px] text-default">
-                          1.5
-                        </p>
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-semibold text-[16px] text-[#777777]">
-                          Max
-                        </p>
-                        <p className="font-bold text-[28px] text-default">
-                          4.5
-                        </p>
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-semibold text-[16px] text-[#777777]">
-                          Min
-                        </p>
-                        <p className="font-bold text-[28px] text-default">0</p>
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-semibold text-[16px] text-[#777777]">
-                          Q3
-                        </p>
-                        <p className="font-bold text-[28px] text-default">
-                          3.75
-                        </p>
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-semibold text-[16px] text-[#777777]">
-                          Q1
-                        </p>
-                        <p className="font-bold text-[28px] text-default">
-                          1.75
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="h-full w-full pl-3 pr-5 ">
-                    <BarChart
-                      style={{
-                        "--chart-cursor-fill": "#E6EAFF",
-                        // "--chart-grid-color": "",
-                        // "--chart-text-color": "",
-                      }}
-                      h={420}
-                      tickLine="x"
-                      xAxisLabel="Score"
-                      yAxisLabel="Number of Students"
-                      data={data}
-                      dataKey="month"
-                      series={[
-                        { name: "Students", color: "var(--color-secondary)" },
-                      ]}
-                      barChartProps={{
-                        barGap: 0,
-                        stackOffset: "none",
-                        barCategoryGap: 0,
-                      }}
-                      barProps={{ stroke: "#000000", strokeWidth: 1 }}
-                      classNames={{
-                        axisLabel: "font-medium text-[12px] border-[#000000]",
-                        bar: "border !border-1-[#000000] hover:!bg-red-500 stroke",
-                        // tooltipBody:
-                        //   "bg-[#E6EAFF] border-[#000000] p-3 rounded-8",
-                        // tooltipItemData: "",
-                        // tooltipItem: "",
-                        // axis: "bg-red-500 hover:bg-red-500",
-                      }}
-                    />
-                  </div>
+                  <HistogramChart data={item} isQuestions={false} />
                 </div>
               ))}
             </div>
@@ -228,7 +176,9 @@ export default function Histogram() {
                   <a href={`#${item.name}`}>
                     <p
                       className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
-                        activeSection === i ? "text-secondary" : "text-[#D2C9C9] "
+                        activeSection === i
+                          ? "text-secondary"
+                          : "text-[#D2C9C9] "
                       }`}
                     >
                       {item.name}
