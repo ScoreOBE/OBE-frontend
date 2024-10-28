@@ -12,6 +12,7 @@ import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
 import PageError from "./pages/PageError";
 import { setLoading } from "./store/loading";
+import ModalTermOfService from "./components/Modal/ModalTermOfService";
 
 function App() {
   const showSidebar = useAppSelector((state) => state.showSidebar);
@@ -71,6 +72,7 @@ function App() {
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-full w-full overflow-hidden">
         {showNavbar && <Navbar />}
+        <ModalTermOfService opened={true} onClose={() => {}} />
         <Outlet />
       </div>
     </div>
