@@ -1,6 +1,5 @@
 import { Alert, Button, Group, Modal } from "@mantine/core";
-import { useEffect, useState } from "react";
-import { useAppSelector } from "@/store";
+import { useState } from "react";
 import Icon from "../Icon";
 import IconExclamamtion from "@/assets/icons/exclamationCircle.svg?react";
 import IconUserScan from "@/assets/icons/userScan.svg?react";
@@ -11,38 +10,44 @@ import IconAddressBook from "@/assets/icons/addressBook.svg?react";
 import IconListNumber from "@/assets/icons/listNumbers.svg?react";
 import IconMail from "@/assets/icons/mail.svg?react";
 import IconClipboardText from "@/assets/icons/clipboardText.svg?react";
+import { logOut, termsOfService } from "@/services/user/user.service";
+import { useAppDispatch } from "@/store";
+import { setUser } from "@/store/user";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
 };
 
-export default function ModalTermOfService({ opened, onClose }: Props) {
-  const tqf3 = useAppSelector((state) => state.tqf3);
-  const [selectedParts, setSelectedParts] = useState<string[]>([]);
+export default function ModalTermsOfService({ opened, onClose }: Props) {
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (opened) {
-      Object.keys(tqf3).forEach((part) => {
-        if (part.includes("part")) {
-          selectedParts.push(part);
-        }
-      });
+  const submitTermsOfService = async (isAgree: boolean) => {
+    setLoading(true);
+    const res = await termsOfService({ agree: isAgree });
+    if (res) {
+      if (res.token) {
+        localStorage.setItem("token", res.token);
+        dispatch(setUser(res.user));
+      } else {
+        logOut();
+      }
+      onClose();
     }
-  }, [opened]);
-
-  const onCloseModal = () => {
-    onClose();
-    setSelectedParts([]);
+    setLoading(false);
   };
 
   return (
     <Modal
       opened={opened}
-      onClose={onCloseModal}
+      onClose={onClose}
       withCloseButton={false}
-      closeOnClickOutside={true}
+      closeOnClickOutside={false}
+      overlayProps={{
+        backgroundOpacity: 0.55,
+        blur: 10,
+      }}
       title={
         <div className="mt-1 text-[22px] flex flex-col gap-3">
           <p className="font-bold">
@@ -166,13 +171,18 @@ export default function ModalTermOfService({ opened, onClose }: Props) {
       <div className="flex justify-end mt-2 sticky w-full">
         <Group className="flex w-full  gap-2 h-fit items-end justify-end">
           <Button
-            onClick={onClose}
+            loading={loading}
+            onClick={() => submitTermsOfService(false)}
             classNames={{ label: "font-bold " }}
             variant="subtle"
           >
             Disagree, Log out
           </Button>
-          <Button loading={loading} classNames={{ label: "font-bold" }}>
+          <Button
+            loading={loading}
+            classNames={{ label: "font-bold" }}
+            onClick={() => submitTermsOfService(true)}
+          >
             I agree with terms
           </Button>
         </Group>

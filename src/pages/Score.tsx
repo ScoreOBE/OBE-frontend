@@ -63,8 +63,6 @@ export default function Overall() {
     dispatch(setShowNavbar(true));
   }, []);
 
-  console.log("Overall");
-
   return (
     <>
       <div className="bg-white flex flex-col h-full w-full p-6 pb-3 pt-5 gap-3 overflow-hidden">

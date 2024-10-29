@@ -27,6 +27,7 @@ import { setLoading } from "@/store/loading";
 import { useEffect } from "react";
 
 export default function Sidebar() {
+  const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const { courseNo } = useParams();
   const course = useAppSelector((state) =>
@@ -74,6 +75,7 @@ export default function Sidebar() {
   }, [academicYear, params]);
 
   const fetchCourse = async () => {
+    if (!user.termsOfService) return;
     dispatch(setLoading(true));
     const res = await getCourse({
       ...new CourseRequestDTO(),

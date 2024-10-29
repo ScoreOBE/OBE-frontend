@@ -1,5 +1,8 @@
+import { ROUTE_PATH } from "@/helpers/constants/route";
 import { IModelUser } from "@/models/ModelUser";
 import apiService from "@/services/apiService";
+import store from "@/store";
+import { setUser } from "@/store/user";
 
 export const userController = (configService = {}) => {
   const service = apiService(configService);
@@ -8,6 +11,9 @@ export const userController = (configService = {}) => {
   return {
     getUserInfo: async () => {
       return service.get(`${prefix}`);
+    },
+    termsOfService: async (params: { agree: boolean }) => {
+      return service.post(`${prefix}/terms-of-service`, { ...params });
     },
     getInstructor: async () => {
       return service.get(`${prefix}/instructor`);
@@ -20,6 +26,11 @@ export const userController = (configService = {}) => {
     },
     updateSAdmin: async (params: Partial<IModelUser>) => {
       return service.put(`${prefix}/s-admin`, { ...params });
+    },
+    logOut: () => {
+      localStorage.removeItem("token");
+      store.dispatch(setUser({}));
+      window.location.replace(ROUTE_PATH.LOGIN);
     },
   };
 };

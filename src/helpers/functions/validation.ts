@@ -8,6 +8,20 @@ import store from "@/store";
 import { setErrorResponse } from "@/store/errorResponse";
 import { isNumber } from "lodash";
 
+export const checkTokenExpired = async (token: string) => {
+  try {
+    const decode = await JSON.parse(atob(token.split(".")[1]));
+    // check expired
+    if (decode.exp * 1000 < new Date().getTime()) {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    // token invalid
+    return false;
+  }
+};
+
 export const isValidResponse = (res: any) => {
   if (
     res.headers &&
@@ -17,7 +31,7 @@ export const isValidResponse = (res: any) => {
   if (res.message === RESPONSE_MESSAGE.SUCCESS) {
     return res.data;
   } else {
-    const path = window.location.pathname;
+    // const path = window.location.pathname;
     const dispatch = store.dispatch;
     switch (res.statusCode) {
       case STATUS_CODE.NOT_FOUND:

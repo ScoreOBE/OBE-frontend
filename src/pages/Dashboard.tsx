@@ -88,6 +88,7 @@ export default function Dashboard() {
   }, [localStorage.getItem("search")]);
 
   const fetchCourse = async (year: number, semester: number) => {
+    if (!user.termsOfService) return;
     dispatch(setLoading(true));
     const payloadCourse = new CourseRequestDTO();
     setPayload({ ...payloadCourse, year, semester, hasMore: true });

@@ -11,6 +11,7 @@ import IconArrowLeft from "@/assets/icons/arrowLeft.svg?react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/Icon";
+import { setUser } from "@/store/user";
 
 export default function PageError() {
   const error = useAppSelector((state) => state.errorResponse);
@@ -33,6 +34,7 @@ export default function PageError() {
           : ROUTE_PATH.DASHBOARD_INS
       );
     } else {
+      dispatch(setUser({}));
       navigate(ROUTE_PATH.LOGIN);
     }
   };
@@ -54,7 +56,10 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <Icon IconComponent={IconArrowLeft} className="size-6 -mr-1 stoke-[3px]" />
+                <Icon
+                  IconComponent={IconArrowLeft}
+                  className="size-6 -mr-1 stoke-[3px]"
+                />
               }
               className="inline-block -ml-4 mt-3 !text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
@@ -80,7 +85,10 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <Icon IconComponent={IconArrowLeft} className="size-6 -mr-1 stoke-[3px]" />
+                <Icon
+                  IconComponent={IconArrowLeft}
+                  className="size-6 -mr-1 stoke-[3px]"
+                />
               }
               className="inline-block -ml-4 mt-3 !text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
@@ -109,7 +117,10 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <Icon IconComponent={IconArrowLeft} className="size-6 -mr-1 stoke-[3px]" />
+                <Icon
+                  IconComponent={IconArrowLeft}
+                  className="size-6 -mr-1 stoke-[3px]"
+                />
               }
               className="inline-block -ml-4 mt-3 !text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >
@@ -139,7 +150,10 @@ export default function PageError() {
             <Button
               onClick={goDashboard}
               leftSection={
-                <Icon IconComponent={IconArrowLeft} className="size-6 -mr-1 stoke-[3px]" />
+                <Icon
+                  IconComponent={IconArrowLeft}
+                  className="size-6 -mr-1 stoke-[3px]"
+                />
               }
               className="inline-block -ml-4 mt-3 !!text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
             >

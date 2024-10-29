@@ -18,7 +18,6 @@ import IconAdmin from "@/assets/icons/admin.svg?react";
 import IconSemester from "@/assets/icons/calendar.svg?react";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import { setUser } from "@/store/user";
 import { ROLE } from "@/helpers/constants/enum";
 import ModalManageAdmin from "./Modal/Profile/ModalManageAdmin";
 import ModalChangeSupAdmin from "./Modal/Profile/ModalChangeSupremeAdmin";
@@ -27,11 +26,11 @@ import ModalManageTQF from "./Modal/Profile/ModalManageTQF";
 import { getUserName } from "@/helpers/functions/function";
 import ModalCourseManagement from "./Modal/Profile/ModalCourseManagement";
 import ModalPLOManagement from "./Modal/Profile/ModalPLOManagement";
+import { logOut } from "@/services/user/user.service";
 
 export default function Profile() {
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const [openModalChangeSupAdmin, setOpenModalChangeSupAdmin] = useState(false);
   const [openModalManageSemester, setOpenModalManageSemester] = useState(false);
   const [openModalManageAdmin, setOpenModalManageAdmin] = useState(false);
@@ -80,12 +79,6 @@ export default function Profile() {
           />
         );
     }
-  };
-
-  const Logout = () => {
-    localStorage.removeItem("token");
-    dispatch(setUser({}));
-    navigate(ROUTE_PATH.LOGIN, { replace: true });
   };
 
   return (
@@ -267,7 +260,10 @@ export default function Profile() {
                   onMouseDown={() => setOpenModalManageTQF(true)}
                 >
                   <div className="flex items-center gap-2">
-                    <Icon IconComponent={IconTQF} className="size-4 stroke-[0.5px]" />
+                    <Icon
+                      IconComponent={IconTQF}
+                      className="size-4 stroke-[0.5px]"
+                    />
                     <span>TQF</span>
                   </div>
                 </Menu.Item>
@@ -278,7 +274,7 @@ export default function Profile() {
           <Menu.Divider />
           <Menu.Item
             className="text-[#FF4747] hover:bg-[#d55757]/10"
-            onClick={Logout}
+            onClick={logOut}
           >
             <div className="flex items-center gap-2">
               <Icon

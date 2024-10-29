@@ -9,6 +9,13 @@ export const getUserInfo = async (): Promise<IModelUser> => {
   return isValidResponse(res);
 };
 
+export const termsOfService = async (params: {
+  agree: boolean;
+}): Promise<any> => {
+  const res = await userService.termsOfService(params);
+  return isValidResponse(res);
+};
+
 export const getInstructor = async (): Promise<IModelUser[]> => {
   const res = await userService.getInstructor();
   return isValidResponse(res);
@@ -27,4 +34,8 @@ export const updateAdmin = async (params: Partial<IModelUser>) => {
 export const updateSAdmin = async (params: Partial<IModelUser>) => {
   const res = await userService.updateSAdmin(params);
   return isValidResponse(res);
+};
+
+export const logOut = () => {
+  userService.logOut();
 };
