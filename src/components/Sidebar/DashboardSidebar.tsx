@@ -34,6 +34,7 @@ export default function DashboardSidebar() {
   );
 
   useEffect(() => {
+    if (!user.termsOfService) return;
     if (
       academicYear.length &&
       !params.get("year") &&
@@ -44,7 +45,7 @@ export default function DashboardSidebar() {
     } else if (user && !academicYear.length) {
       fetchAcademicYear();
     }
-  }, [academicYear]);
+  }, [user.termsOfService, academicYear]);
 
   useEffect(() => {
     if (

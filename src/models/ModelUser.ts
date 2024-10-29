@@ -11,6 +11,7 @@ export interface IModelUser {
   facultyCode: string;
   departmentCode: string[];
   role: ROLE;
+  termsOfService?: boolean;
   enrollCourses?: any[];
   // ownCourses?: any[];
   // coCourses?: any[];

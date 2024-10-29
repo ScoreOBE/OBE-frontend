@@ -50,8 +50,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
       const res = await getCourse(initialPayload);
       if (res) {
         const courseList: any[] = [];
-        console.log(res);
-
         res.forEach((course: IModelCourse) => {
           if (course.type === COURSE_TYPE.SEL_TOPIC.en) {
             course.sections.forEach((section) => {
@@ -99,7 +97,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   };
 
   const onClickToggleOne = (checked: any, index?: number) => {
-    console.log(checked);
     const updatedList = courseList.map((item, idx) => {
       if (index === idx) {
         return {
@@ -109,9 +106,6 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
       }
       return item;
     });
-    // Log updated list to ensure state changes
-    console.log("Updated course list:", updatedList);
-
     setCourseList(updatedList);
   };
   return (

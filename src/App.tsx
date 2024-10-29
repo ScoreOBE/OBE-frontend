@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
@@ -12,9 +12,11 @@ import { setAcademicYear } from "./store/academicYear";
 import { AcademicYearRequestDTO } from "./services/academicYear/dto/academicYear.dto";
 import PageError from "./pages/PageError";
 import { setLoading } from "./store/loading";
-import ModalTermOfService from "./components/Modal/ModalTermOfService";
+import { checkTokenExpired } from "./helpers/functions/validation";
+import ModalTermsOfService from "./components/Modal/ModalTermOfService";
 
 function App() {
+  const [openModalTermsOfService, setOpenModalTermsOfService] = useState(false);
   const showSidebar = useAppSelector((state) => state.showSidebar);
   const showNavbar = useAppSelector((state) => state.showNavbar);
   const error = useAppSelector((state) => state.errorResponse);
@@ -25,8 +27,10 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      if (!isEmpty(user) && !isEmpty(academicYear)) return;
+    const token = localStorage.getItem("token");
+    if (token) {
+      if (user.termsOfService && !isEmpty(academicYear)) return;
+      checkToken(token);
       if (
         user.departmentCode &&
         !user.departmentCode.length &&
@@ -46,6 +50,14 @@ function App() {
     }
   }, [user, path]);
 
+  const checkToken = async (token: string) => {
+    const isExpired = await checkTokenExpired(token);
+    if (isExpired) {
+      localStorage.removeItem("token");
+      navigate(ROUTE_PATH.LOGIN);
+    }
+  };
+
   const fetchData = async () => {
     dispatch(setLoading(true));
     if (!user.id) {
@@ -55,8 +67,13 @@ function App() {
       } else {
         dispatch(setLoading(false));
       }
-    }
-    if (user.id && !academicYear.length && path !== ROUTE_PATH.DASHBOARD_INS) {
+    } else if (!user.termsOfService) {
+      setOpenModalTermsOfService(true);
+    } else if (
+      user.termsOfService &&
+      !academicYear.length &&
+      path !== ROUTE_PATH.DASHBOARD_INS
+    ) {
       const payload = new AcademicYearRequestDTO();
       const rsAcademicYear = await getAcademicYear(payload);
       if (rsAcademicYear) {
@@ -72,7 +89,10 @@ function App() {
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-full w-full overflow-hidden">
         {showNavbar && <Navbar />}
-        <ModalTermOfService opened={true} onClose={() => {}} />
+        <ModalTermsOfService
+          opened={openModalTermsOfService}
+          onClose={() => setOpenModalTermsOfService(false)}
+        />
         <Outlet />
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "@/store/user";
-import { login } from "@/services/authentication/authentication.service";
+import { logIn } from "@/services/authentication/authentication.service";
 import { Button } from "@mantine/core";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -38,7 +38,7 @@ export default function CMUOAuthCallback() {
     }
 
     const fetchData = async () => {
-      const res = await login(code);
+      const res = await logIn(code);
       if (res) {
         localStorage.setItem("token", res.token);
         dispatch(setUser(res.user));
