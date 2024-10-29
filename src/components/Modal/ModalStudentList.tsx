@@ -1,5 +1,5 @@
 import { Dropzone, MS_EXCEL_MIME_TYPE } from "@mantine/dropzone";
-import { Group, Table, Tabs, TextInput } from "@mantine/core";
+import { Table, Tabs, TextInput } from "@mantine/core";
 import { Alert, Button, Modal } from "@mantine/core";
 import { IModelCourse } from "@/models/ModelCourse";
 import regcmu from "@/assets/image/regCMULogo.png";
@@ -14,6 +14,8 @@ import IconX from "@/assets/icons/x.svg?react";
 import IconExternalLink from "@/assets/icons/externalLink.svg?react";
 import IconUpload from "@/assets/icons/upload.svg?react";
 import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
+import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
+import ModalErrorUploadFile from "./ModalErrorUploadFile";
 
 type modalType = "import" | "list" | "import_list";
 type Props = {
@@ -36,6 +38,8 @@ export default function ModalStudentList({
   onNext,
 }: Props) {
   const [tab, setTab] = useState<string | null>("importStudentList");
+  const [openModalUploadError, setOpenModalUploadError] = useState(false);
+  const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
   const studentData = [
     {
       no: 1,
@@ -181,8 +185,15 @@ export default function ModalStudentList({
   const dropZoneFile = () => {
     return (
       <Dropzone
-        onDrop={(files) => console.log("accepted files", files)}
-        onReject={(files) => console.log("rejected files", files)}
+        onDrop={(files) =>
+          onUploadFile(
+            files,
+            "studentList",
+            setOpenModalUploadError,
+            setErrorStudentId
+          )
+        }
+        onReject={(files) => onRejectFile(files)}
         maxFiles={1}
         maxSize={5 * 1024 ** 2}
         accept={MS_EXCEL_MIME_TYPE}
@@ -234,6 +245,11 @@ export default function ModalStudentList({
 
   return (
     <>
+      <ModalErrorUploadFile
+        opened={openModalUploadError}
+        onClose={() => setOpenModalUploadError(false)}
+        errorStudentId={errorStudentId}
+      />
       {/* Main Modal */}
       <Modal
         title={
@@ -311,8 +327,7 @@ export default function ModalStudentList({
                       />
                       <p className="pl-5 text-default leading-6 font-medium ">
                         ou must import the student list (.xlsx) in this course
-                        for all sections from the CMU Registration
-                        System.
+                        for all sections from the CMU Registration System.
                         <a
                           href="https://www1.reg.cmu.ac.th/registrationoffice/searchcourse.php"
                           target="_blank"
@@ -358,7 +373,7 @@ export default function ModalStudentList({
           </Tabs>
         ) : type == "list" ? (
           studentTable()
-        ) : (     
+        ) : (
           <div className="flex flex-col gap-2 overflow-hidden">
             <div className=" flex-col overflow-y-auto h-full gap-3">
               <Alert
@@ -391,8 +406,7 @@ export default function ModalStudentList({
                         {data?.courseName}
                       </span>
                       , <br /> you must import the student list (.xlsx) in this
-                      course for all sections from the CMU Registration
-                      System.
+                      course for all sections from the CMU Registration System.
                       <a
                         href="https://www1.reg.cmu.ac.th/registrationoffice/searchcourse.php"
                         target="_blank"

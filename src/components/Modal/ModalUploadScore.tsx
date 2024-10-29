@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dropzone, MS_EXCEL_MIME_TYPE } from "@mantine/dropzone";
+import { Dropzone, MIME_TYPES, MS_EXCEL_MIME_TYPE } from "@mantine/dropzone";
 import { Alert, Button, Modal } from "@mantine/core";
 import Icon from "../Icon";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -15,11 +15,8 @@ import { IModelCourse } from "@/models/ModelCourse";
 import gradescope from "@/assets/image/gradescope.png";
 import ModalStudentList from "./ModalStudentList";
 import ModalTemplateGuide from "./ModalTemplateGuide";
-import {
-  onUploadFile,
-  onRejectFile,
-  gradescopeFile,
-} from "@/helpers/functions/uploadFile";
+import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
+import ModalErrorUploadFile from "./ModalErrorUploadFile";
 
 type Props = {
   opened: boolean;
@@ -46,19 +43,12 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         onClose={() => setOpenModalStudentList(false)}
         type="import_list"
       />
-      <Modal
+      <ModalErrorUploadFile
         opened={openModalUploadError}
         onClose={() => setOpenModalUploadError(false)}
-        closeOnClickOutside={true}
-        title="Error upload score"
-        transitionProps={{ transition: "pop" }}
-        centered
-      >
-        <div>
-          <p>Student ID: {errorStudentId.join(", ")}</p>
-          <p>Point: {errorPoint.join(", ")}</p>
-        </div>
-      </Modal>
+        errorStudentId={errorStudentId}
+        errorPoint={errorPoint}
+      />
       {/* Main Modal */}
       <Modal.Root
         opened={opened}
@@ -229,25 +219,19 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               </Alert>
 
               <Dropzone
-                onDrop={(files) => {
+                onDrop={(files) =>
                   onUploadFile(
                     files,
+                    "score",
                     setOpenModalUploadError,
                     setErrorStudentId,
                     setErrorPoint
-                  );
-
-                  gradescopeFile(
-                    files,
-                    setOpenModalUploadError,
-                    setErrorStudentId,
-                    setErrorPoint
-                  );
-                }}
+                  )
+                }
                 onReject={(files) => onRejectFile(files)}
                 maxFiles={1}
                 maxSize={5 * 1024 ** 2}
-                accept={MS_EXCEL_MIME_TYPE}
+                accept={[...MS_EXCEL_MIME_TYPE, MIME_TYPES.csv]}
                 className="bg-white hover:bg-gray-50 py-12 border-[#8f9ae37f] border-dashed cursor-pointer border-[2px] rounded-md"
               >
                 <div className="flex flex-col gap-3 justify-center items-center pointer-events-none">
