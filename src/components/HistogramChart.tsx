@@ -6,27 +6,27 @@ type Props = {
   isQuestions: boolean;
 };
 
-// Mock data for demonstration
-const chartData = Array.from({ length: 10 }, (_, index) => ({
-  month: `${index + 1} - ${index + 2}`,
-  Students: 5 * (index + 1),
-}));
-
 export default function HistogramChart({ data, isQuestions }: Props) {
+  // Mock data for demonstration
+  const chartData = Array.from({ length: 10 }, (_, index) => ({
+    month: `${index + 1} - ${index + 2}`,
+    Students: 5 * (index + 1),
+  }));
   return (
     <>
       {!isQuestions && (
         <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-6 text-start mx-5">
           <div className="flex flex-row text-secondary text-[20px] w-full justify-between font-semibold">
-            <div>
-              <p className="text-[#3f4474] mb-1 text-[18px]">{data.name}</p>
-              <p>
-                {data.weight?.toFixed(2)}{" "}
-                <span className="text-[16px]">pts.</span>
-              </p>
+            <div className="flex justify-between !w-full items-center mb-1">
+              <div className="flex flex-col">
+                <p className="text-[#3f4474] mb-1 text-[16px]">{data.name}</p>
+                <p>
+                  {data.weight?.toFixed(2)}{" "}
+                  <span className="text-[16px]">pts.</span>
+                </p>
+              </div>
+              <p className="text-[#3f4474] mb-1 text-[16px]">{120} Students</p>
             </div>
-
-            <p className="text-[#3f4474] mb-1 text-[18px]">{120} Students</p>
           </div>
 
           <div className="flex px-8 flex-row justify-between w-full">
@@ -77,7 +77,8 @@ export default function HistogramChart({ data, isQuestions }: Props) {
           series={[
             {
               name: "Students",
-              color: "#E0DEFF",
+              color: "rgba(169, 169, 233, 0.40)",
+              
             },
           ]}
           barChartProps={{
@@ -86,7 +87,7 @@ export default function HistogramChart({ data, isQuestions }: Props) {
             barCategoryGap: 0,
           }}
           barProps={{
-            stroke: "#696CA3",
+            stroke: "#9A9AE3",
             strokeWidth: 1,
             radius: 2,
             strokeOpacity: 1,
