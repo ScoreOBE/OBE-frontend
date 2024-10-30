@@ -14,6 +14,9 @@ import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
 import { addLoadMoreAllCourse, setAllCourseList } from "@/store/allCourse";
+import { getUniqueTopicsWithTQF } from "@/helpers/functions/function";
+import { COURSE_TYPE } from "@/helpers/constants/enum";
+import { IModelCourse } from "@/models/ModelCourse";
 
 export default function AdminDashboardCLO() {
   const loading = useAppSelector((state) => state.loading);
@@ -88,6 +91,52 @@ export default function AdminDashboardCLO() {
     }
   };
 
+  const courseTable = (index: number, course: Partial<IModelCourse>) => {
+    const uniqueTopic = getUniqueTopicsWithTQF(course.sections!);
+    return course.type == COURSE_TYPE.SEL_TOPIC.en ? (
+      uniqueTopic.map((sec) => {
+        return (
+          <Table.Tr key={`${index}-${sec.topic}`}>
+            <Table.Td>
+              <div>
+                <p>{course.courseNo}</p>
+                <p>{course.courseName}</p>
+                {sec && <p>({sec.topic})</p>}
+              </div>
+            </Table.Td>
+            <Table.Td>
+              <div>
+                {sec.TQF3?.part2 ? (
+                  sec.TQF3?.part2!.clo.map(({ no }) => <p key={no}>CLO {no}</p>)
+                ) : (
+                  <p>TQF 3 {sec.TQF3?.status}</p>
+                )}
+              </div>
+            </Table.Td>
+          </Table.Tr>
+        );
+      })
+    ) : (
+      <Table.Tr key={index}>
+        <Table.Td>
+          <div>
+            <p>{course.courseNo}</p>
+            <p>{course.courseName}</p>
+          </div>
+        </Table.Td>
+        <Table.Td>
+          <div>
+            {course.TQF3?.part2 ? (
+              course.TQF3?.part2.clo.map(({ no }) => <p key={no}>CLO {no}</p>)
+            ) : (
+              <p>TQF 3 {course.TQF3?.status}</p>
+            )}
+          </div>
+        </Table.Td>
+      </Table.Tr>
+    );
+  };
+
   return (
     <>
       <div className=" flex flex-col h-full w-full gap-2 overflow-hidden">
@@ -152,29 +201,9 @@ export default function AdminDashboardCLO() {
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
-                  {courseList.courses.map((item, index) => {
-                    return (
-                      <Table.Tr key={index}>
-                        <Table.Td>
-                          <div>
-                            <p>{item.courseNo}</p>
-                            <p>{item.courseName}</p>
-                          </div>
-                        </Table.Td>
-                        <Table.Td>
-                          <div>
-                            {/* {item.TQF3 && item.TQF3.part7 ? (
-                              item.TQF3.part2.clo.map(({ no }) => (
-                                <p>CLO {no}</p>
-                              ))
-                            ) : (
-                              <></>
-                            )} */}
-                          </div>
-                        </Table.Td>
-                      </Table.Tr>
-                    );
-                  })}
+                  {courseList.courses.map((course, index) =>
+                    courseTable(index, course)
+                  )}
                 </Table.Tbody>
               </Table>
             </InfiniteScroll>
