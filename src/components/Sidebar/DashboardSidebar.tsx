@@ -190,7 +190,10 @@ export default function DashboardSidebar() {
             <div className="flex flex-col gap-2">
               <Button
                 onClick={() => gotoPage(ROUTE_PATH.TQF)}
-                // leftSection={<Icon IconComponent={IconList} />}
+                leftSection={
+                  <></>
+                  // <Icon IconComponent={IconList} />
+                }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
                 path.includes(ROUTE_PATH.TQF)
