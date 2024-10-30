@@ -147,7 +147,7 @@ export default function Histogram() {
           .includes(user.id) ? (
         <div className="flex overflow-y-auto overflow-x-hidden  max-w-full h-full">
           <div className="flex gap-6 w-full h-full">
-            <div className="gap-4 flex flex-col my-1  min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
+            <div className="gap-4 flex flex-col my-2 min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
               {assignments.map((item, i) => (
                 <div
                   style={{

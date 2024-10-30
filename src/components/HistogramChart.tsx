@@ -9,53 +9,61 @@ type Props = {
 // Mock data for demonstration
 const chartData = Array.from({ length: 10 }, (_, index) => ({
   month: `${index + 1} - ${index + 2}`,
-  Students: 450 * (index + 1),
+  Students: 5 * (index + 1),
 }));
 
-export default function HistogramChart(data: Props) {
+export default function HistogramChart({ data, isQuestions }: Props) {
   return (
     <>
-      <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-6 text-start mx-5">
-        <div className="text-secondary text-[20px]  text-start justify-start font-semibold">
-          <p className="text-[#3f4474] mb-1 text-[18px]">{data.data.name}</p>
-          <p>
-            {data.data.weight?.toFixed(2)}{" "}
-            <span className="text-[16px]">pts.</span>
-          </p>
-        </div>
+      {!isQuestions && (
+        <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-6 text-start mx-5">
+          <div className="flex flex-row text-secondary text-[20px] w-full justify-between font-semibold">
+            <div>
+              <p className="text-[#3f4474] mb-1 text-[18px]">{data.name}</p>
+              <p>
+                {data.weight?.toFixed(2)}{" "}
+                <span className="text-[16px]">pts.</span>
+              </p>
+            </div>
 
-        <div className="flex px-8 flex-row justify-between w-full">
-          <div className="flex flex-col">
-            <p className="font-semibold text-[16px] text-[#777777]">Mean</p>
-            <p className="font-bold text-[28px] text-default">2.0</p>
+            <p className="text-[#3f4474] mb-1 text-[18px]">{120} Students</p>
           </div>
-          <div className="flex flex-col">
-            <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-            <p className="font-bold text-[28px] text-default">2.15</p>
-          </div>
-          <div className="flex flex-col">
-            <p className="font-semibold text-[16px] text-[#777777]">Median</p>
-            <p className="font-bold text-[28px] text-default">1.5</p>
-          </div>
-          <div className="flex flex-col">
-            <p className="font-semibold text-[16px] text-[#777777]">Max</p>
-            <p className="font-bold text-[28px] text-default">4.5</p>
-          </div>
-          <div className="flex flex-col">
-            <p className="font-semibold text-[16px] text-[#777777]">Min</p>
-            <p className="font-bold text-[28px] text-default">0</p>
-          </div>
-          <div className="flex flex-col">
-            <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
-            <p className="font-bold text-[28px] text-default">3.75</p>
-          </div>
-          <div className="flex flex-col">
-            <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
-            <p className="font-bold text-[28px] text-default">1.75</p>
+
+          <div className="flex px-8 flex-row justify-between w-full">
+            <div className="flex flex-col">
+              <p className="font-semibold text-[16px] text-[#777777]">Mean</p>
+              <p className="font-bold text-[28px] text-default">2.0</p>
+            </div>
+            <div className="flex flex-col">
+              <p className="font-semibold text-[16px] text-[#777777]">SD</p>
+              <p className="font-bold text-[28px] text-default">2.15</p>
+            </div>
+            <div className="flex flex-col">
+              <p className="font-semibold text-[16px] text-[#777777]">Median</p>
+              <p className="font-bold text-[28px] text-default">1.5</p>
+            </div>
+            <div className="flex flex-col">
+              <p className="font-semibold text-[16px] text-[#777777]">Max</p>
+              <p className="font-bold text-[28px] text-default">4.5</p>
+            </div>
+            <div className="flex flex-col">
+              <p className="font-semibold text-[16px] text-[#777777]">Min</p>
+              <p className="font-bold text-[28px] text-default">0</p>
+            </div>
+            <div className="flex flex-col">
+              <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
+              <p className="font-bold text-[28px] text-default">3.75</p>
+            </div>
+            <div className="flex flex-col">
+              <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
+              <p className="font-bold text-[28px] text-default">1.75</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="h-full w-full pl-3 pr-5">
+      )}
+      <div
+        className={`h-full w-full  ${isQuestions ? "px-20 pb-6" : "pl-3 pr-5"}`}
+      >
         <BarChart
           style={{
             "--chart-cursor-fill": "#EAEBEB",
@@ -88,14 +96,6 @@ export default function HistogramChart(data: Props) {
               if (active && payload && payload.length) {
                 const data = payload[0].value;
                 return (
-                  // <div className="bg-gray-900 text-white p-4 rounded-xl shadow-lg min-w-[160px]">
-                  //   <p className="text-sm font-semibold mb-2">Score: {label}</p>
-                  //   <div className="flex gap-1 items-center justify-between mb-1">
-                  //     <span className="text-[#AAB1B4]">Students: </span>
-                  //     <span className="font-bold">{data}</span>
-                  //   </div>
-                  // </div>
-
                   <div className="bg-gray-900 text-white p-4 rounded-xl shadow-lg min-w-[180px]">
                     <p className="text-sm font-semibold mb-2">Score: {label}</p>
                     <div className="flex flex-col gap-0 items-start justify-between pt-2 border-t-[1px] border-[#747575]">
