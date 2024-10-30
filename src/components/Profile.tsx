@@ -16,7 +16,7 @@ import IconSO from "@/assets/icons/SO.svg?react";
 import IconTQF from "@/assets/icons/TQF.svg?react";
 import IconAdmin from "@/assets/icons/admin.svg?react";
 import IconSemester from "@/assets/icons/calendar.svg?react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { ROLE } from "@/helpers/constants/enum";
 import ModalManageAdmin from "./Modal/Profile/ModalManageAdmin";
@@ -29,8 +29,10 @@ import ModalPLOManagement from "./Modal/Profile/ModalPLOManagement";
 import { logOut } from "@/services/user/user.service";
 
 export default function Profile() {
-  const user = useAppSelector((state) => state.user);
+  const path = useLocation().pathname;
+  const [params, setParams] = useSearchParams({});
   const navigate = useNavigate();
+  const user = useAppSelector((state) => state.user);
   const [openModalChangeSupAdmin, setOpenModalChangeSupAdmin] = useState(false);
   const [openModalManageSemester, setOpenModalManageSemester] = useState(false);
   const [openModalManageAdmin, setOpenModalManageAdmin] = useState(false);
@@ -157,13 +159,26 @@ export default function Profile() {
                   <span>Activity log</span>
                 </div>
               </Menu.Item> */}
-              <Menu.Item>
+              <Menu.Item
+                onClick={() =>
+                  navigate({
+                    pathname: path.includes(ROUTE_PATH.ADMIN_DASHBOARD)
+                      ? ROUTE_PATH.INS_DASHBOARD
+                      : ROUTE_PATH.ADMIN_DASHBOARD,
+                    search: "?" + params.toString(),
+                  })
+                }
+              >
                 <div className="flex items-center gap-2">
                   <Icon
                     IconComponent={IconUserScreen}
                     className=" stroke-[1.5px] size-4"
                   />
-                  <span>Instructor view</span>
+                  <span>
+                    {path.includes(ROUTE_PATH.ADMIN_DASHBOARD)
+                      ? "Instructor view"
+                      : "Admin view"}
+                  </span>
                 </div>
               </Menu.Item>
               <Menu.Divider />

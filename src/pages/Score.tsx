@@ -30,7 +30,7 @@ export default function Overall() {
   const [items, setItems] = useState<any[]>([
     {
       title: "Your Course",
-      path: `${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`,
+      path: `${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`,
     },
     {
       title: "Sections",

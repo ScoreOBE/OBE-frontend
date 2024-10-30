@@ -6,7 +6,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import DashboardSidebar from "./Sidebar/DashboardSidebar";
-import { ROUTE_PATH } from "@/helpers/constants/route";
+import { PATH, ROUTE_PATH } from "@/helpers/constants/route";
 import CourseSidebar from "./Sidebar/CourseSidebar";
 import { motion } from "framer-motion";
 import AssignmentSidebar from "./Sidebar/AssignmentSidebar";
@@ -25,6 +25,7 @@ import OverallSidebar from "./Sidebar/ScoreSidebar";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { setLoading } from "@/store/loading";
 import { useEffect } from "react";
+import { setAllCourseList } from "@/store/allCourse";
 
 export default function Sidebar() {
   const user = useAppSelector((state) => state.user);
@@ -42,7 +43,7 @@ export default function Sidebar() {
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
   const getSidebar = () => {
-    if (path.includes(ROUTE_PATH.DASHBOARD_INS)) {
+    if (path.includes(PATH.DASHBOARD)) {
       return <DashboardSidebar />;
     } else if (!loading) {
       if (path.includes(ROUTE_PATH.COURSE)) {
@@ -77,15 +78,23 @@ export default function Sidebar() {
   const fetchCourse = async () => {
     if (!user.termsOfService) return;
     dispatch(setLoading(true));
-    const res = await getCourse({
+    const payload = {
       ...new CourseRequestDTO(),
       year: parseInt(params.get("year") || ""),
       semester: parseInt(params.get("semester") || ""),
-    });
-    if (res) {
-      dispatch(setCourseList(res));
+    };
+    const [resCourse, resAllCourse] = await Promise.all([
+      getCourse(payload),
+      path.includes(ROUTE_PATH.ADMIN_DASHBOARD) &&
+        getCourse({ ...payload, manage: true }),
+    ]);
+    if (resAllCourse) {
+      dispatch(setAllCourseList(resCourse));
+    }
+    if (resCourse) {
+      dispatch(setCourseList(resCourse));
     } else {
-      navigate(ROUTE_PATH.DASHBOARD_INS);
+      navigate(ROUTE_PATH.INS_DASHBOARD);
     }
     dispatch(setLoading(false));
   };
@@ -96,7 +105,7 @@ export default function Sidebar() {
       dispatch(removeCourse(res.id));
       closeMainPopup();
       showNotifications(NOTI_TYPE.SUCCESS, "Leave Course Success", ``);
-      navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`);
+      navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`);
     }
   };
 
@@ -115,7 +124,7 @@ export default function Sidebar() {
           alt="CMULogo"
           className="h-fit w-[155px] cursor-pointer"
           onClick={() =>
-            navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`)
+            navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`)
           }
         />
         {getSidebar()}

@@ -55,7 +55,7 @@ export default function SelectDepartment() {
     const res = await updateUser({ departmentCode: checkedItems });
     if (res) {
       dispatch(setUser(res));
-      navigate(ROUTE_PATH.DASHBOARD_INS);
+      navigate(ROUTE_PATH.INS_DASHBOARD);
     }
   };
 

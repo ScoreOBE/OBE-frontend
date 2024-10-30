@@ -10,6 +10,7 @@ import courseManagementReducer from "./courseManagement";
 import showNavbarReducer from "./showNavbar";
 import tqf3Reducer from "./tqf3";
 import progressReducer from "./progress";
+import allCourseReducer from "./allCourse";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     errorResponse: errorResponseReducer,
     user: userReducer,
     academicYear: academicYearReducer,
+    allCourse: allCourseReducer,
     course: courseReducer,
     courseManagement: courseManagementReducer,
     tqf3: tqf3Reducer,

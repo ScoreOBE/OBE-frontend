@@ -25,14 +25,14 @@ export default function CMUOAuthCallback() {
     } else if (user.id) {
       switch (user.role) {
         case ROLE.STUDENT:
-          navigate(ROUTE_PATH.DASHBOARD_STD);
+          navigate(ROUTE_PATH.STD_DASHBOARD);
           return;
         case ROLE.SUPREME_ADMIN:
         case ROLE.ADMIN:
-          navigate(ROUTE_PATH.DASHBOARD_ADMIN);
+          navigate(ROUTE_PATH.ADMIN_DASHBOARD);
           return;
         default:
-          navigate(ROUTE_PATH.DASHBOARD_INS);
+          navigate(ROUTE_PATH.INS_DASHBOARD);
           return;
       }
     }
@@ -43,7 +43,7 @@ export default function CMUOAuthCallback() {
         localStorage.setItem("token", res.token);
         dispatch(setUser(res.user));
         if (res.user.departmentCode.length)
-          navigate(ROUTE_PATH.DASHBOARD_INS, { replace: true });
+          navigate(ROUTE_PATH.INS_DASHBOARD, { replace: true });
         else navigate(ROUTE_PATH.SELECTED_DEPARTMENT, { replace: true });
       }
     };

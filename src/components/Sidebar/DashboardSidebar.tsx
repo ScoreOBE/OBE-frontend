@@ -7,15 +7,17 @@ import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { setAcademicYear } from "@/store/academicYear";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { setCourseList } from "@/store/course";
 import { setLoading } from "@/store/loading";
+import { ROUTE_PATH } from "@/helpers/constants/route";
 
 export default function DashboardSidebar() {
-  const user = useAppSelector((state) => state.user);
+  const path = useLocation().pathname;
   const [params, setParams] = useSearchParams();
+  const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const dispatch = useAppDispatch();
   const termOption = academicYear.map((e) => {
@@ -163,6 +165,12 @@ export default function DashboardSidebar() {
             </div>
           </Button>
         </div>
+
+        {path.includes(ROUTE_PATH.ADMIN_DASHBOARD) && (
+          <div className="flex flex-col gap-3">
+            <p className="text-b2 font-semibold">Menu</p>
+          </div>
+        )}
       </div>
     </>
   );

@@ -30,8 +30,10 @@ export default function PageError() {
     if (localStorage.getItem("token")) {
       navigate(
         user.role == ROLE.STUDENT
-          ? ROUTE_PATH.DASHBOARD_STD
-          : ROUTE_PATH.DASHBOARD_INS
+          ? ROUTE_PATH.STD_DASHBOARD
+          : user.role == ROLE.INSTRUCTOR
+          ? ROUTE_PATH.INS_DASHBOARD
+          : ROUTE_PATH.ADMIN_DASHBOARD
       );
     } else {
       dispatch(setUser({}));

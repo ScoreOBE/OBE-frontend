@@ -72,7 +72,7 @@ function App() {
     } else if (
       user.termsOfService &&
       !academicYear.length &&
-      path !== ROUTE_PATH.DASHBOARD_INS
+      path !== ROUTE_PATH.INS_DASHBOARD
     ) {
       const payload = new AcademicYearRequestDTO();
       const rsAcademicYear = await getAcademicYear(payload);
