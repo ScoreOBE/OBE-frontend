@@ -235,7 +235,17 @@ export default function ModalAddSection({
         ...initialSection,
         sectionNo: parseInt(lastValue),
         instructor: isManage ? "" : user.id,
-        coInstructors: coInsList.map((coIns) => ({ ...coIns })),
+        coInstructors: coInsList
+          .map((coIns) => ({ ...coIns }))
+          .filter(
+            (coIns) =>
+              coIns.value !=
+              (
+                sections.find(
+                  ({ sectionNo }) => sectionNo == parseInt(lastValue)
+                )?.instructor as any
+              ).value
+          ),
       };
     }
     // adjust coInstructors
@@ -254,7 +264,17 @@ export default function ModalAddSection({
         ...initialSection,
         sectionNo: parseInt(lastValue),
         instructor: isManage ? "" : user.id,
-        coInstructors: coInsList.map((coIns) => ({ ...coIns })),
+        coInstructors: coInsList
+          .map((coIns) => ({ ...coIns }))
+          .filter(
+            (coIns) =>
+              coIns.value !=
+              (
+                sections.find(
+                  ({ sectionNo }) => sectionNo == parseInt(lastValue)
+                )?.instructor as any
+              ).value
+          ),
       });
     } else {
       coInsList.forEach((coIns) => {
@@ -301,8 +321,12 @@ export default function ModalAddSection({
       const updatedSections = form.getValues().sections?.map((sec) => {
         const coInsArr = [...(sec.coInstructors ?? []), inputUser];
         sortData(coInsArr, "label", "string");
-        inputUser.sections.push(getSectionNo(sec.sectionNo));
-        inputUser.sections.sort((a: any, b: any) => parseInt(a) - parseInt(b));
+        if ((sec.instructor as any).value != inputUser.value) {
+          inputUser.sections.push(getSectionNo(sec.sectionNo));
+          inputUser.sections.sort(
+            (a: any, b: any) => parseInt(a) - parseInt(b)
+          );
+        }
         return {
           ...sec,
           coInstructors: [...coInsArr],
@@ -588,6 +612,7 @@ export default function ModalAddSection({
             <CompoManageIns
               opened={(active == 2 && !isManage) || (active == 3 && isManage)}
               type="add"
+              isManage={isManage}
               action={addCoIns}
               sections={form.getValues().sections}
               setUserList={setCoInsList}
