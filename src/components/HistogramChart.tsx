@@ -12,35 +12,22 @@ type Props = {
 };
 
 // Mock data for demonstration
-const chartData = [
-  { month: "1", Students: 450 },
-  { month: "2", Students: 480 },
-  { month: "3", Students: 500 },
-  { month: "4", Students: 520 },
-  { month: "5", Students: 490 },
-  { month: "6", Students: 470 },
-  { month: "7", Students: 450 },
-  { month: "8", Students: 480 },
-  { month: "9", Students: 500 },
-  { month: "10", Students: 520 },
-  { month: "11", Students: 490 },
-  { month: "12", Students: 470 },
-  { month: "13", Students: 450 },
-  { month: "14", Students: 480 },
-  { month: "16", Students: 500 },
-  { month: "17", Students: 520 },
-  { month: "18", Students: 490 },
-  { month: "19", Students: 470 },
-];
+const chartData = Array.from({ length: 10 }, (_, index) => ({
+  month: `${index + 1} - ${index + 2}`,
+  Students: 450 * (index + 1),
+}));
 
 export default function HistogramChart(data: Props) {
   return (
     <>
       <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-5 text-start mx-5">
-        <p className="text-secondary text-[18px] text-start justify-start font-semibold">
-          {data.data.name} - {data.data.weight?.toFixed(2)}
-          <span className="text-[#5768d5] text-[18px]"> pts</span>
-        </p>
+        <div className="text-secondary text-[28px]  text-start justify-start font-semibold">
+          <p className="text-[#3f4474] text-[18px]">{data.data.name}</p>
+          <p>
+            {data.data.weight?.toFixed(2)}{" "}
+            <span className="text-[18px]">pts</span>
+          </p>
+        </div>
 
         <div className="flex px-8 flex-row justify-between w-full">
           <div className="flex flex-col">
@@ -73,11 +60,10 @@ export default function HistogramChart(data: Props) {
           </div>
         </div>
       </div>
-      <div className="h-full w-full pl-3 pr-5 ">
+      <div className="h-full w-full pl-3 pr-5">
         <BarChart
           style={{
-            "--chart-cursor-fill": "#E6EAFF",
-            "--chart-grid-color": "",
+            "--chart-cursor-fill": "#EAEBEB",
           }}
           h={420}
           tickLine="x"
@@ -88,22 +74,46 @@ export default function HistogramChart(data: Props) {
           series={[
             {
               name: "Students",
+              color: "#E0DEFF",
             },
           ]}
-          legendProps={{ verticalAlign: "bottom" }}
           barChartProps={{
             barGap: 0,
             stackOffset: "none",
             barCategoryGap: 0,
           }}
-          classNames={{
-            axisLabel: "font-medium text-[12px] border-[#000000]",
-            bar: "border border-[#000000]", // Tailwind classes for bar styles
-            tooltipBody: "bg-[#E6EAFF] border-[#000000] p-3 rounded-8",
-            tooltipItemData: "",
-            tooltipItem: "",
-            axis: "bg-red-500 hover:bg-red-500",
-            grid: "!pl-10 !bg-red-500",
+          barProps={{
+            stroke: "#696CA3",
+            strokeWidth: 1,
+            radius: 2,
+            strokeOpacity: 1,
+          }}
+          tooltipProps={{
+            content: ({ active, payload, label }) => {
+              if (active && payload && payload.length) {
+                const data = payload[0].value;
+                return (
+                  // <div className="bg-gray-900 text-white p-4 rounded-xl shadow-lg min-w-[160px]">
+                  //   <p className="text-sm font-semibold mb-2">Score: {label}</p>
+                  //   <div className="flex gap-1 items-center justify-between mb-1">
+                  //     <span className="text-[#AAB1B4]">Students: </span>
+                  //     <span className="font-bold">{data}</span>
+                  //   </div>
+                  // </div>
+
+                  <div className="bg-gray-900 text-white p-4 rounded-xl shadow-lg min-w-[180px]">
+                    <p className="text-sm font-semibold mb-2">Score: {label}</p>
+                    <div className="flex flex-col gap-0 items-start justify-between pt-2 border-t-[1px] border-[#747575]">
+                      <span className=" text-[#AAB1B4] text-[14px]">
+                        Number of Students
+                      </span>
+                      <span className="font-bold text-[22px]">{data}</span>
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            },
           }}
         />
       </div>
