@@ -91,15 +91,15 @@ export default function Histogram() {
     })
   );
   const sectionRefs = useRef(
-    mockData.map(() => React.createRef<HTMLDivElement>())
+    assignments.map(() => React.createRef<HTMLDivElement>())
   );
   const [activeSection, setActiveSection] = useState<number>(0);
 
   useEffect(() => {
-    sectionRefs.current = mockData.map(
+    sectionRefs.current = assignments.map(
       (_, i) => sectionRefs.current[i] || React.createRef()
     );
-  }, [mockData.length]);
+  }, [assignments.length]);
 
   useEffect(() => {
     if (!sectionRefs.current.every((ref) => ref.current)) return;
@@ -134,7 +134,7 @@ export default function Histogram() {
         }
       });
     };
-  }, [section, sectionRefs, mockData.length]);
+  }, [section, sectionRefs, assignments.length]);
 
   return (
     <div className="bg-white flex flex-col h-full w-full px-6 pt-5  gap-3 overflow-hidden">
@@ -153,7 +153,7 @@ export default function Histogram() {
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                   }}
-                  className={`last:mb-4 flex flex-col rounded-md gap-10 py-3 ${
+                  className={`last:mb-4 flex px-2 flex-col rounded-md gap-10 py-2 ${
                     activeSection === i ? "active" : ""
                   }`}
                   id={`${item.name}`}
@@ -166,7 +166,7 @@ export default function Histogram() {
             </div>
 
             <div className="max-w-[12%] mt-3 flex flex-col  ">
-              {mockData.map((item, i) => (
+              {assignments.map((item, i) => (
                 <div
                   key={i}
                   className={`max-w-fit  ${

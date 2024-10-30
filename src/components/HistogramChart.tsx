@@ -1,10 +1,5 @@
-import Icon from "./Icon";
-import { useState } from "react";
-
 import { IModelAssignment } from "@/models/ModelSection";
 import { BarChart } from "@mantine/charts";
-import { mock } from "node:test";
-import { color } from "framer-motion";
 
 type Props = {
   data: Partial<IModelAssignment>;
@@ -20,12 +15,12 @@ const chartData = Array.from({ length: 10 }, (_, index) => ({
 export default function HistogramChart(data: Props) {
   return (
     <>
-      <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-5 text-start mx-5">
-        <div className="text-secondary text-[28px]  text-start justify-start font-semibold">
-          <p className="text-[#3f4474] text-[18px]">{data.data.name}</p>
+      <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-6 text-start mx-5">
+        <div className="text-secondary text-[20px]  text-start justify-start font-semibold">
+          <p className="text-[#3f4474] mb-1 text-[18px]">{data.data.name}</p>
           <p>
             {data.data.weight?.toFixed(2)}{" "}
-            <span className="text-[18px]">pts</span>
+            <span className="text-[16px]">pts.</span>
           </p>
         </div>
 
