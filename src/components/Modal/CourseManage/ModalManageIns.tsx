@@ -421,7 +421,7 @@ export default function ModalManageIns({
           >
             <Icon
               IconComponent={IconUserCicle}
-              className=" size-8 -translate-x-1 stoke-1"
+              className=" size-8 -translate-x-1"
             />
             <div className="flex flex-col">
               <p className="font-semibold text-[14px] text-tertiary">
@@ -458,7 +458,7 @@ export default function ModalManageIns({
                   <div className="gap-3 flex items-center">
                     <Icon
                       IconComponent={IconUserCicle}
-                      className=" size-8 -translate-x-1 stoke-1"
+                      className=" size-8 -translate-x-1  "
                     />
                     <div className="flex flex-col">
                       <p className="font-semibold text-[14px] text-tertiary">

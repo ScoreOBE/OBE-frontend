@@ -96,7 +96,7 @@ export default function Students() {
           </div>
         </div>
       </Modal>
-      <div className="bg-white flex flex-col h-full w-full p-6 pb-3 pt-5 gap-3 overflow-hidden">
+      <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
         {/* <Breadcrumbs /> */}
         {loading ? (
@@ -106,11 +106,11 @@ export default function Students() {
             ?.map(({ id }) => id)
             .includes(user.id) ? (
           <>
-            <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-5 text-start">
+            <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3  items-start gap-4 text-start">
               <p className="text-secondary text-[18px] font-semibold">
                 {name} - 5.0 Points
               </p>
-              <div className="flex px-16 flex-row justify-between w-full">
+              <div className="flex px-10 flex-row justify-between w-full">
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Mean
@@ -153,11 +153,12 @@ export default function Students() {
             <SearchInput
               onSearch={() => "test"}
               placeholder="Student ID / Name"
+              
             />
 
             {/* Table */}
             <div
-              className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
+              className="overflow-y-auto overflow-x-auto m w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
                 height: "fit-content",

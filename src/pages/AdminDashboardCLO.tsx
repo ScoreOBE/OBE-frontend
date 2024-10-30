@@ -8,7 +8,7 @@ import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
-import notFoundImage from "@/assets/image/notFound.png";
+import notFoundImage from "@/assets/image/notFound.jpg";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -208,15 +208,15 @@ export default function AdminDashboardCLO() {
               </Table>
             </InfiniteScroll>
           ) : (
-            <div className=" flex flex-row flex-1 justify-between">
-              <div className="h-full px-[60px] justify-center flex flex-col">
+            <div className=" flex flex-row px-[75px] flex-1 justify-between">
+              <div className="h-full  justify-center flex flex-col">
                 <p className="text-secondary text-[22px] font-semibold">
                   {courseList.search.length
                     ? `No results for "${courseList.search}" `
-                    : "No course found"}
+                    : "No Course Found"}
                 </p>
                 <br />
-                <p className=" -mt-4 mb-6 text-b2 break-words font-400 leading-relaxed">
+                <p className=" -mt-4 mb-6 text-b2 font-medium break-words leading-relaxed">
                   {courseList.search.length ? (
                     <>Check the spelling or try a new search.</>
                   ) : (
@@ -224,7 +224,7 @@ export default function AdminDashboardCLO() {
                   )}
                 </p>
               </div>
-              <div className="h-full px-[60px] bg-slate-300  justify-center flex flex-col">
+              <div className="h-full  w-[24vw] justify-center flex flex-col">
                 <img src={notFoundImage} alt="notFound"></img>
               </div>
             </div>

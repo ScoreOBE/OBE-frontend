@@ -1,15 +1,18 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button, Table } from "@mantine/core";
+import { Button, Menu, Pill, Table } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconAdjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
-import IconExcel from "@/assets/icons/excel.svg?react";
+import IconEye from "@/assets/icons/eyePublish.svg?react";
+import IconPrinter from "@/assets/icons/printer.svg?react";
+import Icontqf3 from "@/assets/icons/TQF3.svg?react";
+import Icontqf5 from "@/assets/icons/TQF5.svg?react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
-import notFoundImage from "@/assets/image/notFound.png";
+import notFoundImage from "@/assets/image/notFound.jpg";
 import { COURSE_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
@@ -128,7 +131,7 @@ export default function AdminDashboardTQF() {
               })}
             </Table.Td>
             <Table.Td>
-              <Button
+              <Pill
                 // color={
                 //   statusTqf3 == TQF_STATUS.NO_DATA
                 //     ? "#d8d8dd"
@@ -136,19 +139,72 @@ export default function AdminDashboardTQF() {
                 //     ? "#eedbb5"
                 //     : "#bbe3e3"
                 // }
-                className="tag-tqf text-center"
+                className="tag-tqf "
+                size="sm"
                 tqf-status={sec ? sec.TQF3?.status : course.TQF3?.status}
               >
                 {sec ? sec.TQF3?.status : course.TQF3?.status}
-              </Button>
+              </Pill>
             </Table.Td>
             <Table.Td>
-              <Button
+              <Pill
                 className="tag-tqf text-center"
                 tqf-status={sec ? sec.TQF5?.status : course.TQF5?.status}
               >
                 {sec ? sec.TQF5?.status : course.TQF5?.status}
-              </Button>
+              </Pill>
+            </Table.Td>
+            <Table.Td>
+              <div className="flex gap-3 h-full">
+                <Menu
+                  trigger="click"
+                  openDelay={100}
+                  clickOutsideEvents={["mousedown"]}
+                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+                >
+                  <Menu.Target>
+                    <Button
+                      variant="outline"
+                      className="tag-tqf  !px-3 !rounded-full text-center"
+                    >
+                      <Icon className="size-5" IconComponent={IconEye} />
+                    </Button>
+                  </Menu.Target>
+                  <Menu.Dropdown
+                    className="!z-50 rounded-md -translate-y-[3px] translate-x-[-78px] bg-white"
+                    style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
+                  >
+                    <div className="flex flex-col">
+                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf3} />}  variant="subtle">View TQF 3</Menu.Item>
+                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf5} />} variant="subtle">View TQF 5</Menu.Item>
+                    </div>
+                  </Menu.Dropdown>
+                </Menu>
+                <Menu
+                  trigger="click"
+                  openDelay={100}
+                  clickOutsideEvents={["mousedown"]}
+                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+                >
+                  <Menu.Target>
+                    <Button
+                      variant="outline"
+                      className="tag-tqf  !px-3 !rounded-full text-center"
+                    >
+                      <Icon className="size-5" IconComponent={IconPrinter} />
+                    </Button>
+                  </Menu.Target>
+                  <Menu.Dropdown
+                    className="!z-50 rounded-md -translate-y-[3px] translate-x-[-78px] bg-white"
+                    style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
+                  >
+                    <div className="flex flex-col">
+                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf3} />}  variant="subtle">Print TQF 3</Menu.Item>
+                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf5} />} variant="subtle">Print TQF 5</Menu.Item>
+                    </div>
+                  </Menu.Dropdown>
+                </Menu>
+              </div>
             </Table.Td>
           </Table.Tr>
         );
@@ -169,7 +225,7 @@ export default function AdminDashboardTQF() {
           })}
         </Table.Td>
         <Table.Td>
-          <Button
+          <Pill
             // color={
             //   statusTqf3 == TQF_STATUS.NO_DATA
             //     ? "#d8d8dd"
@@ -177,19 +233,71 @@ export default function AdminDashboardTQF() {
             //     ? "#eedbb5"
             //     : "#bbe3e3"
             // }
-            className="tag-tqf text-center"
+            className="tag-tqf text-center "
             tqf-status={course.TQF3?.status}
           >
             {course.TQF3?.status}
-          </Button>
+          </Pill>
         </Table.Td>
         <Table.Td>
-          <Button
+          <Pill
             className="tag-tqf text-center"
             tqf-status={course.TQF5?.status}
           >
             {course.TQF5?.status}
-          </Button>
+          </Pill>
+        </Table.Td>
+        <Table.Td>
+        <div className="flex gap-3 h-full">
+                <Menu
+                  trigger="click"
+                  openDelay={100}
+                  clickOutsideEvents={["mousedown"]}
+                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+                >
+                  <Menu.Target>
+                    <Button
+                      variant="outline"
+                      className="tag-tqf  !px-3 !rounded-full text-center"
+                    >
+                      <Icon className="size-5" IconComponent={IconEye} />
+                    </Button>
+                  </Menu.Target>
+                  <Menu.Dropdown
+                    className="!z-50 rounded-md -translate-y-[3px] translate-x-[-78px] bg-white"
+                    style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
+                  >
+                    <div className="flex flex-col">
+                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf3} />}  variant="subtle">View TQF 3</Menu.Item>
+                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf5} />} variant="subtle">View TQF 5</Menu.Item>
+                    </div>
+                  </Menu.Dropdown>
+                </Menu>
+                <Menu
+                  trigger="click"
+                  openDelay={100}
+                  clickOutsideEvents={["mousedown"]}
+                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+                >
+                  <Menu.Target>
+                    <Button
+                      variant="outline"
+                      className="tag-tqf  !px-3 !rounded-full text-center"
+                    >
+                      <Icon className="size-5" IconComponent={IconPrinter} />
+                    </Button>
+                  </Menu.Target>
+                  <Menu.Dropdown
+                    className="!z-50 rounded-md -translate-y-[3px] translate-x-[-78px] bg-white"
+                    style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
+                  >
+                    <div className="flex flex-col">
+                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf3} />}  variant="subtle">Print TQF 3</Menu.Item>
+                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf5} />} variant="subtle">Print TQF 5</Menu.Item>
+                    </div>
+                  </Menu.Dropdown>
+                </Menu>
+              </div>
         </Table.Td>
       </Table.Tr>
     );
@@ -234,17 +342,17 @@ export default function AdminDashboardTQF() {
             >
               Filter
             </Button>
-            <Button
+            {/* <Button
               className="text-center px-4"
               leftSection={
                 <Icon IconComponent={IconExcel} className="size-4" />
               }
             >
               Export PLO
-            </Button>
+            </Button> */}
           </div>
         </div>
-        <div className="flex h-full w-full px-6 pb-3 overflow-hidden">
+        <div className="flex h-full w-full px-6 pt-2 pb-5 overflow-hidden">
           {loading ? (
             <Loading />
           ) : courseList.courses.length ? (
@@ -260,16 +368,18 @@ export default function AdminDashboardTQF() {
               <Table stickyHeader>
                 <Table.Thead>
                   <Table.Tr>
-                    <Table.Th className="border-r !border-[#cecece]">
+                    <Table.Th className="border-r w-[12%] !border-[#cecece]">
                       Course No.
                     </Table.Th>
-                    <Table.Th>Name</Table.Th>
+                    <Table.Th>Course Name</Table.Th>
                     <Table.Th>Instructor</Table.Th>
                     <Table.Th>TQF 3</Table.Th>
+
                     <Table.Th>TQF 5</Table.Th>
+                    <Table.Th>Action</Table.Th>
                   </Table.Tr>
                 </Table.Thead>
-                <Table.Tbody>
+                <Table.Tbody className="text-default font-medium text-[13px]">
                   {courseList.courses.map((course, index) =>
                     courseTable(index, course)
                   )}
@@ -277,15 +387,15 @@ export default function AdminDashboardTQF() {
               </Table>
             </InfiniteScroll>
           ) : (
-            <div className=" flex flex-row flex-1 justify-between">
-              <div className="h-full px-[60px] justify-center flex flex-col">
+            <div className=" flex flex-row flex-1 px-[75px] justify-between">
+              <div className="h-full  justify-center flex flex-col">
                 <p className="text-secondary text-[22px] font-semibold">
                   {courseList.search.length
                     ? `No results for "${courseList.search}" `
-                    : "No course found"}
+                    : "No Course Found"}
                 </p>
                 <br />
-                <p className=" -mt-4 mb-6 text-b2 break-words font-400 leading-relaxed">
+                <p className=" -mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
                   {courseList.search.length ? (
                     <>Check the spelling or try a new search.</>
                   ) : (
@@ -293,7 +403,7 @@ export default function AdminDashboardTQF() {
                   )}
                 </p>
               </div>
-              <div className="h-full px-[60px] bg-slate-300  justify-center flex flex-col">
+              <div className="h-full  w-[24vw] justify-center flex flex-col">
                 <img src={notFoundImage} alt="notFound"></img>
               </div>
             </div>

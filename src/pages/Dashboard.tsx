@@ -18,7 +18,7 @@ import { addLoadMoreCourse, removeCourse, setCourseList } from "@/store/course";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import ModalAddCourse from "@/components/Modal/CourseManage/ModalAddCourse";
-import notFoundImage from "@/assets/image/notFound.png";
+import notFoundImage from "@/assets/image/notFound.jpg";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import MainPopup from "../components/Popup/MainPopup";
 import ModalEditCourse from "../components/Modal/CourseManage/ModalEditCourse";
@@ -506,15 +506,15 @@ export default function Dashboard() {
               })}
             </InfiniteScroll>
           ) : (
-            <div className=" flex flex-row flex-1 justify-between">
-              <div className="h-full px-[60px] justify-center flex flex-col">
+            <div className=" flex flex-row flex-1 px-[95px] justify-between">
+              <div className="h-full  justify-center flex flex-col">
                 <p className="text-secondary text-[22px] font-semibold">
                   {courseList.search.length
                     ? `No results for "${courseList.search}" `
-                    : "No course found"}
+                    : "No Course Found"}
                 </p>
                 <br />
-                <p className=" -mt-4 mb-6 text-b2 break-words font-400 leading-relaxed">
+                <p className=" -mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
                   {courseList.search.length ? (
                     <>Check the spelling or try a new search.</>
                   ) : (
@@ -538,7 +538,7 @@ export default function Dashboard() {
                   </Button>
                 )}
               </div>
-              <div className="h-full px-[60px] bg-slate-300  justify-center flex flex-col">
+              <div className="h-full  w-[24vw] justify-center flex flex-col">
                 <img src={notFoundImage} alt="notFound"></img>
               </div>
             </div>
