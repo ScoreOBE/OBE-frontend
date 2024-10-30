@@ -10,9 +10,16 @@ import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading";
+import HistogramChart from "@/components/HistogramChart";
 import { BarChart } from "@mantine/charts";
 import Icon from "@/components/Icon";
 import IconChevronDown from "@/assets/icons/chevronDown.svg?react";
+import {
+  IModelAssignment,
+  IModelQuestion,
+  IModelScore,
+} from "@/models/ModelSection";
+import { ROLE } from "@/helpers/constants/enum";
 
 export default function Overall() {
   const { courseNo, sectionNo, name } = useParams();
@@ -57,6 +64,38 @@ export default function Overall() {
     { month: "May", Smartphones: 800, Laptops: 1400, Tablets: 1200 },
     { month: "June", Smartphones: 750, Laptops: 600, Tablets: 1000 },
   ];
+
+  // Mock Data for HistogramChart Component
+  const generateMockUser = (index: number): IModelUser => ({
+    id: `user-${index + 1}`,
+    studentId: `student-${index + 1}`,
+    firstNameTH: `ชื่อ${index + 1}`,
+    lastNameTH: `นามสกุล${index + 1}`,
+    firstNameEN: `FirstName${index + 1}`,
+    lastNameEN: `LastName${index + 1}`,
+    email: `student${index + 1}@example.com`,
+    facultyCode: `FAC${index % 5}`, // Example faculty code
+    departmentCode: [`DEP${index % 3}`], // Example department codes
+    role: index % 2 === 0 ? ROLE.STUDENT : ROLE.ADMIN, // Use the ROLE enum
+    enrollCourses: [], // Can add specific courses if needed
+  });
+
+  // Generate assignments mock data for questions
+  const questions: Array<IModelQuestion> = Array.from(
+    { length: 10 },
+    (_, qIndex): IModelQuestion => ({
+      no: qIndex + 1,
+      desc: `Question ${qIndex + 1} Description`,
+      fullScore: 100,
+      scores: Array.from(
+        { length: 30 },
+        (_, sIndex): IModelScore => ({
+          student: generateMockUser(sIndex), // Generate a mock user for each score
+          point: Math.floor(Math.random() * 100), // Random score between 0 and 100
+        })
+      ),
+    })
+  );
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -157,7 +196,7 @@ export default function Overall() {
               </Table>
 
               <Accordion chevron={false} unstyled>
-                {Array.from({ length: 12 }).map((_, index) => (
+                {questions.map((ques, index) => (
                   <Accordion.Item
                     value={`${index + 1}`}
                     key={index}
@@ -218,19 +257,7 @@ export default function Overall() {
                         </p>
                       </div>
 
-                      <div className="h-full w-full px-20 pb-6">
-                        <BarChart
-                          h={300}
-                          tickLine="x"
-                          data={data}
-                          dataKey="month"
-                          series={[
-                            { name: "Smartphones", color: "violet.6" },
-                            { name: "Laptops", color: "blue.6" },
-                            { name: "Tablets", color: "teal.6" },
-                          ]}
-                        />
-                      </div>
+                      <HistogramChart data={ques} isQuestions={true} />
                     </Accordion.Panel>
                   </Accordion.Item>
                 ))}
