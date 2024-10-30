@@ -7,7 +7,7 @@ import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { setAcademicYear } from "@/store/academicYear";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { setCourseList } from "@/store/course";
@@ -18,6 +18,7 @@ import { setAllCourseList } from "@/store/allCourse";
 export default function DashboardSidebar() {
   const path = useLocation().pathname;
   const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const dispatch = useAppDispatch();
@@ -111,6 +112,13 @@ export default function DashboardSidebar() {
     fetchCourse(term.year, term.semester);
   };
 
+  const gotoPage = (newPath: string) => {
+    navigate({
+      pathname: path.replace(path.split("/")[2], newPath),
+      search: "?" + params.toString(),
+    });
+  };
+
   return (
     <>
       <Modal
@@ -179,6 +187,56 @@ export default function DashboardSidebar() {
         {path.includes(ROUTE_PATH.ADMIN_DASHBOARD) && (
           <div className="flex flex-col gap-3">
             <p className="text-b2 font-semibold">Menu</p>
+            <div className="flex flex-col gap-2">
+              <Button
+                onClick={() => gotoPage(ROUTE_PATH.TQF)}
+                // leftSection={<Icon IconComponent={IconList} />}
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+              ${
+                path.includes(ROUTE_PATH.TQF)
+                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+              }`}
+              >
+                TQF
+              </Button>
+              <Button
+                onClick={() => gotoPage(ROUTE_PATH.PLO)}
+                leftSection={
+                  <></>
+                  // <Icon
+                  //   IconComponent={IconHistogram}
+                  //   className="pb-1 pl-[2px] size-[22px]"
+                  // />
+                }
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+                 ${
+                   path.includes(ROUTE_PATH.PLO)
+                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                 }`}
+              >
+                <p className="pl-[3px]">PLO</p>
+              </Button>
+              <Button
+                onClick={() => gotoPage(ROUTE_PATH.CLO)}
+                leftSection={
+                  <></>
+                  // <Icon
+                  //   IconComponent={IconHistogram}
+                  //   className="pb-1 pl-[2px] size-[22px]"
+                  // />
+                }
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+                 ${
+                   path.includes(ROUTE_PATH.CLO)
+                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                 }`}
+              >
+                <p className="pl-[3px]">CLO</p>
+              </Button>
+            </div>
           </div>
         )}
       </div>

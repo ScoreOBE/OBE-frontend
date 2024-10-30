@@ -29,7 +29,7 @@ export default function CMUOAuthCallback() {
           return;
         case ROLE.SUPREME_ADMIN:
         case ROLE.ADMIN:
-          navigate(ROUTE_PATH.ADMIN_DASHBOARD);
+          navigate(`${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`);
           return;
         default:
           navigate(ROUTE_PATH.INS_DASHBOARD);

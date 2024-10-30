@@ -164,7 +164,7 @@ export default function Profile() {
                   navigate({
                     pathname: path.includes(ROUTE_PATH.ADMIN_DASHBOARD)
                       ? ROUTE_PATH.INS_DASHBOARD
-                      : ROUTE_PATH.ADMIN_DASHBOARD,
+                      : `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`,
                     search: "?" + params.toString(),
                   })
                 }
