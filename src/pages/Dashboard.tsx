@@ -81,7 +81,7 @@ export default function Dashboard() {
         year: term.year,
         semester: term.semester,
         search: courseList.search,
-        hasMore: true,
+        hasMore: courseList.total >= payload?.limit,
       });
       localStorage.removeItem("search");
     }
@@ -90,11 +90,14 @@ export default function Dashboard() {
   const fetchCourse = async (year: number, semester: number) => {
     if (!user.termsOfService) return;
     dispatch(setLoading(true));
-    const payloadCourse = new CourseRequestDTO();
-    setPayload({ ...payloadCourse, year, semester, hasMore: true });
+    const payloadCourse = { ...new CourseRequestDTO(), year, semester };
     const res = await getCourse(payloadCourse);
     if (res) {
       dispatch(setCourseList(res));
+      setPayload({
+        ...payloadCourse,
+        hasMore: res.totalCount >= payload.limit,
+      });
     }
     dispatch(setLoading(false));
   };
