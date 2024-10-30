@@ -4,6 +4,8 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import App from "@/App";
 import Loading from "@/components/Loading";
 import AdminDashboardTQF from "@/pages/AdminDashboardTQF";
+import AdminDashboardPLO from "@/pages/AdminDashboardPLO";
+import AdminDashboardCLO from "@/pages/AdminDashboardCLO";
 
 const Login = lazy(() => import("@/pages/Login"));
 const CMUOAuthCallback = lazy(() => import("@/pages/CmuOAuthCallback"));
@@ -128,7 +130,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.PLO,
             element: (
               <Suspense fallback={<Loading />}>
-                <></>
+                <AdminDashboardPLO />
               </Suspense>
             ),
           },
@@ -136,7 +138,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.CLO,
             element: (
               <Suspense fallback={<Loading />}>
-                <></>
+                <AdminDashboardCLO />
               </Suspense>
             ),
           },
