@@ -95,8 +95,8 @@ export default function Navbar() {
       >
         {topicPath()}
       </p>
-      {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].includes(
-        location
+      {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
+        location.includes(path)
       ) && (
         <SearchInput
           onSearch={searchCourse}
