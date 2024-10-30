@@ -1,10 +1,23 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button, Menu, Pill, Table } from "@mantine/core";
+import {
+  Button,
+  Checkbox,
+  Group,
+  Menu,
+  Modal,
+  Pill,
+  Radio,
+  RadioCard,
+  Table,
+  Tooltip,
+} from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconAdjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
+import IconPDF from "@/assets/icons/pdf.svg?react";
 import IconEye from "@/assets/icons/eyePublish.svg?react";
 import IconPrinter from "@/assets/icons/printer.svg?react";
+import IconFileExport from "@/assets/icons/fileExport.svg?react";
 import Icontqf3 from "@/assets/icons/TQF3.svg?react";
 import Icontqf5 from "@/assets/icons/TQF5.svg?react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -36,6 +49,7 @@ export default function AdminDashboardTQF() {
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
+  const [openModalPrintTQF, setOpenModalPrintTQF] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -131,7 +145,7 @@ export default function AdminDashboardTQF() {
               })}
             </Table.Td>
             <Table.Td>
-              <Pill
+              <div
                 // color={
                 //   statusTqf3 == TQF_STATUS.NO_DATA
                 //     ? "#d8d8dd"
@@ -139,71 +153,63 @@ export default function AdminDashboardTQF() {
                 //     ? "#eedbb5"
                 //     : "#bbe3e3"
                 // }
-                className="tag-tqf "
-                size="sm"
+                className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
                 tqf-status={sec ? sec.TQF3?.status : course.TQF3?.status}
               >
                 {sec ? sec.TQF3?.status : course.TQF3?.status}
-              </Pill>
+              </div>
             </Table.Td>
             <Table.Td>
-              <Pill
-                className="tag-tqf text-center"
+              <div
+                className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
                 tqf-status={sec ? sec.TQF5?.status : course.TQF5?.status}
               >
                 {sec ? sec.TQF5?.status : course.TQF5?.status}
-              </Pill>
+              </div>
             </Table.Td>
             <Table.Td>
               <div className="flex gap-3 h-full">
-                <Menu
-                  trigger="click"
-                  openDelay={100}
-                  clickOutsideEvents={["mousedown"]}
-                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+              <Tooltip
+              withArrow
+              arrowPosition="side"
+              arrowOffset={50}
+              arrowSize={7}
+              position="bottom-end"
+              label={
+                <div className="text-default font-semibold text-[13px] p-1">
+                  View TQF
+                </div>
+              }
+              color="#FCFCFC"
+            >
+                <Button
+                  variant="outline"
+                  className="tag-tqf  !px-3 !rounded-full text-center"
                 >
-                  <Menu.Target>
-                    <Button
-                      variant="outline"
-                      className="tag-tqf  !px-3 !rounded-full text-center"
-                    >
-                      <Icon className="size-5" IconComponent={IconEye} />
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown
-                    className="!z-50 rounded-md -translate-y-[3px] translate-x-[-78px] bg-white"
-                    style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
-                  >
-                    <div className="flex flex-col">
-                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf3} />}  variant="subtle">View TQF 3</Menu.Item>
-                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf5} />} variant="subtle">View TQF 5</Menu.Item>
+                  <Icon className="size-5" IconComponent={IconEye} />
+                </Button>
+                </Tooltip>
+                <Tooltip
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={50}
+                  arrowSize={7}
+                  position="bottom-end"
+                  label={
+                    <div className="text-default font-semibold text-[13px] p-1">
+                      Export TQF
                     </div>
-                  </Menu.Dropdown>
-                </Menu>
-                <Menu
-                  trigger="click"
-                  openDelay={100}
-                  clickOutsideEvents={["mousedown"]}
-                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+                  }
+                  color="#FCFCFC"
                 >
-                  <Menu.Target>
-                    <Button
-                      variant="outline"
-                      className="tag-tqf  !px-3 !rounded-full text-center"
-                    >
-                      <Icon className="size-5" IconComponent={IconPrinter} />
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown
-                    className="!z-50 rounded-md -translate-y-[3px] translate-x-[-78px] bg-white"
-                    style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
+                  <Button
+                    variant="outline"
+                    className="tag-tqf  !px-3 !rounded-full text-center"
+                    onClick={() => setOpenModalPrintTQF(true)}
                   >
-                    <div className="flex flex-col">
-                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf3} />}  variant="subtle">Print TQF 3</Menu.Item>
-                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf5} />} variant="subtle">Print TQF 5</Menu.Item>
-                    </div>
-                  </Menu.Dropdown>
-                </Menu>
+                    <Icon className="size-5" IconComponent={IconFileExport} />
+                  </Button>
+                </Tooltip>
               </div>
             </Table.Td>
           </Table.Tr>
@@ -225,7 +231,7 @@ export default function AdminDashboardTQF() {
           })}
         </Table.Td>
         <Table.Td>
-          <Pill
+          <div
             // color={
             //   statusTqf3 == TQF_STATUS.NO_DATA
             //     ? "#d8d8dd"
@@ -233,71 +239,64 @@ export default function AdminDashboardTQF() {
             //     ? "#eedbb5"
             //     : "#bbe3e3"
             // }
-            className="tag-tqf text-center "
+            className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
             tqf-status={course.TQF3?.status}
           >
             {course.TQF3?.status}
-          </Pill>
+          </div>
         </Table.Td>
         <Table.Td>
-          <Pill
-            className="tag-tqf text-center"
+          <div
+            className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
             tqf-status={course.TQF5?.status}
           >
             {course.TQF5?.status}
-          </Pill>
+          </div>
         </Table.Td>
         <Table.Td>
-        <div className="flex gap-3 h-full">
-                <Menu
-                  trigger="click"
-                  openDelay={100}
-                  clickOutsideEvents={["mousedown"]}
-                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
-                >
-                  <Menu.Target>
-                    <Button
-                      variant="outline"
-                      className="tag-tqf  !px-3 !rounded-full text-center"
-                    >
-                      <Icon className="size-5" IconComponent={IconEye} />
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown
-                    className="!z-50 rounded-md -translate-y-[3px] translate-x-[-78px] bg-white"
-                    style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
-                  >
-                    <div className="flex flex-col">
-                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf3} />}  variant="subtle">View TQF 3</Menu.Item>
-                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf5} />} variant="subtle">View TQF 5</Menu.Item>
-                    </div>
-                  </Menu.Dropdown>
-                </Menu>
-                <Menu
-                  trigger="click"
-                  openDelay={100}
-                  clickOutsideEvents={["mousedown"]}
-                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
-                >
-                  <Menu.Target>
-                    <Button
-                      variant="outline"
-                      className="tag-tqf  !px-3 !rounded-full text-center"
-                    >
-                      <Icon className="size-5" IconComponent={IconPrinter} />
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown
-                    className="!z-50 rounded-md -translate-y-[3px] translate-x-[-78px] bg-white"
-                    style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
-                  >
-                    <div className="flex flex-col">
-                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf3} />}  variant="subtle">Print TQF 3</Menu.Item>
-                      <Menu.Item className="!w-48" leftSection={ <Icon className="size-5" IconComponent={Icontqf5} />} variant="subtle">Print TQF 5</Menu.Item>
-                    </div>
-                  </Menu.Dropdown>
-                </Menu>
-              </div>
+          <div className="flex gap-3 h-full">
+          <Tooltip
+              withArrow
+              arrowPosition="side"
+              arrowOffset={50}
+              arrowSize={7}
+              position="bottom-end"
+              label={
+                <div className="text-default font-semibold text-[13px] p-1 ">
+                  View TQF
+                </div>
+              }
+              color="#FCFCFC"
+            >
+            <Button
+              variant="outline"
+              className="tag-tqf  !px-3 !rounded-full text-center"
+            >
+              <Icon className="size-5" IconComponent={IconEye} />
+            </Button>
+            </Tooltip>
+            <Tooltip
+              withArrow
+              arrowPosition="side"
+              arrowOffset={50}
+              arrowSize={7}
+              position="bottom-end"
+              label={
+                <div className="text-default font-semibold text-[13px] p-1">
+                  Export TQF
+                </div>
+              }
+              color="#FCFCFC"
+            >
+              <Button
+                variant="outline"
+                className="tag-tqf  !px-3 !rounded-full text-center"
+                onClick={() => setOpenModalPrintTQF(true)}
+              >
+                <Icon className="size-5" IconComponent={IconFileExport} />
+              </Button>
+            </Tooltip>
+          </div>
         </Table.Td>
       </Table.Tr>
     );
@@ -305,6 +304,87 @@ export default function AdminDashboardTQF() {
 
   return (
     <>
+      <Modal
+        title={
+          <div className="flex flex-col gap-2">
+            <p>Export TQF</p>
+            <p className="text-[12px] inline-flex items-center text-[#e13b3b] -mt-[6px]">
+              File format:{" "}
+              <Icon IconComponent={IconPDF} className="ml-1 stroke-[#e13b3b]" />
+            </p>
+          </div>
+        }
+        closeOnClickOutside={true}
+        opened={openModalPrintTQF}
+        onClose={() => setOpenModalPrintTQF(false)}
+        transitionProps={{ transition: "pop" }}
+        size="25vw"
+        centered
+        classNames={{
+          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+          body: "flex flex-col overflow-hidden max-h-full h-fit",
+        }}
+      >
+        <div className="flex flex-col gap-5 pt-1 w-full">
+          <Checkbox.Group label="Select TQF to export">
+            <Group className="overflow-y-hidden max-h-[200px]">
+              <div className="flex p-1 w-full h-full flex-col overflow-y-auto gap-3">
+                <Checkbox.Card
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                  }}
+                  className="p-3 flex border-none h-full rounded-md w-full"
+                >
+                  <Group>
+                    <Checkbox.Indicator />
+                    <div className="text-b2 font-medium ">TQF 3</div>
+                  </Group>
+                </Checkbox.Card>
+                <Checkbox.Card
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                  }}
+                  className="p-3 flex border-none h-full rounded-md w-full"
+                >
+                  <Group>
+                    <Checkbox.Indicator />
+                    <div className="text-b2 font-medium ">TQF 5</div>
+                  </Group>
+                </Checkbox.Card>
+              </div>
+            </Group>
+          </Checkbox.Group>
+          <div className="flex  justify-end w-full">
+            <Group className="flex w-full h-fit items-end justify-end">
+              <div>
+                <Button
+                  variant="subtle"
+                  onClick={() => {
+                    setOpenModalPrintTQF(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+              <Button
+                onClick={() => {
+                  setOpenModalPrintTQF(false);
+                }}
+                rightSection={
+                  <Icon
+                    IconComponent={IconFileExport}
+                    className="text-[#ffffff]
+                     stroke-[2px] size-5 items-center"
+                  />
+                }
+              >
+                Export TQF
+              </Button>
+            </Group>
+          </div>
+        </div>
+      </Modal>
+
       <div className=" flex flex-col h-full w-full gap-2 overflow-hidden">
         <div className="flex flex-row px-6 pt-3 items-center justify-between">
           <div className="flex flex-col">

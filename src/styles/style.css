@@ -387,16 +387,19 @@
 }
 
 .tag-tqf[tqf-status="No Data"] {
-  color: #79797a;
-  background-color: #d8d8dd;
+  color: #ffffff;
+  background-color: #a2a2a2;
+  font-weight: 700;
 }
 .tag-tqf[tqf-status="In Progress"] {
-  color: #9f7504;
-  background-color: #eedbb5;
+  color: #ce7611;
+  background-color: #fee19c;
+  font-weight: 700;
 }
 .tag-tqf[tqf-status="Done"] {
-  color: #059061;
-  background-color: #bbe3e3;
+  color: #228762;
+  background-color: #10e5908e;
+  font-weight: 700;
 }
 
 .gg1 {
