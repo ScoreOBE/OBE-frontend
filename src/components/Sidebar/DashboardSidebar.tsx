@@ -13,6 +13,7 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { setCourseList } from "@/store/course";
 import { setLoading } from "@/store/loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
+import { setAllCourseList } from "@/store/allCourse";
 
 export default function DashboardSidebar() {
   const path = useLocation().pathname;
@@ -69,9 +70,18 @@ export default function DashboardSidebar() {
   const fetchCourse = async (year: number, semester: number) => {
     dispatch(setLoading(true));
     const payloadCourse = new CourseRequestDTO();
-    const res = await getCourse({ ...payloadCourse, year, semester });
+    const res = await getCourse({
+      ...payloadCourse,
+      year,
+      semester,
+      manage: path.includes(ROUTE_PATH.ADMIN_DASHBOARD),
+    });
     if (res) {
-      dispatch(setCourseList(res));
+      if (path.includes(ROUTE_PATH.ADMIN_DASHBOARD)) {
+        dispatch(setAllCourseList(res));
+      } else {
+        dispatch(setCourseList(res));
+      }
     }
     dispatch(setLoading(false));
   };
