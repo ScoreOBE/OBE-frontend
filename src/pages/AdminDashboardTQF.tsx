@@ -10,13 +10,15 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.png";
-import { TQF_STATUS } from "@/helpers/constants/enum";
+import { COURSE_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
 import { addLoadMoreAllCourse, setAllCourseList } from "@/store/allCourse";
 import { getUniqueInstructors } from "@/helpers/functions/function";
+import { IModelCourse } from "@/models/ModelCourse";
+import { IModelSection } from "@/models/ModelSection";
 
 export default function AdminDashboardTQF() {
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ export default function AdminDashboardTQF() {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const courseList = useAppSelector((state) => state.allCourse);
+  const [courses, setCourses] = useState<Partial<IModelCourse>[]>([]);
   const dispatch = useAppDispatch();
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
@@ -46,6 +49,13 @@ export default function AdminDashboardTQF() {
       }
     }
   }, [academicYear, term, params]);
+
+  useEffect(() => {
+    if (courseList.courses.length) {
+      const newData = filterSectionWithTopic(courseList.courses);
+      setCourses(newData);
+    }
+  }, [courseList]);
 
   useEffect(() => {
     if (term) {
@@ -90,6 +100,165 @@ export default function AdminDashboardTQF() {
         setPayload({ ...payload, hasMore: false });
       }
     }
+  };
+
+  const filterSectionWithTopic = (courses: any) => {
+    let data: Partial<IModelCourse>[] = [];
+    courses.map((course: IModelCourse) => {
+      if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
+        const sections = course.sections.reduce((acc, sec) => {
+          if (sec.topic && !acc.some((item) => item.topic === sec.topic)) {
+            acc.push({
+              topic: sec.topic,
+              TQF3: sec.TQF3,
+              TQF5: sec.TQF5,
+              instructor: sec.instructor,
+            });
+          }
+          return acc;
+        }, [] as Partial<IModelSection>[]);
+        data.push({
+          id: course.id,
+          courseNo: course.courseNo,
+          courseName: course.courseName,
+          type: course.type,
+          sections,
+        });
+      } else {
+        data.push({
+          id: course.id,
+          courseNo: course.courseNo,
+          courseName: course.courseName,
+          type: course.type,
+          TQF3: course.TQF3,
+          TQF5: course.TQF5,
+          sections: course.sections,
+        });
+      }
+    });
+    return data;
+  };
+
+  const courseTable = (
+    index: number,
+    course: Partial<IModelCourse>,
+    sec?: Partial<IModelSection>
+  ) => {
+    const insList = getUniqueInstructors(sec ? [{ ...sec }] : course.sections!);
+    return (
+      <Table.Tr key={index}>
+        <Table.Td>{course.courseNo}</Table.Td>
+        <Table.Td>
+          <div>
+            <p>{course.courseName}</p>
+            {sec && <p>({sec.topic})</p>}
+          </div>
+        </Table.Td>
+        <Table.Td>
+          {insList.map((ins) => {
+            return (
+              <div key={ins} className="flex flex-col">
+                <p>{ins}</p>
+              </div>
+            );
+          })}
+        </Table.Td>
+        <Table.Td>
+          <Button
+            // color={
+            //   statusTqf3 == TQF_STATUS.NO_DATA
+            //     ? "#d8d8dd"
+            //     : statusTqf3 == TQF_STATUS.IN_PROGRESS
+            //     ? "#eedbb5"
+            //     : "#bbe3e3"
+            // }
+            className="tag-tqf text-center"
+            tqf-status={sec ? sec.TQF3?.status : course.TQF3?.status}
+          >
+            {sec ? sec.TQF3?.status : course.TQF3?.status}
+          </Button>
+        </Table.Td>
+        <Table.Td>
+          <Button
+            className="tag-tqf text-center"
+            tqf-status={sec ? sec.TQF5?.status : course.TQF5?.status}
+          >
+            {sec ? sec.TQF5?.status : course.TQF5?.status}
+          </Button>
+        </Table.Td>
+
+        {/* {ploList.data?.map((plo) => (
+          <Table.Td key={plo.id} className="z-50">
+            <div className="flex justify-start items-center">
+              {!isMapPLO ? (
+                ((sec ? sec.plos : course.plos) as string[])?.includes(
+                  plo.id
+                ) ? (
+                  <Icon IconComponent={IconCheck} />
+                ) : (
+                  <p>-</p>
+                )
+              ) : (
+                <Checkbox
+                  size="xs"
+                  classNames={{
+                    input:
+                      "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                    body: "mr-3 px-0",
+                    label: "text-[14px] text-[#615F5F] cursor-pointer",
+                  }}
+                  value={plo.id}
+                  checked={(
+                    (sec ? sec.plos : course.plos) as string[]
+                  )?.includes(plo.id)}
+                  onChange={(event) => {
+                    const newData = { ...course };
+                    if (event.target.checked) {
+                      if (sec) {
+                        newData.sections?.forEach((e: any) => {
+                          if (
+                            e.topic === sec.topic &&
+                            !e.plos?.includes(plo.id)
+                          ) {
+                            e.plos?.push(plo.id);
+                          }
+                        });
+                      } else {
+                        if (!(newData.plos as string[])?.includes(plo.id)) {
+                          newData.plos = [
+                            ...(newData.plos || []),
+                            plo.id,
+                          ] as string[];
+                        }
+                      }
+                    } else {
+                      if (sec) {
+                        newData.sections?.forEach((e: any) => {
+                          if (e.topic === sec.topic) {
+                            const index = e.plos?.indexOf(plo.id);
+                            if (index !== -1) e.plos?.splice(index, 1);
+                          }
+                        });
+                      } else {
+                        const index = (newData.plos as string[])?.indexOf(
+                          plo.id
+                        );
+                        if (index !== -1) {
+                          (newData.plos as string[])?.splice(index, 1);
+                        }
+                      }
+                    }
+                    setCourseManagement((prev) =>
+                      prev.map((c) => (c.id === course.id ? { ...newData } : c))
+                    );
+                  }}
+                />
+              )}
+            </div>
+          </Table.Td>
+        ))} */}
+      </Table.Tr>
+    );
   };
 
   return (
@@ -144,7 +313,7 @@ export default function AdminDashboardTQF() {
         <div className="flex h-full w-full px-6 pb-3 overflow-hidden">
           {loading ? (
             <Loading />
-          ) : courseList.courses.length ? (
+          ) : courses.length ? (
             <InfiniteScroll
               dataLength={courseList.courses.length}
               next={onShowMore}
@@ -165,67 +334,13 @@ export default function AdminDashboardTQF() {
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
-                  {courseList.courses.map((item, index) => {
-                    const insList = getUniqueInstructors(item.sections);
-                    const statusTqf3Sec: any[] = item.sections.map(
-                      (sec) => sec.TQF3?.status
-                    );
-                    const statusTqf5Sec: any[] = item.sections.map(
-                      (sec) => sec.TQF5?.status
-                    );
-                    const statusTqf3 =
-                      item.TQF3?.status ??
-                      (statusTqf3Sec.some((e) => e == TQF_STATUS.IN_PROGRESS)
-                        ? TQF_STATUS.IN_PROGRESS
-                        : statusTqf3Sec.every((e) => e == TQF_STATUS.DONE)
-                        ? TQF_STATUS.DONE
-                        : TQF_STATUS.NO_DATA);
-                    const statusTqf5 =
-                      item.TQF5?.status ??
-                      (statusTqf5Sec.some((e) => e == TQF_STATUS.IN_PROGRESS)
-                        ? TQF_STATUS.IN_PROGRESS
-                        : statusTqf5Sec.every((e) => e == TQF_STATUS.DONE)
-                        ? TQF_STATUS.DONE
-                        : TQF_STATUS.NO_DATA);
-                    return (
-                      <Table.Tr key={index}>
-                        <Table.Td>{item.courseNo}</Table.Td>
-                        <Table.Td>{item.courseName}</Table.Td>
-                        <Table.Td>
-                          {insList.map((ins) => {
-                            return (
-                              <div key={ins} className="flex flex-col">
-                                <p>{ins}</p>
-                              </div>
-                            );
-                          })}
-                        </Table.Td>
-                        <Table.Td>
-                          <Button
-                            // color={
-                            //   statusTqf3 == TQF_STATUS.NO_DATA
-                            //     ? "#d8d8dd"
-                            //     : statusTqf3 == TQF_STATUS.IN_PROGRESS
-                            //     ? "#eedbb5"
-                            //     : "#bbe3e3"
-                            // }
-                            className="tag-tqf text-center"
-                            tqf-status={statusTqf3}
-                          >
-                            {statusTqf3}
-                          </Button>
-                        </Table.Td>
-                        <Table.Td>
-                          <Button
-                            className="tag-tqf text-center"
-                            tqf-status={statusTqf5}
-                          >
-                            {statusTqf5}
-                          </Button>
-                        </Table.Td>
-                      </Table.Tr>
-                    );
-                  })}
+                  {courses.map((course, index) =>
+                    course.type == COURSE_TYPE.SEL_TOPIC.en
+                      ? course.sections?.map((sec) =>
+                          courseTable(sec.sectionNo!, course, sec)
+                        )
+                      : courseTable(index, course)
+                  )}
                 </Table.Tbody>
               </Table>
             </InfiniteScroll>
