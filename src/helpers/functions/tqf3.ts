@@ -1,7 +1,7 @@
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelTQF3Part1, IModelTQF3Part2 } from "@/models/ModelTQF3";
 import { IModelUser } from "@/models/ModelUser";
-import { getUserName } from "./function";
+import { getUniqueInstructors, getUserName } from "./function";
 import { partLabel } from "@/components/SaveTQFBar";
 import { cloneDeep } from "lodash";
 
@@ -27,16 +27,7 @@ export const initialTqf3Part = (tqf3: any, part: any) => {
 export const initialTqf3Part1 = (
   tqf3: IModelCourse
 ): Partial<IModelTQF3Part1> => {
-  const uniqueInstructors = Array.from(
-    new Set(
-      (
-        tqf3.sections?.flatMap((sec) => [
-          sec.instructor,
-          ...(sec.coInstructors as IModelUser[]),
-        ]) as IModelUser[]
-      )?.map((instructor) => getUserName(instructor, 3)!)
-    )
-  );
+  const uniqueInstructors = getUniqueInstructors(tqf3.sections, true, 3);
   const data = {
     consultHoursWk: 1,
     courseType: tqf3.type,

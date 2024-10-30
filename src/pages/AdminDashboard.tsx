@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button } from "@mantine/core";
+import { Button, Table } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconAdjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
 import IconExcel from "@/assets/icons/excel.svg?react";
@@ -17,6 +17,7 @@ import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
 import { addLoadMoreAllCourse, setAllCourseList } from "@/store/allCourse";
+import { getUniqueInstructors } from "@/helpers/functions/function";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ export default function AdminDashboard() {
         year: term.year,
         semester: term.semester,
         search: courseList.search,
-        hasMore: true,
+        hasMore: courseList.total >= payload?.limit,
       });
       localStorage.removeItem("search");
     }
@@ -64,11 +65,14 @@ export default function AdminDashboard() {
   const fetchCourse = async (year: number, semester: number) => {
     if (!user.termsOfService) return;
     dispatch(setLoading(true));
-    const payloadCourse = new CourseRequestDTO();
-    setPayload({ ...payloadCourse, year, semester, hasMore: true });
+    const payloadCourse = { ...new CourseRequestDTO(), year, semester };
     const res = await getCourse(payloadCourse);
     if (res) {
       dispatch(setAllCourseList(res));
+      setPayload({
+        ...payloadCourse,
+        hasMore: res.totalCount >= payload.limit,
+      });
     }
     dispatch(setLoading(false));
   };
@@ -91,8 +95,8 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <div className=" flex flex-col h-full w-full  overflow-hidden">
-        <div className="flex flex-row px-6 pt-3   items-center justify-between">
+      <div className=" flex flex-col h-full w-full gap-2 overflow-hidden">
+        <div className="flex flex-row px-6 pt-3 items-center justify-between">
           <div className="flex flex-col">
             <p className="text-secondary text-[18px] font-semibold ">
               Hi there, {user.firstNameEN}
@@ -138,68 +142,86 @@ export default function AdminDashboard() {
             </Button>
           </div>
         </div>
-        <div className="flex h-full w-full overflow-hidden">
+        <div className="flex h-full w-full px-6 pb-3 overflow-hidden">
           {loading ? (
             <Loading />
-          ) : courseList.total ? (
+          ) : courseList.courses.length ? (
             <InfiniteScroll
               dataLength={courseList.courses.length}
               next={onShowMore}
               height={"100%"}
-              loader={<Loading />}
               hasMore={payload?.hasMore}
-              className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 px-6 p-3"
-              style={{ height: "fit-content", maxHeight: "100%" }}
+              className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
+              style={{ height: "fit-content" }}
+              loader={<Loading />}
             >
-              {courseList.courses.map((item) => {
-                const statusTqf3Sec: any[] = item.sections.map(
-                  (sec) => sec.TQF3?.status
-                );
-                const statusTqf5Sec: any[] = item.sections.map(
-                  (sec) => sec.TQF5?.status
-                );
-                const statusTqf3 =
-                  item.TQF3?.status ??
-                  (statusTqf3Sec.some((e) => e == TQF_STATUS.IN_PROGRESS)
-                    ? TQF_STATUS.IN_PROGRESS
-                    : statusTqf3Sec.every((e) => e == TQF_STATUS.DONE)
-                    ? TQF_STATUS.DONE
-                    : TQF_STATUS.NO_DATA);
-                const statusTqf5 =
-                  item.TQF5?.status ??
-                  (statusTqf5Sec.some((e) => e == TQF_STATUS.IN_PROGRESS)
-                    ? TQF_STATUS.IN_PROGRESS
-                    : statusTqf5Sec.every((e) => e == TQF_STATUS.DONE)
-                    ? TQF_STATUS.DONE
-                    : TQF_STATUS.NO_DATA);
-                return (
-                  <div
-                    key={item.id}
-                    className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-[4px] hover:bg-[#F3F3F3]"
-                  >
-                    <div className="p-2.5 flex flex-col">
-                      <p className="font-bold text-sm">{item.courseNo}</p>
-                      <p className="text-xs font-medium text-gray-600">
-                        {item.courseName}
-                      </p>
-                    </div>
-                    <div className="bg-[#e7eaff] flex h-8 items-center justify-between rounded-b-[4px]">
-                      <p className="p-2.5 text-secondary font-[700] text-[12px]">
-                        {item.sections.length} Section
-                        {item.sections.length > 1 ? "s" : ""}
-                      </p>
-                      <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">
-                        <p className="tag-tqf" tqf-status={statusTqf3}>
-                          TQF 3
-                        </p>
-                        <p className="tag-tqf" tqf-status={statusTqf5}>
-                          TQF 5
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+              <Table stickyHeader striped>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Course No.</Table.Th>
+                    <Table.Th>Name</Table.Th>
+                    <Table.Th>Instructor</Table.Th>
+                    <Table.Th>TQF 3</Table.Th>
+                    <Table.Th>TQF 5</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {courseList.courses.map((item, index) => {
+                    const insList = getUniqueInstructors(item.sections);
+                    const statusTqf3Sec: any[] = item.sections.map(
+                      (sec) => sec.TQF3?.status
+                    );
+                    const statusTqf5Sec: any[] = item.sections.map(
+                      (sec) => sec.TQF5?.status
+                    );
+                    const statusTqf3 =
+                      item.TQF3?.status ??
+                      (statusTqf3Sec.some((e) => e == TQF_STATUS.IN_PROGRESS)
+                        ? TQF_STATUS.IN_PROGRESS
+                        : statusTqf3Sec.every((e) => e == TQF_STATUS.DONE)
+                        ? TQF_STATUS.DONE
+                        : TQF_STATUS.NO_DATA);
+                    const statusTqf5 =
+                      item.TQF5?.status ??
+                      (statusTqf5Sec.some((e) => e == TQF_STATUS.IN_PROGRESS)
+                        ? TQF_STATUS.IN_PROGRESS
+                        : statusTqf5Sec.every((e) => e == TQF_STATUS.DONE)
+                        ? TQF_STATUS.DONE
+                        : TQF_STATUS.NO_DATA);
+                    return (
+                      <Table.Tr key={index}>
+                        <Table.Td>{item.courseNo}</Table.Td>
+                        <Table.Td>{item.courseName}</Table.Td>
+                        <Table.Td>
+                          {insList.map((ins) => {
+                            return (
+                              <div key={ins} className="flex flex-col">
+                                <p>{ins}</p>
+                              </div>
+                            );
+                          })}
+                        </Table.Td>
+                        <Table.Td>
+                          <Button
+                            className="tag-tqf text-center"
+                            tqf-status={statusTqf3}
+                          >
+                            TQF 3
+                          </Button>
+                        </Table.Td>
+                        <Table.Td>
+                          <Button
+                            className="tag-tqf text-center"
+                            tqf-status={statusTqf5}
+                          >
+                            TQF 5
+                          </Button>
+                        </Table.Td>
+                      </Table.Tr>
+                    );
+                  })}
+                </Table.Tbody>
+              </Table>
             </InfiniteScroll>
           ) : (
             <div className=" flex flex-row flex-1 justify-between">
@@ -214,11 +236,7 @@ export default function AdminDashboard() {
                   {courseList.search.length ? (
                     <>Check the spelling or try a new search.</>
                   ) : (
-                    <>
-                      It looks like you haven't added any courses yet.
-                      <br />
-                      Click 'Add Course' button below to get started!
-                    </>
+                    <>It looks like you haven't added any courses yet.</>
                   )}
                 </p>
               </div>

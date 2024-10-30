@@ -1,3 +1,4 @@
+import { IModelSection } from "@/models/ModelSection";
 import { IModelUser } from "@/models/ModelUser";
 import { isEmpty } from "lodash";
 import moment from "moment";
@@ -23,6 +24,23 @@ export const getUserName = (
     default:
       return `${user.firstNameEN} ${user.lastNameEN?.slice(0, 1)}.`; // John D.
   }
+};
+
+export const getUniqueInstructors = (
+  sections: Partial<IModelSection>[],
+  includesCoIns: boolean = false,
+  formatName?: number
+) => {
+  return Array.from(
+    new Set(
+      (
+        sections?.flatMap((sec) => [
+          sec.instructor,
+          includesCoIns && { ...(sec.coInstructors as IModelUser[]) },
+        ]) as IModelUser[]
+      )?.map((instructor) => getUserName(instructor, formatName)!)
+    )
+  );
 };
 
 export const dateFormatter = (
