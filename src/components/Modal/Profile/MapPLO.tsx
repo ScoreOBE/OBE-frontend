@@ -1078,7 +1078,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                   </div>
                 ) : !courseManagement.length ? (
                   <div className="flex w-full h-full justify-center items-center">
-                    No course found
+                    No Course Found
                   </div>
                 ) : (
                   <InfiniteScroll

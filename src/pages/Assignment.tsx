@@ -370,7 +370,7 @@ export default function Assignment() {
         </div>
       </Modal>
 
-      <div className="bg-white flex flex-col h-full w-full px-6  pt-5 gap-3 overflow-hidden">
+      <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
         {/* <Breadcrumbs /> */}
         {loading ? (
@@ -380,7 +380,7 @@ export default function Assignment() {
             ?.map(({ id }) => id)
             .includes(user.id) ? (
           <>
-            <div className="flex flex-row  py-2  items-center justify-between">
+            <div className="flex flex-row  py-1  items-center justify-between">
               <p className="text-secondary text-[18px] font-semibold">
                 {section?.assignments?.length} Assignment
                 {section?.assignments?.length! > 1 && "s"}
@@ -441,7 +441,7 @@ export default function Assignment() {
             </div>
             {/* Table */}
             <div
-              className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
+              className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full  border flex flex-col rounded-lg border-secondary"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
                 height: "fit-content",

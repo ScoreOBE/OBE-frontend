@@ -10,10 +10,12 @@ import {
   List,
   Menu,
   Chip,
+  Alert,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import IconCircleFilled from "@/assets/icons/circleFilled.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
 import IconUsers from "@/assets/icons/users.svg?react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
@@ -508,6 +510,22 @@ export default function ModalAddCourse({
           label="Course Info"
           description="STEP 2"
         >
+          {" "}
+          <Alert
+            radius="md"
+            icon={<Icon IconComponent={IconInfo2} />}
+            variant="light"
+            color="blue"
+            className="mb-3"
+            classNames={{
+              icon: "size-6",
+              body: " flex  justify-center",
+         
+            }}
+            title={"Please fill only the section number for the section you own."}
+          >
+            
+          </Alert>
           <div className="w-full  mt-2 h-fit  bg-white mb-5 rounded-md">
             <div className="flex flex-col gap-3">
               <TextInput
@@ -546,11 +564,11 @@ export default function ModalAddCourse({
                 />
               )}
               <TagsInput
-                label="Section"
+                label="Section No."
                 withAsterisk
                 classNames={{
                   input:
-                    " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
+                    " h-[130px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
                   pill: "bg-secondary text-white font-bold",
                   label: "font-semibold text-tertiary text-b2",
                   error: "text-[10px] !border-none",
@@ -650,6 +668,18 @@ export default function ModalAddCourse({
           description="STEP 4"
         >
           <div className="flex flex-col mt-3 flex-1">
+          <Alert
+              radius="md"
+              icon={<Icon IconComponent={IconInfo2} />}
+              variant="light"
+              color="blue"
+              className="mb-1"
+              classNames={{
+                icon: "size-6",
+                body: " flex justify-center",
+              }}
+              title={<p>Co-instructors have access only to the scores for the section number you select and the Course TQF documents.</p>}
+            ></Alert>
             <CompoManageIns
               opened={active == 3}
               type="add"
@@ -662,7 +692,7 @@ export default function ModalAddCourse({
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <Icon IconComponent={IconUsers} /> Added Co-Instructor
                 </div>
-                <div className="flex flex-col max-h-[220px] h-fit w-full   px-2   overflow-y-auto ">
+                <div className="flex flex-col max-h-[173px] h-fit w-full   px-2   overflow-y-auto ">
                   <div className="flex flex-col h-fit p-1 ">
                     {coInsList.map((coIns, index) => (
                       <div

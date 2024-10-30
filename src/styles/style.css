@@ -327,6 +327,13 @@
   cursor: default !important;
 }
 
+.mantine-Pill-root {
+  height: 30px !important;
+  text-align: center;
+  padding-inline: 15px !important;
+  padding-top: 4px;
+}
+
 /* Radio */
 .mantine-Radio-label {
   font-size: 13px;
@@ -378,6 +385,7 @@
   font-weight: 700;
   line-height: 1;
 }
+
 .tag-tqf[tqf-status="No Data"] {
   color: #79797a;
   background-color: #d8d8dd;

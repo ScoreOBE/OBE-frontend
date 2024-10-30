@@ -479,7 +479,7 @@ export default function ModalAddSection({
               icon={<Icon IconComponent={IconInfo2} />}
               variant="light"
               color="blue"
-              className="mb-5"
+              className="mb-2"
               classNames={{
                 icon: "size-6",
                 body: " flex justify-center",
@@ -541,7 +541,7 @@ export default function ModalAddSection({
                     {getSectionNo(sec.sectionNo)}{" "}
                     <span className="text-red-500">*</span>
                   </span>
-                  <div className="w-full justify-center border-b-2 pl-5 pr-[18px] pt-4 pb-1  flex flex-col ">
+                  <div className="w-full justify-center  border-b-2  pr-[18px] pt-4 pb-1  flex flex-col ">
                     <div className="gap-2 flex flex-col">
                       <span className="font-medium text-default text-b2 ">
                         Repeat on semester
@@ -608,7 +608,18 @@ export default function ModalAddSection({
           label="Co-Instructor"
           description={`STEP ${isManage ? 4 : 3}`}
         >
-          <div className="flex flex-col mt-3 flex-1 ">
+          <Alert
+              radius="md"
+              icon={<Icon IconComponent={IconInfo2} />}
+              variant="light"
+              color="blue"
+              classNames={{
+                icon: "size-6",
+                body: " flex justify-center",
+              }}
+              title={<p>Co-instructors have access only to the scores for the section number you select and the Course TQF documents.</p>}
+            ></Alert>
+          <div className="flex flex-col mt-1 flex-1 ">
             <CompoManageIns
               opened={(active == 2 && !isManage) || (active == 3 && isManage)}
               type="add"
@@ -627,7 +638,7 @@ export default function ModalAddSection({
                 <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <Icon IconComponent={IconUsers} /> Added Co-Instructor
                 </div>
-                <div className="flex flex-col max-h-[220px] h-fit w-full   px-2   overflow-y-auto ">
+                <div className="flex flex-col max-h-[173px] h-fit w-full   px-2   overflow-y-auto ">
                   <div className="flex flex-col  h-fit p-1">
                     {coInsList.map((coIns, index) => (
                       <div
