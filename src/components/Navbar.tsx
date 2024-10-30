@@ -8,6 +8,7 @@ import { getCourse } from "@/services/course/course.service";
 import cmulogo from "@/assets/image/cmuLogoPurple.png";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { SearchInput } from "./SearchInput";
+import { setAllCourseList } from "@/store/allCourse";
 
 export default function Navbar() {
   const { name } = useParams();
@@ -23,14 +24,23 @@ export default function Navbar() {
     if (reset) payloadCourse.search = "";
     else payloadCourse.search = searchValue;
     switch (path) {
-      case ROUTE_PATH.DASHBOARD_INS:
-        payloadCourse = { ...new CourseRequestDTO(), ...payloadCourse };
+      case ROUTE_PATH.INS_DASHBOARD:
+      case ROUTE_PATH.ADMIN_DASHBOARD:
+        payloadCourse = {
+          ...new CourseRequestDTO(),
+          ...payloadCourse,
+          manage: path.includes(ROUTE_PATH.ADMIN_DASHBOARD),
+        };
         payloadCourse.year = parseInt(params.get("year") ?? "");
         payloadCourse.semester = parseInt(params.get("semester") ?? "");
         res = await getCourse(payloadCourse);
         if (res) {
           res.search = payloadCourse.search;
-          dispatch(setCourseList(res));
+          if (path.includes(ROUTE_PATH.ADMIN_DASHBOARD)) {
+            dispatch(setAllCourseList(res));
+          } else {
+            dispatch(setCourseList(res));
+          }
         }
         break;
       default:
@@ -42,8 +52,12 @@ export default function Navbar() {
   const topicPath = () => {
     const path = "/" + location.split("/")[1];
     switch (path) {
-      case ROUTE_PATH.DASHBOARD_INS:
+      case ROUTE_PATH.INS_DASHBOARD:
         return "Your Courses";
+      case ROUTE_PATH.ADMIN_DASHBOARD:
+        return `Course ${params.get("semester") ?? ""}/${
+          params.get("year")?.slice(-2) ?? ""
+        }`;
       case ROUTE_PATH.COURSE:
         if (location.includes(ROUTE_PATH.TQF3))
           return `TQF 3${tqf3Topic ? ` - ${tqf3Topic}` : ""}`;
@@ -81,7 +95,9 @@ export default function Navbar() {
       >
         {topicPath()}
       </p>
-      {[ROUTE_PATH.DASHBOARD_INS].includes(location) && (
+      {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].includes(
+        location
+      ) && (
         <SearchInput
           onSearch={searchCourse}
           placeholder="Course No / Course Name"

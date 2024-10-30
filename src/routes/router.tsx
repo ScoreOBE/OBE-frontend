@@ -3,6 +3,7 @@ import { Suspense, lazy } from "react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import App from "@/App";
 import Loading from "@/components/Loading";
+import AdminDashboard from "@/pages/AdminDashboard";
 
 const Login = lazy(() => import("@/pages/Login"));
 const CMUOAuthCallback = lazy(() => import("@/pages/CmuOAuthCallback"));
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: ROUTE_PATH.DASHBOARD_INS,
+        path: ROUTE_PATH.INS_DASHBOARD,
         element: (
           <Suspense fallback={<Loading />}>
             <Dashboard />
@@ -111,6 +112,14 @@ const router = createBrowserRouter([
             ),
           },
         ],
+      },
+      {
+        path: ROUTE_PATH.ADMIN_DASHBOARD,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AdminDashboard />
+          </Suspense>
+        ),
       },
       {
         path: "*",

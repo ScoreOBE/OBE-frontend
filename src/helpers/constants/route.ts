@@ -2,9 +2,9 @@ export const ROUTE_PATH = {
   LOGIN: "/",
   CMU_OAUTH_CALLBACK: "/cmuOAuthCallback",
   SELECTED_DEPARTMENT: "/select-department",
-  DASHBOARD_INS: "/dashboard",
-  DASHBOARD_ADMIN: "/dashboard-admin",
-  DASHBOARD_STD: "/dashboard-student",
+  INS_DASHBOARD: "/dashboard",
+  ADMIN_DASHBOARD: "/admin-dashboard",
+  STD_DASHBOARD: "/student-dashboard",
   COURSE: "/course",
   SECTION: "sections",
   TQF3: "tqf3",
@@ -13,4 +13,8 @@ export const ROUTE_PATH = {
   HISTOGRAM: "histogram",
   SCORE: "Score",
   STUDENTS: "students",
+};
+
+export const PATH = {
+  DASHBOARD: "dashboard",
 };

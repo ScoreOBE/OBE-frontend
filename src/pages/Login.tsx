@@ -26,7 +26,7 @@ export default function Login() {
     dispatch(setShowSidebar(false));
     dispatch(setShowNavbar(true));
     if (!isEmpty(user)) {
-      navigate(ROUTE_PATH.DASHBOARD_INS);
+      navigate(ROUTE_PATH.INS_DASHBOARD);
     }
   }, [user]);
   return loading ? (

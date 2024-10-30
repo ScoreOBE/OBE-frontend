@@ -85,7 +85,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       setInstructors(insList);
       setCoInstructors(coInsList);
     } else if (store.getState().course.courses.length && !course) {
-      navigate(`${ROUTE_PATH.DASHBOARD_INS}?${params.toString()}`);
+      navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`);
     }
   }, [course]);
 
@@ -138,7 +138,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       if (changePart.length && tqf3.id) {
         setOpenAlertPopup(true);
       } else {
-        goToPage(ROUTE_PATH.DASHBOARD_INS, true);
+        goToPage(ROUTE_PATH.INS_DASHBOARD, true);
       }
     }
   }, [tqf3Original]);
@@ -151,7 +151,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         action={() => {
           dispatch(setDataTQF3({}));
           setOpenAlertPopup(false);
-          goToPage(ROUTE_PATH.DASHBOARD_INS, true);
+          goToPage(ROUTE_PATH.INS_DASHBOARD, true);
         }}
         type="unsaved"
         labelButtonRight={`Keep editing`}
