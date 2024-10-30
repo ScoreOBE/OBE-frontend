@@ -1,25 +1,21 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button, Table } from "@mantine/core";
+import { Button, Select, Table } from "@mantine/core";
 import Icon from "@/components/Icon";
-import IconAdjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
 import IconExcel from "@/assets/icons/excel.svg?react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.png";
-import { TQF_STATUS } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
 import { addLoadMoreAllCourse, setAllCourseList } from "@/store/allCourse";
-import { getUniqueInstructors } from "@/helpers/functions/function";
 
 export default function AdminDashboardCLO() {
-  const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
@@ -124,6 +120,7 @@ export default function AdminDashboardCLO() {
             )}
           </div>
           <div className="flex gap-3 flex-wrap">
+            <Select />
             <Button
               className="text-center px-4"
               leftSection={

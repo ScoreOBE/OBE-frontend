@@ -1,4 +1,6 @@
 import { IModelSection } from "@/models/ModelSection";
+import { IModelTQF3 } from "@/models/ModelTQF3";
+import { IModelTQF5 } from "@/models/ModelTQF5";
 import { IModelUser } from "@/models/ModelUser";
 import { isEmpty } from "lodash";
 import moment from "moment";
@@ -41,6 +43,27 @@ export const getUniqueInstructors = (
       )?.map((instructor) => getUserName(instructor, formatName)!)
     )
   );
+};
+
+export const getUniqueTopicsWithTQF = (sections: Partial<IModelSection>[]) => {
+  const uniqueTopics = new Map<
+    string,
+    { topic: string; TQF3?: IModelTQF3; TQF5?: IModelTQF5 }
+  >();
+  sections.forEach((sec) => {
+    if (sec.topic && (sec.TQF3 || sec.TQF5)) {
+      if (!uniqueTopics.has(sec.topic)) {
+        uniqueTopics.set(sec.topic, {
+          topic: sec.topic,
+          TQF3: sec.TQF3,
+          TQF5: sec.TQF5,
+        });
+      }
+    }
+  });
+
+  // Convert map values to an array
+  return Array.from(uniqueTopics.values());
 };
 
 export const dateFormatter = (
