@@ -39,6 +39,7 @@ export default function Sidebar() {
   const loading = useAppSelector((state) => state.loading);
   const academicYear = useAppSelector((state) => state.academicYear);
   const courseList = useAppSelector((state) => state.course.courses);
+  const allCourseList = useAppSelector((state) => state.allCourse.courses);
   const dispatch = useAppDispatch();
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
@@ -70,10 +71,10 @@ export default function Sidebar() {
       params.get("year") &&
       params.get("semester") &&
       academicYear.length &&
-      !courseList.length
+      (!courseList.length || !allCourseList.length)
     )
       fetchCourse();
-  }, [academicYear, params]);
+  }, [path, academicYear, params]);
 
   const fetchCourse = async () => {
     if (!user.termsOfService) return;

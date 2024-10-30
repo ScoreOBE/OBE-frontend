@@ -23,6 +23,7 @@ type actionType =
 type Props = {
   opened: boolean;
   type: actionType;
+  isManage?: boolean;
   newFetch?: boolean;
   setNewFetch?: (value: boolean) => void;
   currentMainIns?: string;
@@ -38,6 +39,7 @@ type Props = {
 export default function CompoMangeIns({
   opened,
   type,
+  isManage = false,
   newFetch = false,
   setNewFetch,
   currentMainIns,
@@ -129,7 +131,7 @@ export default function CompoMangeIns({
       setInstructorOption(
         res
           .filter((e: IModelUser) =>
-            ["add", "admin", "manageCoSec"].includes(type)
+            ["add", "admin", "manageCoSec"].includes(type) && !isManage
               ? e.id !== user.id
               : e
           )
