@@ -67,10 +67,10 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 Score OBE<span className=" text-[#FFCD1B]">+</span>
               </p>
             )}
-            <p className=" text-default text-[14px]">
+            <p className=" text-default text-b2">
               {isEN === "EN"
-                ? "Last updated: October 29, 2024"
-                : "อัปเดตล่าสุด: 29 ตุลาคม 2567"}
+                ? "Last updated: October 30, 2024"
+                : "อัปเดตล่าสุด: 30 ตุลาคม 2567"}
             </p>
           </div>
           <div>
@@ -99,7 +99,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         </div>
       }
       centered
-      size="65vw"
+      size="68vw"
       transitionProps={{ transition: "pop" }}
       classNames={{
         title: "!w-full ",
@@ -107,7 +107,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         body: "flex flex-col overflow-hidden max-h-full h-fit",
       }}
     >
-      <div className=" pt-1 h-[500px] overflow-y-auto text-slate-700 font-medium">
+      <div className=" mt-2 h-[70vh] overflow-y-auto text-slate-700 font-medium">
         {isEN === "EN" ? (
           <p className=" text-[18px] font-bold text-default mb-[10px]">
             Welcome to <span className=" text-secondary">Score OBE</span>
@@ -123,6 +123,38 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
 
         <Alert
           radius="md"
+          icon={<Icon className="size-8" IconComponent={IconExclamamtion} />}
+          variant="light"
+          color="orange"
+          className="mb-3"
+          classNames={{
+            icon: "size-6",
+            body: " flex ml-1 justify-center",
+            title: "-mb-1 text-[15px]",
+          }}
+          title={
+            isEN === "EN" ? (
+              <p>IMPORTANT</p>
+            ) : (
+              <p className=" font-semibold">สำคัญ</p>
+            )
+          }
+        >
+          {isEN === "EN" ? (
+            <p className=" leading-6 text-default text-b2">
+              Please read, review and understand these Terms and Conditions of
+              Service carefully before using Score OBE+.
+            </p>
+          ) : (
+            <p className=" leading-6 text-default text-b2">
+              โปรดอ่าน ตรวจสอบ
+              และทำความเข้าใจข้อกำหนดและเงื่อนไขในการให้บริการนี้อย่างละเอียดก่อนใช้งาน
+              Score OBE+
+            </p>
+          )}
+        </Alert>
+        <Alert
+          radius="md"
           icon={<Icon className=" size-8" IconComponent={IconUserScan} />}
           variant="light"
           color="indigo"
@@ -130,7 +162,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           classNames={{
             icon: "size-6",
             body: " flex ml-1 justify-center",
-            title: "-mb-1 text-[16px]",
+            title: "-mb-1 text-[15px]",
           }}
           title={
             isEN === "EN" ? (
@@ -140,11 +172,11 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             )
           }
         >
-          <div className=" justify-start text-start items-start">
+          <div className=" justify-start text-b2 text-default text-start items-start">
             <p className="mb-2">
               {isEN === "EN"
-                ? "The following data from CMU OAuth and Score OBE+ may be collected and linked to your identity:"
-                : "ข้อมูลต่อไปนี้ที่มาจาก CMU OAuth และ Score OBE+ อาจะถูกเก็บและเชื่อมโยงกับตัวตนของคุณ:"}
+                ? "The following data from CMU OAuth and Score OBE+ may be collected and linked to your identity for Web application Functionality:"
+                : "ข้อมูลต่อไปนี้ที่มาจาก CMU OAuth และ Score OBE+ อาจะถูกเก็บและเชื่อมโยงกับตัวตนของคุณ เพื่อการทำงานของเว็บแอปพลิเคชั่น:"}
             </p>{" "}
             <br />
             <div className="flex gap-8 -mt-4">
@@ -201,70 +233,74 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 </div>
               </div>
             </div>
-          </div>
-        </Alert>
-        <Alert
-          radius="md"
-          icon={<Icon className="size-8" IconComponent={IconExclamamtion} />}
-          variant="light"
-          color="orange"
-          className="mb-3"
-          classNames={{
-            icon: "size-6",
-            body: " flex ml-1 justify-center",
-            title: "-mb-1 text-[16px]",
-          }}
-          title={
-            isEN === "EN" ? (
-              <p>IMPORTANT</p>
+            {isEN === "EN" ? (
+              <p className="mt-3 leading-6">
+                The developer,{" "}
+                <span className="font-bold">
+                  {" "}
+                  Department of Computer Engineering, Faculty of Engineering,
+                  Chiang Mai University
+                </span>
+                , indicated that the web application's privacy practices may
+                include handling of data as described above. For more
+                information, see the{" "}
+                <a
+                  className=" text-blue-500  hover:underline"
+                  href="https://www.cmu.ac.th/th/privacy"
+                >
+                  CMU Privacy Policy{" "}
+                </a>
+              </p>
             ) : (
-              <p className=" font-semibold">สำคัญ</p>
-            )
-          }
-        >
-          {isEN === "EN" ? (
-            <p className=" leading-6">
-              Please read these Terms and Conditions of Service carefully before
-              using Score OBE+.
-            </p>
-          ) : (
-            <p className=" leading-6">
-              โปรดอ่านข้อกำหนดและเงื่อนไขในการให้บริการอย่างละเอียดก่อนใช้งาน
-            </p>
-          )}
+              <p className="mt-3 font-normal leading-6">
+                นักพัฒนาเว็บแอปพลิเคชั่น{" "}
+                <span className="font-bold">
+                  {" "}
+                  ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์
+                  มหาวิทยาลัยเชียงใหม่
+                </span>{" "}
+                ได้ระบุว่าแนวปฏิบัติด้านความเป็นส่วนตัวของเว็บแอปพลิเคชั่นอาจรวมถึงการจัดการข้อมูลตามที่อธิบายไว้ด้านบน
+                สำหรับข้อมูลเพิ่มเติม ให้ดูที่{" "}
+                <a
+                  className=" text-blue-500 hover:underline"
+                  href="https://www.cmu.ac.th/th/privacy"
+                >
+                  นโยบายคุ้มครองข้อมูลส่วนบุคคล มหาวิทยาลัยเชียงใหม่{" "}
+                </a>{" "}
+              </p>
+            )}
+          </div>
         </Alert>
 
         {isEN === "EN" ? (
-          <div className="mb-3">
-            <p className=" text-[14px] mb-3 leading-6">
+          <div className="mb-4">
+            <p className=" text-b2 mb-3 leading-6">
               <span className="font-bold">Score OBE+</span> is a web application
-              (“System”) developed as a tool to facilitate lecturers, students,
-              and staff in the Faculty of Engineering, Chiang Mai University ,
-              in managing the documents of the Thai Qualifications Framework for
-              Higher Education (TQF:HEd) of the course related to Outcome-Based
+              developed as a tool to facilitate lecturers, students, and staff
+              in the Faculty of Engineering, Chiang Mai University , in managing
+              the documents of the Thai Qualifications Framework for Higher
+              Education (TQF:HEd) of the course related to Outcome-Based
               Education (OBE) and announcing scores via this system.
             </p>
-            <p className=" text-[14px] font-bold mb-3 leading-6">
-              1. Definition{" "}
-            </p>
+            <p className=" text-b2 font-bold mb-3 leading-6">1. Definition </p>
 
             <Table>
               <Table.Tbody className="text-default">
                 {/* Entire Table Row as Control */}
-                <Table.Tr className="text-[13px] border-t-[1px] font-normal py-[14px] w-full ">
+                <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"You"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
                     Refers to Score OBE+ web application users
                   </Table.Td>
                 </Table.Tr>
-                <Table.Tr className="text-[13px] border-t-[1px] font-normal py-[14px] w-full ">
+                <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"We"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
                     Refers to the Department of Computer Engineering, Faculty of
                     Engineering, Chiang Mai University.
                   </Table.Td>
                 </Table.Tr>
-                <Table.Tr className="text-[13px] font-normal py-[14px] w-full ">
+                <Table.Tr className="text-b2 font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[25%] ">"System"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[75%]">
                     Refers to the Score OBE+ web application which is provided
@@ -279,8 +315,8 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </Table>
           </div>
         ) : (
-          <div className="mb-5">
-            <p className=" text-[14px] mb-3 leading-6">
+          <div className=" mb-4">
+            <p className=" text-b2 mb-3 font-normal leading-6">
               <span className="font-bold">Score OBE+ </span> เป็นเว็บแอปพลิเคชัน
               ที่พัฒนาขึ้นเป็นเครื่องมืออำนวยความสะดวกแก่อาจารย์ นักศึกษา
               และบุคลากร คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเชียงใหม่
@@ -288,25 +324,25 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               ของรายวิชาที่เกี่ยวข้องกับการศึกษาตามผลลัพธ์ (OBE)
               และการประกาศผลคะแนนผ่านระบบนี้
             </p>
-            <p className=" text-[14px] font-bold mb-3 leading-6">1. นิยาม </p>
+            <p className=" text-b2 font-bold mb-3 leading-6">1. นิยาม </p>
 
             <Table>
               <Table.Tbody className="text-default">
                 {/* Entire Table Row as Control */}
-                <Table.Tr className="text-[13px] border-t-[1px] font-normal py-[14px] w-full ">
+                <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"ท่าน"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
                     หมายถึง ผู้ใช้บริการเว็บแอปพลิเคชั่น Score OBE+
                   </Table.Td>
                 </Table.Tr>
-                <Table.Tr className="text-[13px] border-t-[1px] font-normal py-[14px] w-full ">
+                <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"เรา"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
                     หมายถึง ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์
                     มหาวิทยาลัยเชียงใหม่
                   </Table.Td>
                 </Table.Tr>
-                <Table.Tr className="text-[13px] font-normal py-[14px] w-full ">
+                <Table.Tr className="text-b2 font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[25%] ">"ระบบ"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[75%]">
                     หมายถึง เว็บแอปพลิเคชั่น Score OBE+
@@ -318,19 +354,12 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 </Table.Tr>
               </Table.Tbody>
             </Table>
-
-            {/* <p className=" text-[14px] font-bold mb-3 leading-6">
-              2. รายละเอียดทั่วไป{" "}
-            </p>
-            <p className=" text-[14px]  mb-3 leading-6">
-             
-            </p> */}
           </div>
         )}
 
         {isEN === "EN" ? (
-          <p className=" text-[14px]  mb-6 leading-6">
-            <p className="font-bold ">2. System Objectives</p>
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1 ">2. System Objectives</p>
             <p className="ml-3">
               <li className="mb-1">
                 Score Announcements: The Score OBE+ system facilitates quick and
@@ -355,9 +384,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>
           </p>
         ) : (
-          <p className=" text-[14px]  mb-6 leading-6">
-            <p className="font-bold"> 2. วัตถุประสงค์ของระบบ</p>
-            <p className="ml-3">
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1"> 2. วัตถุประสงค์ของระบบ</p>
+            <p className="ml-3 font-normal">
               <li className="mb-1">
                 ประกาศคะแนนข้อสอบและการบ้าน:
                 ระบบช่วยให้อาจารย์สามารถประกาศคะแนนของนักศึกษาได้อย่างรวดเร็วและมีประสิทธิภาพ
@@ -379,8 +408,8 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </p>
         )}
         {isEN === "EN" ? (
-          <p className=" text-[14px]  mb-6 leading-6">
-            <p className="font-bold"> 3. Acceptance of Terms and Conditions</p>
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1"> 3. Acceptance of Terms and Conditions</p>
             By using this system, you acknowledge that you have read and
             understood the Terms and Conditions of Service thoroughly. Your use
             of the system constitutes your agreement and acceptance of all terms
@@ -388,10 +417,10 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             these Terms and Conditions, please refrain from using the system.
           </p>
         ) : (
-          <p className=" text-[14px]  mb-6 leading-6">
-            <p className="font-bold"> 3. การยอมรับข้อกำหนดและเงื่อนไข</p>
-            <p>
-              {" "}
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1"> 3. การยอมรับข้อกำหนดและเงื่อนไข</p>
+            <p className="font-normal">
+             
               เมื่อท่านได้ใช้ระบบ
               ถือว่าท่านได้อ่านและเข้าใจข้อกำหนดและเงื่อนไขการให้บริการของระบบเป็นอย่างดีแล้ว
               การใช้บริการถือเป็นการแสดงเจตนาตกลง
@@ -402,31 +431,24 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </p>
         )}
         {isEN === "EN" ? (
-          <p className=" text-[14px]  mb-6 leading-6">
-            <p className="font-bold">
-              {" "}
-              4. Amendment and Acceptance of Terms and Conditions
-            </p>
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1">4. Amendment</p>
             <p>
-              {" "}
               We reserve the right to modify, amend, add, or remove any Terms
               and Conditions of Service within the system without prior notice.
-              Users are responsible for regularly reviewing any updates to these
+              You are responsible for regularly reviewing any updates to these
               Terms and Conditions. Continued use of the system after any
               modifications implies that you have read, understood, and
-              unconditionally accepted the updated Terms and Conditions. Users
-              may not claim lack of awareness of any changes to the Terms and
+              unconditionally accepted the updated Terms and Conditions. You may
+              not claim lack of awareness of any changes to the Terms and
               Conditions as a reason for non-compliance.
             </p>
           </p>
         ) : (
-          <p className=" text-[14px]  mb-6 leading-6">
-            <p className="font-bold">
-              {" "}
-              4. การแก้ไขและการยอมรับข้อกำหนดและเงื่อนไข
-            </p>
-            <p>
-              {" "}
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1"> 4. การแก้ไขเพิ่มเติม</p>
+            <p className="font-normal">
+              
               เราขอสงวนสิทธิในการแก้ไข เปลี่ยนแปลง เพิ่มเติม ตัดทอน
               บรรดาข้อกำหนดและเงื่อนไขการให้บริการใด ๆ ที่กำหนดไว้ในระบบ
               โดยไม่ต้องแจ้งให้ท่านทราบล่วงหน้า อย่างไรก็ดี
@@ -435,13 +457,13 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               ถือว่าท่านได้อ่านและเข้าใจ
               จึงได้ยอมรับตามข้อกำหนดและเงื่อนไขการใช้บริการที่ได้มีการเปลี่ยนแปลงนี้
               อย่างไม่มีเงื่อนไข
-              ท่านไม่อาจอ้างเหตุในการไม่ทราบถึงการเปลี่ยนแปลงข้อกำหนดและเงื่อนการใช้บริการมาเป็นเหตุในการฝ่าฝืนข้อกำหนดและเงื่อนไขนี้ได้
+              ท่านไม่อาจอ้างเหตุในการไม่ทราบถึงการเปลี่ยนแปลงข้อกำหนดและเงื่อนไขการใช้บริการมาเป็นเหตุในการฝ่าฝืนข้อกำหนดและเงื่อนไขนี้ได้
             </p>
           </p>
         )}
         {isEN === "EN" ? (
-          <p className=" text-[14px]  mb-6 leading-6">
-            <p className="font-bold"> 5. Privacy</p>
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1"> 5. Personal Data Protection</p>
             <p>
               {" "}
               We prioritize the importance of your data and respect your right
@@ -455,11 +477,11 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               review the current version of the CMU Privacy Policy at any time
               at
               <a
-                className=" text-secondary hover:underline"
+                className=" text-blue-500  hover:underline"
                 href="https://www.cmu.ac.th/th/privacy"
               >
                 {" "}
-                https://www.cmu.ac.th/th/privacy{" "}
+                CMU Privacy Policy.{" "}
               </a>
               This Privacy Policy applies to your use of this system, including
               access to and use of its content, features, technologies, or
@@ -468,9 +490,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>
           </p>
         ) : (
-          <p className=" text-[14px]  mb-6 leading-6">
-            <p className="font-bold"> 5. ความเป็นส่วนตัว</p>
-            <p>
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1"> 5. การคุ้มครองข้อมูลส่วนบุคคล</p>
+            <p className="font-normal">
               {" "}
               เราคำนึงถึงความสำคัญของข้อมูลและเคารพสิทธิความเป็นส่วนตัวของข้อมูลของท่าน
               ดังนั้น เราจึงขอแจ้งให้ทราบถึงนโยบายในการจัดเก็บข้อมูล
@@ -482,14 +504,14 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               เราอาจดำเนินการปรับปรุงหรือแก้ไขนโยบายคุ้มครองข้อมูลส่วนบุคคล
               ที่กำหนดดังต่อไปนี้
               รวมทั้งที่ได้กำหนดไว้โดยเฉพาะเจาะจงอยู่ในส่วนใดส่วนหนึ่งของระบบนี้ไม่ว่าบางส่วนหรือทั้งหมดเป็นครั้งคราว
-              เพื่อให้สอดคล้องกับแนวทางการให้บริการและหลักเกณฑ์ของกฎหมายที่มี
+              เพื่อให้สอดคล้องกับแนวทางการให้บริการและหลักเกณฑ์ที่มี
               การเปลี่ยนแปลงไป
               โดยท่านสามารถตรวจสอบนโยบายคุ้มครองข้อมูลส่วนบุคคลที่กำหนดไว้นี้ได้อยู่เสมอที่{" "}
               <a
-                className=" text-secondary hover:underline"
+                className=" text-blue-500  hover:underline"
                 href="https://www.cmu.ac.th/th/privacy"
               >
-                https://www.cmu.ac.th/th/privacy{" "}
+                นโยบายคุ้มครองข้อมูลส่วนบุคคล มหาวิทยาลัยเชียงใหม่{" "}
               </a>
               นโยบายคุ้มครองข้อมูลส่วนบุคคลนี้มีขึ้นเพื่อบังคับใช้กับการใช้ระบบ
               การเข้าถึงและใช้เนื้อหา ฟีเจอร์ เทคโนโลยี
@@ -498,23 +520,212 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>
           </p>
         )}
+        {isEN === "EN" ? (
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1"> 6. Use of System Services</p>
+            <p>
+              {" "}
+              By using this website, you agree to adhere strictly to purposes
+              outlined in these terms and conditions. Specifically, you agree
+              not to <br /> (1) Modify, adapt, translate, or reverse engineer
+              any part of the system, system framework, or any of its services,
+              nor allow any third party to do so without our explicit
+              authorization. <br /> (2) Upload or share any information that is
+              obscene, pornographic, defamatory, threatening, or intended to
+              blackmail other members or third parties. <br /> (3) Upload any
+              content or information that implies our endorsement or approval
+              without prior permission or legitimate association with us. <br />{" "}
+              (4) Introduce any viruses, malware, or disruptive system, or take
+              any action that could interfere with, disrupt, or degrade the
+              functionality of our computer systems or the systems of third
+              parties. <br /> (5) Utilize software, Trojan Horse programs, time
+              bombs, or similar methods that can disrupt or interfere with our
+              system, other users, or third-party computer systems, including
+              loading large amounts of data or engaging in activities that
+              threaten the performance of the service. <br /> (6) Violate any
+              additional policies, rules, or announcements that we may introduce
+              as part of these terms and conditions or in subsequent amendments.{" "}
+              <br /> If you breach any of these conditions, we reserve the right
+              to suspend your access to our services without prior notice.
+            </p>
+          </p>
+        ) : (
+          <p className=" text-b2  mb-6 leading-6">
+            <p className="font-bold mb-1"> 6. การใช้บริการระบบ</p>
+            <p className="font-normal">
+              {" "}
+              ท่านตกลงและยอมรับว่า
+              ท่านจะใช้เว็บไซต์นี้ตามวัตถุประสงค์ที่ถูกต้องตามภายใต้ข้อกำหนดและเงื่อนไขฉบับนี้ที่ระบุไว้นี้เท่านั้น
+              อย่างไรก็ดี ท่านจะไม่กระทำการอย่างใดอย่างหนึ่งดังต่อไปนี้
+              <br /> (1) ดำเนินการหรืออนุญาตให้บุคคลที่สามดำเนินการแก้ไขดัดแปลง
+              แปล หรือย้อนกระบวนการผลิต (reverse engineer) ส่วนของระบบ
+              กรอบของระบบ หรือลอกเลียนแบบส่วนของบริการใด ๆ จากระบบ
+              เพื่อวัตถุประสงค์ใด ๆ ก็ตาม เว้นแต่จะได้รับอนุญาตจากทางเราเท่านั้น
+              <br /> (2) อัปโหลดข้อมูลที่หยาบคาย ลามก อนาจาร หมิ่นประมาท
+              ส่อเสียด คุกคาม ว่ากล่าวให้ร้าย
+              ขู่กรรโชกแก่สมาชิกผู้ใช้บริการอื่นหรือบุคคลที่สาม
+              <br /> (3) อัปโหลดข้อมูลใด ๆ ลงในระบบ
+              ที่แสดงออกหรือมีนัยว่าข้อความดังกล่าวได้รับการสนับสนุนหรือรับรองจากเรา
+              โดยไม่เป็นความจริง หรือไม่ได้รับอนุญาตก่อน
+              <br /> (4) อัปโหลด ติดประกาศ ส่งไปรษณีย์อิเล็กทรอนิกส์ (E-mail)
+              หรือ
+              ดำเนินการอื่นใดอันมีผลทำให้เป็นการรบกวนหรือแทรกแซงการทำงานของระบบ
+              โดยการส่งไวรัส (Virus) หรือโปรแกรมคอมพิวเตอร์ในรูปแบบต่าง ๆ
+              ที่ออกแบบมาเพื่อขัดขวาง ทำลาย จำกัดการทำงานของระบบ
+              หรือคอมพิวเตอร์ฮาร์ดแวร์ หรือโปรแกรมซอฟท์แวร์ในการดูแลระบบของเรา
+              หรือผู้ใช้บริการอินเตอร์เน็ต หรือบุคคลภายนอก
+              <br /> (5) ใช้โปรแกรมคอมพิวเตอร์ซอฟท์แวร์ ขัดขวาง แทรกแซง
+              รบกวนการทำงานหรือให้บริการของระบบ
+              หรือเครื่องคอมพิวเตอร์และ/หรือระบบคอมพิวเตอร์ของบุคคลภายนอก
+              อาทิเช่น ใช้โปรแกรมซอฟท์แวร์ประเภทม้าโทรจัน (Trojan Horse)
+              ไวรัสในรูปแบบของไทม์บอมส์ (Time Bombs) ฯลฯ
+              ไม่ตั้งใจใช้เว็บไซต์หนักหรือโหลดข้อมูลขนาดใหญ่ใส่ระบบโดยไม่มีเหตุผลอันสมควรหรือจงใจ
+              ทำให้เป็นภัยต่อการให้บริการระบบ
+              <br /> (6) กระทำการใด ๆ
+              อันขัดต่อประกาศหรือนโยบายของเราที่ระบุไว้ในข้อกำหนดและเงื่อนไขฉบับนี้
+              และ/หรือการแก้ไขเพิ่มเติมข้อกำหนดและเงื่อนไขที่เราประกาศหรือกำหนดขึ้นภายหลัง
+              <br />
+              หากเราทราบว่าท่านดำเนินการอย่างหนึ่งอย่างใดอันขัดต่อข้อกำหนดและเงื่อนไขนี้
+              เรามีสิทธิระงับการให้บริการแก่ท่านโดยไม่จำเป็นต้องบอกกล่าวล่วงหน้า
+            </p>
+          </p>
+        )}
+        {isEN === "EN" ? (
+          <p className=" text-b2  mb-6 leading-6">
+            <p className="font-bold mb-1">
+              {" "}
+              7. Right to Collect Data Linked to You
+            </p>
+            <p>
+              You agree and acknowledge that by using our Service, you grant us
+              the right to collect and process data associated with you, as
+              outlined in these Terms and Conditions. This data collection is
+              intended for purposes of service enhancement, including user
+              experience improvement, system functionality optimization, and the
+              safeguarding of your personal data. <br /> By continuing to use
+              our Service, you consent to and authorize our processing of this
+              data as specified. You also understand that, under our Privacy
+              Policy, you retain the right to access, correct, or delete your
+              data.
+            </p>
+          </p>
+        ) : (
+          <p className=" text-b2  mb-6 leading-6">
+            <p className="font-bold mb-1">
+              7. สิทธิในการนำข้อมูลที่เชื่อมโยงกับคุณเข้าระบบ
+            </p>
+            <p className="font-normal">
+              ท่านตกลงและยอมรับว่า
+              ให้สิทธิ์แก่เราในการเก็บรวบรวมและประมวลผลข้อมูลที่เชื่อมโยงกับคุณตามเงื่อนไขที่กำหนดไว้ในนโยบายนี้
+              ข้อมูลที่เก็บรวบรวมจะใช้เพื่อประโยชน์ในการพัฒนาบริการของเรา
+              รวมถึงการปรับปรุงประสบการณ์ผู้ใช้ ปรับปรุงฟังก์ชันการทำงานของระบบ
+              และรักษาความปลอดภัยของข้อมูลส่วนบุคคลของท่าน
+              <br />
+              โดยการใช้บริการนี้ต่อไป
+              ท่านยินยอมและอนุญาตให้เราประมวลผลข้อมูลตามวัตถุประสงค์ที่ระบุ
+              และเข้าใจว่าท่านมีสิทธิในการเข้าถึง แก้ไข
+              หรือลบข้อมูลของท่านได้ตามข้อกำหนดในนโยบายคุ้มครองข้อมูลส่วนบุคคล
+            </p>
+          </p>
+        )}
+        {isEN === "EN" ? (
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1"> 8. Limitation of Our Liability</p>
+            <p>
+              We disclaim any liability for damages arising from any content
+              imported, created, published, or otherwise acted upon by users. By
+              using our Service, users waive their right to claim any liability
+              from us for such damages. We do not warrant the accuracy of
+              information, whether provided by us or by other users. If we are
+              notified by any relevant party that information on the system may
+              directly or indirectly cause harm to others, we reserve the right
+              to assess the matter and may choose to suspend or permanently
+              remove such information as deemed appropriate. However, the
+              responsibility for any resulting damages remains with the user who
+              provided the information. This limitation includes any errors in
+              our service provision, data transmission, or actions performed by
+              us or other users.
+            </p>
+          </p>
+        ) : (
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1"> 8. การจำกัดความรับผิดของเรา</p>
+            <p className="font-normal">
+              {" "}
+              เราขอปฏิเสธการรับผิดในความเสียหายที่เกิดขึ้นจากการนำเข้า
+              สร้างสรรค์ เผยแพร่ หรือการกระทำอื่นใดของผู้ใช้ทั้งปวง
+              โดยผู้ใช้ขอสละสิทธิในการเรียกร้องให้เรารับผิดใด ๆ
+              จากความเสียหายดังกล่าว เราไม่รับประกันความถูกต้องของข้อมูลใด ๆ
+              ไม่ว่าข้อมูลเหล่านั้นจะเป็นของเราหรือเป็นข้อมูลที่สร้างจากผู้ใช้งานท่านอื่น
+              แต่อย่างไรก็ดี
+              กรณีที่เราได้รับแจ้งจากผู้ที่เกี่ยวข้องหรือบุคคลที่สามว่าข้อมูลที่ปรากฎบนระบบนั้นอาจก่อให้เกิดความเสียหายกับบุคคลอื่นไม่ว่าโดยตรงหรือโดยอ้อม
+              เราขอสงวนสิทธิที่จะพิจารณาเรื่องดังกล่าวตามสมควรเป็นกรณี ๆ
+              ซึ่งอาจนำไปสู่การระงับการเผยแพร่ข้อมูลดังกล่าวไม่ว่าจะเป็นการชั่วคราวหรือถาวรตามสมควรแก่กรณี
+              ทั้งนี้
+              ผู้นำเข้าข้อมูลดังกล่าวนั้นยังคงต้องรับผิดชอบในความเสียหายเช่นเดิม{" "}
+              <br />
+              ข้อจำกัดความรับผิดของเราดังกล่าวนี้
+              ให้รวมไปถึงความผิดพลาดจากการให้บริการ รับส่งข้อมูล
+              หรือการกระทำการใด ๆ ของเรา หรือผู้ใช้ท่านอื่น ๆ ด้วย
+            </p>
+          </p>
+        )}
+
+        {isEN === "EN" ? (
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1">
+              {" "}
+              9. Improvement or Discontinuation of the System
+            </p>
+            <p>
+              {" "}
+              We reserve the right to improve, modify, update, or discontinue
+              any part of the System or Service without prior notice, to ensure
+              optimal functionality and effectiveness. You grant us the right to
+              implement these enhancements, modifications, or adjustments to the
+              System as needed for these purposes.
+            </p>
+          </p>
+        ) : (
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1"> 9. การปรับปรุงหรือหยุดให้บริการระบบ</p>
+            <p className="font-normal">
+              {" "}
+              เราอาจปรับปรุง แก้ไข และเปลี่ยนแปลงใดๆ หรือหยุดให้บริการ
+              ได้โดยไม่ต้องแจ้งให้ท่านทราบล่วงหน้า
+              เพื่อให้ท่านสามารถใช้งานระบบของเราได้แย่างมีประสิทธภาพ
+              ซึ่งเราอาจปรับปรุง แก้ไข
+              และเปลี่ยนแปลงซอฟท์แวร์อย่างเล็กน้อยพื่อวัตถุประสงค์ดังกล่าว
+              โดยท่านได้ให้สิทธิ์แก่เรา ดำเนินการและกระทำการปรับปรุง แก้ไข
+              และเปลี่ยนแปลงดังกล่าว
+            </p>
+          </p>
+        )}
       </div>
-      <div className="flex justify-end mt-3 sticky w-full">
-        <Group className="flex w-full  gap-2 h-fit items-end justify-end">
+      <div className="flex justify-end mt-6 sticky w-full">
+        <Group className="flex w-full gap-2 h-fit items-end justify-end">
           <Button
             loading={loading}
             onClick={() => submitTermsOfService(false)}
-            classNames={{ label: "font-bold " }}
+            classNames={{ label: "font-bold text-b2" }}
             variant="subtle"
           >
-            Log out
+            {isEN === "EN" ? (
+              "Log out"
+            ) : (
+              <p className="font-semibold">ลงชื่อออก</p>
+            )}
           </Button>
           <Button
             loading={loading}
-            classNames={{ label: "font-bold" }}
+            classNames={{ label: "font-bold text-b2" }}
             onClick={() => submitTermsOfService(true)}
           >
-            I agree with terms
+            {isEN === "EN" ? (
+              "I agree with terms"
+            ) : (
+              <p className="font-semibold">ฉันยอมรับข้อกำหนด</p>
+            )}
           </Button>
         </Group>
       </div>
