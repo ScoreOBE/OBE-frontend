@@ -33,7 +33,7 @@ export default function PageError() {
           ? ROUTE_PATH.STD_DASHBOARD
           : user.role == ROLE.INSTRUCTOR
           ? ROUTE_PATH.INS_DASHBOARD
-          : ROUTE_PATH.ADMIN_DASHBOARD
+          : `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
       );
     } else {
       dispatch(setUser({}));

@@ -10,7 +10,6 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.png";
-import { ROUTE_PATH } from "@/helpers/constants/route";
 import { TQF_STATUS } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
@@ -19,7 +18,7 @@ import { setShowNavbar } from "@/store/showNavbar";
 import { addLoadMoreAllCourse, setAllCourseList } from "@/store/allCourse";
 import { getUniqueInstructors } from "@/helpers/functions/function";
 
-export default function AdminDashboard() {
+export default function AdminDashboardTQF() {
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading);
   const user = useAppSelector((state) => state.user);
@@ -203,10 +202,17 @@ export default function AdminDashboard() {
                         </Table.Td>
                         <Table.Td>
                           <Button
+                            // color={
+                            //   statusTqf3 == TQF_STATUS.NO_DATA
+                            //     ? "#d8d8dd"
+                            //     : statusTqf3 == TQF_STATUS.IN_PROGRESS
+                            //     ? "#eedbb5"
+                            //     : "#bbe3e3"
+                            // }
                             className="tag-tqf text-center"
                             tqf-status={statusTqf3}
                           >
-                            TQF 3
+                            {statusTqf3}
                           </Button>
                         </Table.Td>
                         <Table.Td>
@@ -214,7 +220,7 @@ export default function AdminDashboard() {
                             className="tag-tqf text-center"
                             tqf-status={statusTqf5}
                           >
-                            TQF 5
+                            {statusTqf5}
                           </Button>
                         </Table.Td>
                       </Table.Tr>
