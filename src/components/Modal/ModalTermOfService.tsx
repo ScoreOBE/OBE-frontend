@@ -1,4 +1,12 @@
-import { Alert, Button, Group, Modal, Table, Tabs } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Checkbox,
+  Group,
+  Modal,
+  Table,
+  Tabs,
+} from "@mantine/core";
 import { useState } from "react";
 import Icon from "../Icon";
 import IconExclamamtion from "@/assets/icons/exclamationCircle.svg?react";
@@ -24,7 +32,7 @@ type Props = {
 export default function ModalTermsOfService({ opened, onClose }: Props) {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [isEN, setIsEN] = useState<string | null>("EN");
+  const [isEN, setIsEN] = useState<string | null>("TH");
 
   const submitTermsOfService = async (isAgree: boolean) => {
     setLoading(true);
@@ -55,8 +63,8 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         <div className="mt-1 text-[22px] flex item-center  justify-between">
           <div className="flex flex-col gap-3">
             {isEN === "EN" ? (
-              <p className="font-bold">
-                Score OBE<span className=" text-[#FFCD1B]">+</span>
+              <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                Score OBE
                 <span className=" text-default"> Terms of Service</span>
               </p>
             ) : (
@@ -64,13 +72,15 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <span className=" font-semibold text-default">
                   ข้อกำหนดและเงื่อนไขในการให้บริการ
                 </span>{" "}
-                Score OBE<span className=" text-[#FFCD1B]">+</span>
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                  Score OBE
+                </span>
               </p>
             )}
             <p className=" text-default text-b2">
               {isEN === "EN"
-                ? "Last updated: October 30, 2024"
-                : "อัปเดตล่าสุด: 30 ตุลาคม 2567"}
+                ? "Last updated: September 9, 2024"
+                : "อัปเดตล่าสุด: 9 กันยายน 2567"}
             </p>
           </div>
           <div>
@@ -110,14 +120,17 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
       <div className=" mt-2 h-[70vh] overflow-y-auto text-slate-700 font-medium">
         {isEN === "EN" ? (
           <p className=" text-[18px] font-bold text-default mb-[10px]">
-            Welcome to <span className=" text-secondary">Score OBE</span>
-            <span className=" text-[#FFCD1B]">+</span>
+            Welcome to{" "}
+            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+              Score OBE
+            </span>
           </p>
         ) : (
           <p className=" text-[18px] font-bold text-default mb-[10px]">
             <span className="font-semibold">ยินดีต้อนรับสู่ </span>
-            <span className=" text-secondary">Score OBE</span>
-            <span className=" text-[#FFCD1B]">+</span>
+            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+              Score OBE
+            </span>
           </p>
         )}
 
@@ -143,13 +156,13 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           {isEN === "EN" ? (
             <p className=" leading-6 text-default text-b2">
               Please read, review and understand these Terms and Conditions of
-              Service carefully before using Score OBE+.
+              Service carefully before using Score OBE.
             </p>
           ) : (
             <p className=" leading-6 text-default text-b2">
               โปรดอ่าน ตรวจสอบ
               และทำความเข้าใจข้อกำหนดและเงื่อนไขในการให้บริการนี้อย่างละเอียดก่อนใช้งาน
-              Score OBE+
+              Score OBE
             </p>
           )}
         </Alert>
@@ -175,8 +188,8 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           <div className=" justify-start text-b2 text-default text-start items-start">
             <p className="mb-2">
               {isEN === "EN"
-                ? "The following data from CMU OAuth and Score OBE+ may be collected and linked to your identity for Web application Functionality:"
-                : "ข้อมูลต่อไปนี้ที่มาจาก CMU OAuth และ Score OBE+ อาจะถูกเก็บและเชื่อมโยงกับตัวตนของคุณ เพื่อการทำงานของเว็บแอปพลิเคชั่น:"}
+                ? "The following data from CMU OAuth and Score OBE may be collected and linked to your identity for Web application Functionality:"
+                : "ข้อมูลต่อไปนี้ที่มาจากการลงชื่อเข้าสู่ระบบผ่าน CMU OAuth และ Score OBE อาจะถูกเก็บและเชื่อมโยงกับตัวตนของคุณ เพื่อการทำงานของเว็บแอปพลิเคชั่น:"}
             </p>{" "}
             <br />
             <div className="flex gap-8 -mt-4">
@@ -275,7 +288,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         {isEN === "EN" ? (
           <div className="mb-4">
             <p className=" text-b2 mb-3 leading-6">
-              <span className="font-bold">Score OBE+</span> is a web application
+              <span className="font-bold">Score OBE</span> is a web application
               developed as a tool to facilitate lecturers, students, and staff
               in the Faculty of Engineering, Chiang Mai University , in managing
               the documents of the Thai Qualifications Framework for Higher
@@ -290,7 +303,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"You"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
-                    Refers to Score OBE+ web application users
+                    Refers to Score OBE web application users
                   </Table.Td>
                 </Table.Tr>
                 <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
@@ -303,8 +316,8 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <Table.Tr className="text-b2 font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[25%] ">"System"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[75%]">
-                    Refers to the Score OBE+ web application which is provided
-                    by the Department of Computer Engineering, Faculty of
+                    Refers to the Score OBE web application which is provided by
+                    the Department of Computer Engineering, Faculty of
                     Engineering, Chiang Mai University, including any part that
                     has been changed, improved, updated or added by the
                     Department of Computer Engineering, Faculty of Engineering,
@@ -317,7 +330,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         ) : (
           <div className=" mb-4">
             <p className=" text-b2 mb-3 font-normal leading-6">
-              <span className="font-bold">Score OBE+ </span> เป็นเว็บแอปพลิเคชัน
+              <span className="font-bold">Score OBE </span> เป็นเว็บแอปพลิเคชัน
               ที่พัฒนาขึ้นเป็นเครื่องมืออำนวยความสะดวกแก่อาจารย์ นักศึกษา
               และบุคลากร คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเชียงใหม่
               ในการจัดการเอกสารกรอบมาตรฐานคุณวุฒิระดับอุดมศึกษาแห่งชาติ (มคอ.)
@@ -332,7 +345,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"ท่าน"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
-                    หมายถึง ผู้ใช้บริการเว็บแอปพลิเคชั่น Score OBE+
+                    หมายถึง ผู้ใช้บริการเว็บแอปพลิเคชั่น Score OBE
                   </Table.Td>
                 </Table.Tr>
                 <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
@@ -345,7 +358,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <Table.Tr className="text-b2 font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[25%] ">"ระบบ"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[75%]">
-                    หมายถึง เว็บแอปพลิเคชั่น Score OBE+
+                    หมายถึง เว็บแอปพลิเคชั่น Score OBE
                     ซึ่งให้บริการโดยภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์
                     มหาวิทยาลัยเชียงใหม่ โดยรวมถึงในส่วนที่ได้มีการเปลี่ยนแปลง
                     ปรับปรุง อัปเดต หรือเพิ่มเติมโดยภาควิชาวิศวกรรมคอมพิวเตอร์
@@ -362,7 +375,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             <p className="font-bold mb-1 ">2. System Objectives</p>
             <p className="ml-3">
               <li className="mb-1">
-                Score Announcements: The Score OBE+ system facilitates quick and
+                Score Announcements: The Score OBE system facilitates quick and
                 efficient announcement of exam and homework scores, allowing
                 students to access their scores in each subject promptly.
               </li>
@@ -390,7 +403,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               <li className="mb-1">
                 ประกาศคะแนนข้อสอบและการบ้าน:
                 ระบบช่วยให้อาจารย์สามารถประกาศคะแนนของนักศึกษาได้อย่างรวดเร็วและมีประสิทธิภาพ
-                นักศึกษาสามารถตรวจสอบคะแนนของตนเองในแต่ละรายวิชาผ่าน Score OBE+
+                นักศึกษาสามารถตรวจสอบคะแนนของตนเองในแต่ละรายวิชาผ่าน Score OBE
                 ได้ทันที
               </li>
               <li className="mb-1">
@@ -409,24 +422,25 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         )}
         {isEN === "EN" ? (
           <p className=" text-b2 mb-6 leading-6">
-            <p className="font-bold mb-1"> 3. Acceptance of Terms and Conditions</p>
+            <p className="font-bold mb-1">
+              {" "}
+              3. Acceptance of Terms and Conditions
+            </p>
             By using this system, you acknowledge that you have read and
             understood the Terms and Conditions of Service thoroughly. Your use
             of the system constitutes your agreement and acceptance of all terms
             and conditions in an irrevocable manner. If you do not agree to
-            these Terms and Conditions, please refrain from using the system.
+            these Terms and Conditions, please refrain from using the system. You can click the "Log out" button at the bottom-left corner. We will not collect your data by logging in via CMU OAuth.
           </p>
         ) : (
           <p className=" text-b2 mb-6 leading-6">
             <p className="font-bold mb-1"> 3. การยอมรับข้อกำหนดและเงื่อนไข</p>
             <p className="font-normal">
-             
               เมื่อท่านได้ใช้ระบบ
               ถือว่าท่านได้อ่านและเข้าใจข้อกำหนดและเงื่อนไขการให้บริการของระบบเป็นอย่างดีแล้ว
               การใช้บริการถือเป็นการแสดงเจตนาตกลง
               และยอมรับข้อกำหนดและเงื่อนไขการให้บริการระบบทุกประการในลักษณะที่ไม่สามารถเพิกถอนได้
-              หากท่านไม่ยอมรับข้อกำหนดและเงื่อนไขในการให้บริการนี้
-              โปรดอย่าใช้ระบบของเรา
+              หากท่านไม่ยอมรับข้อกำหนดและเงื่อนไขในการให้บริการนี้ โปรดอย่าใช้ระบบของเรา โดยท่านสามารถคลิกที่ปุ่ม "ลงชื่อออก" ได้ที่มุมซ้ายล่าง และเราจะไม่เก็บข้อมูลของท่านที่ได้มาจากการลงชื่อเข้าสู่ระบบผ่าน CMU OAuth
             </p>
           </p>
         )}
@@ -448,7 +462,6 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           <p className=" text-b2 mb-6 leading-6">
             <p className="font-bold mb-1"> 4. การแก้ไขเพิ่มเติม</p>
             <p className="font-normal">
-              
               เราขอสงวนสิทธิในการแก้ไข เปลี่ยนแปลง เพิ่มเติม ตัดทอน
               บรรดาข้อกำหนดและเงื่อนไขการให้บริการใด ๆ ที่กำหนดไว้ในระบบ
               โดยไม่ต้องแจ้งให้ท่านทราบล่วงหน้า อย่างไรก็ดี
@@ -688,7 +701,10 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </p>
         ) : (
           <p className=" text-b2 mb-6 leading-6">
-            <p className="font-bold mb-1"> 9. การปรับปรุงหรือหยุดให้บริการระบบ</p>
+            <p className="font-bold mb-1">
+              {" "}
+              9. การปรับปรุงหรือหยุดให้บริการระบบ
+            </p>
             <p className="font-normal">
               {" "}
               เราอาจปรับปรุง แก้ไข และเปลี่ยนแปลงใดๆ หรือหยุดให้บริการ
@@ -703,7 +719,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         )}
       </div>
       <div className="flex justify-end mt-6 sticky w-full">
-        <Group className="flex w-full gap-2 h-fit items-end justify-end">
+        <Group className="flex w-full gap-2 h-fit items-end justify-between">
           <Button
             loading={loading}
             onClick={() => submitTermsOfService(false)}
@@ -716,6 +732,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               <p className="font-semibold">ลงชื่อออก</p>
             )}
           </Button>
+
           <Button
             loading={loading}
             classNames={{ label: "font-bold text-b2" }}

@@ -82,8 +82,11 @@ export default function SelectDepartment() {
             transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
           >
             <div className=" text-[36px] translate-y-[-16px] font-semibold">
-              Welcome to <span className="text-[#d4d5dd]"> Score OBE </span>{" "}
-              <span className=" text-[#FFCD1B]"> +</span>
+              Welcome to{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                {" "}
+                Score OBE{" "}
+              </span>{" "}
             </div>
             <div className=" font-medium -mt-1 translate-y-[-4px] text-[22px]">
               {getUserName(user, 1)}

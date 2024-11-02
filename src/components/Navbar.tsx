@@ -74,10 +74,11 @@ export default function Navbar() {
   };
 
   return (
+    <>
     <div
-      className={`min-h-14 bg-[#ffffff] border-b border-[#e0e0e0] text-secondary px-6 inline-flex flex-wrap justify-between items-center z-50 ${
+      className={`min-h-14 overflow-hidden bg-[#fafafa] border-b border-[#e0e0e0] text-secondary px-6  inline-flex flex-wrap justify-between items-center z-50 ${
         [ROUTE_PATH.LOGIN].includes(location)
-          ? "border-none overflow-y-auto"
+          ? " border-none min-h-20"
           : ""
       }`}
       style={
@@ -104,12 +105,14 @@ export default function Navbar() {
         />
       )}
       {[ROUTE_PATH.LOGIN].includes(location) && (
-        <div className="bg-white items-center  mt-5 pb-1 justify-between  flex flex-1">
-          <img src={cmulogo} alt="CMULogo" className=" h-[28px] ml-10" />
-          <img src={cpeLogoRed} alt="cpeLogo" className=" h-[75px] mr-10" />
+        <div className="bg-[#fafafa] overflow-hidden items-center !w-full   !h-full  justify-between  flex flex-1">
+          <img src={cmulogo} alt="CMULogo" className=" h-[22px] pl-10" />
+          <img src={cpeLogoRed} alt="cpeLogo" className=" h-[55px] pr-10" />
         </div>
       )}
       {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}
     </div>
+    </>
   );
+  
 }

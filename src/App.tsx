@@ -3,6 +3,7 @@ import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import { setUser } from "@/store/user";
+import { AOSInit } from './aos'
 import { getUserInfo } from "@/services/user/user.service";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -85,7 +86,9 @@ function App() {
   return error.statusCode ? (
     <PageError />
   ) : (
+    
     <div className="flex h-screen w-screen text-default">
+      <AOSInit />
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-full w-full overflow-hidden">
         {showNavbar && <Navbar />}
