@@ -33,7 +33,7 @@ import { getValueEnumByKey } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { useForm, UseFormReturnType } from "@mantine/form";
-import exportFile from "@/assets/icons/exportFile.svg?react";
+import exportFile from "@/assets/icons/fileExport.svg?react";
 import Loading from "@/components/Loading";
 import { IModelCLO, IModelTQF3 } from "@/models/ModelTQF3";
 import { setShowNavbar } from "@/store/showNavbar";
@@ -627,7 +627,7 @@ export default function TQF3() {
                   className="px-4"
                 >
                   <div className="flex gap-2 items-center">
-                    <Icon IconComponent={exportFile} />
+                    <Icon className="size-5" IconComponent={exportFile} />
                     Export TQF3
                   </div>
                 </Button>

@@ -20,6 +20,7 @@ import Icon from "@/components/Icon";
 import IconCalendar from "@/assets/icons/calendar.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconPlus2 from "@/assets/icons/plus2.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 
 type Props = {
   opened: boolean;
@@ -180,9 +181,24 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
         }}
       >
         <div className="flex flex-col gap-5 flex-1">
+          <Alert
+            radius="md"
+            variant="light"
+            color="blue"
+            classNames={{
+              body: " flex justify-center",
+            }}
+            title={
+              <div className="flex items-center  gap-2">
+                <Icon IconComponent={IconInfo2} />
+                <p>You can add up to 3 semesters from the currently active semester.</p>
+              </div>
+            }
+          >
+          </Alert>
           {/* Added Semester */}
           <div
-            className="w-full  flex flex-col bg-white border-secondary  border-[1px]  rounded-md"
+            className="w-full -mt-2  flex flex-col bg-white border-secondary  border-[1px]  rounded-md"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
@@ -191,8 +207,8 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
               <Icon IconComponent={IconCalendar} /> Added Semester
             </div>
             {/* Show List Of Semester */}
-            <div className="flex flex-col gap-2  w-full h-[400px]  p-4  overflow-y-hidden">
-              <TextInput
+            <div className="flex flex-col gap-2  w-full h-[350px]  p-4  overflow-y-hidden">
+              {/* <TextInput
                 leftSection={<TbSearch />}
                 size="xs"
                 placeholder="Year"
@@ -200,9 +216,9 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                 onChange={(event) => setSearchValue(event.currentTarget.value)}
                 rightSectionPointerEvents="all"
               />
-              {/* List of Semester */}
+              List of Semester */}
 
-              <div className="flex flex-col gap-3  p-1 overflow-y-auto">
+              <div className="flex flex-col gap-3   p-1 overflow-y-auto">
                 {Object.keys(yearFilter).map((year) => (
                   <div
                     key={year}

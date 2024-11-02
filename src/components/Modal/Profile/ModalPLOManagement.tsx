@@ -192,12 +192,17 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               collection?.semester! > academicYear?.semester)) && (
             <Button
               color="red"
-              leftSection={<Icon IconComponent={IconTrash} className="size-5 -mr-1 stroke-[2px]" />}
+              leftSection={
+                <Icon
+                  IconComponent={IconTrash}
+                  className="size-5 -mr-1 stroke-[2px]"
+                />
+              }
               onClick={() => {
                 setOpenModal(false);
                 setOpenPopupDeletePLOCollection(true);
               }}
-              className="!w-full"
+              className="!w-full !h-9 !items-center !justify-center"
             >
               Delete {`${collection.name}`} Collection{" "}
             </Button>
@@ -224,7 +229,10 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 </p>
               }
               icon={
-                <Icon IconComponent={IconExclamationCircle} className="size-6" />
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="size-6"
+                />
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
@@ -396,7 +404,10 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 <div className="flex gap-4">
                   <Button
                     leftSection={
-                      <Icon IconComponent={IconPlus2} className="size-5 -mr-1 stroke-[2px]" />
+                      <Icon
+                        IconComponent={IconPlus2}
+                        className="size-5 -mr-1 stroke-[2px]"
+                      />
                     }
                     onClick={openModalDuplicatePLO}
                   >

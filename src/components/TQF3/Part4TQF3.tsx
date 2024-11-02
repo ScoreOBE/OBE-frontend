@@ -10,7 +10,6 @@ import {
 import { useForm } from "@mantine/form";
 import { Table } from "@mantine/core";
 import Icon from "../Icon";
-import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconCheckbox from "@/assets/icons/checkbox.svg?react";
 import { useEffect } from "react";
 import { IModelEval, IModelTQF3Part4 } from "@/models/ModelTQF3";
@@ -18,6 +17,7 @@ import { cloneDeep, isEqual } from "lodash";
 import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { initialTqf3Part4 } from "@/helpers/functions/tqf3";
@@ -170,8 +170,8 @@ export default function Part4TQF3({
         opened={openedAlert}
         onClose={onCloseAlert}
         closeOnClickOutside={false}
-        title="Cannot Save"
-        size="35vw"
+        title="Unable to save"
+        size="30vw"
         centered
         transitionProps={{ transition: "pop" }}
         classNames={{
@@ -183,15 +183,15 @@ export default function Part4TQF3({
           <Alert
             radius="md"
             variant="light"
-            color="red"
+            color="blue"
             classNames={{
               body: " flex justify-center",
             }}
             title={
               <div className="flex items-center  gap-2">
-                <Icon IconComponent={IconExclamationCircle} />
-                <p>text</p>
-                ''
+                <Icon IconComponent={IconInfo2} />
+                <p>You need to complete TQF 3 Part 4 first</p>
+                
               </div>
             }
             className="mb-4"
@@ -203,17 +203,12 @@ export default function Part4TQF3({
                 .join(", ")}
             </p>
 
-            <p className="pl-8 text-default -mt-1 leading-6 font-medium ">
-              {Object.keys(evalForm.errors)
-                .filter((key) => evalForm.errors[key]?.toString().length! > 0)
-                .map((_, index) => evalForm.getValues().data[index].topicTH)
-                .join(", ")}
-            </p>
+           
           </Alert>
         </div>
 
         <Button className="!w-full " onClick={onCloseAlert}>
-          I Understood
+          OK
         </Button>
       </Modal>
 
