@@ -111,8 +111,10 @@ export default function PageError() {
             </p>
             <p className="text-lg  font-medium text-gray-600">
               Look like your CMU account don't have permission to access{" "}
-              <span className=" text-secondary "> Score OBE</span>
-              <span className=" text-[#dab531]"> +</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                {" "}
+                Score OBE
+              </span>
               <br />
               contact to the system administrator to gain access
             </p>
@@ -141,8 +143,9 @@ export default function PageError() {
               </span>
             </p>
             <p className="text-4xl text-gray-600 mt-6  font-semibold">
-              <span className=" text-secondary ">Score OBE </span>{" "}
-              <span className=" text-[#FFCD1B]"> +</span> Lost
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                Score OBE{" "}
+              </span>
             </p>
             <p className="text-lg  font-medium text-gray-600">
               We're facing an internal server error. Our team're trying to fix
