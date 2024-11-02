@@ -117,7 +117,7 @@ export default function Profile() {
       >
         <Menu.Target>
           <Button
-            color="#ffffff"
+            color="#fafafa"
             className="flex flex-row pl-4 justify-end px-0 !h-10 items-center"
           >
             <div className="flex flex-col gap-1 text-end mr-3 text-b3">

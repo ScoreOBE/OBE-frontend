@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import Icon from "@/components/Icon";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconUserCicle from "@/assets/icons/userCircle.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 
 type Props = {
   opened: boolean;
@@ -106,15 +107,30 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
          icon={<Icon IconComponent={IconExclamationCircle} className="size-6" />}
           variant="light"
           color="red"
-          className="mb-5"
+          className="mb-2"
           classNames={{
             body: " flex justify-center",
           }}
           title={
             <p>
               Changing the Supreme Admin
-              <span className=" font-extrabold"> will revoke </span> your
+              <span className=" font-extrabold underline"> will revoke </span> your
               current role
+            </p>
+          }
+        ></Alert>
+         <Alert
+          radius="md"
+         icon={<Icon IconComponent={IconInfo2} className="size-6" />}
+          variant="light"
+          color="blue"
+          className="mb-4"
+          classNames={{
+            body: " flex justify-center",
+          }}
+          title={
+            <p>
+              You can only change the Supreme Admin who currently holds an admin role.
             </p>
           }
         ></Alert>
@@ -182,9 +198,9 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       >
         <Alert
           variant="light"
-          color="red"
-          title={`After you change Supreme Admin, `}
-         icon={<Icon IconComponent={IconExclamationCircle} className="size-6" />}
+          color="blue"
+          title={`After you change Supreme Admin, your role will automatically switch to an admin role`}
+         icon={<Icon IconComponent={IconInfo2} className="size-6" />}
           className="mb-5"
         ></Alert>
         <TextInput
