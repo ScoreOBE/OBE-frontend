@@ -113,7 +113,7 @@ export default function PageError() {
               Look like your CMU account don't have permission to access{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                 {" "}
-                Score OBE
+                TiwaOBE
               </span>
               <br />
               contact to the system administrator to gain access
@@ -144,7 +144,7 @@ export default function PageError() {
             </p>
             <p className="text-4xl text-gray-600 mt-6  font-semibold">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                Score OBE{" "}
+                TiwaOBE{" "}
               </span>
             </p>
             <p className="text-lg  font-medium text-gray-600">

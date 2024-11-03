@@ -176,8 +176,8 @@ export default function Profile() {
                   />
                   <span>
                     {path.includes(ROUTE_PATH.ADMIN_DASHBOARD)
-                      ? "Instructor view"
-                      : "Admin view"}
+                      ? "Switch to Instructor view"
+                      : "Switch to Admin view"}
                   </span>
                 </div>
               </Menu.Item>

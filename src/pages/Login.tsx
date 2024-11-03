@@ -81,12 +81,11 @@ export default function Login() {
     <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex-col  flex">
       <div className=" bg- items-center text-center overflow-y-auto  flex flex-col w-full   ">
         <p className=" drop-shadow-xl cursor-default mt-16 leading-[74px] font-[500] item-center -rounded text-[#000000] text-[60px]">
-          The all-in-one{" "}
           <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-            Score OBE
-          </span>
-          <br />
-          for instructor and student
+            TiwaOBE
+          </span>{" "}
+           Academic Supercharger<br/>
+          for instructors and students
         </p>
         <p className="mt-5 text-h2 text-[#4F4D55] font-[500]">
           Discover A Better Way to Do OBE Simplify Your Academic Journey
