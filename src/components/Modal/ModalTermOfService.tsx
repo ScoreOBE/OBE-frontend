@@ -13,6 +13,7 @@ import IconExclamamtion from "@/assets/icons/exclamationCircle.svg?react";
 import IconUserScan from "@/assets/icons/userScan.svg?react";
 import IconBook from "@/assets/icons/book.svg?react";
 import IconBooks from "@/assets/icons/books.svg?react";
+import IconCPE from "@/assets/icons/userCircle.svg?react";
 import IconSchool from "@/assets/icons/school.svg?react";
 import IconAddressBook from "@/assets/icons/addressBook.svg?react";
 import IconListNumber from "@/assets/icons/listNumbers.svg?react";
@@ -63,8 +64,10 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         <div className="mt-1 text-[22px] flex item-center  justify-between">
           <div className="flex flex-col gap-3">
             {isEN === "EN" ? (
-              <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                Score OBE
+              <p>
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                  TiwaOBE
+                </span>
                 <span className=" text-default"> Terms of Service</span>
               </p>
             ) : (
@@ -73,7 +76,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                   ข้อกำหนดและเงื่อนไขในการให้บริการ
                 </span>{" "}
                 <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                  Score OBE
+                  TiwaOBE
                 </span>
               </p>
             )}
@@ -122,14 +125,14 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           <p className=" text-[18px] font-bold text-default mb-[10px]">
             Welcome to{" "}
             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-              Score OBE
+              TiwaOBE
             </span>
           </p>
         ) : (
           <p className=" text-[18px] font-bold text-default mb-[10px]">
             <span className="font-semibold">ยินดีต้อนรับสู่ </span>
             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-              Score OBE
+              TiwaOBE
             </span>
           </p>
         )}
@@ -156,13 +159,13 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           {isEN === "EN" ? (
             <p className=" leading-6 text-default text-b2">
               Please read, review and understand these Terms and Conditions of
-              Service carefully before using Score OBE.
+              Service carefully before using TiwaOBE.
             </p>
           ) : (
             <p className=" leading-6 text-default text-b2">
               โปรดอ่าน ตรวจสอบ
               และทำความเข้าใจข้อกำหนดและเงื่อนไขในการให้บริการนี้อย่างละเอียดก่อนใช้งาน
-              Score OBE
+              TiwaOBE
             </p>
           )}
         </Alert>
@@ -185,11 +188,11 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             )
           }
         >
-          <div className=" justify-start text-b2 text-default text-start items-start">
+          <div className=" justify-start leading-6 text-b2 text-default text-start items-start">
             <p className="mb-2">
               {isEN === "EN"
-                ? "The following data from CMU OAuth and Score OBE may be collected and linked to your identity for Web application Functionality:"
-                : "ข้อมูลต่อไปนี้ที่มาจากการลงชื่อเข้าสู่ระบบผ่าน CMU OAuth และ Score OBE อาจะถูกเก็บและเชื่อมโยงกับตัวตนของคุณ เพื่อการทำงานของเว็บแอปพลิเคชั่น:"}
+                ? "The following data from CMU OAuth and TiwaOBE will be collected after you agree these Terms of Service and linked to your identity to enhance the functionality of web application:"
+                : "ข้อมูลต่อไปนี้ที่มาจากการลงชื่อเข้าสู่ระบบผ่าน CMU OAuth และ TiwaOBE จะถูกเก็บหลังจากคุณยอมรับข้อตกลงและเงื่อนไขในการให้บริการนี้ และเชื่อมโยงกับตัวตนของคุณ เพื่อปรับปรุงการทำงานของเว็บแอปพลิเคชั่น:"}
             </p>{" "}
             <br />
             <div className="flex gap-8 -mt-4">
@@ -284,11 +287,119 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             )}
           </div>
         </Alert>
+        <Alert
+          radius="md"
+          icon={<Icon className=" size-8 stroke-2" IconComponent={IconCPE} />}
+          variant="light"
+          color="blue"
+          className="mb-3"
+          classNames={{
+            icon: "size-6",
+            body: " flex ml-1 justify-center",
+            title: "-mb-1 text-[15px]",
+          }}
+          title={
+            isEN === "EN" ? (
+              <p>CPE API</p>
+            ) : (
+              <p className=" font-bold">CPE API</p>
+            )
+          }
+        >
+          <div className=" justify-start text-b2 leading-6 text-default text-start items-start">
+            <p className="mb-2">
+              {isEN === "EN" ? (
+                <p>
+                  The CPE API is a service designed for Computer Engineering
+                  department and Information System and Network Engineering
+                  department students at Chiang Mai University. It provides API
+                  routes that offer essential information exclusively about
+                  instructors and courses within these departments, including
+                  course data and instructor information. <br /> The following
+                  data from the CPE API has been collected and integrated into
+                  TiwaOBE, linked to your identity to enhance the functionality
+                  of the web application:
+                </p>
+              ) : (
+                <p>
+                  CPE API
+                  เป็นบริการที่ออกแบบมาสำหรับนักศึกษาสาขาวิศวกรรมคอมพิวเตอร์ และวิศวกรรมระบบสารสนเทศและเครือข่ายของมหาวิทยาลัยเชียงใหม่
+                  บริการนี้ให้บริการ API routes
+                  ที่ให้ข้อมูลที่จำเป็นโดยเฉพาะเกี่ยวกับผู้สอนและหลักสูตรภายในสาขาดังกล่าวเท่านั้น
+                  รวมถึงข้อมูลหลักสูตรและข้อมูลของผู้สอน <br /> ข้อมูลต่อไปนี้
+                  จาก CPE API ได้ถูกเก็บและนำไปใช้ใน TiwaOBE
+                  เป็นที่เรียบร้อยแล้ว และเชื่อมโยงกับตัวตนของคุณ
+                  เพื่อปรับปรุงการทำงานของเว็บแอปพลิเคชัน:
+                </p>
+              )}
+            </p>{" "}
+            <br />
+            <div className="flex gap-8 -mt-4">
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-start">
+                  <Icon className="size-5" IconComponent={IconAddressBook} />
+                  <span className="ml-2">
+                    {isEN === "EN"
+                      ? "Name and Surname Instrcutor"
+                      : "ชื่อและสกุลของอาจารย์"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-start">
+                  <Icon className="size-5" IconComponent={IconBook} />
+                  <span className="ml-2">
+                    {isEN === "EN" ? "Course information" : "ข้อมูลกระบวนวิชา"}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {isEN === "EN" ? (
+              <p className="mt-3 leading-6">
+                The developer,{" "}
+                <span className="font-bold">
+                  {" "}
+                  Department of Computer Engineering, Faculty of Engineering,
+                  Chiang Mai University
+                </span>
+                , have been granted proper authorization and access CPE API data
+                by Assistant Professor Dome Potikanond, an instructor in the
+                Department of Computer Engineering at Chiang Mai University. For
+                more information, see the{" "}
+                <a
+                  className=" text-blue-500 font-semibold hover:underline"
+                  href="https://api.cpe.eng.cmu.ac.th/"
+                >
+                  CPE API{" "}
+                </a>{" "}
+              </p>
+            ) : (
+              <p className="mt-3 font-normal leading-6">
+                นักพัฒนาเว็บแอปพลิเคชั่น{" "}
+                <span className="font-bold">
+                  {" "}
+                  ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์
+                  มหาวิทยาลัยเชียงใหม่
+                </span>{" "}
+                ได้รับการอนุญาตและการเข้าถึงข้อมูล CPE API อย่างถูกต้องจาก
+                ผศ.โดม โพธิการนนท์ อาจารย์ประจำภาควิชาวิศวกรรมคอมพิวเตอร์
+                มหาวิทยาลัยเชียงใหม่ สำหรับข้อมูลเพิ่มเติม ให้ดูที่{" "}
+                <a
+                  className=" text-blue-500 font-semibold hover:underline"
+                  href="https://api.cpe.eng.cmu.ac.th/"
+                >
+                  CPE API{" "}
+                </a>{" "}
+              </p>
+            )}
+          </div>
+        </Alert>
 
         {isEN === "EN" ? (
           <div className="mb-4">
             <p className=" text-b2 mb-3 leading-6">
-              <span className="font-bold">Score OBE</span> is a web application
+              <span className="font-bold">TiwaOBE</span> is a web application
               developed as a tool to facilitate lecturers, students, and staff
               in the Faculty of Engineering, Chiang Mai University , in managing
               the documents of the Thai Qualifications Framework for Higher
@@ -303,7 +414,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"You"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
-                    Refers to Score OBE web application users
+                    Refers to TiwaOBE web application users
                   </Table.Td>
                 </Table.Tr>
                 <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
@@ -316,7 +427,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <Table.Tr className="text-b2 font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[25%] ">"System"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[75%]">
-                    Refers to the Score OBE web application which is provided by
+                    Refers to the TiwaOBE web application which is provided by
                     the Department of Computer Engineering, Faculty of
                     Engineering, Chiang Mai University, including any part that
                     has been changed, improved, updated or added by the
@@ -330,7 +441,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         ) : (
           <div className=" mb-4">
             <p className=" text-b2 mb-3 font-normal leading-6">
-              <span className="font-bold">Score OBE </span> เป็นเว็บแอปพลิเคชัน
+              <span className="font-bold">TiwaOBE </span> เป็นเว็บแอปพลิเคชัน
               ที่พัฒนาขึ้นเป็นเครื่องมืออำนวยความสะดวกแก่อาจารย์ นักศึกษา
               และบุคลากร คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเชียงใหม่
               ในการจัดการเอกสารกรอบมาตรฐานคุณวุฒิระดับอุดมศึกษาแห่งชาติ (มคอ.)
@@ -345,7 +456,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"ท่าน"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
-                    หมายถึง ผู้ใช้บริการเว็บแอปพลิเคชั่น Score OBE
+                    หมายถึง ผู้ใช้บริการเว็บแอปพลิเคชั่น TiwaOBE
                   </Table.Td>
                 </Table.Tr>
                 <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
@@ -358,7 +469,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <Table.Tr className="text-b2 font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[25%] ">"ระบบ"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[75%]">
-                    หมายถึง เว็บแอปพลิเคชั่น Score OBE
+                    หมายถึง เว็บแอปพลิเคชั่น TiwaOBE
                     ซึ่งให้บริการโดยภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์
                     มหาวิทยาลัยเชียงใหม่ โดยรวมถึงในส่วนที่ได้มีการเปลี่ยนแปลง
                     ปรับปรุง อัปเดต หรือเพิ่มเติมโดยภาควิชาวิศวกรรมคอมพิวเตอร์
@@ -375,7 +486,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             <p className="font-bold mb-1 ">2. System Objectives</p>
             <p className="ml-3">
               <li className="mb-1">
-                Score Announcements: The Score OBE system facilitates quick and
+                Score Announcements: The TiwaOBE system facilitates quick and
                 efficient announcement of exam and homework scores, allowing
                 students to access their scores in each subject promptly.
               </li>
@@ -403,7 +514,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               <li className="mb-1">
                 ประกาศคะแนนข้อสอบและการบ้าน:
                 ระบบช่วยให้อาจารย์สามารถประกาศคะแนนของนักศึกษาได้อย่างรวดเร็วและมีประสิทธิภาพ
-                นักศึกษาสามารถตรวจสอบคะแนนของตนเองในแต่ละรายวิชาผ่าน Score OBE
+                นักศึกษาสามารถตรวจสอบคะแนนของตนเองในแต่ละรายวิชาผ่าน TiwaOBE
                 ได้ทันที
               </li>
               <li className="mb-1">
@@ -430,7 +541,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             understood the Terms and Conditions of Service thoroughly. Your use
             of the system constitutes your agreement and acceptance of all terms
             and conditions in an irrevocable manner. If you do not agree to
-            these Terms and Conditions, please refrain from using the system. You can click the "Log out" button at the bottom-left corner. We will not collect your data by logging in via CMU OAuth.
+            these Terms and Conditions, please refrain from using the system.
+            You can click the "Log out" button at the bottom-left corner. We
+            will not collect your data by logging in via CMU OAuth.
           </p>
         ) : (
           <p className=" text-b2 mb-6 leading-6">
@@ -440,7 +553,11 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               ถือว่าท่านได้อ่านและเข้าใจข้อกำหนดและเงื่อนไขการให้บริการของระบบเป็นอย่างดีแล้ว
               การใช้บริการถือเป็นการแสดงเจตนาตกลง
               และยอมรับข้อกำหนดและเงื่อนไขการให้บริการระบบทุกประการในลักษณะที่ไม่สามารถเพิกถอนได้
-              หากท่านไม่ยอมรับข้อกำหนดและเงื่อนไขในการให้บริการนี้ โปรดอย่าใช้ระบบของเรา โดยท่านสามารถคลิกที่ปุ่ม "ลงชื่อออก" ได้ที่มุมซ้ายล่าง และเราจะไม่เก็บข้อมูลของท่านที่ได้มาจากการลงชื่อเข้าสู่ระบบผ่าน CMU OAuth
+              หากท่านไม่ยอมรับข้อกำหนดและเงื่อนไขในการให้บริการนี้
+              โปรดอย่าใช้ระบบของเรา โดยท่านสามารถคลิกที่ปุ่ม "ลงชื่อออก"
+              ได้ที่มุมซ้ายล่าง
+              และเราจะไม่เก็บข้อมูลของท่านที่ได้มาจากการลงชื่อเข้าสู่ระบบผ่าน
+              CMU OAuth
             </p>
           </p>
         )}
