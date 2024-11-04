@@ -6,6 +6,7 @@ import { setCourseList } from "@/store/course";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { getCourse } from "@/services/course/course.service";
 import scoreobe from "@/assets/image/scoreOBElogobold.png";
+import cmulogo from "@/assets/image/cmuLogoPurple.png";
 import { SearchInput } from "./SearchInput";
 import { setAllCourseList } from "@/store/allCourse";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
@@ -111,8 +112,11 @@ export default function Navbar() {
               <span className="font-[600] text-[20px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                 ScoreOBE +
               </span>{" "}
-              
-            </div><img src={cpeLogoRed} alt="cpeLogo" className=" h-[55px] " />
+            </div>
+            <div className="flex items-end gap-5 -mt-5 justify-end">
+            <img src={cmulogo} alt="CMULogo" className=" h-[24px]" />
+              <img src={cpeLogoRed} alt="cpeLogo" className=" h-[45px] " />
+            </div>
           </div>
         )}
         {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}

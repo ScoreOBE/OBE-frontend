@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { isEmpty } from "lodash";
 import { setShowSidebar } from "@/store/showSidebar";
-import cmulogo from "@/assets/image/cmuLogoPurple.png";
+
 import Icon from "@/components/Icon";
 import IconLock from "@/assets/icons/lockIcon.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
@@ -80,7 +80,7 @@ export default function Login() {
     <Loading />
   ) : (
     <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex-col  flex">
-      <div className=" bg- items-center text-start overflow-y-auto    flex flex-col w-full   ">
+      <div className=" bg- items-center text-center overflow-y-auto    flex flex-col w-full   ">
         <p className=" drop-shadow-xl cursor-default px-[118px]  w-full mt-8 leading-[64px] font-[500] item-start -rounded text-[#000000] text-[48px]">
           <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE +
@@ -92,7 +92,7 @@ export default function Login() {
         <p className="mt-5 text-h2 text-[#4F4D55] w-full  px-[118px] font-[500]">
           Discover A Better Way to Do OBE Simplify Your Academic Journey
         </p>
-        <div className="flex items-center mt-8 text-center w-full justify-between px-[118px]">
+        <div className="flex items-center mt-8 text-center w-full justify-center px-[118px]">
           <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
             <Button className=" drop-shadow-lg !text-[14px] !h-[44px]">
               <img
@@ -104,7 +104,6 @@ export default function Login() {
             </Button>
           </a>
 
-          <img src={cmulogo} alt="CMULogo" className=" h-[24px]" />
           
         </div>
         <div
