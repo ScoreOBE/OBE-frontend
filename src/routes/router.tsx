@@ -6,6 +6,7 @@ import Loading from "@/components/Loading";
 import AdminDashboardTQF from "@/pages/AdminDashboardTQF";
 import AdminDashboardPLO from "@/pages/AdminDashboardPLO";
 import AdminDashboardCLO from "@/pages/AdminDashboardCLO";
+import TQF5 from "@/pages/TQF5";
 
 const Login = lazy(() => import("@/pages/Login"));
 const CMUOAuthCallback = lazy(() => import("@/pages/CmuOAuthCallback"));
@@ -110,6 +111,14 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<Loading />}>
                 <TQF3 />
+              </Suspense>
+            ),
+          },
+          {
+            path: ROUTE_PATH.TQF5,
+            element: (
+              <Suspense fallback={<Loading />}>
+                <TQF5 />
               </Suspense>
             ),
           },

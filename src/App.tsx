@@ -88,7 +88,7 @@ function App() {
   ) : (
     
     <div className="flex h-screen w-screen text-default">
-      {/* <AOSInit />
+      <AOSInit />
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-full w-full overflow-hidden">
         {showNavbar && <Navbar />}
@@ -97,8 +97,8 @@ function App() {
           onClose={() => setOpenModalTermsOfService(false)}
         />
         <Outlet />
-      </div> */}
-      <PageError />
+      </div>
+      {/* <PageError /> */}
     </div>
   );
 }
