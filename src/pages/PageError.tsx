@@ -154,7 +154,7 @@ export default function PageError() {
           <p className="text-[120px] text-[#24aa79] font-medium ">403</p>
         </div>
       )}
-      {/* {error.statusCode == STATUS_CODE.SERVER_ERROR && ( */}
+      {error.statusCode == STATUS_CODE.SERVER_ERROR && (
         <div className="text-start bg-[#e9fdff] text-white w-screen px-36 h-full flex justify-between items-center ">
           <div className="flex flex-col gap-4">
             <p className="text-3xl   font-semibold">
@@ -196,7 +196,7 @@ export default function PageError() {
 
           <p className="text-[120px] text-[#487ded] font-medium ">500</p>
         </div>
-      {/* )} */}
+      )}
     </div>
   );
 }

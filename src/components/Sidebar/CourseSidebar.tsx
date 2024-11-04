@@ -193,11 +193,18 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               onClick={() => goToPage(ROUTE_PATH.SECTION)}
               leftSection={<RxDashboard size={18} />}
               className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
-              ${
-                !path.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
-                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-              }`}
+                ${
+                  path.includes(ROUTE_PATH.TQF3) 
+                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]" 
+                    : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                }
+                ${
+                  path.includes(ROUTE_PATH.TQF5) 
+                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]" 
+                    : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                }
+              `}
+              
             >
               Sections
             </Button>
@@ -280,6 +287,9 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             >
               <Menu.Target>
                 <Button
+                onClick={() => {
+                  goToPage(ROUTE_PATH.TQF5);
+                }}
                   leftSection={
                     <Icon IconComponent={IconTQF5} className="size-5" />
                   }
@@ -294,7 +304,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                   }
                   className={`!w-full !text-[13px] mb-2 flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
-                  path.startsWith(ROUTE_PATH.TQF5)
+                  path.includes(ROUTE_PATH.TQF5)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                 }`}
