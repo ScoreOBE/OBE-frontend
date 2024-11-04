@@ -1,4 +1,3 @@
-import cmulogo from "@/assets/image/cmuLogo.png";
 import {
   useLocation,
   useNavigate,
@@ -7,6 +6,7 @@ import {
 } from "react-router-dom";
 import DashboardSidebar from "./Sidebar/DashboardSidebar";
 import { PATH, ROUTE_PATH } from "@/helpers/constants/route";
+import scoreobe from "@/assets/image/scoreOBElogowhite.png";
 import CourseSidebar from "./Sidebar/CourseSidebar";
 import { motion } from "framer-motion";
 import AssignmentSidebar from "./Sidebar/AssignmentSidebar";
@@ -120,14 +120,20 @@ export default function Sidebar() {
       className="w-[255px] border-r-[1px] h-screen flex p-5 sidebar-linear-gradient"
     >
       <div className="flex w-full flex-col gap-11">
-        <img
-          src={cmulogo}
-          alt="CMULogo"
-          className="h-fit w-[155px] cursor-pointer"
-          onClick={() =>
-            navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`)
-          }
-        />
+        <div onClick={() =>
+              navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`)
+            } className="flex cursor-pointer items-center gap-2">
+          <img src={scoreobe}   alt="scoreOBElogo" className=" h-[30px] cursor-pointer w-[30px] " />
+          <p className="text-white text-[20px] font-semibold">ScoreOBE <span className=" text-[#FFCD1B]"> +</span></p>
+        
+        </div>  {/* <img
+            src={cmulogo}
+            alt="CMULogo"
+            className="h-fit w-[155px] cursor-pointer"
+            onClick={() =>
+              navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`)
+            }
+          /> */}
         {getSidebar()}
       </div>
       <MainPopup

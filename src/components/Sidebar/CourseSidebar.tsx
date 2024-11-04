@@ -171,7 +171,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       />
       <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
-          className="hover:underline cursor-pointer font-bold gap-2  text-[13px] p-0 flex justify-start"
+          className="hover:underline cursor-pointer font-bold gap-2 -translate-x-[5px]  text-[13px] p-0 flex justify-start"
           onClick={fetchTqf3}
         >
           <Icon IconComponent={IconChevronLeft} className="size-5" />

@@ -81,7 +81,7 @@ export default function Login() {
   ) : (
     <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex-col  flex">
       <div className=" bg- items-center text-center overflow-y-auto    flex flex-col w-full   ">
-        <p className=" drop-shadow-xl cursor-default px-[118px]  w-full mt-8 leading-[64px] font-[500] item-start -rounded text-[#000000] text-[48px]">
+        <p className=" drop-shadow-xl cursor-default px-[118px]  w-full mt-8 leading-[66px] font-[500] item-start -rounded text-[#000000] text-[50px]">
           <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE +
           </span>{" "}

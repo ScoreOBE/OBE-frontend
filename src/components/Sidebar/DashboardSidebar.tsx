@@ -149,7 +149,7 @@ export default function DashboardSidebar() {
       </Modal>
       <div className="flex text-white flex-col gap-11">
         <div className="text-sm flex flex-col gap-[6px]">
-          <p className="font-semibold">Welcome to ScoreOBE +!</p>
+          <p className="font-semibold">Welcome to ScoreOBE +</p>
           <div className="font-normal flex flex-col gap-[2px]">
             <p>
               Your courses are waiting

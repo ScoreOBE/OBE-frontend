@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import cmulogo from "@/assets/image/cmuLogoLoginWhite.png";
+import scoreobe from "@/assets/image/scoreOBElogowhite.png";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Button, Checkbox } from "@mantine/core";
 import { getUserName, sortData } from "@/helpers/functions/function";
@@ -70,7 +70,8 @@ export default function SelectDepartment() {
             <FaArrowLeftLong size={20} />
           </Button>
         )}
-        <img src={cmulogo} alt="CMULogo" className="h-[24px] " />
+        <img src={scoreobe} alt="CMULogo" className="h-[35px] " />
+        <p className="text-white text-[20px] font-semibold">ScoreOBE <span className=" text-[#FFCD1B]"> +</span></p>
       </div>{" "}
       <div className="bg-[rgba(78,78,80,0.30)] h-screen w-screen flex justify-between px-36 items-center font-sf-pro">
         <div className="text-white">
@@ -81,17 +82,17 @@ export default function SelectDepartment() {
             animate={{ x: 0 }}
             transition={{ duration: 0.5, type: "spring", stiffness: 80 }}
           >
-            <div className=" text-[36px] translate-y-[-16px] font-semibold">
+            {/* <div className=" text-[36px] translate-y-[-16px] font-semibold">
               Welcome to{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                 {" "}
                 ScoreOBE +{" "}
               </span>{" "}
-            </div>
-            <div className=" font-medium -mt-1 translate-y-[-4px] text-[22px]">
+            </div> */}
+            <div className=" font-semibold -mt-1 translate-y-[-4px] text-[24px]">
               {getUserName(user, 1)}
             </div>
-            <div className=" font-light text-[16px]">{faculty.facultyEN}</div>
+            <div className=" font-[400] text-[18px]">{faculty.facultyEN}</div>
           </motion.div>
         </div>
         <motion.div
@@ -106,12 +107,12 @@ export default function SelectDepartment() {
               className="bg-[rgba(78,78,80,0.30)] rounded-[25px] mb-5  flex-col  p-6 h-[640px] scroll-smooth  font-sf-pro"
               style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
             >
-              <div className="text-white font-medium text-[20px] mb-6">
+              <div className="text-white font-medium text-[20px] ">
                 Select department
               </div>
-              {/* <div className="text-[#FFB876] font-normal mb-6">
-                Select up to 2 departments
-              </div> */}
+              <div className="text-[#FFB876] font-normal mb-6">
+                Select up to 3 departments
+              </div>
               <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[515px]">
                 {faculty.department?.map((key) => {
                   const isChecked = checkedItems.includes(key.codeEN);
