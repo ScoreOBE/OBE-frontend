@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { isEmpty } from "lodash";
 import { setShowSidebar } from "@/store/showSidebar";
-
 import Icon from "@/components/Icon";
 import IconLock from "@/assets/icons/lockIcon.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
