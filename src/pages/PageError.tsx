@@ -43,7 +43,7 @@ export default function PageError() {
 
   return (
     <div className="flex flex-col w-screen h-screen">
-      {error.statusCode == STATUS_CODE.BAD_REQUEST && (
+      {/* {error.statusCode == STATUS_CODE.BAD_REQUEST && (
         <div className="text-start bg-[#faefdc] text-white w-screen px-36 h-full flex justify-between items-center ">
           <div className="flex flex-col gap-4">
             <p className="text-3xl   font-semibold">
@@ -70,8 +70,8 @@ export default function PageError() {
           </div>
           <p className="text-[120px] text-amber-600 font-medium ">400</p>
         </div>
-      )}
-      {error.statusCode == STATUS_CODE.UNAUTHORIZED && (
+      )} */}
+      {/* {error.statusCode == STATUS_CODE.UNAUTHORIZED && (
         <div className="text-start bg-[#fff1f1] text-white w-screen px-36 h-full flex justify-between items-center ">
           <div className="flex flex-col gap-4">
             <p className="text-3xl   font-semibold">
@@ -99,8 +99,8 @@ export default function PageError() {
           </div>
           <p className="text-[120px] text-pink-500 font-medium ">401</p>
         </div>
-      )}
-      {error.statusCode == STATUS_CODE.FORBIDDEN && (
+      )} */}
+      {/* {error.statusCode == STATUS_CODE.FORBIDDEN && (
         <div className="text-start bg-[#f1fff8] text-white w-screen px-36 h-full flex justify-between items-center ">
           <div className="flex flex-col gap-4">
             <p className="text-3xl   font-semibold">
@@ -113,7 +113,7 @@ export default function PageError() {
               Look like your CMU account don't have permission to access{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                 {" "}
-                TiwaOBE
+                ScoreOBE +
               </span>
               <br />
               contact to the system administrator to gain access
@@ -133,41 +133,46 @@ export default function PageError() {
           </div>
           <p className="text-[120px] text-[#24aa79] font-medium ">403</p>
         </div>
-      )}
-      {error.statusCode == STATUS_CODE.SERVER_ERROR && (
-        <div className="text-start bg-[#ecebfb] text-white w-screen px-36 h-full flex justify-between items-center ">
-          <div className="flex flex-col gap-4">
-            <p className="text-3xl   font-semibold">
-              <span className=" text-gray-600 font-normal ">
-                Sorry, this is unexpected...{" "}
-              </span>
-            </p>
-            <p className="text-4xl text-gray-600 mt-6  font-semibold">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                TiwaOBE{" "}
-              </span>
-            </p>
-            <p className="text-lg  font-medium text-gray-600">
-              We're facing an internal server error. Our team're trying to fix
-              <br />
-              Please be patient or try again later
-            </p>
-            <Button
-              onClick={goDashboard}
-              leftSection={
-                <Icon
-                  IconComponent={IconArrowLeft}
-                  className="size-6 -mr-1 stoke-[3px]"
-                />
-              }
-              className="inline-block -ml-4 mt-3 !!text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
-            >
-              Back to login
-            </Button>
-          </div>
-          <p className="text-[120px] text-secondary font-medium ">500</p>
+      )} */}
+      {/* {error.statusCode == STATUS_CODE.SERVER_ERROR && (
+      <div className="text-start bg-[#ecebfb] text-white w-screen px-36 h-full flex justify-between items-center ">
+        <div className="flex flex-col gap-4">
+          <p className="text-3xl   font-semibold">
+             <span className=" text-gray-600 font-normal ">
+              Error 500 
+            </span> <br/>
+            <span className=" text-gray-600 font-normal ">
+              Sorry, this is unexpected...{" "}
+            </span>
+          </p>
+
+          <p className="text-4xl text-gray-600 mt-6  font-semibold">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+              ScoreOBE +  
+            </span>
+            {" "} LOST
+          </p>
+          <p className="text-lg  font-medium text-gray-600">
+            We're facing an internal server error. Our team're trying to fix
+            <br />
+            Please be patient or try again later
+          </p>
+          <Button
+            onClick={goDashboard}
+            leftSection={
+              <Icon
+                IconComponent={IconArrowLeft}
+                className="size-6 -mr-1 stoke-[3px]"
+              />
+            }
+            className="inline-block -ml-4 mt-3 !!text-[16px] bg-transparent hover:bg-transparent hover:text-blue-500 hover:underline text-blue-500 !font-bold !rounded transition"
+          >
+            Back to login
+          </Button>
         </div>
-      )}
+        <p className="text-[120px] text-secondary font-medium ">500</p>
+      </div>
+      )} */}
     </div>
   );
 }

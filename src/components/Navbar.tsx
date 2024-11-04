@@ -5,10 +5,10 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { setCourseList } from "@/store/course";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { getCourse } from "@/services/course/course.service";
-import cmulogo from "@/assets/image/cmuLogoPurple.png";
-import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
+import scoreobe from "@/assets/image/scoreOBElogobold.png";
 import { SearchInput } from "./SearchInput";
 import { setAllCourseList } from "@/store/allCourse";
+import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 
 export default function Navbar() {
   const { name } = useParams();
@@ -75,44 +75,48 @@ export default function Navbar() {
 
   return (
     <>
-    <div
-      className={`min-h-14 overflow-hidden bg-[#fafafa] border-b border-[#e0e0e0] text-secondary px-6  inline-flex flex-wrap justify-between items-center z-50 ${
-        [ROUTE_PATH.LOGIN].includes(location)
-          ? " border-none min-h-20"
-          : ""
-      }`}
-      style={
-        ![ROUTE_PATH.LOGIN].includes(location)
-          ? { boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }
-          : {}
-      }
-    >
-      <p
-        className={`font-semibold text-h2 ${
-          location.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
-            ? ""
-            : "md:w-fit max-w-[30%]"
+      <div
+        className={`min-h-14 overflow-hidden bg-[#fafafa] border-b border-[#e0e0e0] text-secondary px-6  inline-flex flex-wrap justify-between items-center z-50 ${
+          [ROUTE_PATH.LOGIN].includes(location)
+            ? " border-none min-h-20 items-center"
+            : ""
         }`}
+        style={
+          ![ROUTE_PATH.LOGIN].includes(location)
+            ? { boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }
+            : {}
+        }
       >
-        {topicPath()}
-      </p>
-      {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
-        location.includes(path)
-      ) && (
-        <SearchInput
-          onSearch={searchCourse}
-          placeholder="Course No / Course Name"
-        />
-      )}
-      {[ROUTE_PATH.LOGIN].includes(location) && (
-        <div className="bg-[#fafafa] overflow-hidden items-center !w-full   !h-full  justify-between  flex flex-1">
-          <img src={cmulogo} alt="CMULogo" className=" h-[22px] pl-10" />
-          <img src={cpeLogoRed} alt="cpeLogo" className=" h-[55px] pr-10" />
-        </div>
-      )}
-      {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}
-    </div>
+        <p
+          className={`font-semibold text-h2 ${
+            location.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
+              ? ""
+              : "md:w-fit max-w-[30%]"
+          }`}
+        >
+          {topicPath()}
+        </p>
+        {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
+          location.includes(path)
+        ) && (
+          <SearchInput
+            onSearch={searchCourse}
+            placeholder="Course No / Course Name"
+          />
+        )}
+        {[ROUTE_PATH.LOGIN].includes(location) && (
+          <div className="bg-[#fafafa] px-12  overflow-hidden items-center !w-full   !h-full  justify-between  flex flex-1">
+            <div className="flex gap-2 items-center">
+              <img src={scoreobe} alt="cpeLogo" className=" h-[35px] " />
+              <span className="font-[600] text-[20px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                ScoreOBE +
+              </span>{" "}
+              
+            </div><img src={cpeLogoRed} alt="cpeLogo" className=" h-[55px] " />
+          </div>
+        )}
+        {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}
+      </div>
     </>
   );
-  
 }

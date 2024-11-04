@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { isEmpty } from "lodash";
 import { setShowSidebar } from "@/store/showSidebar";
+import cmulogo from "@/assets/image/cmuLogoPurple.png";
 import Icon from "@/components/Icon";
 import IconLock from "@/assets/icons/lockIcon.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
@@ -79,33 +80,38 @@ export default function Login() {
     <Loading />
   ) : (
     <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex-col  flex">
-      <div className=" bg- items-center text-center overflow-y-auto  flex flex-col w-full   ">
-        <p className=" drop-shadow-xl cursor-default mt-16 leading-[74px] font-[500] item-center -rounded text-[#000000] text-[60px]">
+      <div className=" bg- items-center text-start overflow-y-auto    flex flex-col w-full   ">
+        <p className=" drop-shadow-xl cursor-default px-[118px]  w-full mt-8 leading-[64px] font-[500] item-start -rounded text-[#000000] text-[48px]">
           <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-            TiwaOBE
+            ScoreOBE +
           </span>{" "}
-           Academic Supercharger<br/>
+          Academic Supercharger
+          <br />
           for instructors and students
         </p>
-        <p className="mt-5 text-h2 text-[#4F4D55] font-[500]">
+        <p className="mt-5 text-h2 text-[#4F4D55] w-full  px-[118px] font-[500]">
           Discover A Better Way to Do OBE Simplify Your Academic Journey
         </p>
+        <div className="flex items-center mt-8 text-center w-full justify-between px-[118px]">
+          <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
+            <Button className=" drop-shadow-lg !text-[14px] !h-[44px]">
+              <img
+                src={cmulogoLogin}
+                alt="CMULogo"
+                className="h-[13px] mr-3 rounded-1xl"
+              />
+              Sign in CMU Account
+            </Button>
+          </a>
 
-        <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
-          <Button className="mt-8 drop-shadow-lg !text-[14px] !h-[44px]">
-            <img
-              src={cmulogoLogin}
-              alt="CMULogo"
-              className="h-[13px] mr-3 rounded-1xl"
-            />
-            Sign in CMU Account
-          </Button>
-        </a>
+          <img src={cmulogo} alt="CMULogo" className=" h-[24px]" />
+          
+        </div>
         <div
           data-aos-duration="1000"
           data-aos-once="false"
           data-aos="fade-up"
-          className="rounded-t-xl  mt-8 w-10/12 "
+          className="rounded-t-xl mx-[118px]  mt-8  "
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
@@ -166,7 +172,7 @@ export default function Login() {
           <img src={loginImage} alt="loginImage" />
         </div>
         <div className="bg-[#fafafa] h-full pb-20 w-full">
-          <div className=" items-start text-start px-[8vw] pb-20 justify-start w-full">
+          <div className=" items-start text-start px-[118px] pb-20 justify-start w-full">
             {" "}
             <p className=" drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start -rounded text-[#000000] text-[48px]">
               <span className="font-[600]  text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">

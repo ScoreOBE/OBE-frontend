@@ -39,7 +39,7 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
         return (
           <>
             <p className="text-secondary leading-[42px] text-[32px] mb-7 font-semibold">
-              CMU OBE <br /> Template Guide <br /> for Upload Score
+              ScoreOBE + <br /> Template Guide <br /> for Upload Score
             </p>
             <p className="text-[14px] mb-16 text-default font-medium">
               Follow these 7 simple steps to easily upload student grades for

@@ -85,7 +85,7 @@ export default function SelectDepartment() {
               Welcome to{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                 {" "}
-                TiwaOBE{" "}
+                ScoreOBE +{" "}
               </span>{" "}
             </div>
             <div className=" font-medium -mt-1 translate-y-[-4px] text-[22px]">
