@@ -119,7 +119,7 @@ export default function Profile() {
         <Menu.Target>
           <Button
             color="#fafafa"
-            className="flex flex-row pl-4 justify-end px-0 !h-10 items-center"
+            className="flex hover:bg-[#efefef] flex-row pl-4 justify-end px-0 !h-10 items-center"
           >
             <div className="flex flex-col gap-1 text-end mr-3 text-b3">
               <p className="font-semibold text-default">{getUserName(user)}</p>
@@ -278,7 +278,7 @@ export default function Profile() {
                   <div className="flex items-center gap-2">
                     <Icon
                       IconComponent={IconTQF}
-                      className="size-4 stroke-[0.5px]"
+                      className="size-4 "
                     />
                     <span>TQF</span>
                   </div>
@@ -288,18 +288,17 @@ export default function Profile() {
           )}
 
           <Menu.Divider />
-          <Menu.Item
-             className="text-[#3e3e3e] h-8 w-w-full "
-            onClick={logOut}
-          >
-            <div className="flex items-center gap-2">
-              <Icon
-                IconComponent={IconExclamationCircle}
-                className="size-4 stroke-[1.5px] stroke-[#3e3e3e]"
-              />
-              <span>Report issue</span>
-            </div>
-          </Menu.Item>
+          <a href="https://forms.gle/haNFpme6KBzyejG18" target="_blank">
+            <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
+              <div className="flex items-center gap-2">
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="size-4 stroke-[1.5px] stroke-[#3e3e3e]"
+                />
+                <span>Report issue</span>
+              </div>
+            </Menu.Item>
+          </a>
 
           <Menu.Divider />
           <Menu.Item

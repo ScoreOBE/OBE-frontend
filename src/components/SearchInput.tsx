@@ -28,12 +28,13 @@ export function SearchInput({ onSearch, placeholder }: Props) {
   };
 
   return (
-    <div className="relative md:w-[400px] w-[220px]">
+    <div className="relative z-50 md:w-[400px] w-[220px]">
       <TextInput
         autoFocus={false}
         leftSection={!isFocused && <TbSearch className="size-4" />}
         placeholder={placeholder}
         size="xs"
+        className="z-50"
         value={searchValue}
         onChange={(event: any) => setSearchValue(event.currentTarget.value)}
         onKeyDown={(event: any) => {
@@ -65,7 +66,7 @@ export function SearchInput({ onSearch, placeholder }: Props) {
           }}
           style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
         >
-          <div className="flex md:w-fit w-full items-center gap-3">
+          <div className="flex z-50 md:w-fit w-full items-center gap-3">
             <TbSearch className="size-4" />
             {!!searchValue.length ? (
               <p className="text-ellipsis overflow-hidden whitespace-nowrap">
