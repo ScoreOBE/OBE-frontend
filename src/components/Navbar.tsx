@@ -11,6 +11,8 @@ import { SearchInput } from "./SearchInput";
 import { setAllCourseList } from "@/store/allCourse";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { Button } from "@mantine/core";
+import Icon from "./Icon";
+import IconFeedback from "@/assets/icons/feedback.svg?react";
 
 export default function Navbar() {
   const { name } = useParams();
@@ -78,9 +80,9 @@ export default function Navbar() {
   return (
     <>
       <div
-        className={`min-h-14 overflow-hidden bg-[#fafafa] border-b border-[#e0e0e0] text-secondary px-6  inline-flex flex-wrap justify-between items-center z-50 ${
+        className={`min-h-14  bg-[#fafafa] border-b border-[#e0e0e0] text-secondary px-6  inline-flex flex-wrap justify-between items-center z-50 ${
           [ROUTE_PATH.LOGIN].includes(location)
-            ? " border-none min-h-20 items-center"
+            ? " border-none  min-h-20 items-center"
             : ""
         }`}
         style={
@@ -120,12 +122,19 @@ export default function Navbar() {
             </div>
           </div>
         )}
-        <div className="flex gap-2 items-center">
-          <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
-            <Button variant="light">Give feedback</Button>
-          </a>
-          {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}
-        </div>
+        {![ROUTE_PATH.LOGIN].includes(location) && (
+          <div className="flex gap-2 items-center">
+            <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
+              <Button variant="light">
+                <div className="flex items-center gap-1">
+                  <Icon className="size-5 " IconComponent={IconFeedback} />{" "}
+                  Feedback
+                </div>
+              </Button>
+            </a>
+            <Profile />
+          </div>
+        )}
       </div>
     </>
   );
