@@ -10,6 +10,7 @@ import cmulogo from "@/assets/image/cmuLogoPurple.png";
 import { SearchInput } from "./SearchInput";
 import { setAllCourseList } from "@/store/allCourse";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
+import { Button } from "@mantine/core";
 
 export default function Navbar() {
   const { name } = useParams();
@@ -119,7 +120,12 @@ export default function Navbar() {
             </div>
           </div>
         )}
-        {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}
+        <div className="flex gap-2 items-center">
+          <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
+            <Button variant="light">Give feedback</Button>
+          </a>
+          {![ROUTE_PATH.LOGIN].includes(location) && <Profile />}
+        </div>
       </div>
     </>
   );

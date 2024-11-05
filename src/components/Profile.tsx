@@ -5,6 +5,7 @@ import Icon from "./Icon";
 import IconUserProfile from "@/assets/icons/profile/userProfile.svg?react";
 import IconAdminProfile from "@/assets/icons/profile/adminProfile.svg?react";
 import IconSAdminProfile from "@/assets/icons/profile/s.AdminProfile.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconLogout from "@/assets/icons/logout.svg?react";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import IconSupreme from "@/assets/icons/supremeAdmin.svg?react";
@@ -285,6 +286,20 @@ export default function Profile() {
               </Menu.Dropdown>
             </Menu>
           )}
+
+          <Menu.Divider />
+          <Menu.Item
+             className="text-[#3e3e3e] h-8 w-w-full "
+            onClick={logOut}
+          >
+            <div className="flex items-center gap-2">
+              <Icon
+                IconComponent={IconExclamationCircle}
+                className="size-4 stroke-[1.5px] stroke-[#3e3e3e]"
+              />
+              <span>Report issue</span>
+            </div>
+          </Menu.Item>
 
           <Menu.Divider />
           <Menu.Item
