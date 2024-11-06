@@ -116,9 +116,9 @@ export default function Navbar() {
                 ScoreOBE +
               </span>{" "}
             </div>
-            <div className="flex items-end gap-5 -mt-5 justify-end">
-              <img src={cmulogo} alt="CMULogo" className=" h-[18px]" />
-              <img src={cpeLogoRed} alt="cpeLogo" className=" h-[38px] " />
+            <div className="flex items-end gap-5  justify-end">
+              {/* <img src={cmulogo} alt="CMULogo" className=" h-[18px]" /> */}
+              <img src={cpeLogoRed} alt="cpeLogo" className=" h-[44px] " />
             </div>
           </div>
         )}

@@ -158,7 +158,7 @@ export default function Sidebar() {
               icon={
                 <Icon
                   IconComponent={IconExclamationCircle}
-                  className="size-6 mb-5"
+                  className="size-6 mt-1"
                 />
               }
             ></Alert>

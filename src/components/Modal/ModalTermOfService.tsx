@@ -158,7 +158,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         >
           {isEN === "EN" ? (
             <p className=" leading-6 text-default text-b2">
-              Please read, review and understand these Terms and Conditions of
+              Please read, review and understand these Terms of
               Service carefully before using ScoreOBE +.
             </p>
           ) : (
@@ -317,13 +317,14 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                   instructors and courses within these departments, including
                   course data and instructor information. <br /> The following
                   data from the CPE API has been collected and integrated into
-                  ScoreOBE +, linked to your identity to enhance the functionality
-                  of the web application:
+                  ScoreOBE +, linked to your identity to enhance the
+                  functionality of the web application:
                 </p>
               ) : (
                 <p>
                   CPE API
-                  เป็นบริการที่ออกแบบมาสำหรับนักศึกษาสาขาวิศวกรรมคอมพิวเตอร์ และวิศวกรรมระบบสารสนเทศและเครือข่ายของมหาวิทยาลัยเชียงใหม่
+                  เป็นบริการที่ออกแบบมาสำหรับนักศึกษาสาขาวิศวกรรมคอมพิวเตอร์
+                  และวิศวกรรมระบบสารสนเทศและเครือข่ายของมหาวิทยาลัยเชียงใหม่
                   บริการนี้ให้บริการ API routes
                   ที่ให้ข้อมูลที่จำเป็นโดยเฉพาะเกี่ยวกับผู้สอนและหลักสูตรภายในสาขาดังกล่าวเท่านั้น
                   รวมถึงข้อมูลหลักสูตรและข้อมูลของผู้สอน <br /> ข้อมูลต่อไปนี้
@@ -397,6 +398,33 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         </Alert>
 
         {isEN === "EN" ? (
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1"> Agreement</p>
+            By accessing and using ScoreOBE +, you acknowledge that you have
+            read, understood, and agree to be bound by all Terms of Service.
+            Your use of this system constitutes irrevocable acceptance of these
+            terms. If you do not agree with all these Terms of
+            Service you are expressly prohibited from further use of the ScoreOBE +
+            and must discontinue immediately by selecting the "Log out" option
+            located in the bottom-left corner. Upon logging out, ScoreOBE + will
+            cease any data collection through CMU OAuth.
+          </p>
+        ) : (
+          <p className=" text-b2 mb-6 leading-6">
+            <p className="font-bold mb-1">ข้อตกลง</p>
+            <p className="font-normal">
+              การเข้าถึงและใช้งาน ScoreOBE+ แสดงว่าผู้ใช้ยืนยันว่าได้อ่าน
+              ทำความเข้าใจ และตกลงที่จะปฏิบัติตามข้อกำหนดในการให้บริการทั้งหมด
+              การใช้ ScoreOBE + นี้ถือเป็นการยอมรับข้อกำหนดและเงื่อนไขทั้งหมดอย่างไม่อาจเพิกถอนได้
+              หากผู้ใช้ไม่ยอมรับข้อกำหนดในการให้บริการ
+              ผู้ใช้จะถูกห้ามใช้ ScoreOBE + โดยเด็ดขาดและต้องยุติการใช้งานทันที โดยเลือก
+              "ออกจากระบบ" ที่มุมล่างซ้าย เมื่อออกจากระบบแล้ว ScoreOBE +
+              จะหยุดการเก็บข้อมูลใด ๆ ผ่าน CMU OAuth
+            </p>
+          </p>
+        )}
+
+        {isEN === "EN" ? (
           <div className="mb-4">
             <p className=" text-b2 mb-3 leading-6">
               <span className="font-bold">ScoreOBE +</span> is a web application
@@ -427,8 +455,8 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <Table.Tr className="text-b2 font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[25%] ">"System"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[75%]">
-                    Refers to the ScoreOBE + web application which is provided by
-                    the Department of Computer Engineering, Faculty of
+                    Refers to the ScoreOBE + web application which is provided
+                    by the Department of Computer Engineering, Faculty of
                     Engineering, Chiang Mai University, including any part that
                     has been changed, improved, updated or added by the
                     Department of Computer Engineering, Faculty of Engineering,
@@ -486,7 +514,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             <p className="font-bold mb-1 ">2. System Objectives</p>
             <p className="ml-3">
               <li className="mb-1">
-                Score Announcements: The ScoreOBE + system facilitates quick and
+                Score Announcements: The system facilitates quick and
                 efficient announcement of exam and homework scores, allowing
                 students to access their scores in each subject promptly.
               </li>
@@ -531,53 +559,24 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>
           </p>
         )}
+
         {isEN === "EN" ? (
           <p className=" text-b2 mb-6 leading-6">
-            <p className="font-bold mb-1">
-              {" "}
-              3. Acceptance of Terms and Conditions
-            </p>
-            By using this system, you acknowledge that you have read and
-            understood the Terms and Conditions of Service thoroughly. Your use
-            of the system constitutes your agreement and acceptance of all terms
-            and conditions in an irrevocable manner. If you do not agree to
-            these Terms and Conditions, please refrain from using the system.
-            You can click the "Log out" button at the bottom-left corner. We
-            will not collect your data by logging in via CMU OAuth.
-          </p>
-        ) : (
-          <p className=" text-b2 mb-6 leading-6">
-            <p className="font-bold mb-1"> 3. การยอมรับข้อกำหนดและเงื่อนไข</p>
-            <p className="font-normal">
-              เมื่อท่านได้ใช้ระบบ
-              ถือว่าท่านได้อ่านและเข้าใจข้อกำหนดและเงื่อนไขการให้บริการของระบบเป็นอย่างดีแล้ว
-              การใช้บริการถือเป็นการแสดงเจตนาตกลง
-              และยอมรับข้อกำหนดและเงื่อนไขการให้บริการระบบทุกประการในลักษณะที่ไม่สามารถเพิกถอนได้
-              หากท่านไม่ยอมรับข้อกำหนดและเงื่อนไขในการให้บริการนี้
-              โปรดอย่าใช้ระบบของเรา โดยท่านสามารถคลิกที่ปุ่ม "ลงชื่อออก"
-              ได้ที่มุมซ้ายล่าง
-              และเราจะไม่เก็บข้อมูลของท่านที่ได้มาจากการลงชื่อเข้าสู่ระบบผ่าน
-              CMU OAuth
-            </p>
-          </p>
-        )}
-        {isEN === "EN" ? (
-          <p className=" text-b2 mb-6 leading-6">
-            <p className="font-bold mb-1">4. Amendment</p>
+            <p className="font-bold mb-1">3. Amendment</p>
             <p>
               We reserve the right to modify, amend, add, or remove any Terms
-              and Conditions of Service within the system without prior notice.
+              and of Service within the system without prior notice.
               You are responsible for regularly reviewing any updates to these
-              Terms and Conditions. Continued use of the system after any
+              Terms. Continued use of the system after any
               modifications implies that you have read, understood, and
-              unconditionally accepted the updated Terms and Conditions. You may
-              not claim lack of awareness of any changes to the Terms and
-              Conditions as a reason for non-compliance.
+              unconditionally accepted the updated Terms. You may
+              not claim lack of awareness of any changes to the Terms
+             as a reason for non-compliance.
             </p>
           </p>
         ) : (
           <p className=" text-b2 mb-6 leading-6">
-            <p className="font-bold mb-1"> 4. การแก้ไขเพิ่มเติม</p>
+            <p className="font-bold mb-1"> 3. การแก้ไขเพิ่มเติม</p>
             <p className="font-normal">
               เราขอสงวนสิทธิในการแก้ไข เปลี่ยนแปลง เพิ่มเติม ตัดทอน
               บรรดาข้อกำหนดและเงื่อนไขการให้บริการใด ๆ ที่กำหนดไว้ในระบบ
@@ -593,7 +592,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         )}
         {isEN === "EN" ? (
           <p className=" text-b2 mb-6 leading-6">
-            <p className="font-bold mb-1"> 5. Personal Data Protection</p>
+            <p className="font-bold mb-1">4. Personal Data Protection</p>
             <p>
               {" "}
               We prioritize the importance of your data and respect your right
@@ -621,7 +620,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </p>
         ) : (
           <p className=" text-b2 mb-6 leading-6">
-            <p className="font-bold mb-1"> 5. การคุ้มครองข้อมูลส่วนบุคคล</p>
+            <p className="font-bold mb-1">4. การคุ้มครองข้อมูลส่วนบุคคล</p>
             <p className="font-normal">
               {" "}
               เราคำนึงถึงความสำคัญของข้อมูลและเคารพสิทธิความเป็นส่วนตัวของข้อมูลของท่าน
@@ -652,11 +651,11 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         )}
         {isEN === "EN" ? (
           <p className=" text-b2 mb-6 leading-6">
-            <p className="font-bold mb-1"> 6. Use of System Services</p>
+            <p className="font-bold mb-1">5. Use of System Services</p>
             <p>
               {" "}
               By using this website, you agree to adhere strictly to purposes
-              outlined in these terms and conditions. Specifically, you agree
+              outlined in these terms. Specifically, you agree
               not to <br /> (1) Modify, adapt, translate, or reverse engineer
               any part of the system, system framework, or any of its services,
               nor allow any third party to do so without our explicit
@@ -674,14 +673,14 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               loading large amounts of data or engaging in activities that
               threaten the performance of the service. <br /> (6) Violate any
               additional policies, rules, or announcements that we may introduce
-              as part of these terms and conditions or in subsequent amendments.{" "}
+              as part of these terms or in subsequent amendments.{" "}
               <br /> If you breach any of these conditions, we reserve the right
               to suspend your access to our services without prior notice.
             </p>
           </p>
         ) : (
           <p className=" text-b2  mb-6 leading-6">
-            <p className="font-bold mb-1"> 6. การใช้บริการระบบ</p>
+            <p className="font-bold mb-1">5. การใช้บริการระบบ</p>
             <p className="font-normal">
               {" "}
               ท่านตกลงและยอมรับว่า
@@ -724,12 +723,12 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           <p className=" text-b2  mb-6 leading-6">
             <p className="font-bold mb-1">
               {" "}
-              7. Right to Collect Data Linked to You
+              6. Right to Collect Data Linked to You
             </p>
             <p>
               You agree and acknowledge that by using our Service, you grant us
               the right to collect and process data associated with you, as
-              outlined in these Terms and Conditions. This data collection is
+              outlined in these Terms. This data collection is
               intended for purposes of service enhancement, including user
               experience improvement, system functionality optimization, and the
               safeguarding of your personal data. <br /> By continuing to use
@@ -742,7 +741,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         ) : (
           <p className=" text-b2  mb-6 leading-6">
             <p className="font-bold mb-1">
-              7. สิทธิในการนำข้อมูลที่เชื่อมโยงกับคุณเข้าระบบ
+              6. สิทธิในการนำข้อมูลที่เชื่อมโยงกับคุณเข้าระบบ
             </p>
             <p className="font-normal">
               ท่านตกลงและยอมรับว่า
@@ -760,7 +759,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         )}
         {isEN === "EN" ? (
           <p className=" text-b2 mb-6 leading-6">
-            <p className="font-bold mb-1"> 8. Limitation of Our Liability</p>
+            <p className="font-bold mb-1">7. Limitation of Our Liability</p>
             <p>
               We disclaim any liability for damages arising from any content
               imported, created, published, or otherwise acted upon by users. By
@@ -779,7 +778,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </p>
         ) : (
           <p className=" text-b2 mb-6 leading-6">
-            <p className="font-bold mb-1"> 8. การจำกัดความรับผิดของเรา</p>
+            <p className="font-bold mb-1">7. การจำกัดความรับผิดของเรา</p>
             <p className="font-normal">
               {" "}
               เราขอปฏิเสธการรับผิดในความเสียหายที่เกิดขึ้นจากการนำเข้า
@@ -805,7 +804,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           <p className=" text-b2 mb-6 leading-6">
             <p className="font-bold mb-1">
               {" "}
-              9. Improvement or Discontinuation of the System
+              8. Improvement or Discontinuation of the System
             </p>
             <p>
               {" "}
@@ -820,7 +819,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           <p className=" text-b2 mb-6 leading-6">
             <p className="font-bold mb-1">
               {" "}
-              9. การปรับปรุงหรือหยุดให้บริการระบบ
+              8. การปรับปรุงหรือหยุดให้บริการระบบ
             </p>
             <p className="font-normal">
               {" "}
@@ -828,7 +827,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               ได้โดยไม่ต้องแจ้งให้ท่านทราบล่วงหน้า
               เพื่อให้ท่านสามารถใช้งานระบบของเราได้แย่างมีประสิทธภาพ
               ซึ่งเราอาจปรับปรุง แก้ไข
-              และเปลี่ยนแปลงซอฟท์แวร์อย่างเล็กน้อยพื่อวัตถุประสงค์ดังกล่าว
+              และเปลี่ยนแปลงระบบอย่างเล็กน้อยพื่อวัตถุประสงค์ดังกล่าว
               โดยท่านได้ให้สิทธิ์แก่เรา ดำเนินการและกระทำการปรับปรุง แก้ไข
               และเปลี่ยนแปลงดังกล่าว
             </p>

@@ -6,7 +6,7 @@ export default function Loading() {
         stroke-length="0.35"
         speed=" 1.0"
         // stroke='6.0'
-        color="#5768d5"
+        color="#1f69f3"
       ></l-hourglass>
     </div>
   );

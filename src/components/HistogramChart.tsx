@@ -77,7 +77,7 @@ export default function HistogramChart({ data, isQuestions }: Props) {
           series={[
             {
               name: "Students",
-              color: "rgba(169, 169, 233, 0.40)",
+              color: "rgba(31, 105, 243, 0.25)",
               
             },
           ]}

@@ -225,7 +225,7 @@ export default function ModalManageTopic({
                     >
                       <Icon
                         IconComponent={IconMinus}
-                        className="size-4 stroke-[#5768d5]"
+                        className="size-4 stroke-[#1f69f3]"
                       />
                     </div>
                     <div className="h-8 border"></div>
@@ -235,7 +235,7 @@ export default function ModalManageTopic({
                     >
                       <Icon
                         IconComponent={IconPlus2}
-                        className="size-4 stroke-[#5768d5]"
+                        className="size-4 stroke-[#1f69f3]"
                       />
                     </div>
                   </div>
@@ -269,7 +269,7 @@ export default function ModalManageTopic({
                     >
                       <Icon
                         IconComponent={IconMinus}
-                        className="size-4 stroke-[#5768d5]"
+                        className="size-4 stroke-[#1f69f3]"
                       />
                     </div>
                     <div className="h-8 border"></div>
@@ -279,7 +279,7 @@ export default function ModalManageTopic({
                     >
                       <Icon
                         IconComponent={IconPlus2}
-                        className="size-4 stroke-[#5768d5]"
+                        className="size-4 stroke-[#1f69f3]"
                       />
                     </div>
                   </div>

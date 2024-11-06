@@ -710,7 +710,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                             </div>
                           </div>
                           {index < course.sections.length - 1 && (
-                            <div className="border-b-[1px] mx-5 border-[#5768d54a]"></div>
+                            <div className="border-b-[1px] mx-5 border-[#1f69f34a]"></div>
                           )}
                         </div>
                       ))}

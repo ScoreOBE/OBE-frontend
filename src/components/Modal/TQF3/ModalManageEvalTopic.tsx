@@ -266,7 +266,7 @@ export default function ModalManageEvalTopic({
                       onClick={() => handlersRef.current?.decrement()}
                       style={{ cursor: "pointer" }}
                     >
-                      <Icon IconComponent={IconMinus} className=" size-4 stroke-[#5768d5]" />
+                      <Icon IconComponent={IconMinus} className=" size-4 stroke-[#1f69f3]" />
                     </div>
                     <div className="h-8 border"></div>
                     <div
@@ -274,7 +274,7 @@ export default function ModalManageEvalTopic({
                       onClick={() => handlersRef.current?.increment()}
                       style={{ cursor: "pointer" }}
                     >
-                      <Icon IconComponent={IconPlus2} className="size-4 stroke-[#5768d5]"   />
+                      <Icon IconComponent={IconPlus2} className="size-4 stroke-[#1f69f3]"   />
                     </div>
                   </div>
                 }

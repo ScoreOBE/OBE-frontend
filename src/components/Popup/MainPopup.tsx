@@ -35,7 +35,7 @@ export default function MainPopup({
       case "warning":
         return "text-[#F58722]";
       case "unsaved":
-        return "text-[#5768d5]";
+        return "text-[#1f69f3]";
     }
   };
   return (
@@ -92,7 +92,7 @@ export default function MainPopup({
                 {labelButtonLeft ? labelButtonLeft : "Cancel"}
               </Button>
               <Button
-                color="#5768d5"
+                color="#1f69f3"
                 className="!text-[13px]"
                 onClick={labelButtonRight === "Keep editing" ? onClose : action}
               >
