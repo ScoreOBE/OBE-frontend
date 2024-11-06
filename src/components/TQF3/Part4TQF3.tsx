@@ -578,7 +578,7 @@ export default function Part4TQF3({
                                                 ({ weekNo }) => (
                                                   <Chip
                                                     key={weekNo}
-                                                    color="#5768d5"
+                                                    color="#1f69f3"
                                                     classNames={{
                                                       label: `${
                                                         disabled &&

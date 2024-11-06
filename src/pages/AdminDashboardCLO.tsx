@@ -158,7 +158,7 @@ export default function AdminDashboardCLO() {
                 ) : (
                   <span>
                     You have{" "}
-                    <span className="text-[#5768D5] font-semibold">
+                    <span className="text-[#1f69f3] font-semibold">
                       {courseList.total} Course
                       {courseList.total > 1 ? "s " : " "}
                     </span>

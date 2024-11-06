@@ -1,6 +1,6 @@
 :root {
   --color-primary: #423e90;
-  --color-secondary: #5768d5;
+  --color-secondary: #1f69f3;
   --color-tertiary: #3e3e3e;
   --color-edit: #f39d4e;
   --color-error: #fa5252;
@@ -145,7 +145,7 @@
 
 /* Input */
 .mantine-Input-input:focus {
-  border: 1px solid #5768d5 !important;
+  border: 1px solid #1f69f3 !important;
 }
 
 /* TextInput */
@@ -364,8 +364,8 @@
 .sidebar-linear-gradient {
   background: linear-gradient(
     180deg,
-    rgba(18, 21, 194, 0.64) 0%,
-    rgba(57, 23, 131, 0.47) 100%
+    rgba(26, 81, 220, 0.83) 0%,
+    rgba(28, 79, 208, 0.683) 100%
   );
 }
 

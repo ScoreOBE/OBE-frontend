@@ -411,7 +411,7 @@ export default function ModalAddCourse({
               rightSection={
                 <Icon
                   IconComponent={IconChevronRight}
-                  className="size-5 stroke-[#5768d5] stroke-[2px] items-center pt-1"
+                  className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
                 />
               }
               classNames={{
@@ -435,7 +435,7 @@ export default function ModalAddCourse({
               rightSection={
                 <Icon
                   IconComponent={IconChevronRight}
-                  className="size-5 stroke-[#5768d5] stroke-[2px] items-center pt-1"
+                  className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
                 />
               }
               classNames={{
@@ -460,7 +460,7 @@ export default function ModalAddCourse({
               rightSection={
                 <Icon
                   IconComponent={IconChevronRight}
-                  className="size-5 stroke-[#5768d5] stroke-[2px] items-center pt-1"
+                  className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
                 />
               }
               classNames={{
@@ -485,7 +485,7 @@ export default function ModalAddCourse({
               rightSection={
                 <Icon
                   IconComponent={IconChevronRight}
-                  className="size-5 stroke-[#5768d5] stroke-[2px] items-center pt-1"
+                  className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
                 />
               }
               classNames={{
