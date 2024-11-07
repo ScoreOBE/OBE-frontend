@@ -100,9 +100,9 @@ export default function Login() {
   return loading ? (
     <Loading />
   ) : (
-    <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex-col  flex pb-28">
+    <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex-col  flex">
       <div className=" items-center text-center overflow-y-auto overflow-x-hidden flex flex-col w-full ">
-        <p className="drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 leading-[66px] font-[600] sm:font-[500] item-start rounded text-[#000000] text-[36px] mb-5 sm:mb-0 sm:text-[50px] leading-[50px]  sm:leading-[66px]">
+        <p className="drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 font-[600] sm:font-[500] item-start rounded text-[#000000] text-[36px] mb-5 sm:mb-0 sm:text-[50px] leading-[50px] sm:leading-[66px]">
           <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE +{" "}
           </span>
@@ -279,11 +279,11 @@ export default function Login() {
                 </div>
               </div>
             </div> */}
-            <div className="mt-12 ">
+            <div className="flex flex-col items-center mt-12 pb-24">
               <Carousel
                 slideSize="60%"
                 slideGap="xl"
-                height={400}
+                height={500}
                 getEmblaApi={setEmbla}
                 initialSlide={0}
                 align="center"
