@@ -90,7 +90,7 @@ function App() {
     <div className="flex heig  w-screen text-default">
       <AOSInit />
       {showSidebar && <Sidebar />}
-      <div className="flex flex-col  heig w-full overflow-hidden">
+      <div className="flex flex-col   w-full overflow-hidden">
         {showNavbar && <Navbar />}
         <ModalTermsOfService
           opened={openModalTermsOfService}
