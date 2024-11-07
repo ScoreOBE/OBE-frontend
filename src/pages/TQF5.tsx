@@ -3,11 +3,17 @@ import { useEffect, useState } from "react";
 import {
   Alert,
   Button,
+  Combobox,
   FocusTrapInitialFocus,
+  Group,
+  Input,
+  InputBase,
   Modal,
   Select,
   Tabs,
+  Text,
   Tooltip,
+  useCombobox,
 } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -88,6 +94,49 @@ export default function TQF5() {
       compo: <Part3TQF5 setForm={setForm} />,
     },
   ];
+
+  interface option {
+
+    topic: string;
+    description: string;
+  }
+
+  const groceries: option[] = [
+    {  topic: "ScoreOBE +", description: "The smartest way to evaluate and analyze your TQF 5" },
+    {
+      
+      topic: "Manual",
+      description: "Customize all data what you want",
+    },
+    
+  ];
+
+  function SelectOption({  topic, description }: option) {
+    return (
+      <Group>
+        
+        <div>
+          <Text fz="sm" fw={500}>
+            {topic}
+          </Text>
+          <Text fz="xs" opacity={0.6}>
+            {description}
+          </Text>
+        </div>
+      </Group>
+    );
+  }
+  const combobox = useCombobox({
+    onDropdownClose: () => combobox.resetSelectedOption(),
+  });
+  const [value, setValue] = useState<string | null>(null);
+  const selectedOption = groceries.find((item) => item.topic === value);
+
+  const options = groceries.map((item) => (
+    <Combobox.Option value={item.topic} key={item.topic}>
+      <SelectOption {...item} />
+    </Combobox.Option>
+  ));
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -380,12 +429,40 @@ export default function TQF5() {
               <div className=" text-secondary   overflow-y-auto font-semibold  whitespace-break-spaces">
                 {getValueEnumByKey(PartTopicTQF5, tqf5Part!)}
               </div>
-              <Select
-                rightSectionPointerEvents="all"
-                data={["ScoreOBE +", "Manual"]}
-                size="sm"
-                className="w-[8vw] border-none "
-              />
+              <Combobox
+                store={combobox}
+                withinPortal={false}
+                onOptionSubmit={(val) => {
+                  setValue(val);
+                  combobox.closeDropdown();
+                }}
+                size="xs"
+              >
+                <Combobox.Target>
+                  <InputBase
+                    component="button"
+                    type="button"
+                    pointer
+                    size="xs"
+                    rightSection={<Combobox.Chevron />}
+                    onClick={() => combobox.toggleDropdown()}
+                    rightSectionPointerEvents="none"
+                    multiline
+                    className="w-[25vw]"
+                    classNames={{ label: ""}}
+                  >
+                    {selectedOption ? (
+                      <SelectOption {...selectedOption} />
+                    ) : (
+                      <Input.Placeholder>Pick value</Input.Placeholder>
+                    )}
+                  </InputBase>
+                </Combobox.Target>
+
+                <Combobox.Dropdown>
+                  <Combobox.Options>{options}</Combobox.Options>
+                </Combobox.Dropdown>
+              </Combobox>
             </div>
           </div>
           <div

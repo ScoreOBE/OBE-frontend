@@ -237,6 +237,26 @@ export default function Profile() {
                         <span>Supreme Admin</span>
                       </div>
                     </Menu.Item>
+                  </>
+                )}
+                <Menu.Item onMouseDown={() => setOpenModalManageAdmin(true)}>
+                  <div className="flex items-center gap-2">
+                    <Icon IconComponent={IconAdmin} className="size-4" />
+                    <span>Admin</span>
+                  </div>
+                </Menu.Item>
+                <Menu.Divider />
+                <Menu.Item
+                  className="text-[#3e3e3e] h-8 w-w-full"
+                  onMouseDown={() => setOpenModalCourseManagement(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Icon IconComponent={IconCourse} className="size-4" />
+                    <span>Course</span>
+                  </div>
+                </Menu.Item>
+                {user.role === ROLE.SUPREME_ADMIN && (
+                  <>
                     <Menu.Item
                       onMouseDown={() => setOpenModalManageSemester(true)}
                     >
@@ -247,19 +267,14 @@ export default function Profile() {
                     </Menu.Item>
                   </>
                 )}
-                <Menu.Item onMouseDown={() => setOpenModalManageAdmin(true)}>
-                  <div className="flex items-center gap-2">
-                    <Icon IconComponent={IconAdmin} className="size-4" />
-                    <span>Admin</span>
-                  </div>
-                </Menu.Item>
+                <Menu.Divider />
                 <Menu.Item
                   className="text-[#3e3e3e] h-8 w-w-full"
-                  onMouseDown={() => setOpenModalCourseManagement(true)}
+                  onMouseDown={() => setOpenModalManageTQF(true)}
                 >
                   <div className="flex items-center gap-2">
-                    <Icon IconComponent={IconCourse} className="size-4" />
-                    <span>Course</span>
+                    <Icon IconComponent={IconTQF} className="size-4 " />
+                    <span>TQF</span>
                   </div>
                 </Menu.Item>
                 <Menu.Item
@@ -269,18 +284,6 @@ export default function Profile() {
                   <div className="flex items-center gap-2">
                     <Icon IconComponent={IconSO} className="size-4" />
                     <span>PLO</span>
-                  </div>
-                </Menu.Item>
-                <Menu.Item
-                  className="text-[#3e3e3e] h-8 w-w-full"
-                  onMouseDown={() => setOpenModalManageTQF(true)}
-                >
-                  <div className="flex items-center gap-2">
-                    <Icon
-                      IconComponent={IconTQF}
-                      className="size-4 "
-                    />
-                    <span>TQF</span>
                   </div>
                 </Menu.Item>
               </Menu.Dropdown>

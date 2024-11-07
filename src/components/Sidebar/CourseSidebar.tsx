@@ -156,7 +156,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         type="unsaved"
         labelButtonRight={`Keep editing`}
         labelButtonLeft="Leave without saving"
-        title={`TQF 3 Unsaved changes ?`}
+        title={`TQF 3 Unsaved changes?`}
         message={
           <>
             <Alert
