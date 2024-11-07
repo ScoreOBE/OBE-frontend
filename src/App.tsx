@@ -87,7 +87,7 @@ function App() {
     <PageError />
   ) : (
     
-    <div className="flex h-screen w-screen text-default">
+    <div className="flex heig h-screen w-screen text-default">
       <AOSInit />
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-full w-full overflow-hidden">
