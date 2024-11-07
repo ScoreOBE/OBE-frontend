@@ -191,7 +191,6 @@ export default function Part4TQF3({
               <div className="flex items-center  gap-2">
                 <Icon IconComponent={IconInfo2} />
                 <p>You need to complete TQF 3 Part 4 first</p>
-                
               </div>
             }
             className="mb-4"
@@ -199,11 +198,19 @@ export default function Part4TQF3({
             <p className="pl-8 text-default -mt-1 leading-6 font-medium ">
               {Object.keys(form.errors)
                 .filter((key) => form.errors[key]?.toString().length! > 0)
-                .map((_, index) => `CLO ${index + 1}`)
+                .map((key) => `CLO ${parseInt(key.split(".")[1]) + 1}`)
                 .join(", ")}
             </p>
-
-           
+            <p className="pl-8 text-default -mt-1 leading-6 font-medium ">
+              {Object.keys(evalForm.errors)
+                .filter((key) => evalForm.errors[key]?.toString().length! > 0)
+                .map(
+                  (key) =>
+                    evalForm.getValues().data[parseInt(key.split(".")[1])]
+                      .topicEN
+                )
+                .join(", ")}
+            </p>
           </Alert>
         </div>
 
