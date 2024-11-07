@@ -5,7 +5,7 @@ import { Button } from "@mantine/core";
 import { Image } from "@mantine/core";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { isEmpty } from "lodash";
@@ -22,7 +22,8 @@ import IconHistogram from "@/assets/icons/histogram.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
 import Loading from "@/components/Loading";
 import gradescope from "@/assets/image/gradescope.png";
-import { url } from "inspector";
+import "@mantine/carousel/styles.css";
+import { Carousel, Embla } from "@mantine/carousel";
 
 export default function Login() {
   const loading = useAppSelector((state) => state.loading);
@@ -31,28 +32,48 @@ export default function Login() {
   const navigate = useNavigate();
   const images = [
     {
+      key: 0,
       url: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
       label: "Desert",
     },
     {
+      key: 1,
       url: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
       label: "Forest",
     },
     {
+      key: 2,
       url: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png",
       label: "Torii gate",
     },
     {
+      key: 3,
       url: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png",
       label: "Fuji mountain",
     },
     {
+      key: 4,
       url: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-5.png",
       label: "Night lake",
     },
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState("right"); // Track the slide direction
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [embla, setEmbla] = useState<Embla | null>(null);
+
+  const handleScroll = useCallback(() => {
+    if (!embla) return;
+    const progress = Math.max(0, Math.min(1, embla.scrollProgress()));
+    setScrollProgress(progress * 100);
+  }, [embla, setScrollProgress]);
+
+  useEffect(() => {
+    if (embla) {
+      embla.on("scroll", handleScroll);
+      handleScroll();
+    }
+  }, [embla]);
 
   const handleNext = () => {
     setDirection("right");
@@ -75,12 +96,13 @@ export default function Login() {
       navigate(ROUTE_PATH.INS_DASHBOARD);
     }
   }, [user]);
+
   return loading ? (
     <Loading />
   ) : (
-    <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex-col  flex">
-      <div className=" bg- items-center text-center overflow-y-auto    flex flex-col w-full   ">
-        <p className="drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 leading-[66px] font-[600] sm:font-[500] item-start -rounded text-[#000000] text-[36px] mb-5 sm:mb-0 sm:text-[50px] leading-[50px]  sm:leading-[66px]">
+    <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex-col  flex pb-28">
+      <div className=" items-center text-center overflow-y-auto overflow-x-hidden flex flex-col w-full ">
+        <p className="drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 leading-[66px] font-[600] sm:font-[500] item-start rounded text-[#000000] text-[36px] mb-5 sm:mb-0 sm:text-[50px] leading-[50px]  sm:leading-[66px]">
           <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE +{" "}
           </span>
@@ -102,7 +124,7 @@ export default function Login() {
             <br /> on your tablet or desktop
           </p>
         </div>
-        <div className="flex items-center mt-8 text-center w-full justify-center px-[118px] hidden sm:flex">
+        <div className="items-center mt-8 text-center w-full justify-center px-[118px] hidden sm:flex">
           <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
             <Button className=" bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg !text-[14px] !h-[44px]">
               <img
@@ -178,8 +200,9 @@ export default function Login() {
 
           <img src={loginImage} alt="loginImage" />
         </div>
-        <div className="bg-[#fafafa] sm:flex hidden h-full pb-20 w-full">
-          <div className=" items-start text-start px-[118px] pb-20 justify-start w-full">
+        {/* Upload, Publish grading efficiency. */}
+        <div className="bg-[#fafafa] sm:flex hidden h-full w-full gap-16 ">
+          <div className="items-start text-start px-[118px] pb-12 justify-start w-full ">
             {" "}
             <p className=" drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start -rounded text-[#000000] text-[48px]">
               <span className="font-[600]  text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
@@ -228,7 +251,7 @@ export default function Login() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col items-center my-3">
+            {/* <div className="flex flex-col items-center my-3">
               <div className="w-full h-full max-w-[60vw] !rounded-xl flex justify-center items-center">
                 <Image
                   src={images[currentIndex].url}
@@ -255,6 +278,35 @@ export default function Login() {
                   </Button>
                 </div>
               </div>
+            </div> */}
+            <div className="mt-12 ">
+              <Carousel
+                slideSize="60%"
+                slideGap="xl"
+                height={400}
+                getEmblaApi={setEmbla}
+                initialSlide={0}
+                align="center"
+                withIndicators
+                dragFree
+                draggable
+                classNames={{
+                  control: "absolute top-[220px] left-[1050px] ",
+                  controls: "absolute space-x-14",
+                }}
+              >
+                {images.map((img) => (
+                  <Carousel.Slide>
+                    <div>
+                      <Image
+                        src={img.url}
+                        className="h-full w-full object-cover rounded-xl"
+                      />
+                      <p>{img.label}</p>
+                    </div>
+                  </Carousel.Slide>
+                ))}
+              </Carousel>
             </div>
           </div>
         </div>
