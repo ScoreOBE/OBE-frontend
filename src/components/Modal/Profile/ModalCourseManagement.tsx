@@ -384,7 +384,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                     .slice(startEndTab.start, startEndTab.end)
                     .map((dep) => (
                       <Tabs.Tab key={dep.codeEN} value={dep.codeEN!}>
-                        {dep.codeEN} {dep.courseCode && `(${dep.courseCode})`}
+                        {dep.codeEN}{dep.courseCode&&`-${dep.courseCode}`}
                       </Tabs.Tab>
                     ))}
                   {department.length > maxTabs && (
@@ -600,7 +600,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                       {course.sections.map((sec: any, index: number) => (
                         <div
                           key={sec.sectionNo}
-                          className="first:rounded-t-md last:rounded-b-md bg-[#f5f6ff]"
+                          className="first:rounded-t-md last:rounded-b-md bg-[#eef4ff]"
                         >
                           <div className="grid grid-cols-5 items-center justify-between py-4 px-7">
                             {/* Section No & Topic */}

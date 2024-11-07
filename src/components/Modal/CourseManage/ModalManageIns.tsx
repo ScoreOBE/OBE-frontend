@@ -270,7 +270,7 @@ export default function ModalManageIns({
         )}
         {!!editCoInsList?.length && (
           <div className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md">
-            <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
+            <div className=" bg-bgTableHeader flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
               <Icon IconComponent={IconUsers} /> Added Co-Instructor
             </div>
             <div className="flex flex-col max-h-[300px] h-fit w-full   px-2   overflow-y-auto ">
@@ -395,7 +395,7 @@ export default function ModalManageIns({
               />
             )}
             <div className="flex flex-col gap-2">
-              <p>Management Instructor</p>
+              <p>Instructor Management</p>
               <p className="text-b3 font-medium text-[#575757]">
                 {data.courseNo} {data.courseName}
               </p>

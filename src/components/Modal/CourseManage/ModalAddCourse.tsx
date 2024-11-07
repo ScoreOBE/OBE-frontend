@@ -689,7 +689,7 @@ export default function ModalAddCourse({
             />
             {!!coInsList.length && (
               <div className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md">
-                <div className="bg-[#e6e9ff] flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
+                <div className=" bg-bgTableHeader flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <Icon IconComponent={IconUsers} /> Added Co-Instructor
                 </div>
                 <div className="flex flex-col max-h-[173px] h-fit w-full   px-2   overflow-y-auto ">
@@ -791,7 +791,7 @@ export default function ModalAddCourse({
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
           >
-            <div className="bg-[#e6e9ff] flex flex-col justify-start gap-[2px] font-semibold  rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
+            <div className="bg-bgTableHeader flex flex-col justify-start gap-[2px] font-semibold  rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
               <p>
                 {form.getValues().courseNo} - {form.getValues().courseName}
               </p>

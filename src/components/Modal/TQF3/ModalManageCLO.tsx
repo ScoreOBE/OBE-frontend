@@ -296,7 +296,7 @@ export default function ModalManageCLO({
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
             >
-              <div className="sticky top-0 z-10 bg-[#e6e9ff] text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
+              <div className="sticky top-0 z-10 bg-bgTableHeader text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={IconList2} className="size-5" />
                   <span className="flex flex-row items-center gap-2">

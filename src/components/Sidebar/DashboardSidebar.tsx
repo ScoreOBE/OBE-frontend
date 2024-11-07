@@ -14,6 +14,9 @@ import { setCourseList } from "@/store/course";
 import { setLoading } from "@/store/loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setAllCourseList } from "@/store/allCourse";
+import IconSO from "@/assets/icons/SO.svg?react";
+import IconTQF from "@/assets/icons/TQF.svg?react";
+import IconCLO from "@/assets/icons/targetArrow.svg?react";
 
 export default function DashboardSidebar() {
   const path = useLocation().pathname;
@@ -191,8 +194,8 @@ export default function DashboardSidebar() {
               <Button
                 onClick={() => gotoPage(ROUTE_PATH.TQF)}
                 leftSection={
-                  <></>
-                  // <Icon IconComponent={IconList} />
+                 
+                  <Icon className=" size-4 mr-[5px]" IconComponent={IconTQF} />
                 }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
@@ -204,31 +207,13 @@ export default function DashboardSidebar() {
                 TQF
               </Button>
               <Button
-                onClick={() => gotoPage(ROUTE_PATH.PLO)}
-                leftSection={
-                  <></>
-                  // <Icon
-                  //   IconComponent={IconHistogram}
-                  //   className="pb-1 pl-[2px] size-[22px]"
-                  // />
-                }
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
-                 ${
-                   path.includes(ROUTE_PATH.PLO)
-                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                 }`}
-              >
-                <p className="pl-[3px]">PLO</p>
-              </Button>
-              <Button
                 onClick={() => gotoPage(ROUTE_PATH.CLO)}
                 leftSection={
-                  <></>
-                  // <Icon
-                  //   IconComponent={IconHistogram}
-                  //   className="pb-1 pl-[2px] size-[22px]"
-                  // />
+                 
+                  <Icon
+                    IconComponent={IconCLO}
+                    className=" size-[21px] mr-[1px] -translate-x-[2px]"
+                  />
                 }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
@@ -237,8 +222,27 @@ export default function DashboardSidebar() {
                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                  }`}
               >
-                <p className="pl-[3px]">CLO</p>
+                <p>CLO</p>
               </Button>
+              <Button
+                onClick={() => gotoPage(ROUTE_PATH.PLO)}
+                leftSection={
+                 
+                  <Icon
+                    IconComponent={IconSO}
+                    className=" size-[18px]"
+                  />
+                }
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+                 ${
+                   path.includes(ROUTE_PATH.PLO)
+                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                 }`}
+              >
+                <p className="pl-1">PLO</p>
+              </Button>
+             
             </div>
           </div>
         )}

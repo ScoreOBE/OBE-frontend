@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button, Select, Table } from "@mantine/core";
+import { Button, Select, Table, Tabs } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconExcel from "@/assets/icons/excel.svg?react";
 import { useSearchParams } from "react-router-dom";
@@ -152,24 +152,25 @@ export default function AdminDashboardCLO() {
               </p>
             ) : (
               <p className="text-[#575757] text-[14px]">
-                In semester {term?.semester ?? ""}, {term?.year ?? ""}!{" "}
+                In CPE Department{" "}
                 {courseList.courses.length === 0 ? (
                   <span>Your course card is currently empty</span>
                 ) : (
                   <span>
-                    You have{" "}
+                    have{" "}
                     <span className="text-[#1f69f3] font-semibold">
                       {courseList.total} Course
                       {courseList.total > 1 ? "s " : " "}
                     </span>
-                    on your plate.
+                    on this semester.
                   </span>
                 )}
               </p>
             )}
           </div>
+        
           <div className="flex gap-3 flex-wrap">
-            <Select />
+            <Select data={["Avg. PLO +", "Score PLO"]} size="xs" className="w-[8vw]" classNames={{ input: "!h-[32px]"}} />
             <Button
               className="text-center px-4"
               leftSection={
@@ -179,8 +180,29 @@ export default function AdminDashboardCLO() {
               Export PLO
             </Button>
           </div>
+          
         </div>
-        <div className="flex h-full w-full px-6 pb-3 overflow-hidden">
+        <Tabs
+          classNames={{
+            root: "overflow-hidden flex -mt-1 px-6 flex-col max-h-full",
+          }}
+          defaultValue="cpe"
+          // value={tab}
+          // onChange={setTab}
+        >
+          <Tabs.List className="mb-2">
+            <Tabs.Tab value="engr">ENGR</Tabs.Tab>{" "}
+            <Tabs.Tab value="cpe">CPE</Tabs.Tab>{" "}
+            <Tabs.Tab value="isne">ISNE</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel className="overflow-hidden flex" value="engr">
+            <div className="overflow-y-auto max-h-[502px] gap-3">engr</div>
+          </Tabs.Panel>
+          <Tabs.Panel
+            className="flex flex-col overflow-auto gap-1"
+            value="cpe"
+          >
+             <div className="flex h-full w-full pb-5 pt-2 overflow-hidden">
           {loading ? (
             <Loading />
           ) : courseList.courses.length ? (
@@ -200,7 +222,7 @@ export default function AdminDashboardCLO() {
                     <Table.Th>CLO</Table.Th>
                   </Table.Tr>
                 </Table.Thead>
-                <Table.Tbody>
+                <Table.Tbody className="text-default font-medium text-[13px]">
                   {courseList.courses.map((course, index) =>
                     courseTable(index, course)
                   )}
@@ -230,6 +252,12 @@ export default function AdminDashboardCLO() {
             </div>
           )}
         </div>
+          </Tabs.Panel>
+          <Tabs.Panel className="overflow-hidden flex" value="isne">
+            <div className="overflow-y-auto max-h-[502px] gap-3">isne</div>
+          </Tabs.Panel>
+        </Tabs>
+       
       </div>
     </>
   );

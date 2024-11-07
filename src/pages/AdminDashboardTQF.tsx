@@ -10,6 +10,7 @@ import {
   Radio,
   RadioCard,
   Table,
+  Tabs,
   Tooltip,
 } from "@mantine/core";
 import Icon from "@/components/Icon";
@@ -169,25 +170,25 @@ export default function AdminDashboardTQF() {
             </Table.Td>
             <Table.Td>
               <div className="flex gap-3 h-full">
-              <Tooltip
-              withArrow
-              arrowPosition="side"
-              arrowOffset={50}
-              arrowSize={7}
-              position="bottom-end"
-              label={
-                <div className="text-default font-semibold text-[13px] p-1">
-                  View TQF
-                </div>
-              }
-              color="#FCFCFC"
-            >
-                <Button
-                  variant="outline"
-                  className="tag-tqf  !px-3 !rounded-full text-center"
+                <Tooltip
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={50}
+                  arrowSize={7}
+                  position="bottom-end"
+                  label={
+                    <div className="text-default font-semibold text-[13px] p-1">
+                      View TQF
+                    </div>
+                  }
+                  color="#FCFCFC"
                 >
-                  <Icon className="size-5" IconComponent={IconEye} />
-                </Button>
+                  <Button
+                    variant="outline"
+                    className="tag-tqf  !px-3 !rounded-full text-center"
+                  >
+                    <Icon className="size-5" IconComponent={IconEye} />
+                  </Button>
                 </Tooltip>
                 <Tooltip
                   withArrow
@@ -255,7 +256,7 @@ export default function AdminDashboardTQF() {
         </Table.Td>
         <Table.Td>
           <div className="flex gap-3 h-full">
-          <Tooltip
+            <Tooltip
               withArrow
               arrowPosition="side"
               arrowOffset={50}
@@ -268,12 +269,12 @@ export default function AdminDashboardTQF() {
               }
               color="#FCFCFC"
             >
-            <Button
-              variant="outline"
-              className="tag-tqf  !px-3 !rounded-full text-center"
-            >
-              <Icon className="size-5" IconComponent={IconEye} />
-            </Button>
+              <Button
+                variant="outline"
+                className="tag-tqf  !px-3 !rounded-full text-center"
+              >
+                <Icon className="size-5" IconComponent={IconEye} />
+              </Button>
             </Tooltip>
             <Tooltip
               withArrow
@@ -398,17 +399,17 @@ export default function AdminDashboardTQF() {
               </p>
             ) : (
               <p className="text-[#575757] text-[14px]">
-                In semester {term?.semester ?? ""}, {term?.year ?? ""}!{" "}
+                In CPE Department{" "}
                 {courseList.courses.length === 0 ? (
                   <span>Your course card is currently empty</span>
                 ) : (
                   <span>
-                    You have{" "}
+                    have{" "}
                     <span className="text-[#1f69f3] font-semibold">
                       {courseList.total} Course
                       {courseList.total > 1 ? "s " : " "}
                     </span>
-                    on your plate.
+                    on this semester.
                   </span>
                 )}
               </p>
@@ -432,63 +433,88 @@ export default function AdminDashboardTQF() {
             </Button> */}
           </div>
         </div>
-        <div className="flex h-full w-full px-6 pt-2 pb-5 overflow-hidden">
-          {loading ? (
-            <Loading />
-          ) : courseList.courses.length ? (
-            <InfiniteScroll
-              dataLength={courseList.courses.length}
-              next={onShowMore}
-              height={"100%"}
-              hasMore={payload?.hasMore}
-              className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
-              style={{ height: "fit-content" }}
-              loader={<Loading />}
-            >
-              <Table stickyHeader>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th className="border-r w-[12%] !border-[#cecece]">
-                      Course No.
-                    </Table.Th>
-                    <Table.Th>Course Name</Table.Th>
-                    <Table.Th>Instructor</Table.Th>
-                    <Table.Th>TQF 3</Table.Th>
+        <Tabs
+          classNames={{
+            root: "overflow-hidden flex -mt-1 px-6 flex-col max-h-full",
+          }}
+          defaultValue="cpe"
+          // value={tab}
+          // onChange={setTab}
+        >
+          <Tabs.List className="mb-2">
+            <Tabs.Tab value="engr">ENGR</Tabs.Tab>{" "}
+            <Tabs.Tab value="cpe">CPE</Tabs.Tab>{" "}
+            <Tabs.Tab value="isne">ISNE</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Panel className="overflow-hidden flex" value="engr">
+            <div className="overflow-y-auto max-h-[502px] gap-3">engr</div>
+          </Tabs.Panel>
+          <Tabs.Panel
+            className="flex flex-col overflow-auto gap-1"
+            value="cpe"
+          >
+            <div className="flex h-full w-full pt-2 pb-5 overflow-hidden">
+              {loading ? (
+                <Loading />
+              ) : courseList.courses.length ? (
+                <InfiniteScroll
+                  dataLength={courseList.courses.length}
+                  next={onShowMore}
+                  height={"100%"}
+                  hasMore={payload?.hasMore}
+                  className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
+                  style={{ height: "fit-content" }}
+                  loader={<Loading />}
+                >
+                  <Table stickyHeader>
+                    <Table.Thead>
+                      <Table.Tr>
+                        <Table.Th className="border-r w-[12%] !border-[#cecece]">
+                          Course No.
+                        </Table.Th>
+                        <Table.Th>Course Name</Table.Th>
+                        <Table.Th>Instructor</Table.Th>
+                        <Table.Th>TQF 3</Table.Th>
 
-                    <Table.Th>TQF 5</Table.Th>
-                    <Table.Th>Action</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody className="text-default font-medium text-[13px]">
-                  {courseList.courses.map((course, index) =>
-                    courseTable(index, course)
-                  )}
-                </Table.Tbody>
-              </Table>
-            </InfiniteScroll>
-          ) : (
-            <div className=" flex flex-row flex-1 px-[75px] justify-between">
-              <div className="h-full  justify-center flex flex-col">
-                <p className="text-secondary text-[22px] font-semibold">
-                  {courseList.search.length
-                    ? `No results for "${courseList.search}" `
-                    : "No Course Found"}
-                </p>
-                <br />
-                <p className=" -mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
-                  {courseList.search.length ? (
-                    <>Check the spelling or try a new search.</>
-                  ) : (
-                    <>It looks like you haven't added any courses yet.</>
-                  )}
-                </p>
-              </div>
-              <div className="h-full  w-[24vw] justify-center flex flex-col">
-                <img src={notFoundImage} alt="notFound"></img>
-              </div>
+                        <Table.Th>TQF 5</Table.Th>
+                        <Table.Th>Action</Table.Th>
+                      </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody className="text-default font-medium text-[13px]">
+                      {courseList.courses.map((course, index) =>
+                        courseTable(index, course)
+                      )}
+                    </Table.Tbody>
+                  </Table>
+                </InfiniteScroll>
+              ) : (
+                <div className=" flex flex-row flex-1 px-[75px] justify-between">
+                  <div className="h-full  justify-center flex flex-col">
+                    <p className="text-secondary text-[22px] font-semibold">
+                      {courseList.search.length
+                        ? `No results for "${courseList.search}" `
+                        : "No Course Found"}
+                    </p>
+                    <br />
+                    <p className=" -mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
+                      {courseList.search.length ? (
+                        <>Check the spelling or try a new search.</>
+                      ) : (
+                        <>It looks like you haven't added any courses yet.</>
+                      )}
+                    </p>
+                  </div>
+                  <div className="h-full  w-[24vw] justify-center flex flex-col">
+                    <img src={notFoundImage} alt="notFound"></img>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </Tabs.Panel>
+          <Tabs.Panel className="overflow-hidden flex" value="isne">
+            <div className="overflow-y-auto max-h-[502px] gap-3">isne</div>
+          </Tabs.Panel>
+        </Tabs>
       </div>
     </>
   );

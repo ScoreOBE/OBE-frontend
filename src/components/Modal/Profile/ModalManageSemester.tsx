@@ -171,7 +171,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       <Modal
         opened={opened}
         onClose={onClose}
-        title="Management Semester"
+        title="Semester Management"
         size="42vw"
         centered
         transitionProps={{ transition: "pop" }}

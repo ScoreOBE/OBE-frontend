@@ -58,7 +58,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Management Admin"
+      title="Admin Management"
       size="45vw"
       centered
       transitionProps={{ transition: "pop" }}

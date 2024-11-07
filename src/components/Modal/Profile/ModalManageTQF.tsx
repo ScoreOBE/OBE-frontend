@@ -112,7 +112,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
     <Modal
       opened={opened && !!courseList.length}
       onClose={onClose}
-      title="Management TQF"
+      title="TQF Management"
       size="60vw"
       centered
       transitionProps={{ transition: "pop" }}
@@ -125,7 +125,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
         <Alert
           variant="light"
           color="blue"
-          title="Tips of TQF 5"
+          title="Instruction for TQF Management"
           classNames={{ icon: "size-5" }}
           icon={<Icon IconComponent={IconInfo2} />}
         >
