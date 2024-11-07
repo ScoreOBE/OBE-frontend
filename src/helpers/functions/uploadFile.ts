@@ -1,7 +1,8 @@
 import * as XLSX from "xlsx";
-import { FileRejection, FileWithPath, MIME_TYPES } from "@mantine/dropzone";
+import { FileRejection, FileWithPath } from "@mantine/dropzone";
 import { NOTI_TYPE } from "../constants/enum";
 import { showNotifications } from "../notifications/showNotifications";
+import { IModelCourse } from "@/models/ModelCourse";
 
 export const isNumeric = (value: any) => {
   return !isNaN(parseFloat(value)) && isFinite(value);
@@ -17,8 +18,10 @@ export const getColumnAlphabet = (columnIndex: number) => {
 };
 
 export const onUploadFile = async (
+  course: Partial<IModelCourse>,
   files: FileWithPath[],
   type: "studentList" | "score",
+  setResult: React.Dispatch<React.SetStateAction<any>>,
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
   setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>,
   setErrorPoint?: React.Dispatch<React.SetStateAction<string[]>>
@@ -29,7 +32,14 @@ export const onUploadFile = async (
     const dataExcel = await file.arrayBuffer();
     workbook = XLSX.read(dataExcel);
     if (type == "studentList") {
-      studentList(files, workbook, setOpenModalUploadError, setErrorStudentId);
+      await studentList(
+        course,
+        files,
+        workbook,
+        setResult,
+        setOpenModalUploadError,
+        setErrorStudentId
+      );
     } else {
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       if (worksheet.C1?.v == "SID" || worksheet[0]?.SID) {
@@ -53,9 +63,15 @@ export const onUploadFile = async (
   }
 };
 
-const studentList = (
+const templateNotMatch = () => {
+  showNotifications(NOTI_TYPE.ERROR, "Failed to Upload", "template incorrect");
+};
+
+const studentList = async (
+  course: Partial<IModelCourse>,
   files: FileWithPath[],
   workbook: XLSX.WorkBook,
+  setResult: React.Dispatch<React.SetStateAction<any>>,
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
   setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>
 ) => {
@@ -65,35 +81,49 @@ const studentList = (
     const range = XLSX.utils.decode_range(worksheet["!ref"]!);
     range.s.r = 3;
     worksheet["!ref"] = XLSX.utils.encode_range(range);
-    delete worksheet["!merges"]![4];
+    if (worksheet["!merges"]) {
+      delete worksheet["!merges"][4];
+    } else {
+      files = [];
+      templateNotMatch();
+      return;
+    }
     worksheet.E4 = { t: "s", v: "firstName" };
     worksheet.F4 = { t: "s", v: "lastName" };
     const resultsData: any[] = XLSX.utils.sheet_to_json(worksheet);
 
-    console.log(resultsData);
-
     // Validate the studentId
     const studentId = "รหัสนักศึกษา";
     const errorStudentIdList: string[] = [];
+    const keys = Object.keys(resultsData[0]);
+    if (![studentId, "SECLAB", "SECLEC"].some((key) => keys.includes(key))) {
+      files = [];
+      templateNotMatch();
+      return;
+    }
     resultsData.forEach((row, index) => {
+      const sectionNo =
+        row.SECLAB == "000" ? parseInt(row.SECLEC) : parseInt(row.SECLAB);
       if (
-        row[studentId] &&
-        (!isNumeric(row[studentId]) || row[studentId].toString().length !== 9)
+        (!row[studentId] && sectionNo.toString().length) ||
+        (row[studentId] &&
+          (!isNumeric(row[studentId]) ||
+            row[studentId].toString().length !== 9))
       ) {
         const row = index + 4;
         const column = getColumnAlphabet(1);
         errorStudentIdList.push(`${column}${row}`);
       }
-      const sectionNo =
-        row.SECLAB == "000" ? parseInt(row.SECLEC) : parseInt(row.SECLAB);
       const existSec = result.find((sec) => sec.sectionNo == sectionNo);
       const student = {
         studentId: row[studentId],
-        firstName: row.firstName,
-        lastName: row.lastName,
+        firstName: row.firstName.replace(/ /g, ""),
+        lastName: row.lastName.replace(/ /g, ""),
       };
       if (!existSec) {
         result.push({
+          sectionId: course.sections?.find((sec) => sec.sectionNo == sectionNo)
+            ?.id,
           sectionNo,
           studentList: [student],
         });
@@ -106,11 +136,16 @@ const studentList = (
       files = [];
       setErrorStudentId(errorStudentIdList);
       setOpenModalUploadError(true);
-    }
+    } else {
+      console.log(result);
 
-    console.log(result);
-    
-    return result;
+      setResult({
+        year: course.year,
+        semester: course.semester,
+        course: course.id,
+        sections: result,
+      });
+    }
   }
 };
 

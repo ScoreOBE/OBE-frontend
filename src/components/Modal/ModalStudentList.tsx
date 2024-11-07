@@ -1,12 +1,14 @@
-import { Dropzone, MS_EXCEL_MIME_TYPE } from "@mantine/dropzone";
+import { Dropzone, FileWithPath, MS_EXCEL_MIME_TYPE } from "@mantine/dropzone";
 import { Table, Tabs, TextInput } from "@mantine/core";
 import { Alert, Button, Modal } from "@mantine/core";
 import { IModelCourse } from "@/models/ModelCourse";
 import regcmu from "@/assets/image/regCMULogo.png";
 import exStudentList from "@/assets/image/exStudentList.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import Icon from "../Icon";
+import IconExcel from "@/assets/icons/excel.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconFileImport from "@/assets/icons/fileImport.svg?react";
@@ -16,6 +18,11 @@ import IconUpload from "@/assets/icons/upload.svg?react";
 import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
 import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
 import ModalErrorUploadFile from "./ModalErrorUploadFile";
+import { uploadStudentList } from "@/services/section/section.service";
+import { updateStudentList } from "@/store/course";
+import store from "@/store";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
 
 type modalType = "import" | "list" | "import_list";
 type Props = {
@@ -38,8 +45,18 @@ export default function ModalStudentList({
   onNext,
 }: Props) {
   const [tab, setTab] = useState<string | null>("importStudentList");
+  const [file, setFile] = useState<FileWithPath>();
+  const [result, setResult] = useState<any>();
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
   const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (opened) {
+      setFile(undefined);
+      setResult(undefined);
+    }
+  }, [opened]);
+
   const studentData = [
     {
       no: 1,
@@ -185,71 +202,114 @@ export default function ModalStudentList({
   const dropZoneFile = () => {
     return (
       <Dropzone
-        onDrop={(files) =>
+        onDrop={(files) => {
           onUploadFile(
+            data,
             files,
             "studentList",
+            setResult,
             setOpenModalUploadError,
             setErrorStudentId
-          )
-        }
+          );
+          setFile(files[0]);
+        }}
         onReject={(files) => onRejectFile(files)}
         maxFiles={1}
         maxSize={5 * 1024 ** 2}
         accept={MS_EXCEL_MIME_TYPE}
         className="border-[#8f9ae37f] mt-3 hover:bg-gray-100 border-dashed bg-gray-50 cursor-pointer border-[2px] rounded-md"
       >
-        <div className="flex flex-col gap-3 min-h-56 justify-center items-center pointer-events-none">
-          <Dropzone.Accept>
-            <Icon
-              IconComponent={IconUpload}
-              style={{ color: "var(--mantine-color-green-6)" }}
-              className="bg-green-100 stroke-[2px] size-16 p-3 rounded-full"
-            />
-          </Dropzone.Accept>
-          <Dropzone.Reject>
-            <Icon
-              IconComponent={IconX}
-              style={{ color: "var(--mantine-color-red-6)" }}
-              className="bg-red-200 stroke-[2px] size-16 p-3 rounded-full"
-            />
-          </Dropzone.Reject>
-          <Dropzone.Idle>
-            <Icon
-              IconComponent={IconUpload}
-              style={{ color: "var(--color-secondary)" }}
-              className="bg-[#DDE0FF] stroke-[2px] size-16 p-3 rounded-full"
-            />
-          </Dropzone.Idle>
-          <p className="font-semibold text-b2 text-default">
-            <span className="text-secondary underline">Click to import</span> or
-            drag and drop
-          </p>
-          <p className="-mt-2 font-medium items-center justify-center text-center text-secondary text-b3">
-            XLSX format only (up to 10MB)
-          </p>
-          <div className="flex flex-col text-b3 font-medium  text-red-500  items-center text-center justify-center">
-            <div className="flex gap-2 items-center justify-center">
-              <Icon
-                IconComponent={IconExclamationCircle}
-                className="size-4 stroke-red-600"
-              />
-              <p>Supports only Student List ({data?.courseNo}) template</p>
+        {result?.sections ? (
+          <div className="flex justify-between p-3">
+            <div className="flex gap-2 items-center">
+              <Icon IconComponent={IconExcel} className="text-[#20884f]" />
+              <p className="text-b2">{file?.name}</p>
             </div>
-            <p>from CMU Registration (Reg CMU)</p>
+            <Button
+              color="red"
+              variant="outline"
+              onClick={(event) => {
+                event.stopPropagation();
+                setResult(undefined);
+                setFile(undefined);
+              }}
+              className="!rounded-full px-2 hover:bg-[#ffcdcd]"
+            >
+              <Icon
+                IconComponent={IconTrash}
+                className="size-4 stroke-[2px] stroke-[#ff4747] flex items-center"
+              />
+            </Button>
           </div>
-        </div>
+        ) : (
+          <div className="flex flex-col gap-3 min-h-56 justify-center items-center pointer-events-none">
+            <Dropzone.Accept>
+              <Icon
+                IconComponent={IconUpload}
+                style={{ color: "var(--mantine-color-green-6)" }}
+                className="bg-green-100 stroke-[2px] size-16 p-3 rounded-full"
+              />
+            </Dropzone.Accept>
+            <Dropzone.Reject>
+              <Icon
+                IconComponent={IconX}
+                style={{ color: "var(--mantine-color-red-6)" }}
+                className="bg-red-200 stroke-[2px] size-16 p-3 rounded-full"
+              />
+            </Dropzone.Reject>
+            <Dropzone.Idle>
+              <Icon
+                IconComponent={IconUpload}
+                style={{ color: "var(--color-secondary)" }}
+                className="bg-[#DDE0FF] stroke-[2px] size-16 p-3 rounded-full"
+              />
+            </Dropzone.Idle>
+            <p className="font-semibold text-b2 text-default">
+              <span className="text-secondary underline">Click to import</span>{" "}
+              or drag and drop
+            </p>
+            <p className="-mt-2 font-medium items-center justify-center text-center text-secondary text-b3">
+              XLSX format only (up to 10MB)
+            </p>
+            <div className="flex flex-col text-b3 font-medium  text-red-500  items-center text-center justify-center">
+              <div className="flex gap-2 items-center justify-center">
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="size-4 stroke-red-600"
+                />
+                <p>Supports only Student List ({data?.courseNo}) template</p>
+              </div>
+              <p>from CMU Registration (Reg CMU)</p>
+            </div>
+          </div>
+        )}
       </Dropzone>
     );
   };
 
+  const uploadList = async () => {
+    if (result) {
+      const res = await uploadStudentList(result);
+      if (res && onNext) {
+        store.dispatch(updateStudentList({ id: data.id, sections: res }));
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Upload success",
+          "upload student list success"
+        );
+        onNext();
+      }
+    } else {
+      showNotifications(
+        NOTI_TYPE.ERROR,
+        "Invalid File",
+        "invalid student list"
+      );
+    }
+  };
+
   return (
     <>
-      <ModalErrorUploadFile
-        opened={openModalUploadError}
-        onClose={() => setOpenModalUploadError(false)}
-        errorStudentId={errorStudentId}
-      />
       {/* Main Modal */}
       <Modal
         title={
@@ -437,7 +497,7 @@ export default function ModalStudentList({
                 {selectCourse ? "Back" : "Cancel"}
               </Button>
               <Button
-                onClick={onNext}
+                onClick={uploadList}
                 rightSection={
                   <Icon
                     IconComponent={IconArrowRight}
@@ -451,6 +511,12 @@ export default function ModalStudentList({
           </div>
         )}
       </Modal>
+
+      <ModalErrorUploadFile
+        opened={openModalUploadError}
+        onClose={() => setOpenModalUploadError(false)}
+        errorStudentId={errorStudentId}
+      />
     </>
   );
 }

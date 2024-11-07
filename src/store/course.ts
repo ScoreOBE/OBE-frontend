@@ -74,6 +74,30 @@ export const courseSlice = createSlice({
         ),
       };
     },
+    updateStudentList: (state, action) => {
+      return {
+        ...state,
+        courses: state.courses.map((course) =>
+          course.id === action.payload.id
+            ? {
+                ...course,
+                sections: course.sections
+                  .map((sec) => {
+                    const updateSec = action.payload.sections.find(
+                      (section: any) => section.id == sec.id
+                    );
+                    if (updateSec) {
+                      return { ...sec, students: updateSec.students };
+                    } else {
+                      return sec;
+                    }
+                  })
+                  .sort((a, b) => a.sectionNo! - b.sectionNo!),
+              }
+            : course
+        ),
+      };
+    },
   },
 });
 
@@ -85,6 +109,7 @@ export const {
   editSection,
   removeCourse,
   removeSection,
+  updateStudentList,
 } = courseSlice.actions;
 
 export default courseSlice.reducer;

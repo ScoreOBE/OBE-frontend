@@ -22,3 +22,7 @@ export const deleteSection = async (id: string, params: any) => {
   const res = await sectionService.deleteSection(id, params);
   return isValidResponse(res);
 };
+export const uploadStudentList = async (params: any) => {
+  const res = await sectionService.uploadStudentList(params);
+  return isValidResponse(res);
+};
