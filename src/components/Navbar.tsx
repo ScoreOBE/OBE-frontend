@@ -109,16 +109,16 @@ export default function Navbar() {
           />
         )}
         {[ROUTE_PATH.LOGIN].includes(location) && (
-          <div className="bg-[#fafafa] px-12  overflow-hidden items-center !w-full   !h-full  justify-between  flex flex-1">
+          <div className="bg-[#fafafa] sm:px-12 px-2  overflow-hidden items-center !w-full   !h-full  justify-between  flex flex-1">
             <div className="flex gap-2 items-center">
-              <img src={scoreobe} alt="cpeLogo" className=" h-[35px] " />
-              <span className="font-[600] text-[20px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+              <img src={scoreobe} alt="cpeLogo" className=" sm:h-[35px] h-[22px] " />
+              <span className="font-[600] sm:text-[20px] text-[14px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                 ScoreOBE +
               </span>{" "}
             </div>
             <div className="flex items-end gap-5  justify-end">
               {/* <img src={cmulogo} alt="CMULogo" className=" h-[18px]" /> */}
-              <img src={cpeLogoRed} alt="cpeLogo" className=" h-[44px] " />
+              <img src={cpeLogoRed} alt="cpeLogo" className=" sm:h-[44px] h-[32px] -mt-2 sm:mt-0" />
             </div>
           </div>
         )}
