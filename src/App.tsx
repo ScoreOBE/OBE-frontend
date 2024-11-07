@@ -87,10 +87,10 @@ function App() {
     <PageError />
   ) : (
     
-    <div className="flex heig h-screen w-screen text-default">
+    <div className="flex heig h-[100svh] h-screen w-screen text-default">
       <AOSInit />
       {showSidebar && <Sidebar />}
-      <div className="flex flex-col h-full w-full overflow-hidden">
+      <div className="flex flex-col h-full heig h-[100svh] w-full overflow-hidden">
         {showNavbar && <Navbar />}
         <ModalTermsOfService
           opened={openModalTermsOfService}
