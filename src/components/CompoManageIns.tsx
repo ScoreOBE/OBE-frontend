@@ -223,7 +223,7 @@ export default function CompoMangeIns({
           setInputUser({ value: null });
           setSwapMethodAddUser(!swapMethodAddUser);
         }}
-        className="bg-[#e6e9ff] hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center py-3 px-5  "
+        className="bg-bgTableHeader hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center py-3 px-5  "
       >
         <div className="flex gap-6 items-center">
           <Icon IconComponent={IconAddCo} className="text-secondary" />

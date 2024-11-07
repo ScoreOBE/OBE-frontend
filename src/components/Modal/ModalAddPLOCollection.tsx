@@ -534,7 +534,7 @@ export default function ModalAddPLOCollection({
                     overflowY: "auto",
                   }}
                 >
-                  <div className="sticky top-0 z-10 bg-[#e6e9ff] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
+                  <div className="sticky top-0 z-10 bg-bgTableHeader flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                     <div className="flex items-center gap-2">
                       <Icon IconComponent={IconSO} />
                       <span>List PLO Added</span>
@@ -669,7 +669,7 @@ export default function ModalAddPLOCollection({
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                <div className="bg-[#e6e9ff] flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
+                <div className="bg-bgTableHeader flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
                   <div className="flex items-center gap-2">
                     <Icon
                       IconComponent={IconHome}
@@ -743,7 +743,7 @@ export default function ModalAddPLOCollection({
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                <div className="bg-[#e6e9ff] flex flex-col items-start justify-start rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
+                <div className="bg-bgTableHeader flex flex-col items-start justify-start rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
                   <div className="flex justify-between w-full">
                     <p>PLO Collection Name - {form.getValues().name}</p>
                     <p>
