@@ -32,7 +32,6 @@ export default function Part7TQF3({ setForm }: Props) {
   const [loading, setLoading] = useState(true);
   const [coursePLO, setCoursePLO] = useState<Partial<IModelPLO>>();
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
-  const [validatePloRequired, setValidatePloRequired] = useState(false);
 
   const form = useForm({
     mode: "controlled",
@@ -40,13 +39,16 @@ export default function Part7TQF3({ setForm }: Props) {
     validate: {
       data: {
         plos: (value) => {
-          setValidatePloRequired(true);
-          return !value.length && "CLO must be linked to at least one PLO";
+          const ploFormError = ploForm.validate();
+          return !value.length
+            ? "CLO must be linked to at least one PLO"
+            : ploFormError.hasErrors
+            ? ""
+            : null;
         },
       },
     },
     onValuesChange(values, previous) {
-      setValidatePloRequired(false);
       if (!isEqual(values, previous)) {
         dispatch(
           updatePartTQF3({ part: "part7", data: cloneDeep(form.getValues()) })
@@ -56,15 +58,55 @@ export default function Part7TQF3({ setForm }: Props) {
     },
   });
 
+  const ploForm = useForm({
+    mode: "controlled",
+    initialValues: { data: [] as { id: string; clos: string[] }[] },
+    validate: {
+      data: {
+        clos: (value) => !value.length && `Select CLO at least one`,
+      },
+    },
+  });
+
   useEffect(() => {
     fetchPLO();
-    if (tqf3.part7) {
-      form.setFieldValue("updatedAt", tqf3.part7.updatedAt);
-      form.setFieldValue("data", cloneDeep(tqf3.part7.data));
-    } else if (tqf3.part2) {
-      form.setValues(initialTqf3Part7(tqf3.part2));
-    }
   }, []);
+
+  useEffect(() => {
+    if (coursePLO?.data?.length) {
+      const ploIds: string[] = coursePLO.data.map((item: any) => item.id) || [];
+      ploForm.setFieldValue(
+        "data",
+        tqf3.ploRequired
+          ?.filter((plo) => ploIds.includes(plo))
+          ?.map((plo) => ({ id: plo, clos: [] })) || []
+      );
+      if (tqf3.part7) {
+        form.setFieldValue("updatedAt", tqf3.part7.updatedAt);
+        form.setFieldValue(
+          "data",
+          cloneDeep(
+            tqf3?.part2?.clo?.map((cloItem) => {
+              const item = tqf3.part7?.data.find(
+                ({ clo }) => clo == cloItem.id
+              );
+              ploForm.getValues().data.forEach(({ id }, index) => {
+                if ((item?.plos as string[]).includes(id)) {
+                  ploForm.insertListItem(`data.${index}.clos`, cloItem.id);
+                }
+              });
+              return {
+                clo: cloItem.id,
+                plos: cloneDeep(item?.plos) || [],
+              };
+            })
+          ) ?? []
+        );
+      } else if (tqf3.part2) {
+        form.setValues(initialTqf3Part7(tqf3.part2));
+      }
+    }
+  }, [coursePLO]);
 
   const fetchPLO = async () => {
     setLoading(true);
@@ -83,7 +125,7 @@ export default function Part7TQF3({ setForm }: Props) {
     setLoading(false);
   };
 
-  return tqf3?.part5?.updatedAt ? (
+  return tqf3?.part6?.updatedAt ? (
     coursePLO?.data?.length ? (
       <>
         {coursePLO && (
@@ -129,7 +171,10 @@ export default function Part7TQF3({ setForm }: Props) {
                       And if you see
                       <span className="text-red-500 font-bold">'*'</span>
                       in a PLO column, at least one of your CLOs must be linked
-                      to that <span className="text-red-500 font-bold">required PLO</span>
+                      to that{" "}
+                      <span className="text-red-500 font-bold">
+                        required PLO
+                      </span>
                     </>
                   )}
                 </p>
@@ -171,7 +216,7 @@ export default function Part7TQF3({ setForm }: Props) {
                         </span>
                       </p>
                       <p className="error-text mt-1">
-                        {validatePloRequired &&
+                        {ploForm.errors &&
                           tqf3.ploRequired?.includes(id) &&
                           !form
                             .getValues()
@@ -236,16 +281,36 @@ export default function Part7TQF3({ setForm }: Props) {
                                     .plos as string[]
                                 ).includes(id)}
                                 onChange={(event) => {
+                                  const ploRequired = ploForm
+                                    .getValues()
+                                    .data.findIndex((plo) => plo.id == id);
+                                  const existClo = ploForm
+                                    .getValues()
+                                    .data[ploRequired]?.clos.findIndex(
+                                      (item) => item == clo
+                                    );
                                   if (event.target.checked) {
                                     form.insertListItem(
                                       `data.${cloIndex}.plos`,
                                       id
                                     );
+                                    if (ploRequired >= 0) {
+                                      ploForm.insertListItem(
+                                        `data.${ploRequired}.clos`,
+                                        clo
+                                      );
+                                    }
                                   } else if (ploIndex >= 0) {
                                     form.removeListItem(
                                       `data.${cloIndex}.plos`,
                                       ploIndex
                                     );
+                                    if (ploRequired >= 0) {
+                                      ploForm.removeListItem(
+                                        `data.${ploRequired}.clos`,
+                                        existClo
+                                      );
+                                    }
                                   }
                                 }}
                               />
