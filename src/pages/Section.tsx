@@ -261,9 +261,7 @@ export default function Section() {
                     <Icon IconComponent={IconUpload} className="size-4" />
                   }
                   onClick={() =>
-                    course?.sections.find(
-                      ({ assignments }) => assignments?.length
-                    )
+                    course?.sections.find(({ students }) => students?.length)
                       ? setOpenModalUploadScore(true)
                       : setOpenModalUploadStudentList(true)
                   }
