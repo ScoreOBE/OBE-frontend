@@ -28,6 +28,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const [openModalStudentList, setOpenModalStudentList] = useState(false);
   const [openModalTemplateGuide, setOpenModalTemplateGuide] = useState(false);
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
+  const [result, setResult] = useState<any>();
   const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
   const [errorPoint, setErrorPoint] = useState<string[]>([]);
 
@@ -43,12 +44,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         onClose={() => setOpenModalStudentList(false)}
         type="import_list"
       />
-      <ModalErrorUploadFile
-        opened={openModalUploadError}
-        onClose={() => setOpenModalUploadError(false)}
-        errorStudentId={errorStudentId}
-        errorPoint={errorPoint}
-      />
+
       {/* Main Modal */}
       <Modal.Root
         opened={opened}
@@ -108,7 +104,10 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               >
                 <p className="pl-8 text-default font-medium -mt-1">
                   Use only
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] font-extrabold"> ScoreOBE + Template </span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] font-extrabold">
+                    {" "}
+                    ScoreOBE + Template{" "}
+                  </span>
                   provided below to submit your scores. Please read the template
                   guide carefully, then download the template to upload your
                   score.
@@ -125,7 +124,12 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   <div className="flex items-center  gap-2">
                     <Icon IconComponent={IconBulb} />
                     <p>
-                      Tips: <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]"> ScoreOBE + </span>support{" "}
+                      Tips:{" "}
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                        {" "}
+                        ScoreOBE +{" "}
+                      </span>
+                      support{" "}
                       <span style={{ fontFamily: "Lexand" }}>
                         Gradescope template{" "}
                       </span>
@@ -141,8 +145,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     className=" h-[35px] ml-8  w-[156px] "
                   />
                   <p className="pl-8 text-default font-medium leading-[22px]">
-                    To upload scores from Gradescope to the ScoreOBE +,
-                    simply{" "}
+                    To upload scores from Gradescope to the ScoreOBE +, simply{" "}
                     <span className="font-extrabold">
                       export the assignment scores
                     </span>{" "}
@@ -184,7 +187,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                       Template guide
                     </Button>
                     <Button
-                    variant='gradient'
+                      variant="gradient"
                       leftSection={
                         <Icon IconComponent={IconDownload} className="size-4" />
                       }
@@ -221,8 +224,10 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               <Dropzone
                 onDrop={(files) =>
                   onUploadFile(
+                    data,
                     files,
                     "score",
+                    setResult,
                     setOpenModalUploadError,
                     setErrorStudentId,
                     setErrorPoint
@@ -325,6 +330,13 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
           </Modal.Body>
         </Modal.Content>
       </Modal.Root>
+
+      <ModalErrorUploadFile
+        opened={openModalUploadError}
+        onClose={() => setOpenModalUploadError(false)}
+        errorStudentId={errorStudentId}
+        errorPoint={errorPoint}
+      />
     </>
   );
 }

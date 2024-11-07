@@ -236,6 +236,7 @@ export default function Dashboard() {
                 id: course.id,
                 courseNo: course.courseNo,
                 courseName: course.courseName,
+                sections: course.sections,
                 label: `${course.courseNo} - ${course.courseName}`,
               };
               // }
@@ -247,6 +248,7 @@ export default function Dashboard() {
                 id: option.id,
                 courseNo: option.courseNo,
                 courseName: option.courseName,
+                sections: option.sections,
                 // topic: option.topic,
               })
             }
