@@ -280,8 +280,16 @@ export default function Dashboard() {
               </Button>
               <Button
                 onClick={() => {
-                  setOpenModalUploadStudentList(true);
-                  setOpenModalSelectCourse(false);
+                  if (
+                    courseList.courses.find(({ id }) => id == uploadCourse?.id)
+                      ?.sections[0].students?.length
+                  ) {
+                    setOpenModalUploadScore(true);
+                    setOpenModalSelectCourse(false);
+                  } else {
+                    setOpenModalUploadStudentList(true);
+                    setOpenModalSelectCourse(false);
+                  }
                 }}
                 disabled={!uploadCourse}
                 rightSection={
