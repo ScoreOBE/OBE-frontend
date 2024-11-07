@@ -72,7 +72,13 @@ export default function Section() {
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
-  }, []);
+    if (
+      course?.sections[0].students?.length &&
+      !course?.sections[0].students[0].id
+    ) {
+      fetchOneCourse();
+    }
+  }, [course]);
 
   const fetchOneCourse = async () => {
     const res = await getOneCourse({

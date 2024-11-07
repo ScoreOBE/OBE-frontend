@@ -14,7 +14,10 @@ export const getUserName = (
   format?: number
 ) => {
   if (!user) return;
-  else if (isEmpty(user.firstNameEN) || isEmpty(user.lastNameEN))
+  else if (
+    (isEmpty(user.firstNameEN) || isEmpty(user.lastNameEN)) &&
+    format !== 3
+  )
     return user.email;
   switch (format) {
     case 1:
