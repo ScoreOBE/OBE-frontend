@@ -80,18 +80,29 @@ export default function Login() {
   ) : (
     <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex-col  flex">
       <div className=" bg- items-center text-center overflow-y-auto    flex flex-col w-full   ">
-        <p className=" drop-shadow-xl cursor-default px-[118px]  w-full mt-8 leading-[66px] font-[500] item-start -rounded text-[#000000] text-[50px]">
-          <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-            ScoreOBE +
-          </span>{" "}
+        <p className="drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 leading-[66px] font-[600] sm:font-[500] item-start -rounded text-[#000000] text-[36px] mb-5 sm:mb-0 sm:text-[50px] leading-[50px]  sm:leading-[66px]">
+          <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+            ScoreOBE +{" "}
+          </span>
           Academic Supercharger
           <br />
           for instructors and students
         </p>
-        <p className="mt-5 text-h2 text-[#4F4D55] w-full  px-[118px] font-[500]">
+        <p className="mt-5 text-h2 text-[#4F4D55] w-full hidden sm:flex justify-center items-center text-center px-[118px] font-[500]">
           Discover A Better Way to Do OBE Simplify Your Academic Journey
         </p>
-        <div className="flex items-center mt-8 text-center w-full justify-center px-[118px]">
+
+        <div className="flex items-center mt-8 text-center w-full justify-center px-[12px] sm:hidden">
+          <p className="text-center text-[16px] font-medium text-[#4F4D55]">
+            <span className="font-bold">
+              ScoreOBE+ unavailable on your screen device
+            </span>
+            <br />
+            To login, go to <span className="font-bold">ScoreOBE+</span>
+            <br /> on your tablet or desktop
+          </p>
+        </div>
+        <div className="flex items-center mt-8 text-center w-full justify-center px-[118px] hidden sm:flex">
           <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
             <Button className=" bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg !text-[14px] !h-[44px]">
               <img
@@ -102,19 +113,17 @@ export default function Login() {
               Sign in CMU Account
             </Button>
           </a>
-
-          
         </div>
         <div
           data-aos-duration="1000"
           data-aos-once="false"
           data-aos="fade-up"
-          className="rounded-t-xl mx-[118px]  mt-8  "
+          className="rounded-t-xl mx-[118px] sm:flex sm:flex-col hidden mt-8  "
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <div className=" flex relative  items-center rounded-t-xl justify-center p-5 py-[9px] border-b-[1px] border-[#eeeeee] flex-row gap-0 w-full bg-white">
+          <div className=" sm:flex relative hidden  items-center rounded-t-xl justify-center p-5 py-[9px] border-b-[1px] border-[#eeeeee] flex-row gap-0 w-full bg-white">
             <div className=" absolute -top-10 py-20  rotate-180 -z-50 w-screen h-screen  flex justify-center">
               <div className="rounded-full h-full w-3/6 bg-[#FF7847] opacityy-50 bg-blur"></div>
               <div className="rounded-full h-[97%] w-3/6 bg-[#FF469D] opacityy-50 bg-blur"></div>
@@ -169,7 +178,7 @@ export default function Login() {
 
           <img src={loginImage} alt="loginImage" />
         </div>
-        <div className="bg-[#fafafa] h-full pb-20 w-full">
+        <div className="bg-[#fafafa] sm:flex hidden h-full pb-20 w-full">
           <div className=" items-start text-start px-[118px] pb-20 justify-start w-full">
             {" "}
             <p className=" drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start -rounded text-[#000000] text-[48px]">
