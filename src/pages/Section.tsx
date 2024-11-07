@@ -483,7 +483,7 @@ export default function Section() {
                       )}
                     </div>
                     {sec.isActive && (
-                      <div className="bg-[#e7eaff] flex h-8 items-center justify-between rounded-b-[4px]">
+                      <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
                         <p className="p-2.5 text-secondary font-semibold text-[12px]">
                           {(sec.assignments?.length ?? 0) === 1
                             ? "Assignment"

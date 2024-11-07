@@ -7,7 +7,7 @@ type Props = {
 
 export default function Breadcrumbs({ items = [] }: Props) {
   return (
-    <div className="flex gap-3 bg-[#f1f3fe] px-4 py-[10px] rounded-md">
+    <div className="flex gap-3 bg-[#e7f0ff] px-4 py-[10px] rounded-md">
       {items.map((item, index) => (
         <div
           className="flex items-center justify-center gap-3 text-[14px]"
