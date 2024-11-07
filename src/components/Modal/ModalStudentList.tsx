@@ -23,6 +23,7 @@ import { updateStudentList } from "@/store/course";
 import store from "@/store";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { getSectionNo, getUserName } from "@/helpers/functions/function";
 
 type modalType = "import" | "list" | "import_list";
 type Props = {
@@ -46,6 +47,7 @@ export default function ModalStudentList({
 }: Props) {
   const [tab, setTab] = useState<string | null>("importStudentList");
   const [file, setFile] = useState<FileWithPath>();
+  const [filter, setFilter] = useState<string>("");
   const [result, setResult] = useState<any>();
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
   const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
@@ -57,112 +59,27 @@ export default function ModalStudentList({
     }
   }, [opened]);
 
-  const studentData = [
-    {
-      no: 1,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 630610720,
-      name: "Khomsan Suangkaew",
-    },
-    {
-      no: 2,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610627,
-      name: "Thidayu Peaungtham",
-    },
-    {
-      no: 3,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610629,
-      name: "Natacha Rungbanpant ",
-    },
-
-    {
-      no: 4,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610638,
-      name: "Thanaporn Chanchanayothin",
-    },
-    {
-      no: 5,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610643,
-      name: "Teerit Youngmeesuk",
-    },
-    {
-      no: 6,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610651,
-      name: "Piyaphat Khaosaeng",
-    },
-    {
-      no: 7,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610657,
-      name: "Patrasorn Khantipong",
-    },
-    {
-      no: 8,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610665,
-      name: "Raiwin Inthasit",
-    },
-    {
-      no: 9,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610666,
-      name: "Worapitcha Muangyot",
-    },
-    {
-      no: 10,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610672,
-      name: "Sawit Charuekpoonpol",
-    },
-    {
-      no: 11,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610673,
-      name: "Surabordin Ngaosai",
-    },
-    {
-      no: 12,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610674,
-      name: "Atipat Daowraeng",
-    },
-    {
-      no: 13,
-      seclec: "003",
-      seclab: "000",
-      studentNo: 640610675,
-      name: "Haris Saema",
-    },
-  ];
-  const rows = studentData.map((element) => (
-    <Table.Tr
-      className="font-medium text-default text-[13px]"
-      key={element.studentNo}
-    >
-      <Table.Td>{element.no}</Table.Td>
-      <Table.Td>{element.seclec}</Table.Td>
-      <Table.Td>{element.seclab}</Table.Td>
-      <Table.Td>{element.studentNo}</Table.Td>
-      <Table.Td>{element.name}</Table.Td>
-    </Table.Tr>
-  ));
+  const rows = data.sections?.map((sec) =>
+    sec.students
+      ?.filter((student) =>
+        parseInt(filter)
+          ? student.studentId?.toString().includes(filter) ||
+            sec.sectionNo?.toString().includes(filter)
+          : getUserName(student, 3)?.includes(filter)
+      )
+      ?.map((student) => (
+        <Table.Tr
+          className="font-medium text-default text-[13px]"
+          key={student.studentId}
+        >
+          {/* <Table.Td>{student.studentId}</Table.Td> */}
+          <Table.Td>{getSectionNo(sec.sectionNo)}</Table.Td>
+          {/* <Table.Td>{student.seclab}</Table.Td> */}
+          <Table.Td>{student.studentId}</Table.Td>
+          <Table.Td>{getUserName(student, 3)}</Table.Td>
+        </Table.Tr>
+      ))
+  );
 
   const studentTable = () => {
     return (
@@ -173,6 +90,7 @@ export default function ModalStudentList({
           size="xs"
           rightSectionPointerEvents="all"
           className="mx-1"
+          onChange={(event: any) => setFilter(event.currentTarget.value)}
         ></TextInput>
         <div
           className=" mx-1  max-h-[500px] h-fit  flex flex-col bg-white mb-1  mt-4 rounded-md overflow-y-auto"
@@ -184,10 +102,10 @@ export default function ModalStudentList({
           <Table stickyHeader striped>
             <Table.Thead>
               <Table.Tr className="bg-[#e5e7f6]">
-                <Table.Th className=" w-[5%]">No.</Table.Th>
-                <Table.Th className=" w-[10%]">SECLEC</Table.Th>
-                <Table.Th className=" w-[10%]">SECLAB</Table.Th>
-                <Table.Th className=" w-[17%]">Student No.</Table.Th>
+                {/* <Table.Th className=" w-[5%]">No.</Table.Th> */}
+                <Table.Th className=" w-[10%]">Section</Table.Th>
+                {/* <Table.Th className=" w-[10%]">SECLAB</Table.Th> */}
+                <Table.Th className=" w-[17%]">Student Id</Table.Th>
                 <Table.Th className=" w-[58%]">Name</Table.Th>
               </Table.Tr>
             </Table.Thead>
