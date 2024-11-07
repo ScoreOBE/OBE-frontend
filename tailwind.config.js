@@ -15,7 +15,7 @@ export default {
         noData: "#ababab",
         edit: "#f39d4e",
         delete: "#ff4747",
-        bgTableHeader: "#e5e7f6",
+        bgTableHeader: "#dfebff",
         hover: "#efefef",
         error: "#fa5252",
         disable: "#f1f3f5",
