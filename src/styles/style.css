@@ -295,8 +295,8 @@
   color: var(--color-secondary);
 }
 .mantine-Tabs-tab[data-active][data-variant="pills"] {
-  background-color: #d5d5f7;
-  border-color: #bcbce1;
+  background-color: #d7e6fc;
+  border-color: #bcc6e1;
   border-radius: 0px;
   color: var(--color-secondary);
 }
@@ -397,12 +397,12 @@
   font-weight: 700;
 }
 .tag-tqf[tqf-status="In Progress"] {
-  color: #ce7611;
+  color: #b7710f;
   background-color: #fee19c;
   font-weight: 700;
 }
 .tag-tqf[tqf-status="Done"] {
-  color: #228762;
+  color: #177653;
   background-color: #10e5908e;
   font-weight: 700;
 }

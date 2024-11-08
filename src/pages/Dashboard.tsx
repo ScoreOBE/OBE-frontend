@@ -503,10 +503,10 @@ export default function Dashboard() {
                         {item.sections.length > 1 ? "s" : ""}
                       </p>
                       <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">
-                        <p className="tag-tqf" tqf-status={statusTqf3}>
+                        <p className="tag-tqf rounded-xl !text-[11px]" tqf-status={statusTqf3}>
                           TQF 3
                         </p>
-                        <p className="tag-tqf" tqf-status={statusTqf5}>
+                        <p className="tag-tqf rounded-xl !text-[11px]" tqf-status={statusTqf5}>
                           TQF 5
                         </p>
                       </div>
