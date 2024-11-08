@@ -6,7 +6,6 @@ import { setCourseList } from "@/store/course";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { getCourse } from "@/services/course/course.service";
 import scoreobe from "@/assets/image/scoreOBElogobold.png";
-import cmulogo from "@/assets/image/cmuLogoPurple.png";
 import { SearchInput } from "./SearchInput";
 import { setAllCourseList } from "@/store/allCourse";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
@@ -22,6 +21,9 @@ export default function Navbar() {
   const [params, setParams] = useSearchParams();
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
   const dispatch = useAppDispatch();
+  const departmentCode = useAppSelector(
+    (state) => state.allCourse.departmentCode
+  );
 
   const searchCourse = async (searchValue: string, reset?: boolean) => {
     const path = "/" + location.split("/")[1];
@@ -35,6 +37,7 @@ export default function Navbar() {
         payloadCourse = {
           ...new CourseRequestDTO(),
           ...payloadCourse,
+          departmentCode,
           manage: path.includes(ROUTE_PATH.ADMIN_DASHBOARD),
         };
         payloadCourse.year = parseInt(params.get("year") ?? "");
