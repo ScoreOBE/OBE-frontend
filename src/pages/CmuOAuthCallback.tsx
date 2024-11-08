@@ -19,25 +19,30 @@ export default function CMUOAuthCallback() {
   useEffect(() => {
     dispatch(setShowSidebar(false));
     dispatch(setShowNavbar(false));
-    if (!code) {
+    if (!code && !user.id) {
       navigate(ROUTE_PATH.LOGIN);
       return;
-    } else if (user.id) {
-      goToDashboard(user.role);
     }
 
     const fetchData = async () => {
-      const res = await logIn(code);
+      const res = await logIn(code!);
       if (res) {
         localStorage.setItem("token", res.token);
         dispatch(setUser(res.user));
-        if (res.user.departmentCode.length) {
-          goToDashboard(res.user.role);
-        } else navigate(ROUTE_PATH.SELECTED_DEPARTMENT, { replace: true });
       }
     };
     fetchData();
-  }, [code, user]);
+  }, [code]);
+
+  useEffect(() => {
+    if (user.id) {
+      if (user.departmentCode.length) {
+        goToDashboard(user.role);
+      } else {
+        navigate(ROUTE_PATH.SELECTED_DEPARTMENT, { replace: true });
+      }
+    }
+  }, [user]);
 
   return (
     <div className="flex flex-col w-screen h-screen gap-10 -rounded font-extrabold justify-center items-center">
