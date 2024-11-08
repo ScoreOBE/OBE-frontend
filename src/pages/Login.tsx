@@ -1,7 +1,7 @@
 "use client";
 import cmulogoLogin from "@/assets/image/cmuLogoLoginWhite.png";
 import loginImage from "@/assets/image/loginPage.png";
-import { Button } from "@mantine/core";
+import { Button, Paper, Title } from "@mantine/core";
 import { Image } from "@mantine/core";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -32,31 +32,37 @@ export default function Login() {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const images = [
+  const data = [
     {
-      key: 0,
-      url: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
-      label: "Desert",
+      image:
+        "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
+
+      title: "Best forests to visit in North America",
+      category: "nature",
     },
     {
-      key: 1,
-      url: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
-      label: "Forest",
+      image:
+        "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
+      title: "Hawaii beaches review: better than you think",
+      category: "beach",
     },
     {
-      key: 2,
-      url: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png",
-      label: "Torii gate",
+      image:
+        "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png",
+      title: "Mountains at night: 12 best locations to enjoy the view",
+      category: "nature",
     },
     {
-      key: 3,
-      url: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png",
-      label: "Fuji mountain",
+      image:
+        "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png",
+      title: "Aurora in Norway: when to visit for best experience",
+      category: "nature",
     },
     {
-      key: 4,
-      url: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-5.png",
-      label: "Night lake",
+      image:
+        "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-5.png",
+      title: "Best places to visit this winter",
+      category: "tourism",
     },
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -77,19 +83,19 @@ export default function Login() {
     }
   }, [embla]);
 
-  const handleNext = () => {
-    setDirection("right");
-    setCurrentIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
-  };
+  // const handleNext = () => {
+  //   setDirection("right");
+  //   setCurrentIndex((prevIndex) =>
+  //     prevIndex === images.length - 1 ? 0 : prevIndex + 1
+  //   );
+  // };
 
-  const handlePrev = () => {
-    setDirection("left");
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
-  };
+  // const handlePrev = () => {
+  //   setDirection("left");
+  //   setCurrentIndex((prevIndex) =>
+  //     prevIndex === 0 ? images.length - 1 : prevIndex - 1
+  //   );
+  // };
 
   useEffect(() => {
     dispatch(setShowSidebar(false));
@@ -279,36 +285,108 @@ export default function Login() {
                     <Icon IconComponent={IconChevronRight} className="size-6" />
                   </Button>
                 </div>
+              </div> */}
+            {/* </div> */}
+          </div>
+        </div>
+        <div className="flex flex-col items-center pb-8">
+          <Carousel
+            slideSize="60%"
+            slideGap="xl"
+            height={450}
+            initialSlide={0}
+            align="center"
+            withIndicators
+            controlsOffset="xl"
+            dragFree
+            skipSnaps={true}
+            loop={true}
+            classNames={{
+              control: "size-10 absolute top-64 right-0 mr-24",
+              slide: "",
+            }}
+            previousControlProps={{
+              className: "mr-40",
+            }}
+            onSlideChange={(index: number) => setCurrentIndex(index)}
+          >
+            {data.map((img, index) => (
+              <Carousel.Slide key={index}>
+                <Image
+                  src={img.image}
+                  className={`h-full w-full object-cover rounded-xl`}
+                />
+
+                <div className="absolute inset-0 bg-black bg-opacity-40 mr-8 rounded-xl">
+                  <div className="top-0 flex flex-col justify-end p-6">
+                    <p className="text-white opacity-70 font-bold uppercase cursor-default">
+                      {img.category}
+                    </p>
+                    <Title
+                      order={3}
+                      className="text-white font-bold text-2xl cursor-default"
+                    >
+                      {img.title}
+                    </Title>
+                  </div>
+                </div>
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        </div>
+
+        {/* Admin View */}
+        <div className="bg-[#fafafa] sm:flex hidden h-full w-full flex-col gap-16 pb-40">
+          <div className="flex flex-col items-center ">
+            <p className=" drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start -rounded text-[#000000] text-[48px]">
+              <span className="font-[600]  text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                Admin View
+              </span>{" "}
+              <br />
+            </p>
+            <p className="mt-5 text-[19px] text-default font-[500] text-center mx-40">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+              <span className="mt-5 underline text-b1  text-[#7b7b7c] font-[500]">
+                Available in December or January
+              </span>
+            </p>
+          </div>
+          <div className=" flex items-center justify-center gap-36">
+            <div className="flex flex-col my-2">
+              <div className="pb-2 border-b-2 w-48 text-start">
+                <p className=" text-black font-[700]  text-[19px]  pt-4 ">
+                  TQF
+                </p>
               </div>
-            </div> */}
-            <div className="flex flex-col items-center mt-12 pb-24">
-              <Carousel
-                slideSize="60%"
-                slideGap="xl"
-                height={500}
-                getEmblaApi={setEmbla}
-                initialSlide={0}
-                align="center"
-                withIndicators
-                dragFree
-                draggable
-                classNames={{
-                  control: "absolute top-[220px] left-[1050px] ",
-                  controls: "absolute space-x-14",
-                }}
-              >
-                {images.map((img) => (
-                  <Carousel.Slide>
-                    <div>
-                      <Image
-                        src={img.url}
-                        className="h-full w-full object-cover rounded-xl"
-                      />
-                      <p>{img.label}</p>
-                    </div>
-                  </Carousel.Slide>
-                ))}
-              </Carousel>
+              <p className=" text-default font-[500] pt-2 text-b2 leading-[22px] text-start text-wrap w-48 ">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
+            </div>
+            <div className="flex flex-col my-2">
+              <div className="pb-2 border-b-2 w-48 text-start">
+                <p className=" text-black font-[700]  text-[19px]  pt-4 ">
+                  CLO
+                </p>
+              </div>
+              <p className=" text-default font-[500] pt-2 text-b2 leading-[22px] text-start text-wrap w-48">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
+            </div>
+            <div className="flex flex-col my-2">
+              <div className="pb-2 border-b-2 w-48 text-start">
+                <p className=" text-black font-[700]  text-[19px]  pt-4 ">
+                  PLO
+                </p>
+              </div>
+              <p className=" text-default font-[500] pt-2 text-b2 leading-[22px] text-start text-wrap w-48">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
             </div>
           </div>
         </div>
