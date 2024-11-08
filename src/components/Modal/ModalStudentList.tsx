@@ -114,7 +114,7 @@ export default function ModalStudentList({
               <Table.Tbody>{rows}</Table.Tbody>
             </Table>
           ) : (
-            <p className="text-center font-semibold text-default p-4">
+            <p className="text-start font-semibold text-secondary p-6 py-10">
               No data found for {data.courseNo}
               <br />
               <p className="mt-2 text-[#777777] font-medium text-b3" font->
