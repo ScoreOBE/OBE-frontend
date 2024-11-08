@@ -56,9 +56,9 @@ export default function StdDashboard() {
           )}
         </div>
       </div>
-      <div className=" flex flex-row px-[75px] flex-1 justify-between">
+      <div className=" flex flex-row px-[60px] flex-1 justify-between">
               <div className="h-full  justify-center flex flex-col">
-                <p className="text-secondary text-[22px] font-semibold">
+                <p className="text-secondary text-[21px] font-semibold">
                   {courseList.search.length
                     ? `No results for "${courseList.search}" `
                     : (<p> Hi there, {user.firstNameEN}<br/> Welcome to  <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">ScoreOBE + </span> We're glad to you here!</p>)}
@@ -72,7 +72,7 @@ export default function StdDashboard() {
                   )}
                 </p>
               </div>
-              <div className="h-full  w-[28vw] justify-center flex flex-col">
+              <div className="h-full  w-[25vw] justify-center flex flex-col">
                 <img src={maintenace} alt="notFound"></img>
               </div>
             </div>
