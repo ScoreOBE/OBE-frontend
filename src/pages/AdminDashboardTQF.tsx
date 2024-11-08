@@ -558,7 +558,7 @@ export default function AdminDashboardTQF() {
                       {courseList.search.length ? (
                         <>Check the spelling or try a new search.</>
                       ) : (
-                        <>It looks like you haven't added any courses yet.</>
+                        <>It looks like no courses have been added yet.</>
                       )}
                     </p>
                   </div>
