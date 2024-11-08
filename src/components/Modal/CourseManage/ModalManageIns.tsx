@@ -1,6 +1,6 @@
 import { Alert, Button, Checkbox, Menu, Modal } from "@mantine/core";
 import { useEffect, useState } from "react";
-
+import { ROLE } from "@/helpers/constants/enum";
 import store, { useAppDispatch, useAppSelector } from "@/store";
 import {
   getSectionNo,
@@ -56,6 +56,8 @@ export default function ModalManageIns({
   const [coInsList, setCoInsList] = useState<any[]>();
   const [editCoSec, setEditCoSec] = useState<any[]>([]);
   const [editCoInsList, setEditCoInsList] = useState<any[]>();
+  const user = useAppSelector((state) => state.user);
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     if (opened) {
@@ -383,17 +385,19 @@ export default function ModalManageIns({
             </div>
           </div>
         )}
-        {data?.sections?.find(
+        {(data?.sections?.find(
           (sec: any) =>
-            (sec.instructor as IModelUser).id == store.getState().user.id
-        ) && (
+            (sec.instructor as IModelUser).id === store.getState().user.id
+        ) ||
+          store.getState().user.role === ROLE.SUPREME_ADMIN ||
+          store.getState().user.role === ROLE.ADMIN) && (
           <Button
             className="!h-[36px] !w-full"
             onClick={onClickSave}
             disabled={isEqual(coInsList, editCoInsList)}
             loading={loading}
           >
-            {type == "course" ? "Save Changes" : "Save"}
+            {type === "course" ? "Save Changes" : "Save"}
           </Button>
         )}
       </div>
