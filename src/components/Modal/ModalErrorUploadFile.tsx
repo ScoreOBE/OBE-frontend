@@ -23,10 +23,10 @@ export default function ModalErrorUploadFile({
       centered
     >
       <div>
-        {errorStudentId.length && (
+        {!!errorStudentId.length && (
           <p>Student ID: {errorStudentId.join(", ")}</p>
         )}
-        {errorPoint?.length && <p>Point: {errorPoint.join(", ")}</p>}
+        {!!errorPoint?.length && <p>Point: {errorPoint.join(", ")}</p>}
       </div>
     </Modal>
   );
