@@ -15,6 +15,8 @@ import IconLock from "@/assets/icons/lockIcon.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconRefresh from "@/assets/icons/refresh.svg?react";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
+import IconBulb from "@/assets/icons/bulb.svg?react";
+import IconSparkle from "@/assets/icons/sparkle.svg?react";
 import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
 import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import IconShare2 from "@/assets/icons/share2.svg?react";
@@ -108,9 +110,9 @@ export default function Login() {
   return loading ? (
     <Loading />
   ) : (
-    <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex-col  flex">
-      <div className=" items-center text-center overflow-y-auto overflow-x-hidden flex flex-col w-full ">
-        <p className="drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 font-[600] sm:font-[500] item-start rounded text-[#000000] text-[36px] mb-5 sm:mb-0 sm:text-[50px] leading-[50px] sm:leading-[66px]">
+    <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex flex-col overflow-y-auto overflow-x-hidden">
+      <div className="flex flex-col w-full ">
+        <p className="text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 font-[600] sm:font-[500] item-start rounded text-[#000000] text-[36px] mb-5 sm:mb-0 sm:text-[50px] leading-[50px] sm:leading-[66px]">
           <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE +{" "}
           </span>
@@ -122,6 +124,7 @@ export default function Login() {
           Discover A Better Way to Do OBE Simplify Your Academic Journey
         </p>
 
+        {/* Smartphone size */}
         <div className="flex items-center mt-8 text-center w-full justify-center px-[12px] sm:hidden">
           <p className="text-center text-[16px] font-medium text-[#4F4D55]">
             <span className="font-bold">
@@ -132,6 +135,7 @@ export default function Login() {
             <br /> on your tablet or desktop
           </p>
         </div>
+
         <div className="items-center mt-8 text-center w-full justify-center px-[118px] hidden sm:flex">
           <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
             <Button className=" bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg !text-[14px] !h-[44px]">
@@ -289,7 +293,7 @@ export default function Login() {
             {/* </div> */}
           </div>
         </div>
-        <div className="flex flex-col items-center pb-8">
+        <div className="flex flex-col items-center pb-8 sm:flex hidden">
           <Carousel
             slideSize="60%"
             slideGap="xl"
@@ -336,7 +340,7 @@ export default function Login() {
         </div>
 
         {/* Admin View */}
-        <div className="bg-[#fafafa] sm:flex hidden h-full w-full flex-col gap-16 pb-40">
+        <div className="bg-[#fafafa] sm:flex hidden h-full w-full flex-col gap-16 ">
           <div className="flex flex-col items-center ">
             <p className=" drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start -rounded text-[#000000] text-[48px]">
               <span className="font-[600]  text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
@@ -387,6 +391,85 @@ export default function Login() {
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua.
               </p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-16 items-center bg-black h-fit text-white px-28 py-20">
+            <div className="flex flex-col gap-16 items-center">
+              <p className="font-[600] text-[48px] ">
+                Boost Student Success with{" "}
+                <span className="font-[600]  text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                  ScoreOBE+!
+                </span>
+              </p>
+
+              <div>
+                <Image
+                  src={
+                    "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png"
+                  }
+                  className={`h-[380px] w-[880px] object-cover rounded-xl `}
+                />
+              </div>
+
+              <div className="flex flex-col gap-16 justify-center w-full font-[600] text-[17px] px-10">
+                <div className="flex items-start justify-center gap-28">
+                  <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                    <Icon
+                      IconComponent={IconBulb}
+                      className="size-16 stroke-1"
+                    />
+                    <p>
+                      Effortless -{"  "}
+                      <span className="text-[#86868B]">
+                        Easily upload, publish, and manage course scores in just
+                        a few clicks, saving you time and effort.
+                      </span>
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                    <Icon
+                      IconComponent={IconBulb}
+                      className="size-16 stroke-1"
+                    />
+                    <p>
+                      Insightful -{"  "}
+                      <span className="text-[#86868B]">
+                        Access powerful, clear charts that provide deep insights
+                        into scores for each assignment.
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start justify-center gap-28">
+                  <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                    <Icon
+                      IconComponent={IconSparkle}
+                      className="size-16 stroke-1"
+                    />
+                    <p>
+                      Empowering -{" "}
+                      <span className="text-[#86868B]">
+                        Seamlessly align assessments with learning goals,
+                        ensuring accuracy and alignment with program objectives.
+                      </span>
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                    <Icon
+                      IconComponent={IconSparkle}
+                      className="size-16 stroke-1"
+                    />
+                    <p>
+                      Streamlined -{" "}
+                      <span className="text-[#86868B]">
+                        Quickly generate TQF reports for course evaluations,
+                        simplifying the process with minimal effort required.
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
