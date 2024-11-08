@@ -99,8 +99,10 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   }, []);
 
   useEffect(() => {
-    if (opened && !department.length) {
-      fetchDep();
+    if (opened) {
+      if (!department.length) {
+        fetchDep();
+      }
       setSelectDepartment({
         departmentEN: "All Courses",
         codeEN: "All Courses",
@@ -360,7 +362,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   setSelectDepartment(
                     department.find((dep) => dep.codeEN == event)!
                   );
-                  setPayload({ ...payload, searchDepartment: event });
+                  setPayload({ ...payload });
                 }}
               >
                 <Tabs.List

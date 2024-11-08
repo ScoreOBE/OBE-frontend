@@ -25,7 +25,11 @@ import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
-import { addLoadMoreAllCourse, setAllCourseList } from "@/store/allCourse";
+import {
+  addLoadMoreAllCourse,
+  setAllCourseList,
+  setSearchDepartmentCode,
+} from "@/store/allCourse";
 import {
   getUniqueInstructors,
   getUniqueTopicsWithTQF,
@@ -67,8 +71,10 @@ export default function AdminDashboardTQF() {
       if (acaYear && acaYear.id != term.id) {
         setTerm(acaYear);
       }
-      if (term && !department.length) {
-        fetchDep();
+      if (term) {
+        if (!department.length) {
+          fetchDep();
+        }
         setSelectDepartment({
           departmentEN: "All Courses",
           codeEN: "All Courses",
@@ -89,14 +95,16 @@ export default function AdminDashboardTQF() {
   }, [localStorage.getItem("search")]);
 
   const initialPayload = () => {
+    const dep = selectDepartment.codeEN?.includes("All")
+      ? department.map((dep) => dep.codeEN!)
+      : [selectDepartment.codeEN!];
+    dispatch(setSearchDepartmentCode(dep));
     return {
       ...new CourseRequestDTO(),
       manage: true,
       year: term.year!,
       semester: term.semester!,
-      departmentCode: selectDepartment.codeEN?.includes("All")
-        ? department.map((dep) => dep.codeEN!)
-        : [selectDepartment.codeEN!],
+      departmentCode: dep,
       search: courseList.search,
       hasMore: courseList.total >= payload?.limit,
     };
@@ -166,7 +174,7 @@ export default function AdminDashboardTQF() {
     return course.type == COURSE_TYPE.SEL_TOPIC.en ? (
       uniqueTopic.map((sec, indexSec) => {
         return (
-          <Table.Tr key={index}>
+          <Table.Tr key={`${course.courseNo}${sec.topic}${index}`}>
             {indexSec == 0 && (
               <Table.Td
                 className="border-r !border-[#cecece]"
@@ -182,9 +190,9 @@ export default function AdminDashboardTQF() {
               </div>
             </Table.Td>
             <Table.Td>
-              {insList.map((ins) => {
+              {insList.map((ins, index1) => {
                 return (
-                  <div key={ins} className="flex flex-col">
+                  <div key={`${sec.topic}${index1}`} className="flex flex-col">
                     <p>{ins}</p>
                   </div>
                 );
@@ -268,9 +276,9 @@ export default function AdminDashboardTQF() {
         </Table.Td>
         <Table.Td>{course.courseName}</Table.Td>
         <Table.Td>
-          {insList.map((ins) => {
+          {insList.map((ins, index1) => {
             return (
-              <div key={ins} className="flex flex-col">
+              <div key={`${index}-${index1}`} className="flex flex-col">
                 <p>{ins}</p>
               </div>
             );
@@ -483,12 +491,12 @@ export default function AdminDashboardTQF() {
         </div>
         <Tabs
           classNames={{
-            root: "overflow-hidden flex -mt-1 px-6 flex-col max-h-full",
+            root: "overflow-hidden flex -mt-1 px-6 flex-col h-full",
           }}
           value={selectDepartment.codeEN}
           onChange={(event) => {
             setSelectDepartment(department.find((dep) => dep.codeEN == event)!);
-            setPayload({ ...payload, searchDepartment: event });
+            setPayload({ ...payload });
           }}
         >
           <Tabs.List className="mb-2">
@@ -500,7 +508,7 @@ export default function AdminDashboardTQF() {
           </Tabs.List>
 
           <Tabs.Panel
-            className="flex flex-col overflow-auto gap-1"
+            className="flex flex-col h-full w-full overflow-auto gap-1"
             value={selectDepartment?.codeEN || "All"}
           >
             <div className="flex h-full w-full pt-2 pb-5 overflow-hidden">
