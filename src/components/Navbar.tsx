@@ -87,9 +87,9 @@ export default function Navbar() {
   return (
     <>
       <div
-        className={`min-h-14  bg-[#fafafa] border-b border-[#e0e0e0] text-secondary px-6  inline-flex flex-wrap justify-between items-center z-50 ${
+        className={`min-h-14 bg-[#fafafa] border-b border-[#e0e0e0] text-secondary px-6 inline-flex flex-wrap justify-between items-center z-50 ${
           [ROUTE_PATH.LOGIN].includes(location)
-            ? " border-none  min-h-20 items-center"
+            ? " border-none  min-h-14 items-center"
             : ""
         }`}
         style={
@@ -116,14 +116,14 @@ export default function Navbar() {
           />
         )}
         {[ROUTE_PATH.LOGIN].includes(location) && (
-          <div className="bg-[#fafafa] sm:px-12 px-2  overflow-hidden items-center !w-full   !h-full  justify-between  flex flex-1">
+          <div className="bg-[#fafafa] sm:px-12 px-2  overflow-hidden items-center !w-full  !h-full  justify-between  flex flex-1 ">
             <div className="flex gap-2 items-center">
               <img
                 src={scoreobe}
                 alt="cpeLogo"
-                className=" sm:h-[35px] h-[22px] "
+                className=" sm:h-[28px] h-[22px] "
               />
-              <span className="font-[600] sm:text-[20px] text-[14px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+              <span className="font-[600] sm:text-[18px] text-[14px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                 ScoreOBE +
               </span>{" "}
             </div>
@@ -132,7 +132,7 @@ export default function Navbar() {
               <img
                 src={cpeLogoRed}
                 alt="cpeLogo"
-                className=" sm:h-[44px] h-[32px] -mt-2 sm:mt-0"
+                className=" sm:h-[40px] h-[32px] -mt-2 sm:mt-0"
               />
             </div>
           </div>

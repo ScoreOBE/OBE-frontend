@@ -298,7 +298,7 @@ export default function ModalManageIns({
               <Icon IconComponent={IconUsers} /> Added Co-Instructor
             </div>
             <div className="flex flex-col max-h-[300px] h-fit w-full   px-2   overflow-y-auto ">
-              <div className="flex flex-col max-h-[400px] h-fit p-1 ">
+              <div className="flex flex-col max-h-[160px] h-fit p-1 ">
                 {editCoInsList.map((coIns, index) => (
                   <div
                     key={index}
