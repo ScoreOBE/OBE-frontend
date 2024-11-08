@@ -17,6 +17,7 @@ import ModalStudentList from "./ModalStudentList";
 import ModalTemplateGuide from "./ModalTemplateGuide";
 import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
 import ModalErrorUploadFile from "./ModalErrorUploadFile";
+import Template from "@/assets/Template.xlsx";
 
 type Props = {
   opened: boolean;
@@ -186,15 +187,26 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     >
                       Template guide
                     </Button>
-                    <Button
-                      variant="gradient"
-                      leftSection={
-                        <Icon IconComponent={IconDownload} className="size-4" />
-                      }
-                      className="size-4   bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]"
+                    <a
+                      href={Template}
+                      download="Template"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="h-fit w-fit"
                     >
-                      Download template
-                    </Button>
+                      <Button
+                        variant="gradient"
+                        leftSection={
+                          <Icon
+                            IconComponent={IconDownload}
+                            className="size-4"
+                          />
+                        }
+                        className="size-4 bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]"
+                      >
+                        Download template
+                      </Button>
+                    </a>
                   </div>
                 </div>
               </div>

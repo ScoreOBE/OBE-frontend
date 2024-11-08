@@ -44,16 +44,20 @@ export const onUploadFile = async (
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       if (worksheet.C1?.v == "SID" || worksheet[0]?.SID) {
         gradescopeFile(
+          course,
           files,
           workbook,
+          setResult,
           setOpenModalUploadError,
           setErrorStudentId,
           setErrorPoint!
         );
       } else {
         scoreOBETemplete(
+          course,
           files,
           workbook,
+          setResult,
           setOpenModalUploadError,
           setErrorStudentId,
           setErrorPoint!
@@ -136,22 +140,22 @@ const studentList = async (
       files = [];
       setErrorStudentId(errorStudentIdList);
       setOpenModalUploadError(true);
-    } else {
-      console.log(result);
-
-      setResult({
-        year: course.year,
-        semester: course.semester,
-        course: course.id,
-        sections: result,
-      });
+      return;
     }
+    setResult({
+      year: course.year,
+      semester: course.semester,
+      course: course.id,
+      sections: result,
+    });
   }
 };
 
 const scoreOBETemplete = (
+  course: Partial<IModelCourse>,
   files: FileWithPath[],
   workbook: XLSX.WorkBook,
+  setResult: React.Dispatch<React.SetStateAction<any>>,
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
   setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>,
   setErrorPoint: React.Dispatch<React.SetStateAction<string[]>>
@@ -160,22 +164,31 @@ const scoreOBETemplete = (
 
   for (const sheet of workbook.SheetNames) {
     const worksheet = workbook.Sheets[sheet];
+    if (
+      worksheet.E1?.v != "Question" ||
+      worksheet.E2?.v != "Full Score" ||
+      worksheet.E3?.v != "Description (Optional)"
+    ) {
+      files = [];
+      templateNotMatch();
+      return;
+    }
+    delete worksheet.E1;
+    delete worksheet.E2;
+    delete worksheet.E3;
+
     const resultsData: any[] = XLSX.utils.sheet_to_json(worksheet);
 
     const assignmentName = sheet;
     const fullScore = resultsData.shift();
     const description = resultsData.shift();
 
-    // console.log(fullScore);
-    // console.log(description);
-    console.log(resultsData);
-
     const errorStudentIdList: string[] = [];
     const errorPointList: string[] = [];
     resultsData.forEach((data, i) => {
       // Validate the studentId
       if (
-        data.studentId &&
+        data.studentId.length &&
         (!isNumeric(data.studentId) || data.studentId.toString().length !== 9)
       ) {
         const row = i + 4;
@@ -184,32 +197,76 @@ const scoreOBETemplete = (
       }
       // Validate the "point" field
       Object.keys(data)
-        .slice(4)
+        .filter(
+          (key) =>
+            !["section", "studentId", "firstName", "lastName"].includes(key)
+        )
         .map((key, j) => {
           if (data[key] && !isNumeric(data[key])) {
+            console.log(data[key]);
             const row = i + 4;
             const column = getColumnAlphabet(j + 5);
             errorPointList.push(`${column}${row}`);
           }
         });
+      const sectionNo = parseInt(data.section);
+      const existSec = result.find((sec) => sec.sectionNo == sectionNo);
+      const existAssignment = existSec?.assignments.find(
+        (assign: any) => assign.assignmentName == assignmentName
+      );
+      delete data.section;
+      const student = {
+        ...data,
+        firstName: data.firstName.replace(/ /g, ""),
+        lastName: data.lastName.replace(/ /g, ""),
+      };
+      if (!existSec) {
+        result.push({
+          sectionId: course.sections?.find((sec) => sec.sectionNo == sectionNo)
+            ?.id,
+          sectionNo,
+          assignments: [
+            {
+              assignmentName,
+              fullScore: fullScore,
+              description: description,
+              studentList: [student],
+            },
+          ],
+        });
+      } else if (!existAssignment) {
+        existSec.assignments.push({
+          assignmentName,
+          fullScore: fullScore,
+          description: description,
+          studentList: [student],
+        });
+      } else {
+        existAssignment.studentList.push(student);
+      }
     });
     if (errorStudentIdList.length || errorPointList.length) {
       files = [];
       setErrorStudentId(errorStudentIdList);
       setErrorPoint(errorPointList);
       setOpenModalUploadError(true);
+      return;
     }
-
-    result.push({
-      name: assignmentName,
-    });
   }
-  return result;
+
+  setResult({
+    year: course.year,
+    semester: course.semester,
+    course: course.id,
+    sections: result,
+  });
 };
 
 const gradescopeFile = (
+  course: Partial<IModelCourse>,
   files: FileWithPath[],
   workbook: XLSX.WorkBook,
+  setResult: React.Dispatch<React.SetStateAction<any>>,
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
   setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>,
   setErrorPoint: React.Dispatch<React.SetStateAction<string[]>>
@@ -218,7 +275,7 @@ const gradescopeFile = (
   for (const sheet of workbook.SheetNames) {
     const worksheet = workbook.Sheets[sheet];
     const resultsData: any[] = XLSX.utils.sheet_to_json(worksheet);
-    const assignmentName = sheet;
+    const assignmentName = files[0].name.replace(/(.csv|.xlsx)$/g, "");
 
     const errorStudentIdList: string[] = [];
     const errorPointList: string[] = [];
@@ -276,19 +333,18 @@ const gradescopeFile = (
       };
     });
 
-    console.log({
-      name: assignmentName,
-      assignments: data,
-      scores: scoreDataArray,
-    });
-
     result.push({
       name: assignmentName,
       assignments: data,
       scores: scoreDataArray,
     });
   }
-  return result;
+  setResult({
+    year: course.year,
+    semester: course.semester,
+    course: course.id,
+    sections: result,
+  });
 };
 
 export const onRejectFile = (files: FileRejection[]) => {
