@@ -643,7 +643,7 @@ export default function ModalAddSection({
                 <div className=" bg-bgTableHeader flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <Icon IconComponent={IconUsers} /> Added Co-Instructor
                 </div>
-                <div className="flex flex-col max-h-[173px] h-fit w-full   px-2   overflow-y-auto ">
+                <div className="flex flex-col max-h-[130px] h-fit w-full   px-2   overflow-y-auto ">
                   <div className="flex flex-col  h-fit p-1">
                     {coInsList.map((coIns, index) => (
                       <div
