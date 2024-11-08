@@ -293,7 +293,7 @@ export default function Login() {
             {/* </div> */}
           </div>
         </div>
-        <div className="flex flex-col items-center pb-8 sm:flex hidden">
+        <div className="flex-col items-center pb-8 sm:flex hidden">
           <Carousel
             slideSize="60%"
             slideGap="xl"
