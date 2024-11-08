@@ -16,6 +16,23 @@ export default function CMUOAuthCallback() {
   const code = queryParameters.get("code");
   const navigate = useNavigate();
 
+  const goToDashboard = () => {
+    switch (user.role) {
+      case ROLE.STUDENT:
+        navigate(ROUTE_PATH.STD_DASHBOARD, { replace: true });
+        return;
+      case ROLE.SUPREME_ADMIN:
+      case ROLE.ADMIN:
+        navigate(`${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`, {
+          replace: true,
+        });
+        return;
+      default:
+        navigate(ROUTE_PATH.INS_DASHBOARD, { replace: true });
+        return;
+    }
+  };
+
   useEffect(() => {
     dispatch(setShowSidebar(false));
     dispatch(setShowNavbar(false));
@@ -23,18 +40,7 @@ export default function CMUOAuthCallback() {
       navigate(ROUTE_PATH.LOGIN);
       return;
     } else if (user.id) {
-      switch (user.role) {
-        case ROLE.STUDENT:
-          navigate(ROUTE_PATH.STD_DASHBOARD);
-          return;
-        case ROLE.SUPREME_ADMIN:
-        case ROLE.ADMIN:
-          navigate(`${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`);
-          return;
-        default:
-          navigate(ROUTE_PATH.INS_DASHBOARD);
-          return;
-      }
+      goToDashboard();
     }
 
     const fetchData = async () => {
@@ -42,9 +48,9 @@ export default function CMUOAuthCallback() {
       if (res) {
         localStorage.setItem("token", res.token);
         dispatch(setUser(res.user));
-        if (res.user.departmentCode.length)
-          navigate(ROUTE_PATH.INS_DASHBOARD, { replace: true });
-        else navigate(ROUTE_PATH.SELECTED_DEPARTMENT, { replace: true });
+        if (res.user.departmentCode.length) {
+          goToDashboard();
+        } else navigate(ROUTE_PATH.SELECTED_DEPARTMENT, { replace: true });
       }
     };
     fetchData();
