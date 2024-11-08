@@ -257,7 +257,24 @@ export default function ModalManageIns({
               I understood
             </Button>
           </div>
-        ) : (
+        ) : (<div>
+            <Alert
+            radius="md"
+            icon={<Icon IconComponent={IconInfo2} />}
+            variant="light"
+            color="blue"
+            classNames={{
+              icon: "size-6",
+              body: " flex justify-center",
+            }}
+            className="mb-4"
+            title={
+              <p>
+                Co-instructors can only access and upload scores for your
+                selected sections and manage the course TQF documents.
+              </p>
+            }
+          ></Alert>
           <CompoManageIns
             opened={opened}
             type={type == "course" ? "manageCoSec" : "manageCo"}
@@ -266,7 +283,7 @@ export default function ModalManageIns({
             setUserList={
               setEditCoInsList as React.Dispatch<React.SetStateAction<any[]>>
             }
-          />
+          /></div>
         )}
         {!!editCoInsList?.length && (
           <div className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md">

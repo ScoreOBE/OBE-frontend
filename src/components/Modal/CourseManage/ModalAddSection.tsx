@@ -609,16 +609,21 @@ export default function ModalAddSection({
           description={`STEP ${isManage ? 4 : 3}`}
         >
           <Alert
-              radius="md"
-              icon={<Icon IconComponent={IconInfo2} />}
-              variant="light"
-              color="blue"
-              classNames={{
-                icon: "size-6",
-                body: " flex justify-center",
-              }}
-              title={<p>Co-instructors have access only to the scores for the section number you select and the Course TQF documents.</p>}
-            ></Alert>
+            radius="md"
+            icon={<Icon IconComponent={IconInfo2} />}
+            variant="light"
+            color="blue"
+            classNames={{
+              icon: "size-6",
+              body: " flex justify-center",
+            }}
+            title={
+              <p>
+                Co-instructors can only access and upload scores for your
+                selected sections and manage the course TQF documents.
+              </p>
+            }
+          ></Alert>
           <div className="flex flex-col mt-1 flex-1 ">
             <CompoManageIns
               opened={(active == 2 && !isManage) || (active == 3 && isManage)}

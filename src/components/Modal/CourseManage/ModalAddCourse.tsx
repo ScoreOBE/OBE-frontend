@@ -520,12 +520,11 @@ export default function ModalAddCourse({
             classNames={{
               icon: "size-6",
               body: " flex  justify-center",
-         
             }}
-            title={"Please fill only the section number for the section you own."}
-          >
-            
-          </Alert>
+            title={
+              "Please fill only the section number for the section you own."
+            }
+          ></Alert>
           <div className="w-full  mt-2 h-fit  bg-white mb-5 rounded-md">
             <div className="flex flex-col gap-3">
               <TextInput
@@ -668,7 +667,7 @@ export default function ModalAddCourse({
           description="STEP 4"
         >
           <div className="flex flex-col mt-3 flex-1">
-          <Alert
+            <Alert
               radius="md"
               icon={<Icon IconComponent={IconInfo2} />}
               variant="light"
@@ -678,7 +677,11 @@ export default function ModalAddCourse({
                 icon: "size-6",
                 body: " flex justify-center",
               }}
-              title={<p>Co-instructors have access only to the scores for the section number you select and the Course TQF documents.</p>}
+              title={
+                <p>
+                 Co-instructors can only access and upload scores for your selected sections and manage the course TQF documents.
+                </p>
+              }
             ></Alert>
             <CompoManageIns
               opened={active == 3}
