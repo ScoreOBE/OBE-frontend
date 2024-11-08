@@ -521,7 +521,9 @@ export default function AdminDashboardTQF() {
                   height={"100%"}
                   hasMore={payload?.hasMore}
                   className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
-                  style={{ height: "fit-content" }}
+                  style={{
+                    height: "fit-content",
+                  }}
                   loader={<Loading />}
                 >
                   <Table stickyHeader>

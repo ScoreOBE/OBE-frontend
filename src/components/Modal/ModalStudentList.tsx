@@ -82,36 +82,48 @@ export default function ModalStudentList({
   );
 
   const studentTable = () => {
+    const hasData = rows && rows.flat().length > 0; // Check if there's any data
+
     return (
       <>
-        <TextInput
-          leftSection={<TbSearch />}
-          placeholder="Section No, Student No, Name"
-          size="xs"
-          rightSectionPointerEvents="all"
-          className="mx-1"
-          onChange={(event: any) => setFilter(event.currentTarget.value)}
-        ></TextInput>
+        {hasData && (
+          <TextInput
+            leftSection={<TbSearch />}
+            placeholder="Section No, Student No, Name"
+            size="xs"
+            rightSectionPointerEvents="all"
+            className="mx-1"
+            onChange={(event: any) => setFilter(event.currentTarget.value)}
+          ></TextInput>
+        )}
         <div
-          className=" mx-1  max-h-[500px] h-fit  flex flex-col bg-white mb-1  mt-4 rounded-md overflow-y-auto"
+          className="mx-1 max-h-[500px] h-fit flex flex-col bg-white mb-1 mt-4 rounded-md overflow-y-auto"
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          {/* <Table.ScrollContainer className="!max-h-[400px] " minWidth={500}> */}
-          <Table stickyHeader striped>
-            <Table.Thead>
-              <Table.Tr className="bg-[#e5e7f6]">
-                {/* <Table.Th className=" w-[5%]">No.</Table.Th> */}
-                <Table.Th className=" w-[10%]">Section</Table.Th>
-                {/* <Table.Th className=" w-[10%]">SECLAB</Table.Th> */}
-                <Table.Th className=" w-[17%]">Student Id</Table.Th>
-                <Table.Th className=" w-[58%]">Name</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
-          </Table>
-          {/* </Table.ScrollContainer> */}
+          {hasData ? (
+            <Table stickyHeader striped>
+              <Table.Thead>
+                <Table.Tr className="bg-[#e5e7f6]">
+                  <Table.Th className="w-[10%]">Section</Table.Th>
+                  <Table.Th className="w-[17%]">Student Id</Table.Th>
+                  <Table.Th className="w-[58%]">Name</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>{rows}</Table.Tbody>
+            </Table>
+          ) : (
+            <p className="text-center font-semibold text-default p-4">
+              No data found for {data.courseNo}
+              <br />
+              <p className="mt-2 text-[#777777] font-medium text-b3" font->
+                {" "}
+                Please ensure you have uploaded the student list from your course
+                page <br/> by clicking the 'Upload Score' button.
+              </p>
+            </p>
+          )}
         </div>
       </>
     );
