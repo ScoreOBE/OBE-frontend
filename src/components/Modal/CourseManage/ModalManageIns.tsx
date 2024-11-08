@@ -56,7 +56,6 @@ export default function ModalManageIns({
   const [coInsList, setCoInsList] = useState<any[]>();
   const [editCoSec, setEditCoSec] = useState<any[]>([]);
   const [editCoInsList, setEditCoInsList] = useState<any[]>();
-  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     if (opened) {
@@ -231,7 +230,8 @@ export default function ModalManageIns({
           type == "courseManagement" && "mt-3"
         }`}
       >
-        {!data?.sections?.find(
+        {type != "courseManagement" &&
+        !data?.sections?.find(
           (sec: any) =>
             (sec.instructor as IModelUser).id == store.getState().user.id
         ) ? (
@@ -253,37 +253,42 @@ export default function ModalManageIns({
                 </p>
               }
             ></Alert>
-            <Button className="mt-1 min-w-fit !h-[36px] !text-[14px] !w-full">
+            <Button
+              className="mt-1 min-w-fit !h-[36px] !text-[14px] !w-full"
+              onClick={onClose}
+            >
               I understood
             </Button>
           </div>
-        ) : (<div>
+        ) : (
+          <div>
             <Alert
-            radius="md"
-            icon={<Icon IconComponent={IconInfo2} />}
-            variant="light"
-            color="blue"
-            classNames={{
-              icon: "size-6",
-              body: " flex justify-center",
-            }}
-            className="mb-4"
-            title={
-              <p>
-                Co-instructors can only access and upload scores for your
-                selected sections and manage the course TQF documents.
-              </p>
-            }
-          ></Alert>
-          <CompoManageIns
-            opened={opened}
-            type={type == "course" ? "manageCoSec" : "manageCo"}
-            action={addCoIns}
-            sections={editCoSec}
-            setUserList={
-              setEditCoInsList as React.Dispatch<React.SetStateAction<any[]>>
-            }
-          /></div>
+              radius="md"
+              icon={<Icon IconComponent={IconInfo2} />}
+              variant="light"
+              color="blue"
+              classNames={{
+                icon: "size-6",
+                body: " flex justify-center",
+              }}
+              className="mb-4"
+              title={
+                <p>
+                  Co-instructors can only access and upload scores for your
+                  selected sections and manage the course TQF documents.
+                </p>
+              }
+            ></Alert>
+            <CompoManageIns
+              opened={opened}
+              type={type == "course" ? "manageCoSec" : "manageCo"}
+              action={addCoIns}
+              sections={editCoSec}
+              setUserList={
+                setEditCoInsList as React.Dispatch<React.SetStateAction<any[]>>
+              }
+            />
+          </div>
         )}
         {!!editCoInsList?.length && (
           <div className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md">
