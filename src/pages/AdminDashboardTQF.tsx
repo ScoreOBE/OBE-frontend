@@ -4,11 +4,7 @@ import {
   Button,
   Checkbox,
   Group,
-  Menu,
   Modal,
-  Pill,
-  Radio,
-  RadioCard,
   Table,
   Tabs,
   Tooltip,
@@ -17,17 +13,14 @@ import Icon from "@/components/Icon";
 import IconAdjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
 import IconPDF from "@/assets/icons/pdf.svg?react";
 import IconEye from "@/assets/icons/eyePublish.svg?react";
-import IconPrinter from "@/assets/icons/printer.svg?react";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
-import Icontqf3 from "@/assets/icons/TQF3.svg?react";
-import Icontqf5 from "@/assets/icons/TQF5.svg?react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.jpg";
-import { COURSE_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
+import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -36,21 +29,28 @@ import { addLoadMoreAllCourse, setAllCourseList } from "@/store/allCourse";
 import {
   getUniqueInstructors,
   getUniqueTopicsWithTQF,
+  sortData,
 } from "@/helpers/functions/function";
 import { IModelCourse } from "@/models/ModelCourse";
-import { IModelSection } from "@/models/ModelSection";
+import { getDepartment } from "@/services/faculty/faculty.service";
+import { setDepartment } from "@/store/department";
+import { IModelDepartment } from "@/models/ModelFaculty";
 
 export default function AdminDashboardTQF() {
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading);
   const user = useAppSelector((state) => state.user);
+  const department = useAppSelector((state) => state.faculty.department);
   const academicYear = useAppSelector((state) => state.academicYear);
   const courseList = useAppSelector((state) => state.allCourse);
   const dispatch = useAppDispatch();
-  const [payload, setPayload] = useState<any>();
+  const [payload, setPayload] = useState<any>({ page: 1, limit: 20 });
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
   const [openModalPrintTQF, setOpenModalPrintTQF] = useState(false);
+  const [selectDepartment, setSelectDepartment] = useState<
+    Partial<IModelDepartment>
+  >({});
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -67,34 +67,79 @@ export default function AdminDashboardTQF() {
       if (acaYear && acaYear.id != term.id) {
         setTerm(acaYear);
       }
+      if (term && !department.length) {
+        fetchDep();
+        setSelectDepartment({
+          departmentEN: "All Courses",
+          codeEN: "All Courses",
+        });
+      }
     }
   }, [academicYear, term, params]);
 
   useEffect(() => {
+    if (department.length && selectDepartment.codeEN) fetchCourse();
+  }, [department, selectDepartment]);
+
+  useEffect(() => {
     if (term) {
-      setPayload({
-        ...new CourseRequestDTO(),
-        manage: true,
-        year: term.year,
-        semester: term.semester,
-        search: courseList.search,
-        hasMore: courseList.total >= payload?.limit,
-      });
+      setPayload(initialPayload());
       localStorage.removeItem("search");
     }
   }, [localStorage.getItem("search")]);
 
-  const fetchCourse = async (year: number, semester: number) => {
+  const initialPayload = () => {
+    return {
+      ...new CourseRequestDTO(),
+      manage: true,
+      year: term.year!,
+      semester: term.semester!,
+      departmentCode: selectDepartment.codeEN?.includes("All")
+        ? department.map((dep) => dep.codeEN!)
+        : [selectDepartment.codeEN!],
+      search: courseList.search,
+      hasMore: courseList.total >= payload?.limit,
+    };
+  };
+
+  const fetchDep = async () => {
+    const res = await getDepartment(user.facultyCode);
+    if (res) {
+      sortData(res.department, "courseCode");
+      let dep = res.department;
+      if (user.role !== ROLE.SUPREME_ADMIN) {
+        dep = res.department.filter((e) =>
+          user.departmentCode.includes(e.codeEN)
+        );
+      }
+      dispatch(
+        setDepartment([
+          { departmentEN: "All Courses", codeEN: "All Courses" },
+          {
+            departmentEN: res.facultyEN.replace("Faculty of ", "Genaral "),
+            courseCode: res.courseCode,
+            codeEN: res.codeEN,
+          },
+          ...dep,
+        ])
+      );
+    }
+  };
+
+  const fetchCourse = async () => {
     if (!user.termsOfService) return;
     dispatch(setLoading(true));
-    const payloadCourse = { ...new CourseRequestDTO(), year, semester };
-    const res = await getCourse(payloadCourse);
-    if (res) {
-      dispatch(setAllCourseList(res));
-      setPayload({
-        ...payloadCourse,
-        hasMore: res.totalCount >= payload.limit,
-      });
+    if (department.length) {
+      const payloadCourse = initialPayload();
+      setPayload(payloadCourse);
+      const res = await getCourse(payloadCourse);
+      if (res) {
+        dispatch(setAllCourseList(res));
+        setPayload({
+          ...payloadCourse,
+          hasMore: res.totalCount >= payload.limit,
+        });
+      }
     }
     dispatch(setLoading(false));
   };
@@ -399,7 +444,10 @@ export default function AdminDashboardTQF() {
               </p>
             ) : (
               <p className="text-[#575757] text-[14px]">
-                In CPE Department{" "}
+                In{" "}
+                {selectDepartment.codeEN?.includes("All")
+                  ? selectDepartment.codeEN
+                  : `${selectDepartment.codeEN} Department`}{" "}
                 {courseList.courses.length === 0 ? (
                   <span>Your course card is currently empty</span>
                 ) : (
@@ -437,21 +485,23 @@ export default function AdminDashboardTQF() {
           classNames={{
             root: "overflow-hidden flex -mt-1 px-6 flex-col max-h-full",
           }}
-          defaultValue="cpe"
-          // value={tab}
-          // onChange={setTab}
+          value={selectDepartment.codeEN}
+          onChange={(event) => {
+            setSelectDepartment(department.find((dep) => dep.codeEN == event)!);
+            setPayload({ ...payload, searchDepartment: event });
+          }}
         >
           <Tabs.List className="mb-2">
-            <Tabs.Tab value="engr">ENGR</Tabs.Tab>{" "}
-            <Tabs.Tab value="cpe">CPE</Tabs.Tab>{" "}
-            <Tabs.Tab value="isne">ISNE</Tabs.Tab>
+            {department.map((dep) => (
+              <Tabs.Tab key={dep.codeEN} value={dep.codeEN!}>
+                {dep.codeEN}
+              </Tabs.Tab>
+            ))}
           </Tabs.List>
-          <Tabs.Panel className="overflow-hidden flex" value="engr">
-            <div className="overflow-y-auto max-h-[502px] gap-3">engr</div>
-          </Tabs.Panel>
+
           <Tabs.Panel
             className="flex flex-col overflow-auto gap-1"
-            value="cpe"
+            value={selectDepartment?.codeEN || "All"}
           >
             <div className="flex h-full w-full pt-2 pb-5 overflow-hidden">
               {loading ? (
@@ -510,9 +560,6 @@ export default function AdminDashboardTQF() {
                 </div>
               )}
             </div>
-          </Tabs.Panel>
-          <Tabs.Panel className="overflow-hidden flex" value="isne">
-            <div className="overflow-y-auto max-h-[502px] gap-3">isne</div>
           </Tabs.Panel>
         </Tabs>
       </div>

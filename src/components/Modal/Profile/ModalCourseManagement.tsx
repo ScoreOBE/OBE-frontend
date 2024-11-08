@@ -40,6 +40,7 @@ import ModalAddSection from "@/components/Modal/CourseManage/ModalAddSection";
 import { SearchInput } from "@/components/SearchInput";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { IModelDepartment } from "@/models/ModelFaculty";
+import { setDepartment } from "@/store/department";
 
 type Props = {
   opened: boolean;
@@ -48,13 +49,13 @@ type Props = {
 
 export default function ModalCourseManagement({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
+  const department = useAppSelector((state) => state.faculty.department);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const courseManagement = useAppSelector((state) => state.courseManagement);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [maxTabs, setMaxTabs] = useState(0);
   const [startEndTab, setStartEndTab] = useState({ start: 0, end: maxTabs });
-  const [department, setDepartment] = useState<Partial<IModelDepartment>[]>([]);
   const [payload, setPayload] = useState<any>({ page: 1, limit: 10 });
   const [startEndPage, setStartEndPage] = useState({ start: 1, end: 10 });
   const [editCourse, setEditCourse] = useState<any>();
@@ -98,7 +99,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   }, []);
 
   useEffect(() => {
-    if (opened) {
+    if (opened && !department.length) {
       fetchDep();
       setSelectDepartment({
         departmentEN: "All Courses",
@@ -108,7 +109,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   }, [opened]);
 
   useEffect(() => {
-    fetchCourse();
+    if (opened && selectDepartment.codeEN) fetchCourse();
   }, [department, selectDepartment]);
 
   const fetchDep = async () => {
@@ -121,15 +122,17 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
           user.departmentCode.includes(e.codeEN)
         );
       }
-      setDepartment([
-        { departmentEN: "All Courses", codeEN: "All Courses" },
-        {
-          departmentEN: res.facultyEN.replace("Faculty of ", "Genaral "),
-          courseCode: res.courseCode,
-          codeEN: res.codeEN,
-        },
-        ...dep,
-      ]);
+      dispatch(
+        setDepartment([
+          { departmentEN: "All Courses", codeEN: "All Courses" },
+          {
+            departmentEN: res.facultyEN.replace("Faculty of ", "Genaral "),
+            courseCode: res.courseCode,
+            codeEN: res.codeEN,
+          },
+          ...dep,
+        ])
+      );
     }
   };
 
@@ -384,7 +387,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                     .slice(startEndTab.start, startEndTab.end)
                     .map((dep) => (
                       <Tabs.Tab key={dep.codeEN} value={dep.codeEN!}>
-                        {dep.codeEN}{dep.courseCode&&`-${dep.courseCode}`}
+                        {dep.codeEN}
+                        {dep.courseCode && `-${dep.courseCode}`}
                       </Tabs.Tab>
                     ))}
                   {department.length > maxTabs && (
