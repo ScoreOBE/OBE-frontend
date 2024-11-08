@@ -138,28 +138,28 @@ export default function Profile() {
           className="!z-50 rounded-md -translate-y-[3px] translate-x-[-18px] bg-white"
           style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
         >
-          {user.role !== ROLE.STUDENT && (
-            <>
-              <div className="flex items-center px-4 py-3 gap-3">
-                {/* <Icon className="pt-[5px]" IconComponent={ProfileIcon} /> */}
-                {getProfileIcon(user.role)}
-                <div className="flex flex-col text-b3">
-                  <p className=" font-semibold">{getUserName(user, 1)}</p>
-                  <p
-                    className="font-medium"
-                    style={{ color: getRoleColor(user.role) }}
-                  >
-                    {user.role}
-                  </p>
-                </div>
+          <>
+            <div className="flex items-center px-4 py-3 gap-3">
+              {/* <Icon className="pt-[5px]" IconComponent={ProfileIcon} /> */}
+              {getProfileIcon(user.role)}
+              <div className="flex flex-col text-b3">
+                <p className=" font-semibold">{getUserName(user, 1)}</p>
+                <p
+                  className="font-medium"
+                  style={{ color: getRoleColor(user.role) }}
+                >
+                  {user.role}
+                </p>
               </div>
-              <Menu.Divider />
-              {/* <Menu.Item className="text-default text-[14px] h-8 w-full ">
+            </div>
+            <Menu.Divider />
+            {/* <Menu.Item className="text-default text-[14px] h-8 w-full ">
                 <div className="flex items-center gap-2">
                   <IconList stroke={1.5} className="size-5" />
                   <span>Activity log</span>
                 </div>
               </Menu.Item> */}
+            {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
               <Menu.Item
                 onClick={() =>
                   navigate({
@@ -182,18 +182,50 @@ export default function Profile() {
                   </span>
                 </div>
               </Menu.Item>
+            )}
+            {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
               <Menu.Divider />
-            </>
+            )}
+            {user.role === ROLE.TA && (
+              <Menu.Item
+                onClick={() =>
+                  navigate({
+                    pathname: path.includes(ROUTE_PATH.INS_DASHBOARD)
+                      ? ROUTE_PATH.STD_DASHBOARD
+                      : `${ROUTE_PATH.INS_DASHBOARD}/${ROUTE_PATH.TQF}`,
+                    search: "?" + params.toString(),
+                  })
+                }
+              >
+                <div className="flex items-center gap-2">
+                  <Icon
+                    IconComponent={IconUserScreen}
+                    className=" stroke-[1.5px] size-4"
+                  />
+                  <span>
+                    {path.includes(ROUTE_PATH.INS_DASHBOARD)
+                      ? "Switch to Student view"
+                      : "Switch to TA view"}
+                  </span>
+                </div>
+              </Menu.Item>
+            )}
+            {user.role === ROLE.TA && <Menu.Divider />}
+          </>
+
+          {(user.role === ROLE.SUPREME_ADMIN ||
+            user.role === ROLE.ADMIN ||
+            user.role === ROLE.INSTRUCTOR) && (
+            <Menu.Item onClick={() => navigate(ROUTE_PATH.SELECTED_DEPARTMENT)}>
+              <div className="flex items-center gap-2">
+                <Icon
+                  IconComponent={IconStatusChange}
+                  className="size-4 stroke-[1.5px]"
+                />
+                <span>Department</span>
+              </div>
+            </Menu.Item>
           )}
-          <Menu.Item onClick={() => navigate(ROUTE_PATH.SELECTED_DEPARTMENT)}>
-            <div className="flex items-center gap-2">
-              <Icon
-                IconComponent={IconStatusChange}
-                className="size-4 stroke-[1.5px]"
-              />
-              <span>Department</span>
-            </div>
-          </Menu.Item>
 
           {/* SUB MENU MANAGEMENT */}
           {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
@@ -290,7 +322,9 @@ export default function Profile() {
             </Menu>
           )}
 
-          <Menu.Divider />
+          {(user.role === ROLE.SUPREME_ADMIN ||
+            user.role === ROLE.ADMIN ||
+            user.role === ROLE.INSTRUCTOR) && <Menu.Divider />}
           <a href="https://forms.gle/haNFpme6KBzyejG18" target="_blank">
             <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
               <div className="flex items-center gap-2">

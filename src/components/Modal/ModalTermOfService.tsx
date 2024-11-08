@@ -845,7 +845,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             {isEN === "EN" ? (
               "Log out"
             ) : (
-              <p className="font-semibold">ลงชื่อออก</p>
+              <p className="font-semibold">ออกจากระบบ</p>
             )}
           </Button>
 

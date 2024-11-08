@@ -11,12 +11,14 @@ import { SearchInput } from "./SearchInput";
 import { setAllCourseList } from "@/store/allCourse";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { Button } from "@mantine/core";
+import { ROLE } from "@/helpers/constants/enum";
 import Icon from "./Icon";
 import IconFeedback from "@/assets/icons/feedback.svg?react";
 
 export default function Navbar() {
   const { name } = useParams();
   const location = useLocation().pathname;
+  const user = useAppSelector((state) => state.user);
   const [params, setParams] = useSearchParams();
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
   const dispatch = useAppDispatch();
@@ -57,6 +59,8 @@ export default function Navbar() {
     const path = "/" + location.split("/")[1];
     switch (path) {
       case ROUTE_PATH.INS_DASHBOARD:
+        return "Your Courses";
+      case ROUTE_PATH.STD_DASHBOARD:
         return "Your Courses";
       case ROUTE_PATH.ADMIN_DASHBOARD:
         return `Course ${params.get("semester") ?? ""}/${
@@ -111,27 +115,37 @@ export default function Navbar() {
         {[ROUTE_PATH.LOGIN].includes(location) && (
           <div className="bg-[#fafafa] sm:px-12 px-2  overflow-hidden items-center !w-full   !h-full  justify-between  flex flex-1">
             <div className="flex gap-2 items-center">
-              <img src={scoreobe} alt="cpeLogo" className=" sm:h-[35px] h-[22px] " />
+              <img
+                src={scoreobe}
+                alt="cpeLogo"
+                className=" sm:h-[35px] h-[22px] "
+              />
               <span className="font-[600] sm:text-[20px] text-[14px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                 ScoreOBE +
               </span>{" "}
             </div>
             <div className="flex items-end gap-5  justify-end">
               {/* <img src={cmulogo} alt="CMULogo" className=" h-[18px]" /> */}
-              <img src={cpeLogoRed} alt="cpeLogo" className=" sm:h-[44px] h-[32px] -mt-2 sm:mt-0" />
+              <img
+                src={cpeLogoRed}
+                alt="cpeLogo"
+                className=" sm:h-[44px] h-[32px] -mt-2 sm:mt-0"
+              />
             </div>
           </div>
         )}
         {![ROUTE_PATH.LOGIN].includes(location) && (
           <div className="flex gap-2 items-center">
-            <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
-              <Button variant="light">
-                <div className="flex items-center gap-1">
-                  <Icon className="size-5 " IconComponent={IconFeedback} />{" "}
-                  Feedback
-                </div>
-              </Button>
-            </a>
+            {user.role !== ROLE.STUDENT && (
+              <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
+                <Button variant="light">
+                  <div className="flex items-center gap-1">
+                    <Icon className="size-5 " IconComponent={IconFeedback} />{" "}
+                    Feedback
+                  </div>
+                </Button>
+              </a>
+            )}
             <Profile />
           </div>
         )}
