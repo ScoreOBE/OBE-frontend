@@ -130,7 +130,7 @@ export default function SelectDepartment() {
                       key={key.codeEN}
                       className={`w-[540px] min-h-[55px] cursor-pointer text-[16px] font-medium rounded-[10px] pl-4 py-4 scroll-auto items-center flex hover:bg-[rgba(182,187,221,0.56)] ${
                         isChecked
-                          ? "bg-[rgba(136,145,205,0.56)]"
+                          ? "bg-[rgba(49,72,113,0.75)]"
                           : "bg-[rgba(181,181,181,0.40)]"
                       } ${disabled ? "text-gray-300" : ""}`}
                       onClick={() => {
