@@ -26,6 +26,7 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { setLoading } from "@/store/loading";
 import { useEffect } from "react";
 import { setAllCourseList } from "@/store/allCourse";
+import { goToDashboard } from "@/helpers/functions/function";
 
 export default function Sidebar() {
   const user = useAppSelector((state) => state.user);
@@ -95,7 +96,7 @@ export default function Sidebar() {
     if (resCourse) {
       dispatch(setCourseList(resCourse));
     } else {
-      navigate(ROUTE_PATH.INS_DASHBOARD);
+      goToDashboard(user.role);
     }
     dispatch(setLoading(false));
   };
@@ -120,13 +121,22 @@ export default function Sidebar() {
       className="w-[255px] border-r-[1px] heig flex p-5 sidebar-linear-gradient"
     >
       <div className="flex w-full flex-col gap-11">
-        <div onClick={() =>
-              navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`)
-            } className="flex cursor-pointer items-center gap-2">
-          <img src={scoreobe}   alt="scoreOBElogo" className=" h-[30px] cursor-pointer w-[30px] " />
-          <p className="text-white text-[20px] font-semibold">ScoreOBE <span className=" text-[#FFCD1B]"> +</span></p>
-        
-        </div>  {/* <img
+        <div
+          onClick={() =>
+            navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`)
+          }
+          className="flex cursor-pointer items-center gap-2"
+        >
+          <img
+            src={scoreobe}
+            alt="scoreOBElogo"
+            className=" h-[30px] cursor-pointer w-[30px] "
+          />
+          <p className="text-white text-[20px] font-semibold">
+            ScoreOBE <span className=" text-[#FFCD1B]"> +</span>
+          </p>
+        </div>{" "}
+        {/* <img
             src={cmulogo}
             alt="CMULogo"
             className="h-fit w-[155px] cursor-pointer"

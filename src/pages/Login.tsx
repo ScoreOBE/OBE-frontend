@@ -24,6 +24,8 @@ import Loading from "@/components/Loading";
 import gradescope from "@/assets/image/gradescope.png";
 import "@mantine/carousel/styles.css";
 import { Carousel, Embla } from "@mantine/carousel";
+import { ROLE } from "@/helpers/constants/enum";
+import { goToDashboard } from "@/helpers/functions/function";
 
 export default function Login() {
   const loading = useAppSelector((state) => state.loading);
@@ -93,7 +95,7 @@ export default function Login() {
     dispatch(setShowSidebar(false));
     dispatch(setShowNavbar(true));
     if (!isEmpty(user)) {
-      navigate(ROUTE_PATH.INS_DASHBOARD);
+      goToDashboard(user.role);
     }
   }, [user]);
 

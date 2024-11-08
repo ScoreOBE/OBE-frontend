@@ -4,6 +4,25 @@ import { IModelTQF5 } from "@/models/ModelTQF5";
 import { IModelUser } from "@/models/ModelUser";
 import { isEmpty } from "lodash";
 import moment from "moment";
+import { ROLE } from "../constants/enum";
+import { ROUTE_PATH } from "../constants/route";
+
+export const goToDashboard = (role: ROLE) => {
+  switch (role) {
+    case ROLE.STUDENT:
+      window.location.replace(ROUTE_PATH.STD_DASHBOARD);
+      return;
+    case ROLE.SUPREME_ADMIN:
+    case ROLE.ADMIN:
+      window.location.replace(
+        `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
+      );
+      return;
+    default:
+      window.location.replace(ROUTE_PATH.INS_DASHBOARD);
+      return;
+  }
+};
 
 export const getSectionNo = (sectionNo: number | string | undefined) => {
   if (!sectionNo) return "";

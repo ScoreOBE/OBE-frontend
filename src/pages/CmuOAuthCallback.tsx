@@ -7,7 +7,7 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
-import { ROLE } from "@/helpers/constants/enum";
+import { goToDashboard } from "@/helpers/functions/function";
 
 export default function CMUOAuthCallback() {
   const user = useAppSelector((state) => state.user);
@@ -16,23 +16,6 @@ export default function CMUOAuthCallback() {
   const code = queryParameters.get("code");
   const navigate = useNavigate();
 
-  const goToDashboard = () => {
-    switch (user.role) {
-      case ROLE.STUDENT:
-        navigate(ROUTE_PATH.STD_DASHBOARD, { replace: true });
-        return;
-      case ROLE.SUPREME_ADMIN:
-      case ROLE.ADMIN:
-        navigate(`${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`, {
-          replace: true,
-        });
-        return;
-      default:
-        navigate(ROUTE_PATH.INS_DASHBOARD, { replace: true });
-        return;
-    }
-  };
-
   useEffect(() => {
     dispatch(setShowSidebar(false));
     dispatch(setShowNavbar(false));
@@ -40,7 +23,7 @@ export default function CMUOAuthCallback() {
       navigate(ROUTE_PATH.LOGIN);
       return;
     } else if (user.id) {
-      goToDashboard();
+      goToDashboard(user.role);
     }
 
     const fetchData = async () => {
@@ -49,7 +32,7 @@ export default function CMUOAuthCallback() {
         localStorage.setItem("token", res.token);
         dispatch(setUser(res.user));
         if (res.user.departmentCode.length) {
-          goToDashboard();
+          goToDashboard(res.user.role);
         } else navigate(ROUTE_PATH.SELECTED_DEPARTMENT, { replace: true });
       }
     };

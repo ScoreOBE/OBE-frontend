@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import scoreobe from "@/assets/image/scoreOBElogowhite.png";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Button, Checkbox } from "@mantine/core";
-import { getUserName, sortData } from "@/helpers/functions/function";
+import {
+  getUserName,
+  goToDashboard,
+  sortData,
+} from "@/helpers/functions/function";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { updateUser } from "@/services/user/user.service";
@@ -55,7 +59,7 @@ export default function SelectDepartment() {
     const res = await updateUser({ departmentCode: checkedItems });
     if (res) {
       dispatch(setUser(res));
-      navigate(ROUTE_PATH.INS_DASHBOARD);
+      goToDashboard(user.role);
     }
   };
 
@@ -71,7 +75,9 @@ export default function SelectDepartment() {
           </Button>
         )}
         <img src={scoreobe} alt="CMULogo" className="h-[35px] " />
-        <p className="text-white text-[20px] font-semibold">ScoreOBE <span className=" text-[#FFCD1B]"> +</span></p>
+        <p className="text-white text-[20px] font-semibold">
+          ScoreOBE <span className=" text-[#FFCD1B]"> +</span>
+        </p>
       </div>{" "}
       <div className="bg-[rgba(78,78,80,0.30)] h-screen w-screen flex justify-between px-36 items-center font-sf-pro">
         <div className="text-white">
