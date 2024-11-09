@@ -125,14 +125,14 @@ export default function Login() {
         </p>
 
         {/* Smartphone size */}
-        <div className="flex items-center  mt-8 text-center w-full justify-center px-[12px] mb-8  sm:hidden">
+        <div className="flex items-center  mt-8 text-center w-full justify-center px-[40px] mb-8  sm:hidden">
           <p className="text-center  font-medium flex flex-col  text-[#4F4D55]">
             <span className="font-bold text-b1 text-secondary ">
               ScoreOBE + is not available <br/> on your current window size.
             </span>
             <br />
             <span className="text-b2">
-            To log in, please use ScoreOBE + on a tablet in landscape mode <br/> or a desktop for the best experience.
+            To log in, please use ScoreOBE + on a tablet in landscape mode <br/>  or a desktop for the best experience.
             </span>
           </p>
         </div>
