@@ -110,9 +110,9 @@ export default function Login() {
   return loading ? (
     <Loading />
   ) : (
-    <div className=" bg-[#fafafa]  h-screen w-screen  items-center flex flex-col overflow-y-auto overflow-x-hidden">
-      <div className="flex flex-col w-full ">
-        <p className="text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 font-[600] sm:font-[500] item-start rounded text-[#000000] text-[36px] mb-5 sm:mb-0 sm:text-[50px] leading-[50px] sm:leading-[66px]">
+    <div className=" bg-[#fafafa]  h-full w-screen items-center flex flex-col overflow-y-auto overflow-x-hidden">
+      <div className="flex    flex-col w-full ">
+        <p className="text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 font-[600] sm:font-[500] item-start rounded text-[#000000] text-[30px] mb-5 sm:mb-0 sm:text-[50px] leading-[48px] sm:leading-[66px]">
           <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE +{" "}
           </span>
@@ -125,14 +125,15 @@ export default function Login() {
         </p>
 
         {/* Smartphone size */}
-        <div className="flex items-center mt-8 text-center w-full justify-center px-[12px] sm:hidden">
-          <p className="text-center text-[16px] font-medium text-[#4F4D55]">
-            <span className="font-bold">
-              ScoreOBE+ unavailable on your screen device
+        <div className="flex items-center  mt-8 text-center w-full justify-center px-[40px] mb-8  sm:hidden">
+          <p className="text-center  font-medium flex flex-col  text-[#4F4D55]">
+            <span className="font-bold text-b1 text-secondary ">
+              ScoreOBE + is not available <br/> on your current window size.
             </span>
             <br />
-            To login, go to <span className="font-bold">ScoreOBE+</span>
-            <br /> on your tablet or desktop
+            <span className="text-b2">
+            To log in, please use ScoreOBE + on a tablet in landscape mode <br/>  or a desktop for the best experience.
+            </span>
           </p>
         </div>
 
