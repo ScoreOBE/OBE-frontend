@@ -237,7 +237,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 ${
                   path.includes(ROUTE_PATH.TQF3)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#f0f0f0]"
                 }`}
                 >
                   TQF 3
