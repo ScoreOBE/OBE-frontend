@@ -133,8 +133,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         ) {
           changePart.push(part);
         }
-      }
-
+      }      
       if (changePart.length && tqf3.id) {
         setOpenAlertPopup(true);
       } else {
