@@ -247,37 +247,51 @@ export default function ModalManageIns({
         }`}
       >
         <div
-          className={`flex flex-col px-4 pb-1 gap-5 overflow-y-auto`}
+          className={`flex flex-col px-2 pb-1 gap-3 overflow-y-auto`}
           style={{
             maxHeight: contentHeight ? `${contentHeight}px` : "auto",
           }}
         >
-          {type != "courseManagement" && (
-            <div>
-              <Alert
-                radius="md"
-                icon={<Icon IconComponent={IconInfo2} />}
-                variant="light"
-                color="red"
-                classNames={{
-                  icon: "size-6",
-                  body: "flex justify-center",
-                }}
-                title={<p>co-instructor ที่เพิ่มในนี้จะไม่มีการ recurrence</p>}
-              ></Alert>
-            </div>
-          )}
+          {type == "courseManagement" ||
+            (data?.sections?.find(
+              (sec: any) =>
+                (sec.instructor as IModelUser).id == store.getState().user.id
+            ) && (
+              <div>
+                <Alert
+                  radius="md"
+                  icon={
+                    <Icon IconComponent={IconUserCicle} className="stroke-2" />
+                  }
+                  variant="light"
+                  color="orange"
+                  classNames={{
+                    icon: "size-6",
+                    body: "flex justify-center",
+                  }}
+                  title={
+                    <p>
+                      Co-instructors added through this modal will only have
+                      access to the course for the current semester. They will
+                      not automatically gain access to future semesters or years
+                      if the course is repeated.
+                    </p>
+                  }
+                ></Alert>
+              </div>
+            ))}
           {type != "courseManagement" &&
           !data?.sections?.find(
             (sec: any) =>
               (sec.instructor as IModelUser).id == store.getState().user.id
           ) ? (
-            <div>
+            <div className="h-full">
               <Alert
                 radius="md"
                 icon={<Icon IconComponent={IconInfo2} />}
                 variant="light"
                 color="blue"
+                className="mb-2"
                 classNames={{
                   icon: "size-6",
                   body: " flex justify-center",
@@ -428,14 +442,14 @@ export default function ModalManageIns({
             </div>
           )}
         </div>
-        <div className="px-4 pt-4">
+        <div className=" ">
           {(type == "courseManagement" ||
             data?.sections?.find(
               (sec: any) =>
                 (sec.instructor as IModelUser).id === store.getState().user.id
             )) && (
             <Button
-              className="!h-[36px] !w-full"
+              className="!h-[36px] mt-4 !w-full"
               onClick={onClickSave}
               disabled={isEqual(coInsList, editCoInsList)}
               loading={loading}
@@ -454,7 +468,7 @@ export default function ModalManageIns({
       onClose={onClose}
       title={
         type == "course" ? (
-          "Management Co-Instructor"
+          "Co-Instructor Management"
         ) : (
           <div className="flex gap-2 items-center">
             {changeMainIns && (
@@ -473,12 +487,12 @@ export default function ModalManageIns({
           </div>
         )
       }
-      size="45vw"
+      size="50vw"
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
         content:
-          "flex flex-col max-h-full justify-start bg-[#F6F7FA] text-[14px] item-center overflow-hidden",
+          "flex flex-col max-h-fit justify-start bg-[#F6F7FA] text-[14px] item-center overflow-hidden",
         body: "!px-0 !pb-0",
       }}
     >

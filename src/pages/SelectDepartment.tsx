@@ -79,7 +79,7 @@ export default function SelectDepartment() {
           ScoreOBE <span className=" text-[#FFCD1B]"> +</span>
         </p>
       </div>{" "}
-      <div className="bg-[rgba(78,78,80,0.30)] h-screen w-screen flex justify-between px-36 items-center font-sf-pro">
+      <div className="bg-[rgba(78,78,80,0.30)] h-screen w-screen flex justify-between  px-24 items-center font-sf-pro">
         <div className="text-white">
           <motion.div
             initial={{
@@ -113,10 +113,10 @@ export default function SelectDepartment() {
               className="bg-[rgba(78,78,80,0.30)] rounded-[25px] mb-5  flex-col  p-6 h-[640px] scroll-smooth  font-sf-pro"
               style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
             >
-              <div className="text-white font-medium text-[20px] ">
+              <div className="text-white font-semibold text-[20px] ">
                 Select department
               </div>
-              <div className="text-[#FFB876] font-normal mb-6">
+              <div className="text-[#FFB876] font-medium mb-6">
                 Select up to 3 departments
               </div>
               <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[515px]">
