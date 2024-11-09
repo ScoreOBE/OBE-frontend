@@ -60,6 +60,7 @@ export default function ModalManageIns({
 
   useEffect(() => {
     if (opened) {
+      setContentHeight(null);
       setCoInsList(undefined);
       setEditCoInsList(undefined);
       setEditSec(undefined);
@@ -235,7 +236,7 @@ export default function ModalManageIns({
           : contentRef.current.offsetHeight;
       setContentHeight(maxHeight);
     }
-  }, [contentRef, editCoInsList]);
+  }, [contentRef, opened, type, data, editCoInsList]);
 
   const ManageCoInstructor = () => {
     return (
@@ -528,7 +529,7 @@ export default function ModalManageIns({
                   <div className="gap-3 flex items-center">
                     <Icon
                       IconComponent={IconUserCicle}
-                      className=" size-8 -translate-x-1  "
+                      className="size-8 -translate-x-1"
                     />
                     <div className="flex flex-col">
                       <p className="font-semibold text-[14px] text-tertiary">
