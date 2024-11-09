@@ -385,12 +385,11 @@ export default function ModalManageIns({
             </div>
           </div>
         )}
-        {(data?.sections?.find(
-          (sec: any) =>
-            (sec.instructor as IModelUser).id === store.getState().user.id
-        ) ||
-          store.getState().user.role === ROLE.SUPREME_ADMIN ||
-          store.getState().user.role === ROLE.ADMIN) && (
+        {(type == "courseManagement" ||
+          data?.sections?.find(
+            (sec: any) =>
+              (sec.instructor as IModelUser).id === store.getState().user.id
+          )) && (
           <Button
             className="!h-[36px] !w-full"
             onClick={onClickSave}
