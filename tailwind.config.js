@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 
 export default {
-    content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-  	extend: {
-  		colors: {
+    extend: {
+      colors: {
         default: "#333333",
         primary: "#164bad",
         secondary: "#1f69f3",
@@ -19,8 +19,11 @@ export default {
         hover: "#efefef",
         error: "#fa5252",
         disable: "#f1f3f5",
-  		},
-  		fontSize: {
+      },
+      screens: {
+        sm: "1024px",
+      },
+      fontSize: {
         h1: "20px",
         h2: "18px",
         b1: "16px",
@@ -32,11 +35,12 @@ export default {
       //   laptop: "1024px",
       //   desktop: "1280px",
       // },
-  	},
-  	fontFamily: {
-  		notoThai: ["NotoSansThai"],
+    },
+    fontFamily: {
+      notoThai: ["NotoSansThai"],
       manrope: ["Manrope"],
     },
+    
   },
   plugins: [],
 };
