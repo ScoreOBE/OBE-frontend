@@ -72,9 +72,6 @@ export default function AdminDashboardTQF() {
         setTerm(acaYear);
       }
       if (term) {
-        if (!department.length) {
-          fetchDep();
-        }
         setSelectDepartment({
           departmentEN: "All Courses",
           codeEN: "All Courses",
@@ -84,7 +81,13 @@ export default function AdminDashboardTQF() {
   }, [academicYear, term, params]);
 
   useEffect(() => {
-    if (department.length && selectDepartment.codeEN) fetchCourse();
+    if (
+      term.id &&
+      !courseList.departmentCode.length &&
+      department.length &&
+      selectDepartment.codeEN
+    )
+      fetchCourse();
   }, [department, selectDepartment]);
 
   useEffect(() => {
@@ -108,30 +111,6 @@ export default function AdminDashboardTQF() {
       search: courseList.search,
       hasMore: courseList.total >= payload?.limit,
     };
-  };
-
-  const fetchDep = async () => {
-    const res = await getDepartment(user.facultyCode);
-    if (res) {
-      sortData(res.department, "courseCode");
-      let dep = res.department;
-      if (user.role !== ROLE.SUPREME_ADMIN) {
-        dep = res.department.filter((e) =>
-          user.departmentCode.includes(e.codeEN)
-        );
-      }
-      dispatch(
-        setDepartment([
-          { departmentEN: "All Courses", codeEN: "All Courses" },
-          {
-            departmentEN: res.facultyEN.replace("Faculty of ", "Genaral "),
-            courseCode: res.courseCode,
-            codeEN: res.codeEN,
-          },
-          ...dep,
-        ])
-      );
-    }
   };
 
   const fetchCourse = async () => {

@@ -30,7 +30,16 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      if (user.termsOfService && !isEmpty(academicYear)) return;
+      if (
+        user.termsOfService &&
+        (!isEmpty(academicYear) ||
+          [
+            ROUTE_PATH.INS_DASHBOARD,
+            ROUTE_PATH.ADMIN_DASHBOARD,
+            ROUTE_PATH.STD_DASHBOARD,
+          ].some((e) => path.includes(e)))
+      )
+        return;
       checkToken(token);
       if (
         user.departmentCode &&
@@ -70,11 +79,7 @@ function App() {
       }
     } else if (!user.termsOfService) {
       setOpenModalTermsOfService(true);
-    } else if (
-      user.termsOfService &&
-      !academicYear.length &&
-      path !== ROUTE_PATH.INS_DASHBOARD
-    ) {
+    } else if (user.termsOfService && !academicYear.length) {
       const payload = new AcademicYearRequestDTO();
       const rsAcademicYear = await getAcademicYear(payload);
       if (rsAcademicYear) {
