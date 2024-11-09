@@ -300,7 +300,7 @@ export default function Profile() {
                   </>
                 )}
                 <Menu.Divider />
-                <Menu.Item
+                {/* <Menu.Item
                   className="text-[#3e3e3e] h-8 w-w-full"
                   onMouseDown={() => setOpenModalManageTQF(true)}
                 >
@@ -308,7 +308,7 @@ export default function Profile() {
                     <Icon IconComponent={IconTQF} className="size-4 " />
                     <span>TQF</span>
                   </div>
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item
                   className="text-[#3e3e3e] h-8 w-w-full "
                   onMouseDown={() => setOpenModalPLOManagement(true)}

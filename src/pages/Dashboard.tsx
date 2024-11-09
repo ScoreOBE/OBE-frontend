@@ -397,7 +397,7 @@ export default function Dashboard() {
               height={"100%"}
               loader={<Loading />}
               hasMore={payload?.hasMore}
-              className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 pb-5 gap-4 px-6 p-3"
+              className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-4  pb-5 gap-4 px-6 p-3"
               style={{ height: "fit-content", maxHeight: "100%" }}
             >
               {courseList.courses.map((item) => {
