@@ -144,7 +144,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
       departmentCode: selectDepartment.codeEN?.includes("All")
         ? department.map((dep) => dep.codeEN!)
         : [selectDepartment.codeEN!],
-      search: "",
+      search: courseManagement.search,
     };
   };
 
@@ -422,8 +422,18 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   {selectDepartment.departmentEN}
                 </p>
                 <p className="text-tertiary text-[14px] font-medium">
-                  {courseManagement.total} Course
-                  {courseManagement.total > 1 ? "s " : " "}
+                  {courseManagement.search.length ? (
+                    <>
+                      {courseManagement.total} result
+                      {courseManagement.total > 1 ? "s " : " "} found
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      {courseManagement.total} Course
+                      {courseManagement.total > 1 ? "s" : ""}
+                    </>
+                  )}
                 </p>
               </div>
               <div className="text-b3 gap-3 font-medium flex flex-row justify-end items-center">
@@ -477,11 +487,24 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
             ) : courseManagement.courseManagements.length === 0 ? (
               <div className="text-center h-full gap-1 justify-center items-center flex flex-col ">
                 <p className=" text-secondary text-[18px] font-semibold">
-                  Oops, No Courses here!
+                  {courseManagement.search.length ? (
+                    <>
+                      No results for {courseManagement.search} in{" "}
+                      {selectDepartment.departmentEN}
+                    </>
+                  ) : (
+                    <>Oops, No Courses here!</>
+                  )}
                 </p>
                 <p>
-                  Currently, No {selectDepartment.departmentEN} courses are
-                  added.
+                  {courseManagement.search.length ? (
+                    <>Check the spelling or try a new search.</>
+                  ) : (
+                    <>
+                      Currently, No {selectDepartment.departmentEN} courses are
+                      added.
+                    </>
+                  )}
                 </p>
               </div>
             ) : (

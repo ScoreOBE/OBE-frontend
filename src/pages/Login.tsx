@@ -3,7 +3,6 @@ import cmulogoLogin from "@/assets/image/cmuLogoLoginWhite.png";
 import loginImage from "@/assets/image/loginPage.png";
 import { Button, Paper, Title } from "@mantine/core";
 import { Image } from "@mantine/core";
-import { Card, CardContent } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

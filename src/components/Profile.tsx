@@ -28,6 +28,7 @@ import { getUserName } from "@/helpers/functions/function";
 import ModalCourseManagement from "./Modal/Profile/ModalCourseManagement";
 import ModalPLOManagement from "./Modal/Profile/ModalPLOManagement";
 import { logOut } from "@/services/user/user.service";
+import { resetSeachCourseManagement } from "@/store/courseManagement";
 
 export default function Profile() {
   const path = useLocation().pathname;
@@ -41,6 +42,7 @@ export default function Profile() {
     useState(false);
   const [openModalPLOManagement, setOpenModalPLOManagement] = useState(false);
   const [openModalManageTQF, setOpenModalManageTQF] = useState(false);
+  const dispatch = useAppDispatch()
 
   const getRoleColor = (role: ROLE) => {
     switch (role) {
@@ -104,7 +106,7 @@ export default function Profile() {
       />
       <ModalCourseManagement
         opened={openModalCourseManagement}
-        onClose={() => setOpenModalCourseManagement(false)}
+        onClose={() => {setOpenModalCourseManagement(false); dispatch(resetSeachCourseManagement())}}
       />
       <ModalPLOManagement
         opened={openModalPLOManagement}

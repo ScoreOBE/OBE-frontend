@@ -359,7 +359,7 @@ export default function Section() {
             </div>
           </div>
           <div className="flex h-full w-full rounded-[5px] overflow-hidden">
-            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pb-5 px-6 p-3">
+            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-1 sm:grid-cols-4 gap-4 pb-5 px-6 p-3">
               {course?.sections.map((sec, index) => {
                 return (
                   <div
