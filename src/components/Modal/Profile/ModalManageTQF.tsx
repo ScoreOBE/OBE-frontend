@@ -21,6 +21,7 @@ import { updateProcessTqf3 } from "@/services/academicYear/academicYear.service"
 import { setProcessTQF3 } from "@/store/academicYear";
 import Icon from "@/components/Icon";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
+import Loading from "@/components/Loading";
 
 type Props = {
   opened: boolean;
@@ -28,6 +29,7 @@ type Props = {
 };
 export default function ModalManageTQF({ opened, onClose }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const department = useAppSelector((state) => state.faculty.department);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [payload, setPayload] = useState<any>({});
@@ -42,15 +44,16 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
 
   const fetchCourse = async () => {
     if (academicYear) {
-      const initialPayload = new CourseRequestDTO();
+      const initialPayload: any = new CourseRequestDTO();
       initialPayload.year = academicYear.year;
       initialPayload.semester = academicYear.semester;
       initialPayload.manage = true;
+      initialPayload.departmentCode = department.map((dep) => dep.codeEN!);
       setPayload(initialPayload);
       const res = await getCourse(initialPayload);
       if (res) {
         const courseList: any[] = [];
-        res.forEach((course: IModelCourse) => {
+        res.courses.forEach((course: IModelCourse) => {
           if (course.type === COURSE_TYPE.SEL_TOPIC.en) {
             course.sections.forEach((section) => {
               if (section.isActive) {
@@ -110,7 +113,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
   };
   return (
     <Modal
-      opened={opened && !!courseList.length}
+      opened={opened}
       onClose={onClose}
       title="TQF Management"
       size="60vw"
@@ -250,7 +253,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
               className="mt-4"
             />
             <div
-              className="w-full  flex flex-col bg-white  mt-4 rounded-md overflow-clip"
+              className="w-full flex flex-col bg-white mt-4 rounded-md overflow-clip"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
@@ -259,8 +262,8 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                 <Table stickyHeader striped>
                   <Table.Thead>
                     <Table.Tr className="bg-[#e5e7f6]">
-                      <Table.Th className=" w-[40%]">Course no.</Table.Th>
-                      <Table.Th className=" w-[35%]">Instructor</Table.Th>
+                      <Table.Th className="w-[40%]">Course no.</Table.Th>
+                      <Table.Th className="w-[35%]">Instructor</Table.Th>
 
                       <Table.Th className="w-[25%] ">
                         <div className="flex flex-row items-center gap-2">
@@ -298,47 +301,55 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody>
-                    {courseList.map((e, index) => (
-                      <Table.Tr key={index}>
-                        <Table.Td>
-                          <div className="flex flex-col">
-                            <p className="font-semibold text-[14px] text-secondary">
-                              {e.courseNo}
-                              {e.type === COURSE_TYPE.SEL_TOPIC.en &&
-                                ` (Section ${getSectionNo(e.sectionNo)})`}
-                            </p>
-                            <p className="text-[12px] font-medium text-[#4E5150]">
-                              {e.type === COURSE_TYPE.SEL_TOPIC.en
-                                ? e.topic
-                                : e.courseName}
-                            </p>
-                          </div>
-                        </Table.Td>
-                        <Table.Td className="text-[#4E5150] text-[12px] font-medium">
-                          {" "}
-                          {e.instructor}
-                        </Table.Td>
-                        <Table.Td>
-                          <Switch
-                            size="md"
-                            onLabel="ON"
-                            offLabel="OFF"
-                            disabled={academicYear?.isProcessTQF3}
-                            checked={
-                              academicYear.isProcessTQF3
-                                ? true
-                                : e.TQF3?.status !== TQF_STATUS.DONE
-                            }
-                            onChange={(event) => {
-                              onClickToggleOne(
-                                event.currentTarget.checked,
-                                index
-                              );
-                            }}
-                          />
+                    {!courseList.length ? (
+                      <Table.Tr>
+                        <Table.Td colSpan={3} className="h-full">
+                          <Loading />
                         </Table.Td>
                       </Table.Tr>
-                    ))}
+                    ) : (
+                      courseList.map((e, index) => (
+                        <Table.Tr key={index}>
+                          <Table.Td>
+                            <div className="flex flex-col">
+                              <p className="font-semibold text-[14px] text-secondary">
+                                {e.courseNo}
+                                {e.type === COURSE_TYPE.SEL_TOPIC.en &&
+                                  ` (Section ${getSectionNo(e.sectionNo)})`}
+                              </p>
+                              <p className="text-[12px] font-medium text-[#4E5150]">
+                                {e.type === COURSE_TYPE.SEL_TOPIC.en
+                                  ? e.topic
+                                  : e.courseName}
+                              </p>
+                            </div>
+                          </Table.Td>
+                          <Table.Td className="text-[#4E5150] text-[12px] font-medium">
+                            {" "}
+                            {e.instructor}
+                          </Table.Td>
+                          <Table.Td>
+                            <Switch
+                              size="md"
+                              onLabel="ON"
+                              offLabel="OFF"
+                              disabled={academicYear?.isProcessTQF3}
+                              checked={
+                                academicYear.isProcessTQF3
+                                  ? true
+                                  : e.TQF3?.status !== TQF_STATUS.DONE
+                              }
+                              onChange={(event) => {
+                                onClickToggleOne(
+                                  event.currentTarget.checked,
+                                  index
+                                );
+                              }}
+                            />
+                          </Table.Td>
+                        </Table.Tr>
+                      ))
+                    )}
                   </Table.Tbody>
                 </Table>
               </Table.ScrollContainer>
