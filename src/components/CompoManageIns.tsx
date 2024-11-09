@@ -212,7 +212,7 @@ export default function CompoMangeIns({
   return (
     <div
       className={`flex flex-col gap-3 max-h-[320px] rounded-md h-fit w-full mt-2 p-4
-        ${["add", "admin"].includes(type) && "mb-5"}`}
+        ${["add", "admin"].includes(type) && "mb-1"}`}
       style={{
         boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
       }}
@@ -223,7 +223,7 @@ export default function CompoMangeIns({
           setInputUser({ value: null });
           setSwapMethodAddUser(!swapMethodAddUser);
         }}
-        className="bg-bgTableHeader hover:bg-[#dee1fa] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center py-3 px-5  "
+        className="bg-bgTableHeader hover:bg-[#d4e1f7] cursor-pointer  h-fit rounded-lg text-secondary flex justify-between items-center py-3 px-5  "
       >
         <div className="flex gap-6 items-center">
           <Icon IconComponent={IconAddCo} className="text-secondary" />
