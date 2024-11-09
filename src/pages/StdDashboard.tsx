@@ -68,7 +68,7 @@ export default function StdDashboard() {
                   {courseList.search.length ? (
                     <>Check the spelling or try a new search.</>
                   ) : (
-                    <>Score OBE+ will be available for students this December. <br/> Stay tuned and get ready to explore your scores!</>
+                    <>Score OBE+ will be available for students this December. <br/> Stay tuned and get ready to check out your scores!</>
                   )}
                 </p>
               </div>

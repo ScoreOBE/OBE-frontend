@@ -424,7 +424,7 @@ export default function Dashboard() {
                 return (
                   <div
                     key={item.id}
-                    className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-[4px] hover:bg-[#F3F3F3]"
+                    className="card relative justify-between xl:h-[135px] md:h-[120px] cursor-pointer rounded-[4px] hover:bg-[#f3f3f3]"
                     onClick={() => goToCourse(item.courseNo)}
                   >
                     <div className="p-2.5 flex flex-col">
