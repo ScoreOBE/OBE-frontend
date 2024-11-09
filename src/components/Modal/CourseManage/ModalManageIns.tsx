@@ -1,6 +1,5 @@
 import { Alert, Button, Checkbox, Menu, Modal } from "@mantine/core";
-import { useEffect, useState } from "react";
-import { ROLE } from "@/helpers/constants/enum";
+import { useEffect, useRef, useState } from "react";
 import store, { useAppDispatch, useAppSelector } from "@/store";
 import {
   getSectionNo,
@@ -56,8 +55,8 @@ export default function ModalManageIns({
   const [coInsList, setCoInsList] = useState<any[]>();
   const [editCoSec, setEditCoSec] = useState<any[]>([]);
   const [editCoInsList, setEditCoInsList] = useState<any[]>();
-  const user = useAppSelector((state) => state.user);
-  const [showAlert, setShowAlert] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [contentHeight, setContentHeight] = useState<number | null>(null);
 
   useEffect(() => {
     if (opened) {
@@ -225,180 +224,225 @@ export default function ModalManageIns({
     setEditCoSec(updatedSections);
   };
 
+  useEffect(() => {
+    if (
+      contentRef.current &&
+      contentRef.current.offsetHeight !== contentHeight
+    ) {
+      const maxHeight =
+        window.innerHeight * 0.7 < contentRef.current.offsetHeight
+          ? window.innerHeight * 0.7
+          : contentRef.current.offsetHeight;
+      setContentHeight(maxHeight);
+    }
+  }, [contentRef, editCoInsList]);
+
   const ManageCoInstructor = () => {
     return (
       <div
-        className={`flex flex-col flex-1 gap-5 ${
+        ref={contentRef}
+        className={`flex flex-col pb-2 max-h-full ${
           type == "courseManagement" && "mt-3"
         }`}
       >
-        {type != "courseManagement" &&
-        !data?.sections?.find(
-          (sec: any) =>
-            (sec.instructor as IModelUser).id == store.getState().user.id
-        ) ? (
-          <div>
-            <Alert
-              radius="md"
-              icon={<Icon IconComponent={IconInfo2} />}
-              variant="light"
-              color="blue"
-              className="mb-5"
-              classNames={{
-                icon: "size-6",
-                body: " flex justify-center",
-              }}
-              title={
-                <p>
-                  You don't have permission to manage co-instructors in this
-                  course. <br /> Please contact to the Owner section for manage.
-                </p>
-              }
-            ></Alert>
-            <Button
-              className="mt-1 min-w-fit !h-[36px] !text-[14px] !w-full"
-              onClick={onClose}
-            >
-              I understood
-            </Button>
-          </div>
-        ) : (
-          <div>
-            <Alert
-              radius="md"
-              icon={<Icon IconComponent={IconInfo2} />}
-              variant="light"
-              color="blue"
-              classNames={{
-                icon: "size-6",
-                body: " flex justify-center",
-              }}
-              className="mb-4"
-              title={
-                <p>
-                  Co-instructors can only access and upload scores for your
-                  selected sections and manage the course TQF documents.
-                </p>
-              }
-            ></Alert>
-            <CompoManageIns
-              opened={opened}
-              type={type == "course" ? "manageCoSec" : "manageCo"}
-              action={addCoIns}
-              sections={editCoSec}
-              setUserList={
-                setEditCoInsList as React.Dispatch<React.SetStateAction<any[]>>
-              }
-            />
-          </div>
-        )}
-        {!!editCoInsList?.length && (
-          <div className="w-full flex flex-col bg-white border-secondary border-[1px]  rounded-md">
-            <div className=" bg-bgTableHeader flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
-              <Icon IconComponent={IconUsers} /> Added Co-Instructor
+        <div
+          className={`flex flex-col px-4 pb-1 gap-5 overflow-y-auto`}
+          style={{
+            maxHeight: contentHeight ? `${contentHeight}px` : "auto",
+          }}
+        >
+          {type != "courseManagement" && (
+            <div>
+              <Alert
+                radius="md"
+                icon={<Icon IconComponent={IconInfo2} />}
+                variant="light"
+                color="red"
+                classNames={{
+                  icon: "size-6",
+                  body: "flex justify-center",
+                }}
+                title={<p>co-instructor ที่เพิ่มในนี้จะไม่มีการ recurrence</p>}
+              ></Alert>
             </div>
-            <div className="flex flex-col max-h-[300px] h-fit w-full   px-2   overflow-y-auto ">
-              <div className="flex flex-col max-h-[160px] h-fit p-1 ">
-                {editCoInsList.map((coIns, index) => (
-                  <div
-                    key={index}
-                    className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none "
+          )}
+          {type != "courseManagement" &&
+          !data?.sections?.find(
+            (sec: any) =>
+              (sec.instructor as IModelUser).id == store.getState().user.id
+          ) ? (
+            <div>
+              <Alert
+                radius="md"
+                icon={<Icon IconComponent={IconInfo2} />}
+                variant="light"
+                color="blue"
+                classNames={{
+                  icon: "size-6",
+                  body: " flex justify-center",
+                }}
+                title={
+                  <p>
+                    You don't have permission to manage co-instructors in this
+                    course. <br /> Please contact to the Owner section for
+                    manage.
+                  </p>
+                }
+              ></Alert>
+              <Button
+                className="mt-1 min-w-fit !h-[36px] !text-[14px] !w-full"
+                onClick={onClose}
+              >
+                I understood
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <Alert
+                radius="md"
+                icon={<Icon IconComponent={IconInfo2} />}
+                variant="light"
+                color="blue"
+                classNames={{
+                  icon: "size-6",
+                  body: " flex justify-center",
+                }}
+                className="mb-4"
+                title={
+                  <p>
+                    Co-instructors can only access and upload scores for your
+                    selected sections and manage the course TQF documents.
+                  </p>
+                }
+              ></Alert>
+              <CompoManageIns
+                opened={opened}
+                type={type == "course" ? "manageCoSec" : "manageCo"}
+                action={addCoIns}
+                sections={editCoSec}
+                setUserList={
+                  setEditCoInsList as React.Dispatch<
+                    React.SetStateAction<any[]>
                   >
-                    <div className="flex w-full justify-between items-center">
-                      <div className="flex flex-col  font-medium text-[14px]">
-                        <span className=" -translate-y-1 font-semibold text-[13px]">
-                          {coIns?.label}
-                        </span>
-                      </div>
-                      <div className="flex justify-end gap-4 mt-1">
-                        <Menu shadow="md" width={200}>
-                          <Menu.Target>
-                            <Button variant="outline" className="!h-7 px-3">
-                              Access
-                            </Button>
-                          </Menu.Target>
+                }
+              />
+            </div>
+          )}
+          {!!editCoInsList?.length && (
+            <div className="w-full flex flex-col bg-white border-secondary border-[1px] rounded-md">
+              <div className="bg-bgTableHeader flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
+                <Icon IconComponent={IconUsers} /> Added Co-Instructor
+              </div>
+              <div className="flex flex-col h-fit w-full px-2">
+                <div className="flex flex-col h-fit p-1 ">
+                  {editCoInsList.map((coIns, index) => (
+                    <div
+                      key={index}
+                      className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none "
+                    >
+                      <div className="flex w-full justify-between items-center">
+                        <div className="flex flex-col  font-medium text-[14px]">
+                          <span className=" -translate-y-1 font-semibold text-[13px]">
+                            {coIns?.label}
+                          </span>
+                        </div>
+                        <div className="flex justify-end gap-4 mt-1">
+                          <Menu shadow="md" width={200}>
+                            <Menu.Target>
+                              <Button variant="outline" className="!h-7 px-3">
+                                Access
+                              </Button>
+                            </Menu.Target>
 
-                          <Menu.Dropdown className="overflow-y-auto max-h-[220px] !w-[220px] h-fit border-b ">
-                            <Menu.Label className="translate-x-1 mb-2">
-                              Can access
-                            </Menu.Label>
-                            <div className="flex flex-col pl-3  pb-2 h-fit gap-4 w-full">
-                              {data.sections?.map((sec, indexSec) => (
-                                <Checkbox
-                                  key={indexSec}
-                                  disabled={
-                                    coIns.value == sec.instructor?.id ||
-                                    (coIns?.sections?.length == 1 &&
-                                      coIns?.sections?.includes(sec.sectionNo))
-                                  }
-                                  classNames={{
-                                    body: "mr-3",
-                                    input:
-                                      "bg-black bg-opacity-0 border-[1.5px] border-tertiary disabled:bg-gray-400",
-                                    label: "text-b2",
-                                  }}
-                                  size="xs"
-                                  label={`Section ${getSectionNo(
-                                    sec.sectionNo
-                                  )}`}
-                                  checked={coIns?.sections?.includes(
-                                    sec.sectionNo
-                                  )}
-                                  onChange={(event) =>
-                                    editCoInsInSec(
-                                      sec.sectionNo!,
-                                      event.currentTarget.checked,
-                                      coIns
-                                    )
-                                  }
-                                />
-                              ))}
-                            </div>
-                          </Menu.Dropdown>
-                        </Menu>
-                        <Button
-                          color="red"
-                          variant="outline"
-                          className="!h-7 px-3"
-                          onClick={() => removeCoIns(coIns)}
-                        >
-                          Remove
-                        </Button>
+                            <Menu.Dropdown className="overflow-y-auto max-h-[220px] !w-[220px] h-fit border-b ">
+                              <Menu.Label className="translate-x-1 mb-2">
+                                Can access
+                              </Menu.Label>
+                              <div className="flex flex-col pl-3  pb-2 h-fit gap-4 w-full">
+                                {data.sections?.map((sec, indexSec) => (
+                                  <Checkbox
+                                    key={indexSec}
+                                    disabled={
+                                      coIns.value == sec.instructor?.id ||
+                                      (coIns?.sections?.length == 1 &&
+                                        coIns?.sections?.includes(
+                                          sec.sectionNo
+                                        ))
+                                    }
+                                    classNames={{
+                                      body: "mr-3",
+                                      input:
+                                        "bg-black bg-opacity-0 border-[1.5px] border-tertiary disabled:bg-gray-400",
+                                      label: "text-b2",
+                                    }}
+                                    size="xs"
+                                    label={`Section ${getSectionNo(
+                                      sec.sectionNo
+                                    )}`}
+                                    checked={coIns?.sections?.includes(
+                                      sec.sectionNo
+                                    )}
+                                    onChange={(event) =>
+                                      editCoInsInSec(
+                                        sec.sectionNo!,
+                                        event.currentTarget.checked,
+                                        coIns
+                                      )
+                                    }
+                                  />
+                                ))}
+                              </div>
+                            </Menu.Dropdown>
+                          </Menu>
+                          <Button
+                            color="red"
+                            variant="outline"
+                            className="!h-7 px-3"
+                            onClick={() => removeCoIns(coIns)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[13px]">
+                        <div className=" font-semibold">
+                          Can access section:
+                        </div>
+                        <div className="flex gap-1  w-[50%]  flex-wrap">
+                          {coIns?.sections?.map(
+                            (sectionNo: any, indexSec: number) => (
+                              <p key={indexSec}>
+                                {getSectionNo(sectionNo)}
+                                {indexSec !== coIns?.sections?.length - 1 &&
+                                  ","}
+                              </p>
+                            )
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[13px]">
-                      <div className=" font-semibold">Can access section:</div>
-                      <div className="flex gap-1  w-[50%]  flex-wrap">
-                        {coIns?.sections?.map(
-                          (sectionNo: any, indexSec: number) => (
-                            <p key={indexSec}>
-                              {getSectionNo(sectionNo)}
-                              {indexSec !== coIns?.sections?.length - 1 && ","}
-                            </p>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        {(type == "courseManagement" ||
-          data?.sections?.find(
-            (sec: any) =>
-              (sec.instructor as IModelUser).id === store.getState().user.id
-          )) && (
-          <Button
-            className="!h-[36px] !w-full"
-            onClick={onClickSave}
-            disabled={isEqual(coInsList, editCoInsList)}
-            loading={loading}
-          >
-            {type === "course" ? "Save Changes" : "Save"}
-          </Button>
-        )}
+          )}
+        </div>
+        <div className="px-4 pt-4">
+          {(type == "courseManagement" ||
+            data?.sections?.find(
+              (sec: any) =>
+                (sec.instructor as IModelUser).id === store.getState().user.id
+            )) && (
+            <Button
+              className="!h-[36px] !w-full"
+              onClick={onClickSave}
+              disabled={isEqual(coInsList, editCoInsList)}
+              loading={loading}
+            >
+              {type === "course" ? "Save Changes" : "Save"}
+            </Button>
+          )}
+        </div>
       </div>
     );
   };
@@ -433,11 +477,12 @@ export default function ModalManageIns({
       transitionProps={{ transition: "pop" }}
       classNames={{
         content:
-          "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden ",
+          "flex flex-col max-h-full justify-start bg-[#F6F7FA] text-[14px] item-center overflow-hidden",
+        body: "!px-0 !pb-0",
       }}
     >
       {changeMainIns && editSec ? (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col px-4 pb-2 gap-2">
           <div
             className="w-full items-center rounded-md justify-start gap-3 mt-2  px-6 py-3  flex"
             style={{
@@ -467,7 +512,7 @@ export default function ModalManageIns({
       ) : type == "course" ? (
         ManageCoInstructor()
       ) : (
-        <Tabs defaultValue="mainInstructor">
+        <Tabs defaultValue="mainInstructor" className="px-4 pb-2">
           <Tabs.List>
             <Tabs.Tab value="mainInstructor">Owner section</Tabs.Tab>
             <Tabs.Tab value="coInstructor">Co-Instructor section</Tabs.Tab>

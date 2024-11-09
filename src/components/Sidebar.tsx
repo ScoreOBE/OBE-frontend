@@ -18,7 +18,7 @@ import Icon from "./Icon";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconLeave from "@/assets/icons/leave.svg?react";
 import MainPopup from "./Popup/MainPopup";
-import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { useDisclosure } from "@mantine/hooks";
 import OverallSidebar from "./Sidebar/ScoreSidebar";
@@ -26,7 +26,9 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { setLoading } from "@/store/loading";
 import { useEffect } from "react";
 import { setAllCourseList } from "@/store/allCourse";
-import { goToDashboard } from "@/helpers/functions/function";
+import { goToDashboard, sortData } from "@/helpers/functions/function";
+import { getDepartment } from "@/services/faculty/faculty.service";
+import { setDepartment } from "@/store/department";
 
 export default function Sidebar() {
   const user = useAppSelector((state) => state.user);
@@ -39,6 +41,7 @@ export default function Sidebar() {
   const [params, setParams] = useSearchParams();
   const loading = useAppSelector((state) => state.loading);
   const academicYear = useAppSelector((state) => state.academicYear);
+  const department = useAppSelector((state) => state.faculty.department);
   const courseList = useAppSelector((state) => state.course.courses);
   const allCourseList = useAppSelector((state) => state.allCourse.courses);
   const dispatch = useAppDispatch();
@@ -72,10 +75,41 @@ export default function Sidebar() {
       params.get("year") &&
       params.get("semester") &&
       academicYear.length &&
-      (!courseList.length || !allCourseList.length)
-    )
-      fetchCourse();
+      !department.length
+    ) {
+      fetchDep();
+    }
   }, [path, academicYear, params]);
+
+  useEffect(() => {
+    if (department.length && (!courseList.length || !allCourseList.length)) {
+      fetchCourse();
+    }
+  }, [department]);
+
+  const fetchDep = async () => {
+    const res = await getDepartment(user.facultyCode);
+    if (res) {
+      sortData(res.department, "courseCode");
+      let dep = res.department;
+      if (user.role !== ROLE.SUPREME_ADMIN) {
+        dep = res.department.filter((e) =>
+          user.departmentCode.includes(e.codeEN)
+        );
+      }
+      dispatch(
+        setDepartment([
+          { departmentEN: "All Courses", codeEN: "All Courses" },
+          {
+            departmentEN: res.facultyEN.replace("Faculty of ", "Genaral "),
+            courseCode: res.courseCode,
+            codeEN: res.codeEN,
+          },
+          ...dep,
+        ])
+      );
+    }
+  };
 
   const fetchCourse = async () => {
     if (!user.termsOfService) return;
@@ -85,18 +119,26 @@ export default function Sidebar() {
       year: parseInt(params.get("year") || ""),
       semester: parseInt(params.get("semester") || ""),
     };
-    const [resCourse, resAllCourse] = await Promise.all([
-      getCourse(payload),
-      path.includes(ROUTE_PATH.ADMIN_DASHBOARD) &&
-        getCourse({ ...payload, manage: true }),
-    ]);
-    if (resAllCourse) {
-      dispatch(setAllCourseList(resCourse));
+    if (!courseList.length) {
+      const resCourse = await getCourse(payload);
+      if (resCourse) {
+        dispatch(setCourseList(resCourse));
+      } else {
+        goToDashboard(user.role);
+      }
     }
-    if (resCourse) {
-      dispatch(setCourseList(resCourse));
-    } else {
-      goToDashboard(user.role);
+    if (
+      [ROLE.SUPREME_ADMIN, ROLE.ADMIN].includes(user.role) &&
+      !allCourseList.length
+    ) {
+      const resAllCourse = await getCourse({
+        ...payload,
+        departmentCode: department.map((dep) => dep.codeEN!),
+        manage: true,
+      });
+      if (resAllCourse) {
+        dispatch(setAllCourseList(resAllCourse));
+      }
     }
     dispatch(setLoading(false));
   };

@@ -17,6 +17,7 @@ import { setAllCourseList } from "@/store/allCourse";
 import IconSO from "@/assets/icons/SO.svg?react";
 import IconTQF from "@/assets/icons/TQF.svg?react";
 import IconCLO from "@/assets/icons/targetArrow.svg?react";
+import { ROLE } from "@/helpers/constants/enum";
 
 export default function DashboardSidebar() {
   const path = useLocation().pathname;
@@ -49,10 +50,33 @@ export default function DashboardSidebar() {
       !selectedTerm
     ) {
       setTerm(academicYear[0]);
-    } else if (user && !academicYear.length) {
+    } else if (!academicYear.length) {
       fetchAcademicYear();
     }
   }, [user.termsOfService, academicYear]);
+
+  useEffect(() => {
+    if (user.termsOfService) {
+      switch (user.role) {
+        case ROLE.INSTRUCTOR:
+          if (path.includes(ROUTE_PATH.ADMIN_DASHBOARD)) {
+            navigate({
+              pathname: ROUTE_PATH.INS_DASHBOARD,
+              search: "?" + params.toString(),
+            });
+          }
+          break;
+        case ROLE.STUDENT:
+          if (!path.includes(ROUTE_PATH.STD_DASHBOARD)) {
+            navigate({
+              pathname: ROUTE_PATH.STD_DASHBOARD,
+              search: "?" + params.toString(),
+            });
+          }
+          break;
+      }
+    }
+  }, [user, path]);
 
   useEffect(() => {
     if (
@@ -194,7 +218,6 @@ export default function DashboardSidebar() {
               <Button
                 onClick={() => gotoPage(ROUTE_PATH.TQF)}
                 leftSection={
-                 
                   <Icon className=" size-4 mr-[5px]" IconComponent={IconTQF} />
                 }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
@@ -209,7 +232,6 @@ export default function DashboardSidebar() {
               <Button
                 onClick={() => gotoPage(ROUTE_PATH.CLO)}
                 leftSection={
-                 
                   <Icon
                     IconComponent={IconCLO}
                     className=" size-[21px] mr-[1px] -translate-x-[2px]"
@@ -227,11 +249,7 @@ export default function DashboardSidebar() {
               <Button
                 onClick={() => gotoPage(ROUTE_PATH.PLO)}
                 leftSection={
-                 
-                  <Icon
-                    IconComponent={IconSO}
-                    className=" size-[18px]"
-                  />
+                  <Icon IconComponent={IconSO} className=" size-[18px]" />
                 }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
@@ -242,7 +260,6 @@ export default function DashboardSidebar() {
               >
                 <p className="pl-1">PLO</p>
               </Button>
-             
             </div>
           </div>
         )}
