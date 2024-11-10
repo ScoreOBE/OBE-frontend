@@ -39,7 +39,7 @@ export interface IModelAssignment {
 }
 
 export interface IModelQuestion {
-  name: number;
+  name: string;
   desc: string;
   fullScore: number;
 }

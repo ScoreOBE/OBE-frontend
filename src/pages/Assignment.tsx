@@ -82,21 +82,21 @@ export default function Assignment() {
   const assign: IModelAssignment[] = [
     {
       name: "Math Quiz 1",
-      desc: "Basic arithmetic quiz covering addition, subtraction, multiplication, and division.",
+      // desc: "Basic arithmetic quiz covering addition, subtraction, multiplication, and division.",
       isPublish: true,
       weight: 10,
       questions: [],
     },
     {
       name: "History Test",
-      desc: "A short test on the history of World War II.",
+      // desc: "A short test on the history of World War II.",
       isPublish: false,
       weight: 15,
       questions: [],
     },
     {
       name: "Science Assignment",
-      desc: "Assignment covering basic physics and chemistry concepts.",
+      // desc: "Assignment covering basic physics and chemistry concepts.",
       isPublish: true,
       weight: 20,
       questions: [],

@@ -84,16 +84,16 @@ export default function Overall() {
   const questions: Array<IModelQuestion> = Array.from(
     { length: 10 },
     (_, qIndex): IModelQuestion => ({
-      no: qIndex + 1,
+      name: '',
       desc: `Question ${qIndex + 1} Description`,
       fullScore: 100,
-      scores: Array.from(
-        { length: 30 },
-        (_, sIndex): IModelScore => ({
-          student: generateMockUser(sIndex), // Generate a mock user for each score
-          point: Math.floor(Math.random() * 100), // Random score between 0 and 100
-        })
-      ),
+      // fscores: Array.from(
+      //   { length: 30 },
+      //   (_, sIndex): IModelScore => ({
+      //     student: generateMockUser(sIndex), // Generate a mock user for each score
+      //     point: Math.floor(Math.random() * 100), // Random score between 0 and 100
+      //   })
+      // ),
     })
   );
 

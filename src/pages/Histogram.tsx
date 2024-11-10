@@ -76,16 +76,16 @@ export default function Histogram() {
       questions: Array.from(
         { length: 5 },
         (_, qIndex): IModelQuestion => ({
-          no: qIndex + 1,
+          name: '',
           desc: `Question ${qIndex + 1} Description`,
           fullScore: 100,
-          scores: Array.from(
-            { length: 30 },
-            (_, sIndex): IModelScore => ({
-              student: generateMockUser(sIndex), // Generate a mock user for each score
-              point: Math.floor(Math.random() * 100),
-            })
-          ),
+          // scores: Array.from(
+          //   { length: 30 },
+          //   (_, sIndex): IModelScore => ({
+          //     student: generateMockUser(sIndex), // Generate a mock user for each score
+          //     point: Math.floor(Math.random() * 100),
+          //   })
+          // ),
         })
       ),
     })
