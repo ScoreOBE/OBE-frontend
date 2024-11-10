@@ -120,7 +120,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
         body: "flex flex-col overflow-hidden max-h-full h-fit",
       }}
     >
-      <div className="flex flex-col">
+      <div className="flex sm:max-ipad11:h-[400px] sm:max-ipad11:overflow-y-auto flex-col">
         {!dataExport.part1?.updatedAt ? (
           <div className="flex flex-col mt-3  items-center  ">
             <p className=" text-[14px] font-semibold">
@@ -149,7 +149,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
               .map((item, index) => (
                 <div
                   key={index}
-                  className="flex p-1 mb-1 w-full h-full flex-col overflow-y-auto"
+                  className="flex p-1 mb-1 w-full h-full  flex-col overflow-y-auto"
                 >
                   <Checkbox.Card
                     className={`p-3 items-center px-4 flex  h-fit rounded-md w-full ${

@@ -79,7 +79,7 @@ export default function SelectDepartment() {
           ScoreOBE <span className=" text-[#FFCD1B]"> +</span>
         </p>
       </div>{" "}
-      <div className=" h-screen w-screen flex justify-between  px-32 items-center font-sf-pro">
+      <div className=" h-screen w-screen flex justify-between  px-[65px] sm:px-[80px] ipad11:px-[90px] macair133:px-32 items-center font-sf-pro">
         <div className="text-white">
           <motion.div
             initial={{
@@ -95,10 +95,10 @@ export default function SelectDepartment() {
                 ScoreOBE +{" "}
               </span>{" "}
             </div> */}
-            <div className=" font-semibold -mt-1 translate-y-[-4px] text-[24px]">
+            <div className=" font-semibold -mt-1 translate-y-[-4px] text-[22px] ipad11:text-[24px]">
               {getUserName(user, 1)}
             </div>
-            <div className=" font-[500] text-[#fec38b] text-h2">{faculty.facultyEN}</div>
+            <div className=" font-[500] text-[#fec38b] text-h3 ipad11:text-h2">{faculty.facultyEN}</div>
           </motion.div>
         </div>
         <motion.div
@@ -119,7 +119,7 @@ export default function SelectDepartment() {
               <div className="text-[#fcc087] text-b2 font-semibold mb-4">
                 Select up to 3 departments <br/> in which you are responsible for teaching.
               </div>
-              <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[515px]">
+              <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[300px] sm:h-[350px] ipad11:h-[515px]">
                 {faculty.department?.map((key) => {
                   const isChecked = checkedItems.includes(key.codeEN);
                   const disabled =
@@ -128,7 +128,7 @@ export default function SelectDepartment() {
                   return (
                     <div
                       key={key.codeEN}
-                      className={`w-[500px] min-h-[50px] cursor-pointer text-b2 font-semibold rounded-[10px] pl-4 scroll-auto items-center flex hover:bg-[rgba(182,187,221,0.56)] ${
+                      className={`w-[480px] min-h-[50px] cursor-pointer text-b2 font-semibold rounded-[10px] pl-4 scroll-auto items-center flex hover:bg-[rgba(182,187,221,0.56)] ${
                         isChecked
                           ? "bg-[rgba(49,72,113,0.75)]"
                           : "bg-[rgba(181,181,181,0.40)]"

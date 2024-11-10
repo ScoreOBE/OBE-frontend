@@ -146,8 +146,8 @@ export default function ModalManageTopic({
       title={`${upperFirst(type)} Course Content`}
       size={
         type === "add" && form.getValues().schedule?.length! > 0
-          ? "70vw"
-          : "35vw"
+          ? "80vw"
+          : "50vw"
       }
       centered
       transitionProps={{ transition: "pop" }}
@@ -160,12 +160,12 @@ export default function ModalManageTopic({
       <FocusTrapInitialFocus />
       <div
         className={`flex flex-col  !gap-5 ${
-          type === "add" ? "h-full" : "h-fit  "
+          type === "add" ? "h-full sm:max-macair133:h-[460px] sm:max-macair133:mb-14 sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]" : "h-fit  "
         } `}
       >
         <div
           className={`flex gap-5 py-1 ${
-            type === "add" ? " h-[500px]" : "h-fit"
+            type === "add" ? " h-[500px] " : "h-fit"
           }`}
         >
           {/* Input Field */}
@@ -176,7 +176,7 @@ export default function ModalManageTopic({
               form.getValues().schedule?.length! > 0 && type === "add"
                 ? "w-[45%]"
                 : "w-full"
-            } h-full relative`}
+            } h-full sm:max-macair133:h-[480px] relative`}
             style={{
               boxShadow:
                 type === "add" ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
@@ -378,7 +378,7 @@ export default function ModalManageTopic({
           )}
         </div>
         {/* Button */}
-        <div className="flex gap-2  items-end  justify-end h-fit">
+        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8  items-end  justify-end h-fit">
           <Button variant="subtle" onClick={onClose}>
             Cancel
           </Button>
