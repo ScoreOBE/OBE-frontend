@@ -59,6 +59,31 @@ export default function ModalStudentList({
     }
   }, [opened]);
 
+  const uploadList = async () => {
+    if (result) {
+      const res = await uploadStudentList(result);
+      if (res) {
+        store.dispatch(updateStudentList({ id: data.id, sections: res }));
+        setFile(undefined);
+        setResult(undefined);
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Upload success",
+          "upload student list success"
+        );
+        if (onNext) {
+          onNext();
+        }
+      }
+    } else {
+      showNotifications(
+        NOTI_TYPE.ERROR,
+        "Invalid File",
+        "invalid student list"
+      );
+    }
+  };
+
   const rows = data.sections?.map((sec) =>
     sec.students
       ?.filter((student) =>
@@ -83,7 +108,6 @@ export default function ModalStudentList({
 
   const studentTable = () => {
     const hasData = rows && rows.flat().length > 0; // Check if there's any data
-
     return (
       <>
         {hasData && (
@@ -119,8 +143,8 @@ export default function ModalStudentList({
               <br />
               <p className="mt-2 text-[#777777] font-medium text-b3" font->
                 {" "}
-                Please ensure you have uploaded the student list from your course
-                page <br/> by clicking the 'Upload Score' button.
+                Please ensure you have uploaded the student list from your
+                course page <br /> by clicking the 'Upload Score' button.
               </p>
             </p>
           )}
@@ -215,27 +239,6 @@ export default function ModalStudentList({
         )}
       </Dropzone>
     );
-  };
-
-  const uploadList = async () => {
-    if (result) {
-      const res = await uploadStudentList(result);
-      if (res && onNext) {
-        store.dispatch(updateStudentList({ id: data.id, sections: res }));
-        showNotifications(
-          NOTI_TYPE.SUCCESS,
-          "Upload success",
-          "upload student list success"
-        );
-        onNext();
-      }
-    } else {
-      showNotifications(
-        NOTI_TYPE.ERROR,
-        "Invalid File",
-        "invalid student list"
-      );
-    }
   };
 
   return (
@@ -349,6 +352,7 @@ export default function ModalStudentList({
             {tab === "importStudentList" && (
               <div className="flex justify-end mt-3 sticky w-full">
                 <Button
+                  onClick={uploadList}
                   leftSection={
                     <Icon
                       IconComponent={IconFileImport}
