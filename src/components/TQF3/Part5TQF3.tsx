@@ -39,6 +39,7 @@ export default function Part5TQF3({ setForm }: Props) {
       form.setValues(tqf3.part5);
     } else {
       dispatch(updatePartTQF3({ part: "part5", data: form.getValues() }));
+      setForm(form);
     }
   }, []);
 
