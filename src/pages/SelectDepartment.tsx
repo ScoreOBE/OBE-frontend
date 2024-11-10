@@ -64,7 +64,7 @@ export default function SelectDepartment() {
   };
 
   return (
-    <div className=" custom-radial-gradient h-screen w-screen">
+    <div className="bg-[rgba(96,127,194,0.21)] custom-radial-gradient h-screen w-screen">
       <div className="absolute top-12 left-12 flex justify-between items-center gap-3">
         {!!user.departmentCode?.length && (
           <Button
@@ -79,7 +79,7 @@ export default function SelectDepartment() {
           ScoreOBE <span className=" text-[#FFCD1B]"> +</span>
         </p>
       </div>{" "}
-      <div className="bg-[rgba(78,78,80,0.30)] h-screen w-screen flex justify-between  px-24 items-center font-sf-pro">
+      <div className=" h-screen w-screen flex justify-between  px-32 items-center font-sf-pro">
         <div className="text-white">
           <motion.div
             initial={{
@@ -98,7 +98,7 @@ export default function SelectDepartment() {
             <div className=" font-semibold -mt-1 translate-y-[-4px] text-[24px]">
               {getUserName(user, 1)}
             </div>
-            <div className=" font-[400] text-[18px]">{faculty.facultyEN}</div>
+            <div className=" font-[500] text-[#fec38b] text-h2">{faculty.facultyEN}</div>
           </motion.div>
         </div>
         <motion.div
@@ -110,14 +110,14 @@ export default function SelectDepartment() {
         >
           <div className="flex flex-col justify-end">
             <div
-              className="bg-[rgba(78,78,80,0.30)] rounded-[25px] mb-5  flex-col  p-6 h-[640px] scroll-smooth  font-sf-pro"
+              className="bg-[rgba(78,78,80,0.30)] rounded-[25px] mb-5 flex-col p-6 h-fit scroll-smooth"
               style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
             >
-              <div className="text-white font-semibold text-[20px] ">
-                Select department
+              <div className="text-white font-semibold text-[18px] mb-[2px] ">
+                Select department 
               </div>
-              <div className="text-[#FFB876] font-medium mb-6">
-                Select up to 3 departments
+              <div className="text-[#fcc087] text-b2 font-semibold mb-4">
+                Select up to 3 departments <br/> in which you are responsible for teaching.
               </div>
               <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[515px]">
                 {faculty.department?.map((key) => {
@@ -128,7 +128,7 @@ export default function SelectDepartment() {
                   return (
                     <div
                       key={key.codeEN}
-                      className={`w-[540px] min-h-[55px] cursor-pointer text-[16px] font-medium rounded-[10px] pl-4 py-4 scroll-auto items-center flex hover:bg-[rgba(182,187,221,0.56)] ${
+                      className={`w-[500px] min-h-[50px] cursor-pointer text-b2 font-semibold rounded-[10px] pl-4 scroll-auto items-center flex hover:bg-[rgba(182,187,221,0.56)] ${
                         isChecked
                           ? "bg-[rgba(49,72,113,0.75)]"
                           : "bg-[rgba(181,181,181,0.40)]"
