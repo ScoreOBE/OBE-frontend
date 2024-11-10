@@ -91,7 +91,7 @@ export default function Part7TQF3({ setForm }: Props) {
                 ({ clo }) => clo == cloItem.id
               );
               ploForm.getValues().data.forEach(({ id }, index) => {
-                if ((item?.plos as string[]).includes(id)) {
+                if ((item?.plos as string[])?.includes(id)) {
                   ploForm.insertListItem(`data.${index}.clos`, cloItem.id);
                 }
               });
