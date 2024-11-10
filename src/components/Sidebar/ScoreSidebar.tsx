@@ -15,7 +15,7 @@ import IconStudent from "@/assets/icons/student.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName } from "@/helpers/functions/function";
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import Loading from "../Loading";
 
 type Props = {

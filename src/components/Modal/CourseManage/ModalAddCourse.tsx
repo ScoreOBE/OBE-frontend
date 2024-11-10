@@ -39,7 +39,7 @@ import {
 } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import CompoManageIns from "@/components/CompoManageIns";
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import Icon from "@/components/Icon";
 
 type Props = {

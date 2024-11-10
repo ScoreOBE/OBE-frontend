@@ -20,7 +20,7 @@ import {
   updateSectionManagement,
 } from "@/services/courseManagement/courseManagement.service";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
 import {
   editCourseManagement,
@@ -129,6 +129,7 @@ export default function ModalManageIns({
       semester: academicYear.semester,
       courseNo: data.courseNo,
       data: payload,
+      actionType: type,
     });
     if (res) {
       dispatch(editCourseManagement(res.courseManagement));

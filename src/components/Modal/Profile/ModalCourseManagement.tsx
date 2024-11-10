@@ -25,7 +25,7 @@ import {
 } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import MainPopup from "@/components/Popup/MainPopup";
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import Loading from "@/components/Loading";
 import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
 import ModalEditCourse from "@/components/Modal/CourseManage/ModalEditCourse";

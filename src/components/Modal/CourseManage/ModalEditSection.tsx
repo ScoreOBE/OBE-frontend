@@ -15,7 +15,7 @@ import {
 } from "@/helpers/functions/validation";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import { updateSection } from "@/services/section/section.service";
 import { IModelSectionManagement } from "@/models/ModelCourseManagement";
 import { COURSE_TYPE, NOTI_TYPE, SEMESTER } from "@/helpers/constants/enum";
@@ -74,18 +74,24 @@ export default function ModalEditSection({
 
   useEffect(() => {
     if (opened && value) {
-      form.reset();
       setOpenThisTerm(false);
       setSemester([]);
       form.setValues(value.data);
       setOpenThisTerm(value.isActive!);
       if (value.data.semester) setSemester(value.data.semester as string[]);
       if (!isCourseManage) fetchOneCourseManagement();
+    } else {
+      form.reset();
     }
   }, [opened, value]);
 
   const submit = async () => {
-    let payload: any = { ...value, data: {} };
+    let payload: any = {
+      ...value,
+      year: academicYear.year,
+      semester: academicYear.semester,
+      data: {},
+    };
     if (value?.type == COURSE_TYPE.SEL_TOPIC.en) {
       payload.data.topic = form.getValues().topic;
     }
@@ -105,12 +111,11 @@ export default function ModalEditSection({
         const res2 = await getOneCourseManagement(value?.courseNo);
         dispatch(editCourseManagement(res2));
         if (openThisTerm) {
-          const payloadCourse = {
+          const resCourse = await getOneCourse({
             year: academicYear.year,
             semester: academicYear.semester,
             courseNo: value?.courseNo,
-          };
-          const resCourse = await getOneCourse(payloadCourse);
+          });
           if (resCourse) {
             dispatch(editCourse(resCourse));
           }

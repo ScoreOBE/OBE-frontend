@@ -32,7 +32,7 @@ import {
 } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import CompoManageIns from "@/components/CompoManageIns";
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import { IModelCourse } from "@/models/ModelCourse";
 import {
   checkCanCreateCourse,
@@ -803,11 +803,13 @@ export default function ModalAddSection({
                           listStyleType="disc"
                           className="flex flex-col gap-1"
                         >
-                          <List.Item>
-                            {sec.semester
-                              ?.join(", ")
-                              .replace(/, ([^,]*)$/, " and $1")}
-                          </List.Item>
+                          {!!sec.semester?.length && (
+                            <List.Item>
+                              {sec.semester
+                                ?.join(", ")
+                                .replace(/, ([^,]*)$/, " and $1")}
+                            </List.Item>
+                          )}
                           {sec.openThisTerm && (
                             <List.Item className="mb-[3px]">
                               Open in this semester ({academicYear.semester}/

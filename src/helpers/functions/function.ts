@@ -1,4 +1,4 @@
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelTQF5 } from "@/models/ModelTQF5";
 import { IModelUser } from "@/models/ModelUser";

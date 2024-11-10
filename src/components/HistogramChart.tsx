@@ -1,4 +1,4 @@
-import { IModelAssignment } from "@/models/ModelSection";
+import { IModelAssignment } from "@/models/ModelCourse";
 import { BarChart } from "@mantine/charts";
 
 type Props = {
