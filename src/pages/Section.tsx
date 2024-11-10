@@ -74,7 +74,7 @@ export default function Section() {
     dispatch(setShowNavbar(true));
     if (
       course?.sections[0].students?.length &&
-      !course?.sections[0].students[0].id
+      !course?.sections[0].students[0].student.id
     ) {
       fetchOneCourse();
     }
