@@ -126,8 +126,6 @@ const studentList = async (
       };
       if (!existSec) {
         result.push({
-          sectionId: course.sections?.find((sec) => sec.sectionNo == sectionNo)
-            ?.id,
           sectionNo,
           studentList: [student],
         });
@@ -222,8 +220,6 @@ const scoreOBETemplete = (
       };
       if (!existSec) {
         result.push({
-          sectionId: course.sections?.find((sec) => sec.sectionNo == sectionNo)
-            ?.id,
           sectionNo,
           assignments: [
             {
