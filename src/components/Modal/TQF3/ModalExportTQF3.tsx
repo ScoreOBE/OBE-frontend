@@ -18,30 +18,33 @@ import Icon from "@/components/Icon";
 type Props = {
   opened: boolean;
   onClose: () => void;
+  dataTQF?: Partial<IModelTQF3> & { courseNo?: string };
 };
 
-export default function ModalExportTQF3({ opened, onClose }: Props) {
+export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const tqf3 = useAppSelector((state) => state.tqf3);
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [dataExport, setDataExport] = useState<Partial<IModelTQF3>>({});
 
   useEffect(() => {
     if (opened) {
       const select: string[] = [];
-      Object.keys(tqf3).forEach((part) => {
+      setDataExport(dataTQF ?? tqf3);
+      Object.keys(dataTQF ?? tqf3).forEach((part) => {
         if (
           part !== "part7" &&
           part.includes("part") &&
-          (tqf3[part as keyof IModelTQF3] as any)?.updatedAt
+          ((dataTQF ?? tqf3)[part as keyof IModelTQF3] as any)?.updatedAt
         ) {
           select.push(part);
         }
       });
       setSelectedParts(select);
     }
-  }, [opened]);
+  }, [opened, dataTQF]);
 
   const onCloseModal = () => {
     onClose();
@@ -60,10 +63,10 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
     setLoading(true);
 
     const payload: any = {
-      courseNo,
+      courseNo: dataTQF?.courseNo ?? courseNo,
       academicYear: academicYear.year,
       academicTerm: academicYear.semester,
-      tqf3: tqf3.id,
+      tqf3: dataExport.id,
     };
     selectedParts.forEach((part) => (payload[part] = ""));
 
@@ -73,7 +76,9 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       const disposition = res.headers["content-disposition"];
       const filename = disposition
         ? disposition.split("filename=")[1]
-        : `TQF3_Parts_${courseNo}_${academicYear.year}_${academicYear.semester}.zip`;
+        : `TQF3_Parts_${dataTQF?.courseNo ?? courseNo}_${academicYear.year}_${
+            academicYear.semester
+          }.zip`;
       const blob = new Blob([res.data], { type: contentType });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -116,7 +121,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
       }}
     >
       <div className="flex flex-col">
-        {!tqf3.part1?.updatedAt ? (
+        {!dataExport.part1?.updatedAt ? (
           <div className="flex flex-col mt-3  items-center  ">
             <p className=" text-[14px] font-semibold">
               No parts of TQF3 are available for export.
@@ -137,7 +142,9 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
             {Object.values(PartTopicTQF3)
               .slice(0, 6)
               .filter(
-                (item) => tqf3 && tqf3[getKeyPartTopicTQF3(item)!]?.updatedAt
+                (item) =>
+                  dataExport &&
+                  dataExport[getKeyPartTopicTQF3(item)!]?.updatedAt
               )
               .map((item, index) => (
                 <div
@@ -168,7 +175,7 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
           </Checkbox.Group>
         )}
       </div>
-      {tqf3.part1?.updatedAt && (
+      {dataExport.part1?.updatedAt && (
         <div className="flex justify-end mt-4 sticky w-full">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
             <Button onClick={onClose} variant="subtle">
@@ -180,12 +187,16 @@ export default function ModalExportTQF3({ opened, onClose }: Props) {
                 <Icon
                   IconComponent={IconFileExport}
                   className={` ${
-                    !tqf3.part1?.updatedAt ? "text-[#adb5bd]" : "text-[#ffffff]"
+                    !dataExport.part1?.updatedAt
+                      ? "text-[#adb5bd]"
+                      : "text-[#ffffff]"
                   } stroke-[2px] size-5 items-center`}
                 />
               }
               onClick={generatePDF}
-              disabled={!tqf3.part1?.updatedAt || selectedParts.length === 0}
+              disabled={
+                !dataExport.part1?.updatedAt || selectedParts.length === 0
+              }
             >
               Export TQF3
             </Button>
