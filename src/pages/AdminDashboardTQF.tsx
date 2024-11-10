@@ -1,18 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Checkbox,
-  Group,
-  Menu,
-  Modal,
-  Table,
-  Tabs,
-  Tooltip,
-} from "@mantine/core";
+import { Button, Menu, Table, Tabs, Tooltip } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconAdjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
-import IconPDF from "@/assets/icons/pdf.svg?react";
 import IconEye from "@/assets/icons/eyePublish.svg?react";
 import IconTQF3 from "@/assets/icons/TQF3.svg?react";
 import IconTQF5 from "@/assets/icons/TQF5.svg?react";
@@ -23,7 +13,7 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.jpg";
-import { COURSE_TYPE, ROLE, TQF_STATUS } from "@/helpers/constants/enum";
+import { COURSE_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -36,13 +26,11 @@ import {
 import {
   getUniqueInstructors,
   getUniqueTopicsWithTQF,
-  sortData,
 } from "@/helpers/functions/function";
 import { IModelCourse } from "@/models/ModelCourse";
-import { getDepartment } from "@/services/faculty/faculty.service";
-import { setDepartment } from "@/store/department";
 import { IModelDepartment } from "@/models/ModelFaculty";
 import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
+import { IModelTQF3 } from "@/models/ModelTQF3";
 
 export default function AdminDashboardTQF() {
   const navigate = useNavigate();
@@ -55,7 +43,9 @@ export default function AdminDashboardTQF() {
   const [payload, setPayload] = useState<any>({ page: 1, limit: 20 });
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
-
+  const [exportDataTQF, setExportDataTQF] = useState<
+    Partial<IModelTQF3> & { courseNo?: string }
+  >({});
   const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
   const [selectDepartment, setSelectDepartment] = useState<
     Partial<IModelDepartment>
@@ -177,18 +167,42 @@ export default function AdminDashboardTQF() {
               })}
             </Table.Td>
             <Table.Td>
-              <div
-                // color={
-                //   statusTqf3 == TQF_STATUS.NO_DATA
-                //     ? "#d8d8dd"
-                //     : statusTqf3 == TQF_STATUS.IN_PROGRESS
-                //     ? "#eedbb5"
-                //     : "#bbe3e3"
-                // }
-                className="px-3 py-2 w-fit tag-tqf rounded-[20px] text-[12px] font-medium"
-                tqf-status={sec ? sec.TQF3?.status : course.TQF3?.status}
-              >
-                {sec ? sec.TQF3?.status : course.TQF3?.status}
+              <div className="flex gap-2">
+                <div
+                  className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
+                  tqf-status={sec ? sec.TQF3?.status : course.TQF3?.status}
+                >
+                  {sec ? sec.TQF3?.status : course.TQF3?.status}
+                </div>
+                {sec.TQF3?.status === TQF_STATUS.DONE && (
+                  <Tooltip
+                    withArrow
+                    arrowPosition="side"
+                    arrowOffset={50}
+                    arrowSize={7}
+                    position="bottom-end"
+                    label={
+                      <div className="text-default font-semibold text-[13px] p-1">
+                        Export TQF
+                      </div>
+                    }
+                    color="#FCFCFC"
+                  >
+                    <Button
+                      variant="light"
+                      className="tag-tqf  !px-3 !rounded-full text-center"
+                      onClick={() => {
+                        setExportDataTQF({
+                          ...sec.TQF3!,
+                          courseNo: course.courseNo,
+                        });
+                        setOpenModalExportTQF3(true);
+                      }}
+                    >
+                      <Icon className="size-5" IconComponent={IconFileExport} />
+                    </Button>
+                  </Tooltip>
+                )}
               </div>
             </Table.Td>
             <Table.Td>
@@ -265,13 +279,6 @@ export default function AdminDashboardTQF() {
         <Table.Td>
           <div className="flex gap-2">
             <div
-              // color={
-              //   statusTqf3 == TQF_STATUS.NO_DATA
-              //     ? "#d8d8dd"
-              //     : statusTqf3 == TQF_STATUS.IN_PROGRESS
-              //     ? "#eedbb5"
-              //     : "#bbe3e3"
-              // }
               className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
               tqf-status={course.TQF3?.status}
             >
@@ -294,7 +301,13 @@ export default function AdminDashboardTQF() {
                 <Button
                   variant="light"
                   className="tag-tqf  !px-3 !rounded-full text-center"
-                  onClick={() => setOpenModalExportTQF3(true)}
+                  onClick={() => {
+                    setExportDataTQF({
+                      ...course.TQF3!,
+                      courseNo: course.courseNo,
+                    });
+                    setOpenModalExportTQF3(true);
+                  }}
                 >
                   <Icon className="size-5" IconComponent={IconFileExport} />
                 </Button>
@@ -465,8 +478,14 @@ export default function AdminDashboardTQF() {
           </div>
         </div>
       </Modal> */}
-      <ModalExportTQF3  opened={openModalExportTQF3}
-        onClose={() => setOpenModalExportTQF3(false)} />
+      <ModalExportTQF3
+        opened={openModalExportTQF3}
+        onClose={() => {
+          setOpenModalExportTQF3(false);
+          setExportDataTQF({});
+        }}
+        dataTQF={exportDataTQF}
+      />
 
       <div className=" flex flex-col h-full w-full gap-2 overflow-hidden">
         <div className="flex flex-row px-6 pt-3 items-center justify-between">
