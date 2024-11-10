@@ -142,6 +142,11 @@ export default function Part6TQF3({ setForm }: Props) {
   const [openModalEditSelectTopic, setOpenModalEditSelectTopic] =
     useState(false);
   const [deleteIndex, setDeleteIndex] = useState(0);
+  const [deleteOption, setDeleteOption] = useState<{
+    th: string;
+    en: string;
+  } | null>(null);
+
   const [openedTooltip, setOpenedTooltip] = useState(false);
   const form = useForm({
     mode: "controlled",
@@ -228,7 +233,9 @@ export default function Part6TQF3({ setForm }: Props) {
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">Topic Description</p>
-              <p className=" -translate-y-[2px] text-b1">{`mffmmf`}</p>
+              <p className=" -translate-y-[2px] leading-7 text-b1">
+                - {deleteOption?.th} <br/> - {deleteOption?.en}
+              </p>
             </div>
           </>
         }
@@ -404,6 +411,7 @@ export default function Part6TQF3({ setForm }: Props) {
                             className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
                             onClick={() => {
                               setDeleteIndex(index);
+                              setDeleteOption({ th: option.th, en: option.en });
                               setOpenPopupDelAddTopic(true);
                             }}
                           >

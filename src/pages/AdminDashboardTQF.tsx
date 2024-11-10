@@ -4,6 +4,7 @@ import {
   Button,
   Checkbox,
   Group,
+  Menu,
   Modal,
   Table,
   Tabs,
@@ -13,6 +14,8 @@ import Icon from "@/components/Icon";
 import IconAdjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
 import IconPDF from "@/assets/icons/pdf.svg?react";
 import IconEye from "@/assets/icons/eyePublish.svg?react";
+import IconTQF3 from "@/assets/icons/TQF3.svg?react";
+import IconTQF5 from "@/assets/icons/TQF5.svg?react";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
@@ -20,7 +23,7 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.jpg";
-import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, ROLE, TQF_STATUS } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -39,6 +42,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { setDepartment } from "@/store/department";
 import { IModelDepartment } from "@/models/ModelFaculty";
+import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 
 export default function AdminDashboardTQF() {
   const navigate = useNavigate();
@@ -51,7 +55,8 @@ export default function AdminDashboardTQF() {
   const [payload, setPayload] = useState<any>({ page: 1, limit: 20 });
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
-  const [openModalPrintTQF, setOpenModalPrintTQF] = useState(false);
+
+  const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
   const [selectDepartment, setSelectDepartment] = useState<
     Partial<IModelDepartment>
   >({});
@@ -180,7 +185,7 @@ export default function AdminDashboardTQF() {
                 //     ? "#eedbb5"
                 //     : "#bbe3e3"
                 // }
-                className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
+                className="px-3 py-2 w-fit tag-tqf rounded-[20px] text-[12px] font-medium"
                 tqf-status={sec ? sec.TQF3?.status : course.TQF3?.status}
               >
                 {sec ? sec.TQF3?.status : course.TQF3?.status}
@@ -216,7 +221,7 @@ export default function AdminDashboardTQF() {
                     <Icon className="size-5" IconComponent={IconEye} />
                   </Button>
                 </Tooltip>
-                <Tooltip
+                {/* <Tooltip
                   withArrow
                   arrowPosition="side"
                   arrowOffset={50}
@@ -236,7 +241,7 @@ export default function AdminDashboardTQF() {
                   >
                     <Icon className="size-5" IconComponent={IconFileExport} />
                   </Button>
-                </Tooltip>
+                </Tooltip> */}
               </div>
             </Table.Td>
           </Table.Tr>
@@ -258,18 +263,43 @@ export default function AdminDashboardTQF() {
           })}
         </Table.Td>
         <Table.Td>
-          <div
-            // color={
-            //   statusTqf3 == TQF_STATUS.NO_DATA
-            //     ? "#d8d8dd"
-            //     : statusTqf3 == TQF_STATUS.IN_PROGRESS
-            //     ? "#eedbb5"
-            //     : "#bbe3e3"
-            // }
-            className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
-            tqf-status={course.TQF3?.status}
-          >
-            {course.TQF3?.status}
+          <div className="flex gap-2">
+            <div
+              // color={
+              //   statusTqf3 == TQF_STATUS.NO_DATA
+              //     ? "#d8d8dd"
+              //     : statusTqf3 == TQF_STATUS.IN_PROGRESS
+              //     ? "#eedbb5"
+              //     : "#bbe3e3"
+              // }
+              className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
+              tqf-status={course.TQF3?.status}
+            >
+              {course.TQF3?.status}
+            </div>
+            {course.TQF3?.status === TQF_STATUS.DONE && (
+              <Tooltip
+                withArrow
+                arrowPosition="side"
+                arrowOffset={50}
+                arrowSize={7}
+                position="bottom-end"
+                label={
+                  <div className="text-default font-semibold text-[13px] p-1">
+                    Export TQF
+                  </div>
+                }
+                color="#FCFCFC"
+              >
+                <Button
+                  variant="light"
+                  className="tag-tqf  !px-3 !rounded-full text-center"
+                  onClick={() => setOpenModalExportTQF3(true)}
+                >
+                  <Icon className="size-5" IconComponent={IconFileExport} />
+                </Button>
+              </Tooltip>
+            )}
           </div>
         </Table.Td>
         <Table.Td>
@@ -282,27 +312,50 @@ export default function AdminDashboardTQF() {
         </Table.Td>
         <Table.Td>
           <div className="flex gap-3 h-full">
-            <Tooltip
-              withArrow
-              arrowPosition="side"
-              arrowOffset={50}
-              arrowSize={7}
-              position="bottom-end"
-              label={
-                <div className="text-default font-semibold text-[13px] p-1 ">
-                  View TQF
-                </div>
-              }
-              color="#FCFCFC"
+            <Menu
+              trigger="hover"
+              openDelay={100}
+              closeDelay={150}
+              clickOutsideEvents={["mousedown", "touchstart"]}
+              classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
             >
-              <Button
-                variant="outline"
-                className="tag-tqf  !px-3 !rounded-full text-center"
+              <Menu.Target>
+                <Button
+                  variant="outline"
+                  className="tag-tqf !px-3 !rounded-full text-center"
+                >
+                  <Icon className="size-5" IconComponent={IconEye} />
+                </Button>
+              </Menu.Target>
+
+              <Menu.Dropdown
+                className="!z-50 rounded-md bg-white"
+                style={{
+                  boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px",
+                  transform: "translate(-78px, -3px)", // Position as needed
+                }}
               >
-                <Icon className="size-5" IconComponent={IconEye} />
-              </Button>
-            </Tooltip>
-            <Tooltip
+                <div className="flex flex-col">
+                  <Menu.Item
+                    leftSection={
+                      <Icon className="size-5" IconComponent={IconTQF3} />
+                    }
+                    className="!w-48"
+                  >
+                    View TQF 3
+                  </Menu.Item>
+                  <Menu.Item
+                    leftSection={
+                      <Icon className="size-5" IconComponent={IconTQF5} />
+                    }
+                    className="!w-48"
+                  >
+                    View TQF 5
+                  </Menu.Item>
+                </div>
+              </Menu.Dropdown>
+            </Menu>
+            {/* <Tooltip
               withArrow
               arrowPosition="side"
               arrowOffset={50}
@@ -322,7 +375,7 @@ export default function AdminDashboardTQF() {
               >
                 <Icon className="size-5" IconComponent={IconFileExport} />
               </Button>
-            </Tooltip>
+            </Tooltip> */}
           </div>
         </Table.Td>
       </Table.Tr>
@@ -331,7 +384,7 @@ export default function AdminDashboardTQF() {
 
   return (
     <>
-      <Modal
+      {/* <Modal
         title={
           <div className="flex flex-col gap-2">
             <p>Export TQF</p>
@@ -368,13 +421,14 @@ export default function AdminDashboardTQF() {
                   </Group>
                 </Checkbox.Card>
                 <Checkbox.Card
+                  disabled
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                   }}
-                  className="p-3 flex border-none h-full rounded-md w-full"
+                  className="p-3 flex border-none disabled:text-disable h-full rounded-md w-full"
                 >
                   <Group>
-                    <Checkbox.Indicator />
+                    <Checkbox.Indicator disabled />
                     <div className="text-b2 font-medium ">TQF 5</div>
                   </Group>
                 </Checkbox.Card>
@@ -410,7 +464,9 @@ export default function AdminDashboardTQF() {
             </Group>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
+      <ModalExportTQF3  opened={openModalExportTQF3}
+        onClose={() => setOpenModalExportTQF3(false)} />
 
       <div className=" flex flex-col h-full w-full gap-2 overflow-hidden">
         <div className="flex flex-row px-6 pt-3 items-center justify-between">

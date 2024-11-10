@@ -13,6 +13,7 @@ import Icon from "@/components/Icon";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconDupTQF from "@/assets/icons/dupTQF.svg?react";
 import IconCheck from "@/assets/icons/Check.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import { useParams, useSearchParams } from "react-router-dom";
 import Part1TQF3 from "@/components/TQF3/Part1TQF3";
 import Part2TQF3 from "@/components/TQF3/Part2TQF3";
@@ -444,6 +445,14 @@ export default function TQF3() {
             title="After reusing TQF 3, please remember to double-check and save the data for all 6 parts of the course you selected"
             icon={
               <Icon IconComponent={IconExclamationCircle} className="size-6" />
+            }
+          ></Alert>
+          <Alert
+            variant="light"
+            color="blue"
+            title="TQF 3 Part 7  will not be reused if the reused course has a mismatched PLO."
+            icon={
+              <Icon IconComponent={IconInfo2} className="size-6" />
             }
           ></Alert>
           <Select
