@@ -162,21 +162,21 @@ export default function ModalManageCLO({
       closeOnClickOutside={false}
       title={`${upperFirst(type)} CLO`}
       size={
-        type === "add" && form.getValues().clo?.length! > 0 ? "70vw" : "40vw"
+        type === "add" && form.getValues().clo?.length! > 0 ? "80vw" : "50vw"
       }
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
         root: `!h-fit`,
         content: `flex flex-col bg-[#F6F7FA] overflow-hidden`,
-        body: `overflow-hidden`,
+        body: `overflow-hidden `,
         header: `mb-1`,
       }}
     >
       <FocusTrapInitialFocus />
-      <div className={`flex flex-col ${height}`}>
+      <div className={`flex flex-col  ${height}`}>
         <div
-          className={`flex gap-5 py-1 ${
+          className={`flex gap-5 py-1 sm:max-macair133:h-[460px] sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]  ${
             type === "add"
               ? form
                   .getValues()
@@ -194,7 +194,7 @@ export default function ModalManageCLO({
           <div
             id="description"
             ref={descriptionRef}
-            className={`flex flex-col rounded-md justify-between ${
+            className={`flex flex-col rounded-md sm:max-macair133:h-[460px] sm:max-macair133:overflow-y-auto justify-between ${
               type === "add" && "p-5"
             } gap-1 overflow-hidden ${
               form.getValues().clo?.length! > 0 && type === "add"

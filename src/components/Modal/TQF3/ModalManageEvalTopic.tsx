@@ -139,7 +139,7 @@ export default function ModalManageEvalTopic({
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Evaluation Topic`}
       size={
-        type === "add" && form.getValues().eval?.length! > 0 ? "70vw" : "45vw"
+        type === "add" && form.getValues().eval?.length! > 0 ? "80vw" : "50vw"
       }
       centered
       transitionProps={{ transition: "pop" }}
@@ -169,12 +169,12 @@ export default function ModalManageEvalTopic({
       )}
       <div
         className={`flex flex-col !gap-5 ${
-          type === "add" ? "h-full" : "h-fit  "
+          type === "add" ? "h-full macair133:h-full  sm:max-macair133:h-[320px]  sm:max-macair133:mb-14 sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]" : "h-fit  "
         } `}
       >
         <div
           className={`flex gap-5 py-1 ${
-            type === "add" ? " h-[500px]" : "h-fit"
+            type === "add" ? " h-[500px] " : "h-fit"
           }`}
         >
           {/* Input Field */}
@@ -284,7 +284,7 @@ export default function ModalManageEvalTopic({
 
             {/* Add More Button */}
             {type === "add" && (
-              <div className="flex justify-end">
+              <div className="flex sm:max-macair133:mt-5 justify-end">
                 <Button
                   variant="outline"
                   disabled={percentTotal == 100}
@@ -368,7 +368,7 @@ export default function ModalManageEvalTopic({
           )}
         </div>
         {/* Button */}
-        <div className="flex gap-2  items-end  justify-end h-fit">
+        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8  items-end  justify-end h-fit">
           <Button variant="subtle" onClick={onClose}>
             Cancel
           </Button>

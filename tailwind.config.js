@@ -25,6 +25,8 @@ export default {
       },
       screens: {
         sm: "1024px",
+        ipad11: "1180px",
+        macair133: "1210px"
       },
       fontSize: {
         h1: "20px",
