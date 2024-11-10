@@ -608,23 +608,26 @@ export default function ModalAddSection({
           label="Co-Instructor"
           description={`STEP ${isManage ? 4 : 3}`}
         >
-          <Alert
-            radius="md"
-            icon={<Icon IconComponent={IconInfo2} />}
-            variant="light"
-            color="blue"
-            classNames={{
-              icon: "size-6",
-              body: " flex justify-center",
-            }}
-            title={
-              <p>
-                Co-instructors can only access and upload scores for your
-                selected sections and manage the course TQF documents.
-              </p>
-            }
-          ></Alert>
-          <div className="flex flex-col mt-1 flex-1 ">
+          <div className="flex flex-col max-h-[420px] mb-4 mt-2 h-fit overflow-y-scroll p-[2px]">
+            <div>
+              <Alert
+                radius="md"
+                icon={<Icon IconComponent={IconInfo2} />}
+                variant="light"
+                color="blue"
+                className="mb-1"
+                classNames={{
+                  icon: "size-6",
+                  body: " flex justify-center",
+                }}
+                title={
+                  <p>
+                    Co-instructors can only access and upload scores for your
+                    selected sections and manage the course TQF documents.
+                  </p>
+                }
+              ></Alert>
+            </div>
             <CompoManageIns
               opened={(active == 2 && !isManage) || (active == 3 && isManage)}
               type="add"
@@ -635,7 +638,7 @@ export default function ModalAddSection({
             />
             {!!coInsList.length && (
               <div
-                className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md"
+                className="w-full flex flex-col mt-3 bg-white border-secondary border-[1px]  rounded-md"
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
@@ -643,7 +646,7 @@ export default function ModalAddSection({
                 <div className=" bg-bgTableHeader flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <Icon IconComponent={IconUsers} /> Added Co-Instructor
                 </div>
-                <div className="flex flex-col max-h-[130px] h-fit w-full   px-2   overflow-y-auto ">
+                <div className="flex flex-col  h-fit w-full px-2">
                   <div className="flex flex-col  h-fit p-1">
                     {coInsList.map((coIns, index) => (
                       <div
@@ -736,7 +739,7 @@ export default function ModalAddSection({
           description={`STEP ${isManage ? 5 : 4}`}
         >
           <div
-            className="w-full flex flex-col bg-white border-secondary border-[1px] mb-5 rounded-md"
+            className="w-full flex flex-col bg-white border-secondary border-[1px] mt-2 mb-5 rounded-md"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}

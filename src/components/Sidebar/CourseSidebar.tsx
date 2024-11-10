@@ -237,7 +237,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 ${
                   path.includes(ROUTE_PATH.TQF3)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#f0f0f0]"
                 }`}
                 >
                   TQF 3
@@ -301,7 +301,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                       />
                     )
                   }
-                  className={`!w-full !text-[13px] mb-2 flex justify-start items-center transition-colors duration-300 focus:border-none group
+                  className={`!w-full !text-[13px] mb-1 flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
                   path.includes(ROUTE_PATH.TQF5)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -347,7 +347,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           </div>
         </div>
 
-        <div className="flex  flex-col gap-2 mt-5">
+        <div className="flex  flex-col gap-2 ">
           <p className="text-b2 font-bold mb-1">Owner section</p>
           <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
             {instructors.map((item, index) => {

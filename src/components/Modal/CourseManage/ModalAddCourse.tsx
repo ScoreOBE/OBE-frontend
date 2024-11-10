@@ -666,7 +666,8 @@ export default function ModalAddCourse({
           label="Co-Instructor"
           description="STEP 4"
         >
-          <div className="flex flex-col mt-3 flex-1">
+          <div className="flex flex-col max-h-[420px] mb-5 h-fit overflow-y-scroll mt-2 p-[2px]">
+            <div>
             <Alert
               radius="md"
               icon={<Icon IconComponent={IconInfo2} />}
@@ -683,7 +684,7 @@ export default function ModalAddCourse({
                   selected sections and manage the course TQF documents.
                 </p>
               }
-            ></Alert>
+            ></Alert></div>
             <CompoManageIns
               opened={active == 3}
               type="add"
@@ -692,11 +693,11 @@ export default function ModalAddCourse({
               setUserList={setCoInsList}
             />
             {!!coInsList.length && (
-              <div className="w-full flex flex-col mb-5 bg-white border-secondary border-[1px]  rounded-md">
+              <div className="w-full flex flex-col mt-3 bg-white border-secondary border-[1px]  rounded-md">
                 <div className=" bg-bgTableHeader flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <Icon IconComponent={IconUsers} /> Added Co-Instructor
                 </div>
-                <div className="flex flex-col max-h-[130px] h-fit w-full   px-2   overflow-y-auto ">
+                <div className="flex flex-col  h-fit w-full px-2">
                   <div className="flex flex-col h-fit p-1 ">
                     {coInsList.map((coIns, index) => (
                       <div
@@ -790,7 +791,7 @@ export default function ModalAddCourse({
           description="STEP 5"
         >
           <div
-            className="w-full flex flex-col bg-white border-secondary border-[1px] mb-5 rounded-md"
+            className="w-full flex flex-col bg-white border-secondary mt-2 border-[1px] mb-5 rounded-md"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}

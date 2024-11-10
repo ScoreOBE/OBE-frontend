@@ -4,7 +4,7 @@ import loginImage from "@/assets/image/loginPage.png";
 import { Button, Paper, Title } from "@mantine/core";
 import { Image } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { isEmpty } from "lodash";
@@ -27,12 +27,19 @@ import "@mantine/carousel/styles.css";
 import { Carousel, Embla } from "@mantine/carousel";
 import { ROLE } from "@/helpers/constants/enum";
 import { goToDashboard } from "@/helpers/functions/function";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
+import { CustomEase } from "gsap/CustomEase";
+import { RoughEase, ExpoScaleEase, SlowMo } from "gsap/EasePack";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function Login() {
   const loading = useAppSelector((state) => state.loading);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  gsap.registerPlugin(ScrollTrigger);
+
   const data = [
     {
       image:
@@ -127,11 +134,12 @@ export default function Login() {
         <div className="flex items-center  mt-8 text-center w-full justify-center px-[40px] mb-8  sm:hidden">
           <p className="text-center  font-medium flex flex-col  text-[#4F4D55]">
             <span className="font-bold text-b1 text-secondary ">
-              ScoreOBE + is not available <br/> on your current window size.
+              ScoreOBE + is not available <br /> on your current window size.
             </span>
             <br />
             <span className="text-b2">
-            To log in, please use ScoreOBE + on a tablet in landscape mode <br/>  or a desktop for the best experience.
+              To log in, please use ScoreOBE + on a tablet in landscape mode{" "}
+              <br /> or a desktop for the best experience.
             </span>
           </p>
         </div>
@@ -340,7 +348,7 @@ export default function Login() {
         </div>
 
         {/* Admin View */}
-        <div className="bg-[#fafafa] sm:flex hidden h-full w-full flex-col gap-16 ">
+        {/* <div className="bg-[#fafafa] sm:flex hidden h-full w-full flex-col gap-16 ">
           <div className="flex flex-col items-center ">
             <p className=" drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start -rounded text-[#000000] text-[48px]">
               <span className="font-[600]  text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
@@ -393,81 +401,312 @@ export default function Login() {
               </p>
             </div>
           </div>
-          <div className="flex flex-col gap-16 items-center bg-black h-fit text-white px-28 py-20">
-            <div className="flex flex-col gap-16 items-center">
-              <p className="font-[600] text-[48px] ">
+        </div> */}
+
+        {/* TQFs */}
+        <div className="flex flex-col gap-20 bg-[#F5F5F7] w-full h-fit px-28 py-16 ">
+          <div className="flex flex-col items-start text-start ">
+            <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start text-[48px] ">
+              <p>New TQF system</p>
+              <p className="text-[#1D1D1F]">Convenient, Fast and Effortless</p>
+            </div>
+            <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[750px]">
+              With ScoreOBE+, generating TQF 3 and TQF 5 reports is now easier
+              than ever. Automatically compile course objectives, track learning
+              progress, and align with program goals —all in one place. Save
+              time, reduce paperwork, and focus more on what matters:{" "}
+              <span className="text-emphasize">
+                {" "}
+                improving teaching quality and student outcomes. Effortless
+                reporting for impactful education.
+              </span>
+            </p>
+          </div>
+
+          {/* benefit */}
+          <div className="flex flex-col gap-20">
+            <div className="flex gap-16 justify-center items-center">
+              <div className="flex flex-col gap-6 items-start text-start">
+                <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
+                  Create TQF Reports <br /> Quickly and Easily.
+                </p>
+                <p className=" text-[17px] text-deemphasize font-[600] text-wrap w-[400px]">
+                  <span className="text-emphasize">
+                    Save time, reduce effort, and ensure consistency across all
+                    your reports.
+                  </span>{" "}
+                  With our software, generating TQF 3 and TQF 5 reports has
+                  never been easier. Streamline your process and focus on what
+                  truly matters—creating quality content.
+                </p>
+              </div>
+
+              {/* Image */}
+              <Image
+                src={
+                  "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png"
+                }
+                className={`h-[450px] w-[780px] object-cover rounded-xl `}
+              />
+            </div>
+
+            <div className="flex gap-16 justify-center items-center">
+              <div className="flex flex-col gap-6 items-start text-start">
+                <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
+                  Reusable TQF 3 Templates.
+                </p>
+                <p className="text-[17px] text-deemphasize font-[600] text-wrap w-[400px]">
+                  Speed up report creation by reusing TQF 3 templates.
+                  <span className="text-emphasize">
+                    {" "}
+                    Eliminate repetitive data entry and quickly customize each
+                    report
+                  </span>
+                  , allowing you to focus on delivering valuable insights
+                  without the hassle of starting from scratch.
+                </p>
+              </div>
+
+              {/* Image */}
+              <Image
+                src={
+                  "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png"
+                }
+                className={`h-[450px] w-[780px] object-cover rounded-xl `}
+              />
+            </div>
+
+            <div className="flex gap-16 justify-center items-center">
+              <div className="flex flex-col gap-6 items-start text-start">
+                <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
+                  Powerful ScoreOBE+ <br />
+                  Analysis with TQF 5.
+                </p>
+                <p className="text-[17px] text-deemphasize font-[600] text-wrap w-[400px]">
+                  <span className="text-emphasize">
+                    Unlock detailed analysis and summaries of course objectives
+                    with TQF 5. Based on real student performance data
+                  </span>
+                  , this feature empowers you to fine-tune and enhance your
+                  curriculum for improved outcomes. Drive course effectiveness
+                  and align with institutional goals effortlessly.
+                </p>
+              </div>
+
+              {/* Image */}
+              <Image
+                src={
+                  "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png"
+                }
+                className={`h-[450px] w-[780px] object-cover rounded-xl `}
+              />
+            </div>
+          </div>
+
+          {/* TQF3 */}
+          <div className="flex flex-col items-center text-center font-[600] gap-14">
+            <div>
+              <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] ">
+                <p>TQF 3</p>
+                <p className="text-[#1D1D1F]">Save Time & Focus on Content</p>
+              </div>
+              <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[800px]">
+                With our reusable TQF 3 templates, you can{" "}
+                <span className="text-emphasize">
+                  {" "}
+                  generate reports quickly and easily. No more redundant data
+                  entry{" "}
+                </span>
+                —just fill in the essential details and get a polished report
+                ready in minutes.
+              </p>
+            </div>
+
+            <div className="flex gap-16">
+              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                <div className=" flex flex-col gap-1">
+                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
+                  <p className="text-center">
+                    Topic <br />
+                  </p>
+                </div>
+                <p className="text-[#86868B]">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor
+                </p>
+              </div>
+              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                <div className=" flex flex-col gap-1">
+                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
+                  <p className="text-center">
+                    Topic <br />
+                  </p>
+                </div>
+                <p className="text-[#86868B]">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor
+                </p>
+              </div>
+              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                <div className=" flex flex-col gap-1">
+                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
+                  <p className="text-center">
+                    Topic <br />
+                  </p>
+                </div>
+                <p className="text-[#86868B]">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor
+                </p>
+              </div>
+            </div>
+
+            <Image
+              src={
+                "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png"
+              }
+              className={`h-[600px] w-[3000px] object-cover rounded-xl `}
+            />
+          </div>
+
+          {/* TQF5 */}
+          <div className="flex flex-col items-center text-center font-[600] gap-14 -mt-14">
+            <div className="flex flex-col items-center">
+              <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] ">
+                <p>TQF 5</p>
+                <p className="text-[#1D1D1F]">
+                  Unlock Deep Insights into Your Course
+                </p>
+              </div>
+              <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[800px] ">
+                TQF 5 helps you analyze course objectives based on real student
+                performance data, empowering you to make data-driven
+                improvements and align your courses with institutional goals.
+              </p>
+            </div>
+
+            <div className="flex gap-16">
+              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                <div className=" flex flex-col gap-1">
+                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
+                  <p className="text-center">
+                    Topic <br />
+                  </p>
+                </div>
+                <p className="text-[#86868B]">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor
+                </p>
+              </div>
+              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                <div className=" flex flex-col gap-1">
+                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
+                  <p className="text-center">
+                    Topic <br />
+                  </p>
+                </div>
+                <p className="text-[#86868B]">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor
+                </p>
+              </div>
+              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                <div className=" flex flex-col gap-1">
+                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
+                  <p className="text-center">
+                    Topic <br />
+                  </p>
+                </div>
+                <p className="text-[#86868B]">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor
+                </p>
+              </div>
+            </div>
+
+            <Image
+              src={
+                "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-5.png"
+              }
+              className={`h-[600px] w-[3000px] object-cover rounded-xl `}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-16 items-center bg-black h-fit text-white px-28 py-20">
+          <div className="flex flex-col gap-20 items-center">
+            <div className="text-[21px] text-center">
+              <p className="font-[600] text-[60px] ">
                 Boost Student Success with{" "}
-                <span className="font-[600]  text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                   ScoreOBE+!
                 </span>
               </p>
+              <p>
+                Simplifies score announcements, tracks student progress, and
+                helps instructors align with educational goals.
+              </p>
+            </div>
 
-              <div>
-                <Image
-                  src={
-                    "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png"
-                  }
-                  className={`h-[380px] w-[880px] object-cover rounded-xl `}
-                />
+            <div>
+              <Image
+                src={
+                  "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png"
+                }
+                className={`h-[380px] w-[880px] object-cover rounded-xl `}
+              />
+            </div>
+
+            <div className="flex flex-col gap-16 justify-center w-full font-[600] text-[17px] px-10">
+              <div className="flex items-start justify-center gap-28">
+                <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
+                  <p>
+                    Effortless -{"  "}
+                    <span className="text-[#86868B]">
+                      Easily upload, publish, and manage course scores in just a
+                      few clicks, saving you time and effort.
+                    </span>
+                  </p>
+                </div>
+                <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
+                  <p>
+                    Insightful -{"  "}
+                    <span className="text-[#86868B]">
+                      Access powerful, clear charts that provide deep insights
+                      into scores for each assignment.
+                    </span>
+                  </p>
+                </div>
               </div>
 
-              <div className="flex flex-col gap-16 justify-center w-full font-[600] text-[17px] px-10">
-                <div className="flex items-start justify-center gap-28">
-                  <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
-                    <Icon
-                      IconComponent={IconBulb}
-                      className="size-16 stroke-1"
-                    />
-                    <p>
-                      Effortless -{"  "}
-                      <span className="text-[#86868B]">
-                        Easily upload, publish, and manage course scores in just
-                        a few clicks, saving you time and effort.
-                      </span>
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
-                    <Icon
-                      IconComponent={IconBulb}
-                      className="size-16 stroke-1"
-                    />
-                    <p>
-                      Insightful -{"  "}
-                      <span className="text-[#86868B]">
-                        Access powerful, clear charts that provide deep insights
-                        into scores for each assignment.
-                      </span>
-                    </p>
-                  </div>
+              <div className="flex items-start justify-center gap-28">
+                <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                  <Icon
+                    IconComponent={IconSparkle}
+                    className="size-16 stroke-1"
+                  />
+                  <p>
+                    Empowering -{" "}
+                    <span className="text-[#86868B]">
+                      Seamlessly align assessments with learning goals, ensuring
+                      accuracy and alignment with program objectives.
+                    </span>
+                  </p>
                 </div>
-
-                <div className="flex items-start justify-center gap-28">
-                  <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
-                    <Icon
-                      IconComponent={IconSparkle}
-                      className="size-16 stroke-1"
-                    />
-                    <p>
-                      Empowering -{" "}
-                      <span className="text-[#86868B]">
-                        Seamlessly align assessments with learning goals,
-                        ensuring accuracy and alignment with program objectives.
-                      </span>
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
-                    <Icon
-                      IconComponent={IconSparkle}
-                      className="size-16 stroke-1"
-                    />
-                    <p>
-                      Streamlined -{" "}
-                      <span className="text-[#86868B]">
-                        Quickly generate TQF reports for course evaluations,
-                        simplifying the process with minimal effort required.
-                      </span>
-                    </p>
-                  </div>
+                <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                  <Icon
+                    IconComponent={IconSparkle}
+                    className="size-16 stroke-1"
+                  />
+                  <p>
+                    Streamlined -{" "}
+                    <span className="text-[#86868B]">
+                      Quickly generate TQF reports for course evaluations,
+                      simplifying the process with minimal effort required.
+                    </span>
+                  </p>
                 </div>
               </div>
             </div>
