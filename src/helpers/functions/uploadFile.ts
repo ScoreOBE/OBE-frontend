@@ -121,8 +121,8 @@ const studentList = async (
       const existSec = result.find((sec) => sec.sectionNo == sectionNo);
       const student = {
         studentId: row[studentId],
-        firstName: row.firstName.replace(/ /g, ""),
-        lastName: row.lastName.replace(/ /g, ""),
+        firstNameTH: row.firstName.replace(/ /g, ""),
+        lastNameTH: row.lastName.replace(/ /g, ""),
       };
       if (!existSec) {
         result.push({
@@ -215,8 +215,8 @@ const scoreOBETemplete = (
       delete data.section;
       const student = {
         ...data,
-        firstName: data.firstName.replace(/ /g, ""),
-        lastName: data.lastName.replace(/ /g, ""),
+        firstNameTH: data.firstName.replace(/ /g, ""),
+        lastNameTH: data.lastName.replace(/ /g, ""),
       };
       if (!existSec) {
         result.push({
@@ -267,7 +267,7 @@ const gradescopeFile = (
   setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>,
   setErrorPoint: React.Dispatch<React.SetStateAction<string[]>>
 ) => {
-  const result: any[] = [];
+  const result = { sections: [] as any[], assignments: [] as any[] };
   for (const sheet of workbook.SheetNames) {
     const worksheet = workbook.Sheets[sheet];
     const resultsData: any[] = XLSX.utils.sheet_to_json(worksheet);
@@ -290,11 +290,27 @@ const gradescopeFile = (
       }
       scoreDataArray.push({
         studentId: data.SID,
-        firstName: data["First Name"],
-        lastName: data["Last Name"],
+        firstNameEN: data["First Name"],
+        lastNameEN: data["Last Name"],
         email: data.Email,
-        assignments: {},
+        scores: {},
       });
+      const sectionNo = course.sections?.find((sec) =>
+        sec.students?.find((std) => std.student.studentId == data.SID)
+      )?.sectionNo;
+      const existSec = result.sections.find(
+        (sec) => sec.sectionNo == sectionNo
+      );
+      if (!existSec) {
+        result.sections.push({
+          sectionNo,
+          assignments: [],
+          students: [scoreDataArray],
+        });
+      } else {
+        existSec.students.push(scoreDataArray);
+      }
+
       Object.keys(data)
         .slice(12)
         .map((key, j) => {
@@ -307,10 +323,10 @@ const gradescopeFile = (
           const formatted = key.split(" ");
           formatted.pop();
           const fullScore = formatted.pop()?.slice(1);
-          const assignmentNo = formatted.join(" ");
+          const questionName = formatted.join(" ");
           fullScoreDataArray.push(parseFloat(fullScore!));
-          formattedResults.push(assignmentNo);
-          scoreDataArray[i].assignments[assignmentNo] = data[key];
+          formattedResults.push(questionName);
+          scoreDataArray[i].scores[questionName] = data[key];
         });
     });
 
@@ -324,14 +340,14 @@ const gradescopeFile = (
 
     const data = formattedResults.map((question, index) => {
       return {
-        no: question,
+        name: question,
         fullScore: fullScoreDataArray[index],
       };
     });
 
-    result.push({
+    result.assignments.push({
       name: assignmentName,
-      assignments: data,
+      questions: data,
       scores: scoreDataArray,
     });
   }
@@ -339,7 +355,7 @@ const gradescopeFile = (
     year: course.year,
     semester: course.semester,
     course: course.id,
-    sections: result,
+    ...result,
   });
 };
 

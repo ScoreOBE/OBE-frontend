@@ -23,9 +23,9 @@ export interface IModelSection {
   openThisTerm?: boolean;
   instructor: IModelUser | string;
   coInstructors: IModelUser[] | any[];
-  students?: IModelUser[];
   isActive: boolean;
   addFirstTime?: boolean;
+  students?: { student: IModelUser; scores: IModelScore[] }[];
   assignments?: IModelAssignment[];
   TQF3?: IModelTQF3;
   TQF5?: IModelTQF5;
@@ -33,20 +33,21 @@ export interface IModelSection {
 
 export interface IModelAssignment {
   name: string;
-  desc: string;
   isPublish: boolean;
   weight: number;
   questions: IModelQuestion[];
 }
 
 export interface IModelQuestion {
-  no: number;
+  name: number;
   desc: string;
   fullScore: number;
-  scores: IModelScore[];
 }
 
 export interface IModelScore {
-  student: IModelUser;
-  point: number;
+  assignmentName: string;
+  questions: {
+    name: string;
+    score: number;
+  }[];
 }

@@ -86,7 +86,8 @@ export default function ModalStudentList({
 
   const rows = data.sections?.map((sec) =>
     sec.students
-      ?.filter((student) =>
+      ?.map(({ student }) => student)
+      .filter((student) =>
         parseInt(filter)
           ? student.studentId?.toString().includes(filter) ||
             sec.sectionNo?.toString().includes(filter)
