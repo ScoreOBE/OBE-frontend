@@ -81,13 +81,7 @@ export default function AdminDashboardTQF() {
   }, [academicYear, term, params]);
 
   useEffect(() => {
-    if (
-      term.id &&
-      !courseList.departmentCode.length &&
-      department.length &&
-      selectDepartment.codeEN
-    )
-      fetchCourse();
+    if (term.id && department.length && selectDepartment.codeEN) fetchCourse();
   }, [department, selectDepartment]);
 
   useEffect(() => {
