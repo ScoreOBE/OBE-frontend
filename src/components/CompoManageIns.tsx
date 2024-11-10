@@ -9,7 +9,7 @@ import { NOTI_TYPE, ROLE, TITLE_ROLE } from "@/helpers/constants/enum";
 import { IModelUser } from "@/models/ModelUser";
 import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import { getUserName } from "@/helpers/functions/function";
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 
 type actionType =

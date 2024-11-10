@@ -30,7 +30,7 @@ import { IModelUser } from "@/models/ModelUser";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
 import ModalUploadScore from "../components/Modal/ModalUploadScore";
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 
 export default function Dashboard() {

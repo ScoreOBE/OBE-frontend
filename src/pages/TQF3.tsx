@@ -42,7 +42,7 @@ import { LearningMethod } from "@/components/Modal/TQF3/ModalManageCLO";
 import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
 import { setDataTQF3, updatePartTQF3 } from "@/store/tqf3";
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { IModelCourse } from "@/models/ModelCourse";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";

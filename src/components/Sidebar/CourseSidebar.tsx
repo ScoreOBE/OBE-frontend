@@ -23,7 +23,7 @@ import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { getOneCourse } from "@/services/course/course.service";
 import { setDataTQF3 } from "@/store/tqf3";
 import { IModelTQF3 } from "@/models/ModelTQF3";
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import { isEmpty, isEqual } from "lodash";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";
 

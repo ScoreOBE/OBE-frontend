@@ -1,4 +1,4 @@
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import apiService from "@/services/apiService";
 
 export const sectionController = (configService = {}) => {
@@ -9,8 +9,8 @@ export const sectionController = (configService = {}) => {
     updateSection: async (id: string, params: Partial<IModelSection>) => {
       return service.put(`${prefix}/${id}`, { ...params });
     },
-    updateSectionActive: async (id: string, params: Partial<IModelSection>) => {
-      return service.put(`${prefix}/${id}/active`, { ...params });
+    updateSectionActive: async (params: any) => {
+      return service.put(`${prefix}/active`, { ...params });
     },
     deleteSection: async (id: string, params: any) => {
       return service.delete(`${prefix}/${id}`, { ...params });

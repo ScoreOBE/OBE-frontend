@@ -23,7 +23,7 @@ import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import ModalEditSection from "@/components/Modal/CourseManage/ModalEditSection";
 import Loading from "@/components/Loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import { IModelSection } from "@/models/ModelSection";
+import { IModelSection } from "@/models/ModelCourse";
 import {
   deleteSection,
   updateSectionActive,
@@ -95,7 +95,11 @@ export default function Section() {
     sec: Partial<IModelSection>,
     checked: boolean
   ) => {
-    const res = await updateSectionActive(sec.id!, { isActive: checked });
+    const res = await updateSectionActive({
+      courseId: course?.id,
+      sectionNo: sec.sectionNo,
+      isActive: checked,
+    });
     if (res) {
       // fetchOneCourse();
       dispatch(

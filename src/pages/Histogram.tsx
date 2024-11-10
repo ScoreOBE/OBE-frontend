@@ -12,7 +12,7 @@ import {
   IModelAssignment,
   IModelQuestion,
   IModelScore,
-} from "@/models/ModelSection";
+} from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
 import { ROLE } from "@/helpers/constants/enum";
 

@@ -18,7 +18,7 @@ import {
   IModelAssignment,
   IModelQuestion,
   IModelScore,
-} from "@/models/ModelSection";
+} from "@/models/ModelCourse";
 import { ROLE } from "@/helpers/constants/enum";
 
 export default function Overall() {
