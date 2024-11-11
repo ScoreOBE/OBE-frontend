@@ -39,6 +39,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
   const [activateSemester, setActivateSemester] =
     useState<IModelAcademicYear>();
   const [textActivate, setTextActivate] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (opened) {
@@ -106,6 +107,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
   };
 
   const onClickActivate = async (e: IModelAcademicYear) => {
+    setLoading(true);
     const res = await activeAcademicYear(e.id);
     if (res) {
       showNotifications(
@@ -120,6 +122,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       setTextActivate("");
       fetchSemester();
     }
+    setLoading(false);
   };
 
   const onClickAdd = async () => {
@@ -191,11 +194,13 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             title={
               <div className="flex items-center  gap-2">
                 <Icon IconComponent={IconInfo2} />
-                <p>You can add up to 3 semesters from the currently active semester.</p>
+                <p>
+                  You can add up to 3 semesters from the currently active
+                  semester.
+                </p>
               </div>
             }
-          >
-          </Alert>
+          ></Alert>
           {/* Added Semester */}
           <div
             className="w-full -mt-2  flex flex-col bg-white border-secondary  border-[1px]  rounded-md"
@@ -328,6 +333,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             )
           }
           onClick={() => onClickActivate(activateSemester!)}
+          loading={loading}
           className="mt-4 min-w-fit !h-[36px] !w-full"
         >
           Activate this semester
