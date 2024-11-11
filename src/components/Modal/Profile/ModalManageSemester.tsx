@@ -172,7 +172,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
         opened={opened}
         onClose={onClose}
         title="Semester Management"
-        size="42vw"
+        size="45vw"
         centered
         transitionProps={{ transition: "pop" }}
         classNames={{
@@ -222,7 +222,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                 {Object.keys(yearFilter).map((year) => (
                   <div
                     key={year}
-                    className="border-[1px] rounded-md border-[#e6e6e6] bg-white overflow-clip flex flex-col w-full items-center justify-between"
+                    className="border-[1px] rounded-md border-[#e6e6e6] h-fit bg-white  flex flex-col w-full items-center justify-between"
                   >
                     <div className="flex flex-col w-full items-center">
                       {yearFilter[year].map((semester: any, index: number) => (

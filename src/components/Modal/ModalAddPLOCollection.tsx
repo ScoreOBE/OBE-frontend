@@ -460,9 +460,9 @@ export default function ModalAddPLOCollection({
             label="Add PLO"
             description="STEP 2"
           >
-            <div className="flex gap-3 h-[440px] mt-3 ">
+            <div className="flex gap-3 overflow-hidden sm:max-macair133:h-fit p-[2px] macair133:h-[440px] mt-3 ">
               <div
-                className={`flex flex-col  gap-3 p-5 rounded-lg h-full ${
+                className={`flex flex-col overflow-y-auto  sm:h-[320px] ipad11:h-[360px]  gap-3 p-5 rounded-lg h-full ${
                   state.length ? "w-[50%]" : "w-full"
                 } overflow-hidden relative`}
                 style={{
@@ -479,7 +479,7 @@ export default function ModalAddPLOCollection({
                   }
                   className="w-full border-none   rounded-r-none "
                   classNames={{
-                    input: "flex  h-[140px] p-3 ",
+                    input: "flex  h-[140px] sm:h-[75px] ipad11:h-[95px] p-3 ",
                     label: "flex pb-1",
                   }}
                   placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
@@ -503,7 +503,7 @@ export default function ModalAddPLOCollection({
                   }
                   className="w-full border-none rounded-r-none"
                   classNames={{
-                    input: "flex h-[140px] p-3",
+                    input: "flex h-[140px] sm:h-[75px] ipad11:h-[95px] p-3",
                     label: "flex pb-1",
                   }}
                   placeholder="Ex. An ability to solve complex engineering problems."
@@ -517,7 +517,7 @@ export default function ModalAddPLOCollection({
                   }}
                 />
 
-                <div className="flex gap-2 mt-3 w-full justify-end absolute right-5 bottom-5 ">
+                <div className="flex gap-2 mt-3 w-full justify-end macair133:absolute right-5 bottom-5 ">
                   <Button
                     variant="outline"
                     onClick={() => setIsAddAnother(true)}
@@ -528,7 +528,7 @@ export default function ModalAddPLOCollection({
               </div>
               {form.getValues().data?.length! > 1 && (
                 <div
-                  className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[50%] h-full"
+                  className="flex flex-col bg-white border-secondary border-[1px] sm:h-[320px] ipad11:h-[360px] rounded-md w-[50%] h-full"
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                     overflowY: "auto",
@@ -683,7 +683,7 @@ export default function ModalAddPLOCollection({
                     {department.length > 1 ? "s" : ""}
                   </p>
                 </div>
-                <div className="flex flex-col w-full h-[290px] px-3 overflow-y-auto">
+                <div className="flex flex-col w-full macair133:h-[290px] h-[200px] ipad11:h-[220px] sm:h-[170px] px-3 overflow-y-auto">
                   <Checkbox
                     size="xs"
                     className="p-3 py-5  w-full last:border-none border-b-[1px]"
@@ -736,7 +736,7 @@ export default function ModalAddPLOCollection({
             label="Review"
             description="STEP 4"
           >
-            <div className="flex gap-5 mt-3   max-h-[440px]">
+            <div className="flex gap-5 mt-3 sm:max-h-[280px] ipad11:max-h-[340px] macair133:max-h-[440px]">
               <div
                 className="w-full  flex flex-col bg-white border-secondary border-[1px] rounded-md overflow-hidden"
                 style={{

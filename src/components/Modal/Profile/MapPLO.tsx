@@ -1093,11 +1093,11 @@ export default function MapPLO({ ploName = "" }: Props) {
                     <Table stickyHeader striped>
                       <Table.Thead className="z-[52]">
                         <Table.Tr>
-                          <Table.Th className="w-[30%] sticky left-0">
+                          <Table.Th className="w-[30%] sm:text-b3 sticky left-0">
                             Course No.
                           </Table.Th>
                           {ploList.data?.map((plo, index) => (
-                            <Table.Th key={index}>PLO-{plo.no}</Table.Th>
+                            <Table.Th className="sm:text-b3" key={index}>PLO-{plo.no}</Table.Th>
                           ))}
                         </Table.Tr>
                       </Table.Thead>
