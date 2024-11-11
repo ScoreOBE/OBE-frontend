@@ -426,7 +426,13 @@ export default function ModalAddCourse({
                 </span>
                 <br />
                 <span className="flex justify-start font-medium text-b3 text-secondary -mt-1">
-                  - Learner Person / Innovative Co-creator / Active Citizen
+                  - Learner Person
+                </span>
+                <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
+                  - Innovative Co-creator 
+                </span>
+                <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
+                  - Active Citizen 
                 </span>
               </p>
             </Button>
@@ -450,8 +456,13 @@ export default function ModalAddCourse({
                 </span>
                 <br />
                 <span className="flex justify-start font-medium text-b3 text-secondary -mt-1">
-                  - Core Courses / Major Courses (Required Courses) / Minor
-                  Courses
+                  - Core Courses 
+                </span>
+                <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
+                  - Major Courses 
+                </span>
+                <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
+                  - Minor Courses 
                 </span>
               </p>
             </Button>
@@ -467,15 +478,11 @@ export default function ModalAddCourse({
                 inner: "flex justify-between items-center w-full",
               }}
               color="#ffffff"
-              className="!w-full !h-fit !text-[13px] !border border-secondary py-3 items-center flex hover:bg-bgSecond"
+              className="!w-full !h-fit !text-[13px] !border border-secondary py-4 items-center flex hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
-                <span className="flex justify-start text-default">
-                  Major Elective
-                </span>
-                <br />
-                <span className="flex justify-start font-medium text-[12px] text-secondary -mt-1">
-                  - Selected Topics Course
+                <span className="flex justify-start mb-1 text-default">
+                  Selected Topics Course
                 </span>
               </p>
             </Button>
@@ -491,15 +498,11 @@ export default function ModalAddCourse({
               classNames={{
                 inner: "flex justify-between items-center w-full ",
               }}
-              className="!w-full !h-fit !text-[13px] !border border-secondary py-3 items-center flex hover:bg-bgSecond"
+              className="!w-full !h-fit !text-[13px] !border border-secondary py-4 items-center flex hover:bg-bgSecond"
             >
               <p className="justify-start flex flex-col">
-                <span className="flex justify-start text-default">
+                <span className="flex justify-start mb-1 text-default">
                   {COURSE_TYPE.FREE.en}
-                </span>
-                <br />
-                <span className="flex justify-start font-medium text-[12px] text-secondary -mt-1">
-                  -
                 </span>
               </p>
             </Button>
@@ -520,7 +523,7 @@ export default function ModalAddCourse({
             classNames={{
               icon: "size-6",
               body: " flex  justify-center",
-              label: "sm:text-[13px] ipad11:text-b2"
+              label: "sm:text-[13px] ipad11:text-b2",
             }}
             title={
               "Please fill only the section number for the section you own."
@@ -669,24 +672,25 @@ export default function ModalAddCourse({
         >
           <div className="flex flex-col macair133:max-h-[420px] sm:max-h-[300px] ipad11:max-h-[360px] mb-5 h-fit overflow-y-scroll mt-2 p-[2px]">
             <div>
-            <Alert
-              radius="md"
-              icon={<Icon IconComponent={IconInfo2} />}
-              variant="light"
-              color="blue"
-              className="mb-1"
-              classNames={{
-                icon: "size-6",
-                body: " flex justify-center",
-                label: "sm:text-[13px] ipad11:text-b2"
-              }}
-              title={
-                <p>
-                  Co-instructors can only access and upload scores for your
-                  selected sections and manage the course TQF documents.
-                </p>
-              }
-            ></Alert></div>
+              <Alert
+                radius="md"
+                icon={<Icon IconComponent={IconInfo2} />}
+                variant="light"
+                color="blue"
+                className="mb-1"
+                classNames={{
+                  icon: "size-6",
+                  body: " flex justify-center",
+                  label: "sm:text-[13px] ipad11:text-b2",
+                }}
+                title={
+                  <p>
+                    Co-instructors can only access and upload scores for your
+                    selected sections and manage the course TQF documents.
+                  </p>
+                }
+              ></Alert>
+            </div>
             <CompoManageIns
               opened={active == 3}
               type="add"
