@@ -133,7 +133,7 @@ export default function TQF3() {
     if (academicYear && (tqf3.topic !== tqf3Original?.topic || !tqf3Original)) {
       fetchOneCourse(true);
     }
-  }, [academicYear, tqf3.topic, courseNo]);
+  }, [academicYear, tqf3.topic, tqf3.coursePLO, courseNo]);
 
   useEffect(() => {
     if (localStorage.getItem(`reuse${tqf3.id}-part1`)?.length) {
