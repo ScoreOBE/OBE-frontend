@@ -132,8 +132,10 @@ export default function TQF3() {
   }, [academicYear, tqf3.topic, courseNo]);
 
   useEffect(() => {
-    replaceReuseTQF3();
-  }, [tqf3.id]);
+    if (localStorage.getItem(`reuse${tqf3.id}-part1`)?.length) {
+      replaceReuseTQF3();
+    }
+  }, [localStorage.getItem(`reuse${tqf3.id}-part1`)]);
 
   useEffect(() => {
     if (!openWarningEditDataTQF2Or3 && confirmToEditData) {
@@ -259,6 +261,8 @@ export default function TQF3() {
         );
       }
     }
+    setTqf3Part("part1");
+    localStorage.setItem("setReuse", "true");
   };
 
   const setCurrentPartTQF3 = (tqf3: IModelTQF3) => {
@@ -334,6 +338,7 @@ export default function TQF3() {
             `TQF 3, ${tqf3Part} save success`,
             `TQF 3 - ${tqf3Part} is saved`
           );
+          setTqf3Part(`part${parseInt(tqf3Part.slice(-1)) + 1}`);
         }
       }
     }
@@ -451,9 +456,7 @@ export default function TQF3() {
             variant="light"
             color="blue"
             title="TQF 3 Part 7  will not be reused if the reused course has a mismatched PLO."
-            icon={
-              <Icon IconComponent={IconInfo2} className="size-6" />
-            }
+            icon={<Icon IconComponent={IconInfo2} className="size-6" />}
           ></Alert>
           <Select
             rightSectionPointerEvents="all"
