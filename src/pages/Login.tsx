@@ -1,7 +1,7 @@
 "use client";
 import cmulogoLogin from "@/assets/image/cmuLogoLoginWhite.png";
 import loginImage from "@/assets/image/loginPage.png";
-import { Button, Paper, Title } from "@mantine/core";
+import { Button, Paper, Tabs, Title } from "@mantine/core";
 import { Image } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -32,6 +32,7 @@ import { useGSAP } from "@gsap/react";
 import { CustomEase } from "gsap/CustomEase";
 import { RoughEase, ExpoScaleEase, SlowMo } from "gsap/EasePack";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import testPhoto from "@/assets/image/testPhoto.png";
 
 export default function Login() {
   const loading = useAppSelector((state) => state.loading);
@@ -76,34 +77,6 @@ export default function Login() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState("right"); // Track the slide direction
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [embla, setEmbla] = useState<Embla | null>(null);
-
-  const handleScroll = useCallback(() => {
-    if (!embla) return;
-    const progress = Math.max(0, Math.min(1, embla.scrollProgress()));
-    setScrollProgress(progress * 100);
-  }, [embla, setScrollProgress]);
-
-  useEffect(() => {
-    if (embla) {
-      embla.on("scroll", handleScroll);
-      handleScroll();
-    }
-  }, [embla]);
-
-  // const handleNext = () => {
-  //   setDirection("right");
-  //   setCurrentIndex((prevIndex) =>
-  //     prevIndex === images.length - 1 ? 0 : prevIndex + 1
-  //   );
-  // };
-
-  // const handlePrev = () => {
-  //   setDirection("left");
-  //   setCurrentIndex((prevIndex) =>
-  //     prevIndex === 0 ? images.length - 1 : prevIndex - 1
-  //   );
-  // };
 
   useEffect(() => {
     dispatch(setShowSidebar(false));
@@ -113,11 +86,32 @@ export default function Login() {
     }
   }, [user]);
 
+  // useGSAP(() => {
+  //   gsap.set(".img:not(:first-child)", { opacity: 0, scale: 0.5 });
+
+  //   gsap.to(".img:not(:first-child)", {
+  //     opacity: 1,
+  //     scale: 1,
+  //     duration: 1,
+  //     stagger: 1,
+  //     scrollTrigger: {
+  //       trigger: ".benefit",
+  //       start: "top 7%",
+  //       end: "bottom bottom",
+  //       pin: ".right",
+  //       scrub: 1,
+  //       markers: true,
+  //       // onLeave: () =>
+  //       //   gsap.set(".img:not(:first-child)", { opacity: 1, scale: 1 }), // Keep images visible when reaching the end
+  //     },
+  //   });
+  // }, []);
+
   return loading ? (
     <Loading />
   ) : (
-    <div className=" bg-[#fafafa]  h-full w-screen items-center flex flex-col overflow-y-auto overflow-x-hidden">
-      <div className="flex    flex-col w-full ">
+    <div className=" bg-[#fafafa] h-full w-screen items-center flex flex-col overflow-y-auto overflow-x-hidden">
+      <div className="flex flex-col w-full">
         <p className="text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 font-[600] sm:font-[500] item-start rounded text-[#000000] text-[30px] mb-5 sm:mb-0 sm:text-[50px] leading-[48px] sm:leading-[66px]">
           <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE +{" "}
@@ -165,7 +159,7 @@ export default function Login() {
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <div className=" sm:flex relative hidden  items-center rounded-t-xl justify-center p-5 py-[9px] border-b-[1px] border-[#eeeeee] flex-row gap-0 w-full bg-white">
+          <div className=" sm:flex relative hidden items-center rounded-t-xl justify-center p-5 py-[9px] border-b-[1px] border-[#eeeeee] flex-row gap-0 w-full bg-white">
             <div className=" absolute -top-10 py-20  rotate-180 -z-50 w-screen h-screen  flex justify-center">
               <div className="rounded-full h-full w-3/6 bg-[#FF7847] opacityy-50 bg-blur"></div>
               <div className="rounded-full h-[97%] w-3/6 bg-[#FF469D] opacityy-50 bg-blur"></div>
@@ -173,7 +167,7 @@ export default function Login() {
               <div className="rounded-full h-[97%] w-3/6 bg-[#0A7CFF] opacityy-50 bg-blur"></div>{" "}
               <div className="rounded-full h-[97%] w-3/6 bg-[#00abdf] opacityy-50 bg-blur"></div>
             </div>
-            <div className="flex justify-start w-[35%]   flex-row gap-6 items-center">
+            <div className="flex justify-start w-[35%] flex-row gap-6 items-center">
               <div className="flex  flex-row gap-2">
                 <div className=" rounded-full w-[12px] h-[12px] bg-[#ED6A5E]"></div>
                 <div className=" rounded-full w-[12px] h-[12px] bg-[#F4BF4F]"></div>
@@ -347,65 +341,9 @@ export default function Login() {
           </Carousel>
         </div>
 
-        {/* Admin View */}
-        {/* <div className="bg-[#fafafa] sm:flex hidden h-full w-full flex-col gap-16 ">
-          <div className="flex flex-col items-center ">
-            <p className=" drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start -rounded text-[#000000] text-[48px]">
-              <span className="font-[600]  text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                Admin View
-              </span>{" "}
-              <br />
-            </p>
-            <p className="mt-5 text-[19px] text-default font-[500] text-center mx-40">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-              <span className="mt-5 underline text-b1  text-[#7b7b7c] font-[500]">
-                Available in December or January
-              </span>
-            </p>
-          </div>
-          <div className=" flex items-center justify-center gap-36">
-            <div className="flex flex-col my-2">
-              <div className="pb-2 border-b-2 w-48 text-start">
-                <p className=" text-black font-[700]  text-[19px]  pt-4 ">
-                  TQF
-                </p>
-              </div>
-              <p className=" text-default font-[500] pt-2 text-b2 leading-[22px] text-start text-wrap w-48 ">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-            </div>
-            <div className="flex flex-col my-2">
-              <div className="pb-2 border-b-2 w-48 text-start">
-                <p className=" text-black font-[700]  text-[19px]  pt-4 ">
-                  CLO
-                </p>
-              </div>
-              <p className=" text-default font-[500] pt-2 text-b2 leading-[22px] text-start text-wrap w-48">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-            </div>
-            <div className="flex flex-col my-2">
-              <div className="pb-2 border-b-2 w-48 text-start">
-                <p className=" text-black font-[700]  text-[19px]  pt-4 ">
-                  PLO
-                </p>
-              </div>
-              <p className=" text-default font-[500] pt-2 text-b2 leading-[22px] text-start text-wrap w-48">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-            </div>
-          </div>
-        </div> */}
-
         {/* TQFs */}
-        <div className="flex flex-col gap-20 bg-[#F5F5F7] w-full h-fit px-28 py-16 ">
-          <div className="flex flex-col items-start text-start ">
+        <div className="flex flex-col w-full h-fit pt-16">
+          <div className="flex flex-col items-start text-start px-28">
             <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start text-[48px] ">
               <p>New TQF system</p>
               <p className="text-[#1D1D1F]">Convenient, Fast and Effortless</p>
@@ -423,9 +361,86 @@ export default function Login() {
             </p>
           </div>
 
+          {/* for GSAP */}
+          {/* <div className="flex px-28 benefit">
+            <div className="left flex flex-col justify-center items-center">
+              <div className="flex flex-col gap-6 items-start justify-center text-start bg-red-400 h-screen text z-30">
+                <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
+                  Create TQF Reports <br /> Quickly and Easily.
+                </p>
+                <p className=" text-[17px] text-deemphasize font-[600] text-wrap w-[400px]">
+                  <span className="text-emphasize">
+                    Save time, reduce effort, and ensure consistency across all
+                    your reports.
+                  </span>{" "}
+                  With our software, generating TQF 3 and TQF 5 reports has
+                  never been easier. Streamline your process and focus on what
+                  truly matters—creating quality content.
+                </p>
+              </div>
+              <div className="flex flex-col gap-6  items-start justify-center text-start  bg-red-300 h-screen text z-20">
+                <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
+                  Reusable TQF 3 Templates.
+                </p>
+                <p className="text-[17px] text-deemphasize font-[600] text-wrap w-[400px]">
+                  Speed up report creation by reusing TQF 3 templates.
+                  <span className="text-emphasize">
+                    {" "}
+                    Eliminate repetitive data entry and quickly customize each
+                    report
+                  </span>
+                  , allowing you to focus on delivering valuable insights
+                  without the hassle of starting from scratch.
+                </p>
+              </div>
+              <div className="flex flex-col gap-6  items-start justify-center text-start  bg-red-200 h-screen text z-10">
+                <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
+                  Powerful ScoreOBE+ <br />
+                  Analysis with TQF 5.
+                </p>
+                <p className="text-[17px] text-deemphasize font-[600] text-wrap w-[400px]">
+                  <span className="text-emphasize">
+                    Unlock detailed analysis and summaries of course objectives
+                    with TQF 5. Based on real student performance data
+                  </span>
+                  , this feature empowers you to fine-tune and enhance your
+                  curriculum for improved outcomes. Drive course effectiveness
+                  and align with institutional goals effortlessly.
+                </p>
+              </div>
+            </div>
+
+            <div className="right bg-blue-200 w-full py-10 pl-10 items-center justify-center h-screen relative">
+              <div className="img absolute top-[20%] z-10">
+                <Image
+                  src={
+                    "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png"
+                  }
+                  className={`object-cover rounded-xl`}
+                />
+              </div>
+              <div className="img absolute top-[20%] z-20">
+                <Image
+                  src={
+                    "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png"
+                  }
+                  className={`object-cover rounded-xl`}
+                />
+              </div>
+              <div className="img absolute top-[20%] z-30">
+                <Image
+                  src={
+                    "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png"
+                  }
+                  className={`object-cover rounded-xl`}
+                />
+              </div>
+            </div>
+          </div> */}
+
           {/* benefit */}
-          <div className="flex flex-col gap-20">
-            <div className="flex gap-16 justify-center items-center">
+          <div className="flex flex-col">
+            <div className="flex gap-16 h-screen w-screen justify-center items-center">
               <div className="flex flex-col gap-6 items-start text-start">
                 <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
                   Create TQF Reports <br /> Quickly and Easily.
@@ -446,11 +461,11 @@ export default function Login() {
                 src={
                   "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png"
                 }
-                className={`h-[450px] w-[780px] object-cover rounded-xl `}
+                className={`h-[80%] w-[50%] object-cover rounded-xl`}
               />
             </div>
 
-            <div className="flex gap-16 justify-center items-center">
+            <div className="flex gap-16 h-screen w-screen justify-center items-center">
               <div className="flex flex-col gap-6 items-start text-start">
                 <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
                   Reusable TQF 3 Templates.
@@ -472,11 +487,11 @@ export default function Login() {
                 src={
                   "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png"
                 }
-                className={`h-[450px] w-[780px] object-cover rounded-xl `}
+                className={`h-[80%] w-[50%] object-cover rounded-xl `}
               />
             </div>
 
-            <div className="flex gap-16 justify-center items-center">
+            <div className="flex gap-16 h-screen w-screen justify-center items-center">
               <div className="flex flex-col gap-6 items-start text-start">
                 <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
                   Powerful ScoreOBE+ <br />
@@ -498,7 +513,7 @@ export default function Login() {
                 src={
                   "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png"
                 }
-                className={`h-[450px] w-[780px] object-cover rounded-xl `}
+                className={`h-[80%] w-[50%] object-cover rounded-xl `}
               />
             </div>
           </div>
@@ -570,7 +585,7 @@ export default function Login() {
           </div>
 
           {/* TQF5 */}
-          <div className="flex flex-col items-center text-center font-[600] gap-14 -mt-14">
+          <div className="flex flex-col items-center text-center font-[600] gap-14 -mt-28">
             <div className="flex flex-col items-center">
               <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] ">
                 <p>TQF 5</p>
@@ -633,6 +648,244 @@ export default function Login() {
           </div>
         </div>
 
+        <div>
+          <div className="bg-[#fafafa] sm:flex hidden h-full w-full flex-col gap-12">
+            <div className="flex flex-col items-start text-start px-28">
+              <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
+                <p>
+                  Say Goodbye to Complexity, <br /> Hello to Seamless Course
+                  Management!
+                </p>
+              </div>
+              <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[900px]">
+                Unlock the ultimate tools for TQF, PLO, and CLO management with
+                our powerful admin features.
+              </p>
+            </div>
+
+            <div className="flex">
+              <img
+                src={testPhoto}
+                alt="CMULogo"
+                className="h-[75%] -translate-x-[15%]"
+              />
+
+              <div className="flex flex-col items-start justify-center gap-8 -translate-x-[45%] h-[70%]">
+                <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                  <Icon
+                    IconComponent={IconSparkle}
+                    className="size-16 stroke-1"
+                  />
+                  <p>
+                    TQF -{" "}
+                    <span className="text-[#86868B]">
+                      Seamlessly align assessments with learning goals, ensuring
+                      accuracy and alignment with program objectives.
+                    </span>
+                  </p>
+                </div>
+                <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                  <Icon
+                    IconComponent={IconSparkle}
+                    className="size-16 stroke-1"
+                  />
+                  <p>
+                    CLO -{" "}
+                    <span className="text-[#86868B]">
+                      Seamlessly align assessments with learning goals, ensuring
+                      accuracy and alignment with program objectives.
+                    </span>
+                  </p>
+                </div>
+                <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                  <Icon
+                    IconComponent={IconSparkle}
+                    className="size-16 stroke-1"
+                  />
+                  <p>
+                    PLO -{" "}
+                    <span className="text-[#86868B]">
+                      Seamlessly align assessments with learning goals, ensuring
+                      accuracy and alignment with program objectives.
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center -mt-48">
+              <Tabs defaultValue="tqf">
+                <Tabs.List className="flex justify-center">
+                  <Tabs.Tab
+                    value="tqf"
+                    className="text-black font-[700] text-[20px]"
+                  >
+                    TQF
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    value="clo"
+                    className="text-black font-[700] text-[20px]"
+                  >
+                    CLO
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    value="plo"
+                    className="text-black font-[700] text-[20px]"
+                  >
+                    PLO
+                  </Tabs.Tab>
+                </Tabs.List>
+
+                <Tabs.Panel value="tqf" className="mt-8 flex gap-4">
+                  <div className="bg-[#4285f4]/10 h-[600px] w-[700px] rounded-xl flex items-center justify-center">
+                    Image TQF
+                  </div>
+                  <div className="h-[600px] flex flex-col gap-4">
+                    <div className="bg-[#4285f4]/10 h-full w-[400px] rounded-xl flex items-center justify-center">
+                      TQF
+                    </div>
+                    <div className="bg-[#4285f4]/10 h-full w-[400px] rounded-xl flex items-center justify-center">
+                      TQF
+                    </div>
+                    <div className="bg-[#4285f4]/10 h-full w-[400px] rounded-xl flex items-center justify-center">
+                      TQF
+                    </div>
+                  </div>
+                </Tabs.Panel>
+                <Tabs.Panel value="clo" className="mt-8 flex gap-4">
+                  <div className="bg-[#ec407a]/10 h-[600px] w-[700px] rounded-xl flex items-center justify-center">
+                    Image CLO
+                  </div>
+                  <div className="h-[600px] flex flex-col gap-4">
+                    <div className="bg-[#ec407a]/10 h-full w-[400px] rounded-xl flex items-center justify-center">
+                      CLO
+                    </div>
+                    <div className="bg-[#ec407a]/10 h-full w-[400px] rounded-xl flex items-center justify-center">
+                      CLO
+                    </div>
+                    <div className="bg-[#ec407a]/10 h-full w-[400px] rounded-xl flex items-center justify-center">
+                      CLO
+                    </div>
+                  </div>
+                </Tabs.Panel>
+                <Tabs.Panel value="plo" className="mt-8 flex gap-4">
+                  <div className="bg-[#a06ee1]/10 h-[600px] w-[700px] rounded-xl flex items-center justify-center">
+                    Image PLO
+                  </div>
+                  <div className="h-[600px] flex flex-col gap-4">
+                    <div className="bg-[#a06ee1]/10 h-full w-[400px] rounded-xl flex items-center justify-center">
+                      PLO
+                    </div>
+                    <div className="bg-[#a06ee1]/10 h-full w-[400px] rounded-xl flex items-center justify-center">
+                      PLO
+                    </div>
+                    <div className="bg-[#a06ee1]/10 h-full w-[400px] rounded-xl flex items-center justify-center">
+                      PLO
+                    </div>
+                  </div>
+                </Tabs.Panel>
+              </Tabs>
+            </div>
+
+            <div className="flex flex-col items-center text-center px-28 mt-48 gap-10">
+              <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]  drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[52px] ">
+                <p>
+                  There's never been a better time <br /> for an upgrade than
+                  right now.
+                </p>
+              </div>
+              <img src={testPhoto} alt="CMULogo" className="h-[50%] " />
+            </div>
+
+            {/* <div className=" flex items-center justify-center gap-36">
+            <div className="flex flex-col my-2">
+              <div className="pb-2 border-b-2 w-48 text-start">
+                <p className=" text-black font-[700]  text-[19px]  pt-4 ">
+                  TQF
+                </p>
+              </div>
+              <p className=" text-default font-[500] pt-2 text-b2 leading-[22px] text-start text-wrap w-48 ">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
+            </div>
+            <div className="flex flex-col my-2">
+              <div className="pb-2 border-b-2 w-48 text-start">
+                <p className=" text-black font-[700]  text-[19px]  pt-4 ">
+                  CLO
+                </p>
+              </div>
+              <p className=" text-default font-[500] pt-2 text-b2 leading-[22px] text-start text-wrap w-48">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
+            </div>
+            <div className="flex flex-col my-2">
+              <div className="pb-2 border-b-2 w-48 text-start">
+                <p className=" text-black font-[700]  text-[19px]  pt-4 ">
+                  PLO
+                </p>
+              </div>
+              <p className=" text-default font-[500] pt-2 text-b2 leading-[22px] text-start text-wrap w-48">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
+            </div>
+          </div> */}
+          </div>
+        </div>
+
+        <div className="bg-red-400 w-full h-fit py-20 flex flex-col gap-10">
+          <div className="px-20 font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r text-white drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[40px] ">
+            <p>Explore More Features Beyond the Essentials</p>
+          </div>
+          <div className="flex-col items-center pb-8 sm:flex hidden">
+            <Carousel
+              slideSize="60%"
+              slideGap="xl"
+              height={450}
+              initialSlide={0}
+              align="center"
+              withIndicators
+              controlsOffset="xl"
+              dragFree
+              skipSnaps={true}
+              loop={true}
+              classNames={{
+                control: "size-10 absolute top-64 right-0 mr-24",
+                slide: "",
+              }}
+              previousControlProps={{
+                className: "mr-40",
+              }}
+              onSlideChange={(index: number) => setCurrentIndex(index)}
+            >
+              {data.map((img, index) => (
+                <Carousel.Slide key={index}>
+                  <Image
+                    src={img.image}
+                    className={`h-full w-full object-cover rounded-xl`}
+                  />
+
+                  <div className="absolute inset-0 bg-black bg-opacity-40 mr-8 rounded-xl">
+                    <div className="top-0 flex flex-col justify-end p-6">
+                      <p className="text-white opacity-70 font-bold uppercase cursor-default">
+                        {img.category}
+                      </p>
+                      <Title
+                        order={3}
+                        className="text-white font-bold text-2xl cursor-default"
+                      >
+                        {img.title}
+                      </Title>
+                    </div>
+                  </div>
+                </Carousel.Slide>
+              ))}
+            </Carousel>
+          </div>
+        </div>
+
         <div className="flex flex-col gap-16 items-center bg-black h-fit text-white px-28 py-20">
           <div className="flex flex-col gap-20 items-center">
             <div className="text-[21px] text-center">
@@ -648,14 +901,15 @@ export default function Login() {
               </p>
             </div>
 
-            <div>
+            {/* <div>
               <Image
                 src={
                   "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png"
                 }
                 className={`h-[380px] w-[880px] object-cover rounded-xl `}
               />
-            </div>
+            </div> */}
+            <img src={testPhoto} alt="CMULogo" className="" />
 
             <div className="flex flex-col gap-16 justify-center w-full font-[600] text-[17px] px-10">
               <div className="flex items-start justify-center gap-28">
