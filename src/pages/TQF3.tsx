@@ -351,7 +351,9 @@ export default function TQF3() {
             `TQF 3, ${tqf3Part} save success`,
             `TQF 3 - ${tqf3Part} is saved`
           );
-          setTqf3Part(`part${parseInt(tqf3Part.slice(-1)) + 1}`);
+          if (tqf3Part !== "part7") {
+            setTqf3Part(`part${parseInt(tqf3Part.slice(-1)) + 1}`);
+          }
         }
       }
     }
