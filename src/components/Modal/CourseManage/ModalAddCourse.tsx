@@ -520,6 +520,7 @@ export default function ModalAddCourse({
             classNames={{
               icon: "size-6",
               body: " flex  justify-center",
+              label: "sm:text-[13px]"
             }}
             title={
               "Please fill only the section number for the section you own."
@@ -567,7 +568,7 @@ export default function ModalAddCourse({
                 withAsterisk
                 classNames={{
                   input:
-                    " h-[130px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
+                    " h-[130px] sm:h-[75px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
                   pill: "bg-secondary text-white font-bold",
                   label: "font-semibold text-tertiary text-b2",
                   error: "text-[10px] !border-none",
@@ -591,7 +592,7 @@ export default function ModalAddCourse({
           label="Semester"
           description="STEP 3"
         >
-          <div className="flex flex-col max-h-[420px] h-fit w-full mt-2 mb-5 p-[2px] overflow-y-auto">
+          <div className="flex flex-col macair133:max-h-[420px]  sm:max-h-[260px] ipad11:max-h-[340px] h-fit w-full mt-2 mb-5 p-[2px] overflow-y-auto">
             <div className="flex flex-col font-medium text-[14px] gap-4">
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
@@ -666,7 +667,7 @@ export default function ModalAddCourse({
           label="Co-Instructor"
           description="STEP 4"
         >
-          <div className="flex flex-col max-h-[420px] mb-5 h-fit overflow-y-scroll mt-2 p-[2px]">
+          <div className="flex flex-col macair133:max-h-[420px] sm:max-h-[300px] ipad11:max-h-[360px] mb-5 h-fit overflow-y-scroll mt-2 p-[2px]">
             <div>
             <Alert
               radius="md"
@@ -677,6 +678,7 @@ export default function ModalAddCourse({
               classNames={{
                 icon: "size-6",
                 body: " flex justify-center",
+                label: "sm:text-[13px]"
               }}
               title={
                 <p>
@@ -791,7 +793,7 @@ export default function ModalAddCourse({
           description="STEP 5"
         >
           <div
-            className="w-full flex flex-col bg-white border-secondary mt-2 border-[1px] mb-5 rounded-md"
+            className="w-full flex flex-col sm:max-h-[320px] ipad11:max-h-[380px] bg-white border-secondary mt-2 border-[1px] mb-5 rounded-md"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
