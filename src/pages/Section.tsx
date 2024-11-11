@@ -207,7 +207,10 @@ export default function Section() {
       />
       <ModalAddSection
         opened={openModalAddSec}
-        onClose={() => setOpenModalAddSec(false)}
+        onClose={() => {
+          setAddSec({});
+          setOpenModalAddSec(false);
+        }}
         data={addSec!}
         fetchOneCourse={fetchOneCourse}
       />

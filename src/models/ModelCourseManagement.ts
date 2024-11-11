@@ -1,6 +1,5 @@
-import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { IModelUser } from "./ModelUser";
-import { IModelPLONo } from "./ModelPLO";
+import { IModelPLO, IModelPLONo } from "./ModelPLO";
 
 export interface IModelCourseManagement {
   id: string;
@@ -10,7 +9,7 @@ export interface IModelCourseManagement {
   updatedSemester: number;
   type: string;
   sections: Partial<IModelSectionManagement>[];
-  plos?: IModelPLONo[] | string[];
+  ploRequire?: IModelPLORequire[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -18,10 +17,15 @@ export interface IModelCourseManagement {
 export interface IModelSectionManagement {
   id: string;
   topic?: string;
-  plos?: IModelPLONo[] | string[];
+  ploRequire?: IModelPLORequire[];
   sectionNo: number;
   semester: number[] | string[];
   instructor: IModelUser;
   coInstructors: IModelUser[];
   isActive: boolean;
+}
+
+export interface IModelPLORequire {
+  plo: IModelPLO | string;
+  list: IModelPLONo[] | string[];
 }

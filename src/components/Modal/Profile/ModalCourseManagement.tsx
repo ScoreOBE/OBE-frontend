@@ -230,7 +230,10 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
     <>
       <ModalAddSection
         opened={openModalAddSec}
-        onClose={() => setOpenModalAddSec(false)}
+        onClose={() => {
+          setEditCourse({});
+          setOpenModalAddSec(false);
+        }}
         isManage={true}
         data={editCourse}
       />

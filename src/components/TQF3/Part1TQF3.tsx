@@ -90,10 +90,11 @@ export default function Part1TQF3({ setForm }: Props) {
       if (tqf3.part1.teachingLocation.out !== undefined) {
         checked.push("out");
       }
+      localStorage.removeItem("setReuse");
     } else {
       form.setValues({ ...initialTqf3Part1(tqf3) });
     }
-  }, []);
+  }, [localStorage.getItem("setReuse")]);
 
   useEffect(() => {
     let teachingLocation = { ...form.getValues().teachingLocation };

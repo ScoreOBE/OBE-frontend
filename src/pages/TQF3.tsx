@@ -136,8 +136,10 @@ export default function TQF3() {
   }, [academicYear, tqf3.topic, courseNo]);
 
   useEffect(() => {
-    replaceReuseTQF3();
-  }, [tqf3.id]);
+    if (localStorage.getItem(`reuse${tqf3.id}-part1`)?.length) {
+      replaceReuseTQF3();
+    }
+  }, [localStorage.getItem(`reuse${tqf3.id}-part1`)]);
 
   useEffect(() => {
     if (!openWarningEditDataTQF2Or3 && confirmToEditData) {
@@ -214,16 +216,19 @@ export default function TQF3() {
         const sectionTdf3 = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf3.topic
         )?.TQF3;
+        const ploRequire = resPloRequired?.sections
+          .find((item: any) => item.topic == tqf3.topic)
+          .ploRequire.find((plo: any) => plo.plo == tqf3.coursePLO?.id)?.list;
         setTqf3Original({
           topic: tqf3.topic,
-          ploRequired: resPloRequired?.plos || [],
+          ploRequired: ploRequire || [],
           part7: {},
           ...sectionTdf3,
         });
         dispatch(
           setDataTQF3({
             topic: tqf3.topic,
-            ploRequired: resPloRequired?.plos || [],
+            ploRequired: ploRequire || [],
             ...sectionTdf3,
             type: resCourse.type,
             sections: [...resCourse.sections],
@@ -233,16 +238,19 @@ export default function TQF3() {
           setCurrentPartTQF3(sectionTdf3);
         }
       } else {
+        const ploRequire = resPloRequired?.ploRequire.find(
+          (plo: any) => plo.plo == tqf3.coursePLO?.id
+        )?.list;
         setTqf3Original({
           topic: tqf3.topic,
-          ploRequired: resPloRequired?.plos || [],
+          ploRequired: ploRequire || [],
           part7: {},
           ...resCourse.TQF3!,
         });
         dispatch(
           setDataTQF3({
             topic: tqf3.topic,
-            ploRequired: resPloRequired?.plos || [],
+            ploRequired: ploRequire || [],
             ...resCourse.TQF3!,
             type: resCourse.type,
             sections: [...resCourse.sections],
@@ -266,6 +274,8 @@ export default function TQF3() {
         );
       }
     }
+    setTqf3Part("part1");
+    localStorage.setItem("setReuse", "true");
   };
 
   const setCurrentPartTQF3 = (tqf3: IModelTQF3) => {
@@ -341,6 +351,7 @@ export default function TQF3() {
             `TQF 3, ${tqf3Part} save success`,
             `TQF 3 - ${tqf3Part} is saved`
           );
+          setTqf3Part(`part${parseInt(tqf3Part.slice(-1)) + 1}`);
         }
       }
     }
