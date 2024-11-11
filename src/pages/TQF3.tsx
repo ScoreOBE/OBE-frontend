@@ -32,7 +32,7 @@ import {
 } from "@/services/tqf3/tqf3.service";
 import { getValueEnumByKey } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
-import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { useForm, UseFormReturnType } from "@mantine/form";
 import exportFile from "@/assets/icons/fileExport.svg?react";
 import Loading from "@/components/Loading";
@@ -53,7 +53,11 @@ export default function TQF3() {
   const [params, setParams] = useSearchParams();
   const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
   const loading = useAppSelector((state) => state.loading);
+  const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const courseAdmin = useAppSelector((state) =>
+    state.allCourse.courses.find((course) => course.courseNo == courseNo)
+  );
   const [tqf3Original, setTqf3Original] = useState<
     Partial<IModelTQF3> & { topic?: string; ploRequired?: string[] }
   >();
@@ -196,7 +200,7 @@ export default function TQF3() {
   };
 
   const fetchOneCourse = async (firstFetch: boolean = false) => {
-    const [resCourse, resPloRequired] = await Promise.all([
+    let [resCourse, resPloRequired] = await Promise.all([
       getOneCourse({
         year: params.get("year"),
         semester: params.get("semester"),
@@ -204,6 +208,9 @@ export default function TQF3() {
       }),
       getOneCourseManagement(courseNo!),
     ]);
+    if ([ROLE.SUPREME_ADMIN, ROLE.ADMIN].includes(user.role)) {
+      resCourse = courseAdmin;
+    }
     if (resCourse) {
       if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
         const sectionTdf3 = resCourse.sections.find(

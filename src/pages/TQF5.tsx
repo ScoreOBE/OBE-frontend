@@ -12,6 +12,7 @@ import {
 import Icon from "@/components/Icon";
 import IconCheck from "@/assets/icons/Check.svg?react";
 import { useParams, useSearchParams } from "react-router-dom";
+import maintenace from "@/assets/image/maintenance.png";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { isEmpty, isEqual } from "lodash";
 import { getValueEnumByKey } from "@/helpers/functions/function";
@@ -222,8 +223,25 @@ export default function TQF5() {
                 {tqf5Part === part.value && tqf5.id ? (
                   part.compo
                 ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <Loading />
+                  <div className="flex px-16  flex-row items-center justify-between h-full">
+                    <div className="h-full  justify-center flex flex-col">
+                      <p className="text-secondary text-[21px] font-semibold">
+                        TQF 5 is coming soon to{" "}
+                        <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                          ScoreOBE +{" "}
+                        </span>{" "}
+                      </p>
+                      <br />
+                      <p className=" -mt-3 mb-6 text-b2 break-words font-medium leading-relaxed">
+                        Instructors, get ready to experience a new and improved
+                        way to complete TQF 5 <br /> starting February 2025.
+                      </p>
+                    </div>
+                    <img
+                      className=" z-50  w-[25vw] "
+                      src={maintenace}
+                      alt="loginImage"
+                    />
                   </div>
                 )}
               </Tabs.Panel>
