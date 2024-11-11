@@ -7,7 +7,7 @@ import IconEye from "@/assets/icons/eyePublish.svg?react";
 import IconTQF3 from "@/assets/icons/TQF3.svg?react";
 import IconTQF5 from "@/assets/icons/TQF5.svg?react";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -31,6 +31,8 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { IModelDepartment } from "@/models/ModelFaculty";
 import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { IModelTQF3 } from "@/models/ModelTQF3";
+import { ROUTE_PATH } from "@/helpers/constants/route";
+import { setDataTQF3, setSelectTqf3Topic } from "@/store/tqf3";
 
 export default function AdminDashboardTQF() {
   const navigate = useNavigate();
@@ -100,6 +102,17 @@ export default function AdminDashboardTQF() {
       search: courseList.search,
       hasMore: courseList.total >= payload?.limit,
     };
+  };
+
+  const goToPage = (pathname: string, courseNo: string, data: any) => {
+    dispatch(setDataTQF3(data.TQF3));
+    if (data.topic) {
+      dispatch(setSelectTqf3Topic(data.topic));
+    }
+    navigate({
+      pathname: `${ROUTE_PATH.COURSE}/${courseNo}/${pathname}`,
+      search: "?" + params.toString(),
+    });
   };
 
   const fetchCourse = async () => {
@@ -215,47 +228,53 @@ export default function AdminDashboardTQF() {
             </Table.Td>
             <Table.Td>
               <div className="flex gap-3 h-full">
-                <Tooltip
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={50}
-                  arrowSize={7}
-                  position="bottom-end"
-                  label={
-                    <div className="text-default font-semibold text-[13px] p-1">
-                      View TQF
-                    </div>
-                  }
-                  color="#FCFCFC"
+                <Menu
+                  trigger="hover"
+                  openDelay={100}
+                  closeDelay={150}
+                  clickOutsideEvents={["mousedown", "touchstart"]}
+                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
                 >
-                  <Button
-                    variant="outline"
-                    className="tag-tqf  !px-3 !rounded-full text-center"
+                  <Menu.Target>
+                    <Button
+                      variant="outline"
+                      className="tag-tqf !px-3 !rounded-full text-center"
+                    >
+                      <Icon className="size-5" IconComponent={IconEye} />
+                    </Button>
+                  </Menu.Target>
+
+                  <Menu.Dropdown
+                    className="!z-50 rounded-md bg-white"
+                    style={{
+                      boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px",
+                      transform: "translate(-78px, -3px)", // Position as needed
+                    }}
                   >
-                    <Icon className="size-5" IconComponent={IconEye} />
-                  </Button>
-                </Tooltip>
-                {/* <Tooltip
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={50}
-                  arrowSize={7}
-                  position="bottom-end"
-                  label={
-                    <div className="text-default font-semibold text-[13px] p-1">
-                      Export TQF
+                    <div className="flex flex-col">
+                      <Menu.Item
+                        leftSection={
+                          <Icon className="size-5" IconComponent={IconTQF3} />
+                        }
+                        className="!w-48"
+                        onClick={() => {
+                          goToPage(ROUTE_PATH.TQF3, course.courseNo!, sec);
+                        }}
+                      >
+                        View TQF 3
+                      </Menu.Item>
+                      <Menu.Item
+                        leftSection={
+                          <Icon className="size-5" IconComponent={IconTQF5} />
+                        }
+                        className="!w-48"
+                        disabled
+                      >
+                        View TQF 5
+                      </Menu.Item>
                     </div>
-                  }
-                  color="#FCFCFC"
-                >
-                  <Button
-                    variant="outline"
-                    className="tag-tqf  !px-3 !rounded-full text-center"
-                    onClick={() => setOpenModalPrintTQF(true)}
-                  >
-                    <Icon className="size-5" IconComponent={IconFileExport} />
-                  </Button>
-                </Tooltip> */}
+                  </Menu.Dropdown>
+                </Menu>
               </div>
             </Table.Td>
           </Table.Tr>
@@ -354,6 +373,9 @@ export default function AdminDashboardTQF() {
                       <Icon className="size-5" IconComponent={IconTQF3} />
                     }
                     className="!w-48"
+                    onClick={() => {
+                      goToPage(ROUTE_PATH.TQF3, course.courseNo!, course);
+                    }}
                   >
                     View TQF 3
                   </Menu.Item>
@@ -362,6 +384,7 @@ export default function AdminDashboardTQF() {
                       <Icon className="size-5" IconComponent={IconTQF5} />
                     }
                     className="!w-48"
+                    disabled
                   >
                     View TQF 5
                   </Menu.Item>
@@ -608,7 +631,10 @@ export default function AdminDashboardTQF() {
                       {courseList.search.length ? (
                         <>Check the spelling or try a new search.</>
                       ) : (
-                        <>It looks like no courses have been added <br/> in this semester yet.</>
+                        <>
+                          It looks like no courses have been added <br /> in
+                          this semester yet.
+                        </>
                       )}
                     </p>
                   </div>

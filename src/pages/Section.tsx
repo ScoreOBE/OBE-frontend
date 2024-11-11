@@ -369,7 +369,7 @@ export default function Section() {
                   <div
                     onClick={() => goToAssignment(sec.sectionNo!)}
                     key={index}
-                    className={`card relative justify-between xl:h-[135px] md:h-[120px]  rounded-[4px] ${
+                    className={`card relative justify-between h-[125px] cursor-pointer macair133:h-[135px] sm:h-[128px]  rounded-[4px] ${
                       sec.isActive ? "hover:bg-[#F3F3F3] cursor-pointer" : ""
                     }`}
                   >
