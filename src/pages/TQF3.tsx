@@ -430,7 +430,7 @@ export default function TQF3() {
         closeOnClickOutside={false}
         onClose={() => setOpenModalReuse(false)}
         transitionProps={{ transition: "pop" }}
-        size="39vw"
+        size="45vw"
         centered
         classNames={{
           content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",

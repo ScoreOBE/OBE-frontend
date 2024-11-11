@@ -254,7 +254,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
         opened={modalDuplicatePLO && !!ploCollectDupli.length}
         onClose={closeModalDuplicatePLO}
         transitionProps={{ transition: "pop" }}
-        size="35vw"
+        size="42vw"
         centered
         classNames={{
           content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
@@ -291,7 +291,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               )
             }
           >
-            <Group className="flex overflow-y-auto max-h-[260px]">
+            <Group className="flex overflow-y-auto max-h-[265px]">
               <div className="flex p-1 w-full h-full flex-col overflow-y-auto gap-3">
                 {ploCollectDupli.map((plo, index) => (
                   <RadioCard

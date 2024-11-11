@@ -83,7 +83,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
             <Icon IconComponent={IconUsers} /> Added Admin
           </div>
           {/* Show List Of Admin */}
-          <div className="flex flex-col gap-2 w-full h-[400px]   p-4 py-3  overflow-y-hidden">
+          <div className="flex flex-col gap-2 w-full sm:max-macair133:h-[300px] macair133:h-[400px] h-[250px]  p-4 py-3  overflow-y-auto">
             <TextInput
               leftSection={<TbSearch />}
               placeholder="Name / CMU account"

@@ -135,7 +135,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           }
         ></Alert>
         <div
-          className=" max-h-[500px]  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
+          className=" max-h-[500px] sm:max-macair133:max-h-[320px]  flex flex-col bg-white border-secondary border-[1px]  rounded-md"
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
@@ -154,7 +154,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
             />
 
             {/* List of Admin */}
-            <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
+            <div className="flex flex-1 flex-col gap-2 sm:max-macair133:h-[300px] macair133:h-[400px] h-[250px] overflow-y-auto">
               {adminFilter.map((admin) => (
                 <div
                   key={admin.id}
