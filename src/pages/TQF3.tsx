@@ -209,16 +209,19 @@ export default function TQF3() {
         const sectionTdf3 = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf3.topic
         )?.TQF3;
+        const ploRequire = resPloRequired?.sections
+          .find((item: any) => item.topic == tqf3.topic)
+          .ploRequire.find((plo: any) => plo.plo == tqf3.coursePLO?.id)?.list;
         setTqf3Original({
           topic: tqf3.topic,
-          ploRequired: resPloRequired?.plos || [],
+          ploRequired: ploRequire || [],
           part7: {},
           ...sectionTdf3,
         });
         dispatch(
           setDataTQF3({
             topic: tqf3.topic,
-            ploRequired: resPloRequired?.plos || [],
+            ploRequired: ploRequire || [],
             ...sectionTdf3,
             type: resCourse.type,
             sections: [...resCourse.sections],
@@ -228,16 +231,19 @@ export default function TQF3() {
           setCurrentPartTQF3(sectionTdf3);
         }
       } else {
+        const ploRequire = resPloRequired?.ploRequire.find(
+          (plo: any) => plo.plo == tqf3.coursePLO?.id
+        )?.list;
         setTqf3Original({
           topic: tqf3.topic,
-          ploRequired: resPloRequired?.plos || [],
+          ploRequired: ploRequire || [],
           part7: {},
           ...resCourse.TQF3!,
         });
         dispatch(
           setDataTQF3({
             topic: tqf3.topic,
-            ploRequired: resPloRequired?.plos || [],
+            ploRequired: ploRequire || [],
             ...resCourse.TQF3!,
             type: resCourse.type,
             sections: [...resCourse.sections],

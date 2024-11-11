@@ -21,11 +21,12 @@ import { getUserName, sortData } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
 import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { getOneCourse } from "@/services/course/course.service";
-import { setDataTQF3 } from "@/store/tqf3";
+import { setDataTQF3, setPloTQF3 } from "@/store/tqf3";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelSection } from "@/models/ModelCourse";
 import { isEmpty, isEqual } from "lodash";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";
+import { getOnePLO } from "@/services/plo/plo.service";
 
 type Props = {
   onClickLeaveCourse: () => void;
@@ -96,6 +97,21 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
     });
   };
 
+  useEffect(() => {
+    fetchPLO();
+  }, [courseNo]);
+
+  const fetchPLO = async () => {
+    const resPloCol = await getOnePLO({
+      year: params.get("year"),
+      semester: params.get("semester"),
+      courseCode: courseNo?.slice(0, -3),
+    });
+    if (resPloCol) {
+      dispatch(setPloTQF3(resPloCol));
+    }
+  };
+
   const fetchTqf3 = async () => {
     const resCourse = await getOneCourse({
       year: params.get("year"),
@@ -133,7 +149,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         ) {
           changePart.push(part);
         }
-      }      
+      }
       if (changePart.length && tqf3.id) {
         setOpenAlertPopup(true);
       } else {
@@ -171,7 +187,10 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       <div className="flex text-white flex-col h-full  gap-[26px]">
         <div
           className="hover:underline cursor-pointer font-bold gap-2 -translate-x-[5px]  text-[13px] p-0 flex justify-start"
-          onClick={fetchTqf3}
+          onClick={() => {
+            fetchPLO();
+            fetchTqf3();
+          }}
         >
           <Icon IconComponent={IconChevronLeft} className="size-5" />
           Back to Your Course
@@ -193,17 +212,16 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               leftSection={<RxDashboard size={18} />}
               className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
-                  path.includes(ROUTE_PATH.TQF3) 
-                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]" 
+                  path.includes(ROUTE_PATH.TQF3)
+                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                     : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                 }
                 ${
-                  path.includes(ROUTE_PATH.TQF5) 
-                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]" 
+                  path.includes(ROUTE_PATH.TQF5)
+                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                     : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                 }
               `}
-              
             >
               Sections
             </Button>
@@ -286,9 +304,9 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             >
               <Menu.Target>
                 <Button
-                onClick={() => {
-                  goToPage(ROUTE_PATH.TQF5);
-                }}
+                  onClick={() => {
+                    goToPage(ROUTE_PATH.TQF5);
+                  }}
                   leftSection={
                     <Icon IconComponent={IconTQF5} className="size-5" />
                   }

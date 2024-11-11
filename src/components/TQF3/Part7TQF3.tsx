@@ -7,13 +7,11 @@ import DrawerPLOdes from "@/components/DrawerPLO";
 import { useEffect, useState } from "react";
 import { IModelTQF3Part7 } from "@/models/ModelTQF3";
 import { IModelPLO } from "@/models/ModelPLO";
-import { getOnePLO } from "@/services/plo/plo.service";
 import { useAppDispatch, useAppSelector } from "@/store";
 import unplug from "@/assets/image/unplug.png";
 import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF3 } from "@/store/tqf3";
-import { useParams, useSearchParams } from "react-router-dom";
-import Loading from "../Loading";
+import { useSearchParams } from "react-router-dom";
 import { initialTqf3Part7 } from "@/helpers/functions/tqf3";
 
 type Props = {
@@ -21,16 +19,14 @@ type Props = {
 };
 
 export default function Part7TQF3({ setForm }: Props) {
-  const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [params, setParams] = useSearchParams({});
   const disabled =
     parseInt(params.get("year") || "") !== academicYear.year &&
     parseInt(params.get("semester") || "") !== academicYear.semester;
   const tqf3 = useAppSelector((state) => state.tqf3);
+  const coursePLO = useAppSelector((state) => state.tqf3.coursePLO);
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(true);
-  const [coursePLO, setCoursePLO] = useState<Partial<IModelPLO>>();
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
 
   const form = useForm({
@@ -69,10 +65,6 @@ export default function Part7TQF3({ setForm }: Props) {
   });
 
   useEffect(() => {
-    fetchPLO();
-  }, []);
-
-  useEffect(() => {
     if (coursePLO?.data?.length) {
       const ploIds: string[] = coursePLO.data.map((item: any) => item.id) || [];
       ploForm.setFieldValue(
@@ -107,23 +99,6 @@ export default function Part7TQF3({ setForm }: Props) {
       }
     }
   }, [coursePLO]);
-
-  const fetchPLO = async () => {
-    setLoading(true);
-    const resPloCol = await getOnePLO({
-      year: academicYear.year,
-      semester: academicYear.semester,
-      courseCode: courseNo?.slice(0, -3),
-    });
-    if (resPloCol) {
-      setCoursePLO(resPloCol);
-      if (!resPloCol.data) {
-        localStorage.removeItem(`reuse${tqf3.id}-part7`);
-        form.setValues(initialTqf3Part7(tqf3.part2));
-      }
-    }
-    setLoading(false);
-  };
 
   return tqf3?.part6?.updatedAt ? (
     coursePLO?.data?.length ? (
@@ -328,27 +303,23 @@ export default function Part7TQF3({ setForm }: Props) {
       </>
     ) : (
       <div className="flex flex-col w-full h-full justify-center items-center">
-        {loading ? (
-          <Loading />
-        ) : (
-          <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
-            <div className="flex justify-center  h-full items-start gap-2 flex-col">
-              <p className="text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-                Course Not Linked to PLO Collection
-              </p>
-              <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-                This course is currently not linked to any PLO collection.{" "}
-                <br /> If you need to do this part, please contact your
-                department administrator.
-              </p>
-            </div>
-            <img
-              className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
-              src={unplug}
-              alt="loginImage"
-            />
+        <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
+          <div className="flex justify-center  h-full items-start gap-2 flex-col">
+            <p className="text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
+              Course Not Linked to PLO Collection
+            </p>
+            <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
+              This course is currently not linked to any PLO collection. <br />{" "}
+              If you need to do this part, please contact your department
+              administrator.
+            </p>
           </div>
-        )}
+          <img
+            className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
+            src={unplug}
+            alt="loginImage"
+          />
+        </div>
       </div>
     )
   ) : (

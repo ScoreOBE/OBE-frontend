@@ -16,6 +16,7 @@ import IconUserCicle from "@/assets/icons/userCircle.svg?react";
 import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
 import IconUsers from "@/assets/icons/users.svg?react";
 import {
+  getOneCourseManagement,
   updateCoInsSections,
   updateSectionManagement,
 } from "@/services/courseManagement/courseManagement.service";
@@ -132,7 +133,18 @@ export default function ModalManageIns({
       actionType: type,
     });
     if (res) {
-      dispatch(editCourseManagement(res.courseManagement));
+      if (type == "courseManagement") {
+        const resOne = await getOneCourseManagement(data.courseNo!);
+        if (resOne) {
+          dispatch(editCourseManagement(resOne));
+        }
+        dispatch(
+          editCourse({
+            id: res.courseId,
+            ...res,
+          })
+        );
+      }
       if (res.course) dispatch(editCourse(res.course));
       setCoInsList(cloneDeep(editCoInsList));
       showNotifications(

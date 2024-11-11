@@ -292,7 +292,9 @@ export default function MapPLO({ ploName = "" }: Props) {
           if (sec.topic && !acc.some((item) => item.topic === sec.topic)) {
             acc.push({
               topic: sec.topic,
-              plos: (sec.plos ?? []) as string[],
+              ploRequire: sec.ploRequire?.length
+                ? sec.ploRequire
+                : [{ plo: ploList.id as string, list: [] }],
             });
           }
           return acc;
@@ -308,7 +310,9 @@ export default function MapPLO({ ploName = "" }: Props) {
           id: course.id,
           courseNo: course.courseNo,
           type: course.type,
-          plos: course.plos,
+          ploRequire: course.ploRequire?.length
+            ? course.ploRequire
+            : [{ plo: ploList.id as string, list: [] }],
         });
       }
     });
@@ -353,76 +357,85 @@ export default function MapPLO({ ploName = "" }: Props) {
           {course.courseNo} {sec && `(${sec.topic})`}
         </Table.Td>
 
-        {ploList.data?.map((plo) => (
-          <Table.Td key={plo.id} className="z-50">
-            <div className="flex justify-start items-center">
-              {!isMapPLO ? (
-                ((sec ? sec.plos : course.plos) as string[])?.includes(
-                  plo.id
-                ) ? (
-                  <Icon IconComponent={IconCheck} />
+        {ploList.data?.map((plo) => {
+          const ploRequire = (sec ? sec.ploRequire : course.ploRequire)?.find(
+            (item) => item.plo == ploList.id
+          )?.list as string[];
+          return (
+            <Table.Td key={plo.id} className="z-50">
+              <div className="flex justify-start items-center">
+                {!isMapPLO ? (
+                  ploRequire?.includes(plo.id) ? (
+                    <Icon IconComponent={IconCheck} />
+                  ) : (
+                    <p>-</p>
+                  )
                 ) : (
-                  <p>-</p>
-                )
-              ) : (
-                <Checkbox
-                  size="xs"
-                  classNames={{
-                    input:
-                      "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                    body: "mr-3 px-0",
-                    label: "text-[14px] text-[#615F5F] cursor-pointer",
-                  }}
-                  value={plo.id}
-                  checked={(
-                    (sec ? sec.plos : course.plos) as string[]
-                  )?.includes(plo.id)}
-                  onChange={(event) => {
-                    const newData = { ...course };
-                    if (event.target.checked) {
-                      if (sec) {
-                        newData.sections?.forEach((e: any) => {
-                          if (
-                            e.topic === sec.topic &&
-                            !e.plos?.includes(plo.id)
-                          ) {
-                            e.plos?.push(plo.id);
+                  <Checkbox
+                    size="xs"
+                    classNames={{
+                      input:
+                        "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                      body: "mr-3 px-0",
+                      label: "text-[14px] text-[#615F5F] cursor-pointer",
+                    }}
+                    value={plo.id}
+                    checked={ploRequire?.includes(plo.id)}
+                    onChange={(event) => {
+                      const newData = { ...course };
+                      const newPlo = newData.ploRequire?.find(
+                        (item) => item.plo == ploList.id
+                      )!;
+                      if (event.target.checked) {
+                        if (sec) {
+                          newData.sections?.forEach((e) => {
+                            if (
+                              e.topic === sec.topic &&
+                              !ploRequire?.includes(plo.id)
+                            ) {
+                              ploRequire?.push(plo.id);
+                            }
+                          });
+                        } else {
+                          if (!ploRequire?.includes(plo.id)) {
+                            newPlo.list = [...newPlo.list, plo.id] as string[];
                           }
-                        });
+                        }
                       } else {
-                        if (!(newData.plos as string[])?.includes(plo.id)) {
-                          newData.plos = [
-                            ...(newData.plos || []),
-                            plo.id,
-                          ] as string[];
+                        if (sec) {
+                          newData.sections?.forEach((e) => {
+                            if (e.topic === sec.topic) {
+                              const selectPlo = e.ploRequire?.find(
+                                (item) => item.plo == ploList.id
+                              );
+                              const index = (
+                                selectPlo?.list as string[]
+                              )?.indexOf(plo.id);
+                              if (index !== -1)
+                                selectPlo?.list?.splice(index, 1);
+                            }
+                          });
+                        } else {
+                          const index = (newPlo.list as string[])?.indexOf(
+                            plo.id
+                          );
+                          if (index !== -1) {
+                            newPlo.list?.splice(index, 1);
+                          }
                         }
                       }
-                    } else {
-                      if (sec) {
-                        newData.sections?.forEach((e: any) => {
-                          if (e.topic === sec.topic) {
-                            const index = e.plos?.indexOf(plo.id);
-                            if (index !== -1) e.plos?.splice(index, 1);
-                          }
-                        });
-                      } else {
-                        const index = (newData.plos as string[])?.indexOf(
-                          plo.id
-                        );
-                        if (index !== -1) {
-                          (newData.plos as string[])?.splice(index, 1);
-                        }
-                      }
-                    }
-                    setCourseManagement((prev) =>
-                      prev.map((c) => (c.id === course.id ? { ...newData } : c))
-                    );
-                  }}
-                />
-              )}
-            </div>
-          </Table.Td>
-        ))}
+                      setCourseManagement((prev) =>
+                        prev.map((c) =>
+                          c.id === course.id ? { ...newData } : c
+                        )
+                      );
+                    }}
+                  />
+                )}
+              </div>
+            </Table.Td>
+          );
+        })}
       </Table.Tr>
     );
   };
@@ -1097,7 +1110,9 @@ export default function MapPLO({ ploName = "" }: Props) {
                             Course No.
                           </Table.Th>
                           {ploList.data?.map((plo, index) => (
-                            <Table.Th className="sm:text-b3" key={index}>PLO-{plo.no}</Table.Th>
+                            <Table.Th className="sm:text-b3" key={index}>
+                              PLO-{plo.no}
+                            </Table.Th>
                           ))}
                         </Table.Tr>
                       </Table.Thead>
