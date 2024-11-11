@@ -520,7 +520,7 @@ export default function ModalAddCourse({
             classNames={{
               icon: "size-6",
               body: " flex  justify-center",
-              label: "sm:text-[13px]"
+              label: "sm:text-[13px] ipad11:text-b2"
             }}
             title={
               "Please fill only the section number for the section you own."
@@ -568,7 +568,7 @@ export default function ModalAddCourse({
                 withAsterisk
                 classNames={{
                   input:
-                    " h-[130px] sm:h-[75px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
+                    " macair133:h-[130px] sm:h-[75px] ipad11:h-[90px] overflow-y-scroll bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
                   pill: "bg-secondary text-white font-bold",
                   label: "font-semibold text-tertiary text-b2",
                   error: "text-[10px] !border-none",
@@ -678,7 +678,7 @@ export default function ModalAddCourse({
               classNames={{
                 icon: "size-6",
                 body: " flex justify-center",
-                label: "sm:text-[13px]"
+                label: "sm:text-[13px] ipad11:text-b2"
               }}
               title={
                 <p>
