@@ -154,7 +154,7 @@ export default function AdminDashboardCLO() {
               <p className="text-[#575757] text-[14px]">
                 In CPE Department{" "}
                 {courseList.courses.length === 0 ? (
-                  <span>Your course card is currently empty</span>
+                  <span>Course is currently empty</span>
                 ) : (
                   <span>
                     have{" "}

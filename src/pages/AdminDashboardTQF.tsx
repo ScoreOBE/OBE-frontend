@@ -505,7 +505,7 @@ export default function AdminDashboardTQF() {
                   ? selectDepartment.codeEN
                   : `${selectDepartment.codeEN} Department`}{" "}
                 {courseList.courses.length === 0 ? (
-                  <span>Your course card is currently empty</span>
+                  <span>Course is currently empty</span>
                 ) : (
                   <span>
                     have{" "}
@@ -608,7 +608,7 @@ export default function AdminDashboardTQF() {
                       {courseList.search.length ? (
                         <>Check the spelling or try a new search.</>
                       ) : (
-                        <>It looks like no courses have been added yet.</>
+                        <>It looks like no courses have been added <br/> in this semester yet.</>
                       )}
                     </p>
                   </div>

@@ -73,14 +73,14 @@ export function SearchInput({ onSearch, placeholder }: Props) {
                 {ellipsisText(searchValue, 40)}
               </p>
             ) : (
-              <p>Show All Your Course</p>
+              <p className="sm:max-ipad11:text-[11px]">Show All Course</p>
             )}
           </div>
 
-          <div className="flex md:w-fit w-full justify-end items-center text-secondary gap-1">
+          <div className="flex md:w-fit sm:max-ipad11:text-[11px] w-full justify-end items-center text-secondary gap-1">
             Press
             <div className="ml-1 flex items-center gap-1 border border-secondary p-1 font-semibold rounded-[6px]">
-              Enter <AiOutlineEnter className="stroke-[50px]" />
+              Enter <AiOutlineEnter className="stroke-[50px] sm:max-ipad11:text-[11px]" />
             </div>
           </div>
         </div>
