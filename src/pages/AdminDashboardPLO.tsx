@@ -111,7 +111,7 @@ export default function AdminDashboardPLO() {
               <p className="text-[#575757] text-[14px]">
                 In semester {term?.semester ?? ""}, {term?.year ?? ""}!{" "}
                 {courseList.courses.length === 0 ? (
-                  <span>Your course card is currently empty</span>
+                  <span>Course is currently empty</span>
                 ) : (
                   <span>
                     You have{" "}

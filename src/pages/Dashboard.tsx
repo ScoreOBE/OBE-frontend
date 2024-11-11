@@ -516,15 +516,15 @@ export default function Dashboard() {
               })}
             </InfiniteScroll>
           ) : (
-            <div className=" flex flex-row flex-1 px-[95px] justify-between">
+            <div className=" flex flex-row flex-1 px-[95px] sm:max-ipad11:px-[70px] justify-between">
               <div className="h-full  justify-center flex flex-col">
-                <p className="text-secondary text-[22px] font-semibold">
+                <p className="text-secondary text-[22px] sm:max-ipad11:text-[20px] font-semibold">
                   {courseList.search.length
                     ? `No results for "${courseList.search}" `
                     : "No Course Found"}
                 </p>
                 <br />
-                <p className=" -mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
+                <p className=" -mt-4 mb-6 sm:max-ipad11:mb-2 text-b2 break-words font-medium leading-relaxed">
                   {courseList.search.length ? (
                     <>Check the spelling or try a new search.</>
                   ) : (
