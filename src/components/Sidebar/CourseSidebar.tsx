@@ -19,7 +19,7 @@ import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName, sortData } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
-import { COURSE_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
 import { getOneCourse } from "@/services/course/course.service";
 import { setDataTQF3 } from "@/store/tqf3";
 import { IModelTQF3 } from "@/models/ModelTQF3";
@@ -39,7 +39,9 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const prefix = `${ROUTE_PATH.COURSE}/${courseNo}`;
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
-    state.course.courses.find((e) => e.courseNo == courseNo)
+    [ROLE.SUPREME_ADMIN, ROLE.ADMIN].includes(user.role)
+      ? state.allCourse.courses.find((e) => e.courseNo == courseNo)
+      : state.course.courses.find((e) => e.courseNo == courseNo)
   );
   const dispatch = useAppDispatch();
   const [instructors, setInstructors] = useState<IModelUser[]>([]);
@@ -60,7 +62,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         }
       });
       setUniqTopic(temp);
-      if (tqf3.topic != temp[0]) {
+      if (!tqf3.topic || !temp.includes(tqf3.topic)) {
         dispatch(setDataTQF3({ topic: temp[0] }));
       }
       const insList: any[] = [];
@@ -133,7 +135,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         ) {
           changePart.push(part);
         }
-      }      
+      }
       if (changePart.length && tqf3.id) {
         setOpenAlertPopup(true);
       } else {
@@ -188,26 +190,33 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             </p>
           </div>
           <div className="flex flex-col gap-2">
-            <Button
-              onClick={() => goToPage(ROUTE_PATH.SECTION)}
-              leftSection={<RxDashboard size={18} />}
-              className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+            {(course?.sections.some(
+              (section) => (section.instructor as IModelUser)?.id === user.id
+            ) ||
+              course?.sections.some((section) =>
+                section.coInstructors?.some(
+                  (coInstructor) => coInstructor.id === user.id
+                )
+              )) && (
+              <Button
+                onClick={() => goToPage(ROUTE_PATH.SECTION)}
+                leftSection={<RxDashboard size={18} />}
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                 ${
-                  path.includes(ROUTE_PATH.TQF3) 
-                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]" 
+                  path.includes(ROUTE_PATH.TQF3)
+                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                     : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                 }
                 ${
-                  path.includes(ROUTE_PATH.TQF5) 
-                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]" 
+                  path.includes(ROUTE_PATH.TQF5)
+                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                     : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                 }
               `}
-              
-            >
-              Sections
-            </Button>
-
+              >
+                Sections
+              </Button>
+            )}
             <Menu
               trigger="hover"
               openDelay={100}
@@ -286,9 +295,9 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             >
               <Menu.Target>
                 <Button
-                onClick={() => {
-                  goToPage(ROUTE_PATH.TQF5);
-                }}
+                  onClick={() => {
+                    goToPage(ROUTE_PATH.TQF5);
+                  }}
                   leftSection={
                     <Icon IconComponent={IconTQF5} className="size-5" />
                   }
@@ -323,7 +332,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                         <Menu.Divider />
                         {uniqTopic.map((topic) => (
                           <Menu.Item
-                            className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
+                            className="justify-between bg-transparent !max-w-full  py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
                             variant="outline"
                             onClick={() => {
                               if (topic !== tqf3.topic) {
