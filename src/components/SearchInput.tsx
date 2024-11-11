@@ -28,7 +28,7 @@ export function SearchInput({ onSearch, placeholder }: Props) {
   };
 
   return (
-    <div className="relative z-50 ipad11:w-[320px] macair133:w-[400px] w-[220px]">
+    <div className="relative z-50 ipad11:w-[280px] macair133:w-[400px] w-[220px]">
       <TextInput
         autoFocus={false}
         leftSection={!isFocused && <TbSearch className="size-4" />}

@@ -16,6 +16,7 @@ import IconFeedback from "@/assets/icons/feedback.svg?react";
 
 export default function Navbar() {
   const { name } = useParams();
+  const path = useLocation().pathname;
   const location = useLocation().pathname;
   const user = useAppSelector((state) => state.user);
   const [params, setParams] = useSearchParams();
@@ -98,15 +99,23 @@ export default function Navbar() {
             : {}
         }
       >
-        <p
-          className={`font-semibold text-h2 ${
-            location.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
-              ? ""
-              : "md:w-fit max-w-[30%]"
-          }`}
-        >
-          {topicPath()}
-        </p>
+        <div className="flex w-fit  gap-3 items-center">
+          <p
+            className={`font-semibold text-h2 ${
+              location.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
+                ? ""
+                : "md:w-fit w-full"
+            }`}
+          >
+            {topicPath()}
+          </p>
+          {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) &&
+            (path.includes(ROUTE_PATH.ADMIN_DASHBOARD) ? (
+              <div className="px-3 py-2 w-fit tag-tqf bg-sky-100 text-blue-600 rounded-[20px]">AD</div>
+            ) : (
+              <div className="px-3 py-2 w-fit tag-tqf bg-indigo-100 text-secondary rounded-[20px]">INS</div>
+            ))}
+        </div>
         {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
           location.includes(path)
         ) && (
