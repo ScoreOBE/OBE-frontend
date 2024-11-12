@@ -16,7 +16,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName } from "@/helpers/functions/function";
 import { IModelSection } from "@/models/ModelCourse";
-import Loading from "../Loading";
+import Loading from "../Loading/Loading";
 
 type Props = {
   onClickLeaveCourse: () => void;
@@ -30,10 +30,10 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
   const prefix = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.SECTION}/${sectionNo}`;
   const user = useAppSelector((state) => state.user);
   const courseList = useAppSelector((state) => state.course.courses);
+  const loading = useAppSelector((state) => state.loading.loading);
   const dispatch = useAppDispatch();
   const [course, setCourse] = useState<IModelCourse>();
   const [section, setSection] = useState<Partial<IModelSection>>();
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (courseList.length) {

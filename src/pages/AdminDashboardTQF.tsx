@@ -14,7 +14,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import { COURSE_TYPE, ROLE, TQF_STATUS } from "@/helpers/constants/enum";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
@@ -36,7 +36,7 @@ import { setDataTQF3, setSelectTqf3Topic } from "@/store/tqf3";
 
 export default function AdminDashboardTQF() {
   const navigate = useNavigate();
-  const loading = useAppSelector((state) => state.loading);
+  const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const department = useAppSelector((state) => state.faculty.department);
   const academicYear = useAppSelector((state) => state.academicYear);

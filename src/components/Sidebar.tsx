@@ -39,7 +39,7 @@ export default function Sidebar() {
   );
   const path = useLocation().pathname;
   const [params, setParams] = useSearchParams();
-  const loading = useAppSelector((state) => state.loading);
+  const loading = useAppSelector((state) => state.loading.loading);
   const academicYear = useAppSelector((state) => state.academicYear);
   const department = useAppSelector((state) => state.faculty.department);
   const courseList = useAppSelector((state) => state.course.courses);

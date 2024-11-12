@@ -21,7 +21,7 @@ import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import IconShare2 from "@/assets/icons/share2.svg?react";
 import IconHistogram from "@/assets/icons/histogram.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import gradescope from "@/assets/image/gradescope.png";
 import "@mantine/carousel/styles.css";
 import { Carousel, Embla } from "@mantine/carousel";
@@ -35,7 +35,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import testPhoto from "@/assets/image/testPhoto.png";
 
 export default function Login() {
-  const loading = useAppSelector((state) => state.loading);
+  const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

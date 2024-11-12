@@ -15,11 +15,13 @@ import PageError from "./pages/PageError";
 import { setLoading } from "./store/loading";
 import { checkTokenExpired } from "./helpers/functions/validation";
 import ModalTermsOfService from "./components/Modal/ModalTermOfService";
+import { LoadingOverlay } from "@mantine/core";
 
 function App() {
   const [openModalTermsOfService, setOpenModalTermsOfService] = useState(false);
   const showSidebar = useAppSelector((state) => state.showSidebar);
   const showNavbar = useAppSelector((state) => state.showNavbar);
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const error = useAppSelector((state) => state.errorResponse);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
@@ -93,6 +95,7 @@ function App() {
   ) : (
     <div className="flex heig   w-screen text-default">
       <AOSInit />
+      {loading && <LoadingOverlay />}
       {showSidebar && <Sidebar />}
       <div className="flex flex-col h-screen  w-full overflow-hidden">
         {showNavbar && <Navbar />}

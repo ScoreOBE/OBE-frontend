@@ -41,6 +41,7 @@ import {
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { editCourse } from "@/store/course";
 import { editCourseManagement } from "@/store/courseManagement";
+import { setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -58,8 +59,8 @@ export default function ModalAddSection({
 }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(0);
   const [sectionNoList, setSectionNoList] = useState<string[]>([]);
   const [coInsList, setCoInsList] = useState<any[]>([]);
@@ -85,7 +86,7 @@ export default function ModalAddSection({
   });
 
   const nextStep = async () => {
-    setLoading(true);
+    dispatch(setLoadingOverlay(true));
     setFirstInput(false);
     let isValid = true;
     const length = form.getValues().sections.length || 0;
@@ -148,7 +149,7 @@ export default function ModalAddSection({
         await addSection();
       }
     }
-    setLoading(false);
+    dispatch(setLoadingOverlay(false));
   };
   const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
   const closeModal = () => {

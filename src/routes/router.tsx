@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import App from "@/App";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import AdminDashboardTQF from "@/pages/AdminDashboardTQF";
 import AdminDashboardPLO from "@/pages/AdminDashboardPLO";
 import AdminDashboardCLO from "@/pages/AdminDashboardCLO";

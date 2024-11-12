@@ -8,7 +8,7 @@ import needAccess from "@/assets/image/needAccess.jpg";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import { Button, Modal, NumberInput, Table, TextInput } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
@@ -17,7 +17,7 @@ import { SearchInput } from "@/components/SearchInput";
 export default function Students() {
   const { name } = useParams();
   const { courseNo, sectionNo } = useParams();
-  const loading = useAppSelector((state) => state.loading);
+  const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)

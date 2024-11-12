@@ -26,7 +26,7 @@ import {
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import MainPopup from "@/components/Popup/MainPopup";
 import { IModelSection } from "@/models/ModelCourse";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
 import ModalEditCourse from "@/components/Modal/CourseManage/ModalEditCourse";
 import ModalEditSection from "@/components/Modal/CourseManage/ModalEditSection";
@@ -41,6 +41,7 @@ import { SearchInput } from "@/components/SearchInput";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { IModelDepartment } from "@/models/ModelFaculty";
 import { setDepartment } from "@/store/department";
+import { setLoading } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -52,8 +53,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const department = useAppSelector((state) => state.faculty.department);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const courseManagement = useAppSelector((state) => state.courseManagement);
+  const loading = useAppSelector((state) => state.loading.loading);
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
   const [maxTabs, setMaxTabs] = useState(0);
   const [startEndTab, setStartEndTab] = useState({ start: 0, end: maxTabs });
   const [payload, setPayload] = useState<any>({ page: 1, limit: 10 });
@@ -149,7 +150,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   };
 
   const fetchCourse = async () => {
-    setLoading(true);
+    dispatch(setLoading(true));
     if (department.length) {
       const payloadCourse = initialPayload();
       setPayload(payloadCourse);
@@ -158,7 +159,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         dispatch(setCourseManagementList(res));
       }
     }
-    setLoading(false);
+    dispatch(setLoading(false));
   };
 
   const searchCourse = async (searchValue: string, reset?: boolean) => {

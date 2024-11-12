@@ -22,7 +22,7 @@ import IconTrash from "@/assets/icons/trash.svg?react";
 import IconSO from "@/assets/icons/SO.svg?react";
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { getDepartment } from "@/services/faculty/faculty.service";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { sortData } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { useListState } from "@mantine/hooks";
@@ -33,6 +33,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { validateTextInput } from "@/helpers/functions/validation";
 import { checkCanCreatePLO, createPLO } from "@/services/plo/plo.service";
 import { IModelDepartment } from "@/models/ModelFaculty";
+import { setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -51,7 +52,8 @@ export default function ModalAddPLOCollection({
 }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const [loading, setLoading] = useState(false);
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
+  const dispatch = useAppDispatch();
   const [active, setActive] = useState(0);
   const [department, setDepartment] = useState<IModelDepartment[]>([]);
   const [ploNo, setPloNo] = useState(0);
@@ -101,7 +103,7 @@ export default function ModalAddPLOCollection({
   });
 
   const nextStep = async () => {
-    setLoading(true);
+    dispatch(setLoadingOverlay(true));
     setFirstInput(false);
     let isValid = true;
     switch (active) {
@@ -145,7 +147,7 @@ export default function ModalAddPLOCollection({
         onClose();
       }
     }
-    setLoading(false);
+    dispatch(setLoadingOverlay(false));
   };
   const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
   const closeModal = () => {

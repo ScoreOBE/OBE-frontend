@@ -33,7 +33,7 @@ import needAccess from "@/assets/image/needAccess.jpg";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 
 import { useForm } from "@mantine/form";
@@ -42,7 +42,7 @@ import { IModelAssignment } from "@/models/ModelCourse";
 export default function Assignment() {
   const { courseNo, sectionNo } = useParams();
   const path = useLocation().pathname;
-  const loading = useAppSelector((state) => state.loading);
+  const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)

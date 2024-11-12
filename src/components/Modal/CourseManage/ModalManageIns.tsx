@@ -29,6 +29,7 @@ import {
 } from "@/store/courseManagement";
 import { cloneDeep, isEqual } from "lodash";
 import { editCourse } from "@/store/course";
+import { setLoadingOverlay } from "@/store/loading";
 
 type actionType = "course" | "courseManagement";
 
@@ -47,8 +48,8 @@ export default function ModalManageIns({
   setNewData = () => {},
 }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
   const [changeMainIns, setChangeMainIns] = useState(false);
   const [editSec, setEditSec] = useState<
     Partial<IModelSection> & Record<string, any>
@@ -116,7 +117,7 @@ export default function ModalManageIns({
   };
 
   const onClickSave = async () => {
-    setLoading(true);
+    dispatch(setLoadingOverlay(true));
     const payload = editCoSec.map((sec) => {
       return {
         sectionNo: sec.sectionNo,
@@ -154,7 +155,7 @@ export default function ModalManageIns({
       );
       if (type == "course") onClose();
     }
-    setLoading(false);
+    dispatch(setLoadingOverlay(false));
   };
 
   const addCoIns = (

@@ -21,7 +21,7 @@ import PageError from "./PageError";
 import MainPopup from "@/components/Popup/MainPopup";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import ModalEditSection from "@/components/Modal/CourseManage/ModalEditSection";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { IModelSection } from "@/models/ModelCourse";
 import {
@@ -43,7 +43,7 @@ export default function Section() {
   const [params, setParams] = useSearchParams();
   const error = useAppSelector((state) => state.errorResponse);
   const user = useAppSelector((state) => state.user);
-  const loading = useAppSelector((state) => state.loading);
+  const loading = useAppSelector((state) => state.loading.loading);
   const dispatch = useAppDispatch();
   const academicYear = useAppSelector((state) => state.academicYear);
   const activeTerm = academicYear.find(

@@ -21,7 +21,7 @@ import { updateProcessTqf3 } from "@/services/academicYear/academicYear.service"
 import { setProcessTQF3 } from "@/store/academicYear";
 import Icon from "@/components/Icon";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 
 type Props = {
   opened: boolean;

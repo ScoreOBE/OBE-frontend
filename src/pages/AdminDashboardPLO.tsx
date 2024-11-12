@@ -11,7 +11,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import { TQF_STATUS } from "@/helpers/constants/enum";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
 import { setShowNavbar } from "@/store/showNavbar";
@@ -21,7 +21,7 @@ import { IModelPLO } from "@/models/ModelPLO";
 
 export default function AdminDashboardPLO() {
   const navigate = useNavigate();
-  const loading = useAppSelector((state) => state.loading);
+  const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const courseList = useAppSelector((state) => state.allCourse);

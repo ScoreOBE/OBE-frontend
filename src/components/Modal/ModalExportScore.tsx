@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
 import Icon from "../Icon";
 import IconExcel from "@/assets/icons/excel.svg?react";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
+import { setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -19,7 +20,8 @@ export default function ModalExportScore({ opened, onClose }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const tqf3 = useAppSelector((state) => state.tqf3);
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
+  const dispatch = useAppDispatch();
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
@@ -48,8 +50,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
       );
       return;
     }
-    setLoading(true);
-
+    dispatch(setLoadingOverlay(true));
     const payload: any = {
       courseNo,
       academicYear: academicYear.year,
@@ -57,7 +58,6 @@ export default function ModalExportScore({ opened, onClose }: Props) {
       tqf3: tqf3.id,
     };
     selectedParts.forEach((part) => (payload[part] = ""));
-
     const res = await genPdfTQF3(payload);
     if (res) {
       const contentType = res.headers["content-type"];
@@ -80,7 +80,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
         `TQF3 exported successfully as ${filename}.`
       );
     }
-    setLoading(false);
+    dispatch(setLoadingOverlay(false));
     onCloseModal();
   };
 
@@ -147,9 +147,11 @@ export default function ModalExportScore({ opened, onClose }: Props) {
           <Button
             loading={loading}
             rightSection={
-              <Icon IconComponent={IconFileExport}
-                className={`${!tqf3.part1?.updatedAt ? "text-[#adb5bd]" : "text-[#ffffff]" } size-5 items-center stroke-[2px]`}
-              
+              <Icon
+                IconComponent={IconFileExport}
+                className={`${
+                  !tqf3.part1?.updatedAt ? "text-[#adb5bd]" : "text-[#ffffff]"
+                } size-5 items-center stroke-[2px]`}
               />
             }
             onClick={generatePDF}

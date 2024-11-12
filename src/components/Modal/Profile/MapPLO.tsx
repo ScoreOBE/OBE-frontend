@@ -33,12 +33,12 @@ import {
   getCourseManagement,
   ploMapping,
 } from "@/services/courseManagement/courseManagement.service";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import {
   CourseManagementRequestDTO,
   CourseManagementSearchDTO,
 } from "@/services/courseManagement/dto/courseManagement.dto";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {
   createPLONo,
@@ -62,6 +62,7 @@ import { getSectionNo, sortData } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { SearchInput } from "@/components/SearchInput";
 import { IModelCourse } from "@/models/ModelCourse";
+import { setLoading } from "@/store/loading";
 
 type Props = {
   ploName: string;
@@ -69,7 +70,8 @@ type Props = {
 
 export default function MapPLO({ ploName = "" }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const [loading, setLoading] = useState(false);
+  const loading = useAppSelector((state) => state.loading.loading);
+  const dispatch = useAppDispatch();
   const [payload, setPayload] = useState<any>({});
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
   const [reorder, setReorder] = useState(false);
@@ -216,7 +218,7 @@ export default function MapPLO({ ploName = "" }: Props) {
   };
 
   const fetchCourse = async (payloadCourse: any) => {
-    setLoading(true);
+    dispatch(setLoading(true));
     const res = await getCourseManagement(payloadCourse);
     if (res) {
       setPayload({
@@ -228,7 +230,7 @@ export default function MapPLO({ ploName = "" }: Props) {
       setCourseManagement(res.courses);
       setCourseCode(res.courseCode);
     }
-    setLoading(false);
+    dispatch(setLoading(false));
   };
 
   const onClickAddPLONo = async () => {
