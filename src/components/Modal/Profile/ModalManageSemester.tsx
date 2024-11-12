@@ -21,6 +21,7 @@ import IconCalendar from "@/assets/icons/calendar.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
+import { setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -28,6 +29,7 @@ type Props = {
 };
 export default function ModalManageSemester({ opened, onClose }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [yearList, setYearList] = useState<IModelAcademicYear[]>([]);
@@ -39,7 +41,6 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
   const [activateSemester, setActivateSemester] =
     useState<IModelAcademicYear>();
   const [textActivate, setTextActivate] = useState("");
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (opened) {
@@ -107,7 +108,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
   };
 
   const onClickActivate = async (e: IModelAcademicYear) => {
-    setLoading(true);
+    dispatch(setLoadingOverlay(true));
     const res = await activeAcademicYear(e.id);
     if (res) {
       showNotifications(
@@ -122,7 +123,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       setTextActivate("");
       fetchSemester();
     }
-    setLoading(false);
+    dispatch(setLoadingOverlay(false));
   };
 
   const onClickAdd = async () => {

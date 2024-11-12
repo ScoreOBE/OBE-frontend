@@ -35,7 +35,7 @@ import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { COURSE_TYPE, NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { useForm, UseFormReturnType } from "@mantine/form";
 import exportFile from "@/assets/icons/fileExport.svg?react";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import { IModelCLO, IModelTQF3 } from "@/models/ModelTQF3";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -47,6 +47,7 @@ import { IModelSection } from "@/models/ModelCourse";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { IModelCourse } from "@/models/ModelCourse";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";
+import { setLoadingOverlay } from "@/store/loading";
 
 export default function TQF3() {
   const { courseNo } = useParams();
@@ -72,7 +73,6 @@ export default function TQF3() {
   const [confirmToEditData, setConfirmToEditData] = useState(false);
   const [openModalReuse, setOpenModalReuse] = useState(false);
   const [courseReuseTqf3List, setCourseReuseTqf3List] = useState<any[]>([]);
-  const [loadingRes, setLoadingRes] = useState(false);
   const [openAlertDataTQF3Part4, setOpenAlertDataTQF3Part4] = useState(false);
   const partTab = [
     {
@@ -370,7 +370,7 @@ export default function TQF3() {
 
   const onClickReuseTQF3 = async () => {
     if (!selectTqf3Reuse.validate().hasErrors && tqf3Original) {
-      setLoadingRes(true);
+      dispatch(setLoadingOverlay(true));
       const res = await reuseTQF3({
         id: tqf3Original.id,
         reuseId: selectTqf3Reuse.getValues().value,
@@ -395,7 +395,7 @@ export default function TQF3() {
         });
         showNotifications(NOTI_TYPE.SUCCESS, "Reuse TQF 3 Success", "thinking");
       }
-      setLoadingRes(false);
+      dispatch(setLoadingOverlay(false));
       setOpenModalReuse(false);
       selectTqf3Reuse.reset();
     }
@@ -434,7 +434,7 @@ export default function TQF3() {
       : "text-[#24b9a5]"; // Done
   };
 
-  return loading || !tqf3Original ? (
+  return loading.loading || !tqf3Original ? (
     <Loading />
   ) : (
     <>
@@ -498,7 +498,7 @@ export default function TQF3() {
             >
               Cancel
             </Button>
-            <Button loading={loadingRes} onClick={onClickReuseTQF3}>
+            <Button loading={loading.loadingOverlay} onClick={onClickReuseTQF3}>
               Reuse
             </Button>
           </div>

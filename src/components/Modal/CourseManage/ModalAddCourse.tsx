@@ -21,7 +21,7 @@ import IconUsers from "@/assets/icons/users.svg?react";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import { SEMESTER } from "@/helpers/constants/enum";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import {
   validateTextInput,
   validateCourseNo,
@@ -41,6 +41,7 @@ import { showNotifications } from "@/helpers/notifications/showNotifications";
 import CompoManageIns from "@/components/CompoManageIns";
 import { IModelSection } from "@/models/ModelCourse";
 import Icon from "@/components/Icon";
+import { setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -54,7 +55,8 @@ export default function ModalAddCourse({
 }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const [loading, setLoading] = useState(false);
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
+  const dispatch = useAppDispatch();
   const [active, setActive] = useState(0);
   const [sectionNoList, setSectionNoList] = useState<string[]>([]);
   const [coInsList, setCoInsList] = useState<any[]>([]);
@@ -84,7 +86,7 @@ export default function ModalAddCourse({
   });
 
   const nextStep = async (type?: string) => {
-    setLoading(true);
+    dispatch(setLoadingOverlay(true));
     setFirstInput(false);
     let isValid = true;
     const length = form.getValues().sections?.length || 0;
@@ -152,7 +154,7 @@ export default function ModalAddCourse({
       }
       setActive((cur) => (cur < 4 ? cur + 1 : cur));
     }
-    setLoading(false);
+    dispatch(setLoadingOverlay(false));
   };
   const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
   const closeModal = () => {
@@ -429,10 +431,10 @@ export default function ModalAddCourse({
                   - Learner Person
                 </span>
                 <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
-                  - Innovative Co-creator 
+                  - Innovative Co-creator
                 </span>
                 <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
-                  - Active Citizen 
+                  - Active Citizen
                 </span>
               </p>
             </Button>
@@ -456,13 +458,13 @@ export default function ModalAddCourse({
                 </span>
                 <br />
                 <span className="flex justify-start font-medium text-b3 text-secondary -mt-1">
-                  - Core Courses 
+                  - Core Courses
                 </span>
                 <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
-                  - Major Courses 
+                  - Major Courses
                 </span>
                 <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
-                  - Minor Courses 
+                  - Minor Courses
                 </span>
               </p>
             </Button>

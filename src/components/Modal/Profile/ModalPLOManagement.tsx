@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import { deletePLO, getPLOs } from "@/services/plo/plo.service";
 import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
 import ModalAddPLOCollection from "@/components/Modal/ModalAddPLOCollection";
@@ -28,6 +28,7 @@ import MapPLO from "./MapPLO";
 import MainPopup from "@/components/Popup/MainPopup";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
+import { setLoading } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -37,8 +38,8 @@ type Props = {
 export default function ModalPLOManagement({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const loading = useAppSelector((state) => state.loading.loading);
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
   const [ploActive, setPloActive] = useState<IModelPLO[]>([]);
   const [selectPlo, setSelectPlo] = useState<string | null>("Dashboard");
   const [ploCollection, setPloCollection] = useState<IModelPLO[]>([]);
@@ -99,10 +100,10 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
       }
     };
     if (opened) {
-      setLoading(true);
+      dispatch(setLoading(true));
       fetchPLOTab();
       fetchPLO();
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   }, [opened]);
 

@@ -6,7 +6,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import React from "react";
 import {
   IModelAssignment,
@@ -18,7 +18,7 @@ import { ROLE } from "@/helpers/constants/enum";
 
 export default function Histogram() {
   const { courseNo, sectionNo } = useParams();
-  const loading = useAppSelector((state) => state.loading);
+  const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)

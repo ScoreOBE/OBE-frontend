@@ -24,7 +24,7 @@ import MainPopup from "../components/Popup/MainPopup";
 import ModalEditCourse from "../components/Modal/CourseManage/ModalEditCourse";
 import { NOTI_TYPE, ROLE, TQF_STATUS } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
 import { IModelUser } from "@/models/ModelUser";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -35,7 +35,7 @@ import ModalStudentList from "@/components/Modal/ModalStudentList";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const loading = useAppSelector((state) => state.loading);
+  const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const courseList = useAppSelector((state) => state.course);

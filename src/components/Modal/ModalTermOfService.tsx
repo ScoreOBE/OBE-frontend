@@ -1,12 +1,4 @@
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Group,
-  Modal,
-  Table,
-  Tabs,
-} from "@mantine/core";
+import { Alert, Button, Group, Modal, Table, Tabs } from "@mantine/core";
 import { useState } from "react";
 import Icon from "../Icon";
 import IconExclamamtion from "@/assets/icons/exclamationCircle.svg?react";
@@ -158,8 +150,8 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         >
           {isEN === "EN" ? (
             <p className=" leading-6 text-default text-b2">
-              Please read, review and understand these Terms of
-              Service carefully before using ScoreOBE +.
+              Please read, review and understand these Terms of Service
+              carefully before using ScoreOBE +.
             </p>
           ) : (
             <p className=" leading-6 text-default text-b2">
@@ -403,11 +395,11 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             By accessing and using ScoreOBE +, you acknowledge that you have
             read, understood, and agree to be bound by all Terms of Service.
             Your use of this system constitutes irrevocable acceptance of these
-            terms. If you do not agree with all these Terms of
-            Service you are expressly prohibited from further use of the ScoreOBE +
-            and must discontinue immediately by selecting the "Log out" option
-            located in the bottom-left corner. Upon logging out, ScoreOBE + will
-            cease any data collection through CMU OAuth.
+            terms. If you do not agree with all these Terms of Service you are
+            expressly prohibited from further use of the ScoreOBE + and must
+            discontinue immediately by selecting the "Log out" option located in
+            the bottom-left corner. Upon logging out, ScoreOBE + will cease any
+            data collection through CMU OAuth.
           </p>
         ) : (
           <p className=" text-b2 mb-6 leading-6">
@@ -415,9 +407,10 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             <p className="font-normal">
               การเข้าถึงและใช้งาน ScoreOBE+ แสดงว่าผู้ใช้ยืนยันว่าได้อ่าน
               ทำความเข้าใจ และตกลงที่จะปฏิบัติตามข้อกำหนดในการให้บริการทั้งหมด
-              การใช้ ScoreOBE + นี้ถือเป็นการยอมรับข้อกำหนดและเงื่อนไขทั้งหมดอย่างไม่อาจเพิกถอนได้
-              หากผู้ใช้ไม่ยอมรับข้อกำหนดในการให้บริการ
-              ผู้ใช้จะถูกห้ามใช้ ScoreOBE + โดยเด็ดขาดและต้องยุติการใช้งานทันที โดยเลือก
+              การใช้ ScoreOBE +
+              นี้ถือเป็นการยอมรับข้อกำหนดและเงื่อนไขทั้งหมดอย่างไม่อาจเพิกถอนได้
+              หากผู้ใช้ไม่ยอมรับข้อกำหนดในการให้บริการ ผู้ใช้จะถูกห้ามใช้
+              ScoreOBE + โดยเด็ดขาดและต้องยุติการใช้งานทันที โดยเลือก
               "ออกจากระบบ" ที่มุมล่างซ้าย เมื่อออกจากระบบแล้ว ScoreOBE +
               จะหยุดการเก็บข้อมูลใด ๆ ผ่าน CMU OAuth
             </p>
@@ -514,9 +507,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             <p className="font-bold mb-1 ">2. System Objectives</p>
             <p className="ml-3">
               <li className="mb-1">
-                Score Announcements: The system facilitates quick and
-                efficient announcement of exam and homework scores, allowing
-                students to access their scores in each subject promptly.
+                Score Announcements: The system facilitates quick and efficient
+                announcement of exam and homework scores, allowing students to
+                access their scores in each subject promptly.
               </li>
               <li className="mb-1">
                 {" "}
@@ -565,13 +558,12 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             <p className="font-bold mb-1">3. Amendment</p>
             <p>
               We reserve the right to modify, amend, add, or remove any Terms
-              and of Service within the system without prior notice.
-              You are responsible for regularly reviewing any updates to these
-              Terms. Continued use of the system after any
-              modifications implies that you have read, understood, and
-              unconditionally accepted the updated Terms. You may
-              not claim lack of awareness of any changes to the Terms
-             as a reason for non-compliance.
+              and of Service within the system without prior notice. You are
+              responsible for regularly reviewing any updates to these Terms.
+              Continued use of the system after any modifications implies that
+              you have read, understood, and unconditionally accepted the
+              updated Terms. You may not claim lack of awareness of any changes
+              to the Terms as a reason for non-compliance.
             </p>
           </p>
         ) : (
@@ -655,27 +647,27 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             <p>
               {" "}
               By using this website, you agree to adhere strictly to purposes
-              outlined in these terms. Specifically, you agree
-              not to <br /> (1) Modify, adapt, translate, or reverse engineer
-              any part of the system, system framework, or any of its services,
-              nor allow any third party to do so without our explicit
-              authorization. <br /> (2) Upload or share any information that is
-              obscene, pornographic, defamatory, threatening, or intended to
-              blackmail other members or third parties. <br /> (3) Upload any
-              content or information that implies our endorsement or approval
-              without prior permission or legitimate association with us. <br />{" "}
-              (4) Introduce any viruses, malware, or disruptive system, or take
-              any action that could interfere with, disrupt, or degrade the
-              functionality of our computer systems or the systems of third
-              parties. <br /> (5) Utilize software, Trojan Horse programs, time
-              bombs, or similar methods that can disrupt or interfere with our
-              system, other users, or third-party computer systems, including
-              loading large amounts of data or engaging in activities that
-              threaten the performance of the service. <br /> (6) Violate any
-              additional policies, rules, or announcements that we may introduce
-              as part of these terms or in subsequent amendments.{" "}
-              <br /> If you breach any of these conditions, we reserve the right
-              to suspend your access to our services without prior notice.
+              outlined in these terms. Specifically, you agree not to <br /> (1)
+              Modify, adapt, translate, or reverse engineer any part of the
+              system, system framework, or any of its services, nor allow any
+              third party to do so without our explicit authorization. <br />{" "}
+              (2) Upload or share any information that is obscene, pornographic,
+              defamatory, threatening, or intended to blackmail other members or
+              third parties. <br /> (3) Upload any content or information that
+              implies our endorsement or approval without prior permission or
+              legitimate association with us. <br /> (4) Introduce any viruses,
+              malware, or disruptive system, or take any action that could
+              interfere with, disrupt, or degrade the functionality of our
+              computer systems or the systems of third parties. <br /> (5)
+              Utilize software, Trojan Horse programs, time bombs, or similar
+              methods that can disrupt or interfere with our system, other
+              users, or third-party computer systems, including loading large
+              amounts of data or engaging in activities that threaten the
+              performance of the service. <br /> (6) Violate any additional
+              policies, rules, or announcements that we may introduce as part of
+              these terms or in subsequent amendments. <br /> If you breach any
+              of these conditions, we reserve the right to suspend your access
+              to our services without prior notice.
             </p>
           </p>
         ) : (
@@ -728,9 +720,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             <p>
               You agree and acknowledge that by using our Service, you grant us
               the right to collect and process data associated with you, as
-              outlined in these Terms. This data collection is
-              intended for purposes of service enhancement, including user
-              experience improvement, system functionality optimization, and the
+              outlined in these Terms. This data collection is intended for
+              purposes of service enhancement, including user experience
+              improvement, system functionality optimization, and the
               safeguarding of your personal data. <br /> By continuing to use
               our Service, you consent to and authorize our processing of this
               data as specified. You also understand that, under our Privacy

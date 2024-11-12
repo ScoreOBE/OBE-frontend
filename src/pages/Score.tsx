@@ -9,7 +9,7 @@ import needAccess from "@/assets/image/needAccess.jpg";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading/Loading";
 import HistogramChart from "@/components/HistogramChart";
 import { BarChart } from "@mantine/charts";
 import Icon from "@/components/Icon";
@@ -23,7 +23,7 @@ import { ROLE } from "@/helpers/constants/enum";
 
 export default function Overall() {
   const { courseNo, sectionNo, name } = useParams();
-  const loading = useAppSelector((state) => state.loading);
+  const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)

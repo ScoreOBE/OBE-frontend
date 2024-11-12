@@ -7,13 +7,14 @@ import {
   PartTopicTQF3,
 } from "@/helpers/constants/TQF3.enum";
 import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import noData from "@/assets/image/noData.jpg";
 import IconPDF from "@/assets/icons/pdf.svg?react";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
 import Icon from "@/components/Icon";
+import { setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -26,7 +27,8 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const tqf3 = useAppSelector((state) => state.tqf3);
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
+  const dispatch = useAppDispatch();
   const [dataExport, setDataExport] = useState<Partial<IModelTQF3>>({});
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
       );
       return;
     }
-    setLoading(true);
+    dispatch(setLoadingOverlay(true));
 
     const payload: any = {
       courseNo: dataTQF?.courseNo ?? courseNo,
@@ -94,7 +96,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
         `TQF3 exported successfully as ${filename}.`
       );
     }
-    setLoading(false);
+    dispatch(setLoadingOverlay(false));
     onCloseModal();
   };
 

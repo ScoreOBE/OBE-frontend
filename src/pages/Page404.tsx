@@ -1,7 +1,7 @@
 import Icon from "@/components/Icon";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch } from "@/store";
-import { setLoading } from "@/store/loading";
+import { setLoading, setLoadingOverlay } from "@/store/loading";
 import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { Button } from "@mantine/core";
@@ -15,6 +15,7 @@ export default function NotFoundPage() {
 
   useEffect(() => {
     dispatch(setLoading(false));
+    dispatch(setLoadingOverlay(false));
     dispatch(setShowSidebar(false));
     dispatch(setShowNavbar(false));
   }, []);

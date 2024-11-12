@@ -20,10 +20,11 @@ import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
 import ModalErrorUploadFile from "./ModalErrorUploadFile";
 import { uploadStudentList } from "@/services/section/section.service";
 import { updateStudentList } from "@/store/course";
-import store from "@/store";
+import store, { useAppDispatch, useAppSelector } from "@/store";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
+import { setLoadingOverlay } from "@/store/loading";
 
 type modalType = "import" | "list" | "import_list";
 type Props = {
@@ -51,7 +52,8 @@ export default function ModalStudentList({
   const [result, setResult] = useState<any>();
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
   const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (opened) {
@@ -62,7 +64,7 @@ export default function ModalStudentList({
 
   const uploadList = async () => {
     if (result) {
-      setLoading(true);
+      dispatch(setLoadingOverlay(true));
       const res = await uploadStudentList(result);
       if (res) {
         store.dispatch(updateStudentList({ id: data.id, sections: res }));
@@ -77,7 +79,7 @@ export default function ModalStudentList({
           onNext();
         }
       }
-      setLoading(false);
+      dispatch(setLoadingOverlay(false));
     } else {
       showNotifications(
         NOTI_TYPE.ERROR,
