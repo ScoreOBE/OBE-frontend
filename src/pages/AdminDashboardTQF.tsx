@@ -53,6 +53,8 @@ export default function AdminDashboardTQF() {
   const [selectDepartment, setSelectDepartment] = useState<
     Partial<IModelDepartment>
   >({});
+  const [tqf3Filters, setTqf3Filters] = useState<string[]>([]);
+  const [tqf5Filters, setTqf5Filters] = useState<string[]>([]);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -84,6 +86,10 @@ export default function AdminDashboardTQF() {
   }, [department, selectDepartment]);
 
   useEffect(() => {
+    fetchCourse();
+  }, [tqf3Filters, tqf5Filters]);
+
+  useEffect(() => {
     if (term) {
       setPayload(initialPayload());
       localStorage.removeItem("search");
@@ -102,6 +108,8 @@ export default function AdminDashboardTQF() {
       semester: term.semester!,
       departmentCode: dep,
       search: courseList.search,
+      tqf3: tqf3Filters,
+      tqf5: tqf5Filters,
       hasMore: courseList.total >= payload?.limit,
     };
   };
@@ -149,6 +157,18 @@ export default function AdminDashboardTQF() {
         setPayload({ ...payload, hasMore: false });
       }
     }
+  };
+
+  const handleTqf3FilterChange = (status: string, isChecked: boolean) => {
+    setTqf3Filters((prev) =>
+      isChecked ? [...prev, status] : prev.filter((item) => item !== status)
+    );
+  };
+
+  const handleTqf5FilterChange = (status: string, isChecked: boolean) => {
+    setTqf5Filters((prev) =>
+      isChecked ? [...prev, status] : prev.filter((item) => item !== status)
+    );
   };
 
   const courseTable = (index: number, course: Partial<IModelCourse>) => {
@@ -393,27 +413,6 @@ export default function AdminDashboardTQF() {
                 </div>
               </Menu.Dropdown>
             </Menu>
-            {/* <Tooltip
-              withArrow
-              arrowPosition="side"
-              arrowOffset={50}
-              arrowSize={7}
-              position="bottom-end"
-              label={
-                <div className="text-default font-semibold text-[13px] p-1">
-                  Export TQF
-                </div>
-              }
-              color="#FCFCFC"
-            >
-              <Button
-                variant="outline"
-                className="tag-tqf  !px-3 !rounded-full text-center"
-                onClick={() => setOpenModalPrintTQF(true)}
-              >
-                <Icon className="size-5" IconComponent={IconFileExport} />
-              </Button>
-            </Tooltip> */}
           </div>
         </Table.Td>
       </Table.Tr>
@@ -423,76 +422,45 @@ export default function AdminDashboardTQF() {
   const filterTQF3 = () => (
     <div>
       <p className="mb-3 text-b2 font-bold text-secondary">TQF 3</p>
-      <div className="flex flex-col justify-center gap-3 pr-10 ">
-        <Checkbox
-          label={
-            <div
-              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
-              tqf-status="Done"
-            >
-              Done
-            </div>
-          }
-        />
-        <Checkbox
-          label={
-            <div
-              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
-              tqf-status="In Progress"
-            >
-              In Progress
-            </div>
-          }
-        />
-        <Checkbox
-          label={
-            <div
-              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
-              tqf-status="No Data"
-            >
-              No Data
-            </div>
-          }
-        />
+      <div className="flex flex-col justify-center gap-3 pr-10">
+        {["Done", "In Progress", "No Data"].map((status) => (
+          <Checkbox
+            key={status}
+            checked={tqf3Filters.includes(status)}
+            onChange={(e) => handleTqf3FilterChange(status, e.target.checked)}
+            label={
+              <div
+                className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
+                tqf-status={status}
+              >
+                {status}
+              </div>
+            }
+          />
+        ))}
       </div>
-      <div className="mt-3 mb-2"></div>
     </div>
   );
 
   const filterTQF5 = () => (
     <div>
-      <p className="mb-3 text-b2 font-bold text-secondary">TQF 5</p>
-      <div className="flex flex-col justify-center gap-3 pr-10 ">
-        <Checkbox
-          label={
-            <div
-              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
-              tqf-status="Done"
-            >
-              Done
-            </div>
-          }
-        />
-        <Checkbox
-          label={
-            <div
-              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
-              tqf-status="In Progress"
-            >
-              In Progress
-            </div>
-          }
-        />
-        <Checkbox
-          label={
-            <div
-              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
-              tqf-status="No Data"
-            >
-              No Data
-            </div>
-          }
-        />
+      <p className="my-3 text-b2 font-bold text-secondary">TQF 5</p>
+      <div className="flex flex-col justify-center gap-3 pr-10">
+        {["Done", "In Progress", "No Data"].map((status) => (
+          <Checkbox
+            key={status}
+            checked={tqf5Filters.includes(status)}
+            onChange={(e) => handleTqf5FilterChange(status, e.target.checked)}
+            label={
+              <div
+                className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
+                tqf-status={status}
+              >
+                {status}
+              </div>
+            }
+          />
+        ))}
       </div>
     </div>
   );
