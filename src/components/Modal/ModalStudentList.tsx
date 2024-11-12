@@ -51,6 +51,7 @@ export default function ModalStudentList({
   const [result, setResult] = useState<any>();
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
   const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (opened) {
@@ -61,6 +62,7 @@ export default function ModalStudentList({
 
   const uploadList = async () => {
     if (result) {
+      setLoading(true);
       const res = await uploadStudentList(result);
       if (res) {
         store.dispatch(updateStudentList({ id: data.id, sections: res }));
@@ -75,6 +77,7 @@ export default function ModalStudentList({
           onNext();
         }
       }
+      setLoading(false);
     } else {
       showNotifications(
         NOTI_TYPE.ERROR,
@@ -354,6 +357,7 @@ export default function ModalStudentList({
               <div className="flex justify-end mt-3 sticky w-full">
                 <Button
                   onClick={uploadList}
+                  loading={loading}
                   leftSection={
                     <Icon
                       IconComponent={IconFileImport}
@@ -433,6 +437,7 @@ export default function ModalStudentList({
               </Button>
               <Button
                 onClick={uploadList}
+                loading={loading}
                 rightSection={
                   <Icon
                     IconComponent={IconArrowRight}
