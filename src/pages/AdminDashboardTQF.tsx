@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button, Menu, Table, Tabs, Tooltip } from "@mantine/core";
+import { Button, Checkbox, Menu, Table, Tabs, Tooltip } from "@mantine/core";
 import Icon from "@/components/Icon";
-import IconAdjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
+import IconFilter from "@/assets/icons/filter.svg?react";
 import IconEye from "@/assets/icons/eyePublish.svg?react";
 import IconTQF3 from "@/assets/icons/TQF3.svg?react";
 import IconTQF5 from "@/assets/icons/TQF5.svg?react";
@@ -33,6 +33,7 @@ import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setDataTQF3, setSelectTqf3Topic } from "@/store/tqf3";
+import { randomId, useListState } from "@mantine/hooks";
 
 export default function AdminDashboardTQF() {
   const navigate = useNavigate();
@@ -419,89 +420,85 @@ export default function AdminDashboardTQF() {
     );
   };
 
+  const filterTQF3 = () => (
+    <div>
+      <p className="mb-3 text-b2 font-bold text-secondary">TQF 3</p>
+      <div className="flex flex-col justify-center gap-3 pr-10 ">
+        <Checkbox
+          label={
+            <div
+              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
+              tqf-status="Done"
+            >
+              Done
+            </div>
+          }
+        />
+        <Checkbox
+          label={
+            <div
+              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
+              tqf-status="In Progress"
+            >
+              In Progress
+            </div>
+          }
+        />
+        <Checkbox
+          label={
+            <div
+              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
+              tqf-status="No Data"
+            >
+              No Data
+            </div>
+          }
+        />
+      </div>
+      <div className="mt-3 mb-2"></div>
+    </div>
+  );
+
+  const filterTQF5 = () => (
+    <div>
+      <p className="mb-3 text-b2 font-bold text-secondary">TQF 5</p>
+      <div className="flex flex-col justify-center gap-3 pr-10 ">
+        <Checkbox
+          label={
+            <div
+              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
+              tqf-status="Done"
+            >
+              Done
+            </div>
+          }
+        />
+        <Checkbox
+          label={
+            <div
+              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
+              tqf-status="In Progress"
+            >
+              In Progress
+            </div>
+          }
+        />
+        <Checkbox
+          label={
+            <div
+              className="px-3 py-2 w-fit tag-tqf rounded-[20px] -translate-y-1 text-[12px] font-medium"
+              tqf-status="No Data"
+            >
+              No Data
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+
   return (
     <>
-      {/* <Modal
-        title={
-          <div className="flex flex-col gap-2">
-            <p>Export TQF</p>
-            <p className="text-[12px] inline-flex items-center text-[#e13b3b] -mt-[6px]">
-              File format:{" "}
-              <Icon IconComponent={IconPDF} className="ml-1 stroke-[#e13b3b]" />
-            </p>
-          </div>
-        }
-        closeOnClickOutside={true}
-        opened={openModalPrintTQF}
-        onClose={() => setOpenModalPrintTQF(false)}
-        transitionProps={{ transition: "pop" }}
-        size="25vw"
-        centered
-        classNames={{
-          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
-          body: "flex flex-col overflow-hidden max-h-full h-fit",
-        }}
-      >
-        <div className="flex flex-col gap-5 pt-1 w-full">
-          <Checkbox.Group label="Select TQF to export">
-            <Group className="overflow-y-hidden max-h-[200px]">
-              <div className="flex p-1 w-full h-full flex-col overflow-y-auto gap-3">
-                <Checkbox.Card
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  }}
-                  className="p-3 flex border-none h-full rounded-md w-full"
-                >
-                  <Group>
-                    <Checkbox.Indicator />
-                    <div className="text-b2 font-medium ">TQF 3</div>
-                  </Group>
-                </Checkbox.Card>
-                <Checkbox.Card
-                  disabled
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  }}
-                  className="p-3 flex border-none disabled:text-disable h-full rounded-md w-full"
-                >
-                  <Group>
-                    <Checkbox.Indicator disabled />
-                    <div className="text-b2 font-medium ">TQF 5</div>
-                  </Group>
-                </Checkbox.Card>
-              </div>
-            </Group>
-          </Checkbox.Group>
-          <div className="flex  justify-end w-full">
-            <Group className="flex w-full h-fit items-end justify-end">
-              <div>
-                <Button
-                  variant="subtle"
-                  onClick={() => {
-                    setOpenModalPrintTQF(false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </div>
-              <Button
-                onClick={() => {
-                  setOpenModalPrintTQF(false);
-                }}
-                rightSection={
-                  <Icon
-                    IconComponent={IconFileExport}
-                    className="text-[#ffffff]
-                     stroke-[2px] size-5 items-center"
-                  />
-                }
-              >
-                Export TQF
-              </Button>
-            </Group>
-          </div>
-        </div>
-      </Modal> */}
       <ModalExportTQF3
         opened={openModalExportTQF3}
         onClose={() => {
@@ -544,13 +541,34 @@ export default function AdminDashboardTQF() {
             )}
           </div>
           <div className="flex gap-3 flex-wrap">
-            <Button
-              variant="outline"
-              className="text-center px-4"
-              leftSection={<Icon IconComponent={IconAdjustmentsHorizontal} />}
+            <Menu
+              trigger="click"
+              openDelay={100}
+              clickOutsideEvents={["mousedown"]}
+              classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
             >
-              Filter
-            </Button>
+              <Menu.Target>
+                <Button
+                  variant="outline"
+                  className="text-center pr-4 pl-3"
+                  leftSection={
+                    <Icon
+                      className="stroke-[1.3px] size-5"
+                      IconComponent={IconFilter}
+                    />
+                  }
+                >
+                  Filter
+                </Button>
+              </Menu.Target>{" "}
+              <Menu.Dropdown
+                className="!z-50 rounded-md -translate-y-[3px] p-4 translate-x-[-18px] bg-white"
+                style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
+              >
+                {filterTQF3()}
+                {filterTQF5()}
+              </Menu.Dropdown>
+            </Menu>
             {/* <Button
               className="text-center px-4"
               leftSection={
@@ -601,15 +619,24 @@ export default function AdminDashboardTQF() {
                   <Table stickyHeader>
                     <Table.Thead>
                       <Table.Tr>
-                        <Table.Th className="border-r w-[12%] !border-[#cecece]">
+                        <Table.Th className="border-r macair133:w-[10%] ipad11:w-[15%] !border-[#cecece] sm:text-b3 ipad11:text-b2">
                           Course No.
                         </Table.Th>
-                        <Table.Th>Course Name</Table.Th>
-                        <Table.Th>Instructor</Table.Th>
-                        <Table.Th>TQF 3</Table.Th>
-
-                        <Table.Th>TQF 5</Table.Th>
-                        <Table.Th>Action</Table.Th>
+                        <Table.Th className="w-[30%] ipad11:text-b2  sm:text-b3">
+                          Course Name
+                        </Table.Th>
+                        <Table.Th className="w-[15%] ipad11:text-b2 sm:text-b3">
+                          Instructor
+                        </Table.Th>
+                        <Table.Th className="w-[10%] ipad11:text-b2 sm:text-b3 sm:max-macair133:w-[14.5%]">
+                          TQF 3
+                        </Table.Th>
+                        <Table.Th className="w-[10%] ipad11:text-b2 sm:text-b3 sm:max-macair133:w-[14.5%]">
+                          TQF 5
+                        </Table.Th>
+                        <Table.Th className="w-[10%] ipad11:text-b2 sm:text-b3 sm:max-macair133:w-[11%]">
+                          Action
+                        </Table.Th>
                       </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody className="text-default font-medium text-[13px]">
