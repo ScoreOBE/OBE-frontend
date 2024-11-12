@@ -155,7 +155,7 @@ export default function ModalAddSection({
     setActive(0);
     setSectionNoList([]);
     setCoInsList([]);
-    form.reset();
+    form.setValues({ sections: [{}] });
     onClose();
   };
 
