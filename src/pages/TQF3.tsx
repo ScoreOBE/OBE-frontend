@@ -208,7 +208,7 @@ export default function TQF3() {
       }),
       getOneCourseManagement(courseNo!),
     ]);
-    if ([ROLE.SUPREME_ADMIN, ROLE.ADMIN].includes(user.role)) {
+    if (localStorage.getItem("dashboard") == ROLE.ADMIN) {
       resCourse = courseAdmin;
     }
     if (resCourse) {

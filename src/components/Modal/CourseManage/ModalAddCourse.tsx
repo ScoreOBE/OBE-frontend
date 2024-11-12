@@ -161,7 +161,7 @@ export default function ModalAddCourse({
     setActive(0);
     setSectionNoList([]);
     setCoInsList([]);
-    form.reset();
+    form.setValues({ sections: [{}] });
     onClose();
   };
 
