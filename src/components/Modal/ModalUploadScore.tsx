@@ -1,14 +1,20 @@
-import { useState } from "react";
-import { Dropzone, MIME_TYPES, MS_EXCEL_MIME_TYPE } from "@mantine/dropzone";
+import { useEffect, useState } from "react";
+import {
+  Dropzone,
+  FileWithPath,
+  MIME_TYPES,
+  MS_EXCEL_MIME_TYPE,
+} from "@mantine/dropzone";
 import { Alert, Button, Modal } from "@mantine/core";
 import Icon from "../Icon";
+import IconExcel from "@/assets/icons/excel.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconUpload from "@/assets/icons/upload.svg?react";
 import IconFileImport from "@/assets/icons/fileImport.svg?react";
 import IconBulb from "@/assets/icons/bulb.svg?react";
 import IconDownload from "@/assets/icons/download.svg?react";
-import IconFileExcel from "@/assets/icons/excelFile.svg?react";
 import IconX from "@/assets/icons/x.svg?react";
 import IconFile from "@/assets/icons/file.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
@@ -18,6 +24,10 @@ import ModalTemplateGuide from "./ModalTemplateGuide";
 import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
 import ModalErrorUploadFile from "./ModalErrorUploadFile";
 import Template from "@/assets/Template.xlsx";
+import { setLoadingOverlay } from "@/store/loading";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 
 type Props = {
   opened: boolean;
@@ -29,9 +39,37 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const [openModalStudentList, setOpenModalStudentList] = useState(false);
   const [openModalTemplateGuide, setOpenModalTemplateGuide] = useState(false);
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
+  const [file, setFile] = useState<FileWithPath>();
   const [result, setResult] = useState<any>();
   const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
   const [errorPoint, setErrorPoint] = useState<string[]>([]);
+  const [errorSection, setErrorSection] = useState<string[]>([]);
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
+  const dispatch = useAppDispatch();
+
+  const uploadScore = async () => {
+    if (result) {
+      dispatch(setLoadingOverlay(true));
+      console.log(result);
+
+      // const res = await uploadStudentList(result);
+      // if (res) {
+      //   dispatch(updateStudentList({ id: data.id, sections: res }));
+      //   setFile(undefined);
+      //   setResult(undefined);
+      //   showNotifications(
+      //     NOTI_TYPE.SUCCESS,
+      //     "Upload success",
+      //     "upload student list success"
+      //   );
+      //   setFile(undefined);
+      //   setResult(undefined);
+      // }
+      dispatch(setLoadingOverlay(false));
+    } else {
+      showNotifications(NOTI_TYPE.ERROR, "Invalid File", "invalid scores");
+    }
+  };
 
   return (
     <>
@@ -234,7 +272,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               </Alert>
 
               <Dropzone
-                onDrop={(files) =>
+                onDrop={(files) => {
                   onUploadFile(
                     data,
                     files,
@@ -243,101 +281,101 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     setOpenModalUploadError,
                     setErrorStudentId,
                     setErrorPoint
-                  )
-                }
+                  );
+                  setFile(files[0]);
+                }}
                 onReject={(files) => onRejectFile(files)}
                 maxFiles={1}
                 maxSize={5 * 1024 ** 2}
                 accept={[...MS_EXCEL_MIME_TYPE, MIME_TYPES.csv]}
-                className="bg-white hover:bg-gray-50 py-12 border-[#8f9ae37f] border-dashed cursor-pointer border-[2px] rounded-md"
+                className="bg-white hover:bg-gray-50 border-[#8f9ae37f] border-dashed cursor-pointer border-[2px] rounded-md"
               >
-                <div className="flex flex-col gap-3 justify-center items-center pointer-events-none">
-                  <Dropzone.Accept>
-                    <Icon
-                      IconComponent={IconUpload}
-                      style={{ color: "var(--mantine-color-green-6)" }}
-                      className="bg-green-100 stroke-[2px] size-16 p-3 rounded-full"
-                    />
-                  </Dropzone.Accept>
-                  <Dropzone.Reject>
-                    <Icon
-                      IconComponent={IconX}
-                      style={{ color: "var(--mantine-color-red-6)" }}
-                      className="bg-red-200 stroke-[2px] size-16 p-3 rounded-full"
-                    />
-                  </Dropzone.Reject>
-                  <Dropzone.Idle>
-                    <Icon
-                      IconComponent={IconUpload}
-                      style={{ color: "var(--color-secondary)" }}
-                      className="bg-[#DDE0FF] stroke-[2px] size-16 p-3 rounded-full"
-                    />
-                  </Dropzone.Idle>
-                  <p className="font-semibold text-default">
-                    <span className="text-secondary underline">
-                      Click to upload
-                    </span>{" "}
-                    or drag and drop
-                  </p>
-                  <p className="-mt-2 font-medium items-center justify-center text-center text-secondary text-b2">
-                    CSV or XLSX format only (up to 10MB)
-                  </p>
-                  <div className="flex flex-col font-medium  text-b2 text-red-500  items-center text-center justify-center">
-                    <div className="flex gap-2 items-center justify-center">
+                {result?.sections ? (
+                  <div className="flex justify-between p-5">
+                    <div className="flex gap-2 items-center">
                       <Icon
-                        IconComponent={IconExclamationCircle}
-                        className="size-4 stroke-red-600"
+                        IconComponent={IconExcel}
+                        className="text-[#20884f]"
                       />
-                      <p>Supports only ScoreOBE +</p>
+                      <p className="text-b2">{file?.name}</p>
                     </div>
-                    <p> Gradescope assignment template</p>
+                    <div className="flex gap-2">
+                      <Button
+                        color="#ffcdcd"
+                        className=" text-error pl-4 font-extrabold hover:text-[#f26c6c] text-b3 rounded-md"
+                        leftSection={
+                          <Icon IconComponent={IconTrash} className="size-4" />
+                        }
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setResult(undefined);
+                          setFile(undefined);
+                        }}
+                        loading={loading}
+                      >
+                        Delete
+                      </Button>
+                      <Button
+                        color="#DDE0FF"
+                        className=" text-secondary pl-4 font-extrabold hover:text-[#4a58b4] text-b3 rounded-md"
+                        leftSection={
+                          <Icon IconComponent={IconUpload} className="size-4" />
+                        }
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          uploadScore();
+                        }}
+                        loading={loading}
+                      >
+                        Upload
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex flex-col py-12 gap-3 justify-center items-center pointer-events-none">
+                    <Dropzone.Accept>
+                      <Icon
+                        IconComponent={IconUpload}
+                        style={{ color: "var(--mantine-color-green-6)" }}
+                        className="bg-green-100 stroke-[2px] size-16 p-3 rounded-full"
+                      />
+                    </Dropzone.Accept>
+                    <Dropzone.Reject>
+                      <Icon
+                        IconComponent={IconX}
+                        style={{ color: "var(--mantine-color-red-6)" }}
+                        className="bg-red-200 stroke-[2px] size-16 p-3 rounded-full"
+                      />
+                    </Dropzone.Reject>
+                    <Dropzone.Idle>
+                      <Icon
+                        IconComponent={IconUpload}
+                        style={{ color: "var(--color-secondary)" }}
+                        className="bg-[#DDE0FF] stroke-[2px] size-16 p-3 rounded-full"
+                      />
+                    </Dropzone.Idle>
+                    <p className="font-semibold text-default">
+                      <span className="text-secondary underline">
+                        Click to upload
+                      </span>{" "}
+                      or drag and drop
+                    </p>
+                    <p className="-mt-2 font-medium items-center justify-center text-center text-secondary text-b2">
+                      CSV or XLSX format only (up to 10MB)
+                    </p>
+                    <div className="flex flex-col font-medium  text-b2 text-red-500  items-center text-center justify-center">
+                      <div className="flex gap-2 items-center justify-center">
+                        <Icon
+                          IconComponent={IconExclamationCircle}
+                          className="size-4 stroke-red-600"
+                        />
+                        <p>Supports only ScoreOBE +</p>
+                      </div>
+                      <p> Gradescope assignment template</p>
+                    </div>
+                  </div>
+                )}
               </Dropzone>
-              <div className=" rounded-md items-center border-[2px] border-[#8f9ae37f] py-4 gap-3 px-5 flex">
-                <div className="flex flex-col w-full">
-                  <div className="flex items-center gap-2">
-                    <Icon
-                      IconComponent={IconFileExcel}
-                      className="size-7 stroke-[#058a3a]"
-                    />{" "}
-                    <div className="flex flex-col">
-                      <p className=" text-secondary text-b2 font-semibold">
-                        File name.xlsx
-                      </p>
-                      <p className=" text-[11px] text-default">88 KB</p>
-                    </div>
-                  </div>
-                  <div className=" ml-9 mt-2 rounded-md h-2 bg-slate-300">
-                    <div className="bg-secondary rounded-md w-72 h-2"></div>
-                  </div>
-                </div>
-              </div>
-              <div className=" rounded-md items-center border-[2px] border-[#8f9ae37f] py-4 gap-3 px-5 flex">
-                <div className="flex justify-between items-center w-full">
-                  <div className="flex items-center gap-2">
-                    <Icon
-                      IconComponent={IconFileExcel}
-                      className="size-7 stroke-[#058A3A]"
-                    />{" "}
-                    <div className="flex flex-col">
-                      <p className=" text-secondary text-b2 font-semibold">
-                        File name.xlsx
-                      </p>
-                      <p className=" text-[11px] text-default">88 KB</p>
-                    </div>
-                  </div>
-                  <Button
-                    color="#DDE0FF"
-                    className=" text-secondary pl-4 font-extrabold hover:text-[#4a58b4] text-b3 rounded-md"
-                    leftSection={
-                      <Icon IconComponent={IconUpload} className="size-4" />
-                    }
-                  >
-                    Upload
-                  </Button>
-                </div>
-              </div>
             </div>
           </Modal.Body>
         </Modal.Content>

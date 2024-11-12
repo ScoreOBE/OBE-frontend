@@ -67,7 +67,7 @@ export default function ModalStudentList({
       dispatch(setLoadingOverlay(true));
       const res = await uploadStudentList(result);
       if (res) {
-        store.dispatch(updateStudentList({ id: data.id, sections: res }));
+        dispatch(updateStudentList({ id: data.id, sections: res }));
         setFile(undefined);
         setResult(undefined);
         showNotifications(
