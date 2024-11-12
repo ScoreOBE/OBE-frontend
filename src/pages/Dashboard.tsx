@@ -22,7 +22,7 @@ import notFoundImage from "@/assets/image/notFound.jpg";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import MainPopup from "../components/Popup/MainPopup";
 import ModalEditCourse from "../components/Modal/CourseManage/ModalEditCourse";
-import { NOTI_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
+import { NOTI_TYPE, ROLE, TQF_STATUS } from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
@@ -59,6 +59,7 @@ export default function Dashboard() {
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
+    localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
   }, []);
 
   useEffect(() => {
@@ -503,10 +504,16 @@ export default function Dashboard() {
                         {item.sections.length > 1 ? "s" : ""}
                       </p>
                       <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">
-                        <p className="tag-tqf rounded-xl !text-[11px]" tqf-status={statusTqf3}>
+                        <p
+                          className="tag-tqf rounded-xl !text-[11px]"
+                          tqf-status={statusTqf3}
+                        >
                           TQF 3
                         </p>
-                        <p className="tag-tqf rounded-xl !text-[11px]" tqf-status={statusTqf5}>
+                        <p
+                          className="tag-tqf rounded-xl !text-[11px]"
+                          tqf-status={statusTqf5}
+                        >
                           TQF 5
                         </p>
                       </div>

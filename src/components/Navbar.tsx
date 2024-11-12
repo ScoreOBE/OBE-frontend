@@ -110,10 +110,14 @@ export default function Navbar() {
             {topicPath()}
           </p>
           {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) &&
-            (path.includes(ROUTE_PATH.ADMIN_DASHBOARD) ? (
-              <div className="px-3 py-2 w-fit tag-tqf bg-sky-100 text-blue-600 rounded-[20px]">AD</div>
+            (localStorage.getItem("dashboard") == ROLE.ADMIN ? (
+              <div className="px-3 py-2 w-fit tag-tqf bg-sky-100 text-blue-600 rounded-[20px]">
+                AD
+              </div>
             ) : (
-              <div className="px-3 py-2 w-fit tag-tqf bg-indigo-100 text-secondary rounded-[20px]">INS</div>
+              <div className="px-3 py-2 w-fit tag-tqf bg-indigo-100 text-secondary rounded-[20px]">
+                INS
+              </div>
             ))}
         </div>
         {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>

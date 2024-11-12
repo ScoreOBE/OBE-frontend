@@ -13,7 +13,7 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.jpg";
-import { COURSE_TYPE, TQF_STATUS } from "@/helpers/constants/enum";
+import { COURSE_TYPE, ROLE, TQF_STATUS } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowSidebar } from "@/store/showSidebar";
@@ -56,6 +56,7 @@ export default function AdminDashboardTQF() {
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
+    localStorage.setItem("dashboard", ROLE.ADMIN);
   }, []);
 
   useEffect(() => {

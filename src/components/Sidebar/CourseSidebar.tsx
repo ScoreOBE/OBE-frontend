@@ -40,7 +40,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const prefix = `${ROUTE_PATH.COURSE}/${courseNo}`;
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
-    [ROLE.SUPREME_ADMIN, ROLE.ADMIN].includes(user.role)
+    localStorage.getItem("dashboard") == ROLE.ADMIN
       ? state.allCourse.courses.find((e) => e.courseNo == courseNo)
       : state.course.courses.find((e) => e.courseNo == courseNo)
   );
@@ -87,7 +87,11 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       sortData(coInsList, "firstNameEN", "string");
       setInstructors(insList);
       setCoInstructors(coInsList);
-    } else if (store.getState().course.courses.length && !course) {
+    } else if (
+      (store.getState().course.courses.length ||
+        store.getState().allCourse.courses.length) &&
+      !course
+    ) {
       navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`);
     }
   }, [course]);
@@ -155,7 +159,12 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       if (changePart.length && tqf3.id) {
         setOpenAlertPopup(true);
       } else {
-        goToPage(ROUTE_PATH.INS_DASHBOARD, true);
+        goToPage(
+          localStorage.getItem("dashboard") == ROLE.ADMIN
+            ? `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
+            : ROUTE_PATH.INS_DASHBOARD,
+          true
+        );
       }
     }
   }, [tqf3Original]);
@@ -168,7 +177,12 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         action={() => {
           dispatch(setDataTQF3({}));
           setOpenAlertPopup(false);
-          goToPage(ROUTE_PATH.INS_DASHBOARD, true);
+          goToPage(
+            localStorage.getItem("dashboard") == ROLE.ADMIN
+              ? `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
+              : ROUTE_PATH.INS_DASHBOARD,
+            true
+          );
         }}
         type="unsaved"
         labelButtonRight={`Keep editing`}
@@ -190,12 +204,14 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         <div
           className="hover:underline cursor-pointer font-bold gap-2 -translate-x-[5px]  text-[13px] p-0 flex justify-start"
           onClick={() => {
-            fetchPLO();
             fetchTqf3();
           }}
         >
           <Icon IconComponent={IconChevronLeft} className="size-5" />
-          Back to Your Course
+          Back to{" "}
+          {localStorage.getItem("dashboard") == ROLE.ADMIN
+            ? "Admin Dashboard"
+            : "Your Course"}
         </div>
 
         <div className="flex flex-col gap-5 ">
@@ -209,14 +225,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             </p>
           </div>
           <div className="flex flex-col gap-2">
-            {(course?.sections.some(
-              (section) => (section.instructor as IModelUser)?.id === user.id
-            ) ||
-              course?.sections.some((section) =>
-                section.coInstructors?.some(
-                  (coInstructor) => coInstructor.id === user.id
-                )
-              )) && (
+            {localStorage.getItem("dashboard") == ROLE.INSTRUCTOR && (
               <Button
                 onClick={() => goToPage(ROUTE_PATH.SECTION)}
                 leftSection={<RxDashboard size={18} />}
@@ -404,7 +413,8 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             </div>
           </div>
         )}
-        {course &&
+        {localStorage.getItem("dashboard") == ROLE.INSTRUCTOR &&
+          course &&
           !course?.sections.find(
             (sec: any) => sec.instructor.email === user.email
           ) && (
