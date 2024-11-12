@@ -53,6 +53,7 @@ export default function AdminDashboardTQF() {
   const [selectDepartment, setSelectDepartment] = useState<
     Partial<IModelDepartment>
   >({});
+  const [filterCourse, setFilterCourse] = useState<IModelCourse[]>([]);
   const [tqf3Filters, setTqf3Filters] = useState<string[]>([]);
   const [tqf5Filters, setTqf5Filters] = useState<string[]>([]);
 
@@ -86,15 +87,56 @@ export default function AdminDashboardTQF() {
   }, [department, selectDepartment]);
 
   useEffect(() => {
-    fetchCourse();
-  }, [tqf3Filters, tqf5Filters]);
-
-  useEffect(() => {
     if (term) {
       setPayload(initialPayload());
       localStorage.removeItem("search");
     }
   }, [localStorage.getItem("search")]);
+
+  useEffect(() => {
+    if (courseList.courses.length) {
+      const filter =
+        courseList.courses
+          .map((course) => {
+            if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
+              const filter = course.sections.filter((sec) => {
+                if (tqf3Filters.length && tqf5Filters.length) {
+                  return (
+                    tqf3Filters.includes(sec.TQF3!.status) &&
+                    tqf5Filters.includes(sec.TQF5!.status)
+                  );
+                } else if (tqf3Filters.length) {
+                  return tqf3Filters.includes(sec.TQF3!.status);
+                } else if (tqf5Filters.length) {
+                  return tqf5Filters.includes(sec.TQF5!.status);
+                }
+              });
+              return filter.length
+                ? { ...course, sections: [...filter] }
+                : undefined;
+            } else {
+              return { ...course };
+            }
+          })
+          .filter((course) => {
+            if (!course) return false;
+            else if (course.TQF3 && course.TQF5) {
+              if (tqf3Filters.length && tqf5Filters.length) {
+                return (
+                  tqf3Filters.includes(course.TQF3.status) &&
+                  tqf5Filters.includes(course.TQF5.status)
+                );
+              } else if (tqf3Filters.length) {
+                return tqf3Filters.includes(course.TQF3.status);
+              } else if (tqf5Filters.length) {
+                return tqf5Filters.includes(course.TQF5.status);
+              }
+            }
+            return true;
+          }) || [];
+      setFilterCourse(filter as any);
+    }
+  }, [courseList, tqf3Filters, tqf5Filters]);
 
   const initialPayload = () => {
     const dep = selectDepartment.codeEN?.includes("All")
@@ -108,8 +150,6 @@ export default function AdminDashboardTQF() {
       semester: term.semester!,
       departmentCode: dep,
       search: courseList.search,
-      tqf3: tqf3Filters,
-      tqf5: tqf5Filters,
       hasMore: courseList.total >= payload?.limit,
     };
   };
@@ -528,7 +568,7 @@ export default function AdminDashboardTQF() {
                 >
                   Filter
                 </Button>
-              </Menu.Target>{" "}
+              </Menu.Target>
               <Menu.Dropdown
                 className="!z-50 rounded-md -translate-y-[3px] p-4 translate-x-[-18px] bg-white"
                 style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
@@ -572,9 +612,9 @@ export default function AdminDashboardTQF() {
             <div className="flex h-full w-full pt-2 pb-5 overflow-hidden">
               {loading ? (
                 <Loading />
-              ) : courseList.courses.length ? (
+              ) : filterCourse.length ? (
                 <InfiniteScroll
-                  dataLength={courseList.courses.length}
+                  dataLength={filterCourse.length}
                   next={onShowMore}
                   height={"100%"}
                   hasMore={payload?.hasMore}
@@ -608,7 +648,7 @@ export default function AdminDashboardTQF() {
                       </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody className="text-default font-medium text-[13px]">
-                      {courseList.courses.map((course, index) =>
+                      {filterCourse.map((course, index) =>
                         courseTable(index, course)
                       )}
                     </Table.Tbody>

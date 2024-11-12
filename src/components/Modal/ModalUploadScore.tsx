@@ -41,8 +41,12 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
   const [file, setFile] = useState<FileWithPath>();
   const [result, setResult] = useState<any>();
-  const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
-  const [errorPoint, setErrorPoint] = useState<string[]>([]);
+  const [errorStudentId, setErrorStudentId] = useState<
+    { name: string; cell: string[] }[]
+  >([]);
+  const [errorPoint, setErrorPoint] = useState<
+    { name: string; cell: string[] }[]
+  >([]);
   const [errorSection, setErrorSection] = useState<string[]>([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
@@ -51,7 +55,6 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
     if (result) {
       dispatch(setLoadingOverlay(true));
       console.log(result);
-
       // const res = await uploadStudentList(result);
       // if (res) {
       //   dispatch(updateStudentList({ id: data.id, sections: res }));
@@ -280,6 +283,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     setResult,
                     setOpenModalUploadError,
                     setErrorStudentId,
+                    setErrorSection,
                     setErrorPoint
                   );
                   setFile(files[0]);
@@ -385,6 +389,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         opened={openModalUploadError}
         onClose={() => setOpenModalUploadError(false)}
         errorStudentId={errorStudentId}
+        errorSection={errorSection}
         errorPoint={errorPoint}
       />
     </>

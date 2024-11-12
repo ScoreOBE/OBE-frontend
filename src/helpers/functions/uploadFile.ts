@@ -3,6 +3,9 @@ import { FileRejection, FileWithPath } from "@mantine/dropzone";
 import { NOTI_TYPE } from "../constants/enum";
 import { showNotifications } from "../notifications/showNotifications";
 import { IModelCourse } from "@/models/ModelCourse";
+import store from "@/store";
+import { IModelUser } from "@/models/ModelUser";
+import { getSectionNo } from "./function";
 
 export const isNumeric = (value: any) => {
   return !isNaN(parseFloat(value)) && isFinite(value);
@@ -23,8 +26,9 @@ export const onUploadFile = async (
   type: "studentList" | "score",
   setResult: React.Dispatch<React.SetStateAction<any>>,
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
-  setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>,
-  setErrorPoint?: React.Dispatch<React.SetStateAction<string[]>>
+  setErrorStudentId: React.Dispatch<React.SetStateAction<any[]>>,
+  setErrorSection?: React.Dispatch<React.SetStateAction<string[]>>,
+  setErrorPoint?: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
   const file = files[0];
   if (file) {
@@ -60,6 +64,7 @@ export const onUploadFile = async (
           setResult,
           setOpenModalUploadError,
           setErrorStudentId,
+          setErrorSection!,
           setErrorPoint!
         );
       }
@@ -155,11 +160,15 @@ const scoreOBETemplete = (
   workbook: XLSX.WorkBook,
   setResult: React.Dispatch<React.SetStateAction<any>>,
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
-  setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>,
-  setErrorPoint: React.Dispatch<React.SetStateAction<string[]>>
+  setErrorStudentId: React.Dispatch<React.SetStateAction<any[]>>,
+  setErrorSection: React.Dispatch<React.SetStateAction<string[]>>,
+  setErrorPoint: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
+  const user = store.getState().user;
   const result: any[] = [];
-
+  const errorStudentIdList: { name: string; cell: string[] }[] = [];
+  const errorSection: string[] = [];
+  const errorPointList: { name: string; cell: string[] }[] = [];
   for (const sheet of workbook.SheetNames) {
     const worksheet = workbook.Sheets[sheet];
     if (
@@ -181,8 +190,6 @@ const scoreOBETemplete = (
     const fullScore = resultsData.shift();
     const description = resultsData.shift();
 
-    const errorStudentIdList: string[] = [];
-    const errorPointList: string[] = [];
     resultsData.forEach((data, i) => {
       // Validate the studentId
       if (
@@ -191,7 +198,13 @@ const scoreOBETemplete = (
       ) {
         const row = i + 4;
         const column = getColumnAlphabet(1);
-        errorStudentIdList.push(`${column}${row}`);
+        const cell = `${column}${row}`;
+        const existSheet = errorStudentIdList.find(({ name }) => name == sheet);
+        if (existSheet) {
+          existSheet.cell.push(cell);
+        } else {
+          errorStudentIdList.push({ name: sheet, cell: [cell] });
+        }
       }
       // Validate the "point" field
       Object.keys(data)
@@ -204,10 +217,26 @@ const scoreOBETemplete = (
             console.log(data[key]);
             const row = i + 4;
             const column = getColumnAlphabet(j + 5);
-            errorPointList.push(`${column}${row}`);
+            const cell = `${column}${row}`;
+            const existSheet = errorPointList.find(({ name }) => name == sheet);
+            if (existSheet) {
+              existSheet.cell.push(cell);
+            } else {
+              errorPointList.push({ name: sheet, cell: [cell] });
+            }
           }
         });
       const sectionNo = parseInt(data.section);
+      const canUpload = course.sections?.find(
+        (sec) => sec.sectionNo == sectionNo
+      );
+      if (
+        (canUpload?.instructor as IModelUser)?.id !== user.id &&
+        !canUpload?.coInstructors?.some((coIns) => coIns.id == user.id) &&
+        !errorSection.includes(getSectionNo(sectionNo))
+      ) {
+        errorSection.push(getSectionNo(sectionNo));
+      }
       const existSec = result.find((sec) => sec.sectionNo == sectionNo);
       const existAssignment = existSec?.assignments.find(
         (assign: any) => assign.assignmentName == assignmentName
@@ -241,15 +270,19 @@ const scoreOBETemplete = (
         existAssignment.studentList.push(student);
       }
     });
-    if (errorStudentIdList.length || errorPointList.length) {
-      files = [];
-      setErrorStudentId(errorStudentIdList);
-      setErrorPoint(errorPointList);
-      setOpenModalUploadError(true);
-      return;
-    }
   }
-
+  if (
+    errorStudentIdList.length ||
+    errorSection.length ||
+    errorPointList.length
+  ) {
+    files = [];
+    setErrorStudentId(errorStudentIdList);
+    setErrorSection(errorSection);
+    setErrorPoint(errorPointList);
+    setOpenModalUploadError(true);
+    return;
+  }
   setResult({
     year: course.year,
     semester: course.semester,
@@ -264,8 +297,8 @@ const gradescopeFile = (
   workbook: XLSX.WorkBook,
   setResult: React.Dispatch<React.SetStateAction<any>>,
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
-  setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>,
-  setErrorPoint: React.Dispatch<React.SetStateAction<string[]>>
+  setErrorStudentId: React.Dispatch<React.SetStateAction<any[]>>,
+  setErrorPoint: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
   const result = { sections: [] as any[], assignments: [] as any[] };
   for (const sheet of workbook.SheetNames) {
