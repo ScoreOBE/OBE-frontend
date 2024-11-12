@@ -22,10 +22,16 @@ const Students = lazy(() => import("@/pages/Students"));
 const Page404 = lazy(() => import("@/pages/Page404"));
 // const PageError = lazy(() => import("@/pages/PageError"));
 
+const loadingPage = (
+  <div className="flex h-screen w-screen">
+    <Loading />
+  </div>
+);
+
 const router = createBrowserRouter([
   {
     element: (
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={loadingPage}>
         <App />
       </Suspense>
     ),
@@ -41,7 +47,7 @@ const router = createBrowserRouter([
       {
         path: ROUTE_PATH.SELECTED_DEPARTMENT,
         element: (
-          <Suspense fallback={<Loading />}>
+          <Suspense fallback={loadingPage}>
             <SelectDepartment />
           </Suspense>
         ),
@@ -49,7 +55,7 @@ const router = createBrowserRouter([
       {
         path: ROUTE_PATH.INS_DASHBOARD,
         element: (
-          <Suspense fallback={<Loading />}>
+          <Suspense fallback={loadingPage}>
             <Dashboard />
           </Suspense>
         ),
@@ -63,7 +69,7 @@ const router = createBrowserRouter([
               {
                 path: "",
                 element: (
-                  <Suspense fallback={<Loading />}>
+                  <Suspense fallback={loadingPage}>
                     <Section />
                   </Suspense>
                 ),
@@ -74,7 +80,7 @@ const router = createBrowserRouter([
                   {
                     path: "",
                     element: (
-                      <Suspense fallback={<Loading />}>
+                      <Suspense fallback={loadingPage}>
                         <Assignment />
                       </Suspense>
                     ),
@@ -82,7 +88,7 @@ const router = createBrowserRouter([
                   {
                     path: `:name/${ROUTE_PATH.SCORE}`,
                     element: (
-                      <Suspense fallback={<Loading />}>
+                      <Suspense fallback={loadingPage}>
                         <Score />
                       </Suspense>
                     ),
@@ -90,7 +96,7 @@ const router = createBrowserRouter([
                   {
                     path: `:name/${ROUTE_PATH.STUDENTS}`,
                     element: (
-                      <Suspense fallback={<Loading />}>
+                      <Suspense fallback={loadingPage}>
                         <Students />
                       </Suspense>
                     ),
@@ -100,7 +106,7 @@ const router = createBrowserRouter([
               {
                 path: `:sectionNo/${ROUTE_PATH.HISTOGRAM}`,
                 element: (
-                  <Suspense fallback={<Loading />}>
+                  <Suspense fallback={loadingPage}>
                     <Histogram />
                   </Suspense>
                 ),
@@ -110,7 +116,7 @@ const router = createBrowserRouter([
           {
             path: ROUTE_PATH.TQF3,
             element: (
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={loadingPage}>
                 <TQF3 />
               </Suspense>
             ),
@@ -118,7 +124,7 @@ const router = createBrowserRouter([
           {
             path: ROUTE_PATH.TQF5,
             element: (
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={loadingPage}>
                 <TQF5 />
               </Suspense>
             ),
@@ -131,7 +137,7 @@ const router = createBrowserRouter([
           {
             path: ROUTE_PATH.TQF,
             element: (
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={loadingPage}>
                 <AdminDashboardTQF />
               </Suspense>
             ),
@@ -139,7 +145,7 @@ const router = createBrowserRouter([
           {
             path: ROUTE_PATH.PLO,
             element: (
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={loadingPage}>
                 <AdminDashboardPLO />
               </Suspense>
             ),
@@ -147,7 +153,7 @@ const router = createBrowserRouter([
           {
             path: ROUTE_PATH.CLO,
             element: (
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={loadingPage}>
                 <AdminDashboardCLO />
               </Suspense>
             ),
@@ -157,7 +163,7 @@ const router = createBrowserRouter([
       {
         path: ROUTE_PATH.STD_DASHBOARD,
         element: (
-          <Suspense fallback={<Loading />}>
+          <Suspense fallback={loadingPage}>
             <StdDashboard />
           </Suspense>
         ),
@@ -165,7 +171,7 @@ const router = createBrowserRouter([
       {
         path: "*",
         element: (
-          <Suspense fallback={<Loading />}>
+          <Suspense fallback={loadingPage}>
             <Page404 />
           </Suspense>
         ),

@@ -1,12 +1,11 @@
 "use client";
 import cmulogoLogin from "@/assets/image/cmuLogoLoginWhite.png";
 import loginImage from "@/assets/image/loginPage.png";
-import { Button, Paper, Tabs, Title } from "@mantine/core";
+import { Button, Tabs, Title } from "@mantine/core";
 import { Image } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ROUTE_PATH } from "@/helpers/constants/route";
 import { isEmpty } from "lodash";
 import { setShowSidebar } from "@/store/showSidebar";
 import Icon from "@/components/Icon";
@@ -21,18 +20,14 @@ import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import IconShare2 from "@/assets/icons/share2.svg?react";
 import IconHistogram from "@/assets/icons/histogram.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
-import Loading from "@/components/Loading/Loading";
 import gradescope from "@/assets/image/gradescope.png";
 import "@mantine/carousel/styles.css";
-import { Carousel, Embla } from "@mantine/carousel";
-import { ROLE } from "@/helpers/constants/enum";
+import { Carousel } from "@mantine/carousel";
 import { goToDashboard } from "@/helpers/functions/function";
 import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import { CustomEase } from "gsap/CustomEase";
-import { RoughEase, ExpoScaleEase, SlowMo } from "gsap/EasePack";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import testPhoto from "@/assets/image/testPhoto.png";
+import LoadingOverlay from "@/components/Loading/LoadingOverlay";
 
 export default function Login() {
   const loading = useAppSelector((state) => state.loading.loading);
@@ -107,10 +102,9 @@ export default function Login() {
   //   });
   // }, []);
 
-  return loading ? (
-    <Loading />
-  ) : (
+  return (
     <div className=" bg-[#fafafa] h-full w-screen items-center flex flex-col overflow-y-auto overflow-x-hidden">
+      {loading && <LoadingOverlay />}
       <div className="flex flex-col w-full">
         <p className="text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 font-[600] sm:font-[500] item-start rounded text-[#000000] text-[30px] mb-5 sm:mb-0 sm:text-[50px] leading-[48px] sm:leading-[66px]">
           <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
