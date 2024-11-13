@@ -465,7 +465,7 @@ export default function ModalStudentList({
         )}
       </Modal>
 
-      {(errorStudentId.length || errorSection.length) && (
+      {!!(errorStudentId.length || errorSection.length) && (
         <ModalErrorUploadFile
           type="students"
           opened={openModalUploadError}
