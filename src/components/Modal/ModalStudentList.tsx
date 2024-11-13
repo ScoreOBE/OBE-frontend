@@ -191,7 +191,7 @@ export default function ModalStudentList({
         className="border-[#8f9ae37f] mt-3 hover:bg-gray-100 border-dashed bg-gray-50 cursor-pointer border-[2px] rounded-md"
       >
         {result?.sections ? (
-          <div className="flex justify-between p-3">
+          <div className="flex justify-between p-3 mx-4">
             <div className="flex gap-2 items-center">
               <Icon IconComponent={IconExcel} className="text-[#20884f]" />
               <p className="text-b2">{file?.name}</p>
@@ -336,7 +336,7 @@ export default function ModalStudentList({
                         className=" h-[38px] w-[185px] "
                       />
                       <p className="pl-5 text-default leading-6 font-medium ">
-                        ou must import the student list (.xlsx) in this course
+                        You must import the student list (.xlsx) in this course
                         for all sections from the CMU Registration System.
                         <a
                           href="https://www1.reg.cmu.ac.th/registrationoffice/searchcourse.php"
@@ -367,7 +367,7 @@ export default function ModalStudentList({
               </div>
             </Tabs.Panel>
             {tab === "importStudentList" && (
-              <div className="flex justify-end mt-3 sticky w-full">
+              <div className="flex justify-end mt-5 sticky w-full">
                 <Button
                   onClick={uploadList}
                   loading={loading}
@@ -444,7 +444,7 @@ export default function ModalStudentList({
               </Alert>
               {dropZoneFile()}
             </div>
-            <div className="flex gap-2 justify-end w-full h-fit">
+            <div className="flex gap-2 mt-2 justify-end w-full h-fit">
               <Button onClick={onBack} variant="subtle">
                 {selectCourse ? "Back" : "Cancel"}
               </Button>

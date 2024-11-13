@@ -76,7 +76,7 @@ export const onUploadFile = async (
 };
 
 const templateNotMatch = () => {
-  showNotifications(NOTI_TYPE.ERROR, "Failed to Upload", "template incorrect");
+  showNotifications(NOTI_TYPE.ERROR, "Template incorrect", "Please check your template again.");
 };
 
 const studentList = async (
@@ -492,7 +492,7 @@ export const onRejectFile = (files: FileRejection[]) => {
   switch (files[0].errors[0].code) {
     case "file-invalid-type":
       title = "Invalid file type";
-      message = "File type must be .csv, xls or .xlsx";
+      message = "File type must be .csv, .xls or .xlsx";
       break;
     case "file-too-large":
       title = "";
