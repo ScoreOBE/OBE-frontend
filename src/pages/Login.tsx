@@ -29,13 +29,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import testPhoto from "@/assets/image/testPhoto.png";
 import studentPLOPage from "@/assets/image/studentPLO.png";
 import LoadingOverlay from "@/components/Loading/LoadingOverlay";
+import tqf3pt1 from "@/assets/image/tqf3pt1.png";
 
 export default function Login() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  gsap.registerPlugin(ScrollTrigger);
 
   const data = [
     {
@@ -70,9 +70,88 @@ export default function Login() {
       category: "tourism",
     },
   ];
+
+  const tqf3List = [
+    {
+      id: "1",
+      topic: "Course Information",
+      description:
+        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
+    },
+    {
+      id: "2",
+      topic: "Description and Planning",
+      description:
+        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
+    },
+    {
+      id: "3",
+      topic: "Course Evaluation",
+      description:
+        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png",
+    },
+    {
+      id: "4",
+      topic: "Assessment Mapping",
+      description:
+        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png",
+    },
+    {
+      id: "5",
+      topic: "Course Materials",
+      description:
+        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-5.png",
+    },
+    {
+      id: "6",
+      topic: "Course evaluation and improvement processes",
+      description:
+        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
+    },
+    {
+      id: "7",
+      topic: "Curriculum Mapping",
+      description:
+        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
+    },
+  ];
+
+  const tqf5List = [
+    {
+      id: "1",
+      topic: "Course Evaluation",
+      description:
+        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
+    },
+    {
+      id: "2",
+      topic: "Assessment tool mapping to CLO",
+      description:
+        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
+    },
+    {
+      id: "3",
+      topic: "(Rubrics for CLO evaluation",
+      description:
+        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png",
+    },
+  ];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState("right"); // Track the slide direction
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [selectTQF3Image, setSelectTQF3Image] = useState(tqf3List[0].img);
+  const [selectTQF5Image, setSelectTQF5Image] = useState(tqf5List[0].img);
+  const [openItem, setOpenItem] = useState("1");
 
   useEffect(() => {
     dispatch(setShowSidebar(false));
@@ -81,39 +160,6 @@ export default function Login() {
       goToDashboard(user.role);
     }
   }, [user]);
-
-  const tqf3List = [
-    {
-      id: "1",
-      description: "Fascinated with cooking, though has no sense of taste",
-      img: "",
-    },
-    {
-      id: "2",
-      description: "Fascinated with cooking, though has no sense of taste",
-      img: "",
-    },
-    {
-      id: "3",
-      description: "Fascinated with cooking, though has no sense of taste",
-    },
-    {
-      id: "4",
-      description: "Fascinated with cooking, though has no sense of taste",
-    },
-    {
-      id: "5",
-      description: "Fascinated with cooking, though has no sense of taste",
-    },
-    {
-      id: "6",
-      description: "Fascinated with cooking, though has no sense of taste",
-    },
-    {
-      id: "7",
-      description: "Fascinated with cooking, though has no sense of taste",
-    },
-  ];
 
   return (
     <div className=" bg-[#fafafa] h-full w-screen items-center flex flex-col overflow-y-auto overflow-x-hidden">
@@ -397,7 +443,7 @@ export default function Login() {
         </div>
 
         {/* TQFs */}
-        <div className="flex flex-col w-full h-fit pt-16">
+        <div className="sm:flex flex-col w-full h-fit pt-16 hidden">
           <div className="flex flex-col items-start text-start px-28">
             <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start text-[48px] ">
               <p>New TQF system</p>
@@ -496,303 +542,360 @@ export default function Login() {
             </div>
           </div>
 
-          {/* TQF3 */}
-          <div className="flex flex-col items-center text-center font-[600] gap-14 mx-28">
-            <div>
-              <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] ">
-                <p>TQF 3</p>
-                <p className="text-[#1D1D1F]">Save Time & Focus on Content</p>
+          <div className="bg-[#fdd7d7] py-14 flex flex-col gap-10">
+            {/* TQF3 */}
+            <div className="flex flex-col items-center text-center font-[600] gap-14 mx-28">
+              <div>
+                <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] ">
+                  <p>TQF 3</p>
+                  <p className="text-[#1D1D1F]">Save Time & Focus on Content</p>
+                </div>
+                <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[800px]">
+                  With our reusable TQF 3 templates, you can{" "}
+                  <span className="text-emphasize">
+                    {" "}
+                    generate reports quickly and easily. No more redundant data
+                    entry{" "}
+                  </span>
+                  —just fill in the essential details and get a polished report
+                  ready in minutes.
+                </p>
               </div>
-              <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[800px]">
-                With our reusable TQF 3 templates, you can{" "}
-                <span className="text-emphasize">
-                  {" "}
-                  generate reports quickly and easily. No more redundant data
-                  entry{" "}
-                </span>
-                —just fill in the essential details and get a polished report
-                ready in minutes.
-              </p>
+
+              <div className="flex gap-16">
+                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                  <div className=" flex flex-col gap-1">
+                    <Icon
+                      IconComponent={IconBulb}
+                      className="size-16 stroke-1"
+                    />
+                    <p className="text-center">
+                      Topic <br />
+                    </p>
+                  </div>
+                  <p className="text-[#86868B]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor
+                  </p>
+                </div>
+                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                  <div className=" flex flex-col gap-1">
+                    <Icon
+                      IconComponent={IconBulb}
+                      className="size-16 stroke-1"
+                    />
+                    <p className="text-center">
+                      Topic <br />
+                    </p>
+                  </div>
+                  <p className="text-[#86868B]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor
+                  </p>
+                </div>
+                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                  <div className=" flex flex-col gap-1">
+                    <Icon
+                      IconComponent={IconBulb}
+                      className="size-16 stroke-1"
+                    />
+                    <p className="text-center">
+                      Topic <br />
+                    </p>
+                  </div>
+                  <p className="text-[#86868B]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex h-fit w-full rounded-xl bg-white border-[#dddddd] border-2 overflow-clip">
+                <Accordion
+                  defaultValue="1"
+                  onChange={() => setOpenItem}
+                  className="p-6"
+                >
+                  {tqf3List.map((item) => {
+                    return (
+                      <Accordion.Item
+                        key={item.id}
+                        value={item.id}
+                        className="w-[400px]"
+                        onClick={() => {
+                          setSelectTQF3Image(item.img);
+                        }}
+                      >
+                        <Accordion.Control className="h-full min-h-[80px] text-[18px]">
+                          <p className="text-[17px] font-[700] text-emphasize">
+                            Part {item.id}
+                          </p>
+                          <p className="text-[14px] font-[600] text-deemphasize">
+                            {item.topic}
+                          </p>
+                        </Accordion.Control>
+                        <Accordion.Panel className="text-start text-[14px] font-[600]">
+                          {item.description}
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                    );
+                  })}
+                </Accordion>
+
+                {/* Image */}
+                <Image
+                  src={selectTQF3Image}
+                  className={`h-full w-[70%] object-cover  `}
+                />
+              </div>
             </div>
 
-            <div className="flex gap-16">
-              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
-                <div className=" flex flex-col gap-1">
-                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
-                  <p className="text-center">
-                    Topic <br />
+            {/* TQF5*/}
+            <div className="flex flex-col items-center text-center font-[600] gap-14 mx-28 ">
+              <div className="flex flex-col items-center">
+                <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] ">
+                  <p>TQF 5</p>
+                  <p className="text-[#1D1D1F]">
+                    Unlock Deep Insights into Your Course
                   </p>
                 </div>
-                <p className="text-[#86868B]">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor
+                <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[800px] ">
+                  TQF 5 helps you analyze course objectives based on real
+                  student performance data, empowering you to make data-driven
+                  improvements and align your courses with institutional goals.
                 </p>
               </div>
-              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
-                <div className=" flex flex-col gap-1">
-                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
-                  <p className="text-center">
-                    Topic <br />
-                  </p>
-                </div>
-                <p className="text-[#86868B]">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor
-                </p>
-              </div>
-              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
-                <div className=" flex flex-col gap-1">
-                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
-                  <p className="text-center">
-                    Topic <br />
-                  </p>
-                </div>
-                <p className="text-[#86868B]">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor
-                </p>
-              </div>
-            </div>
 
-            <div className="flex h-fit w-full rounded-xl bg-red-400 overflow-clip">
-              <Accordion defaultValue="1" className="px-4">
-                {tqf3List.map((item, index) => {
-                  return (
-                    <Accordion.Item
-                      key={item.id}
-                      value={item.id}
-                      className="w-[400px]"
-                    >
-                      <Accordion.Control className="h-full min-h-[85px]">
-                        Part {item.id}
-                      </Accordion.Control>
-                      <Accordion.Panel>{item.description}</Accordion.Panel>
-                    </Accordion.Item>
-                  );
-                })}
-              </Accordion>
+              <div className="flex gap-16">
+                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                  <div className=" flex flex-col gap-1">
+                    <Icon
+                      IconComponent={IconBulb}
+                      className="size-16 stroke-1"
+                    />
+                    <p className="text-center">
+                      Topic <br />
+                    </p>
+                  </div>
+                  <p className="text-[#86868B]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor
+                  </p>
+                </div>
+                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                  <div className=" flex flex-col gap-1">
+                    <Icon
+                      IconComponent={IconBulb}
+                      className="size-16 stroke-1"
+                    />
+                    <p className="text-center">
+                      Topic <br />
+                    </p>
+                  </div>
+                  <p className="text-[#86868B]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor
+                  </p>
+                </div>
+                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                  <div className=" flex flex-col gap-1">
+                    <Icon
+                      IconComponent={IconBulb}
+                      className="size-16 stroke-1"
+                    />
+                    <p className="text-center">
+                      Topic <br />
+                    </p>
+                  </div>
+                  <p className="text-[#86868B]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor
+                  </p>
+                </div>
+              </div>
 
-              {/* Image */}
-              <Image
-                src={
-                  "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png"
-                }
-                className={`h-full w-[70%] object-cover  `}
-              />
+              <div className="flex h-fit w-full rounded-xl bg-white border-[#dddddd] border-2 overflow-clip">
+                <Accordion
+                  defaultValue="1"
+                  onChange={() => setOpenItem}
+                  className="p-6"
+                >
+                  {tqf5List.map((item) => {
+                    return (
+                      <Accordion.Item
+                        key={item.id}
+                        value={item.id}
+                        className="w-[400px]"
+                        onClick={() => {
+                          setSelectTQF3Image(item.img);
+                        }}
+                      >
+                        <Accordion.Control className="h-full min-h-[140px] text-[18px]">
+                          <p className="text-[17px] font-[700] text-emphasize">
+                            Part {item.id}
+                          </p>
+                          <p className="text-[14px] font-[600] text-deemphasize">
+                            {item.topic}
+                          </p>
+                        </Accordion.Control>
+                        <Accordion.Panel className="text-start text-[14px] font-[600]">
+                          {item.description}
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                    );
+                  })}
+                </Accordion>
+
+                {/* Image */}
+                <Image
+                  src={selectTQF3Image}
+                  className={`h-full w-[70%] object-cover  `}
+                />
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* TQF5 */}
-          <div className="flex flex-col items-center text-center font-[600] gap-14">
-            <div className="flex flex-col items-center">
-              <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] ">
-                <p>TQF 5</p>
-                <p className="text-[#1D1D1F]">
-                  Unlock Deep Insights into Your Course
-                </p>
-              </div>
-              <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[800px] ">
-                TQF 5 helps you analyze course objectives based on real student
-                performance data, empowering you to make data-driven
-                improvements and align your courses with institutional goals.
+        <div className="bg-[#edebce] sm:flex hidden h-fit w-full flex-col gap-28 py-36">
+          <div className="flex flex-col items-start text-start px-28">
+            <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
+              <p>
+                Say Goodbye to Complexity, <br /> Hello to Seamless Course
+                Management!
               </p>
             </div>
+            <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[900px]">
+              Unlock the ultimate tools for TQF, PLO, and CLO management with
+              our powerful admin features.
+            </p>
+          </div>
 
-            <div className="flex gap-16">
-              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
-                <div className=" flex flex-col gap-1">
-                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
-                  <p className="text-center">
-                    Topic <br />
-                  </p>
-                </div>
-                <p className="text-[#86868B]">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor
-                </p>
-              </div>
-              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
-                <div className=" flex flex-col gap-1">
-                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
-                  <p className="text-center">
-                    Topic <br />
-                  </p>
-                </div>
-                <p className="text-[#86868B]">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor
-                </p>
-              </div>
-              <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
-                <div className=" flex flex-col gap-1">
-                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
-                  <p className="text-center">
-                    Topic <br />
-                  </p>
-                </div>
-                <p className="text-[#86868B]">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor
-                </p>
-              </div>
-            </div>
-
-            <Image
-              src={
-                "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-5.png"
-              }
-              className={`h-[600px] w-[3000px] object-cover rounded-xl `}
+          <div className="flex h-fit">
+            <img
+              src={studentPLOPage}
+              alt="CMULogo"
+              className="h-[75%] -translate-x-[15%]"
             />
-          </div>
-        </div>
 
-        <div>
-          <div className="bg-[#fafafa] sm:flex hidden h-full w-full flex-col gap-12">
-            <div className="flex flex-col items-start text-start px-28">
-              <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
+            <div className="flex flex-col items-start justify-center gap-8 -translate-x-[45%] h-[70%] ">
+              <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                <Icon
+                  IconComponent={IconSparkle}
+                  className="size-16 stroke-1"
+                />
                 <p>
-                  Say Goodbye to Complexity, <br /> Hello to Seamless Course
-                  Management!
+                  TQF -{" "}
+                  <span className="text-[#86868B]">
+                    Seamlessly align assessments with learning goals, ensuring
+                    accuracy and alignment with program objectives.
+                  </span>
                 </p>
               </div>
-              <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[900px]">
-                Unlock the ultimate tools for TQF, PLO, and CLO management with
-                our powerful admin features.
-              </p>
-            </div>
-
-            <div className="flex">
-              <img
-                src={testPhoto}
-                alt="CMULogo"
-                className="h-[75%] -translate-x-[15%]"
-              />
-
-              <div className="flex flex-col items-start justify-center gap-8 -translate-x-[45%] h-[70%]">
-                <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
-                  <Icon
-                    IconComponent={IconSparkle}
-                    className="size-16 stroke-1"
-                  />
-                  <p>
-                    TQF -{" "}
-                    <span className="text-[#86868B]">
-                      Seamlessly align assessments with learning goals, ensuring
-                      accuracy and alignment with program objectives.
-                    </span>
-                  </p>
-                </div>
-                <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
-                  <Icon
-                    IconComponent={IconSparkle}
-                    className="size-16 stroke-1"
-                  />
-                  <p>
-                    CLO -{" "}
-                    <span className="text-[#86868B]">
-                      Seamlessly align assessments with learning goals, ensuring
-                      accuracy and alignment with program objectives.
-                    </span>
-                  </p>
-                </div>
-                <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
-                  <Icon
-                    IconComponent={IconSparkle}
-                    className="size-16 stroke-1"
-                  />
-                  <p>
-                    PLO -{" "}
-                    <span className="text-[#86868B]">
-                      Seamlessly align assessments with learning goals, ensuring
-                      accuracy and alignment with program objectives.
-                    </span>
-                  </p>
-                </div>
+              <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                <Icon
+                  IconComponent={IconSparkle}
+                  className="size-16 stroke-1"
+                />
+                <p>
+                  CLO -{" "}
+                  <span className="text-[#86868B]">
+                    Seamlessly align assessments with learning goals, ensuring
+                    accuracy and alignment with program objectives.
+                  </span>
+                </p>
               </div>
-            </div>
-
-            <div className="flex items-center justify-center -mt-48">
-              <Tabs defaultValue="tqf">
-                <Tabs.List className="flex justify-center">
-                  <Tabs.Tab
-                    value="tqf"
-                    className="text-black font-[700] text-[20px]"
-                  >
-                    TQF
-                  </Tabs.Tab>
-                  <Tabs.Tab
-                    value="clo"
-                    className="text-black font-[700] text-[20px]"
-                  >
-                    CLO
-                  </Tabs.Tab>
-                  <Tabs.Tab
-                    value="plo"
-                    className="text-black font-[700] text-[20px]"
-                  >
-                    PLO
-                  </Tabs.Tab>
-                </Tabs.List>
-
-                <Tabs.Panel value="tqf" className="mt-8 flex gap-4">
-                  <div className="bg-[#4285f4]/10 h-[600px] w-[750px] rounded-xl flex items-center justify-center">
-                    Image TQF
-                  </div>
-                  <div className="h-[600px] flex flex-col gap-4">
-                    <div className="bg-[#4285f4]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
-                      TQF
-                    </div>
-                    <div className="bg-[#4285f4]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
-                      TQF
-                    </div>
-                  </div>
-                </Tabs.Panel>
-                <Tabs.Panel value="clo" className="mt-8 flex gap-4">
-                  <div className="bg-[#ec407a]/10 h-[600px] w-[750px] rounded-xl flex items-center justify-center">
-                    Image CLO
-                  </div>
-                  <div className="h-[600px] flex flex-col gap-4">
-                    <div className="bg-[#ec407a]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
-                      CLO
-                    </div>
-                    <div className="bg-[#ec407a]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
-                      CLO
-                    </div>
-                  </div>
-                </Tabs.Panel>
-                <Tabs.Panel value="plo" className="mt-8 flex gap-4">
-                  <div className="bg-[#a06ee1]/10 h-[600px] w-[750px] rounded-xl flex items-center justify-center">
-                    Image PLO
-                  </div>
-                  <div className="h-[600px] flex flex-col gap-4">
-                    <div className="bg-[#a06ee1]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
-                      PLO
-                    </div>
-                    <div className="bg-[#a06ee1]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
-                      PLO
-                    </div>
-                  </div>
-                </Tabs.Panel>
-              </Tabs>
-            </div>
-
-            <div className="relative flex flex-col items-center text-center px-28 mt-48 gap-10 overflow-clip">
-              <div className="absolute left-0 right-0 bottom-0 z-0 h-52 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
-              <div className="relative z-10 flex flex-col gap-20 ">
-                <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]  drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[52px] ">
-                  <p>
-                    There's never been a better time <br /> for an upgrade than
-                    right now.
-                  </p>
-                </div>
-                <img src={studentPLOPage} alt="CMULogo" className="h-[50%] " />
+              <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
+                <Icon
+                  IconComponent={IconSparkle}
+                  className="size-16 stroke-1"
+                />
+                <p>
+                  PLO -{" "}
+                  <span className="text-[#86868B]">
+                    Seamlessly align assessments with learning goals, ensuring
+                    accuracy and alignment with program objectives.
+                  </span>
+                </p>
               </div>
             </div>
           </div>
+
+          <div className="flex items-center justify-center -mt-48">
+            <Tabs defaultValue="tqf">
+              <Tabs.List className="flex justify-center">
+                <Tabs.Tab
+                  value="tqf"
+                  className="text-black font-[700] text-[20px]"
+                >
+                  TQF
+                </Tabs.Tab>
+                <Tabs.Tab
+                  value="clo"
+                  className="text-black font-[700] text-[20px]"
+                >
+                  CLO
+                </Tabs.Tab>
+                <Tabs.Tab
+                  value="plo"
+                  className="text-black font-[700] text-[20px]"
+                >
+                  PLO
+                </Tabs.Tab>
+              </Tabs.List>
+
+              <Tabs.Panel value="tqf" className="mt-8 flex gap-4">
+                <div className="bg-[#4285f4]/10 h-[600px] w-[750px] rounded-xl flex items-center justify-center">
+                  Image TQF
+                </div>
+                <div className="h-[600px] flex flex-col gap-4">
+                  <div className="bg-[#4285f4]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
+                    TQF
+                  </div>
+                  <div className="bg-[#4285f4]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
+                    TQF
+                  </div>
+                </div>
+              </Tabs.Panel>
+              <Tabs.Panel value="clo" className="mt-8 flex gap-4">
+                <div className="bg-[#ec407a]/10 h-[600px] w-[750px] rounded-xl flex items-center justify-center">
+                  Image CLO
+                </div>
+                <div className="h-[600px] flex flex-col gap-4">
+                  <div className="bg-[#ec407a]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
+                    CLO
+                  </div>
+                  <div className="bg-[#ec407a]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
+                    CLO
+                  </div>
+                </div>
+              </Tabs.Panel>
+              <Tabs.Panel value="plo" className="mt-8 flex gap-4">
+                <div className="bg-[#a06ee1]/10 h-[600px] w-[750px] rounded-xl flex items-center justify-center">
+                  Image PLO
+                </div>
+                <div className="h-[600px] flex flex-col gap-4">
+                  <div className="bg-[#a06ee1]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
+                    PLO
+                  </div>
+                  <div className="bg-[#a06ee1]/10 h-full w-[450px] rounded-xl flex items-center justify-center">
+                    PLO
+                  </div>
+                </div>
+              </Tabs.Panel>
+            </Tabs>
+          </div>
+
+          <div className="text-center gap-20 font-[700] flex flex-col text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]  drop-shadow-xl pb-2 cursor-default leading-[72px] items-center justify-center w-screen h-screen text-[60px] ">
+            <p>
+              There's never been a better time <br /> for an upgrade than right
+              now.
+            </p>
+            <img src={studentPLOPage} alt="CMULogo" className="h-[75%]" />
+          </div>
         </div>
 
-        <div className="w-full h-fit py-20 flex flex-col gap-10">
-          <div className="px-20 font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r text-[#4285f4] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[40px] ">
+        <div className="w-full  py-20 sm:flex flex-col gap-10 hidden">
+          <div className="px-20 font-[700] flex flex-col gap-1 bg-clip-text bg-gradient-to-r text-[#4285f4] drop-shadow-xl pb-2 cursor-default leading-[56px] items-start text-[40px] ">
             <p>Explore More Features Beyond the Essentials</p>
           </div>
           <div className="flex-col items-center pb-8 sm:flex hidden">
@@ -842,7 +945,7 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-16 items-center bg-black h-fit text-white px-28 py-20">
+        <div className="sm:flex flex-col gap-16 items-center bg-black h-fit text-white px-28 py-20 hidden">
           <div className="flex flex-col gap-20 items-center">
             <div className="text-[21px] text-center">
               <p className="font-[600] text-[60px] ">
@@ -856,16 +959,6 @@ export default function Login() {
                 helps instructors align with educational goals.
               </p>
             </div>
-
-            {/* <div>
-              <Image
-                src={
-                  "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png"
-                }
-                className={`h-[380px] w-[880px] object-cover rounded-xl `}
-              />
-            </div> */}
-            <img src={testPhoto} alt="CMULogo" className="" />
 
             <div className="flex flex-col gap-16 justify-center w-full font-[600] text-[17px] px-10">
               <div className="flex items-start justify-center gap-28">
