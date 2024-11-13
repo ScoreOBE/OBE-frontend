@@ -211,8 +211,10 @@ const scoreOBETemplete = (
     resultsData.forEach((data, i) => {
       // Validate the studentId
       if (
-        data.studentId.length &&
-        (!isNumeric(data.studentId) || data.studentId.toString().length !== 9)
+        !data.studentId?.length ||
+        (data.studentId.length &&
+          (!isNumeric(data.studentId) ||
+            data.studentId.toString().length !== 9))
       ) {
         const row = i + 4;
         const column = getColumnAlphabet(1);
@@ -265,9 +267,15 @@ const scoreOBETemplete = (
         : !course.sections?.find(({ students }) =>
             students?.find(({ student }) => student.studentId == data.studentId)
           );
-          console.log(checkSection, checkStudent);
-          
       if (
+        course.sections?.find(({ students }) =>
+          students?.find(
+            ({ student }) =>
+              student.studentId == data.studentId ||
+              (student.firstNameTH == firstNameTH &&
+                student.lastNameTH == lastNameTH)
+          )
+        ) &&
         (!checkSection || checkStudent) &&
         !errorStudent.find(
           ({ student }) => student == `${firstNameTH} ${lastNameTH}`
