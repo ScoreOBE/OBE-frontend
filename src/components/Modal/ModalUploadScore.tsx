@@ -78,17 +78,16 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
           "Upload success",
           "upload scores success"
         );
-        // const res = await getOneCourse({
-        //   year: data.year,
-        //   semester: data.semester,
-        //   courseNo: data.courseNo,
-        // });
-        // if (res) {
-        //   dispatch(editCourse(res));
-        // }
-
-        // setFile(undefined);
-        // setResult(undefined);
+        const res = await getOneCourse({
+          year: data.year,
+          semester: data.semester,
+          courseNo: data.courseNo,
+        });
+        if (res) {
+          dispatch(editCourse(res));
+        }
+        setFile(undefined);
+        setResult(undefined);
       }
       dispatch(setLoadingOverlay(false));
     } else {
