@@ -395,7 +395,11 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         </Modal.Content>
       </Modal.Root>
 
-      {(errorStudentId.length || errorSection.length || errorPoint.length) && (
+      {!!(
+        errorStudentId.length ||
+        errorSection.length ||
+        errorPoint.length
+      ) && (
         <ModalErrorUploadFile
           type="scores"
           opened={openModalUploadError}
