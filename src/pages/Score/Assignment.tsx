@@ -13,6 +13,7 @@ import IconPencilMinus from "@/assets/icons/pencilMinus.svg?react";
 import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import notFoundImage from "@/assets/image/notFound.jpg";
 import {
   useLocation,
   useNavigate,
@@ -74,7 +75,7 @@ export default function Assignment() {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
   }, []);
-  
+
   const onClosePublishModal = () => {
     setOpenPublishScoreModal(false);
     setOpenSelectSecModal(false);
@@ -439,112 +440,144 @@ export default function Assignment() {
                   </Table.Tr>
                 </Table.Thead>
 
-                <Table.Tbody className="text-default text-[13px] ">
-                  {section?.assignments?.map((assignment, index) => {
-                    const totalStudent = section.students?.filter(
-                      ({ scores }) =>
-                        scores.find(
-                          ({ assignmentName }) =>
-                            assignmentName == assignment.name
-                        )
-                    ).length;
-                    const totalScore = section.students?.reduce(
-                      (a, b) =>
-                        a +
-                        (b.scores
-                          .find(
+                {section?.assignments?.length !== 0 ? (
+                  <Table.Tbody className="text-default text-[13px] ">
+                    {section?.assignments?.map((assignment, index) => {
+                      const totalStudent = section.students?.filter(
+                        ({ scores }) =>
+                          scores.find(
                             ({ assignmentName }) =>
                               assignmentName == assignment.name
                           )
-                          ?.questions.reduce((a, b) => a + b.score, 0) || 0),
-                      0
-                    );
-                    return (
-                      <Table.Tr
-                        key={index}
-                        className={`hover:bg-[#F3F3F3] cursor-pointer ${
-                          index % 2 === 0 && "bg-[#F8F9FA]"
-                        }`}
-                        onClick={() => goToOverall(`${assignment.name}`)}
-                      >
-                        <Table.Td>{assignment.name}</Table.Td>
-                        <Table.Td className="text-end pr-14 !pl-0">
-                          {assignment.questions.reduce(
-                            (a, b) => a + b.fullScore,
-                            0
-                          )}
-                        </Table.Td>
-                        <Table.Td className="text-end pr-20 !pl-0">
-                          {((totalScore || 0) / (totalStudent || 1)).toFixed(2)}
-                        </Table.Td>
-                        <Table.Td className="!pl-12">
-                          {dateFormatter(assignment.createdAt, 3)}
-                        </Table.Td>
-                        <Table.Td>{totalStudent || 0}</Table.Td>
-                        <Table.Td className="text-center !pl-3">
-                          {assignment.isPublish ? (
-                            <Icon
-                              IconComponent={IconPublish}
-                              className="text-default"
-                            />
-                          ) : (
-                            <Icon
-                              IconComponent={IconUnPublish}
-                              className="text-default"
-                            />
-                          )}
-                        </Table.Td>
-                        <Table.Td className="text-center flex  items-center justify-center">
-                          <div
-                            className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
-                            onClick={(event) => event.stopPropagation()}
-                          >
-                            <Menu
-                              trigger="click"
-                              position="bottom-end"
-                              offset={2}
+                      ).length;
+                      const totalScore = section.students?.reduce(
+                        (a, b) =>
+                          a +
+                          (b.scores
+                            .find(
+                              ({ assignmentName }) =>
+                                assignmentName == assignment.name
+                            )
+                            ?.questions.reduce((a, b) => a + b.score, 0) || 0),
+                        0
+                      );
+                      return (
+                        <Table.Tr
+                          key={index}
+                          className={`hover:bg-[#F3F3F3] cursor-pointer ${
+                            index % 2 === 0 && "bg-[#F8F9FA]"
+                          }`}
+                          onClick={() => goToOverall(`${assignment.name}`)}
+                        >
+                          <Table.Td>{assignment.name}</Table.Td>
+                          <Table.Td className="text-end pr-14 !pl-0">
+                            {assignment.questions.reduce(
+                              (a, b) => a + b.fullScore,
+                              0
+                            )}
+                          </Table.Td>
+                          <Table.Td className="text-end pr-20 !pl-0">
+                            {((totalScore || 0) / (totalStudent || 1)).toFixed(
+                              2
+                            )}
+                          </Table.Td>
+                          <Table.Td className="!pl-12">
+                            {dateFormatter(assignment.createdAt, 3)}
+                          </Table.Td>
+                          <Table.Td>{totalStudent || 0}</Table.Td>
+                          <Table.Td className="text-center !pl-3">
+                            {assignment.isPublish ? (
+                              <Icon
+                                IconComponent={IconPublish}
+                                className="text-default"
+                              />
+                            ) : (
+                              <Icon
+                                IconComponent={IconUnPublish}
+                                className="text-default"
+                              />
+                            )}
+                          </Table.Td>
+                          <Table.Td className="text-center flex  items-center justify-center">
+                            <div
+                              className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                              onClick={(event) => event.stopPropagation()}
                             >
-                              <Menu.Target>
-                                <div>
-                                  <Icon
-                                    IconComponent={IconDots}
-                                    className=" rounded-full w-fit hover:bg-gray-300"
-                                  />
-                                </div>
-                              </Menu.Target>
-                              <Menu.Dropdown
-                                className="rounded-md backdrop-blur-xl bg-white/70 "
-                                style={{
-                                  boxShadow:
-                                    "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                                }}
+                              <Menu
+                                trigger="click"
+                                position="bottom-end"
+                                offset={2}
                               >
-                                <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
-                                  <div className="flex items-center gap-2">
+                                <Menu.Target>
+                                  <div>
                                     <Icon
-                                      IconComponent={IconPencilMinus}
-                                      className="size-4 stroke-[2px]"
+                                      IconComponent={IconDots}
+                                      className=" rounded-full w-fit hover:bg-gray-300"
                                     />
-                                    <span>Edit Assignment Name</span>
                                   </div>
-                                </Menu.Item>
-                                <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
-                                  <div className="flex items-center gap-2">
-                                    <Icon
-                                      IconComponent={IconTrash}
-                                      className="size-4 stroke-[2px]"
-                                    />
-                                    <span>Delete Assignment</span>
-                                  </div>
-                                </Menu.Item>
-                              </Menu.Dropdown>
-                            </Menu>
+                                </Menu.Target>
+                                <Menu.Dropdown
+                                  className="rounded-md backdrop-blur-xl bg-white/70 "
+                                  style={{
+                                    boxShadow:
+                                      "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                                  }}
+                                >
+                                  <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
+                                    <div className="flex items-center gap-2">
+                                      <Icon
+                                        IconComponent={IconPencilMinus}
+                                        className="size-4 stroke-[2px]"
+                                      />
+                                      <span>Edit Assignment Name</span>
+                                    </div>
+                                  </Menu.Item>
+                                  <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
+                                    <div className="flex items-center gap-2">
+                                      <Icon
+                                        IconComponent={IconTrash}
+                                        className="size-4 stroke-[2px]"
+                                      />
+                                      <span>Delete Assignment</span>
+                                    </div>
+                                  </Menu.Item>
+                                </Menu.Dropdown>
+                              </Menu>
+                            </div>
+                          </Table.Td>
+                        </Table.Tr>
+                      );
+                    })}
+                  </Table.Tbody>
+                ) : (
+                  <Table.Tbody>
+                    <Table.Tr>
+                      <Table.Td
+                        colSpan={7}
+                        className=" text-center items-center !h-full  !w-full"
+                      >
+                        <div className="flex items-center !h-full justify-between px-20">
+                          <div className="flex flex-col gap-3 text-start">
+                            <p className="!h-full text-[20px] font-semibold">
+                              No Assignment
+                            </p>{" "}
+                            <p className=" text-[#333333] -mt-2 text-b2 break-words font-medium leading-relaxed">
+                              It looks like no assignment have been added <br/> in this
+                              course yet.
+                            </p>{" "}
                           </div>
-                        </Table.Td>
-                      </Table.Tr>
-                    );
-                  })}
-                </Table.Tbody>
+                          <div className=" items-center justify-center flex">
+                            <img
+                              src={notFoundImage}
+                              className="h-full items-center  w-[24vw] justify-center flex flex-col"
+                              alt="notFound"
+                            ></img>
+                          </div>
+                        </div>
+                      </Table.Td>
+                    </Table.Tr>
+                  </Table.Tbody>
+                )}
               </Table>
             </div>
           </>
