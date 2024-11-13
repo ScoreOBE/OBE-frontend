@@ -1,15 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import {
-  Alert,
-  Button,
-  Chip,
-  Group,
-  Menu,
-  Modal,
-  Pill,
-  Table,
-} from "@mantine/core";
+import { Alert, Button, Chip, Group, Menu, Modal, Table } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEyePublish from "@/assets/icons/eyePublish.svg?react";
 import IconPublish from "@/assets/icons/publish.svg?react";
@@ -35,7 +26,6 @@ import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-
 import { useForm } from "@mantine/form";
 import { IModelAssignment } from "@/models/ModelCourse";
 
@@ -78,6 +68,11 @@ export default function Assignment() {
     },
     validate: {},
   });
+
+  useEffect(() => {
+    dispatch(setShowSidebar(true));
+    dispatch(setShowNavbar(true));
+  }, []);
 
   const assign: IModelAssignment[] = [
     {
@@ -127,11 +122,6 @@ export default function Assignment() {
       .sections.map((sec: string) => Number(sec));
     form.setFieldValue("sections", sectionsToNum);
   };
-
-  useEffect(() => {
-    dispatch(setShowSidebar(true));
-    dispatch(setShowNavbar(true));
-  }, []);
 
   return (
     <>
@@ -372,7 +362,6 @@ export default function Assignment() {
 
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
-        {/* <Breadcrumbs /> */}
         {loading ? (
           <Loading />
         ) : (section?.instructor as IModelUser)?.id === user.id ||
@@ -467,6 +456,37 @@ export default function Assignment() {
                 </Table.Thead>
 
                 <Table.Tbody className="text-default text-[13px] ">
+                  {section?.assignments?.map((assignment, index) => {
+                    // const totalScore =  section.students.scores
+                    // .find(
+                    //   ({ assignmentName }) =>
+                    //     assignmentName == assignment.name
+                    // )
+                    // ?.questions.reduce((a, b) => a + b.score || 0, 0)
+                    // const mean = section.students?.reduce(
+                    //   (a, b) =>
+                    //     a + ,
+                    //   0
+                    // );
+                    return (
+                      <Table.Tr
+                        key={index}
+                        className={`hover:bg-[#F3F3F3] cursor-pointer ${
+                          index % 2 === 0 && "bg-[#F8F9FA]"
+                        }`}
+                        onClick={() => goToOverall(`${assignment.name}`)}
+                      >
+                        <Table.Td>{assignment.name}</Table.Td>
+                        <Table.Td className="text-end pr-14 !pl-0">
+                          {assignment.questions.reduce(
+                            (a, b) => a + b.fullScore,
+                            0
+                          )}
+                        </Table.Td>
+                        <Table.Td className="text-end pr-20 !pl-0">{}</Table.Td>
+                      </Table.Tr>
+                    );
+                  })}
                   {Array.from({ length: 12 }).map((_, index) => (
                     <Table.Tr
                       key={index}
