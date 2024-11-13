@@ -57,12 +57,15 @@ export const getUniqueInstructors = (
 ) => {
   return Array.from(
     new Set(
-      (
-        sections?.flatMap((sec) => [
-          sec.instructor,
-          includesCoIns && { ...(sec.coInstructors as IModelUser[]) },
-        ]) as IModelUser[]
-      )?.map((instructor) => getUserName(instructor, formatName)!)
+      sections
+        .flatMap((sec) => {
+          const instructors = [sec.instructor];
+          if (includesCoIns && sec.coInstructors) {
+            instructors.push(...(sec.coInstructors as IModelUser[]));
+          }
+          return instructors.filter(Boolean);
+        })
+        .map((instructor) => getUserName(instructor as IModelUser, formatName)!)
     )
   );
 };
