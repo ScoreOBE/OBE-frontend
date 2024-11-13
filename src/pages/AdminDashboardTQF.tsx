@@ -632,16 +632,30 @@ export default function AdminDashboardTQF() {
                         : "No Course Found"}
                     </p>
                     <br />
-                    <p className=" -mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
+                    <p className="-mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
                       {courseList.search.length ? (
                         <>Check the spelling or try a new search.</>
+                      ) : (tqf3Filters.length &&
+                          courseList.courses.length === 0) ||
+                        (tqf5Filters.length &&
+                          courseList.courses.length === 0) ? (
+                        <p>
+                          We couldn’t find any courses that match your filter.
+                        </p>
                       ) : (
-                        <>
+                        <p>
                           It looks like no courses have been added <br /> in
                           this semester yet.
-                        </>
+                        </p>
                       )}
                     </p>
+
+                    {/* {tqf5Filters.length && courseList.courses.length == 0 && (
+                      <p className="text-secondary text-[22px] font-semibold">
+                        no courseeeee
+                      </p>
+                    )} */}
+                    <br />
                   </div>
                   <div className="h-full  w-[24vw] justify-center flex flex-col">
                     <img src={notFoundImage} alt="notFound"></img>

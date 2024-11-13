@@ -1,4 +1,6 @@
-import { Modal } from "@mantine/core";
+import { Alert, Button, Modal } from "@mantine/core";
+import Icon from "../Icon";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 
 type Props = {
   type: "students" | "scores";
@@ -27,10 +29,13 @@ export default function ModalErrorUploadFile({
     <Modal
       opened={opened}
       onClose={onClose}
-      closeOnClickOutside={true}
-      title="Error upload score"
+      closeOnClickOutside={false}
+      title="File was rejected"
+      // classNames={{ title: "text-delete"}}
       transitionProps={{ transition: "pop" }}
       centered
+      size="40vw"
+      withCloseButton={false}
     >
       {!!errorStudent?.length ? (
         <div className="flex flex-col gap-2">
