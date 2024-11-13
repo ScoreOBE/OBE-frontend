@@ -4,6 +4,7 @@ import { Alert, Button, Chip, Group, Menu, Modal, Table } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEyePublish from "@/assets/icons/eyePublish.svg?react";
 import IconPublish from "@/assets/icons/publish.svg?react";
+import IconUnPublish from "@/assets/icons/unPublish.svg?react";
 import IconPublishEach from "@/assets/icons/publishEach.svg?react";
 import IconPublishAll from "@/assets/icons/publishAll.svg?react";
 import IconDots from "@/assets/icons/dots.svg?react";
@@ -18,7 +19,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { getSectionNo } from "@/helpers/functions/function";
+import { dateFormatter, getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
 import { setShowNavbar } from "@/store/showNavbar";
@@ -73,31 +74,7 @@ export default function Assignment() {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
   }, []);
-
-  const assign: IModelAssignment[] = [
-    {
-      name: "Math Quiz 1",
-      // desc: "Basic arithmetic quiz covering addition, subtraction, multiplication, and division.",
-      isPublish: true,
-      weight: 10,
-      questions: [],
-    },
-    {
-      name: "History Test",
-      // desc: "A short test on the history of World War II.",
-      isPublish: false,
-      weight: 15,
-      questions: [],
-    },
-    {
-      name: "Science Assignment",
-      // desc: "Assignment covering basic physics and chemistry concepts.",
-      isPublish: true,
-      weight: 20,
-      questions: [],
-    },
-  ];
-
+  
   const onClosePublishModal = () => {
     setOpenPublishScoreModal(false);
     setOpenSelectSecModal(false);
@@ -165,12 +142,19 @@ export default function Assignment() {
                   "text-[13px] text-default font-semibold translate-y-[3px]",
               }}
               size="md"
-              checked={form.getValues().assignments.length === assign.length}
+              checked={
+                form.getValues().assignments.length ===
+                section?.assignments!.length
+              }
               onChange={() => {
-                if (form.getValues().assignments.length === assign.length) {
+                if (
+                  form.getValues().assignments.length ===
+                  section?.assignments!.length
+                ) {
                   form.setFieldValue("assignments", []);
                 } else {
-                  const allAssign = assign.map((as) => as.name);
+                  const allAssign =
+                    section?.assignments?.map((as) => as.name) || [];
                   form.setFieldValue("assignments", [...allAssign]);
                 }
               }}
@@ -188,7 +172,7 @@ export default function Assignment() {
           >
             <Group>
               <div className="flex gap-3">
-                {assign.map((as, index) => (
+                {section?.assignments?.map((as, index) => (
                   <Chip
                     key={index}
                     classNames={{
@@ -457,17 +441,24 @@ export default function Assignment() {
 
                 <Table.Tbody className="text-default text-[13px] ">
                   {section?.assignments?.map((assignment, index) => {
-                    // const totalScore =  section.students.scores
-                    // .find(
-                    //   ({ assignmentName }) =>
-                    //     assignmentName == assignment.name
-                    // )
-                    // ?.questions.reduce((a, b) => a + b.score || 0, 0)
-                    // const mean = section.students?.reduce(
-                    //   (a, b) =>
-                    //     a + ,
-                    //   0
-                    // );
+                    const totalStudent = section.students?.filter(
+                      ({ scores }) =>
+                        scores.find(
+                          ({ assignmentName }) =>
+                            assignmentName == assignment.name
+                        )
+                    ).length;
+                    const totalScore = section.students?.reduce(
+                      (a, b) =>
+                        a +
+                        (b.scores
+                          .find(
+                            ({ assignmentName }) =>
+                              assignmentName == assignment.name
+                          )
+                          ?.questions.reduce((a, b) => a + b.score, 0) || 0),
+                      0
+                    );
                     return (
                       <Table.Tr
                         key={index}
@@ -483,79 +474,76 @@ export default function Assignment() {
                             0
                           )}
                         </Table.Td>
-                        <Table.Td className="text-end pr-20 !pl-0">{}</Table.Td>
+                        <Table.Td className="text-end pr-20 !pl-0">
+                          {((totalScore || 0) / (totalStudent || 1)).toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="!pl-12">
+                          {dateFormatter(assignment.createdAt, 3)}
+                        </Table.Td>
+                        <Table.Td>{totalStudent || 0}</Table.Td>
+                        <Table.Td className="text-center !pl-3">
+                          {assignment.isPublish ? (
+                            <Icon
+                              IconComponent={IconPublish}
+                              className="text-default"
+                            />
+                          ) : (
+                            <Icon
+                              IconComponent={IconUnPublish}
+                              className="text-default"
+                            />
+                          )}
+                        </Table.Td>
+                        <Table.Td className="text-center flex  items-center justify-center">
+                          <div
+                            className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            <Menu
+                              trigger="click"
+                              position="bottom-end"
+                              offset={2}
+                            >
+                              <Menu.Target>
+                                <div>
+                                  <Icon
+                                    IconComponent={IconDots}
+                                    className=" rounded-full w-fit hover:bg-gray-300"
+                                  />
+                                </div>
+                              </Menu.Target>
+                              <Menu.Dropdown
+                                className="rounded-md backdrop-blur-xl bg-white/70 "
+                                style={{
+                                  boxShadow:
+                                    "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                                }}
+                              >
+                                <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
+                                  <div className="flex items-center gap-2">
+                                    <Icon
+                                      IconComponent={IconPencilMinus}
+                                      className="size-4 stroke-[2px]"
+                                    />
+                                    <span>Edit Assignment Name</span>
+                                  </div>
+                                </Menu.Item>
+                                <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
+                                  <div className="flex items-center gap-2">
+                                    <Icon
+                                      IconComponent={IconTrash}
+                                      className="size-4 stroke-[2px]"
+                                    />
+                                    <span>Delete Assignment</span>
+                                  </div>
+                                </Menu.Item>
+                              </Menu.Dropdown>
+                            </Menu>
+                          </div>
+                        </Table.Td>
                       </Table.Tr>
                     );
                   })}
-                  {Array.from({ length: 12 }).map((_, index) => (
-                    <Table.Tr
-                      key={index}
-                      className={`hover:bg-[#F3F3F3] cursor-pointer ${
-                        index % 2 === 0 && "bg-[#F8F9FA]"
-                      }`}
-                      onClick={() => goToOverall(`Quiz${index + 1}`)}
-                    >
-                      <Table.Td>Quiz {index + 1}</Table.Td>
-                      <Table.Td className="text-end pr-14 !pl-0">5.0</Table.Td>
-                      <Table.Td className="text-end pr-20 !pl-0">2.0</Table.Td>
-                      <Table.Td className="!pl-12">8 Dec 2023</Table.Td>
-                      <Table.Td>25</Table.Td>
-                      <Table.Td className="text-center !pl-3">
-                        <Icon
-                          IconComponent={IconPublish}
-                          className="text-default"
-                        />
-                        {/* <Icon IconComponent={unPublish} className="text-default" /> */}
-                      </Table.Td>
-                      <Table.Td className="text-center flex  items-center justify-center">
-                        <div
-                          className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
-                          onClick={(event) => event.stopPropagation()}
-                        >
-                          <Menu
-                            trigger="click"
-                            position="bottom-end"
-                            offset={2}
-                          >
-                            <Menu.Target>
-                              <div>
-                                <Icon
-                                  IconComponent={IconDots}
-                                  className=" rounded-full w-fit hover:bg-gray-300"
-                                />
-                              </div>
-                            </Menu.Target>
-                            <Menu.Dropdown
-                              className="rounded-md backdrop-blur-xl bg-white/70 "
-                              style={{
-                                boxShadow:
-                                  "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                              }}
-                            >
-                              <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
-                                <div className="flex items-center gap-2">
-                                  <Icon
-                                    IconComponent={IconPencilMinus}
-                                    className="size-4 stroke-[2px]"
-                                  />
-                                  <span>Edit Assignment Name</span>
-                                </div>
-                              </Menu.Item>
-                              <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
-                                <div className="flex items-center gap-2">
-                                  <Icon
-                                    IconComponent={IconTrash}
-                                    className="size-4 stroke-[2px]"
-                                  />
-                                  <span>Delete Assignment</span>
-                                </div>
-                              </Menu.Item>
-                            </Menu.Dropdown>
-                          </Menu>
-                        </div>
-                      </Table.Td>
-                    </Table.Tr>
-                  ))}
                 </Table.Tbody>
               </Table>
             </div>

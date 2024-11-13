@@ -1,12 +1,14 @@
-import { IModelAssignment } from "@/models/ModelCourse";
+import { IModelAssignment, IModelScore } from "@/models/ModelCourse";
+import { IModelUser } from "@/models/ModelUser";
 import { BarChart } from "@mantine/charts";
 
 type Props = {
   data: Partial<IModelAssignment>;
+  students: { student: IModelUser; scores: IModelScore[] }[];
   isQuestions: boolean;
 };
 
-export default function HistogramChart({ data, isQuestions }: Props) {
+export default function HistogramChart({ data, students, isQuestions }: Props) {
   // Mock data for demonstration
   const chartData = Array.from({ length: 10 }, (_, index) => ({
     month: `${index + 1} - ${index + 2}`,
@@ -78,7 +80,6 @@ export default function HistogramChart({ data, isQuestions }: Props) {
             {
               name: "Students",
               color: "rgba(31, 105, 243, 0.25)",
-              
             },
           ]}
           barChartProps={{
