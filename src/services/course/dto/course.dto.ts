@@ -8,4 +8,6 @@ export class CourseRequestDTO {
   page: number = 1;
   limit: number = 20;
   departmentCode?: string[] = [];
+  tqf3?: string[] = [];
+  tqf5?: string[] = [];
 }
