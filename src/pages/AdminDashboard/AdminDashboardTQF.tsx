@@ -625,7 +625,7 @@ export default function AdminDashboardTQF() {
                 </InfiniteScroll>
               ) : (
                 <div className=" flex flex-row flex-1 px-[75px] justify-between">
-                  <div className="h-full  justify-center flex flex-col">
+                  <div className="h-full justify-center flex flex-col">
                     <p className="text-secondary text-[22px] font-semibold">
                       {courseList.search.length
                         ? `No results for "${courseList.search}" `
