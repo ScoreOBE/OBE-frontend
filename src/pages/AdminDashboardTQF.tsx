@@ -53,7 +53,6 @@ export default function AdminDashboardTQF() {
   const [selectDepartment, setSelectDepartment] = useState<
     Partial<IModelDepartment>
   >({});
-  const [filterCourse, setFilterCourse] = useState<IModelCourse[]>([]);
   const [tqf3Filters, setTqf3Filters] = useState<string[]>([]);
   const [tqf5Filters, setTqf5Filters] = useState<string[]>([]);
 
@@ -94,49 +93,13 @@ export default function AdminDashboardTQF() {
   }, [localStorage.getItem("search")]);
 
   useEffect(() => {
-    if (courseList.courses.length) {
-      const filter =
-        courseList.courses
-          .map((course) => {
-            if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
-              const filter = course.sections.filter((sec) => {
-                if (tqf3Filters.length && tqf5Filters.length) {
-                  return (
-                    tqf3Filters.includes(sec.TQF3!.status) &&
-                    tqf5Filters.includes(sec.TQF5!.status)
-                  );
-                } else if (tqf3Filters.length) {
-                  return tqf3Filters.includes(sec.TQF3!.status);
-                } else if (tqf5Filters.length) {
-                  return tqf5Filters.includes(sec.TQF5!.status);
-                }
-              });
-              return filter.length
-                ? { ...course, sections: [...filter] }
-                : undefined;
-            } else {
-              return { ...course };
-            }
-          })
-          .filter((course) => {
-            if (!course) return false;
-            else if (course.TQF3 && course.TQF5) {
-              if (tqf3Filters.length && tqf5Filters.length) {
-                return (
-                  tqf3Filters.includes(course.TQF3.status) &&
-                  tqf5Filters.includes(course.TQF5.status)
-                );
-              } else if (tqf3Filters.length) {
-                return tqf3Filters.includes(course.TQF3.status);
-              } else if (tqf5Filters.length) {
-                return tqf5Filters.includes(course.TQF5.status);
-              }
-            }
-            return true;
-          }) || [];
-      setFilterCourse(filter as any);
+    if (
+      term.id &&
+      (payload.tqf3 != tqf3Filters || payload.tqf5 != tqf5Filters)
+    ) {
+      fetchCourse();
     }
-  }, [courseList, tqf3Filters, tqf5Filters]);
+  }, [tqf3Filters, tqf5Filters]);
 
   const initialPayload = () => {
     const dep = selectDepartment.codeEN?.includes("All")
@@ -150,6 +113,8 @@ export default function AdminDashboardTQF() {
       semester: term.semester!,
       departmentCode: dep,
       search: courseList.search,
+      tqf3: tqf3Filters,
+      tqf5: tqf5Filters,
       hasMore: courseList.total >= payload?.limit,
     };
   };
@@ -612,12 +577,16 @@ export default function AdminDashboardTQF() {
             <div className="flex h-full w-full pt-2 pb-5 overflow-hidden">
               {loading ? (
                 <Loading />
-              ) : filterCourse.length ? (
+              ) : courseList.courses.length ? (
                 <InfiniteScroll
-                  dataLength={filterCourse.length}
+                  dataLength={courseList.courses.length}
                   next={onShowMore}
                   height={"100%"}
-                  hasMore={payload?.hasMore}
+                  hasMore={
+                    tqf3Filters.length || tqf5Filters.length
+                      ? false
+                      : payload?.hasMore
+                  }
                   className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
                   style={{
                     height: "fit-content",
@@ -648,7 +617,7 @@ export default function AdminDashboardTQF() {
                       </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody className="text-default font-medium text-[13px]">
-                      {filterCourse.map((course, index) =>
+                      {courseList.courses.map((course, index) =>
                         courseTable(index, course)
                       )}
                     </Table.Tbody>
