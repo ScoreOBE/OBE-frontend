@@ -462,7 +462,7 @@ export default function TQF3() {
           <Alert
             variant="light"
             color="red"
-            title="After reusing TQF 3, please remember to double-check and save the data for all 6 parts of the course you selected"
+            title="After reusing TQF 3, please recheck and save the data for all 6 parts of the course you selected"
             icon={
               <Icon IconComponent={IconExclamationCircle} className="size-6" />
             }
@@ -470,7 +470,7 @@ export default function TQF3() {
           <Alert
             variant="light"
             color="blue"
-            title="TQF 3 Part 7  will not be reused if the reused course has a mismatched PLO."
+            title="TQF 3 Part 7  will not be reused if the reused course has a mismatched PLOs."
             icon={<Icon IconComponent={IconInfo2} className="size-6" />}
           ></Alert>
           <Select

@@ -294,7 +294,7 @@ export default function Part1TQF5({ setForm }: Props) {
     //     </div>
     //   </div>
     // </div>
-    <div className="flex px-16  flex-row items-center justify-between h-full">
+    <div className="flex px-16 sm:max-ipad11:px-8  flex-row items-center justify-between h-full">
       <div className="h-full  justify-center flex flex-col">
         <p className="text-secondary text-[21px] font-semibold">
           TQF 5 is coming soon to{" "}
@@ -308,7 +308,7 @@ export default function Part1TQF5({ setForm }: Props) {
           complete TQF 5 <br /> starting February 2025.
         </p>
       </div>
-      <img className=" z-50  w-[25vw] " src={maintenace} alt="loginImage" />
+      <img className=" z-50  w-[25vw]  " src={maintenace} alt="loginImage" />
     </div>
   );
 }

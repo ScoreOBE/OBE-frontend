@@ -6,6 +6,7 @@ import regcmu from "@/assets/image/regCMULogo.png";
 import exStudentList from "@/assets/image/exStudentList.png";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
+import notFoundImage from "@/assets/image/notFound.jpg";
 import Icon from "../Icon";
 import IconExcel from "@/assets/icons/excel.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
@@ -83,7 +84,7 @@ export default function ModalStudentList({
         showNotifications(
           NOTI_TYPE.SUCCESS,
           "Upload success",
-          "upload student list success"
+          "Upload student list success"
         );
         if (onNext) {
           onNext();
@@ -137,7 +138,7 @@ export default function ModalStudentList({
           ></TextInput>
         )}
         <div
-          className="mx-1 max-h-[500px] h-fit flex flex-col bg-white mb-1 mt-4 rounded-md overflow-y-auto"
+          className="mx-1 max-h-[500px] sm:max-h-[400px] h-fit flex flex-col bg-white mb-1 mt-2 rounded-md overflow-y-auto"
           style={{
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
@@ -153,16 +154,19 @@ export default function ModalStudentList({
               </Table.Thead>
               <Table.Tbody>{rows}</Table.Tbody>
             </Table>
-          ) : (
+          ) : (<div className="flex items-center justify-between px-10 !w-full">
             <p className="text-start font-semibold text-secondary p-6 py-10">
-              No data found for {data.courseNo}
+              No Student List found for {data.courseNo}
               <br />
               <p className="mt-2 text-[#777777] font-medium text-b3" font->
                 {" "}
-                Please ensure you have uploaded the student list from your
-                course page <br /> by clicking the 'Upload Score' button.
+                Student list will show when you upload score first.
               </p>
             </p>
+            <div className="h-full  w-[15vw] justify-center flex flex-col">
+                    <img src={notFoundImage} alt="notFound"></img>
+                  </div>
+            </div>
           )}
         </div>
       </>
