@@ -2,19 +2,12 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useRef, useState } from "react";
 import HistogramChart from "@/components/HistogramChart";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
 import Loading from "@/components/Loading/Loading";
 import React from "react";
-import {
-  IModelAssignment,
-  IModelQuestion,
-  IModelScore,
-} from "@/models/ModelCourse";
-import { IModelUser } from "@/models/ModelUser";
-import { ROLE } from "@/helpers/constants/enum";
 
 export default function Histogram() {
   const { courseNo, sectionNo } = useParams();
@@ -27,7 +20,6 @@ export default function Histogram() {
     (sec) => parseInt(sectionNo!) === sec.sectionNo
   );
   const [params] = useSearchParams();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [items, setItems] = useState<any[]>([
@@ -44,71 +36,27 @@ export default function Histogram() {
     { title: `Histogram Section ${getSectionNo(sectionNo)}` },
   ]);
 
-  const mockData = [
-    { name: "สอบกลางภาค" },
-    { name: "สอบเก็บคะแนนครั้งที่ 1 hhhmmmmmmmและ 2" },
-    { name: "Quiz 3" },
-  ];
-
-  // Mock Data for HistogramChart Component
-  const generateMockUser = (index: number): IModelUser => ({
-    id: `user-${index + 1}`,
-    studentId: `student-${index + 1}`,
-    firstNameTH: `ชื่อ${index + 1}`,
-    lastNameTH: `นามสกุล${index + 1}`,
-    firstNameEN: `FirstName${index + 1}`,
-    lastNameEN: `LastName${index + 1}`,
-    email: `student${index + 1}@example.com`,
-    facultyCode: `FAC${index % 5}`, // Example faculty code
-    departmentCode: [`DEP${index % 3}`], // Example department codes
-    role: index % 2 === 0 ? ROLE.STUDENT : ROLE.ADMIN, // Use the ROLE enum
-    enrollCourses: [], // Can add specific courses if needed
-  });
-
-  // Generate assignments mock data
-  const assignments: IModelAssignment[] = Array.from(
-    { length: 12 },
-    (_, index) => ({
-      name: `Assignment ${index + 1}`,
-      desc: `Description for Assignment ${index + 1}`,
-      isPublish: index % 2 === 0,
-      weight: Math.floor(index) + 1,
-      questions: Array.from(
-        { length: 5 },
-        (_, qIndex): IModelQuestion => ({
-          name: '',
-          desc: `Question ${qIndex + 1} Description`,
-          fullScore: 100,
-          // scores: Array.from(
-          //   { length: 30 },
-          //   (_, sIndex): IModelScore => ({
-          //     student: generateMockUser(sIndex), // Generate a mock user for each score
-          //     point: Math.floor(Math.random() * 100),
-          //   })
-          // ),
-        })
-      ),
-    })
-  );
   const sectionRefs = useRef(
-    assignments.map(() => React.createRef<HTMLDivElement>())
+    section?.assignments!.map(() => React.createRef<HTMLDivElement>())
   );
   const [activeSection, setActiveSection] = useState<number>(0);
 
   useEffect(() => {
-    sectionRefs.current = assignments.map(
-      (_, i) => sectionRefs.current[i] || React.createRef()
-    );
-  }, [assignments.length]);
+    if (section) {
+      sectionRefs.current = section.assignments!.map(
+        (_, i) => sectionRefs.current?.at(i) || React.createRef()
+      );
+    }
+  }, [section]);
 
   useEffect(() => {
-    if (!sectionRefs.current.every((ref) => ref.current)) return;
-
+    if (sectionRefs.current && !sectionRefs.current.every((ref) => ref.current))
+      return;
     let observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const index = sectionRefs.current.findIndex(
+            const index = sectionRefs.current!.findIndex(
               (ref) => ref.current === entry.target
             );
             setActiveSection(index);
@@ -121,20 +69,20 @@ export default function Histogram() {
       }
     );
 
-    sectionRefs.current.forEach((ref, i) => {
+    sectionRefs.current?.forEach((ref, i) => {
       if (ref.current) {
         observer.observe(ref.current);
       }
     });
 
     return () => {
-      sectionRefs.current.forEach((ref) => {
+      sectionRefs.current?.forEach((ref) => {
         if (ref.current) {
           observer.unobserve(ref.current);
         }
       });
     };
-  }, [section, sectionRefs, assignments.length]);
+  }, [section, sectionRefs]);
 
   return (
     <div className="bg-white flex flex-col h-full w-full px-6 pt-5  gap-3 overflow-hidden">
@@ -148,25 +96,31 @@ export default function Histogram() {
         <div className="flex overflow-y-auto overflow-x-hidden  max-w-full h-full">
           <div className="flex gap-6 w-full h-full">
             <div className="gap-4 flex flex-col my-2 min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
-              {assignments.map((item, i) => (
-                <div
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  }}
-                  className={`last:mb-4 flex px-2 flex-col rounded-md gap-10 py-2 ${
-                    activeSection === i ? "active" : ""
-                  }`}
-                  id={`${item.name}`}
-                  key={i}
-                  ref={sectionRefs.current[i]} // Dynamic refs
-                >
-                  <HistogramChart data={item} isQuestions={false} />
-                </div>
-              ))}
+              {section?.assignments?.map((item, i) => {
+                return (
+                  <div
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                    className={`last:mb-4 flex px-2 flex-col rounded-md gap-10 py-2 ${
+                      activeSection === i ? "active" : ""
+                    }`}
+                    id={`${item.name}`}
+                    key={i}
+                    ref={sectionRefs.current?.at(i)} // Dynamic refs
+                  >
+                    <HistogramChart
+                      data={item}
+                      students={section.students!}
+                      isQuestions={false}
+                    />
+                  </div>
+                );
+              })}
             </div>
 
             <div className="max-w-[12%] mt-3 flex flex-col  ">
-              {assignments.map((item, i) => (
+              {section?.assignments?.map((item, i) => (
                 <div
                   key={i}
                   className={`max-w-fit  ${

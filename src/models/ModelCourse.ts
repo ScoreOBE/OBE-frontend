@@ -25,8 +25,8 @@ export interface IModelSection {
   coInstructors: IModelUser[] | any[];
   isActive: boolean;
   addFirstTime?: boolean;
-  students?: { student: IModelUser; scores: IModelScore[] }[];
-  assignments?: IModelAssignment[];
+  students: { student: IModelUser; scores: IModelScore[] }[];
+  assignments: IModelAssignment[];
   TQF3?: IModelTQF3;
   TQF5?: IModelTQF5;
 }
@@ -36,6 +36,7 @@ export interface IModelAssignment {
   isPublish: boolean;
   weight: number;
   questions: IModelQuestion[];
+  createdAt: Date;
 }
 
 export interface IModelQuestion {

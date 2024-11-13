@@ -84,7 +84,7 @@ export default function Overall() {
   const questions: Array<IModelQuestion> = Array.from(
     { length: 10 },
     (_, qIndex): IModelQuestion => ({
-      name: '',
+      name: "",
       desc: `Question ${qIndex + 1} Description`,
       fullScore: 100,
       // fscores: Array.from(
@@ -257,7 +257,11 @@ export default function Overall() {
                         </p>
                       </div>
 
-                      <HistogramChart data={ques} isQuestions={true} />
+                      <HistogramChart
+                        data={ques}
+                        students={[]}
+                        isQuestions={true}
+                      />
                     </Accordion.Panel>
                   </Accordion.Item>
                 ))}
