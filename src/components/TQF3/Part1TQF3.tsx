@@ -33,7 +33,7 @@ export default function Part1TQF3({ setForm }: Props) {
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const [checked, setChecked] = useState<string[]>([]);
-  const curriculum = ["สำหรับหลักสูตร", "สำหรับหลายหลักสูตร"];
+  const curriculum = ["สำหรับหลักสูตร (For an Individual Curriculum)", "สำหรับหลายหลักสูตร (For a Multiple Curriculums)"];
   const studentYear = [
     { year: 1, en: "1st year", th: "ชั้นปีที่ 1" },
     { year: 2, en: "2nd year", th: "ชั้นปีที่ 2" },
@@ -178,7 +178,7 @@ export default function Part1TQF3({ setForm }: Props) {
         </Radio.Group>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
-        <div className="flex text-secondary pt-2 flex-col">
+        <div className="flex text-secondary flex-col">
           <p className="font-semibold">
             ชั้นปีที่เรียน <span className=" text-red-500">*</span>
           </p>

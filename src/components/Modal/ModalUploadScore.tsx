@@ -31,6 +31,7 @@ import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { uploadScore } from "@/services/score/score.service";
 import { getOneCourse } from "@/services/course/course.service";
 import { editCourse } from "@/store/course";
+import scoreOBETemplate from "@/assets/image/ScoreOBETemplate.png";
 
 type Props = {
   opened: boolean;
@@ -222,7 +223,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
                 }}
-                className="py-14 bg-white px-[76px] rounded-md"
+                className="py-14 bg-white flex justify-between items-center px-[60px] rounded-md"
               >
                 <div className="flex flex-col gap-10">
                   <div className="flex gap-3">
@@ -270,7 +271,13 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                       </Button>
                     </a>
                   </div>
+
                 </div>
+                <img
+                    src={scoreOBETemplate}
+                    alt="cpeLogo"
+                    className=" sm:hidden ipad11:h-[30vh]  h-[40vh] -mt-2 sm:mt-0"
+                  />
               </div>
               <Alert
                 radius="md"
