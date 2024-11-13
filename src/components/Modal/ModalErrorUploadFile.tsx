@@ -1,6 +1,7 @@
 import { Modal } from "@mantine/core";
 
 type Props = {
+  type: "students" | "scores";
   opened: boolean;
   onClose: () => void;
   errorStudentId: { name: string; cell: string[] }[] | string[];
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export default function ModalErrorUploadFile({
+  type,
   opened,
   onClose,
   errorStudentId,
@@ -25,20 +27,26 @@ export default function ModalErrorUploadFile({
       centered
     >
       <div className="flex flex-col gap-2">
-        {!!errorSection?.length && <p>Section: {errorSection.join(", ")}</p>}
-        {!!errorStudentId.length && (errorStudentId[0] as any).name ? (
-          <div>
-            Student ID
-            {errorStudentId.map((item: any) => (
-              <div>
-                <p className="font-semibold">Sheet: {item.name}</p>
-                <p>Cell: {item.cell.join(", ")}</p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p>Student ID: {errorStudentId.join(", ")}</p>
+        {!!errorSection?.length && (
+          <>
+            {type == "students" && <p>following section does not exist in this course</p>}
+            <p>Section: {errorSection.join(", ")}</p>
+          </>
         )}
+        {!!errorStudentId.length &&
+          ((errorStudentId[0] as any).name ? (
+            <div>
+              Student ID
+              {errorStudentId.map((item: any) => (
+                <div>
+                  <p className="font-semibold">Sheet: {item.name}</p>
+                  <p>Cell: {item.cell.join(", ")}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>Student ID: {errorStudentId.join(", ")}</p>
+          ))}
         {!!errorPoint?.length && (
           <div>
             {errorPoint.map((item) => (

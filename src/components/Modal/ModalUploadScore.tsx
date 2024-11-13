@@ -51,6 +51,16 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (!openModalUploadError) {
+      setFile(undefined);
+      setResult(undefined);
+      setErrorStudentId([]);
+      setErrorSection([]);
+      setErrorPoint([]);
+    }
+  }, [openModalUploadError]);
+
   const uploadScore = async () => {
     if (result) {
       dispatch(setLoadingOverlay(true));
@@ -385,13 +395,16 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         </Modal.Content>
       </Modal.Root>
 
-      <ModalErrorUploadFile
-        opened={openModalUploadError}
-        onClose={() => setOpenModalUploadError(false)}
-        errorStudentId={errorStudentId}
-        errorSection={errorSection}
-        errorPoint={errorPoint}
-      />
+      {(errorStudentId.length || errorSection.length || errorPoint.length) && (
+        <ModalErrorUploadFile
+          type="scores"
+          opened={openModalUploadError}
+          onClose={() => setOpenModalUploadError(false)}
+          errorStudentId={errorStudentId}
+          errorSection={errorSection}
+          errorPoint={errorPoint}
+        />
+      )}
     </>
   );
 }

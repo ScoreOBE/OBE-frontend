@@ -42,7 +42,8 @@ export const onUploadFile = async (
         workbook,
         setResult,
         setOpenModalUploadError,
-        setErrorStudentId
+        setErrorStudentId,
+        setErrorSection!
       );
     } else {
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -82,7 +83,8 @@ const studentList = async (
   workbook: XLSX.WorkBook,
   setResult: React.Dispatch<React.SetStateAction<any>>,
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
-  setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>
+  setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>,
+  setErrorSection: React.Dispatch<React.SetStateAction<string[]>>
 ) => {
   for (const sheet of workbook.SheetNames) {
     const result: any[] = [];
@@ -104,6 +106,7 @@ const studentList = async (
     // Validate the studentId
     const studentId = "รหัสนักศึกษา";
     const errorStudentIdList: string[] = [];
+    const errorSection: string[] = [];
     const keys = Object.keys(resultsData[0]);
     if (![studentId, "SECLAB", "SECLEC"].some((key) => keys.includes(key))) {
       files = [];
@@ -119,9 +122,15 @@ const studentList = async (
           (!isNumeric(row[studentId]) ||
             row[studentId].toString().length !== 9))
       ) {
-        const row = index + 4;
-        const column = getColumnAlphabet(1);
+        const row = index + 5;
+        const column = getColumnAlphabet(3);
         errorStudentIdList.push(`${column}${row}`);
+      }
+      const canUpload = course.sections?.find(
+        (sec) => sec.sectionNo == sectionNo
+      );
+      if (!canUpload && !errorSection.includes(getSectionNo(sectionNo))) {
+        errorSection.push(getSectionNo(sectionNo));
       }
       const existSec = result.find((sec) => sec.sectionNo == sectionNo);
       const student = {
@@ -139,9 +148,10 @@ const studentList = async (
       }
     });
 
-    if (errorStudentIdList.length) {
+    if (errorStudentIdList.length || errorSection.length) {
       files = [];
       setErrorStudentId(errorStudentIdList);
+      setErrorSection(errorSection);
       setOpenModalUploadError(true);
       return;
     }
