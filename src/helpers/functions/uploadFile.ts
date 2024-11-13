@@ -224,7 +224,6 @@ const scoreOBETemplete = (
         )
         .map((key, j) => {
           if (data[key] && !isNumeric(data[key])) {
-            console.log(data[key]);
             const row = i + 4;
             const column = getColumnAlphabet(j + 5);
             const cell = `${column}${row}`;
@@ -311,13 +310,14 @@ const gradescopeFile = (
   setErrorPoint: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
   const result = { sections: [] as any[], assignments: [] as any[] };
+  const errorStudentIdList: { name: string; cell: string[] }[] = [];
+  const errorPointList: { name: string; cell: string[] }[] = [];
   for (const sheet of workbook.SheetNames) {
     const worksheet = workbook.Sheets[sheet];
     const resultsData: any[] = XLSX.utils.sheet_to_json(worksheet);
-    const assignmentName = files[0].name.replace(/(.csv|.xlsx)$/g, "");
-
-    const errorStudentIdList: string[] = [];
-    const errorPointList: string[] = [];
+    const assignmentName =
+      sheet == "Sheet1" ? files[0].name.replace(/(.csv|.xlsx)$/g, "") : sheet;
+      
     const scoreDataArray: any[] = [];
     const fullScoreDataArray: (string | number | null)[] = [];
     const formattedResults: string[] = [];
@@ -329,7 +329,15 @@ const gradescopeFile = (
       ) {
         const row = i + 2;
         const column = getColumnAlphabet(2);
-        errorStudentIdList.push(`${column}${row}`);
+        const cell = `${column}${row}`;
+        const existSheet = errorStudentIdList.find(
+          ({ name }) => name == assignmentName
+        );
+        if (existSheet) {
+          existSheet.cell.push(cell);
+        } else {
+          errorStudentIdList.push({ name: assignmentName, cell: [cell] });
+        }
       }
       scoreDataArray.push({
         studentId: data.SID,
@@ -361,7 +369,15 @@ const gradescopeFile = (
           if (data[key] && !isNumeric(data[key])) {
             const row = i + 2;
             const column = getColumnAlphabet(j + 12);
-            errorPointList.push(`${column}${row}`);
+            const cell = `${column}${row}`;
+            const existSheet = errorPointList.find(
+              ({ name }) => name == assignmentName
+            );
+            if (existSheet) {
+              existSheet.cell.push(cell);
+            } else {
+              errorPointList.push({ name: assignmentName, cell: [cell] });
+            }
           }
           const formatted = key.split(" ");
           formatted.pop();
