@@ -211,8 +211,8 @@ const scoreOBETemplete = (
     resultsData.forEach((data, i) => {
       // Validate the studentId
       if (
-        !data.studentId?.length ||
-        (data.studentId.length &&
+        !data.studentId ||
+        (data.studentId &&
           (!isNumeric(data.studentId) ||
             data.studentId.toString().length !== 9))
       ) {
