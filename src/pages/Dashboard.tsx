@@ -235,6 +235,8 @@ export default function Dashboard() {
               return {
                 value: course.id,
                 id: course.id,
+                year: course.year,
+                semester: course.semester,
                 courseNo: course.courseNo,
                 courseName: course.courseName,
                 sections: course.sections,
@@ -247,6 +249,8 @@ export default function Dashboard() {
               setUploadCourse({
                 value: value,
                 id: option.id,
+                year: option.year,
+                semester: option.semester,
                 courseNo: option.courseNo,
                 courseName: option.courseName,
                 sections: option.sections,

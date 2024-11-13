@@ -28,6 +28,9 @@ import { setLoadingOverlay } from "@/store/loading";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
+import { uploadScore } from "@/services/score/score.service";
+import { getOneCourse } from "@/services/course/course.service";
+import { editCourse } from "@/store/course";
 
 type Props = {
   opened: boolean;
@@ -65,23 +68,28 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
     }
   }, [openModalUploadError]);
 
-  const uploadScore = async () => {
+  const onClickUpload = async () => {
     if (result) {
       dispatch(setLoadingOverlay(true));
-      console.log(result);
-      // const res = await uploadStudentList(result);
-      // if (res) {
-      //   dispatch(updateStudentList({ id: data.id, sections: res }));
-      //   setFile(undefined);
-      //   setResult(undefined);
-      //   showNotifications(
-      //     NOTI_TYPE.SUCCESS,
-      //     "Upload success",
-      //     "upload student list success"
-      //   );
-      //   setFile(undefined);
-      //   setResult(undefined);
-      // }
+      const res = await uploadScore(result);
+      if (res) {
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Upload success",
+          "upload scores success"
+        );
+        // const res = await getOneCourse({
+        //   year: data.year,
+        //   semester: data.semester,
+        //   courseNo: data.courseNo,
+        // });
+        // if (res) {
+        //   dispatch(editCourse(res));
+        // }
+
+        // setFile(undefined);
+        // setResult(undefined);
+      }
       dispatch(setLoadingOverlay(false));
     } else {
       showNotifications(NOTI_TYPE.ERROR, "Invalid File", "invalid scores");
@@ -342,7 +350,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                         }
                         onClick={(event) => {
                           event.stopPropagation();
-                          uploadScore();
+                          onClickUpload();
                         }}
                         loading={loading}
                       >
