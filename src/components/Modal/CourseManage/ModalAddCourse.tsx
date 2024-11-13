@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Stepper,
   Button,
@@ -85,6 +85,12 @@ export default function ModalAddCourse({
     },
   });
 
+  useEffect(() => {
+    if (!opened) {
+      closeModal();
+    }
+  }, [opened]);
+
   const nextStep = async (type?: string) => {
     dispatch(setLoadingOverlay(true));
     setFirstInput(false);
@@ -161,7 +167,7 @@ export default function ModalAddCourse({
     setActive(0);
     setSectionNoList([]);
     setCoInsList([]);
-    form.setValues({ sections: [{}] });
+    form.reset();
     onClose();
   };
 

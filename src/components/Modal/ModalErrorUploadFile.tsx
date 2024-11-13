@@ -26,20 +26,23 @@ export default function ModalErrorUploadFile({
       transitionProps={{ transition: "pop" }}
       centered
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-5">
         {!!errorSection?.length && (
           <>
-            {type == "students" && <p>following section does not exist in this course</p>}
+            <p>
+              following section does not exist in this course{" "}
+              {type == "scores" && "or your cannot access"}
+            </p>
             <p>Section: {errorSection.join(", ")}</p>
           </>
         )}
         {!!errorStudentId.length &&
           ((errorStudentId[0] as any).name ? (
             <div>
-              Student ID
+              <p className="font-semibold">Student ID</p>
               {errorStudentId.map((item: any) => (
                 <div>
-                  <p className="font-semibold">Sheet: {item.name}</p>
+                  <p className="font-medium">Sheet: {item.name}</p>
                   <p>Cell: {item.cell.join(", ")}</p>
                 </div>
               ))}
@@ -49,9 +52,10 @@ export default function ModalErrorUploadFile({
           ))}
         {!!errorPoint?.length && (
           <div>
+            <p className="font-semibold">Scores</p>
             {errorPoint.map((item) => (
               <div>
-                <p>Sheet: {item.name}</p>
+                <p className="font-medium">Sheet: {item.name}</p>
                 <p>Point: {item.cell.join(", ")}</p>
               </div>
             ))}
