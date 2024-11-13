@@ -48,6 +48,9 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
     { name: string; cell: string[] }[]
   >([]);
   const [errorSection, setErrorSection] = useState<string[]>([]);
+  const [errorStudent, setErrorStudent] = useState<
+    { student: string; studentIdNotMatch: boolean; sectionNotMatch: boolean }[]
+  >([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
 
@@ -58,6 +61,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
       setErrorStudentId([]);
       setErrorSection([]);
       setErrorPoint([]);
+      setErrorStudent([]);
     }
   }, [openModalUploadError]);
 
@@ -294,7 +298,8 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     setOpenModalUploadError,
                     setErrorStudentId,
                     setErrorSection,
-                    setErrorPoint
+                    setErrorPoint,
+                    setErrorStudent
                   );
                   setFile(files[0]);
                 }}
@@ -398,7 +403,8 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
       {!!(
         errorStudentId.length ||
         errorSection.length ||
-        errorPoint.length
+        errorPoint.length ||
+        errorStudent.length
       ) && (
         <ModalErrorUploadFile
           type="scores"
@@ -407,6 +413,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
           errorStudentId={errorStudentId}
           errorSection={errorSection}
           errorPoint={errorPoint}
+          errorStudent={errorStudent}
         />
       )}
     </>

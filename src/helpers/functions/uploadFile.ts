@@ -28,7 +28,8 @@ export const onUploadFile = async (
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
   setErrorStudentId: React.Dispatch<React.SetStateAction<any[]>>,
   setErrorSection?: React.Dispatch<React.SetStateAction<string[]>>,
-  setErrorPoint?: React.Dispatch<React.SetStateAction<any[]>>
+  setErrorPoint?: React.Dispatch<React.SetStateAction<any[]>>,
+  setErrorStudent?: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
   const file = files[0];
   if (file) {
@@ -66,7 +67,8 @@ export const onUploadFile = async (
           setOpenModalUploadError,
           setErrorStudentId,
           setErrorSection!,
-          setErrorPoint!
+          setErrorPoint!,
+          setErrorStudent!
         );
       }
     }
@@ -172,13 +174,19 @@ const scoreOBETemplete = (
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
   setErrorStudentId: React.Dispatch<React.SetStateAction<any[]>>,
   setErrorSection: React.Dispatch<React.SetStateAction<string[]>>,
-  setErrorPoint: React.Dispatch<React.SetStateAction<any[]>>
+  setErrorPoint: React.Dispatch<React.SetStateAction<any[]>>,
+  setErrorStudent: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
   const user = store.getState().user;
   const result: any[] = [];
   const errorStudentIdList: { name: string; cell: string[] }[] = [];
   const errorSection: string[] = [];
   const errorPointList: { name: string; cell: string[] }[] = [];
+  const errorStudent: {
+    student: string;
+    studentIdNotMatch: boolean;
+    sectionNotMatch: boolean;
+  }[] = [];
   for (const sheet of workbook.SheetNames) {
     const worksheet = workbook.Sheets[sheet];
     if (
@@ -246,49 +254,101 @@ const scoreOBETemplete = (
       ) {
         errorSection.push(getSectionNo(sectionNo));
       }
+      const firstNameTH = data.firstName.replace(/ /g, "");
+      const lastNameTH = data.lastName.replace(/ /g, "");
+      const checkSection = canUpload?.students?.find(
+        ({ student }) =>
+          student.firstNameTH == firstNameTH && student.lastNameTH == lastNameTH
+      );
+      const checkStudent = checkSection
+        ? checkSection.student.studentId != data.studentId
+        : !course.sections?.find(({ students }) =>
+            students?.find(({ student }) => student.studentId == data.studentId)
+          );
+          console.log(checkSection, checkStudent);
+          
+      if (
+        (!checkSection || checkStudent) &&
+        !errorStudent.find(
+          ({ student }) => student == `${firstNameTH} ${lastNameTH}`
+        )
+      ) {
+        errorStudent.push({
+          student: `${firstNameTH} ${lastNameTH}`,
+          studentIdNotMatch: checkStudent,
+          sectionNotMatch: !checkSection,
+        });
+      }
       const existSec = result.find((sec) => sec.sectionNo == sectionNo);
       const existAssignment = existSec?.assignments.find(
-        (assign: any) => assign.assignmentName == assignmentName
+        (assign: any) => assign.name == assignmentName
       );
       delete data.section;
+      const existStudent = existSec?.students.find(
+        ({ studentId }: any) => studentId == data.studentId
+      );
+      const questions = Object.keys(fullScore).map((item) => ({
+        name: item,
+        desc: description[item],
+        fullScore: fullScore[item],
+      }));
+      const scores = {
+        assignmentName,
+        questions: Object.keys(data)
+          .filter(
+            (item) => !["studentId", "firstName", "lastName"].includes(item)
+          )
+          .map((item) => ({
+            name: item,
+            score: data[item],
+          })),
+      };
       const student = {
-        ...data,
-        firstNameTH: data.firstName.replace(/ /g, ""),
-        lastNameTH: data.lastName.replace(/ /g, ""),
+        student: canUpload?.students?.find(
+          ({ student }) => student.studentId == data.studentId
+        )?.student.id,
+        studentId: data.studentId,
+        firstNameTH,
+        lastNameTH,
+        scores: [scores],
       };
       if (!existSec) {
         result.push({
           sectionNo,
+          students: [student],
           assignments: [
             {
-              assignmentName,
-              fullScore: fullScore,
-              description: description,
-              studentList: [student],
+              name: assignmentName,
+              questions,
             },
           ],
         });
-      } else if (!existAssignment) {
-        existSec.assignments.push({
-          assignmentName,
-          fullScore: fullScore,
-          description: description,
-          studentList: [student],
-        });
       } else {
-        existAssignment.studentList.push(student);
+        if (!existStudent) {
+          existSec.students.push(student);
+        } else {
+          existStudent.scores.push(scores);
+        }
+        if (!existAssignment) {
+          existSec.assignments.push({
+            name: assignmentName,
+            questions,
+          });
+        }
       }
     });
   }
   if (
     errorStudentIdList.length ||
     errorSection.length ||
-    errorPointList.length
+    errorPointList.length ||
+    errorStudent.length
   ) {
     files = [];
     setErrorStudentId(errorStudentIdList);
     setErrorSection(errorSection);
     setErrorPoint(errorPointList);
+    setErrorStudent(errorStudent);
     setOpenModalUploadError(true);
     return;
   }
@@ -317,7 +377,7 @@ const gradescopeFile = (
     const resultsData: any[] = XLSX.utils.sheet_to_json(worksheet);
     const assignmentName =
       sheet == "Sheet1" ? files[0].name.replace(/(.csv|.xlsx)$/g, "") : sheet;
-      
+
     const scoreDataArray: any[] = [];
     const fullScoreDataArray: (string | number | null)[] = [];
     const formattedResults: string[] = [];
