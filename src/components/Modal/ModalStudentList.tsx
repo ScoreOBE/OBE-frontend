@@ -20,7 +20,7 @@ import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
 import ModalErrorUploadFile from "./ModalErrorUploadFile";
 import { uploadStudentList } from "@/services/section/section.service";
 import { updateStudentList } from "@/store/course";
-import store, { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
@@ -52,6 +52,7 @@ export default function ModalStudentList({
   const [result, setResult] = useState<any>();
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
   const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
+  const [errorSection, setErrorSection] = useState<string[]>([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
 
@@ -61,6 +62,15 @@ export default function ModalStudentList({
       setResult(undefined);
     }
   }, [opened]);
+
+  useEffect(() => {
+    if (!openModalUploadError) {
+      setFile(undefined);
+      setResult(undefined);
+      setErrorStudentId([]);
+      setErrorSection([]);
+    }
+  }, [openModalUploadError]);
 
   const uploadList = async () => {
     if (result) {
@@ -169,7 +179,8 @@ export default function ModalStudentList({
             "studentList",
             setResult,
             setOpenModalUploadError,
-            setErrorStudentId
+            setErrorStudentId,
+            setErrorSection
           );
           setFile(files[0]);
         }}
@@ -454,11 +465,15 @@ export default function ModalStudentList({
         )}
       </Modal>
 
-      <ModalErrorUploadFile
-        opened={openModalUploadError}
-        onClose={() => setOpenModalUploadError(false)}
-        errorStudentId={errorStudentId}
-      />
+      {(errorStudentId.length || errorSection.length) && (
+        <ModalErrorUploadFile
+          type="students"
+          opened={openModalUploadError}
+          onClose={() => setOpenModalUploadError(false)}
+          errorStudentId={errorStudentId}
+          errorSection={errorSection}
+        />
+      )}
     </>
   );
 }
