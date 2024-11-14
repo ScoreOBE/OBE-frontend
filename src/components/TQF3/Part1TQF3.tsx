@@ -33,7 +33,16 @@ export default function Part1TQF3({ setForm }: Props) {
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const [checked, setChecked] = useState<string[]>([]);
-  const curriculum = ["สำหรับหลักสูตร (For an Individual Curriculum)", "สำหรับหลายหลักสูตร (For a Multiple Curriculums)"];
+  const curriculum = [
+    {
+      label: "สำหรับหลักสูตร (For an Individual Curriculum)",
+      value: "สำหรับหลักสูตร",
+    },
+    {
+      label: "สำหรับหลายหลักสูตร (For a Multiple Curriculums)",
+      value: "สำหรับหลายหลักสูตร",
+    },
+  ];
   const studentYear = [
     { year: 1, en: "1st year", th: "ชั้นปีที่ 1" },
     { year: 2, en: "2nd year", th: "ชั้นปีที่ 2" },
@@ -116,7 +125,7 @@ export default function Part1TQF3({ setForm }: Props) {
       <div className="w-full border-b-[1px] border-[#e6e6e6]  justify-between h-fit  items-top  grid grid-cols-3  pb-4">
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">
-            หลักสูตร <span className=" text-red-500">*</span>
+            หลักสูตร <span className="text-red-500">*</span>
           </p>
           <p className="font-semibold">Curriculum</p>
           <p className="error-text mt-1">
@@ -133,15 +142,15 @@ export default function Part1TQF3({ setForm }: Props) {
           <div className="flex text-default gap-3 flex-col">
             {curriculum.map((item) => (
               <Radio
-                key={item}
+                key={item.value}
                 classNames={{
                   radio: `${disabled && "!cursor-default"}`,
                   label: `${
                     disabled && "!cursor-default"
                   } font-medium text-[13px]`,
                 }}
-                label={item}
-                value={item}
+                label={item.label}
+                value={item.value}
                 disabled={disabled}
               />
             ))}
