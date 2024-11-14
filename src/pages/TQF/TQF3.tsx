@@ -148,18 +148,11 @@ export default function TQF3() {
       academicYear &&
       courseNo &&
       tqf3.coursePLO &&
-      localStorage.getItem("tqf3-topic") &&
       (tqf3.topic !== tqf3Original?.topic || !tqf3Original)
     ) {
       fetchOneCourse(true);
-      localStorage.removeItem("tqf3-topic");
     }
-  }, [
-    academicYear,
-    localStorage.getItem("tqf3-topic"),
-    tqf3.topic,
-    tqf3.coursePLO,
-  ]);
+  }, [academicYear, tqf3.topic, tqf3.coursePLO]);
 
   useEffect(() => {
     if (localStorage.getItem(`reuse${tqf3.id}-part1`)?.length) {
@@ -621,7 +614,10 @@ export default function TQF3() {
         >
           <div
             className={`flex flex-col w-full h-fit ${
-              tqf3Part === "part4" && (tqf3Original.part4 || (tqf3Original.part3 && localStorage.getItem(`reuse${tqf3.id}-part4`)))
+              tqf3Part === "part4" &&
+              (tqf3Original.part4 ||
+                (tqf3Original.part3 &&
+                  localStorage.getItem(`reuse${tqf3.id}-part4`)))
                 ? "pb-1"
                 : "border-b-[2px] pb-4 mb-1"
             }`}
