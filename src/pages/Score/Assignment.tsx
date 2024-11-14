@@ -426,7 +426,7 @@ export default function Assignment() {
                   <Table.Tr className="bg-[#e5e7f6]">
                     <Table.Th className="w-60">Name</Table.Th>
                     <Table.Th className="w-40 text-end pr-14 !pl-0">
-                      Points
+                      Full Scores
                     </Table.Th>
                     <Table.Th className="w-40 text-end pr-20 !pl-0">
                       Mean
@@ -441,7 +441,7 @@ export default function Assignment() {
                 </Table.Thead>
 
                 {section?.assignments?.length !== 0 ? (
-                  <Table.Tbody className="text-default text-[13px] ">
+                  <Table.Tbody className="text-default font-semibold text-[14px] ">
                     {section?.assignments?.map((assignment, index) => {
                       const totalStudent = section.students?.filter(
                         ({ scores }) =>

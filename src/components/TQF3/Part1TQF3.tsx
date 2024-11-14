@@ -128,7 +128,7 @@ export default function Part1TQF3({ setForm }: Props) {
       if (tqf3.part1.teachingLocation.out !== undefined) {
         checked.push("out");
       }
-      if(tqf3.part1.curriculum.includes('สำหรับหลักสูตร')){
+      if(tqf3.part1.curriculum?.includes('สำหรับหลักสูตร')){
         const splitCurriculum = tqf3.part1.curriculum.split(' ')
         curriculumForm.setFieldValue('name', splitCurriculum[1])
         curriculumForm.setFieldValue('department', splitCurriculum[3])
@@ -193,7 +193,7 @@ export default function Part1TQF3({ setForm }: Props) {
               <div>
                 <TextInput
                   className="mt-2"
-                  label="ชื่อหลักสูตร"
+                  label="สำหรับหลักสูตร (For what curriculum?)"
                   withAsterisk
                   size="xs"
                   classNames={{ label: "font-medium text-[13px]", input: 'w-[300px]' }}
@@ -203,7 +203,7 @@ export default function Part1TQF3({ setForm }: Props) {
                 />
                 <TextInput
                   className="mt-3"
-                  label="ชื่อสาขาวิชา"
+                  label="สาขา (For what department)"
                   withAsterisk
                   size="xs"
                   classNames={{ label: "font-medium text-[13px]" , input: 'w-[300px]' }}

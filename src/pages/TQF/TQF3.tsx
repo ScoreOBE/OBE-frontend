@@ -495,7 +495,7 @@ export default function TQF3() {
           <Alert
             variant="light"
             color="red"
-            title="After reusing TQF 3, please recheck and save the data for all 6 parts of the course you selected"
+            title="After reusing TQF 3, please recheck and save the data for all 7 parts of the course you selected"
             icon={
               <Icon IconComponent={IconExclamationCircle} className="size-6" />
             }
@@ -621,7 +621,7 @@ export default function TQF3() {
         >
           <div
             className={`flex flex-col w-full h-fit ${
-              tqf3Part === "part4" && tqf3Original![tqf3Part]
+              tqf3Part === "part4" && (tqf3Original.part4 || (tqf3Original.part3 && localStorage.getItem(`reuse${tqf3.id}-part4`)))
                 ? "pb-1"
                 : "border-b-[2px] pb-4 mb-1"
             }`}
@@ -659,7 +659,7 @@ export default function TQF3() {
                             Reuse TQF 3
                           </span>
                           <br />
-                          We'll automatically import all 6 parts of the TQF 3
+                          We'll automatically import all 7 parts of the TQF 3
                           data from your selected course.
                         </p>
                       </div>
