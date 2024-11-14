@@ -22,6 +22,7 @@ export const tqf3Slice = createSlice({
       return { ...state, coursePLO: action.payload };
     },
     setSelectTqf3Topic: (state, action) => {
+      localStorage.setItem("tqf3-topic", "true");
       return { ...state, topic: action.payload };
     },
     updatePartTQF3: (state, action) => {

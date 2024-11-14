@@ -144,10 +144,22 @@ export default function TQF3() {
   };
 
   useEffect(() => {
-    if (academicYear && (tqf3.topic !== tqf3Original?.topic || !tqf3Original)) {
+    if (
+      academicYear &&
+      courseNo &&
+      tqf3.coursePLO &&
+      localStorage.getItem("tqf3-topic") &&
+      (tqf3.topic !== tqf3Original?.topic || !tqf3Original)
+    ) {
       fetchOneCourse(true);
+      localStorage.removeItem("tqf3-topic");
     }
-  }, [academicYear, tqf3.topic, tqf3.coursePLO, courseNo]);
+  }, [
+    academicYear,
+    localStorage.getItem("tqf3-topic"),
+    tqf3.topic,
+    tqf3.coursePLO,
+  ]);
 
   useEffect(() => {
     if (localStorage.getItem(`reuse${tqf3.id}-part1`)?.length) {
