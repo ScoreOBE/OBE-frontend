@@ -11,7 +11,6 @@ export const AOSInit = () => {
     const handleScroll = () => {
       if (scrollRef.current <= 1000) {
         scrollRef.current += 10;
-        console.log("ScrollRef:", scrollRef.current); // Log scrollRef value on scroll
       } else {
         AOS.refresh();
       }

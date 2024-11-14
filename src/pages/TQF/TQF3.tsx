@@ -310,6 +310,13 @@ export default function TQF3() {
         payload.id = tqf3.id;
         switch (tqf3Part) {
           case Object.keys(partLabel)[0]:
+            if (payload.curriculum.includes("สำหรับหลักสูตร")) {
+              payload.curriculum = `สำหรับหลักสูตร ${localStorage.getItem(
+                "curriculumName"
+              )} สาขา ${localStorage.getItem("curriculumDepartment")}`;
+              localStorage.removeItem("curriculumName");
+              localStorage.removeItem("curriculumDepartment");
+            }
             payload.instructors = payload.instructors.filter(
               (ins: any) => ins.length
             );

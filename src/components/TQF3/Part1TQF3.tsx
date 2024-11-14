@@ -35,7 +35,7 @@ export default function Part1TQF3({ setForm }: Props) {
   const [checked, setChecked] = useState<string[]>([]);
   const curriculum = [
     {
-      label: "สำหรับหลักสูตร (For an Individual Curriculum)",
+      label: "กรอกด้วยตนเอง (Manual)",
       value: "สำหรับหลักสูตร",
     },
     {
@@ -57,7 +57,15 @@ export default function Part1TQF3({ setForm }: Props) {
       consultHoursWk: 1,
     } as IModelTQF3Part1,
     validate: {
-      curriculum: (value) => !value?.length && "Curriculum is required",
+      curriculum: (value) => {
+        if (value.includes("สำหรับหลักสูตร")) {
+          const checked = curriculumForm.validate();
+          if (checked.hasErrors) {
+            return "";
+          }
+        }
+        return !value?.length && "Curriculum is required";
+      },
       studentYear: (value) =>
         !value?.length && "Select Student Year at least one",
       mainInstructor: (value) =>
@@ -88,6 +96,27 @@ export default function Part1TQF3({ setForm }: Props) {
       }
     },
   });
+  const curriculumForm = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      name: "",
+      department: "",
+    },
+    validate: {
+      name: (value) => !value?.length && "Curriculum name is required",
+      department: (value) => !value?.length && "Department name is required",
+    },
+    validateInputOnBlur: true,
+    onValuesChange(values, previous) {
+      if (
+        !isEqual(values, previous) &&
+        form.getValues().curriculum?.includes("สำหรับหลักสูตร")
+      ) {
+        localStorage.setItem("curriculumName", values.name);
+        localStorage.setItem("curriculumDepartment", values.department);
+      }
+    },
+  });
 
   useEffect(() => {
     if (tqf3.part1) {
@@ -98,6 +127,11 @@ export default function Part1TQF3({ setForm }: Props) {
       }
       if (tqf3.part1.teachingLocation.out !== undefined) {
         checked.push("out");
+      }
+      if(tqf3.part1.curriculum.includes('สำหรับหลักสูตร')){
+        const splitCurriculum = tqf3.part1.curriculum.split(' ')
+        curriculumForm.setFieldValue('name', splitCurriculum[1])
+        curriculumForm.setFieldValue('department', splitCurriculum[3])
       }
       localStorage.removeItem("setReuse");
     } else {
@@ -136,7 +170,7 @@ export default function Part1TQF3({ setForm }: Props) {
           key={form.key("curriculum")}
           {...form.getInputProps("curriculum")}
           error={<></>}
-          value={form.getValues().curriculum}
+          value={form.getValues().curriculum?.split(" ")[0]}
           onChange={(event) => form.setFieldValue("curriculum", event)}
         >
           <div className="flex text-default gap-3 flex-col">
@@ -154,6 +188,31 @@ export default function Part1TQF3({ setForm }: Props) {
                 disabled={disabled}
               />
             ))}
+
+            {form.getValues().curriculum?.includes("สำหรับหลักสูตร") && (
+              <div>
+                <TextInput
+                  className="mt-2"
+                  label="ชื่อหลักสูตร"
+                  withAsterisk
+                  size="xs"
+                  classNames={{ label: "font-medium text-[13px]", input: 'w-[300px]' }}
+                  placeholder="Curriculum name e.g วิศวกรรมศาตร์ (Engineer)"
+                  {...curriculumForm.getInputProps("name")}
+                  key={curriculumForm.key("name")}
+                />
+                <TextInput
+                  className="mt-3"
+                  label="ชื่อสาขาวิชา"
+                  withAsterisk
+                  size="xs"
+                  classNames={{ label: "font-medium text-[13px]" , input: 'w-[300px]' }}
+                  placeholder="Department name e.g คอมพิวเตอร์ (Computer)"
+                  {...curriculumForm.getInputProps("department")}
+                  key={curriculumForm.key("department")}
+                />
+              </div>
+            )}
           </div>
         </Radio.Group>
       </div>
