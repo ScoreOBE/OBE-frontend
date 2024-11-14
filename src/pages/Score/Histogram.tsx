@@ -21,7 +21,6 @@ export default function Histogram() {
   );
   const [params] = useSearchParams();
   const dispatch = useAppDispatch();
-
   const [items, setItems] = useState<any[]>([
     {
       title: "Your Course",
@@ -50,38 +49,39 @@ export default function Histogram() {
   }, [section]);
 
   useEffect(() => {
-    if (sectionRefs.current && !sectionRefs.current.every((ref) => ref.current))
-      return;
-    let observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = sectionRefs.current!.findIndex(
-              (ref) => ref.current === entry.target
-            );
-            setActiveSection(index);
-          }
-        });
-      },
-      {
-        root: null,
-        threshold: 0.6,
-      }
-    );
+    if (sectionRefs.current) {
+      if (!sectionRefs.current.every((ref) => ref.current)) return;
+      let observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const index = sectionRefs.current!.findIndex(
+                (ref) => ref.current === entry.target
+              );
+              setActiveSection(index);
+            }
+          });
+        },
+        {
+          root: null,
+          threshold: 0.6,
+        }
+      );
 
-    sectionRefs.current?.forEach((ref, i) => {
-      if (ref.current) {
-        observer.observe(ref.current);
-      }
-    });
-
-    return () => {
-      sectionRefs.current?.forEach((ref) => {
+      sectionRefs.current.forEach((ref, i) => {
         if (ref.current) {
-          observer.unobserve(ref.current);
+          observer.observe(ref.current);
         }
       });
-    };
+
+      return () => {
+        sectionRefs.current!.forEach((ref) => {
+          if (ref.current) {
+            observer.unobserve(ref.current);
+          }
+        });
+      };
+    }
   }, [section, sectionRefs]);
 
   return (
@@ -96,27 +96,28 @@ export default function Histogram() {
         <div className="flex overflow-y-auto overflow-x-hidden  max-w-full h-full">
           <div className="flex gap-6 w-full h-full">
             <div className="gap-4 flex flex-col my-2 min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
-              {section?.assignments?.map((item, i) => {
-                return (
-                  <div
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                    }}
-                    className={`last:mb-4 flex px-2 flex-col rounded-md gap-10 py-2 ${
-                      activeSection === i ? "active" : ""
-                    }`}
-                    id={`${item.name}`}
-                    key={i}
-                    ref={sectionRefs.current?.at(i)} // Dynamic refs
-                  >
-                    <HistogramChart
-                      data={item}
-                      students={section.students!}
-                      isQuestions={false}
-                    />
-                  </div>
-                );
-              })}
+              {section &&
+                section?.assignments?.map((item, i) => {
+                  return (
+                    <div
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      }}
+                      className={`last:mb-4 flex px-2 flex-col rounded-md gap-10 py-2 ${
+                        activeSection === i ? "active" : ""
+                      }`}
+                      id={`${item.name}`}
+                      key={i}
+                      ref={sectionRefs.current?.at(i)} // Dynamic refs
+                    >
+                      <HistogramChart
+                        data={item}
+                        students={section.students!}
+                        isQuestions={false}
+                      />
+                    </div>
+                  );
+                })}
             </div>
 
             <div className="max-w-[12%] mt-3 flex flex-col  ">

@@ -1,3 +1,4 @@
+import { calStat } from "@/helpers/functions/score";
 import { IModelAssignment, IModelScore } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
 import { BarChart } from "@mantine/charts";
@@ -9,11 +10,42 @@ type Props = {
 };
 
 export default function HistogramChart({ data, students, isQuestions }: Props) {
-  // Mock data for demonstration
-  const chartData = Array.from({ length: 10 }, (_, index) => ({
-    month: `${index + 1} - ${index + 2}`,
-    Students: 5 * (index + 1),
-  }));
+  const fullScore =
+    data.questions?.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
+  const scores = students
+    .map(({ scores }) =>
+      scores
+        .find(({ assignmentName }) => assignmentName == data.name)
+        ?.questions?.reduce((sum, { score }) => sum + score, 0)
+    )
+    .filter((item) => item != undefined)
+    .sort((a, b) => a - b) || [0];
+  const totalStudent = students.length;
+  const { mean, sd, median, maxScore, minScore, q1, q3 } = calStat(
+    scores,
+    totalStudent
+  );
+  const k = Math.log2(totalStudent) + 1;
+  const binWidth = (maxScore - minScore) / k;
+  const scoresData = Array.from({ length: k }, (_, index) => {
+    const start = minScore + index * binWidth;
+    const end = start + binWidth;
+    return {
+      range: `${start.toFixed(2)} - ${end.toFixed(2)}`,
+      start,
+      end,
+      Students: 0,
+    };
+  });
+  scores.forEach((score) => {
+    const binIndex = scoresData.findIndex(
+      (item) => item.start <= score && item.end >= score
+    );
+    if (binIndex !== -1) {
+      scoresData[binIndex].Students += 1;
+    }
+  });
+
   return (
     <>
       {!isQuestions && (
@@ -23,42 +55,44 @@ export default function HistogramChart({ data, students, isQuestions }: Props) {
               <div className="flex flex-col">
                 <p className="text-[#3f4474] mb-1 text-[16px]">{data.name}</p>
                 <p>
-                  {data.weight?.toFixed(2)}{" "}
+                  {fullScore?.toFixed(2)}{" "}
                   <span className="text-[16px]">pts.</span>
                 </p>
               </div>
-              <p className="text-[#3f4474] mb-1 text-[16px]">{120} Students</p>
+              <p className="text-[#3f4474] mb-1 text-[16px]">
+                {totalStudent} Students
+              </p>
             </div>
           </div>
 
           <div className="flex px-8 flex-row justify-between w-full">
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Mean</p>
-              <p className="font-bold text-[28px] text-default">2.0</p>
+              <p className="font-bold text-[28px] text-default">{mean}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-              <p className="font-bold text-[28px] text-default">2.15</p>
+              <p className="font-bold text-[28px] text-default">{sd}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Median</p>
-              <p className="font-bold text-[28px] text-default">1.5</p>
+              <p className="font-bold text-[28px] text-default">{median}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Max</p>
-              <p className="font-bold text-[28px] text-default">4.5</p>
+              <p className="font-bold text-[28px] text-default">{maxScore}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Min</p>
-              <p className="font-bold text-[28px] text-default">0</p>
+              <p className="font-bold text-[28px] text-default">{minScore}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
-              <p className="font-bold text-[28px] text-default">3.75</p>
+              <p className="font-bold text-[28px] text-default">{q3}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
-              <p className="font-bold text-[28px] text-default">1.75</p>
+              <p className="font-bold text-[28px] text-default">{q1}</p>
             </div>
           </div>
         </div>
@@ -74,8 +108,8 @@ export default function HistogramChart({ data, students, isQuestions }: Props) {
           tickLine="x"
           xAxisLabel="Score"
           yAxisLabel="Number of Students"
-          data={chartData}
-          dataKey="month"
+          data={scoresData}
+          dataKey="range"
           series={[
             {
               name: "Students",
