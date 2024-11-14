@@ -354,93 +354,98 @@ export default function Assignment() {
             ?.map(({ id }) => id)
             .includes(user.id) ? (
           <>
-            <div className="flex flex-row  py-1  items-center justify-between">
-              <p className="text-secondary text-[18px] font-semibold">
-                {section?.assignments?.length} Assignment
-                {section?.assignments?.length! > 1 && "s"}
-              </p>
-              <Menu
-                trigger="click"
-                openDelay={100}
-                clickOutsideEvents={["mousedown"]}
-                classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
-              >
-                <Menu.Target>
-                  <Button
-                    color="#13a9a1"
-                    leftSection={
-                      <Icon IconComponent={IconEyePublish} className="size-5" />
-                    }
-                    className="px-3"
-                  >
-                    Publish score
-                  </Button>
-                </Menu.Target>
-                <Menu.Dropdown
-                  className="!z-50 -translate-y-[3px] translate-x-[5px] bg-white"
-                  style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
+            {section?.assignments?.length !== 0 && (
+              <div className="flex flex-row  py-1  items-center justify-between">
+                <p className="text-secondary text-[18px] font-semibold">
+                  {section?.assignments?.length} Assignment
+                  {section?.assignments?.length! > 1 && "s"}
+                </p>
+                <Menu
+                  trigger="click"
+                  openDelay={100}
+                  clickOutsideEvents={["mousedown"]}
+                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
                 >
-                  <Menu.Item
-                    className="text-[#3E3E3E] text-[14px] h-8 w-full "
-                    onClick={() => {
-                      setIsPublishAll(false);
-                      setOpenPublishScoreModal(true);
-                    }}
+                  <Menu.Target>
+                    <Button
+                      color="#13a9a1"
+                      leftSection={
+                        <Icon
+                          IconComponent={IconEyePublish}
+                          className="size-5"
+                        />
+                      }
+                      className="px-3"
+                    >
+                      Publish score
+                    </Button>
+                  </Menu.Target>
+                  <Menu.Dropdown
+                    className="!z-50 -translate-y-[3px] translate-x-[5px] bg-white"
+                    style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
                   >
-                    <div className="flex items-center gap-2">
-                      <Icon
-                        IconComponent={IconPublishEach}
-                        className="size-4 text-[#000000]"
-                      />
-                      <span>Each Section</span>
-                    </div>
-                  </Menu.Item>
-                  <Menu.Item
-                    onClick={() => {
-                      setIsPublishAll(true);
-                      setOpenPublishScoreModal(true);
-                    }}
-                    className="text-[#3E3E3E] text-[14px] h-8 w-full "
-                  >
-                    <div className="flex items-center gap-2">
-                      <Icon
-                        IconComponent={IconPublishAll}
-                        className="size-4 text-[#000000]"
-                      />
-                      <span>All Sections</span>
-                    </div>
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </div>
+                    <Menu.Item
+                      className="text-[#3E3E3E] text-[14px] h-8 w-full "
+                      onClick={() => {
+                        setIsPublishAll(false);
+                        setOpenPublishScoreModal(true);
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Icon
+                          IconComponent={IconPublishEach}
+                          className="size-4 text-[#000000]"
+                        />
+                        <span>Each Section</span>
+                      </div>
+                    </Menu.Item>
+                    <Menu.Item
+                      onClick={() => {
+                        setIsPublishAll(true);
+                        setOpenPublishScoreModal(true);
+                      }}
+                      className="text-[#3E3E3E] text-[14px] h-8 w-full "
+                    >
+                      <div className="flex items-center gap-2">
+                        <Icon
+                          IconComponent={IconPublishAll}
+                          className="size-4 text-[#000000]"
+                        />
+                        <span>All Sections</span>
+                      </div>
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              </div>
+            )}
             {/* Table */}
-            <div
-              className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full  border flex flex-col rounded-lg border-secondary"
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-                height: "fit-content",
-              }}
-            >
-              <Table stickyHeader>
-                <Table.Thead>
-                  <Table.Tr className="bg-[#e5e7f6]">
-                    <Table.Th className="w-60">Name</Table.Th>
-                    <Table.Th className="w-40 text-end pr-14 !pl-0">
-                      Full Scores
-                    </Table.Th>
-                    <Table.Th className="w-40 text-end pr-20 !pl-0">
-                      Mean
-                    </Table.Th>
-                    <Table.Th className="!pl-12">Created</Table.Th>
-                    <Table.Th className="w-40">Student(s)</Table.Th>
-                    <Table.Th className="w-40 !px-4 text-center">
-                      Published
-                    </Table.Th>
-                    <Table.Th className="w-50"></Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
+            {section?.assignments?.length !== 0 ? (
+              <div
+                className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full  border flex flex-col rounded-lg border-secondary"
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
+                  height: "fit-content",
+                }}
+              >
+                <Table stickyHeader>
+                  <Table.Thead>
+                    <Table.Tr className="bg-[#e5e7f6]">
+                      <Table.Th className="w-60">Name</Table.Th>
+                      <Table.Th className="w-40 text-end pr-14 !pl-0">
+                        Full Scores
+                      </Table.Th>
+                      <Table.Th className="w-40 text-end pr-20 !pl-0">
+                        Mean
+                      </Table.Th>
+                      <Table.Th className="!pl-12">Created</Table.Th>
+                      <Table.Th className="w-40">Student(s)</Table.Th>
+                      <Table.Th className="w-40 !px-4 text-center">
+                        Published
+                      </Table.Th>
+                      <Table.Th className="w-50"></Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
 
-                {section?.assignments?.length !== 0 ? (
                   <Table.Tbody className="text-default font-semibold text-[14px] ">
                     {section?.assignments?.map((assignment, index) => {
                       const totalStudent = section.students?.filter(
@@ -549,37 +554,27 @@ export default function Assignment() {
                       );
                     })}
                   </Table.Tbody>
-                ) : (
-                  <Table.Tbody>
-                    <Table.Tr>
-                      <Table.Td
-                        colSpan={7}
-                        className=" text-center items-center !h-full  !w-full"
-                      >
-                        <div className="flex items-center !h-full justify-between px-20">
-                          <div className="flex flex-col gap-3 text-start">
-                            <p className="!h-full text-[20px] font-semibold">
-                              No Assignment
-                            </p>{" "}
-                            <p className=" text-[#333333] -mt-2 text-b2 break-words font-medium leading-relaxed">
-                              It looks like no assignment have been added <br/> in this
-                              course yet.
-                            </p>{" "}
-                          </div>
-                          <div className=" items-center justify-center flex">
-                            <img
-                              src={notFoundImage}
-                              className="h-full items-center  w-[24vw] justify-center flex flex-col"
-                              alt="notFound"
-                            ></img>
-                          </div>
-                        </div>
-                      </Table.Td>
-                    </Table.Tr>
-                  </Table.Tbody>
-                )}
-              </Table>
+                </Table>
+              </div>
+            ) : (
+              <div className="flex items-center  !h-full !w-full justify-between px-16">
+              <div className="flex flex-col gap-3 text-start">
+                <p className="!h-full text-[20px] text-secondary font-semibold">
+                  No Assignment
+                </p>{" "}
+                <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
+                It seems like no assignments have been added to this course yet.
+                </p>{" "}
+              </div>
+              <div className=" items-center justify-center flex">
+                <img
+                  src={notFoundImage}
+                  className="h-full items-center  w-[24vw] justify-center flex flex-col"
+                  alt="notFound"
+                ></img>
+              </div>
             </div>
+            )}
           </>
         ) : (
           <div className="flex px-16  flex-row items-center justify-between h-full">

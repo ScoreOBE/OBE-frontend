@@ -7,6 +7,7 @@ import { getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
 import Loading from "@/components/Loading/Loading";
+import notFoundImage from "@/assets/image/notFound.jpg";
 import React from "react";
 
 export default function Histogram() {
@@ -93,56 +94,76 @@ export default function Histogram() {
         (section?.coInstructors as any[])
           ?.map(({ id }) => id)
           .includes(user.id) ? (
-        <div className="flex overflow-y-auto overflow-x-hidden  max-w-full h-full">
-          <div className="flex gap-6 w-full h-full">
-            <div className="gap-4 flex flex-col my-2 min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
-              {section &&
-                section?.assignments?.map((item, i) => {
-                  return (
-                    <div
-                      style={{
-                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                      }}
-                      className={`last:mb-4 flex px-2 flex-col rounded-md gap-10 py-2 ${
-                        activeSection === i ? "active" : ""
-                      }`}
-                      id={`${item.name}`}
-                      key={i}
-                      ref={sectionRefs.current?.at(i)} // Dynamic refs
-                    >
-                      <HistogramChart
-                        data={item}
-                        students={section.students!}
-                        isQuestions={false}
-                      />
-                    </div>
-                  );
-                })}
-            </div>
+        <div className="flex overflow-y-auto overflow-x-hidden max-w-full h-full">
+          {section?.assignments?.length !== 0 ? (
+            <div className="flex gap-6 w-full h-full">
+              <div className="gap-4 flex flex-col my-2 min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
+                {section &&
+                  section?.assignments?.map((item, i) => {
+                    return (
+                      <div
+                        style={{
+                          boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                        }}
+                        className={`last:mb-4 flex px-2 flex-col rounded-md gap-10 py-2 ${
+                          activeSection === i ? "active" : ""
+                        }`}
+                        id={`${item.name}`}
+                        key={i}
+                        ref={sectionRefs.current?.at(i)} // Dynamic refs
+                      >
+                        <HistogramChart
+                          data={item}
+                          students={section.students!}
+                          isQuestions={false}
+                        />
+                      </div>
+                    );
+                  })}
+              </div>
 
-            <div className="max-w-[12%] mt-3 flex flex-col  ">
-              {section?.assignments?.map((item, i) => (
-                <div
-                  key={i}
-                  className={`max-w-fit  ${
-                    activeSection === i ? "active" : ""
-                  }`}
-                >
-                  <a href={`#${item.name}`}>
-                    <p
-                      className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
-                        activeSection === i
-                          ? "text-secondary"
-                          : "text-[#D2C9C9] "
-                      }`}
-                    >
-                      {item.name}
-                    </p>
-                  </a>
-                </div>
-              ))}
+              <div className="max-w-[12%] mt-3 flex flex-col  ">
+                {section?.assignments?.map((item, i) => (
+                  <div
+                    key={i}
+                    className={`max-w-fit  ${
+                      activeSection === i ? "active" : ""
+                    }`}
+                  >
+                    <a href={`#${item.name}`}>
+                      <p
+                        className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
+                          activeSection === i
+                            ? "text-secondary"
+                            : "text-[#D2C9C9] "
+                        }`}
+                      >
+                        {item.name}
+                      </p>
+                    </a>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center !h-full !w-full -mt-[10px] justify-between px-16">
+              <div className="flex flex-col gap-3 text-start">
+                <p className="!h-full text-[20px] text-secondary font-semibold">
+                  No Assignment
+                </p>{" "}
+                <p className=" text-[#333333] -mt-1 text-b2 break-words font-medium leading-relaxed">
+                  The histogram will show when the assignment is uploaded.
+                </p>{" "}
+              </div>
+              <div className=" items-center justify-center flex">
+                <img
+                  src={notFoundImage}
+                  className="h-full items-center  w-[24vw] justify-center flex flex-col"
+                  alt="notFound"
+                ></img>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div className="flex px-16 flex-row items-center justify-between h-full">

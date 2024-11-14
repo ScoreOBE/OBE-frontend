@@ -154,16 +154,16 @@ export default function ModalStudentList({
               </Table.Thead>
               <Table.Tbody>{rows}</Table.Tbody>
             </Table>
-          ) : (<div className="flex items-center justify-between px-10 !w-full">
-            <p className="text-start font-semibold text-secondary p-6 py-10">
-              No Student List found for {data.courseNo}
+          ) : (<div className="flex items-center justify-between px-8 !w-full">
+            <p className="text-start font-semibold text-[18px] text-secondary p-6 py-10">
+              No Student List found 
               <br />
-              <p className="mt-2 text-[#777777] font-medium text-b3" font->
+              <p className="mt-1  text-[#777777] font-medium text-b2" font->
                 {" "}
                 Student list will show when you upload score first.
               </p>
             </p>
-            <div className="h-full  w-[15vw] justify-center flex flex-col">
+            <div className="h-full  w-[18vw] justify-center flex flex-col">
                     <img src={notFoundImage} alt="notFound"></img>
                   </div>
             </div>
