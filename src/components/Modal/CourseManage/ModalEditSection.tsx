@@ -23,7 +23,7 @@ import {
   getOneCourseManagement,
   updateSectionManagement,
 } from "@/services/courseManagement/courseManagement.service";
-import { editCourseManagement } from "@/store/courseManagement";
+import { editSectionManagement } from "@/store/courseManagement";
 import { editCourse, editSection } from "@/store/course";
 import { getOneCourse } from "@/services/course/course.service";
 
@@ -108,8 +108,7 @@ export default function ModalEditSection({
       delete payload.isActive;
       res = await updateSectionManagement(id!, secId, payload);
       if (res) {
-        const res2 = await getOneCourseManagement(value?.courseNo);
-        dispatch(editCourseManagement(res2));
+        dispatch(editSectionManagement({ id: id, secId: secId, ...payload }));
         if (openThisTerm) {
           const resCourse = await getOneCourse({
             year: academicYear.year,
