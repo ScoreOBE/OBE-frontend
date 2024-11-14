@@ -42,19 +42,19 @@ import { setShowSidebar } from "@/store/showSidebar";
 import { LearningMethod } from "@/components/Modal/TQF3/ModalManageCLO";
 import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
-import { setDataTQF3, updatePartTQF3 } from "@/store/tqf3";
+import { setDataTQF3, setPloTQF3, updatePartTQF3 } from "@/store/tqf3";
 import { IModelSection } from "@/models/ModelCourse";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { IModelCourse } from "@/models/ModelCourse";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";
 import { setLoadingOverlay } from "@/store/loading";
+import { getOnePLO } from "@/services/plo/plo.service";
 
 export default function TQF3() {
   const { courseNo } = useParams();
   const [params, setParams] = useSearchParams();
   const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
   const loading = useAppSelector((state) => state.loading);
-  const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const courseAdmin = useAppSelector((state) =>
     state.allCourse.courses.find((course) => course.courseNo == courseNo)
@@ -125,15 +125,41 @@ export default function TQF3() {
 
   useEffect(() => {
     if (academicYear && params.get("year") && params.get("semester")) {
-      if (checkActiveTerm()) fetchTqf3Reuse();
+      fetchPLO();
+      if (checkActiveTerm()) {
+        fetchTqf3Reuse();
+      }
     }
   }, [academicYear]);
 
-  useEffect(() => {
-    if (academicYear && (tqf3.topic !== tqf3Original?.topic || !tqf3Original)) {
-      fetchOneCourse(true);
+  const fetchPLO = async () => {
+    const resPloCol = await getOnePLO({
+      year: params.get("year"),
+      semester: params.get("semester"),
+      courseCode: courseNo?.slice(0, -3),
+    });
+    if (resPloCol) {
+      dispatch(setPloTQF3(resPloCol));
     }
-  }, [academicYear, tqf3.topic, tqf3.coursePLO, courseNo]);
+  };
+
+  useEffect(() => {
+    if (
+      academicYear &&
+      courseNo &&
+      tqf3.coursePLO &&
+      localStorage.getItem("tqf3-topic") &&
+      (tqf3.topic !== tqf3Original?.topic || !tqf3Original)
+    ) {
+      fetchOneCourse(true);
+      localStorage.removeItem("tqf3-topic");
+    }
+  }, [
+    academicYear,
+    localStorage.getItem("tqf3-topic"),
+    tqf3.topic,
+    tqf3.coursePLO,
+  ]);
 
   useEffect(() => {
     if (localStorage.getItem(`reuse${tqf3.id}-part1`)?.length) {
@@ -218,7 +244,7 @@ export default function TQF3() {
         )?.TQF3;
         const ploRequire = resPloRequired?.sections
           .find((item: any) => item.topic == tqf3.topic)
-          .ploRequire.find((plo: any) => plo.plo == tqf3.coursePLO?.id)?.list;
+          ?.ploRequire.find((plo: any) => plo.plo == tqf3.coursePLO?.id)?.list;
         setTqf3Original({
           topic: tqf3.topic,
           ploRequired: ploRequire || [],

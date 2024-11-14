@@ -36,7 +36,7 @@ export default function DrawerPLOdes({ opened, onClose, data }: Props) {
                       </p>
 
                       <p className="text-[#909090] text-[13px] font-medium">
-                        PLO Collection
+                        This course uses {data.name}
                       </p>
                     </div>
                   </Drawer.Title>
