@@ -42,7 +42,7 @@ export default function Profile() {
     useState(false);
   const [openModalPLOManagement, setOpenModalPLOManagement] = useState(false);
   const [openModalManageTQF, setOpenModalManageTQF] = useState(false);
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const getRoleColor = (role: ROLE) => {
     switch (role) {
@@ -106,7 +106,10 @@ export default function Profile() {
       />
       <ModalCourseManagement
         opened={openModalCourseManagement}
-        onClose={() => {setOpenModalCourseManagement(false); dispatch(resetSeachCourseManagement())}}
+        onClose={() => {
+          setOpenModalCourseManagement(false);
+          dispatch(resetSeachCourseManagement());
+        }}
       />
       <ModalPLOManagement
         opened={openModalPLOManagement}
@@ -165,9 +168,11 @@ export default function Profile() {
               <Menu.Item
                 onClick={() =>
                   navigate({
-                    pathname: path.includes(ROUTE_PATH.ADMIN_DASHBOARD)
-                      ? ROUTE_PATH.INS_DASHBOARD
-                      : `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`,
+                    pathname:
+                      path.includes(ROUTE_PATH.ADMIN_DASHBOARD) ||
+                      localStorage.getItem("dashboard") == ROLE.ADMIN
+                        ? ROUTE_PATH.INS_DASHBOARD
+                        : `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`,
                     search: "?" + params.toString(),
                   })
                 }
@@ -178,7 +183,8 @@ export default function Profile() {
                     className=" stroke-[1.5px] size-4"
                   />
                   <span>
-                    {path.includes(ROUTE_PATH.ADMIN_DASHBOARD)
+                    {path.includes(ROUTE_PATH.ADMIN_DASHBOARD) ||
+                    localStorage.getItem("dashboard") == ROLE.ADMIN
                       ? "Switch to Instructor view"
                       : "Switch to Admin view"}
                   </span>

@@ -12,6 +12,9 @@ export const tqf3Slice = createSlice({
       coursePLO?: Partial<IModelPLO>;
     },
   reducers: {
+    resetDataTQF3: () => {
+      return {} as any;
+    },
     setDataTQF3: (state, action) => {
       return { coursePLO: { ...state.coursePLO }, ...action.payload };
     },
@@ -19,6 +22,7 @@ export const tqf3Slice = createSlice({
       return { ...state, coursePLO: action.payload };
     },
     setSelectTqf3Topic: (state, action) => {
+      localStorage.setItem("tqf3-topic", "true");
       return { ...state, topic: action.payload };
     },
     updatePartTQF3: (state, action) => {
@@ -27,7 +31,12 @@ export const tqf3Slice = createSlice({
   },
 });
 
-export const { setDataTQF3, setPloTQF3, setSelectTqf3Topic, updatePartTQF3 } =
-  tqf3Slice.actions;
+export const {
+  resetDataTQF3,
+  setDataTQF3,
+  setPloTQF3,
+  setSelectTqf3Topic,
+  updatePartTQF3,
+} = tqf3Slice.actions;
 
 export default tqf3Slice.reducer;

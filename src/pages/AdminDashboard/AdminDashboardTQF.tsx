@@ -33,7 +33,6 @@ import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setDataTQF3, setSelectTqf3Topic } from "@/store/tqf3";
-import { randomId, useListState } from "@mantine/hooks";
 
 export default function AdminDashboardTQF() {
   const navigate = useNavigate();
@@ -120,10 +119,10 @@ export default function AdminDashboardTQF() {
   };
 
   const goToPage = (pathname: string, courseNo: string, data: any) => {
-    dispatch(setDataTQF3(data.TQF3));
     if (data.topic) {
       dispatch(setSelectTqf3Topic(data.topic));
     }
+    dispatch(setDataTQF3(data.TQF3));
     navigate({
       pathname: `${ROUTE_PATH.COURSE}/${courseNo}/${pathname}`,
       search: "?" + params.toString(),

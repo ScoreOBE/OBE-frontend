@@ -55,7 +55,7 @@ export default function ModalAddPLOCollection({
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
   const [active, setActive] = useState(0);
-  const [department, setDepartment] = useState<IModelDepartment[]>([]);
+  const [department, setDepartment] = useState<Partial<IModelDepartment>[]>([]);
   const [ploNo, setPloNo] = useState(0);
   const [state, handlers] = useListState<Partial<IModelPLONo>>([]);
   const [reorder, setReorder] = useState(false);
@@ -165,12 +165,26 @@ export default function ModalAddPLOCollection({
     if (res) {
       sortData(res.department, "codeEN", "string");
       if (user.role === ROLE.SUPREME_ADMIN) {
-        setDepartment(res.department);
+        setDepartment([
+          {
+            departmentEN: res.facultyEN,
+            codeEN: res.codeEN,
+            courseCode: res.courseCode,
+          },
+          ...res.department,
+        ]);
       } else {
         const dep = res.department.filter((e) =>
           user.departmentCode.includes(e.codeEN)
         );
-        setDepartment(dep);
+        setDepartment([
+          {
+            departmentEN: res.facultyEN,
+            codeEN: res.codeEN,
+            courseCode: res.courseCode,
+          },
+          ...dep,
+        ]);
       }
     }
   };
@@ -251,7 +265,7 @@ export default function ModalAddPLOCollection({
     if (value) {
       departmentCode = value.sort();
     } else if (checked) {
-      departmentCode = department.map((dep) => dep.codeEN);
+      departmentCode = department.map((dep) => dep.codeEN!);
     } else {
       departmentCode = [];
     }
@@ -719,7 +733,7 @@ export default function ModalAddPLOCollection({
                             label: "ml-2 text-[13px] font-medium",
                             input: "cursor-pointer",
                           }}
-                          label={`${dep.departmentEN} (${dep.codeEN})`}
+                          label={`${dep.departmentEN} (${dep.codeEN} - ${dep.courseCode})`}
                         />
                       ))}
                     </Group>

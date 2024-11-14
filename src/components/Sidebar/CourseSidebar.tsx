@@ -21,12 +21,11 @@ import { getUserName, sortData } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
 import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
 import { getOneCourse } from "@/services/course/course.service";
-import { setDataTQF3, setPloTQF3 } from "@/store/tqf3";
+import { resetDataTQF3, setSelectTqf3Topic } from "@/store/tqf3";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelSection } from "@/models/ModelCourse";
 import { isEmpty, isEqual } from "lodash";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";
-import { getOnePLO } from "@/services/plo/plo.service";
 
 type Props = {
   onClickLeaveCourse: () => void;
@@ -64,7 +63,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       });
       setUniqTopic(temp);
       if (!tqf3.topic || !temp.includes(tqf3.topic)) {
-        dispatch(setDataTQF3({ topic: temp[0] }));
+        dispatch(setSelectTqf3Topic(temp[0]));
       }
       const insList: any[] = [];
       const coInsList: any[] = [];
@@ -101,21 +100,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       pathname: back ? pathname : `${prefix}/${pathname}`,
       search: "?" + params.toString(),
     });
-  };
-
-  useEffect(() => {
-    fetchPLO();
-  }, [courseNo]);
-
-  const fetchPLO = async () => {
-    const resPloCol = await getOnePLO({
-      year: params.get("year"),
-      semester: params.get("semester"),
-      courseCode: courseNo?.slice(0, -3),
-    });
-    if (resPloCol) {
-      dispatch(setPloTQF3(resPloCol));
-    }
   };
 
   const fetchTqf3 = async () => {
@@ -175,7 +159,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         opened={openAlertPopup}
         onClose={() => setOpenAlertPopup(false)}
         action={() => {
-          dispatch(setDataTQF3({}));
+          dispatch(resetDataTQF3());
           setOpenAlertPopup(false);
           goToPage(
             localStorage.getItem("dashboard") == ROLE.ADMIN
@@ -296,7 +280,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                             variant="outline"
                             onClick={() => {
                               if (topic !== tqf3.topic) {
-                                dispatch(setDataTQF3({ topic }));
+                                dispatch(setSelectTqf3Topic(topic));
                               }
                               goToPage(ROUTE_PATH.TQF3);
                             }}
@@ -364,7 +348,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                             variant="outline"
                             onClick={() => {
                               if (topic !== tqf3.topic) {
-                                dispatch(setDataTQF3({ topic }));
+                                dispatch(setSelectTqf3Topic(topic));
                               }
                               goToPage(ROUTE_PATH.TQF5);
                             }}
