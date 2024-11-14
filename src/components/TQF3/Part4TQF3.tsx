@@ -214,7 +214,7 @@ export default function Part4TQF3({
           </Alert>
         </div>
 
-        <Button className="!w-full " onClick={onCloseAlert}>
+        <Button className="!w-full" onClick={onCloseAlert}>
           OK
         </Button>
       </Modal>

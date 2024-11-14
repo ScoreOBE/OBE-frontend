@@ -18,7 +18,7 @@ export default function Breadcrumbs({ items = [] }: Props) {
             className={` ${
               !item.path
                 ? "!text-[#3F4474] font-bold cursor-default"
-                : "text-secondary hover:underline font-semibold"
+                : "text-secondary hover:underline cursor-pointer font-semibold"
             }`}
           >
             {item?.title}

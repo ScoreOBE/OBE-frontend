@@ -476,9 +476,9 @@ export default function ModalAddPLOCollection({
             label="Add PLO"
             description="STEP 2"
           >
-            <div className="flex gap-3 overflow-hidden sm:max-macair133:h-fit p-[2px] macair133:h-[440px] mt-3 ">
+            <div className="flex gap-3 overflow-hidden sm:max-macair133:h-full p-[2px] macair133:h-[440px] mt-3 ">
               <div
-                className={`flex flex-col overflow-y-auto  sm:h-[320px] ipad11:h-[360px]  gap-3 p-5 rounded-lg h-full ${
+                className={`flex flex-col overflow-y-auto macair133:h-full  sm:h-[320px] ipad11:h-[360px]  gap-3 p-5 rounded-lg h-full ${
                   state.length ? "w-[50%]" : "w-full"
                 } overflow-hidden relative`}
                 style={{
@@ -495,7 +495,7 @@ export default function ModalAddPLOCollection({
                   }
                   className="w-full border-none   rounded-r-none "
                   classNames={{
-                    input: "flex  h-[140px] sm:h-[75px] ipad11:h-[95px] p-3 ",
+                    input: "flex  macair133:h-[120px] sm:h-[75px] ipad11:h-[95px] p-3 ",
                     label: "flex pb-1",
                   }}
                   placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
@@ -519,7 +519,7 @@ export default function ModalAddPLOCollection({
                   }
                   className="w-full border-none rounded-r-none"
                   classNames={{
-                    input: "flex h-[140px] sm:h-[75px] ipad11:h-[95px] p-3",
+                    input: "flex macair133:h-[120px] sm:h-[75px] ipad11:h-[95px] p-3",
                     label: "flex pb-1",
                   }}
                   placeholder="Ex. An ability to solve complex engineering problems."
@@ -544,7 +544,7 @@ export default function ModalAddPLOCollection({
               </div>
               {form.getValues().data?.length! > 1 && (
                 <div
-                  className="flex flex-col bg-white border-secondary border-[1px] sm:h-[320px] ipad11:h-[360px] rounded-md w-[50%] h-full"
+                  className="flex flex-col bg-white border-secondary border-[1px] macair133:h-full sm:h-[320px] ipad11:h-[360px] rounded-md w-[50%] h-full"
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                     overflowY: "auto",
