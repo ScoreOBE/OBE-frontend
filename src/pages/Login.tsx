@@ -19,6 +19,7 @@ import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
 import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import IconShare2 from "@/assets/icons/share2.svg?react";
 import IconHistogram from "@/assets/icons/histogram.svg?react";
+import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
 import gradescope from "@/assets/image/gradescope.png";
 import "@mantine/carousel/styles.css";
@@ -165,8 +166,8 @@ export default function Login() {
     <div className=" bg-[#fafafa] h-full w-screen items-center flex flex-col overflow-y-auto overflow-x-hidden">
       {loading && <LoadingOverlay />}
       <div className="flex flex-col w-full">
-        <p className="text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 font-[600] sm:font-[500] item-start rounded text-[#000000] text-[30px] mb-5 sm:mb-0 sm:text-[50px] leading-[48px] sm:leading-[66px]">
-          <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+        <p className="text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 font-[700] sm:font-[500] item-start rounded text-emphasize text-[48px] mb-5 sm:mb-0 sm:text-[50px] leading-[48px] sm:leading-[66px]">
+          <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE +{" "}
           </span>
           Academic Supercharger
@@ -269,29 +270,29 @@ export default function Login() {
         </div>
         {/* Upload, Publish grading efficiency. */}
         <div className="bg-[#fafafa] sm:flex hidden h-full w-full gap-16 ">
-          <div className="relative items-start text-start px-[118px] pb-32 justify-start w-full overflow-clip">
+          <div className="relative items-start text-start pb-32 justify-start w-full overflow-clip">
             {" "}
-            <div className="absolute left-0 right-0 bottom-0 z-0 h-52 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
-            <div className="relative z-30">
-              <div className="h-fit w-full bg-red-400 p-20 mt-16 rounded-2xl">
-                <p className="drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start -rounded text-[#000000] text-[48px]">
-                  <span className="font-[600]  text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+            <div className="absolute left-0 right-0 bottom-0 z-0 h-40 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
+            <div className="relative">
+              <div className="relative h-fit w-full py-20 mt-16 px-[118px]">
+                <div className="absolute ml-[40%] left-0 right-0 bottom-40 z-0 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
+                <p className="drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[#000000] text-[48px] ">
+                  <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
                     Upload, Publish
                     <br /> grading efficiency.
                   </span>{" "}
                   <br />
                 </p>
-                <div className=" flex items-center justify-between">
-                  <p className="mt-5 text-[19px] text-default font-[500]">
+                <div className="flex items-center justify-between">
+                  <p className="mt-5 text-[19px] text-black font-[500]">
                     Effortless score uploads, instant analytics, <br /> and
                     visual insights! Elevate your grading today! <br />
                     <span className="mt-5 underline text-b1  text-[#7b7b7c] font-[500]">
                       Available in December or January
                     </span>
                   </p>
-                  <div className="flex justify-end gap-5">
-                    {" "}
-                    <div className="flex justify-start flex-col items-start mt-2 mb-2">
+                  <div className="flex justify-end gap-10 -mt-14">
+                    <div className="flex justify-start flex-col items-start mt-2 mb-2 p-7 rounded-xl bg-white/65 backdrop-blur-[100px] shadow-lg">
                       <img
                         src={gradescope}
                         alt="CMULogo"
@@ -301,20 +302,19 @@ export default function Login() {
                         Gradescope Support
                       </p>
                       <p className=" text-default font-[500] pt-2 text-b2  leading-[22px]">
-                        Effortless grade import Gradescope <br />
-                        assignment template
+                        Effortless import Gradescope <br /> assignment template
                       </p>
                     </div>
-                    <div className="flex justify-start flex-col items-start mt-2 mb-2">
+                    <div className="flex justify-start flex-col items-start mt-2 mb-2 bg-black p-7 rounded-xl bg-white/65 backdrop-blur-[100px] shadow-lg">
                       <Icon IconComponent={IconHistogram} className="size-8" />
                       <p className=" text-black font-[700] pt-4 ">
                         Statistics & Histogram
                       </p>
-                      <p className=" text-default font-[500] pt-2 text-b2 leading-[22px]">
+                      <p className="text-default font-[500] pt-2 text-b2 leading-[22px] ">
                         Visualize your grade <br /> with interactive charts
                       </p>
                     </div>
-                    <div className="flex justify-start flex-col items-start mt-2 mb-2">
+                    <div className="flex justify-start flex-col items-start mt-2 mb-2 bg-black p-7 rounded-xl bg-white/65 backdrop-blur-[100px] shadow-lg">
                       <Icon IconComponent={IconEdit} className="size-8" />
                       <p className=" text-black font-[700] pt-4 ">
                         On-the-Spot Edits
@@ -326,113 +326,170 @@ export default function Login() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-20 ">
+              <div className="flex flex-col gap-20 px-[118px]">
                 <div className="flex flex-col items-start text-start">
                   <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start text-[48px] ">
-                    <p>Powerful Insight</p>
+                    <p>See Beyond the Scores</p>
                     <p className="text-[#1D1D1F]">
-                      Convenient, Fast and Effortless
+                      Where Insight Ignites Impact
                     </p>
                   </div>
                   <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[750px]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor
+                    ScoreOBE+ turns data into actionable insights that{" "}
+                    <span className="text-emphasize">
+                      support teaching excellence <br /> and elevate learning
+                      outcomes.
+                    </span>
                   </p>
                 </div>
-                <div className="flex gap-20">
+                <div className="flex items-center">
                   <img
                     src={studentPLOPage}
                     alt="CMULogo"
-                    className="w-[85%] h-[85%] -ml-[20%]  bg-red-400 mx-0"
+                    className="w-[85%] h-[85%] -ml-[20%] mx-0"
                   />
-                  <div className="w-[40%] text-[18px]">
-                    <p>PLO</p>
-                    <p className="text-[#86868B]">
-                      Seamlessly align assessments with learning goals, ensuring
-                      accuracy and alignment with program objectives.
-                    </p>
+                  <div className="flex flex-col w-[40%] h-full gap-8 text-[18px] ">
+                    <div className="flex flex-col gap-2 items-start mt-2 mb-2">
+                      <p className="font-[700] text-[36px] text-emphasize">
+                        Statistics & Histogram
+                      </p>
+                      <p className="text-[17px] text-deemphasize font-[600] text-wrap w-[750px]">
+                        Visualize your grade with interactive charts
+                      </p>
+                    </div>
+                    <div className="flex justify-start flex-col items-start mt-2 mb-2">
+                      <Icon IconComponent={IconHistogram} className="size-8" />
+                      <p className=" text-black font-[700] pt-4 ">
+                        Clear Overview of Performance
+                      </p>
+                      <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px]">
+                        Provides a comprehensive view of student performance
+                        <br />
+                        <span className="text-emphasize">
+                          across each assignment and question.
+                        </span>
+                      </p>
+                    </div>
+                    <div className="flex justify-start flex-col items-start mt-2 mb-2">
+                      <Icon IconComponent={IconHistogram} className="size-8" />
+                      <p className=" text-black font-[700] pt-4 ">
+                        Unlock In-Depth Statistical Insights
+                      </p>
+                      <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px]">
+                        <span className="text-emphasize">
+                          Analyze key metrics{" "}
+                        </span>
+                        like mean and standard deviation <br />{" "}
+                        <span className="text-emphasize">
+                          to easily identify areas for improvement.{" "}
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex gap-20">
-                  <div className="w-[40%] text-[18px]">
-                    <p>PLO</p>
-                    <p className="text-[#86868B]">
-                      Seamlessly align assessments with learning goals, ensuring
-                      accuracy and alignment with program objectives.
-                    </p>
+                <div className="flex gap-20 items-center">
+                  <div className="flex flex-col w-[50%] h-full gap-8 text-[18px] ">
+                    <div className="flex flex-col gap-2 items-start mt-2 mb-2">
+                      {/* <Icon
+                        IconComponent={IconSpiderChart}
+                        className="size-9 stroke-[10px] pb-1"
+                      /> */}
+                      <p className="font-[700] text-[36px] text-emphasize">
+                        PLO Performance <br /> Spider Chart
+                      </p>
+                      <p className="text-[17px] text-deemphasize font-[600] text-wrap w-[520px]">
+                        Visualize student progress{" "}
+                        <span className="text-emphasize">
+                          {" "}
+                          in each course and across <br /> the entire curriculum{" "}
+                        </span>
+                        , aligned with Program Learning <br /> Outcomes (PLOs).
+                      </p>
+                    </div>
+                    <div className="flex justify-start flex-col items-start mt-2 mb-2">
+                      <Icon
+                        IconComponent={IconSpiderChart}
+                        className="size-8"
+                      />
+                      <p className=" text-black font-[700] pt-4 ">
+                        Students Can Track Their Own Performance
+                      </p>
+                      <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px]">
+                        <span className="text-emphasize">
+                          {" "}
+                          Gain clear insights into your progress{" "}
+                        </span>{" "}
+                        across courses and learning outcomes, and discover areas
+                        to improve.
+                      </p>
+                    </div>
                   </div>
                   <img
                     src={studentPLOPage}
                     alt="CMULogo"
-                    className="w-[85%] h-[85%] -mr-[20%]  bg-red-400 mx-0"
+                    className="w-[85%] h-[85%] -translate-x-28"
                   />
                 </div>
 
                 <div className="flex flex-col gap-20 ">
                   <div className="flex flex-col items-center">
                     <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] ">
-                      <p>TQF 3</p>
-                      <p className="text-[#1D1D1F]">
-                        Save Time & Focus on Content
-                      </p>
+                      Easily Manage Scores <br />{" "}
+                      <span className=" text-emphasize">
+                        with Export and Publish
+                      </span>
                     </div>
                     <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[800px] text-center">
-                      With our reusable TQF 3 templates, you can{" "}
+                      Make managing scores easier than ever. With our intuitive
+                      export and publish options, you can{" "}
                       <span className="text-emphasize">
-                        {" "}
-                        generate reports quickly and easily. No more redundant
-                        data entry{" "}
+                        quickly organize, share, and update student data with
+                        just a few clicks.
                       </span>
-                      —just fill in the essential details and get a polished
-                      report ready in minutes.
                     </p>
                   </div>
-                  <div className="flex relative justify-center gap-16">
-                    <div className="flex flex-col justify-center items-center gap-2">
-                      <p className="text-[24px] font-[600]">Publish</p>
-                      <div className="bg-black rounded-2xl h-[550px] w-[600px]">
-                        {/* <Image
-                      src={studentPLOPage}
-                      className={`h-full w-full object-cover rounded-xl`}
-                    /> */}
+                  <div className="flex  justify-center gap-16">
+                    <div className="relative bg-[#FFFFFF] rounded-2xl h-[550px] w-[600px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
+                      <Image
+                        src={studentPLOPage}
+                        className={`h-full w-full object-cover rounded-xl -translate-x-20 translate-y-36`}
+                      />
 
-                        {/* <div className="absolute inset-0 bg-black bg-opacity-40 mr-8 rounded-xl">
-                      <div className="top-0 flex flex-col justify-end p-6">
-                        <p className="text-white opacity-70 font-bold uppercase cursor-default">
-                          Topic
-                        </p>
-                        <Title
-                          order={3}
-                          className="text-white font-bold text-2xl cursor-default"
-                        >
-                          Detail
-                        </Title>
-                      </div>
-                    </div> */}
+                      <div className="absolute inset-0 rounded-xl">
+                        <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
+                          <p className="opacity-70 font-bold uppercase cursor-default">
+                            Publish
+                          </p>
+                          <Title
+                            order={3}
+                            className="font-bold text-[20px] cursor-default"
+                          >
+                            Quickly publish scores for individual or all
+                            sections and share results instantly.
+                          </Title>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-col justify-center items-center gap-2">
-                      <p className="text-[24px] font-[600]">Export</p>
-                      <div className="bg-black rounded-2xl h-[550px] w-[600px]">
-                        {/* <Image
-                      src={studentPLOPage}
-                      className={`h-full w-full object-cover rounded-xl`}
-                    /> */}
+                    <div className="relative bg-[#FFFFFF] rounded-2xl h-[550px] w-[600px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
+                      <Image
+                        src={studentPLOPage}
+                        className={`h-full w-full object-cover rounded-xl translate-x-20 translate-y-36`}
+                      />
 
-                        {/* <div className="absolute inset-0 bg-black bg-opacity-40 mr-8 rounded-xl">
-                      <div className="top-0 flex flex-col justify-end p-6">
-                        <p className="text-white opacity-70 font-bold uppercase cursor-default">
-                          Topic
-                        </p>
-                        <Title
-                          order={3}
-                          className="text-white font-bold text-2xl cursor-default"
-                        >
-                          Detail
-                        </Title>
-                      </div>
-                    </div> */}
+                      <div className="absolute inset-0 rounded-xl">
+                        <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
+                          <p className="opacity-70 font-bold uppercase cursor-default">
+                            Export
+                          </p>
+                          <Title
+                            order={3}
+                            className="font-boldtext-[20px] cursor-default"
+                          >
+                            Export score data to .xlsx files for each section
+                            with a single click.
+                          </Title>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -926,7 +983,7 @@ export default function Login() {
                     className={`h-full w-full object-cover rounded-xl`}
                   />
 
-                  <div className="absolute inset-0 bg-black bg-opacity-40 mr-8 rounded-xl">
+                  <div className="absolute inset-0  mr-8 rounded-xl">
                     <div className="top-0 flex flex-col justify-end p-6">
                       <p className="text-white opacity-70 font-bold uppercase cursor-default">
                         {img.category}
