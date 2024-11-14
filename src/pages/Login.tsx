@@ -77,49 +77,48 @@ export default function Login() {
       id: "1",
       topic: "Course Information",
       description:
-        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+        "Enter basic course details, including the curriculum, course type, and instructor's name.",
       img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
     },
     {
       id: "2",
       topic: "Description and Planning",
       description:
-        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+        "Plan your course by entering teaching methods, CLOs, course content, and schedule.",
       img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
     },
     {
       id: "3",
       topic: "Course Evaluation",
       description:
-        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+        " users can choose how they want to be graded and ensure that all course topics are given 100% weight in the assessment.",
       img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png",
     },
     {
       id: "4",
       topic: "Assessment Mapping",
       description:
-        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+        "In this section, choose the assessment tools for each CLO, set the assessment percentage, and specify the week for each assessment.",
       img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png",
     },
     {
       id: "5",
       topic: "Course Materials",
-      description:
-        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+      description: "Specify the documents and media used for teaching.",
       img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-5.png",
     },
     {
       id: "6",
       topic: "Course evaluation and improvement processes",
       description:
-        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+        "Describe the course evaluation methods and improvement plans for the next semester.",
       img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
     },
     {
       id: "7",
       topic: "Curriculum Mapping",
       description:
-        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+        "Mapping CLOs to the relevant PLOs for analyzing the performance of each student's PLOs.",
       img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
     },
   ];
@@ -129,21 +128,21 @@ export default function Login() {
       id: "1",
       topic: "Course Evaluation",
       description:
-        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+        "Upload grade sheets for processing, or manually enter the number of students who received each grade and complete the corresponding criteria.",
       img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
     },
     {
       id: "2",
       topic: "Assessment tool mapping to CLO",
       description:
-        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+        "Select the assessment tool to use for this CLO and determine which items to process.",
       img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
     },
     {
       id: "3",
       topic: "(Rubrics for CLO evaluation",
       description:
-        "Fascinated with cooking, though has no sense of tasteFascinated with cooking, though has no sense ",
+        "Review the assessment tool scores and score ranges for each CLO, and include the rubrics for CLO/CSO evaluation.",
       img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png",
     },
   ];
@@ -546,7 +545,7 @@ export default function Login() {
               />
             </div>
 
-            <div className="flex gap-16 h-screen w-screen justify-center items-center">
+            {/* <div className="flex gap-16 h-screen w-screen justify-center items-center">
               <div className="flex flex-col gap-6 items-start text-start">
                 <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
                   Reusable TQF 3 Templates.
@@ -563,7 +562,7 @@ export default function Login() {
                 </p>
               </div>
 
-              {/* Image */}
+          
               <Image
                 src={
                   "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png"
@@ -589,17 +588,16 @@ export default function Login() {
                 </p>
               </div>
 
-              {/* Image */}
               <Image
                 src={
                   "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png"
                 }
                 className={`h-[80%] w-[50%] object-cover rounded-xl `}
               />
-            </div>
+            </div> */}
           </div>
 
-          <div className="bg-[#fdd7d7] py-14 flex flex-col gap-10">
+          <div className="bg-[#fafafa] py-14 flex flex-col gap-10">
             {/* TQF3 */}
             <div className="flex flex-col items-center text-center font-[600] gap-14 mx-28">
               <div>
@@ -619,55 +617,40 @@ export default function Login() {
                 </p>
               </div>
 
-              <div className="flex gap-16">
-                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+              <div className="relative flex gap-16">
+                <div className="absolute left-0 right-0 top-[75%] z-0 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
+                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg py-6">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
                       className="size-16 stroke-1"
                     />
                     <p className="text-center">
-                      Topic <br />
+                      Reusable TQF 3 Templates <br />
                     </p>
                   </div>
                   <p className="text-[#86868B]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor
+                    Eliminate repetitive data entry <br />
+                    and quickly customize each report
                   </p>
                 </div>
-                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg py-6">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
                       className="size-16 stroke-1"
                     />
                     <p className="text-center">
-                      Topic <br />
+                      Consistency Across Reports <br />
                     </p>
                   </div>
                   <p className="text-[#86868B]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor
-                  </p>
-                </div>
-                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
-                  <div className=" flex flex-col gap-1">
-                    <Icon
-                      IconComponent={IconBulb}
-                      className="size-16 stroke-1"
-                    />
-                    <p className="text-center">
-                      Topic <br />
-                    </p>
-                  </div>
-                  <p className="text-[#86868B]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor
+                    Ensure alignment and consistency <br /> across all reports.
                   </p>
                 </div>
               </div>
 
-              <div className="flex h-fit w-full rounded-xl bg-white border-[#dddddd] border-2 overflow-clip">
+              <div className="relative flex h-fit w-full rounded-xl bg-white border-[#dddddd] border-2 overflow-clip">
                 <Accordion
                   defaultValue="1"
                   onChange={() => setOpenItem}
@@ -691,7 +674,7 @@ export default function Login() {
                             {item.topic}
                           </p>
                         </Accordion.Control>
-                        <Accordion.Panel className="text-start text-[14px] font-[600]">
+                        <Accordion.Panel className="text-start text-[14px] font-[600] w-[95%]">
                           {item.description}
                         </Accordion.Panel>
                       </Accordion.Item>
@@ -723,50 +706,55 @@ export default function Login() {
                 </p>
               </div>
 
-              <div className="flex gap-16">
-                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+              <div className="relative flex gap-16">
+                <div className="absolute left-0 right-0 top-[50%] z-0 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
+                <div className="relative flex flex-col items-center gap-3 text-pretty w-[370px] border shadow-md bg-white/65 backdrop-blur-[150px] border-24 p-6 rounded-lg">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
                       className="size-16 stroke-1"
                     />
                     <p className="text-center">
-                      Topic <br />
+                      System & Manual
+                      <br />
                     </p>
                   </div>
                   <p className="text-[#86868B]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor
+                    Choose automated or manual processes for TQF 5 reports,
+                    providing versatility for any reporting need.
                   </p>
                 </div>
-                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
                       className="size-16 stroke-1"
                     />
                     <p className="text-center">
-                      Topic <br />
+                      Assessment tool mapping to CLO
+                      <br />
                     </p>
                   </div>
                   <p className="text-[#86868B]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor
+                    CLOs can be mapped to assessment tools
+                    <br /> on a detailed, item-by-item basis <br />
+                    for more precise results.
                   </p>
                 </div>
-                <div className="flex flex-col items-center gap-3 text-pretty w-[370px] border border-[#dddddd] border-24 p-6 rounded-lg">
+                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
                       className="size-16 stroke-1"
                     />
                     <p className="text-center">
-                      Topic <br />
+                      Automated Data Analysis <br />
                     </p>
                   </div>
                   <p className="text-[#86868B]">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor
+                    Automatically calculate scores and easily <br />
+                    view student performance through <br /> histograms within
+                    the CLO score range.
                   </p>
                 </div>
               </div>
@@ -787,7 +775,7 @@ export default function Login() {
                           setSelectTQF3Image(item.img);
                         }}
                       >
-                        <Accordion.Control className="h-full min-h-[140px] text-[18px]">
+                        <Accordion.Control className="h-full min-h-[160px] text-[18px]">
                           <p className="text-[17px] font-[700] text-emphasize">
                             Part {item.id}
                           </p>
@@ -813,7 +801,7 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="bg-[#edebce] sm:flex hidden h-fit w-full flex-col gap-28 py-36">
+        <div className="bg-[#F2F2F2] sm:flex hidden h-fit w-full flex-col gap-28 py-36">
           <div className="flex flex-col items-start text-start px-28">
             <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
               <p>
@@ -951,7 +939,7 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="w-full  py-20 sm:flex flex-col gap-10 hidden">
+        {/* <div className="w-full  py-20 sm:flex flex-col gap-10 hidden">
           <div className="px-20 font-[700] flex flex-col gap-1 bg-clip-text bg-gradient-to-r text-[#4285f4] drop-shadow-xl pb-2 cursor-default leading-[56px] items-start text-[40px] ">
             <p>Explore More Features Beyond the Essentials</p>
           </div>
@@ -1000,7 +988,7 @@ export default function Login() {
               ))}
             </Carousel>
           </div>
-        </div>
+        </div> */}
 
         <div className="sm:flex flex-col gap-16 items-center bg-black h-fit text-white px-28 py-20 hidden">
           <div className="flex flex-col gap-20 items-center">
