@@ -107,7 +107,7 @@ export default function Assignment() {
       <Modal
         opened={openPublishScoreModal}
         closeOnClickOutside={false}
-        size="38vw"
+        size="30vw"
         title={
           <div className="flex flex-col gap-2">
             <p>Publish score {isPublishAll ? "all" : "each"} sections</p>
@@ -177,7 +177,7 @@ export default function Assignment() {
                   <Chip
                     key={index}
                     classNames={{
-                      root: "h-8 min-w-[114px]  !rounded-[10px] text-center justify-center items-center",
+                      root: "h-8 !rounded-[10px] text-center justify-center items-center",
                       label:
                         "text-[13px] text-default font-semibold translate-y-[3px] ",
                     }}
@@ -558,22 +558,23 @@ export default function Assignment() {
               </div>
             ) : (
               <div className="flex items-center  !h-full !w-full justify-between px-16">
-              <div className="flex flex-col gap-3 text-start">
-                <p className="!h-full text-[20px] text-secondary font-semibold">
-                  No Assignment
-                </p>{" "}
-                <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                It seems like no assignments have been added to this course yet.
-                </p>{" "}
+                <div className="flex flex-col gap-3 text-start">
+                  <p className="!h-full text-[20px] text-secondary font-semibold">
+                    No Assignment
+                  </p>{" "}
+                  <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
+                    It seems like no assignments have been added to this course
+                    yet.
+                  </p>{" "}
+                </div>
+                <div className=" items-center justify-center flex">
+                  <img
+                    src={notFoundImage}
+                    className="h-full items-center  w-[24vw] justify-center flex flex-col"
+                    alt="notFound"
+                  ></img>
+                </div>
               </div>
-              <div className=" items-center justify-center flex">
-                <img
-                  src={notFoundImage}
-                  className="h-full items-center  w-[24vw] justify-center flex flex-col"
-                  alt="notFound"
-                ></img>
-              </div>
-            </div>
             )}
           </>
         ) : (
