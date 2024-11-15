@@ -59,7 +59,7 @@ export default function HistogramChart({ data, students, isQuestions }: Props) {
                   <span className="text-[16px]">pts.</span>
                 </p>
               </div>
-              <p className="text-[#3f4474] mb-1 text-[16px]">
+              <p className="text-[#3f4474] mb-1 sm:max-macair133:text-[14px] text-[16px]">
                 {totalStudent} Students
               </p>
             </div>
@@ -68,31 +68,31 @@ export default function HistogramChart({ data, students, isQuestions }: Props) {
           <div className="flex  flex-row justify-between w-full">
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Mean</p>
-              <p className="font-bold text-[28px] text-default">{mean}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{mean?.toFixed(2)}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-              <p className="font-bold text-[28px] text-default">{sd}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{sd?.toFixed(2)}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Median</p>
-              <p className="font-bold text-[28px] text-default">{median}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{median?.toFixed(2)}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Max</p>
-              <p className="font-bold text-[28px] text-default">{maxScore}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{maxScore?.toFixed(2)}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Min</p>
-              <p className="font-bold text-[28px] text-default">{minScore}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{minScore?.toFixed(2)}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
-              <p className="font-bold text-[28px] text-default">{q3}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{q3?.toFixed(2)}</p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
-              <p className="font-bold text-[28px] text-default">{q1}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{q1?.toFixed(2)}</p>
             </div>
           </div>
         </div>

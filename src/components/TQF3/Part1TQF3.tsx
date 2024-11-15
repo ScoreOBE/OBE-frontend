@@ -435,7 +435,7 @@ export default function Part1TQF3({ setForm }: Props) {
       </div>
 
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
-        <div className="flex text-secondary flex-col">
+        <div className="flex text-secondary flex-col sm:max-macair133:pr-8">
           <p className="font-semibold">
             ชั่วโมงต่อสัปดาห์ในการให้คำปรึกษาแก่นักศึกษารายบุคคล
             <span className="text-red-500"> *</span>

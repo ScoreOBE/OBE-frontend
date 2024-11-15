@@ -259,7 +259,7 @@ export default function ModalManageTopic({
                 .includes(e.th)
             )}
           >
-            {type === "add" ? "Done" : "Done"}
+            {type === "add" ? "Save" : "Done"}
           </Button>
         </Group>
       </div>

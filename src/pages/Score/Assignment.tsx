@@ -430,23 +430,23 @@ export default function Assignment() {
                 <Table stickyHeader>
                   <Table.Thead>
                     <Table.Tr className="bg-[#e5e7f6]">
-                      <Table.Th className="w-60">Name</Table.Th>
-                      <Table.Th className="w-40 text-end pr-14 !pl-0">
+                      <Table.Th className="w-20 sm:max-macair133:text-b3">Name</Table.Th>
+                      <Table.Th className="w-20 sm:max-macair133:text-b3  text-end pr-14 !pl-0">
                         Full Scores
                       </Table.Th>
-                      <Table.Th className="w-40 text-end pr-20 !pl-0">
+                      <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
                         Mean
                       </Table.Th>
-                      <Table.Th className="!pl-12">Created</Table.Th>
-                      <Table.Th className="w-40">Student(s)</Table.Th>
-                      <Table.Th className="w-40 !px-4 text-center">
+                      <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b3">Created</Table.Th>
+                      <Table.Th className="w-10 sm:max-macair133:text-b3">Student(s)</Table.Th>
+                      <Table.Th className="w-10 !px-4 sm:max-macair133:text-b3 text-center">
                         Published
                       </Table.Th>
-                      <Table.Th className="w-50"></Table.Th>
+                      <Table.Th className="w-5 sm:max-macair133:text-b3"></Table.Th>
                     </Table.Tr>
                   </Table.Thead>
 
-                  <Table.Tbody className="text-default font-semibold text-[14px] ">
+                  <Table.Tbody className="text-default sm:max-macair133:text-b3 font-medium text-[13px] ">
                     {section?.assignments?.map((assignment, index) => {
                       const totalStudent = section.students?.filter(
                         ({ scores }) =>
