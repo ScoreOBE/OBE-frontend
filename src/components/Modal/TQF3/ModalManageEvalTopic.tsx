@@ -169,12 +169,14 @@ export default function ModalManageEvalTopic({
       )}
       <div
         className={`flex flex-col !gap-5 ${
-          type === "add" ? "h-full macair133:h-full  sm:max-macair133:h-[320px]  sm:max-macair133:mb-14 sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]" : "h-fit  "
+          type === "add"
+            ? "h-fit macair133:h-fit  sm:max-macair133:h-[320px]  sm:max-macair133:mb-14 sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]"
+            : "h-fit  "
         } `}
       >
         <div
           className={`flex gap-5 py-1 ${
-            type === "add" ? " h-[500px] " : "h-fit"
+            type === "add" ? " h-fit " : "h-fit"
           }`}
         >
           {/* Input Field */}
@@ -234,7 +236,7 @@ export default function ModalManageEvalTopic({
                 label={<p className="font-semibold flex gap-1">Description</p>}
                 className="w-full border-none rounded-r-none"
                 classNames={{
-                  input: "flex h-[125px] px-3 py-2 text-[13px]",
+                  input: "flex h-[70px] px-3 py-2 text-[13px]",
                   label: "flex pb-1",
                 }}
                 placeholder="(Optional)"
@@ -266,7 +268,10 @@ export default function ModalManageEvalTopic({
                       onClick={() => handlersRef.current?.decrement()}
                       style={{ cursor: "pointer" }}
                     >
-                      <Icon IconComponent={IconMinus} className=" size-4 stroke-[#1f69f3]" />
+                      <Icon
+                        IconComponent={IconMinus}
+                        className=" size-4 stroke-[#1f69f3]"
+                      />
                     </div>
                     <div className="h-8 border"></div>
                     <div
@@ -274,33 +279,21 @@ export default function ModalManageEvalTopic({
                       onClick={() => handlersRef.current?.increment()}
                       style={{ cursor: "pointer" }}
                     >
-                      <Icon IconComponent={IconPlus2} className="size-4 stroke-[#1f69f3]"   />
+                      <Icon
+                        IconComponent={IconPlus2}
+                        className="size-4 stroke-[#1f69f3]"
+                      />
                     </div>
                   </div>
                 }
                 {...formOneTopic.getInputProps("percent")}
               />
             </div>
-
-            {/* Add More Button */}
-            {type === "add" && (
-              <div className="flex sm:max-macair133:mt-5 justify-end">
-                <Button
-                  variant="outline"
-                  disabled={percentTotal == 100}
-                  onClick={addMore}
-                  onMouseOver={() => setOpenedTooltip(true)}
-                  onMouseLeave={() => setOpenedTooltip(false)}
-                >
-                  Add more
-                </Button>
-              </div>
-            )}
           </div>
           {/* List CLO */}
           {!!form.getValues().eval?.length! && type === "add" && (
             <div
-              className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-[492px]"
+              className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-[370px]"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 overflowY: "auto",
@@ -309,7 +302,8 @@ export default function ModalManageEvalTopic({
               <div className="sticky top-0 z-10 bg-bgTableHeader text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
                   <span className="flex flex-row items-center gap-2">
-                    <Icon IconComponent={IconList2} /> List Evaluation Topic Added
+                    <Icon IconComponent={IconList2} /> List Evaluation Topic
+                    Added
                   </span>
                 </div>
                 <p>
@@ -372,13 +366,25 @@ export default function ModalManageEvalTopic({
           <Button variant="subtle" onClick={onClose}>
             Cancel
           </Button>
+          {/* Add More Button */}
+          {type === "add" && (
+            <Button
+              variant="subtle"
+              disabled={percentTotal == 100}
+              onClick={addMore}
+              onMouseOver={() => setOpenedTooltip(true)}
+              onMouseLeave={() => setOpenedTooltip(false)}
+            >
+              Add more topic
+            </Button>
+          )}
           <Button
             onClick={onClickDone}
             disabled={
               form.getValues().eval?.length == 0 && !formOneTopic.errors
             }
           >
-            Done
+            Save
           </Button>
         </div>
       </div>

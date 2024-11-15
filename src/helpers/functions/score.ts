@@ -55,12 +55,13 @@ export const generateBellCurveData = (
 ): { x: number; y: number }[] => {
   const { mean, sd } = calStat(scores, totalStudent);
 
-  const numPoints = 100; 
-  const step = fullScore / numPoints;
+  const numPoints = 100;
+  const step = fullScore / (numPoints - 1);
 
   const bellCurveData = [];
 
-  for (let x = 0; x <= fullScore; x += step) {
+  for (let i = 0; i < numPoints; i++) {
+    const x = i * step; 
     const y =
       (1 / (sd * Math.sqrt(2 * Math.PI))) *
       Math.exp(-Math.pow(x - mean, 2) / (2 * Math.pow(sd, 2)));
@@ -69,5 +70,4 @@ export const generateBellCurveData = (
 
   return bellCurveData;
 };
-
 

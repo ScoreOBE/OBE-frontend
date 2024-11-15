@@ -134,7 +134,7 @@ export default function Histogram() {
                           {" "}
                           <Tabs.List className="mb-2">
                             <Tabs.Tab value="histogram">Histogram</Tabs.Tab>{" "}
-                            <Tabs.Tab value="bellCurve">Bell Curve</Tabs.Tab>
+                            <Tabs.Tab value="bellCurve">Distribution</Tabs.Tab>
                           </Tabs.List>
                           <Tabs.Panel
                             className="flex flex-col gap-1"

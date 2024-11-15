@@ -194,7 +194,7 @@ export default function ModalManageCLO({
           <div
             id="description"
             ref={descriptionRef}
-            className={`flex flex-col rounded-md sm:max-macair133:h-[460px] sm:max-macair133:overflow-y-auto justify-between ${
+            className={`flex flex-col rounded-md sm:max-macair133:h-[400px] sm:overflow-y-auto justify-between ${
               type === "add" && "p-5"
             } gap-1 overflow-hidden ${
               form.getValues().clo?.length! > 0 && type === "add"
@@ -217,7 +217,7 @@ export default function ModalManageCLO({
                 }
                 className="w-full border-none"
                 classNames={{
-                  input: "flex h-[110px] px-3 py-2 text-[13px]",
+                  input: "flex h-[80px] px-3 py-2 text-[13px]",
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
@@ -233,7 +233,7 @@ export default function ModalManageCLO({
                 }
                 className="w-full border-none"
                 classNames={{
-                  input: "flex h-[110px] px-3 py-2 text-[13px]",
+                  input: "flex h-[80px] px-3 py-2 text-[13px]",
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. Explain the working principle of computer operating systems."
@@ -278,14 +278,7 @@ export default function ModalManageCLO({
               </div>
             </div>
 
-            {/* Add More Button */}
-            {type === "add" && (
-              <div className="flex justify-end">
-                <Button variant="outline" onClick={addMore}>
-                  Add more
-                </Button>
-              </div>
-            )}
+            
           </div>
           {/* List CLO */}
           {!!form.getValues().clo?.length && type === "add" && (
@@ -364,15 +357,23 @@ export default function ModalManageCLO({
           )}
         </div>
         {/* Button */}
-        <div className="flex gap-2 items-end justify-end h-fit">
+        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8  items-end  justify-end h-fit">
           <Button variant="subtle" onClick={onClose}>
             Cancel
           </Button>
+          {/* Add More Button */}
+          {type === "add" && (
+              <div className="flex justify-end">
+                <Button variant='subtle' onClick={addMore}>
+                  Add more CLO
+                </Button>
+              </div>
+            )}
           <Button
             onClick={onClickDone}
             disabled={form.getValues().clo?.length == 0 && !formOneCLO.errors}
           >
-            Done
+            Save
           </Button>
         </div>
       </div>

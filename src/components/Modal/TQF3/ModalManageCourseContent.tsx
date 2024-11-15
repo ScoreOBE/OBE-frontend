@@ -160,12 +160,12 @@ export default function ModalManageTopic({
       <FocusTrapInitialFocus />
       <div
         className={`flex flex-col  !gap-5 ${
-          type === "add" ? "h-full sm:max-macair133:h-[460px] sm:max-macair133:mb-14 sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]" : "h-fit  "
+          type === "add" ? "h-full sm:max-macair133:h-fit sm:max-macair133:mb-14 sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]" : "h-fit  "
         } `}
       >
         <div
           className={`flex gap-5 py-1 ${
-            type === "add" ? " h-[500px] " : "h-fit"
+            type === "add" ? " h-fit " : "h-fit"
           }`}
         >
           {/* Input Field */}
@@ -176,7 +176,7 @@ export default function ModalManageTopic({
               form.getValues().schedule?.length! > 0 && type === "add"
                 ? "w-[45%]"
                 : "w-full"
-            } h-full sm:max-macair133:h-[480px] relative`}
+            } h-fit sm:max-macair133:h-fit relative`}
             style={{
               boxShadow:
                 type === "add" ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
@@ -192,7 +192,7 @@ export default function ModalManageTopic({
                 }
                 className="w-full border-none rounded-r-none"
                 classNames={{
-                  input: "flex h-[200px] p-3 text-[13px]",
+                  input: "flex h-[100px] p-3 text-[13px]",
                   label: "flex pb-1",
                 }}
                 placeholder="Ex. การอินทิเกรต (Integration)"
@@ -292,20 +292,11 @@ export default function ModalManageTopic({
                   formOneWeek.getInputProps("labHour").error}
               </p>
             </div>
-
-            {/* Add More Button */}
-            {type === "add" && (
-              <div className="absolute right-5 bottom-5">
-                <Button variant="outline" onClick={addMore}>
-                  Add more
-                </Button>
-              </div>
-            )}
           </div>
           {/* List Course Content */}
           {!!form.getValues().schedule?.length && type === "add" && (
             <div
-              className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-full"
+              className="flex flex-col flex-1 bg-white border-secondary border-[1px] rounded-md w-[55%] h-[342px]"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 overflowY: "auto",
@@ -382,13 +373,21 @@ export default function ModalManageTopic({
           <Button variant="subtle" onClick={onClose}>
             Cancel
           </Button>
+    
+           {type === "add" && (
+          
+                <Button variant='subtle' onClick={addMore}>
+                  Add more content
+                </Button>
+        
+            )}
           <Button
             onClick={onClickDone}
             disabled={
               form.getValues().schedule?.length == 0 && !formOneWeek.errors
             }
           >
-            Done
+            Save
           </Button>
         </div>
       </div>
