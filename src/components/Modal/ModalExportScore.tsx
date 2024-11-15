@@ -19,7 +19,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const tqf3 = useAppSelector((state) => state.tqf3);
-  const [selectedParts, setSelectedParts] = useState<string[]>([]);
+  const [selectedSecToExport, setSelectedSecToExport] = useState<string[]>([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
   const course = useAppSelector((state) =>
@@ -30,58 +30,21 @@ export default function ModalExportScore({ opened, onClose }: Props) {
     if (opened) {
       Object.keys(tqf3).forEach((part) => {
         if (part.includes("part")) {
-          selectedParts.push(part);
+          selectedSecToExport.push(part);
         }
       });
     }
   }, [opened]);
 
+  useEffect(() => {
+    if (selectedSecToExport) {
+      console.log(selectedSecToExport);
+    }
+  }, [selectedSecToExport]);
+
   const onCloseModal = () => {
     onClose();
-    setSelectedParts([]);
-  };
-
-  const generatePDF = async () => {
-    if (selectedParts.length === 0) {
-      showNotifications(
-        NOTI_TYPE.ERROR,
-        "Error",
-        "Please select at least one part to export."
-      );
-      return;
-    }
-    dispatch(setLoadingOverlay(true));
-    const payload: any = {
-      courseNo,
-      academicYear: academicYear.year,
-      academicTerm: academicYear.semester,
-      tqf3: tqf3.id,
-    };
-    selectedParts.forEach((part) => (payload[part] = ""));
-    const res = await genPdfTQF3(payload);
-    if (res) {
-      const contentType = res.headers["content-type"];
-      const disposition = res.headers["content-disposition"];
-      const filename = disposition
-        ? disposition.split("filename=")[1]
-        : `TQF3_Parts_${courseNo}_${academicYear.year}_${academicYear.semester}.zip`;
-      const blob = new Blob([res.data], { type: contentType });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename.replace(/"/g, "");
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-      showNotifications(
-        NOTI_TYPE.SUCCESS,
-        "Export Success",
-        `TQF3 exported successfully as ${filename}.`
-      );
-    }
-    dispatch(setLoadingOverlay(false));
-    onCloseModal();
+    setSelectedSecToExport([]);
   };
 
   return (
@@ -99,7 +62,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
         </div>
       }
       centered
-      size="45vw"
+      size="30vw"
       transitionProps={{ transition: "pop" }}
       classNames={{
         content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
@@ -110,8 +73,8 @@ export default function ModalExportScore({ opened, onClose }: Props) {
         <Checkbox.Group
           label={`Select section to export`}
           classNames={{ label: "mb-1 font-semibold text-default" }}
-          value={selectedParts}
-          onChange={setSelectedParts}
+          value={selectedSecToExport}
+          onChange={setSelectedSecToExport}
         >
           {course?.sections.map((sec, index) => {
             return (
@@ -122,13 +85,14 @@ export default function ModalExportScore({ opened, onClose }: Props) {
                 <Checkbox.Card
                   className="p-3 items-center px-4 flex border-none h-fit rounded-md w-full"
                   style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
+                  value={sec.sectionNo?.toString()}
                 >
                   <Group
                     wrap="nowrap"
-                    className="item-center flex"
+                    className="items-center flex"
                     align="flex-start"
                   >
-                    <Checkbox.Indicator className="mt-1" />
+                    <Checkbox.Indicator />
                     <div className="text-default whitespace-break-spaces font-medium text-[13px]">
                       Section {sec.sectionNo}
                     </div>
@@ -150,12 +114,14 @@ export default function ModalExportScore({ opened, onClose }: Props) {
               <Icon
                 IconComponent={IconFileExport}
                 className={`${
-                  !tqf3.part1?.updatedAt ? "text-[#adb5bd]" : "text-[#ffffff]"
+                  selectedSecToExport.length === 0
+                    ? "text-[#adb5bd]"
+                    : "text-[#ffffff]"
                 } size-5 items-center stroke-[2px]`}
               />
             }
-            onClick={generatePDF}
-            disabled={!tqf3.part1?.updatedAt}
+            // onClick={generatePDF}
+            disabled={selectedSecToExport.length === 0}
           >
             Export TQF3
           </Button>
