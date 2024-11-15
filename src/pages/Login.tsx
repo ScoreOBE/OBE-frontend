@@ -17,8 +17,12 @@ import IconBulb from "@/assets/icons/bulb.svg?react";
 import IconSparkle from "@/assets/icons/sparkle.svg?react";
 import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
 import IconPlus2 from "@/assets/icons/plus2.svg?react";
+import IconExcel from "@/assets/icons/excel.svg?react";
 import IconShare2 from "@/assets/icons/share2.svg?react";
 import IconHistogram from "@/assets/icons/histogram.svg?react";
+import IconClick from "@/assets/icons/click.svg?react";
+import IconPublish1 from "@/assets/icons/eyePublish.svg?react";
+import IconPublish2 from "@/assets/icons/publishEach.svg?react";
 import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
 import gradescope from "@/assets/image/gradescope.png";
@@ -30,47 +34,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import testPhoto from "@/assets/image/testPhoto.png";
 import studentPLOPage from "@/assets/image/studentPLO.png";
 import LoadingOverlay from "@/components/Loading/LoadingOverlay";
-import tqf3pt1 from "@/assets/image/tqf3pt1.png";
-
+import exportScoreImg from "@/assets/image/exporScore.png";
+import publishScoreImg from "@/assets/image/publishScore.png";
 export default function Login() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const data = [
-    {
-      image:
-        "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
-
-      title: "Best forests to visit in North America",
-      category: "nature",
-    },
-    {
-      image:
-        "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
-      title: "Hawaii beaches review: better than you think",
-      category: "beach",
-    },
-    {
-      image:
-        "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png",
-      title: "Mountains at night: 12 best locations to enjoy the view",
-      category: "nature",
-    },
-    {
-      image:
-        "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png",
-      title: "Aurora in Norway: when to visit for best experience",
-      category: "nature",
-    },
-    {
-      image:
-        "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-5.png",
-      title: "Best places to visit this winter",
-      category: "tourism",
-    },
-  ];
 
   const tqf3List = [
     {
@@ -447,46 +417,70 @@ export default function Login() {
                       </span>
                     </p>
                   </div>
+
                   <div className="flex  justify-center gap-16">
-                    <div className="relative bg-[#FFFFFF] rounded-2xl h-[550px] w-[600px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
-                      <Image
-                        src={studentPLOPage}
-                        className={`h-full w-full object-cover rounded-xl -translate-x-20 translate-y-36`}
+                    <div className="relative rounded-2xl h-[550px] w-[600px] bg-gradient-to-b shadow-xl from-[#7161ef]  via-[#957fef] to-[#b79ced] border-t-[1px] overflow-clip">
+                      <div
+                        className={`h-full w-full overflow-clip rounded-xl -translate-x-20 translate-y-40 shadow-2xl`}
+                      >
+                        <Image
+                          src={publishScoreImg}
+                          className={`h-[500px] w-full object-cover rounded-xl translate-x-14 -translate-y-8`}
+                        />
+                      </div>
+                      <Icon
+                        IconComponent={IconPublish1}
+                        className="absolute bottom-10 right-12 size-20 text-white "
+                      />
+                      <Icon
+                        IconComponent={IconPublish2}
+                        className="absolute top-24 right-[300px] size-14 stroke-slate-200 text-white "
                       />
 
-                      <div className="absolute inset-0 rounded-xl">
-                        <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
-                          <p className="opacity-70 font-bold uppercase cursor-default">
+                      <div className="absolute top-2 left-2 rounded-xl">
+                        <div className="top-0 flex flex-col justify-end p-6 ">
+                          <p className="opacity-70 font-bold uppercase cursor-default  text-white">
                             Publish
                           </p>
                           <Title
                             order={3}
-                            className="font-bold text-[20px] cursor-default"
+                            className="font-bold text-[28px] cursor-default text-white"
                           >
-                            Quickly publish scores for individual or all
-                            sections and share results instantly.
+                            Quickly publish scores for individual <br /> or all
+                            sections.
                           </Title>
                         </div>
                       </div>
                     </div>
-
-                    <div className="relative bg-[#FFFFFF] rounded-2xl h-[550px] w-[600px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
-                      <Image
-                        src={studentPLOPage}
-                        className={`h-full w-full object-cover rounded-xl translate-x-20 translate-y-36`}
+                    <div className="relative rounded-2xl h-[550px] w-[600px] bg-gradient-to-b shadow-xl from-[#5390d9] via-[#4ea8de] to-[#48bfe3] border-t-[1px] overflow-clip">
+                      <div
+                        className={`h-full w-full overflow-clip rounded-xl translate-x-20 translate-y-40 shadow-2xl`}
+                      >
+                        <Image
+                          src={exportScoreImg}
+                          className={`h-[700px] w-full object-cover rounded-xl -translate-y-[150px] -translate-x-9`}
+                        />
+                      </div>
+                      <Icon
+                        IconComponent={IconExcel}
+                        className="absolute bottom-10 left-6 size-20 -rotate-12 text-white "
+                      />
+                      <Icon
+                        IconComponent={IconClick}
+                        className="absolute top-32 right-10 size-14 -rotate-12 text-white "
                       />
 
-                      <div className="absolute inset-0 rounded-xl">
-                        <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
-                          <p className="opacity-70 font-bold uppercase cursor-default">
+                      <div className="absolute top-2 left-2 rounded-xl">
+                        <div className="top-0 flex flex-col justify-end p-6 ">
+                          <p className="opacity-70 font-bold uppercase cursor-default  text-white">
                             Export
                           </p>
                           <Title
                             order={3}
-                            className="font-boldtext-[20px] cursor-default"
+                            className="font-bold text-[28px] cursor-default text-white"
                           >
-                            Export score data to .xlsx files for each section
-                            with a single click.
+                            Export score data to .xlsx files <br />
+                            for each section with a single click.
                           </Title>
                         </div>
                       </div>
