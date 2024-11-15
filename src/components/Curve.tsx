@@ -1,7 +1,20 @@
-import { calStat } from "@/helpers/functions/score";
+import { calStat, generateBellCurveData } from "@/helpers/functions/score";
 import { IModelAssignment, IModelScore } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
-import { BarChart } from "@mantine/charts";
+import {
+  Chart,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+} from "chart.js";
+import { useEffect, useRef } from "react";
+import { CategoryScale } from "chart.js";
+import "chart.js/auto";
+Chart.register(CategoryScale);
+
+Chart.register(LineController, LineElement, PointElement, LinearScale, Title);
 
 type Props = {
   data: Partial<IModelAssignment>;
@@ -9,52 +22,92 @@ type Props = {
   isQuestions: boolean;
 };
 
-export default function HistogramChart({ data, students, isQuestions }: Props) {
+export default function Curve({ data, students, isQuestions }: Props) {
+  const chartRef = useRef<HTMLCanvasElement | null>(null);
+
   const fullScore =
     data.questions?.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
   const scores = students
     .map(({ scores }) =>
       scores
-        .find(({ assignmentName }) => assignmentName == data.name)
+        .find(({ assignmentName }) => assignmentName === data.name)
         ?.questions?.reduce((sum, { score }) => sum + score, 0)
     )
-    .filter((item) => item != undefined)
-    .sort((a, b) => a - b) || [0];
+    .filter((item): item is number => item !== undefined)
+    .sort((a, b) => a - b);
+
   const totalStudent = students.length;
   const { mean, sd, median, maxScore, minScore, q1, q3 } = calStat(
     scores,
     totalStudent
   );
-  const k = Math.log2(totalStudent) + 1;
-  const binWidth = (maxScore - minScore) / k;
-  const scoresData = Array.from({ length: k }, (_, index) => {
-    const start = minScore + index * binWidth;
-    const end = start + binWidth;
-    return {
-      range: `${start.toFixed(2)} - ${end.toFixed(2)}`,
-      start,
-      end,
-      Students: 0,
-    };
-  });
-  scores.forEach((score) => {
-    const binIndex = scoresData.findIndex(
-      (item) => item.start <= score && item.end >= score
-    );
-    if (binIndex !== -1) {
-      scoresData[binIndex].Students += 1;
+  
+
+  useEffect(() => {
+    if (chartRef.current) {
+      const ctx = chartRef.current.getContext("2d");
+      if (ctx) {
+        const bellCurveData = generateBellCurveData(
+          scores,
+          fullScore,
+          totalStudent
+        );
+
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: bellCurveData.map((point) => point.x.toFixed(2)),
+            datasets: [
+              {
+                data: bellCurveData.map((point) => point.y),
+                borderColor: "rgba(31, 105, 243, 1)",
+                backgroundColor: "rgba(31, 105, 243, 0.1)",
+                borderWidth: 2,
+                fill: true,
+                pointRadius: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              title: {
+                display: true,
+              },
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: "Score",
+                },
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: "Number of Students",
+                },
+              },
+            },
+          },
+        });
+      }
     }
-  });
+  }, [mean, sd, minScore, maxScore]);
 
   return (
     <>
       {!isQuestions && (
         <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-5 text-start mx-5">
+          {/* Statistics Display */}
           <div className="flex flex-row text-secondary text-[20px] w-full justify-between font-semibold">
             <div className="flex justify-between !w-full items-center mb-1">
               <div className="flex flex-col">
-                <p className="text-[#3f4474]  text-[16px]">{data.name}</p>
-                <p >
+                <p className="text-[#3f4474] text-[16px]">{data.name}</p>
+                <p>
                   {fullScore?.toFixed(2)}{" "}
                   <span className="text-[16px]">pts.</span>
                 </p>
@@ -98,56 +151,11 @@ export default function HistogramChart({ data, students, isQuestions }: Props) {
         </div>
       )}
       <div
-        className={`h-full w-full  ${isQuestions ? "px-20 pb-6" : "pl-3 pr-5"}`}
+        className={`h-full bg w-full ${
+          isQuestions ? "px-20 pb-6" : "pl-3 pr-5"
+        }`}
       >
-        <BarChart
-         className="mt-4"
-          style={{
-            "--chart-cursor-fill": "#EAEBEB",
-          }}
-          h={420}
-          tickLine="x"
-          xAxisLabel="Score"
-          yAxisLabel="Number of Students"
-          data={scoresData}
-          dataKey="range"
-          series={[
-            {
-              name: "Students",
-              color: "rgba(31, 105, 243, 0.25)",
-            },
-          ]}
-          barChartProps={{
-            barGap: 0,
-            stackOffset: "none",
-            barCategoryGap: 0,
-          }}
-          barProps={{
-            stroke: "#9A9AE3",
-            strokeWidth: 1,
-            radius: 2,
-            strokeOpacity: 1,
-          }}
-          tooltipProps={{
-            content: ({ active, payload, label }) => {
-              if (active && payload && payload.length) {
-                const data = payload[0].value;
-                return (
-                  <div className="bg-gray-900 text-white p-4 rounded-xl shadow-lg min-w-[180px]">
-                    <p className="text-sm font-semibold mb-2">Score: {label}</p>
-                    <div className="flex flex-col gap-0 items-start justify-between pt-2 border-t-[1px] border-[#747575]">
-                      <span className=" text-[#AAB1B4] text-[14px]">
-                        Number of Students
-                      </span>
-                      <span className="font-bold text-[22px]">{data}</span>
-                    </div>
-                  </div>
-                );
-              }
-              return null;
-            },
-          }}
-        />
+        <canvas ref={chartRef} id="myChart"></canvas>
       </div>
     </>
   );

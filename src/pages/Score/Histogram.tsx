@@ -9,9 +9,21 @@ import needAccess from "@/assets/image/needAccess.jpg";
 import Loading from "@/components/Loading/Loading";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import React from "react";
+import { Tabs } from "@mantine/core";
+import Curve from "@/components/Curve";
+type TabState = {
+  [key: number]: string; 
+};
 
 export default function Histogram() {
   const { courseNo, sectionNo } = useParams();
+  const [tabStates, setTabStates] = useState<TabState>({});
+  const handleTabChange = (index:any, newValue:any) => {
+    setTabStates((prevStates) => ({
+      ...prevStates,
+      [index]: newValue, 
+    }));
+  }
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
@@ -112,11 +124,39 @@ export default function Histogram() {
                         key={i}
                         ref={sectionRefs.current?.at(i)} // Dynamic refs
                       >
-                        <HistogramChart
-                          data={item}
-                          students={section.students!}
-                          isQuestions={false}
-                        />
+                        <Tabs
+                          classNames={{
+                            root: "overflow-hidden mt-1 mx-3 flex flex-col max-h-full",
+                          }}
+                          value={tabStates[i] || "histogram"} // Default tab for new items
+                          onChange={(newValue) => handleTabChange(i, newValue)} // Update specific tab
+                        >
+                          {" "}
+                          <Tabs.List className="mb-2">
+                            <Tabs.Tab value="histogram">Histogram</Tabs.Tab>{" "}
+                            <Tabs.Tab value="bellCurve">Bell Curve</Tabs.Tab>
+                          </Tabs.List>
+                          <Tabs.Panel
+                            className="flex flex-col gap-1"
+                            value="histogram"
+                          >
+                            <HistogramChart
+                              data={item}
+                              students={section.students!}
+                              isQuestions={false}
+                            />
+                          </Tabs.Panel>
+                          <Tabs.Panel
+                            className="flex flex-col gap-1"
+                            value="bellCurve"
+                          >
+                            <Curve
+                              data={item}
+                              students={section.students!}
+                              isQuestions={false}
+                            />
+                          </Tabs.Panel>
+                        </Tabs>
                       </div>
                     );
                   })}
