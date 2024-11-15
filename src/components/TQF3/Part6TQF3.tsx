@@ -51,7 +51,7 @@ export default function Part6TQF3({ setForm }: Props) {
         },
         {
           label:
-            "ข้อเสนอแนะผ่านเวบบอร์ดที่อาจารย์ผู้สอนได้จัดทำเป็นช่องทางการสื่อสารกับนักศึกษา \n(Suggestions through the instructor's webboard for student communication.)",
+            "ข้อเสนอแนะผ่านเว็บบอร์ดที่อาจารย์ผู้สอนได้จัดทำเป็นช่องทางการสื่อสารกับนักศึกษา \n(Suggestions through the instructor's webboard for student communication.)",
         },
         { label: "อื่นๆ (Other)" },
       ],
