@@ -38,12 +38,36 @@ export const calStat = (scores: number[], totalStudent: number) => {
     scores[baseQ1] + (Q1 - baseQ1) * (scores[baseQ1 + 1] - scores[baseQ1]);
 
   return {
-    mean: mean?.toFixed(2),
-    sd: sd?.toFixed(2),
-    median: median?.toFixed(2),
+    mean: mean,
+    sd: sd,
+    median: median,
     maxScore,
     minScore,
-    q1: q1?.toFixed(2),
-    q3: q3?.toFixed(2),
+    q1: q1,
+    q3: q3,
   };
 };
+
+export const generateBellCurveData = (
+  scores: number[],
+  fullScore: number,
+  totalStudent: number
+): { x: number; y: number }[] => {
+  const { mean, sd } = calStat(scores, totalStudent);
+
+  const numPoints = 100; 
+  const step = fullScore / numPoints;
+
+  const bellCurveData = [];
+
+  for (let x = 0; x <= fullScore; x += step) {
+    const y =
+      (1 / (sd * Math.sqrt(2 * Math.PI))) *
+      Math.exp(-Math.pow(x - mean, 2) / (2 * Math.pow(sd, 2)));
+    bellCurveData.push({ x, y });
+  }
+
+  return bellCurveData;
+};
+
+
