@@ -29,7 +29,6 @@ import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { useForm } from "@mantine/form";
-import { IModelAssignment } from "@/models/ModelCourse";
 
 export default function Assignment() {
   const { courseNo, sectionNo } = useParams();

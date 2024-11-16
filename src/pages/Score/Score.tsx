@@ -10,16 +10,11 @@ import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
-import HistogramChart from "@/components/HistogramChart";
-import { BarChart } from "@mantine/charts";
+import HistogramChart from "@/components/Chart/HistogramChart";
 import Icon from "@/components/Icon";
 import IconChevronDown from "@/assets/icons/chevronDown.svg?react";
-import {
-  IModelAssignment,
-  IModelQuestion,
-  IModelScore,
-} from "@/models/ModelCourse";
-import { ROLE } from "@/helpers/constants/enum";
+import { IModelQuestion } from "@/models/ModelCourse";
+import ChartContainer from "@/components/Chart/ChartContainer";
 
 export default function Overall() {
   const { courseNo, sectionNo, name } = useParams();
@@ -53,32 +48,6 @@ export default function Overall() {
     },
     { title: `${name}` },
   ]);
-
-  const [openAllPublishModal, setOpenAllPublishModal] = useState(false);
-
-  const data = [
-    { month: "January", Smartphones: 1200, Laptops: 900, Tablets: 200 },
-    { month: "February", Smartphones: 1900, Laptops: 1200, Tablets: 400 },
-    { month: "March", Smartphones: 400, Laptops: 1000, Tablets: 200 },
-    { month: "April", Smartphones: 1000, Laptops: 200, Tablets: 800 },
-    { month: "May", Smartphones: 800, Laptops: 1400, Tablets: 1200 },
-    { month: "June", Smartphones: 750, Laptops: 600, Tablets: 1000 },
-  ];
-
-  // Mock Data for HistogramChart Component
-  const generateMockUser = (index: number): IModelUser => ({
-    id: `user-${index + 1}`,
-    studentId: `student-${index + 1}`,
-    firstNameTH: `ชื่อ${index + 1}`,
-    lastNameTH: `นามสกุล${index + 1}`,
-    firstNameEN: `FirstName${index + 1}`,
-    lastNameEN: `LastName${index + 1}`,
-    email: `student${index + 1}@example.com`,
-    facultyCode: `FAC${index % 5}`, // Example faculty code
-    departmentCode: [`DEP${index % 3}`], // Example department codes
-    role: index % 2 === 0 ? ROLE.STUDENT : ROLE.ADMIN, // Use the ROLE enum
-    enrollCourses: [], // Can add specific courses if needed
-  });
 
   // Generate assignments mock data for questions
   const questions: Array<IModelQuestion> = Array.from(
@@ -256,8 +225,8 @@ export default function Overall() {
                           120 Students
                         </p>
                       </div>
-
-                      <HistogramChart
+                      <ChartContainer
+                        type="histogram"
                         data={ques}
                         students={[]}
                         isQuestions={true}

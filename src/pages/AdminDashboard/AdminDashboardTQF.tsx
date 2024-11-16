@@ -541,14 +541,6 @@ export default function AdminDashboardTQF() {
                 {filterTQF5()}
               </Menu.Dropdown>
             </Menu>
-            {/* <Button
-              className="text-center px-4"
-              leftSection={
-                <Icon IconComponent={IconExcel} className="size-4" />
-              }
-            >
-              Export PLO
-            </Button> */}
           </div>
         </div>
         <Tabs
@@ -587,9 +579,7 @@ export default function AdminDashboardTQF() {
                       : payload?.hasMore
                   }
                   className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
-                  style={{
-                    height: "fit-content",
-                  }}
+                  style={{ height: "fit-content" }}
                   loader={<Loading />}
                 >
                   <Table stickyHeader>

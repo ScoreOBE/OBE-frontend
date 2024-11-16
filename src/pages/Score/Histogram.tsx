@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useRef, useState } from "react";
-import HistogramChart from "@/components/HistogramChart";
+import HistogramChart from "@/components/Chart/HistogramChart";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
@@ -10,20 +10,21 @@ import Loading from "@/components/Loading/Loading";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import React from "react";
 import { Tabs } from "@mantine/core";
-import Curve from "@/components/Curve";
+import Curve from "@/components/Chart/Curve";
+import ChartContainer from "@/components/Chart/ChartContainer";
 type TabState = {
-  [key: number]: string; 
+  [key: number]: string;
 };
 
 export default function Histogram() {
   const { courseNo, sectionNo } = useParams();
   const [tabStates, setTabStates] = useState<TabState>({});
-  const handleTabChange = (index:any, newValue:any) => {
+  const handleTabChange = (index: any, newValue: any) => {
     setTabStates((prevStates) => ({
       ...prevStates,
-      [index]: newValue, 
+      [index]: newValue,
     }));
-  }
+  };
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
@@ -131,16 +132,16 @@ export default function Histogram() {
                           value={tabStates[i] || "histogram"} // Default tab for new items
                           onChange={(newValue) => handleTabChange(i, newValue)} // Update specific tab
                         >
-                          {" "}
                           <Tabs.List className="mb-2">
-                            <Tabs.Tab value="histogram">Histogram</Tabs.Tab>{" "}
+                            <Tabs.Tab value="histogram">Histogram</Tabs.Tab>
                             <Tabs.Tab value="bellCurve">Distribution</Tabs.Tab>
                           </Tabs.List>
                           <Tabs.Panel
                             className="flex flex-col gap-1"
                             value="histogram"
                           >
-                            <HistogramChart
+                            <ChartContainer
+                              type="histogram"
                               data={item}
                               students={section.students!}
                               isQuestions={false}
@@ -150,7 +151,8 @@ export default function Histogram() {
                             className="flex flex-col gap-1"
                             value="bellCurve"
                           >
-                            <Curve
+                            <ChartContainer
+                              type="curve"
                               data={item}
                               students={section.students!}
                               isQuestions={false}

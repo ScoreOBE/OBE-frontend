@@ -6,7 +6,6 @@ import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import { useEffect, useState } from "react";
 import { IModelTQF3Part7 } from "@/models/ModelTQF3";
-import { IModelPLO } from "@/models/ModelPLO";
 import { useAppDispatch, useAppSelector } from "@/store";
 import unplug from "@/assets/image/unplug.png";
 import { cloneDeep, isEqual } from "lodash";
