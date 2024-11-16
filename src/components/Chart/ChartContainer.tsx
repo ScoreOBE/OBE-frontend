@@ -1,15 +1,22 @@
 import { calStat } from "@/helpers/functions/score";
 import { IModelAssignment, IModelScore } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
-import { BarChart } from "@mantine/charts";
+import Curve from "./Curve";
+import HistogramChart from "./HistogramChart";
 
 type Props = {
   data: Partial<IModelAssignment>;
   students: { student: IModelUser; scores: IModelScore[] }[];
   isQuestions: boolean;
+  type: "histogram" | "curve";
 };
 
-export default function HistogramChart({ data, students, isQuestions }: Props) {
+export default function ChartContainer({
+  data,
+  students,
+  isQuestions,
+  type,
+}: Props) {
   const fullScore =
     data.questions?.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
   const scores = students
@@ -54,7 +61,7 @@ export default function HistogramChart({ data, students, isQuestions }: Props) {
             <div className="flex justify-between !w-full items-center mb-1">
               <div className="flex flex-col">
                 <p className="text-[#3f4474]  text-[16px]">{data.name}</p>
-                <p >
+                <p>
                   {fullScore?.toFixed(2)}{" "}
                   <span className="text-[16px]">pts.</span>
                 </p>
@@ -68,31 +75,45 @@ export default function HistogramChart({ data, students, isQuestions }: Props) {
           <div className="flex  flex-row justify-between w-full">
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Mean</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{mean?.toFixed(2)}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                {mean?.toFixed(2)}
+              </p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{sd?.toFixed(2)}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                {sd?.toFixed(2)}
+              </p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Median</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{median?.toFixed(2)}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                {median?.toFixed(2)}
+              </p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Max</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{maxScore?.toFixed(2)}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                {maxScore?.toFixed(2)}
+              </p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Min</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{minScore?.toFixed(2)}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                {minScore?.toFixed(2)}
+              </p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{q3?.toFixed(2)}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                {q3?.toFixed(2)}
+              </p>
             </div>
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">{q1?.toFixed(2)}</p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                {q1?.toFixed(2)}
+              </p>
             </div>
           </div>
         </div>
@@ -100,54 +121,11 @@ export default function HistogramChart({ data, students, isQuestions }: Props) {
       <div
         className={`h-full w-full  ${isQuestions ? "px-20 pb-6" : "pl-3 pr-5"}`}
       >
-        <BarChart
-         className="mt-4"
-          style={{
-            "--chart-cursor-fill": "#EAEBEB",
-          }}
-          h={420}
-          tickLine="x"
-          xAxisLabel="Score"
-          yAxisLabel="Number of Students"
-          data={scoresData}
-          dataKey="range"
-          series={[
-            {
-              name: "Students",
-              color: "rgba(31, 105, 243, 0.25)",
-            },
-          ]}
-          barChartProps={{
-            barGap: 0,
-            stackOffset: "none",
-            barCategoryGap: 0,
-          }}
-          barProps={{
-            stroke: "#9A9AE3",
-            strokeWidth: 1,
-            radius: 2,
-            strokeOpacity: 1,
-          }}
-          tooltipProps={{
-            content: ({ active, payload, label }) => {
-              if (active && payload && payload.length) {
-                const data = payload[0].value;
-                return (
-                  <div className="bg-gray-900 text-white p-4 rounded-xl shadow-lg min-w-[180px]">
-                    <p className="text-sm font-semibold mb-2">Score: {label}</p>
-                    <div className="flex flex-col gap-0 items-start justify-between pt-2 border-t-[1px] border-[#747575]">
-                      <span className=" text-[#AAB1B4] text-[14px]">
-                        Number of Students
-                      </span>
-                      <span className="font-bold text-[22px]">{data}</span>
-                    </div>
-                  </div>
-                );
-              }
-              return null;
-            },
-          }}
-        />
+        {type == "histogram" ? (
+          <HistogramChart scoresData={scoresData} />
+        ) : (
+          <Curve mean={mean} sd={sd} fullScore={fullScore} />
+        )}
       </div>
     </>
   );

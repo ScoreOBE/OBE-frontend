@@ -4,10 +4,10 @@ export const calStat = (scores: number[], totalStudent: number) => {
 
   // calculate Mean
   const mean = scores.reduce((a, b) => a + b, 0) / totalStudent;
-  const middle = (totalStudent + 1) / 2;
 
   // calculate Median
   let median = 0;
+  const middle = (totalStudent + 1) / 2;
   if (totalStudent % 2 === 0) {
     const lwMid = scores[Math.floor(middle) - 1];
     const upMid = scores[Math.ceil(middle) - 1];
@@ -49,19 +49,16 @@ export const calStat = (scores: number[], totalStudent: number) => {
 };
 
 export const generateBellCurveData = (
-  scores: number[],
-  fullScore: number,
-  totalStudent: number
+  mean: number,
+  sd: number,
+  fullScore: number
 ): { x: number; y: number }[] => {
-  const { mean, sd } = calStat(scores, totalStudent);
-
   const numPoints = 100;
   const step = fullScore / (numPoints - 1);
-
   const bellCurveData = [];
 
   for (let i = 0; i < numPoints; i++) {
-    const x = i * step; 
+    const x = i * step;
     const y =
       (1 / (sd * Math.sqrt(2 * Math.PI))) *
       Math.exp(-Math.pow(x - mean, 2) / (2 * Math.pow(sd, 2)));
@@ -70,4 +67,3 @@ export const generateBellCurveData = (
 
   return bellCurveData;
 };
-
