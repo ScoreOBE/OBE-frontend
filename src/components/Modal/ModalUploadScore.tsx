@@ -268,14 +268,14 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                       className="h-fit w-fit"
                     >
                       <Button
-                        variant="gradient"
+                        variant='filled'
                         leftSection={
                           <Icon
                             IconComponent={IconDownload}
                             className="size-4"
                           />
                         }
-                        className="size-4 bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]"
+                        className="size-4 "
                       >
                         Download template
                       </Button>
@@ -285,7 +285,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 <img
                   src={scoreOBETemplate}
                   alt="cpeLogo"
-                  className=" sm:hidden ipad11:h-[30vh]  h-[40vh] -mt-2 sm:mt-0"
+                  className=" sm:max-ipad11:hidden ipad11:max-macair133:h-[30vh] h-[42vh] -mt-2 sm:mt-0"
                 />
               </div>
               <Alert
@@ -333,7 +333,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 className="bg-white hover:bg-gray-50 border-[#8f9ae37f] border-dashed cursor-pointer border-[2px] rounded-md"
               >
                 {result?.sections ? (
-                  <div className="flex justify-between p-5">
+                  <div className="flex justify-between p-5 px-8">
                     <div className="flex gap-2 items-center">
                       <Icon
                         IconComponent={IconExcel}
@@ -341,10 +341,11 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                       />
                       <p className="text-b2">{file?.name}</p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                       <Button
                         color="#ffcdcd"
-                        className=" text-error pl-4 font-extrabold hover:text-[#f26c6c] text-b3 rounded-md"
+                        variant='outline'
+                        className=" text-error pl-4 font-semibold  hover:text-[#f26c6c] text-b3 rounded-md"
                         leftSection={
                           <Icon IconComponent={IconTrash} className="size-4" />
                         }
@@ -358,8 +359,9 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                         Delete
                       </Button>
                       <Button
-                        color="#DDE0FF"
-                        className=" text-secondary pl-4 font-extrabold hover:text-[#4a58b4] text-b3 rounded-md"
+                        
+                        variant='filled'
+                        className=" text-white pl-4 font-semibold hover:text-[#ffffff] text-b3 rounded-md"
                         leftSection={
                           <Icon IconComponent={IconUpload} className="size-4" />
                         }

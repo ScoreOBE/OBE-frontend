@@ -117,13 +117,13 @@ export default function SelectDepartment() {
                 Select department 
               </div>
               <div className="text-[#fcc087] text-b2 font-semibold mb-4">
-                Select up to 3 departments <br/> in which you are responsible for teaching.
+                Select up to 4 departments <br/> in which you are responsible for teaching.
               </div>
-              <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[300px] sm:h-[350px] ipad11:h-[515px]">
+              <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[300px] sm:h-[350px] ipad11:h-[430px]">
                 {faculty.department?.map((key) => {
                   const isChecked = checkedItems.includes(key.codeEN);
                   const disabled =
-                    checkedItems.length == 3 &&
+                    checkedItems.length == 4 &&
                     !checkedItems.includes(key.codeEN);
                   return (
                     <div
