@@ -39,9 +39,9 @@ export default function ModalErrorUploadFile({
       }
       // classNames={{ title: "text-delete"}}
       transitionProps={{
-        transition: "scale",
+
         // duration: 1000,
-        timingFunction: "linear",
+  
       }}
       centered
       size="40vw"

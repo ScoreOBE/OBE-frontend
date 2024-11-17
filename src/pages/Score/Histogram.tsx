@@ -46,7 +46,7 @@ export default function Histogram() {
         ROUTE_PATH.SECTION
       }?${params.toString()}`,
     },
-    { title: `Histogram Section ${getSectionNo(sectionNo)}` },
+    { title: `Chart Section ${getSectionNo(sectionNo)}` },
   ]);
 
   const sectionRefs = useRef(

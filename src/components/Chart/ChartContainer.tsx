@@ -55,7 +55,7 @@ export default function ChartContainer({
     scores,
     totalStudent
   );
-  const k = Math.log2(totalStudent) + 1;
+  const k = Math.ceil(Math.log2(totalStudent) + 1);
   const binWidth = (maxScore - minScore) / k;
   const scoresData = Array.from({ length: k }, (_, index) => {
     const start = minScore + index * binWidth;
@@ -68,9 +68,11 @@ export default function ChartContainer({
     };
   });
   scores.forEach((score) => {
-    const binIndex = scoresData.findIndex(
-      (item) => item.start <= score && item.end >= score
-    );
+    const binIndex = scoresData.findIndex((item, index) =>
+      index === scoresData.length - 1
+        ? item.start <= score && score <= item.end
+        : item.start <= score && score < item.end
+    );    
     if (binIndex !== -1) {
       scoresData[binIndex].Students += 1;
     }
