@@ -144,7 +144,6 @@ export default function Histogram() {
                               type="histogram"
                               data={item}
                               students={section.students!}
-                              isQuestions={false}
                             />
                           </Tabs.Panel>
                           <Tabs.Panel
@@ -155,7 +154,6 @@ export default function Histogram() {
                               type="curve"
                               data={item}
                               students={section.students!}
-                              isQuestions={false}
                             />
                           </Tabs.Panel>
                         </Tabs>
