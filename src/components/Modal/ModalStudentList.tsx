@@ -57,17 +57,18 @@ export default function ModalStudentList({
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
 
+  const reset = () => {
+    setFile(undefined);
+    setResult(undefined);
+  };
+
   useEffect(() => {
-    if (opened) {
-      setFile(undefined);
-      setResult(undefined);
-    }
+    if (opened) reset();
   }, [opened]);
 
   useEffect(() => {
     if (!openModalUploadError) {
-      setFile(undefined);
-      setResult(undefined);
+      reset();
       setErrorStudentId([]);
       setErrorSection([]);
     }
@@ -154,18 +155,19 @@ export default function ModalStudentList({
               </Table.Thead>
               <Table.Tbody>{rows}</Table.Tbody>
             </Table>
-          ) : (<div className="flex items-center justify-between px-8 !w-full">
-            <p className="text-start font-semibold text-[18px] text-secondary p-6 py-10">
-              No Student List found 
-              <br />
-              <p className="mt-1  text-[#777777] font-medium text-b2" font->
-                {" "}
-                Student list will show when you upload score first.
+          ) : (
+            <div className="flex items-center justify-between px-8 !w-full">
+              <p className="text-start font-semibold text-[18px] text-secondary p-6 py-10">
+                No Student List found
+                <br />
+                <p className="mt-1  text-[#777777] font-medium text-b2" font->
+                  {" "}
+                  Student list will show when you upload score first.
+                </p>
               </p>
-            </p>
-            <div className="h-full  w-[18vw] justify-center flex flex-col">
-                    <img src={notFoundImage} alt="notFound"></img>
-                  </div>
+              <div className="h-full  w-[18vw] justify-center flex flex-col">
+                <img src={notFoundImage} alt="notFound"></img>
+              </div>
             </div>
           )}
         </div>
@@ -469,15 +471,13 @@ export default function ModalStudentList({
         )}
       </Modal>
 
-      {!!(errorStudentId.length || errorSection.length) && (
-        <ModalErrorUploadFile
-          type="students"
-          opened={openModalUploadError}
-          onClose={() => setOpenModalUploadError(false)}
-          errorStudentId={errorStudentId}
-          errorSection={errorSection}
-        />
-      )}
+      <ModalErrorUploadFile
+        type="students"
+        opened={openModalUploadError}
+        onClose={() => setOpenModalUploadError(false)}
+        errorStudentId={errorStudentId}
+        errorSection={errorSection}
+      />
     </>
   );
 }

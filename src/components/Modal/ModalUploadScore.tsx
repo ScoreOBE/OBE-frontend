@@ -58,10 +58,18 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
 
+  const reset = () => {
+    setFile(undefined);
+    setResult(undefined);
+  };
+
+  useEffect(() => {
+    if (opened) reset();
+  }, [opened]);
+
   useEffect(() => {
     if (!openModalUploadError) {
-      setFile(undefined);
-      setResult(undefined);
+      reset();
       setErrorStudentId([]);
       setErrorSection([]);
       setErrorPoint([]);
@@ -70,6 +78,8 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   }, [openModalUploadError]);
 
   const onClickUpload = async () => {
+    // console.log(result);
+
     if (result) {
       dispatch(setLoadingOverlay(true));
       const res = await uploadScore(result);
@@ -271,13 +281,12 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                       </Button>
                     </a>
                   </div>
-
                 </div>
                 <img
-                    src={scoreOBETemplate}
-                    alt="cpeLogo"
-                    className=" sm:hidden ipad11:h-[30vh]  h-[40vh] -mt-2 sm:mt-0"
-                  />
+                  src={scoreOBETemplate}
+                  alt="cpeLogo"
+                  className=" sm:hidden ipad11:h-[30vh]  h-[40vh] -mt-2 sm:mt-0"
+                />
               </div>
               <Alert
                 radius="md"
@@ -414,22 +423,15 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         </Modal.Content>
       </Modal.Root>
 
-      {!!(
-        errorStudentId.length ||
-        errorSection.length ||
-        errorPoint.length ||
-        errorStudent.length
-      ) && (
-        <ModalErrorUploadFile
-          type="scores"
-          opened={openModalUploadError}
-          onClose={() => setOpenModalUploadError(false)}
-          errorStudentId={errorStudentId}
-          errorSection={errorSection}
-          errorPoint={errorPoint}
-          errorStudent={errorStudent}
-        />
-      )}
+      <ModalErrorUploadFile
+        type="scores"
+        opened={openModalUploadError}
+        onClose={() => setOpenModalUploadError(false)}
+        errorStudentId={errorStudentId}
+        errorSection={errorSection}
+        errorPoint={errorPoint}
+        errorStudent={errorStudent}
+      />
     </>
   );
 }
