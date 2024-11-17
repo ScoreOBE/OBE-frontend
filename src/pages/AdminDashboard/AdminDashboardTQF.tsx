@@ -322,9 +322,9 @@ export default function AdminDashboardTQF() {
           })}
         </Table.Td>
         <Table.Td>
-          <div className="flex gap-2">
+          <div className="flex gap-2 ">
             <div
-              className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
+              className="px-4 py-2 w-fit tag-tqf rounded-[20px] text-[12px] font-medium flex items-center"
               tqf-status={course.TQF3?.status}
             >
               {course.TQF3?.status}
@@ -345,7 +345,7 @@ export default function AdminDashboardTQF() {
               >
                 <Button
                   variant="light"
-                  className="tag-tqf  !px-3 !rounded-full text-center"
+                  className="tag-tqf !px-3 !rounded-full text-center"
                   onClick={() => {
                     setExportDataTQF({
                       ...course.TQF3!,
