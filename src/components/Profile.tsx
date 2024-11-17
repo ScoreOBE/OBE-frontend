@@ -191,6 +191,26 @@ export default function Profile() {
                 </div>
               </Menu.Item>
             )}
+            {user.role !== ROLE.STUDENT &&
+              user.studentId &&
+              !path.includes(ROUTE_PATH.STD_DASHBOARD) && (
+                <Menu.Item
+                  onClick={() =>
+                    navigate({
+                      pathname: ROUTE_PATH.STD_DASHBOARD,
+                      search: "?" + params.toString(),
+                    })
+                  }
+                >
+                  <div className="flex items-center gap-2">
+                    <Icon
+                      IconComponent={IconUserScreen}
+                      className=" stroke-[1.5px] size-4"
+                    />
+                    <span>Switch to Student view</span>
+                  </div>
+                </Menu.Item>
+              )}
             {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
               <Menu.Divider />
             )}
