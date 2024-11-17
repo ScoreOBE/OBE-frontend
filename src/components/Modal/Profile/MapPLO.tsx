@@ -1003,7 +1003,7 @@ export default function MapPLO({ ploName = "" }: Props) {
 
                   <div className="flex gap-3">
                     {!isMapPLO ? (
-                      <div className="flex gap-5">
+                      <div className="flex gap-5 z-[60]">
                         <SearchInput
                           onSearch={searchCourse}
                           placeholder="Course No / Course Name"

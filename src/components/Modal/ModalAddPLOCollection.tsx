@@ -294,7 +294,6 @@ export default function ModalAddPLOCollection({
       fetchPLO();
     }
   };
-
   return (
     <>
       <Modal
@@ -495,7 +494,8 @@ export default function ModalAddPLOCollection({
                   }
                   className="w-full border-none   rounded-r-none "
                   classNames={{
-                    input: "flex  macair133:h-[120px] sm:h-[75px] ipad11:h-[95px] p-3 ",
+                    input:
+                      "flex  macair133:h-[120px] sm:h-[75px] ipad11:h-[95px] p-3 ",
                     label: "flex pb-1",
                   }}
                   placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
@@ -519,7 +519,8 @@ export default function ModalAddPLOCollection({
                   }
                   className="w-full border-none rounded-r-none"
                   classNames={{
-                    input: "flex macair133:h-[120px] sm:h-[75px] ipad11:h-[95px] p-3",
+                    input:
+                      "flex macair133:h-[120px] sm:h-[75px] ipad11:h-[95px] p-3",
                     label: "flex pb-1",
                   }}
                   placeholder="Ex. An ability to solve complex engineering problems."
@@ -533,14 +534,14 @@ export default function ModalAddPLOCollection({
                   }}
                 />
 
-                <div className="flex gap-2 mt-3 w-full justify-end macair133:absolute right-5 bottom-5 ">
+                {/* <div className="flex gap-2 mt-3 w-full justify-end macair133:absolute right-5 bottom-5 ">
                   <Button
                     variant="outline"
                     onClick={() => setIsAddAnother(true)}
                   >
                     Add more
                   </Button>
-                </div>
+                </div> */}
               </div>
               {form.getValues().data?.length! > 1 && (
                 <div
@@ -822,22 +823,38 @@ export default function ModalAddPLOCollection({
                 </Button>
               )}
             </div>
-            <Button
-              loading={loading}
-              onClick={() => {
-                nextStep();
-              }}
-              rightSection={
-                active != 4 && (
-                  <Icon
-                    IconComponent={IconArrowRight}
-                    className=" stroke-[2px] size-5"
-                  />
-                )
-              }
-            >
-              {active == 3 ? "Select semester" : "Next step"}
-            </Button>
+
+            <div className="flex gap-3">
+              {active === 1 && (
+                <Button
+                  variant="subtle"
+                  disabled={
+                    form.getValues().data?.at(0)?.descTH.length! === 0 &&
+                    form.getValues().data?.at(0)?.descEN.length! === 0
+                  }
+                  onClick={() => setIsAddAnother(true)}
+                >
+                  Add more PLO
+                </Button>
+              )}
+
+              <Button
+                loading={loading}
+                onClick={() => {
+                  nextStep();
+                }}
+                rightSection={
+                  active != 4 && (
+                    <Icon
+                      IconComponent={IconArrowRight}
+                      className=" stroke-[2px] size-5"
+                    />
+                  )
+                }
+              >
+                {active == 3 ? "Select semester" : "Next step"}
+              </Button>
+            </div>
           </Group>
         )}
       </Modal>
