@@ -1,4 +1,4 @@
-import { Button, Checkbox, Group, Modal } from "@mantine/core";
+import { Button, Checkbox, Group, Modal, Radio } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
@@ -26,6 +26,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const tqf3 = useAppSelector((state) => state.tqf3);
+  const [selectedMerge, setSelectedMerge] = useState("pdf");
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
@@ -69,6 +70,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
       academicYear: academicYear.year,
       academicTerm: academicYear.semester,
       tqf3: dataExport.id,
+      oneFile: selectedMerge.includes("pdf"),
     };
     selectedParts.forEach((part) => (payload[part] = ""));
 
@@ -135,46 +137,56 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
             />
           </div>
         ) : (
-          <Checkbox.Group
-            label="Select part to export"
-            classNames={{ label: "mb-1 font-semibold text-default" }}
-            value={selectedParts}
-            onChange={setSelectedParts}
-          >
-            {Object.values(PartTopicTQF3)
-              .slice(0, 6)
-              .filter(
-                (item) =>
-                  dataExport &&
-                  dataExport[getKeyPartTopicTQF3(item)!]?.updatedAt
-              )
-              .map((item, index) => (
-                <div
-                  key={index}
-                  className="flex p-1 mb-1 w-full h-full  flex-col overflow-y-auto"
-                >
-                  <Checkbox.Card
-                    className={`p-3 items-center px-4 flex  h-fit rounded-md w-full ${
-                      selectedParts.includes(getKeyPartTopicTQF3(item)!) &&
-                      "!border-[1px] !border-secondary "
-                    }`}
-                    style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)" }}
-                    value={getKeyPartTopicTQF3(item)}
+          <div>
+            <Radio.Group value={selectedMerge} onChange={setSelectedMerge}>
+              <Group mb={2}>
+                <Radio value="pdf" label="PDF" />
+                <Radio value="zip" label="Zip" />
+              </Group>
+            </Radio.Group>
+            <Checkbox.Group
+              label="Select part to export"
+              classNames={{ label: "mb-1 font-semibold text-default" }}
+              value={selectedParts}
+              onChange={setSelectedParts}
+            >
+              {Object.values(PartTopicTQF3)
+                .slice(0, 6)
+                .filter(
+                  (item) =>
+                    dataExport &&
+                    dataExport[getKeyPartTopicTQF3(item)!]?.updatedAt
+                )
+                .map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex p-1 mb-1 w-full h-full  flex-col overflow-y-auto"
                   >
-                    <Group
-                      wrap="nowrap"
-                      className="item-center flex"
-                      align="flex-start"
+                    <Checkbox.Card
+                      className={`p-3 items-center px-4 flex  h-fit rounded-md w-full ${
+                        selectedParts.includes(getKeyPartTopicTQF3(item)!) &&
+                        "!border-[1px] !border-secondary "
+                      }`}
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
+                      }}
+                      value={getKeyPartTopicTQF3(item)}
                     >
-                      <Checkbox.Indicator className="mt-1" />
-                      <div className="text-default whitespace-break-spaces font-medium text-[13px]">
-                        {item}
-                      </div>
-                    </Group>
-                  </Checkbox.Card>
-                </div>
-              ))}
-          </Checkbox.Group>
+                      <Group
+                        wrap="nowrap"
+                        className="item-center flex"
+                        align="flex-start"
+                      >
+                        <Checkbox.Indicator className="mt-1" />
+                        <div className="text-default whitespace-break-spaces font-medium text-[13px]">
+                          {item}
+                        </div>
+                      </Group>
+                    </Checkbox.Card>
+                  </div>
+                ))}
+            </Checkbox.Group>
+          </div>
         )}
       </div>
       {dataExport.part1?.updatedAt && (
