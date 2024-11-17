@@ -36,6 +36,13 @@ import studentPLOPage from "@/assets/image/studentPLO.png";
 import LoadingOverlay from "@/components/Loading/LoadingOverlay";
 import exportScoreImg from "@/assets/image/exporScore.png";
 import publishScoreImg from "@/assets/image/publishScore.png";
+import tqf3Pt1Img from "@/assets/image/tqf3pt1.png";
+import tqf3Pt2Img from "@/assets/image/tqf3pt2.png";
+import tqf3Pt3Img from "@/assets/image/tqf3pt3.png";
+import tqf3Pt4Img from "@/assets/image/tqf3pt4.png";
+import tqf3Pt5Img from "@/assets/image/tqf3pt5.png";
+import tqf3Pt6Img from "@/assets/image/tqf3pt6.png";
+import tqf3Pt7Img from "@/assets/image/tqf3pt7.png";
 export default function Login() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
@@ -48,48 +55,48 @@ export default function Login() {
       topic: "Course Information",
       description:
         "Enter basic course details, including the curriculum, course type, and instructor's name.",
-      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
+      img: tqf3Pt1Img,
     },
     {
       id: "2",
       topic: "Description and Planning",
       description:
         "Plan your course by entering teaching methods, CLOs, course content, and schedule.",
-      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
+      img: tqf3Pt2Img,
     },
     {
       id: "3",
       topic: "Course Evaluation",
       description:
         " users can choose how they want to be graded and ensure that all course topics are given 100% weight in the assessment.",
-      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png",
+      img: tqf3Pt3Img,
     },
     {
       id: "4",
       topic: "Assessment Mapping",
       description:
         "In this section, choose the assessment tools for each CLO, set the assessment percentage, and specify the week for each assessment.",
-      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png",
+      img: tqf3Pt4Img,
     },
     {
       id: "5",
       topic: "Course Materials",
       description: "Specify the documents and media used for teaching.",
-      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-5.png",
+      img: tqf3Pt5Img,
     },
     {
       id: "6",
       topic: "Course evaluation and improvement processes",
       description:
         "Describe the course evaluation methods and improvement plans for the next semester.",
-      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
+      img: tqf3Pt6Img,
     },
     {
       id: "7",
       topic: "Curriculum Mapping",
       description:
         "Mapping CLOs to the relevant PLOs for analyzing the performance of each student's PLOs.",
-      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
+      img: tqf3Pt7Img,
     },
   ];
 
@@ -644,7 +651,7 @@ export default function Login() {
                 </div>
               </div>
 
-              <div className="relative flex h-fit w-full rounded-xl bg-white border-[#dddddd] border-2 overflow-clip">
+              <div className="relative flex h-fit w-full rounded-xl bg-white shadow-md backdrop-blur-[120px]  overflow-clip">
                 <Accordion
                   defaultValue="1"
                   onChange={() => setOpenItem}
@@ -660,7 +667,7 @@ export default function Login() {
                           setSelectTQF3Image(item.img);
                         }}
                       >
-                        <Accordion.Control className="h-full min-h-[80px] text-[18px]">
+                        <Accordion.Control className="h-full min-h-[80px] samsungA24:min-h-[100px] text-[18px]">
                           <p className="text-[17px] font-[700] text-emphasize">
                             Part {item.id}
                           </p>
@@ -677,10 +684,12 @@ export default function Login() {
                 </Accordion>
 
                 {/* Image */}
-                <Image
-                  src={selectTQF3Image}
-                  className={`h-full w-[70%] object-cover  `}
-                />
+                <div className="flex items-center justify-center">
+                  <Image
+                    src={selectTQF3Image}
+                    className={`h-fit w-[90%] samsungA24:w-[80%] object-cover  `}
+                  />
+                </div>
               </div>
             </div>
 
@@ -753,7 +762,7 @@ export default function Login() {
                 </div>
               </div>
 
-              <div className="flex h-fit w-full rounded-xl bg-white border-[#dddddd] border-2 overflow-clip">
+              <div className="flex h-fit w-full rounded-xl bg-white/65 overflow-clip">
                 <Accordion
                   defaultValue="1"
                   onChange={() => setOpenItem}
@@ -788,7 +797,7 @@ export default function Login() {
                 {/* Image */}
                 <Image
                   src={selectTQF3Image}
-                  className={`h-full w-[70%] object-cover  `}
+                  className={`h-full w-[70%] object-cover`}
                 />
               </div>
             </div>
