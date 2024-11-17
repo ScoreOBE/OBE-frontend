@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { Menu, Button } from "@mantine/core";
 import Icon from "./Icon";
@@ -14,7 +14,6 @@ import IconUserScreen from "@/assets/icons/userScreen.svg?react";
 import IconAdjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
 import IconStatusChange from "@/assets/icons/statusChange.svg?react";
 import IconSO from "@/assets/icons/SO.svg?react";
-import IconTQF from "@/assets/icons/TQF.svg?react";
 import IconAdmin from "@/assets/icons/admin.svg?react";
 import IconSemester from "@/assets/icons/calendar.svg?react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -34,6 +33,7 @@ export default function Profile() {
   const path = useLocation().pathname;
   const [params, setParams] = useSearchParams({});
   const navigate = useNavigate();
+  const [dashboard, setDashboard] = useState(localStorage.getItem("dashboard"));
   const user = useAppSelector((state) => state.user);
   const [openModalChangeSupAdmin, setOpenModalChangeSupAdmin] = useState(false);
   const [openModalManageSemester, setOpenModalManageSemester] = useState(false);
@@ -85,6 +85,14 @@ export default function Profile() {
         );
     }
   };
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setDashboard(localStorage.getItem("dashboard"));
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   return (
     <>
@@ -170,7 +178,7 @@ export default function Profile() {
                   navigate({
                     pathname:
                       path.includes(ROUTE_PATH.ADMIN_DASHBOARD) ||
-                      localStorage.getItem("dashboard") == ROLE.ADMIN
+                      dashboard == ROLE.ADMIN
                         ? ROUTE_PATH.INS_DASHBOARD
                         : `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`,
                     search: "?" + params.toString(),
@@ -184,7 +192,7 @@ export default function Profile() {
                   />
                   <span>
                     {path.includes(ROUTE_PATH.ADMIN_DASHBOARD) ||
-                    localStorage.getItem("dashboard") == ROLE.ADMIN
+                    dashboard == ROLE.ADMIN
                       ? "Switch to Instructor view"
                       : "Switch to Admin view"}
                   </span>
