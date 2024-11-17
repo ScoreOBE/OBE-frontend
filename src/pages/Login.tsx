@@ -43,6 +43,11 @@ import tqf3Pt4Img from "@/assets/image/tqf3pt4.png";
 import tqf3Pt5Img from "@/assets/image/tqf3pt5.png";
 import tqf3Pt6Img from "@/assets/image/tqf3pt6.png";
 import tqf3Pt7Img from "@/assets/image/tqf3pt7.png";
+import chartImg from "@/assets/image/chart.png";
+import tqf5ComingImg from "@/assets/image/tqf5Coming.png";
+import tqfOverviewImg from "@/assets/image/tqfOverview.png";
+import exportTQFImag from "@/assets/image/exportTQF.png";
+import courseManagementImg from "@/assets/image/courseManagement.png";
 export default function Login() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
@@ -106,21 +111,21 @@ export default function Login() {
       topic: "Course Evaluation",
       description:
         "Upload grade sheets for processing, or manually enter the number of students who received each grade and complete the corresponding criteria.",
-      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-1.png",
+      img: tqf5ComingImg,
     },
     {
       id: "2",
       topic: "Assessment tool mapping to CLO",
       description:
         "Select the assessment tool to use for this CLO and determine which items to process.",
-      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png",
+      img: tqf5ComingImg,
     },
     {
       id: "3",
       topic: "(Rubrics for CLO evaluation",
       description:
         "Review the assessment tool scores and score ranges for each CLO, and include the rubrics for CLO/CSO evaluation.",
-      img: "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png",
+      img: tqf5ComingImg,
     },
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -320,7 +325,7 @@ export default function Login() {
                 </div>
                 <div className="flex items-center">
                   <img
-                    src={studentPLOPage}
+                    src={chartImg}
                     alt="CMULogo"
                     className="w-[85%] h-[85%] -ml-[20%] mx-0"
                   />
@@ -539,9 +544,7 @@ export default function Login() {
 
               {/* Image */}
               <Image
-                src={
-                  "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-2.png"
-                }
+                src={exportTQFImag}
                 className={`h-[80%] w-[50%] object-cover rounded-xl`}
               />
             </div>
@@ -762,7 +765,7 @@ export default function Login() {
                 </div>
               </div>
 
-              <div className="flex h-fit w-full rounded-xl bg-white/65 overflow-clip">
+              <div className="flex h-fit w-full rounded-xl bg-white/65 overflow-clip shadow-md z-30">
                 <Accordion
                   defaultValue="1"
                   onChange={() => setOpenItem}
@@ -774,11 +777,11 @@ export default function Login() {
                         key={item.id}
                         value={item.id}
                         className="w-[400px]"
-                        onClick={() => {
-                          setSelectTQF3Image(item.img);
-                        }}
+                        // onClick={() => {
+                        //   setSelectTQF3Image(item.img);
+                        // }}
                       >
-                        <Accordion.Control className="h-full min-h-[160px] text-[18px]">
+                        <Accordion.Control className="h-full min-h-[160px] samsungA24:min-h-[200px] text-[18px]">
                           <p className="text-[17px] font-[700] text-emphasize">
                             Part {item.id}
                           </p>
@@ -795,10 +798,12 @@ export default function Login() {
                 </Accordion>
 
                 {/* Image */}
-                <Image
-                  src={selectTQF3Image}
-                  className={`h-full w-[70%] object-cover`}
-                />
+                <div className="flex items-center justify-center py-2">
+                  <Image
+                    src={tqf5ComingImg}
+                    className={`h-fit w-[85%] samsungA24:w-[80%] object-cover`}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -820,7 +825,7 @@ export default function Login() {
 
           <div className="flex h-fit">
             <img
-              src={studentPLOPage}
+              src={tqfOverviewImg}
               alt="CMULogo"
               className="h-[75%] -translate-x-[15%]"
             />
@@ -850,7 +855,7 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="relative flex items-center justify-center -mt-48">
+          {/* <div className="relative flex items-center justify-center -mt-48">
             <div className="absolute left-0 right-0 top-[50%] z-0 -ml-20 h-40 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[200px]"></div>
             <Tabs defaultValue="tqf">
               <Tabs.List className="flex justify-center">
@@ -1067,7 +1072,7 @@ export default function Login() {
                 </div>
               </Tabs.Panel>
             </Tabs>
-          </div>
+          </div> */}
 
           <div className="flex h-fit mt-24">
             <div className="flex flex-col items-start justify-center gap-4 h-[70%] pl-28">
@@ -1108,7 +1113,11 @@ export default function Login() {
                 </p>
               </div>
             </div>
-            <img src={studentPLOPage} alt="CMULogo" className="h-[75%] " />
+            <img
+              src={courseManagementImg}
+              alt="CMULogo"
+              className="h-[75%] -translate-x-28"
+            />
           </div>
 
           {/* 
