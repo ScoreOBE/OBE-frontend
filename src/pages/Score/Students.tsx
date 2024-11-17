@@ -9,12 +9,13 @@ import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
-import { Button, Modal, NumberInput, Table, TextInput } from "@mantine/core";
+import { Button, Modal, Table, TextInput } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
-import { SearchInput } from "@/components/SearchInput";
 import { calStat } from "@/helpers/functions/score";
 import { TbSearch } from "react-icons/tb";
+import { useForm } from "@mantine/form";
+import { cloneDeep } from "lodash";
 
 export default function Students() {
   const { name } = useParams();
@@ -59,7 +60,8 @@ export default function Students() {
   }, []);
 
   const fullScore =
-    assignment?.questions.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
+    assignment?.questions.reduce((sum, { fullScore }) => sum + fullScore, 0) ||
+    0;
   const scores = section?.students
     ?.map(({ scores }) =>
       scores
@@ -97,42 +99,89 @@ export default function Students() {
     }
   });
 
+  const form = useForm({
+    mode: "controlled",
+    initialValues: {} as {
+      student: IModelUser;
+      questions: {
+        name: string;
+        score: any;
+      }[];
+    },
+    validate: {
+      questions: {
+        score: (value, values, path) =>
+          (!value.length ||
+            !parseInt(value) ||
+            parseInt(value) >
+              (assignment?.questions.find(
+                (ques) =>
+                  ques.name ==
+                  values.questions[parseInt(path.split(".")[1])].name
+              )?.fullScore || 0)) &&
+          "Please input valid score",
+      },
+    },
+    validateInputOnBlur: true,
+  });
+
+  const onSaveEditScore = () => {
+    console.log(form.getValues());
+  };
+
   return (
     <>
       <Modal
         opened={openEditScore}
         onClose={() => setOpenEditScore(false)}
-        title="Edit Score 640610653"
+        title={`Edit Score ${form.getValues().student?.studentId}`}
         size="22vw"
         centered
         closeOnClickOutside={false}
         transitionProps={{ transition: "pop" }}
         className="flex items-center justify-center"
         classNames={{
-          title: "",
           content:
             "flex flex-col justify-center w-full font-medium leading-[24px] text-[14px] item-center  overflow-hidden ",
         }}
       >
-        <div className="flex flex-col  gap-5 w-full">
-          <div className="flex items-center justify-center w-full">
-            <TextInput
-              label="Score"
-              size="sm"
-              withAsterisk
-              value={2.0}
-              classNames={{
-                input:
-                  "focus:border-primary text-[16px] w-28 h-10 text-center text-default ",
-              }}
-            />
+        <div className="flex flex-col gap-5 w-full">
+          <div className="flex flex-col w-full">
+            {!!form.getValues().questions?.length &&
+              form.getValues().questions.map((ques, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <p>{ques.name}</p>
+                  <p>full score: {assignment?.questions[index].fullScore}</p>
+                  <TextInput
+                    size="xs"
+                    withAsterisk={true}
+                    label="Score"
+                    classNames={{
+                      input:
+                        "focus:border-primary text-[16px] w-28 h-10 text-center text-default ",
+                    }}
+                    {...form.getInputProps(`questions.${index}.score`)}
+                  />
+                </div>
+              ))}
           </div>
 
           <div className="flex gap-2 mt-3 justify-end">
-            <Button onClick={() => setOpenEditScore(false)} variant="subtle">
+            <Button
+              onClick={() => {
+                setOpenEditScore(false);
+                form.reset();
+              }}
+              variant="subtle"
+            >
               Cancel
             </Button>
-            <Button onClick={() => setOpenEditScore(false)}>
+            <Button
+              onClick={() => {
+                setOpenEditScore(false);
+                onSaveEditScore();
+              }}
+            >
               Save Changes
             </Button>
           </div>
@@ -240,27 +289,45 @@ export default function Students() {
                         ? student.student.studentId?.toString().includes(filter)
                         : getUserName(student.student, 3)?.includes(filter)
                     )
-                    ?.map((student, index) => (
-                      <Table.Tr className="">
-                        <Table.Td className="!py-[19px]">
-                          {student.student.studentId}
-                        </Table.Td>
-                        <Table.Td className="w-[25%]">
-                          {getUserName(student.student, 3)}
-                        </Table.Td>
-                        <Table.Td className="flex gap-4 items-center justify-end pr-28">
-                          <p className="mt-0.5">2.0</p>
-                          <Icon
-                            IconComponent={IconEdit}
-                            onClick={() => setOpenEditScore(true)}
-                            className="size-4 cursor-pointer text-default"
-                          />
-                        </Table.Td>
-                        <Table.Td className="text-[#D8751A] font-medium">
-                          Score is edited
-                        </Table.Td>
-                      </Table.Tr>
-                    ))}
+                    ?.map((student, index) => {
+                      const questions = cloneDeep(
+                        student.scores.find(
+                          ({ assignmentName }) => assignmentName == name
+                        )?.questions
+                      );
+                      return (
+                        <Table.Tr key={index}>
+                          <Table.Td className="!py-[19px]">
+                            {student.student.studentId}
+                          </Table.Td>
+                          <Table.Td className="w-[25%]">
+                            {getUserName(student.student, 3)}
+                          </Table.Td>
+                          <Table.Td className="flex gap-4 items-center justify-end pr-28">
+                            <p className="mt-0.5">
+                              {questions?.reduce(
+                                (sum, { score }) => sum + score,
+                                0
+                              )}
+                            </p>
+                            <Icon
+                              IconComponent={IconEdit}
+                              onClick={() => {
+                                form.setValues({
+                                  student: student.student,
+                                  questions,
+                                });
+                                setOpenEditScore(true);
+                              }}
+                              className="size-4 cursor-pointer text-default"
+                            />
+                          </Table.Td>
+                          <Table.Td className="text-[#D8751A] font-medium">
+                            Score is edited
+                          </Table.Td>
+                        </Table.Tr>
+                      );
+                    })}
                 </Table.Tbody>
               </Table>
             </div>
