@@ -98,6 +98,26 @@ export const courseSlice = createSlice({
         ),
       };
     },
+    updateAssignments: (state, action) => {
+      return {
+        ...state,
+        courses: state.courses.map((course) =>
+          course.id === action.payload.id
+            ? {
+                ...course,
+                sections: course.sections
+                  .map((sec) => ({
+                    ...sec,
+                    ...action.payload.sections.find(
+                      (item: any) => sec.sectionNo == item.sectionNo
+                    ),
+                  }))
+                  .sort((a, b) => a.sectionNo - b.sectionNo),
+              }
+            : course
+        ),
+      };
+    },
   },
 });
 
@@ -110,6 +130,7 @@ export const {
   removeCourse,
   removeSection,
   updateStudentList,
+  updateAssignments,
 } = courseSlice.actions;
 
 export default courseSlice.reducer;

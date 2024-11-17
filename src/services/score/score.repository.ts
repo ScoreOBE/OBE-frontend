@@ -8,5 +8,8 @@ export const scoreController = (configService = {}) => {
     uploadScore: async (params: any) => {
       return service.post(`${prefix}`, { ...params });
     },
+    publishScore: async (params: any) => {
+      return service.put(`${prefix}/publish`, { ...params });
+    },
   };
 };

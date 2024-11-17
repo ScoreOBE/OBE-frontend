@@ -29,6 +29,11 @@ import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { useForm } from "@mantine/form";
+import { publishScore } from "@/services/score/score.service";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { updateAssignments } from "@/store/course";
+import { setLoadingOverlay } from "@/store/loading";
 
 export default function Assignment() {
   const { courseNo, sectionNo } = useParams();
@@ -67,7 +72,6 @@ export default function Assignment() {
       sections: [] as any[],
       assignments: [] as string[],
     },
-    validate: {},
   });
 
   useEffect(() => {
@@ -88,7 +92,7 @@ export default function Assignment() {
     });
   };
 
-  const publishScore = (isPublishAll: boolean) => {
+  const onClickPublishScore = () => {
     form.setFieldValue("isPublish", true);
     if (isPublishAll) {
       const allSec = course?.sections?.map((sec) => sec.sectionNo) || [];
@@ -96,8 +100,36 @@ export default function Assignment() {
     }
     const sectionsToNum = form
       .getValues()
-      .sections.map((sec: string) => Number(sec));
+      .sections.map((sec: string) => parseInt(sec));
     form.setFieldValue("sections", sectionsToNum);
+    onClickPublish();
+  };
+
+  const onClickPublish = async () => {
+    dispatch(setLoadingOverlay(true));
+    const res = await publishScore({
+      course: course?.id,
+      ...form.getValues(),
+    });
+    if (res) {
+      dispatch(updateAssignments({ ...res }));
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        `${
+          form.getValues().isPublish ? "Published" : "Unpublished"
+        } score successfully`,
+        `assignment ${form.getValues().assignments.join(", ")} in ${form
+          .getValues()
+          .sections.map((item) => getSectionNo(item))
+          .join(", ")} ${
+          form.getValues().assignments.length > 1 ? "are" : "is"
+        } ${form.getValues().isPublish ? "published" : "unpublished"}`
+      );
+      setOpenPublishScoreModal(false);
+      setOpenSelectSecModal(false);
+      form.reset();
+    }
+    dispatch(setLoadingOverlay(false));
   };
 
   return (
@@ -166,9 +198,7 @@ export default function Assignment() {
             {...form.getInputProps("assignments")}
             multiple
             value={form.getValues().assignments?.map((as) => as)}
-            onChange={(event) => {
-              form.setFieldValue("assignments", event);
-            }}
+            onChange={(event) => form.setFieldValue("assignments", event)}
           >
             <Group>
               <div className="flex gap-3">
@@ -207,14 +237,14 @@ export default function Assignment() {
               onClick={() => {
                 setOpenPublishScoreModal(false);
                 setOpenSelectSecModal(true);
-                form.setFieldValue("sections", []);
+                form.setFieldValue("sections", [sectionNo]);
               }}
             >
               Next
             </Button>
           ) : (
             <Button
-              onClick={() => publishScore(true)}
+              onClick={onClickPublishScore}
               disabled={!form.getValues().assignments.length}
             >
               Publish
@@ -334,9 +364,8 @@ export default function Assignment() {
           >
             Back
           </Button>
-
           <Button
-            onClick={() => publishScore(false)}
+            onClick={onClickPublishScore}
             disabled={!form.getValues().sections.length}
           >
             Publish
@@ -429,15 +458,21 @@ export default function Assignment() {
                 <Table stickyHeader>
                   <Table.Thead>
                     <Table.Tr className="bg-[#e5e7f6]">
-                      <Table.Th className="w-20 sm:max-macair133:text-b3">Name</Table.Th>
+                      <Table.Th className="w-20 sm:max-macair133:text-b3">
+                        Name
+                      </Table.Th>
                       <Table.Th className="w-20 sm:max-macair133:text-b3  text-end pr-14 !pl-0">
                         Full Scores
                       </Table.Th>
                       <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
                         Mean
                       </Table.Th>
-                      <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b3">Created</Table.Th>
-                      <Table.Th className="w-10 sm:max-macair133:text-b3">Student(s)</Table.Th>
+                      <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b3">
+                        Created
+                      </Table.Th>
+                      <Table.Th className="w-10 sm:max-macair133:text-b3">
+                        Student(s)
+                      </Table.Th>
                       <Table.Th className="w-10 !px-4 sm:max-macair133:text-b3 text-center">
                         Published
                       </Table.Th>
@@ -462,7 +497,10 @@ export default function Assignment() {
                               ({ assignmentName }) =>
                                 assignmentName == assignment.name
                             )
-                            ?.questions.reduce((a, b) => a + b.score, 0) || 0),
+                            ?.questions.reduce(
+                              (sum, { score }) => sum + score,
+                              0
+                            ) || 0),
                         0
                       );
                       return (
@@ -476,7 +514,7 @@ export default function Assignment() {
                           <Table.Td>{assignment.name}</Table.Td>
                           <Table.Td className="text-end pr-14 !pl-0">
                             {assignment.questions.reduce(
-                              (a, b) => a + b.fullScore,
+                              (sum, { fullScore }) => sum + fullScore,
                               0
                             )}
                           </Table.Td>
@@ -489,20 +527,38 @@ export default function Assignment() {
                             {dateFormatter(assignment.createdAt, 3)}
                           </Table.Td>
                           <Table.Td>{totalStudent || 0}</Table.Td>
-                          <Table.Td className="text-center !pl-3">
-                            {assignment.isPublish ? (
-                              <Icon
-                                IconComponent={IconPublish}
-                                className="text-default"
-                              />
-                            ) : (
-                              <Icon
-                                IconComponent={IconUnPublish}
-                                className="text-default"
-                              />
-                            )}
+                          <Table.Td className="text-center justify-items-center">
+                            <div
+                              className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                form.setFieldValue(
+                                  "isPublish",
+                                  !assignment.isPublish
+                                );
+                                form.setFieldValue("sections", [
+                                  parseInt(sectionNo!),
+                                ]);
+                                form.setFieldValue("assignments", [
+                                  assignment.name,
+                                ]);
+                                onClickPublish();
+                              }}
+                            >
+                              {assignment.isPublish ? (
+                                <Icon
+                                  IconComponent={IconPublish}
+                                  className="text-default"
+                                />
+                              ) : (
+                                <Icon
+                                  IconComponent={IconUnPublish}
+                                  className="text-default"
+                                />
+                              )}
+                            </div>
                           </Table.Td>
-                          <Table.Td className="text-center flex  items-center justify-center">
+                          <Table.Td className="text-center flex items-center justify-center">
                             <div
                               className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
                               onClick={(event) => event.stopPropagation()}

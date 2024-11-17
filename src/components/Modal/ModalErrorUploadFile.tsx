@@ -33,19 +33,26 @@ export default function ModalErrorUploadFile({
       closeOnClickOutside={false}
       title={
         <div className="flex gap-2 mb-1 items-center">
-          <Icon
-            IconComponent={IconBan}
-            className="size-6 "
-          />
+          <Icon IconComponent={IconBan} className="size-6 " />
           File was rejected
         </div>
       }
       // classNames={{ title: "text-delete"}}
-      transitionProps={{ transition: 'scale', duration: 1000, timingFunction: 'linear' }}
+      transitionProps={{
+        transition: "scale",
+        // duration: 1000,
+        timingFunction: "linear",
+      }}
       centered
       size="40vw"
       withCloseButton={false}
     >
+      {!errorPoint?.length &&
+        !errorStudentId?.length &&
+        !errorSection?.length &&
+        !errorStudent?.length && (
+          <div>upload score for Gradescope template is coming soon</div>
+        )}
       {!!errorStudent?.length ? (
         <div className="flex flex-col gap-2">
           {errorStudent?.map((item) => (
@@ -176,7 +183,10 @@ export default function ModalErrorUploadFile({
                     <p className="ml-12 font-medium">
                       Cell: {item.cell.join(", ")}
                     </p>
-                    <p className="ml-8 mt-3 text-teal-600 font-semibold "> Expect Format: The Scores must be numberic only, and may include decimals</p>
+                    <p className="ml-8 mt-3 text-teal-600 font-semibold ">
+                      Expect Format: The Scores must be numberic only, and may
+                      include decimals
+                    </p>
                   </div>
                 ))}
               </Alert>
