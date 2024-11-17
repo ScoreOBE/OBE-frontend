@@ -7,27 +7,50 @@ import HistogramChart from "./HistogramChart";
 type Props = {
   data: Partial<IModelAssignment>;
   students: { student: IModelUser; scores: IModelScore[] }[];
-  isQuestions: boolean;
+  questionName?: string;
   type: "histogram" | "curve";
 };
 
 export default function ChartContainer({
   data,
   students,
-  isQuestions,
+  questionName,
   type,
 }: Props) {
   const fullScore =
-    data.questions?.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
+    (questionName
+      ? data.questions?.find(({ name }) => name == questionName)?.fullScore
+      : data.questions?.reduce((a, { fullScore }) => a + fullScore, 0)) || 0;
+
+  const getScores = (studentScores: IModelScore[]) => {
+    const assignment = studentScores.find(
+      ({ assignmentName }) => assignmentName === data.name
+    );
+    if (!assignment) return undefined;
+    if (questionName) {
+      return assignment.questions?.find(({ name }) => name === questionName)
+        ?.score;
+    }
+    return assignment.questions?.reduce((sum, { score }) => sum + score, 0);
+  };
+
   const scores = students
-    .map(({ scores }) =>
-      scores
-        .find(({ assignmentName }) => assignmentName == data.name)
-        ?.questions?.reduce((sum, { score }) => sum + score, 0)
-    )
-    .filter((item) => item != undefined)
-    .sort((a, b) => a - b) || [0];
-  const totalStudent = students.length;
+    .map(({ scores }) => getScores(scores))
+    .filter((score) => score !== undefined)
+    .sort((a, b) => a - b);
+
+  const totalStudent = students.filter(({ scores }) => {
+    const assignment = scores.find(
+      ({ assignmentName }) => assignmentName === data.name
+    );
+    return (
+      assignment &&
+      (questionName
+        ? assignment.questions.some(({ name }) => name === questionName)
+        : true)
+    );
+  }).length;
+
   const { mean, sd, median, maxScore, minScore, q1, q3 } = calStat(
     scores,
     totalStudent
@@ -55,7 +78,7 @@ export default function ChartContainer({
 
   return (
     <>
-      {!isQuestions && (
+      {!questionName && (
         <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-5 text-start mx-5">
           <div className="flex flex-row text-secondary text-[20px] w-full justify-between font-semibold">
             <div className="flex justify-between !w-full items-center mb-1">
@@ -119,7 +142,9 @@ export default function ChartContainer({
         </div>
       )}
       <div
-        className={`h-full w-full  ${isQuestions ? "px-20 pb-6" : "pl-3 pr-5"}`}
+        className={`h-full w-full  ${
+          questionName ? "px-20 pb-6" : "pl-3 pr-5"
+        }`}
       >
         {type == "histogram" ? (
           <HistogramChart scoresData={scoresData} />

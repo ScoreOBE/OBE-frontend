@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { getSectionNo } from "@/helpers/functions/function";
+import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
 import { setShowNavbar } from "@/store/showNavbar";
@@ -13,6 +13,8 @@ import { Button, Modal, NumberInput, Table, TextInput } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import { SearchInput } from "@/components/SearchInput";
+import { calStat } from "@/helpers/functions/score";
+import { TbSearch } from "react-icons/tb";
 
 export default function Students() {
   const { name } = useParams();
@@ -25,9 +27,11 @@ export default function Students() {
   const section = course?.sections.find(
     (sec) => parseInt(sectionNo!) === sec.sectionNo
   );
+  const assignment = section?.assignments?.find((item) => item.name == name);
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [filter, setFilter] = useState<string>("");
   const [openEditScore, setOpenEditScore] = useState(false);
   const [items, setItems] = useState<any[]>([
     {
@@ -48,12 +52,50 @@ export default function Students() {
     },
     { title: `${name}` },
   ]);
-  const [openAllPublishModal, setOpenAllPublishModal] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
   }, []);
+
+  const fullScore =
+    assignment?.questions.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
+  const scores = section?.students
+    ?.map(({ scores }) =>
+      scores
+        .find(({ assignmentName }) => assignmentName == name)
+        ?.questions?.reduce((sum, { score }) => sum + score, 0)
+    )
+    .filter((item) => item != undefined)
+    .sort((a, b) => a - b) || [0];
+  const totalStudent =
+    section?.students?.filter((item) =>
+      item.scores.find(({ assignmentName }) => assignmentName == name)
+    ).length || 0;
+  const { mean, sd, median, maxScore, minScore, q1, q3 } = calStat(
+    scores,
+    totalStudent
+  );
+  const k = Math.log2(totalStudent) + 1;
+  const binWidth = (maxScore - minScore) / k;
+  const scoresData = Array.from({ length: k }, (_, index) => {
+    const start = minScore + index * binWidth;
+    const end = start + binWidth;
+    return {
+      range: `${start.toFixed(2)} - ${end.toFixed(2)}`,
+      start,
+      end,
+      Students: 0,
+    };
+  });
+  scores.forEach((score) => {
+    const binIndex = scoresData.findIndex(
+      (item) => item.start <= score && item.end >= score
+    );
+    if (binIndex !== -1) {
+      scoresData[binIndex].Students += 1;
+    }
+  });
 
   return (
     <>
@@ -108,53 +150,70 @@ export default function Students() {
           <>
             <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3  items-start gap-4 text-start">
               <p className="text-secondary text-[18px] font-semibold">
-                {name} - 5.0 Points
+                {name} - {fullScore} Points
               </p>
               <div className="flex px-10 flex-row justify-between w-full">
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Mean
                   </p>
-                  <p className="font-bold text-[28px] text-defa">2.0</p>
+                  <p className="font-bold text-[28px] text-defa">
+                    {mean.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-                  <p className="font-bold text-[28px] text-defa">2.15</p>
+                  <p className="font-bold text-[28px] text-defa">
+                    {sd.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Median
                   </p>
-                  <p className="font-bold text-[28px] text-default">1.5</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {median.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Max
                   </p>
-                  <p className="font-bold text-[28px] text-default">4.5</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {maxScore.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Min
                   </p>
-                  <p className="font-bold text-[28px] text-default">0</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {minScore.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
-                  <p className="font-bold text-[28px] text-default">3.75</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {q3.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
-                  <p className="font-bold text-[28px] text-default">1.75</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {q1.toFixed(2)}
+                  </p>
                 </div>
               </div>
             </div>
 
-            <SearchInput
-              onSearch={() => "test"}
-              placeholder="Student ID / Name"
-              
-            />
+            <TextInput
+              leftSection={<TbSearch />}
+              placeholder="Section No, Student No, Name"
+              size="xs"
+              rightSectionPointerEvents="all"
+              className="mx-1"
+              onChange={(event: any) => setFilter(event.currentTarget.value)}
+            ></TextInput>
 
             {/* Table */}
             <div
@@ -175,25 +234,33 @@ export default function Students() {
                 </Table.Thead>
 
                 <Table.Tbody className="text-default text-[13px] ">
-                  {Array.from({ length: 12 }).map((_, index) => (
-                    <Table.Tr className="">
-                      <Table.Td className="!py-[19px]">
-                        {640610653 + index}
-                      </Table.Td>
-                      <Table.Td className="w-[25%]">ลาลิซ่า มโนบาล</Table.Td>
-                      <Table.Td className="flex gap-4 items-center justify-end pr-28">
-                        <p className="mt-0.5">2.0</p>
-                        <Icon
-                          IconComponent={IconEdit}
-                          onClick={() => setOpenEditScore(true)}
-                          className="size-4 cursor-pointer text-default"
-                        />
-                      </Table.Td>
-                      <Table.Td className="text-[#D8751A] font-medium">
-                        Score is edited
-                      </Table.Td>
-                    </Table.Tr>
-                  ))}
+                  {section?.students
+                    ?.filter((student) =>
+                      parseInt(filter)
+                        ? student.student.studentId?.toString().includes(filter)
+                        : getUserName(student.student, 3)?.includes(filter)
+                    )
+                    ?.map((student, index) => (
+                      <Table.Tr className="">
+                        <Table.Td className="!py-[19px]">
+                          {student.student.studentId}
+                        </Table.Td>
+                        <Table.Td className="w-[25%]">
+                          {getUserName(student.student, 3)}
+                        </Table.Td>
+                        <Table.Td className="flex gap-4 items-center justify-end pr-28">
+                          <p className="mt-0.5">2.0</p>
+                          <Icon
+                            IconComponent={IconEdit}
+                            onClick={() => setOpenEditScore(true)}
+                            className="size-4 cursor-pointer text-default"
+                          />
+                        </Table.Td>
+                        <Table.Td className="text-[#D8751A] font-medium">
+                          Score is edited
+                        </Table.Td>
+                      </Table.Tr>
+                    ))}
                 </Table.Tbody>
               </Table>
             </div>

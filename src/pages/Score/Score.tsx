@@ -10,11 +10,10 @@ import { setShowNavbar } from "@/store/showNavbar";
 import { setShowSidebar } from "@/store/showSidebar";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
-import HistogramChart from "@/components/Chart/HistogramChart";
 import Icon from "@/components/Icon";
 import IconChevronDown from "@/assets/icons/chevronDown.svg?react";
-import { IModelQuestion } from "@/models/ModelCourse";
 import ChartContainer from "@/components/Chart/ChartContainer";
+import { calStat } from "@/helpers/functions/score";
 
 export default function Overall() {
   const { courseNo, sectionNo, name } = useParams();
@@ -26,6 +25,7 @@ export default function Overall() {
   const section = course?.sections.find(
     (sec) => parseInt(sectionNo!) === sec.sectionNo
   );
+  const assignment = section?.assignments?.find((item) => item.name == name);
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -49,33 +49,54 @@ export default function Overall() {
     { title: `${name}` },
   ]);
 
-  // Generate assignments mock data for questions
-  const questions: Array<IModelQuestion> = Array.from(
-    { length: 10 },
-    (_, qIndex): IModelQuestion => ({
-      name: "",
-      desc: `Question ${qIndex + 1} Description`,
-      fullScore: 100,
-      // fscores: Array.from(
-      //   { length: 30 },
-      //   (_, sIndex): IModelScore => ({
-      //     student: generateMockUser(sIndex), // Generate a mock user for each score
-      //     point: Math.floor(Math.random() * 100), // Random score between 0 and 100
-      //   })
-      // ),
-    })
-  );
-
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
   }, []);
 
+  const fullScore =
+    assignment?.questions.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
+  const scores = section?.students
+    ?.map(({ scores }) =>
+      scores
+        .find(({ assignmentName }) => assignmentName == name)
+        ?.questions?.reduce((sum, { score }) => sum + score, 0)
+    )
+    .filter((item) => item != undefined)
+    .sort((a, b) => a - b) || [0];
+  const totalStudent =
+    section?.students?.filter((item) =>
+      item.scores.find(({ assignmentName }) => assignmentName == name)
+    ).length || 0;
+  const { mean, sd, median, maxScore, minScore, q1, q3 } = calStat(
+    scores,
+    totalStudent
+  );
+  const k = Math.log2(totalStudent) + 1;
+  const binWidth = (maxScore - minScore) / k;
+  const scoresData = Array.from({ length: k }, (_, index) => {
+    const start = minScore + index * binWidth;
+    const end = start + binWidth;
+    return {
+      range: `${start.toFixed(2)} - ${end.toFixed(2)}`,
+      start,
+      end,
+      Students: 0,
+    };
+  });
+  scores.forEach((score) => {
+    const binIndex = scoresData.findIndex(
+      (item) => item.start <= score && item.end >= score
+    );
+    if (binIndex !== -1) {
+      scoresData[binIndex].Students += 1;
+    }
+  });
+
   return (
     <>
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
-        {/* <Breadcrumbs /> */}
         {loading ? (
           <Loading />
         ) : (section?.instructor as IModelUser)?.id === user.id ||
@@ -85,44 +106,58 @@ export default function Overall() {
           <>
             <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
               <p className="text-secondary text-[18px] font-semibold">
-                {name} - 5.0 Points
+                {name} - {fullScore} Points
               </p>
               <div className="flex px-10 flex-row justify-between w-full">
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Mean
                   </p>
-                  <p className="font-bold text-[28px] text-default">2.0</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {mean.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-                  <p className="font-bold text-[28px] text-default">2.15</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {sd.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Median
                   </p>
-                  <p className="font-bold text-[28px] text-default">1.5</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {median.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Max
                   </p>
-                  <p className="font-bold text-[28px] text-default">4.5</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {maxScore.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Min
                   </p>
-                  <p className="font-bold text-[28px] text-default">0</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {minScore.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
-                  <p className="font-bold text-[28px] text-default">3.75</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {q3.toFixed(2)}
+                  </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
-                  <p className="font-bold text-[28px] text-default">1.75</p>
+                  <p className="font-bold text-[28px] text-default">
+                    {q1.toFixed(2)}
+                  </p>
                 </div>
               </div>
             </div>
@@ -137,9 +172,9 @@ export default function Overall() {
               <Table stickyHeader className="">
                 <Table.Thead>
                   <Table.Tr className="bg-[#e5e7f6]">
-                    <Table.Th className="w-[15%] ">Question</Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[11%]">
-                      Points
+                    <Table.Th className="w-[12%]">Question</Table.Th>
+                    <Table.Th className="text-end pr-[70px] w-[14%]">
+                      Full Score
                     </Table.Th>
                     <Table.Th className="text-end pr-[70px]  w-[11%]">
                       Mean
@@ -156,7 +191,7 @@ export default function Overall() {
                     <Table.Th className="text-end pr-[70px] w-[11%]">
                       Q3
                     </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[11%] ">
+                    <Table.Th className="text-end pr-[70px] w-[11%]">
                       Q1
                     </Table.Th>
                     <Table.Th className="text-end pr-[70px] w-[8%]"></Table.Th>
@@ -165,75 +200,83 @@ export default function Overall() {
               </Table>
 
               <Accordion chevron={false} unstyled>
-                {questions.map((ques, index) => (
-                  <Accordion.Item
-                    value={`${index + 1}`}
-                    key={index}
-                    className={`!px-0 ${index % 2 === 0 ? "bg-[#F8F9FA]" : ""}`}
-                  >
-                    <Accordion.Control
-                      className="pl-0 py-1.5 w-full"
-                      classNames={{
-                        label: `flex-itemstart w-full`,
-                      }}
+                {assignment?.questions.map((ques, index) => {
+                  const totalStd = section?.students?.filter((item) =>
+                    item.scores
+                      .find(({ assignmentName }) => assignmentName == name)
+                      ?.questions.find((item) => item.name == ques.name)
+                  ).length;
+                  return (
+                    <Accordion.Item
+                      value={ques.name}
+                      key={index}
+                      className={`!px-0 ${
+                        index % 2 === 0 ? "bg-[#F8F9FA]" : ""
+                      }`}
                     >
-                      <Table>
-                        <Table.Tbody className="text-default">
-                          {/* Entire Table Row as Control */}
-                          <Table.Tr className="text-[13px] font-normal py-[14px] w-full ">
-                            <Table.Td className="text-start w-[15%] ">
-                              No. {index + 1}
-                            </Table.Td>
-                            <Table.Td className="text-end pr-[70px] w-[11%]">
-                              5.0
-                            </Table.Td>
-                            <Table.Td className="text-end pr-[70px] w-[11%]">
-                              2.0
-                            </Table.Td>
-                            <Table.Td className="text-end pr-[70px] w-[11%]">
-                              10.0
-                            </Table.Td>
-                            <Table.Td className="text-end pr-[70px] w-[11%]">
-                              25
-                            </Table.Td>
-                            <Table.Td className="text-end pr-[70px]  w-[11%]">
-                              5.0
-                            </Table.Td>
-                            <Table.Td className="text-end pr-[70px] w-[11%]">
-                              2.0
-                            </Table.Td>
-                            <Table.Td className="text-end pr-[70px] w-[11%]">
-                              10.0
-                            </Table.Td>
-                            <Table.Th className="text-end pr-[70px] w-[8%]">
-                              <Icon
-                                IconComponent={IconChevronDown}
-                                className="size-4"
-                              />
-                            </Table.Th>
-                          </Table.Tr>
-                        </Table.Tbody>
-                      </Table>
-                    </Accordion.Control>
-
-                    <Accordion.Panel className="!py-0">
-                      <div className="flex justify-between px-20 pb-6 pt-0">
-                        <p className="text-secondary text-[16px] font-semibold">
-                          No.{index + 1} - 5.0 Points
-                        </p>
-                        <p className="text-secondary text-[16px] font-semibold">
-                          120 Students
-                        </p>
-                      </div>
-                      <ChartContainer
-                        type="histogram"
-                        data={ques}
-                        students={[]}
-                        isQuestions={true}
-                      />
-                    </Accordion.Panel>
-                  </Accordion.Item>
-                ))}
+                      <Accordion.Control
+                        className="pl-0 py-1.5 w-full"
+                        classNames={{
+                          label: `flex-itemstart w-full`,
+                        }}
+                      >
+                        <Table>
+                          <Table.Tbody className="text-default">
+                            {/* Entire Table Row as Control */}
+                            <Table.Tr className="text-[13px] font-normal py-[14px] w-full ">
+                              <Table.Td className="text-start w-[12%]">
+                                {ques.name}
+                              </Table.Td>
+                              <Table.Td className="text-end pr-[70px] w-[14%]">
+                                {ques.fullScore}
+                              </Table.Td>
+                              <Table.Td className="text-end pr-[70px] w-[11%]">
+                                2.0
+                              </Table.Td>
+                              <Table.Td className="text-end pr-[70px] w-[11%]">
+                                10.0
+                              </Table.Td>
+                              <Table.Td className="text-end pr-[70px] w-[11%]">
+                                25
+                              </Table.Td>
+                              <Table.Td className="text-end pr-[70px]  w-[11%]">
+                                5.0
+                              </Table.Td>
+                              <Table.Td className="text-end pr-[70px] w-[11%]">
+                                2.0
+                              </Table.Td>
+                              <Table.Td className="text-end pr-[70px] w-[11%]">
+                                10.0
+                              </Table.Td>
+                              <Table.Th className="text-end pr-[70px] w-[8%]">
+                                <Icon
+                                  IconComponent={IconChevronDown}
+                                  className="size-4"
+                                />
+                              </Table.Th>
+                            </Table.Tr>
+                          </Table.Tbody>
+                        </Table>
+                      </Accordion.Control>
+                      <Accordion.Panel className="!py-0">
+                        <div className="flex justify-between px-20 pb-6 pt-0">
+                          <p className="text-secondary text-[16px] font-semibold">
+                            {ques.name} - {ques.fullScore} Points
+                          </p>
+                          <p className="text-secondary text-[16px] font-semibold">
+                            {totalStd} Students
+                          </p>
+                        </div>
+                        <ChartContainer
+                          type="histogram"
+                          data={assignment}
+                          students={section?.students!}
+                          questionName={ques.name}
+                        />
+                      </Accordion.Panel>
+                    </Accordion.Item>
+                  );
+                })}
               </Accordion>
             </div>
           </>
