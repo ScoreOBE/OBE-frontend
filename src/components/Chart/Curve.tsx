@@ -1,6 +1,7 @@
 import { calStat, generateBellCurveData } from "@/helpers/functions/score";
 import { IModelAssignment, IModelScore } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
+import annotationPlugin from "chartjs-plugin-annotation";
 import {
   Chart,
   LineController,
@@ -25,6 +26,28 @@ type Props = {
 export default function Curve({ mean, sd, fullScore }: Props) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
+  const statLine:any[] = [{
+    type: "line",
+    label: {
+      content: 'mean',
+      display: true,
+      position: "start",
+      yAdjust: 5,
+      xAdjust: 5,
+      // rotation: i === 0 ? 90 : 0,
+      color: 'blue',
+      backgroundColor: "rgb(0,0,0,0)",
+      font: {
+        // size: fontSize,
+        // fontFamily: "SF PRo, sans-serif",
+      },
+    },
+    value: mean,
+    borderColor: 'blue',
+    borderDash: [6, 6],
+    borderWidth: 2,
+    scaleID: "x",
+  }];
 
   useEffect(() => {
     if (chartRef.current) {
@@ -56,6 +79,10 @@ export default function Curve({ mean, sd, fullScore }: Props) {
               legend: {
                 display: false,
               },
+            annotation: {
+              clip: false,
+              annotations: statLine,
+            }
             },
             scales: {
               x: {
@@ -78,6 +105,15 @@ export default function Curve({ mean, sd, fullScore }: Props) {
                 },
               },
             },
+            elements: {
+              point: {
+                radius: 0,
+              },
+              line: {
+                borderWidth: 1,
+              },
+            },
+            events: [],
           },
         });
       }

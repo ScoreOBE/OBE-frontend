@@ -206,13 +206,13 @@ export default function Students() {
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Mean
                   </p>
-                  <p className="font-bold text-[28px] text-defa">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-defa">
                     {mean.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-                  <p className="font-bold text-[28px] text-defa">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-defa">
                     {sd.toFixed(2)}
                   </p>
                 </div>
@@ -220,7 +220,7 @@ export default function Students() {
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Median
                   </p>
-                  <p className="font-bold text-[28px] text-default">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
                     {median.toFixed(2)}
                   </p>
                 </div>
@@ -228,7 +228,7 @@ export default function Students() {
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Max
                   </p>
-                  <p className="font-bold text-[28px] text-default">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
                     {maxScore.toFixed(2)}
                   </p>
                 </div>
@@ -236,19 +236,19 @@ export default function Students() {
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Min
                   </p>
-                  <p className="font-bold text-[28px] text-default">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
                     {minScore.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
-                  <p className="font-bold text-[28px] text-default">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
                     {q3.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
-                  <p className="font-bold text-[28px] text-default">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
                     {q1.toFixed(2)}
                   </p>
                 </div>

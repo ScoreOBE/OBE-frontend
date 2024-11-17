@@ -26,7 +26,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const tqf3 = useAppSelector((state) => state.tqf3);
-  const [selectedMerge, setSelectedMerge] = useState("pdf");
+  const [selectedMerge, setSelectedMerge] = useState("unzipfile");
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
@@ -70,7 +70,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
       academicYear: academicYear.year,
       academicTerm: academicYear.semester,
       tqf3: dataExport.id,
-      oneFile: selectedMerge.includes("pdf"),
+      oneFile: selectedMerge.includes("unzipfile"),
     };
     selectedParts.forEach((part) => (payload[part] = ""));
 
@@ -138,17 +138,25 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
           </div>
         ) : (
           <div>
-            <Radio.Group value={selectedMerge} onChange={setSelectedMerge}>
-              <Group mb={2}>
-                <Radio value="pdf" label="PDF" />
-                <Radio value="zip" label="Zip" />
-              </Group>
-            </Radio.Group>
+            <div
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
+              className="p-3 m-[4px] rounded-md"
+            >
+              <Radio.Group classNames={{ label: "font-semibold"}} value={selectedMerge} onChange={setSelectedMerge}>
+                <Group  mb={2}>
+                  <Radio classNames={{ label: "font-medium"}} value="unzipfile" label="Combine into one file (Unzip)" />
+                  <Radio classNames={{ label: "font-medium"}} value="zipfile" label="Split into parts (Zip)" />
+                </Group>
+              </Radio.Group>
+            </div>
             <Checkbox.Group
               label="Select part to export"
               classNames={{ label: "mb-1 font-semibold text-default" }}
               value={selectedParts}
               onChange={setSelectedParts}
+              className=" h-[400px] overflow-y-auto my-4 "
             >
               {Object.values(PartTopicTQF3)
                 .slice(0, 6)
@@ -160,7 +168,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
                 .map((item, index) => (
                   <div
                     key={index}
-                    className="flex p-1 mb-1 w-full h-full  flex-col overflow-y-auto"
+                    className="flex p-1 mb-1 w-full  flex-col overflow-y-auto"
                   >
                     <Checkbox.Card
                       className={`p-3 items-center px-4 flex  h-fit rounded-md w-full ${
@@ -190,7 +198,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
         )}
       </div>
       {dataExport.part1?.updatedAt && (
-        <div className="flex justify-end mt-4 sticky w-full">
+         <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end  justify-end h-fit">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
             <Button onClick={onClose} variant="subtle">
               Cancel
