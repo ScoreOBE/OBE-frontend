@@ -10,6 +10,7 @@ export const ROUTE_PATH = {
   STD_DASHBOARD: "/student-dashboard",
   COURSE: "/course",
   SECTION: "sections",
+  ROSTER: "roster",
   TQF3: "tqf3",
   TQF5: "tqf5",
   ASSIGNMENT: "assignment",

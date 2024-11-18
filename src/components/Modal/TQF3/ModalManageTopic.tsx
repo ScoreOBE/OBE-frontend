@@ -103,6 +103,7 @@ export default function ModalManageTopic({
     <Modal
       opened={opened}
       onClose={onCloseModal}
+      closeOnEscape={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Topic TQF 3 Part 6`}
       size={type === "add" ? "45vw" : "40vw"}

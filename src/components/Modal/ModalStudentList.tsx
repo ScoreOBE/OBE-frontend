@@ -79,7 +79,7 @@ export default function ModalStudentList({
       dispatch(setLoadingOverlay(true));
       const res = await uploadStudentList(result);
       if (res) {
-        dispatch(updateStudentList({ id: data.id, sections: res }));
+        dispatch(updateStudentList({ id: data?.id, sections: res }));
         setFile(undefined);
         setResult(undefined);
         showNotifications(
@@ -87,6 +87,7 @@ export default function ModalStudentList({
           "Upload success",
           "Upload student list success"
         );
+        onClose();
         if (onNext) {
           onNext();
         }
@@ -101,7 +102,7 @@ export default function ModalStudentList({
     }
   };
 
-  const rows = data.sections?.map((sec) =>
+  const rows = data?.sections?.map((sec) =>
     sec.students
       ?.map(({ student }) => student)
       .filter((student) =>
@@ -124,8 +125,9 @@ export default function ModalStudentList({
       ))
   );
 
+
   const studentTable = () => {
-    const hasData = rows && rows.flat().length > 0; // Check if there's any data
+    const hasData = rows && rows.flat().length > 0;
     return (
       <>
         {hasData && (
@@ -273,14 +275,14 @@ export default function ModalStudentList({
             <div className="flex flex-col gap-2">
               <p>Import Student list from Reg CMU</p>
               <p className=" text-[12px] text-noData">
-                {data.courseNo} {data.courseName}
+                {data?.courseNo} {data?.courseName}
               </p>
             </div>
           ) : (
             <div className="flex flex-col gap-2">
               <p>{type === "import_list" ? "Import " : ""}Student list</p>
               <p className=" text-[12px] text-noData">
-                {data.courseNo} - {data.courseName}
+                {data?.courseNo} - {data?.courseName}
               </p>
             </div>
           )

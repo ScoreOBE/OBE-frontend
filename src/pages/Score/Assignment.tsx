@@ -741,7 +741,7 @@ export default function Assignment() {
             )}
           </>
         ) : (
-          <div className="flex px-16  flex-row items-center justify-between h-full">
+          <div className="flex px-16 mt-5 flex-row items-center justify-between h-full">
             <div className="flex justify-center  h-full items-start gap-2 flex-col">
               <p className="   text-secondary font-semibold text-[22px]">
                 You need access

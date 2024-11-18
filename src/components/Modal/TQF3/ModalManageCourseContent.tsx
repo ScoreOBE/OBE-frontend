@@ -9,6 +9,8 @@ import {
   NumberInputHandlers,
   FocusTrapInitialFocus,
   rem,
+  Kbd,
+  Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Icon from "@/components/Icon";
@@ -18,6 +20,7 @@ import IconMinus from "@/assets/icons/minus.svg?react";
 import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import { upperFirst } from "lodash";
 import { useEffect, useRef, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 type actionType = "add" | "edit";
 
@@ -42,6 +45,7 @@ export default function ModalManageTopic({
   const handlersLabRef = useRef<NumberInputHandlers>(null);
   const topicRef = useRef<HTMLDivElement>(null);
   const [isAdded, setIsAdded] = useState(false);
+  const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 
   const form = useForm({
     mode: "controlled",
@@ -138,10 +142,21 @@ export default function ModalManageTopic({
     formOneWeek.setFieldValue("weekNo", length + newTopicList?.length! + 1);
   };
 
+  useHotkeys(
+    "ctrl+enter, meta+enter",
+    () => {
+      addMore();
+    },
+    {
+      enableOnFormTags: ["INPUT", "TEXTAREA", "SELECT"],
+    }
+  );
+
   return (
     <Modal
       opened={opened}
       onClose={onClose}
+      closeOnEscape={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Course Content`}
       size={
@@ -160,13 +175,13 @@ export default function ModalManageTopic({
       <FocusTrapInitialFocus />
       <div
         className={`flex flex-col  !gap-5 ${
-          type === "add" ? "h-full sm:max-macair133:h-fit sm:max-macair133:mb-14 sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]" : "h-fit  "
+          type === "add"
+            ? "h-full sm:max-macair133:h-fit sm:max-macair133:mb-14 sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]"
+            : "h-fit  "
         } `}
       >
         <div
-          className={`flex gap-5 py-1 ${
-            type === "add" ? " h-fit " : "h-fit"
-          }`}
+          className={`flex gap-5 py-1 ${type === "add" ? " h-fit " : "h-fit"}`}
         >
           {/* Input Field */}
           <div
@@ -373,14 +388,32 @@ export default function ModalManageTopic({
           <Button variant="subtle" onClick={onClose}>
             Cancel
           </Button>
-    
-           {type === "add" && (
-          
-                <Button variant='subtle' onClick={addMore}>
-                  Add more content
-                </Button>
-        
-            )}
+
+          {type === "add" && (
+           <Tooltip
+           arrowOffset={20}
+           arrowSize={8}
+           arrowRadius={1}
+           transitionProps={{
+             transition: "fade",
+             duration: 300,
+           }}
+           multiline
+           withArrow
+           label={
+             <div className="text-default text-[12px] p-2 font-medium gap-2">
+               <Kbd  className=" text-secondary">{isMac ? "⌘" : "Ctrl"}</Kbd> + <Kbd className=" text-secondary">Enter</Kbd>
+             </div>
+           }
+           color="#FCFCFC"
+           className="w-fit border  rounded-md "
+           position="top"
+         >
+           <Button variant="subtle" onClick={addMore}>
+             Add more Content
+           </Button>
+         </Tooltip>
+          )}
           <Button
             onClick={onClickDone}
             disabled={

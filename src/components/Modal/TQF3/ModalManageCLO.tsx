@@ -7,6 +7,8 @@ import {
   Modal,
   rem,
   Textarea,
+  Tooltip,
+  Kbd,
 } from "@mantine/core";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import IconList2 from "@/assets/icons/list2.svg?react";
@@ -14,6 +16,7 @@ import { useForm } from "@mantine/form";
 import { upperFirst } from "lodash";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Icon from "@/components/Icon";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export enum LearningMethod {
   Lec = "บรรยาย (Lecture)",
@@ -48,6 +51,7 @@ export default function ModalManageCLO({
   const descriptionRef = useRef<any>(null);
   const cloRef = useRef<HTMLDivElement>(null);
   const [isAdded, setIsAdded] = useState(false);
+  const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 
   const updateHeight = () => {
     if (descriptionRef.current) {
@@ -145,6 +149,16 @@ export default function ModalManageCLO({
     }
   };
 
+  useHotkeys(
+    "ctrl+enter, meta+enter",
+    () => {
+      addMore();
+    },
+    {
+      enableOnFormTags: ["INPUT", "TEXTAREA", "SELECT"],
+    }
+  );
+
   const removeCLO = (index: number) => {
     const length = (data as IModelCLO[]).length;
     form.removeListItem("clo", index);
@@ -159,6 +173,7 @@ export default function ModalManageCLO({
     <Modal
       opened={opened}
       onClose={onClose}
+      closeOnEscape={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} CLO`}
       size={
@@ -277,8 +292,6 @@ export default function ModalManageCLO({
                 </Checkbox.Group>
               </div>
             </div>
-
-            
           </div>
           {/* List CLO */}
           {!!form.getValues().clo?.length && type === "add" && (
@@ -363,12 +376,32 @@ export default function ModalManageCLO({
           </Button>
           {/* Add More Button */}
           {type === "add" && (
-              <div className="flex justify-end">
-                <Button variant='subtle' onClick={addMore}>
+            <div className="flex justify-end">
+              <Tooltip
+                arrowOffset={20}
+                arrowSize={8}
+                arrowRadius={1}
+                transitionProps={{
+                  transition: "fade",
+                  duration: 300,
+                }}
+                multiline
+                withArrow
+                label={
+                  <div className="text-default text-[12px] p-2 font-medium gap-2">
+                    <Kbd className=" text-secondary">{isMac ? "⌘" : "Ctrl"}</Kbd> + <Kbd className=" text-secondary">Enter</Kbd>
+                  </div>
+                }
+                color="#FCFCFC"
+                className="w-fit border  rounded-md "
+                position="top"
+              >
+                <Button variant="subtle" onClick={addMore}>
                   Add more CLO
                 </Button>
-              </div>
-            )}
+              </Tooltip>
+            </div>
+          )}
           <Button
             onClick={onClickDone}
             disabled={form.getValues().clo?.length == 0 && !formOneCLO.errors}
