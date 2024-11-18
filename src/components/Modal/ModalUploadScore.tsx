@@ -43,6 +43,8 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const [openModalStudentList, setOpenModalStudentList] = useState(false);
   const [openModalTemplateGuide, setOpenModalTemplateGuide] = useState(false);
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
+  const [openModalWarningStudentList, setOpenModalWarningStudentList] =
+    useState(false);
   const [file, setFile] = useState<FileWithPath>();
   const [result, setResult] = useState<any>();
   const [errorStudentId, setErrorStudentId] = useState<
@@ -55,6 +57,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const [errorStudent, setErrorStudent] = useState<
     { student: string; studentIdNotMatch: boolean; sectionNotMatch: boolean }[]
   >([]);
+  const [warningStudentList, setWarningStudentList] = useState<string[]>([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
 
@@ -76,6 +79,26 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
       setErrorStudent([]);
     }
   }, [openModalUploadError]);
+
+  useEffect(() => {
+    if (result?.sections) {
+      const notExistStudent: string[] = [];
+      data.sections?.forEach((sec) => {
+        sec.students?.forEach(({ student }) => {
+          const existStudent = result.sections
+            .find((item: any) => item.sectionNo == sec.sectionNo)
+            .students.find((item: any) => item.student == student.id);
+          if (!existStudent) {
+            notExistStudent.push(student.studentId!);
+          }
+        });
+      });
+      if (notExistStudent.length) {
+        setWarningStudentList(notExistStudent);
+        setOpenModalWarningStudentList(true);
+      }
+    }
+  }, [result]);
 
   const onClickUpload = async () => {
     if (result) {
@@ -308,7 +331,6 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   Question
                 </p>
               </Alert>
-
               <Dropzone
                 onDrop={(files) => {
                   onUploadFile(
@@ -421,6 +443,37 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
           </Modal.Body>
         </Modal.Content>
       </Modal.Root>
+
+      <Modal
+        opened={openModalWarningStudentList}
+        onClose={() => setOpenModalWarningStudentList(false)}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+        closeOnEscape={false}
+        centered
+        title="Warning student list"
+      >
+        <div className="flex flex-col gap-4">
+          <div>
+            {warningStudentList.join(", ")}
+            <p>exists in student list but not exists in file upload</p>
+          </div>
+          <div className="flex gap-2 justify-end w-full">
+            <Button
+              onClick={() => {
+                reset();
+                setOpenModalWarningStudentList(false);
+              }}
+              variant="subtle"
+            >
+              Cancel
+            </Button>
+            <Button onClick={() => setOpenModalWarningStudentList(false)}>
+              OK
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
       <ModalErrorUploadFile
         type="scores"
