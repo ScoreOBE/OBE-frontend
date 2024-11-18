@@ -291,7 +291,7 @@ export default function Login() {
                   className="drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[#000000] text-[48px] "
                   ref={targetRef}
                 >
-                  <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
+                  <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start ipadtext-[48px] ">
                     Upload, Publish
                     <br /> grading efficiency.
                   </span>{" "}
