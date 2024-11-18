@@ -48,6 +48,11 @@ import tqf5ComingImg from "@/assets/image/tqf5Coming.png";
 import tqfOverviewImg from "@/assets/image/tqfOverview.png";
 import exportTQFImag from "@/assets/image/exportTQF.png";
 import courseManagementImg from "@/assets/image/courseManagement.png";
+import cloManagementImg from "@/assets/image/cloManagement.png";
+import ploManagementImg from "@/assets/image/ploManagement.png";
+import addPLOColImg from "@/assets/image/addPLOCol.png";
+import ploMappingImg from "@/assets/image/ploMapping.png";
+import reuseTQF3Img from "@/assets/image/reuseTQF3.png";
 export default function Login() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
@@ -823,7 +828,7 @@ export default function Login() {
             </p>
           </div>
 
-          <div className="flex h-fit">
+          {/* <div className="flex h-fit">
             <img
               src={tqfOverviewImg}
               alt="CMULogo"
@@ -853,10 +858,10 @@ export default function Login() {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          {/* <div className="relative flex items-center justify-center -mt-48">
-            <div className="absolute left-0 right-0 top-[50%] z-0 -ml-20 h-40 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[200px]"></div>
+          <div className=" flex items-center justify-center ">
+            {/* <div className="absolute left-0 right-0 top-[50%] z-0 -ml-20 h-40 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[200px]"></div> */}
             <Tabs defaultValue="tqf">
               <Tabs.List className="flex justify-center">
                 <Tabs.Tab
@@ -878,201 +883,73 @@ export default function Login() {
                   PLO
                 </Tabs.Tab>
               </Tabs.List>
-
-              <Tabs.Panel value="tqf" className="mt-8 flex gap-4">
-                <div className="relative bg-[#FFFFFF] rounded-2xl h-[600px] w-[750px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
-                  <Image
-                    src={studentPLOPage}
-                    className={`h-full w-full object-cover rounded-xl -translate-x-20 translate-y-36`}
-                  />
-
-                  <div className="absolute inset-0 rounded-xl">
-                    <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
-                      <p className="opacity-70 font-bold uppercase cursor-default">
-                        TQF Status
-                      </p>
-                      <Title
-                        order={3}
-                        className="font-bold text-[20px] cursor-default"
-                      >
-                        Lorem
-                      </Title>
-                    </div>
-                  </div>
+              <Tabs.Panel
+                value="tqf"
+                className="relative mt-8 flex gap-4 h-[80vh] w-screen"
+              >
+                <div className="absolute right-52 top-4 flex flex-col items-start gap-3 text-pretty w-[370px]">
+                  <p className="text-[24px] font-[700] text-emphasize">TQF</p>
+                  <p className="text-deemphasize font-[600] text-[17px]">
+                    Track the status of TQFs for each course and effortlessly
+                    export them as PDF files.
+                  </p>
                 </div>
-                <div className="h-[600px] flex flex-col gap-4">
-                  <div className="relative bg-[#FFFFFF] rounded-2xl h-full w-[450px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
-                    <Image
-                      src={studentPLOPage}
-                      className={`h-full w-full object-cover rounded-xl translate-x-[40%] translate-y-20`}
-                    />
-
-                    <div className="absolute inset-0 rounded-xl">
-                      <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
-                        <p className="opacity-70 font-bold uppercase cursor-default">
-                          Export TQF
-                        </p>
-                        <Title
-                          order={3}
-                          className="font-bold text-[20px] cursor-default"
-                        >
-                          Lorem
-                        </Title>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative bg-[#FFFFFF] rounded-2xl h-full w-[450px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
-                    <Image
-                      src={studentPLOPage}
-                      className={`h-full w-full object-cover rounded-xl translate-y-[40%]`}
-                    />
-
-                    <div className="absolute inset-0 rounded-xl text-center">
-                      <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
-                        <p className="opacity-70 font-bold uppercase cursor-default">
-                          Export TQF
-                        </p>
-                        <Title
-                          order={3}
-                          className="font-bold text-[20px] cursor-default"
-                        >
-                          Lorem
-                        </Title>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <Image
+                  src={tqfOverviewImg}
+                  className="absolute w-[65%] z-10 bottom-0"
+                />
+                <Image
+                  src={reuseTQF3Img}
+                  className="absolute w-[35%] z-0 right-52 bottom-0"
+                />
               </Tabs.Panel>
-              <Tabs.Panel value="clo" className="mt-8 flex gap-4">
-                <div className="relative bg-[#FFFFFF] rounded-2xl h-[600px] w-[750px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
-                  <Image
-                    src={studentPLOPage}
-                    className={`h-full w-full object-cover rounded-xl -translate-x-20 translate-y-36`}
-                  />
 
-                  <div className="absolute inset-0 rounded-xl">
-                    <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
-                      <p className="opacity-70 font-bold uppercase cursor-default">
-                        OVerview CLOs
-                      </p>
-                      <Title
-                        order={3}
-                        className="font-bold text-[20px] cursor-default"
-                      >
-                        Lorem
-                      </Title>
-                    </div>
-                  </div>
-                </div>
-                <div className="h-[600px] flex flex-col gap-4">
-                  <div className="relative bg-[#FFFFFF] rounded-2xl h-full w-[450px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
-                    <Image
-                      src={studentPLOPage}
-                      className={`h-full w-full object-cover rounded-xl translate-x-[40%] translate-y-20`}
-                    />
-
-                    <div className="absolute inset-0 rounded-xl">
-                      <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
-                        <p className="opacity-70 font-bold uppercase cursor-default">
-                          Other
-                        </p>
-                        <Title
-                          order={3}
-                          className="font-bold text-[20px] cursor-default"
-                        >
-                          Lorem
-                        </Title>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative bg-[#FFFFFF] rounded-2xl h-full w-[450px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
-                    <Image
-                      src={studentPLOPage}
-                      className={`h-full w-full object-cover rounded-xl translate-y-[40%]`}
-                    />
-
-                    <div className="absolute inset-0 rounded-xl text-center">
-                      <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
-                        <p className="opacity-70 font-bold uppercase cursor-default">
-                          Tooltip CLOs
-                        </p>
-                        <Title
-                          order={3}
-                          className="font-bold text-[20px] cursor-default"
-                        >
-                          Lorem
-                        </Title>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <Tabs.Panel
+                value="clo"
+                className="relative mt-8 flex gap-4 h-[80vh] w-screen"
+              >
+                {/* <div className="absolute right-40 top-4 flex flex-col items-start gap-3 text-pretty w-[370px]">
+                  <p className="text-[24px] font-[700] text-emphasize">CLO</p>
+                  <p className="text-deemphasize font-[600] text-[17px]">
+                    Easily view the CLOs for each course and make edits to the
+                    course information as needed.
+                  </p>
+                </div> */}
+                <Image
+                  src={cloManagementImg}
+                  className="absolute w-[65%] z-10     bottom-0"
+                />
+                <Image
+                  src={reuseTQF3Img}
+                  className="absolute w-[35%] z-0 right-52 bottom-0"
+                />
               </Tabs.Panel>
-              <Tabs.Panel value="plo" className="mt-8 flex gap-4">
-                <div className="relative bg-[#FFFFFF] rounded-2xl h-[600px] w-[750px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
-                  <Image
-                    src={studentPLOPage}
-                    className={`h-full w-full object-cover rounded-xl -translate-x-20 translate-y-36`}
-                  />
-
-                  <div className="absolute inset-0 rounded-xl">
-                    <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
-                      <p className="opacity-70 font-bold uppercase cursor-default">
-                        PLO Management
-                      </p>
-                      <Title
-                        order={3}
-                        className="font-bold text-[20px] cursor-default"
-                      >
-                        Lorem
-                      </Title>
-                    </div>
-                  </div>
+              <Tabs.Panel
+                value="plo"
+                className="mt-8 selection:flex flex-col  items-center justify-center h-[80vh] w-screen"
+              >
+                <div className="flex flex-col items-center gap-3 text-pretty">
+                  <p className="text-[24px] font-[700] text-emphasize">PLO</p>
+                  <p className="text-deemphasize text-center font-[600] text-[17px] pb-6">
+                    Create and manage PLO Collections, assign them to faculty,
+                    <br />
+                    track average PLOs, and see mapped courses.
+                  </p>
                 </div>
-                <div className="h-[600px] flex flex-col gap-4">
-                  <div className="relative bg-[#FFFFFF] rounded-2xl h-full w-[450px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
-                    <Image
-                      src={studentPLOPage}
-                      className={`h-full w-full object-cover rounded-xl translate-x-[40%] translate-y-20`}
-                    />
-
-                    <div className="absolute inset-0 rounded-xl">
-                      <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
-                        <p className="opacity-70 font-bold uppercase cursor-default">
-                          Track average PLOs
-                        </p>
-                        <Title
-                          order={3}
-                          className="font-bold text-[20px] cursor-default"
-                        >
-                          Lorem
-                        </Title>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative bg-[#FFFFFF] rounded-2xl h-full w-[450px] shadow-xl border-[#e3e3e3] border-t-[1px] overflow-clip">
-                    <Image
-                      src={studentPLOPage}
-                      className={`h-full w-full object-cover rounded-xl translate-y-[40%]`}
-                    />
-
-                    <div className="absolute inset-0 rounded-xl text-center">
-                      <div className="top-0 flex flex-col justify-end p-6 text-emphasize">
-                        <p className="opacity-70 font-bold uppercase cursor-default">
-                          Export PLO
-                        </p>
-                        <Title
-                          order={3}
-                          className="font-bold text-[20px] cursor-default"
-                        >
-                          Lorem
-                        </Title>
-                      </div>
-                    </div>
-                  </div>
+                <div className="relative flex items-center justify-center">
+                  <Image src={ploManagementImg} className="w-[60%] z-10" />
+                  <Image
+                    src={addPLOColImg}
+                    className="absolute w-[35%] z-0 right-20 bottom-3"
+                  />
+                  <Image
+                    src={ploMappingImg}
+                    className="absolute w-[35%] z-0 left-20  bottom-3"
+                  />
                 </div>
               </Tabs.Panel>
             </Tabs>
-          </div> */}
+          </div>
 
           <div className="flex h-fit mt-24">
             <div className="flex flex-col items-start justify-center gap-4 h-[70%] pl-28">
