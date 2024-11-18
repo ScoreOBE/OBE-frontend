@@ -6,6 +6,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import store from "@/store";
 import { IModelUser } from "@/models/ModelUser";
 import { getSectionNo } from "./function";
+import { capitalize } from "lodash";
 
 export const isNumeric = (value: any) => {
   return !isNaN(parseFloat(value)) && isFinite(value);
@@ -452,8 +453,8 @@ const gradescopeFile = (
           ?.students?.find(({ student }) => student.studentId == data.SID)
           ?.student.id,
         studentId: data.SID,
-        firstNameEN: data["First Name"],
-        lastNameEN: data["Last Name"],
+        firstNameEN: capitalize(data["First Name"]),
+        lastNameEN: capitalize(data["Last Name"]),
         email: data.Email,
         scores: [score],
       };
