@@ -8,6 +8,8 @@ import {
   NumberInput,
   NumberInputHandlers,
   Alert,
+  Tooltip,
+  Kbd,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Icon from "@/components/Icon";
@@ -18,6 +20,7 @@ import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import { upperFirst } from "lodash";
 import { useEffect, useRef, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 type actionType = "add" | "edit";
 
@@ -43,6 +46,7 @@ export default function ModalManageEvalTopic({
   const [isAdded, setIsAdded] = useState(false);
   const [percentTotal, setPercentTotal] = useState(0);
   const [openedTooltip, setOpenedTooltip] = useState(false);
+  const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 
   const form = useForm({
     mode: "controlled",
@@ -121,6 +125,16 @@ export default function ModalManageEvalTopic({
     }
   };
 
+  useHotkeys(
+    "ctrl+enter, meta+enter",
+    () => {
+      addMore();
+    },
+    {
+      enableOnFormTags: ["INPUT", "TEXTAREA", "SELECT"],
+    }
+  );
+
   const removeTopic = (index: number) => {
     const length = (data as IModelEval[]).length;
     setPercentTotal(percentTotal - form.getValues().eval![index].percent);
@@ -136,6 +150,7 @@ export default function ModalManageEvalTopic({
     <Modal
       opened={opened}
       onClose={onClose}
+      closeOnEscape={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Evaluation Topic`}
       size={
@@ -368,6 +383,25 @@ export default function ModalManageEvalTopic({
           </Button>
           {/* Add More Button */}
           {type === "add" && (
+           <Tooltip
+           arrowOffset={20}
+           arrowSize={8}
+           arrowRadius={1}
+           transitionProps={{
+             transition: "fade",
+             duration: 300,
+           }}
+           multiline
+           withArrow
+           label={
+             <div className="text-default text-[12px] p-2 font-medium gap-2">
+               <Kbd className=" text-secondary">{isMac ? "⌘" : "Ctrl"}</Kbd> + <Kbd className=" text-secondary">Enter</Kbd>
+             </div>
+           }
+           color="#FCFCFC"
+           className="w-fit border  rounded-md "
+           position="top"
+         >
             <Button
               variant="subtle"
               disabled={percentTotal == 100}
@@ -377,6 +411,7 @@ export default function ModalManageEvalTopic({
             >
               Add more topic
             </Button>
+            </Tooltip>
           )}
           <Button
             onClick={onClickDone}

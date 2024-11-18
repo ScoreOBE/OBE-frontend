@@ -338,7 +338,7 @@ export default function Section() {
                         </div>
                       </Menu.Item>
 
-                      <Menu.Item
+                      {/* <Menu.Item
                         onClick={() => setOpenModalStudentList(true)}
                         className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[210px]"
                       >
@@ -349,7 +349,7 @@ export default function Section() {
                           />
                           <span>Student list {course?.courseNo}</span>
                         </div>
-                      </Menu.Item>
+                      </Menu.Item> */}
                       <Menu.Item
                         onClick={() => setOpenModalExportScore(true)}
                         className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-[12px] h-7 "

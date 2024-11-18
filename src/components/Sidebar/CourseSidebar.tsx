@@ -214,7 +214,13 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 onClick={() => goToPage(ROUTE_PATH.SECTION)}
                 leftSection={<RxDashboard size={18} />}
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
-                ${
+                     ${
+                   path.includes(ROUTE_PATH.ROSTER)
+                     ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                     : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                 }
+                
+                  ${
                   path.includes(ROUTE_PATH.TQF3)
                     ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                     : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -227,6 +233,31 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               `}
               >
                 Sections
+              </Button>
+            )}
+            {localStorage.getItem("dashboard") == ROLE.INSTRUCTOR && (
+              <Button
+                onClick={() => goToPage(ROUTE_PATH.ROSTER)}
+                leftSection={<RxDashboard size={18} />}
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+                 ${
+                   path.includes(ROUTE_PATH.SECTION)
+                     ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                     : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                 }
+                  ${
+                    path.includes(ROUTE_PATH.TQF3)
+                      ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                      : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                  }
+                ${
+                  path.includes(ROUTE_PATH.TQF5)
+                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                    : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                }
+              `}
+              >
+                Roster
               </Button>
             )}
             <Menu

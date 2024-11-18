@@ -146,8 +146,8 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
             >
               <Radio.Group classNames={{ label: "font-semibold"}} value={selectedMerge} onChange={setSelectedMerge}>
                 <Group  mb={2}>
-                  <Radio classNames={{ label: "font-medium"}} value="unzipfile" label="Combine into one file (Unzip)" />
-                  <Radio classNames={{ label: "font-medium"}} value="zipfile" label="Split into parts (Zip)" />
+                  <Radio classNames={{ label: "font-medium"}} value="unzipfile" label="Single file" />
+                  <Radio classNames={{ label: "font-medium"}} value="zipfile" label="Multiple file (Zip)" />
                 </Group>
               </Radio.Group>
             </div>

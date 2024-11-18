@@ -267,7 +267,7 @@ export default function ModalManageTQF({ opened, onClose }: Props) {
 
                       <Table.Th className="w-[25%] ">
                         <div className="flex flex-row items-center gap-2">
-                          TQF3 Edit
+                          TQF 3 Edit
                           <Tooltip
                             arrowOffset={10}
                             arrowSize={8}
