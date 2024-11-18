@@ -76,7 +76,11 @@ export const onUploadFile = async (
 };
 
 const templateNotMatch = () => {
-  showNotifications(NOTI_TYPE.ERROR, "Template incorrect", "Please check your template again.");
+  showNotifications(
+    NOTI_TYPE.ERROR,
+    "Template incorrect",
+    "Please check your template again."
+  );
 };
 
 const studentList = async (
@@ -300,7 +304,7 @@ const scoreOBETemplete = (
         desc: description[item],
         fullScore: fullScore[item],
       }));
-      const scores = {
+      const score = {
         assignmentName,
         questions: Object.keys(data)
           .filter(
@@ -318,30 +322,22 @@ const scoreOBETemplete = (
         studentId: data.studentId,
         firstNameTH,
         lastNameTH,
-        scores: [scores],
+        scores: [score],
       };
       if (!existSec) {
         result.push({
           sectionNo,
           students: [student],
-          assignments: [
-            {
-              name: assignmentName,
-              questions,
-            },
-          ],
+          assignments: [{ name: assignmentName, questions }],
         });
       } else {
         if (!existStudent) {
           existSec.students.push(student);
         } else {
-          existStudent.scores.push(scores);
+          existStudent.scores.push(score);
         }
         if (!existAssignment) {
-          existSec.assignments.push({
-            name: assignmentName,
-            questions,
-          });
+          existSec.assignments.push({ name: assignmentName, questions });
         }
       }
     });
@@ -377,23 +373,34 @@ const gradescopeFile = (
   setErrorStudentId: React.Dispatch<React.SetStateAction<any[]>>,
   setErrorPoint: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
-  const result = { sections: [] as any[], assignments: [] as any[] };
+  const result: any[] = [];
   const errorStudentIdList: { name: string; cell: string[] }[] = [];
   const errorPointList: { name: string; cell: string[] }[] = [];
+
   for (const sheet of workbook.SheetNames) {
     const worksheet = workbook.Sheets[sheet];
     const resultsData: any[] = XLSX.utils.sheet_to_json(worksheet);
+
     const assignmentName =
       sheet == "Sheet1" ? files[0].name.replace(/(.csv|.xlsx)$/g, "") : sheet;
+    const questions = Object.keys(resultsData[0])
+      .slice(12)
+      .map((key) => {
+        const formatted = key.split(" ");
+        formatted.pop();
+        const fullScore = formatted.pop()?.slice(1);
+        const questionName = formatted.join(" ").split(":")[0];
+        return {
+          name: questionName,
+          fullScore: parseFloat(fullScore!),
+        };
+      });
 
-    const scoreDataArray: any[] = [];
-    const fullScoreDataArray: (string | number | null)[] = [];
-    const formattedResults: string[] = [];
     resultsData.forEach((data, i) => {
       // Validate the studentId
       if (
-        data.SID &&
-        (!isNumeric(data.SID) || data.SID.toString().length !== 9)
+        !data.SID ||
+        (data.SID && (!isNumeric(data.SID) || data.SID.toString().length !== 9))
       ) {
         const row = i + 2;
         const column = getColumnAlphabet(2);
@@ -406,28 +413,6 @@ const gradescopeFile = (
         } else {
           errorStudentIdList.push({ name: assignmentName, cell: [cell] });
         }
-      }
-      scoreDataArray.push({
-        studentId: data.SID,
-        firstNameEN: data["First Name"],
-        lastNameEN: data["Last Name"],
-        email: data.Email,
-        scores: {},
-      });
-      const sectionNo = course.sections?.find((sec) =>
-        sec.students?.find((std) => std.student.studentId == data.SID)
-      )?.sectionNo;
-      const existSec = result.sections.find(
-        (sec) => sec.sectionNo == sectionNo
-      );
-      if (!existSec) {
-        result.sections.push({
-          sectionNo,
-          assignments: [],
-          students: [scoreDataArray],
-        });
-      } else {
-        existSec.students.push(scoreDataArray);
       }
 
       Object.keys(data)
@@ -447,42 +432,68 @@ const gradescopeFile = (
               errorPointList.push({ name: assignmentName, cell: [cell] });
             }
           }
-          const formatted = key.split(" ");
-          formatted.pop();
-          const fullScore = formatted.pop()?.slice(1);
-          const questionName = formatted.join(" ");
-          fullScoreDataArray.push(parseFloat(fullScore!));
-          formattedResults.push(questionName);
-          scoreDataArray[i].scores[questionName] = data[key];
         });
-    });
 
-    if (errorStudentIdList.length || errorPointList.length) {
-      files = [];
-      setErrorStudentId(errorStudentIdList);
-      setErrorPoint(errorPointList);
-      setOpenModalUploadError(true);
-      return;
-    }
-
-    const data = formattedResults.map((question, index) => {
-      return {
-        name: question,
-        fullScore: fullScoreDataArray[index],
+      const sectionNo = course.sections?.find((sec) =>
+        sec.students?.find((std) => std.student.studentId == data.SID)
+      )?.sectionNo;
+      const score = {
+        assignmentName,
+        questions: Object.keys(data)
+          .slice(12)
+          .map((key, index) => ({
+            name: questions[index].name,
+            score: data[key],
+          })),
       };
+      const student = {
+        student: course.sections
+          ?.find((sec) => sec.sectionNo == sectionNo)
+          ?.students?.find(({ student }) => student.studentId == data.SID)
+          ?.student.id,
+        studentId: data.SID,
+        firstNameEN: data["First Name"],
+        lastNameEN: data["Last Name"],
+        email: data.Email,
+        scores: [score],
+      };
+      const existSec = result.find((sec) => sec.sectionNo == sectionNo);
+      const existAssignment = existSec?.assignments.find(
+        (assign: any) => assign.name == assignmentName
+      );
+      const existStudent = existSec?.students.find(
+        ({ studentId }: any) => studentId == data.studentId
+      );
+      if (!existSec) {
+        result.push({
+          sectionNo,
+          students: [student],
+          assignments: [{ name: assignmentName, questions }],
+        });
+      } else {
+        if (!existStudent) {
+          existSec.students.push(student);
+        } else {
+          existStudent.scores.push(score);
+        }
+        if (!existAssignment) {
+          existSec.assignments.push({ name: assignmentName, questions });
+        }
+      }
     });
-
-    result.assignments.push({
-      name: assignmentName,
-      questions: data,
-      scores: scoreDataArray,
-    });
+  }
+  if (errorStudentIdList.length || errorPointList.length) {
+    files = [];
+    setErrorStudentId(errorStudentIdList);
+    setErrorPoint(errorPointList);
+    setOpenModalUploadError(true);
+    return;
   }
   setResult({
     year: course.year,
     semester: course.semester,
     course: course.id,
-    ...result,
+    sections: result,
   });
 };
 
