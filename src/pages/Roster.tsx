@@ -79,6 +79,11 @@ export default function Roster() {
       ))
   );
 
+  const onClickDeleteTopic = () => {
+   console.log('hello');
+   
+  };
+
   const studentTable = () => {
     const hasData = rows && rows.flat().length > 0;
     return (
@@ -238,7 +243,7 @@ export default function Roster() {
           </>
         }
         labelButtonRight="Delete Student"
-        // action={onClickDeleteTopic}
+        action={onClickDeleteTopic}
       />
       <ModalStudentList
         type="import"
