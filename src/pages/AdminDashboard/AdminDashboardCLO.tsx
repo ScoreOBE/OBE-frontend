@@ -379,7 +379,7 @@ export default function AdminDashboardCLO() {
                     <Table.Thead>
                       <Table.Tr>
                         <Table.Th>Course</Table.Th>
-                        <Table.Th className="w-[10%]">CLO</Table.Th>
+                        <Table.Th className="w-[15%]">CLO</Table.Th>
                         {departmentPLO.data?.map((plo) => (
                           <Table.Th key={plo.no}>PLO {plo.no}</Table.Th>
                         ))}
