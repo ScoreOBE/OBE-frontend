@@ -27,9 +27,10 @@ import { IModelCourse, IModelSection } from "@/models/ModelCourse";
 import { IModelDepartment } from "@/models/ModelFaculty";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import ModalExportPLO from "@/components/Modal/ModalExportPLO";
-import { IModelPLO } from "@/models/ModelPLO";
+import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { getOnePLO } from "@/services/plo/plo.service";
-
+import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
+import { setCourseManagementList } from "@/store/courseManagement";
 export default function AdminDashboardCLO() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
@@ -39,6 +40,7 @@ export default function AdminDashboardCLO() {
   const academicYear = useAppSelector((state) => state.academicYear);
   const courseList = useAppSelector((state) => state.allCourse);
   const [departmentPLO, setDepartmentPLO] = useState<Partial<IModelPLO>>({});
+  const courseManagement = useAppSelector((state) => state.courseManagement);
   const dispatch = useAppDispatch();
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
@@ -86,6 +88,7 @@ export default function AdminDashboardCLO() {
         fetchPLO();
       }
       fetchCourse();
+      fetchCourseManagement();
     }
   }, [selectDepartment]);
 
@@ -112,6 +115,19 @@ export default function AdminDashboardCLO() {
       search: courseList.search,
       hasMore: courseList.total >= payload?.limit,
     };
+  };
+
+  const fetchCourseManagement = async () => {
+    dispatch(setLoading(true));
+    if (department.length) {
+      const payloadCourse = initialPayload();
+      setPayload(payloadCourse);
+      const res = await getCourseManagement(payloadCourse);
+      if (res) {
+        dispatch(setCourseManagementList(res));
+      }
+    }
+    dispatch(setLoading(false));
   };
 
   const fetchCourse = async () => {
@@ -154,6 +170,17 @@ export default function AdminDashboardCLO() {
     sec?: Partial<IModelSection>
   ) => {
     const dataTQF3 = sec?.TQF3 || course.TQF3;
+    const ploRequire = courseManagement.courseManagements.find(
+      (e) => e.courseNo === course.courseNo
+    )?.ploRequire;
+    const ploRequireNo = departmentPLO?.data?.filter((plo) => {
+      if (ploRequire?.[0]?.list) {
+        return ploRequire[0].list.some((item) =>
+          plo.id.includes(item.toString())
+        );
+      }
+    });
+
     return dataTQF3?.part2 ? (
       dataTQF3.part2!.clo.map((clo) => (
         <Table.Tr key={`${index}-${clo.id}`}>
@@ -162,11 +189,18 @@ export default function AdminDashboardCLO() {
               <div>
                 <p>{course.courseNo}</p>
                 <p>{course.courseName}</p>
+                <span>PLO Require: </span>
+                {ploRequireNo?.map((plo, index) => (
+                  <span key={index} className="text-secondary">
+                    PLO {plo.no}
+                    {index < ploRequireNo.length - 1 && ", "}
+                  </span>
+                ))}
                 {sec && <p>({sec.topic})</p>}
               </div>
             </Table.Td>
           )}
-          <Table.Td className="flex gap-2">
+          <Table.Td className="flex gap-2 ">
             <p>CLO {clo.no}</p>
             <Tooltip
               arrowOffset={10}
@@ -195,15 +229,18 @@ export default function AdminDashboardCLO() {
               </div>
             </Tooltip>
           </Table.Td>
+
           {departmentPLO.data?.map((plo) => (
-            <Table.Td key={plo.no} className="text-secondary">
+            <Table.Td key={plo.no} className={`text-secondary `}>
               {dataTQF3?.part7 ? (
                 dataTQF3.part7!.data.some(
                   (item) =>
                     item.clo === clo.id &&
                     (item.plos as string[]).includes(plo.id)
                 ) ? (
-                  <Icon IconComponent={IconCheck} />
+                  <div className="flex text-start">
+                    <Icon IconComponent={IconCheck} />
+                  </div>
                 ) : (
                   <p>-</p>
                 )
@@ -342,7 +379,7 @@ export default function AdminDashboardCLO() {
                     <Table.Thead>
                       <Table.Tr>
                         <Table.Th>Course</Table.Th>
-                        <Table.Th>CLO</Table.Th>
+                        <Table.Th className="w-[10%]">CLO</Table.Th>
                         {departmentPLO.data?.map((plo) => (
                           <Table.Th key={plo.no}>PLO {plo.no}</Table.Th>
                         ))}
