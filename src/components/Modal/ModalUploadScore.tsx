@@ -78,8 +78,6 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   }, [openModalUploadError]);
 
   const onClickUpload = async () => {
-    // console.log(result);
-
     if (result) {
       dispatch(setLoadingOverlay(true));
       const res = await uploadScore(result);
@@ -268,7 +266,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                       className="h-fit w-fit"
                     >
                       <Button
-                        variant='filled'
+                        variant="filled"
                         leftSection={
                           <Icon
                             IconComponent={IconDownload}
@@ -344,7 +342,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     <div className="flex gap-3">
                       <Button
                         color="#ffcdcd"
-                        variant='outline'
+                        variant="outline"
                         className=" text-error pl-4 font-semibold  hover:text-[#f26c6c] text-b3 rounded-md"
                         leftSection={
                           <Icon IconComponent={IconTrash} className="size-4" />
@@ -359,8 +357,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                         Delete
                       </Button>
                       <Button
-                        
-                        variant='filled'
+                        variant="filled"
                         className=" text-white pl-4 font-semibold hover:text-[#ffffff] text-b3 rounded-md"
                         leftSection={
                           <Icon IconComponent={IconUpload} className="size-4" />

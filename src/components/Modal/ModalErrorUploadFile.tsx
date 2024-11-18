@@ -38,21 +38,15 @@ export default function ModalErrorUploadFile({
         </div>
       }
       // classNames={{ title: "text-delete"}}
-      transitionProps={{
-
-        // duration: 1000,
-  
-      }}
+      transitionProps={
+        {
+          // duration: 1000,
+        }
+      }
       centered
       size="40vw"
       withCloseButton={false}
     >
-      {!errorPoint?.length &&
-        !errorStudentId?.length &&
-        !errorSection?.length &&
-        !errorStudent?.length && (
-          <div>upload score for Gradescope template is coming soon</div>
-        )}
       {!!errorStudent?.length ? (
         <div className="flex flex-col gap-2">
           {errorStudent?.map((item) => (
