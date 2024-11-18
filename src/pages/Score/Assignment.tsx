@@ -1,6 +1,15 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Alert, Button, Chip, Group, Menu, Modal, Table } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Chip,
+  Group,
+  Menu,
+  Modal,
+  Table,
+  TextInput,
+} from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEyePublish from "@/assets/icons/eyePublish.svg?react";
 import IconPublish from "@/assets/icons/publish.svg?react";
@@ -29,16 +38,22 @@ import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { useForm } from "@mantine/form";
-import { publishScore } from "@/services/score/score.service";
+import {
+  deleteAssignment,
+  publishScore,
+  updateAssignmentName,
+} from "@/services/score/score.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { updateAssignments } from "@/store/course";
 import { setLoadingOverlay } from "@/store/loading";
+import { isEqual } from "lodash";
+import MainPopup from "@/components/Popup/MainPopup";
 
 export default function Assignment() {
   const { courseNo, sectionNo } = useParams();
   const path = useLocation().pathname;
-  const loading = useAppSelector((state) => state.loading.loading);
+  const loading = useAppSelector((state) => state.loading);
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)
@@ -65,6 +80,11 @@ export default function Assignment() {
   const [openPublishScoreModal, setOpenPublishScoreModal] = useState(false);
   const [openSelectSecModal, setOpenSelectSecModal] = useState(false);
   const [isPublishAll, setIsPublishAll] = useState(false);
+  const [editDeleteAssignment, setEditDeleteAssignment] = useState("");
+  const [editName, setEditName] = useState("");
+  const [openModalEditAssignment, setOpenModalEditAssignment] = useState(false);
+  const [openModalDeleteAssignment, setOpenModalDeleteAssignment] =
+    useState(false);
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -128,6 +148,46 @@ export default function Assignment() {
       setOpenPublishScoreModal(false);
       setOpenSelectSecModal(false);
       form.reset();
+    }
+    dispatch(setLoadingOverlay(false));
+  };
+
+  const onClickEditAssignmentName = async () => {
+    dispatch(setLoadingOverlay(true));
+    const res = await updateAssignmentName({
+      course: course?.id,
+      oldName: editDeleteAssignment,
+      name: editName,
+    });
+    if (res) {
+      dispatch(updateAssignments({ ...res }));
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Edit Assignment Name successfully",
+        `assignment change from ${editDeleteAssignment} to ${editName}.`
+      );
+      setOpenModalEditAssignment(false);
+      setEditDeleteAssignment("");
+      setEditName("");
+    }
+    dispatch(setLoadingOverlay(false));
+  };
+
+  const onClickDeleteAssignment = async () => {
+    dispatch(setLoadingOverlay(true));
+    const res = await deleteAssignment({
+      course: course?.id,
+      name: editDeleteAssignment,
+    });
+    if (res) {
+      dispatch(updateAssignments({ ...res }));
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        `Delete Assignment successfully`,
+        `assignment ${editDeleteAssignment} is deleted.`
+      );
+      setOpenModalDeleteAssignment(false);
+      setEditDeleteAssignment("");
     }
     dispatch(setLoadingOverlay(false));
   };
@@ -372,10 +432,45 @@ export default function Assignment() {
           </Button>
         </div>
       </Modal>
+      {/* Edit Assignment Name */}
+      <Modal
+        opened={openModalEditAssignment}
+        onClose={() => setOpenModalEditAssignment(false)}
+        centered
+        title="Edit Assignment Name"
+      >
+        <TextInput
+          classNames={{ input: "focus:border-primary" }}
+          label="Course No."
+          size="xs"
+          withAsterisk
+          placeholder="Ex. Quiz 1"
+          value={editName}
+          onChange={(event) => setEditName(event.target.value)}
+        />
+        <Button
+          className="!h-[36px] mt-4 !w-full"
+          onClick={onClickEditAssignmentName}
+          disabled={isEqual(editName, editDeleteAssignment)}
+          loading={loading.loadingOverlay}
+        >
+          Save Changes
+        </Button>
+      </Modal>
+      {/* Delete Assignment */}
+      <MainPopup
+        opened={openModalDeleteAssignment}
+        onClose={() => setOpenModalDeleteAssignment(false)}
+        action={onClickDeleteAssignment}
+        type="delete"
+        labelButtonRight="Delete Assignment"
+        title={`Delete Assignment '${editDeleteAssignment}'`}
+        message={"xxxxxxxxxxx"}
+      />
 
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
-        {loading ? (
+        {loading.loading ? (
           <Loading />
         ) : (section?.instructor as IModelUser)?.id === user.id ||
           (section?.coInstructors as IModelUser[])
@@ -583,7 +678,14 @@ export default function Assignment() {
                                       "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                                   }}
                                 >
-                                  <Menu.Item className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]">
+                                  <Menu.Item
+                                    className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]"
+                                    onClick={() => {
+                                      setEditDeleteAssignment(assignment.name);
+                                      setEditName(assignment.name);
+                                      setOpenModalEditAssignment(true);
+                                    }}
+                                  >
                                     <div className="flex items-center gap-2">
                                       <Icon
                                         IconComponent={IconPencilMinus}
@@ -592,7 +694,13 @@ export default function Assignment() {
                                       <span>Edit Assignment Name</span>
                                     </div>
                                   </Menu.Item>
-                                  <Menu.Item className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]">
+                                  <Menu.Item
+                                    className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]"
+                                    onClick={() => {
+                                      setEditDeleteAssignment(assignment.name);
+                                      setOpenModalDeleteAssignment(true);
+                                    }}
+                                  >
                                     <div className="flex items-center gap-2">
                                       <Icon
                                         IconComponent={IconTrash}

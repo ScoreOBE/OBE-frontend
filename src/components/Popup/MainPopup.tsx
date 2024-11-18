@@ -2,6 +2,7 @@ import { Button, Modal } from "@mantine/core";
 import { ReactElement, ReactNode } from "react";
 import Icon from "@/components/Icon";
 import IconDelete from "@/assets/icons/delete.svg?react";
+import { useAppSelector } from "@/store";
 
 type popupType = "delete" | "warning" | "unsaved";
 
@@ -38,6 +39,7 @@ export default function MainPopup({
         return "text-[#1f69f3]";
     }
   };
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   return (
     <Modal
       opened={opened}
@@ -73,10 +75,16 @@ export default function MainPopup({
                 variant="subtle"
                 className="!text-[13px]"
                 onClick={onClose}
+                loading={loading}
               >
                 Cancel
               </Button>
-              <Button color="red" className="!text-[13px]" onClick={action}>
+              <Button
+                color="red"
+                className="!text-[13px]"
+                onClick={action}
+                loading={loading}
+              >
                 {labelButtonRight}
               </Button>
             </>
@@ -101,7 +109,7 @@ export default function MainPopup({
             </>
           ) : (
             <></>
-          )}{" "}
+          )}
         </div>
       </div>
     </Modal>
