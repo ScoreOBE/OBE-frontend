@@ -26,6 +26,7 @@ import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse, IModelSection } from "@/models/ModelCourse";
 import { IModelDepartment } from "@/models/ModelFaculty";
 import DrawerPLOdes from "@/components/DrawerPLO";
+import ModalExportPLO from "@/components/Modal/ModalExportPLO";
 import { IModelPLO } from "@/models/ModelPLO";
 import { getOnePLO } from "@/services/plo/plo.service";
 
@@ -46,6 +47,7 @@ export default function AdminDashboardCLO() {
     Partial<IModelDepartment>
   >({});
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
+  const [openModalExportPLO, setOpenModalExportPLO] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -247,6 +249,10 @@ export default function AdminDashboardCLO() {
           data={departmentPLO}
         />
       )}
+      <ModalExportPLO
+        opened={openModalExportPLO}
+        onClose={() => setOpenModalExportPLO(false)}
+      />
       <div className=" flex flex-col h-full w-full gap-2 overflow-hidden">
         <div className="flex flex-row px-6 pt-3 items-center justify-between">
           <div className="flex flex-col">
@@ -292,6 +298,7 @@ export default function AdminDashboardCLO() {
               leftSection={
                 <Icon IconComponent={IconExcel} className="size-4" />
               }
+              onClick={() => setOpenModalExportPLO(true)}
             >
               Export PLO
             </Button>

@@ -18,6 +18,7 @@ import { setShowNavbar } from "@/store/showNavbar";
 import { addLoadMoreAllCourse, setAllCourseList } from "@/store/allCourse";
 import { getUniqueInstructors } from "@/helpers/functions/function";
 import { IModelPLO } from "@/models/ModelPLO";
+import ModalExportPLO from "@/components/Modal/ModalExportPLO";
 
 export default function AdminDashboardPLO() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export default function AdminDashboardPLO() {
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
+  const [openModalExportPLO, setOpenModalExportPLO] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -96,6 +98,10 @@ export default function AdminDashboardPLO() {
 
   return (
     <>
+      <ModalExportPLO
+        opened={openModalExportPLO}
+        onClose={() => setOpenModalExportPLO(false)}
+      />
       <div className=" flex flex-col h-full w-full gap-2 overflow-hidden">
         <div className="flex flex-row px-6 pt-3 items-center justify-between">
           <div className="flex flex-col">
@@ -131,6 +137,7 @@ export default function AdminDashboardPLO() {
               leftSection={
                 <Icon IconComponent={IconExcel} className="size-4" />
               }
+              onClick={() => setOpenModalExportPLO(true)}
             >
               Export PLO
             </Button>
