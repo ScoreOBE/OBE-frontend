@@ -53,11 +53,17 @@ import ploManagementImg from "@/assets/image/ploManagement.png";
 import addPLOColImg from "@/assets/image/addPLOCol.png";
 import ploMappingImg from "@/assets/image/ploMapping.png";
 import reuseTQF3Img from "@/assets/image/reuseTQF3.png";
+import courseDashboardImg from "@/assets/image/courseDashboard1.png";
+import { useScrollIntoView } from "@mantine/hooks";
 export default function Login() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView<
+    HTMLDivElement,
+    HTMLDivElement
+  >();
 
   const tqf3List = [
     {
@@ -149,11 +155,29 @@ export default function Login() {
   }, [user]);
 
   return (
-    <div className=" bg-[#fafafa] h-full w-screen items-center flex flex-col overflow-y-auto overflow-x-hidden">
+    <div
+      className=" bg-[#fafafa] h-full w-screen items-center flex flex-col overflow-y-auto overflow-x-hidden"
+      ref={scrollableRef}
+    >
       {loading && <LoadingOverlay />}
-      <div className="flex flex-col w-full">
-        <p className="text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 font-[700] sm:font-[500] item-start rounded text-emphasize text-[48px] mb-5 sm:mb-0 sm:text-[50px] leading-[48px] sm:leading-[66px]">
-          <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+      <div className="relative flex flex-col w-full">
+        <div className="absolute  z-10 h-screen w-screen top-0 flex justify-center items-end pb-28">
+          <div
+            className="arrowCTA"
+            onClick={() =>
+              scrollIntoView({
+                alignment: "center",
+              })
+            }
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+
+        <p className="!font-[600] text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 sm:font-[500] item-start rounded text-emphasize text-[48px] mb-5 sm:mb-0 sm:text-[50px] leading-[48px] sm:leading-[66px]">
+          <span className=" text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE +{" "}
           </span>
           Academic Supercharger
@@ -254,6 +278,7 @@ export default function Login() {
 
           <img src={loginImage} alt="loginImage" />
         </div>
+
         {/* Upload, Publish grading efficiency. */}
         <div className="bg-[#fafafa] sm:flex hidden h-full w-full gap-16 ">
           <div className="relative items-start text-start pb-32 justify-start w-full overflow-clip">
@@ -262,8 +287,11 @@ export default function Login() {
             <div className="relative">
               <div className="relative h-fit w-full py-20 mt-16 px-[118px]">
                 <div className="absolute ml-[40%] left-0 right-0 bottom-40 z-0 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
-                <p className="drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[#000000] text-[48px] ">
-                  <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
+                <p
+                  className="drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[#000000] text-[48px] "
+                  ref={targetRef}
+                >
+                  <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start ipadtext-[48px] ">
                     Upload, Publish
                     <br /> grading efficiency.
                   </span>{" "}
@@ -530,7 +558,7 @@ export default function Login() {
           </div>
 
           {/* benefit */}
-          <div className="flex flex-col">
+          <div className="flex flex-col mt-16">
             <div className="flex gap-16 h-screen w-screen justify-center items-center">
               <div className="flex flex-col gap-6 items-start text-start">
                 <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
@@ -548,65 +576,16 @@ export default function Login() {
               </div>
 
               {/* Image */}
-              <Image
-                src={exportTQFImag}
-                className={`h-[80%] w-[50%] object-cover rounded-xl`}
-              />
-            </div>
-
-            {/* <div className="flex gap-16 h-screen w-screen justify-center items-center">
-              <div className="flex flex-col gap-6 items-start text-start">
-                <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
-                  Reusable TQF 3 Templates.
-                </p>
-                <p className="text-[17px] text-deemphasize font-[600] text-wrap w-[400px]">
-                  Speed up report creation by reusing TQF 3 templates.
-                  <span className="text-emphasize">
-                    {" "}
-                    Eliminate repetitive data entry and quickly customize each
-                    report
-                  </span>
-                  , allowing you to focus on delivering valuable insights
-                  without the hassle of starting from scratch.
-                </p>
+              <div className={`h-[80%] w-[50%] object-cover rounded-xl`}>
+                <Image
+                  src={exportTQFImag}
+                  className={`h-full w-full object-cover rounded-xl`}
+                />
               </div>
-
-          
-              <Image
-                src={
-                  "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-3.png"
-                }
-                className={`h-[80%] w-[50%] object-cover rounded-xl `}
-              />
             </div>
-
-            <div className="flex gap-16 h-screen w-screen justify-center items-center">
-              <div className="flex flex-col gap-6 items-start text-start">
-                <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
-                  Powerful ScoreOBE+ <br />
-                  Analysis with TQF 5.
-                </p>
-                <p className="text-[17px] text-deemphasize font-[600] text-wrap w-[400px]">
-                  <span className="text-emphasize">
-                    Unlock detailed analysis and summaries of course objectives
-                    with TQF 5. Based on real student performance data
-                  </span>
-                  , this feature empowers you to fine-tune and enhance your
-                  curriculum for improved outcomes. Drive course effectiveness
-                  and align with institutional goals effortlessly.
-                </p>
-              </div>
-
-              <Image
-                src={
-                  "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-4.png"
-                }
-                className={`h-[80%] w-[50%] object-cover rounded-xl `}
-              />
-            </div> */}
           </div>
 
-          <div className="bg-[#fafafa] py-14 flex flex-col gap-10">
+          <div className="bg-[#fafafa] py-14 flex flex-col gap-10 -mt-10">
             {/* TQF3 */}
             <div className="flex flex-col items-center text-center font-[600] gap-14 mx-28">
               <div>
@@ -802,12 +781,28 @@ export default function Login() {
                   })}
                 </Accordion>
 
-                {/* Image */}
-                <div className="flex items-center justify-center py-2">
+                <div className="relative flex items-center justify-center py-2">
                   <Image
                     src={tqf5ComingImg}
-                    className={`h-fit w-[85%] samsungA24:w-[80%] object-cover`}
+                    alt="Background Image"
+                    className="relative h-fit w-[85%] samsungA24:w-[80%] object-cover"
                   />
+
+                  <div className="absolute bg-black opacity-80 w-full h-full backdrop-blur-[160px]"></div>
+
+                  <div className="absolute text-center text-white z-10">
+                    <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
+                      <h1 className="text-[48px] leading-[64px] font-semibold">
+                        <span className="text-[#5a96f6] ">
+                          TQF 5 is coming soon <br /> to
+                        </span>{" "}
+                        ScoreOBE+
+                      </h1>
+                    </div>
+                    <p className="text-sm mt-2 text-[28px] text-white underline ">
+                      Available in February
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -827,38 +822,6 @@ export default function Login() {
               our powerful admin features.
             </p>
           </div>
-
-          {/* <div className="flex h-fit">
-            <img
-              src={tqfOverviewImg}
-              alt="CMULogo"
-              className="h-[75%] -translate-x-[15%]"
-            />
-
-            <div className="flex flex-col items-start justify-center gap-16 -translate-x-[45%] h-[70%] ">
-              <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
-                <p className="text-[24px] font-[700] text-emphasize">TQF</p>
-                <p className="text-deemphasize font-[600] text-[17px]">
-                  Track the status of TQFs for each course and effortlessly
-                  export them as PDF files.
-                </p>
-              </div>
-              <div className="flex flex-col items-start gap-3 text-pretty w-[390px]">
-                <p className="text-[24px] font-[700] text-emphasize">CLO</p>
-                <p className="text-deemphasize font-[600] text-[17px]">
-                  Easily view the CLOs for each course and make edits to the
-                  course information as needed.
-                </p>
-              </div>
-              <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
-                <p className="text-[24px] font-[700] text-emphasize">PLO</p>
-                <p className="text-deemphasize font-[600] text-[17px]">
-                  Create and manage PLO Collections, assign them to faculty,
-                  track average PLOs, and see mapped courses.
-                </p>
-              </div>
-            </div>
-          </div> */}
 
           <div className=" flex items-center justify-center ">
             {/* <div className="absolute left-0 right-0 top-[50%] z-0 -ml-20 h-40 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[200px]"></div> */}
@@ -883,54 +846,50 @@ export default function Login() {
                   PLO
                 </Tabs.Tab>
               </Tabs.List>
+
               <Tabs.Panel
                 value="tqf"
-                className="relative mt-8 flex gap-4 h-[80vh] w-screen"
+                className="mt-8 selection:flex flex-col items-center justify-center h-[80vh] w-screen"
               >
-                <div className="absolute right-52 top-4 flex flex-col items-start gap-3 text-pretty w-[370px]">
+                <div className="flex flex-col items-center gap-3 text-pretty pb-8">
                   <p className="text-[24px] font-[700] text-emphasize">TQF</p>
                   <p className="text-deemphasize font-[600] text-[17px]">
-                    Track the status of TQFs for each course and effortlessly
-                    export them as PDF files.
+                    Track the status of TQFs for each course <br /> and
+                    effortlessly export them as PDF files.
                   </p>
                 </div>
-                <Image
-                  src={tqfOverviewImg}
-                  className="absolute w-[65%] z-10 bottom-0"
-                />
-                <Image
-                  src={reuseTQF3Img}
-                  className="absolute w-[35%] z-0 right-52 bottom-0"
-                />
+                <div className="relative flex items-center justify-center -translate-x-[15%]">
+                  <Image src={tqfOverviewImg} className="w-[60%] z-10" />
+                  <Image
+                    src={reuseTQF3Img}
+                    className="absolute w-[35%] z-0 right-0 bottom-3"
+                  />
+                </div>
               </Tabs.Panel>
 
               <Tabs.Panel
                 value="clo"
-                className="relative mt-8 flex gap-4 h-[80vh] w-screen"
+                className="mt-8 selection:flex flex-col  items-center justify-center h-[80vh] w-screen"
               >
-                {/* <div className="absolute right-40 top-4 flex flex-col items-start gap-3 text-pretty w-[370px]">
+                <div className="flex flex-col items-center gap-3 text-pretty text-center pb-8">
                   <p className="text-[24px] font-[700] text-emphasize">CLO</p>
                   <p className="text-deemphasize font-[600] text-[17px]">
-                    Easily view the CLOs for each course and make edits to the
-                    course information as needed.
+                    Easily view the CLOs for each course <br /> and make edits
+                    to the course information as needed.
                   </p>
-                </div> */}
-                <Image
-                  src={cloManagementImg}
-                  className="absolute w-[65%] z-10     bottom-0"
-                />
-                <Image
-                  src={reuseTQF3Img}
-                  className="absolute w-[35%] z-0 right-52 bottom-0"
-                />
+                </div>
+                <div className="relative flex items-center justify-center">
+                  <Image src={cloManagementImg} className="w-[45%]" />
+                </div>
               </Tabs.Panel>
+
               <Tabs.Panel
                 value="plo"
                 className="mt-8 selection:flex flex-col  items-center justify-center h-[80vh] w-screen"
               >
                 <div className="flex flex-col items-center gap-3 text-pretty">
                   <p className="text-[24px] font-[700] text-emphasize">PLO</p>
-                  <p className="text-deemphasize text-center font-[600] text-[17px] pb-6">
+                  <p className="text-deemphasize text-center font-[600] text-[17px] pb-8">
                     Create and manage PLO Collections, assign them to faculty,
                     <br />
                     track average PLOs, and see mapped courses.
@@ -951,8 +910,8 @@ export default function Login() {
             </Tabs>
           </div>
 
-          <div className="flex h-fit mt-24">
-            <div className="flex flex-col items-start justify-center gap-4 h-[70%] pl-28">
+          <div className="flex h-fit items-center mt-28">
+            <div className="flex flex-col items-start justify-center gap-4 h-[85%]  pl-28 samsungA24:pl-48">
               <div className="flex flex-col gap-2 items-start mt-2 mb-2">
                 <p className="font-[700] text-[36px] text-emphasize">
                   Course Management
@@ -990,73 +949,13 @@ export default function Login() {
                 </p>
               </div>
             </div>
-            <img
+            <Image
               src={courseManagementImg}
               alt="CMULogo"
-              className="h-[75%] -translate-x-28"
+              className="w-[75%] -translate-x-36 samsungA24:-translate-x-20"
             />
           </div>
-
-          {/* 
-          <div className="text-center gap-20 font-[700] flex flex-col text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]  drop-shadow-xl pb-2 cursor-default leading-[72px] items-center justify-center w-screen h-screen text-[60px] ">
-            <p>
-              There's never been a better time <br /> for an upgrade than right
-              now.
-            </p>
-            <img src={studentPLOPage} alt="CMULogo" className="h-[75%]" />
-          </div> */}
         </div>
-
-        {/* <div className="w-full  py-20 sm:flex flex-col gap-10 hidden">
-          <div className="px-20 font-[700] flex flex-col gap-1 bg-clip-text bg-gradient-to-r text-[#4285f4] drop-shadow-xl pb-2 cursor-default leading-[56px] items-start text-[40px] ">
-            <p>Explore More Features Beyond the Essentials</p>
-          </div>
-          <div className="flex-col items-center pb-8 sm:flex hidden">
-            <Carousel
-              slideSize="60%"
-              slideGap="xl"
-              height={450}
-              initialSlide={0}
-              align="center"
-              withIndicators
-              controlsOffset="xl"
-              dragFree
-              skipSnaps={true}
-              loop={true}
-              classNames={{
-                control: "size-10 absolute top-64 right-0 mr-24",
-                slide: "",
-              }}
-              previousControlProps={{
-                className: "mr-40",
-              }}
-              onSlideChange={(index: number) => setCurrentIndex(index)}
-            >
-              {data.map((img, index) => (
-                <Carousel.Slide key={index}>
-                  <Image
-                    src={img.image}
-                    className={`h-full w-full object-cover rounded-xl`}
-                  />
-
-                  <div className="absolute inset-0  mr-8 rounded-xl">
-                    <div className="top-0 flex flex-col justify-end p-6">
-                      <p className="text-white opacity-70 font-bold uppercase cursor-default">
-                        {img.category}
-                      </p>
-                      <Title
-                        order={3}
-                        className="text-white font-bold text-2xl cursor-default"
-                      >
-                        {img.title}
-                      </Title>
-                    </div>
-                  </div>
-                </Carousel.Slide>
-              ))}
-            </Carousel>
-          </div>
-        </div> */}
 
         <div className="sm:flex flex-col gap-16 items-center bg-black h-fit text-white px-28 py-20 hidden">
           <div className="flex flex-col gap-20 items-center">
@@ -1072,8 +971,6 @@ export default function Login() {
                 helps instructors align with educational goals.
               </p>
             </div>
-
-            <img src={studentPLOPage} alt="CMULogo" className="h-[50%]" />
 
             <div className="flex flex-col gap-16 justify-center w-full font-[600] text-[17px] px-10">
               <div className="flex items-start justify-center gap-28">

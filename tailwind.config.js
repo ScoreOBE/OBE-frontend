@@ -36,11 +36,6 @@ export default {
         b2: "14px",
         b3: "12px",
       },
-      // screens: {
-      //   tablet: "640px",
-      //   laptop: "1024px",
-      //   desktop: "1280px",
-      // },
     },
     fontFamily: {
       notoThai: ["NotoSansThai"],
