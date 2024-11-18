@@ -15,39 +15,71 @@ import { CategoryScale } from "chart.js";
 import "chart.js/auto";
 Chart.register(CategoryScale);
 
-Chart.register(LineController, LineElement, PointElement, LinearScale, Title);
+Chart.register(
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  annotationPlugin
+);
 
 type Props = {
   mean: number;
+  median: number;
   sd: number;
   fullScore: number;
 };
 
-export default function Curve({ mean, sd, fullScore }: Props) {
+export default function Curve({ mean, median, sd, fullScore }: Props) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
-  const statLine:any[] = [{
-    type: "line",
-    label: {
-      content: 'mean',
-      display: true,
-      position: "start",
-      yAdjust: 5,
-      xAdjust: 5,
-      // rotation: i === 0 ? 90 : 0,
-      color: 'blue',
-      backgroundColor: "rgb(0,0,0,0)",
+  const statLine: any[] = [
+    {
+      type: "line",
+      label: {
+        content: "mean",
+        display: true,
+        position: "start",
+        yAdjust: 5,
+        xAdjust: 0,
+        // rotation: i === 0 ? 90 : 0,
+        color: "#1f69f3",
+        backgroundColor: "rgb(0,0,0,0)",
       font: {
-        // size: fontSize,
-        // fontFamily: "SF PRo, sans-serif",
+        size: 14,
+        fontFamily: "Manrope",
+      },
+      },
+      value: mean,
+      borderColor: "#1f69f3",
+      borderDash: [5,5],
+      borderWidth: 2,
+      scaleID: "x",
+    },
+    {
+      type: "line",
+      label: {
+        content: "median",
+        display: true,
+        position: "start",
+        yAdjust: 30,
+        xAdjust: 0,
+        // rotation: i === 0 ? 90 : 0,
+        color: "red",
+        backgroundColor: "rgb(0,0,0,0)",
+      },
+      value: median,
+      borderColor: "red",
+      borderDash: [5,5],
+      borderWidth: 2,
+      scaleID: "x",
+      font: {
+        size: 14,
+        fontFamily: "Manrope",
       },
     },
-    value: mean,
-    borderColor: 'blue',
-    borderDash: [6, 6],
-    borderWidth: 2,
-    scaleID: "x",
-  }];
+  ];
 
   useEffect(() => {
     if (chartRef.current) {
@@ -79,10 +111,10 @@ export default function Curve({ mean, sd, fullScore }: Props) {
               legend: {
                 display: false,
               },
-            annotation: {
-              clip: false,
-              annotations: statLine,
-            }
+              annotation: {
+                clip: false,
+                annotations: statLine,
+              },
             },
             scales: {
               x: {

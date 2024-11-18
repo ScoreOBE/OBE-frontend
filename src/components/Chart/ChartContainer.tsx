@@ -151,7 +151,7 @@ export default function ChartContainer({
         {type == "histogram" ? (
           <HistogramChart scoresData={scoresData} />
         ) : (
-          <Curve mean={mean} sd={sd} fullScore={fullScore} />
+          <Curve mean={mean} median={median} sd={sd} fullScore={fullScore} />
         )}
       </div>
     </>

@@ -38,7 +38,7 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
       case 1:
         return (
           <>
-            <p className="text-secondary leading-[42px] text-[32px] mb-7 font-semibold">
+            <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] mb-10 leading-[42px] text-[32px]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] font-semibold text-[24px]">
               ScoreOBE + <br /> Template Guide <br /> for Upload Score
             </p>
             <p className="text-[14px] mb-16 text-default font-medium">
@@ -167,7 +167,7 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
                 </Button>
               )}
               {step < 7 && (
-                <Button rightSection={<Icon IconComponent={IconArrowRight} />} onClick={next}>
+                <Button rightSection={<Icon className="storke-[1px]" IconComponent={IconArrowRight} />} onClick={next}>
                   Next
                 </Button>
               )}
