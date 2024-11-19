@@ -1,10 +1,6 @@
-import { Dropzone, FileWithPath, MS_EXCEL_MIME_TYPE } from "@mantine/dropzone";
-import { Menu, Table, Tabs, TextInput } from "@mantine/core";
-import { Alert, Button, Modal } from "@mantine/core";
-import { IModelCourse } from "@/models/ModelCourse";
-import regcmu from "@/assets/image/regCMULogo.png";
-import exStudentList from "@/assets/image/exStudentList.png";
-import { useEffect, useState } from "react";
+import { Menu, Table, TextInput } from "@mantine/core";
+import { Alert, Button } from "@mantine/core";
+import { useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import Iconbin from "@/assets/icons/trash.svg?react";
 import notFoundImage from "@/assets/image/notFound.jpg";
@@ -12,23 +8,9 @@ import Icon from "@/components/Icon";
 import IconImport from "@/assets/icons/fileImport.svg?react";
 import IconDots from "@/assets/icons/dots.svg?react";
 import IconManageAdmin from "@/assets/icons/addCo.svg?react";
-import IconTrash from "@/assets/icons/trash.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import IconInfo2 from "@/assets/icons/Info2.svg?react";
-import IconFileImport from "@/assets/icons/fileImport.svg?react";
-import IconX from "@/assets/icons/x.svg?react";
-import IconExternalLink from "@/assets/icons/externalLink.svg?react";
-import IconUpload from "@/assets/icons/upload.svg?react";
-import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
-import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
-import ModalErrorUploadFile from "@/components/Modal/ModalErrorUploadFile";
-import { uploadStudentList } from "@/services/section/section.service";
-import { updateStudentList } from "@/store/course";
-import { useAppDispatch, useAppSelector } from "@/store";
-import { showNotifications } from "@/helpers/notifications/showNotifications";
-import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { useAppSelector } from "@/store";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
-import { setLoadingOverlay } from "@/store/loading";
 import { useParams } from "react-router-dom";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 import MainPopup from "@/components/Popup/MainPopup";
@@ -41,10 +23,15 @@ export default function Roster() {
   const [openModalUploadStudentList, setOpenModalUploadStudentList] =
     useState(false);
   const [openPopupDeleteStudent, setOpenPopupDeleteStudent] = useState(false);
-  const data = useAppSelector((state) =>
+  const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
-  const rows = data?.sections?.map((sec) =>
+
+  const onClickDeleteTopic = () => {
+    console.log("hello");
+  };
+
+  const rows = course?.sections?.map((sec) =>
     sec.students
       ?.map(({ student }) => student)
       .filter((student) =>
@@ -79,11 +66,6 @@ export default function Roster() {
       ))
   );
 
-  const onClickDeleteTopic = () => {
-   console.log('hello');
-   
-  };
-
   const studentTable = () => {
     const hasData = rows && rows.flat().length > 0;
     return (
@@ -92,7 +74,7 @@ export default function Roster() {
           <div className=" px-1 flex items-center justify-between">
             <p className="  text-secondary font-semibold">
               {(() => {
-                const totalStudents = data?.sections.reduce(
+                const totalStudents = course?.sections.reduce(
                   (total, sec) => total + (sec.students?.length || 0),
                   0
                 );
@@ -208,7 +190,7 @@ export default function Roster() {
         opened={openPopupDeleteStudent}
         onClose={() => setOpenPopupDeleteStudent(false)}
         type="delete"
-        title={`Delete Student ${data?.courseNo}`}
+        title={`Delete Student ${course?.courseNo}`}
         message={
           <>
             <Alert
@@ -247,7 +229,7 @@ export default function Roster() {
       />
       <ModalStudentList
         type="import"
-        data={data!}
+        data={course!}
         opened={openModalUploadStudentList}
         onClose={() => setOpenModalUploadStudentList(false)}
       />
