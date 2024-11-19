@@ -1,4 +1,4 @@
-import { Menu, Table, TextInput } from "@mantine/core";
+import { Menu, Modal, Table, TextInput } from "@mantine/core";
 import { Alert, Button } from "@mantine/core";
 import { useState } from "react";
 import { TbSearch } from "react-icons/tb";
@@ -21,6 +21,8 @@ export default function Roster() {
   const { courseNo } = useParams();
   const loading = useAppSelector((state) => state.loading);
   const [filter, setFilter] = useState<string>("");
+
+  const [openModalAddStudent, setOpenModalAddStudent] = useState(false);
   const [selectedUser, setSelectedUser] = useState<
     IModelUser & { sectionNo: number }
   >();
@@ -33,6 +35,35 @@ export default function Roster() {
 
   const onClickDeleteTopic = () => {
     console.log("hello");
+  };
+
+  const [sectionNo, setSectionNo] = useState("");
+  const [studentId, setStudentId] = useState("");
+  const [name, setName] = useState("");
+  const [cmuAccount, setCmuAccount] = useState("");
+
+  const allRequiredFieldsFilled = sectionNo && studentId && name;
+
+  const clearForm = () => {
+    setSectionNo("");
+    setStudentId("");
+    setName("");
+    setCmuAccount("");
+    setOpenModalAddStudent(false);
+  };
+
+  const handleSectionNoChange = (e:any) => {
+    const value = e.target.value;
+    if (/^\d{0,3}$/.test(value)) { 
+      setSectionNo(value);
+    }
+  };
+
+  const handleStudentIDNoChange = (e:any) => {
+    const value = e.target.value;
+    if (/^\d{0,9}$/.test(value)) { 
+      setStudentId(value);
+    }
   };
 
   const rows = course?.sections?.map((sec) =>
@@ -113,6 +144,7 @@ export default function Roster() {
                   >
                     <Menu.Item
                       className=" text-[#3e3e3e] font-semibold text-[12px] h-7 "
+                      onClick={() => setOpenModalAddStudent(true)}
                       // onClick={() => {
                       //   setAddSec({ ...course });
                       //   setOpenModalAddSec(true);
@@ -241,6 +273,60 @@ export default function Roster() {
         opened={openModalUploadStudentList}
         onClose={() => setOpenModalUploadStudentList(false)}
       />
+
+      <Modal
+        opened={openModalAddStudent}
+        onClose={clearForm}
+        size="45vw"
+        title={`Add Student ${courseNo}`}
+        centered
+        transitionProps={{ transition: "pop" }}
+        closeOnClickOutside={false}
+        classNames={{
+          content: "flex flex-col overflow-hidden !pb-1 max-h-full h-fit",
+          body: "flex flex-col overflow-hidden h-fit",
+        }}
+      >
+        <div className="flex flex-col gap-3">
+          <TextInput
+            size="xs"
+            placeholder="e.g. 1 or 001"
+            label="Section No."
+            value={sectionNo}
+            onChange={handleSectionNoChange}
+            withAsterisk
+          ></TextInput>
+          <TextInput
+            size="xs"
+            placeholder="9 Digits e.g. 640123456"
+            label="Student ID"
+            value={studentId}
+            onChange={handleStudentIDNoChange}
+            withAsterisk
+          ></TextInput>
+          <TextInput
+            size="xs"
+            placeholder="e.g. สมชาย เรียนดี"
+            label="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            withAsterisk
+          ></TextInput>
+          <TextInput
+            size="xs"
+            placeholder="e.g. example@cmu.ac.th"
+            label="CMU Account"
+            value={cmuAccount}
+            onChange={(e) => setCmuAccount(e.target.value)}
+          ></TextInput>
+          <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 mt-4  items-end  justify-end h-fit">
+            <Button onClick={() => clearForm()} variant="subtle">
+              Cancel
+            </Button>
+            <Button disabled={!allRequiredFieldsFilled}>Add</Button>
+          </div>
+        </div>
+      </Modal>
       {loading.loading ? <Loading /> : studentTable()}
     </div>
   );
