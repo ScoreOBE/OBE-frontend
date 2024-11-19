@@ -5,6 +5,7 @@ import { TbSearch } from "react-icons/tb";
 import Iconbin from "@/assets/icons/trash.svg?react";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import Icon from "@/components/Icon";
+import IconEdit from "@/assets/icons/edit.svg?react";
 import IconImport from "@/assets/icons/fileImport.svg?react";
 import IconDots from "@/assets/icons/dots.svg?react";
 import IconManageAdmin from "@/assets/icons/addCo.svg?react";
@@ -17,7 +18,11 @@ import MainPopup from "@/components/Popup/MainPopup";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
 import { setLoadingOverlay } from "@/store/loading";
-import { addStudent, deleteStudent } from "@/services/section/section.service";
+import {
+  addStudent,
+  deleteStudent,
+  updateStudent,
+} from "@/services/section/section.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import {
@@ -36,6 +41,9 @@ export default function Roster() {
   const [filter, setFilter] = useState<string>("");
 
   const [openModalAddStudent, setOpenModalAddStudent] = useState(false);
+  const [editName, setEditName] = useState<Partial<IModelUser>>();
+
+  const [openModalEditStudent, setOpenModalEditStudent] = useState(false);
   const [selectedUser, setSelectedUser] = useState<
     IModelUser & { sectionNo: number }
   >();
@@ -131,6 +139,28 @@ export default function Roster() {
     dispatch(setLoadingOverlay(false));
   };
 
+  const onClickEditStudnet = async () => {
+    dispatch(setLoadingOverlay(true));
+    const res = await updateStudent({
+      year: course?.year,
+      semester: course?.semester,
+      course: course?.id,
+      sectionNo: selectedUser?.sectionNo,
+      student: selectedUser?.id,
+    });
+    if (res) {
+      dispatch(updateStudentList({ id: course?.id, sections: res }));
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Update student successfully",
+        `student ${selectedUser?.studentId} is updated`
+      );
+      setOpenModalEditStudent(false);
+      setSelectedUser(undefined);
+    }
+    dispatch(setLoadingOverlay(false));
+  };
+
   const clearForm = () => {
     setOpenModalAddStudent(false);
     form.reset();
@@ -155,17 +185,38 @@ export default function Roster() {
           <Table.Td>{getUserName(student, 3)}</Table.Td>
           <Table.Td>{student.email ? student.email : "Not login yet"}</Table.Td>
           <Table.Td>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSelectedUser({ sectionNo: sec.sectionNo!, ...student });
-                setOpenPopupDeleteStudent(true);
-              }}
-              color="red"
-              className="tag-tqf !px-3 !rounded-full text-center"
-            >
-              <Icon className="size-5" IconComponent={Iconbin} />
-            </Button>
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSelectedUser({ sectionNo: sec.sectionNo!, ...student });
+                  setEditName({
+                    id: student.id,
+                    firstNameTH: student.firstNameTH,
+                    lastNameTH: student.lastNameTH,
+                    studentId: student.studentId,
+                    email: student.email,
+                  });
+
+                  setOpenModalEditStudent(true);
+                }}
+                color="yellow"
+                className="tag-tqf !px-3 !rounded-full text-center"
+              >
+                <Icon className="size-5" IconComponent={IconEdit} />
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSelectedUser({ sectionNo: sec.sectionNo!, ...student });
+                  setOpenPopupDeleteStudent(true);
+                }}
+                color="red"
+                className="tag-tqf !px-3 !rounded-full text-center"
+              >
+                <Icon className="size-5" IconComponent={Iconbin} />
+              </Button>
+            </div>
           </Table.Td>
         </Table.Tr>
       ))
@@ -253,7 +304,7 @@ export default function Roster() {
                 <Table.Tr className="bg-[#e5e7f6]">
                   <Table.Th className="w-[10%]">Section</Table.Th>
                   <Table.Th className="w-[17%]">Student ID</Table.Th>
-                  <Table.Th className="w-[25%]">Name</Table.Th>
+                  <Table.Th className="w-[20%]">Name</Table.Th>
                   <Table.Th className="w-[25%]">CMU Account</Table.Th>
                   <Table.Th className="w-[10%]">Action</Table.Th>
                 </Table.Tr>
@@ -346,6 +397,7 @@ export default function Roster() {
 
       <Modal
         opened={openModalAddStudent}
+        closeOnEscape={false}
         onClose={clearForm}
         size="45vw"
         title={`Add Student ${courseNo}`}
@@ -391,6 +443,72 @@ export default function Roster() {
               Cancel
             </Button>
             <Button onClick={onClickAddStudent}>Add</Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Modal Edit Student */}
+      <Modal
+        opened={openModalEditStudent}
+        onClose={() => setOpenModalEditStudent(false)}
+        size="45vw"
+        closeOnEscape={false}
+        title={`Edit Student ${courseNo}`}
+        centered
+        transitionProps={{ transition: "pop" }}
+        closeOnClickOutside={false}
+        classNames={{
+          content: "flex flex-col overflow-hidden !pb-1 max-h-full h-fit",
+          body: "flex flex-col overflow-hidden h-fit",
+        }}
+      >
+        <div className="flex flex-col gap-3">
+          <TextInput
+            size="xs"
+            placeholder="e.g. 1 or 001"
+            label="Section No."
+            withAsterisk
+            value={getSectionNo(selectedUser?.sectionNo)}
+          ></TextInput>
+          <TextInput
+            size="xs"
+            placeholder="9 Digits e.g. 640123456"
+            label="Student ID"
+            value={editName?.studentId}
+            withAsterisk
+          ></TextInput>
+          <TextInput
+            size="xs"
+            placeholder="e.g. สมชาย เรียนดี"
+            label="Name"
+            value={`${editName?.firstNameTH || ""} ${
+              editName?.lastNameTH || ""
+            }`.trim()}
+            withAsterisk
+            onChange={(e) => {
+              const [firstName, ...lastNameParts] = e.target.value.split(" ");
+              setEditName((prev) => ({
+                ...prev,
+                firstNameTH: firstName || "",
+                lastNameTH: lastNameParts.join(" ") || "",
+              }));
+            }}
+          />
+          <TextInput
+            size="xs"
+            placeholder="e.g. example@cmu.ac.th"
+            label="CMU Account"
+            value={editName?.email}
+            id="email"
+          ></TextInput>
+          <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 mt-4  items-end  justify-end h-fit">
+            <Button
+              onClick={() => setOpenModalEditStudent(false)}
+              variant="subtle"
+            >
+              Cancel
+            </Button>
+            <Button onClick={onClickAddStudent}>Save</Button>
           </div>
         </div>
       </Modal>

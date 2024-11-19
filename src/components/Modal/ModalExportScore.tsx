@@ -69,7 +69,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
         body: "flex flex-col overflow-hidden max-h-full h-fit",
       }}
     >
-      <div className="flex flex-col">
+      {/* <div className="flex flex-col">
         <Checkbox.Group
           label={`Select section to export`}
           classNames={{ label: "mb-1 font-semibold text-default" }}
@@ -126,7 +126,17 @@ export default function ModalExportScore({ opened, onClose }: Props) {
             Export TQF3
           </Button>
         </Group>
+      </div> */}
+    
+      <div className="h-full items-start justify-center flex flex-col">
+       
+      
+        <p className=" mb-7 mt-1 text-b2 break-words text-[#777777] font-medium leading-relaxed">
+        Available in January
+        </p>
       </div>
+      {/* <img className=" z-50  w-[25vw]  " src={maintenace} alt="loginImage" /> */}
+  <Button onClick={onClose} className="!w-full">OK</Button>
     </Modal>
   );
 }

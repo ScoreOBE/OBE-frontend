@@ -161,7 +161,7 @@ export default function Navbar() {
         )}
         {![ROUTE_PATH.LOGIN].includes(location) && (
           <div className="flex gap-2 items-center">
-            {user.role !== ROLE.STUDENT && (
+            {/* {user.role !== ROLE.STUDENT && (
               <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
                 <Button variant="light">
                   <div className="flex items-center gap-1">
@@ -170,7 +170,7 @@ export default function Navbar() {
                   </div>
                 </Button>
               </a>
-            )}
+            )} */}
             <Profile />
           </div>
         )}

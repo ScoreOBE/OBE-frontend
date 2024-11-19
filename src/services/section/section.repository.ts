@@ -24,5 +24,8 @@ export const sectionController = (configService = {}) => {
     deleteStudent: async (params: any) => {
       return service.delete(`${prefix}/student`, { ...params });
     },
+    updateStudent: async (params: any) => {
+      return service.post(`${prefix}/student`, { ...params });
+    },
   };
 };
