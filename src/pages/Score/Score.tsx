@@ -27,7 +27,6 @@ export default function Overall() {
   );
   const assignment = section?.assignments?.find((item) => item.name == name);
   const [params, setParams] = useSearchParams();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [items, setItems] = useState<any[]>([
     {
@@ -169,7 +168,7 @@ export default function Overall() {
                 height: "fit-content",
               }}
             >
-              <Table stickyHeader className="">
+              <Table stickyHeader>
                 <Table.Thead>
                   <Table.Tr className="bg-[#e5e7f6]">
                     <Table.Th className="w-[12%]">Question</Table.Th>
@@ -201,11 +200,18 @@ export default function Overall() {
 
               <Accordion chevron={false} unstyled>
                 {assignment?.questions.map((ques, index) => {
-                  const totalStd = section?.students?.filter((item) =>
-                    item.scores
-                      .find(({ assignmentName }) => assignmentName == name)
-                      ?.questions.find((item) => item.name == ques.name)
-                  ).length;
+                  const dataScores =
+                    section?.students
+                      ?.flatMap(({ scores }) =>
+                        scores
+                          .filter((item) => item.assignmentName === name)
+                          .flatMap((item) =>
+                            item.questions.filter((q) => q.name === ques.name)
+                          )
+                          .map((question) => question.score)
+                      )
+                      .sort((a, b) => a - b) || [];
+                  const stat = calStat(dataScores, scores?.length);
                   return (
                     <Accordion.Item
                       value={ques.name}
@@ -231,22 +237,22 @@ export default function Overall() {
                                 {ques.fullScore}
                               </Table.Td>
                               <Table.Td className="text-end pr-[70px] w-[11%]">
-                                2.0
+                                {stat.mean.toFixed(2)}
                               </Table.Td>
                               <Table.Td className="text-end pr-[70px] w-[11%]">
-                                10.0
+                                {stat.sd.toFixed(2)}
                               </Table.Td>
                               <Table.Td className="text-end pr-[70px] w-[11%]">
-                                25
+                                {stat.median.toFixed(2)}
                               </Table.Td>
                               <Table.Td className="text-end pr-[70px]  w-[11%]">
-                                5.0
+                                {stat.maxScore.toFixed(2)}
                               </Table.Td>
                               <Table.Td className="text-end pr-[70px] w-[11%]">
-                                2.0
+                                {stat.q3.toFixed(2)}
                               </Table.Td>
                               <Table.Td className="text-end pr-[70px] w-[11%]">
-                                10.0
+                                {stat.q1.toFixed(2)}
                               </Table.Td>
                               <Table.Th className="text-end pr-[70px] w-[8%]">
                                 <Icon
@@ -264,7 +270,7 @@ export default function Overall() {
                             {ques.name} - {ques.fullScore} Points
                           </p>
                           <p className="text-secondary text-[16px] font-semibold">
-                            {totalStd} Students
+                            {scores?.length} Students
                           </p>
                         </div>
                         <ChartContainer
