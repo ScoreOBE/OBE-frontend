@@ -23,7 +23,9 @@ import IconHistogram from "@/assets/icons/histogram.svg?react";
 import IconClick from "@/assets/icons/click.svg?react";
 import IconPublish1 from "@/assets/icons/eyePublish.svg?react";
 import IconPublish2 from "@/assets/icons/publishEach.svg?react";
-import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
+import IconRocket from "@/assets/icons/rocket.svg?react";
+import IconWand from "@/assets/icons/wand.svg?react";
+import IconChecklist from "@/assets/icons/checkList.svg?react";
 import IconChartBar from "@/assets/icons/chartBar.svg?react";
 import IconRadar from "@/assets/icons/radar.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
@@ -159,7 +161,7 @@ export default function Login() {
     >
       {loading && <LoadingOverlay />}
       <div className="relative flex flex-col w-full">
-        <div className="absolute z-10 h-screen w-screen top-screen flex justify-center items-end pb-28">
+        <div className="max-sm:hidden absolute z-10 h-screen w-screen top-screen flex justify-center items-end pb-28">
           <div
             className="arrowCTA"
             onClick={() =>
@@ -174,7 +176,7 @@ export default function Login() {
           </div>
         </div>
 
-        <p className="!font-[600] text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 sm:font-[500] item-start rounded text-emphasize text-[48px] mb-5 sm:mb-0 sm:text-[50px] leading-[48px] sm:leading-[66px]">
+        <p className="!font-[600] text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 sm:font-[600] item-start rounded text-emphasize text-[48px] mb-5 sm:mb-0 sm:text-[50px] leading-[48px] sm:leading-[66px]">
           <span className=" text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE +{" "}
           </span>
@@ -182,7 +184,7 @@ export default function Login() {
           <br />
           for instructors and students
         </p>
-        <p className="mt-5 text-h2 text-[#4F4D55] w-full hidden sm:flex justify-center items-center text-center px-[118px] font-[500]">
+        <p className="mt-5 text-h2 text-[#4F4D55] w-full hidden sm:flex justify-center items-center text-center px-[118px] font-[600]">
           Discover A Better Way to Do OBE Simplify Your Academic Journey
         </p>
 
@@ -222,7 +224,7 @@ export default function Login() {
           }}
         >
           <div className=" sm:flex relative hidden items-center rounded-t-xl justify-center p-5 py-[9px] border-b-[1px] border-[#eeeeee] flex-row gap-0 w-full bg-white">
-            <div className=" absolute -top-10 py-20  rotate-180 -z-50 w-screen h-screen  flex justify-center">
+            <div className=" absolute -top-10 py-20 max-macair133:py-40  rotate-180 -z-50 w-screen h-screen  flex justify-center">
               <div className="rounded-full h-full w-3/6 bg-[#FF7847] opacityy-50 bg-blur"></div>
               <div className="rounded-full h-[97%] w-3/6 bg-[#FF469D] opacityy-50 bg-blur"></div>
               <div className="rounded-full h-[97%] w-3/6 bg-[#7733FF] opacityy-50 bg-blur"></div>
@@ -289,17 +291,17 @@ export default function Login() {
               >
                 <div className="absolute ml-[40%] max-macair133:ml-0 left-0 right-0 bottom-40 z-0 max-macair133:h-16 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px] max-macair133:blur-[200px]"></div>
                 <p className="drop-shadow-xl pb-2 cursor-default leading-[56px] max-macair133:text-center text-[#000000] text-[48px] ">
-                  <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px] text-[48px] ">
+                  <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px] text-[48px] max-macair133:text-[44px]">
                     Upload, Publish
                     <br /> grading efficiency.
                   </span>{" "}
                   <br />
                 </p>
                 <div className="flex max-macair133:flex-col max-macair133:gap-24 items-center justify-between">
-                  <p className="mt-5 text-[19px] max-macair133:text-center text-black font-[500]">
+                  <p className="mt-5 text-[19px] max-macair133:text-[17px] max-macair133:text-center text-black font-[600]">
                     Effortless score uploads, instant analytics, <br /> and
                     visual insights! Elevate your grading today! <br />
-                    <span className="mt-5 underline text-b1  text-[#7b7b7c] font-[500]">
+                    <span className="mt-5 underline text-b1  text-[#7b7b7c] font-[600]">
                       Available in December or January
                     </span>
                   </p>
@@ -313,7 +315,7 @@ export default function Login() {
                       <p className=" text-black font-[700] pt-4 ">
                         Gradescope Support
                       </p>
-                      <p className=" text-default font-[500] pt-2 text-b2  leading-[22px]">
+                      <p className=" text-default font-[600] pt-2 text-b2  leading-[22px]">
                         Effortless import Gradescope <br /> assignment template
                       </p>
                     </div>
@@ -322,7 +324,7 @@ export default function Login() {
                       <p className=" text-black font-[700] pt-4 ">
                         Statistics & Histogram
                       </p>
-                      <p className="text-default font-[500] pt-2 text-b2 leading-[22px] ">
+                      <p className="text-default font-[600] pt-2 text-b2 leading-[22px] ">
                         Visualize your grade <br /> with interactive charts
                       </p>
                     </div>
@@ -331,7 +333,7 @@ export default function Login() {
                       <p className=" text-black font-[700] pt-4 ">
                         On-the-Spot Edits
                       </p>
-                      <p className=" text-default font-[500] pt-2 text-b2 leading-[22px]">
+                      <p className=" text-default font-[600] pt-2 text-b2 leading-[22px]">
                         Modify student scores <br /> directly within the system.
                       </p>
                     </div>
@@ -377,7 +379,7 @@ export default function Login() {
                       <p className=" text-black font-[700] pt-4">
                         Clear Overview of Performance
                       </p>
-                      <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
+                      <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
                         Provides a comprehensive view of student performance
                         <span className="text-emphasize">
                           {" "}
@@ -393,11 +395,11 @@ export default function Login() {
                       <p className=" text-black font-[700] pt-4 ">
                         Unlock In-Depth Statistical Insights
                       </p>
-                      <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px]">
+                      <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] w-[380px]">
                         <span className="text-emphasize">
                           Analyze key metrics{" "}
                         </span>
-                        like mean and standard deviation <br />{" "}
+                        like mean and standard deviation{" "}
                         <span className="text-emphasize">
                           to easily identify areas for improvement.{" "}
                         </span>
@@ -425,7 +427,7 @@ export default function Login() {
                       <p className=" text-black font-[700] pt-4 ">
                         Students Can Track Their Own Performance
                       </p>
-                      <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
+                      <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
                         <span className="text-emphasize">
                           {" "}
                           Gain clear insights into your progress{" "}
@@ -586,8 +588,8 @@ export default function Login() {
 
           <div className="bg-[#fafafa] py-14 flex flex-col gap-10 -mt-10">
             {/* TQF3 */}
-            <div className="flex flex-col items-center text-center font-[600] gap-14 mx-28">
-              <div>
+            <div className="flex flex-col items-center text-center font-[600] gap-14 ">
+              <div className="mx-28">
                 <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] max-macair133:text-[44px] ">
                   <p>TQF 3</p>
                   <p className="text-[#1D1D1F]">Save Time & Focus on Content</p>
@@ -637,51 +639,53 @@ export default function Login() {
                 </div>
               </div>
 
-              <div className="relative flex h-fit w-full rounded-xl bg-white shadow-md backdrop-blur-[120px]  overflow-clip">
-                <Accordion
-                  defaultValue="1"
-                  onChange={() => setOpenItem}
-                  className="p-6"
-                >
-                  {tqf3List.map((item) => {
-                    return (
-                      <Accordion.Item
-                        key={item.id}
-                        value={item.id}
-                        className="w-[400px]"
-                        onClick={() => {
-                          setSelectTQF3Image(item.img);
-                        }}
-                      >
-                        <Accordion.Control className="h-full min-h-[80px] samsungA24:min-h-[100px] text-[18px]">
-                          <p className="text-[17px] font-[700] text-emphasize">
-                            Part {item.id}
-                          </p>
-                          <p className="text-[14px] font-[600] text-deemphasize">
-                            {item.topic}
-                          </p>
-                        </Accordion.Control>
-                        <Accordion.Panel className="text-start text-[14px] font-[600] w-[95%]">
-                          {item.description}
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                    );
-                  })}
-                </Accordion>
+              <div className="mx-28 max-macair133:mx-10 ">
+                <div className=" flex h-fit w-full rounded-xl bg-white shadow-md backdrop-blur-[120px]  overflow-clip">
+                  <Accordion
+                    defaultValue="1"
+                    onChange={() => setOpenItem}
+                    className="p-6"
+                  >
+                    {tqf3List.map((item) => {
+                      return (
+                        <Accordion.Item
+                          key={item.id}
+                          value={item.id}
+                          className="w-[400px] max-macair133:w-[300px]"
+                          onClick={() => {
+                            setSelectTQF3Image(item.img);
+                          }}
+                        >
+                          <Accordion.Control className="h-full min-h-[80px] samsungA24:min-h-[100px] text-[18px]">
+                            <p className="text-[17px] font-[700] text-emphasize">
+                              Part {item.id}
+                            </p>
+                            <p className="text-[14px] font-[600] text-deemphasize">
+                              {item.topic}
+                            </p>
+                          </Accordion.Control>
+                          <Accordion.Panel className="text-start text-[14px] font-[600] w-[95%]">
+                            {item.description}
+                          </Accordion.Panel>
+                        </Accordion.Item>
+                      );
+                    })}
+                  </Accordion>
 
-                {/* Image */}
-                <div className="flex items-center justify-center">
-                  <Image
-                    src={selectTQF3Image}
-                    className={`h-fit w-[90%] samsungA24:w-[80%] object-cover  `}
-                  />
+                  {/* Image */}
+                  <div className="flex items-center justify-center">
+                    <Image
+                      src={selectTQF3Image}
+                      className={`w-[90%] max-macair133:w-full max-macair133:translate-x-16 samsungA24:w-[80%] object-cover  `}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* TQF5*/}
-            <div className="flex flex-col items-center text-center font-[600] gap-14 mx-28 ">
-              <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center text-center font-[600] gap-14">
+              <div className="flex flex-col items-center mx-28">
                 <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px]  max-macair133:text-[44px]">
                   <p>TQF 5</p>
                   <p className="text-[#1D1D1F]">
@@ -689,9 +693,12 @@ export default function Login() {
                   </p>
                 </div>
                 <p className="mt-5 text-[17px]  max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[800px] ">
-                  TQF 5 helps you analyze course objectives based on real
-                  student performance data, empowering you to make data-driven
-                  improvements and align your courses with institutional goals.
+                  <span className="text-emphasize">
+                    TQF 5 helps you analyze course objectives based on real
+                    student performance data
+                  </span>
+                  , empowering you to make data-driven improvements and align
+                  your courses with institutional goals.
                 </p>
               </div>
 
@@ -748,56 +755,58 @@ export default function Login() {
                 </div>
               </div>
 
-              <div className="flex h-fit w-full rounded-xl bg-white/65 overflow-clip shadow-md z-30">
-                <Accordion
-                  defaultValue="1"
-                  onChange={() => setOpenItem}
-                  className="p-6"
-                >
-                  {tqf5List.map((item) => {
-                    return (
-                      <Accordion.Item
-                        key={item.id}
-                        value={item.id}
-                        className="w-[400px]"
-                      >
-                        <Accordion.Control className="h-full min-h-[160px] samsungA24:min-h-[200px] text-[18px]">
-                          <p className="text-[17px] font-[700] text-emphasize">
-                            Part {item.id}
-                          </p>
-                          <p className="text-[14px] font-[600] text-deemphasize">
-                            {item.topic}
-                          </p>
-                        </Accordion.Control>
-                        <Accordion.Panel className="text-start text-[14px] font-[600]">
-                          {item.description}
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                    );
-                  })}
-                </Accordion>
+              <div className="mx-28 max-macair133:mx-10 z-30">
+                <div className="flex h-fit w-full rounded-xl bg-white/65 overflow-clip shadow-md ">
+                  <Accordion
+                    defaultValue="1"
+                    onChange={() => setOpenItem}
+                    className="p-6"
+                  >
+                    {tqf5List.map((item) => {
+                      return (
+                        <Accordion.Item
+                          key={item.id}
+                          value={item.id}
+                          className="w-[400px] max-macair133:w-[300px]"
+                        >
+                          <Accordion.Control className="h-full min-h-[160px] samsungA24:min-h-[200px] text-[18px]">
+                            <p className="text-[17px] font-[700] text-emphasize">
+                              Part {item.id}
+                            </p>
+                            <p className="text-[14px] font-[600] text-deemphasize">
+                              {item.topic}
+                            </p>
+                          </Accordion.Control>
+                          <Accordion.Panel className="text-start text-[14px] font-[600]">
+                            {item.description}
+                          </Accordion.Panel>
+                        </Accordion.Item>
+                      );
+                    })}
+                  </Accordion>
 
-                <div className="relative flex items-center justify-center py-2">
-                  <Image
-                    src={tqf5ComingImg}
-                    alt="Background Image"
-                    className="relative h-fit w-[85%] samsungA24:w-[80%] object-cover"
-                  />
+                  <div className="relative flex items-center justify-center py-2">
+                    <Image
+                      src={tqf5ComingImg}
+                      alt="Background Image"
+                      className="relative h-fit w-[85%] samsungA24:w-[80%] object-cover"
+                    />
 
-                  <div className="absolute bg-black opacity-80 w-full h-full backdrop-blur-[160px]"></div>
+                    <div className="absolute bg-black opacity-80 w-full h-full backdrop-blur-[160px]"></div>
 
-                  <div className="absolute text-center text-white z-10">
-                    <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
-                      <h1 className="text-[48px]  max-macair133:text-[40px] leading-[64px] font-semibold">
-                        <span className="text-[#5a96f6] ">
-                          TQF 5 is coming soon <br /> to
-                        </span>{" "}
-                        ScoreOBE+
-                      </h1>
+                    <div className="absolute text-center text-white z-10">
+                      <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
+                        <h1 className="text-[48px]  max-macair133:text-[40px] leading-[64px] font-semibold">
+                          <span className="text-[rgb(106,163,255)] ">
+                            TQF 5 is coming soon <br /> to
+                          </span>{" "}
+                          ScoreOBE+
+                        </h1>
+                      </div>
+                      <p className="text-sm mt-2 text-[28px] text-white underline ">
+                        Available in February
+                      </p>
                     </div>
-                    <p className="text-sm mt-2 text-[28px] text-white underline ">
-                      Available in February
-                    </p>
                   </div>
                 </div>
               </div>
@@ -912,8 +921,8 @@ export default function Login() {
             </Tabs>
           </div>
 
-          <div className="flex h-fit items-center mt-28">
-            <div className="flex flex-col items-start justify-center gap-4 h-[85%]  pl-28 samsungA24:pl-48">
+          <div className="flex h-fit items-center mt-8">
+            <div className="flex flex-col items-start justify-center gap-4 max-macair133:gap-2 h-[85%]  pl-28 samsungA24:pl-48">
               <div className="flex flex-col gap-2 items-start mt-2 mb-2">
                 <p className="font-[700] text-[36px] text-emphasize">
                   Course Management
@@ -927,8 +936,11 @@ export default function Login() {
                 <p className=" text-black font-[700] pt-4 ">
                   Recurrence course
                 </p>
-                <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px] w-[400px]">
-                  Easily set courses to recur in the next semester,
+                <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] w-[400px]">
+                  <span className="text-[#4285f4]">
+                    Easily set courses to recur in the next semester
+                  </span>
+                  ,
                   <br /> saving time by avoiding the need to set up <br /> new
                   courses each term.
                 </p>
@@ -937,24 +949,31 @@ export default function Login() {
                 <p className=" text-black font-[700] pt-4 ">
                   Manage Co-instructors
                 </p>
-                <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px] ">
-                  Efficiently manage co-instructors for each course,
+                <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] ">
+                  <span className="text-[#4285f4]">
+                    Efficiently manage co-instructors for each course
+                  </span>
+                  ,
                   <br /> with options to remove or add them using their <br />{" "}
                   CMU OAuth or by selecting from the instructor list.
                 </p>
               </div>
               <div className="flex justify-start flex-col items-start mt-2 mb-2">
                 <p className=" text-black font-[700] pt-4 ">Manage Sections</p>
-                <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px] w-[400px]">
-                  Easily manage course sections, enabling you to open or close
-                  them for the semester with just a few clicks.
+                <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] w-[400px] max-macair133:w-[350px]">
+                  Easily manage course sections,{" "}
+                  <span className="text-[#4285f4]">
+                    {" "}
+                    enabling you to open or close them for the semester{" "}
+                  </span>
+                  with just a few clicks.
                 </p>
               </div>
             </div>
             <Image
               src={courseManagementImg}
               alt="CMULogo"
-              className="w-[75%] max-macair133:w-[80%] -translate-x-36 samsungA24:-translate-x-20"
+              className="w-[75%] max-macair133:w-[90%] -translate-x-36 samsungA24:-translate-x-20"
             />
           </div>
         </div>
@@ -962,7 +981,7 @@ export default function Login() {
         <div className="sm:flex flex-col gap-16 items-center bg-black h-fit text-white px-28 py-20 hidden">
           <div className="flex flex-col gap-20 items-center">
             <div className="text-[21px] text-center">
-              <p className="font-[600] text-[60px] max-macair133:text-[48px]  ">
+              <p className="font-[600] text-[60px] max-macair133:text-[48px]">
                 Boost Student Success with{" "}
                 <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                   ScoreOBE+!
@@ -977,7 +996,10 @@ export default function Login() {
             <div className="flex flex-col gap-16 justify-center w-full font-[600] text-[17px] max-macair133:text-[15px]  px-10">
               <div className="flex items-start justify-center gap-28">
                 <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
-                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
+                  <Icon
+                    IconComponent={IconWand}
+                    className="size-16 max-macair133:size-12 stroke-1"
+                  />
                   <p>
                     Effortless -{"  "}
                     <span className="text-[#86868B]">
@@ -987,7 +1009,10 @@ export default function Login() {
                   </p>
                 </div>
                 <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
-                  <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
+                  <Icon
+                    IconComponent={IconChartBar}
+                    className="size-16 max-macair133:size-12 stroke-1"
+                  />
                   <p>
                     Insightful -{"  "}
                     <span className="text-[#86868B]">
@@ -1001,8 +1026,8 @@ export default function Login() {
               <div className="flex items-start justify-center gap-28">
                 <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
                   <Icon
-                    IconComponent={IconSparkle}
-                    className="size-16 stroke-1"
+                    IconComponent={IconRocket}
+                    className="size-16 max-macair133:size-12 stroke-1"
                   />
                   <p>
                     Empowering -{" "}
@@ -1014,8 +1039,8 @@ export default function Login() {
                 </div>
                 <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
                   <Icon
-                    IconComponent={IconSparkle}
-                    className="size-16 stroke-1"
+                    IconComponent={IconChecklist}
+                    className="size-16 max-macair133:size-12 stroke-1"
                   />
                   <p>
                     Streamlined -{" "}
