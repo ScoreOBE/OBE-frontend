@@ -15,11 +15,15 @@ import { useParams } from "react-router-dom";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 import MainPopup from "@/components/Popup/MainPopup";
 import { IModelUser } from "@/models/ModelUser";
+import Loading from "@/components/Loading/Loading";
 
 export default function Roster() {
   const { courseNo } = useParams();
+  const loading = useAppSelector((state) => state.loading);
   const [filter, setFilter] = useState<string>("");
-  const [selectedUser, setSelectedUser] = useState<IModelUser | null>(null);
+  const [selectedUser, setSelectedUser] = useState<
+    IModelUser & { sectionNo: number }
+  >();
   const [openModalUploadStudentList, setOpenModalUploadStudentList] =
     useState(false);
   const [openPopupDeleteStudent, setOpenPopupDeleteStudent] = useState(false);
@@ -53,7 +57,7 @@ export default function Roster() {
             <Button
               variant="outline"
               onClick={() => {
-                setSelectedUser(student);
+                setSelectedUser({ sectionNo: sec.sectionNo!, ...student });
                 setOpenPopupDeleteStudent(true);
               }}
               color="red"
@@ -68,9 +72,10 @@ export default function Roster() {
 
   const studentTable = () => {
     const hasData = rows && rows.flat().length > 0;
+    const search = filter.length > 0;
     return (
       <>
-        {hasData && (
+        {(hasData || search) && (
           <div className=" px-1 flex items-center justify-between">
             <p className="  text-secondary font-semibold">
               {(() => {
@@ -156,22 +161,23 @@ export default function Roster() {
           ) : (
             <div className="flex items-center !h-screen  justify-between px-8 !w-full">
               <p className="text-start font-semibold text-[20px] text-secondary p-6 py-10">
-                No Course Roster found
+                {search ? "" : "No Course Roster found"}
                 <br />
-                <p className="mt-1  text-[#333333] font-medium text-b2" font->
-                  {" "}
+                <p className="mt-1 text-[#333333] font-medium text-b2">
                   Course Roster will show when you import first.
                 </p>
-                <Button
-                  leftSection={
-                    <Icon className="size-5" IconComponent={IconImport} />
-                  }
-                  variant="filled"
-                  onClick={() => setOpenModalUploadStudentList(true)}
-                  className=" font-bold mt-5"
-                >
-                  Import Course Roster
-                </Button>
+                {!search && (
+                  <Button
+                    leftSection={
+                      <Icon className="size-5" IconComponent={IconImport} />
+                    }
+                    variant="filled"
+                    onClick={() => setOpenModalUploadStudentList(true)}
+                    className=" font-bold mt-5"
+                  >
+                    Import Course Roster
+                  </Button>
+                )}
               </p>
 
               <div className="h-full  w-[20vw] justify-center flex flex-col">
@@ -211,7 +217,9 @@ export default function Roster() {
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b3  text-[#808080]">Section</p>
-              <p className="-translate-y-[2px] text-b1 mb-2">idk</p>
+              <p className="-translate-y-[2px] text-b1 mb-2">
+                {getSectionNo(selectedUser?.sectionNo)}
+              </p>
               <p className="text-b3  text-[#808080]">Student ID</p>
               <p className="-translate-y-[2px] text-b1 mb-2">
                 {selectedUser?.studentId}
@@ -233,7 +241,7 @@ export default function Roster() {
         opened={openModalUploadStudentList}
         onClose={() => setOpenModalUploadStudentList(false)}
       />
-      {studentTable()}
+      {loading.loading ? <Loading /> : studentTable()}
     </div>
   );
 }
