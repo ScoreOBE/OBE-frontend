@@ -27,7 +27,7 @@ import { IModelCourse, IModelSection } from "@/models/ModelCourse";
 import { IModelDepartment } from "@/models/ModelFaculty";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import ModalExportPLO from "@/components/Modal/ModalExportPLO";
-import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
+import { IModelPLO } from "@/models/ModelPLO";
 import { getOnePLO } from "@/services/plo/plo.service";
 import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { setCourseManagementList } from "@/store/courseManagement";
@@ -38,9 +38,11 @@ export default function AdminDashboardCLO() {
     state.faculty.department.slice(1)
   );
   const academicYear = useAppSelector((state) => state.academicYear);
+  const courseManagements = useAppSelector(
+    (state) => state.courseManagement.courseManagements
+  );
   const courseList = useAppSelector((state) => state.allCourse);
   const [departmentPLO, setDepartmentPLO] = useState<Partial<IModelPLO>>({});
-  const courseManagement = useAppSelector((state) => state.courseManagement);
   const dispatch = useAppDispatch();
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
@@ -121,8 +123,10 @@ export default function AdminDashboardCLO() {
     dispatch(setLoading(true));
     if (department.length) {
       const payloadCourse = initialPayload();
-      setPayload(payloadCourse);
-      const res = await getCourseManagement(payloadCourse);
+      const res = await getCourseManagement({
+        ...payloadCourse,
+        ignorePage: true,
+      });
       if (res) {
         dispatch(setCourseManagementList(res));
       }
@@ -170,9 +174,12 @@ export default function AdminDashboardCLO() {
     sec?: Partial<IModelSection>
   ) => {
     const dataTQF3 = sec?.TQF3 || course.TQF3;
-    const ploRequire = courseManagement.courseManagements.find(
-      (e) => e.courseNo === course.courseNo
-    )?.ploRequire;
+    const ploRequire = sec
+      ? courseManagements
+          .find((e) => e.courseNo === course.courseNo)
+          ?.sections.find(({ topic }) => topic == sec.topic)?.ploRequire
+      : courseManagements.find((e) => e.courseNo === course.courseNo)
+          ?.ploRequire;
     const ploRequireNo = departmentPLO?.data?.filter((plo) => {
       if (ploRequire?.[0]?.list) {
         return ploRequire[0].list.some((item) =>
@@ -189,13 +196,17 @@ export default function AdminDashboardCLO() {
               <div>
                 <p>{course.courseNo}</p>
                 <p>{course.courseName}</p>
-                <span>PLO Require: </span>
-                {ploRequireNo?.map((plo, index) => (
-                  <span key={index} className="text-secondary">
-                    PLO {plo.no}
-                    {index < ploRequireNo.length - 1 && ", "}
-                  </span>
-                ))}
+                {!!ploRequireNo?.length && (
+                  <>
+                    <span>PLO Require: </span>
+                    {ploRequireNo?.map((plo, index) => (
+                      <span key={index} className="text-secondary">
+                        PLO {plo.no}
+                        {index < ploRequireNo.length - 1 && ", "}
+                      </span>
+                    ))}
+                  </>
+                )}
                 {sec && <p>({sec.topic})</p>}
               </div>
             </Table.Td>
@@ -258,6 +269,17 @@ export default function AdminDashboardCLO() {
             <p>{course.courseNo}</p>
             <p>{course.courseName}</p>
             {sec && <p>({sec.topic})</p>}
+            {!!ploRequireNo?.length && (
+              <>
+                <span>PLO Require: </span>
+                {ploRequireNo?.map((plo, index) => (
+                  <span key={index} className="text-secondary">
+                    PLO {plo.no}
+                    {index < ploRequireNo.length - 1 && ", "}
+                  </span>
+                ))}
+              </>
+            )}
           </div>
         </Table.Td>
         <Table.Td>TQF 3 {dataTQF3?.status}</Table.Td>
