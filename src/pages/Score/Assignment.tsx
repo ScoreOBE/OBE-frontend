@@ -464,8 +464,24 @@ export default function Assignment() {
         action={onClickDeleteAssignment}
         type="delete"
         labelButtonRight="Delete Assignment"
-        title={`Delete Assignment '${editDeleteAssignment}'`}
-        message={"xxxxxxxxxxx"}
+        title={`Delete' ${editDeleteAssignment}'`}
+        message={
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title={
+                <p>
+                  This action cannot be undone. After you delete this assignment,{" "}
+                  <br /> it will be permanently deleted from this course.
+                </p>
+              }
+              icon={<Icon IconComponent={IconExclamationCircle} />}
+              classNames={{ icon: "size-6" }}
+            ></Alert>
+            
+          </>
+        }
       />
 
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">

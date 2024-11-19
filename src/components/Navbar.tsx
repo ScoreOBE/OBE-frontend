@@ -61,12 +61,20 @@ export default function Navbar() {
 
   const topicPath = () => {
     const path = "/" + location.split("/")[1];
+    const semester = params.get("semester") || "Unknown Semester";
+    const year = params.get("year") ? params.get("year")?.slice(-2) : "??";
     switch (path) {
       case ROUTE_PATH.INS_DASHBOARD:
         return "Your Courses";
       case ROUTE_PATH.STD_DASHBOARD:
         return "Your Courses";
       case ROUTE_PATH.ADMIN_DASHBOARD:
+        if(location.includes(ROUTE_PATH.TQF))
+          return `TQF ${semester}/${year}`;
+        else if(location.includes(ROUTE_PATH.CLO))
+          return `CLO ${semester}/${year}`;
+        else 
+        return `PLO ${semester}/${year}`;
         return `Course ${params.get("semester") ?? ""}/${
           params.get("year")?.slice(-2) ?? ""
         }`;
@@ -113,11 +121,11 @@ export default function Navbar() {
           {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) &&
             (localStorage.getItem("dashboard") == ROLE.ADMIN ? (
               <div className="px-3 py-2 w-fit tag-tqf bg-sky-100 text-blue-600 rounded-[20px]">
-                AD
+                Admin View
               </div>
             ) : (
               <div className="px-3 py-2 w-fit tag-tqf bg-indigo-100 text-secondary rounded-[20px]">
-                INS
+                Inst View
               </div>
             ))}
         </div>
