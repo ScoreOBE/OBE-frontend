@@ -789,7 +789,8 @@ export default function Login() {
                     <Image
                       src={tqf5ComingImg}
                       alt="Background Image"
-                      className="relative h-fit w-[85%] samsungA24:w-[80%] object-cover"
+                      className="relative h-fit w-[85%]  max-macair133:w-full max-macair133:translate-x-16 samsungA24:w-[80%] object-cover  `}
+                    /> samsungA24:w-[80%] object-cover"
                     />
 
                     <div className="absolute bg-black opacity-80 w-full h-full backdrop-blur-[160px]"></div>
