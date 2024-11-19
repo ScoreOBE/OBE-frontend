@@ -14,7 +14,7 @@ import IconHistogram from "@/assets/icons/histogram.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
-import { getUserName } from "@/helpers/functions/function";
+import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { IModelSection } from "@/models/ModelCourse";
 import Loading from "../Loading/Loading";
 
@@ -62,6 +62,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
           <p className="text-lg">
             {courseNo} ({course?.semester}/{course?.year.toString().slice(-2)})
           </p>
+          <p className="text-lg">Section {getSectionNo(sectionNo)}</p>
           <p className="text-[13px] font-semibold text-pretty max-w-full">
             {course?.courseName}
           </p>

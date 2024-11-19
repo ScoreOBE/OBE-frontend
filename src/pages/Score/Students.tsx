@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
@@ -15,7 +15,12 @@ import IconEdit from "@/assets/icons/edit.svg?react";
 import { calStat } from "@/helpers/functions/score";
 import { TbSearch } from "react-icons/tb";
 import { useForm } from "@mantine/form";
-import { cloneDeep } from "lodash";
+import { cloneDeep, isEqual } from "lodash";
+import { setLoadingOverlay } from "@/store/loading";
+import { updateStudentScore } from "@/services/score/score.service";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
+import { updateStudentList } from "@/store/course";
 
 export default function Students() {
   const { name } = useParams();
@@ -30,10 +35,15 @@ export default function Students() {
   );
   const assignment = section?.assignments?.find((item) => item.name == name);
   const [params, setParams] = useSearchParams();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [filter, setFilter] = useState<string>("");
   const [openEditScore, setOpenEditScore] = useState(false);
+  const [editScore, setEditScore] = useState<
+    {
+      name: string;
+      score: number;
+    }[]
+  >();
   const [items, setItems] = useState<any[]>([
     {
       title: "Your Course",
@@ -110,23 +120,61 @@ export default function Students() {
     },
     validate: {
       questions: {
-        score: (value, values, path) =>
-          (!value.length ||
-            !parseInt(value) ||
-            parseInt(value) >
-              (assignment?.questions.find(
-                (ques) =>
-                  ques.name ==
-                  values.questions[parseInt(path.split(".")[1])].name
-              )?.fullScore || 0)) &&
-          "Please input valid score",
+        score: (value, values, path) => {
+          if (typeof value !== "number")
+            return (
+              !value.length ||
+              (!parseInt(value) && value != "0" && "Please enter valid score")
+            );
+          const fullScore =
+            assignment?.questions.find(
+              (ques) =>
+                ques.name == values.questions[parseInt(path.split(".")[1])].name
+            )?.fullScore || 0;
+          return value > fullScore
+            ? `Please enter score <= ${fullScore}`
+            : null;
+        },
       },
     },
     validateInputOnBlur: true,
+    onValuesChange: (values) => {
+      values.questions?.forEach((item) => {
+        if (typeof item.score != "number" && !isNaN(parseInt(item.score))) {
+          item.score = parseInt(item.score);
+        }
+      });
+    },
   });
 
-  const onSaveEditScore = () => {
-    console.log(form.getValues());
+  useEffect(() => {
+    if (!openEditScore) {
+      form.reset();
+    }
+  }, [openEditScore]);
+
+  const onSaveEditScore = async () => {
+    if (!form.validate().hasErrors) {
+      dispatch(setLoadingOverlay(true));
+      const studentId = form.getValues().student.studentId;
+      const res = await updateStudentScore({
+        course: course?.id,
+        sectionNo: section?.sectionNo,
+        student: form.getValues().student.id,
+        assignmentName: name,
+        questions: [...form.getValues().questions],
+      });
+      if (res) {
+        dispatch(updateStudentList({ id: course?.id, sections: res }));
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Edit score successfully",
+          `score of student ${studentId} is updated`
+        );
+        setOpenEditScore(false);
+      }
+      dispatch(setLoadingOverlay(false));
+    }
   };
 
   return (
@@ -181,6 +229,7 @@ export default function Students() {
                 setOpenEditScore(false);
                 onSaveEditScore();
               }}
+              disabled={isEqual(editScore, form.getValues().questions)}
             >
               Save Changes
             </Button>
@@ -317,13 +366,11 @@ export default function Students() {
                                   student: student.student,
                                   questions,
                                 });
+                                setEditScore(questions);
                                 setOpenEditScore(true);
                               }}
                               className="size-4 cursor-pointer text-default"
                             />
-                          </Table.Td>
-                          <Table.Td className="text-[#D8751A] font-medium">
-                            Score is edited
                           </Table.Td>
                         </Table.Tr>
                       );
