@@ -9,6 +9,7 @@ type Props = {
   onClose: () => void;
   errorStudentId?: { name: string; cell: string[] }[] | string[];
   errorSection?: string[];
+  errorSectionNoStudents?: string[];
   errorPoint?: { name: string; cell: string[] }[];
   errorStudent?: {
     student: string;
@@ -23,6 +24,7 @@ export default function ModalErrorUploadFile({
   onClose,
   errorStudentId,
   errorSection,
+  errorSectionNoStudents,
   errorPoint,
   errorStudent,
 }: Props) {
@@ -47,6 +49,15 @@ export default function ModalErrorUploadFile({
       size="40vw"
       withCloseButton={false}
     >
+      {!!errorSectionNoStudents?.length && (
+        <div className="flex flex-col gap-2">
+          The following section not have student list. Please import student
+          list before upload score
+          <p className="ml-8 font-semibold">
+            Section: {errorSectionNoStudents.join(", ")}
+          </p>
+        </div>
+      )}
       {!!errorStudent?.length ? (
         <div className="flex flex-col gap-2">
           {errorStudent?.map((item) => (
@@ -85,7 +96,6 @@ export default function ModalErrorUploadFile({
                   </div>
                 }
               >
-                {" "}
                 <p className="ml-8 font-semibold">
                   Section: {errorSection.join(", ")}
                 </p>

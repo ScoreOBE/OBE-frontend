@@ -29,6 +29,7 @@ export const onUploadFile = async (
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
   setErrorStudentId: React.Dispatch<React.SetStateAction<any[]>>,
   setErrorSection?: React.Dispatch<React.SetStateAction<string[]>>,
+  setErrorSectionNoStudents?: React.Dispatch<React.SetStateAction<string[]>>,
   setErrorPoint?: React.Dispatch<React.SetStateAction<any[]>>,
   setErrorStudent?: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
@@ -68,6 +69,7 @@ export const onUploadFile = async (
           setOpenModalUploadError,
           setErrorStudentId,
           setErrorSection!,
+          setErrorSectionNoStudents!,
           setErrorPoint!,
           setErrorStudent!
         );
@@ -179,6 +181,7 @@ const scoreOBETemplete = (
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
   setErrorStudentId: React.Dispatch<React.SetStateAction<any[]>>,
   setErrorSection: React.Dispatch<React.SetStateAction<string[]>>,
+  setErrorSectionNoStudents: React.Dispatch<React.SetStateAction<string[]>>,
   setErrorPoint: React.Dispatch<React.SetStateAction<any[]>>,
   setErrorStudent: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
@@ -186,6 +189,7 @@ const scoreOBETemplete = (
   const result: any[] = [];
   const errorStudentIdList: { name: string; cell: string[] }[] = [];
   const errorSection: string[] = [];
+  const errorSectionNoStudents: string[] = [];
   const errorPointList: { name: string; cell: string[] }[] = [];
   const errorStudent: {
     student: string;
@@ -254,6 +258,12 @@ const scoreOBETemplete = (
       const canUpload = course.sections?.find(
         (sec) => sec.sectionNo == sectionNo
       );
+      if (
+        !canUpload?.students?.length &&
+        !errorSectionNoStudents.includes(getSectionNo(sectionNo))
+      ) {
+        errorSectionNoStudents.push(getSectionNo(sectionNo));
+      }
       if (
         (canUpload?.instructor as IModelUser)?.id !== user.id &&
         !canUpload?.coInstructors?.some((coIns) => coIns.id == user.id) &&
@@ -346,12 +356,14 @@ const scoreOBETemplete = (
   if (
     errorStudentIdList.length ||
     errorSection.length ||
+    errorSectionNoStudents.length ||
     errorPointList.length ||
     errorStudent.length
   ) {
     files = [];
     setErrorStudentId(errorStudentIdList);
     setErrorSection(errorSection);
+    setErrorSectionNoStudents(errorSectionNoStudents);
     setErrorPoint(errorPointList);
     setErrorStudent(errorStudent);
     setOpenModalUploadError(true);

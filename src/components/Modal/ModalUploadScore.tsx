@@ -54,10 +54,19 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
     { name: string; cell: string[] }[]
   >([]);
   const [errorSection, setErrorSection] = useState<string[]>([]);
+  const [errorSectionNoStudents, setErrorSectionNoStudents] = useState<
+    string[]
+  >([]);
   const [errorStudent, setErrorStudent] = useState<
     { student: string; studentIdNotMatch: boolean; sectionNotMatch: boolean }[]
   >([]);
-  const [warningStudentList, setWarningStudentList] = useState<string[]>([]);
+  const [warningStudentList, setWarningStudentList] = useState<
+    {
+      studentId: string;
+      firstName: string;
+      lastName: string;
+    }[]
+  >([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
 
@@ -82,14 +91,22 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
 
   useEffect(() => {
     if (result?.sections) {
-      const notExistStudent: string[] = [];
+      const notExistStudent: {
+        studentId: string;
+        firstName: string;
+        lastName: string;
+      }[] = [];
       data.sections?.forEach((sec) => {
         sec.students?.forEach(({ student }) => {
           const existStudent = result.sections
             .find((item: any) => item.sectionNo == sec.sectionNo)
             .students.find((item: any) => item.student == student.id);
           if (!existStudent) {
-            notExistStudent.push(student.studentId!);
+            notExistStudent.push({
+              studentId: student.studentId!,
+              firstName: student.firstNameTH || student.firstNameEN,
+              lastName: student.lastNameTH || student.lastNameEN,
+            });
           }
         });
       });
@@ -341,6 +358,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     setOpenModalUploadError,
                     setErrorStudentId,
                     setErrorSection,
+                    setErrorSectionNoStudents,
                     setErrorPoint,
                     setErrorStudent
                   );
@@ -455,7 +473,11 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
       >
         <div className="flex flex-col gap-4">
           <div>
-            {warningStudentList.join(", ")}
+            {warningStudentList.map((std) => (
+              <p>
+                {std.studentId}: {std.firstName} {std.lastName}
+              </p>
+            ))}
             <p>exists in student list but not exists in file upload</p>
           </div>
           <div className="flex gap-2 justify-end w-full">
@@ -483,6 +505,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         errorSection={errorSection}
         errorPoint={errorPoint}
         errorStudent={errorStudent}
+        errorSectionNoStudents={errorSectionNoStudents}
       />
     </>
   );
