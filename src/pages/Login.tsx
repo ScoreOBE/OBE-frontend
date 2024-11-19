@@ -161,7 +161,7 @@ export default function Login() {
     >
       {loading && <LoadingOverlay />}
       <div className="relative flex flex-col w-full">
-        <div className="absolute  z-10 h-screen w-screen top-0 flex justify-center items-end pb-28">
+        <div className="absolute z-10 h-screen w-screen top-screen flex justify-center items-end pb-28">
           <div
             className="arrowCTA"
             onClick={() =>
@@ -204,7 +204,7 @@ export default function Login() {
 
         <div className="items-center mt-8 text-center w-full justify-center px-[118px] hidden sm:flex">
           <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
-            <Button className=" bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg !text-[14px] !h-[44px]">
+            <Button className="z-[52] bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg !text-[14px] !h-[44px]">
               <img
                 src={cmulogoLogin}
                 alt="CMULogo"
