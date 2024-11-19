@@ -161,7 +161,7 @@ export default function Login() {
     >
       {loading && <LoadingOverlay />}
       <div className="relative flex flex-col w-full">
-        <div className="max-sm:hidden absolute z-10 h-screen w-screen top-screen flex justify-center items-end pb-28">
+        <div className="max-sm:hidden absolute z-10 h-screen w-screen top-screen flex justify-center items-end pb-28 max-macair133:pb-32">
           <div
             className="arrowCTA"
             onClick={() =>
@@ -176,7 +176,7 @@ export default function Login() {
           </div>
         </div>
 
-        <p className="!font-[600] text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 sm:font-[600] item-start rounded text-emphasize text-[48px] mb-5 sm:mb-0 sm:text-[50px] leading-[48px] sm:leading-[66px]">
+        <p className="!font-[600] text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 sm:font-[600] item-start rounded text-emphasize sm:text-[48px] text-[28px] mb-5 sm:mb-0  ipad11:text-[50px] leading-[48px] sm:leading-[66px]">
           <span className=" text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE +{" "}
           </span>
@@ -789,8 +789,7 @@ export default function Login() {
                     <Image
                       src={tqf5ComingImg}
                       alt="Background Image"
-                      className="relative h-fit w-[85%]  max-macair133:w-full max-macair133:translate-x-16 samsungA24:w-[80%] object-cover  `}
-                    /> samsungA24:w-[80%] object-cover"
+                      className="w-[85%]  max-macair133:w-full max-macair133:translate-x-14 samsungA24:w-[80%] object-cover"
                     />
 
                     <div className="absolute bg-black opacity-80 w-full h-full backdrop-blur-[160px]"></div>
