@@ -14,7 +14,7 @@ import IconLogout from "@/assets/icons/logout.svg?react";
 import IconStudent from "@/assets/icons/student.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
-import { getUserName } from "@/helpers/functions/function";
+import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { IModelSection } from "@/models/ModelCourse";
 import Loading from "../Loading/Loading";
 
@@ -23,7 +23,7 @@ type Props = {
 };
 
 export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
-  const { courseNo, sectionNo } = useParams();
+  const { courseNo, sectionNo, name } = useParams();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
@@ -59,11 +59,12 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
     <div className="flex text-white flex-col h-full  gap-[26px]">
       <div className="flex flex-col gap-5 ">
         <div className="flex flex-col flex-1 font-bold gap-1 ">
-          <p className="text-lg">
+          <p className="text-lg">{name}</p>
+          <p className="text-[13px] font-semibold text-pretty max-w-full">
             {courseNo} ({course?.semester}/{course?.year.toString().slice(-2)})
           </p>
           <p className="text-[13px] font-semibold text-pretty max-w-full">
-            {course?.courseName}
+            Section {getSectionNo(sectionNo)}
           </p>
         </div>
         <div className="flex flex-col gap-2">

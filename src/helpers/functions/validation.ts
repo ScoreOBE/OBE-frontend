@@ -7,6 +7,7 @@ import { NOTI_TYPE } from "../constants/enum";
 import store from "@/store";
 import { setErrorResponse } from "@/store/errorResponse";
 import { isNumber } from "lodash";
+import { ROUTE_PATH } from "../constants/route";
 
 export const checkTokenExpired = async (token: string) => {
   try {
@@ -22,7 +23,7 @@ export const checkTokenExpired = async (token: string) => {
   }
 };
 
-export const isValidResponse = (res: any) => {
+export const isValidResponse = async (res: any) => {
   if (
     res.headers &&
     ["application/pdf", "application/zip"].includes(res.headers["content-type"])
@@ -39,7 +40,14 @@ export const isValidResponse = (res: any) => {
         break;
       case STATUS_CODE.FORBIDDEN:
       case STATUS_CODE.UNAUTHORIZED:
+        const checkToken = await checkTokenExpired(
+          localStorage.getItem("token") || ""
+        );
         localStorage.clear();
+        if (!checkToken) {
+          window.location.assign(ROUTE_PATH.LOGIN);
+          return;
+        }
         dispatch(setErrorResponse(res));
         break;
       default:
