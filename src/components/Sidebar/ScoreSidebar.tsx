@@ -60,10 +60,10 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
       <div className="flex flex-col gap-5 ">
         <div className="flex flex-col flex-1 font-bold gap-1 ">
           <p className="text-lg">{name}</p>
-          <p className="text-[13px] font-semibold text-pretty max-w-full">
+          <p className="text-[14px] font-semibold text-pretty max-w-full">
             {courseNo} ({course?.semester}/{course?.year.toString().slice(-2)})
           </p>
-          <p className="text-[13px] font-semibold text-pretty max-w-full">
+          <p className="text-[14px] -mt-1 font-semibold text-pretty max-w-full">
             Section {getSectionNo(sectionNo)}
           </p>
         </div>
