@@ -40,71 +40,46 @@ export default function ModalErrorUploadFile({
           File was rejected
         </div>
       }
-      // classNames={{ title: "text-delete"}}
+     
       transitionProps={
         {
           // duration: 1000,
         }
       }
       centered
-      size="40vw"
+      size="43vw"
       withCloseButton={false}
     >
-      {!!errorSectionNoStudents?.length && (
-        <div className="flex flex-col gap-2">
-          The following section not have student list. Please import student
-          list before upload score
-          <p className="ml-8 font-semibold">
-            Section: {errorSectionNoStudents.join(", ")}
-          </p>
-        </div>
-      )}
-      {!!errorStudent?.length ? (
-        <div className="flex flex-col gap-2">
-          {errorStudent?.map((item) => (
-            <div>
-              <span>
-                {item.student}:{" "}
-                <span className="text-[#d44c4c]">
-                  {item.sectionNotMatch && "Section not match"}
-                </span>
-                {item.sectionNotMatch && item.studentIdNotMatch && ", "}
-                <span className="text-[#4c79d4]">
-                  {item.studentIdNotMatch && "Student ID not match"}
-                </span>
-              </span>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          {!!errorSection?.length && (
-            <>
-              <Alert
-                radius="md"
-                variant="light"
-                color="red"
-                classNames={{
-                  body: " flex justify-center",
-                }}
-                title={
-                  <div className="flex items-center  gap-2">
-                    <Icon IconComponent={IconExclamationCircle} />
-                    <p>
-                      The following section does not exist in this course{" "}
-                      {type == "scores" && "or you cannot access"}
-                    </p>
-                  </div>
-                }
-              >
-                <p className="ml-8 font-semibold">
-                  Section: {errorSection.join(", ")}
-                </p>
-              </Alert>
-            </>
-          )}
-          {!!errorStudentId?.length &&
-            ((errorStudentId[0] as any).name ? (
+      <div className="h-fit max-h-[500px] mb-10 overflow-y-auto">
+        {!!errorSectionNoStudents?.length && (
+          <div className="flex flex-col gap-2">
+            <Alert
+              radius="md"
+              variant="light"
+              color="red"
+              className="mb-3"
+              classNames={{
+                body: " flex justify-center",
+              }}
+              title={
+                <div className="flex items-center  gap-2">
+                  <Icon IconComponent={IconExclamationCircle} />
+                  <p>The following section is not included in this course.</p>
+                </div>
+              }
+            >
+              {" "}
+              <p className="ml-8 font-medium ">
+                Section: {errorSectionNoStudents.join(", ")}
+              </p>
+            </Alert>
+          </div>
+        )}
+        {!!errorStudent?.length ? (
+          <div className="flex flex-col gap-4">
+            {/* Section Not Match */}
+            {errorStudent?.filter((item) => item.sectionNotMatch).length >
+              0 && (
               <div>
                 <Alert
                   radius="md"
@@ -116,95 +91,210 @@ export default function ModalErrorUploadFile({
                   title={
                     <div className="flex items-center  gap-2">
                       <Icon IconComponent={IconExclamationCircle} />
-                      <p>The Student ID do not match the format</p>
+                      <p>
+                        The following students do not match section in Course
+                        Roster
+                      </p>
                     </div>
                   }
                 >
-                  {errorStudentId.map((item: any) => (
-                    <div className="leading-6">
+                  <div className="gap-2 flex flex-col">
+                    {errorStudent
+                      ?.filter((item) => item.sectionNotMatch)
+                      .map((item) => (
+                        <div
+                          key={`section-${item.student}`}
+                          className="gap-2 ml-8"
+                        >
+                          <div className="flex gap-1 items-center">
+                            <div className="font-medium">
+                              {item.studentId} -{" "}
+                            </div>
+                            <div className="font-medium"> {item.student}</div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </Alert>
+              </div>
+            )}
+
+            {/* Student ID Not Match */}
+            {errorStudent?.filter((item) => item.studentIdNotMatch).length >
+              0 && (
+              <div>
+                <Alert
+                  radius="md"
+                  variant="light"
+                  color="red"
+                  classNames={{
+                    body: " flex justify-center",
+                  }}
+                  title={
+                    <div className="flex items-center  gap-2">
+                      <Icon IconComponent={IconExclamationCircle} />
+                      <p>
+                        The following students do not match student IDs in
+                        Course Roster
+                      </p>
+                    </div>
+                  }
+                >
+                  <div className="gap-2 flex flex-col">
+                    {errorStudent
+                      ?.filter((item) => item.studentIdNotMatch)
+                      .map((item) => (
+                        <div
+                          key={`section-${item.student}`}
+                          className="gap-2 ml-8"
+                        >
+                          <div className="flex gap-1 items-center">
+                            <div className="font-medium">
+                              {item.studentId} -{" "}
+                            </div>
+                            <div className="font-medium"> {item.student}</div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </Alert>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {!!errorSection?.length && (
+              <>
+                <Alert
+                  radius="md"
+                  variant="light"
+                  color="red"
+                  classNames={{
+                    body: " flex justify-center",
+                  }}
+                  title={
+                    <div className="flex items-center  gap-2">
+                      <Icon IconComponent={IconExclamationCircle} />
+                      <p>
+                        The following section does not exist in this course{" "}
+                        {type == "scores" && "or you cannot access"}
+                      </p>
+                    </div>
+                  }
+                >
+                  <p className="ml-8 font-semibold">
+                    Section: {errorSection.join(", ")}
+                  </p>
+                </Alert>
+              </>
+            )}
+            {!!errorStudentId?.length &&
+              ((errorStudentId[0] as any).name ? (
+                <div>
+                  <Alert
+                    radius="md"
+                    variant="light"
+                    color="red"
+                    classNames={{
+                      body: " flex justify-center",
+                    }}
+                    title={
+                      <div className="flex items-center  gap-2">
+                        <Icon IconComponent={IconExclamationCircle} />
+                        <p>The Student ID do not match the format</p>
+                      </div>
+                    }
+                  >
+                    {errorStudentId.map((item: any) => (
+                      <div className="leading-6">
+                        <p className="ml-8 font-semibold ">
+                          Sheet: {item.name}
+                        </p>
+                        <p className="ml-12 font-medium">
+                          Cell: {item.cell.join(", ")}
+                        </p>
+                        <p className="ml-8 mt-3 text-teal-600 font-semibold ">
+                          {" "}
+                          Expect Format: The Student ID must consist of only 9
+                          digits.
+                        </p>
+                      </div>
+                    ))}
+                  </Alert>
+                </div>
+              ) : (
+                <div>
+                  <Alert
+                    radius="md"
+                    variant="light"
+                    color="red"
+                    classNames={{
+                      body: " flex justify-center",
+                    }}
+                    title={
+                      <div className="flex items-center  gap-2">
+                        <Icon IconComponent={IconExclamationCircle} />
+                        <p>The Student ID do not match the format</p>
+                      </div>
+                    }
+                  >
+                    {errorStudentId.map((item: any) => (
+                      <div className="leading-6">
+                        <p className="ml-12 font-medium">
+                          Cell: {errorStudentId.join(", ")}
+                        </p>
+                        <p className="ml-8 mt-3 text-teal-600 font-semibold ">
+                          {" "}
+                          Expect Format: The Student ID must consist of only 9
+                          digits.
+                        </p>
+                      </div>
+                    ))}
+                  </Alert>
+                </div>
+              ))}
+            {!!errorPoint?.length && (
+              <div>
+                <Alert
+                  radius="md"
+                  variant="light"
+                  color="red"
+                  classNames={{
+                    body: " flex justify-center",
+                  }}
+                  title={
+                    <div className="flex items-center  gap-2">
+                      <Icon IconComponent={IconExclamationCircle} />
+                      <p>The Scores do not match the format</p>
+                    </div>
+                  }
+                >
+                  {errorPoint.map((item) => (
+                    <div>
                       <p className="ml-8 font-semibold ">Sheet: {item.name}</p>
                       <p className="ml-12 font-medium">
                         Cell: {item.cell.join(", ")}
                       </p>
                       <p className="ml-8 mt-3 text-teal-600 font-semibold ">
-                        {" "}
-                        Expect Format: The Student ID must consist of only 9
-                        digits.
+                        Expect Format: The Scores must be numberic only, and may
+                        include decimals
                       </p>
                     </div>
                   ))}
                 </Alert>
               </div>
-            ) : (
-              <div>
-                <Alert
-                  radius="md"
-                  variant="light"
-                  color="red"
-                  classNames={{
-                    body: " flex justify-center",
-                  }}
-                  title={
-                    <div className="flex items-center  gap-2">
-                      <Icon IconComponent={IconExclamationCircle} />
-                      <p>The Student ID do not match the format</p>
-                    </div>
-                  }
-                >
-                  {errorStudentId.map((item: any) => (
-                    <div className="leading-6">
-                      <p className="ml-12 font-medium">
-                        Cell: {errorStudentId.join(", ")}
-                      </p>
-                      <p className="ml-8 mt-3 text-teal-600 font-semibold ">
-                        {" "}
-                        Expect Format: The Student ID must consist of only 9
-                        digits.
-                      </p>
-                    </div>
-                  ))}
-                </Alert>
-              </div>
-            ))}
-          {!!errorPoint?.length && (
-            <div>
-              <Alert
-                radius="md"
-                variant="light"
-                color="red"
-                classNames={{
-                  body: " flex justify-center",
-                }}
-                title={
-                  <div className="flex items-center  gap-2">
-                    <Icon IconComponent={IconExclamationCircle} />
-                    <p>The Scores do not match the format</p>
-                  </div>
-                }
-              >
-                {errorPoint.map((item) => (
-                  <div>
-                    <p className="ml-8 font-semibold ">Sheet: {item.name}</p>
-                    <p className="ml-12 font-medium">
-                      Cell: {item.cell.join(", ")}
-                    </p>
-                    <p className="ml-8 mt-3 text-teal-600 font-semibold ">
-                      Expect Format: The Scores must be numberic only, and may
-                      include decimals
-                    </p>
-                  </div>
-                ))}
-              </Alert>
-            </div>
-          )}
+            )}
+          </div>
+        )}
+        <div className="flex fixed bottom-2 !w-[91%] justify-center ">
+          <Button
+            onClick={() => onClose()}
+            className="mt-4 !h-[36px] mb-2 !text-[14px] !w-full "
+          >
+            OK
+          </Button>
         </div>
-      )}
-      <Button
-        onClick={() => onClose()}
-        className="mt-4 min-w-fit !h-[36px] !text-[14px] !w-full"
-      >
-        OK
-      </Button>
+      </div>
     </Modal>
   );
 }

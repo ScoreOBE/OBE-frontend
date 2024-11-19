@@ -474,29 +474,49 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         withCloseButton={false}
         closeOnEscape={false}
         centered
-        title="Warning student list"
+        size="39vw"
+        title="Upload Warning"
+        transitionProps={{ transition: "pop" }}
+    
+        
       >
         <div className="flex flex-col gap-4">
-          <div>
-            {warningStudentList.map((std) => (
-              <p>
-                {std.studentId}: {std.firstName} {std.lastName}
-              </p>
-            ))}
-            <p>exists in student list but not exists in file upload</p>
+          <div className="mt-2">
+            <Alert
+              radius="md"
+              variant="light"
+              color='orange'
+              classNames={{
+                body: " flex justify-center",
+              }}
+              title={
+                <div className="flex items-center  gap-2">
+                  <Icon IconComponent={IconExclamationCircle} />
+                  <p>
+                  The following Student is in the Course Roster but missing from the file you uploaded:
+                  </p>
+                </div>
+              }
+            >
+              { warningStudentList.map((std) => (
+              <div className="ml-8">{std.studentId} - {std.firstName} {std.firstName} </div>))}
+            </Alert>
           </div>
-          <div className="flex gap-2 justify-end w-full">
+
+          <div className="flex gap-2 mt-2 justify-end w-full">
+            <Button
+              variant="subtle"
+              onClick={() => setOpenModalWarningStudentList(false)}
+            >
+              Continue Upload
+            </Button>
             <Button
               onClick={() => {
                 reset();
                 setOpenModalWarningStudentList(false);
               }}
-              variant="subtle"
             >
-              Cancel
-            </Button>
-            <Button onClick={() => setOpenModalWarningStudentList(false)}>
-              OK
+              Discard Upload
             </Button>
           </div>
         </div>

@@ -13,6 +13,7 @@ import Icon from "@/components/Icon";
 import IconLogout from "@/assets/icons/logout.svg?react";
 import IconTQF3 from "@/assets/icons/TQF3.svg?react";
 import IconTQF5 from "@/assets/icons/TQF5.svg?react";
+import IconStudent from "@/assets/icons/student.svg?react";
 import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
@@ -238,7 +239,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             {localStorage.getItem("dashboard") == ROLE.INSTRUCTOR && (
               <Button
                 onClick={() => goToPage(ROUTE_PATH.ROSTER)}
-                leftSection={<RxDashboard size={18} />}
+                leftSection={<Icon IconComponent={IconStudent} className="size-[19px]" />}
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
                    path.includes(ROUTE_PATH.SECTION)

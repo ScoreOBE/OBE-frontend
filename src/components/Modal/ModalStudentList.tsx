@@ -426,7 +426,7 @@ export default function ModalStudentList({
                         {data?.courseName}
                       </span>
                       , <br /> you must import the student list (.xlsx) in this
-                      course for all sections from the CMU Registration System.
+                      course for <span className=" font-bold text-secondary"> all sections </span> from the CMU Registration System.
                       <a
                         href="https://www1.reg.cmu.ac.th/registrationoffice/searchcourse.php"
                         target="_blank"
