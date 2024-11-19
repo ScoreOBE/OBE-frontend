@@ -106,6 +106,19 @@ export const validateEmail = (email: string) => {
   return /^\S+@cmu\.ac\.th$/i.test(email);
 };
 
+export const validateThaiLanguage = (value: string) => {
+  return /[\u0E00-\u0E7F]/.test(value);
+};
+
+export const validateStudentId = (
+  value: number | string | null | undefined
+) => {
+  if (value == undefined) return "Student Id. is required";
+  const isValid =
+    (isNumber(value) || parseInt(value)) && value.toString().length == 9;
+  return isValid ? null : "Please enter a valid student id";
+};
+
 export const containsOnlyNumbers = (
   textString: any,
   min?: number,

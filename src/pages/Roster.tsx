@@ -9,17 +9,30 @@ import IconImport from "@/assets/icons/fileImport.svg?react";
 import IconDots from "@/assets/icons/dots.svg?react";
 import IconManageAdmin from "@/assets/icons/addCo.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { useParams } from "react-router-dom";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 import MainPopup from "@/components/Popup/MainPopup";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
+import { setLoadingOverlay } from "@/store/loading";
+import { addStudent, deleteStudent } from "@/services/section/section.service";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
+import {
+  validateEmail,
+  validateSectionNo,
+  validateStudentId,
+  validateThaiLanguage,
+} from "@/helpers/functions/validation";
+import { useForm } from "@mantine/form";
+import { updateStudentList } from "@/store/course";
 
 export default function Roster() {
   const { courseNo } = useParams();
   const loading = useAppSelector((state) => state.loading);
+  const dispatch = useAppDispatch();
   const [filter, setFilter] = useState<string>("");
 
   const [openModalAddStudent, setOpenModalAddStudent] = useState(false);
@@ -32,38 +45,95 @@ export default function Roster() {
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
+  const form = useForm({
+    mode: "controlled",
+    initialValues: { sectionNo: "", studentId: "", name: "", email: "" },
+    validate: {
+      sectionNo: (value) =>
+        validateSectionNo(value) ??
+        (value.length &&
+          !course?.sections
+            .map(({ sectionNo }) => sectionNo)
+            .includes(parseInt(value)) &&
+          `Section ${getSectionNo(value)} is not exist in this course`),
+      studentId: (value) => {
+        const exist = course?.sections.find((sec) =>
+          sec.students?.find((std) => std.student.studentId == value)
+        );
+        return (
+          validateStudentId(value) ??
+          (value.length &&
+            exist &&
+            `student ${value} already exist in section ${exist.sectionNo}`)
+        );
+      },
+      name: (value) => !value.length && "Please enter a student name",
+      email: (value) =>
+        !value.length
+          ? null
+          : !validateEmail(value) &&
+            "Please enter a valid email address (e.g., example@cmu.ac.th).",
+    },
+    validateInputOnBlur: true,
+  });
 
-  const onClickDeleteTopic = () => {
-    console.log("hello");
+  const onClickAddStudent = async () => {
+    if (!form.validate().hasErrors) {
+      dispatch(setLoadingOverlay(true));
+      const data: any = { ...form.getValues() };
+      const name = data.name.split(" ");
+      if (validateThaiLanguage(data.name)) {
+        data.firstNameTH = name[0];
+        data.lastNameTH = name[1];
+      } else {
+        data.firstNameEN = name[0];
+        data.lastNameEN = name[1];
+      }
+      delete data.name;
+      const res = await addStudent({
+        year: course?.year,
+        semester: course?.semester,
+        course: course?.id,
+        ...data,
+      });
+      if (res) {
+        dispatch(updateStudentList({ id: course?.id, sections: res }));
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Add student successfully",
+          `student ${data.studentId} is added`
+        );
+        clearForm();
+      }
+      dispatch(setLoadingOverlay(false));
+    }
   };
 
-  const [sectionNo, setSectionNo] = useState("");
-  const [studentId, setStudentId] = useState("");
-  const [name, setName] = useState("");
-  const [cmuAccount, setCmuAccount] = useState("");
-
-  const allRequiredFieldsFilled = sectionNo && studentId && name;
+  const onClickDeleteStudent = async () => {
+    dispatch(setLoadingOverlay(true));
+    const res = await deleteStudent({
+      year: course?.year,
+      semester: course?.semester,
+      course: course?.id,
+      sectionNo: selectedUser?.sectionNo,
+      student: selectedUser?.id,
+    });
+    if (res) {
+      dispatch(updateStudentList({ id: course?.id, sections: res }));
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Delete student successfully",
+        `student ${selectedUser?.studentId} is deleted`
+      );
+      setOpenPopupDeleteStudent(false);
+      setSelectedUser(undefined);
+    }
+    dispatch(setLoadingOverlay(false));
+  };
 
   const clearForm = () => {
-    setSectionNo("");
-    setStudentId("");
-    setName("");
-    setCmuAccount("");
     setOpenModalAddStudent(false);
-  };
-
-  const handleSectionNoChange = (e:any) => {
-    const value = e.target.value;
-    if (/^\d{0,3}$/.test(value)) { 
-      setSectionNo(value);
-    }
-  };
-
-  const handleStudentIDNoChange = (e:any) => {
-    const value = e.target.value;
-    if (/^\d{0,9}$/.test(value)) { 
-      setStudentId(value);
-    }
+    form.reset();
   };
 
   const rows = course?.sections?.map((sec) =>
@@ -265,7 +335,7 @@ export default function Roster() {
           </>
         }
         labelButtonRight="Delete Student"
-        action={onClickDeleteTopic}
+        action={onClickDeleteStudent}
       />
       <ModalStudentList
         type="import"
@@ -292,38 +362,35 @@ export default function Roster() {
             size="xs"
             placeholder="e.g. 1 or 001"
             label="Section No."
-            value={sectionNo}
-            onChange={handleSectionNoChange}
             withAsterisk
+            {...form.getInputProps("sectionNo")}
           ></TextInput>
           <TextInput
             size="xs"
             placeholder="9 Digits e.g. 640123456"
             label="Student ID"
-            value={studentId}
-            onChange={handleStudentIDNoChange}
             withAsterisk
+            {...form.getInputProps("studentId")}
           ></TextInput>
           <TextInput
             size="xs"
             placeholder="e.g. สมชาย เรียนดี"
             label="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
             withAsterisk
+            {...form.getInputProps("name")}
           ></TextInput>
           <TextInput
             size="xs"
             placeholder="e.g. example@cmu.ac.th"
             label="CMU Account"
-            value={cmuAccount}
-            onChange={(e) => setCmuAccount(e.target.value)}
+            id="email"
+            {...form.getInputProps("email")}
           ></TextInput>
           <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 mt-4  items-end  justify-end h-fit">
             <Button onClick={() => clearForm()} variant="subtle">
               Cancel
             </Button>
-            <Button disabled={!allRequiredFieldsFilled}>Add</Button>
+            <Button onClick={onClickAddStudent}>Add</Button>
           </div>
         </div>
       </Modal>
