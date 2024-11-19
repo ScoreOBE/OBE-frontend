@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { Menu, Button } from "@mantine/core";
 import Icon from "./Icon";
 import IconUserProfile from "@/assets/icons/profile/userProfile.svg?react";
+import IconFeedback from "@/assets/icons/feedback.svg?react";
 import IconAdminProfile from "@/assets/icons/profile/adminProfile.svg?react";
 import IconSAdminProfile from "@/assets/icons/profile/s.AdminProfile.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -358,9 +359,15 @@ export default function Profile() {
             </Menu>
           )}
 
-          {(user.role === ROLE.SUPREME_ADMIN ||
-            user.role === ROLE.ADMIN ||
-            user.role === ROLE.INSTRUCTOR) && <Menu.Divider />}
+          <Menu.Divider />
+          {user.role !== ROLE.STUDENT && (<a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
+            <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
+              <div className="flex items-center gap-2">
+              <Icon className="size-4 " IconComponent={IconFeedback} />{" "}
+                <span>Feedback</span>
+              </div>
+            </Menu.Item>
+          </a>)}
           <a href="https://forms.gle/haNFpme6KBzyejG18" target="_blank">
             <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
               <div className="flex items-center gap-2">
@@ -372,6 +379,7 @@ export default function Profile() {
               </div>
             </Menu.Item>
           </a>
+
 
           <Menu.Divider />
           <Menu.Item

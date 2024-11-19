@@ -301,9 +301,7 @@ export default function Login() {
                   <p className="mt-5 text-[19px] max-macair133:text-[17px] max-macair133:text-center text-black font-[600]">
                     Effortless score uploads, instant analytics, <br /> and
                     visual insights! Elevate your grading today! <br />
-                    <span className="mt-5 underline text-b1  text-[#7b7b7c] font-[600]">
-                      Available in December or January
-                    </span>
+
                   </p>
                   <div className="flex justify-end gap-10 -mt-14">
                     <div className="flex justify-start flex-col items-start mt-2 mb-2 p-7 rounded-xl bg-white/65 backdrop-blur-[100px] shadow-lg">

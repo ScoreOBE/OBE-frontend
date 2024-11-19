@@ -31,3 +31,7 @@ export const deleteStudent = async (params: any) => {
   const res = await sectionService.deleteStudent(params);
   return isValidResponse(res);
 };
+export const updateStudent = async (params: any) => {
+  const res = await sectionService.updateStudent(params);
+  return isValidResponse(res);
+};
