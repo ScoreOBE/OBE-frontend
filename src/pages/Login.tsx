@@ -25,7 +25,7 @@ import IconPublish1 from "@/assets/icons/eyePublish.svg?react";
 import IconPublish2 from "@/assets/icons/publishEach.svg?react";
 import IconRocket from "@/assets/icons/rocket.svg?react";
 import IconWand from "@/assets/icons/wand.svg?react";
-import IconChecklist from "@/assets/icons/checkList.svg?react";
+import IconChecklist from "@/assets/icons/checklist.svg?react";
 import IconChartBar from "@/assets/icons/chartBar.svg?react";
 import IconRadar from "@/assets/icons/radar.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
