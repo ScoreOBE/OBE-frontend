@@ -24,14 +24,12 @@ import IconClick from "@/assets/icons/click.svg?react";
 import IconPublish1 from "@/assets/icons/eyePublish.svg?react";
 import IconPublish2 from "@/assets/icons/publishEach.svg?react";
 import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
+import IconChartBar from "@/assets/icons/chartBar.svg?react";
+import IconRadar from "@/assets/icons/radar.svg?react";
 import { setShowNavbar } from "@/store/showNavbar";
 import gradescope from "@/assets/image/gradescope.png";
 import "@mantine/carousel/styles.css";
-import { Carousel } from "@mantine/carousel";
 import { goToDashboard } from "@/helpers/functions/function";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import testPhoto from "@/assets/image/testPhoto.png";
 import studentPLOPage from "@/assets/image/studentPLO.png";
 import LoadingOverlay from "@/components/Loading/LoadingOverlay";
 import exportScoreImg from "@/assets/image/exporScore.png";
@@ -285,20 +283,20 @@ export default function Login() {
             {" "}
             <div className="absolute left-0 right-0 bottom-0 z-0 h-40 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
             <div className="relative">
-              <div className="relative h-fit w-full py-20 mt-16 px-[118px]">
-                <div className="absolute ml-[40%] left-0 right-0 bottom-40 z-0 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
-                <p
-                  className="drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[#000000] text-[48px] "
-                  ref={targetRef}
-                >
-                  <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start ipadtext-[48px] ">
+              <div
+                className="relative h-fit w-full py-20 mt-16 max-macair133:mt-8 px-[118px]"
+                ref={targetRef}
+              >
+                <div className="absolute ml-[40%] max-macair133:ml-0 left-0 right-0 bottom-40 z-0 max-macair133:h-16 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px] max-macair133:blur-[200px]"></div>
+                <p className="drop-shadow-xl pb-2 cursor-default leading-[56px] max-macair133:text-center text-[#000000] text-[48px] ">
+                  <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px] text-[48px] ">
                     Upload, Publish
                     <br /> grading efficiency.
                   </span>{" "}
                   <br />
                 </p>
-                <div className="flex items-center justify-between">
-                  <p className="mt-5 text-[19px] text-black font-[500]">
+                <div className="flex max-macair133:flex-col max-macair133:gap-24 items-center justify-between">
+                  <p className="mt-5 text-[19px] max-macair133:text-center text-black font-[500]">
                     Effortless score uploads, instant analytics, <br /> and
                     visual insights! Elevate your grading today! <br />
                     <span className="mt-5 underline text-b1  text-[#7b7b7c] font-[500]">
@@ -357,35 +355,41 @@ export default function Login() {
                   </p>
                 </div>
                 <div className="flex items-center">
-                  <img
+                  <Image
                     src={chartImg}
-                    alt="CMULogo"
-                    className="w-[85%] h-[85%] -ml-[20%] mx-0"
+                    alt="chartImg"
+                    className="w-[85%] max-macair133:w-[95%] max-macair133:-ml-[30%]  -ml-[20%] mx-0"
                   />
-                  <div className="flex flex-col w-[40%] h-full gap-8 text-[18px] ">
+                  <div className="flex flex-col w-[40%] h-full gap-8 max-macair133:gap-4 text-[18px] ">
                     <div className="flex flex-col gap-2 items-start mt-2 mb-2">
-                      <p className="font-[700] text-[36px] text-emphasize">
+                      <p className="font-[700] text-[36px] max-macair133:text-[34px] text-emphasize">
                         Statistics & Histogram
                       </p>
-                      <p className="text-[17px] text-deemphasize font-[600] text-wrap w-[750px]">
+                      <p className="text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[750px]">
                         Visualize your grade with interactive charts
                       </p>
                     </div>
                     <div className="flex justify-start flex-col items-start mt-2 mb-2">
-                      <Icon IconComponent={IconHistogram} className="size-8" />
-                      <p className=" text-black font-[700] pt-4 ">
+                      <Icon
+                        IconComponent={IconChartBar}
+                        className="size-9 max-macair133:size-8 -ml-1"
+                      />
+                      <p className=" text-black font-[700] pt-4">
                         Clear Overview of Performance
                       </p>
-                      <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px]">
+                      <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
                         Provides a comprehensive view of student performance
-                        <br />
                         <span className="text-emphasize">
+                          {" "}
                           across each assignment and question.
                         </span>
                       </p>
                     </div>
                     <div className="flex justify-start flex-col items-start mt-2 mb-2">
-                      <Icon IconComponent={IconHistogram} className="size-8" />
+                      <Icon
+                        IconComponent={IconHistogram}
+                        className="size-8 max-macair133:size-7"
+                      />
                       <p className=" text-black font-[700] pt-4 ">
                         Unlock In-Depth Statistical Insights
                       </p>
@@ -404,14 +408,10 @@ export default function Login() {
                 <div className="flex gap-20 items-center">
                   <div className="flex flex-col w-[50%] h-full gap-8 text-[18px] ">
                     <div className="flex flex-col gap-2 items-start mt-2 mb-2">
-                      {/* <Icon
-                        IconComponent={IconSpiderChart}
-                        className="size-9 stroke-[10px] pb-1"
-                      /> */}
-                      <p className="font-[700] text-[36px] text-emphasize">
+                      <p className="font-[700] text-[36px] max-macair133:text-[34px] text-emphasize">
                         PLO Performance <br /> Spider Chart
                       </p>
-                      <p className="text-[17px] text-deemphasize font-[600] text-wrap w-[520px]">
+                      <p className="text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[520px] ">
                         Visualize student progress{" "}
                         <span className="text-emphasize">
                           {" "}
@@ -421,14 +421,11 @@ export default function Login() {
                       </p>
                     </div>
                     <div className="flex justify-start flex-col items-start mt-2 mb-2">
-                      <Icon
-                        IconComponent={IconSpiderChart}
-                        className="size-8"
-                      />
+                      <Icon IconComponent={IconRadar} className="size-8" />
                       <p className=" text-black font-[700] pt-4 ">
                         Students Can Track Their Own Performance
                       </p>
-                      <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px]">
+                      <p className=" text-deemphasize font-[500] pt-2 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
                         <span className="text-emphasize">
                           {" "}
                           Gain clear insights into your progress{" "}
@@ -438,22 +435,22 @@ export default function Login() {
                       </p>
                     </div>
                   </div>
-                  <img
+                  <Image
                     src={studentPLOPage}
                     alt="CMULogo"
-                    className="w-[85%] h-[85%] -translate-x-28"
+                    className="w-[85%] max-macair133:w-[95%] max-macair133:-ml-[5%] -translate-x-28"
                   />
                 </div>
 
                 <div className="flex flex-col gap-20 ">
                   <div className="flex flex-col items-center">
-                    <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] ">
+                    <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] max-macair133:text-[44px] ">
                       Easily Manage Scores <br />{" "}
                       <span className=" text-emphasize">
                         with Export and Publish
                       </span>
                     </div>
-                    <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[800px] text-center">
+                    <p className="mt-5 text-[17px] max-macair133:text-[15px]  text-deemphasize font-[600] text-wrap w-[800px] text-center">
                       Make managing scores easier than ever. With our intuitive
                       export and publish options, you can{" "}
                       <span className="text-emphasize">
@@ -466,20 +463,20 @@ export default function Login() {
                   <div className="flex  justify-center gap-16">
                     <div className="relative rounded-2xl h-[550px] w-[600px] bg-gradient-to-b shadow-xl from-[#7161ef]  via-[#957fef] to-[#b79ced] border-t-[1px] overflow-clip">
                       <div
-                        className={`h-full w-full overflow-clip rounded-xl -translate-x-20 translate-y-40 shadow-2xl`}
+                        className={`h-full w-full overflow-clip rounded-xl -translate-x-20 translate-y-40 shadow-2xl max-macair133:-translate-x-14`}
                       >
                         <Image
                           src={publishScoreImg}
-                          className={`h-[500px] w-full object-cover rounded-xl translate-x-14 -translate-y-8`}
+                          className={`h-[500px] w-full object-cover rounded-xl translate-x-14 -translate-y-8 max-macair133:translate-x-10`}
                         />
                       </div>
                       <Icon
                         IconComponent={IconPublish1}
-                        className="absolute bottom-10 right-12 size-20 text-white "
+                        className="absolute bottom-10 right-12 max-macair133:right-2 max-macair133:size-16 size-20 text-white "
                       />
                       <Icon
                         IconComponent={IconPublish2}
-                        className="absolute top-24 right-[300px] size-14 stroke-slate-200 text-white "
+                        className="absolute top-24 right-[300px] max-macair133:right-12 max-macair133:top-20  size-14 stroke-slate-200 text-white "
                       />
 
                       <div className="absolute top-2 left-2 rounded-xl">
@@ -489,9 +486,9 @@ export default function Login() {
                           </p>
                           <Title
                             order={3}
-                            className="font-bold text-[28px] cursor-default text-white"
+                            className="font-bold text-[28px] max-macair133:text-[24px] w-[500px] max-macair133:w-[400px] cursor-default text-white"
                           >
-                            Quickly publish scores for individual <br /> or all
+                            Quickly publish scores for individual or all
                             sections.
                           </Title>
                         </div>
@@ -499,20 +496,20 @@ export default function Login() {
                     </div>
                     <div className="relative rounded-2xl h-[550px] w-[600px] bg-gradient-to-b shadow-xl from-[#5390d9] via-[#4ea8de] to-[#48bfe3] border-t-[1px] overflow-clip">
                       <div
-                        className={`h-full w-full overflow-clip rounded-xl translate-x-20 translate-y-40 shadow-2xl`}
+                        className={`h-full w-full overflow-clip rounded-xl translate-x-20 translate-y-40 max-macair133:translate-x-12 shadow-2xl`}
                       >
                         <Image
                           src={exportScoreImg}
-                          className={`h-[700px] w-full object-cover rounded-xl -translate-y-[150px] -translate-x-9`}
+                          className={`h-[700px] max-macair133:h-[685px] w-full object-cover rounded-xl -translate-y-[150px] -translate-x-9 max-macair133:-translate-y-[140px] max-macair133:-translate-x-1`}
                         />
                       </div>
                       <Icon
                         IconComponent={IconExcel}
-                        className="absolute bottom-10 left-6 size-20 -rotate-12 text-white "
+                        className="absolute bottom-10 left-6 size-20 max-macair133:top-44 max-macair133:size-12 -rotate-12 text-white "
                       />
                       <Icon
                         IconComponent={IconClick}
-                        className="absolute top-32 right-10 size-14 -rotate-12 text-white "
+                        className="absolute top-32 right-10 size-14 -rotate-12 text-white max-macair133:size-12 max-macair133:-mt-2 max-macair133:-ml-20"
                       />
 
                       <div className="absolute top-2 left-2 rounded-xl">
@@ -522,7 +519,7 @@ export default function Login() {
                           </p>
                           <Title
                             order={3}
-                            className="font-bold text-[28px] cursor-default text-white"
+                            className="font-bold text-[28px] max-macair133:text-[22px] cursor-default text-white"
                           >
                             Export score data to .xlsx files <br />
                             for each section with a single click.
@@ -540,11 +537,11 @@ export default function Login() {
         {/* TQFs */}
         <div className="sm:flex flex-col w-full h-fit pt-16 hidden">
           <div className="flex flex-col items-start text-start px-28">
-            <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start text-[48px] ">
+            <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start text-[48px] max-macair133:text-[44px] ">
               <p>New TQF system</p>
               <p className="text-[#1D1D1F]">Convenient, Fast and Effortless</p>
             </div>
-            <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[750px]">
+            <p className="mt-5 text-[17px]max-macair133:text-[15px]  text-deemphasize font-[600] text-wrap w-[750px]">
               With ScoreOBE+, generating TQF 3 and TQF 5 reports is now easier
               than ever. Automatically compile course objectives, track learning
               progress, and align with program goals —all in one place. Save
@@ -561,10 +558,10 @@ export default function Login() {
           <div className="flex flex-col mt-16">
             <div className="flex gap-16 h-screen w-screen justify-center items-center">
               <div className="flex flex-col gap-6 items-start text-start">
-                <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] ">
+                <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] max-macair133:text-[24px]">
                   Create TQF Reports <br /> Quickly and Easily.
                 </p>
-                <p className=" text-[17px] text-deemphasize font-[600] text-wrap w-[400px]">
+                <p className=" text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[400px] max-macair133:w-[370px]">
                   <span className="text-emphasize">
                     Save time, reduce effort, and ensure consistency across all
                     your reports.
@@ -576,7 +573,9 @@ export default function Login() {
               </div>
 
               {/* Image */}
-              <div className={`h-[80%] w-[50%] object-cover rounded-xl`}>
+              <div
+                className={`h-[80%] w-[50%] object-cover rounded-xl max-macair133:w-[45%]`}
+              >
                 <Image
                   src={exportTQFImag}
                   className={`h-full w-full object-cover rounded-xl`}
@@ -589,11 +588,11 @@ export default function Login() {
             {/* TQF3 */}
             <div className="flex flex-col items-center text-center font-[600] gap-14 mx-28">
               <div>
-                <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] ">
+                <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] max-macair133:text-[44px] ">
                   <p>TQF 3</p>
                   <p className="text-[#1D1D1F]">Save Time & Focus on Content</p>
                 </div>
-                <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[800px]">
+                <p className="mt-5 text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[800px]">
                   With our reusable TQF 3 templates, you can{" "}
                   <span className="text-emphasize">
                     {" "}
@@ -605,9 +604,9 @@ export default function Login() {
                 </p>
               </div>
 
-              <div className="relative flex gap-16">
+              <div className="relative flex gap-16  max-macair133:gap-8">
                 <div className="absolute left-0 right-0 top-[75%] z-0 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
-                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg py-6">
+                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  max-macair133:w-[330px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg py-6">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
@@ -617,12 +616,12 @@ export default function Login() {
                       Reusable TQF 3 Templates <br />
                     </p>
                   </div>
-                  <p className="text-[#86868B]">
+                  <p className="text-[#86868B] max-macair133:text-[14px] ">
                     Eliminate repetitive data entry <br />
                     and quickly customize each report
                   </p>
                 </div>
-                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg py-6">
+                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]   max-macair133:w-[330px] border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg py-6">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
@@ -632,7 +631,7 @@ export default function Login() {
                       Consistency Across Reports <br />
                     </p>
                   </div>
-                  <p className="text-[#86868B]">
+                  <p className="text-[#86868B]  max-macair133:text-[14px]">
                     Ensure alignment and consistency <br /> across all reports.
                   </p>
                 </div>
@@ -683,22 +682,22 @@ export default function Login() {
             {/* TQF5*/}
             <div className="flex flex-col items-center text-center font-[600] gap-14 mx-28 ">
               <div className="flex flex-col items-center">
-                <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] ">
+                <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px]  max-macair133:text-[44px]">
                   <p>TQF 5</p>
                   <p className="text-[#1D1D1F]">
                     Unlock Deep Insights into Your Course
                   </p>
                 </div>
-                <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[800px] ">
+                <p className="mt-5 text-[17px]  max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[800px] ">
                   TQF 5 helps you analyze course objectives based on real
                   student performance data, empowering you to make data-driven
                   improvements and align your courses with institutional goals.
                 </p>
               </div>
 
-              <div className="relative flex gap-16">
+              <div className="relative flex gap-16 max-macair133:gap-8">
                 <div className="absolute left-0 right-0 top-[50%] z-0 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
-                <div className="relative flex flex-col items-center gap-3 text-pretty w-[370px] border shadow-md bg-white/65 backdrop-blur-[150px] border-24 p-6 rounded-lg">
+                <div className="relative flex flex-col items-center gap-3 text-pretty w-[370px] max-macair133:w-[330px] border shadow-md bg-white/65 backdrop-blur-[150px] border-24 p-6 rounded-lg">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
@@ -709,12 +708,12 @@ export default function Login() {
                       <br />
                     </p>
                   </div>
-                  <p className="text-[#86868B]">
+                  <p className="text-[#86868B] max-macair133:text-[14px]">
                     Choose automated or manual processes for TQF 5 reports,
                     providing versatility for any reporting need.
                   </p>
                 </div>
-                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg">
+                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px] max-macair133:w-[330px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
@@ -725,13 +724,13 @@ export default function Login() {
                       <br />
                     </p>
                   </div>
-                  <p className="text-[#86868B]">
+                  <p className="text-[#86868B]  max-macair133:text-[14px]">
                     CLOs can be mapped to assessment tools
                     <br /> on a detailed, item-by-item basis <br />
                     for more precise results.
                   </p>
                 </div>
-                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg">
+                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  max-macair133:w-[330px] border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
@@ -741,7 +740,7 @@ export default function Login() {
                       Automated Data Analysis <br />
                     </p>
                   </div>
-                  <p className="text-[#86868B]">
+                  <p className="text-[#86868B]  max-macair133:text-[14px]">
                     Automatically calculate scores and easily <br />
                     view student performance through <br /> histograms within
                     the CLO score range.
@@ -761,9 +760,6 @@ export default function Login() {
                         key={item.id}
                         value={item.id}
                         className="w-[400px]"
-                        // onClick={() => {
-                        //   setSelectTQF3Image(item.img);
-                        // }}
                       >
                         <Accordion.Control className="h-full min-h-[160px] samsungA24:min-h-[200px] text-[18px]">
                           <p className="text-[17px] font-[700] text-emphasize">
@@ -792,7 +788,7 @@ export default function Login() {
 
                   <div className="absolute text-center text-white z-10">
                     <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
-                      <h1 className="text-[48px] leading-[64px] font-semibold">
+                      <h1 className="text-[48px]  max-macair133:text-[40px] leading-[64px] font-semibold">
                         <span className="text-[#5a96f6] ">
                           TQF 5 is coming soon <br /> to
                         </span>{" "}
@@ -811,13 +807,13 @@ export default function Login() {
 
         <div className="bg-[#F2F2F2] sm:flex hidden h-fit w-full flex-col gap-28 py-36">
           <div className="flex flex-col items-start text-start px-28">
-            <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
+            <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px]  max-macair133:text-[44px]">
               <p>
                 Say Goodbye to Complexity, <br /> Hello to Seamless Course
                 Management!
               </p>
             </div>
-            <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[900px]">
+            <p className="mt-5 text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[900px]">
               Unlock the ultimate tools for TQF, PLO, and CLO management with
               our powerful admin features.
             </p>
@@ -829,7 +825,7 @@ export default function Login() {
               <Tabs.List className="flex justify-center">
                 <Tabs.Tab
                   value="tqf"
-                  className="text-black font-[700] text-[20px]"
+                  className="text-black font-[700] text-[20px] "
                 >
                   TQF
                 </Tabs.Tab>
@@ -852,8 +848,10 @@ export default function Login() {
                 className="mt-8 selection:flex flex-col items-center justify-center h-[80vh] w-screen"
               >
                 <div className="flex flex-col items-center gap-3 text-pretty pb-8">
-                  <p className="text-[24px] font-[700] text-emphasize">TQF</p>
-                  <p className="text-deemphasize font-[600] text-[17px]">
+                  <p className="text-[24px] max-macair133:text-[20px]  font-[700] text-emphasize">
+                    TQF
+                  </p>
+                  <p className="text-deemphasize font-[600] text-[17px] max-macair133:text-[15px]">
                     Track the status of TQFs for each course <br /> and
                     effortlessly export them as PDF files.
                   </p>
@@ -872,8 +870,10 @@ export default function Login() {
                 className="mt-8 selection:flex flex-col  items-center justify-center h-[80vh] w-screen"
               >
                 <div className="flex flex-col items-center gap-3 text-pretty text-center pb-8">
-                  <p className="text-[24px] font-[700] text-emphasize">CLO</p>
-                  <p className="text-deemphasize font-[600] text-[17px]">
+                  <p className="text-[24px] max-macair133:text-[20px]  font-[700] text-emphasize">
+                    CLO
+                  </p>
+                  <p className="text-deemphasize font-[600] text-[17px] max-macair133:text-[15px]">
                     Easily view the CLOs for each course <br /> and make edits
                     to the course information as needed.
                   </p>
@@ -888,8 +888,10 @@ export default function Login() {
                 className="mt-8 selection:flex flex-col  items-center justify-center h-[80vh] w-screen"
               >
                 <div className="flex flex-col items-center gap-3 text-pretty">
-                  <p className="text-[24px] font-[700] text-emphasize">PLO</p>
-                  <p className="text-deemphasize text-center font-[600] text-[17px] pb-8">
+                  <p className="text-[24px] max-macair133:text-[20px] font-[700] text-emphasize">
+                    PLO
+                  </p>
+                  <p className="text-deemphasize text-center font-[600] text-[17px] max-macair133:text-[15px] pb-8">
                     Create and manage PLO Collections, assign them to faculty,
                     <br />
                     track average PLOs, and see mapped courses.
@@ -952,7 +954,7 @@ export default function Login() {
             <Image
               src={courseManagementImg}
               alt="CMULogo"
-              className="w-[75%] -translate-x-36 samsungA24:-translate-x-20"
+              className="w-[75%] max-macair133:w-[80%] -translate-x-36 samsungA24:-translate-x-20"
             />
           </div>
         </div>
@@ -960,19 +962,19 @@ export default function Login() {
         <div className="sm:flex flex-col gap-16 items-center bg-black h-fit text-white px-28 py-20 hidden">
           <div className="flex flex-col gap-20 items-center">
             <div className="text-[21px] text-center">
-              <p className="font-[600] text-[60px] ">
+              <p className="font-[600] text-[60px] max-macair133:text-[48px]  ">
                 Boost Student Success with{" "}
                 <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                   ScoreOBE+!
                 </span>
               </p>
-              <p>
+              <p className="max-macair133:text-[18px] ">
                 Simplifies score announcements, tracks student progress, and
                 helps instructors align with educational goals.
               </p>
             </div>
 
-            <div className="flex flex-col gap-16 justify-center w-full font-[600] text-[17px] px-10">
+            <div className="flex flex-col gap-16 justify-center w-full font-[600] text-[17px] max-macair133:text-[15px]  px-10">
               <div className="flex items-start justify-center gap-28">
                 <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
                   <Icon IconComponent={IconBulb} className="size-16 stroke-1" />
