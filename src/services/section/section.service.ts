@@ -23,3 +23,11 @@ export const uploadStudentList = async (params: any) => {
   const res = await sectionService.uploadStudentList(params);
   return isValidResponse(res);
 };
+export const addStudent = async (params: any) => {
+  const res = await sectionService.addStudent(params);
+  return isValidResponse(res);
+};
+export const deleteStudent = async (params: any) => {
+  const res = await sectionService.deleteStudent(params);
+  return isValidResponse(res);
+};

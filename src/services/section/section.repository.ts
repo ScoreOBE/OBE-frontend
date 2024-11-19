@@ -18,5 +18,11 @@ export const sectionController = (configService = {}) => {
     uploadStudentList: async (params: any) => {
       return service.post(`${prefix}/student-list`, { ...params });
     },
+    addStudent: async (params: any) => {
+      return service.post(`${prefix}/student`, { ...params });
+    },
+    deleteStudent: async (params: any) => {
+      return service.delete(`${prefix}/student`, { ...params });
+    },
   };
 };
