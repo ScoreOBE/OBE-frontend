@@ -108,7 +108,7 @@ export default function ModalEditSection({
       delete payload.isActive;
       res = await updateSectionManagement(id!, secId, payload);
       if (res) {
-        dispatch(editSectionManagement({ id: id, secId: secId, ...payload }));
+        dispatch(editSectionManagement({ id: id, secId: secId, data }));
         if (openThisTerm) {
           const resCourse = await getOneCourse({
             year: academicYear.year,
