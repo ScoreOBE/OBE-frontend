@@ -192,6 +192,7 @@ const scoreOBETemplete = (
   const errorSectionNoStudents: string[] = [];
   const errorPointList: { name: string; cell: string[] }[] = [];
   const errorStudent: {
+    studentId: string;
     student: string;
     studentIdNotMatch: boolean;
     sectionNotMatch: boolean;
@@ -297,6 +298,7 @@ const scoreOBETemplete = (
         )
       ) {
         errorStudent.push({
+          studentId: data.studentId,
           student: `${firstNameTH} ${lastNameTH}`,
           studentIdNotMatch: checkStudent,
           sectionNotMatch: !checkSection,

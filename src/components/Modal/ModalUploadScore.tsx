@@ -58,7 +58,12 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
     string[]
   >([]);
   const [errorStudent, setErrorStudent] = useState<
-    { student: string; studentIdNotMatch: boolean; sectionNotMatch: boolean }[]
+    {
+      studentId: string;
+      student: string;
+      studentIdNotMatch: boolean;
+      sectionNotMatch: boolean;
+    }[]
   >([]);
   const [warningStudentList, setWarningStudentList] = useState<
     {

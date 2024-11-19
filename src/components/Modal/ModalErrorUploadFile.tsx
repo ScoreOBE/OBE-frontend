@@ -12,6 +12,7 @@ type Props = {
   errorSectionNoStudents?: string[];
   errorPoint?: { name: string; cell: string[] }[];
   errorStudent?: {
+    studentId: string;
     student: string;
     studentIdNotMatch: boolean;
     sectionNotMatch: boolean;
