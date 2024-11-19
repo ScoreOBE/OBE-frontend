@@ -5,6 +5,7 @@ export class CourseManagementSearchDTO {
   search: string = "";
   page: number = 1;
   limit: number = 10;
+  ignorePage?: boolean = false;
 }
 
 export class CourseManagementRequestDTO {

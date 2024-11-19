@@ -7,6 +7,7 @@ export class CourseRequestDTO {
   search: string = "";
   page: number = 1;
   limit: number = 20;
+  ignorePage?: boolean = false;
   departmentCode?: string[] = [];
   tqf3?: string[] = [];
   tqf5?: string[] = [];
