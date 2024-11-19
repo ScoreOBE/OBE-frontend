@@ -62,7 +62,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
           <p className="text-lg">
             {courseNo} ({course?.semester}/{course?.year.toString().slice(-2)})
           </p>
-          <p className="text-lg">Section {getSectionNo(sectionNo)}</p>
+          <p className="text-lg -mt-1">Section {getSectionNo(sectionNo)}</p>
           <p className="text-[13px] font-semibold text-pretty max-w-full">
             {course?.courseName}
           </p>
