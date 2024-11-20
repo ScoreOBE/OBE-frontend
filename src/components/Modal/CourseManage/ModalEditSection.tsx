@@ -127,7 +127,6 @@ export default function ModalEditSection({
       res = await updateSection(id!, payload);
       if (res) {
         fetchOneCourse();
-        // dispatch(editSection({ id: payload.courseId, secId: id, data }));
       }
     }
     if (res) {

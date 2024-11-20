@@ -28,7 +28,7 @@ import {
   editSectionManagement,
 } from "@/store/courseManagement";
 import { cloneDeep, isEqual } from "lodash";
-import { editCourse } from "@/store/course";
+import { editCourse, updateSections } from "@/store/course";
 import { setLoadingOverlay } from "@/store/loading";
 
 type actionType = "course" | "courseManagement";
@@ -146,7 +146,10 @@ export default function ModalManageIns({
           })
         );
       }
-      if (res.course) dispatch(editCourse(res.course));
+      if (res.course)
+        dispatch(
+          updateSections({ id: res.course.id, sections: res.course.sections })
+        );
       setCoInsList(cloneDeep(editCoInsList));
       showNotifications(
         NOTI_TYPE.SUCCESS,
