@@ -183,7 +183,7 @@ export default function Students() {
         opened={openEditScore}
         onClose={() => setOpenEditScore(false)}
         title={`Edit Score ${form.getValues().student?.studentId}`}
-        size="22vw"
+        size="35vw"
         centered
         closeOnClickOutside={false}
         transitionProps={{ transition: "pop" }}
@@ -194,27 +194,31 @@ export default function Students() {
         }}
       >
         <div className="flex flex-col gap-5 w-full">
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col gap-6 w-full max-h-[300px] overflow-y-auto">
             {!!form.getValues().questions?.length &&
               form.getValues().questions.map((ques, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <p>{ques.name}</p>
-                  <p>full score: {assignment?.questions[index].fullScore}</p>
-                  <TextInput
-                    size="xs"
-                    withAsterisk={true}
-                    label="Score"
-                    classNames={{
-                      input:
-                        "focus:border-primary text-[16px] w-28 h-10 text-center text-default ",
-                    }}
-                    {...form.getInputProps(`questions.${index}.score`)}
-                  />
+                <div key={index} className="flex flex-col  gap-1 w-full  text-start justify-start">
+                  <p >{ques.name}</p>
+                  <div className="flex text-center     items-center gap-3">
+                    <TextInput
+                      size="xs"
+                      withAsterisk={true}
+                 
+                      classNames={{
+                        input:
+                          "focus:border-primary text-[16px] w-20  text-center text-default ",
+                      }}
+                      {...form.getInputProps(`questions.${index}.score`)}
+                    />
+                    <p className=" text-[18px]">
+                      / {assignment?.questions[index].fullScore}
+                    </p>
+                  </div>
                 </div>
               ))}
           </div>
 
-          <div className="flex gap-2 mt-3 justify-end">
+          <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end  justify-end h-fit">
             <Button
               onClick={() => {
                 setOpenEditScore(false);
