@@ -53,6 +53,8 @@ export default function Profile() {
         return "#009BCC";
       case ROLE.INSTRUCTOR:
         return "#13A5A5";
+      case ROLE.TA:
+        return "#7f0410";
       case ROLE.STUDENT:
         return "#6869AD";
     }
@@ -200,7 +202,7 @@ export default function Profile() {
                 </div>
               </Menu.Item>
             )}
-            {user.role !== ROLE.STUDENT &&
+            {![ROLE.STUDENT, ROLE.TA].includes(user.role) &&
               user.studentId &&
               !path.includes(ROUTE_PATH.STD_DASHBOARD) && (
                 <Menu.Item
@@ -229,7 +231,7 @@ export default function Profile() {
                   navigate({
                     pathname: path.includes(ROUTE_PATH.INS_DASHBOARD)
                       ? ROUTE_PATH.STD_DASHBOARD
-                      : `${ROUTE_PATH.INS_DASHBOARD}/${ROUTE_PATH.TQF}`,
+                      : ROUTE_PATH.INS_DASHBOARD,
                     search: "?" + params.toString(),
                   })
                 }
@@ -247,7 +249,6 @@ export default function Profile() {
                 </div>
               </Menu.Item>
             )}
-            {user.role === ROLE.TA && <Menu.Divider />}
           </>
 
           {(user.role === ROLE.SUPREME_ADMIN ||
@@ -360,14 +361,16 @@ export default function Profile() {
           )}
 
           <Menu.Divider />
-          {user.role !== ROLE.STUDENT && (<a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
-            <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
-              <div className="flex items-center gap-2">
-              <Icon className="size-4 " IconComponent={IconFeedback} />{" "}
-                <span>Feedback</span>
-              </div>
-            </Menu.Item>
-          </a>)}
+          {user.role !== ROLE.STUDENT && (
+            <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
+              <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
+                <div className="flex items-center gap-2">
+                  <Icon className="size-4 " IconComponent={IconFeedback} />{" "}
+                  <span>Feedback</span>
+                </div>
+              </Menu.Item>
+            </a>
+          )}
           <a href="https://forms.gle/haNFpme6KBzyejG18" target="_blank">
             <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
               <div className="flex items-center gap-2">
@@ -379,7 +382,6 @@ export default function Profile() {
               </div>
             </Menu.Item>
           </a>
-
 
           <Menu.Divider />
           <Menu.Item

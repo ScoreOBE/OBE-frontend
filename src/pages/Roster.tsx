@@ -25,7 +25,7 @@ import {
   updateStudent,
 } from "@/services/section/section.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
-import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import {
   validateEmail,
   validateSectionNo,
@@ -39,6 +39,7 @@ import { isEqual } from "lodash";
 export default function Roster() {
   const { courseNo } = useParams();
   const [params, setParams] = useSearchParams();
+  const user = useAppSelector((state) => state.user);
   const loading = useAppSelector((state) => state.loading);
   const activeTerm = useAppSelector((state) =>
     state.academicYear.find(
@@ -216,7 +217,7 @@ export default function Roster() {
           <Table.Td>{student.studentId}</Table.Td>
           <Table.Td>{getUserName(student, 3)}</Table.Td>
           <Table.Td>{student.email ? student.email : "Not login yet"}</Table.Td>
-          {activeTerm && (
+          {activeTerm && user.role != ROLE.TA && (
             <Table.Td>
               <div className="flex gap-3">
                 <Button
@@ -288,7 +289,7 @@ export default function Roster() {
                 className="mx-1 w-[25vw] "
                 onChange={(event) => setFilter(event.currentTarget.value)}
               ></TextInput>
-              {activeTerm && (
+              {activeTerm && user.role != ROLE.TA && (
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
                   <Menu trigger="click" position="bottom-end">
                     <Menu.Target>
@@ -348,7 +349,7 @@ export default function Roster() {
                   <Table.Th className="w-[17%]">Student ID</Table.Th>
                   <Table.Th className="w-[20%]">Name</Table.Th>
                   <Table.Th className="w-[25%]">CMU Account</Table.Th>
-                  {activeTerm && (
+                  {activeTerm && user.role != ROLE.TA && (
                     <Table.Th className="w-[10%]">Action</Table.Th>
                   )}
                 </Table.Tr>
@@ -462,7 +463,7 @@ export default function Roster() {
           body: "flex flex-col overflow-hidden h-fit",
         }}
       >
-        {(actionModal == 'Edit' && selectedUser?.termsOfService) &&
+        {actionModal == "Edit" && selectedUser?.termsOfService && (
           <Alert
             radius="md"
             variant="light"
@@ -474,14 +475,14 @@ export default function Roster() {
               <div className="flex items-center  gap-2">
                 <Icon IconComponent={IconInfo2} />
                 <p>
-                  You can only edit section for the student who is
-                  currently logged into ScoreOBE +.
+                  You can only edit section for the student who is currently
+                  logged into ScoreOBE +.
                 </p>
               </div>
             }
             className="mb-3"
           ></Alert>
-        }
+        )}
         <div className="flex flex-col gap-3">
           <TextInput
             size="xs"

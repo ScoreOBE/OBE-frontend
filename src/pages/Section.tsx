@@ -20,7 +20,7 @@ import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import PageError from "./PageError";
 import MainPopup from "@/components/Popup/MainPopup";
-import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import ModalEditSection from "@/components/Modal/CourseManage/ModalEditSection";
 import Loading from "@/components/Loading/Loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
@@ -255,19 +255,32 @@ export default function Section() {
             </p>
             <div className="flex gap-5 items-center">
               {activeTerm ? (
-                <Button
-                  className="text-center px-4"
-                  leftSection={
-                    <Icon IconComponent={IconUpload} className="size-4" />
-                  }
-                  onClick={() =>
-                    course?.sections.find(({ students }) => students?.length)
-                      ? setOpenModalUploadScore(true)
-                      : setOpenModalUploadStudentList(true)
-                  }
-                >
-                  Upload score
-                </Button>
+                <div className="flex gap-4">
+                  <Button
+                    className="text-center px-4"
+                    leftSection={
+                      <Icon IconComponent={IconUpload} className="size-4" />
+                    }
+                    onClick={() =>
+                      course?.sections.find(({ students }) => students?.length)
+                        ? setOpenModalUploadScore(true)
+                        : setOpenModalUploadStudentList(true)
+                    }
+                  >
+                    Upload score
+                  </Button>
+                  {user.role == ROLE.TA && (
+                    <Button
+                      color="#20884f"
+                      leftSection={
+                        <Icon className="size-4" IconComponent={IconExcel} />
+                      }
+                      className="!font-medium px-3"
+                    >
+                      Export score
+                    </Button>
+                  )}
+                </div>
               ) : (
                 <Button
                   color="#20884f"
@@ -279,7 +292,7 @@ export default function Section() {
                   Export score
                 </Button>
               )}
-              {activeTerm && (
+              {activeTerm && user.role != ROLE.TA && (
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
                   <Menu trigger="click" position="bottom-end">
                     <Menu.Target>
@@ -499,7 +512,7 @@ export default function Section() {
                     {sec.isActive && (
                       <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
                         <p className="p-2.5 text-secondary font-semibold text-[12px]">
-                          {sec.assignments?.length} { " "}
+                          {sec.assignments?.length}{" "}
                           {(sec.assignments?.length ?? 0) === 1
                             ? "Assignment"
                             : (sec.assignments?.length ?? 0) > 1
