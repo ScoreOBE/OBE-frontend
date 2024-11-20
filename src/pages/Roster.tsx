@@ -170,8 +170,9 @@ export default function Roster() {
         year: course?.year,
         semester: course?.semester,
         course: course?.id,
+        oldSectionNo: parseInt(selectedUser.sectionNo),
         ...data,
-        sectionNo: parseInt(selectedUser.sectionNo),
+        sectionNo: parseInt(form.getValues().sectionNo),
         student: selectedUser.id,
       });
       if (res) {
