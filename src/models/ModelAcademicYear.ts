@@ -3,5 +3,5 @@ export interface IModelAcademicYear {
   year: number;
   semester: number;
   isActive: boolean;
-  isProcessTQF3: boolean;
+  // isProcessTQF3: boolean;
 }

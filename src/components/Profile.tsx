@@ -23,7 +23,7 @@ import { ROLE } from "@/helpers/constants/enum";
 import ModalManageAdmin from "./Modal/Profile/ModalManageAdmin";
 import ModalChangeSupAdmin from "./Modal/Profile/ModalChangeSupremeAdmin";
 import ModalManageSemester from "./Modal/Profile/ModalManageSemester";
-import ModalManageTQF from "./Modal/Profile/ModalManageTQF";
+// import ModalManageTQF from "./Modal/Profile/ModalManageTQF";
 import { getUserName } from "@/helpers/functions/function";
 import ModalCourseManagement from "./Modal/Profile/ModalCourseManagement";
 import ModalPLOManagement from "./Modal/Profile/ModalPLOManagement";
@@ -105,10 +105,10 @@ export default function Profile() {
         opened={openModalChangeSupAdmin}
         onClose={() => setOpenModalChangeSupAdmin(false)}
       />
-      <ModalManageTQF
+      {/* <ModalManageTQF
         opened={openModalManageTQF}
         onClose={() => setOpenModalManageTQF(false)}
-      />
+      /> */}
       <ModalManageSemester
         opened={openModalManageSemester}
         onClose={() => setOpenModalManageSemester(false)}
