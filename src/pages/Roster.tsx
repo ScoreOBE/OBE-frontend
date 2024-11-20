@@ -164,6 +164,9 @@ export default function Roster() {
           data.firstNameEN = name[0];
           data.lastNameEN = name[1];
         }
+      } else {
+        delete data.studentId;
+        delete data.email;
       }
       delete data.name;
       const res = await updateStudent({

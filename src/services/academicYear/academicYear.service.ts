@@ -21,10 +21,10 @@ export const activeAcademicYear = async (id: string) => {
   const res = await academicYearService.activeAcademicYear(id);
   return isValidResponse(res);
 };
-export const updateProcessTqf3 = async (id: string, params: any) => {
-  const res = await academicYearService.updateProcessTqf3(id, params);
-  return isValidResponse(res);
-};
+// export const updateProcessTqf3 = async (id: string, params: any) => {
+//   const res = await academicYearService.updateProcessTqf3(id, params);
+//   return isValidResponse(res);
+// };
 export const deleteAcademicYear = async (id: string) => {
   const res = await academicYearService.deleteAcademicYear(id);
   return isValidResponse(res);
