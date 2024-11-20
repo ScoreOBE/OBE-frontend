@@ -5,6 +5,7 @@ import { Alert, Button, Menu, Switch } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconPencilMinus from "@/assets/icons/pencilMinus.svg?react";
+import IconStudent from "@/assets/icons/student.svg?react";
 import IconUpload from "@/assets/icons/upload.svg?react";
 import IconDots from "@/assets/icons/dots.svg?react";
 import IconUserGroup from "@/assets/icons/usersGroup.svg?react";
@@ -447,10 +448,10 @@ export default function Section() {
                           </Menu>
                         ) : (
                           <Switch
-                            size="md"
+                            size="sm"
                             onLabel="ON"
                             offLabel="OFF"
-                            className="absolute top-3 right-3"
+                            className="absolute top-[11px] right-[60px]"
                             checked={sec.isActive}
                             onChange={(event) =>
                               onClickActiveSection(sec, event.target.checked)
@@ -460,13 +461,23 @@ export default function Section() {
                     </div>
                     <div className="p-2.5 flex h-full justify-between  flex-col">
                       <div>
-                        <p
-                          className={`font-semibold text-sm ${
-                            !sec.isActive && "text-[#c8c8c8]"
-                          }`}
-                        >
-                          Section {getSectionNo(sec.sectionNo)}
-                        </p>
+                        <div className="flex justify-between items-center">
+                          <p
+                            className={`font-semibold text-sm ${
+                              !sec.isActive && "text-[#c8c8c8]"
+                            }`}
+                          >
+                            Section {getSectionNo(sec.sectionNo)}
+                          </p>
+                          <p className="tag-tqf bg-secondary text-secondary flex gap-1 items-center bg-opacity-15 rounded-xl !text-[11px]">
+                            <Icon
+                              IconComponent={IconStudent}
+                              className="size-[14px] text-secondary stroke-secondary"
+                            />
+                            {sec.students?.length}
+                          </p>
+                        </div>
+
                         <p
                           className={`font-semibold text-xs ${
                             !sec.isActive && "text-[#c8c8c8]"
@@ -488,6 +499,7 @@ export default function Section() {
                     {sec.isActive && (
                       <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
                         <p className="p-2.5 text-secondary font-semibold text-[12px]">
+                          {sec.assignments?.length} { " "}
                           {(sec.assignments?.length ?? 0) === 1
                             ? "Assignment"
                             : (sec.assignments?.length ?? 0) > 1
