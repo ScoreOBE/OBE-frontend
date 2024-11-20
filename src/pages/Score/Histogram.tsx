@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useRef, useState } from "react";
-import HistogramChart from "@/components/Chart/HistogramChart";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
@@ -10,7 +9,6 @@ import Loading from "@/components/Loading/Loading";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import React from "react";
 import { Tabs } from "@mantine/core";
-import Curve from "@/components/Chart/Curve";
 import ChartContainer from "@/components/Chart/ChartContainer";
 type TabState = {
   [key: number]: string;
