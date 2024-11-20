@@ -312,7 +312,10 @@ export default function Roster() {
                         </div>
                       </Menu.Item>
 
-                      <Menu.Item className="text-[#3e3e3e] font-semibold text-[12px] h-7 ">
+                      <Menu.Item
+                        className="text-[#3e3e3e] font-semibold text-[12px] h-7"
+                        onClick={() => setOpenModalUploadStudentList(true)}
+                      >
                         <div className="flex items-center gap-2">
                           <Icon className="size-4" IconComponent={IconImport} />
                           <span>Import new Course Roster</span>
@@ -428,10 +431,12 @@ export default function Roster() {
         action={onClickDeleteStudent}
       />
       <ModalStudentList
-        type="import"
+        type="replace"
         data={course!}
         opened={openModalUploadStudentList}
         onClose={() => setOpenModalUploadStudentList(false)}
+        selectCourse={false}
+        onBack={() => setOpenModalUploadStudentList(false)}
       />
 
       {/* Modal Add/Edit Student */}

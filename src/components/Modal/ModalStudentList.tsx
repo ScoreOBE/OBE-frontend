@@ -27,7 +27,7 @@ import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { setLoadingOverlay } from "@/store/loading";
 
-type modalType = "import" | "list" | "import_list";
+type modalType = "import" | "replace" | "import_list";
 type Props = {
   opened: boolean;
   onClose: () => void;
@@ -124,7 +124,6 @@ export default function ModalStudentList({
         </Table.Tr>
       ))
   );
-
 
   const studentTable = () => {
     const hasData = rows && rows.flat().length > 0;
@@ -391,8 +390,6 @@ export default function ModalStudentList({
               </div>
             )}
           </Tabs>
-        ) : type == "list" ? (
-          studentTable()
         ) : (
           <div className="flex flex-col gap-2 overflow-hidden">
             <div className=" flex-col overflow-y-auto h-full gap-3">
@@ -426,7 +423,12 @@ export default function ModalStudentList({
                         {data?.courseName}
                       </span>
                       , <br /> you must import the student list (.xlsx) in this
-                      course for <span className=" font-bold text-secondary"> all sections </span> from the CMU Registration System.
+                      course for{" "}
+                      <span className=" font-bold text-secondary">
+                        {" "}
+                        all sections{" "}
+                      </span>{" "}
+                      from the CMU Registration System.
                       <a
                         href="https://www1.reg.cmu.ac.th/registrationoffice/searchcourse.php"
                         target="_blank"
@@ -460,13 +462,15 @@ export default function ModalStudentList({
                 onClick={uploadList}
                 loading={loading}
                 rightSection={
-                  <Icon
-                    IconComponent={IconArrowRight}
-                    className="size-5 stroke-[#ffffff] stroke-[2px] items-center"
-                  />
+                  type == "import" ? (
+                    <Icon
+                      IconComponent={IconArrowRight}
+                      className="size-5 stroke-[#ffffff] stroke-[2px] items-center"
+                    />
+                  ) : null
                 }
               >
-                Import & Next to Upload
+                {type == "import" ? "Import & Next to Upload" : "Import"}
               </Button>
             </div>
           </div>

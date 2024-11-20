@@ -237,14 +237,6 @@ export default function Section() {
           }}
         />
       )}
-      {course && (
-        <ModalStudentList
-          type="list"
-          opened={openModalStudentList}
-          onClose={() => setOpenModalStudentList(false)}
-          data={course}
-        />
-      )}
       <ModalExportScore
         opened={openModalExportScore}
         onClose={() => setOpenModalExportScore(false)}
