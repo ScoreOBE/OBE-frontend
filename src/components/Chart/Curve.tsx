@@ -1,6 +1,4 @@
-import { calStat, generateBellCurveData } from "@/helpers/functions/score";
-import { IModelAssignment, IModelScore } from "@/models/ModelCourse";
-import { IModelUser } from "@/models/ModelUser";
+import { generateBellCurveData } from "@/helpers/functions/score";
 import annotationPlugin from "chartjs-plugin-annotation";
 import {
   Chart,
@@ -10,7 +8,7 @@ import {
   LinearScale,
   Title,
 } from "chart.js";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CategoryScale } from "chart.js";
 import "chart.js/auto";
 Chart.register(CategoryScale);
@@ -34,6 +32,7 @@ type Props = {
 export default function Curve({ mean, median, sd, fullScore }: Props) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
+  const [chartSize, setChartSize] = useState({ width: 0, height: 0 });
   const statLine: any[] = [
     {
       type: "line",
@@ -43,17 +42,16 @@ export default function Curve({ mean, median, sd, fullScore }: Props) {
         position: "start",
         yAdjust: 5,
         xAdjust: 0,
-        // rotation: i === 0 ? 90 : 0,
         color: "#1f69f3",
         backgroundColor: "rgb(0,0,0,0)",
-      font: {
-        size: 14,
-        fontFamily: "Manrope",
-      },
+        font: {
+          size: 14,
+          fontFamily: "Manrope",
+        },
       },
       value: mean,
       borderColor: "#1f69f3",
-      borderDash: [5,5],
+      borderDash: [5, 5],
       borderWidth: 2,
       scaleID: "x",
     },
@@ -65,13 +63,12 @@ export default function Curve({ mean, median, sd, fullScore }: Props) {
         position: "start",
         yAdjust: 30,
         xAdjust: 0,
-        // rotation: i === 0 ? 90 : 0,
         color: "red",
         backgroundColor: "rgb(0,0,0,0)",
       },
       value: median,
       borderColor: "red",
-      borderDash: [5,5],
+      borderDash: [5, 5],
       borderWidth: 2,
       scaleID: "x",
       font: {
@@ -80,6 +77,27 @@ export default function Curve({ mean, median, sd, fullScore }: Props) {
       },
     },
   ];
+
+  useEffect(() => {
+    const container = chartRef.current?.parentElement;
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        setChartSize({
+          width: entry.contentRect.width,
+          height: entry.contentRect.height,
+        });
+      }
+    });
+
+    if (container) {
+      resizeObserver.observe(container);
+    }
+    return () => {
+      if (container) {
+        resizeObserver.unobserve(container);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (chartRef.current) {
@@ -150,7 +168,7 @@ export default function Curve({ mean, median, sd, fullScore }: Props) {
         });
       }
     }
-  }, [mean, sd]);
+  }, [mean, median, sd, fullScore, chartSize]);
 
   return <canvas ref={chartRef} id="myChart"></canvas>;
 }
