@@ -437,25 +437,38 @@ export default function Assignment() {
         opened={openModalEditAssignment}
         onClose={() => setOpenModalEditAssignment(false)}
         centered
+        transitionProps={{ transition: "pop" }}
         title="Edit Assignment Name"
       >
         <TextInput
           classNames={{ input: "focus:border-primary" }}
-          label="Course No."
+          label="Assignment name"
           size="xs"
           withAsterisk
           placeholder="Ex. Quiz 1"
           value={editName}
           onChange={(event) => setEditName(event.target.value)}
         />
-        <Button
-          className="!h-[36px] mt-4 !w-full"
-          onClick={onClickEditAssignmentName}
-          disabled={isEqual(editName, editDeleteAssignment)}
-          loading={loading.loadingOverlay}
-        >
-          Save Changes
-        </Button>
+        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 mt-6  items-end  justify-end h-fit">
+          <Button
+
+            onClick={() => setOpenModalEditAssignment(false)}
+         
+            loading={loading.loadingOverlay}
+            variant='subtle'
+          >
+            Cancel
+          </Button>
+          <Button
+        
+            onClick={onClickEditAssignmentName}
+            disabled={isEqual(editName, editDeleteAssignment)}
+            loading={loading.loadingOverlay}
+            
+          >
+            Save Changes
+          </Button>
+        </div>
       </Modal>
       {/* Delete Assignment */}
       <MainPopup
@@ -472,14 +485,14 @@ export default function Assignment() {
               color="red"
               title={
                 <p>
-                  This action cannot be undone. After you delete this assignment,{" "}
-                  <br /> it will be permanently deleted from this course.
+                  This action cannot be undone. After you delete this
+                  assignment, <br /> it will be permanently deleted from this
+                  course.
                 </p>
               }
               icon={<Icon IconComponent={IconExclamationCircle} />}
               classNames={{ icon: "size-6" }}
             ></Alert>
-            
           </>
         }
       />

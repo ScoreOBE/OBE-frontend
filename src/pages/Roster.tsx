@@ -3,6 +3,7 @@ import { Alert, Button } from "@mantine/core";
 import { useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import Iconbin from "@/assets/icons/trash.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
@@ -446,7 +447,7 @@ export default function Roster() {
         opened={openModalAddEditStudent}
         closeOnEscape={false}
         onClose={clearForm}
-        size="45vw"
+        size="47vw"
         title={`${actionModal} Student ${
           actionModal == "Add" ? courseNo : selectedUser?.studentId
         }`}
@@ -458,6 +459,26 @@ export default function Roster() {
           body: "flex flex-col overflow-hidden h-fit",
         }}
       >
+        {(actionModal == 'Edit' && selectedUser?.termsOfService) &&
+          <Alert
+            radius="md"
+            variant="light"
+            color="blue"
+            classNames={{
+              body: " flex justify-center",
+            }}
+            title={
+              <div className="flex items-center  gap-2">
+                <Icon IconComponent={IconInfo2} />
+                <p>
+                  You can only edit section for the student who is
+                  currently logged into ScoreOBE +.
+                </p>
+              </div>
+            }
+            className="mb-3"
+          ></Alert>
+        }
         <div className="flex flex-col gap-3">
           <TextInput
             size="xs"
