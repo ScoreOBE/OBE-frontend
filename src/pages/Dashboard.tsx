@@ -369,14 +369,16 @@ export default function Dashboard() {
           </div>
           {term?.isActive && !!courseList.courses.length && (
             <div className="flex gap-3 flex-wrap">
-              <Button
-                variant="outline"
-                className="text-center px-4"
-                leftSection={<Icon IconComponent={IconAdd} />}
-                onClick={() => setOpenAddModal(true)}
-              >
-                Add course
-              </Button>
+              {user.role != ROLE.TA && (
+                <Button
+                  variant="outline"
+                  className="text-center px-4"
+                  leftSection={<Icon IconComponent={IconAdd} />}
+                  onClick={() => setOpenAddModal(true)}
+                >
+                  Add course
+                </Button>
+              )}
               <Button
                 className="text-center px-4"
                 leftSection={
