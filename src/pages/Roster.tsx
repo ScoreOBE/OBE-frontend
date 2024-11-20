@@ -33,6 +33,7 @@ import {
 } from "@/helpers/functions/validation";
 import { useForm } from "@mantine/form";
 import { updateStudentList } from "@/store/course";
+import { isEqual } from "lodash";
 
 export default function Roster() {
   const { courseNo } = useParams();
@@ -496,8 +497,24 @@ export default function Roster() {
               onClick={
                 actionModal == "Add" ? onClickAddStudent : onClickEditStudent
               }
+              disabled={
+                actionModal == "Edit" &&
+                selectedUser &&
+                isEqual(
+                  {
+                    ...form.getValues(),
+                    sectionNo: parseInt(form.getValues().sectionNo),
+                  },
+                  {
+                    sectionNo: parseInt(selectedUser.sectionNo),
+                    name: getUserName(selectedUser, 3),
+                    studentId: selectedUser.studentId,
+                    email: selectedUser.email,
+                  }
+                )
+              }
             >
-              Add
+              {actionModal == "Add" ? "Add" : "Save"}
             </Button>
           </div>
         </div>
