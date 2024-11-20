@@ -12,7 +12,7 @@ import IconManageAdmin from "@/assets/icons/addCo.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 import MainPopup from "@/components/Popup/MainPopup";
 import { IModelUser } from "@/models/ModelUser";
@@ -36,16 +36,21 @@ import { updateStudentList } from "@/store/course";
 
 export default function Roster() {
   const { courseNo } = useParams();
+  const [params, setParams] = useSearchParams();
   const loading = useAppSelector((state) => state.loading);
+  const activeTerm = useAppSelector((state) =>
+    state.academicYear.find(
+      (term) =>
+        term.year == parseInt(params.get("year") || "") &&
+        term.semester == parseInt(params.get("semester") || "")
+    )
+  )?.isActive;
   const dispatch = useAppDispatch();
   const [filter, setFilter] = useState<string>("");
-
-  const [openModalAddStudent, setOpenModalAddStudent] = useState(false);
-  const [editName, setEditName] = useState<Partial<IModelUser>>();
-
-  const [openModalEditStudent, setOpenModalEditStudent] = useState(false);
+  const [actionModal, setActionModal] = useState<"Add" | "Edit" | "">("");
+  const [openModalAddEditStudent, setOpenModalAddEditStudent] = useState(false);
   const [selectedUser, setSelectedUser] = useState<
-    IModelUser & { sectionNo: number }
+    IModelUser & { sectionNo: string }
   >();
   const [openModalUploadStudentList, setOpenModalUploadStudentList] =
     useState(false);
@@ -65,9 +70,12 @@ export default function Roster() {
             .includes(parseInt(value)) &&
           `Section ${getSectionNo(value)} is not exist in this course`),
       studentId: (value) => {
-        const exist = course?.sections.find((sec) =>
+        let exist = course?.sections.find((sec) =>
           sec.students?.find((std) => std.student.studentId == value)
         );
+        if (actionModal == "Edit" && selectedUser?.studentId == value) {
+          exist = undefined;
+        }
         return (
           validateStudentId(value) ??
           (value.length &&
@@ -103,6 +111,7 @@ export default function Roster() {
         semester: course?.semester,
         course: course?.id,
         ...data,
+        sectionNo: parseInt(data.sectionNo),
       });
       if (res) {
         dispatch(updateStudentList({ id: course?.id, sections: res }));
@@ -118,51 +127,68 @@ export default function Roster() {
   };
 
   const onClickDeleteStudent = async () => {
-    dispatch(setLoadingOverlay(true));
-    const res = await deleteStudent({
-      year: course?.year,
-      semester: course?.semester,
-      course: course?.id,
-      sectionNo: selectedUser?.sectionNo,
-      student: selectedUser?.id,
-    });
-    if (res) {
-      dispatch(updateStudentList({ id: course?.id, sections: res }));
-      showNotifications(
-        NOTI_TYPE.SUCCESS,
-        "Delete student successfully",
-        `student ${selectedUser?.studentId} is deleted`
-      );
-      setOpenPopupDeleteStudent(false);
-      setSelectedUser(undefined);
+    if (selectedUser) {
+      dispatch(setLoadingOverlay(true));
+      const res = await deleteStudent({
+        year: course?.year,
+        semester: course?.semester,
+        course: course?.id,
+        sectionNo: parseInt(selectedUser.sectionNo),
+        student: selectedUser.id,
+      });
+      if (res) {
+        dispatch(updateStudentList({ id: course?.id, sections: res }));
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Delete student successfully",
+          `student ${selectedUser.studentId} is deleted`
+        );
+        setOpenPopupDeleteStudent(false);
+        setSelectedUser(undefined);
+      }
+      dispatch(setLoadingOverlay(false));
     }
-    dispatch(setLoadingOverlay(false));
   };
 
-  const onClickEditStudnet = async () => {
-    dispatch(setLoadingOverlay(true));
-    const res = await updateStudent({
-      year: course?.year,
-      semester: course?.semester,
-      course: course?.id,
-      sectionNo: selectedUser?.sectionNo,
-      student: selectedUser?.id,
-    });
-    if (res) {
-      dispatch(updateStudentList({ id: course?.id, sections: res }));
-      showNotifications(
-        NOTI_TYPE.SUCCESS,
-        "Update student successfully",
-        `student ${selectedUser?.studentId} is updated`
-      );
-      setOpenModalEditStudent(false);
-      setSelectedUser(undefined);
+  const onClickEditStudent = async () => {
+    if (selectedUser) {
+      dispatch(setLoadingOverlay(true));
+      const data: any = { ...form.getValues() };
+      if (!selectedUser.termsOfService) {
+        const name = data.name.split(" ");
+        if (validateThaiLanguage(data.name)) {
+          data.firstNameTH = name[0];
+          data.lastNameTH = name[1];
+        } else {
+          data.firstNameEN = name[0];
+          data.lastNameEN = name[1];
+        }
+      }
+      delete data.name;
+      const res = await updateStudent({
+        year: course?.year,
+        semester: course?.semester,
+        course: course?.id,
+        ...data,
+        sectionNo: parseInt(selectedUser.sectionNo),
+        student: selectedUser.id,
+      });
+      if (res) {
+        dispatch(updateStudentList({ id: course?.id, sections: res }));
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Update student successfully",
+          `student ${selectedUser?.studentId} is updated`
+        );
+        setOpenModalAddEditStudent(false);
+        setSelectedUser(undefined);
+      }
+      dispatch(setLoadingOverlay(false));
     }
-    dispatch(setLoadingOverlay(false));
   };
 
   const clearForm = () => {
-    setOpenModalAddStudent(false);
+    setOpenModalAddEditStudent(false);
     form.reset();
   };
 
@@ -184,40 +210,47 @@ export default function Roster() {
           <Table.Td>{student.studentId}</Table.Td>
           <Table.Td>{getUserName(student, 3)}</Table.Td>
           <Table.Td>{student.email ? student.email : "Not login yet"}</Table.Td>
-          <Table.Td>
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSelectedUser({ sectionNo: sec.sectionNo!, ...student });
-                  setEditName({
-                    id: student.id,
-                    firstNameTH: student.firstNameTH,
-                    lastNameTH: student.lastNameTH,
-                    studentId: student.studentId,
-                    email: student.email,
-                  });
-
-                  setOpenModalEditStudent(true);
-                }}
-                color="yellow"
-                className="tag-tqf !px-3 !rounded-full text-center"
-              >
-                <Icon className="size-5" IconComponent={IconEdit} />
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSelectedUser({ sectionNo: sec.sectionNo!, ...student });
-                  setOpenPopupDeleteStudent(true);
-                }}
-                color="red"
-                className="tag-tqf !px-3 !rounded-full text-center"
-              >
-                <Icon className="size-5" IconComponent={Iconbin} />
-              </Button>
-            </div>
-          </Table.Td>
+          {activeTerm && (
+            <Table.Td>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setActionModal("Edit");
+                    setSelectedUser({
+                      sectionNo: getSectionNo(sec.sectionNo),
+                      ...student,
+                    });
+                    form.setValues({
+                      sectionNo: getSectionNo(sec.sectionNo),
+                      name: getUserName(student, 3),
+                      studentId: student.studentId,
+                      email: student.email,
+                    });
+                    setOpenModalAddEditStudent(true);
+                  }}
+                  color="yellow"
+                  className="tag-tqf !px-3 !rounded-full text-center"
+                >
+                  <Icon className="size-5" IconComponent={IconEdit} />
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedUser({
+                      sectionNo: getSectionNo(sec.sectionNo),
+                      ...student,
+                    });
+                    setOpenPopupDeleteStudent(true);
+                  }}
+                  color="red"
+                  className="tag-tqf !px-3 !rounded-full text-center"
+                >
+                  <Icon className="size-5" IconComponent={Iconbin} />
+                </Button>
+              </div>
+            </Table.Td>
+          )}
         </Table.Tr>
       ))
   );
@@ -235,7 +268,6 @@ export default function Roster() {
                   (total, sec) => total + (sec.students?.length || 0),
                   0
                 );
-
                 return `${totalStudents} ${
                   totalStudents === 1 ? "Student" : "Students"
                 }`;
@@ -250,45 +282,46 @@ export default function Roster() {
                 className="mx-1 w-[25vw] "
                 onChange={(event) => setFilter(event.currentTarget.value)}
               ></TextInput>
-              <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
-                <Menu trigger="click" position="bottom-end">
-                  <Menu.Target>
-                    <div>
-                      <Icon IconComponent={IconDots} />
-                    </div>
-                  </Menu.Target>
-                  <Menu.Dropdown
-                    className="rounded-md translate-y-1 backdrop-blur-xl bg-white "
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                    }}
-                  >
-                    <Menu.Item
-                      className=" text-[#3e3e3e] font-semibold text-[12px] h-7 "
-                      onClick={() => setOpenModalAddStudent(true)}
-                      // onClick={() => {
-                      //   setAddSec({ ...course });
-                      //   setOpenModalAddSec(true);
-                      // }}
+              {activeTerm && (
+                <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
+                  <Menu trigger="click" position="bottom-end">
+                    <Menu.Target>
+                      <div>
+                        <Icon IconComponent={IconDots} />
+                      </div>
+                    </Menu.Target>
+                    <Menu.Dropdown
+                      className="rounded-md translate-y-1 backdrop-blur-xl bg-white "
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      }}
                     >
-                      <div className="flex items-center gap-2">
-                        <Icon
-                          className="size-4"
-                          IconComponent={IconManageAdmin}
-                        />
-                        <span>Add student</span>
-                      </div>
-                    </Menu.Item>
+                      <Menu.Item
+                        className=" text-[#3e3e3e] font-semibold text-[12px] h-7 "
+                        onClick={() => {
+                          setActionModal("Add");
+                          setOpenModalAddEditStudent(true);
+                        }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Icon
+                            className="size-4"
+                            IconComponent={IconManageAdmin}
+                          />
+                          <span>Add student</span>
+                        </div>
+                      </Menu.Item>
 
-                    <Menu.Item className="text-[#3e3e3e] font-semibold text-[12px] h-7 ">
-                      <div className="flex items-center gap-2">
-                        <Icon className="size-4" IconComponent={IconImport} />
-                        <span>Import new Course Roster</span>
-                      </div>
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              </div>
+                      <Menu.Item className="text-[#3e3e3e] font-semibold text-[12px] h-7 ">
+                        <div className="flex items-center gap-2">
+                          <Icon className="size-4" IconComponent={IconImport} />
+                          <span>Import new Course Roster</span>
+                        </div>
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -306,7 +339,9 @@ export default function Roster() {
                   <Table.Th className="w-[17%]">Student ID</Table.Th>
                   <Table.Th className="w-[20%]">Name</Table.Th>
                   <Table.Th className="w-[25%]">CMU Account</Table.Th>
-                  <Table.Th className="w-[10%]">Action</Table.Th>
+                  {activeTerm && (
+                    <Table.Th className="w-[10%]">Action</Table.Th>
+                  )}
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>{rows}</Table.Tbody>
@@ -314,12 +349,16 @@ export default function Roster() {
           ) : (
             <div className="flex items-center !h-screen  justify-between px-8 !w-full">
               <p className="text-start font-semibold text-[20px] text-secondary p-6 py-10">
-                {search ? "" : "No Course Roster found"}
+                {search
+                  ? `No results for "${filter}"`
+                  : "No Course Roster found"}
                 <br />
                 <p className="mt-1 text-[#333333] font-medium text-b2">
-                  Course Roster will show when you import first.
+                  {search
+                    ? "Check the spelling or try a new search."
+                    : "Course Roster will show when you import first."}
                 </p>
-                {!search && (
+                {!search && activeTerm && (
                   <Button
                     leftSection={
                       <Icon className="size-5" IconComponent={IconImport} />
@@ -395,12 +434,15 @@ export default function Roster() {
         onClose={() => setOpenModalUploadStudentList(false)}
       />
 
+      {/* Modal Add/Edit Student */}
       <Modal
-        opened={openModalAddStudent}
+        opened={openModalAddEditStudent}
         closeOnEscape={false}
         onClose={clearForm}
         size="45vw"
-        title={`Add Student ${courseNo}`}
+        title={`${actionModal} Student ${
+          actionModal == "Add" ? courseNo : selectedUser?.studentId
+        }`}
         centered
         transitionProps={{ transition: "pop" }}
         closeOnClickOutside={false}
@@ -422,6 +464,7 @@ export default function Roster() {
             placeholder="9 Digits e.g. 640123456"
             label="Student ID"
             withAsterisk
+            disabled={actionModal == "Edit" && selectedUser?.termsOfService}
             {...form.getInputProps("studentId")}
           ></TextInput>
           <TextInput
@@ -429,6 +472,7 @@ export default function Roster() {
             placeholder="e.g. สมชาย เรียนดี"
             label="Name"
             withAsterisk
+            disabled={actionModal == "Edit" && selectedUser?.termsOfService}
             {...form.getInputProps("name")}
           ></TextInput>
           <TextInput
@@ -436,79 +480,20 @@ export default function Roster() {
             placeholder="e.g. example@cmu.ac.th"
             label="CMU Account"
             id="email"
+            disabled={actionModal == "Edit" && selectedUser?.termsOfService}
             {...form.getInputProps("email")}
           ></TextInput>
           <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 mt-4  items-end  justify-end h-fit">
             <Button onClick={() => clearForm()} variant="subtle">
               Cancel
             </Button>
-            <Button onClick={onClickAddStudent}>Add</Button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Modal Edit Student */}
-      <Modal
-        opened={openModalEditStudent}
-        onClose={() => setOpenModalEditStudent(false)}
-        size="45vw"
-        closeOnEscape={false}
-        title={`Edit Student ${courseNo}`}
-        centered
-        transitionProps={{ transition: "pop" }}
-        closeOnClickOutside={false}
-        classNames={{
-          content: "flex flex-col overflow-hidden !pb-1 max-h-full h-fit",
-          body: "flex flex-col overflow-hidden h-fit",
-        }}
-      >
-        <div className="flex flex-col gap-3">
-          <TextInput
-            size="xs"
-            placeholder="e.g. 1 or 001"
-            label="Section No."
-            withAsterisk
-            value={getSectionNo(selectedUser?.sectionNo)}
-          ></TextInput>
-          <TextInput
-            size="xs"
-            placeholder="9 Digits e.g. 640123456"
-            label="Student ID"
-            value={editName?.studentId}
-            withAsterisk
-          ></TextInput>
-          <TextInput
-            size="xs"
-            placeholder="e.g. สมชาย เรียนดี"
-            label="Name"
-            value={`${editName?.firstNameTH || ""} ${
-              editName?.lastNameTH || ""
-            }`.trim()}
-            withAsterisk
-            onChange={(e) => {
-              const [firstName, ...lastNameParts] = e.target.value.split(" ");
-              setEditName((prev) => ({
-                ...prev,
-                firstNameTH: firstName || "",
-                lastNameTH: lastNameParts.join(" ") || "",
-              }));
-            }}
-          />
-          <TextInput
-            size="xs"
-            placeholder="e.g. example@cmu.ac.th"
-            label="CMU Account"
-            value={editName?.email}
-            id="email"
-          ></TextInput>
-          <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 mt-4  items-end  justify-end h-fit">
             <Button
-              onClick={() => setOpenModalEditStudent(false)}
-              variant="subtle"
+              onClick={
+                actionModal == "Add" ? onClickAddStudent : onClickEditStudent
+              }
             >
-              Cancel
+              Add
             </Button>
-            <Button onClick={onClickAddStudent}>Save</Button>
           </div>
         </div>
       </Modal>
