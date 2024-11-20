@@ -67,7 +67,6 @@ export default function Section() {
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
   const [openModalManageIns, setOpenModalManageIns] = useState(false);
-  const [openModalStudentList, setOpenModalStudentList] = useState(false);
   const [openModalExportScore, setOpenModalExportScore] = useState(false);
 
   useEffect(() => {
