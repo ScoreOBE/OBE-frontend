@@ -48,22 +48,59 @@ export const calStat = (scores: number[], totalStudent: number) => {
   };
 };
 
+const recroot2pi = 1.0 / Math.sqrt(2.0 * Math.PI);
+const gaussian = (x1: number, spread: number, x2: number): number => {
+  const invSpread = 1.0 / spread;
+  const offset = (x1 - x2) * invSpread;
+  return recroot2pi * invSpread * Math.exp(-0.5 * offset * offset);
+};
+const apriori = (x: number, min: number, max: number) => {
+  const p = (x - min) / (max - min);
+  return p * (1.0 - p);
+};
+
 export const generateBellCurveData = (
+  scores: number[],
   mean: number,
   sd: number,
   fullScore: number
 ): { x: number; y: number }[] => {
-  const numPoints = 100;
-  const step = fullScore / (numPoints - 1);
-  const bellCurveData = [];
+  const bins = 200;
+  const spread = 5;
+  const bellCurveData: { x: number; y: number }[] = [];
+  const precomputedApriori = Array.from({ length: bins }, (_, j) => {
+    const frac = j / (bins - 1);
+    return apriori(frac * fullScore, 0, fullScore);
+  });
+  let y = new Array(bins).fill(0);
+  let bin = (mean / fullScore) * bins + 0.5;
+  if (bin >= bins) bin = bins - 1;
 
-  for (let i = 0; i < numPoints; i++) {
-    const x = i * step;
-    const y =
-      (1 / (sd * Math.sqrt(2 * Math.PI))) *
-      Math.exp(-Math.pow(x - mean, 2) / (2 * Math.pow(sd, 2)));
-    bellCurveData.push({ x, y });
+  scores.forEach((x) => {
+    const y1 = new Array(bins).fill(0);
+    let weight = 0.0;
+    for (let j = 0; j < bins; j++) {
+      const x1 = (j / (bins - 1)) * fullScore;
+      y1[j] = gaussian(x, spread, x1) * precomputedApriori[j];
+      weight += y1[j];
+    }
+    const iweight = bins / fullScore / weight;
+    for (let j = 0; j < bins; j++) {
+      y[j] += y1[j] * iweight;
+    }
+  });
+  for (let j = 0; j < bins; j++) {
+    const x = (j / (bins - 1)) * fullScore;
+    bellCurveData.push({ x, y: y[j] });
   }
+
+  // for (let i = 0; i < numPoints; i++) {
+  //   const x = i * step;
+  //   const y =
+  //     (1 / (sd * Math.sqrt(2 * Math.PI))) *
+  //     Math.exp(-Math.pow(x - mean, 2) / (2 * Math.pow(sd, 2)));
+  //   bellCurveData.push({ x, y });
+  // }
 
   return bellCurveData;
 };

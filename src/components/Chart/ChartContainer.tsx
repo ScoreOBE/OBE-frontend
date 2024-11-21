@@ -72,7 +72,7 @@ export default function ChartContainer({
       index === scoresData.length - 1
         ? item.start <= score && score <= item.end
         : item.start <= score && score < item.end
-    );    
+    );
     if (binIndex !== -1) {
       scoresData[binIndex].Students += 1;
     }
@@ -151,7 +151,13 @@ export default function ChartContainer({
         {type == "histogram" ? (
           <HistogramChart scoresData={scoresData} />
         ) : (
-          <Curve mean={mean} median={median} sd={sd} fullScore={fullScore} />
+          <Curve
+            scores={scores}
+            mean={mean}
+            median={median}
+            sd={sd}
+            fullScore={fullScore}
+          />
         )}
       </div>
     </>

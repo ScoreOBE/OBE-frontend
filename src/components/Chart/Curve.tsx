@@ -23,13 +23,14 @@ Chart.register(
 );
 
 type Props = {
+  scores: number[];
   mean: number;
   median: number;
   sd: number;
   fullScore: number;
 };
 
-export default function Curve({ mean, median, sd, fullScore }: Props) {
+export default function Curve({ scores, mean, median, sd, fullScore }: Props) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
   const [chartSize, setChartSize] = useState({ width: 0, height: 0 });
@@ -107,7 +108,12 @@ export default function Curve({ mean, median, sd, fullScore }: Props) {
       }
 
       if (ctx) {
-        const bellCurveData = generateBellCurveData(mean, sd, fullScore);
+        const bellCurveData = generateBellCurveData(
+          scores,
+          mean,
+          sd,
+          fullScore
+        );
         chartInstanceRef.current = new Chart(ctx, {
           type: "line",
           data: {
@@ -125,6 +131,7 @@ export default function Curve({ mean, median, sd, fullScore }: Props) {
           },
           options: {
             responsive: true,
+            // animation: false,
             plugins: {
               legend: {
                 display: false,
@@ -144,7 +151,7 @@ export default function Curve({ mean, median, sd, fullScore }: Props) {
                 min: 0,
                 max: fullScore,
                 ticks: {
-                  stepSize: 1,
+                  stepSize: fullScore <= 30 ? 1 : 5,
                   autoSkip: false,
                 },
               },
