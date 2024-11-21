@@ -1,4 +1,5 @@
 import { ROLE } from "@/helpers/constants/enum";
+import { IModelCourse } from "./ModelCourse";
 
 export interface IModelUser {
   id: string;
@@ -12,7 +13,14 @@ export interface IModelUser {
   departmentCode: string[];
   role: ROLE;
   termsOfService?: boolean;
-  enrollCourses?: any[];
-  // ownCourses?: any[];
-  // coCourses?: any[];
+  enrollCourses?: IModelEnrollCourse[];
+}
+
+export interface IModelEnrollCourse {
+  year: number;
+  semester: number;
+  courses: {
+    course: IModelCourse;
+    section: number;
+  }[];
 }
