@@ -197,13 +197,15 @@ export default function Students() {
           <div className="flex flex-col gap-6 w-full max-h-[300px] overflow-y-auto">
             {!!form.getValues().questions?.length &&
               form.getValues().questions.map((ques, index) => (
-                <div key={index} className="flex flex-col  gap-1 w-full  text-start justify-start">
-                  <p >{ques.name}</p>
+                <div
+                  key={index}
+                  className="flex flex-col  gap-1 w-full  text-start justify-start"
+                >
+                  <p>{ques.name}</p>
                   <div className="flex text-center     items-center gap-3">
                     <TextInput
                       size="xs"
                       withAsterisk={true}
-                 
                       classNames={{
                         input:
                           "focus:border-primary text-[16px] w-20  text-center text-default ",
@@ -358,10 +360,9 @@ export default function Students() {
                           </Table.Td>
                           <Table.Td className="flex gap-4 items-center justify-end pr-28">
                             <p className="mt-0.5">
-                              {questions?.reduce(
-                                (sum, { score }) => sum + score,
-                                0
-                              )}
+                              {questions
+                                ?.reduce((sum, { score }) => sum + score, 0)
+                                .toFixed(2)}
                             </p>
                             <Icon
                               IconComponent={IconEdit}
