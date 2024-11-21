@@ -144,7 +144,7 @@ export default function ChartContainer({
         </div>
       )}
       <div
-        className={`h-full w-full  ${
+        className={`relative h-full w-full  ${
           questionName ? "px-20 pb-6" : "pl-3 pr-5"
         }`}
       >

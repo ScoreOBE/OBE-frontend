@@ -33,7 +33,6 @@ type Props = {
 export default function Curve({ scores, mean, median, sd, fullScore }: Props) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
-  const [chartSize, setChartSize] = useState({ width: 0, height: 0 });
   const statLine: any[] = [
     {
       type: "line",
@@ -80,24 +79,12 @@ export default function Curve({ scores, mean, median, sd, fullScore }: Props) {
   ];
 
   useEffect(() => {
-    const container = chartRef.current?.parentElement;
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        setChartSize({
-          width: entry.contentRect.width,
-          height: entry.contentRect.height,
-        });
-      }
-    });
-
-    if (container) {
-      resizeObserver.observe(container);
-    }
-    return () => {
-      if (container) {
-        resizeObserver.unobserve(container);
-      }
+    const resizeChart = () => {
+      chartInstanceRef.current?.resize();
     };
+  
+    window.addEventListener("resize", resizeChart);
+    return () => window.removeEventListener("resize", resizeChart);
   }, []);
 
   useEffect(() => {
@@ -175,7 +162,7 @@ export default function Curve({ scores, mean, median, sd, fullScore }: Props) {
         });
       }
     }
-  }, [mean, median, sd, fullScore, chartSize]);
+  }, [mean, median, sd, fullScore]);
 
   return <canvas ref={chartRef} id="myChart"></canvas>;
 }
