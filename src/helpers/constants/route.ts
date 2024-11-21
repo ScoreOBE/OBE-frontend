@@ -15,7 +15,7 @@ export const ROUTE_PATH = {
   TQF5: "tqf5",
   ASSIGNMENT: "assignment",
   HISTOGRAM: "histogram",
-  SCORE: "Score",
+  SCORE: "score",
   STUDENTS: "students",
 };
 
