@@ -13,14 +13,12 @@ export interface IModelUser {
   departmentCode: string[];
   role: ROLE;
   termsOfService?: boolean;
-  enrollCourses?: IModelEnrollCourse[];
-}
-
-export interface IModelEnrollCourse {
-  year: number;
-  semester: number;
-  courses: {
-    course: IModelCourse;
-    section: number;
+  enrollCourses?: {
+    year: number;
+    semester: number;
+    courses: {
+      course: IModelCourse;
+      section: number;
+    }[];
   }[];
 }

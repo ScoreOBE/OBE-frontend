@@ -17,7 +17,9 @@ import { setAllCourseList } from "@/store/allCourse";
 import IconSO from "@/assets/icons/SO.svg?react";
 import IconTQF from "@/assets/icons/TQF.svg?react";
 import IconCLO from "@/assets/icons/targetArrow.svg?react";
+import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
 import { ROLE } from "@/helpers/constants/enum";
+import { RxDashboard } from "react-icons/rx";
 
 export default function DashboardSidebar() {
   const path = useLocation().pathname;
@@ -146,6 +148,13 @@ export default function DashboardSidebar() {
     });
   };
 
+  const stdGotoPage = (next: string) => {
+    navigate({
+      pathname: `${path.split("/")[1]}${next}`,
+      search: "?" + params.toString(),
+    });
+  };
+
   return (
     <>
       <Modal
@@ -259,6 +268,40 @@ export default function DashboardSidebar() {
                  }`}
               >
                 <p className="pl-1">PLO</p>
+              </Button>
+            </div>
+          </div>
+        )}
+        {path.includes(ROUTE_PATH.STD_DASHBOARD) && (
+          <div className="flex flex-col gap-3">
+            <p className="text-b2 font-semibold">Menu</p>
+            <div className="flex flex-col gap-2">
+              <Button
+                onClick={() => stdGotoPage("")}
+                leftSection={<RxDashboard size={18} />}
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                  !path.includes(ROUTE_PATH.PLO)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                }`}
+              >
+                Dashboard
+              </Button>
+              <Button
+                onClick={() => stdGotoPage(`/${ROUTE_PATH.PLO}`)}
+                leftSection={
+                  <Icon
+                    IconComponent={IconSpiderChart}
+                    className="size-[20px] stroke-1"
+                  />
+                }
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                  path.includes(ROUTE_PATH.PLO)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                }`}
+              >
+                <p className="pl-1">Overall PLO</p>
               </Button>
             </div>
           </div>

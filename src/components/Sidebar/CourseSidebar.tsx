@@ -212,24 +212,11 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               <Button
                 onClick={() => goToPage(ROUTE_PATH.SECTION)}
                 leftSection={<RxDashboard size={18} />}
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
-                     ${
-                       path.includes(ROUTE_PATH.ROSTER)
-                         ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                         : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                     }
-                
-                  ${
-                    path.includes(ROUTE_PATH.TQF3)
-                      ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                      : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                  }
-                ${
-                  path.includes(ROUTE_PATH.TQF5)
-                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                    : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                }
-              `}
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                  path.includes(ROUTE_PATH.SECTION)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                }`}
               >
                 Sections
               </Button>
@@ -240,23 +227,11 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 leftSection={
                   <Icon IconComponent={IconStudent} className="size-[19px]" />
                 }
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
-                 ${
-                   path.includes(ROUTE_PATH.SECTION)
-                     ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                     : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                 }
-                  ${
-                    path.includes(ROUTE_PATH.TQF3)
-                      ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                      : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                  }
-                ${
-                  path.includes(ROUTE_PATH.TQF5)
-                    ? "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                    : "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                }
-              `}
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                  path.includes(ROUTE_PATH.ROSTER)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                }`}
               >
                 Roster
               </Button>
@@ -288,12 +263,11 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                           />
                         )
                       }
-                      className={`!w-full !text-[13px]  flex justify-start items-center transition-colors duration-300 focus:border-none group
-                ${
-                  path.includes(ROUTE_PATH.TQF3)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#f0f0f0]"
-                }`}
+                      className={`!w-full !text-[13px]  flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                        path.includes(ROUTE_PATH.TQF3)
+                          ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                          : "text-white bg-transparent hover:text-tertiary hover:bg-[#f0f0f0]"
+                      }`}
                     >
                       TQF 3
                     </Button>
@@ -356,12 +330,11 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                           />
                         )
                       }
-                      className={`!w-full !text-[13px] mb-1 flex justify-start items-center transition-colors duration-300 focus:border-none group
-                ${
-                  path.includes(ROUTE_PATH.TQF5)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                }`}
+                      className={`!w-full !text-[13px] mb-1 flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                        path.includes(ROUTE_PATH.TQF5)
+                          ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                          : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                      }`}
                     >
                       TQF 5
                     </Button>

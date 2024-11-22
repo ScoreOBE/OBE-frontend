@@ -161,12 +161,6 @@ export default function Profile() {
               </div>
             </div>
             <Menu.Divider />
-            {/* <Menu.Item className="text-default text-[14px] h-8 w-full ">
-                <div className="flex items-center gap-2">
-                  <IconList stroke={1.5} className="size-5" />
-                  <span>Activity log</span>
-                </div>
-              </Menu.Item> */}
             {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
               <Menu.Item
                 onClick={() =>
@@ -350,16 +344,18 @@ export default function Profile() {
             </Menu>
           )}
 
-          <Menu.Divider />
           {user.role !== ROLE.STUDENT && (
-            <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
-              <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
-                <div className="flex items-center gap-2">
-                  <Icon className="size-4 " IconComponent={IconFeedback} />{" "}
-                  <span>Feedback</span>
-                </div>
-              </Menu.Item>
-            </a>
+            <>
+              <Menu.Divider />
+              <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
+                <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
+                  <div className="flex items-center gap-2">
+                    <Icon className="size-4 " IconComponent={IconFeedback} />{" "}
+                    <span>Feedback</span>
+                  </div>
+                </Menu.Item>
+              </a>
+            </>
           )}
           <a href="https://forms.gle/haNFpme6KBzyejG18" target="_blank">
             <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">

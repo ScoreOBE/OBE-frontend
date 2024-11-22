@@ -1,7 +1,6 @@
-import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { ROLE } from "@/helpers/constants/enum";
@@ -9,17 +8,24 @@ import { setLoading } from "@/store/loading";
 import { getEnrollCourse } from "@/services/student/student.service";
 import { setEnrollCourseList } from "@/store/enrollCourse";
 import Loading from "@/components/Loading/Loading";
-import { ROUTE_PATH } from "@/helpers/constants/route";
 
-export default function StdDashboard() {
+export default function StdCourse() {
+  const { courseNo } = useParams();
+  const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
-  const academicYear = useAppSelector((state) => state.academicYear);
-  const enrollCourses = useAppSelector((state) => state.enrollCourse);
+  const term = useAppSelector((state) =>
+    state.academicYear.find(
+      (term) =>
+        term.year == parseInt(params.get("year") || "") &&
+        term.semester == parseInt(params.get("semester") || "")
+    )
+  );
+  const course = useAppSelector((state) =>
+    state.enrollCourse.courses.find((c) => c.courseNo == courseNo)
+  );
   const dispatch = useAppDispatch();
-  const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
-  const [params, setParams] = useSearchParams({});
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -28,88 +34,17 @@ export default function StdDashboard() {
     localStorage.setItem("dashboard", ROLE.STUDENT);
   }, []);
 
-  useEffect(() => {
-    if (user.role && !user.studentId) {
-      navigate(
-        user.role == ROLE.INSTRUCTOR
-          ? ROUTE_PATH.INS_DASHBOARD
-          : ROUTE_PATH.ADMIN_DASHBOARD
-      );
-    }
-  }, [user]);
-
-  useEffect(() => {
-    const year = parseInt(params.get("year")!);
-    const semester = parseInt(params.get("semester")!);
-    if (academicYear.length) {
-      const acaYear = academicYear.find(
-        (e) => e.semester == semester && e.year == year
-      );
-      if (acaYear && acaYear.id != term.id) {
-        setTerm(acaYear);
-      }
-    }
-  }, [academicYear, term, params]);
-
-  useEffect(() => {
-    if (
-      term.year &&
-      term.semester &&
-      enrollCourses.year != term.year &&
-      enrollCourses.semester != term.semester
-    ) {
-      fetchCourse(term.year, term.semester);
-    }
-  }, [term]);
-
-  const fetchCourse = async (year: number, semester: number) => {
-    if (!user.termsOfService) return;
-    dispatch(setLoading(true));
-    const res = await getEnrollCourse({ year, semester });
-    if (res) {
-      dispatch(setEnrollCourseList(res));
-    }
-    dispatch(setLoading(false));
-  };
-
-  const goToCourse = (courseNo: string) => {
-    navigate({
-      pathname: `${ROUTE_PATH.STD_DASHBOARD}/${courseNo}/${ROUTE_PATH.ASSIGNMENT}`,
-      search: "?" + params.toString(),
-    });
-  };
-
   return (
     <div className=" flex flex-col h-full w-full  overflow-hidden">
-      <div className="flex flex-row px-6 pt-3   items-center justify-between">
-        <div className="flex flex-col">
-          <p className="text-secondary text-[18px] font-semibold ">
-            Hi there, {user.firstNameEN}
-          </p>
-          <p className="text-[#575757] text-[14px]">
-            In semester {enrollCourses.semester || ""}/
-            {enrollCourses.year || ""}.{" "}
-            {enrollCourses.courses.length === 0 ? (
-              <span>Your course card is currently empty</span>
-            ) : (
-              <span>
-                You have{" "}
-                <span className="text-[#1f69f3] font-semibold">
-                  {enrollCourses.courses.length} Course
-                  {enrollCourses.courses.length > 1 ? "s " : " "}
-                </span>
-                on your plate.
-              </span>
-            )}
-          </p>
-        </div>
+      <div className="flex flex-row px-6 pt-3 items-center justify-between">
+        <div className="flex flex-col"></div>
       </div>
-      <div className="flex h-full w-full overflow-hidden">
+      {/* <div className="flex h-full w-full overflow-hidden">
         {loading ? (
           <Loading />
-        ) : !!enrollCourses.courses.length ? (
+        ) : !!enrollCourses.length ? (
           <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 macair133:grid-cols-4  pb-5 gap-4 px-6 p-3">
-            {enrollCourses.courses.map((item) => (
+            {enrollCourses.map((item) => (
               <div
                 key={item.id}
                 className="card relative justify-between h-[125px] macair133:h-[135px] sm:h-[128px] cursor-pointer rounded-[4px] hover:bg-[#f3f3f3]"
@@ -148,7 +83,7 @@ export default function StdDashboard() {
             </div>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
