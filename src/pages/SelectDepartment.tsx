@@ -9,14 +9,12 @@ import {
   sortData,
 } from "@/helpers/functions/function";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { ROUTE_PATH } from "@/helpers/constants/route";
 import { updateUser } from "@/services/user/user.service";
 import { setUser } from "@/store/user";
 import { motion } from "framer-motion";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { isEqual } from "lodash";
-import { setShowSidebar } from "@/store/showSidebar";
-import { setShowNavbar } from "@/store/showNavbar";
+import { setShowSidebar, setShowNavbar } from "@/store/config";
 import { IModelFaculty } from "@/models/ModelFaculty";
 
 export default function SelectDepartment() {
@@ -98,7 +96,9 @@ export default function SelectDepartment() {
             <div className=" font-semibold -mt-1 translate-y-[-4px] text-[22px] ipad11:text-[24px]">
               {getUserName(user, 1)}
             </div>
-            <div className=" font-[500] text-[#fec38b] text-h3 ipad11:text-h2">{faculty.facultyEN}</div>
+            <div className=" font-[500] text-[#fec38b] text-h3 ipad11:text-h2">
+              {faculty.facultyEN}
+            </div>
           </motion.div>
         </div>
         <motion.div
@@ -114,10 +114,11 @@ export default function SelectDepartment() {
               style={{ boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }}
             >
               <div className="text-white font-semibold text-[18px] mb-[2px] ">
-                Select department 
+                Select department
               </div>
               <div className="text-[#fcc087] text-b2 font-semibold mb-4">
-                Select up to 4 departments <br/> in which you are responsible for teaching.
+                Select up to 4 departments <br /> in which you are responsible
+                for teaching.
               </div>
               <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[300px] sm:h-[350px] ipad11:h-[430px]">
                 {faculty.department?.map((key) => {

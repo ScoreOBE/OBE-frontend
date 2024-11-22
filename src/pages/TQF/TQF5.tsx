@@ -13,13 +13,11 @@ import Icon from "@/components/Icon";
 import IconCheck from "@/assets/icons/Check.svg?react";
 import { useParams, useSearchParams } from "react-router-dom";
 import maintenace from "@/assets/image/maintenance.png";
-
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { getValueEnumByKey } from "@/helpers/functions/function";
 import { useForm, UseFormReturnType } from "@mantine/form";
 import Loading from "@/components/Loading/Loading";
-import { setShowNavbar } from "@/store/showNavbar";
-import { setShowSidebar } from "@/store/showSidebar";
+import { setShowNavbar, setShowSidebar } from "@/store/config";
 import Part1TQF5 from "@/components/TQF5/Part1TQF5";
 import Part2TQF5 from "@/components/TQF5/Part2TQF5";
 import Part3TQF5 from "@/components/TQF5/Part3TQF5";

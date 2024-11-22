@@ -32,8 +32,7 @@ import {
 import ModalAddSection from "@/components/Modal/CourseManage/ModalAddSection";
 import { IModelUser } from "@/models/ModelUser";
 import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
-import { setShowNavbar } from "@/store/showNavbar";
-import { setShowSidebar } from "@/store/showSidebar";
+import { setShowNavbar, setShowSidebar } from "@/store/config";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 import ModalExportScore from "@/components/Modal/ModalExportScore";
 import ModalUploadScore from "@/components/Modal/ModalUploadScore";

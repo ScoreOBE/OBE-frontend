@@ -34,7 +34,7 @@ export default function Profile() {
   const path = useLocation().pathname;
   const [params, setParams] = useSearchParams({});
   const navigate = useNavigate();
-  const [dashboard, setDashboard] = useState(localStorage.getItem("dashboard"));
+  const dashboard = useAppSelector((state) => state.config.dashboard);
   const user = useAppSelector((state) => state.user);
   const [openModalChangeSupAdmin, setOpenModalChangeSupAdmin] = useState(false);
   const [openModalManageSemester, setOpenModalManageSemester] = useState(false);
@@ -42,7 +42,7 @@ export default function Profile() {
   const [openModalCourseManagement, setOpenModalCourseManagement] =
     useState(false);
   const [openModalPLOManagement, setOpenModalPLOManagement] = useState(false);
-  const [openModalManageTQF, setOpenModalManageTQF] = useState(false);
+  // const [openModalManageTQF, setOpenModalManageTQF] = useState(false);
   const dispatch = useAppDispatch();
 
   const getRoleColor = (role: ROLE) => {
@@ -88,14 +88,6 @@ export default function Profile() {
         );
     }
   };
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setDashboard(localStorage.getItem("dashboard"));
-    };
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
 
   return (
     <>
@@ -180,7 +172,6 @@ export default function Profile() {
                 onClick={() =>
                   navigate({
                     pathname:
-                      path.includes(ROUTE_PATH.ADMIN_DASHBOARD) ||
                       dashboard == ROLE.ADMIN
                         ? ROUTE_PATH.INS_DASHBOARD
                         : `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`,
@@ -194,8 +185,7 @@ export default function Profile() {
                     className=" stroke-[1.5px] size-4"
                   />
                   <span>
-                    {path.includes(ROUTE_PATH.ADMIN_DASHBOARD) ||
-                    dashboard == ROLE.ADMIN
+                    {dashboard == ROLE.ADMIN
                       ? "Switch to Instructor view"
                       : "Switch to Admin view"}
                   </span>

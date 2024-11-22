@@ -27,8 +27,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
 import { IModelUser } from "@/models/ModelUser";
-import { setShowSidebar } from "@/store/showSidebar";
-import { setShowNavbar } from "@/store/showNavbar";
+import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import ModalUploadScore from "../components/Modal/ModalUploadScore";
 import { IModelSection } from "@/models/ModelCourse";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
@@ -59,6 +58,7 @@ export default function Dashboard() {
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
+    dispatch(setDashboard(ROLE.INSTRUCTOR));
     localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
   }, []);
 

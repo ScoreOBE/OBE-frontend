@@ -10,13 +10,10 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.jpg";
-import { TQF_STATUS } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
-import { setShowSidebar } from "@/store/showSidebar";
-import { setShowNavbar } from "@/store/showNavbar";
+import { setShowNavbar, setShowSidebar } from "@/store/config";
 import { addLoadMoreAllCourse, setAllCourseList } from "@/store/allCourse";
-import { getUniqueInstructors } from "@/helpers/functions/function";
 import { IModelPLO } from "@/models/ModelPLO";
 import ModalExportPLO from "@/components/Modal/ModalExportPLO";
 

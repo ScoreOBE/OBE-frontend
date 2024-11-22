@@ -9,16 +9,14 @@ import scoreobe from "@/assets/image/scoreOBElogobold.png";
 import { SearchInput } from "./SearchInput";
 import { setAllCourseList } from "@/store/allCourse";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
-import { Button } from "@mantine/core";
 import { ROLE } from "@/helpers/constants/enum";
-import Icon from "./Icon";
-import IconFeedback from "@/assets/icons/feedback.svg?react";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const { name } = useParams();
-  const path = useLocation().pathname;
   const location = useLocation().pathname;
   const user = useAppSelector((state) => state.user);
+  const dashboard = useAppSelector((state) => state.config.dashboard);
   const [params, setParams] = useSearchParams();
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
   const dispatch = useAppDispatch();
@@ -69,15 +67,10 @@ export default function Navbar() {
       case ROUTE_PATH.STD_DASHBOARD:
         return "Your Courses";
       case ROUTE_PATH.ADMIN_DASHBOARD:
-        if(location.includes(ROUTE_PATH.TQF))
-          return `TQF ${semester}/${year}`;
-        else if(location.includes(ROUTE_PATH.CLO))
+        if (location.includes(ROUTE_PATH.TQF)) return `TQF ${semester}/${year}`;
+        else if (location.includes(ROUTE_PATH.CLO))
           return `CLO ${semester}/${year}`;
-        else 
-        return `PLO ${semester}/${year}`;
-        return `Course ${params.get("semester") ?? ""}/${
-          params.get("year")?.slice(-2) ?? ""
-        }`;
+        else return `PLO ${semester}/${year}`;
       case ROUTE_PATH.COURSE:
         if (location.includes(ROUTE_PATH.TQF3))
           return `TQF 3${tqf3Topic ? ` - ${tqf3Topic}` : ""}`;
@@ -119,7 +112,7 @@ export default function Navbar() {
             {topicPath()}
           </p>
           {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) &&
-            (localStorage.getItem("dashboard") == ROLE.ADMIN ? (
+            (dashboard == ROLE.ADMIN ? (
               <div className="px-3 py-2 w-fit tag-tqf bg-sky-100 text-blue-600 rounded-[20px]">
                 Admin View
               </div>

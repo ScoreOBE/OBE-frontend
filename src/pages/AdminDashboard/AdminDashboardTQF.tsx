@@ -16,8 +16,7 @@ import notFoundImage from "@/assets/image/notFound.jpg";
 import { COURSE_TYPE, ROLE, TQF_STATUS } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
-import { setShowSidebar } from "@/store/showSidebar";
-import { setShowNavbar } from "@/store/showNavbar";
+import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import {
   addLoadMoreAllCourse,
   setAllCourseList,
@@ -59,6 +58,7 @@ export default function AdminDashboardTQF() {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
     localStorage.setItem("dashboard", ROLE.ADMIN);
+    dispatch(setDashboard(ROLE.ADMIN));
   }, []);
 
   useEffect(() => {

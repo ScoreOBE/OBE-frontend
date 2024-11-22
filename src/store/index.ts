@@ -1,24 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import showSidebarReducer from "./showSidebar";
+import configReducer from "./config";
 import loadingReducer from "./loading";
 import errorResponseReducer from "./errorResponse";
 import userReducer from "./user";
 import academicYearReducer from "./academicYear";
 import courseReducer from "./course";
 import courseManagementReducer from "./courseManagement";
-import showNavbarReducer from "./showNavbar";
 import tqf3Reducer from "./tqf3";
-import progressReducer from "./progress";
 import allCourseReducer from "./allCourse";
 import facultyReducer from "./department";
 
 const store = configureStore({
   reducer: {
-    showNavbar: showNavbarReducer,
-    showSidebar: showSidebarReducer,
+    config: configReducer,
     loading: loadingReducer,
-    progress: progressReducer,
     errorResponse: errorResponseReducer,
     user: userReducer,
     faculty: facultyReducer,

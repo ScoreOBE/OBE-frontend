@@ -32,8 +32,7 @@ import {
 import { dateFormatter, getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
-import { setShowNavbar } from "@/store/showNavbar";
-import { setShowSidebar } from "@/store/showSidebar";
+import { setShowNavbar, setShowSidebar } from "@/store/config";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -451,20 +450,16 @@ export default function Assignment() {
         />
         <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 mt-6  items-end  justify-end h-fit">
           <Button
-
             onClick={() => setOpenModalEditAssignment(false)}
-         
             loading={loading.loadingOverlay}
-            variant='subtle'
+            variant="subtle"
           >
             Cancel
           </Button>
           <Button
-        
             onClick={onClickEditAssignmentName}
             disabled={isEqual(editName, editDeleteAssignment)}
             loading={loading.loadingOverlay}
-            
           >
             Save Changes
           </Button>

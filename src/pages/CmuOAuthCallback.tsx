@@ -5,8 +5,7 @@ import { logIn } from "@/services/authentication/authentication.service";
 import { Button } from "@mantine/core";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { setShowSidebar } from "@/store/showSidebar";
-import { setShowNavbar } from "@/store/showNavbar";
+import { setShowNavbar, setShowSidebar } from "@/store/config";
 import { goToDashboard } from "@/helpers/functions/function";
 
 export default function CMUOAuthCallback() {

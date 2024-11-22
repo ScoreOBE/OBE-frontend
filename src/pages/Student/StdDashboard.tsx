@@ -3,8 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import maintenace from "@/assets/image/maintenance.png";
-import { setShowNavbar } from "@/store/showNavbar";
-import { setShowSidebar } from "@/store/showSidebar";
+import { setShowNavbar, setShowSidebar} from "@/store/config";
 
 export default function StdDashboard() {
   const user = useAppSelector((state) => state.user);
