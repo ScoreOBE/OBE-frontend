@@ -457,7 +457,7 @@ export default function ModalAddPLOCollection({
                 label={
                   <p className=" flex gap-1">
                     Criteria{" "}
-                    <span className="text-secondary">English language</span>
+                    <span className="text-secondary">English</span>
                   </p>
                 }
                 className="w-full border-none "
@@ -514,7 +514,7 @@ export default function ModalAddPLOCollection({
                   label={
                     <p className="font-semibold flex gap-1">
                       PLO{" "}
-                      <span className="text-secondary">English language</span>
+                      <span className="text-secondary">English</span>
                     </p>
                   }
                   className="w-full border-none rounded-r-none"

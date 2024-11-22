@@ -152,7 +152,7 @@ export default function ModalManageEvalTopic({
       onClose={onClose}
       closeOnEscape={false}
       closeOnClickOutside={false}
-      title={`${upperFirst(type)} Evaluation Topic`}
+      title={`${upperFirst(type)} Evaluation Method`}
       size={
         type === "add" && form.getValues().eval?.length! > 0 ? "80vw" : "50vw"
       }
@@ -176,7 +176,7 @@ export default function ModalManageEvalTopic({
             <div className="flex items-center  gap-2">
               <Icon IconComponent={IconInfo2} />
               <p className="pl-2">
-                Your Evaluation topics in your course now add up to 100%.
+                Your Evaluation methods in your course now add up to 100%.
               </p>
             </div>
           }
@@ -214,8 +214,8 @@ export default function ModalManageEvalTopic({
                 autoFocus={false}
                 label={
                   <p className="font-semibold flex gap-1 h-full ">
-                    Evaluation Topic{" "}
-                    <span className="text-secondary">Thai language</span>
+                    Evaluation Method{" "}
+                    <span className="text-secondary">Thai</span>
                     <span className=" text-error">*</span>
                   </p>
                 }
@@ -232,8 +232,8 @@ export default function ModalManageEvalTopic({
                 autoFocus={false}
                 label={
                   <p className="font-semibold flex gap-1">
-                    Evaluation Topic{" "}
-                    <span className="text-secondary">English language</span>
+                    Evaluation Method{" "}
+                    <span className="text-secondary">English</span>
                     <span className=" text-error">*</span>
                   </p>
                 }
@@ -409,7 +409,7 @@ export default function ModalManageEvalTopic({
               onMouseOver={() => setOpenedTooltip(true)}
               onMouseLeave={() => setOpenedTooltip(false)}
             >
-              Add more topic
+              Add more method
             </Button>
             </Tooltip>
           )}

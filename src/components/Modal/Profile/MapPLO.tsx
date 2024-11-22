@@ -539,7 +539,7 @@ export default function MapPLO({ ploName = "" }: Props) {
             withAsterisk={true}
             label={
               <p className="text-b2 font-semibold flex gap-1">
-                PLO <span className="text-secondary">Thai language</span>
+                PLO <span className="text-secondary">Thai</span>
               </p>
             }
             className="w-full border-none   rounded-r-none "
@@ -554,7 +554,7 @@ export default function MapPLO({ ploName = "" }: Props) {
             withAsterisk={true}
             label={
               <p className="text-b2 font-semibold flex gap-1 ">
-                PLO <span className="text-secondary">English language</span>
+                PLO <span className="text-secondary">English</span>
               </p>
             }
             className="w-full border-none rounded-r-none"
@@ -597,7 +597,7 @@ export default function MapPLO({ ploName = "" }: Props) {
             withAsterisk={true}
             label={
               <p className="text-b2 flex gap-1">
-                PLO <span className="text-secondary">Thai language</span>
+                PLO <span className="text-secondary">Thai</span>
               </p>
             }
             className="w-full border-none mt-2 rounded-md "
@@ -617,7 +617,7 @@ export default function MapPLO({ ploName = "" }: Props) {
             withAsterisk={true}
             label={
               <p className="text-b2 flex gap-1 ">
-                PLO <span className="text-secondary">English language</span>
+                PLO <span className="text-secondary">English</span>
               </p>
             }
             className="w-full border-none rounded-md "

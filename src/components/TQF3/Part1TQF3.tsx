@@ -128,10 +128,10 @@ export default function Part1TQF3({ setForm }: Props) {
       if (tqf3.part1.teachingLocation.out !== undefined) {
         checked.push("out");
       }
-      if(tqf3.part1.curriculum?.includes('สำหรับหลักสูตร')){
-        const splitCurriculum = tqf3.part1.curriculum.split(' ')
-        curriculumForm.setFieldValue('name', splitCurriculum[1])
-        curriculumForm.setFieldValue('department', splitCurriculum[3])
+      if (tqf3.part1.curriculum?.includes("สำหรับหลักสูตร")) {
+        const splitCurriculum = tqf3.part1.curriculum.split(" ");
+        curriculumForm.setFieldValue("name", splitCurriculum[1]);
+        curriculumForm.setFieldValue("department", splitCurriculum[3]);
       }
       localStorage.removeItem("setReuse");
     } else {
@@ -162,6 +162,12 @@ export default function Part1TQF3({ setForm }: Props) {
             หลักสูตร <span className="text-red-500">*</span>
           </p>
           <p className="font-semibold">Curriculum</p>
+          <p className="font-semibold text-[#888888] mt-3 text-[13px] text-pretty pr-12">
+            <span className=" underline"> For Multiple Curriculums</span> Choose
+            this option if the course is taught across multiple faculties or
+            departments. For example, a general course that students from
+            various curriculums need to enroll.
+          </p>
           <p className="error-text mt-1">
             {form.getInputProps("curriculum").error}
           </p>
@@ -196,8 +202,11 @@ export default function Part1TQF3({ setForm }: Props) {
                   label="สำหรับหลักสูตร (For what curriculum?)"
                   withAsterisk
                   size="xs"
-                  classNames={{ label: "font-medium text-[13px]", input: 'w-[300px]' }}
-                  placeholder="Curriculum name e.g วิศวกรรมศาตร์ (Engineer)"
+                  classNames={{
+                    label: "font-medium text-[13px]",
+                    input: "w-[300px]",
+                  }}
+                  placeholder="Curriculum name e.g วิศวกรรมศาสตร์ (Engineer)"
                   {...curriculumForm.getInputProps("name")}
                   key={curriculumForm.key("name")}
                 />
@@ -206,7 +215,10 @@ export default function Part1TQF3({ setForm }: Props) {
                   label="สาขา (For what department)"
                   withAsterisk
                   size="xs"
-                  classNames={{ label: "font-medium text-[13px]" , input: 'w-[300px]' }}
+                  classNames={{
+                    label: "font-medium text-[13px]",
+                    input: "w-[300px]",
+                  }}
                   placeholder="Department name e.g คอมพิวเตอร์ (Computer)"
                   {...curriculumForm.getInputProps("department")}
                   key={curriculumForm.key("department")}
@@ -223,27 +235,27 @@ export default function Part1TQF3({ setForm }: Props) {
           </p>
           <p className="font-semibold">Course Type</p>
         </div>
-        <Radio.Group
+        <Checkbox.Group
           key={form.key("courseType")}
           {...form.getInputProps("courseType")}
         >
           <div className="flex text-default gap-3 flex-col">
             {Object.values(COURSE_TYPE).map((key) => (
-              <Radio
+              <Checkbox
                 key={key.en}
                 classNames={{
-                  radio: `${disabled && "!cursor-default"}`,
+                  input: `${disabled && "!cursor-default"}`,
                   label: `${
                     disabled && "!cursor-default"
                   } font-medium text-[13px]`,
                 }}
                 label={`${key.th} (${key.en})`}
-                disabled={true}
+              
                 value={key.en}
               />
             ))}
           </div>
-        </Radio.Group>
+        </Checkbox.Group>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">

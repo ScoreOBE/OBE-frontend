@@ -87,8 +87,8 @@ export default function StdDashboard() {
             Hi there, {user.firstNameEN}
           </p>
           <p className="text-[#575757] text-[14px]">
-            In semester {enrollCourses.semester || ""}/
-            {enrollCourses.year || ""}.{" "}
+            In semester <span className="text-[#1f69f3] font-semibold"> {enrollCourses.semester || ""}/
+            {enrollCourses.year || ""}!</span>{" "}
             {enrollCourses.courses.length === 0 ? (
               <span>Your course card is currently empty</span>
             ) : (
