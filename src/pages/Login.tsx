@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { isEmpty } from "lodash";
-import { setShowSidebar } from "@/store/showSidebar";
+import { setShowSidebar, setShowNavbar } from "@/store/config";
 import Icon from "@/components/Icon";
 import IconLock from "@/assets/icons/lockIcon.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
@@ -28,7 +28,6 @@ import IconWand from "@/assets/icons/wand.svg?react";
 import IconChecklist from "@/assets/icons/checklist.svg?react";
 import IconChartBar from "@/assets/icons/chartBar.svg?react";
 import IconRadar from "@/assets/icons/radar.svg?react";
-import { setShowNavbar } from "@/store/showNavbar";
 import gradescope from "@/assets/image/gradescope.png";
 import "@mantine/carousel/styles.css";
 import { goToDashboard } from "@/helpers/functions/function";
@@ -301,7 +300,6 @@ export default function Login() {
                   <p className="mt-5 text-[19px] max-macair133:text-[17px] max-macair133:text-center text-black font-[600]">
                     Effortless score uploads, instant analytics, <br /> and
                     visual insights! Elevate your grading today! <br />
-
                   </p>
                   <div className="flex justify-end gap-10 -mt-14">
                     <div className="flex justify-start flex-col items-start mt-2 mb-2 p-7 rounded-xl bg-white/65 backdrop-blur-[100px] shadow-lg">

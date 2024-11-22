@@ -14,8 +14,7 @@ import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
-import { setShowSidebar } from "@/store/showSidebar";
-import { setShowNavbar } from "@/store/showNavbar";
+import { setShowNavbar, setShowSidebar } from "@/store/config";
 import {
   addLoadMoreAllCourse,
   setAllCourseList,
