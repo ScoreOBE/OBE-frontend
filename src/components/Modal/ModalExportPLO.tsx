@@ -1,4 +1,12 @@
-import { Alert, Button, Checkbox, Group, Modal, Radio } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Checkbox,
+  Group,
+  Modal,
+  Radio,
+  Select,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
@@ -32,6 +40,9 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
   const [dataExport, setDataExport] = useState<Partial<IModelTQF3>>({});
+  const department = useAppSelector((state) =>
+    state.faculty.department.slice(1)
+  );
 
   return (
     <Modal
@@ -41,16 +52,14 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
       title={
         <div className="flex flex-col gap-3">
           <p>Export PLO</p>
-          <p className="text-[#909090] text-[13px] font-medium -mt-[6px]">
-            Computer Engineering Department (CPE)
-          </p>
+
           <p className="text-[12px] inline-flex items-center text-[#20884f] -mt-[6px]">
             File format: <Icon IconComponent={IconExcel} className="ml-1 " />
           </p>
         </div>
       }
       centered
-      size="45vw"
+      size="43vw"
       transitionProps={{ transition: "pop" }}
       classNames={{
         header: "bg-red-400",
@@ -59,109 +68,44 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
         body: "flex flex-col overflow-hidden max-h-full h-fit",
       }}
     >
-      <Alert
-        radius="md"
-        variant="light"
-        color="blue"
-        classNames={{
-          body: " flex justify-center",
-        }}
-        title={
-          <div className="flex items-center  gap-2">
-            <Icon IconComponent={IconInfo2} />
-            <p>
-              The <span>list of courses mapped to each PLO</span> can be edited
-              in <span className="underline">Map PLO required. </span>
-            </p>
-          </div>
-        }
-      ></Alert>
-      {/* <div className="flex sm:max-ipad11:h-[400px] sm:max-ipad11:overflow-y-auto flex-col">
-        {!dataExport.part1?.updatedAt ? (
-          <div className="flex flex-col mt-3  items-center  ">
-            <p className=" text-[14px] font-semibold">
-              No parts of TQF3 are available for export.
-            </p>
-            <img
-              className=" z-50  w-[320px] h-[220px] "
-              src={noData}
-              alt="loginImage"
-            />
-          </div>
-        ) : (
-          <div>
-            <div
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-              }}
-              className="p-3 m-[4px] rounded-md"
-            >
-              <Radio.Group
-                classNames={{ label: "font-semibold" }}
-                value={selectedMerge}
-                onChange={setSelectedMerge}
-              >
-                <Group mb={2}>
-                  <Radio
-                    classNames={{ label: "font-medium" }}
-                    value="unzipfile"
-                    label="Combine into one file (Unzip)"
-                  />
-                  <Radio
-                    classNames={{ label: "font-medium" }}
-                    value="zipfile"
-                    label="Split into parts (Zip)"
-                  />
-                </Group>
-              </Radio.Group>
+      <div className="flex flex-col gap-5 ">
+        <Select
+          rightSectionPointerEvents="all"
+          label={`Select Department to Export PLO.`}
+          // placeholder={}
+          data={department.map((dep) => ({
+            value: dep.codeEN!,
+            label: dep.departmentEN!,
+          }))}
+          allowDeselect
+          searchable
+          clearable
+          size="sm"
+          nothingFoundMessage="No result"
+          className="w-full border-none "
+          classNames={{
+            input: `rounded-md`,
+            option: `py-1`,
+          }}
+        />
+        <Alert
+          radius="md"
+          variant="light"
+          color="blue"
+          classNames={{
+            body: " flex justify-center",
+          }}
+          title={
+            <div className="flex items-center  gap-2">
+              <Icon IconComponent={IconInfo2} />
+              <p>
+                The <span>list of courses mapped to each PLO</span> can be
+                edited in <span className="underline">Map PLO required. </span>
+              </p>
             </div>
-            <Checkbox.Group
-              label="Select part to export"
-              classNames={{ label: "mb-1 font-semibold text-default" }}
-              value={selectedParts}
-              onChange={setSelectedParts}
-              className=" h-[400px] overflow-y-auto my-4 "
-            >
-              {Object.values(PartTopicTQF3)
-                .slice(0, 6)
-                .filter(
-                  (item) =>
-                    dataExport &&
-                    dataExport[getKeyPartTopicTQF3(item)!]?.updatedAt
-                )
-                .map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex p-1 mb-1 w-full  flex-col overflow-y-auto"
-                  >
-                    <Checkbox.Card
-                      className={`p-3 items-center px-4 flex  h-fit rounded-md w-full ${
-                        selectedParts.includes(getKeyPartTopicTQF3(item)!) &&
-                        "!border-[1px] !border-secondary "
-                      }`}
-                      style={{
-                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
-                      }}
-                      value={getKeyPartTopicTQF3(item)}
-                    >
-                      <Group
-                        wrap="nowrap"
-                        className="item-center flex"
-                        align="flex-start"
-                      >
-                        <Checkbox.Indicator className="mt-1" />
-                        <div className="text-default whitespace-break-spaces font-medium text-[13px]">
-                          {item}
-                        </div>
-                      </Group>
-                    </Checkbox.Card>
-                  </div>
-                ))}
-            </Checkbox.Group>
-          </div>
-        )}
-      </div>
-      {dataExport.part1?.updatedAt && (
+          }
+        ></Alert>
+
         <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end  justify-end h-fit">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
             <Button onClick={onClose} variant="subtle">
@@ -171,7 +115,7 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
               loading={loading}
               rightSection={
                 <Icon
-                  IconComponent={IconFileExport}
+                  IconComponent={IconExcel}
                   className={` ${
                     !dataExport.part1?.updatedAt
                       ? "text-[#adb5bd]"
@@ -179,15 +123,16 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
                   } stroke-[2px] size-5 items-center`}
                 />
               }
+              // onClick={generatePDF}
               disabled={
                 !dataExport.part1?.updatedAt || selectedParts.length === 0
               }
             >
-              Export TQF3
+              Export PLO
             </Button>
           </Group>
         </div>
-      )} */}
+      </div>
     </Modal>
   );
 }

@@ -10,9 +10,11 @@ import {
   Group,
   NumberInput,
   Button,
+  Tooltip,
 } from "@mantine/core";
 import Icon from "../Icon";
 import IconAdd from "@/assets/icons/plus.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import { useForm } from "@mantine/form";
 import { cloneDeep, isEqual } from "lodash";
@@ -162,12 +164,12 @@ export default function Part1TQF3({ setForm }: Props) {
             หลักสูตร <span className="text-red-500">*</span>
           </p>
           <p className="font-semibold">Curriculum</p>
-          <p className="font-semibold text-[#888888] mt-3 text-[13px] text-pretty pr-12">
-            <span className=" underline"> For Multiple Curriculums</span> Choose
+          {/* <p className="font-semibold text-[#888888] mt-3 text-[13px] text-pretty pr-12 ">
+            <span className="underline"> For Multiple Curriculums</span> Choose
             this option if the course is taught across multiple faculties or
             departments. For example, a general course that students from
             various curriculums need to enroll.
-          </p>
+          </p> */}
           <p className="error-text mt-1">
             {form.getInputProps("curriculum").error}
           </p>
@@ -181,18 +183,60 @@ export default function Part1TQF3({ setForm }: Props) {
         >
           <div className="flex text-default gap-3 flex-col">
             {curriculum.map((item) => (
-              <Radio
-                key={item.value}
-                classNames={{
-                  radio: `${disabled && "!cursor-default"}`,
-                  label: `${
-                    disabled && "!cursor-default"
-                  } font-medium text-[13px]`,
-                }}
-                label={item.label}
-                value={item.value}
-                disabled={disabled}
-              />
+              <div className="flex gap-1 items-center">
+                <Radio
+                  key={item.value}
+                  classNames={{
+                    radio: `${disabled && "!cursor-default"}`,
+                    label: `${
+                      disabled && "!cursor-default"
+                    } font-medium text-[13px]`,
+                  }}
+                  label={item.label}
+                  value={item.value}
+                  disabled={disabled}
+                />
+                {item.value === "สำหรับหลายหลักสูตร" && (
+                  <Tooltip
+                    arrowOffset={125}
+                    arrowSize={8}
+                    arrowRadius={1}
+                    transitionProps={{
+                      transition: "fade",
+                      duration: 300,
+                    }}
+                    multiline
+                    withArrow
+                    label={
+                      <div className="text-[#888888] text-[13px] p-2 flex flex-col gap-1 w-[380px]">
+                        <p className="text-secondary font-bold">
+                          For a Multiple Curriculums
+                        </p>
+
+                        <p className="font-medium text-[13px] text-pretty ">
+                          Choose this option if{" "}
+                          <span className="text-emphasize">
+                            the course is taught across multiple faculties or
+                            departments.
+                          </span>{" "}
+                          For example, a general course that students from
+                          various curriculums need to enroll.{" "}
+                        </p>
+                      </div>
+                    }
+                    color="#FCFCFC"
+                    className="w-fit border  rounded-md "
+                    position="bottom-start"
+                  >
+                    <div className="border-none">
+                      <Icon
+                        IconComponent={IconInfo2}
+                        className="-ml-0 size-5 text-secondary"
+                      />
+                    </div>
+                  </Tooltip>
+                )}
+              </div>
             ))}
 
             {form.getValues().curriculum?.includes("สำหรับหลักสูตร") && (
@@ -250,7 +294,6 @@ export default function Part1TQF3({ setForm }: Props) {
                   } font-medium text-[13px]`,
                 }}
                 label={`${key.th} (${key.en})`}
-              
                 value={key.en}
               />
             ))}
