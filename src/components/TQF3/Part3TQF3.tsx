@@ -115,7 +115,7 @@ export default function Part3TQF3({ setForm }: Props) {
         opened={openPopupDelEvalTopic}
         onClose={() => setOpenPopupDelEvalTopic(false)}
         type="delete"
-        title={`Delete Topic ${editData?.no}`}
+        title={`Delete Method ${editData?.no}`}
         message={
           <>
             <Alert
@@ -124,7 +124,7 @@ export default function Part3TQF3({ setForm }: Props) {
               title={
                 <p>
                   This action cannot be undone. After you delete this Evaluation
-                  Topic, <br /> it will be permanently deleted from this course.
+                  Method, <br /> it will be permanently deleted from this course.
                 </p>
               }
               icon={
@@ -132,7 +132,7 @@ export default function Part3TQF3({ setForm }: Props) {
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
-              <p className="text-b3  text-[#808080]">Evaluation Topic</p>
+              <p className="text-b3  text-[#808080]">Evaluation Method</p>
               <p className="-translate-y-[2px] text-b1">{editData?.topicTH}</p>
               <p className="-translate-y-[2px] text-b1">{editData?.topicEN}</p>
             </div>
@@ -189,7 +189,7 @@ export default function Part3TQF3({ setForm }: Props) {
                 >
                   <div className="flex gap-2">
                     <Icon IconComponent={IconAdd} />
-                    Add Evaluation Topic
+                    Add Evaluation Method
                   </div>
                 </Button>
               )}
@@ -209,7 +209,7 @@ export default function Part3TQF3({ setForm }: Props) {
                   className="w-full"
                   title={
                     <p className="font-semibold">
-                      The total of all topics in the course syllabus{" "}
+                      The total of all methods in the course syllabus{" "}
                       <span className=" font-extrabold">
                         must add up to 100%
                       </span>{" "}
@@ -241,7 +241,7 @@ export default function Part3TQF3({ setForm }: Props) {
                   <Table.Thead>
                     <Table.Tr className="bg-[#e5e7f6] ">
                       <Table.Th className="w-[5%] !rounded-tl-md">No.</Table.Th>
-                      <Table.Th className=" w-[15%]">Topic</Table.Th>
+                      <Table.Th className=" w-[15%]">Method</Table.Th>
                       <Table.Th className="w-[65%]">Description</Table.Th>
                       <Table.Th className="w-[5%] text-end">
                         <div className="flex flex-row !justify-end items-center gap-2">

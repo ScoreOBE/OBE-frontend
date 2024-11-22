@@ -226,7 +226,7 @@ export default function ModalManageCLO({
                 autoFocus={false}
                 label={
                   <p className="font-semibold flex gap-1 h-full ">
-                    CLO <span className="text-secondary">Thai language</span>
+                    CLO <span className="text-secondary">Thai</span>
                     <span className=" text-error">*</span>
                   </p>
                 }
@@ -242,7 +242,7 @@ export default function ModalManageCLO({
                 autoFocus={false}
                 label={
                   <p className="font-semibold flex gap-1">
-                    CLO <span className="text-secondary">English language</span>
+                    CLO <span className="text-secondary">English</span>
                     <span className=" text-error">*</span>
                   </p>
                 }
