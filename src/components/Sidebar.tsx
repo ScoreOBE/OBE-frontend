@@ -29,6 +29,7 @@ import { setAllCourseList } from "@/store/allCourse";
 import { goToDashboard, sortData } from "@/helpers/functions/function";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { setDepartment } from "@/store/department";
+import StdCourseSidebar from "./Sidebar/StdCourseSidebar";
 
 export default function Sidebar() {
   const user = useAppSelector((state) => state.user);
@@ -49,6 +50,9 @@ export default function Sidebar() {
     useDisclosure(false);
   const getSidebar = () => {
     if (path.includes(PATH.DASHBOARD)) {
+      if (courseNo) {
+        return <StdCourseSidebar />;
+      }
       return <DashboardSidebar />;
     } else if (!loading) {
       if (path.includes(ROUTE_PATH.COURSE)) {
@@ -75,7 +79,8 @@ export default function Sidebar() {
       params.get("year") &&
       params.get("semester") &&
       academicYear.length &&
-      !department.length
+      !department.length &&
+      user.role != ROLE.STUDENT
     ) {
       fetchDep();
     }
@@ -177,7 +182,7 @@ export default function Sidebar() {
           <p className="text-white text-[20px] font-semibold">
             ScoreOBE <span className=" text-[#FFCD1B]"> +</span>
           </p>
-        </div>{" "}
+        </div>
         {/* <img
             src={cmulogo}
             alt="CMULogo"
