@@ -37,7 +37,7 @@ import { useForm, UseFormReturnType } from "@mantine/form";
 import exportFile from "@/assets/icons/fileExport.svg?react";
 import Loading from "@/components/Loading/Loading";
 import { IModelCLO, IModelTQF3 } from "@/models/ModelTQF3";
-import { setShowNavbar, setShowSidebar} from "@/store/config";
+import { setShowNavbar, setShowSidebar } from "@/store/config";
 import { LearningMethod } from "@/components/Modal/TQF3/ModalManageCLO";
 import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
@@ -54,6 +54,7 @@ export default function TQF3() {
   const [params, setParams] = useSearchParams();
   const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
   const loading = useAppSelector((state) => state.loading);
+  const dashboard = useAppSelector((state) => state.config.dashboard);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const courseAdmin = useAppSelector((state) =>
     state.allCourse.courses.find((course) => course.courseNo == courseNo)
@@ -226,7 +227,7 @@ export default function TQF3() {
       }),
       getOneCourseManagement(courseNo!),
     ]);
-    if (localStorage.getItem("dashboard") == ROLE.ADMIN) {
+    if (dashboard == ROLE.ADMIN) {
       resCourse = courseAdmin;
     }
     if (resCourse) {

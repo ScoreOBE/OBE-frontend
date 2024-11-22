@@ -39,8 +39,9 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const path = useLocation().pathname;
   const prefix = `${ROUTE_PATH.COURSE}/${courseNo}`;
   const user = useAppSelector((state) => state.user);
+  const dashboard = useAppSelector((state) => state.config.dashboard);
   const course = useAppSelector((state) =>
-    localStorage.getItem("dashboard") == ROLE.ADMIN
+    dashboard == ROLE.ADMIN
       ? state.allCourse.courses.find((e) => e.courseNo == courseNo)
       : state.course.courses.find((e) => e.courseNo == courseNo)
   );
@@ -145,7 +146,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         setOpenAlertPopup(true);
       } else {
         goToPage(
-          localStorage.getItem("dashboard") == ROLE.ADMIN
+          dashboard == ROLE.ADMIN
             ? `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
             : ROUTE_PATH.INS_DASHBOARD,
           true
@@ -163,7 +164,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           dispatch(resetDataTQF3());
           setOpenAlertPopup(false);
           goToPage(
-            localStorage.getItem("dashboard") == ROLE.ADMIN
+            dashboard == ROLE.ADMIN
               ? `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
               : ROUTE_PATH.INS_DASHBOARD,
             true
@@ -193,10 +194,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           }}
         >
           <Icon IconComponent={IconChevronLeft} className="size-5" />
-          Back to{" "}
-          {localStorage.getItem("dashboard") == ROLE.ADMIN
-            ? "Admin Dashboard"
-            : "Your Course"}
+          Back to {dashboard == ROLE.ADMIN ? "Admin Dashboard" : "Your Course"}
         </div>
 
         <div className="flex flex-col gap-5 ">
@@ -210,7 +208,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             </p>
           </div>
           <div className="flex flex-col gap-2">
-            {localStorage.getItem("dashboard") == ROLE.INSTRUCTOR && (
+            {dashboard == ROLE.INSTRUCTOR && (
               <Button
                 onClick={() => goToPage(ROUTE_PATH.SECTION)}
                 leftSection={<RxDashboard size={18} />}
@@ -236,7 +234,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 Sections
               </Button>
             )}
-            {localStorage.getItem("dashboard") == ROLE.INSTRUCTOR && (
+            {dashboard == ROLE.INSTRUCTOR && (
               <Button
                 onClick={() => goToPage(ROUTE_PATH.ROSTER)}
                 leftSection={
@@ -435,7 +433,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             </div>
           </div>
         )}
-        {localStorage.getItem("dashboard") == ROLE.INSTRUCTOR &&
+        {dashboard == ROLE.INSTRUCTOR &&
           course &&
           !course?.sections.find(
             (sec: any) => sec.instructor.email === user.email
