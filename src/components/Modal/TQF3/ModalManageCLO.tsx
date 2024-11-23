@@ -120,11 +120,13 @@ export default function ModalManageCLO({
 
   const onClickDone = () => {
     if (type == "add") {
+      if (formOneCLO.getValues().descTH?.length) {
+        addMore();
+      }
       if (form.getValues().clo?.length! > 0) {
         setCloList(form.getValues().clo);
-      } else if (!formOneCLO.validate().hasErrors) {
-        setCloList([{ ...formOneCLO.getValues() }]);
       } else {
+        formOneCLO.validate();
         return;
       }
     } else if (!formOneCLO.validate().hasErrors) {
@@ -389,7 +391,10 @@ export default function ModalManageCLO({
                 withArrow
                 label={
                   <div className="text-default text-[12px] p-2 font-medium gap-2">
-                    <Kbd className=" text-secondary">{isMac ? "⌘" : "Ctrl"}</Kbd> + <Kbd className=" text-secondary">Enter</Kbd>
+                    <Kbd className=" text-secondary">
+                      {isMac ? "⌘" : "Ctrl"}
+                    </Kbd>{" "}
+                    + <Kbd className=" text-secondary">Enter</Kbd>
                   </div>
                 }
                 color="#FCFCFC"
