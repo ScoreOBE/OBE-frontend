@@ -30,7 +30,7 @@ export const initialTqf3Part1 = (
   const uniqueInstructors = getUniqueInstructors(tqf3.sections, true, 3);
   const data = {
     consultHoursWk: 1,
-    courseType: tqf3.type,
+    courseType: [tqf3.type],
     mainInstructor: getUserName(tqf3.sections[0].instructor as IModelUser, 3),
     instructors: uniqueInstructors,
     teachingLocation: {},

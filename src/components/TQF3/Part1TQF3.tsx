@@ -19,7 +19,7 @@ import IconTrash from "@/assets/icons/trash.svg?react";
 import { useForm } from "@mantine/form";
 import { cloneDeep, isEqual } from "lodash";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { initialTqf3Part1 } from "@/helpers/functions/tqf3";
 
 type Props = {
@@ -27,11 +27,15 @@ type Props = {
 };
 
 export default function Part1TQF3({ setForm }: Props) {
+  const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [params, setParams] = useSearchParams({});
   const disabled =
     parseInt(params.get("year") || "") !== academicYear.year &&
     parseInt(params.get("semester") || "") !== academicYear.semester;
+  const courseType = useAppSelector(
+    (state) => state.course.courses.find((c) => c.courseNo == courseNo)?.type
+  );
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const [checked, setChecked] = useState<string[]>([]);
@@ -123,7 +127,6 @@ export default function Part1TQF3({ setForm }: Props) {
   useEffect(() => {
     if (tqf3.part1) {
       form.setValues(cloneDeep(tqf3.part1));
-      form.setFieldValue("courseType", tqf3.type);
       if (tqf3.part1.teachingLocation.in !== undefined) {
         checked.push("in");
       }
@@ -295,6 +298,7 @@ export default function Part1TQF3({ setForm }: Props) {
                 }}
                 label={`${key.th} (${key.en})`}
                 value={key.en}
+                disabled={key.en == courseType}
               />
             ))}
           </div>
