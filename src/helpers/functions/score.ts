@@ -65,7 +65,7 @@ export const generateBellCurveData = (
   sd: number,
   fullScore: number
 ): { x: number; y: number }[] => {
-  const bins = 200;
+  const bins = fullScore <= 5 ? 100 : 200;
   const spread = 5;
   const bellCurveData: { x: number; y: number }[] = [];
   const precomputedApriori = Array.from({ length: bins }, (_, j) => {

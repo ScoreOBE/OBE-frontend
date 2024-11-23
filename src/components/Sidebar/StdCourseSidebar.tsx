@@ -20,7 +20,6 @@ export default function StdCourseSidebar() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
-  const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
     state.enrollCourse.courses.find((c) => c.courseNo == courseNo)
   );
@@ -29,7 +28,9 @@ export default function StdCourseSidebar() {
 
   const gotoPage = (newPath: string, back?: boolean) => {
     navigate({
-      pathname: back ? newPath : path.replace(path.split("/")[5], newPath),
+      pathname: back
+        ? newPath
+        : `${ROUTE_PATH.STD_DASHBOARD}/${courseNo}/${newPath}`,
       search: "?" + params.toString(),
     });
   };
@@ -69,6 +70,7 @@ export default function StdCourseSidebar() {
             Assignment
           </Button>
           <Button
+            onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
             leftSection={
               <Icon
                 IconComponent={IconHistogram}

@@ -30,6 +30,8 @@ import { goToDashboard, sortData } from "@/helpers/functions/function";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { setDepartment } from "@/store/department";
 import StdCourseSidebar from "./Sidebar/StdCourseSidebar";
+import { setEnrollCourseList } from "@/store/enrollCourse";
+import { getEnrollCourse } from "@/services/student/student.service";
 
 export default function Sidebar() {
   const user = useAppSelector((state) => state.user);
@@ -45,6 +47,9 @@ export default function Sidebar() {
   const department = useAppSelector((state) => state.faculty.department);
   const courseList = useAppSelector((state) => state.course.courses);
   const allCourseList = useAppSelector((state) => state.allCourse.courses);
+  const enrollCourseList = useAppSelector(
+    (state) => state.enrollCourse.courses
+  );
   const dispatch = useAppDispatch();
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
@@ -75,14 +80,12 @@ export default function Sidebar() {
   };
 
   useEffect(() => {
-    if (
-      params.get("year") &&
-      params.get("semester") &&
-      academicYear.length &&
-      !department.length &&
-      user.role != ROLE.STUDENT
-    ) {
-      fetchDep();
+    if (params.get("year") && params.get("semester") && academicYear.length) {
+      if (user.role != ROLE.STUDENT && !department.length) {
+        fetchDep();
+      } else if (user.role == ROLE.STUDENT) {
+        fetchCourse();
+      }
     }
   }, [path, academicYear, params]);
 
@@ -119,11 +122,20 @@ export default function Sidebar() {
   const fetchCourse = async () => {
     if (!user.termsOfService) return;
     dispatch(setLoading(true));
-    const payload = {
-      ...new CourseRequestDTO(),
+    const term = {
       year: parseInt(params.get("year") || ""),
       semester: parseInt(params.get("semester") || ""),
     };
+    const payload = {
+      ...new CourseRequestDTO(),
+      ...term,
+    };
+    if (user.studentId && !enrollCourseList.length) {
+      const res = await getEnrollCourse(term);
+      if (res) {
+        dispatch(setEnrollCourseList(res));
+      }
+    }
     if (!courseList.length) {
       const resCourse = await getCourse(payload);
       if (resCourse) {

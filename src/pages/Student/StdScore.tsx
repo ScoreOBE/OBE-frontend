@@ -3,11 +3,8 @@ import { useEffect, useState } from "react";
 import { Accordion, Table } from "@mantine/core";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useParams, useSearchParams } from "react-router-dom";
-import { getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import needAccess from "@/assets/image/needAccess.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
-import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
 import Icon from "@/components/Icon";
 import IconChevronDown from "@/assets/icons/chevronDown.svg?react";
@@ -15,35 +12,30 @@ import ChartContainer from "@/components/Chart/ChartContainer";
 import { calStat } from "@/helpers/functions/score";
 import { ROLE } from "@/helpers/constants/enum";
 
-export default function Overall() {
-  const { courseNo, sectionNo, name } = useParams();
+export default function StdScore() {
+  const { courseNo, name } = useParams();
   const loading = useAppSelector((state) => state.loading.loading);
-  const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
-    state.course.courses.find((e) => e.courseNo == courseNo)
+    state.enrollCourse.courses.find((e) => e.courseNo == courseNo)
   );
-  const section = course?.sections.find(
-    (sec) => parseInt(sectionNo!) === sec.sectionNo
+  const assignment = course?.section?.assignments?.find(
+    (item) => item.name == name
   );
-  const assignment = section?.assignments?.find((item) => item.name == name);
+  const yourScores = course?.scores.find(
+    ({ assignmentName }) => assignmentName == name
+  );
   const [params, setParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const [items, setItems] = useState<any[]>([
     {
       title: "Your Course",
-      path: `${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`,
+      path: `${ROUTE_PATH.STD_DASHBOARD}?${params.toString()}`,
     },
     {
-      title: "Sections",
-      path: `${ROUTE_PATH.COURSE}/${courseNo}/${
-        ROUTE_PATH.SECTION
+      title: `Assignments`,
+      path: `${ROUTE_PATH.STD_DASHBOARD}/${courseNo}/${
+        ROUTE_PATH.ASSIGNMENT
       }?${params.toString()}`,
-    },
-    {
-      title: `Assignment Section ${getSectionNo(sectionNo)}`,
-      path: `${ROUTE_PATH.COURSE}/${courseNo}/${
-        ROUTE_PATH.SECTION
-      }/${sectionNo}/${ROUTE_PATH.ASSIGNMENT}?${params.toString()}`,
     },
     { title: `${name}` },
   ]);
@@ -51,27 +43,15 @@ export default function Overall() {
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
-    dispatch(setDashboard(ROLE.INSTRUCTOR));
-    localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
+    dispatch(setDashboard(ROLE.STUDENT));
+    localStorage.setItem("dashboard", ROLE.STUDENT);
   }, []);
-
 
   const fullScore =
     assignment?.questions.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
-  const scores = section?.students
-    ?.map(({ scores }) =>
-      scores
-        .find(({ assignmentName }) => assignmentName == name)
-        ?.questions?.reduce((sum, { score }) => sum + score, 0)
-    )
-    .filter((item) => item != undefined)
-    .sort((a, b) => a - b) || [0];
-  const totalStudent =
-    section?.students?.filter((item) =>
-      item.scores.find(({ assignmentName }) => assignmentName == name)
-    ).length || 0;
+  const totalStudent = assignment?.scores.length || 0;
   const { mean, sd, median, maxScore, minScore, q1, q3 } = calStat(
-    scores,
+    assignment?.scores || [],
     totalStudent
   );
   const k = Math.log2(totalStudent) + 1;
@@ -86,7 +66,7 @@ export default function Overall() {
       Students: 0,
     };
   });
-  scores.forEach((score) => {
+  assignment?.scores.forEach((score) => {
     const binIndex = scoresData.findIndex(
       (item) => item.start <= score && item.end >= score
     );
@@ -101,16 +81,23 @@ export default function Overall() {
         <Breadcrumbs items={items} />
         {loading ? (
           <Loading />
-        ) : (section?.instructor as IModelUser)?.id === user.id ||
-          (section?.coInstructors as IModelUser[])
-            ?.map(({ id }) => id)
-            .includes(user.id) ? (
+        ) : (
           <>
             <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
               <p className="text-secondary text-[18px] font-semibold">
                 {name} - {fullScore} Points
               </p>
               <div className="flex px-10 flex-row justify-between w-full">
+                <div className="flex flex-col">
+                  <p className="font-semibold text-[16px] text-[#777777]">
+                    Your Score
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                    {yourScores?.questions
+                      .reduce((a, { score }) => a + score, 0)
+                      .toFixed(2)}
+                  </p>
+                </div>
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Mean
@@ -142,14 +129,6 @@ export default function Overall() {
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">
-                    Min
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {minScore.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
                   <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
                     {q3.toFixed(2)}
@@ -174,47 +153,26 @@ export default function Overall() {
               <Table stickyHeader>
                 <Table.Thead>
                   <Table.Tr className="bg-[#e5e7f6]">
-                    <Table.Th className="w-[12%]">Question</Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[14%]">
-                      Full Score
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px]  w-[11%]">
-                      Mean
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px]  w-[11%]">
-                      SD
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px]  w-[11%]">
-                      Median
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[11%]">
-                      Max
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[11%]">
-                      Q3
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[11%]">
-                      Q1
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[8%]"></Table.Th>
+                    <Table.Th className="w-[10%]">Question</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Your Score</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Full Score</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Mean</Table.Th>
+                    <Table.Th className="text-end w-[10%]">SD</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Median</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Max</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Q3</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Q1</Table.Th>
+                    <Table.Th className="text-end pr-[30px] w-[10%]"></Table.Th>
                   </Table.Tr>
                 </Table.Thead>
               </Table>
 
               <Accordion chevron={false} unstyled>
                 {assignment?.questions.map((ques, index) => {
-                  const dataScores =
-                    section?.students
-                      ?.flatMap(({ scores }) =>
-                        scores
-                          .filter((item) => item.assignmentName === name)
-                          .flatMap((item) =>
-                            item.questions.filter((q) => q.name === ques.name)
-                          )
-                          .map((question) => question.score)
-                      )
-                      .sort((a, b) => a - b) || [];
-                  const stat = calStat(dataScores, scores?.length);
+                  const stat = calStat(ques.scores, ques.scores.length);
+                  const studentScore = yourScores?.questions.find(
+                    (item) => item.name == ques.name
+                  )?.score;
                   return (
                     <Accordion.Item
                       value={ques.name}
@@ -233,31 +191,34 @@ export default function Overall() {
                           <Table.Tbody className="text-default">
                             {/* Entire Table Row as Control */}
                             <Table.Tr className="text-[13px] font-normal py-[14px] w-full ">
-                              <Table.Td className="text-start w-[12%]">
+                              <Table.Td className="text-start w-[10%]">
                                 {ques.name}
                               </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[14%]">
+                              <Table.Td className="text-end w-[10%]">
+                                {studentScore?.toFixed(2)}
+                              </Table.Td>
+                              <Table.Td className="text-end w-[10%]">
                                 {ques.fullScore}
                               </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[11%]">
+                              <Table.Td className="text-end w-[10%]">
                                 {stat.mean.toFixed(2)}
                               </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[11%]">
+                              <Table.Td className="text-end w-[10%]">
                                 {stat.sd.toFixed(2)}
                               </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[11%]">
+                              <Table.Td className="text-end w-[10%]">
                                 {stat.median.toFixed(2)}
                               </Table.Td>
-                              <Table.Td className="text-end pr-[70px]  w-[11%]">
+                              <Table.Td className="text-end w-[10%]">
                                 {stat.maxScore.toFixed(2)}
                               </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[11%]">
+                              <Table.Td className="text-end w-[10%]">
                                 {stat.q3.toFixed(2)}
                               </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[11%]">
+                              <Table.Td className="text-end w-[10%]">
                                 {stat.q1.toFixed(2)}
                               </Table.Td>
-                              <Table.Th className="text-end pr-[70px] w-[8%]">
+                              <Table.Th className="text-end pr-[30px] w-[10%]">
                                 <Icon
                                   IconComponent={IconChevronDown}
                                   className="size-4"
@@ -273,14 +234,14 @@ export default function Overall() {
                             {ques.name} - {ques.fullScore} Points
                           </p>
                           <p className="text-secondary text-[16px] font-semibold">
-                            {scores?.length} Students
+                            {ques.scores.length} Students
                           </p>
                         </div>
                         <ChartContainer
-                          type="histogram"
+                          type='curve'
                           data={assignment}
-                          students={section?.students!}
                           questionName={ques.name}
+                          studentScore={studentScore}
                         />
                       </Accordion.Panel>
                     </Accordion.Item>
@@ -289,23 +250,6 @@ export default function Overall() {
               </Accordion>
             </div>
           </>
-        ) : (
-          <div className="flex px-16  flex-row items-center justify-between h-full">
-            <div className="flex justify-center  h-full items-start gap-2 flex-col">
-              <p className="   text-secondary font-semibold text-[22px]">
-                You need access
-              </p>
-              <p className=" text-[#333333] leading-6 font-medium text-[14px]">
-                You're not listed as a Co-Instructor. <br /> Please contact the
-                Owner section for access.
-              </p>
-            </div>
-            <img
-              className=" z-50  size-[460px] "
-              src={needAccess}
-              alt="loginImage"
-            />
-          </div>
         )}
       </div>
     </>

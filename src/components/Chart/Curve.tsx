@@ -28,9 +28,17 @@ type Props = {
   median: number;
   sd: number;
   fullScore: number;
+  studentScore?: number;
 };
 
-export default function Curve({ scores, mean, median, sd, fullScore }: Props) {
+export default function Curve({
+  scores,
+  mean,
+  median,
+  sd,
+  fullScore,
+  studentScore,
+}: Props) {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
   const statLine: any[] = [
@@ -78,11 +86,35 @@ export default function Curve({ scores, mean, median, sd, fullScore }: Props) {
     },
   ];
 
+  if (studentScore) {
+    statLine.push({
+      type: "line",
+      label: {
+        content: "Your Score",
+        display: true,
+        position: "start",
+        yAdjust: 5,
+        xAdjust: 0,
+        color: "#32a83a",
+        backgroundColor: "rgb(0,0,0,0)",
+        font: {
+          size: 14,
+          fontFamily: "Manrope",
+        },
+      },
+      value: studentScore,
+      borderColor: "#32a83a",
+      borderDash: [5, 5],
+      borderWidth: 2,
+      scaleID: "x",
+    });
+  }
+
   useEffect(() => {
     const resizeChart = () => {
       chartInstanceRef.current?.resize();
     };
-  
+
     window.addEventListener("resize", resizeChart);
     return () => window.removeEventListener("resize", resizeChart);
   }, []);
@@ -138,7 +170,14 @@ export default function Curve({ scores, mean, median, sd, fullScore }: Props) {
                 min: 0,
                 max: fullScore,
                 ticks: {
-                  stepSize: fullScore <= 30 ? 1 : 5,
+                  stepSize:
+                    fullScore <= 1
+                      ? 0.2
+                      : fullScore <= 5
+                      ? 0.5
+                      : fullScore <= 30
+                      ? 1
+                      : 5,
                   autoSkip: false,
                 },
               },

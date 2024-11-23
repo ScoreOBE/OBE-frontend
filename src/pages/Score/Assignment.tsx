@@ -32,7 +32,7 @@ import {
 import { dateFormatter, getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
-import { setShowNavbar, setShowSidebar } from "@/store/config";
+import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -43,7 +43,7 @@ import {
   updateAssignmentName,
 } from "@/services/score/score.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
-import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { updateAssignments } from "@/store/course";
 import { setLoadingOverlay } from "@/store/loading";
 import { isEqual } from "lodash";
@@ -96,6 +96,8 @@ export default function Assignment() {
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
+    dispatch(setDashboard(ROLE.INSTRUCTOR));
+    localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
   }, []);
 
   const onClosePublishModal = () => {

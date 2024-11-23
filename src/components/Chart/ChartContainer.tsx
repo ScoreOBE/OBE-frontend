@@ -3,19 +3,22 @@ import { IModelAssignment, IModelScore } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
 import Curve from "./Curve";
 import HistogramChart from "./HistogramChart";
+import { IModelStudentAssignment } from "@/models/ModelEnrollCourse";
 
 type Props = {
-  data: Partial<IModelAssignment>;
-  students: { student: IModelUser; scores: IModelScore[] }[];
+  data: Partial<IModelAssignment> | IModelStudentAssignment;
+  students?: { student: IModelUser; scores: IModelScore[] }[];
   questionName?: string;
   type: "histogram" | "curve";
+  studentScore?: number;
 };
 
 export default function ChartContainer({
   data,
-  students,
+  students = [],
   questionName,
   type,
+  studentScore,
 }: Props) {
   const fullScore =
     (questionName
@@ -34,25 +37,24 @@ export default function ChartContainer({
     return assignment.questions?.reduce((sum, { score }) => sum + score, 0);
   };
 
-  const scores = students
-    .map(({ scores }) => getScores(scores))
-    .filter((score) => score !== undefined)
-    .sort((a, b) => a - b);
+  const scores =
+    studentScore != undefined
+      ? questionName
+        ? (
+            data.questions!.find(
+              ({ name }) => name == questionName
+            ) as Partial<IModelStudentAssignment>
+          ).scores
+        : (data as IModelStudentAssignment).scores
+      : students
+          .map(({ scores }) => getScores(scores))
+          .filter((score) => score !== undefined)
+          .sort((a, b) => a - b);
 
-  const totalStudent = students.filter(({ scores }) => {
-    const assignment = scores.find(
-      ({ assignmentName }) => assignmentName === data.name
-    );
-    return (
-      assignment &&
-      (questionName
-        ? assignment.questions.some(({ name }) => name === questionName)
-        : true)
-    );
-  }).length;
+  const totalStudent = scores?.length || 0;
 
   const { mean, sd, median, maxScore, minScore, q1, q3 } = calStat(
-    scores,
+    scores || [],
     totalStudent
   );
   const k = Math.ceil(Math.log2(totalStudent) + 1);
@@ -62,14 +64,14 @@ export default function ChartContainer({
     const end = start + binWidth;
     return {
       range: `${start.toFixed(2)} - ${end.toFixed(2)}`,
-      start,
-      end,
+      start: parseFloat(start.toFixed(2) || "0"),
+      end: parseFloat(end.toFixed(2) || "0"),
       Students: 0,
     };
   });
-  scores.forEach((score) => {
+  scores?.forEach((score) => {
     const binIndex = scoresData.findIndex((item, index) =>
-      index === scoresData.length - 1
+      index == scoresData.length - 1
         ? item.start <= score && score <= item.end
         : item.start <= score && score < item.end
     );
@@ -98,6 +100,16 @@ export default function ChartContainer({
           </div>
 
           <div className="flex  flex-row justify-between w-full">
+            {studentScore && (
+              <div className="flex flex-col">
+                <p className="font-semibold text-[16px] text-[#777777]">
+                  Your Score
+                </p>
+                <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                  {studentScore.toFixed(2)}
+                </p>
+              </div>
+            )}
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Mean</p>
               <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
@@ -122,12 +134,14 @@ export default function ChartContainer({
                 {maxScore?.toFixed(2)}
               </p>
             </div>
-            <div className="flex flex-col">
-              <p className="font-semibold text-[16px] text-[#777777]">Min</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
-                {minScore?.toFixed(2)}
-              </p>
-            </div>
+            {!studentScore && (
+              <div className="flex flex-col">
+                <p className="font-semibold text-[16px] text-[#777777]">Min</p>
+                <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                  {minScore?.toFixed(2)}
+                </p>
+              </div>
+            )}
             <div className="flex flex-col">
               <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
               <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
@@ -149,14 +163,15 @@ export default function ChartContainer({
         }`}
       >
         {type == "histogram" ? (
-          <HistogramChart scoresData={scoresData} />
+          <HistogramChart scoresData={scoresData} studentScore={studentScore} />
         ) : (
           <Curve
-            scores={scores}
+            scores={scores || []}
             mean={mean}
             median={median}
             sd={sd}
             fullScore={fullScore}
+            studentScore={studentScore}
           />
         )}
       </div>

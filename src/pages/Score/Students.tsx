@@ -5,7 +5,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
-import { setShowNavbar, setShowSidebar } from "@/store/config";
+import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
 import { Button, Modal, Table, TextInput } from "@mantine/core";
@@ -17,7 +17,7 @@ import { useForm } from "@mantine/form";
 import { cloneDeep, isEqual } from "lodash";
 import { setLoadingOverlay } from "@/store/loading";
 import { updateStudentScore } from "@/services/score/score.service";
-import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { updateStudentList } from "@/store/course";
 
@@ -66,7 +66,10 @@ export default function Students() {
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
+    dispatch(setDashboard(ROLE.INSTRUCTOR));
+    localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
   }, []);
+
 
   const fullScore =
     assignment?.questions.reduce((sum, { fullScore }) => sum + fullScore, 0) ||
