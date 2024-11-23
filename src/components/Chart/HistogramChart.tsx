@@ -7,9 +7,10 @@ type Props = {
     end: number;
     Students: number;
   }[];
+  studentScore?: number;
 };
 
-export default function HistogramChart({ scoresData }: Props) {
+export default function HistogramChart({ scoresData, studentScore }: Props) {
   return (
     <BarChart
       className="mt-4"

@@ -20,6 +20,8 @@ import IconCLO from "@/assets/icons/targetArrow.svg?react";
 import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
 import { ROLE } from "@/helpers/constants/enum";
 import { RxDashboard } from "react-icons/rx";
+import { getEnrollCourse } from "@/services/student/student.service";
+import { setEnrollCourseList } from "@/store/enrollCourse";
 
 export default function DashboardSidebar() {
   const path = useLocation().pathname;
@@ -99,18 +101,26 @@ export default function DashboardSidebar() {
 
   const fetchCourse = async (year: number, semester: number) => {
     dispatch(setLoading(true));
-    const payloadCourse = new CourseRequestDTO();
-    const res = await getCourse({
-      ...payloadCourse,
-      year,
-      semester,
-      manage: path.includes(ROUTE_PATH.ADMIN_DASHBOARD),
-    });
-    if (res) {
-      if (path.includes(ROUTE_PATH.ADMIN_DASHBOARD)) {
-        dispatch(setAllCourseList(res));
-      } else {
-        dispatch(setCourseList(res));
+    if (user.role != ROLE.STUDENT) {
+      const payloadCourse = new CourseRequestDTO();
+      const res = await getCourse({
+        ...payloadCourse,
+        year,
+        semester,
+        manage: path.includes(ROUTE_PATH.ADMIN_DASHBOARD),
+      });
+      if (res) {
+        if (path.includes(ROUTE_PATH.ADMIN_DASHBOARD)) {
+          dispatch(setAllCourseList(res));
+        } else {
+          dispatch(setCourseList(res));
+        }
+      }
+    }
+    if (user.studentId) {
+      const res = await getEnrollCourse({ year, semester });
+      if (res) {
+        dispatch(setEnrollCourseList(res));
       }
     }
     dispatch(setLoading(false));

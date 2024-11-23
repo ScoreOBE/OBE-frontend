@@ -1,10 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useRef, useState } from "react";
-import Breadcrumbs from "@/components/Breadcrumbs";
 import { useParams, useSearchParams } from "react-router-dom";
-import { getSectionNo } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import needAccess from "@/assets/image/needAccess.jpg";
 import Loading from "@/components/Loading/Loading";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import React from "react";
@@ -12,12 +9,13 @@ import { Tabs } from "@mantine/core";
 import ChartContainer from "@/components/Chart/ChartContainer";
 import { ROLE } from "@/helpers/constants/enum";
 import { setShowSidebar, setShowNavbar, setDashboard } from "@/store/config";
+
 type TabState = {
   [key: number]: string;
 };
 
-export default function Histogram() {
-  const { courseNo, sectionNo } = useParams();
+export default function StdChart() {
+  const { courseNo } = useParams();
   const [tabStates, setTabStates] = useState<TabState>({});
   const handleTabChange = (index: any, newValue: any) => {
     setTabStates((prevStates) => ({
@@ -26,49 +24,31 @@ export default function Histogram() {
     }));
   };
   const loading = useAppSelector((state) => state.loading.loading);
-  const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
-    state.course.courses.find((e) => e.courseNo == courseNo)
-  );
-  const section = course?.sections.find(
-    (sec) => parseInt(sectionNo!) === sec.sectionNo
+    state.enrollCourse.courses.find((e) => e.courseNo == courseNo)
   );
   const [params] = useSearchParams();
   const dispatch = useAppDispatch();
-  const [items, setItems] = useState<any[]>([
-    {
-      title: "Your Course",
-      path: `${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`,
-    },
-    {
-      title: "Sections",
-      path: `${ROUTE_PATH.COURSE}/${courseNo}/${
-        ROUTE_PATH.SECTION
-      }?${params.toString()}`,
-    },
-    { title: `Chart Section ${getSectionNo(sectionNo)}` },
-  ]);
 
   const sectionRefs = useRef(
-    section?.assignments!.map(() => React.createRef<HTMLDivElement>())
+    course?.section?.assignments!.map(() => React.createRef<HTMLDivElement>())
   );
   const [activeSection, setActiveSection] = useState<number>(0);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
-    dispatch(setDashboard(ROLE.INSTRUCTOR));
-    localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
+    dispatch(setDashboard(ROLE.STUDENT));
+    localStorage.setItem("dashboard", ROLE.STUDENT);
   }, []);
 
-
   useEffect(() => {
-    if (section) {
-      sectionRefs.current = section.assignments!.map(
+    if (course?.section) {
+      sectionRefs.current = course.section.assignments!.map(
         (_, i) => sectionRefs.current?.at(i) || React.createRef()
       );
     }
-  }, [section]);
+  }, [course]);
 
   useEffect(() => {
     if (sectionRefs.current) {
@@ -104,23 +84,22 @@ export default function Histogram() {
         });
       };
     }
-  }, [section, sectionRefs]);
+  }, [course, sectionRefs]);
 
   return (
     <div className="bg-white flex flex-col h-full w-full px-6 pt-5  gap-3 overflow-hidden">
-      <Breadcrumbs items={items} />
       {loading ? (
         <Loading />
-      ) : (section?.instructor as any)?.id === user.id ||
-        (section?.coInstructors as any[])
-          ?.map(({ id }) => id)
-          .includes(user.id) ? (
+      ) : (
         <div className="flex overflow-y-auto overflow-x-hidden max-w-full h-full">
-          {section?.assignments?.length !== 0 ? (
+          {course?.section?.assignments?.length !== 0 ? (
             <div className="flex gap-6 w-full h-full">
               <div className="gap-4 flex flex-col my-2 min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
-                {section &&
-                  section?.assignments?.map((item, i) => {
+                {course?.section &&
+                  course.section.assignments?.map((item, i) => {
+                    const studentScore = course.scores
+                      .find(({ assignmentName }) => assignmentName == item.name)
+                      ?.questions.reduce((a, { score }) => a + score, 0);
                     return (
                       <div
                         style={{
@@ -151,7 +130,7 @@ export default function Histogram() {
                             <ChartContainer
                               type="histogram"
                               data={item}
-                              students={section.students!}
+                              studentScore={studentScore}
                             />
                           </Tabs.Panel>
                           <Tabs.Panel
@@ -161,7 +140,7 @@ export default function Histogram() {
                             <ChartContainer
                               type="curve"
                               data={item}
-                              students={section.students!}
+                              studentScore={studentScore}
                             />
                           </Tabs.Panel>
                         </Tabs>
@@ -171,7 +150,7 @@ export default function Histogram() {
               </div>
 
               <div className="max-w-[12%] mt-3 flex flex-col  ">
-                {section?.assignments?.map((item, i) => (
+                {course?.section?.assignments?.map((item, i) => (
                   <div
                     key={i}
                     className={`max-w-fit  ${
@@ -200,7 +179,7 @@ export default function Histogram() {
                   No Assignment
                 </p>{" "}
                 <p className=" text-[#333333] -mt-1 text-b2 break-words font-medium leading-relaxed">
-                  The histogram will show when the assignment is uploaded.
+                  The chart will show when the assignment is publish.
                 </p>{" "}
               </div>
               <div className=" items-center justify-center flex">
@@ -212,23 +191,6 @@ export default function Histogram() {
               </div>
             </div>
           )}
-        </div>
-      ) : (
-        <div className="flex px-16  flex-row items-center justify-between h-full">
-          <div className="flex justify-center h-full items-start gap-2 flex-col">
-            <p className="text-secondary font-semibold text-[22px]">
-              You need access
-            </p>
-            <p className="text-[#333333] leading-6 font-medium text-[14px]">
-              You're not listed as a Co-Instructor. <br /> Please contact the
-              Owner section for access.
-            </p>
-          </div>
-          <img
-            className="z-50 size-[460px]"
-            src={needAccess}
-            alt="loginImage"
-          />
         </div>
       )}
     </div>

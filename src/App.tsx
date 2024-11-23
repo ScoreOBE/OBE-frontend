@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, Outlet } from "react-router-dom";
+import { useLocation, useNavigate, Outlet, useParams } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import { setUser } from "@/store/user";
@@ -19,6 +19,7 @@ import { LoadingOverlay } from "@mantine/core";
 
 function App() {
   const [openModalTermsOfService, setOpenModalTermsOfService] = useState(false);
+  const { courseNo } = useParams();
   const config = useAppSelector((state) => state.config);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const error = useAppSelector((state) => state.errorResponse);
@@ -34,11 +35,12 @@ function App() {
       if (
         user.termsOfService &&
         (!isEmpty(academicYear) ||
-          [
+          ([
             ROUTE_PATH.INS_DASHBOARD,
             ROUTE_PATH.ADMIN_DASHBOARD,
             ROUTE_PATH.STD_DASHBOARD,
-          ].some((e) => path.includes(e)))
+          ].some((e) => path.includes(e)) &&
+            !courseNo))
       )
         return;
       checkToken(token);

@@ -9,8 +9,10 @@ import AdminDashboardCLO from "@/pages/AdminDashboard/AdminDashboardCLO";
 import TQF5 from "@/pages/TQF/TQF5";
 import StdDashboard from "@/pages/Student/StdDashboard";
 import Roster from "@/pages/Roster";
-import StdCourse from "@/pages/Student/StdCourse";
+import StdAssignment from "@/pages/Student/StdAssignment";
 import StdPLO from "@/pages/Student/StdPLO";
+import StdChart from "@/pages/Student/StdChart";
+import StdScore from "@/pages/Student/StdScore";
 
 const Login = lazy(() => import("@/pages/Login"));
 const CMUOAuthCallback = lazy(() => import("@/pages/CmuOAuthCallback"));
@@ -195,9 +197,30 @@ const router = createBrowserRouter([
             children: [
               {
                 path: ROUTE_PATH.ASSIGNMENT,
+                children: [
+                  {
+                    path: "",
+                    element: (
+                      <Suspense fallback={loadingPage}>
+                        <StdAssignment />
+                      </Suspense>
+                    ),
+                  },
+                  {
+                    path: ":name",
+                    element: (
+                      <Suspense fallback={loadingPage}>
+                        <StdScore />
+                      </Suspense>
+                    ),
+                  },
+                ],
+              },
+              {
+                path: ROUTE_PATH.HISTOGRAM,
                 element: (
                   <Suspense fallback={loadingPage}>
-                    <StdCourse />
+                    <StdChart />
                   </Suspense>
                 ),
               },
