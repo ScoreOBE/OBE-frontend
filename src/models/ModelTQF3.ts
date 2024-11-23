@@ -16,7 +16,7 @@ export interface IModelTQF3 {
 
 export interface IModelTQF3Part1 {
   curriculum: string;
-  courseType: string;
+  courseType: string[];
   studentYear: number[];
   mainInstructor: string;
   instructors: string[];
