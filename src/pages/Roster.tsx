@@ -1,6 +1,6 @@
 import { Menu, Modal, Table, TextInput } from "@mantine/core";
 import { Alert, Button } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import Iconbin from "@/assets/icons/trash.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
@@ -35,6 +35,7 @@ import {
 import { useForm } from "@mantine/form";
 import { updateStudentList } from "@/store/course";
 import { isEqual } from "lodash";
+import { setShowSidebar, setShowNavbar, setDashboard } from "@/store/config";
 
 export default function Roster() {
   const { courseNo } = useParams();
@@ -95,6 +96,13 @@ export default function Roster() {
     },
     validateInputOnBlur: true,
   });
+
+  useEffect(() => {
+    dispatch(setShowSidebar(true));
+    dispatch(setShowNavbar(true));
+    dispatch(setDashboard(ROLE.INSTRUCTOR));
+    localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
+  }, []);
 
   const onClickAddStudent = async () => {
     if (!form.validate().hasErrors) {
