@@ -11,7 +11,7 @@ import { useForm } from "@mantine/form";
 import { Table } from "@mantine/core";
 import Icon from "../Icon";
 import IconCheckbox from "@/assets/icons/checkbox.svg?react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { IModelEval, IModelTQF3Part4 } from "@/models/ModelTQF3";
 import { cloneDeep, isEqual } from "lodash";
 import unplug from "@/assets/image/unplug.png";
@@ -40,6 +40,7 @@ export default function Part4TQF3({
     parseInt(params.get("semester") || "") !== academicYear.semester;
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
+  const tableRefs = useRef<(HTMLInputElement | null)[][]>([]);
   const form = useForm({
     mode: "controlled",
     initialValues: { data: [] as IModelTQF3Part4[] },
@@ -161,6 +162,32 @@ export default function Part4TQF3({
         )
         .reduce((acc, cur) => acc + (cur?.percent || 0), 0)
     );
+  };
+
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    cloIndex: number,
+    colIndex: number
+  ) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const isShiftPressed = e.shiftKey;
+      let nextRowIndex = cloIndex + (isShiftPressed ? -1 : 1);
+      let nextColIndex = colIndex;
+      if (nextRowIndex < 0) {
+        nextRowIndex = tableRefs.current[nextColIndex - 1]?.length - 1 || 0;
+        nextColIndex -= 1;
+      } else if (nextRowIndex >= tableRefs.current[nextColIndex]?.length) {
+        nextRowIndex = 0;
+        nextColIndex += 1;
+      }
+      if (nextColIndex >= 0 && nextColIndex < tableRefs.current.length) {
+        const targetInput = tableRefs.current[nextColIndex][nextRowIndex];
+        if (targetInput) {
+          targetInput.focus();
+        }
+      }
+    }
   };
 
   return tqf3?.part3?.updatedAt ? (
@@ -357,20 +384,28 @@ export default function Part4TQF3({
                                 </p>
                               </div>
                             </Table.Td>
-                            {evalForm.getValues().data.map((item, index) => {
+                            {evalForm.getValues().data.map((item, colIndex) => {
                               const evalItem = evals.find(
                                 (e) => e.eval === item.id
                               );
                               const i = evals.findIndex(
                                 (e) => e.eval === item.id
                               );
+                              if (!tableRefs.current[colIndex]) {
+                                tableRefs.current[colIndex] = [];
+                              }
+
                               return (
                                 <Table.Td
-                                  key={index}
+                                  key={colIndex}
                                   className="!px-4.5 max-w-[200px]"
                                 >
                                   <div className="flex flex-col gap-2 max-w-full">
                                     <NumberInput
+                                      ref={(el) =>
+                                        (tableRefs.current[colIndex][cloIndex] =
+                                          el)
+                                      }
                                       className="w-[80px]"
                                       hideControls
                                       suffix="%"
@@ -388,6 +423,9 @@ export default function Part4TQF3({
                                         typeof evalItem?.percent == "number"
                                           ? evalItem.percent
                                           : 0
+                                      }
+                                      onKeyDown={(e) =>
+                                        handleKeyDown(e, cloIndex, colIndex)
                                       }
                                       onChange={(value) =>
                                         setPercentEval(
@@ -634,20 +672,20 @@ export default function Part4TQF3({
     </>
   ) : (
     <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
-    <div className="flex justify-center  h-full items-start gap-2 flex-col">
-      <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-        Complete TQF3 Part 3 First
-      </p>
-      <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-        To start TQF3 Part 4, please complete and save TQF3 Part 3. <br />{" "}
-        Once done, you can continue to do it.
-      </p>
+      <div className="flex justify-center  h-full items-start gap-2 flex-col">
+        <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
+          Complete TQF3 Part 3 First
+        </p>
+        <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
+          To start TQF3 Part 4, please complete and save TQF3 Part 3. <br />{" "}
+          Once done, you can continue to do it.
+        </p>
+      </div>
+      <img
+        className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
+        src={unplug}
+        alt="loginImage"
+      />
     </div>
-    <img
-      className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
-      src={unplug}
-      alt="loginImage"
-    />
-  </div>
   );
 }
