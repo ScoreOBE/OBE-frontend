@@ -8,7 +8,6 @@ import {
   NumberInput,
   NumberInputHandlers,
   FocusTrapInitialFocus,
-  rem,
   Kbd,
   Tooltip,
 } from "@mantine/core";
@@ -104,11 +103,13 @@ export default function ModalManageTopic({
 
   const onClickDone = () => {
     if (type == "add") {
+      if (formOneWeek.getValues().topic?.length) {
+        addMore();
+      }
       if (form.getValues().schedule?.length! > 0) {
         setScheduleList(form.getValues().schedule);
-      } else if (!formOneWeek.validate().hasErrors) {
-        setScheduleList([{ ...formOneWeek.getValues() }]);
       } else {
+        formOneWeek.validate();
         return;
       }
     } else if (!formOneWeek.validate().hasErrors) {
@@ -390,29 +391,30 @@ export default function ModalManageTopic({
           </Button>
 
           {type === "add" && (
-           <Tooltip
-           arrowOffset={20}
-           arrowSize={8}
-           arrowRadius={1}
-           transitionProps={{
-             transition: "fade",
-             duration: 300,
-           }}
-           multiline
-           withArrow
-           label={
-             <div className="text-default text-[12px] p-2 font-medium gap-2">
-               <Kbd  className=" text-secondary">{isMac ? "⌘" : "Ctrl"}</Kbd> + <Kbd className=" text-secondary">Enter</Kbd>
-             </div>
-           }
-           color="#FCFCFC"
-           className="w-fit border  rounded-md "
-           position="top"
-         >
-           <Button variant="subtle" onClick={addMore}>
-             Add more Content
-           </Button>
-         </Tooltip>
+            <Tooltip
+              arrowOffset={20}
+              arrowSize={8}
+              arrowRadius={1}
+              transitionProps={{
+                transition: "fade",
+                duration: 300,
+              }}
+              multiline
+              withArrow
+              label={
+                <div className="text-default text-[12px] p-2 font-medium gap-2">
+                  <Kbd className=" text-secondary">{isMac ? "⌘" : "Ctrl"}</Kbd>{" "}
+                  + <Kbd className=" text-secondary">Enter</Kbd>
+                </div>
+              }
+              color="#FCFCFC"
+              className="w-fit border  rounded-md "
+              position="top"
+            >
+              <Button variant="subtle" onClick={addMore}>
+                Add more Content
+              </Button>
+            </Tooltip>
           )}
           <Button
             onClick={onClickDone}

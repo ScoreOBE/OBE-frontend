@@ -95,11 +95,13 @@ export default function ModalManageEvalTopic({
 
   const onClickDone = () => {
     if (type == "add") {
+      if (formOneTopic.getValues().topicTH?.length) {
+        addMore();
+      }
       if (form.getValues().eval?.length! > 0) {
         setEvalList(form.getValues().eval);
-      } else if (!formOneTopic.validate().hasErrors) {
-        setEvalList([{ ...formOneTopic.getValues() }]);
       } else {
+        formOneTopic.validate();
         return;
       }
     } else if (!formOneTopic.validate().hasErrors) {
@@ -190,9 +192,7 @@ export default function ModalManageEvalTopic({
         } `}
       >
         <div
-          className={`flex gap-5 py-1 ${
-            type === "add" ? " h-fit " : "h-fit"
-          }`}
+          className={`flex gap-5 py-1 ${type === "add" ? " h-fit " : "h-fit"}`}
         >
           {/* Input Field */}
           <div
@@ -383,34 +383,35 @@ export default function ModalManageEvalTopic({
           </Button>
           {/* Add More Button */}
           {type === "add" && (
-           <Tooltip
-           arrowOffset={20}
-           arrowSize={8}
-           arrowRadius={1}
-           transitionProps={{
-             transition: "fade",
-             duration: 300,
-           }}
-           multiline
-           withArrow
-           label={
-             <div className="text-default text-[12px] p-2 font-medium gap-2">
-               <Kbd className=" text-secondary">{isMac ? "⌘" : "Ctrl"}</Kbd> + <Kbd className=" text-secondary">Enter</Kbd>
-             </div>
-           }
-           color="#FCFCFC"
-           className="w-fit border  rounded-md "
-           position="top"
-         >
-            <Button
-              variant="subtle"
-              disabled={percentTotal == 100}
-              onClick={addMore}
-              onMouseOver={() => setOpenedTooltip(true)}
-              onMouseLeave={() => setOpenedTooltip(false)}
+            <Tooltip
+              arrowOffset={20}
+              arrowSize={8}
+              arrowRadius={1}
+              transitionProps={{
+                transition: "fade",
+                duration: 300,
+              }}
+              multiline
+              withArrow
+              label={
+                <div className="text-default text-[12px] p-2 font-medium gap-2">
+                  <Kbd className=" text-secondary">{isMac ? "⌘" : "Ctrl"}</Kbd>{" "}
+                  + <Kbd className=" text-secondary">Enter</Kbd>
+                </div>
+              }
+              color="#FCFCFC"
+              className="w-fit border  rounded-md "
+              position="top"
             >
-              Add more method
-            </Button>
+              <Button
+                variant="subtle"
+                disabled={percentTotal == 100}
+                onClick={addMore}
+                onMouseOver={() => setOpenedTooltip(true)}
+                onMouseLeave={() => setOpenedTooltip(false)}
+              >
+                Add more method
+              </Button>
             </Tooltip>
           )}
           <Button

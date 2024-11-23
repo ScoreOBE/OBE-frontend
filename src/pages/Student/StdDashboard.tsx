@@ -10,6 +10,7 @@ import { getEnrollCourse } from "@/services/student/student.service";
 import { setEnrollCourseList } from "@/store/enrollCourse";
 import Loading from "@/components/Loading/Loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
+import { getSectionNo } from "@/helpers/functions/function";
 
 export default function StdDashboard() {
   const navigate = useNavigate();
@@ -87,8 +88,11 @@ export default function StdDashboard() {
             Hi there, {user.firstNameEN}
           </p>
           <p className="text-[#575757] text-[14px]">
-            In semester <span className="text-[#1f69f3] font-semibold"> {enrollCourses.semester || ""}/
-            {enrollCourses.year || ""}!</span>{" "}
+            In semester{" "}
+            <span className="text-[#1f69f3] font-semibold">
+              {" "}
+              {enrollCourses.semester || ""}/{enrollCourses.year || ""}!
+            </span>{" "}
             {enrollCourses.courses.length === 0 ? (
               <span>Your course card is currently empty</span>
             ) : (
@@ -119,6 +123,9 @@ export default function StdDashboard() {
                   <p className="font-bold text-sm">{item.courseNo}</p>
                   <p className="text-xs font-medium text-gray-600">
                     {item.courseName}
+                  </p>
+                  <p className="text-xs font-medium text-gray-600">
+                    Section {getSectionNo(item.section.sectionNo)}
                   </p>
                 </div>
                 <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
