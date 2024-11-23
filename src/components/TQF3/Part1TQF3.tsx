@@ -1,4 +1,4 @@
-import { COURSE_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
 import { IModelTQF3Part1 } from "@/models/ModelTQF3";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
@@ -33,8 +33,11 @@ export default function Part1TQF3({ setForm }: Props) {
   const disabled =
     parseInt(params.get("year") || "") !== academicYear.year &&
     parseInt(params.get("semester") || "") !== academicYear.semester;
-  const courseType = useAppSelector(
-    (state) => state.course.courses.find((c) => c.courseNo == courseNo)?.type
+  const dashboard = useAppSelector((state) => state.config.dashboard);
+  const courseType = useAppSelector((state) =>
+    dashboard == ROLE.ADMIN
+      ? state.allCourse.courses.find((c) => c.courseNo == courseNo)?.type
+      : state.course.courses.find((c) => c.courseNo == courseNo)?.type
   );
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
