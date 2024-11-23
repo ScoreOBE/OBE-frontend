@@ -65,7 +65,13 @@ export default function Navbar() {
       case ROUTE_PATH.INS_DASHBOARD:
         return "Your Courses";
       case ROUTE_PATH.STD_DASHBOARD:
-        return "Your Courses";
+        if (location.includes(ROUTE_PATH.PLO))
+          return `Overall PLO`;
+        if (location.includes(ROUTE_PATH.ASSIGNMENT))
+          return `Assignment`;
+        if (location.includes(ROUTE_PATH.HISTOGRAM))
+          return `Chart`;
+        else return "Dashboard";
       case ROUTE_PATH.ADMIN_DASHBOARD:
         if (location.includes(ROUTE_PATH.TQF)) return `TQF ${semester}/${year}`;
         else if (location.includes(ROUTE_PATH.CLO))

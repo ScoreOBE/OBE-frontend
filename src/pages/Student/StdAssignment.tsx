@@ -78,33 +78,15 @@ export default function StdAssignment() {
               <Table stickyHeader>
                 <Table.Thead>
                   <Table.Tr className="bg-[#e5e7f6]">
-                    <Table.Th className="w-20 sm:max-macair133:text-b3">
-                      Name
-                    </Table.Th>
-                    <Table.Th className="w-20 sm:max-macair133:text-b3  text-end pr-14 !pl-0">
-                      Your Score
-                    </Table.Th>
-                    <Table.Th className="w-20 sm:max-macair133:text-b3  text-end pr-14 !pl-0">
-                      Full Scores
-                    </Table.Th>
-                    <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
-                      Mean
-                    </Table.Th>
-                    <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
-                      SD
-                    </Table.Th>
-                    <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
-                      Median
-                    </Table.Th>
-                    <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
-                      Max
-                    </Table.Th>
-                    <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
-                      Q3
-                    </Table.Th>
-                    <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
-                      Q1
-                    </Table.Th>
+                  <Table.Th className="w-[10%]">Question</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Your Score</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Mean</Table.Th>
+                    <Table.Th className="text-end w-[10%]">SD</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Median</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Max</Table.Th>
+                    <Table.Th className="text-end w-[10%]">Q3</Table.Th>
+                    <Table.Th className="text-end w-[10%] pr-[30px]">Q1</Table.Th>
+              
                   </Table.Tr>
                 </Table.Thead>
 
@@ -123,36 +105,39 @@ export default function StdAssignment() {
                         }`}
                         onClick={() => goToAssignment(`${assignment.name}`)}
                       >
-                        <Table.Td>{assignment.name}</Table.Td>
-                        <Table.Td className="text-end pr-14 !pl-0">
+                        <Table.Td >{assignment.name}</Table.Td>
+
+                        <Table.Td className="text-end ">
                           {course?.scores
                             .find(
                               ({ assignmentName }) =>
                                 assignmentName == assignment.name
                             )
                             ?.questions.reduce((a, { score }) => a + score, 0)
+                            .toFixed(2)}{" "}
+                          /{" "}
+                          {assignment.questions
+                            .reduce((a, { fullScore }) => a + fullScore, 0)
                             .toFixed(2)}
                         </Table.Td>
-                        <Table.Td className="text-end pr-14 !pl-0">
+
+                        <Table.Td className="text-end">
                           {stat.mean.toFixed(2)}
                         </Table.Td>
-                        <Table.Td className="text-end pr-14 !pl-0">
+                        <Table.Td className="text-end">
                           {stat.sd.toFixed(2)}
                         </Table.Td>
-                        <Table.Td className="text-end pr-14 !pl-0">
+                        <Table.Td className="text-end">
                           {stat.median.toFixed(2)}
                         </Table.Td>
-                        <Table.Td className="text-end pr-14 !pl-0">
+                        <Table.Td className="text-end">
                           {stat.maxScore.toFixed(2)}
                         </Table.Td>
-                        <Table.Td className="text-end pr-14 !pl-0">
+                        <Table.Td className="text-end">
                           {stat.q3.toFixed(2)}
                         </Table.Td>
-                        <Table.Td className="text-end pr-14 !pl-0">
+                        <Table.Td className="text-end  pr-[30px]">
                           {stat.q1.toFixed(2)}
-                        </Table.Td>
-                        <Table.Td className="text-end pr-20 !pl-0">
-                          {((totalScore || 0) / (totalStudent || 1)).toFixed(2)}
                         </Table.Td>
                       </Table.Tr>
                     );

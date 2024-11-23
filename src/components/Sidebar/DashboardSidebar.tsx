@@ -302,7 +302,7 @@ export default function DashboardSidebar() {
                 leftSection={
                   <Icon
                     IconComponent={IconSpiderChart}
-                    className="size-[20px] stroke-1"
+                    className="size-[18px] -translate-x-[1px] stroke-1"
                   />
                 }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
@@ -311,7 +311,7 @@ export default function DashboardSidebar() {
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                 }`}
               >
-                <p className="pl-1">Overall PLO</p>
+                <p className="">Overall PLO</p>
               </Button>
             </div>
           </div>

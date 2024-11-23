@@ -120,12 +120,14 @@ export default function StdDashboard() {
                 onClick={() => goToCourse(item.courseNo)}
               >
                 <div className="p-2.5 flex flex-col">
-                  <p className="font-bold text-sm">{item.courseNo}</p>
-                  <p className="text-xs font-medium text-gray-600">
+                  <div className="flex justify-between items-center">
+                    <p className="font-bold text-sm">{item.courseNo}</p>{" "}
+                    <p className="tag-tqf bg-secondary text-secondary flex gap-1 h-6 items-center bg-opacity-15 rounded-xl !text-[11px]">
+                  SEC. {getSectionNo(item.section.sectionNo)}
+                    </p>
+                  </div>
+                  <p className="text-xs  font-medium text-gray-600">
                     {item.courseName}
-                  </p>
-                  <p className="text-xs font-medium text-gray-600">
-                    Section {getSectionNo(item.section.sectionNo)}
                   </p>
                 </div>
                 <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">

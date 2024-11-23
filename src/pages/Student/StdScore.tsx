@@ -89,7 +89,7 @@ export default function StdScore() {
               </p>
               <div className="flex px-10 flex-row justify-between w-full">
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">
+                  <p className="font-semibold text-[16px] text-secondary">
                     Your Score
                   </p>
                   <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
@@ -155,7 +155,6 @@ export default function StdScore() {
                   <Table.Tr className="bg-[#e5e7f6]">
                     <Table.Th className="w-[10%]">Question</Table.Th>
                     <Table.Th className="text-end w-[10%]">Your Score</Table.Th>
-                    <Table.Th className="text-end w-[10%]">Full Score</Table.Th>
                     <Table.Th className="text-end w-[10%]">Mean</Table.Th>
                     <Table.Th className="text-end w-[10%]">SD</Table.Th>
                     <Table.Th className="text-end w-[10%]">Median</Table.Th>
@@ -195,11 +194,9 @@ export default function StdScore() {
                                 {ques.name}
                               </Table.Td>
                               <Table.Td className="text-end w-[10%]">
-                                {studentScore?.toFixed(2)}
+                                {studentScore?.toFixed(2)} /  {ques.fullScore.toFixed(2)}
                               </Table.Td>
-                              <Table.Td className="text-end w-[10%]">
-                                {ques.fullScore}
-                              </Table.Td>
+                             
                               <Table.Td className="text-end w-[10%]">
                                 {stat.mean.toFixed(2)}
                               </Table.Td>

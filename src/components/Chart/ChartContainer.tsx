@@ -102,7 +102,7 @@ export default function ChartContainer({
           <div className="flex  flex-row justify-between w-full">
             {studentScore && (
               <div className="flex flex-col">
-                <p className="font-semibold text-[16px] text-[#777777]">
+                <p className="font-semibold text-[16px] text-secondary">
                   Your Score
                 </p>
                 <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
