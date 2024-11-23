@@ -154,7 +154,7 @@ export default function Roster() {
   };
 
   const onClickEditStudent = async () => {
-    if (selectedUser) {
+    if (selectedUser && !form.validate().hasErrors) {
       dispatch(setLoadingOverlay(true));
       const data: any = { ...form.getValues() };
       if (!selectedUser.termsOfService) {
