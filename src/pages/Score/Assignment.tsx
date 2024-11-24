@@ -333,27 +333,72 @@ export default function Assignment() {
         <Alert
           variant="light"
           color="blue"
-          title={<p>You choose Quiz 1, Quiz 4 and Prelim 2 to publish.</p>}
+          title={
+            <p>
+              You choose{" "}
+              {form
+                .getValues()
+                .assignments.join(", ")
+                .replace(/, ([^,]*)$/, " and $1")}{" "}
+              to publish.
+            </p>
+          }
           icon={<Icon IconComponent={IconInfo2} />}
           classNames={{ icon: "size-6" }}
           className="mb-5"
         ></Alert>
 
-        <Alert
-          variant="light"
-          color="#D0820C"
-          title={
-            <p className="font-medium">
-              <span className="font-extrabold text-[#D0820C]">
-                Oops! Looks like Quiz 1 and Prelim 2 couldn't find in section
-                801.
-              </span>
-            </p>
-          }
-          icon={<Icon IconComponent={IconExclamationCircle} />}
-          classNames={{ icon: "size-6" }}
-          className="mb-5 -mt-2"
-        ></Alert>
+        {(() => {
+          const assignments = form.getValues().assignments;
+          const selectedSectionNumbers = form
+            .getValues()
+            .sections.map((item) => Number(item));
+
+          const missingAssignments = assignments
+            .map((assign) => {
+              const sectionsNotFound = course?.sections
+                ?.filter((sec) =>
+                  selectedSectionNumbers.includes(sec.sectionNo!)
+                )
+                ?.filter(
+                  (sec) =>
+                    !sec.assignments?.some((item) => item.name === assign)
+                )
+                ?.map((sec) => sec.sectionNo);
+
+              return sectionsNotFound?.length
+                ? { assign, sections: sectionsNotFound }
+                : null;
+            })
+            .filter(Boolean);
+
+          return missingAssignments.length > 0 ? (
+            <Alert
+              variant="light"
+              color="#D0820C"
+              title={
+                <p className="font-medium">
+                  <span className="font-extrabold text-[#D0820C]">
+                    The following assignments were not found in the selected
+                    sections:
+                  </span>
+                </p>
+              }
+              icon={<Icon IconComponent={IconExclamationCircle} />}
+              classNames={{ icon: "size-6" }}
+              className="mb-5 -mt-2"
+            >
+              <ul className="list-disc pl-5">
+                {missingAssignments.map(({ assign, sections }: any) => (
+                  <li key={assign}>
+                    {assign} not found in Section
+                    {sections.length > 1 ? "s" : ""} {sections.join(", ")}
+                  </li>
+                ))}
+              </ul>
+            </Alert>
+          ) : null;
+        })()}
 
         <div className="-mt-1 gap-2 flex flex-col mb-6">
           <p className="text-[14px] mb-1 font-semibold text-secondary">
