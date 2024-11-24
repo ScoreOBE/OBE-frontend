@@ -116,7 +116,7 @@ export default function StdChart() {
                           classNames={{
                             root: "overflow-hidden mt-1 mx-3 flex flex-col max-h-full",
                           }}
-                          value={tabStates[i] || "histogram"} // Default tab for new items
+                          value={tabStates[i] || "bellCurve"} // Default tab for new items
                           onChange={(newValue) => handleTabChange(i, newValue)} // Update specific tab
                         >
                           <Tabs.List className="mb-2">
