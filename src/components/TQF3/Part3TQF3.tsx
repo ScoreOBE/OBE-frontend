@@ -41,7 +41,6 @@ export default function Part3TQF3({ setForm }: Props) {
   const [openModalAddEvalTopic, setOpenModalAddEvalTopic] = useState(false);
   const [openModalEditEvalTopic, setOpenModalEditEvalTopic] = useState(false);
   const [openPopupDelEvalTopic, setOpenPopupDelEvalTopic] = useState(false);
-  const [openedTooltip, setOpenedTooltip] = useState(false);
 
   const form = useForm({
     mode: "controlled",
@@ -124,11 +123,15 @@ export default function Part3TQF3({ setForm }: Props) {
               title={
                 <p>
                   This action cannot be undone. After you delete this Evaluation
-                  Method, <br /> it will be permanently deleted from this course.
+                  Method, <br /> it will be permanently deleted from this
+                  course.
                 </p>
               }
               icon={
-                <Icon IconComponent={IconExclamationCircle} className="size-6" />
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="size-6"
+                />
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
@@ -184,8 +187,6 @@ export default function Part3TQF3({ setForm }: Props) {
                 <Button
                   className="text-center px-4"
                   onClick={() => setOpenModalAddEvalTopic(true)}
-                  onMouseOver={() => setOpenedTooltip(true)}
-                  onMouseLeave={() => setOpenedTooltip(false)}
                 >
                   <div className="flex gap-2">
                     <Icon IconComponent={IconAdd} />
@@ -193,7 +194,6 @@ export default function Part3TQF3({ setForm }: Props) {
                   </div>
                 </Button>
               )}
-              {/* </Tooltip> */}
             </div>
             {!disabled && (
               <div className="w-full">
@@ -246,7 +246,6 @@ export default function Part3TQF3({ setForm }: Props) {
                       <Table.Th className="w-[5%] text-end">
                         <div className="flex flex-row !justify-end items-center gap-2">
                           Evaluate
-                         
                         </div>
                       </Table.Th>
                       {disabled ? (
@@ -343,13 +342,13 @@ export default function Part3TQF3({ setForm }: Props) {
                                           className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center "
                                           {...provided.dragHandleProps}
                                         >
-                                          <Icon IconComponent={IconVerticalGrip}
-                                          className="stroke-[2px]"
+                                          <Icon
+                                            IconComponent={IconVerticalGrip}
+                                            className="stroke-[2px]"
                                             style={{
                                               width: "20px",
                                               height: "20px",
                                             }}
-                                          
                                           />
                                         </div>
                                       </Table.Td>
@@ -392,21 +391,21 @@ export default function Part3TQF3({ setForm }: Props) {
         </div>
       ) : (
         <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
-      <div className="flex justify-center  h-full items-start gap-2 flex-col">
-        <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-          Complete TQF3 Part 2 First
-        </p>
-        <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-          To start TQF3 Part 3, please complete and save TQF3 Part 2. <br />{" "}
-          Once done, you can continue to do it.
-        </p>
-      </div>
-      <img
-        className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
-        src={unplug}
-        alt="loginImage"
-      />
-    </div>
+          <div className="flex justify-center  h-full items-start gap-2 flex-col">
+            <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
+              Complete TQF3 Part 2 First
+            </p>
+            <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
+              To start TQF3 Part 3, please complete and save TQF3 Part 2. <br />{" "}
+              Once done, you can continue to do it.
+            </p>
+          </div>
+          <img
+            className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
+            src={unplug}
+            alt="loginImage"
+          />
+        </div>
       )}
     </>
   );

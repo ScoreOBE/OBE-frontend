@@ -156,8 +156,7 @@ export default function Dashboard() {
               color="red"
               title={
                 <p>
-                  {" "}
-                  This action cannot be undone. After you delete this course,{" "}
+                  This action cannot be undone. After you delete this course,
                   <br /> it will be permanently deleted all data from the
                   current semester. Data from previous semesters will not be
                   affected.
@@ -351,7 +350,11 @@ export default function Dashboard() {
               </p>
             ) : (
               <p className="text-[#575757] text-[14px]">
-                In semester <span className="text-[#1f69f3] font-semibold"> {term?.semester ?? ""}/{term?.year ?? ""}!</span>{" "}
+                In semester{" "}
+                <span className="text-[#1f69f3] font-semibold">
+                  {" "}
+                  {term?.semester ?? ""}/{term?.year ?? ""}!
+                </span>{" "}
                 {courseList.courses.length === 0 ? (
                   <span>Your course card is currently empty</span>
                 ) : (
