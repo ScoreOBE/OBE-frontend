@@ -55,7 +55,6 @@ export default function Overall() {
     localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
   }, []);
 
-
   const fullScore =
     assignment?.questions.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
   const scores = section?.students
@@ -165,15 +164,14 @@ export default function Overall() {
             </div>
             {/* Table */}
             <div
-              className="overflow-y-auto mt-2  overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
+              className="relative overflow-auto mt-2 border rounded-lg border-secondary"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-                height: "fit-content",
               }}
             >
-              <Table stickyHeader>
+              <Table className="sticky top-0 z-[1]">
                 <Table.Thead>
-                  <Table.Tr className="bg-[#e5e7f6]">
+                  <Table.Tr className="bg-[#dfebff]">
                     <Table.Th className="w-[12%]">Question</Table.Th>
                     <Table.Th className="text-end pr-[70px] w-[14%]">
                       Full Score

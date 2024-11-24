@@ -44,6 +44,11 @@ export default function Curve({
   const statLine: any[] = [
     {
       type: "line",
+      scaleID: "x",
+      value: mean,
+      borderColor: "#1f69f3",
+      borderDash: [5, 5],
+      borderWidth: 2,
       label: {
         content: "mean",
         display: true,
@@ -57,14 +62,14 @@ export default function Curve({
           fontFamily: "Manrope",
         },
       },
-      value: mean,
-      borderColor: "#1f69f3",
-      borderDash: [5, 5],
-      borderWidth: 2,
-      scaleID: "x",
     },
     {
       type: "line",
+      scaleID: "x",
+      value: median,
+      borderColor: "red",
+      borderDash: [5, 5],
+      borderWidth: 2,
       label: {
         content: "median",
         display: true,
@@ -74,11 +79,6 @@ export default function Curve({
         color: "red",
         backgroundColor: "rgb(0,0,0,0)",
       },
-      value: median,
-      borderColor: "red",
-      borderDash: [5, 5],
-      borderWidth: 2,
-      scaleID: "x",
       font: {
         size: 14,
         fontFamily: "Manrope",
@@ -86,9 +86,14 @@ export default function Curve({
     },
   ];
 
-  if (studentScore) {
+  if (studentScore != undefined) {
     statLine.push({
       type: "line",
+      scaleID: "x",
+      value: studentScore,
+      borderColor: "#32a83a",
+      borderDash: [5, 5],
+      borderWidth: 2,
       label: {
         content: "Your Score",
         display: true,
@@ -102,11 +107,6 @@ export default function Curve({
           fontFamily: "Manrope",
         },
       },
-      value: studentScore,
-      borderColor: "#32a83a",
-      borderDash: [5, 5],
-      borderWidth: 2,
-      scaleID: "x",
     });
   }
 
