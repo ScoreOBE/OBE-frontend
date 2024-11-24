@@ -16,7 +16,7 @@ import { getUserName } from "@/helpers/functions/function";
 import Loading from "../Loading/Loading";
 
 export default function StdCourseSidebar() {
-  const { courseNo } = useParams();
+  const { courseNo, name } = useParams();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
@@ -39,16 +39,25 @@ export default function StdCourseSidebar() {
     <Loading />
   ) : (
     <div className="flex text-white flex-col h-full  gap-[26px]">
-      <div
-        className="hover:underline cursor-pointer font-bold gap-2 -translate-x-[5px]  text-[13px] p-0 flex justify-start"
-        onClick={() => gotoPage(ROUTE_PATH.STD_DASHBOARD, true)}
-      >
-        <Icon IconComponent={IconChevronLeft} className="size-5" />
-        Back to Dashboard
-      </div>
+      {!name && (
+        <div
+          className="hover:underline cursor-pointer font-bold gap-2 -translate-x-[5px]  text-[13px] p-0 flex justify-start"
+          onClick={() => gotoPage(ROUTE_PATH.STD_DASHBOARD, true)}
+        >
+          <Icon IconComponent={IconChevronLeft} className="size-5" />
+          Back to Dashboard
+        </div>
+      )}
       <div className="flex flex-col gap-5 ">
         <div className="flex flex-col flex-1 font-bold gap-1 ">
-          <p className="text-lg">
+          {name && <p className="text-lg">{name}</p>}
+          <p
+            className={
+              name
+                ? "text-[14px] font-semibold text-pretty max-w-full"
+                : "text-lg"
+            }
+          >
             {courseNo} (
             {`${params?.get("semester")}/${params?.get("year")?.slice(-2)}`})
           </p>
@@ -56,66 +65,68 @@ export default function StdCourseSidebar() {
             {course?.courseName}
           </p>
         </div>
-        <div className="flex flex-col gap-2">
-          <Button
-            onClick={() => gotoPage(ROUTE_PATH.ASSIGNMENT)}
-            leftSection={<Icon IconComponent={IconList} />}
-            className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+        {!name && (
+          <div className="flex flex-col gap-2">
+            <Button
+              onClick={() => gotoPage(ROUTE_PATH.ASSIGNMENT)}
+              leftSection={<Icon IconComponent={IconList} />}
+              className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
                 path.includes(ROUTE_PATH.ASSIGNMENT)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               }`}
-          >
-            Assignment
-          </Button>
-          <Button
-            onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
-            leftSection={
-              <Icon
-                IconComponent={IconHistogram}
-                className="pb-1 pl-[2px] size-[22px]"
-              />
-            }
-            className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-              path.includes(ROUTE_PATH.HISTOGRAM)
-                ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-            }`}
-          >
-            <p className="pl-[3px]">Chart</p>
-          </Button>
-          <Button
-            leftSection={
-              <Icon
-                IconComponent={IconHistogram}
-                className="pb-1 pl-[2px] size-[22px]"
-              />
-            }
-            className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-              path.includes(ROUTE_PATH.CLO)
-                ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-            }`}
-          >
-            <p className="pl-[3px]">CLO</p>
-          </Button>
-          <Button
-            leftSection={
-              <Icon
-                IconComponent={IconSpiderChart}
-                className="pb-1 pl-[2px] size-[22px]"
-              />
-            }
-            className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-              path.includes(ROUTE_PATH.PLO)
-                ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-            }`}
-          >
-            <p className="pl-[3px]">PLO</p>
-          </Button>
-        </div>
+            >
+              Assignment
+            </Button>
+            <Button
+              onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
+              leftSection={
+                <Icon
+                  IconComponent={IconHistogram}
+                  className="pb-1 pl-[2px] size-[22px]"
+                />
+              }
+              className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                path.includes(ROUTE_PATH.HISTOGRAM)
+                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+              }`}
+            >
+              <p className="pl-[3px]">Chart</p>
+            </Button>
+            <Button
+              leftSection={
+                <Icon
+                  IconComponent={IconHistogram}
+                  className="pb-1 pl-[2px] size-[22px]"
+                />
+              }
+              className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                path.includes(ROUTE_PATH.CLO)
+                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+              }`}
+            >
+              <p className="pl-[3px]">CLO</p>
+            </Button>
+            <Button
+              leftSection={
+                <Icon
+                  IconComponent={IconSpiderChart}
+                  className="pb-1 pl-[2px] size-[22px]"
+                />
+              }
+              className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                path.includes(ROUTE_PATH.PLO)
+                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+              }`}
+            >
+              <p className="pl-[3px]">PLO</p>
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className="flex  flex-col gap-2 mt-5">
@@ -129,7 +140,11 @@ export default function StdCourseSidebar() {
       {!!course?.section?.coInstructors?.length && (
         <div className="flex  flex-col gap-2">
           <p className="text-b2 font-bold mb-1">Co-Instructor</p>
-          <div className="max-h-[140px] gap-1 flex flex-col  overflow-y-auto">
+          <div
+            className={`${
+              name ? "max-h-[200px]" : "max-h-[140px]"
+            } gap-1 flex flex-col  overflow-y-auto`}
+          >
             {course?.section.coInstructors.map((item, index) => {
               return (
                 <p key={index} className="text-pretty font-medium text-[12px]">
