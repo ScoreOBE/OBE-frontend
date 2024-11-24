@@ -53,7 +53,7 @@ export default function Curve({
         content: "mean",
         display: true,
         position: "start",
-        yAdjust: 5,
+        yAdjust: 10,
         xAdjust: 0,
         color: "#1f69f3",
         backgroundColor: "rgb(0,0,0,0)",
@@ -98,7 +98,7 @@ export default function Curve({
         content: "Your Score",
         display: true,
         position: "start",
-        yAdjust: 5,
+        yAdjust: -10,
         xAdjust: 0,
         color: "#32a83a",
         backgroundColor: "rgb(0,0,0,0)",
@@ -203,5 +203,5 @@ export default function Curve({
     }
   }, [mean, median, sd, fullScore]);
 
-  return <canvas ref={chartRef} id="myChart"></canvas>;
+  return <canvas ref={chartRef} id="myChart" className="max-h-[340px]"></canvas>;
 }
