@@ -203,5 +203,5 @@ export default function Curve({
     }
   }, [mean, median, sd, fullScore]);
 
-  return <canvas ref={chartRef} id="myChart" className="max-h-[340px]"></canvas>;
+  return <canvas ref={chartRef} id="myChart"></canvas>;
 }
