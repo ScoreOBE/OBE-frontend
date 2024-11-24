@@ -119,15 +119,15 @@ export default function StdDashboard() {
                 className="card relative justify-between h-[125px] macair133:h-[135px] sm:h-[128px] cursor-pointer rounded-[4px] hover:bg-[#f3f3f3]"
                 onClick={() => goToCourse(item.courseNo)}
               >
-                <div className="p-2.5 flex flex-col">
-                  <div className="flex justify-between items-center">
+                <div className="p-2.5 h-full justify-between flex flex-col">
+                  <div>
                     <p className="font-bold text-sm">{item.courseNo}</p>{" "}
-                    <p className="tag-tqf bg-secondary text-secondary flex gap-1 h-6 items-center bg-opacity-15 rounded-xl !text-[11px]">
-                  SEC. {getSectionNo(item.section.sectionNo)}
+                    <p className="text-xs  font-medium text-gray-600">
+                      {item.courseName}
                     </p>
                   </div>
-                  <p className="text-xs  font-medium text-gray-600">
-                    {item.courseName}
+                  <p className=" text-xs font-medium text-[#757575]">
+                    Section {getSectionNo(item.section.sectionNo)}
                   </p>
                 </div>
                 <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
