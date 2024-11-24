@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Button,
@@ -7,7 +7,6 @@ import {
   Modal,
   Radio,
   RadioCard,
-  rem,
   Stepper,
   Textarea,
   TextInput,
@@ -56,11 +55,9 @@ export default function ModalAddPLOCollection({
   const dispatch = useAppDispatch();
   const [active, setActive] = useState(0);
   const [department, setDepartment] = useState<Partial<IModelDepartment>[]>([]);
-  const [ploNo, setPloNo] = useState(0);
   const [state, handlers] = useListState<Partial<IModelPLONo>>([]);
   const [reorder, setReorder] = useState(false);
   const [firstInput, setFirstInput] = useState(false);
-  const [isAddAnother, setIsAddAnother] = useState(false);
   const [openModalSelectSemester, setOpenModalSelectSemester] = useState(false);
   const [semesterOption, setSemesterOption] = useState<any[]>([]);
   const [selectSemester, setSelectSemester] = useState("");
@@ -80,23 +77,21 @@ export default function ModalAddPLOCollection({
         validateTextInput(value, "Criteria English language", 70, false),
       departmentCode: (value) =>
         !value?.length && "Select department at least one",
-      data: {
-        descTH: (value) => {
-          if (form.getValues().data?.length! > 1 && firstInput && !isAddAnother)
-            return false;
-          if (isAddAnother || firstInput) {
-            if (!value) return `PLO Thai language is required`;
-            else if (!value.trim().length) return "Cannot have only spaces";
-          }
-        },
-        descEN: (value) => {
-          if (form.getValues().data?.length! > 1 && firstInput && !isAddAnother)
-            return false;
-          if (isAddAnother || firstInput) {
-            if (!value) return `PLO English language is required`;
-            else if (!value.trim().length) return "Cannot have only spaces";
-          }
-        },
+    },
+    validateInputOnBlur: true,
+  });
+
+  const formOnePLONo = useForm({
+    mode: "controlled",
+    initialValues: { no: 1, descTH: "", descEN: "" },
+    validate: {
+      descTH: (value) => {
+        if (!value) return `PLO Thai language is required`;
+        else if (!value.trim().length) return "Cannot have only spaces";
+      },
+      descEN: (value) => {
+        if (!value) return `PLO English language is required`;
+        else if (!value.trim().length) return "Cannot have only spaces";
       },
     },
     validateInputOnBlur: true,
@@ -119,8 +114,7 @@ export default function ModalAddPLOCollection({
           const res = await checkCanCreatePLO(form.getValues().name!);
           if (!res) isValid = false;
         }
-        form.clearFieldError(`data.${ploNo}.descTH`);
-        form.clearFieldError(`data.${ploNo}.descEN`);
+        formOnePLONo.clearErrors();
         break;
       case 1:
         isValid = form.getValues().data?.length! > 1;
@@ -131,8 +125,16 @@ export default function ModalAddPLOCollection({
             "Invalid PLO No.",
             "Please add PLO No. at least one"
           );
-          form.validateField(`data.${ploNo}.descTH`);
-          form.validateField(`data.${ploNo}.descEN`);
+          formOnePLONo.validate();
+        }
+        if (
+          formOnePLONo.getValues().descTH.length ||
+          formOnePLONo.getValues().descEN.length
+        ) {
+          if (formOnePLONo.validate().hasErrors) {
+            isValid = false;
+          }
+          onClickAddAnother();
         }
         break;
       case 2:
@@ -154,9 +156,9 @@ export default function ModalAddPLOCollection({
     setOpenModalSelectSemester(false);
     setSelectSemester("");
     setActive(0);
-    setPloNo(0);
     handlers.setState([]);
     form.reset();
+    formOnePLONo.reset();
     onClose();
   };
 
@@ -193,13 +195,9 @@ export default function ModalAddPLOCollection({
     if (opened && !form.getValues().name?.length) {
       fetchDep();
       if (!isEmpty(collection)) {
-        setPloNo(collection.data?.length!);
+        formOnePLONo.setFieldValue("no", collection.data?.length! + 1);
         form.setValues(collection);
         form.setFieldValue("name", "");
-        form.insertListItem("data", {
-          descTH: "",
-          descEN: "",
-        });
         handlers.setState(collection.data!);
       }
       if (academicYear) {
@@ -230,35 +228,25 @@ export default function ModalAddPLOCollection({
         e.no = index + 1;
       });
       handlers.setState(plo!);
-      form.setFieldValue("data", [...plo, { descTH: "", descEN: "" }]);
+      form.setFieldValue("data", [...plo]);
       setReorder(false);
     }
   }, [reorder]);
 
-  useEffect(() => {
-    if (isAddAnother) {
-      form.validateField(`data.${ploNo}.descTH`);
-      form.validateField(`data.${ploNo}.descEN`);
-      if (
-        !form.validateField(`data.${ploNo}.descTH`).hasError &&
-        !form.validateField(`data.${ploNo}.descEN`).hasError
-      ) {
-        form.setFieldValue(`data.${ploNo}.no`, ploNo + 1);
-        form.insertListItem("data", {
-          descTH: "",
-          descEN: "",
-        });
-        setPloNo(ploNo + 1);
-        handlers.setState(form.getValues().data?.filter((e) => e.no)!);
-        showNotifications(
-          NOTI_TYPE.SUCCESS,
-          "Add success",
-          `PLO-${ploNo + 1} is added`
-        );
-      }
-      setIsAddAnother(false);
+  const onClickAddAnother = () => {
+    if (!formOnePLONo.validate().hasErrors) {
+      form.insertListItem("data", formOnePLONo.getValues());
+      formOnePLONo.reset();
+      const ploNo = form.getValues().data?.length!;
+      formOnePLONo.setFieldValue("no", ploNo);
+      handlers.setState(form.getValues().data!);
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Add success",
+        `PLO-${ploNo} is added`
+      );
     }
-  }, [isAddAnother]);
+  };
 
   const setDepartmentCode = (checked: boolean, value?: string[]) => {
     let departmentCode = form.getValues().departmentCode;
@@ -281,7 +269,7 @@ export default function ModalAddPLOCollection({
       facultyCode: user.facultyCode,
       semester: term.semester,
       year: term.year,
-      data: form.getValues().data?.filter((plo) => plo.no),
+      data: form.getValues().data,
     };
     const res = await createPLO(payload);
     if (res) {
@@ -294,6 +282,7 @@ export default function ModalAddPLOCollection({
       fetchPLO();
     }
   };
+
   return (
     <>
       <Modal
@@ -439,8 +428,7 @@ export default function ModalAddPLOCollection({
                 withAsterisk={true}
                 label={
                   <p className="font-semibold flex gap-1">
-                    Criteria{" "}
-                    <span className="text-secondary">Thai language</span>
+                    Criteria <span className="text-secondary">Thai</span>
                   </p>
                 }
                 className="w-full border-none "
@@ -455,9 +443,8 @@ export default function ModalAddPLOCollection({
                 size="xs"
                 withAsterisk={true}
                 label={
-                  <p className=" flex gap-1">
-                    Criteria{" "}
-                    <span className="text-secondary">English</span>
+                  <p className="flex gap-1">
+                    Criteria <span className="text-secondary">English</span>
                   </p>
                 }
                 className="w-full border-none "
@@ -488,60 +475,36 @@ export default function ModalAddPLOCollection({
                   withAsterisk={true}
                   autoFocus={false}
                   label={
-                    <p className="font-semibold flex gap-1 h-full ">
-                      PLO <span className="text-secondary">Thai language</span>
+                    <p className="font-semibold flex gap-1 h-full">
+                      PLO <span className="text-secondary">Thai</span>
                     </p>
                   }
                   className="w-full border-none   rounded-r-none "
                   classNames={{
                     input:
-                      "flex  macair133:h-[120px] sm:h-[75px] ipad11:h-[95px] p-3 ",
-                    label: "flex pb-1",
+                      "flex macair133:h-[120px] sm:h-[75px] ipad11:h-[95px] p-3 ",
+                    label: "flex pb-1 gap-1",
                   }}
                   placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
-                  {...form.getInputProps(`data.${ploNo}.descTH`)}
-                  value={form.getValues().data?.at(ploNo)?.descTH ?? undefined}
-                  onChange={(event) => {
-                    form.setFieldValue(
-                      `data.${ploNo}.descTH`,
-                      event.target.value
-                    );
-                  }}
+                  {...formOnePLONo.getInputProps("descTH")}
                 />
                 <Textarea
                   autoFocus={false}
                   withAsterisk={true}
                   label={
                     <p className="font-semibold flex gap-1">
-                      PLO{" "}
-                      <span className="text-secondary">English</span>
+                      PLO <span className="text-secondary">English</span>
                     </p>
                   }
                   className="w-full border-none rounded-r-none"
                   classNames={{
                     input:
                       "flex macair133:h-[120px] sm:h-[75px] ipad11:h-[95px] p-3",
-                    label: "flex pb-1",
+                    label: "flex pb-1 gap-1",
                   }}
                   placeholder="Ex. An ability to solve complex engineering problems."
-                  {...form.getInputProps(`data.${ploNo}.descEN`)}
-                  value={form.getValues().data?.at(ploNo)?.descEN ?? undefined}
-                  onChange={(event) => {
-                    form.setFieldValue(
-                      `data.${ploNo}.descEN`,
-                      event.target.value
-                    );
-                  }}
+                  {...formOnePLONo.getInputProps("descEN")}
                 />
-
-                {/* <div className="flex gap-2 mt-3 w-full justify-end macair133:absolute right-5 bottom-5 ">
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsAddAnother(true)}
-                  >
-                    Add more
-                  </Button>
-                </div> */}
               </div>
               {form.getValues().data?.length! > 1 && (
                 <div
@@ -608,7 +571,6 @@ export default function ModalAddPLOCollection({
                                             className="flex items-center justify-center border-[#FF4747] size-8 rounded-full hover:bg-[#FF4747]/10 cursor-pointer"
                                             onClick={() => {
                                               handlers.remove(index);
-                                              setPloNo(ploNo - 1);
                                               form.removeListItem(
                                                 "data",
                                                 index
@@ -828,11 +790,8 @@ export default function ModalAddPLOCollection({
               {active === 1 && (
                 <Button
                   variant="subtle"
-                  disabled={
-                    form.getValues().data?.at(0)?.descTH.length! === 0 &&
-                    form.getValues().data?.at(0)?.descEN.length! === 0
-                  }
-                  onClick={() => setIsAddAnother(true)}
+                  disabled={form.getValues().data?.length === 0}
+                  onClick={onClickAddAnother}
                 >
                   Add more PLO
                 </Button>
