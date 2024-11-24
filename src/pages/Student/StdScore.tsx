@@ -150,7 +150,7 @@ export default function StdScore() {
                 height: "fit-content",
               }}
             >
-              <Table stickyHeader>
+              <Table className="sticky top-0 z-[1]">
                 <Table.Thead>
                   <Table.Tr className="bg-[#e5e7f6]">
                     <Table.Th className="w-[10%]">Question</Table.Th>
