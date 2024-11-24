@@ -45,12 +45,14 @@ export default function ModalManageEvalTopic({
   const topicRef = useRef<HTMLDivElement>(null);
   const [isAdded, setIsAdded] = useState(false);
   const [percentTotal, setPercentTotal] = useState(0);
-  const [openedTooltip, setOpenedTooltip] = useState(false);
   const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 
   const form = useForm({
     mode: "controlled",
     initialValues: { eval: [] } as Partial<IModelTQF3Part3>,
+    onValuesChange: (values) => {
+      localStorage.setItem("dataAddEval", JSON.stringify(values));
+    },
   });
 
   const formOneTopic = useForm({
@@ -70,19 +72,46 @@ export default function ModalManageEvalTopic({
       percent: (value) => !value && "Evaluation Percentage is required",
     },
     validateInputOnBlur: true,
+    onValuesChange: (values) => {
+      localStorage.setItem("dataAddOneEval", JSON.stringify(values));
+    },
   });
 
   useEffect(() => {
     if (opened && data) {
-      form.reset();
-      formOneTopic.reset();
-      setPercentTotal(total);
+      if (!localStorage.getItem("dataAddEval")) {
+        form.reset();
+      }
+      if (!localStorage.getItem("dataAddOneEval")) {
+        formOneTopic.reset();
+      }
+      let totalStorage = 0;
       if (type == "add") {
-        const length = (data as IModelEval[]).length || 0;
-        formOneTopic.setFieldValue("no", length + 1);
+        const dataListStorage = JSON.parse(
+          localStorage.getItem("dataAddEval")!
+        );
+        const dataOneStorage = JSON.parse(
+          localStorage.getItem("dataAddOneEval")!
+        );
+        const length =
+          dataListStorage?.length ?? ((data as IModelEval[]).length || 0);
+        if (dataListStorage) {
+          totalStorage =
+            dataListStorage.eval?.reduce(
+              (acc: any, { percent }: any) => acc + percent,
+              0
+            ) || 0;
+          form.setValues(dataListStorage);
+        }
+        if (dataOneStorage) {
+          formOneTopic.setValues(dataOneStorage);
+        } else {
+          formOneTopic.setFieldValue("no", length + 1);
+        }
       } else {
         formOneTopic.setValues(data as IModelEval);
       }
+      setPercentTotal(totalStorage + total);
     }
   }, [data, opened]);
 
@@ -92,6 +121,12 @@ export default function ModalManageEvalTopic({
       setIsAdded(false);
     }
   }, [isAdded]);
+
+  const closeModal = () => {
+    onClose();
+    localStorage.removeItem("dataAddEval");
+    localStorage.removeItem("dataAddOneEval");
+  };
 
   const onClickDone = () => {
     if (type == "add") {
@@ -109,7 +144,7 @@ export default function ModalManageEvalTopic({
     } else {
       return;
     }
-    onClose();
+    closeModal();
   };
 
   const addMore = () => {
@@ -151,10 +186,17 @@ export default function ModalManageEvalTopic({
   return (
     <Modal
       opened={opened}
-      onClose={onClose}
+      onClose={closeModal}
       closeOnEscape={false}
       closeOnClickOutside={false}
-      title={`${upperFirst(type)} Evaluation Method`}
+      title={
+        <div className="flex flex-col gap-1">
+          {upperFirst(type)} Evaluation Method
+          <p className="text-b3  text-[#808080]">
+            percent total : {percentTotal}
+          </p>
+        </div>
+      }
       size={
         type === "add" && form.getValues().eval?.length! > 0 ? "80vw" : "50vw"
       }
@@ -378,7 +420,7 @@ export default function ModalManageEvalTopic({
         </div>
         {/* Button */}
         <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8  items-end  justify-end h-fit">
-          <Button variant="subtle" onClick={onClose}>
+          <Button variant="subtle" onClick={closeModal}>
             Cancel
           </Button>
           {/* Add More Button */}
@@ -407,8 +449,6 @@ export default function ModalManageEvalTopic({
                 variant="subtle"
                 disabled={percentTotal == 100}
                 onClick={addMore}
-                onMouseOver={() => setOpenedTooltip(true)}
-                onMouseLeave={() => setOpenedTooltip(false)}
               >
                 Add more method
               </Button>

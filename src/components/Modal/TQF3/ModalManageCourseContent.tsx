@@ -49,6 +49,9 @@ export default function ModalManageTopic({
   const form = useForm({
     mode: "controlled",
     initialValues: { schedule: [] } as Partial<IModelTQF3Part2>,
+    onValuesChange: (values) => {
+      localStorage.setItem("dataAddCourseContent", JSON.stringify(values));
+    },
   });
 
   const formOneWeek = useForm({
@@ -73,21 +76,40 @@ export default function ModalManageTopic({
       } else if (values.labHour != previous.labHour) {
         formOneWeek.validateField("lecHour");
       }
+      localStorage.setItem("dataAddWeekCourseContent", JSON.stringify(values));
     },
   });
 
   useEffect(() => {
     if (opened && data) {
-      form.reset();
-      formOneWeek.reset();
+      if (!localStorage.getItem("dataAddCourseContent")) {
+        form.reset();
+      }
+      if (!localStorage.getItem("dataAddWeekCourseContent")) {
+        formOneWeek.reset();
+      }
       if (type == "add") {
-        const length = (data as IModelSchedule[]).length || 0;
-        formOneWeek.setValues({
-          weekNo: length + 1,
-          topic: "",
-          lecHour: teachingMethod.includes(TEACHING_METHOD.LEC.en) ? 3 : 0,
-          labHour: teachingMethod.includes(TEACHING_METHOD.LAB.en) ? 3 : 0,
-        });
+        const dataListStorage = JSON.parse(
+          localStorage.getItem("dataAddCourseContent")!
+        );
+        const dataOneStorage = JSON.parse(
+          localStorage.getItem("dataAddWeekCourseContent")!
+        );
+        const length =
+          dataListStorage?.length ?? ((data as IModelSchedule[]).length || 0);
+        if (dataListStorage) {
+          form.setValues(dataListStorage);
+        }
+        if (dataOneStorage) {
+          formOneWeek.setValues(dataOneStorage);
+        } else {
+          formOneWeek.setValues({
+            weekNo: length + 1,
+            topic: "",
+            lecHour: teachingMethod.includes(TEACHING_METHOD.LEC.en) ? 3 : 0,
+            labHour: teachingMethod.includes(TEACHING_METHOD.LAB.en) ? 3 : 0,
+          });
+        }
       } else {
         formOneWeek.setValues(data as IModelSchedule);
       }
@@ -100,6 +122,12 @@ export default function ModalManageTopic({
       setIsAdded(false);
     }
   }, [isAdded]);
+
+  const closeModal = () => {
+    onClose();
+    localStorage.removeItem("dataAddCourseContent");
+    localStorage.removeItem("dataAddWeekCourseContent");
+  };
 
   const onClickDone = () => {
     if (type == "add") {
@@ -117,7 +145,7 @@ export default function ModalManageTopic({
     } else {
       return;
     }
-    onClose();
+    closeModal();
   };
 
   const addMore = () => {
@@ -156,7 +184,7 @@ export default function ModalManageTopic({
   return (
     <Modal
       opened={opened}
-      onClose={onClose}
+      onClose={closeModal}
       closeOnEscape={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} Course Content`}
@@ -386,7 +414,7 @@ export default function ModalManageTopic({
         </div>
         {/* Button */}
         <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8  items-end  justify-end h-fit">
-          <Button variant="subtle" onClick={onClose}>
+          <Button variant="subtle" onClick={closeModal}>
             Cancel
           </Button>
 

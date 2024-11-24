@@ -72,6 +72,9 @@ export default function ModalManageCLO({
   const form = useForm({
     mode: "controlled",
     initialValues: { clo: [] } as Partial<IModelTQF3Part2>,
+    onValuesChange: (values) => {
+      localStorage.setItem("dataAddListClo", JSON.stringify(values));
+    },
   });
 
   const formOneCLO = useForm({
@@ -96,15 +99,36 @@ export default function ModalManageCLO({
         "Other is required",
     },
     validateInputOnBlur: true,
+    onValuesChange: (values) => {
+      localStorage.setItem("dataAddOneClo", JSON.stringify(values));
+    },
   });
 
   useEffect(() => {
     if (opened && data) {
-      form.reset();
-      formOneCLO.reset();
+      if (!localStorage.getItem("dataAddListClo")) {
+        form.reset();
+      }
+      if (!localStorage.getItem("dataAddOneClo")) {
+        formOneCLO.reset();
+      }
       if (type == "add") {
-        const length = (data as IModelCLO[]).length || 0;
-        formOneCLO.setFieldValue("no", length + 1);
+        const dataListStorage = JSON.parse(
+          localStorage.getItem("dataAddListClo")!
+        );
+        const dataOneStorage = JSON.parse(
+          localStorage.getItem("dataAddOneClo")!
+        );
+        const length =
+          dataListStorage?.length ?? ((data as IModelCLO[]).length || 0);
+        if (dataListStorage) {
+          form.setValues(dataListStorage);
+        }
+        if (dataOneStorage) {
+          formOneCLO.setValues(dataOneStorage);
+        } else {
+          formOneCLO.setFieldValue("no", length + 1);
+        }
       } else {
         formOneCLO.setValues(data as IModelCLO);
       }
@@ -117,6 +141,12 @@ export default function ModalManageCLO({
       setIsAdded(false);
     }
   }, [isAdded]);
+
+  const closeModal = () => {
+    onClose();
+    localStorage.removeItem("dataAddListClo");
+    localStorage.removeItem("dataAddOneClo");
+  };
 
   const onClickDone = () => {
     if (type == "add") {
@@ -134,7 +164,7 @@ export default function ModalManageCLO({
     } else {
       return;
     }
-    onClose();
+    closeModal();
   };
 
   const addMore = () => {
@@ -174,7 +204,7 @@ export default function ModalManageCLO({
   return (
     <Modal
       opened={opened}
-      onClose={onClose}
+      onClose={closeModal}
       closeOnEscape={false}
       closeOnClickOutside={false}
       title={`${upperFirst(type)} CLO`}
@@ -373,7 +403,7 @@ export default function ModalManageCLO({
         </div>
         {/* Button */}
         <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8  items-end  justify-end h-fit">
-          <Button variant="subtle" onClick={onClose}>
+          <Button variant="subtle" onClick={closeModal}>
             Cancel
           </Button>
           {/* Add More Button */}
