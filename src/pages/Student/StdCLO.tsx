@@ -32,11 +32,11 @@ export default function StdCLO() {
       ) : (
         <>
           <div className="flex flex-row  py-1  items-center justify-between">
-            <p className="text-secondary text-[16px] font-semibold">
+          {course?.clos.length !== 0 ? (<p className="text-secondary text-[16px] font-semibold">
               ผลลัพธ์การเรียนรู้ของกระบวนวิชา
               <br />
               Course Learning Outcome
-            </p>
+            </p>) : (<></>) }
           </div>
           {course?.clos.length !== 0 ? (
             <div
