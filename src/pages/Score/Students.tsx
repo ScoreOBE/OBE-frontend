@@ -70,7 +70,6 @@ export default function Students() {
     localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
   }, []);
 
-
   const fullScore =
     assignment?.questions.reduce((sum, { fullScore }) => sum + fullScore, 0) ||
     0;
@@ -306,7 +305,7 @@ export default function Students() {
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
                   <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {q1.toFixed(2)}
+                    {q1 ? q1.toFixed(2) : "-"}
                   </p>
                 </div>
               </div>

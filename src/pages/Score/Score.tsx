@@ -157,7 +157,7 @@ export default function Overall() {
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
                   <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {q1.toFixed(2)}
+                    {q1 ? q1.toFixed(2) : "-"}
                   </p>
                 </div>
               </div>
@@ -253,7 +253,7 @@ export default function Overall() {
                                 {stat.q3.toFixed(2)}
                               </Table.Td>
                               <Table.Td className="text-end pr-[70px] w-[11%]">
-                                {stat.q1.toFixed(2)}
+                                {stat.q1 ? stat.q1.toFixed(2) : "-"}
                               </Table.Td>
                               <Table.Th className="text-end pr-[70px] w-[8%]">
                                 <Icon
