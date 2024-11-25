@@ -43,8 +43,8 @@ export const isValidResponse = async (res: any) => {
         const checkToken = await checkTokenExpired(
           localStorage.getItem("token") || ""
         );
-        localStorage.clear();
-        if (!checkToken) {
+        if (localStorage.getItem("token") && !checkToken) {
+          localStorage.clear();
           window.location.assign(ROUTE_PATH.LOGIN);
           return;
         }
