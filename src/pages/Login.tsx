@@ -4,10 +4,14 @@ import loginImage from "@/assets/image/loginPage.png";
 import { Accordion, Button, Tabs, Title } from "@mantine/core";
 import { Image } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { isEmpty } from "lodash";
-import { setShowSidebar, setShowNavbar } from "@/store/config";
+import {
+  setShowSidebar,
+  setShowNavbar,
+  setShowButtonLogin,
+} from "@/store/config";
 import Icon from "@/components/Icon";
 import IconLock from "@/assets/icons/lockIcon.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
@@ -52,18 +56,18 @@ import ploManagementImg from "@/assets/image/ploManagement.png";
 import addPLOColImg from "@/assets/image/addPLOCol.png";
 import ploMappingImg from "@/assets/image/ploMapping.png";
 import reuseTQF3Img from "@/assets/image/reuseTQF3.png";
-import courseDashboardImg from "@/assets/image/courseDashboard1.png";
 import { useScrollIntoView } from "@mantine/hooks";
+
 export default function Login() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const buttonRef = useRef<HTMLDivElement>(null);
   const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView<
     HTMLDivElement,
     HTMLDivElement
   >();
-
   const tqf3List = [
     {
       id: "1",
@@ -138,12 +142,7 @@ export default function Login() {
       img: tqf5ComingImg,
     },
   ];
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState("right"); // Track the slide direction
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [selectTQF3Image, setSelectTQF3Image] = useState(tqf3List[0].img);
-  const [selectTQF5Image, setSelectTQF5Image] = useState(tqf5List[0].img);
-  const [openItem, setOpenItem] = useState("1");
 
   useEffect(() => {
     dispatch(setShowSidebar(false));
@@ -152,6 +151,44 @@ export default function Login() {
       goToDashboard(user.role);
     }
   }, [user]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        dispatch(setShowButtonLogin(!entry.isIntersecting));
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+
+    if (buttonRef.current) {
+      observer.observe(buttonRef.current);
+    }
+
+    return () => {
+      if (buttonRef.current) {
+        observer.unobserve(buttonRef.current);
+      }
+    };
+  }, []);
+
+  const ButtonLogin = () => {
+    return (
+      <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
+        <Button className="z-[52] bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg !text-[14px] !h-[44px]">
+          <img
+            src={cmulogoLogin}
+            alt="CMULogo"
+            className="h-[13px] mr-3 rounded-1xl"
+          />
+          Sign in CMU Account
+        </Button>
+      </a>
+    );
+  };
 
   return (
     <div
@@ -201,17 +238,11 @@ export default function Login() {
           </p>
         </div>
 
-        <div className="items-center mt-8 text-center w-full justify-center px-[118px] hidden sm:flex">
-          <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
-            <Button className="z-[52] bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg !text-[14px] !h-[44px]">
-              <img
-                src={cmulogoLogin}
-                alt="CMULogo"
-                className="h-[13px] mr-3 rounded-1xl"
-              />
-              Sign in CMU Account
-            </Button>
-          </a>
+        <div
+          ref={buttonRef}
+          className="items-center mt-8 text-center w-full justify-center px-[118px] hidden sm:flex"
+        >
+          {ButtonLogin()}
         </div>
         <div
           data-aos-duration="1000"
@@ -637,11 +668,7 @@ export default function Login() {
 
               <div className="mx-28 max-macair133:mx-10 ">
                 <div className=" flex h-fit w-full rounded-xl bg-white shadow-md backdrop-blur-[120px]  overflow-clip">
-                  <Accordion
-                    defaultValue="1"
-                    onChange={() => setOpenItem}
-                    className="p-6"
-                  >
+                  <Accordion defaultValue="1" className="p-6">
                     {tqf3List.map((item) => {
                       return (
                         <Accordion.Item
@@ -753,11 +780,7 @@ export default function Login() {
 
               <div className="mx-28 max-macair133:mx-10 z-30">
                 <div className="flex h-fit w-full rounded-xl bg-white/65 overflow-clip shadow-md ">
-                  <Accordion
-                    defaultValue="1"
-                    onChange={() => setOpenItem}
-                    className="p-6"
-                  >
+                  <Accordion defaultValue="1" className="p-6">
                     {tqf5List.map((item) => {
                       return (
                         <Accordion.Item
