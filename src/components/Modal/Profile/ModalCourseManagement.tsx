@@ -205,7 +205,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
       dispatch(removeCourse(res.courseId));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Delete success",
+        "Delete successfully",
         `${course.courseNo} is deleted`
       );
     }
@@ -221,7 +221,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
       dispatch(removeSection({ id: res.courseId, secId: res.secId }));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Delete Section Success",
+        "Delete Section successfully",
         `${getSectionNo(editSec?.sectionNo)} is deleted`
       );
     }

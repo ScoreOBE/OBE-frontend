@@ -200,7 +200,7 @@ export default function ModalAddCourse({
     if (res) {
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Add success",
+        "Add successfully",
         `${form.getValues().courseNo} is added`
       );
       closeModal();

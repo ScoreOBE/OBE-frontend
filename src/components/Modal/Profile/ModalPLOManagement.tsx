@@ -120,7 +120,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
       fetchPLO();
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Delete success",
+        "Delete successfully",
         `${collection.name} is deleted`
       );
       setOpenPopupDeletePLOCollection(false);

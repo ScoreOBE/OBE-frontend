@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import Icon from "@/components/Icon";
 import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
 import IconList from "@/assets/icons/list.svg?react";
+import IconArrow from "@/assets/icons/targetArrow.svg?react";
 import IconHistogram from "@/assets/icons/histogram.svg?react";
 import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
@@ -99,8 +100,8 @@ export default function StdCourseSidebar() {
               onClick={() => gotoPage(ROUTE_PATH.CLO)}
               leftSection={
                 <Icon
-                  IconComponent={IconHistogram}
-                  className="pb-1 pl-[2px] size-[22px]"
+                  IconComponent={IconArrow}
+                  className=" stroke-[1.5px] size-[22px] "
                 />
               }
               className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${

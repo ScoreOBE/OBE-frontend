@@ -114,7 +114,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Activate",
-        `Activate ${e.semester}, ${e.year} successful`
+        `Activate ${e.semester}, ${e.year} successfully`
       );
       setSelectSemester(undefined);
       const res = await getAcademicYear(new AcademicYearRequestDTO());
@@ -161,7 +161,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       if (res) {
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Add Success",
+          "Add successfully",
           `Add Semester ${selectSemester.semester}, ${selectSemester.year} successful`
         );
         setSelectSemester(undefined);

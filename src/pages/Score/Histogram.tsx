@@ -135,12 +135,12 @@ export default function Histogram() {
                           classNames={{
                             root: "overflow-hidden mt-1 mx-3 flex flex-col max-h-full",
                           }}
-                          value={tabStates[i] || "histogram"} // Default tab for new items
+                          value={tabStates[i] || "bellCurve"} // Default tab for new items
                           onChange={(newValue) => handleTabChange(i, newValue)} // Update specific tab
                         >
                           <Tabs.List className="mb-2">
-                            <Tabs.Tab value="histogram">Histogram</Tabs.Tab>
                             <Tabs.Tab value="bellCurve">Distribution</Tabs.Tab>
+                            <Tabs.Tab value="histogram">Histogram</Tabs.Tab>
                           </Tabs.List>
                           <Tabs.Panel
                             className="flex flex-col gap-1"
@@ -161,6 +161,7 @@ export default function Histogram() {
                               data={item}
                               students={section.students!}
                             />
+                            <p className=" text-[10px] translate-x-6 mb-2">Score distribution powered by Andrew C. Myers (Cornell University)</p>
                           </Tabs.Panel>
                         </Tabs>
                       </div>

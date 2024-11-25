@@ -168,7 +168,7 @@ export default function StdScore() {
                     <Table.Th className="text-end w-[10%]">Median</Table.Th>
                     <Table.Th className="text-end w-[10%]">Max</Table.Th>
                     <Table.Th className="text-end w-[10%]">Q3</Table.Th>
-                    <Table.Th className="text-end w-[10%]">Q1</Table.Th>
+                    <Table.Th className="text-end w-[10%] px-8">Q1</Table.Th>
                     {/* <Table.Th className="text-end pr-[30px] w-[10%]"></Table.Th> */}
                   </Table.Tr>
                 </Table.Thead>
@@ -213,7 +213,7 @@ export default function StdScore() {
                         <Table.Td className="text-end w-[10%]">
                           {stat.q3.toFixed(2)}
                         </Table.Td>
-                        <Table.Td className="text-end w-[10%]">
+                        <Table.Td className="text-end px-8 w-[10%]">
                           {stat.q1 ? stat.q1.toFixed(2) : "-"}
                         </Table.Td>
                       </Table.Tr>

@@ -374,7 +374,7 @@ export default function TQF3() {
           dispatch(setDataTQF3({ ...tqf3, ...res }));
           showNotifications(
             NOTI_TYPE.SUCCESS,
-            `TQF 3, ${tqf3Part} save success`,
+            `TQF 3, ${tqf3Part} save successfully`,
             `TQF 3 - ${tqf3Part} is saved`
           );
           if (tqf3Part !== "part7") {
@@ -419,7 +419,7 @@ export default function TQF3() {
             );
           }
         });
-        showNotifications(NOTI_TYPE.SUCCESS, "Reuse TQF 3 Success", "thinking");
+        showNotifications(NOTI_TYPE.SUCCESS, "Reuse TQF 3 Successfully", "This course reuses data from course you select.");
       }
       dispatch(setLoadingOverlay(false));
       setOpenModalReuse(false);

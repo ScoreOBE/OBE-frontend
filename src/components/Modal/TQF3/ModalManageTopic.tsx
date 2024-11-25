@@ -85,13 +85,13 @@ export default function ModalManageTopic({
         if (type === "add") {
           showNotifications(
             NOTI_TYPE.SUCCESS,
-            "Add success",
+            "Add successfully",
             `Additional topic is added`
           );
         } else {
           showNotifications(
             NOTI_TYPE.SUCCESS,
-            "Edit success",
+            "Edit successfully",
             `Topic ${editData?.index! + 1} is edited`
           );
         }

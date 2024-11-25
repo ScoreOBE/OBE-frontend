@@ -128,7 +128,7 @@ export default function Section() {
         dispatch(removeSection({ id: editSec.courseId, secId: id }));
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Delete Section Success",
+          "Delete Section successfully",
           `${getSectionNo(editSec?.sectionNo)} is deleted`
         );
       }

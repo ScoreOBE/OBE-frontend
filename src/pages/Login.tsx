@@ -220,7 +220,7 @@ export default function Login() {
           <br />
           for instructors and students
         </p>
-        <p className="mt-5 text-h2 text-[#4F4D55] w-full hidden sm:flex justify-center items-center text-center px-[118px] font-[600]">
+        <p className="mt-5 text-h2 text-[#4F4D55] w-full hidden sm:flex justify-center items-center text-center px-[118px] font-[500]">
           Discover A Better Way to Do OBE Simplify Your Academic Journey
         </p>
 
@@ -332,7 +332,7 @@ export default function Login() {
                     Effortless score uploads, instant analytics, <br /> and
                     visual insights! Elevate your grading today! <br />
                   </p>
-                  <div className="flex justify-end gap-10 -mt-14">
+                  <div className="flex justify-end gap-10 ml-12 -mt-14">
                     <div className="flex justify-start flex-col items-start mt-2 mb-2 p-7 rounded-xl bg-white/65 backdrop-blur-[100px] shadow-lg">
                       <img
                         src={gradescope}
@@ -392,7 +392,7 @@ export default function Login() {
                   <div className="flex flex-col w-[40%] h-full gap-8 max-macair133:gap-4 text-[18px] ">
                     <div className="flex flex-col gap-2 items-start mt-2 mb-2">
                       <p className="font-[700] text-[36px] max-macair133:text-[34px] text-emphasize">
-                        Statistics & Histogram
+                        Statistics & Chart
                       </p>
                       <p className="text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[750px]">
                         Visualize your grade with interactive charts
@@ -438,7 +438,7 @@ export default function Login() {
                   <div className="flex flex-col w-[50%] h-full gap-8 text-[18px] ">
                     <div className="flex flex-col gap-2 items-start mt-2 mb-2">
                       <p className="font-[700] text-[36px] max-macair133:text-[34px] text-emphasize">
-                        PLO Performance <br /> Spider Chart
+                        PLO Performance <br /> <p className="-mt-1"> Spider Chart</p>
                       </p>
                       <p className="text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[520px] ">
                         Visualize student progress{" "}
@@ -461,6 +461,10 @@ export default function Login() {
                         </span>{" "}
                         across courses and learning outcomes, and discover areas
                         to improve.
+                      </p>
+                      <p className=" text-deemphasize underline font-[600]  mt-10 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
+                        
+                        Available in February 2025
                       </p>
                     </div>
                   </div>
@@ -490,7 +494,12 @@ export default function Login() {
                   </div>
 
                   <div className="flex  justify-center gap-16">
-                    <div className="relative rounded-2xl h-[550px] w-[600px] bg-gradient-to-b shadow-xl from-[#7161ef]  via-[#957fef] to-[#b79ced] border-t-[1px] overflow-clip">
+                    <div
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.45)",
+                      }}
+                      className="relative rounded-2xl h-[550px] w-[600px] bg-gradient-to-b shadow-xl from-[#7161ef]  via-[#957fef] to-[#b79ced] border-t-[1px] overflow-clip"
+                    >
                       <div
                         className={`h-full w-full overflow-clip rounded-xl -translate-x-20 translate-y-40 shadow-2xl max-macair133:-translate-x-14`}
                       >
@@ -523,7 +532,12 @@ export default function Login() {
                         </div>
                       </div>
                     </div>
-                    <div className="relative rounded-2xl h-[550px] w-[600px] bg-gradient-to-b shadow-xl from-[#5390d9] via-[#4ea8de] to-[#48bfe3] border-t-[1px] overflow-clip">
+                    <div
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.45)",
+                      }}
+                      className="relative rounded-2xl h-[550px] w-[600px] bg-gradient-to-b shadow-xl from-[#5390d9] via-[#4ea8de] to-[#48bfe3] border-t-[1px] overflow-clip"
+                    >
                       <div
                         className={`h-full w-full overflow-clip rounded-xl translate-x-20 translate-y-40 max-macair133:translate-x-12 shadow-2xl`}
                       >
@@ -543,8 +557,8 @@ export default function Login() {
 
                       <div className="absolute top-2 left-2 rounded-xl">
                         <div className="top-0 flex flex-col justify-end p-6 ">
-                          <p className="opacity-70 font-bold uppercase cursor-default  text-white">
-                            Export
+                          <p className="opacity-70 font-bold  cursor-default  text-white">
+                            EXPORT (Available in February 2025)
                           </p>
                           <Title
                             order={3}
@@ -823,7 +837,7 @@ export default function Login() {
                         </h1>
                       </div>
                       <p className="text-sm mt-2 text-[28px] text-white underline ">
-                        Available in February
+                        Available in February 2025
                       </p>
                     </div>
                   </div>
