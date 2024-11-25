@@ -267,17 +267,7 @@ export default function Section() {
                   >
                     Upload score
                   </Button>
-                  {user.role == ROLE.TA && (
-                    <Button
-                      color="#20884f"
-                      leftSection={
-                        <Icon className="size-4" IconComponent={IconExcel} />
-                      }
-                      className="!font-medium px-3"
-                    >
-                      Export score
-                    </Button>
-                  )}
+                 
                 </div>
               ) : (
                 <Button
