@@ -84,7 +84,7 @@ export default function StdChart() {
         });
       };
     }
-  }, [course, sectionRefs]);
+  }, [sectionRefs.current]);
 
   return (
     <div className="bg-white flex flex-col h-full w-full px-6 pt-5  gap-3 overflow-hidden">
@@ -110,7 +110,7 @@ export default function StdChart() {
                         }`}
                         id={`${item.name}`}
                         key={i}
-                        ref={sectionRefs.current?.at(i)} // Dynamic refs
+                        ref={sectionRefs.current!.at(i)} // Dynamic refs
                       >
                         <Tabs
                           classNames={{
