@@ -4,6 +4,7 @@ import { Button, Checkbox, Menu, Table, Tabs, Tooltip } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconFilter from "@/assets/icons/filter.svg?react";
 import IconEye from "@/assets/icons/eyePublish.svg?react";
+import IconActionTQF from "@/assets/icons/actionTQF.svg?react";
 import IconTQF3 from "@/assets/icons/TQF3.svg?react";
 import IconTQF5 from "@/assets/icons/TQF5.svg?react";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
@@ -208,11 +209,12 @@ export default function AdminDashboardTQF() {
             <Table.Td>
               <div className="flex gap-2">
                 <div
-                  className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
+                  className="px-4 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium flex items-center"
                   tqf-status={sec ? sec.TQF3?.status : course.TQF3?.status}
                 >
                   {sec ? sec.TQF3?.status : course.TQF3?.status}
                 </div>
+
                 {sec.TQF3?.status === TQF_STATUS.DONE && (
                   <Tooltip
                     withArrow
@@ -266,7 +268,7 @@ export default function AdminDashboardTQF() {
                       variant="outline"
                       className="tag-tqf !px-3 !rounded-full text-center"
                     >
-                      <Icon className="size-5" IconComponent={IconEye} />
+                      <Icon className="size-5" IconComponent={IconActionTQF} />
                     </Button>
                   </Menu.Target>
 
@@ -287,7 +289,7 @@ export default function AdminDashboardTQF() {
                           goToPage(ROUTE_PATH.TQF3, course.courseNo!, sec);
                         }}
                       >
-                        View TQF 3
+                        Edit TQF 3
                       </Menu.Item>
                       <Menu.Item
                         leftSection={
@@ -296,7 +298,7 @@ export default function AdminDashboardTQF() {
                         className="!w-48"
                         disabled
                       >
-                        View TQF 5
+                        Edit TQF 5
                       </Menu.Item>
                     </div>
                   </Menu.Dropdown>
@@ -382,7 +384,7 @@ export default function AdminDashboardTQF() {
                   variant="outline"
                   className="tag-tqf !px-3 !rounded-full text-center"
                 >
-                  <Icon className="size-5" IconComponent={IconEye} />
+                  <Icon className="size-5 ml-1" IconComponent={IconActionTQF} />
                 </Button>
               </Menu.Target>
 
@@ -403,7 +405,7 @@ export default function AdminDashboardTQF() {
                       goToPage(ROUTE_PATH.TQF3, course.courseNo!, course);
                     }}
                   >
-                    View TQF 3
+                    Edit TQF 3
                   </Menu.Item>
                   <Menu.Item
                     leftSection={
@@ -412,7 +414,7 @@ export default function AdminDashboardTQF() {
                     className="!w-48"
                     disabled
                   >
-                    View TQF 5
+                    Edit TQF 5
                   </Menu.Item>
                 </div>
               </Menu.Dropdown>
