@@ -38,7 +38,7 @@ export default function ModalQuestionChart({
       <ChartContainer
         type="curve"
         data={question?.assignment}
-        students={question.students}
+        students={question?.students}
         questionName={question?.name}
         studentScore={question?.studentScore}
       />
