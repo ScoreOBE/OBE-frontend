@@ -14,6 +14,7 @@ import IconChevronDown from "@/assets/icons/chevronDown.svg?react";
 import ChartContainer from "@/components/Chart/ChartContainer";
 import { calStat } from "@/helpers/functions/score";
 import { ROLE } from "@/helpers/constants/enum";
+import ModalQuestionChart from "@/components/Modal/ModalQuestionChart";
 
 export default function Overall() {
   const { courseNo, sectionNo, name } = useParams();
@@ -28,6 +29,8 @@ export default function Overall() {
   const assignment = section?.assignments?.find((item) => item.name == name);
   const [params, setParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const [selectQuestion, setSelectQuestion] = useState<any>();
+  const [openModalChart, setOpenModalChart] = useState(false);
   const [items, setItems] = useState<any[]>([
     {
       title: "Your Course",
@@ -96,6 +99,11 @@ export default function Overall() {
 
   return (
     <>
+      <ModalQuestionChart
+        opened={openModalChart}
+        onClose={() => setOpenModalChart(false)}
+        question={selectQuestion}
+      />
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
         {loading ? (
@@ -194,12 +202,74 @@ export default function Overall() {
                     <Table.Th className="text-end pr-[70px] w-[11%]">
                       Q1
                     </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[8%]"></Table.Th>
+                    {/* <Table.Th className="text-end pr-[70px] w-[8%]"></Table.Th> */}
                   </Table.Tr>
                 </Table.Thead>
+                <Table.Tbody className="text-default">
+                  {assignment?.questions.map((ques, index) => {
+                    const dataScores =
+                      section?.students
+                        ?.flatMap(({ scores }) =>
+                          scores
+                            .filter((item) => item.assignmentName === name)
+                            .flatMap((item) =>
+                              item.questions.filter((q) => q.name === ques.name)
+                            )
+                            .map((question) => question.score)
+                        )
+                        .sort((a, b) => a - b) || [];
+                    const stat = calStat(dataScores, scores?.length);
+                    return (
+                      <Table.Tr
+                        key={index}
+                        className="text-[13px] font-normal py-[14px] w-full cursor-pointer"
+                        onClick={() => {
+                          setSelectQuestion({
+                            assignment,
+                            ...ques,
+                            scores,
+                            students: section?.students,
+                          });
+                          setOpenModalChart(true);
+                        }}
+                      >
+                        <Table.Td className="text-start w-[12%]">
+                          {ques.name}
+                        </Table.Td>
+                        <Table.Td className="text-end pr-[70px] w-[14%]">
+                          {ques.fullScore}
+                        </Table.Td>
+                        <Table.Td className="text-end pr-[70px] w-[11%]">
+                          {stat.mean.toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="text-end pr-[70px] w-[11%]">
+                          {stat.sd.toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="text-end pr-[70px] w-[11%]">
+                          {stat.median.toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="text-end pr-[70px]  w-[11%]">
+                          {stat.maxScore.toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="text-end pr-[70px] w-[11%]">
+                          {stat.q3.toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="text-end pr-[70px] w-[11%]">
+                          {stat.q1 ? stat.q1.toFixed(2) : "-"}
+                        </Table.Td>
+                        <Table.Th className="text-end pr-[70px] w-[8%]">
+                          <Icon
+                            IconComponent={IconChevronDown}
+                            className="size-4"
+                          />
+                        </Table.Th>
+                      </Table.Tr>
+                    );
+                  })}
+                </Table.Tbody>
               </Table>
 
-              <Accordion chevron={false} unstyled>
+              {/* <Accordion chevron={false} unstyled>
                 {assignment?.questions.map((ques, index) => {
                   const dataScores =
                     section?.students
@@ -229,7 +299,6 @@ export default function Overall() {
                       >
                         <Table>
                           <Table.Tbody className="text-default">
-                            {/* Entire Table Row as Control */}
                             <Table.Tr className="text-[13px] font-normal py-[14px] w-full ">
                               <Table.Td className="text-start w-[12%]">
                                 {ques.name}
@@ -284,7 +353,7 @@ export default function Overall() {
                     </Accordion.Item>
                   );
                 })}
-              </Accordion>
+              </Accordion> */}
             </div>
           </>
         ) : (
