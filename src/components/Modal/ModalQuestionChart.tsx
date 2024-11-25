@@ -26,11 +26,19 @@ export default function ModalQuestionChart({
   question,
 }: Props) {
   return (
-    <Modal opened={opened} onClose={onClose} centered>
-      <div className="flex justify-between px-20 pb-6 pt-0">
-        <p className="text-secondary text-[16px] font-semibold">
-          {question?.name} - {question?.fullScore} Points
-        </p>
+    <Modal
+      opened={opened}
+      onClose={onClose}
+      centered
+      size="80vw"
+      title={`Chart - ${question?.name} (${question?.fullScore} Points)`}
+      transitionProps={{ transition: "pop" }}
+      classNames={{
+        content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
+        body: "flex flex-col gap-4 overflow-hidden max-h-full h-fit",
+      }}
+    >
+      <div className="flex justify-end">
         <p className="text-secondary text-[16px] font-semibold">
           {question?.scores?.length} Students
         </p>
