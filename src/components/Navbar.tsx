@@ -10,11 +10,15 @@ import { SearchInput } from "./SearchInput";
 import { setAllCourseList } from "@/store/allCourse";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { ROLE } from "@/helpers/constants/enum";
+import { Button } from "@mantine/core";
 
 export default function Navbar() {
   const { name } = useParams();
   const location = useLocation().pathname;
   const user = useAppSelector((state) => state.user);
+  const showButtonLogin = useAppSelector(
+    (state) => state.config.showButtonLogin
+  );
   const dashboard = useAppSelector((state) => state.config.dashboard);
   const [params, setParams] = useSearchParams();
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
@@ -90,12 +94,25 @@ export default function Navbar() {
     }
   };
 
+  const ButtonLogin = () => {
+    return (
+      <a
+        href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}
+        className="hidden sm:flex"
+      >
+        <Button size="xs" variant="light" className="!text-[14px]">
+          Sign in CMU Account
+        </Button>
+      </a>
+    );
+  };
+
   return (
     <>
       <div
         className={`min-h-14 bg-[#fafafa] border-b border-[#e0e0e0] text-secondary px-6 inline-flex flex-wrap justify-between items-center z-50 ${
           [ROUTE_PATH.LOGIN].includes(location)
-            ? " border-none  min-h-14 items-center"
+            ? "border-none min-h-14 items-center"
             : ""
         }`}
         style={
@@ -104,7 +121,7 @@ export default function Navbar() {
             : {}
         }
       >
-        <div className="flex w-fit  gap-3 items-center">
+        <div className="flex w-fit gap-3 items-center">
           <p
             className={`font-semibold text-h2 ${
               location.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
@@ -138,7 +155,7 @@ export default function Navbar() {
           />
         )}
         {[ROUTE_PATH.LOGIN].includes(location) && (
-          <div className="bg-[#fafafa] sm:px-12 px-2  overflow-hidden items-center !w-full  !h-full  justify-between  flex flex-1 ">
+          <div className="bg-[#fafafa] sm:px-12 px-2 overflow-hidden items-center !w-full !h-full justify-between flex">
             <div className="flex gap-2 items-center">
               <img
                 src={scoreobe}
@@ -149,12 +166,12 @@ export default function Navbar() {
                 ScoreOBE +
               </span>{" "}
             </div>
-            <div className="flex items-end gap-5  justify-end">
-              {/* <img src={cmulogo} alt="CMULogo" className=" h-[18px]" /> */}
+            <div className="py-5 flex items-end gap-5 justify-end h-full">
+              {showButtonLogin && ButtonLogin()}
               <img
                 src={cpeLogoRed}
                 alt="cpeLogo"
-                className=" sm:h-[40px] h-[32px] -mt-2 sm:mt-0"
+                className="sm:h-[40px] h-[32px]"
               />
             </div>
           </div>
