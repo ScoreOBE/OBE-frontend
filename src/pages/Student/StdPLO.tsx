@@ -34,8 +34,8 @@ export default function StdPLO() {
           <p className="text-secondary text-[18px] font-semibold "></p>
         </div>
       </div>
-      <div className=" flex flex-row px-[60px] flex-1 justify-between">
-        <div className="h-full  justify-center flex flex-col">
+      <div className="flex items-center  !h-full !w-full justify-between px-[88px]">
+        <div className="h-full  translate-y-2  justify-center flex flex-col">
           <p className="text-secondary text-[21px] font-semibold">
             PLO is coming soon to{" "}
             <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">

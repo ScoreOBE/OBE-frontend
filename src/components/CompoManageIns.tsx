@@ -182,7 +182,7 @@ export default function CompoMangeIns({
           fetchIns();
           showNotifications(
             NOTI_TYPE.SUCCESS,
-            "Add success",
+            "Add successfully",
             `${name} is added to admin`
           );
         }

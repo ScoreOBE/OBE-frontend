@@ -148,7 +148,7 @@ export default function MapPLO({ ploName = "" }: Props) {
       setOpenModalEditPLONo(false);
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Edit success",
+        "Edit successfully",
         `PLO-${formPLO.getValues().no} is edited`
       );
     }
@@ -195,7 +195,7 @@ export default function MapPLO({ ploName = "" }: Props) {
         showNotifications(
           NOTI_TYPE.SUCCESS,
           "Update PLO",
-          "Reorder PLO success"
+          "Reorder PLO successfully"
         );
       }
     };
@@ -244,7 +244,7 @@ export default function MapPLO({ ploName = "" }: Props) {
       if (res) {
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          `Add PLO-${no} Success`,
+          `Add PLO-${no} successfully`,
           `PLO-${no} is added`
         );
         setPloList(res);
@@ -339,7 +339,7 @@ export default function MapPLO({ ploName = "" }: Props) {
     if (res) {
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "PLO Mapping Success",
+        "PLO Mapping successfully",
         `PLO mapping completed for ${res.length} course${
           res.length > 1 ? "s" : ""
         }`
@@ -508,7 +508,7 @@ export default function MapPLO({ ploName = "" }: Props) {
         searchCourse("");
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Add success",
+          "Add successfully",
           `${form.getValues().courseNo} is added`
         );
         closeModalAddCourse();

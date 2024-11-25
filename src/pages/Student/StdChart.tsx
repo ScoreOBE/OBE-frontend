@@ -120,8 +120,8 @@ export default function StdChart() {
                           onChange={(newValue) => handleTabChange(i, newValue)} // Update specific tab
                         >
                           <Tabs.List className="mb-2">
-                            <Tabs.Tab value="histogram">Histogram</Tabs.Tab>
                             <Tabs.Tab value="bellCurve">Distribution</Tabs.Tab>
+                            <Tabs.Tab value="histogram">Histogram</Tabs.Tab>
                           </Tabs.List>
                           <Tabs.Panel
                             className="flex flex-col gap-1"
@@ -142,6 +142,7 @@ export default function StdChart() {
                               data={item}
                               studentScore={studentScore}
                             />
+                             <p className=" text-[10px] translate-x-6 mb-2">Score distribution powered by Andrew C. Myers (Cornell University)</p>
                           </Tabs.Panel>
                         </Tabs>
                       </div>
@@ -176,10 +177,10 @@ export default function StdChart() {
             <div className="flex items-center !h-full !w-full -mt-[10px] justify-between px-16">
               <div className="flex flex-col gap-3 text-start">
                 <p className="!h-full text-[20px] text-secondary font-semibold">
-                  No Assignment
+                  No Chart
                 </p>{" "}
                 <p className=" text-[#333333] -mt-1 text-b2 break-words font-medium leading-relaxed">
-                  The chart will show when the assignment is publish.
+                  The chart will show when the assignment is published by the instructor.
                 </p>{" "}
               </div>
               <div className=" items-center justify-center flex">

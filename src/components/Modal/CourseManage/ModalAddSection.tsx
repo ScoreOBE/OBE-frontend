@@ -201,7 +201,7 @@ export default function ModalAddSection({
       }
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Add success",
+        "Add successfully",
         `${sectionNoList.join(", ")} is added`
       );
       closeModal();

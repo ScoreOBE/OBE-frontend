@@ -94,7 +94,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
       window.URL.revokeObjectURL(url);
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Export Success",
+        "Export successfully",
         `TQF3 exported successfully as ${filename}.`
       );
     }

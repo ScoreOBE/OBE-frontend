@@ -32,10 +32,10 @@ export default function StdCLO() {
       ) : (
         <>
           <div className="flex flex-row  py-1  items-center justify-between">
-            <p className="text-secondary text-[18px] font-semibold">
-              CLO - ผลลัพธ์การเรียนรู้ของกระบวนวิชา
+            <p className="text-secondary text-[16px] font-semibold">
+              ผลลัพธ์การเรียนรู้ของกระบวนวิชา
               <br />
-              Course Learning Outcome.
+              Course Learning Outcome
             </p>
           </div>
           {course?.clos.length !== 0 ? (
@@ -50,7 +50,7 @@ export default function StdCLO() {
                   <Table.Tr className="bg-[#e5e7f6]">
                     <Table.Th>CLO No.</Table.Th>
                     <Table.Th>CLO Description</Table.Th>
-                    <Table.Th>Score Average</Table.Th>
+                    <Table.Th>Score</Table.Th>
                     <Table.Th>Evaluation</Table.Th>
                   </Table.Tr>
                 </Table.Thead>
@@ -79,7 +79,7 @@ export default function StdCLO() {
                   No CLO
                 </p>
                 <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                  It seems like no clo.
+                The CLO will show when the TQF 3 is submitted by the instructor.
                 </p>
               </div>
               <div className=" items-center justify-center flex">
