@@ -353,6 +353,21 @@ export default function Profile() {
                     <Icon className="size-4 " IconComponent={IconFeedback} />{" "}
                     <span>Feedback</span>
                   </div>
+                </Menu.Item> 
+              </a>
+            </>
+          )}
+          {[ROLE.STUDENT, ROLE.TA].includes(user.role) && (
+            <>
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSfstqyy0ijNp8u0JU0a7bBU_x0HGPhJ5V7flAD0ZymzD9cZqA/viewform"
+                target="_blank"
+              >
+                <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
+                  <div className="flex items-center gap-2">
+                    <Icon className="size-4 " IconComponent={IconFeedback} />{" "}
+                    <span>Feedback</span>
+                  </div>
                 </Menu.Item>
               </a>
             </>

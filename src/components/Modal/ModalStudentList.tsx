@@ -84,8 +84,8 @@ export default function ModalStudentList({
         setResult(undefined);
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Upload success",
-          "Upload student list success"
+          "Upload successfully",
+          "Student list have been uploaded successfully"
         );
         onClose();
         if (onNext) {

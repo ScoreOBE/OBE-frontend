@@ -129,8 +129,8 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
       if (res) {
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Upload success",
-          "upload scores success"
+          "Upload successfully",
+          "Scores have been upload successfully"
         );
         const res = await getOneCourse({
           year: data.year,

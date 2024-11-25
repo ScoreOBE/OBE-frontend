@@ -50,6 +50,9 @@ export default function ModalQuestionChart({
         questionName={question?.name}
         studentScore={question?.studentScore}
       />
+      <p className=" text-[10px] translate-x-6 mb-2">
+        Score distribution powered by Andrew C. Myers (Cornell University)
+      </p>
     </Modal>
   );
 }

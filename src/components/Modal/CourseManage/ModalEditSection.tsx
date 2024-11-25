@@ -132,7 +132,7 @@ export default function ModalEditSection({
     if (res) {
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Edit success",
+        "Edit successfully",
         `${
           payload.data.sectionNo !== value?.oldSectionNo ? "Section no." : ""
         } ${

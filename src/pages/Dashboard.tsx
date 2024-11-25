@@ -126,7 +126,7 @@ export default function Dashboard() {
       setOpenDelPopup(false);
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Delete Course Success",
+        "Delete Course successfully",
         `${delCourse?.courseNo} is deleted`
       );
     }

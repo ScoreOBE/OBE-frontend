@@ -140,7 +140,7 @@ export default function StdAssignment() {
                   No Assignment
                 </p>
                 <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                  It seems like no assignments.
+                The assignment will show to you once the instructor publishes it.
                 </p>
               </div>
               <div className=" items-center justify-center flex">
