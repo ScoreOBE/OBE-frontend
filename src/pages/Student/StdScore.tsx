@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Accordion, Table } from "@mantine/core";
+import { Accordion, Modal, Table } from "@mantine/core";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useParams, useSearchParams } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
@@ -11,6 +11,7 @@ import IconChevronDown from "@/assets/icons/chevronDown.svg?react";
 import ChartContainer from "@/components/Chart/ChartContainer";
 import { calStat } from "@/helpers/functions/score";
 import { ROLE } from "@/helpers/constants/enum";
+import ModalQuestionChart from "@/components/Modal/ModalQuestionChart";
 
 export default function StdScore() {
   const { courseNo, name } = useParams();
@@ -39,6 +40,8 @@ export default function StdScore() {
     },
     { title: `${name}` },
   ]);
+  const [selectQuestion, setSelectQuestion] = useState<any>();
+  const [openModalChart, setOpenModalChart] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -77,6 +80,11 @@ export default function StdScore() {
 
   return (
     <>
+      <ModalQuestionChart
+        opened={openModalChart}
+        onClose={() => setOpenModalChart(false)}
+        question={selectQuestion}
+      />
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
         {loading ? (
@@ -150,7 +158,7 @@ export default function StdScore() {
                 height: "fit-content",
               }}
             >
-              <Table className="sticky top-0 z-[1]">
+              <Table stickyHeader striped>
                 <Table.Thead>
                   <Table.Tr className="bg-[#e5e7f6]">
                     <Table.Th className="w-[10%]">Question</Table.Th>
@@ -161,12 +169,60 @@ export default function StdScore() {
                     <Table.Th className="text-end w-[10%]">Max</Table.Th>
                     <Table.Th className="text-end w-[10%]">Q3</Table.Th>
                     <Table.Th className="text-end w-[10%]">Q1</Table.Th>
-                    <Table.Th className="text-end pr-[30px] w-[10%]"></Table.Th>
+                    {/* <Table.Th className="text-end pr-[30px] w-[10%]"></Table.Th> */}
                   </Table.Tr>
                 </Table.Thead>
+                <Table.Tbody className="text-default">
+                  {assignment?.questions.map((ques, index) => {
+                    const stat = calStat(ques.scores, ques.scores.length);
+                    const studentScore = yourScores?.questions.find(
+                      (item) => item.name == ques.name
+                    )?.score;
+                    return (
+                      <Table.Tr
+                        key={index}
+                        className="text-[13px] font-normal py-[14px] w-full cursor-pointer"
+                        onClick={() => {
+                          setSelectQuestion({
+                            assignment,
+                            ...ques,
+                            studentScore,
+                          });
+                          setOpenModalChart(true);
+                        }}
+                      >
+                        <Table.Td className="text-start w-[10%]">
+                          {ques.name}
+                        </Table.Td>
+                        <Table.Td className="text-end w-[10%]">
+                          {studentScore?.toFixed(2)} /{" "}
+                          {ques.fullScore.toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="text-end w-[10%]">
+                          {stat.mean.toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="text-end w-[10%]">
+                          {stat.sd.toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="text-end w-[10%]">
+                          {stat.median.toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="text-end w-[10%]">
+                          {stat.maxScore.toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="text-end w-[10%]">
+                          {stat.q3.toFixed(2)}
+                        </Table.Td>
+                        <Table.Td className="text-end w-[10%]">
+                          {stat.q1 ? stat.q1.toFixed(2) : "-"}
+                        </Table.Td>
+                      </Table.Tr>
+                    );
+                  })}
+                </Table.Tbody>
               </Table>
 
-              <Accordion chevron={false} unstyled>
+              {/* <Accordion chevron={false} unstyled>
                 {assignment?.questions.map((ques, index) => {
                   const stat = calStat(ques.scores, ques.scores.length);
                   const studentScore = yourScores?.questions.find(
@@ -188,7 +244,6 @@ export default function StdScore() {
                       >
                         <Table>
                           <Table.Tbody className="text-default">
-                            {/* Entire Table Row as Control */}
                             <Table.Tr className="text-[13px] font-normal py-[14px] w-full ">
                               <Table.Td className="text-start w-[10%]">
                                 {ques.name}
@@ -197,7 +252,6 @@ export default function StdScore() {
                                 {studentScore?.toFixed(2)} /{" "}
                                 {ques.fullScore.toFixed(2)}
                               </Table.Td>
-
                               <Table.Td className="text-end w-[10%]">
                                 {stat.mean.toFixed(2)}
                               </Table.Td>
@@ -245,7 +299,7 @@ export default function StdScore() {
                     </Accordion.Item>
                   );
                 })}
-              </Accordion>
+              </Accordion> */}
             </div>
           </>
         )}
