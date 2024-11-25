@@ -9,14 +9,8 @@ import {
 import notFoundImage from "@/assets/image/notFound.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { ROLE } from "@/helpers/constants/enum";
-import { setLoading } from "@/store/loading";
-import { getEnrollCourse } from "@/services/student/student.service";
-import { setEnrollCourseList } from "@/store/enrollCourse";
 import Loading from "@/components/Loading/Loading";
-import Icon from "@/components/Icon";
-import { dateFormatter } from "@/helpers/functions/function";
 import { Table } from "@mantine/core";
-import { ROUTE_PATH } from "@/helpers/constants/route";
 import { calStat } from "@/helpers/functions/score";
 
 export default function StdAssignment() {
@@ -26,13 +20,6 @@ export default function StdAssignment() {
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
-  const term = useAppSelector((state) =>
-    state.academicYear.find(
-      (term) =>
-        term.year == parseInt(params.get("year") || "") &&
-        term.semester == parseInt(params.get("semester") || "")
-    )
-  );
   const course = useAppSelector((state) =>
     state.enrollCourse.courses.find((c) => c.courseNo == courseNo)
   );
@@ -85,7 +72,9 @@ export default function StdAssignment() {
                     <Table.Th className="text-end w-[10%]">Median</Table.Th>
                     <Table.Th className="text-end w-[10%]">Max</Table.Th>
                     <Table.Th className="text-end w-[10%]">Q3</Table.Th>
-                    <Table.Th className="text-end w-[10%] pr-[30px]">Q1</Table.Th>
+                    <Table.Th className="text-end w-[10%] pr-[30px]">
+                      Q1
+                    </Table.Th>
                   </Table.Tr>
                 </Table.Thead>
 
