@@ -233,6 +233,9 @@ export default function Profile() {
                 </div>
               </Menu.Item>
             )}
+            {user.role === ROLE.TA  && (
+              <Menu.Divider />
+            )}
           </>
 
           {(user.role === ROLE.SUPREME_ADMIN ||
@@ -344,7 +347,7 @@ export default function Profile() {
             </Menu>
           )}
 
-          {user.role !== ROLE.STUDENT && (
+          {user.role !== ROLE.STUDENT && user.role !== ROLE.TA && (
             <>
               <Menu.Divider />
               <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
@@ -353,7 +356,7 @@ export default function Profile() {
                     <Icon className="size-4 " IconComponent={IconFeedback} />{" "}
                     <span>Feedback</span>
                   </div>
-                </Menu.Item> 
+                </Menu.Item>
               </a>
             </>
           )}
