@@ -78,7 +78,7 @@ export default function StdAssignment() {
               <Table stickyHeader>
                 <Table.Thead>
                   <Table.Tr className="bg-[#e5e7f6]">
-                  <Table.Th className="w-[10%]">Question</Table.Th>
+                    <Table.Th className="w-[10%]">Question</Table.Th>
                     <Table.Th className="text-end w-[10%]">Your Score</Table.Th>
                     <Table.Th className="text-end w-[10%]">Mean</Table.Th>
                     <Table.Th className="text-end w-[10%]">SD</Table.Th>
@@ -86,7 +86,6 @@ export default function StdAssignment() {
                     <Table.Th className="text-end w-[10%]">Max</Table.Th>
                     <Table.Th className="text-end w-[10%]">Q3</Table.Th>
                     <Table.Th className="text-end w-[10%] pr-[30px]">Q1</Table.Th>
-              
                   </Table.Tr>
                 </Table.Thead>
 
@@ -105,7 +104,7 @@ export default function StdAssignment() {
                         }`}
                         onClick={() => goToAssignment(`${assignment.name}`)}
                       >
-                        <Table.Td >{assignment.name}</Table.Td>
+                        <Table.Td>{assignment.name}</Table.Td>
 
                         <Table.Td className="text-end ">
                           {course?.scores
@@ -137,7 +136,7 @@ export default function StdAssignment() {
                           {stat.q3.toFixed(2)}
                         </Table.Td>
                         <Table.Td className="text-end  pr-[30px]">
-                          {stat.q1.toFixed(2)}
+                          {stat.q1 ? stat.q1.toFixed(2) : "-"}
                         </Table.Td>
                       </Table.Tr>
                     );

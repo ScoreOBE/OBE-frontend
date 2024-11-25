@@ -137,7 +137,7 @@ export default function StdScore() {
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
                   <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {q1.toFixed(2)}
+                    {q1 ? q1.toFixed(2) : "-"}
                   </p>
                 </div>
               </div>
@@ -194,9 +194,10 @@ export default function StdScore() {
                                 {ques.name}
                               </Table.Td>
                               <Table.Td className="text-end w-[10%]">
-                                {studentScore?.toFixed(2)} /  {ques.fullScore.toFixed(2)}
+                                {studentScore?.toFixed(2)} /{" "}
+                                {ques.fullScore.toFixed(2)}
                               </Table.Td>
-                             
+
                               <Table.Td className="text-end w-[10%]">
                                 {stat.mean.toFixed(2)}
                               </Table.Td>
@@ -213,7 +214,7 @@ export default function StdScore() {
                                 {stat.q3.toFixed(2)}
                               </Table.Td>
                               <Table.Td className="text-end w-[10%]">
-                                {stat.q1.toFixed(2)}
+                                {stat.q1 ? stat.q1.toFixed(2) : "-"}
                               </Table.Td>
                               <Table.Th className="text-end pr-[30px] w-[10%]">
                                 <Icon
@@ -235,7 +236,7 @@ export default function StdScore() {
                           </p>
                         </div>
                         <ChartContainer
-                          type='curve'
+                          type="curve"
                           data={assignment}
                           questionName={ques.name}
                           studentScore={studentScore}
