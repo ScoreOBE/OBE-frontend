@@ -213,7 +213,7 @@ export default function AdminDashboardCLO() {
           <Table.Td className="flex gap-2 ">
             <p>CLO {clo.no}</p>
             <Tooltip
-              arrowOffset={10}
+              arrowOffset={150}
               arrowSize={8}
               arrowRadius={1}
               transitionProps={{
@@ -223,13 +223,26 @@ export default function AdminDashboardCLO() {
               multiline
               withArrow
               label={
-                <div className="border-none">
-                  <p>{clo.descTH}</p>
-                  <p>{clo.descEN}</p>
+                <div className="text-emphasize text-[13px] p-2 flex flex-col gap-1 w-fit max-w-[800px]">
+                  <p className="text-secondary font-bold">CLO {clo.no}</p>
+
+                  <p className="font-medium text-[13px] text-pretty ">
+                    <div className="border-none">
+                      <div className="flex">
+                        <li></li>
+                        <p>{clo.descTH}</p>
+                      </div>
+                      <div className="flex">
+                        <li></li>
+                        <p>{clo.descEN}</p>
+                      </div>
+                    </div>
+                  </p>
                 </div>
               }
-              className="w-fit border rounded-md"
-              position="right-start"
+              color="#FCFCFC"
+              className="w-fit border  rounded-md "
+              position="bottom-start"
             >
               <div className="border-none">
                 <Icon
@@ -350,15 +363,6 @@ export default function AdminDashboardCLO() {
                 <Icon IconComponent={IconPLO} />
                 PLO Description
               </div>
-            </Button>
-            <Button
-              className="text-center px-4"
-              leftSection={
-                <Icon IconComponent={IconExcel} className="size-4" />
-              }
-              onClick={() => setOpenModalExportPLO(true)}
-            >
-              Export PLO
             </Button>
           </div>
         </div>

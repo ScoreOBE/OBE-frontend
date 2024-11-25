@@ -475,6 +475,9 @@ export default function Part4TQF3({
                             key={evalIndex}
                             className={`!bg-bgTableHeader text-b2 ${
                               item.curPercent > item.percent && "text-delete"
+                            } ${
+                              item.curPercent == item.percent &&
+                              "text-[#042B74]"
                             }`}
                           >
                             {item.curPercent.toFixed(
