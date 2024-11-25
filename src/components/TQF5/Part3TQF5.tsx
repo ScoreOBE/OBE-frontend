@@ -1,10 +1,12 @@
 import maintenace from "@/assets/image/maintenance.png";
+import { TypeMethodTQF5 } from "@/pages/TQF/TQF5";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
+  method: TypeMethodTQF5;
 };
 
-export default function Part3TQF5({ setForm }: Props) {
+export default function Part3TQF5({ setForm, method }: Props) {
   return (
     <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
       <div className="h-full  justify-center flex flex-col">

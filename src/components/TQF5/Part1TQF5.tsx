@@ -4,12 +4,14 @@ import IconEdit from "@/assets/icons/edit.svg?react";
 import Icon from "../Icon";
 import maintenace from "@/assets/image/maintenance.png";
 import { useAppSelector } from "@/store";
+import { TypeMethodTQF5 } from "@/pages/TQF/TQF5";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
+  method: TypeMethodTQF5;
 };
 
-export default function Part1TQF5({ setForm }: Props) {
+export default function Part1TQF5({ setForm, method }: Props) {
   const user = useAppSelector((state) => state.user);
   const studentData = [
     {
