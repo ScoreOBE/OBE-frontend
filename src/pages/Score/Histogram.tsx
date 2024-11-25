@@ -48,7 +48,6 @@ export default function Histogram() {
     },
     { title: `Chart Section ${getSectionNo(sectionNo)}` },
   ]);
-
   const sectionRefs = useRef(
     section?.assignments!.map(() => React.createRef<HTMLDivElement>())
   );
@@ -60,7 +59,6 @@ export default function Histogram() {
     dispatch(setDashboard(ROLE.INSTRUCTOR));
     localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
   }, []);
-
 
   useEffect(() => {
     if (section) {
@@ -104,7 +102,7 @@ export default function Histogram() {
         });
       };
     }
-  }, [section, sectionRefs]);
+  }, [sectionRefs.current]);
 
   return (
     <div className="bg-white flex flex-col h-full w-full px-6 pt-5  gap-3 overflow-hidden">
@@ -120,7 +118,7 @@ export default function Histogram() {
             <div className="flex gap-6 w-full h-full">
               <div className="gap-4 flex flex-col my-2 min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
                 {section &&
-                  section?.assignments?.map((item, i) => {
+                  section.assignments?.map((item, i) => {
                     return (
                       <div
                         style={{
@@ -131,7 +129,7 @@ export default function Histogram() {
                         }`}
                         id={`${item.name}`}
                         key={i}
-                        ref={sectionRefs.current?.at(i)} // Dynamic refs
+                        ref={sectionRefs.current!.at(i)} // Dynamic refs
                       >
                         <Tabs
                           classNames={{
