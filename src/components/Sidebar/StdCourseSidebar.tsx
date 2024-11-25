@@ -96,6 +96,7 @@ export default function StdCourseSidebar() {
               <p className="pl-[3px]">Chart</p>
             </Button>
             <Button
+              onClick={() => gotoPage(ROUTE_PATH.CLO)}
               leftSection={
                 <Icon
                   IconComponent={IconHistogram}
@@ -111,6 +112,7 @@ export default function StdCourseSidebar() {
               <p className="pl-[3px]">CLO</p>
             </Button>
             <Button
+              onClick={() => gotoPage(ROUTE_PATH.PLO)}
               leftSection={
                 <Icon
                   IconComponent={IconSpiderChart}

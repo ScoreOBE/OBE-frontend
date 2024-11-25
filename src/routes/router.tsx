@@ -13,6 +13,7 @@ import StdAssignment from "@/pages/Student/StdAssignment";
 import StdPLO from "@/pages/Student/StdPLO";
 import StdChart from "@/pages/Student/StdChart";
 import StdScore from "@/pages/Student/StdScore";
+import StdCLO from "@/pages/Student/StdCLO";
 
 const Login = lazy(() => import("@/pages/Login"));
 const CMUOAuthCallback = lazy(() => import("@/pages/CmuOAuthCallback"));
@@ -185,14 +186,6 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: `${ROUTE_PATH.PLO}`,
-            element: (
-              <Suspense fallback={loadingPage}>
-                <StdPLO />
-              </Suspense>
-            ),
-          },
-          {
             path: ":courseNo",
             children: [
               {
@@ -221,6 +214,22 @@ const router = createBrowserRouter([
                 element: (
                   <Suspense fallback={loadingPage}>
                     <StdChart />
+                  </Suspense>
+                ),
+              },
+              {
+                path: ROUTE_PATH.CLO,
+                element: (
+                  <Suspense fallback={loadingPage}>
+                    <StdCLO />
+                  </Suspense>
+                ),
+              },
+              {
+                path: `${ROUTE_PATH.PLO}`,
+                element: (
+                  <Suspense fallback={loadingPage}>
+                    <StdPLO />
                   </Suspense>
                 ),
               },
