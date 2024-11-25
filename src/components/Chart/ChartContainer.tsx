@@ -158,8 +158,8 @@ export default function ChartContainer({
         </div>
       )}
       <div
-        className={`relative h-full w-full  ${
-          questionName ? "px-20 pb-6" : "pl-3 pr-5"
+        className={`relative h-full w-full ${
+          questionName ? "justify-items-center" : "pl-3 pr-5"
         }`}
       >
         {type == "histogram" ? (
