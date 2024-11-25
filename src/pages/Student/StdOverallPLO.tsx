@@ -5,7 +5,7 @@ import maintenace from "@/assets/image/maintenance.png";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { ROLE } from "@/helpers/constants/enum";
 
-export default function StdPLO() {
+export default function StdOverallPLO() {
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading.loading);
@@ -37,14 +37,16 @@ export default function StdPLO() {
       <div className=" flex flex-row px-[60px] flex-1 justify-between">
         <div className="h-full  justify-center flex flex-col">
           <p className="text-secondary text-[21px] font-semibold">
-            PLO is coming soon to{" "}
+            Overall PLO is coming soon to {" "}
+           
             <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
               ScoreOBE +{" "}
             </span>{" "}
+           
           </p>
           <br />
           <p className=" -mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
-            PLO will be available for students February 2025.
+            Overall PLO will be available for students February 2025.
           </p>
         </div>
         <div className="h-full  w-[25vw] justify-center flex flex-col">

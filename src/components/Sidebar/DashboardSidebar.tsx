@@ -311,7 +311,7 @@ export default function DashboardSidebar() {
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                 }`}
               >
-                <p className="">Overall PLO</p>
+                Overall PLO
               </Button>
             </div>
           </div>
