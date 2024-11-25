@@ -80,6 +80,8 @@ export default function ModalManageIns({
   const onClickChangeMainIns = async (value: any) => {
     let payload: any = {
       ...editSec,
+      year: academicYear.year,
+      semester: academicYear.semester,
       data: { ...editSec?.data, instructor: value.value },
     };
     const id = payload.id;
