@@ -257,12 +257,6 @@ export default function Overall() {
                         <Table.Td className="text-end pr-[70px] w-[11%]">
                           {stat.q1 ? stat.q1.toFixed(2) : "-"}
                         </Table.Td>
-                        <Table.Th className="text-end pr-[70px] w-[8%]">
-                          <Icon
-                            IconComponent={IconChevronDown}
-                            className="size-4"
-                          />
-                        </Table.Th>
                       </Table.Tr>
                     );
                   })}
