@@ -31,22 +31,23 @@ export default function TQF5() {
   );
   const [selectedMethod, setSelectedMethod] =
     useState<TypeMethodTQF5>("manual");
+  const [confirmMethod, setConfirmMethod] = useState<TypeMethodTQF5>("manual");
   const [openModalChangeMethod, setOpenModalChangeMethod] = useState(false);
   const partTab = [
     {
       value: Object.keys(partLabel)[0],
       tab: partLabel.part1,
-      compo: <Part1TQF5 setForm={setForm} method={selectedMethod} />,
+      compo: <Part1TQF5 setForm={setForm} method={confirmMethod} />,
     },
     {
       value: Object.keys(partLabel)[1],
       tab: partLabel.part2,
-      compo: <Part2TQF5 setForm={setForm} method={selectedMethod} />,
+      compo: <Part2TQF5 setForm={setForm} method={confirmMethod} />,
     },
     {
       value: Object.keys(partLabel)[2],
       tab: partLabel.part3,
-      compo: <Part3TQF5 setForm={setForm} method={selectedMethod} />,
+      compo: <Part3TQF5 setForm={setForm} method={confirmMethod} />,
     },
   ];
 
@@ -144,38 +145,53 @@ export default function TQF5() {
         title="Change Method"
         transitionProps={{ transition: "pop" }}
       >
-        <div className="flex flex-col gap-2">
-          <Alert />
-          <Radio.Group
-            classNames={{ label: "font-semibold" }}
-            value={selectedMethod}
-            onChange={setSelectedMethod as any}
-          >
-            <Group mb={2}>
-              <Radio
-                classNames={{ label: "font-medium" }}
-                value="scoreOBE"
-                label={
-                  <div>
-                    <p className="text-b1">ScoreOBE +</p>
-                    <p className="text-b3">
-                      The smartest way to evaluate and analyze your TQF 5
-                    </p>
-                  </div>
-                }
-              />
-              <Radio
-                classNames={{ label: "font-medium" }}
-                value="manual"
-                label={
-                  <div>
-                    <p className="text-b1">Manual</p>
-                    <p className="text-b3">Customize all data what you want</p>
-                  </div>
-                }
-              />
-            </Group>
-          </Radio.Group>
+        <div className="flex flex-col gap-5 justify-between">
+          <div className="flex flex-col gap-2">
+            <Alert />
+            <Radio.Group
+              classNames={{ label: "font-semibold" }}
+              value={selectedMethod}
+              onChange={setSelectedMethod as any}
+            >
+              <Group mb={2}>
+                <Radio
+                  classNames={{ label: "font-medium" }}
+                  value="scoreOBE"
+                  label={
+                    <div>
+                      <p className="text-b1">ScoreOBE +</p>
+                      <p className="text-b3">
+                        The smartest way to evaluate and analyze your TQF 5
+                      </p>
+                    </div>
+                  }
+                />
+                <Radio
+                  classNames={{ label: "font-medium" }}
+                  value="manual"
+                  label={
+                    <div>
+                      <p className="text-b1">Manual</p>
+                      <p className="text-b3">
+                        Customize all data what you want
+                      </p>
+                    </div>
+                  }
+                />
+              </Group>
+            </Radio.Group>
+          </div>
+          <div className="flex justify-end">
+            <Button
+              className="font-bold"
+              onClick={() => {
+                setConfirmMethod(selectedMethod);
+                setOpenModalChangeMethod(false);
+              }}
+            >
+              Confirm
+            </Button>
+          </div>
         </div>
       </Modal>
       <div
