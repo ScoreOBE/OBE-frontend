@@ -24,7 +24,7 @@ export const getColumnAlphabet = (columnIndex: number) => {
 export const onUploadFile = async (
   course: Partial<IModelCourse>,
   files: FileWithPath[],
-  type: "studentList" | "score",
+  type: "studentList" | "score" | "grade",
   setResult: React.Dispatch<React.SetStateAction<any>>,
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
   setErrorStudentId: React.Dispatch<React.SetStateAction<any[]>>,
@@ -39,7 +39,7 @@ export const onUploadFile = async (
     const dataExcel = await file.arrayBuffer();
     workbook = XLSX.read(dataExcel);
     if (type == "studentList") {
-      await studentList(
+      studentList(
         course,
         files,
         workbook,
@@ -48,7 +48,7 @@ export const onUploadFile = async (
         setErrorStudentId,
         setErrorSection!
       );
-    } else {
+    } else if (type == "score") {
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       if (worksheet.C1?.v == "SID" || worksheet[0]?.SID) {
         gradescopeFile(
@@ -74,6 +74,19 @@ export const onUploadFile = async (
           setErrorStudent!
         );
       }
+    } else {
+      gradeTemplete(
+        course,
+        files,
+        workbook,
+        setResult,
+        setOpenModalUploadError,
+        setErrorStudentId,
+        setErrorSection!,
+        setErrorSectionNoStudents!,
+        setErrorPoint!,
+        setErrorStudent!
+      );
     }
   }
 };
@@ -86,7 +99,7 @@ const templateNotMatch = () => {
   );
 };
 
-const studentList = async (
+const studentList = (
   course: Partial<IModelCourse>,
   files: FileWithPath[],
   workbook: XLSX.WorkBook,
@@ -216,7 +229,7 @@ const scoreOBETemplete = (
 
     const assignmentName = sheet;
     const fullScore = resultsData.shift();
-    const description = resultsData.shift();
+    const description = resultsData[0].section ? {} : resultsData.shift();
 
     resultsData.forEach((data, i) => {
       // Validate the studentId
@@ -501,6 +514,57 @@ const gradescopeFile = (
     files = [];
     setErrorStudentId(errorStudentIdList);
     setErrorPoint(errorPointList);
+    setOpenModalUploadError(true);
+    return;
+  }
+  setResult({
+    year: course.year,
+    semester: course.semester,
+    course: course.id,
+    sections: result,
+  });
+};
+
+const gradeTemplete = (
+  course: Partial<IModelCourse>,
+  files: FileWithPath[],
+  workbook: XLSX.WorkBook,
+  setResult: React.Dispatch<React.SetStateAction<any>>,
+  setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
+  setErrorStudentId: React.Dispatch<React.SetStateAction<any[]>>,
+  setErrorSection: React.Dispatch<React.SetStateAction<string[]>>,
+  setErrorSectionNoStudents: React.Dispatch<React.SetStateAction<string[]>>,
+  setErrorPoint: React.Dispatch<React.SetStateAction<any[]>>,
+  setErrorStudent: React.Dispatch<React.SetStateAction<any[]>>
+) => {
+  const user = store.getState().user;
+  const result: any[] = [];
+  const errorStudentIdList: { name: string; cell: string[] }[] = [];
+  const errorSection: string[] = [];
+  const errorSectionNoStudents: string[] = [];
+  const errorPointList: { name: string; cell: string[] }[] = [];
+  const errorStudent: {
+    studentId: string;
+    student: string;
+    studentIdNotMatch: boolean;
+    sectionNotMatch: boolean;
+  }[] = [];
+  for (const sheet of workbook.SheetNames) {
+    const worksheet = workbook.Sheets[sheet];
+  }
+  if (
+    errorStudentIdList.length ||
+    errorSection.length ||
+    errorSectionNoStudents.length ||
+    errorPointList.length ||
+    errorStudent.length
+  ) {
+    files = [];
+    setErrorStudentId(errorStudentIdList);
+    setErrorSection(errorSection);
+    setErrorSectionNoStudents(errorSectionNoStudents);
+    setErrorPoint(errorPointList);
+    setErrorStudent(errorStudent);
     setOpenModalUploadError(true);
     return;
   }
