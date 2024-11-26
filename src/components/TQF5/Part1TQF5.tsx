@@ -7,7 +7,9 @@ import maintenace from "@/assets/image/maintenance.png";
 import { useAppSelector } from "@/store";
 import { TypeMethodTQF5 } from "@/pages/TQF/TQF5";
 import { useForm } from "@mantine/form";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
+import { IModelTQF5Part1 } from "@/models/ModelTQF5";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -15,115 +17,70 @@ type Props = {
 };
 
 export default function Part1TQF5({ setForm, method }: Props) {
+  const { courseNo } = useParams();
+  const course = useAppSelector((state) =>
+    state.course.courses.find((c) => c.courseNo == courseNo)
+  );
+  const [isEditCourseEval, setIsEditCourseEval] = useState(false);
   const [isEditCriteria, setIsEditCriteria] = useState(false);
-  const studentData = [
-    {
-      section: "001",
-      a: "3",
-      bplus: "3",
-      b: "2",
-      cplus: "2",
-      c: "2",
-      dplus: "2",
-      d: "2",
-      f: "1",
-      w: "0",
-      s: "0",
-      u: "0",
-      p: "0",
-      total: "17",
-      avg: "3.14",
-    },
-    {
-      section: "002",
-      a: "5",
-      bplus: "2",
-      b: "1",
-      cplus: "8",
-      c: "2",
-      dplus: "0",
-      d: "1",
-      f: "3",
-      w: "0",
-      s: "0",
-      u: "0",
-      p: "0",
-      total: "22",
-      avg: "2.99",
-    },
-    {
-      section: "701",
-      a: "0",
-      bplus: "2",
-      b: "8",
-      cplus: "6",
-      c: "1",
-      dplus: "5",
-      d: "6",
-      f: "2",
-      w: "0",
-      s: "0",
-      u: "0",
-      p: "0",
-      total: "30",
-      avg: "2.74",
-    },
-    {
-      section: "801",
-      a: "4",
-      bplus: "8",
-      b: "4",
-      cplus: "2",
-      c: "9",
-      dplus: "6",
-      d: "3",
-      f: "1",
-      w: "0",
-      s: "0",
-      u: "0",
-      p: "0",
-      total: "37",
-      avg: "2.88",
-    },
-  ];
-  const rows = studentData.map((element) => (
-    <Table.Tr
-      className="font-medium text-default text-[13px]"
-      key={element.section}
-    >
-      <Table.Td>{element.section}</Table.Td>
-      <Table.Td>{element.a}</Table.Td>
-      <Table.Td>{element.bplus}</Table.Td>
-      <Table.Td>{element.b}</Table.Td>
-      <Table.Td>{element.cplus}</Table.Td>
-      <Table.Td>{element.c}</Table.Td>
-      <Table.Td>{element.dplus}</Table.Td>
-      <Table.Td>{element.d}</Table.Td>
-      <Table.Td>{element.f}</Table.Td>
-      <Table.Td>{element.w}</Table.Td>
-      <Table.Td>{element.s}</Table.Td>
-      <Table.Td>{element.u}</Table.Td>
-      <Table.Td>{element.p}</Table.Td>
-      <Table.Td>{element.total}</Table.Td>
-      <Table.Td>{element.avg}</Table.Td>
-    </Table.Tr>
-  ));
-  const gradingCriteriaForm = useForm({
+  const form = useForm({
     mode: "controlled",
     initialValues: {
-      A: "80.00 to 100.00",
-      Bplus: "75.00 to 79.99",
-      B: "70.00 to 75.99",
-      Cplus: "65.00 to 69.99",
-      C: "60.00 to 64.99",
-      Dplus: "55.00 to 59.99",
-      D: "50.00 to 54.99",
-      F: "0.00 to 49.99",
-      W: "-",
-      S: "-",
-      U: "-",
-    },
+      courseEval: course?.sections.map((sec) => ({
+        sectionNo: sec.sectionNo,
+        A: 0,
+        Bplus: 0,
+        B: 0,
+        Cplus: 0,
+        C: 0,
+        Dplus: 0,
+        D: 0,
+        F: 0,
+        W: 0,
+        S: 0,
+        U: 0,
+        P: 0,
+      })),
+      gradingCriteria: {
+        A: "80.00 to 100.00",
+        Bplus: "75.00 to 79.99",
+        B: "70.00 to 75.99",
+        Cplus: "65.00 to 69.99",
+        C: "60.00 to 64.99",
+        Dplus: "55.00 to 59.99",
+        D: "50.00 to 54.99",
+        F: "0.00 to 49.99",
+        W: "-",
+        S: "-",
+        U: "-",
+      },
+    } as IModelTQF5Part1,
   });
+
+  const calculateTotals = (courseEval: any[]) => {
+    const totals = {
+      A: 0,
+      Bplus: 0,
+      B: 0,
+      Cplus: 0,
+      C: 0,
+      Dplus: 0,
+      D: 0,
+      F: 0,
+      W: 0,
+      S: 0,
+      U: 0,
+      P: 0,
+      total: 0,
+    };
+    courseEval?.forEach((item) => {
+      Object.keys(totals).forEach((key) => {
+        (totals as any)[key] += item[key] || 0;
+      });
+    });
+    totals.total = Object.values(totals).reduce((a, b) => a + (b as number), 0);
+    return totals;
+  };
 
   return (
     // <div className="flex w-full flex-col text-[15px] max-h-full gap-2 text-default ">
@@ -143,11 +100,17 @@ export default function Part1TQF5({ setForm, method }: Props) {
     //         </Button>
     //       ) : (
     //         <Button
-    //           leftSection={<Icon IconComponent={IconEdit} className="size-4" />}
+    //           leftSection={
+    //             <Icon
+    //               IconComponent={isEditCourseEval ? IconCheck2 : IconEdit}
+    //               className="size-4"
+    //             />
+    //           }
     //           className="font-bold"
-    //           color="#ee933e"
+    //           color={isEditCourseEval ? "#0eb092" : "#ee933e"}
+    //           onClick={() => setIsEditCourseEval(!isEditCourseEval)}
     //         >
-    //           Edit Course Eval
+    //           {isEditCourseEval ? "Done" : "Edit Course Eval"}
     //         </Button>
     //       )}
     //     </div>
@@ -167,8 +130,6 @@ export default function Part1TQF5({ setForm, method }: Props) {
     //               จำนวนนักศึกษา (Number of Students)
     //             </Table.Th>
     //           </Table.Tr>
-
-    //           {/* Second row of headers */}
     //           <Table.Tr className="bg-[#e5e7f6]">
     //             <Table.Th className=" w-[10%]">Section</Table.Th>
     //             <Table.Th className=" w-[6%]">A</Table.Th>
@@ -188,25 +149,168 @@ export default function Part1TQF5({ setForm, method }: Props) {
     //           </Table.Tr>
     //         </Table.Thead>
 
-    //         <Table.Tbody>{rows}</Table.Tbody>
-    //         <Table.Tfoot className=" !bg-bgTableHeader  !border-t-[1px] border-secondary sticky bottom-0">
-    //           <Table.Tr className="border-none text-secondary font-semibold">
-    //             <Table.Th className="rounded-bl-[8px] w-[10%]">Total</Table.Th>
-    //             <Table.Th className=" w-[6%]">12</Table.Th>
-    //             <Table.Th className=" w-[6%]">15</Table.Th>
-    //             <Table.Th className=" w-[6%]">15</Table.Th>
-    //             <Table.Th className=" w-[6%]">18</Table.Th>
-    //             <Table.Th className=" w-[6%]">14</Table.Th>
-    //             <Table.Th className=" w-[6%]">13</Table.Th>
-    //             <Table.Th className=" w-[6%]">12</Table.Th>
-    //             <Table.Th className=" w-[6%]">7</Table.Th>
-    //             <Table.Th className=" w-[6%]">0</Table.Th>
-    //             <Table.Th className=" w-[6%]">0</Table.Th>
-    //             <Table.Th className=" w-[6%]">0</Table.Th>
-    //             <Table.Th className=" w-[6%]">0</Table.Th>
-    //             <Table.Th className=" w-[9%]">106</Table.Th>
-    //             <Table.Th className="!rounded-br-[8px] w-[9%]">2.94</Table.Th>
-    //           </Table.Tr>
+    //         <Table.Tbody>
+    //           {form.getValues().courseEval?.map((item, index) => {
+    //             const total = Object.values(item)
+    //               .slice(1)
+    //               .reduce((a, b) => a + (b ?? 0), 0);
+    //             return (
+    //               <Table.Tr
+    //                 className="font-medium text-default text-[13px]"
+    //                 key={item.sectionNo}
+    //               >
+    //                 <Table.Td>{item.sectionNo}</Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.A`)}
+    //                     />
+    //                   ) : (
+    //                     item.A ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.Bplus`)}
+    //                     />
+    //                   ) : (
+    //                     item.Bplus ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.B`)}
+    //                     />
+    //                   ) : (
+    //                     item.B ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.Cplus`)}
+    //                     />
+    //                   ) : (
+    //                     item.Cplus ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.C`)}
+    //                     />
+    //                   ) : (
+    //                     item.C ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.Dplus`)}
+    //                     />
+    //                   ) : (
+    //                     item.Dplus ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.D`)}
+    //                     />
+    //                   ) : (
+    //                     item.D ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.F`)}
+    //                     />
+    //                   ) : (
+    //                     item.F ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.W`)}
+    //                     />
+    //                   ) : (
+    //                     item.W ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.S`)}
+    //                     />
+    //                   ) : (
+    //                     item.S ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.U`)}
+    //                     />
+    //                   ) : (
+    //                     item.U ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>
+    //                   {isEditCourseEval ? (
+    //                     <TextInput
+    //                       size="xs"
+    //                       {...form.getInputProps(`courseEval.${index}.P`)}
+    //                     />
+    //                   ) : (
+    //                     item.P ?? "-"
+    //                   )}
+    //                 </Table.Td>
+    //                 <Table.Td>{total}</Table.Td>
+    //                 <Table.Td>{(0 / (total || 1)).toFixed(2)}</Table.Td>
+    //               </Table.Tr>
+    //             );
+    //           })}
+    //         </Table.Tbody>
+    //         <Table.Tfoot className="!bg-bgTableHeader  !border-t-[1px] border-secondary sticky bottom-0">
+    //           {(() => {
+    //             const totals = calculateTotals(form.getValues().courseEval);
+    //             return (
+    //               <Table.Tr className="border-none text-secondary font-semibold">
+    //                 <Table.Th className="rounded-bl-[8px] w-[10%]">
+    //                   Total
+    //                 </Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.A}</Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.Bplus}</Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.B}</Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.Cplus}</Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.C}</Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.Dplus}</Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.D}</Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.F}</Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.W}</Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.S}</Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.U}</Table.Th>
+    //                 <Table.Th className="w-[6%]">{totals.P}</Table.Th>
+    //                 <Table.Th className="w-[9%]">{totals.total}</Table.Th>
+    //                 <Table.Th className="!rounded-br-[8px] w-[9%]">0</Table.Th>
+    //               </Table.Tr>
+    //             );
+    //           })()}
     //         </Table.Tfoot>
     //       </Table>
     //     </div>
@@ -249,8 +353,8 @@ export default function Part1TQF5({ setForm, method }: Props) {
     //           </Table.Tr>
     //         </Table.Thead>
 
-    //         <Table.Tbody className="  justify-center items-center text-center ">
-    //           {Object.keys(gradingCriteriaForm.getValues()).map((key) => (
+    //         <Table.Tbody className="justify-center items-center text-center ">
+    //           {Object.keys(form.getValues().gradingCriteria).map((key) => (
     //             <Table.Tr
     //               className="font-medium text-default text-[13px]"
     //               key={key}
@@ -258,11 +362,11 @@ export default function Part1TQF5({ setForm, method }: Props) {
     //               <Table.Td>{key.replace("plus", "+")}</Table.Td>
     //               <Table.Td>
     //                 {!isEditCriteria ? (
-    //                   (gradingCriteriaForm.getValues() as any)[key]
+    //                   (form.getValues().gradingCriteria as any)[key]
     //                 ) : (
     //                   <TextInput
     //                     size="xs"
-    //                     {...gradingCriteriaForm.getInputProps(key)}
+    //                     {...form.getInputProps(`gradingCriteria.${key}`)}
     //                   />
     //                 )}
     //               </Table.Td>
