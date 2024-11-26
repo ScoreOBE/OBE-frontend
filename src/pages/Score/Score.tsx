@@ -136,7 +136,7 @@ export default function Overall() {
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Median
                   </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px]] text-default">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
                     {median.toFixed(2)}
                   </p>
                 </div>
