@@ -273,7 +273,7 @@ export default function Part2TQF3({ setForm }: Props) {
           >
             <div className="flex text-secondary items-center w-full justify-between">
               <p className="font-semibold text-[15px]">
-                วัตถุประสงค์ของกระบวนวิชา{" "}
+                ผลลัพธ์การเรียนรู้ของกระบวนวิชา{" "}
                 <span className="font-bold">
                   (Course Learning Objective: CLO)
                 </span>
@@ -637,21 +637,21 @@ export default function Part2TQF3({ setForm }: Props) {
         </div>
       ) : (
         <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
-      <div className="flex justify-center  h-full items-start gap-2 flex-col">
-        <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-          Complete TQF3 Part 1 First
-        </p>
-        <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-          To start TQF3 Part 2, please complete and save TQF3 Part 1. <br />{" "}
-          Once done, you can continue to do it.
-        </p>
-      </div>
-      <img
-        className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
-        src={unplug}
-        alt="loginImage"
-      />
-    </div>
+          <div className="flex justify-center  h-full items-start gap-2 flex-col">
+            <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
+              Complete TQF3 Part 1 First
+            </p>
+            <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
+              To start TQF3 Part 2, please complete and save TQF3 Part 1. <br />{" "}
+              Once done, you can continue to do it.
+            </p>
+          </div>
+          <img
+            className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
+            src={unplug}
+            alt="loginImage"
+          />
+        </div>
       )}
     </>
   );

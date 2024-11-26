@@ -394,6 +394,11 @@ export default function TQF3() {
     validateInputOnBlur: true,
   });
 
+  const onCloseReuseModal = () => {
+    setOpenModalReuse(false);
+    selectTqf3Reuse.reset();
+  };
+
   const onClickReuseTQF3 = async () => {
     if (!selectTqf3Reuse.validate().hasErrors && tqf3Original) {
       dispatch(setLoadingOverlay(true));
@@ -419,7 +424,11 @@ export default function TQF3() {
             );
           }
         });
-        showNotifications(NOTI_TYPE.SUCCESS, "Reuse TQF 3 Successfully", "This course reuses data from course you select.");
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Reuse TQF 3 Successfully",
+          "This course reuses data from course you select."
+        );
       }
       dispatch(setLoadingOverlay(false));
       setOpenModalReuse(false);
@@ -474,7 +483,7 @@ export default function TQF3() {
         title="Reuse TQF 3"
         opened={openModalReuse}
         closeOnClickOutside={false}
-        onClose={() => setOpenModalReuse(false)}
+        onClose={onCloseReuseModal}
         transitionProps={{ transition: "pop" }}
         size="45vw"
         centered
@@ -515,13 +524,7 @@ export default function TQF3() {
             {...selectTqf3Reuse.getInputProps("value")}
           />
           <div className="flex gap-2 mt-3 justify-end">
-            <Button
-              variant="subtle"
-              onClick={() => {
-                setOpenModalReuse(false);
-                selectTqf3Reuse.reset();
-              }}
-            >
+            <Button variant="subtle" onClick={onCloseReuseModal}>
               Cancel
             </Button>
             <Button loading={loading.loadingOverlay} onClick={onClickReuseTQF3}>
