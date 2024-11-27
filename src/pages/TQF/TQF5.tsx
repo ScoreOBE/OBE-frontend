@@ -15,6 +15,15 @@ import Part2TQF5 from "@/components/TQF5/Part2TQF5";
 import Part3TQF5 from "@/components/TQF5/Part3TQF5";
 import { IModelTQF5 } from "@/models/ModelTQF5";
 import { PartTopicTQF5 } from "@/helpers/constants/TQF5.enum";
+import { COURSE_TYPE, NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
+import { IModelSection } from "@/models/ModelCourse";
+import { getOneCourse } from "@/services/course/course.service";
+import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
+import { setDataTQF5 } from "@/store/tqf5";
+import tqf3 from "@/store/tqf3";
+import { isEmpty, isEqual } from "lodash";
+import { saveTQF5 } from "@/services/tqf5/tqf5.service";
+import { showNotifications } from "@/helpers/notifications/showNotifications";
 
 export type TypeMethodTQF5 = "scoreOBE" | "manual";
 
@@ -22,8 +31,15 @@ export default function TQF5() {
   const { courseNo } = useParams();
   const [params, setParams] = useSearchParams();
   const loading = useAppSelector((state) => state.loading);
+  const dashboard = useAppSelector((state) => state.config.dashboard);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  // const tqf5 = useAppSelector((state) => state.tqf3);
+  const courseAdmin = useAppSelector((state) =>
+    state.allCourse.courses.find((course) => course.courseNo == courseNo)
+  );
+  const [tqf5Original, setTqf5Original] = useState<
+    Partial<IModelTQF5> & { topic?: string; ploRequired?: string[] }
+  >();
+  const tqf5 = useAppSelector((state) => state.tqf5);
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<UseFormReturnType<any>>();
   const [tqf5Part, setTqf5Part] = useState<string | null>(
@@ -57,7 +73,7 @@ export default function TQF5() {
   }, []);
 
   // useEffect(() => {
-  //   if (academicYear && (tqf5.topic !== tqf3Original?.topic || !tqf3Original)) {
+  //   if (academicYear && (tqf5.topic !== tqf5Original?.topic || !tqf5Original)) {
   //     fetchOneCourse(true);
   //   }
   // }, [academicYear, tqf5.topic, courseNo]);
@@ -69,60 +85,67 @@ export default function TQF5() {
     );
   };
 
-  // const fetchOneCourse = async (firstFetch: boolean = false) => {
-  //   const [resCourse, resPloRequired] = await Promise.all([
-  //     getOneCourse({
-  //       year: params.get("year"),
-  //       semester: params.get("semester"),
-  //       courseNo,
-  //     }),
-  //     getOneCourseManagement(courseNo!),
-  //   ]);
-  //   if (resCourse) {
-  //     if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
-  //       const sectionTdf3 = resCourse.sections.find(
-  //         (sec: IModelSection) => sec.topic == tqf3.topic
-  //       )?.TQF3;
-  //       setTqf3Original({
-  //         topic: tqf3.topic,
-  //         ploRequired: resPloRequired?.plos || [],
-  //         part7: {},
-  //         ...sectionTdf3,
-  //       });
-  //       dispatch(
-  //         setDataTQF3({
-  //           topic: tqf3.topic,
-  //           ploRequired: resPloRequired?.plos || [],
-  //           ...sectionTdf3,
-  //           type: resCourse.type,
-  //           sections: [...resCourse.sections],
-  //         })
-  //       );
-  //       if (firstFetch) {
-  //         setCurrentPartTQF3(sectionTdf3);
-  //       }
-  //     } else {
-  //       setTqf3Original({
-  //         topic: tqf3.topic,
-  //         ploRequired: resPloRequired?.plos || [],
-  //         part7: {},
-  //         ...resCourse.TQF3!,
-  //       });
-  //       dispatch(
-  //         setDataTQF3({
-  //           topic: tqf3.topic,
-  //           ploRequired: resPloRequired?.plos || [],
-  //           ...resCourse.TQF3!,
-  //           type: resCourse.type,
-  //           sections: [...resCourse.sections],
-  //         })
-  //       );
-  //       if (firstFetch) {
-  //         setCurrentPartTQF3(resCourse.TQF3!);
-  //       }
-  //     }
-  //   }
-  // };
+  const fetchOneCourse = async (firstFetch: boolean = false) => {
+    let [resCourse, resPloRequired] = await Promise.all([
+      getOneCourse({
+        year: params.get("year"),
+        semester: params.get("semester"),
+        courseNo,
+      }),
+      getOneCourseManagement(courseNo!),
+    ]);
+    if (dashboard == ROLE.ADMIN) {
+      resCourse = courseAdmin;
+    }
+    if (resCourse) {
+      if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
+        const sectionTdf5 = resCourse.sections.find(
+          (sec: IModelSection) => sec.topic == tqf5.topic
+        )?.TQF5;
+        const ploRequire = resPloRequired?.sections
+          .find((item: any) => item.topic == tqf5.topic)
+          ?.ploRequire.find((plo: any) => plo.plo == tqf5.coursePLO?.id)?.list;
+        setTqf5Original({
+          topic: tqf5.topic,
+          ploRequired: ploRequire || [],
+          ...sectionTdf5,
+        });
+        dispatch(
+          setDataTQF5({
+            topic: tqf5.topic,
+            ploRequired: ploRequire || [],
+            ...sectionTdf5,
+            type: resCourse.type,
+            sections: [...resCourse.sections],
+          })
+        );
+        if (firstFetch) {
+          setCurrentPartTQF5(sectionTdf5);
+        }
+      } else {
+        const ploRequire = resPloRequired?.ploRequire.find(
+          (plo: any) => plo.plo == tqf5.coursePLO?.id
+        )?.list;
+        setTqf5Original({
+          topic: tqf5.topic,
+          ploRequired: ploRequire || [],
+          ...resCourse.TQF5!,
+        });
+        dispatch(
+          setDataTQF5({
+            topic: tqf5.topic,
+            ploRequired: ploRequire || [],
+            ...resCourse.TQF5!,
+            type: resCourse.type,
+            sections: [...resCourse.sections],
+          })
+        );
+        if (firstFetch) {
+          setCurrentPartTQF5(resCourse.TQF5!);
+        }
+      }
+    }
+  };
 
   const setCurrentPartTQF5 = (tqf5: IModelTQF5) => {
     if (!tqf5 || !tqf5.part1) {
@@ -132,6 +155,48 @@ export default function TQF5() {
     } else {
       setTqf5Part("part3");
     }
+  };
+
+  const onSave = async () => {
+    if (form && tqf5.id && tqf5Part) {
+      const validationResult = form.validate();
+      if (Object.keys(validationResult.errors).length > 0) {
+        const firstErrorPath = Object.keys(validationResult.errors)[0];
+        form
+          .getInputNode(firstErrorPath)
+          ?.scrollIntoView({ behavior: "smooth", block: "end" });
+      } else {
+        const payload = form.getValues();
+        payload.id = tqf5.id;
+        // switch (tqf5Part) {
+        //   case Object.keys(partLabel)[0]:
+        //     break;
+        //   case Object.keys(partLabel)[1]:
+        //     break;
+        // }
+        const res = await saveTQF5(tqf5Part, payload);
+        if (res) {
+          setTqf5Original({ ...tqf5Original, ...res });
+          dispatch(setDataTQF5({ ...tqf3, ...res }));
+          showNotifications(
+            NOTI_TYPE.SUCCESS,
+            `TQF 5, ${tqf5Part} save successfully`,
+            `TQF 5 - ${tqf5Part} is saved`
+          );
+        }
+      }
+    }
+  };
+
+  const checkPartStatus = (value: keyof IModelTQF5) => {
+    return !tqf5Original ||
+      !tqf5.id ||
+      isEmpty(tqf5[value]) ||
+      isEmpty(tqf5Original[value])
+      ? "text-[#DEE2E6]" // No Data
+      : !isEqual(tqf5Original![value], tqf5[value])
+      ? "text-edit" // In Progress
+      : "text-[#24b9a5]"; // Done
   };
 
   return loading.loading ? (
@@ -221,7 +286,7 @@ export default function TQF5() {
                   <div className="flex flex-row items-center gap-2">
                     <Icon
                       IconComponent={IconCheck}
-                      //   className={checkPartStatus(value as keyof IModelTQF3)}
+                      className={checkPartStatus(value as keyof IModelTQF5)}
                     />
                     {tab}
                   </div>
@@ -237,46 +302,12 @@ export default function TQF5() {
                   Change Method
                 </Button>
               )}
-              {/* <Combobox
-                store={combobox}
-                withinPortal={false}
-                onOptionSubmit={(val) => {
-                  setValue(val);
-                  combobox.closeDropdown();
-                }}
-                size="xs"
-              >
-                <Combobox.Target>
-                  <InputBase
-                    component="button"
-                    type="button"
-                    pointer
-                    size="xs"
-                    rightSection={<Combobox.Chevron />}
-                    onClick={() => combobox.toggleDropdown()}
-                    rightSectionPointerEvents="none"
-                    multiline
-                    className="w-[25vw]"
-                    classNames={{ label: "" }}
-                  >
-                    {selectedOption ? (
-                      <SelectOption {...selectedOption} />
-                    ) : (
-                      <Input.Placeholder>Pick value</Input.Placeholder>
-                    )}
-                  </InputBase>
-                </Combobox.Target>
-
-                <Combobox.Dropdown>
-                  <Combobox.Options>{options}</Combobox.Options>
-                </Combobox.Dropdown>
-              </Combobox> */}
             </div>
           </div>
           <div className="h-full w-full flex overflow-y-auto rounded-md text-[14px]">
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.value} className="w-full">
-                {/* {tqf5Part === part.value && tqf5.id ? (
+                {tqf5Part === part.value && tqf5.id ? (
                   part.compo
                 ) : (
                   <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
@@ -299,13 +330,32 @@ export default function TQF5() {
                       alt="loginImage"
                     />
                   </div>
-                )} */}
-                {part.compo}
+                )}
               </Tabs.Panel>
             ))}
           </div>
         </Tabs>
       </div>
+      {checkActiveTerm() &&
+        tqf5Original &&
+        tqf5.id &&
+        (tqf5Part == "part1" ||
+          tqf5Original[
+            Object.keys(partLabel)[
+              Object.keys(partLabel).findIndex((e) => e == tqf5Part) - 1
+            ] as keyof IModelTQF5
+          ]) && (
+          <SaveTQFbar
+            tqf="5"
+            part={tqf5Part as partType}
+            data={tqf5Original[tqf5Part as keyof IModelTQF5]}
+            onSave={onSave}
+            disabledSave={isEqual(
+              tqf5Original[tqf5Part as keyof IModelTQF5],
+              tqf5[tqf5Part as keyof IModelTQF5]
+            )}
+          />
+        )}
     </>
   );
 }

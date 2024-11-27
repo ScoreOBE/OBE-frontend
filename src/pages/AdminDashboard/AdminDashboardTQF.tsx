@@ -33,6 +33,7 @@ import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setDataTQF3, setSelectTqf3Topic } from "@/store/tqf3";
+import { setDataTQF5, setSelectTqf5Topic } from "@/store/tqf5";
 
 export default function AdminDashboardTQF() {
   const navigate = useNavigate();
@@ -121,9 +122,17 @@ export default function AdminDashboardTQF() {
 
   const goToPage = (pathname: string, courseNo: string, data: any) => {
     if (data.topic) {
-      dispatch(setSelectTqf3Topic(data.topic));
+      if (pathname == ROUTE_PATH.TQF3) {
+        dispatch(setSelectTqf3Topic(data.topic));
+      } else if (pathname == ROUTE_PATH.TQF5) {
+        dispatch(setSelectTqf5Topic(data.topic));
+      }
     }
-    dispatch(setDataTQF3(data.TQF3));
+    if (pathname == ROUTE_PATH.TQF3) {
+      dispatch(setDataTQF3(data.TQF3));
+    } else if (pathname == ROUTE_PATH.TQF5) {
+      // dispatch(setDataTQF5(data.TQF5));
+    }
     navigate({
       pathname: `${ROUTE_PATH.COURSE}/${courseNo}/${pathname}`,
       search: "?" + params.toString(),
