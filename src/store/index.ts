@@ -8,6 +8,7 @@ import academicYearReducer from "./academicYear";
 import courseReducer from "./course";
 import courseManagementReducer from "./courseManagement";
 import tqf3Reducer from "./tqf3";
+import tqf5Reducer from "./tqf5";
 import allCourseReducer from "./allCourse";
 import facultyReducer from "./department";
 import enrollCourseReducer from "./enrollCourse";
@@ -24,6 +25,7 @@ const store = configureStore({
     course: courseReducer,
     courseManagement: courseManagementReducer,
     tqf3: tqf3Reducer,
+    tqf5: tqf5Reducer,
     enrollCourse: enrollCourseReducer,
   },
 });
