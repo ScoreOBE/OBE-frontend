@@ -22,6 +22,7 @@ export default function Navbar() {
   const dashboard = useAppSelector((state) => state.config.dashboard);
   const [params, setParams] = useSearchParams();
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
+  const tqf5Topic = useAppSelector((state) => state.tqf5.topic);
   const dispatch = useAppDispatch();
   const departmentCode = useAppSelector(
     (state) => state.allCourse.departmentCode
@@ -82,7 +83,7 @@ export default function Navbar() {
         if (location.includes(ROUTE_PATH.TQF3))
           return `TQF 3${tqf3Topic ? ` - ${tqf3Topic}` : ""}`;
         else if (location.includes(ROUTE_PATH.TQF5))
-          return `TQF 5${tqf3Topic ? ` - ${tqf3Topic}` : ""}`;
+          return `TQF 5${tqf5Topic ? ` - ${tqf5Topic}` : ""}`;
         else if (location.includes(ROUTE_PATH.SCORE)) return `${name}`;
         else if (location.includes(ROUTE_PATH.ROSTER)) return `Course Roster`;
         else if (location.includes(ROUTE_PATH.STUDENTS)) return `${name}`;

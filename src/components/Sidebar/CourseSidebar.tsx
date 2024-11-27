@@ -27,6 +27,7 @@ import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelSection } from "@/models/ModelCourse";
 import { isEmpty, isEqual } from "lodash";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";
+import { setSelectTqf5Topic } from "@/store/tqf5";
 
 type Props = {
   onClickLeaveCourse: () => void;
@@ -50,6 +51,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const [coInstructors, setCoInstructors] = useState<IModelUser[]>([]);
   const [uniqTopic, setUniqTopic] = useState<string[]>([]);
   const tqf3 = useAppSelector((state) => state.tqf3);
+  const tqf5 = useAppSelector((state) => state.tqf5);
   const [openAlertPopup, setOpenAlertPopup] = useState(false);
   const [tqf3Original, setTqf3Original] = useState<
     Partial<IModelTQF3> & { topic?: string; ploRequired?: string[] }
@@ -66,6 +68,9 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       setUniqTopic(temp);
       if (!tqf3.topic || !temp.includes(tqf3.topic)) {
         dispatch(setSelectTqf3Topic(temp[0]));
+      }
+      if (!tqf5.topic || !temp.includes(tqf5.topic)) {
+        dispatch(setSelectTqf5Topic(temp[0]));
       }
       const insList: any[] = [];
       const coInsList: any[] = [];
@@ -354,8 +359,8 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                                 className="justify-between bg-transparent !max-w-full  py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
                                 variant="outline"
                                 onClick={() => {
-                                  if (topic !== tqf3.topic) {
-                                    dispatch(setSelectTqf3Topic(topic));
+                                  if (topic !== tqf5.topic) {
+                                    dispatch(setSelectTqf5Topic(topic));
                                   }
                                   goToPage(ROUTE_PATH.TQF5);
                                 }}
