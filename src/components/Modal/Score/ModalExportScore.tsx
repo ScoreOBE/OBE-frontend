@@ -2,10 +2,9 @@ import { Button, Checkbox, Group, Modal } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
-import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
-import Icon from "../Icon";
+import Icon from "../../Icon";
 import IconExcel from "@/assets/icons/excel.svg?react";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
 import { setLoadingOverlay } from "@/store/loading";
@@ -18,7 +17,6 @@ type Props = {
 export default function ModalExportScore({ opened, onClose }: Props) {
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const tqf3 = useAppSelector((state) => state.tqf3);
   const [selectedSecToExport, setSelectedSecToExport] = useState<string[]>([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
@@ -26,15 +24,10 @@ export default function ModalExportScore({ opened, onClose }: Props) {
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
 
-  useEffect(() => {
-    if (opened) {
-      Object.keys(tqf3).forEach((part) => {
-        if (part.includes("part")) {
-          selectedSecToExport.push(part);
-        }
-      });
-    }
-  }, [opened]);
+  // useEffect(() => {
+  //   if (opened) {
+  //   }
+  // }, [opened]);
 
   useEffect(() => {
     if (selectedSecToExport) {
@@ -127,16 +120,16 @@ export default function ModalExportScore({ opened, onClose }: Props) {
           </Button>
         </Group>
       </div> */}
-    
+
       <div className="h-full items-start justify-center flex flex-col">
-       
-      
         <p className=" mb-7 mt-1 text-b2 break-words text-[#777777] font-medium leading-relaxed">
-        Available in January
+          Available in January
         </p>
       </div>
       {/* <img className=" z-50  w-[25vw]  " src={maintenace} alt="loginImage" /> */}
-  <Button onClick={onClose} className="!w-full">OK</Button>
+      <Button onClick={onClose} className="!w-full">
+        OK
+      </Button>
     </Modal>
   );
 }

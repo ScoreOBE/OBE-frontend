@@ -34,8 +34,8 @@ import { IModelUser } from "@/models/ModelUser";
 import ModalManageIns from "@/components/Modal/CourseManage/ModalManageIns";
 import { setShowNavbar, setShowSidebar } from "@/store/config";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
-import ModalExportScore from "@/components/Modal/ModalExportScore";
-import ModalUploadScore from "@/components/Modal/ModalUploadScore";
+import ModalExportScore from "@/components/Modal/Score/ModalExportScore";
+import ModalUploadScore from "@/components/Modal/Score/ModalUploadScore";
 
 export default function Section() {
   const navigate = useNavigate();

@@ -6,7 +6,7 @@ import {
   MS_EXCEL_MIME_TYPE,
 } from "@mantine/dropzone";
 import { Alert, Button, Modal } from "@mantine/core";
-import Icon from "../Icon";
+import Icon from "../../Icon";
 import IconExcel from "@/assets/icons/excel.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -19,7 +19,7 @@ import IconX from "@/assets/icons/x.svg?react";
 import IconFile from "@/assets/icons/file.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import gradescope from "@/assets/image/gradescope.png";
-import ModalStudentList from "./ModalStudentList";
+import ModalStudentList from "../ModalStudentList";
 import ModalTemplateGuide from "./ModalTemplateGuide";
 import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
 import ModalErrorUploadFile from "./ModalErrorUploadFile";
@@ -477,15 +477,13 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         size="39vw"
         title="Upload Warning"
         transitionProps={{ transition: "pop" }}
-    
-        
       >
         <div className="flex flex-col gap-4">
           <div className="mt-2">
             <Alert
               radius="md"
               variant="light"
-              color='orange'
+              color="orange"
               classNames={{
                 body: " flex justify-center",
               }}
@@ -493,13 +491,17 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 <div className="flex items-center  gap-2">
                   <Icon IconComponent={IconExclamationCircle} />
                   <p>
-                  The following Student is in the Course Roster but missing from the file you uploaded:
+                    The following Student is in the Course Roster but missing
+                    from the file you uploaded:
                   </p>
                 </div>
               }
             >
-              { warningStudentList.map((std) => (
-              <div className="ml-8">{std.studentId} - {std.firstName} {std.firstName} </div>))}
+              {warningStudentList.map((std) => (
+                <div className="ml-8">
+                  {std.studentId} - {std.firstName} {std.firstName}{" "}
+                </div>
+              ))}
             </Alert>
           </div>
 

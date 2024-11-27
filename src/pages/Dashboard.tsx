@@ -28,7 +28,7 @@ import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
 import { IModelUser } from "@/models/ModelUser";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
-import ModalUploadScore from "../components/Modal/ModalUploadScore";
+import ModalUploadScore from "../components/Modal/Score/ModalUploadScore";
 import { IModelSection } from "@/models/ModelCourse";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 
