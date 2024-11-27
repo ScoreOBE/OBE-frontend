@@ -157,8 +157,12 @@ const studentList = (
       const existSec = result.find((sec) => sec.sectionNo == sectionNo);
       const student = {
         studentId: row[studentId],
-        firstNameTH: row.firstName.replace(/ /g, ""),
-        lastNameTH: row.lastName.replace(/ /g, ""),
+        firstNameTH: row.firstName.endsWith(" ")
+          ? row.firstName.slice(0, -1)
+          : row.firstName,
+        lastNameTH: row.lastName.endsWith(" ")
+          ? row.lastName.slice(0, -1)
+          : row.lastName,
       };
       if (!existSec) {
         result.push({
@@ -285,8 +289,12 @@ const scoreOBETemplete = (
       ) {
         errorSection.push(getSectionNo(sectionNo));
       }
-      const firstNameTH = data.firstName.replace(/ /g, "");
-      const lastNameTH = data.lastName.replace(/ /g, "");
+      const firstNameTH = data.firstName.endsWith(" ")
+        ? data.firstName.slice(0, -1)
+        : data.firstName;
+      const lastNameTH = data.lastName.endsWith(" ")
+        ? data.lastName.slice(0, -1)
+        : data.lastName;
       const checkSection = canUpload?.students?.find(
         ({ student }) =>
           student.firstNameTH == firstNameTH && student.lastNameTH == lastNameTH
