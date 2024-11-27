@@ -1,5 +1,5 @@
 import { Alert, Button, Modal } from "@mantine/core";
-import Icon from "../Icon";
+import Icon from "../../Icon";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconBan from "@/assets/icons/ban.svg?react";
 
@@ -40,7 +40,6 @@ export default function ModalErrorUploadFile({
           File was rejected
         </div>
       }
-     
       transitionProps={
         {
           // duration: 1000,

@@ -18,7 +18,7 @@ import IconExternalLink from "@/assets/icons/externalLink.svg?react";
 import IconUpload from "@/assets/icons/upload.svg?react";
 import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
 import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
-import ModalErrorUploadFile from "./ModalErrorUploadFile";
+import ModalErrorUploadFile from "./Score/ModalErrorUploadFile";
 import { uploadStudentList } from "@/services/section/section.service";
 import { updateStudentList } from "@/store/course";
 import { useAppDispatch, useAppSelector } from "@/store";

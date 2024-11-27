@@ -8,7 +8,7 @@ import templateGuideStep4 from "@/assets/image/templateGuide4.png";
 import templateGuideStep5 from "@/assets/image/templateGuide51.png";
 import templateGuideStep0 from "@/assets/image/templateGuide0.png";
 
-import Icon from "../Icon";
+import Icon from "../../Icon";
 
 type Props = {
   opened: boolean;
