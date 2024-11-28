@@ -4,13 +4,15 @@ import IconUpload from "@/assets/icons/upload.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconCheck2 from "@/assets/icons/Check2.svg?react";
 import maintenace from "@/assets/image/maintenance.png";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { TypeMethodTQF5 } from "@/pages/TQF/TQF5";
 import { useForm } from "@mantine/form";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IModelTQF5Part1 } from "@/models/ModelTQF5";
 import ModalUploadGrade from "../Modal/Score/ModalUploadGrade";
+import { cloneDeep, isEqual } from "lodash";
+import { updatePartTQF5 } from "@/store/tqf5";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -22,6 +24,8 @@ export default function Part1TQF5({ setForm, method }: Props) {
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
+  const tqf5 = useAppSelector((state) => state.tqf5);
+  const dispatch = useAppDispatch();
   const [openModalUploadGrade, setOpenModalUploadGrade] = useState(false);
   const [isEditCourseEval, setIsEditCourseEval] = useState(false);
   const [isEditCriteria, setIsEditCriteria] = useState(false);
@@ -57,6 +61,15 @@ export default function Part1TQF5({ setForm, method }: Props) {
         U: "-",
       },
     } as IModelTQF5Part1,
+    validateInputOnBlur: true,
+    onValuesChange(values, previous) {
+      if (!isEqual(values, previous)) {
+        dispatch(
+          updatePartTQF5({ part: "part1", data: cloneDeep(form.getValues()) })
+        );
+        setForm(form);
+      }
+    },
   });
 
   const calculateTotals = (courseEval: any[]) => {
@@ -74,15 +87,22 @@ export default function Part1TQF5({ setForm, method }: Props) {
       U: 0,
       P: 0,
       total: 0,
+      avg: 0,
     };
     courseEval?.forEach((item) => {
       Object.keys(totals).forEach((key) => {
-        (totals as any)[key] += item[key] || 0;
+        (totals as any)[key] += parseInt(item[key]) || 0;
       });
     });
     totals.total = Object.values(totals).reduce((a, b) => a + (b as number), 0);
     return totals;
   };
+
+  useEffect(() => {
+    if (tqf5.part1) {
+      form.setValues(cloneDeep(tqf5.part1));
+    }
+  }, []);
 
   return (
     <>
@@ -161,9 +181,22 @@ export default function Part1TQF5({ setForm, method }: Props) {
 
               <Table.Tbody>
                 {form.getValues().courseEval?.map((item, index) => {
-                  const total = Object.values(item)
+                  const data = Object.values(item)
                     .slice(1)
-                    .reduce((a, b) => a + (b ?? 0), 0);
+                    .map((e: any) => parseInt(e));
+                  const total = data.reduce((a, b: any) => a + b, 0);
+                  const avg =
+                    total > 0
+                      ? (4 * data[0] +
+                          3.5 * data[1] +
+                          3 * data[2] +
+                          2.5 * data[3] +
+                          2 * data[4] +
+                          1.5 * data[5] +
+                          1 * data[6] +
+                          0 * data[7]) /
+                        total
+                      : 0;
                   return (
                     <Table.Tr
                       className="font-medium text-default text-[13px]"
@@ -291,7 +324,7 @@ export default function Part1TQF5({ setForm, method }: Props) {
                         )}
                       </Table.Td>
                       <Table.Td>{total}</Table.Td>
-                      <Table.Td>{(0 / (total || 1)).toFixed(2)}</Table.Td>
+                      <Table.Td>{avg.toFixed(2)}</Table.Td>
                     </Table.Tr>
                   );
                 })}
@@ -299,6 +332,18 @@ export default function Part1TQF5({ setForm, method }: Props) {
               <Table.Tfoot className="!bg-bgTableHeader  !border-t-[1px] border-secondary sticky bottom-0">
                 {(() => {
                   const totals = calculateTotals(form.getValues().courseEval);
+                  const avg =
+                    totals.total > 0
+                      ? (4 * totals.A +
+                          3.5 * totals.Bplus +
+                          3 * totals.B +
+                          2.5 * totals.Cplus +
+                          2 * totals.C +
+                          1.5 * totals.Dplus +
+                          1 * totals.D +
+                          0 * totals.F) /
+                        totals.total
+                      : 0;
                   return (
                     <Table.Tr className="border-none text-secondary font-semibold">
                       <Table.Th className="rounded-bl-[8px] w-[10%]">
@@ -318,7 +363,7 @@ export default function Part1TQF5({ setForm, method }: Props) {
                       <Table.Th className="w-[6%]">{totals.P}</Table.Th>
                       <Table.Th className="w-[9%]">{totals.total}</Table.Th>
                       <Table.Th className="!rounded-br-[8px] w-[9%]">
-                        0
+                        {avg.toFixed(2)}
                       </Table.Th>
                     </Table.Tr>
                   );

@@ -7,7 +7,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import maintenace from "@/assets/image/maintenance.png";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { getValueEnumByKey } from "@/helpers/functions/function";
-import { useForm, UseFormReturnType } from "@mantine/form";
+import { UseFormReturnType } from "@mantine/form";
 import Loading from "@/components/Loading/Loading";
 import { setShowNavbar, setShowSidebar } from "@/store/config";
 import Part1TQF5 from "@/components/TQF5/Part1TQF5";
@@ -15,15 +15,21 @@ import Part2TQF5 from "@/components/TQF5/Part2TQF5";
 import Part3TQF5 from "@/components/TQF5/Part3TQF5";
 import { IModelTQF5 } from "@/models/ModelTQF5";
 import { PartTopicTQF5 } from "@/helpers/constants/TQF5.enum";
-import { COURSE_TYPE, NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
+import {
+  COURSE_TYPE,
+  NOTI_TYPE,
+  ROLE,
+  TQF_STATUS,
+} from "@/helpers/constants/enum";
 import { IModelSection } from "@/models/ModelCourse";
 import { getOneCourse } from "@/services/course/course.service";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
-import { setDataTQF5 } from "@/store/tqf5";
-import tqf3 from "@/store/tqf3";
+import { setDataTQF5, setPloTQF5 } from "@/store/tqf5";
+import tqf3, { setPloTQF3 } from "@/store/tqf3";
 import { isEmpty, isEqual } from "lodash";
 import { saveTQF5 } from "@/services/tqf5/tqf5.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
+import { getOnePLO } from "@/services/plo/plo.service";
 
 export type TypeMethodTQF5 = "scoreOBE" | "manual";
 
@@ -36,6 +42,7 @@ export default function TQF5() {
   const courseAdmin = useAppSelector((state) =>
     state.allCourse.courses.find((course) => course.courseNo == courseNo)
   );
+  const [tqf3Status, setTqf3Status] = useState("");
   const [tqf5Original, setTqf5Original] = useState<
     Partial<IModelTQF5> & { topic?: string; ploRequired?: string[] }
   >();
@@ -72,11 +79,38 @@ export default function TQF5() {
     dispatch(setShowNavbar(true));
   }, []);
 
-  // useEffect(() => {
-  //   if (academicYear && (tqf5.topic !== tqf5Original?.topic || !tqf5Original)) {
-  //     fetchOneCourse(true);
-  //   }
-  // }, [academicYear, tqf5.topic, courseNo]);
+  useEffect(() => {
+    if (academicYear && params.get("year") && params.get("semester")) {
+      if (!tqf5.coursePLO?.id) {
+        fetchPLO();
+      }
+    }
+  }, [academicYear]);
+
+  const fetchPLO = async () => {
+    const resPloCol = await getOnePLO({
+      year: params.get("year"),
+      semester: params.get("semester"),
+      courseCode: courseNo?.slice(0, -3),
+    });
+    if (resPloCol) {
+      dispatch(setPloTQF3(resPloCol));
+      dispatch(setPloTQF5(resPloCol));
+    }
+  };
+
+  useEffect(() => {
+    if (
+      academicYear &&
+      courseNo &&
+      tqf5.coursePLO &&
+      (tqf5.topic !== tqf5Original?.topic || !tqf5Original)
+    ) {
+      if (!tqf3Status?.length || tqf3Status == TQF_STATUS.DONE) {
+        fetchOneCourse(true);
+      }
+    }
+  }, [academicYear, tqf5.topic, tqf5.coursePLO]);
 
   const checkActiveTerm = () => {
     return (
@@ -99,9 +133,11 @@ export default function TQF5() {
     }
     if (resCourse) {
       if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
-        const sectionTdf5 = resCourse.sections.find(
+        const section = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf5.topic
-        )?.TQF5;
+        );
+        const sectionTdf5 = section?.TQF5;
+        setTqf3Status(section?.TQF3?.status);
         const ploRequire = resPloRequired?.sections
           .find((item: any) => item.topic == tqf5.topic)
           ?.ploRequire.find((plo: any) => plo.plo == tqf5.coursePLO?.id)?.list;
@@ -126,6 +162,7 @@ export default function TQF5() {
         const ploRequire = resPloRequired?.ploRequire.find(
           (plo: any) => plo.plo == tqf5.coursePLO?.id
         )?.list;
+        setTqf3Status(resCourse.TQF3?.status);
         setTqf5Original({
           topic: tqf5.topic,
           ploRequired: ploRequire || [],
@@ -177,7 +214,7 @@ export default function TQF5() {
         const res = await saveTQF5(tqf5Part, payload);
         if (res) {
           setTqf5Original({ ...tqf5Original, ...res });
-          dispatch(setDataTQF5({ ...tqf3, ...res }));
+          dispatch(setDataTQF5({ ...tqf5, ...res }));
           showNotifications(
             NOTI_TYPE.SUCCESS,
             `TQF 5, ${tqf5Part} save successfully`,
@@ -307,21 +344,19 @@ export default function TQF5() {
           <div className="h-full w-full flex overflow-y-auto rounded-md text-[14px]">
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.value} className="w-full">
-                {tqf5Part === part.value && tqf5.id ? (
+                {tqf5Part === part.value &&
+                tqf5.id &&
+                tqf3Status == TQF_STATUS.DONE ? (
                   part.compo
                 ) : (
                   <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
                     <div className="h-full  justify-center flex flex-col">
                       <p className="text-secondary text-[21px] font-semibold">
-                        TQF 5 is coming soon to{" "}
-                        <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                          ScoreOBE +{" "}
-                        </span>{" "}
+                        TQF3 incompleted
                       </p>
                       <br />
                       <p className=" -mt-3 mb-6 text-b2 break-words font-medium leading-relaxed">
-                        Instructors, get ready to experience a new and improved
-                        way to complete TQF 5 <br /> starting February 2025.
+                        Your TQF3 is incompleted in all part.
                       </p>
                     </div>
                     <img

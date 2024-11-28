@@ -27,7 +27,7 @@ import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelSection } from "@/models/ModelCourse";
 import { isEmpty, isEqual } from "lodash";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";
-import { setSelectTqf5Topic } from "@/store/tqf5";
+import { resetDataTQF5, setSelectTqf5Topic } from "@/store/tqf5";
 
 type Props = {
   onClickLeaveCourse: () => void;
@@ -167,6 +167,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         onClose={() => setOpenAlertPopup(false)}
         action={() => {
           dispatch(resetDataTQF3());
+          dispatch(resetDataTQF5());
           setOpenAlertPopup(false);
           goToPage(
             dashboard == ROLE.ADMIN

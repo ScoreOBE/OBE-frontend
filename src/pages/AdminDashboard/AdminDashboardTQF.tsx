@@ -121,17 +121,11 @@ export default function AdminDashboardTQF() {
   };
 
   const goToPage = (pathname: string, courseNo: string, data: any) => {
+    dispatch(setDataTQF3(data.TQF3));
+    dispatch(setDataTQF5(data.TQF5));
     if (data.topic) {
-      if (pathname == ROUTE_PATH.TQF3) {
-        dispatch(setSelectTqf3Topic(data.topic));
-      } else if (pathname == ROUTE_PATH.TQF5) {
-        dispatch(setSelectTqf5Topic(data.topic));
-      }
-    }
-    if (pathname == ROUTE_PATH.TQF3) {
-      dispatch(setDataTQF3(data.TQF3));
-    } else if (pathname == ROUTE_PATH.TQF5) {
-      // dispatch(setDataTQF5(data.TQF5));
+      dispatch(setSelectTqf3Topic(data.topic));
+      dispatch(setSelectTqf5Topic(data.topic));
     }
     navigate({
       pathname: `${ROUTE_PATH.COURSE}/${courseNo}/${pathname}`,
@@ -305,7 +299,10 @@ export default function AdminDashboardTQF() {
                           <Icon className="size-5" IconComponent={IconTQF5} />
                         }
                         className="!w-48"
-                        disabled
+                        disabled={sec.TQF3?.status !== TQF_STATUS.DONE}
+                        onClick={() => {
+                          goToPage(ROUTE_PATH.TQF5, course.courseNo!, sec);
+                        }}
                       >
                         Edit TQF 5
                       </Menu.Item>
@@ -421,7 +418,10 @@ export default function AdminDashboardTQF() {
                       <Icon className="size-5" IconComponent={IconTQF5} />
                     }
                     className="!w-48"
-                    disabled
+                    disabled={course.TQF3?.status !== TQF_STATUS.DONE}
+                    onClick={() => {
+                      goToPage(ROUTE_PATH.TQF5, course.courseNo!, course);
+                    }}
                   >
                     Edit TQF 5
                   </Menu.Item>
@@ -628,7 +628,7 @@ export default function AdminDashboardTQF() {
                   <div className="h-full justify-center flex flex-col">
                     <p className="text-secondary text-[22px] font-semibold">
                       {courseList.search.length
-                        ? `No results for "${courseList.search}" `
+                        ? `No results for "${courseList.search}"`
                         : "No Course Found"}
                     </p>
                     <br />
@@ -649,12 +649,6 @@ export default function AdminDashboardTQF() {
                         </p>
                       )}
                     </p>
-
-                    {/* {tqf5Filters.length && courseList.courses.length == 0 && (
-                      <p className="text-secondary text-[22px] font-semibold">
-                        no courseeeee
-                      </p>
-                    )} */}
                     <br />
                   </div>
                   <div className="h-full  w-[24vw] justify-center flex flex-col">
