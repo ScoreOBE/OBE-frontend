@@ -48,6 +48,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";
 import { setLoadingOverlay } from "@/store/loading";
 import { getOnePLO } from "@/services/plo/plo.service";
+import { setPloTQF5 } from "@/store/tqf5";
 
 export default function TQF3() {
   const { courseNo } = useParams();
@@ -125,7 +126,9 @@ export default function TQF3() {
 
   useEffect(() => {
     if (academicYear && params.get("year") && params.get("semester")) {
-      fetchPLO();
+      if (!tqf3.coursePLO?.id) {
+        fetchPLO();
+      }
       if (checkActiveTerm()) {
         fetchTqf3Reuse();
       }
@@ -140,6 +143,7 @@ export default function TQF3() {
     });
     if (resPloCol) {
       dispatch(setPloTQF3(resPloCol));
+      dispatch(setPloTQF5(resPloCol));
     }
   };
 
@@ -366,6 +370,7 @@ export default function TQF3() {
           setOpenWarningEditDataTQF2Or3(true);
           return;
         }
+        if (tqf3Part == "part6" && !tqf3.coursePLO?.id) payload.done = true;
         if (confirmToEditData) payload.inProgress = true;
         const res = await saveTQF3(tqf3Part, payload);
         if (res) {

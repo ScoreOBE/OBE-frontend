@@ -134,7 +134,8 @@ export default function ModalUploadGrade({ opened, onClose, data }: Props) {
       >
         <div className="flex flex-col gap-2 overflow-hidden">
           <div className=" flex-col overflow-y-auto h-full gap-3">
-            <Dropzone
+            Upload Grade is coming soon.
+            {/* <Dropzone
               onDrop={(files) => {
                 onUploadFile(
                   data,
@@ -231,7 +232,7 @@ export default function ModalUploadGrade({ opened, onClose, data }: Props) {
                   </p>
                 </div>
               )}
-            </Dropzone>
+            </Dropzone> */}
           </div>
         </div>
       </Modal>
