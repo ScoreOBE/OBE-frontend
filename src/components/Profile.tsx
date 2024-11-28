@@ -233,9 +233,7 @@ export default function Profile() {
                 </div>
               </Menu.Item>
             )}
-            {user.role === ROLE.TA  && (
-              <Menu.Divider />
-            )}
+            {user.role === ROLE.TA && <Menu.Divider />}
           </>
 
           {(user.role === ROLE.SUPREME_ADMIN ||
@@ -347,34 +345,23 @@ export default function Profile() {
             </Menu>
           )}
 
-          {user.role !== ROLE.STUDENT && user.role !== ROLE.TA && (
-            <>
-              <Menu.Divider />
-              <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
-                <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
-                  <div className="flex items-center gap-2">
-                    <Icon className="size-4 " IconComponent={IconFeedback} />{" "}
-                    <span>Feedback</span>
-                  </div>
-                </Menu.Item>
-              </a>
-            </>
-          )}
-          {[ROLE.STUDENT, ROLE.TA].includes(user.role) && (
-            <>
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSfstqyy0ijNp8u0JU0a7bBU_x0HGPhJ5V7flAD0ZymzD9cZqA/viewform"
-                target="_blank"
-              >
-                <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
-                  <div className="flex items-center gap-2">
-                    <Icon className="size-4 " IconComponent={IconFeedback} />{" "}
-                    <span>Feedback</span>
-                  </div>
-                </Menu.Item>
-              </a>
-            </>
-          )}
+          {![ROLE.STUDENT, ROLE.TA].includes(user.role) && <Menu.Divider />}
+          {/* <a
+            href={
+              [ROLE.STUDENT, ROLE.TA].includes(user.role)
+                ? "https://docs.google.com/forms/d/e/1FAIpQLSfstqyy0ijNp8u0JU0a7bBU_x0HGPhJ5V7flAD0ZymzD9cZqA/viewform"
+                : "https://forms.gle/HwxjaAZAJs99v8aDA"
+            }
+            target="_blank"
+          >
+            <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
+              <div className="flex items-center gap-2">
+                <Icon className="size-4 " IconComponent={IconFeedback} />
+                <span>Feedback</span>
+              </div>
+            </Menu.Item>
+          </a> */}
+
           <a href="https://forms.gle/haNFpme6KBzyejG18" target="_blank">
             <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
               <div className="flex items-center gap-2">

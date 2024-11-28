@@ -11,6 +11,8 @@ import { setAllCourseList } from "@/store/allCourse";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { ROLE } from "@/helpers/constants/enum";
 import { Button } from "@mantine/core";
+import Icon from "./Icon";
+import IconFeedback from "@/assets/icons/feedback.svg?react";
 
 export default function Navbar() {
   const { name } = useParams();
@@ -165,7 +167,7 @@ export default function Navbar() {
               />
               <span className="font-[600] sm:text-[18px] text-[14px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                 ScoreOBE +
-              </span>{" "}
+              </span>
             </div>
             <div className="py-5 flex items-end gap-5 justify-end h-full">
               {showButtonLogin && ButtonLogin()}
@@ -179,16 +181,21 @@ export default function Navbar() {
         )}
         {![ROUTE_PATH.LOGIN].includes(location) && (
           <div className="flex gap-2 items-center">
-            {/* {user.role !== ROLE.STUDENT && (
-              <a href="https://forms.gle/HwxjaAZAJs99v8aDA" target="_blank">
-                <Button variant="light">
-                  <div className="flex items-center gap-1">
-                    <Icon className="size-5 " IconComponent={IconFeedback} />{" "}
-                    Feedback
-                  </div>
-                </Button>
-              </a>
-            )} */}
+            <a
+              href={
+                [ROLE.STUDENT, ROLE.TA].includes(user.role)
+                  ? "https://docs.google.com/forms/d/e/1FAIpQLSfstqyy0ijNp8u0JU0a7bBU_x0HGPhJ5V7flAD0ZymzD9cZqA/viewform"
+                  : "https://forms.gle/HwxjaAZAJs99v8aDA"
+              }
+              target="_blank"
+            >
+              <Button variant="light">
+                <div className="flex items-center gap-1">
+                  <Icon className="size-5" IconComponent={IconFeedback} />
+                  <span>Feedback</span>
+                </div>
+              </Button>
+            </a>
             <Profile />
           </div>
         )}
