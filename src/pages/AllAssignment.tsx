@@ -573,14 +573,14 @@ export default function AllAssignment() {
         }
       />
 
-      <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
+      <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-2 overflow-hidden">
         {loading.loading ? (
           <Loading />
         ) : (
           <>
             {allAssignments.length !== 0 && (
-              <div className="flex flex-row py-1 items-center justify-between">
-                <p className="text-secondary text-[18px] font-semibold">
+              <div className="flex flex-row items-center justify-between">
+                <p className="text-secondary text-[16px] font-semibold">
                   {allAssignments.length} Assignment
                   {allAssignments.length! > 1 && "s"}
                 </p>
@@ -651,7 +651,7 @@ export default function AllAssignment() {
                 }}
               >
                 <Tabs.List>
-                  <Tabs.Tab value="assignment">Assignments</Tabs.Tab>
+                  <Tabs.Tab value="assignment">List</Tabs.Tab>
                   <Tabs.Tab value="chart">Chart</Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value="assignment">
