@@ -36,7 +36,7 @@ import { getEnrollCourse } from "@/services/student/student.service";
 export default function Sidebar() {
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
-  const { courseNo } = useParams();
+  const { courseNo, sectionNo } = useParams();
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)
   );
@@ -62,6 +62,7 @@ export default function Sidebar() {
     } else if (!loading) {
       if (path.includes(ROUTE_PATH.COURSE)) {
         if (
+          sectionNo &&
           [ROUTE_PATH.ASSIGNMENT, ROUTE_PATH.HISTOGRAM].some((route) =>
             path.includes(route)
           )

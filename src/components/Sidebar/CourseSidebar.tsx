@@ -13,6 +13,7 @@ import Icon from "@/components/Icon";
 import IconLogout from "@/assets/icons/logout.svg?react";
 import IconTQF3 from "@/assets/icons/TQF3.svg?react";
 import IconTQF5 from "@/assets/icons/TQF5.svg?react";
+import IconTQF from "@/assets/icons/TQF.svg?react";
 import IconStudent from "@/assets/icons/student.svg?react";
 import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -229,9 +230,27 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             )}
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
+                onClick={() => goToPage(ROUTE_PATH.ASSIGNMENT)}
+                leftSection={
+                  <Icon IconComponent={IconTQF} className="mr-0.5" />
+                }
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                  path.includes(ROUTE_PATH.ASSIGNMENT)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                }`}
+              >
+                Assignments
+              </Button>
+            )}
+            {dashboard == ROLE.INSTRUCTOR && (
+              <Button
                 onClick={() => goToPage(ROUTE_PATH.ROSTER)}
                 leftSection={
-                  <Icon IconComponent={IconStudent} className="size-[19px]" />
+                  <Icon
+                    IconComponent={IconStudent}
+                    className="size-[19px] stroke-1"
+                  />
                 }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
                   path.includes(ROUTE_PATH.ROSTER)

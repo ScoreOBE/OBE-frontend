@@ -76,9 +76,6 @@ export default function Assignment() {
     },
     { title: `Assignment Section ${getSectionNo(sectionNo)}` },
   ]);
-  const [openPublishScoreModal, setOpenPublishScoreModal] = useState(false);
-  const [openSelectSecModal, setOpenSelectSecModal] = useState(false);
-  const [isPublishAll, setIsPublishAll] = useState(false);
   const [editDeleteAssignment, setEditDeleteAssignment] = useState("");
   const [editName, setEditName] = useState("");
   const [openModalEditAssignment, setOpenModalEditAssignment] = useState(false);
@@ -100,30 +97,11 @@ export default function Assignment() {
     localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
   }, []);
 
-  const onClosePublishModal = () => {
-    setOpenPublishScoreModal(false);
-    setOpenSelectSecModal(false);
-    form.reset();
-  };
-
   const goToOverall = (name: string) => {
     navigate({
       pathname: `${path}/${name}/${ROUTE_PATH.SCORE}`,
       search: "?" + params.toString(),
     });
-  };
-
-  const onClickPublishScore = () => {
-    form.setFieldValue("isPublish", true);
-    if (isPublishAll) {
-      const allSec = course?.sections?.map((sec) => sec.sectionNo) || [];
-      form.setFieldValue("sections", allSec);
-    }
-    const sectionsToNum = form
-      .getValues()
-      .sections.map((sec: string) => parseInt(sec));
-    form.setFieldValue("sections", sectionsToNum);
-    onClickPublish();
   };
 
   const onClickPublish = async () => {
@@ -146,8 +124,6 @@ export default function Assignment() {
           form.getValues().assignments.length > 1 ? "are" : "is"
         } ${form.getValues().isPublish ? "published" : "unpublished"}`
       );
-      setOpenPublishScoreModal(false);
-      setOpenSelectSecModal(false);
       form.reset();
     }
     dispatch(setLoadingOverlay(false));
@@ -157,6 +133,7 @@ export default function Assignment() {
     dispatch(setLoadingOverlay(true));
     const res = await updateAssignmentName({
       course: course?.id,
+      sectionNo: parseInt(sectionNo!),
       oldName: editDeleteAssignment,
       name: editName,
     });
@@ -178,6 +155,7 @@ export default function Assignment() {
     dispatch(setLoadingOverlay(true));
     const res = await deleteAssignment({
       course: course?.id,
+      sectionNo: parseInt(sectionNo!),
       name: editDeleteAssignment,
     });
     if (res) {
@@ -195,289 +173,6 @@ export default function Assignment() {
 
   return (
     <>
-      {/* Select assignment to publish */}
-      <Modal
-        opened={openPublishScoreModal}
-        closeOnClickOutside={false}
-        size="30vw"
-        title={
-          <div className="flex flex-col gap-2">
-            <p>Publish score {isPublishAll ? "all" : "each"} sections</p>
-            <p className=" text-[12px] text-noData">
-              {courseNo} {course?.courseName}
-            </p>
-          </div>
-        }
-        transitionProps={{ transition: "pop" }}
-        centered
-        onClose={onClosePublishModal}
-      >
-        {isPublishAll && (
-          <Alert
-            variant="light"
-            color="blue"
-            title={
-              <p>
-                <span className="font-extrabold underline">All students</span>
-                {` enrolled in this course will be able to see the assignments score you publish.`}
-              </p>
-            }
-            icon={<Icon IconComponent={IconInfo2} />}
-            classNames={{ icon: "size-6" }}
-            className="mb-5"
-          ></Alert>
-        )}
-        <div className="mb-6 flex flex-col gap-3">
-          {course?.sections.length! > 1 && (
-            <Chip
-              classNames={{
-                label:
-                  "text-[13px] text-default font-semibold translate-y-[3px]",
-              }}
-              size="md"
-              checked={
-                form.getValues().assignments.length ===
-                section?.assignments!.length
-              }
-              onChange={() => {
-                if (
-                  form.getValues().assignments.length ===
-                  section?.assignments!.length
-                ) {
-                  form.setFieldValue("assignments", []);
-                } else {
-                  const allAssign =
-                    section?.assignments?.map((as) => as.name) || [];
-                  form.setFieldValue("assignments", [...allAssign]);
-                }
-              }}
-            >
-              All Assignment
-            </Chip>
-          )}
-          <Chip.Group
-            {...form.getInputProps("assignments")}
-            multiple
-            value={form.getValues().assignments?.map((as) => as)}
-            onChange={(event) => form.setFieldValue("assignments", event)}
-          >
-            <Group>
-              <div className="flex gap-3">
-                {section?.assignments?.map((as, index) => (
-                  <Chip
-                    key={index}
-                    classNames={{
-                      root: "h-8 !rounded-[10px] text-center justify-center items-center",
-                      label:
-                        "text-[13px] text-default font-semibold translate-y-[3px] ",
-                    }}
-                    size="md"
-                    value={as.name}
-                  >
-                    {as.name}
-                  </Chip>
-                ))}
-              </div>
-            </Group>
-          </Chip.Group>
-        </div>
-
-        <div className="flex gap-2 justify-end w-full">
-          <Button onClick={onClosePublishModal} variant="subtle">
-            Cancel
-          </Button>
-          {!isPublishAll ? (
-            <Button
-              rightSection={
-                <Icon
-                  IconComponent={IconArrowRight}
-                  className="size-5 stroke-2"
-                />
-              }
-              disabled={!form.getValues().assignments.length}
-              onClick={() => {
-                setOpenPublishScoreModal(false);
-                setOpenSelectSecModal(true);
-                form.setFieldValue("sections", [sectionNo]);
-              }}
-            >
-              Next
-            </Button>
-          ) : (
-            <Button
-              onClick={onClickPublishScore}
-              disabled={!form.getValues().assignments.length}
-            >
-              Publish
-            </Button>
-          )}
-        </div>
-      </Modal>
-      {/* Select section to publish */}
-      <Modal
-        opened={openSelectSecModal}
-        closeOnClickOutside={false}
-        size="38vw"
-        title={
-          <div className="flex flex-col gap-2">
-            <p>Publish score {isPublishAll ? "all" : "each"} sections</p>
-            <p className=" text-[12px] text-noData">
-              {courseNo} {course?.courseName}
-            </p>
-          </div>
-        }
-        transitionProps={{ transition: "pop" }}
-        centered
-        onClose={onClosePublishModal}
-      >
-        <Alert
-          variant="light"
-          color="blue"
-          title={
-            <p>
-              You choose{" "}
-              {form
-                .getValues()
-                .assignments.join(", ")
-                .replace(/, ([^,]*)$/, " and $1")}{" "}
-              to publish.
-            </p>
-          }
-          icon={<Icon IconComponent={IconInfo2} />}
-          classNames={{ icon: "size-6" }}
-          className="mb-5"
-        ></Alert>
-
-        {(() => {
-          const assignments = form.getValues().assignments;
-          const selectedSectionNumbers = form
-            .getValues()
-            .sections.map((item) => Number(item));
-
-          const missingAssignments = assignments
-            .map((assign) => {
-              const sectionsNotFound = course?.sections
-                ?.filter((sec) =>
-                  selectedSectionNumbers.includes(sec.sectionNo!)
-                )
-                ?.filter(
-                  (sec) =>
-                    !sec.assignments?.some((item) => item.name === assign)
-                )
-                ?.map((sec) => sec.sectionNo);
-
-              return sectionsNotFound?.length
-                ? { assign, sections: sectionsNotFound }
-                : null;
-            })
-            .filter(Boolean);
-
-          return missingAssignments.length > 0 ? (
-            <Alert
-              variant="light"
-              color="#D0820C"
-              title={
-                <p className="font-medium">
-                  <span className="font-extrabold text-[#D0820C]">
-                    The following assignments were not found in the selected
-                    sections:
-                  </span>
-                </p>
-              }
-              icon={<Icon IconComponent={IconExclamationCircle} />}
-              classNames={{ icon: "size-6" }}
-              className="mb-5 -mt-2"
-            >
-              <ul className="list-disc pl-5">
-                {missingAssignments.map(({ assign, sections }: any) => (
-                  <li key={assign}>
-                    {assign} not found in Section
-                    {sections.length > 1 ? "s" : ""} {sections.join(", ")}
-                  </li>
-                ))}
-              </ul>
-            </Alert>
-          ) : null;
-        })()}
-
-        <div className="-mt-1 gap-2 flex flex-col mb-6">
-          <p className="text-[14px] mb-1 font-semibold text-secondary">
-            Select section to publish
-          </p>
-          {/* Chip */}
-          {course?.sections.length! > 1 && (
-            <Chip
-              classNames={{
-                label:
-                  "text-[13px] text-default font-semibold translate-y-[3px]",
-              }}
-              size="md"
-              checked={
-                form.getValues().sections.length === course?.sections.length
-              }
-              onChange={() => {
-                if (
-                  form.getValues().sections.length === course?.sections.length
-                ) {
-                  form.setFieldValue("sections", []);
-                } else {
-                  const allSec =
-                    course?.sections?.map((sec) => sec.sectionNo!.toString()) ||
-                    [];
-                  form.setFieldValue("sections", allSec);
-                }
-              }}
-            >
-              All Sections
-            </Chip>
-          )}
-          <Chip.Group
-            {...form.getInputProps("sections")}
-            multiple
-            value={form.getValues().sections.map((sec) => sec.toString())}
-            onChange={(event) => {
-              form.setFieldValue("sections", event);
-            }}
-          >
-            <Group className="flex gap-3">
-              <div className="flex gap-3">
-                {course?.sections.map((sec) => (
-                  <Chip
-                    key={sec.id}
-                    classNames={{
-                      root: "h-8 min-w-[114px]  !rounded-[10px] text-center justify-center items-center",
-                      label:
-                        "text-[13px] text-default font-semibold translate-y-[3px] ",
-                    }}
-                    size="md"
-                    value={sec.sectionNo?.toString()}
-                  >
-                    Section {sec.sectionNo}
-                  </Chip>
-                ))}
-              </div>
-            </Group>
-          </Chip.Group>
-        </div>
-
-        <div className="flex gap-2 justify-end w-full">
-          <Button
-            onClick={() => {
-              setOpenSelectSecModal(false);
-              setOpenPublishScoreModal(true);
-            }}
-            variant="subtle"
-          >
-            Back
-          </Button>
-          <Button
-            onClick={onClickPublishScore}
-            disabled={!form.getValues().sections.length}
-          >
-            Publish
-          </Button>
-        </div>
-      </Modal>
       {/* Edit Assignment Name */}
       <Modal
         opened={openModalEditAssignment}
@@ -554,62 +249,6 @@ export default function Assignment() {
                   {section?.assignments?.length} Assignment
                   {section?.assignments?.length! > 1 && "s"}
                 </p>
-                <Menu
-                  trigger="click"
-                  openDelay={100}
-                  clickOutsideEvents={["mousedown"]}
-                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
-                >
-                  <Menu.Target>
-                    <Button
-                      color="#13a9a1"
-                      leftSection={
-                        <Icon
-                          IconComponent={IconEyePublish}
-                          className="size-5"
-                        />
-                      }
-                      className="px-3"
-                    >
-                      Publish score
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown
-                    className="!z-50 -translate-y-[3px] translate-x-[5px] bg-white"
-                    style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
-                  >
-                    <Menu.Item
-                      className="text-[#3E3E3E] text-[14px] h-8 w-full "
-                      onClick={() => {
-                        setIsPublishAll(false);
-                        setOpenPublishScoreModal(true);
-                      }}
-                    >
-                      <div className="flex items-center gap-2">
-                        <Icon
-                          IconComponent={IconPublishEach}
-                          className="size-4 text-[#000000]"
-                        />
-                        <span>Each Section</span>
-                      </div>
-                    </Menu.Item>
-                    <Menu.Item
-                      onClick={() => {
-                        setIsPublishAll(true);
-                        setOpenPublishScoreModal(true);
-                      }}
-                      className="text-[#3E3E3E] text-[14px] h-8 w-full "
-                    >
-                      <div className="flex items-center gap-2">
-                        <Icon
-                          IconComponent={IconPublishAll}
-                          className="size-4 text-[#000000]"
-                        />
-                        <span>All Sections</span>
-                      </div>
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
               </div>
             )}
             {/* Table */}
