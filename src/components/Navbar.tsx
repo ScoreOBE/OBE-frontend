@@ -89,7 +89,7 @@ export default function Navbar() {
         else if (location.includes(ROUTE_PATH.SCORE)) return `${name}`;
         else if (location.includes(ROUTE_PATH.ROSTER)) return `Course Roster`;
         else if (location.includes(ROUTE_PATH.STUDENTS)) return `${name}`;
-        else if (location.includes(ROUTE_PATH.ASSIGNMENT)) return "Assignment";
+        else if (location.includes(ROUTE_PATH.ASSIGNMENT)) return "Assignments";
         else if (location.includes(ROUTE_PATH.HISTOGRAM)) return "Chart";
         else return "Section";
       default:

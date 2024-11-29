@@ -15,6 +15,7 @@ import StdChart from "@/pages/Student/StdChart";
 import StdScore from "@/pages/Student/StdScore";
 import StdCLO from "@/pages/Student/StdCLO";
 import StdPLO from "@/pages/Student/StdPLO";
+import AllAssignment from "@/pages/AllAssignment";
 
 const Login = lazy(() => import("@/pages/Login"));
 const CMUOAuthCallback = lazy(() => import("@/pages/CmuOAuthCallback"));
@@ -119,6 +120,14 @@ const router = createBrowserRouter([
                 ),
               },
             ],
+          },
+          {
+            path: ROUTE_PATH.ASSIGNMENT,
+            element: (
+              <Suspense fallback={loadingPage}>
+                <AllAssignment />
+              </Suspense>
+            ),
           },
           {
             path: ROUTE_PATH.ROSTER,
