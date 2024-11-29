@@ -57,13 +57,13 @@ export default function MainPopup({
           {title}
         </div>
       }
-      size="42vw"
+      size="auto"
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
         title: `${titleClassName()}`,
         content:
-          "flex flex-col justify-start   font-medium leading-[24px] text-[14px] item-center  overflow-hidden ",
+          "flex flex-col justify-start   font-medium leading-[24px] text-[14px] item-center  overflow-hidden max-w-[42vw] min-w-[32vw] w-fit",
       }}
     >
       <div className="flex flex-col">

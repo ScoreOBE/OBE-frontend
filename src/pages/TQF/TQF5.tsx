@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { Alert, Button, Group, Modal, Radio, Tabs } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconCheck from "@/assets/icons/Check.svg?react";
+import IconExchange from "@/assets/icons/change.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { useParams, useSearchParams } from "react-router-dom";
 import maintenace from "@/assets/image/maintenance.png";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
@@ -30,8 +33,9 @@ import { isEmpty, isEqual } from "lodash";
 import { saveTQF5 } from "@/services/tqf5/tqf5.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { getOnePLO } from "@/services/plo/plo.service";
+import MainPopup from "@/components/Popup/MainPopup";
 
-export type TypeMethodTQF5 = "scoreOBE" | "manual";
+export type TypeMethodTQF5 = "ScoreOBE" | "Manual";
 
 export default function TQF5() {
   const { courseNo } = useParams();
@@ -53,9 +57,11 @@ export default function TQF5() {
     Object.keys(partLabel)[0]
   );
   const [selectedMethod, setSelectedMethod] =
-    useState<TypeMethodTQF5>("manual");
-  const [confirmMethod, setConfirmMethod] = useState<TypeMethodTQF5>("manual");
+    useState<TypeMethodTQF5>("Manual");
+  const [confirmMethod, setConfirmMethod] = useState<TypeMethodTQF5>("Manual");
   const [openModalChangeMethod, setOpenModalChangeMethod] = useState(false);
+  const [openMainPopupConfirmChange, setOpenMainPopupConfirmChange] =
+    useState(false);
   const partTab = [
     {
       value: Object.keys(partLabel)[0],
@@ -249,45 +255,93 @@ export default function TQF5() {
       >
         <div className="flex flex-col gap-5 justify-between">
           <div className="flex flex-col gap-2">
-            <Alert />
+            <Alert
+              radius="md"
+              icon={<Icon IconComponent={IconInfo2} />}
+              variant="light"
+              color="blue"
+              className="mb-5"
+              classNames={{
+                icon: "size-6",
+                body: " flex justify-center",
+              }}
+              title={<p>Test: Naka</p>}
+            ></Alert>
             <Radio.Group
               classNames={{ label: "font-semibold" }}
               value={selectedMethod}
               onChange={setSelectedMethod as any}
             >
               <Group mb={2}>
-                <Radio
-                  classNames={{ label: "font-medium" }}
-                  value="scoreOBE"
-                  label={
-                    <div>
-                      <p className="text-b1">ScoreOBE +</p>
-                      <p className="text-b3">
-                        The smartest way to evaluate and analyze your TQF 5
-                      </p>
-                    </div>
-                  }
-                />
-                <Radio
-                  classNames={{ label: "font-medium" }}
-                  value="manual"
-                  label={
-                    <div>
-                      <p className="text-b1">Manual</p>
-                      <p className="text-b3">
-                        Customize all data what you want
-                      </p>
-                    </div>
-                  }
-                />
+                <Radio.Card
+                  value="ScoreOBE"
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
+                  }}
+                  className={`p-4 flex flex-col rounded-md ${
+                    selectedMethod === "ScoreOBE"
+                      ? "border-2 border-secondary"
+                      : "border"
+                  }`}
+                >
+                  <Radio
+                    classNames={{ label: "font-medium" }}
+                    value="ScoreOBE"
+                    label={
+                      <div>
+                        <p className="text-b1">ScoreOBE + </p>
+
+                        <p className="text-b3">
+                          The smartest way to evaluate and analyze your TQF 5
+                        </p>
+                        {confirmMethod === "ScoreOBE" && (
+                          <span className="text-xs text-secondary">
+                            (Currently in use)
+                          </span>
+                        )}
+                      </div>
+                    }
+                  />
+                </Radio.Card>
+
+                <Radio.Card
+                  value="ScoreOBE"
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
+                  }}
+                  className={`p-4 flex flex-col rounded-md ${
+                    selectedMethod === "Manual"
+                      ? "border-2 border-secondary"
+                      : "border"
+                  }`}
+                >
+                  <Radio
+                    classNames={{ label: "font-medium" }}
+                    value="Manual"
+                    label={
+                      <div>
+                        <p className="text-b1">Manual</p>
+                        <p className="text-b3">
+                          Customize all data what you want
+                        </p>
+                        {confirmMethod === "Manual" && (
+                          <p className="text-xs text-secondary">
+                            (Currently in use)
+                          </p>
+                        )}
+                      </div>
+                    }
+                  />
+                </Radio.Card>
               </Group>
             </Radio.Group>
           </div>
           <div className="flex justify-end">
             <Button
               className="font-bold"
+              disabled={selectedMethod === confirmMethod}
               onClick={() => {
-                setConfirmMethod(selectedMethod);
+                setOpenMainPopupConfirmChange(true);
                 setOpenModalChangeMethod(false);
               }}
             >
@@ -296,6 +350,41 @@ export default function TQF5() {
           </div>
         </div>
       </Modal>
+      <MainPopup
+        opened={openMainPopupConfirmChange}
+        onClose={() => setOpenMainPopupConfirmChange(false)}
+        action={() => {
+          setConfirmMethod(selectedMethod);
+          setOpenMainPopupConfirmChange(false);
+        }}
+        type="unsaved"
+        labelButtonRight={`Switch to ${selectedMethod} ${
+          selectedMethod === "ScoreOBE" ? "+" : ""
+        }`}
+        title={`Your save will be lost ? `}
+        message={
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title={
+                <p>
+                  Head Up!{" "}
+                  <span className="text-[#B12C2C]">
+                    {" "}
+                    Switch to {selectedMethod}{" "}
+                    {selectedMethod === "ScoreOBE" ? "+" : ""}
+                  </span>{" "}
+                  will be removed your save in TQF 5. <br /> Are you sure you
+                  want to switch?
+                </p>
+              }
+              icon={<Icon IconComponent={IconExclamationCircle} />}
+              classNames={{ icon: "size-6" }}
+            ></Alert>
+          </>
+        }
+      />
       <div
         className={`flex flex-col h-full w-full overflow-hidden ${
           !checkActiveTerm() && "pb-2"
@@ -314,7 +403,7 @@ export default function TQF5() {
         >
           <div
             className={`flex flex-col w-full h-fit ${
-              tqf5Part === "part2" ? "pb-1" : "border-b-[2px] pb-4 mb-1"
+              tqf5Part === "part2" ? "pb-1" : "border-b-[2px] pb-4 mb-4"
             }`}
           >
             <Tabs.List className="md:gap-x-5 gap-x-3 w-full">
@@ -335,8 +424,25 @@ export default function TQF5() {
                 {getValueEnumByKey(PartTopicTQF5, tqf5Part!)}
               </div>
               {checkActiveTerm() && (
-                <Button onClick={() => setOpenModalChangeMethod(true)}>
-                  Change Method
+                <Button
+                  variant="outline"
+                  onClick={() => setOpenModalChangeMethod(true)}
+                  className="flex flex-col items-start !justify-start text-left !h-14 !px-4"
+                >
+                  <div className="flex items-center gap-4">
+                    <Icon
+                      IconComponent={IconExchange}
+                      className="size-5 stroke-[2px]"
+                    />
+                    <div className="flex flex-col gap-1">
+                      <p className="text-[13px] font-semibold">Change Method</p>{" "}
+                      {/* Use span for inline text */}
+                      <p className="text-deemphasize font-medium">
+                        Currently: {confirmMethod}{" "}
+                        {confirmMethod === "ScoreOBE" ? "+" : ""}
+                      </p>
+                    </div>
+                  </div>
                 </Button>
               )}
             </div>
