@@ -1,4 +1,4 @@
-import { Button, Modal, TextInput } from "@mantine/core";
+import { Alert, Button, Modal, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { IModelUser } from "@/models/ModelUser";
@@ -8,9 +8,11 @@ import { getUserName } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import CompoManageIns from "@/components/CompoManageIns";
 import { updateAdmin } from "@/services/user/user.service";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconUserCicle from "@/assets/icons/userCircle.svg?react";
 import IconUsers from "@/assets/icons/users.svg?react";
 import Icon from "@/components/Icon";
+import MainPopup from "@/components/Popup/MainPopup";
 
 type Props = {
   opened: boolean;
@@ -22,6 +24,9 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
   const [adminList, setAdminList] = useState<IModelUser[]>([]);
   const [adminFilter, setAdminFilter] = useState<IModelUser[]>([]);
   const [isNewFetch, setIsNewFetch] = useState(false);
+  const [openMainPopupDelAdmin, setOpenMainPopupDelAdmin] = useState(false);
+  const [targetAdminId, setTargetAdminId] = useState("");
+  const [targetAdminName, setTargetAdminName] = useState("");
 
   useEffect(() => {
     if (opened) {
@@ -55,86 +60,129 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
   };
 
   return (
-    <Modal
-      opened={opened}
-      onClose={onClose}
-      title="Admin Management"
-      size="45vw"
-      centered
-      transitionProps={{ transition: "pop" }}
-      classNames={{
-        content:
-          "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-fit ",
-      }}
-    >
-      <div className="flex flex-1 flex-col h-full ">
-        <CompoManageIns
-          opened={opened}
-          type="admin"
-          newFetch={isNewFetch}
-          setNewFetch={setIsNewFetch}
-          setUserList={setAdminList}
-          setUserFilter={setAdminFilter}
-        />
-
-        {/* Added Admin */}
-        <div className="w-full  flex flex-col bg-white mt-3 border-secondary border-[1px]  rounded-md">
-          <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
-            <Icon IconComponent={IconUsers} /> Added Admin
-          </div>
-          {/* Show List Of Admin */}
-          <div className="flex flex-col gap-2 w-full sm:max-macair133:h-[300px] macair133:h-[400px] h-[250px]  p-4 py-3  overflow-y-auto">
-            <TextInput
-              leftSection={<TbSearch />}
-              placeholder="Name / CMU account"
-              size="xs"
-              value={searchValue}
-              onChange={(event: any) =>
-                setSearchValue(event.currentTarget.value)
+    <>
+      <MainPopup
+        opened={openMainPopupDelAdmin}
+        onClose={() => setOpenMainPopupDelAdmin(false)}
+        action={() => {
+          deleteAdmin(targetAdminId);
+          setOpenMainPopupDelAdmin(false);
+        }}
+        type="delete"
+        labelButtonRight="Delete admin"
+        title={`Delete admin`}
+        message={
+          <>
+            <Alert
+              variant="light"
+              color="red"
+              title={
+                <p>
+                  After you delete this admin, they will no longer have access
+                  to the management system.
+                </p>
               }
-              rightSectionPointerEvents="all"
+              icon={<Icon IconComponent={IconExclamationCircle} />}
+              classNames={{ icon: "size-6" }}
+            ></Alert>
+            <div className="flex flex-col mt-3 gap-2">
+              <div className="flex flex-col  ">
+                <p className="text-b3 text-[#808080]">Admin</p>
+                <p className="  -translate-y-[2px] text-b1">{`${targetAdminName}`}</p>
+              </div>
+            </div>
+          </>
+        }
+      />
+      {!openMainPopupDelAdmin && (
+        <Modal
+          opened={opened}
+          onClose={onClose}
+          title="Admin Management"
+          size="45vw"
+          centered
+          transitionProps={{ transition: "pop" }}
+          classNames={{
+            content:
+              "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center px-2 pb-2 overflow-hidden max-h-fit ",
+          }}
+        >
+          <div className="flex flex-1 flex-col h-full ">
+            <CompoManageIns
+              opened={opened}
+              type="admin"
+              newFetch={isNewFetch}
+              setNewFetch={setIsNewFetch}
+              setUserList={setAdminList}
+              setUserFilter={setAdminFilter}
             />
-            {/* List of Admin */}
-            <div className="flex flex-col overflow-y-auto p-1">
-              {adminFilter.map((admin, index) => (
-                <div
-                  key={index}
-                  className="w-full items-center last:border-none border-b-[1px] justify-between  p-3  flex"
-                >
-                  <div className="gap-3 flex items-center">
-                    <Icon
-                      IconComponent={IconUserCicle}
-                      className=" size-8 stroke-1 -translate-x-1"
-                    />
-                    <div className="flex flex-col">
-                      <p className="font-semibold text-[14px] text-tertiary">
-                        {getUserName(admin, 1)}
-                      </p>
-                      <p className="text-secondary text-[12px] font-normal">
-                        {admin.email}
-                      </p>
-                    </div>
-                  </div>
-                  {admin.firstNameEN === user.firstNameEN &&
-                  admin.lastNameEN === user.lastNameEN ? (
-                    <p className="mr-1 text-secondary text-[14px] font-normal">
-                      You
-                    </p>
-                  ) : (
-                    <Button
-                      color="red"
-                      variant="outline"
-                      onClick={() => deleteAdmin(admin.id)}
+
+            {/* Added Admin */}
+            <div className="w-full  flex flex-col bg-white mt-3 border-secondary border-[1px]  rounded-md">
+              <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
+                <Icon IconComponent={IconUsers} /> Added Admin
+              </div>
+              {/* Show List Of Admin */}
+              <div className="flex flex-col gap-2 w-full sm:max-macair133:h-[300px] macair133:h-[400px] h-[250px]  p-4 py-3  overflow-y-auto">
+                <TextInput
+                  leftSection={<TbSearch />}
+                  placeholder="Name / CMU account"
+                  size="xs"
+                  value={searchValue}
+                  onChange={(event: any) =>
+                    setSearchValue(event.currentTarget.value)
+                  }
+                  rightSectionPointerEvents="all"
+                />
+                {/* List of Admin */}
+                <div className="flex flex-col overflow-y-auto p-1">
+                  {adminFilter.map((admin, index) => (
+                    <div
+                      key={index}
+                      className="w-full items-center last:border-none border-b-[1px] justify-between  p-3  flex"
                     >
-                      Delete
-                    </Button>
-                  )}
+                      <div className="gap-3 flex items-center">
+                        <Icon
+                          IconComponent={IconUserCicle}
+                          className=" size-8 stroke-1 -translate-x-1"
+                        />
+                        <div className="flex flex-col">
+                          <p className="font-semibold text-[14px] text-tertiary">
+                            {getUserName(admin, 1)}
+                          </p>
+                          <p className="text-secondary text-[12px] font-normal">
+                            {admin.email}
+                          </p>
+                        </div>
+                      </div>
+                      {admin.firstNameEN === user.firstNameEN &&
+                      admin.lastNameEN === user.lastNameEN ? (
+                        <p className="mr-1 text-secondary text-[14px] font-normal">
+                          You
+                        </p>
+                      ) : (
+                        <Button
+                          color="red"
+                          variant="outline"
+                          onClick={() => {
+                            setTargetAdminId(admin.id);
+                            setTargetAdminName(
+                              `${admin.firstNameEN} ${admin.lastNameEN}`
+                            );
+                            setOpenMainPopupDelAdmin(true);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </Modal>
+        </Modal>
+      )}
+    </>
   );
 }
