@@ -3,7 +3,6 @@ import Icon from "../Icon";
 import IconUpload from "@/assets/icons/upload.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconCheck2 from "@/assets/icons/Check2.svg?react";
-import maintenace from "@/assets/image/maintenance.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { TypeMethodTQF5 } from "@/pages/TQF/TQF5";
 import { useForm } from "@mantine/form";
@@ -118,7 +117,7 @@ export default function Part1TQF5({ setForm, method }: Props) {
             <p className="font-bold">
               Student grading<span className="ml-1 text-red-500">*</span>
             </p>
-            {method == "scoreOBE" ? (
+            {method == "ScoreOBE" ? (
               <Button
                 leftSection={
                   <Icon IconComponent={IconUpload} className="size-4" />

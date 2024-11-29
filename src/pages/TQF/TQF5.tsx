@@ -28,7 +28,7 @@ import { IModelSection } from "@/models/ModelCourse";
 import { getOneCourse } from "@/services/course/course.service";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { setDataTQF5, setPloTQF5 } from "@/store/tqf5";
-import tqf3, { setPloTQF3 } from "@/store/tqf3";
+import { setPloTQF3 } from "@/store/tqf3";
 import { isEmpty, isEqual } from "lodash";
 import { saveTQF5 } from "@/services/tqf5/tqf5.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
