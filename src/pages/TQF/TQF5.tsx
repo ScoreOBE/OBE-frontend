@@ -287,28 +287,23 @@ export default function TQF5() {
                       : "border"
                   }`}
                 >
-                  <Radio
-                    classNames={{ label: "font-medium" }}
-                    value="ScoreOBE"
-                    label={
-                      <div>
-                        <p className="text-b1">ScoreOBE + </p>
-
-                        <p className="text-b3">
-                          The smartest way to evaluate and analyze your TQF 5
-                        </p>
-                        {confirmMethod === "ScoreOBE" && (
-                          <span className="text-xs text-secondary">
-                            (Currently in use)
-                          </span>
-                        )}
-                      </div>
-                    }
-                  />
+                  <Group wrap="nowrap" align="flex-start">
+                    <Radio.Indicator />
+                    <div>
+                      <p className="text-b1">ScoreOBE + </p>
+                      <p className="text-b3">
+                        The smartest way to evaluate and analyze your TQF 5
+                      </p>
+                      {confirmMethod === "ScoreOBE" && (
+                        <span className="text-xs text-secondary">
+                          (Currently in use)
+                        </span>
+                      )}
+                    </div>
+                  </Group>
                 </Radio.Card>
-
                 <Radio.Card
-                  value="ScoreOBE"
+                  value="Manual"
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
                   }}
@@ -318,23 +313,20 @@ export default function TQF5() {
                       : "border"
                   }`}
                 >
-                  <Radio
-                    classNames={{ label: "font-medium" }}
-                    value="Manual"
-                    label={
-                      <div>
-                        <p className="text-b1">Manual</p>
-                        <p className="text-b3">
-                          Customize all data what you want
+                  <Group wrap="nowrap" align="flex-start">
+                    <Radio.Indicator />
+                    <div>
+                      <p className="text-b1">Manual</p>
+                      <p className="text-b3">
+                        Customize all data what you want
+                      </p>
+                      {confirmMethod === "Manual" && (
+                        <p className="text-xs text-secondary">
+                          (Currently in use)
                         </p>
-                        {confirmMethod === "Manual" && (
-                          <p className="text-xs text-secondary">
-                            (Currently in use)
-                          </p>
-                        )}
-                      </div>
-                    }
-                  />
+                      )}
+                    </div>
+                  </Group>
                 </Radio.Card>
               </Group>
             </Radio.Group>
