@@ -111,8 +111,8 @@ export default function Part1TQF5({ setForm, method }: Props) {
         data={course!}
       />
 
-      <div className="flex w-full flex-col text-[15px] max-h-full gap-2 text-default ">
-        <div className="flex text-secondary gap-4  w-full border-b-[1px] border-[#e6e6e6] pb-6 flex-col">
+      <div className="flex w-full flex-col text-[15px] max-h-full gap-3 text-default ">
+        <div className="flex text-secondary gap-4 w-full border-b-[1px] border-[#e6e6e6] pb-6 flex-col">
           <div className="flex text-secondary items-center justify-between flex-row gap-1 text-[15px]">
             <p className="font-bold">
               Student grading<span className="ml-1 text-red-500">*</span>

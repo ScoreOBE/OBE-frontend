@@ -7,7 +7,7 @@ import IconExchange from "@/assets/icons/change.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { useParams, useSearchParams } from "react-router-dom";
-import maintenace from "@/assets/image/maintenance.png";
+import unplug from "@/assets/image/unplug.png";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { getValueEnumByKey } from "@/helpers/functions/function";
 import { UseFormReturnType } from "@mantine/form";
@@ -404,7 +404,7 @@ export default function TQF5() {
           }}
           className="px-6 pt-2 flex flex-col h-full w-full"
         >
-          <div className="flex flex-col w-full h-fit border-b-[2px] pb-4 mb-4">
+          <div className="flex flex-col w-full h-fit border-b-[2px] pb-4 mb-1">
             <Tabs.List className="md:gap-x-5 gap-x-3 w-full">
               {partTab.map(({ tab, value }) => (
                 <Tabs.Tab key={value} value={value}>
@@ -446,14 +446,14 @@ export default function TQF5() {
               )}
             </div>
           </div>
-          <div className="h-full w-full flex overflow-y-auto text-[14px]">
+          <div className="h-full w-full flex overflow-y-auto text-[14px] pt-3 px-3">
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.value} className="w-full">
                 {tqf5Part === part.value &&
                 tqf5.id &&
                 tqf3?.status == TQF_STATUS.DONE ? (
                   part.compo
-                ) : (
+                ) : tqf3?.status != TQF_STATUS.DONE ? (
                   <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
                     <div className="h-full  justify-center flex flex-col">
                       <p className="text-secondary text-[21px] font-semibold">
@@ -466,9 +466,13 @@ export default function TQF5() {
                     </div>
                     <img
                       className=" z-50  w-[25vw] "
-                      src={maintenace}
+                      src={unplug}
                       alt="loginImage"
                     />
+                  </div>
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <Loading />
                   </div>
                 )}
               </Tabs.Panel>

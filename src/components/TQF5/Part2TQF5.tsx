@@ -53,6 +53,25 @@ export default function Part2TQF5({ setForm, method, tqf3 }: Props) {
     //       }}
     //     />
     //   </div>
+    //   {tqf3.part4?.data
+    //     .find(({ clo }) => clo == selectedClo.id)
+    //     ?.evals.map((item, index) => {
+    //       const evaluation = tqf3.part3?.eval.find((e) => e.id == item.eval);
+    //       return (
+    //         <div
+    //           key={index}
+    //           className="bg-bgTableHeader rounded-md p-2"
+    //           style={{
+    //             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
+    //           }}
+    //         >
+    //           <p>
+    //             {evaluation?.topicTH} | {evaluation?.topicEN}
+    //           </p>
+    //           <p>Description: {evaluation?.desc}</p>
+    //         </div>
+    //       );
+    //     })}
     // </div>
     <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
       <div className="h-full  justify-center flex flex-col">
