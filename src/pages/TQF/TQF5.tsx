@@ -269,10 +269,11 @@ export default function TQF5() {
         opened={openModalChangeMethod}
         onClose={() => setOpenModalChangeMethod(false)}
         centered
+        size="500"
         title="Change Method"
         transitionProps={{ transition: "pop" }}
       >
-        <div className="flex flex-col gap-5 justify-between">
+        <div className="flex flex-col gap-5 justify-between ">
           <div className="flex flex-col gap-2">
             <Alert
               radius="md"
@@ -284,7 +285,7 @@ export default function TQF5() {
                 icon: "size-6",
                 body: " flex justify-center",
               }}
-              title={<p>Test: Naka</p>}
+              title={<p>Changing the method will impact TQF 5 Part 2 & 3.</p>}
             ></Alert>
             <Radio.Group
               classNames={{ label: "font-semibold" }}
@@ -365,23 +366,25 @@ export default function TQF5() {
         opened={openMainPopupConfirmChange}
         onClose={() => setOpenMainPopupConfirmChange(false)}
         action={() => onChangeMethod()}
-        type="unsaved"
-        labelButtonRight={`Switch to ${selectedMethod}`}
+        type="warning"
+        labelButtonRight={`Switch to ${selectedMethod} ${
+          selectedMethod !== "Manual" ? "+" : ""
+        }`}
         title={`Your save will be lost ? `}
         message={
           <>
             <Alert
               variant="light"
-              color="red"
+              color="orange"
               title={
                 <p>
                   Head Up!{" "}
-                  <span className="text-[#B12C2C]">
+                  <span className="text-[#CD5E00]">
                     {" "}
                     Switch to {selectedMethod}
                   </span>{" "}
-                  will be removed your save in TQF 5. <br /> Are you sure you
-                  want to switch?
+                  will be removed your save in TQF 5 Parts 2 & 3. Are you sure
+                  you want to switch?
                 </p>
               }
               icon={<Icon IconComponent={IconExclamationCircle} />}
@@ -436,11 +439,7 @@ export default function TQF5() {
               {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
                 <div className="flex gap-2 items-center">
                   {tqf5Part == "part2" && (
-                    <Button
-                      variant="outline"
-                      className="!h-14"
-                      onClick={() => setOpenModalAssignmentMapping(true)}
-                    >
+                    <Button onClick={() => setOpenModalAssignmentMapping(true)}>
                       Assignment Mapping
                     </Button>
                   )}
@@ -450,21 +449,20 @@ export default function TQF5() {
                       if (tqf5.method) setSelectedMethod(tqf5.method);
                       setOpenModalChangeMethod(true);
                     }}
-                    className="flex flex-col items-start !justify-start text-left !h-14 !px-4"
+                    className="flex flex-col items-start !justify-start text-left"
                   >
-                    <div className="flex items-center gap-4">
-                      <Icon
+                    <div className="flex items-center gap-2">
+                      {/* <Icon
                         IconComponent={IconExchange}
-                        className="size-5 stroke-[2px]"
-                      />
-                      <div className="flex flex-col gap-1">
-                        <p className="text-[13px] font-semibold">
-                          Change Method
+                        className="size-4 stroke-[2px]"
+                      /> */}
+                      <div className="flex flex-col gap-1 font-semibold">
+                        <p className="text-[13px]">
+                          Change Method{" "}
+                          <span className="text-primary font-medium">
+                            ({tqf5.method})
+                          </span>
                         </p>{" "}
-                        {/* Use span for inline text */}
-                        <p className="text-deemphasize font-medium">
-                          Currently: {tqf5.method}
-                        </p>
                       </div>
                     </div>
                   </Button>

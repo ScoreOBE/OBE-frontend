@@ -2,6 +2,7 @@ import { Button, Modal } from "@mantine/core";
 import { ReactElement, ReactNode } from "react";
 import Icon from "@/components/Icon";
 import IconDelete from "@/assets/icons/delete.svg?react";
+import IconWarning from "@/assets/icons/infoTri.svg?react";
 import { useAppSelector } from "@/store";
 
 type popupType = "delete" | "warning" | "unsaved";
@@ -51,6 +52,8 @@ export default function MainPopup({
             icon
           ) : type == "delete" ? (
             <Icon IconComponent={IconDelete} className=" size-6 mr-2" />
+          ) : type == "warning" ? (
+            <Icon IconComponent={IconWarning} className=" size-6 mr-2" />
           ) : (
             <></>
           )}
@@ -108,7 +111,24 @@ export default function MainPopup({
               </Button>
             </>
           ) : (
-            <></>
+            <>
+              <Button
+                variant="subtle"
+                className="!text-[13px]"
+                onClick={
+                  labelButtonLeft === "Leave without saving" ? action : onClose
+                }
+              >
+                {labelButtonLeft ? labelButtonLeft : "Cancel"}
+              </Button>
+              <Button
+                color="#F58722"
+                className="!text-[13px]"
+                onClick={labelButtonRight === "Keep editing" ? onClose : action}
+              >
+                {labelButtonRight}
+              </Button>
+            </>
           )}
         </div>
       </div>
