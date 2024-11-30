@@ -1,25 +1,78 @@
 import maintenace from "@/assets/image/maintenance.png";
 import unplug from "@/assets/image/unplug.png";
+import { IModelCLO, IModelTQF3 } from "@/models/ModelTQF3";
 import { TypeMethodTQF5 } from "@/pages/TQF/TQF5";
 import { useAppSelector, useAppDispatch } from "@/store";
+import { Select } from "@mantine/core";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
   method: TypeMethodTQF5;
+  tqf3: IModelTQF3;
 };
 
-export default function Part2TQF5({ setForm, method }: Props) {
+export default function Part2TQF5({ setForm, method, tqf3 }: Props) {
   const { courseNo } = useParams();
-  const course = useAppSelector((state) =>
-    state.course.courses.find((c) => c.courseNo == courseNo)
-  );
-  const tqf3 = useAppSelector((state) => state.tqf3);
   const tqf5 = useAppSelector((state) => state.tqf5);
+  const [selectedClo, setSelectedClo] = useState<Partial<IModelCLO>>({});
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (tqf3?.part2?.clo) {
+      setSelectedClo({
+        ...tqf3.part2.clo[0],
+      });
+    }
+  }, [tqf3]);
+
   return tqf5.part1?.updatedAt ? (
-    // <div className="flex w-full flex-col text-[15px] max-h-full gap-2 text-default "></div>
+    // <div className="flex w-full flex-col text-[15px] max-h-full gap-2 text-default">
+    //   <div className="flex justify-between">
+    //     <div className="text-secondary">
+    //       <p>
+    //         CLO {selectedClo.no} - {selectedClo.descTH}
+    //       </p>
+    //       <p>{selectedClo.descEN}</p>
+    //     </div>
+    //     <Select
+    //       data={tqf3.part2?.clo.map((clo) => ({
+    //         value: clo.id,
+    //         label: `CLO ${clo.no}`,
+    //         ...clo,
+    //       }))}
+    //       value={selectedClo.id}
+    //       onChange={(value, option: any) => setSelectedClo({ ...option })}
+    //       allowDeselect={false}
+    //       className="w-fit"
+    //       classNames={{
+    //         label: "font-medium mb-1",
+    //         input: "text-primary font-medium",
+    //         option: "hover:bg-[#DDDDF6] text-primary font-medium",
+    //       }}
+    //     />
+    //   </div>
+    //   {tqf3.part4?.data
+    //     .find(({ clo }) => clo == selectedClo.id)
+    //     ?.evals.map((item, index) => {
+    //       const evaluation = tqf3.part3?.eval.find((e) => e.id == item.eval);
+    //       return (
+    //         <div
+    //           key={index}
+    //           className="bg-bgTableHeader rounded-md p-2"
+    //           style={{
+    //             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
+    //           }}
+    //         >
+    //           <p>
+    //             {evaluation?.topicTH} | {evaluation?.topicEN}
+    //           </p>
+    //           <p>Description: {evaluation?.desc}</p>
+    //         </div>
+    //       );
+    //     })}
+    // </div>
     <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
       <div className="h-full  justify-center flex flex-col">
         <p className="text-secondary text-[21px] font-semibold">

@@ -11,7 +11,6 @@ export default {
         tertiary: "#3e3e3e",
         emphasize: "#1D1D1F",
         deemphasize: "#6e6e73",
-
         done: "#059061",
         save: "#13A9A1",
         label: "#424242",
