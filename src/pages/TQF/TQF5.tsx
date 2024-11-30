@@ -34,6 +34,7 @@ import { saveTQF5 } from "@/services/tqf5/tqf5.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { getOnePLO } from "@/services/plo/plo.service";
 import MainPopup from "@/components/Popup/MainPopup";
+import { IModelTQF3 } from "@/models/ModelTQF3";
 
 export type TypeMethodTQF5 = "ScoreOBE" | "Manual";
 
@@ -46,7 +47,7 @@ export default function TQF5() {
   const courseAdmin = useAppSelector((state) =>
     state.allCourse.courses.find((course) => course.courseNo == courseNo)
   );
-  const [tqf3Status, setTqf3Status] = useState("");
+  const [tqf3, setTqf3] = useState<IModelTQF3>();
   const [tqf5Original, setTqf5Original] = useState<
     Partial<IModelTQF5> & { topic?: string; ploRequired?: string[] }
   >();
@@ -71,7 +72,9 @@ export default function TQF5() {
     {
       value: Object.keys(partLabel)[1],
       tab: partLabel.part2,
-      compo: <Part2TQF5 setForm={setForm} method={confirmMethod} />,
+      compo: (
+        <Part2TQF5 setForm={setForm} method={confirmMethod} tqf3={tqf3!} />
+      ),
     },
     {
       value: Object.keys(partLabel)[2],
@@ -112,7 +115,7 @@ export default function TQF5() {
       tqf5.coursePLO &&
       (tqf5.topic !== tqf5Original?.topic || !tqf5Original)
     ) {
-      if (!tqf3Status?.length || tqf3Status == TQF_STATUS.DONE) {
+      if (!tqf3?.status || tqf3?.status == TQF_STATUS.DONE) {
         fetchOneCourse(true);
       }
     }
@@ -143,7 +146,7 @@ export default function TQF5() {
           (sec: IModelSection) => sec.topic == tqf5.topic
         );
         const sectionTdf5 = section?.TQF5;
-        setTqf3Status(section?.TQF3?.status);
+        setTqf3(section?.TQF3);
         const ploRequire = resPloRequired?.sections
           .find((item: any) => item.topic == tqf5.topic)
           ?.ploRequire.find((plo: any) => plo.plo == tqf5.coursePLO?.id)?.list;
@@ -168,7 +171,7 @@ export default function TQF5() {
         const ploRequire = resPloRequired?.ploRequire.find(
           (plo: any) => plo.plo == tqf5.coursePLO?.id
         )?.list;
-        setTqf3Status(resCourse.TQF3?.status);
+        setTqf3(resCourse.TQF3);
         setTqf5Original({
           topic: tqf5.topic,
           ploRequired: ploRequire || [],
@@ -443,12 +446,12 @@ export default function TQF5() {
               )}
             </div>
           </div>
-          <div className="h-full w-full flex overflow-y-auto rounded-md text-[14px]">
+          <div className="h-full w-full flex overflow-y-auto text-[14px]">
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.value} className="w-full">
                 {tqf5Part === part.value &&
                 tqf5.id &&
-                tqf3Status == TQF_STATUS.DONE ? (
+                tqf3?.status == TQF_STATUS.DONE ? (
                   part.compo
                 ) : (
                   <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">

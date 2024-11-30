@@ -699,7 +699,7 @@ export default function TQF3() {
             </div>
           </div>
           <div
-            className={`h-full w-full flex overflow-y-auto rounded-md text-[14px]
+            className={`h-full w-full flex overflow-y-auto text-[14px]
               ${
                 tqf3Original &&
                 (tqf3Original.part3 && tqf3Part === "part4" ? "" : "pt-3 px-3")
