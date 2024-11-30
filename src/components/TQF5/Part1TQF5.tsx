@@ -49,7 +49,7 @@ export default function Part1TQF5({ setForm, method }: Props) {
       gradingCriteria: {
         A: ">= 80.00",
         Bplus: "75.00 - 79.99",
-        B: "70.00 - 75.99",
+        B: "70.00 - 74.99",
         Cplus: "65.00 - 69.99",
         C: "60.00 - 64.99",
         Dplus: "55.00 - 59.99",
