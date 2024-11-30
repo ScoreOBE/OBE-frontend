@@ -202,126 +202,22 @@ export default function Part1TQF5({ setForm, method }: Props) {
                       key={item.sectionNo}
                     >
                       <Table.Td>{item.sectionNo}</Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.A`)}
-                          />
-                        ) : (
-                          item.A ?? "-"
-                        )}
-                      </Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.Bplus`)}
-                          />
-                        ) : (
-                          item.Bplus ?? "-"
-                        )}
-                      </Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.B`)}
-                          />
-                        ) : (
-                          item.B ?? "-"
-                        )}
-                      </Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.Cplus`)}
-                          />
-                        ) : (
-                          item.Cplus ?? "-"
-                        )}
-                      </Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.C`)}
-                          />
-                        ) : (
-                          item.C ?? "-"
-                        )}
-                      </Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.Dplus`)}
-                          />
-                        ) : (
-                          item.Dplus ?? "-"
-                        )}
-                      </Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.D`)}
-                          />
-                        ) : (
-                          item.D ?? "-"
-                        )}
-                      </Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.F`)}
-                          />
-                        ) : (
-                          item.F ?? "-"
-                        )}
-                      </Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.W`)}
-                          />
-                        ) : (
-                          item.W ?? "-"
-                        )}
-                      </Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.S`)}
-                          />
-                        ) : (
-                          item.S ?? "-"
-                        )}
-                      </Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.U`)}
-                          />
-                        ) : (
-                          item.U ?? "-"
-                        )}
-                      </Table.Td>
-                      <Table.Td>
-                        {isEditCourseEval ? (
-                          <TextInput
-                            size="xs"
-                            {...form.getInputProps(`courseEval.${index}.P`)}
-                          />
-                        ) : (
-                          item.P ?? "-"
-                        )}
-                      </Table.Td>
+                      {Object.keys(item)
+                        .slice(1)
+                        .map((key) => (
+                          <Table.Td key={key}>
+                            {isEditCourseEval ? (
+                              <TextInput
+                                size="xs"
+                                {...form.getInputProps(
+                                  `courseEval.${index}.${key}`
+                                )}
+                              />
+                            ) : (
+                              (item as any)[key] ?? "-"
+                            )}
+                          </Table.Td>
+                        ))}
                       <Table.Td>{total}</Table.Td>
                       <Table.Td>{avg.toFixed(2)}</Table.Td>
                     </Table.Tr>
@@ -348,20 +244,12 @@ export default function Part1TQF5({ setForm, method }: Props) {
                       <Table.Th className="rounded-bl-[8px] w-[10%]">
                         Total
                       </Table.Th>
-                      <Table.Th className="w-[6%]">{totals.A}</Table.Th>
-                      <Table.Th className="w-[6%]">{totals.Bplus}</Table.Th>
-                      <Table.Th className="w-[6%]">{totals.B}</Table.Th>
-                      <Table.Th className="w-[6%]">{totals.Cplus}</Table.Th>
-                      <Table.Th className="w-[6%]">{totals.C}</Table.Th>
-                      <Table.Th className="w-[6%]">{totals.Dplus}</Table.Th>
-                      <Table.Th className="w-[6%]">{totals.D}</Table.Th>
-                      <Table.Th className="w-[6%]">{totals.F}</Table.Th>
-                      <Table.Th className="w-[6%]">{totals.W}</Table.Th>
-                      <Table.Th className="w-[6%]">{totals.S}</Table.Th>
-                      <Table.Th className="w-[6%]">{totals.U}</Table.Th>
-                      <Table.Th className="w-[6%]">{totals.P}</Table.Th>
-                      <Table.Th className="w-[9%]">{totals.total}</Table.Th>
-                      <Table.Th className="!rounded-br-[8px] w-[9%]">
+                      {Object.keys(totals)
+                        .slice(0, -1)
+                        .map((key) => (
+                          <Table.Th>{(totals as any)[key]}</Table.Th>
+                        ))}
+                      <Table.Th className="!rounded-br-[8px]">
                         {avg.toFixed(2)}
                       </Table.Th>
                     </Table.Tr>
