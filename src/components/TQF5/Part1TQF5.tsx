@@ -247,7 +247,7 @@ export default function Part1TQF5({ setForm, method }: Props) {
                       {Object.keys(totals)
                         .slice(0, -1)
                         .map((key) => (
-                          <Table.Th>{(totals as any)[key]}</Table.Th>
+                          <Table.Th key={key}>{(totals as any)[key]}</Table.Th>
                         ))}
                       <Table.Th className="!rounded-br-[8px]">
                         {avg.toFixed(2)}
