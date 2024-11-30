@@ -401,11 +401,7 @@ export default function TQF5() {
           }}
           className="px-6 pt-2 flex flex-col h-full w-full"
         >
-          <div
-            className={`flex flex-col w-full h-fit ${
-              tqf5Part === "part2" ? "pb-1" : "border-b-[2px] pb-4 mb-4"
-            }`}
-          >
+          <div className="flex flex-col w-full h-fit border-b-[2px] pb-4 mb-4">
             <Tabs.List className="md:gap-x-5 gap-x-3 w-full">
               {partTab.map(({ tab, value }) => (
                 <Tabs.Tab key={value} value={value}>
