@@ -1,9 +1,10 @@
-import { TQF_STATUS } from "@/helpers/constants/enum";
+import { METHOD_TQF5, TQF_STATUS } from "@/helpers/constants/enum";
 import { IModelCLO, IModelEval } from "./ModelTQF3";
 
 export interface IModelTQF5 {
   id: string;
   status: TQF_STATUS;
+  method?: METHOD_TQF5;
   part1?: IModelTQF5Part1;
   part2?: { data: IModelTQF5Part2[]; updatedAt: Date };
   part3?: any;

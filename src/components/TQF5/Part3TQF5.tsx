@@ -1,14 +1,12 @@
 import maintenace from "@/assets/image/maintenance.png";
 import unplug from "@/assets/image/unplug.png";
-import { TypeMethodTQF5 } from "@/pages/TQF/TQF5";
 import { useAppSelector } from "@/store";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
-  method: TypeMethodTQF5;
 };
 
-export default function Part3TQF5({ setForm, method }: Props) {
+export default function Part3TQF5({ setForm }: Props) {
   const tqf5 = useAppSelector((state) => state.tqf5);
 
   return tqf5.part2?.updatedAt ? (

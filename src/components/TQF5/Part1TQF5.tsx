@@ -4,7 +4,6 @@ import IconUpload from "@/assets/icons/upload.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconCheck2 from "@/assets/icons/Check2.svg?react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { TypeMethodTQF5 } from "@/pages/TQF/TQF5";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -12,13 +11,13 @@ import { IModelTQF5Part1 } from "@/models/ModelTQF5";
 import ModalUploadGrade from "../Modal/Score/ModalUploadGrade";
 import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF5 } from "@/store/tqf5";
+import { METHOD_TQF5 } from "@/helpers/constants/enum";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
-  method: TypeMethodTQF5;
 };
 
-export default function Part1TQF5({ setForm, method }: Props) {
+export default function Part1TQF5({ setForm }: Props) {
   const { courseNo } = useParams();
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
@@ -117,7 +116,7 @@ export default function Part1TQF5({ setForm, method }: Props) {
             <p className="font-bold">
               Student grading<span className="ml-1 text-red-500">*</span>
             </p>
-            {method == "ScoreOBE" ? (
+            <div className="flex gap-2">
               <Button
                 leftSection={
                   <Icon IconComponent={IconUpload} className="size-4" />
@@ -127,7 +126,6 @@ export default function Part1TQF5({ setForm, method }: Props) {
               >
                 Upload Grade Sheet
               </Button>
-            ) : (
               <Button
                 leftSection={
                   <Icon
@@ -141,7 +139,7 @@ export default function Part1TQF5({ setForm, method }: Props) {
               >
                 {isEditCourseEval ? "Done" : "Edit Course Eval"}
               </Button>
-            )}
+            </div>
           </div>
           <div
             className="overflow-x-auto w-full h-fit bg max-h-full border flex flex-col rounded-lg border-secondary"

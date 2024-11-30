@@ -20,6 +20,7 @@ import { IModelTQF5 } from "@/models/ModelTQF5";
 import { PartTopicTQF5 } from "@/helpers/constants/TQF5.enum";
 import {
   COURSE_TYPE,
+  METHOD_TQF5,
   NOTI_TYPE,
   ROLE,
   TQF_STATUS,
@@ -30,13 +31,11 @@ import { getOneCourseManagement } from "@/services/courseManagement/courseManage
 import { setDataTQF5, setPloTQF5 } from "@/store/tqf5";
 import { setPloTQF3 } from "@/store/tqf3";
 import { isEmpty, isEqual } from "lodash";
-import { saveTQF5 } from "@/services/tqf5/tqf5.service";
+import { changeMethodTQF5, saveTQF5 } from "@/services/tqf5/tqf5.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { getOnePLO } from "@/services/plo/plo.service";
 import MainPopup from "@/components/Popup/MainPopup";
 import { IModelTQF3 } from "@/models/ModelTQF3";
-
-export type TypeMethodTQF5 = "ScoreOBE" | "Manual";
 
 export default function TQF5() {
   const { courseNo } = useParams();
@@ -57,29 +56,27 @@ export default function TQF5() {
   const [tqf5Part, setTqf5Part] = useState<string | null>(
     Object.keys(partLabel)[0]
   );
-  const [selectedMethod, setSelectedMethod] =
-    useState<TypeMethodTQF5>("Manual");
-  const [confirmMethod, setConfirmMethod] = useState<TypeMethodTQF5>("Manual");
+  const [selectedMethod, setSelectedMethod] = useState<METHOD_TQF5>();
   const [openModalChangeMethod, setOpenModalChangeMethod] = useState(false);
+  const [openModalAssignmentMapping, setOpenModalAssignmentMapping] =
+    useState(false);
   const [openMainPopupConfirmChange, setOpenMainPopupConfirmChange] =
     useState(false);
   const partTab = [
     {
       value: Object.keys(partLabel)[0],
       tab: partLabel.part1,
-      compo: <Part1TQF5 setForm={setForm} method={confirmMethod} />,
+      compo: <Part1TQF5 setForm={setForm} />,
     },
     {
       value: Object.keys(partLabel)[1],
       tab: partLabel.part2,
-      compo: (
-        <Part2TQF5 setForm={setForm} method={confirmMethod} tqf3={tqf3!} />
-      ),
+      compo: <Part2TQF5 setForm={setForm} tqf3={tqf3!} />,
     },
     {
       value: Object.keys(partLabel)[2],
       tab: partLabel.part3,
-      compo: <Part3TQF5 setForm={setForm} method={confirmMethod} />,
+      compo: <Part3TQF5 setForm={setForm} />,
     },
   ];
 
@@ -234,6 +231,25 @@ export default function TQF5() {
     }
   };
 
+  const onChangeMethod = async (method?: string) => {
+    const res = await changeMethodTQF5(tqf5.id, {
+      method: method ?? selectedMethod,
+    });
+    if (res) {
+      const newTqf5 = tqf5Original;
+      delete newTqf5?.part2;
+      delete newTqf5?.part3;
+      setTqf5Original({ ...newTqf5, method: res.method });
+      dispatch(setDataTQF5({ ...newTqf5, method: res.method }));
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Change Method successfully",
+        `now method TQF5 is ${method ?? selectedMethod}.`
+      );
+      setOpenMainPopupConfirmChange(false);
+    }
+  };
+
   const checkPartStatus = (value: keyof IModelTQF5) => {
     return !tqf5Original ||
       !tqf5.id ||
@@ -277,12 +293,12 @@ export default function TQF5() {
             >
               <Group mb={2}>
                 <Radio.Card
-                  value="ScoreOBE"
+                  value={METHOD_TQF5.SCORE_OBE}
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
                   }}
                   className={`p-4 flex flex-col rounded-md ${
-                    selectedMethod === "ScoreOBE"
+                    selectedMethod === METHOD_TQF5.SCORE_OBE
                       ? "border-2 border-secondary"
                       : "border"
                   }`}
@@ -290,11 +306,11 @@ export default function TQF5() {
                   <Group wrap="nowrap" align="flex-start">
                     <Radio.Indicator />
                     <div>
-                      <p className="text-b1">ScoreOBE + </p>
+                      <p className="text-b1">{METHOD_TQF5.SCORE_OBE}</p>
                       <p className="text-b3">
                         The smartest way to evaluate and analyze your TQF 5
                       </p>
-                      {confirmMethod === "ScoreOBE" && (
+                      {tqf5.method === METHOD_TQF5.SCORE_OBE && (
                         <span className="text-xs text-secondary">
                           (Currently in use)
                         </span>
@@ -303,12 +319,12 @@ export default function TQF5() {
                   </Group>
                 </Radio.Card>
                 <Radio.Card
-                  value="Manual"
+                  value={METHOD_TQF5.MANUAL}
                   style={{
                     boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
                   }}
                   className={`p-4 flex flex-col rounded-md ${
-                    selectedMethod === "Manual"
+                    selectedMethod === METHOD_TQF5.MANUAL
                       ? "border-2 border-secondary"
                       : "border"
                   }`}
@@ -316,11 +332,11 @@ export default function TQF5() {
                   <Group wrap="nowrap" align="flex-start">
                     <Radio.Indicator />
                     <div>
-                      <p className="text-b1">Manual</p>
+                      <p className="text-b1">{METHOD_TQF5.MANUAL}</p>
                       <p className="text-b3">
                         Customize all data what you want
                       </p>
-                      {confirmMethod === "Manual" && (
+                      {tqf5.method === METHOD_TQF5.MANUAL && (
                         <p className="text-xs text-secondary">
                           (Currently in use)
                         </p>
@@ -334,7 +350,7 @@ export default function TQF5() {
           <div className="flex justify-end">
             <Button
               className="font-bold"
-              disabled={selectedMethod === confirmMethod}
+              disabled={selectedMethod === tqf5.method}
               onClick={() => {
                 setOpenMainPopupConfirmChange(true);
                 setOpenModalChangeMethod(false);
@@ -348,14 +364,9 @@ export default function TQF5() {
       <MainPopup
         opened={openMainPopupConfirmChange}
         onClose={() => setOpenMainPopupConfirmChange(false)}
-        action={() => {
-          setConfirmMethod(selectedMethod);
-          setOpenMainPopupConfirmChange(false);
-        }}
+        action={() => onChangeMethod()}
         type="unsaved"
-        labelButtonRight={`Switch to ${selectedMethod} ${
-          selectedMethod === "ScoreOBE" ? "+" : ""
-        }`}
+        labelButtonRight={`Switch to ${selectedMethod}`}
         title={`Your save will be lost ? `}
         message={
           <>
@@ -367,8 +378,7 @@ export default function TQF5() {
                   Head Up!{" "}
                   <span className="text-[#B12C2C]">
                     {" "}
-                    Switch to {selectedMethod}{" "}
-                    {selectedMethod === "ScoreOBE" ? "+" : ""}
+                    Switch to {selectedMethod}
                   </span>{" "}
                   will be removed your save in TQF 5. <br /> Are you sure you
                   want to switch?
@@ -380,6 +390,15 @@ export default function TQF5() {
           </>
         }
       />
+      <Modal
+        opened={openModalAssignmentMapping}
+        onClose={() => setOpenModalAssignmentMapping(false)}
+        centered
+        title="Assignment Mapping"
+        transitionProps={{ transition: "pop" }}
+      >
+        Assignment Mapping is coming soon.
+      </Modal>
       <div
         className={`flex flex-col h-full w-full overflow-hidden ${
           !checkActiveTerm() && "pb-2"
@@ -411,30 +430,45 @@ export default function TQF5() {
               ))}
             </Tabs.List>
             <div className="flex justify-between pt-4 items-center">
-              <div className=" text-secondary   overflow-y-auto font-semibold  whitespace-break-spaces">
+              <div className=" text-secondary overflow-y-auto font-semibold min-h-14 whitespace-break-spaces">
                 {getValueEnumByKey(PartTopicTQF5, tqf5Part!)}
               </div>
-              {checkActiveTerm() && (
-                <Button
-                  variant="outline"
-                  onClick={() => setOpenModalChangeMethod(true)}
-                  className="flex flex-col items-start !justify-start text-left !h-14 !px-4"
-                >
-                  <div className="flex items-center gap-4">
-                    <Icon
-                      IconComponent={IconExchange}
-                      className="size-5 stroke-[2px]"
-                    />
-                    <div className="flex flex-col gap-1">
-                      <p className="text-[13px] font-semibold">Change Method</p>{" "}
-                      {/* Use span for inline text */}
-                      <p className="text-deemphasize font-medium">
-                        Currently: {confirmMethod}{" "}
-                        {confirmMethod === "ScoreOBE" ? "+" : ""}
-                      </p>
+              {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
+                <div className="flex gap-2 items-center">
+                  {tqf5Part == "part2" && (
+                    <Button
+                      variant="outline"
+                      className="!h-14"
+                      onClick={() => setOpenModalAssignmentMapping(true)}
+                    >
+                      Assignment Mapping
+                    </Button>
+                  )}
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      if (tqf5.method) setSelectedMethod(tqf5.method);
+                      setOpenModalChangeMethod(true);
+                    }}
+                    className="flex flex-col items-start !justify-start text-left !h-14 !px-4"
+                  >
+                    <div className="flex items-center gap-4">
+                      <Icon
+                        IconComponent={IconExchange}
+                        className="size-5 stroke-[2px]"
+                      />
+                      <div className="flex flex-col gap-1">
+                        <p className="text-[13px] font-semibold">
+                          Change Method
+                        </p>{" "}
+                        {/* Use span for inline text */}
+                        <p className="text-deemphasize font-medium">
+                          Currently: {tqf5.method}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </Button>
+                  </Button>
+                </div>
               )}
             </div>
           </div>
@@ -443,7 +477,8 @@ export default function TQF5() {
               <Tabs.Panel key={index} value={part.value} className="w-full">
                 {tqf5Part === part.value &&
                 tqf5.id &&
-                tqf3?.status == TQF_STATUS.DONE ? (
+                tqf3?.status == TQF_STATUS.DONE &&
+                (tqf5Part == "part1" || tqf5.method) ? (
                   part.compo
                 ) : tqf3?.status != TQF_STATUS.DONE ? (
                   <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
@@ -458,6 +493,37 @@ export default function TQF5() {
                     </div>
                     <img
                       className=" z-50  w-[25vw] "
+                      src={unplug}
+                      alt="loginImage"
+                    />
+                  </div>
+                ) : !tqf5.method ? (
+                  <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
+                    <div className="flex justify-center  h-full items-start gap-2 flex-col">
+                      <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
+                        Choose method to evaluate TQF5 First
+                      </p>
+                      <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
+                        To start TQF5 Part 2, please choose method to evaluate.{" "}
+                        <br />
+                        Once done, you can continue to do it.
+                      </p>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          onClick={() => onChangeMethod(METHOD_TQF5.MANUAL)}
+                        >
+                          {METHOD_TQF5.MANUAL}
+                        </Button>
+                        <Button
+                          onClick={() => onChangeMethod(METHOD_TQF5.SCORE_OBE)}
+                        >
+                          {METHOD_TQF5.SCORE_OBE}
+                        </Button>
+                      </div>
+                    </div>
+                    <img
+                      className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
                       src={unplug}
                       alt="loginImage"
                     />

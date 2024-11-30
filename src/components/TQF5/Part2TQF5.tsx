@@ -1,12 +1,10 @@
 import maintenace from "@/assets/image/maintenance.png";
 import unplug from "@/assets/image/unplug.png";
 import { IModelTQF3 } from "@/models/ModelTQF3";
-import { TypeMethodTQF5 } from "@/pages/TQF/TQF5";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { Button, TextInput } from "@mantine/core";
 import React from "react";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
 import Icon from "../Icon";
 import IconAdd from "@/assets/icons/plus.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
@@ -15,20 +13,22 @@ import { updatePartTQF5 } from "@/store/tqf5";
 import { isEqual, cloneDeep } from "lodash";
 import { IModelTQF5Part2 } from "@/models/ModelTQF5";
 import { initialTqf5Part2 } from "@/helpers/functions/tqf5";
+import { METHOD_TQF5 } from "@/helpers/constants/enum";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
-  method: TypeMethodTQF5;
+
   tqf3: IModelTQF3;
 };
 
-export default function Part2TQF5({ setForm, method, tqf3 }: Props) {
+export default function Part2TQF5({ setForm, tqf3 }: Props) {
   const tqf5 = useAppSelector((state) => state.tqf5);
   const dispatch = useAppDispatch();
   const sectionRefs = useRef(
     tqf3.part2?.clo.map(() => React.createRef<HTMLDivElement>())
   );
   const [activeSection, setActiveSection] = useState<number>(0);
+  const [assignmentMapping, setAssignmentMapping] = useState();
 
   const form = useForm({
     mode: "controlled",
@@ -52,7 +52,7 @@ export default function Part2TQF5({ setForm, method, tqf3 }: Props) {
     } else if (tqf3.part4) {
       form.setValues(initialTqf5Part2(tqf3.part4.data));
     }
-  }, []);
+  }, [tqf5.method]);
 
   useEffect(() => {
     if (tqf3.part2) {
@@ -99,144 +99,151 @@ export default function Part2TQF5({ setForm, method, tqf3 }: Props) {
   }, [sectionRefs.current]);
 
   return tqf5.part1?.updatedAt ? (
-    // <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
-    //   <div className="gap-4 flex flex-col min-w-[90%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
-    //     {form.getValues().data.map((item, indexClo) => {
-    //       const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
-    //       return (
-    //         <div
-    //           style={{
-    //             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-    //           }}
-    //           className={`last:mb-4 flex px-2 flex-col rounded-md gap-2 py-2 ${
-    //             activeSection === indexClo ? "active" : ""
-    //           }`}
-    //           id={`${clo?.id}`}
-    //           key={indexClo}
-    //           ref={sectionRefs.current!.at(indexClo)} // Dynamic refs
-    //         >
-    //           <div className="flex justify-between">
-    //             <div className="text-secondary">
-    //               <p>
-    //                 CLO {clo?.no} - {clo?.descTH}
-    //               </p>
-    //               <p>{clo?.descEN}</p>
-    //             </div>
-    //           </div>
-    //           {item.assignments.map((item, indexEval) => {
-    //             const evaluation = tqf3.part3?.eval.find(
-    //               (e) => e.id == item.eval
-    //             );
-    //             return (
-    //               <div
-    //                 key={indexEval}
-    //                 className="rounded-md overflow-clip"
-    //                 style={{
-    //                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-    //                 }}
-    //               >
-    //                 <div className="bg-bgTableHeader p-2 flex justify-between items-center">
-    //                   <div>
-    //                     <p>
-    //                       {evaluation?.topicTH} | {evaluation?.topicEN}
-    //                     </p>
-    //                     <p>
-    //                       Description:{" "}
-    //                       {evaluation?.desc?.length ? evaluation.desc : "-"}
-    //                     </p>
-    //                   </div>
-    //                   <Button
-    //                     className="text-center px-3"
-    //                     onClick={() =>
-    //                       form.insertListItem(
-    //                         `data.${indexClo}.assignments.${indexEval}.questions`,
-    //                         ""
-    //                       )
-    //                     }
-    //                   >
-    //                     <Icon IconComponent={IconAdd} />
-    //                   </Button>
-    //                 </div>
-    //                 {item.questions.map((ques, indexQues) => (
-    //                   <div
-    //                     key={form.key(
-    //                       `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
-    //                     )}
-    //                     className="flex p-2 justify-between items-center"
-    //                   >
-    //                     <div className="flex w-4/5 gap-2 items-center">
-    //                       <p>{indexQues + 1}.</p>
-    //                       <TextInput
-    //                         withAsterisk={true}
-    //                         size="xs"
-    //                         placeholder="Question / Assignment No"
-    //                         {...form.getInputProps(
-    //                           `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
-    //                         )}
-    //                         className="w-full"
-    //                       />
-    //                     </div>
-    //                     <Button
-    //                       className="text-center px-2 border-none hover:bg-[#ff4747]/10"
-    //                       variant="light"
-    //                       color="#ff4747"
-    //                       onClick={() =>
-    //                         form.removeListItem(
-    //                           `data.${indexClo}.assignments.${indexEval}.questions`,
-    //                           indexQues
-    //                         )
-    //                       }
-    //                     >
-    //                       <Icon
-    //                         IconComponent={IconTrash}
-    //                         className="stroke-[2px] size-5"
-    //                       />
-    //                     </Button>
-    //                   </div>
-    //                 ))}
-    //                 <div></div>
-    //               </div>
-    //             );
-    //           })}
-    //         </div>
-    //       );
-    //     })}
-    //   </div>
-    //   <div className="max-w-[10%] mt-3 flex flex-col">
-    //     {tqf3.part2?.clo.map((item, index) => (
-    //       <div
-    //         key={index}
-    //         className={`max-w-fit  ${activeSection === index ? "active" : ""}`}
-    //       >
-    //         <a href={`#${item.id}`}>
-    //           <p
-    //             className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
-    //               activeSection === index ? "text-secondary" : "text-[#D2C9C9] "
-    //             }`}
-    //           >
-    //             CLO {item.no}
-    //           </p>
-    //         </a>
-    //       </div>
-    //     ))}
-    //   </div>
-    // </div>
-    <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
-      <div className="h-full  justify-center flex flex-col">
-        <p className="text-secondary text-[21px] font-semibold">
-          TQF 5 is coming soon to{" "}
-          <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-            ScoreOBE +{" "}
-          </span>{" "}
-        </p>
-        <br />
-        <p className=" -mt-3 mb-6 text-b2 break-words font-medium leading-relaxed">
-          Instructors, get ready to experience a new and improved way to
-          complete TQF 5 <br /> starting February 2025.
-        </p>
+    tqf5.method == METHOD_TQF5.SCORE_OBE && !assignmentMapping ? (
+      <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
+        <div className="flex justify-center  h-full items-start gap-2 flex-col">
+          <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
+            Complete Assignment Mapping First
+          </p>
+          <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
+            To start TQF5 Part 2, please complete assignment mapping. <br />{" "}
+            Once done, you can continue to do it.
+          </p>
+        </div>
+        <img
+          className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
+          src={unplug}
+          alt="loginImage"
+        />
       </div>
-      <img className=" z-50  w-[25vw] " src={maintenace} alt="loginImage" />
-    </div>
+    ) : (
+      <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
+        <div className="gap-4 flex flex-col min-w-[90%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
+          {form.getValues().data.map((item, indexClo) => {
+            const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
+            return (
+              <div
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+                className={`last:mb-4 flex px-2 flex-col rounded-md gap-2 py-2 ${
+                  activeSection === indexClo ? "active" : ""
+                }`}
+                id={`${clo?.id}`}
+                key={indexClo}
+                ref={sectionRefs.current!.at(indexClo)} // Dynamic refs
+              >
+                <div className="flex justify-between">
+                  <div className="text-secondary">
+                    <p>
+                      CLO {clo?.no} - {clo?.descTH}
+                    </p>
+                    <p>{clo?.descEN}</p>
+                  </div>
+                </div>
+                {item.assignments.map((item, indexEval) => {
+                  const evaluation = tqf3.part3?.eval.find(
+                    (e) => e.id == item.eval
+                  );
+                  return (
+                    <div
+                      key={indexEval}
+                      className="rounded-md overflow-clip"
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
+                      }}
+                    >
+                      <div className="bg-bgTableHeader p-2 flex justify-between items-center">
+                        <div>
+                          <p>
+                            {evaluation?.topicTH} | {evaluation?.topicEN}
+                          </p>
+                          <p>
+                            Description:{" "}
+                            {evaluation?.desc?.length ? evaluation.desc : "-"}
+                          </p>
+                        </div>
+                        <Button
+                          className="text-center px-3"
+                          onClick={() =>
+                            form.insertListItem(
+                              `data.${indexClo}.assignments.${indexEval}.questions`,
+                              ""
+                            )
+                          }
+                        >
+                          <Icon IconComponent={IconAdd} />
+                        </Button>
+                      </div>
+                      {item.questions.map((ques, indexQues) => (
+                        <div
+                          key={form.key(
+                            `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
+                          )}
+                          className="flex p-2 justify-between items-center"
+                        >
+                          <div className="flex w-4/5 gap-2 items-center">
+                            <p>{indexQues + 1}.</p>
+                            <TextInput
+                              withAsterisk={true}
+                              size="xs"
+                              placeholder="Question / Assignment No"
+                              {...form.getInputProps(
+                                `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
+                              )}
+                              className="w-full"
+                            />
+                          </div>
+                          <Button
+                            className="text-center px-2 border-none hover:bg-[#ff4747]/10"
+                            variant="light"
+                            color="#ff4747"
+                            onClick={() =>
+                              form.removeListItem(
+                                `data.${indexClo}.assignments.${indexEval}.questions`,
+                                indexQues
+                              )
+                            }
+                          >
+                            <Icon
+                              IconComponent={IconTrash}
+                              className="stroke-[2px] size-5"
+                            />
+                          </Button>
+                        </div>
+                      ))}
+                      <div></div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+        <div className="max-w-[10%] mt-3 flex flex-col">
+          {tqf3.part2?.clo.map((item, index) => (
+            <div
+              key={index}
+              className={`max-w-fit  ${
+                activeSection === index ? "active" : ""
+              }`}
+            >
+              <a href={`#${item.id}`}>
+                <p
+                  className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
+                    activeSection === index
+                      ? "text-secondary"
+                      : "text-[#D2C9C9] "
+                  }`}
+                >
+                  CLO {item.no}
+                </p>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
   ) : (
     <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
       <div className="flex justify-center  h-full items-start gap-2 flex-col">
