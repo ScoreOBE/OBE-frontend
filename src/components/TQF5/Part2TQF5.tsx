@@ -1,11 +1,20 @@
 import maintenace from "@/assets/image/maintenance.png";
 import unplug from "@/assets/image/unplug.png";
-import { IModelCLO, IModelTQF3 } from "@/models/ModelTQF3";
+import { IModelTQF3 } from "@/models/ModelTQF3";
 import { TypeMethodTQF5 } from "@/pages/TQF/TQF5";
 import { useAppSelector, useAppDispatch } from "@/store";
-import { Select } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { Button, TextInput } from "@mantine/core";
+import React from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import Icon from "../Icon";
+import IconAdd from "@/assets/icons/plus.svg?react";
+import IconTrash from "@/assets/icons/trash.svg?react";
+import { useForm } from "@mantine/form";
+import { updatePartTQF5 } from "@/store/tqf5";
+import { isEqual, cloneDeep } from "lodash";
+import { IModelTQF5Part2 } from "@/models/ModelTQF5";
+import { initialTqf5Part2 } from "@/helpers/functions/tqf5";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -14,64 +23,203 @@ type Props = {
 };
 
 export default function Part2TQF5({ setForm, method, tqf3 }: Props) {
-  const { courseNo } = useParams();
   const tqf5 = useAppSelector((state) => state.tqf5);
-  const [selectedClo, setSelectedClo] = useState<Partial<IModelCLO>>({});
   const dispatch = useAppDispatch();
+  const sectionRefs = useRef(
+    tqf3.part2?.clo.map(() => React.createRef<HTMLDivElement>())
+  );
+  const [activeSection, setActiveSection] = useState<number>(0);
+
+  const form = useForm({
+    mode: "controlled",
+    initialValues: { data: [] as IModelTQF5Part2[] },
+    validateInputOnBlur: true,
+    onValuesChange(values, previous) {
+      if (!isEqual(values, previous)) {
+        console.log(values);
+
+        dispatch(
+          updatePartTQF5({ part: "part2", data: cloneDeep(form.getValues()) })
+        );
+        setForm(form);
+      }
+    },
+  });
 
   useEffect(() => {
-    if (tqf3?.part2?.clo) {
-      setSelectedClo({
-        ...tqf3.part2.clo[0],
-      });
+    if (tqf5.part2) {
+      form.setValues(cloneDeep(tqf5.part2));
+    } else if (tqf3.part4) {
+      form.setValues(initialTqf5Part2(tqf3.part4.data));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (tqf3.part2) {
+      sectionRefs.current = tqf3.part2.clo.map(
+        (_, i) => sectionRefs.current?.at(i) || React.createRef()
+      );
     }
   }, [tqf3]);
 
+  useEffect(() => {
+    if (sectionRefs.current) {
+      if (!sectionRefs.current.every((ref) => ref.current)) return;
+      let observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const index = sectionRefs.current!.findIndex(
+                (ref) => ref.current === entry.target
+              );
+              setActiveSection(index);
+            }
+          });
+        },
+        {
+          root: null,
+          threshold: 0.9,
+        }
+      );
+
+      sectionRefs.current.forEach((ref, i) => {
+        if (ref.current) {
+          observer.observe(ref.current);
+        }
+      });
+
+      return () => {
+        sectionRefs.current!.forEach((ref) => {
+          if (ref.current) {
+            observer.unobserve(ref.current);
+          }
+        });
+      };
+    }
+  }, [sectionRefs.current]);
+
   return tqf5.part1?.updatedAt ? (
-    // <div className="flex w-full flex-col text-[15px] max-h-full gap-2 text-default">
-    //   <div className="flex justify-between">
-    //     <div className="text-secondary">
-    //       <p>
-    //         CLO {selectedClo.no} - {selectedClo.descTH}
-    //       </p>
-    //       <p>{selectedClo.descEN}</p>
-    //     </div>
-    //     <Select
-    //       data={tqf3.part2?.clo.map((clo) => ({
-    //         value: clo.id,
-    //         label: `CLO ${clo.no}`,
-    //         ...clo,
-    //       }))}
-    //       value={selectedClo.id}
-    //       onChange={(value, option: any) => setSelectedClo({ ...option })}
-    //       allowDeselect={false}
-    //       className="w-fit"
-    //       classNames={{
-    //         label: "font-medium mb-1",
-    //         input: "text-primary font-medium",
-    //         option: "hover:bg-[#DDDDF6] text-primary font-medium",
-    //       }}
-    //     />
-    //   </div>
-    //   {tqf3.part4?.data
-    //     .find(({ clo }) => clo == selectedClo.id)
-    //     ?.evals.map((item, index) => {
-    //       const evaluation = tqf3.part3?.eval.find((e) => e.id == item.eval);
+    // <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
+    //   <div className="gap-4 flex flex-col min-w-[90%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
+    //     {form.getValues().data.map((item, indexClo) => {
+    //       const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
     //       return (
     //         <div
-    //           key={index}
-    //           className="bg-bgTableHeader rounded-md p-2"
     //           style={{
-    //             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
+    //             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
     //           }}
+    //           className={`last:mb-4 flex px-2 flex-col rounded-md gap-2 py-2 ${
+    //             activeSection === indexClo ? "active" : ""
+    //           }`}
+    //           id={`${clo?.id}`}
+    //           key={indexClo}
+    //           ref={sectionRefs.current!.at(indexClo)} // Dynamic refs
     //         >
-    //           <p>
-    //             {evaluation?.topicTH} | {evaluation?.topicEN}
-    //           </p>
-    //           <p>Description: {evaluation?.desc}</p>
+    //           <div className="flex justify-between">
+    //             <div className="text-secondary">
+    //               <p>
+    //                 CLO {clo?.no} - {clo?.descTH}
+    //               </p>
+    //               <p>{clo?.descEN}</p>
+    //             </div>
+    //           </div>
+    //           {item.assignments.map((item, indexEval) => {
+    //             const evaluation = tqf3.part3?.eval.find(
+    //               (e) => e.id == item.eval
+    //             );
+    //             return (
+    //               <div
+    //                 key={indexEval}
+    //                 className="rounded-md overflow-clip"
+    //                 style={{
+    //                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
+    //                 }}
+    //               >
+    //                 <div className="bg-bgTableHeader p-2 flex justify-between items-center">
+    //                   <div>
+    //                     <p>
+    //                       {evaluation?.topicTH} | {evaluation?.topicEN}
+    //                     </p>
+    //                     <p>
+    //                       Description:{" "}
+    //                       {evaluation?.desc?.length ? evaluation.desc : "-"}
+    //                     </p>
+    //                   </div>
+    //                   <Button
+    //                     className="text-center px-3"
+    //                     onClick={() =>
+    //                       form.insertListItem(
+    //                         `data.${indexClo}.assignments.${indexEval}.questions`,
+    //                         ""
+    //                       )
+    //                     }
+    //                   >
+    //                     <Icon IconComponent={IconAdd} />
+    //                   </Button>
+    //                 </div>
+    //                 {item.questions.map((ques, indexQues) => (
+    //                   <div
+    //                     key={form.key(
+    //                       `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
+    //                     )}
+    //                     className="flex p-2 justify-between items-center"
+    //                   >
+    //                     <div className="flex w-4/5 gap-2 items-center">
+    //                       <p>{indexQues + 1}.</p>
+    //                       <TextInput
+    //                         withAsterisk={true}
+    //                         size="xs"
+    //                         placeholder="Question / Assignment No"
+    //                         {...form.getInputProps(
+    //                           `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
+    //                         )}
+    //                         className="w-full"
+    //                       />
+    //                     </div>
+    //                     <Button
+    //                       className="text-center px-2 border-none hover:bg-[#ff4747]/10"
+    //                       variant="light"
+    //                       color="#ff4747"
+    //                       onClick={() =>
+    //                         form.removeListItem(
+    //                           `data.${indexClo}.assignments.${indexEval}.questions`,
+    //                           indexQues
+    //                         )
+    //                       }
+    //                     >
+    //                       <Icon
+    //                         IconComponent={IconTrash}
+    //                         className="stroke-[2px] size-5"
+    //                       />
+    //                     </Button>
+    //                   </div>
+    //                 ))}
+    //                 <div></div>
+    //               </div>
+    //             );
+    //           })}
     //         </div>
     //       );
     //     })}
+    //   </div>
+    //   <div className="max-w-[10%] mt-3 flex flex-col">
+    //     {tqf3.part2?.clo.map((item, index) => (
+    //       <div
+    //         key={index}
+    //         className={`max-w-fit  ${activeSection === index ? "active" : ""}`}
+    //       >
+    //         <a href={`#${item.id}`}>
+    //           <p
+    //             className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
+    //               activeSection === index ? "text-secondary" : "text-[#D2C9C9] "
+    //             }`}
+    //           >
+    //             CLO {item.no}
+    //           </p>
+    //         </a>
+    //       </div>
+    //     ))}
+    //   </div>
     // </div>
     <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
       <div className="h-full  justify-center flex flex-col">

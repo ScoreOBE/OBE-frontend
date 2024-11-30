@@ -1,10 +1,11 @@
 import { TQF_STATUS } from "@/helpers/constants/enum";
+import { IModelCLO, IModelEval } from "./ModelTQF3";
 
 export interface IModelTQF5 {
   id: string;
   status: TQF_STATUS;
   part1?: IModelTQF5Part1;
-  part2?: any;
+  part2?: { data: IModelTQF5Part2[]; updatedAt: Date };
   part3?: any;
   updatedAt: Date;
 }
@@ -39,4 +40,9 @@ export interface IModelTQF5Part1 {
     U: string;
   };
   updatedAt: Date;
+}
+
+export interface IModelTQF5Part2 {
+  clo: IModelCLO | string;
+  assignments: { eval: IModelEval | string; questions: string[] }[];
 }
