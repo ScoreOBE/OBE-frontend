@@ -151,6 +151,8 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       if (changePart.length && tqf3.id) {
         setOpenAlertPopup(true);
       } else {
+        dispatch(resetDataTQF3());
+        dispatch(resetDataTQF5());
         goToPage(
           dashboard == ROLE.ADMIN
             ? `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
