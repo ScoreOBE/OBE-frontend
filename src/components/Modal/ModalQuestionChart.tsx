@@ -40,7 +40,7 @@ export default function ModalQuestionChart({
     >
       <div className="flex justify-end">
         <p className="text-secondary text-[16px] font-semibold">
-          {question?.scores?.length} Students
+          {question?.scores?.filter((e) => e >= 0).length} Students
         </p>
       </div>
       <ChartContainer
