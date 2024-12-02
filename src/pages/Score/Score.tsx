@@ -222,7 +222,9 @@ export default function Overall() {
                     return (
                       <Table.Tr
                         key={index}
-                        className="text-[13px] font-normal py-[14px] w-full cursor-pointer"
+                        className={`hover:bg-[#F3F3F3] text-[13px] font-normal py-[14px] w-full cursor-pointer ${
+                          index % 2 === 0 && "bg-[#F8F9FA]"
+                        }`}
                         onClick={() => {
                           setSelectQuestion({
                             assignment,

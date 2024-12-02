@@ -195,12 +195,12 @@ export default function Students() {
         }}
       >
         <div className="flex flex-col gap-5 w-full">
-          <div className="flex flex-col gap-6 w-full max-h-[300px] overflow-y-auto">
+          <div className="flex flex-col gap-5 w-full max-h-[300px] overflow-y-auto ipad11:gap-5">
             {!!form.getValues().questions?.length &&
               form.getValues().questions.map((ques, index) => (
                 <div
                   key={index}
-                  className="flex flex-col  gap-1 w-full  text-start justify-start"
+                  className="flex flex-col gap-1 w-full text-start justify-start "
                 >
                   <p>{ques.name}</p>
                   <div className="flex text-center     items-center gap-3">
@@ -221,7 +221,7 @@ export default function Students() {
               ))}
           </div>
 
-          <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end  justify-end h-fit">
+          <div className="flex gap-2  items-end  justify-end h-fit">
             <Button
               onClick={() => {
                 setOpenEditScore(false);
@@ -328,13 +328,15 @@ export default function Students() {
                 height: "fit-content",
               }}
             >
-              <Table stickyHeader>
+              <Table stickyHeader striped>
                 <Table.Thead>
                   <Table.Tr>
                     <Table.Th className="w-[15%]">Student ID</Table.Th>
                     <Table.Th className="w-[25%]">Name</Table.Th>
-                    <Table.Th className=" text-end pr-28">Score</Table.Th>
-                    <Table.Th className="w-[40%]"></Table.Th>
+                    <Table.Th className="w-[20%] text-end pr-28">
+                      Score
+                    </Table.Th>
+                    <Table.Th className=""></Table.Th>
                   </Table.Tr>
                 </Table.Thead>
 
@@ -359,14 +361,14 @@ export default function Students() {
                           <Table.Td className="w-[25%]">
                             {getUserName(student.student, 3)}
                           </Table.Td>
-                          <Table.Td className="flex gap-4 items-center justify-end pr-28">
-                            <p className="mt-0.5">
+                          <Table.Td className="flex gap-3 items-center justify-end pr-28 !bg-red-400">
+                            <p className="mt-1">
                               {questions
                                 ?.reduce((sum, { score }) => sum + score, 0)
                                 .toFixed(2)}
                             </p>
-                            <Icon
-                              IconComponent={IconEdit}
+                            <div
+                              className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
                               onClick={() => {
                                 form.setValues({
                                   student: student.student,
@@ -375,9 +377,15 @@ export default function Students() {
                                 setEditScore(questions);
                                 setOpenEditScore(true);
                               }}
-                              className="size-4 cursor-pointer text-default"
-                            />
+                            >
+                              <Icon
+                                IconComponent={IconEdit}
+                                className="size-4 cursor-pointer text-default"
+                              />
+                            </div>
                           </Table.Td>
+
+                          <Table.Td className=""></Table.Td>
                         </Table.Tr>
                       );
                     })}

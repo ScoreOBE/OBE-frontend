@@ -134,20 +134,6 @@ export default function Navbar() {
           >
             {topicPath()}
           </p>
-          {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) &&
-            (dashboard == ROLE.ADMIN ? (
-              <div className="px-3 py-2 w-fit tag-tqf bg-sky-100 text-blue-600 rounded-[20px]">
-                Admin View
-              </div>
-            ) : dashboard == ROLE.INSTRUCTOR ? (
-              <div className="px-3 py-2 w-fit tag-tqf bg-indigo-100 text-secondary rounded-[20px]">
-                Inst View
-              </div>
-            ) : (
-              <div className="px-3 py-2 w-fit tag-tqf bg-indigo-100 text-primary rounded-[20px]">
-                Std View
-              </div>
-            ))}
         </div>
         {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
           location.includes(path)

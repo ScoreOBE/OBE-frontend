@@ -523,7 +523,7 @@ export default function Roster() {
             disabled={actionModal == "Edit" && selectedUser?.termsOfService}
             {...form.getInputProps("email")}
           ></TextInput>
-          <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 mt-4  items-end  justify-end h-fit">
+          <div className="flex gap-2 items-end  justify-end h-fit">
             <Button onClick={() => clearForm()} variant="subtle">
               Cancel
             </Button>

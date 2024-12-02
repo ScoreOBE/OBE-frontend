@@ -135,7 +135,24 @@ export default function Profile() {
                 className="font-medium"
                 style={{ color: getRoleColor(user.role) }}
               >
-                {user.role}
+                {user.role !== ROLE.SUPREME_ADMIN &&
+                  user.role !== ROLE.ADMIN &&
+                  user.role}
+                {(user.role === ROLE.SUPREME_ADMIN ||
+                  user.role === ROLE.ADMIN) &&
+                  (dashboard === ROLE.ADMIN ? (
+                    <div >
+                      Admin 
+                    </div>
+                  ) : dashboard === ROLE.INSTRUCTOR ? (
+                    <div >
+                      Instructor
+                    </div>
+                  ) : (
+                    <div >
+                      Student
+                    </div>
+                  ))}
               </p>
             </div>
             {/* <Icon IconComponent={ProfileIcon} /> */}
