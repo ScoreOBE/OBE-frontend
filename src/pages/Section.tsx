@@ -138,7 +138,7 @@ export default function Section() {
   const goToAssignment = (sectionNo: number) => {
     const pathname = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.SECTION}`;
     navigate({
-      pathname: `${pathname}/${sectionNo}/${ROUTE_PATH.ASSIGNMENT}`,
+      pathname: `${pathname}/${sectionNo}/${ROUTE_PATH.EVALUATION}`,
       search: "?" + params.toString(),
     });
   };
@@ -267,7 +267,6 @@ export default function Section() {
                   >
                     Upload score
                   </Button>
-                 
                 </div>
               ) : (
                 <Button
@@ -510,10 +509,10 @@ export default function Section() {
                             ? ""
                             : sec.assignments?.length}
                           {(sec.assignments?.length ?? 0) === 1
-                            ? ` ${" "}Assignment`
+                            ? ` ${" "}Evaluation`
                             : (sec.assignments?.length ?? 0) > 1
-                            ? ` ${" "}Assignments`
-                            : "No Assignment"}
+                            ? ` ${" "}Evaluations`
+                            : "No Evaluation"}
                         </p>
                         {course.type == COURSE_TYPE.SEL_TOPIC.en && (
                           <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">

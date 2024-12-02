@@ -33,9 +33,9 @@ export default function StdScore() {
       path: `${ROUTE_PATH.STD_DASHBOARD}?${params.toString()}`,
     },
     {
-      title: `Assignments`,
+      title: `Evaluations`,
       path: `${ROUTE_PATH.STD_DASHBOARD}/${courseNo}/${
-        ROUTE_PATH.ASSIGNMENT
+        ROUTE_PATH.EVALUATION
       }?${params.toString()}`,
     },
     { title: `${name}` },

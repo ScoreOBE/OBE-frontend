@@ -75,7 +75,7 @@ export default function StdDashboard() {
 
   const goToCourse = (courseNo: string) => {
     navigate({
-      pathname: `${ROUTE_PATH.STD_DASHBOARD}/${courseNo}/${ROUTE_PATH.ASSIGNMENT}`,
+      pathname: `${ROUTE_PATH.STD_DASHBOARD}/${courseNo}/${ROUTE_PATH.EVALUATION}`,
       search: "?" + params.toString(),
     });
   };
@@ -133,8 +133,8 @@ export default function StdDashboard() {
                 <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
                   <p className="p-2.5 text-secondary font-[700] text-[12px]">
                     {!item.section?.assignments.length
-                      ? "No Assignment"
-                      : `${item.section?.assignments.length} Assignment`}
+                      ? "No Evaluation"
+                      : `${item.section?.assignments.length} Evaluation`}
                     {item.section?.assignments.length > 1 ? "s" : ""}
                   </p>
                 </div>

@@ -48,7 +48,7 @@ export default function StdAssignment() {
           {course?.section?.assignments?.length !== 0 && (
             <div className="flex flex-row  py-1  items-center justify-between">
               <p className="text-secondary text-[18px] font-semibold">
-                {course?.section?.assignments?.length} Assignment
+                {course?.section?.assignments?.length} Evaluation
                 {course?.section?.assignments?.length! > 1 && "s"}
               </p>
             </div>
@@ -137,10 +137,11 @@ export default function StdAssignment() {
             <div className="flex items-center  !h-full !w-full justify-between px-16">
               <div className="flex flex-col gap-3 text-start">
                 <p className="!h-full text-[20px] text-secondary font-semibold">
-                  No Assignment
+                  No Evaluation
                 </p>
                 <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                The assignment will show to you once the instructor publishes it.
+                  The evaluation will show to you once the instructor publishes
+                  it.
                 </p>
               </div>
               <div className=" items-center justify-center flex">

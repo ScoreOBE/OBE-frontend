@@ -69,16 +69,16 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
         </div>
         <div className="flex flex-col gap-2">
           <Button
-            onClick={() => gotoPage(ROUTE_PATH.ASSIGNMENT)}
+            onClick={() => gotoPage(ROUTE_PATH.EVALUATION)}
             leftSection={<Icon IconComponent={IconList} />}
             className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
-                path.includes(ROUTE_PATH.ASSIGNMENT)
+                path.includes(ROUTE_PATH.EVALUATION)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               }`}
           >
-            Assignment
+            Evaluation
           </Button>
           <Button
             onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}

@@ -83,7 +83,7 @@ const router = createBrowserRouter([
                 ),
               },
               {
-                path: `:sectionNo/${ROUTE_PATH.ASSIGNMENT}`,
+                path: `:sectionNo/${ROUTE_PATH.EVALUATION}`,
                 children: [
                   {
                     path: "",
@@ -122,7 +122,7 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: ROUTE_PATH.ASSIGNMENT,
+            path: ROUTE_PATH.EVALUATION,
             element: (
               <Suspense fallback={loadingPage}>
                 <AllAssignment />
@@ -207,7 +207,7 @@ const router = createBrowserRouter([
             path: ":courseNo",
             children: [
               {
-                path: ROUTE_PATH.ASSIGNMENT,
+                path: ROUTE_PATH.EVALUATION,
                 children: [
                   {
                     path: "",
