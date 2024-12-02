@@ -34,7 +34,7 @@ export default function ChartContainer({
       const score = assignment.questions?.find(
         ({ name }) => name === questionName
       )?.score;
-      return !score || score < 0 || typeof score != "number"
+      return score == undefined || score < 0 || typeof score != "number"
         ? undefined
         : score;
     }
