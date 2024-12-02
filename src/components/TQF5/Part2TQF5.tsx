@@ -118,7 +118,7 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
       </div>
     ) : (
       <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
-        <div className="gap-4 flex flex-col min-w-[90%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
+        <div className="gap-4 flex flex-col min-w-[90%] max-w-[87%] overflow-y-auto pt-1 max-h-full px-1">
           {form.getValues().data.map((item, indexClo) => {
             const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
             return (
@@ -126,7 +126,7 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
                 style={{
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
-                className={`last:mb-4 flex px-2 flex-col rounded-md gap-2 py-2 ${
+                className={`last:mb-4 flex flex-col rounded-md gap-5 px-6 py-5 ${
                   activeSection === indexClo ? "active" : ""
                 }`}
                 id={`${clo?.id}`}
@@ -134,7 +134,7 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
                 ref={sectionRefs.current!.at(indexClo)} // Dynamic refs
               >
                 <div className="flex justify-between">
-                  <div className="text-secondary">
+                  <div className="text-default font-medium text-[15px]">
                     <p>
                       CLO {clo?.no} - {clo?.descTH}
                     </p>
@@ -148,12 +148,12 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
                   return (
                     <div
                       key={indexEval}
-                      className="rounded-md overflow-clip"
+                      className="rounded-md overflow-clip text-[14px]"
                       style={{
                         boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
                       }}
                     >
-                      <div className="bg-bgTableHeader p-2 flex justify-between items-center">
+                      <div className="bg-bgTableHeader px-4 py-2 flex justify-between items-center font-medium text-secondary ">
                         <div>
                           <p>
                             {evaluation?.topicTH} | {evaluation?.topicEN}
@@ -180,9 +180,9 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
                           key={form.key(
                             `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
                           )}
-                          className="flex p-2 justify-between items-center"
+                          className="flex px-4 py-4 justify-between items-center"
                         >
-                          <div className="flex w-4/5 gap-2 items-center">
+                          <div className="flex w-[95%] gap-2 items-center">
                             <p>{indexQues + 1}.</p>
                             <TextInput
                               withAsterisk={true}
@@ -195,8 +195,8 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
                             />
                           </div>
                           <Button
-                            className="text-center px-2 border-none hover:bg-[#ff4747]/10"
-                            variant="light"
+                            className="text-center px-2 hover:bg-[#ff4747]/10"
+                            variant="outline"
                             color="#ff4747"
                             onClick={() =>
                               form.removeListItem(
