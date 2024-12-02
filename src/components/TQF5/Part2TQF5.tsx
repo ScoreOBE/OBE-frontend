@@ -103,10 +103,10 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
       <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
         <div className="flex justify-center  h-full items-start gap-2 flex-col">
           <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-            Complete Assignment Mapping First
+            Complete Evaluation Mapping First
           </p>
           <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-            To start TQF5 Part 2, please complete assignment mapping. <br />{" "}
+            To start TQF5 Part 2, please complete evaluation mapping. <br />{" "}
             Once done, you can continue to do it.
           </p>
         </div>

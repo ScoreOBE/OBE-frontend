@@ -63,7 +63,7 @@ export default function Sidebar() {
       if (path.includes(ROUTE_PATH.COURSE)) {
         if (
           sectionNo &&
-          [ROUTE_PATH.ASSIGNMENT, ROUTE_PATH.HISTOGRAM].some((route) =>
+          [ROUTE_PATH.EVALUATION, ROUTE_PATH.HISTOGRAM].some((route) =>
             path.includes(route)
           )
         ) {
@@ -224,7 +224,7 @@ export default function Sidebar() {
             <Alert
               variant="light"
               color="red"
-              title={` After you leave ${course?.courseNo} course, you won't have access to Assignments, Score, TQF document and Grades in this course `}
+              title={` After you leave ${course?.courseNo} course, you won't have access to Evaluations, Score, TQF document and Grades in this course `}
               icon={
                 <Icon
                   IconComponent={IconExclamationCircle}

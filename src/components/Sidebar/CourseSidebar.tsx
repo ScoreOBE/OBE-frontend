@@ -232,17 +232,17 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             )}
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
-                onClick={() => goToPage(ROUTE_PATH.ASSIGNMENT)}
+                onClick={() => goToPage(ROUTE_PATH.EVALUATION)}
                 leftSection={
                   <Icon IconComponent={IconTQF} className="mr-0.5" />
                 }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-                  path.includes(ROUTE_PATH.ASSIGNMENT)
+                  path.includes(ROUTE_PATH.EVALUATION)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                 }`}
               >
-                Assignments
+                Evaluations
               </Button>
             )}
             {dashboard == ROLE.INSTRUCTOR && (

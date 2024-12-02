@@ -176,7 +176,7 @@ export default function AllAssignment() {
         `${
           form.getValues().isPublish ? "Published" : "Unpublished"
         } score successfully`,
-        `assignment ${form.getValues().assignments.join(", ")} in ${form
+        `evaluation ${form.getValues().assignments.join(", ")} in ${form
           .getValues()
           .sections.map((item) => getSectionNo(item))
           .join(", ")} ${
@@ -201,8 +201,8 @@ export default function AllAssignment() {
       dispatch(updateAssignments({ ...res }));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Edit Assignment Name successfully",
-        `assignment change from ${editDeleteAssignment} to ${editName}.`
+        "Edit Evaluation Name successfully",
+        `evaluation change from ${editDeleteAssignment} to ${editName}.`
       );
       setOpenModalEditAssignment(false);
       setEditDeleteAssignment("");
@@ -221,8 +221,8 @@ export default function AllAssignment() {
       dispatch(updateAssignments({ ...res }));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        `Delete Assignment successfully`,
-        `assignment ${editDeleteAssignment} is deleted.`
+        `Delete Evaluation successfully`,
+        `evaluation ${editDeleteAssignment} is deleted.`
       );
       setOpenModalDeleteAssignment(false);
       setEditDeleteAssignment("");
@@ -287,7 +287,7 @@ export default function AllAssignment() {
                 }
               }}
             >
-              All Assignment
+              All Evaluation
             </Chip>
           )}
           <Chip.Group
@@ -512,17 +512,17 @@ export default function AllAssignment() {
           </Button>
         </div>
       </Modal>
-      {/* Edit Assignment Name */}
+      {/* Edit Evaluation Name */}
       <Modal
         opened={openModalEditAssignment}
         onClose={() => setOpenModalEditAssignment(false)}
         centered
         transitionProps={{ transition: "pop" }}
-        title="Edit Assignment Name"
+        title="Edit Evaluation Name"
       >
         <TextInput
           classNames={{ input: "focus:border-primary" }}
-          label="Assignment name"
+          label="Evaluation name"
           size="xs"
           withAsterisk
           placeholder="Ex. Quiz 1"
@@ -546,13 +546,13 @@ export default function AllAssignment() {
           </Button>
         </div>
       </Modal>
-      {/* Delete Assignment */}
+      {/* Delete Evaluation */}
       <MainPopup
         opened={openModalDeleteAssignment}
         onClose={() => setOpenModalDeleteAssignment(false)}
         action={onClickDeleteAssignment}
         type="delete"
-        labelButtonRight="Delete Assignment"
+        labelButtonRight="Delete Evaluation"
         title={`Delete' ${editDeleteAssignment}'`}
         message={
           <>
@@ -581,7 +581,7 @@ export default function AllAssignment() {
             {allAssignments.length !== 0 && (
               <div className="flex flex-row items-center justify-between">
                 <p className="text-secondary text-[16px] font-semibold">
-                  {allAssignments.length} Assignment
+                  {allAssignments.length} Evaluation
                   {allAssignments.length! > 1 && "s"}
                 </p>
                 <Menu
@@ -799,7 +799,7 @@ export default function AllAssignment() {
                                             IconComponent={IconPencilMinus}
                                             className="size-4 stroke-[2px]"
                                           />
-                                          <span>Edit Assignment Name</span>
+                                          <span>Edit Evaluation Name</span>
                                         </div>
                                       </Menu.Item>
                                       <Menu.Item
@@ -816,7 +816,7 @@ export default function AllAssignment() {
                                             IconComponent={IconTrash}
                                             className="size-4 stroke-[2px]"
                                           />
-                                          <span>Delete Assignment</span>
+                                          <span>Delete Evaluation</span>
                                         </div>
                                       </Menu.Item>
                                     </Menu.Dropdown>
@@ -929,10 +929,10 @@ export default function AllAssignment() {
               <div className="flex items-center  !h-full !w-full justify-between px-16">
                 <div className="flex flex-col gap-3 text-start">
                   <p className="!h-full text-[20px] text-secondary font-semibold">
-                    No Assignment
+                    No Evaluation
                   </p>{" "}
                   <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                    It seems like no assignments have been added to this course
+                    It seems like no evaluations have been added to this course
                     yet.
                   </p>{" "}
                 </div>

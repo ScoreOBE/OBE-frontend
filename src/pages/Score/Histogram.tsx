@@ -196,10 +196,10 @@ export default function Histogram() {
             <div className="flex items-center !h-full !w-full -mt-[10px] justify-between px-16">
               <div className="flex flex-col gap-3 text-start">
                 <p className="!h-full text-[20px] text-secondary font-semibold">
-                  No Assignment
+                  No Evaluation
                 </p>{" "}
                 <p className=" text-[#333333] -mt-1 text-b2 break-words font-medium leading-relaxed">
-                  The histogram will show when the assignment is uploaded.
+                  The histogram will show when the evaluation is uploaded.
                 </p>{" "}
               </div>
               <div className=" items-center justify-center flex">

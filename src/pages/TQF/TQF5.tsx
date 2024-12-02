@@ -394,10 +394,10 @@ export default function TQF5() {
         opened={openModalAssignmentMapping}
         onClose={() => setOpenModalAssignmentMapping(false)}
         centered
-        title="Assignment Mapping"
+        title="Evaluation Mapping"
         transitionProps={{ transition: "pop" }}
       >
-        Assignment Mapping is coming soon.
+        Evaluation Mapping is coming soon.
       </Modal>
       <div
         className={`flex flex-col h-full w-full overflow-hidden ${
@@ -441,7 +441,7 @@ export default function TQF5() {
                       className="!h-14"
                       onClick={() => setOpenModalAssignmentMapping(true)}
                     >
-                      Assignment Mapping
+                      Evaluation Mapping
                     </Button>
                   )}
                   <Button

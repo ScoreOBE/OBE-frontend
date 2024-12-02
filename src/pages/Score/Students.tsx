@@ -55,10 +55,10 @@ export default function Students() {
       }?${params.toString()}`,
     },
     {
-      title: `Assignment Section ${getSectionNo(sectionNo)}`,
+      title: `Evaluation Section ${getSectionNo(sectionNo)}`,
       path: `${ROUTE_PATH.COURSE}/${courseNo}/${
         ROUTE_PATH.SECTION
-      }/${sectionNo}/${ROUTE_PATH.ASSIGNMENT}?${params.toString()}`,
+      }/${sectionNo}/${ROUTE_PATH.EVALUATION}?${params.toString()}`,
     },
     { title: `${name}` },
   ]);

@@ -1,5 +1,4 @@
 import { IModelAssignment, IModelQuestion } from "./ModelCourse";
-import { IModelPLONo } from "./ModelPLO";
 import { IModelCLO, IModelEval } from "./ModelTQF3";
 import { IModelUser } from "./ModelUser";
 
