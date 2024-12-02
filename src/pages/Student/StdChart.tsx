@@ -142,7 +142,10 @@ export default function StdChart() {
                               data={item}
                               studentScore={studentScore}
                             />
-                             <p className=" text-[10px] translate-x-6 mb-2">Score distribution powered by Andrew C. Myers (Cornell University)</p>
+                            <p className=" text-[10px] translate-x-6 mb-2">
+                              Score distribution powered by Andrew C. Myers
+                              (Cornell University)
+                            </p>
                           </Tabs.Panel>
                         </Tabs>
                       </div>
@@ -180,7 +183,8 @@ export default function StdChart() {
                   No Chart
                 </p>{" "}
                 <p className=" text-[#333333] -mt-1 text-b2 break-words font-medium leading-relaxed">
-                  The chart will show when the assignment is published by the instructor.
+                  The chart will show when the assignment is published by the
+                  instructor.
                 </p>{" "}
               </div>
               <div className=" items-center justify-center flex">
