@@ -418,7 +418,7 @@ export default function TQF5() {
           }}
           className="px-6 pt-2 flex flex-col h-full w-full"
         >
-          <div className="flex flex-col w-full h-fit border-b-[2px] pb-4 mb-1">
+          <div className="flex flex-col w-full h-fit border-b-[2px] pb-2 mb-1">
             <Tabs.List className="md:gap-x-5 gap-x-3 w-full">
               {partTab.map(({ tab, value }) => (
                 <Tabs.Tab key={value} value={value}>
@@ -470,7 +470,7 @@ export default function TQF5() {
               )}
             </div>
           </div>
-          <div className="h-full w-full flex overflow-y-auto text-[14px] pt-3 px-3">
+          <div className="h-full w-full flex overflow-y-auto text-[14px] pt-3">
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.value} className="w-full">
                 {tqf5Part === part.value &&
