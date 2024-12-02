@@ -110,7 +110,7 @@ export default function Part1TQF5({ setForm }: Props) {
         data={course!}
       />
 
-      <div className="flex w-full flex-col text-[15px] max-h-full gap-3 text-default ">
+      <div className="flex w-full flex-col text-[15px] max-h-full gap-3 text-default px-3">
         <div className="flex text-secondary gap-4 w-full border-b-[1px] border-[#e6e6e6] pb-6 flex-col">
           <div className="flex text-secondary items-center justify-between flex-row gap-1 text-[15px]">
             <p className="font-bold">
@@ -118,6 +118,7 @@ export default function Part1TQF5({ setForm }: Props) {
             </p>
             <div className="flex gap-2">
               <Button
+                variant="outline"
                 leftSection={
                   <Icon IconComponent={IconUpload} className="size-4" />
                 }
