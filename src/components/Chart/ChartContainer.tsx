@@ -31,10 +31,16 @@ export default function ChartContainer({
     );
     if (!assignment) return undefined;
     if (questionName) {
-      return assignment.questions?.find(({ name }) => name === questionName)
-        ?.score;
+      const score = assignment.questions?.find(
+        ({ name }) => name === questionName
+      )?.score;
+      return score == undefined || score < 0 || typeof score != "number"
+        ? undefined
+        : score;
     }
-    return assignment.questions?.reduce((sum, { score }) => sum + score, 0);
+    return assignment.questions
+      ?.filter(({ score }) => score >= 0)
+      .reduce((sum, { score }) => sum + score, 0);
   };
 
   const scores =

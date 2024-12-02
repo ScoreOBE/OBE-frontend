@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Accordion, Table } from "@mantine/core";
+import { Table } from "@mantine/core";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo } from "@/helpers/functions/function";
@@ -9,9 +9,6 @@ import needAccess from "@/assets/image/needAccess.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
-import Icon from "@/components/Icon";
-import IconChevronDown from "@/assets/icons/chevronDown.svg?react";
-import ChartContainer from "@/components/Chart/ChartContainer";
 import { calStat } from "@/helpers/functions/score";
 import { ROLE } from "@/helpers/constants/enum";
 import ModalQuestionChart from "@/components/Modal/ModalQuestionChart";
@@ -64,7 +61,8 @@ export default function Overall() {
     ?.map(({ scores }) =>
       scores
         .find(({ assignmentName }) => assignmentName == name)
-        ?.questions?.reduce((sum, { score }) => sum + score, 0)
+        ?.questions?.filter(({ score }) => score >= 0)
+        .reduce((sum, { score }) => sum + score, 0)
     )
     .filter((item) => item != undefined)
     .sort((a, b) => a - b) || [0];
@@ -216,6 +214,7 @@ export default function Overall() {
                               item.questions.filter((q) => q.name === ques.name)
                             )
                             .map((question) => question.score)
+                            .filter((e) => e >= 0)
                         )
                         .sort((a, b) => a - b) || [];
                     const stat = calStat(dataScores, scores?.length);

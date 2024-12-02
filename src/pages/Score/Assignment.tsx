@@ -302,10 +302,8 @@ export default function Assignment() {
                               ({ assignmentName }) =>
                                 assignmentName == assignment.name
                             )
-                            ?.questions.reduce(
-                              (sum, { score }) => sum + score,
-                              0
-                            ) || 0),
+                            ?.questions.filter(({ score }) => score >= 0)
+                            .reduce((sum, { score }) => sum + score, 0) || 0),
                         0
                       );
                       return (

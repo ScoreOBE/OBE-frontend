@@ -77,7 +77,8 @@ export default function Students() {
     ?.map(({ scores }) =>
       scores
         .find(({ assignmentName }) => assignmentName == name)
-        ?.questions?.reduce((sum, { score }) => sum + score, 0)
+        ?.questions?.filter(({ score }) => score >= 0)
+        .reduce((sum, { score }) => sum + score, 0)
     )
     .filter((item) => item != undefined)
     .sort((a, b) => a - b) || [0];
@@ -349,9 +350,12 @@ export default function Students() {
                     )
                     ?.map((student, index) => {
                       const questions = cloneDeep(
-                        student.scores.find(
-                          ({ assignmentName }) => assignmentName == name
-                        )?.questions
+                        student.scores
+                          .find(({ assignmentName }) => assignmentName == name)
+                          ?.questions.map((item) => ({
+                            ...item,
+                            score: item.score >= 0 ? item.score : "",
+                          }))
                       );
                       return (
                         <Table.Tr key={index}>
@@ -364,7 +368,10 @@ export default function Students() {
                           <Table.Td className="flex gap-3 items-center justify-end pr-28 !bg-red-400">
                             <p className="mt-1">
                               {questions
-                                ?.reduce((sum, { score }) => sum + score, 0)
+                                ?.filter(
+                                  ({ score }) => typeof score == "number"
+                                )
+                                .reduce((sum, { score }: any) => sum + score, 0)
                                 .toFixed(2)}
                             </p>
                             <div
@@ -374,7 +381,7 @@ export default function Students() {
                                   student: student.student,
                                   questions,
                                 });
-                                setEditScore(questions);
+                                setEditScore(questions as any);
                                 setOpenEditScore(true);
                               }}
                             >

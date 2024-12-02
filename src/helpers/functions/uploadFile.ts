@@ -340,14 +340,10 @@ const scoreOBETemplete = (
       }));
       const score = {
         assignmentName,
-        questions: Object.keys(data)
-          .filter(
-            (item) => !["studentId", "firstName", "lastName"].includes(item)
-          )
-          .map((item) => ({
-            name: item,
-            score: data[item],
-          })),
+        questions: questions.map(({ name }) => ({
+          name: name,
+          score: data[name] ?? -1,
+        })),
       };
       const student = {
         student: canUpload?.students?.find(
