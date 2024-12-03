@@ -8,6 +8,10 @@ import { ROLE } from "@/helpers/constants/enum";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getUserName } from "@/helpers/functions/function";
+import { IModelUser } from "@/models/ModelUser";
+import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
+import Icon from "@/components/Icon";
+import IconEdit from "@/assets/icons/edit.svg?react";
 
 export default function OneAssignment() {
   const { courseNo, name } = useParams();
@@ -16,9 +20,10 @@ export default function OneAssignment() {
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)
   );
-  const questions = course?.sections[0].assignments?.find(
+  const assignment = course?.sections[0].assignments?.find(
     (item) => item.name == name
-  )?.questions;
+  );
+  const questions = assignment?.questions;
   const allStudent: any[] =
     course?.sections
       .flatMap((sec) => {
@@ -38,6 +43,10 @@ export default function OneAssignment() {
               return {
                 sectionNo: sec.sectionNo,
                 student: std.student,
+                score: score.questions.map((item) => ({
+                  ...item,
+                  score: item.score >= 0 ? item.score : "",
+                })),
                 ...questionsObject,
               };
             }
@@ -48,6 +57,12 @@ export default function OneAssignment() {
       .filter((item) => item !== undefined) || [];
   const [params, setParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const [openEditScore, setOpenEditScore] = useState(false);
+  const [editScore, setEditScore] = useState<{
+    section: number;
+    student: IModelUser;
+    questions: { name: string; score: number | string }[];
+  }>();
   const [items, setItems] = useState<any[]>([
     {
       title: "Evaluations",
@@ -67,6 +82,14 @@ export default function OneAssignment() {
 
   return (
     <>
+      <ModalEditStudentScore
+        opened={openEditScore}
+        onClose={() => setOpenEditScore(false)}
+        course={course!}
+        section={editScore?.section!}
+        assignment={assignment!}
+        data={editScore!}
+      />
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-2 overflow-hidden">
         <Breadcrumbs items={items} />
         {loading.loading ? (
@@ -84,6 +107,7 @@ export default function OneAssignment() {
                   <Table.Th>Section</Table.Th>
                   <Table.Th>Student ID</Table.Th>
                   <Table.Th>Name</Table.Th>
+                  <Table.Th>Score</Table.Th>
                   {questions?.map((item, index) => (
                     <Table.Th key={index}>{item.name}</Table.Th>
                   ))}
@@ -91,6 +115,11 @@ export default function OneAssignment() {
               </Table.Thead>
               <Table.Tbody className="text-default">
                 {allStudent?.map((item, index) => {
+                  const sumScore =
+                    questions?.reduce((sum, ques) => {
+                      const score = item[ques.name];
+                      return score >= 0 ? sum + score : sum;
+                    }, 0) || 0;
                   return (
                     <Table.Tr
                       key={index}
@@ -99,6 +128,27 @@ export default function OneAssignment() {
                       <Table.Td>{item.sectionNo}</Table.Td>
                       <Table.Td>{item.student.studentId}</Table.Td>
                       <Table.Td>{getUserName(item.student, 3)}</Table.Td>
+                      <Table.Td className="w-[5%]">
+                        <div className="flex gap-3 justify-end items-center">
+                          <p>{sumScore.toFixed(2)}</p>
+                          <div
+                            className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
+                            onClick={() => {
+                              setEditScore({
+                                section: item.sectionNo,
+                                student: item.student,
+                                questions: item.score || [],
+                              });
+                              setOpenEditScore(true);
+                            }}
+                          >
+                            <Icon
+                              IconComponent={IconEdit}
+                              className="size-4 cursor-pointer text-default"
+                            />
+                          </div>
+                        </div>
+                      </Table.Td>
                       {questions?.map((ques, index) => (
                         <Table.Td key={index}>
                           {item[ques.name] == undefined || item[ques.name] < 0

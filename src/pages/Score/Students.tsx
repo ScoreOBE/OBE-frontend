@@ -8,22 +8,17 @@ import needAccess from "@/assets/image/needAccess.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
-import { Button, Modal, Table, TextInput } from "@mantine/core";
+import { Table, TextInput } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import { calStat } from "@/helpers/functions/score";
 import { TbSearch } from "react-icons/tb";
-import { useForm } from "@mantine/form";
-import { cloneDeep, isEqual } from "lodash";
-import { setLoadingOverlay } from "@/store/loading";
-import { updateStudentScore } from "@/services/score/score.service";
-import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
-import { showNotifications } from "@/helpers/notifications/showNotifications";
-import { updateStudentList } from "@/store/course";
+import { cloneDeep } from "lodash";
+import { ROLE } from "@/helpers/constants/enum";
+import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
 
 export default function Students() {
-  const { name } = useParams();
-  const { courseNo, sectionNo } = useParams();
+  const { courseNo, sectionNo, name } = useParams();
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
@@ -37,12 +32,10 @@ export default function Students() {
   const dispatch = useAppDispatch();
   const [filter, setFilter] = useState<string>("");
   const [openEditScore, setOpenEditScore] = useState(false);
-  const [editScore, setEditScore] = useState<
-    {
-      name: string;
-      score: number;
-    }[]
-  >();
+  const [editScore, setEditScore] = useState<{
+    student: IModelUser;
+    questions: { name: string; score: number | string }[];
+  }>();
   const [items, setItems] = useState<any[]>([
     {
       title: "Your Course",
@@ -111,139 +104,16 @@ export default function Students() {
     }
   });
 
-  const form = useForm({
-    mode: "controlled",
-    initialValues: {} as {
-      student: IModelUser;
-      questions: {
-        name: string;
-        score: any;
-      }[];
-    },
-    validate: {
-      questions: {
-        score: (value, values, path) => {
-          if (typeof value !== "number")
-            return (
-              !value.length ||
-              (!parseInt(value) && value != "0" && "Please enter valid score")
-            );
-          const fullScore =
-            assignment?.questions.find(
-              (ques) =>
-                ques.name == values.questions[parseInt(path.split(".")[1])].name
-            )?.fullScore || 0;
-          return value > fullScore
-            ? `Please enter score <= ${fullScore}`
-            : null;
-        },
-      },
-    },
-    validateInputOnBlur: true,
-    onValuesChange: (values) => {
-      values.questions?.forEach((item) => {
-        if (typeof item.score != "number" && !isNaN(parseInt(item.score))) {
-          item.score = parseInt(item.score);
-        }
-      });
-    },
-  });
-
-  useEffect(() => {
-    if (!openEditScore) {
-      form.reset();
-    }
-  }, [openEditScore]);
-
-  const onSaveEditScore = async () => {
-    if (!form.validate().hasErrors) {
-      dispatch(setLoadingOverlay(true));
-      const studentId = form.getValues().student.studentId;
-      const res = await updateStudentScore({
-        course: course?.id,
-        sectionNo: section?.sectionNo,
-        student: form.getValues().student.id,
-        assignmentName: name,
-        questions: [...form.getValues().questions],
-      });
-      if (res) {
-        dispatch(updateStudentList({ id: course?.id, sections: res }));
-        showNotifications(
-          NOTI_TYPE.SUCCESS,
-          "Edit score successfully",
-          `score of student ${studentId} is updated`
-        );
-        setOpenEditScore(false);
-      }
-      dispatch(setLoadingOverlay(false));
-    }
-  };
-
   return (
     <>
-      <Modal
+      <ModalEditStudentScore
         opened={openEditScore}
         onClose={() => setOpenEditScore(false)}
-        title={`Edit Score ${form.getValues().student?.studentId}`}
-        size="35vw"
-        centered
-        closeOnClickOutside={false}
-        transitionProps={{ transition: "pop" }}
-        className="flex items-center justify-center"
-        classNames={{
-          content:
-            "flex flex-col justify-center w-full font-medium leading-[24px] text-[14px] item-center  overflow-hidden ",
-        }}
-      >
-        <div className="flex flex-col gap-5 w-full">
-          <div className="flex flex-col gap-5 w-full max-h-[300px] overflow-y-auto ipad11:gap-5">
-            {!!form.getValues().questions?.length &&
-              form.getValues().questions.map((ques, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-1 w-full text-start justify-start "
-                >
-                  <p>{ques.name}</p>
-                  <div className="flex text-center     items-center gap-3">
-                    <TextInput
-                      size="xs"
-                      withAsterisk={true}
-                      classNames={{
-                        input:
-                          "focus:border-primary text-[16px] w-20  text-center text-default ",
-                      }}
-                      {...form.getInputProps(`questions.${index}.score`)}
-                    />
-                    <p className=" text-[18px]">
-                      / {assignment?.questions[index].fullScore}
-                    </p>
-                  </div>
-                </div>
-              ))}
-          </div>
-
-          <div className="flex gap-2  items-end  justify-end h-fit">
-            <Button
-              onClick={() => {
-                setOpenEditScore(false);
-                form.reset();
-              }}
-              variant="subtle"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                setOpenEditScore(false);
-                onSaveEditScore();
-              }}
-              disabled={isEqual(editScore, form.getValues().questions)}
-            >
-              Save Changes
-            </Button>
-          </div>
-        </div>
-      </Modal>
+        course={course!}
+        section={parseInt(sectionNo || "")}
+        assignment={assignment!}
+        data={editScore!}
+      />
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
         {/* <Breadcrumbs /> */}
@@ -365,7 +235,7 @@ export default function Students() {
                           <Table.Td className="w-[25%]">
                             {getUserName(student.student, 3)}
                           </Table.Td>
-                          <Table.Td className="flex gap-3 items-center justify-end pr-28 !bg-red-400">
+                          <Table.Td className="flex gap-3 items-center justify-end pr-28">
                             <p className="mt-1">
                               {questions
                                 ?.filter(
@@ -377,11 +247,10 @@ export default function Students() {
                             <div
                               className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
                               onClick={() => {
-                                form.setValues({
+                                setEditScore({
                                   student: student.student,
-                                  questions,
+                                  questions: questions || [],
                                 });
-                                setEditScore(questions as any);
                                 setOpenEditScore(true);
                               }}
                             >
