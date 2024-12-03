@@ -168,7 +168,6 @@ export default function Overall() {
                 </div>
               </div>
             </div>
-            {/* Table */}
             <div
               className="relative overflow-auto mt-2 border rounded-lg border-secondary"
               style={{
@@ -263,92 +262,6 @@ export default function Overall() {
                   })}
                 </Table.Tbody>
               </Table>
-
-              {/* <Accordion chevron={false} unstyled>
-                {assignment?.questions.map((ques, index) => {
-                  const dataScores =
-                    section?.students
-                      ?.flatMap(({ scores }) =>
-                        scores
-                          .filter((item) => item.assignmentName === name)
-                          .flatMap((item) =>
-                            item.questions.filter((q) => q.name === ques.name)
-                          )
-                          .map((question) => question.score)
-                      )
-                      .sort((a, b) => a - b) || [];
-                  const stat = calStat(dataScores, scores?.length);
-                  return (
-                    <Accordion.Item
-                      value={ques.name}
-                      key={index}
-                      className={`!px-0 ${
-                        index % 2 === 0 ? "bg-[#F8F9FA]" : ""
-                      }`}
-                    >
-                      <Accordion.Control
-                        className="pl-0 py-1.5 w-full"
-                        classNames={{
-                          label: `flex-itemstart w-full`,
-                        }}
-                      >
-                        <Table>
-                          <Table.Tbody className="text-default">
-                            <Table.Tr className="text-[13px] font-normal py-[14px] w-full ">
-                              <Table.Td className="text-start w-[12%]">
-                                {ques.name}
-                              </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[14%]">
-                                {ques.fullScore}
-                              </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[11%]">
-                                {stat.mean.toFixed(2)}
-                              </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[11%]">
-                                {stat.sd.toFixed(2)}
-                              </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[11%]">
-                                {stat.median.toFixed(2)}
-                              </Table.Td>
-                              <Table.Td className="text-end pr-[70px]  w-[11%]">
-                                {stat.maxScore.toFixed(2)}
-                              </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[11%]">
-                                {stat.q3.toFixed(2)}
-                              </Table.Td>
-                              <Table.Td className="text-end pr-[70px] w-[11%]">
-                                {stat.q1 ? stat.q1.toFixed(2) : "-"}
-                              </Table.Td>
-                              <Table.Th className="text-end pr-[70px] w-[8%]">
-                                <Icon
-                                  IconComponent={IconChevronDown}
-                                  className="size-4"
-                                />
-                              </Table.Th>
-                            </Table.Tr>
-                          </Table.Tbody>
-                        </Table>
-                      </Accordion.Control>
-                      <Accordion.Panel className="!py-0">
-                        <div className="flex justify-between px-20 pb-6 pt-0">
-                          <p className="text-secondary text-[16px] font-semibold">
-                            {ques.name} - {ques.fullScore} Points
-                          </p>
-                          <p className="text-secondary text-[16px] font-semibold">
-                            {scores?.length} Students
-                          </p>
-                        </div>
-                        <ChartContainer
-                          type="histogram"
-                          data={assignment}
-                          students={section?.students!}
-                          questionName={ques.name}
-                        />
-                      </Accordion.Panel>
-                    </Accordion.Item>
-                  );
-                })}
-              </Accordion> */}
             </div>
           </>
         ) : (

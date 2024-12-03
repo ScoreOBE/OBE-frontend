@@ -23,7 +23,12 @@ import IconPencilMinus from "@/assets/icons/pencilMinus.svg?react";
 import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import notFoundImage from "@/assets/image/notFound.jpg";
-import { useParams, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { dateFormatter, getSectionNo } from "@/helpers/functions/function";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import Loading from "@/components/Loading/Loading";
@@ -48,6 +53,7 @@ type TabState = {
 };
 export default function AllAssignment() {
   const { courseNo } = useParams();
+  const path = useLocation().pathname;
   const loading = useAppSelector((state) => state.loading);
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
@@ -75,6 +81,7 @@ export default function AllAssignment() {
   );
   const [activeSection, setActiveSection] = useState<number>(0);
   const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [openPublishScoreModal, setOpenPublishScoreModal] = useState(false);
   const [openSelectSecModal, setOpenSelectSecModal] = useState(false);
@@ -228,6 +235,13 @@ export default function AllAssignment() {
       setEditDeleteAssignment("");
     }
     dispatch(setLoadingOverlay(false));
+  };
+
+  const goToAssignment = (name: string) => {
+    navigate({
+      pathname: `${path}/${name}`,
+      search: "?" + params.toString(),
+    });
   };
 
   return (
@@ -661,7 +675,7 @@ export default function AllAssignment() {
                       boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
                     }}
                   >
-                    <Table stickyHeader striped>
+                    <Table stickyHeader>
                       <Table.Thead>
                         <Table.Tr className="bg-[#e5e7f6]">
                           <Table.Th className="w-20 sm:max-macair133:text-b3">
@@ -711,7 +725,15 @@ export default function AllAssignment() {
                             0
                           );
                           return (
-                            <Table.Tr key={index}>
+                            <Table.Tr
+                              key={index}
+                              className={`hover:bg-[#F3F3F3] cursor-pointer ${
+                                index % 2 === 0 && "bg-[#F8F9FA]"
+                              }`}
+                              onClick={() =>
+                                goToAssignment(`${assignment.name}`)
+                              }
+                            >
                               <Table.Td>{assignment.name}</Table.Td>
                               <Table.Td className="text-end pr-14 !pl-0">
                                 {assignment.questions.reduce(
@@ -732,6 +754,7 @@ export default function AllAssignment() {
                                 <div
                                   className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
                                   onClick={(event) => {
+                                    event.stopPropagation();
                                     form.setFieldValue(
                                       "isPublish",
                                       !assignment.isPublish
@@ -762,7 +785,10 @@ export default function AllAssignment() {
                                 </div>
                               </Table.Td>
                               <Table.Td className="text-center flex items-center justify-center">
-                                <div className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer">
+                                <div
+                                  className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                                  onClick={(event) => event.stopPropagation()}
+                                >
                                   <Menu
                                     trigger="click"
                                     position="bottom-end"
