@@ -1,6 +1,14 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Alert, Button, Group, Modal, Radio, Tabs } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Group,
+  Modal,
+  Radio,
+  Tabs,
+  MultiSelect,
+} from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconCheck from "@/assets/icons/Check.svg?react";
 import IconExchange from "@/assets/icons/change.svg?react";
@@ -25,7 +33,7 @@ import {
   ROLE,
   TQF_STATUS,
 } from "@/helpers/constants/enum";
-import { IModelSection } from "@/models/ModelCourse";
+import { IModelAssignment, IModelSection } from "@/models/ModelCourse";
 import { getOneCourse } from "@/services/course/course.service";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { setDataTQF5, setPloTQF5 } from "@/store/tqf5";
@@ -46,6 +54,7 @@ export default function TQF5() {
   const courseAdmin = useAppSelector((state) =>
     state.allCourse.courses.find((course) => course.courseNo == courseNo)
   );
+  const [assignments, setAssignments] = useState<IModelAssignment>();
   const [tqf3, setTqf3] = useState<IModelTQF3>();
   const [tqf5Original, setTqf5Original] = useState<
     Partial<IModelTQF5> & { topic?: string; ploRequired?: string[] }
@@ -142,6 +151,12 @@ export default function TQF5() {
         const section = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf5.topic
         );
+        console.log(section);
+
+        setAssignments(
+          section?.assignments?.map((assi: any) => assi.name) || []
+        );
+
         const sectionTdf5 = section?.TQF5;
         setTqf3(section?.TQF3);
         const ploRequire = resPloRequired?.sections
@@ -396,11 +411,73 @@ export default function TQF5() {
       <Modal
         opened={openModalAssignmentMapping}
         onClose={() => setOpenModalAssignmentMapping(false)}
+        closeOnClickOutside={false}
         centered
+        size="45vw"
         title="Evaluation Mapping"
         transitionProps={{ transition: "pop" }}
       >
-        Evaluation Mapping is coming soon.
+        <div>
+          {/* Evaluation Mapping is coming soon.*/}
+
+          <Alert
+            radius="md"
+            icon={<Icon IconComponent={IconInfo2} />}
+            variant="light"
+            color="blue"
+            className="mb-5"
+            classNames={{
+              icon: "size-6",
+              body: " flex justify-center",
+            }}
+            title={
+              <p>
+                Course Evaluation Topics can be mapped to multiple assignment.
+              </p>
+            }
+          ></Alert>
+          <div className=" text-[15px] rounded-lg w-full h-fit px-8 mb-2 flex justify-between font-semibold text-secondary">
+            <p>From: Course Evaluation</p>
+
+            <p className="w-[350px]">To: Assignment</p>
+          </div>
+          {tqf3?.part3?.eval.map((eva, index) => (
+            <div
+              key={eva.id}
+              className="bg-[#F3F3F3] rounded-lg w-full h-fit px-8 py-4 mb-4 flex justify-between"
+            >
+              <div className="text-[13px]">
+                <p>{eva.topicTH}</p>
+                <p>{eva.topicEN}</p>
+              </div>
+              <MultiSelect
+                className="w-[350px]"
+                // placeholder="Choose Assignment"
+                data={Array.isArray(assignments) ? assignments : []}
+                classNames={{ pill: "bg-secondary text-white font-medium" }}
+                // searchable
+                // nothingFoundMessage="Nothing found..."
+              />
+            </div>
+          ))}
+
+          <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end  justify-end h-fit mt-4">
+            <Group className="flex w-full gap-2 h-fit items-end justify-end">
+              <Button
+                onClick={() => setOpenModalAssignmentMapping(false)}
+                variant="subtle"
+              >
+                Cancel
+              </Button>
+              <Button
+              // loading={loading}
+              // onClick={generatePDF}
+              >
+                Done
+              </Button>
+            </Group>
+          </div>
+        </div>
       </Modal>
       <div
         className={`flex flex-col h-full w-full overflow-hidden ${
