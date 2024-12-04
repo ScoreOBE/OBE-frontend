@@ -184,7 +184,7 @@ export default function Students() {
 
             <TextInput
               leftSection={<TbSearch />}
-              placeholder="Section No, Student No, Name"
+              placeholder="Student ID, Name"
               size="xs"
               rightSectionPointerEvents="all"
               className="mx-1"
@@ -204,10 +204,10 @@ export default function Students() {
                   <Table.Tr>
                     <Table.Th className="w-[15%]">Student ID</Table.Th>
                     <Table.Th className="w-[25%]">Name</Table.Th>
-                    <Table.Th className="w-[20%] text-end pr-28">
-                      Score
-                    </Table.Th>
-                    <Table.Th className=""></Table.Th>
+                    <Table.Th>Score</Table.Th>
+                    {assignment?.questions.map((item, index) => (
+                      <Table.Th key={index}>{item.name}</Table.Th>
+                    ))}
                   </Table.Tr>
                 </Table.Thead>
 
@@ -235,33 +235,46 @@ export default function Students() {
                           <Table.Td className="w-[25%]">
                             {getUserName(student.student, 3)}
                           </Table.Td>
-                          <Table.Td className="flex gap-3 items-center justify-end pr-28">
-                            <p className="mt-1">
-                              {questions
-                                ?.filter(
-                                  ({ score }) => typeof score == "number"
-                                )
-                                .reduce((sum, { score }: any) => sum + score, 0)
-                                .toFixed(2)}
-                            </p>
-                            <div
-                              className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
-                              onClick={() => {
-                                setEditScore({
-                                  student: student.student,
-                                  questions: questions || [],
-                                });
-                                setOpenEditScore(true);
-                              }}
-                            >
-                              <Icon
-                                IconComponent={IconEdit}
-                                className="size-4 cursor-pointer text-default"
-                              />
+                          <Table.Td className="w-[5%]">
+                            <div className="flex gap-3 justify-end items-center">
+                              <p>
+                                {questions
+                                  ?.filter(
+                                    ({ score }) => typeof score == "number"
+                                  )
+                                  .reduce(
+                                    (sum, { score }: any) => sum + score,
+                                    0
+                                  )
+                                  .toFixed(2)}
+                              </p>
+                              <div
+                                className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
+                                onClick={() => {
+                                  setEditScore({
+                                    student: student.student,
+                                    questions: questions || [],
+                                  });
+                                  setOpenEditScore(true);
+                                }}
+                              >
+                                <Icon
+                                  IconComponent={IconEdit}
+                                  className="size-4 cursor-pointer text-default"
+                                />
+                              </div>
                             </div>
                           </Table.Td>
-
-                          <Table.Td className=""></Table.Td>
+                          {assignment?.questions.map((ques, index) => {
+                            const score = questions?.find(
+                              (e) => e.name == ques.name
+                            )?.score;
+                            return (
+                              <Table.Td key={index}>
+                                {score != undefined ? score : "-"}
+                              </Table.Td>
+                            );
+                          })}
                         </Table.Tr>
                       );
                     })}
