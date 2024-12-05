@@ -17,7 +17,6 @@ import { METHOD_TQF5 } from "@/helpers/constants/enum";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
-
   tqf3: IModelTQF3;
 };
 
@@ -99,26 +98,9 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
   }, [sectionRefs.current]);
 
   return tqf5.part1?.updatedAt ? (
-    tqf5.method == METHOD_TQF5.SCORE_OBE && !assignmentMapping ? (
-      <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
-        <div className="flex justify-center  h-full items-start gap-2 flex-col">
-          <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-            Complete Evaluation Mapping First
-          </p>
-          <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-            To start TQF5 Part 2, please complete evaluation mapping. <br />{" "}
-            Once done, you can continue to do it.
-          </p>
-        </div>
-        <img
-          className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
-          src={unplug}
-          alt="loginImage"
-        />
-      </div>
-    ) : (
+    tqf5.method == METHOD_TQF5.MANUAL ? (
       <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
-        <div className="gap-4 flex flex-col min-w-[90%] max-w-[87%] overflow-y-auto pt-1 max-h-full px-1">
+        <div className="gap-4 flex flex-col w-full overflow-y-auto pt-1 max-h-full px-1">
           {form.getValues().data.map((item, indexClo) => {
             const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
             return (
@@ -220,13 +202,11 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
             );
           })}
         </div>
-        <div className="max-w-[10%] mt-3 flex flex-col">
+        <div className="min-w-fit px-2 mt-3 flex flex-col">
           {tqf3.part2?.clo.map((item, index) => (
             <div
               key={index}
-              className={`max-w-fit  ${
-                activeSection === index ? "active" : ""
-              }`}
+              className={`w-full ${activeSection === index ? "active" : ""}`}
             >
               <a href={`#${item.id}`}>
                 <p
@@ -242,6 +222,40 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
             </div>
           ))}
         </div>
+      </div>
+    ) : !!assignmentMapping ? (
+      <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
+        <div className="h-full  justify-center flex flex-col">
+          <p className="text-secondary text-[21px] font-semibold">
+            TQF 5 is coming soon to{" "}
+            <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+              ScoreOBE +{" "}
+            </span>{" "}
+          </p>
+          <br />
+          <p className=" -mt-3 mb-6 text-b2 break-words font-medium leading-relaxed">
+            Instructors, get ready to experience a new and improved way to
+            complete TQF 5 <br /> starting February 2025.
+          </p>
+        </div>
+        <img className=" z-50  w-[25vw] " src={maintenace} alt="loginImage" />
+      </div>
+    ) : (
+      <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
+        <div className="flex justify-center  h-full items-start gap-2 flex-col">
+          <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
+            Complete Evaluation Mapping First
+          </p>
+          <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
+            To start TQF5 Part 2, please complete evaluation mapping. <br />{" "}
+            Once done, you can continue to do it.
+          </p>
+        </div>
+        <img
+          className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
+          src={unplug}
+          alt="loginImage"
+        />
       </div>
     )
   ) : (

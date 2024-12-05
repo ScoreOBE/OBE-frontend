@@ -7,7 +7,7 @@ export interface IModelTQF5 {
   method?: METHOD_TQF5;
   part1?: IModelTQF5Part1;
   part2?: { data: IModelTQF5Part2[]; updatedAt: Date };
-  part3?: any;
+  part3?: { data: IModelTQF5Part3[]; updatedAt: Date };
   updatedAt: Date;
 }
 
@@ -46,4 +46,13 @@ export interface IModelTQF5Part1 {
 export interface IModelTQF5Part2 {
   clo: IModelCLO | string;
   assignments: { eval: IModelEval | string; questions: string[] }[];
+}
+
+export interface IModelTQF5Part3 {
+  clo: IModelCLO | string;
+  score0: number;
+  score1: number;
+  score2: number;
+  score3: number;
+  score4: number;
 }

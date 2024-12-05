@@ -85,7 +85,7 @@ export default function TQF5() {
     {
       value: Object.keys(partLabel)[2],
       tab: partLabel.part3,
-      compo: <Part3TQF5 setForm={setForm} />,
+      compo: <Part3TQF5 setForm={setForm} tqf3={tqf3!} />,
     },
   ];
 
@@ -167,6 +167,7 @@ export default function TQF5() {
           ploRequired: ploRequire || [],
           ...sectionTdf5,
         });
+        setSelectedMethod(sectionTdf5.method);
         dispatch(
           setDataTQF5({
             topic: tqf5.topic,
@@ -189,6 +190,7 @@ export default function TQF5() {
           ploRequired: ploRequire || [],
           ...resCourse.TQF5!,
         });
+        setSelectedMethod(resCourse.TQF5.method);
         dispatch(
           setDataTQF5({
             topic: tqf5.topic,
@@ -226,12 +228,6 @@ export default function TQF5() {
       } else {
         const payload = form.getValues();
         payload.id = tqf5.id;
-        // switch (tqf5Part) {
-        //   case Object.keys(partLabel)[0]:
-        //     break;
-        //   case Object.keys(partLabel)[1]:
-        //     break;
-        // }
         const res = await saveTQF5(tqf5Part, payload);
         if (res) {
           setTqf5Original({ ...tqf5Original, ...res });
@@ -241,6 +237,9 @@ export default function TQF5() {
             `TQF 5, ${tqf5Part} save successfully`,
             `TQF 5 - ${tqf5Part} is saved`
           );
+          if (tqf5Part !== "part3") {
+            setTqf5Part(`part${parseInt(tqf5Part.slice(-1)) + 1}`);
+          }
         }
       }
     }
@@ -515,11 +514,14 @@ export default function TQF5() {
               </div>
               {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
                 <div className="flex gap-2 items-center">
-                  {tqf5Part == "part2" && (
-                    <Button onClick={() => setOpenModalAssignmentMapping(true)}>
-                      Evaluation Mapping
-                    </Button>
-                  )}
+                  {tqf5Part == "part2" &&
+                    tqf5.method == METHOD_TQF5.SCORE_OBE && (
+                      <Button
+                        onClick={() => setOpenModalAssignmentMapping(true)}
+                      >
+                        Evaluation Mapping
+                      </Button>
+                    )}
                   <Button
                     variant="outline"
                     onClick={() => {

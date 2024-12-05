@@ -11,7 +11,6 @@ import { IModelTQF5Part1 } from "@/models/ModelTQF5";
 import ModalUploadGrade from "../Modal/Score/ModalUploadGrade";
 import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF5 } from "@/store/tqf5";
-import { METHOD_TQF5 } from "@/helpers/constants/enum";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
