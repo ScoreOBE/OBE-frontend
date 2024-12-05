@@ -1,4 +1,4 @@
-import { IModelTQF3Part4 } from "@/models/ModelTQF3";
+import { IModelCLO, IModelTQF3Part4 } from "@/models/ModelTQF3";
 import { partLabel } from "@/components/SaveTQFBar";
 import { cloneDeep } from "lodash";
 
@@ -9,7 +9,7 @@ export const initialTqf5Part = (tqf5: any, part: any, tqf3?: any) => {
     case Object.keys(partLabel)[1]: // part 2
       return initialTqf5Part2(tqf3.part4.data);
     case Object.keys(partLabel)[2]: // part 3
-      return;
+      return initialTqf5Part3(tqf3.part2.clo);
   }
 };
 
@@ -24,6 +24,23 @@ export const initialTqf5Part2 = (part4: IModelTQF3Part4[] | undefined) => {
               eval: e.eval,
               questions: [],
             })),
+          }))
+        ),
+  };
+};
+
+export const initialTqf5Part3 = (part2: IModelCLO[] | undefined) => {
+  return {
+    data: !part2
+      ? []
+      : cloneDeep(
+          part2?.map((item) => ({
+            clo: item.id,
+            score0: 0,
+            score1: 0,
+            score2: 0,
+            score3: 0,
+            score4: 0,
           }))
         ),
   };
