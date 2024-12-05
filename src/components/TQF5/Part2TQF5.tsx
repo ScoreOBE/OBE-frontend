@@ -98,7 +98,7 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
   }, [sectionRefs.current]);
 
   return tqf5.part1?.updatedAt ? (
-    tqf5.method == METHOD_TQF5.MANUAL ? (
+    !!assignmentMapping || tqf5.method == METHOD_TQF5.MANUAL ? (
       <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
         <div className="gap-4 flex flex-col w-full overflow-y-auto pt-1 max-h-full px-1">
           {form.getValues().data.map((item, indexClo) => {
@@ -145,55 +145,58 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
                             {evaluation?.desc?.length ? evaluation.desc : "-"}
                           </p>
                         </div>
-                        <Button
-                          className="text-center px-3"
-                          onClick={() =>
-                            form.insertListItem(
-                              `data.${indexClo}.assignments.${indexEval}.questions`,
-                              ""
-                            )
-                          }
-                        >
-                          <Icon IconComponent={IconAdd} />
-                        </Button>
-                      </div>
-                      {item.questions.map((ques, indexQues) => (
-                        <div
-                          key={form.key(
-                            `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
-                          )}
-                          className="flex px-4 py-4 justify-between items-center"
-                        >
-                          <div className="flex w-[95%] gap-2 items-center">
-                            <p>{indexQues + 1}.</p>
-                            <TextInput
-                              withAsterisk={true}
-                              size="xs"
-                              placeholder="Question / Assignment No"
-                              {...form.getInputProps(
-                                `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
-                              )}
-                              className="w-full"
-                            />
-                          </div>
+                        {tqf5.method == METHOD_TQF5.MANUAL && (
                           <Button
-                            className="text-center px-2 hover:bg-[#ff4747]/10"
-                            variant="outline"
-                            color="#ff4747"
+                            className="text-center px-3"
                             onClick={() =>
-                              form.removeListItem(
+                              form.insertListItem(
                                 `data.${indexClo}.assignments.${indexEval}.questions`,
-                                indexQues
+                                ""
                               )
                             }
                           >
-                            <Icon
-                              IconComponent={IconTrash}
-                              className="stroke-[2px] size-5"
-                            />
+                            <Icon IconComponent={IconAdd} />
                           </Button>
-                        </div>
-                      ))}
+                        )}
+                      </div>
+                      {tqf5.method == METHOD_TQF5.MANUAL &&
+                        item.questions.map((ques, indexQues) => (
+                          <div
+                            key={form.key(
+                              `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
+                            )}
+                            className="flex px-4 py-4 justify-between items-center"
+                          >
+                            <div className="flex w-[95%] gap-2 items-center">
+                              <p>{indexQues + 1}.</p>
+                              <TextInput
+                                withAsterisk={true}
+                                size="xs"
+                                placeholder="Question / Assignment No"
+                                {...form.getInputProps(
+                                  `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
+                                )}
+                                className="w-full"
+                              />
+                            </div>
+                            <Button
+                              className="text-center px-2 hover:bg-[#ff4747]/10"
+                              variant="outline"
+                              color="#ff4747"
+                              onClick={() =>
+                                form.removeListItem(
+                                  `data.${indexClo}.assignments.${indexEval}.questions`,
+                                  indexQues
+                                )
+                              }
+                            >
+                              <Icon
+                                IconComponent={IconTrash}
+                                className="stroke-[2px] size-5"
+                              />
+                            </Button>
+                          </div>
+                        ))}
                       <div></div>
                     </div>
                   );
@@ -223,24 +226,24 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
           ))}
         </div>
       </div>
-    ) : !!assignmentMapping ? (
-      <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
-        <div className="h-full  justify-center flex flex-col">
-          <p className="text-secondary text-[21px] font-semibold">
-            TQF 5 is coming soon to{" "}
-            <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-              ScoreOBE +{" "}
-            </span>{" "}
-          </p>
-          <br />
-          <p className=" -mt-3 mb-6 text-b2 break-words font-medium leading-relaxed">
-            Instructors, get ready to experience a new and improved way to
-            complete TQF 5 <br /> starting February 2025.
-          </p>
-        </div>
-        <img className=" z-50  w-[25vw] " src={maintenace} alt="loginImage" />
-      </div>
     ) : (
+      // ) : !!assignmentMapping ? (
+      //   <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
+      //     <div className="h-full  justify-center flex flex-col">
+      //       <p className="text-secondary text-[21px] font-semibold">
+      //         TQF 5 is coming soon to{" "}
+      //         <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+      //           ScoreOBE +{" "}
+      //         </span>{" "}
+      //       </p>
+      //       <br />
+      //       <p className=" -mt-3 mb-6 text-b2 break-words font-medium leading-relaxed">
+      //         Instructors, get ready to experience a new and improved way to
+      //         complete TQF 5 <br /> starting February 2025.
+      //       </p>
+      //     </div>
+      //     <img className=" z-50  w-[25vw] " src={maintenace} alt="loginImage" />
+      //   </div>
       <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
         <div className="flex justify-center  h-full items-start gap-2 flex-col">
           <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
