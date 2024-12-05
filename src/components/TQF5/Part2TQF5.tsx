@@ -35,7 +35,7 @@ export default function Part2TQF5({ setForm, tqf3 }: Props) {
     validateInputOnBlur: true,
     onValuesChange(values, previous) {
       if (!isEqual(values, previous)) {
-        console.log(values);
+        // console.log(values);
 
         dispatch(
           updatePartTQF5({ part: "part2", data: cloneDeep(form.getValues()) })
