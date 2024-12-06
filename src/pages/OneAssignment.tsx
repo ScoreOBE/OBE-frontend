@@ -13,6 +13,7 @@ import { TbSearch } from "react-icons/tb";
 import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
+import { calStat } from "@/helpers/functions/score";
 
 export default function OneAssignment() {
   const { courseNo, name } = useParams();
@@ -24,6 +25,8 @@ export default function OneAssignment() {
   const assignment = course?.sections[0].assignments?.find(
     (item) => item.name == name
   );
+  const fullScore =
+    assignment?.questions.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
   const [filter, setFilter] = useState<string>("");
   const questions = assignment?.questions;
   const allStudent: any[] =
@@ -57,7 +60,18 @@ export default function OneAssignment() {
           .filter((item) => item !== null);
       })
       .filter((item) => item !== undefined) || [];
+
   const [params, setParams] = useSearchParams();
+  const scores = allStudent.map((item) => {
+    return questions?.reduce((sum, ques) => {
+      const score = item[ques.name];
+      return score >= 0 ? sum + score : sum;
+    }, 0);
+  }).filter((item) => item !== undefined).sort((a,b) => a-b);
+  const { mean, sd, median, maxScore, minScore, q1, q3 } = calStat(
+    scores,
+    allStudent.length
+  );
   const dispatch = useAppDispatch();
   const [openEditScore, setOpenEditScore] = useState(false);
   const [editScore, setEditScore] = useState<{
@@ -98,6 +112,63 @@ export default function OneAssignment() {
           <Loading />
         ) : (
           <>
+            <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
+              <p className="text-secondary text-[18px] font-semibold">
+                {name} - {fullScore} Points
+              </p>
+              <div className="flex px-10 flex-row justify-between w-full">
+                <div className="flex flex-col">
+                  <p className="font-semibold text-[16px] text-[#777777]">
+                    Mean
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                    {mean.toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-[16px] text-[#777777]">SD</p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                    {sd.toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-[16px] text-[#777777]">
+                    Median
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                    {median.toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-[16px] text-[#777777]">
+                    Max
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                    {maxScore.toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-[16px] text-[#777777]">
+                    Min
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                    {minScore.toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                    {q3.toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                    {q1 ? q1.toFixed(2) : "-"}
+                  </p>
+                </div>
+              </div>
+            </div>
             <TextInput
               leftSection={<TbSearch />}
               placeholder="Section No, Student ID, Name"
