@@ -288,7 +288,7 @@ export default function TQF5() {
     return false;
   };
 
-  return loading.loading ? (
+  return loading.loading || !tqf5Original ? (
     <Loading />
   ) : (
     <>
@@ -511,7 +511,9 @@ export default function TQF5() {
                       </p>
                       <br />
                       <p className=" -mt-3 mb-6 text-b2 break-words font-medium leading-relaxed">
-                      It seems this TQF 3 for {courseNo} isn’t fully completed all parts yet. <br/> Review and fill in the missing sections to ensure everything is in place!
+                        It seems this TQF 3 for {courseNo} isn’t fully completed
+                        all parts yet. <br /> Review and fill in the missing
+                        sections to ensure everything is in place!
                       </p>
                     </div>
                     <img

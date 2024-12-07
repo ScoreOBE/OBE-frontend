@@ -119,7 +119,7 @@ export default function ModalMappingAssignment({
               <MultiSelect
                 className="w-[350px]"
                 // placeholder="Choose Assignment"
-                data={assignments.map((item) => ({
+                data={assignments?.map((item) => ({
                   value: item.name,
                   label: item.name,
                   disabled: form
