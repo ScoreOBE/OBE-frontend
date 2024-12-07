@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { IModelTQF3Part7 } from "@/models/ModelTQF3";
 import { useAppDispatch, useAppSelector } from "@/store";
 import unplug from "@/assets/image/unplug.png";
+import notLinkPLO from "@/assets/image/notLinkPLO.jpeg";
 import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useSearchParams } from "react-router-dom";
@@ -305,17 +306,17 @@ export default function Part7TQF3({ setForm }: Props) {
         <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
           <div className="flex justify-center  h-full items-start gap-2 flex-col">
             <p className="text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-              Course Not Linked to PLO Collection
+              This Course not linked to PLO 
             </p>
             <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-              This course is currently not linked to any PLO collection. <br />{" "}
+               
               If you need to do this part, please contact your department
-              administrator.
+              administrator. <br/> You can still  proceed with completing TQF 5
             </p>
           </div>
           <img
-            className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
-            src={unplug}
+            className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[500px] macair133:h-[500px] "
+            src={notLinkPLO}
             alt="loginImage"
           />
         </div>

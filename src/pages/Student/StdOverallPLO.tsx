@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import maintenace from "@/assets/image/maintenance.png";
+import maintenace from "@/assets/image/maintenance.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { ROLE } from "@/helpers/constants/enum";
 
@@ -34,7 +34,7 @@ export default function StdOverallPLO() {
           <p className="text-secondary text-[18px] font-semibold "></p>
         </div>
       </div>
-      <div className=" flex flex-row px-[60px] flex-1 justify-between">
+      <div className=" flex flex-row px-20 flex-1 justify-between">
         <div className="h-full  justify-center flex flex-col">
           <p className="text-secondary text-[21px] font-semibold">
             Overall PLO is coming soon to {" "}

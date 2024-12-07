@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import maintenace from "@/assets/image/maintenance.png";
+import maintenace from "@/assets/image/maintenance.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { ROLE } from "@/helpers/constants/enum";
 
