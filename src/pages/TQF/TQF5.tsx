@@ -35,6 +35,7 @@ import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { getOnePLO } from "@/services/plo/plo.service";
 import MainPopup from "@/components/Popup/MainPopup";
 import { IModelTQF3 } from "@/models/ModelTQF3";
+import ModalMappingAssignment from "@/components/Modal/TQF5/ModalMappingAssignment";
 
 export default function TQF5() {
   const { courseNo } = useParams();
@@ -45,7 +46,7 @@ export default function TQF5() {
   const courseAdmin = useAppSelector((state) =>
     state.allCourse.courses.find((course) => course.courseNo == courseNo)
   );
-  const [assignments, setAssignments] = useState<IModelAssignment>();
+  const [assignments, setAssignments] = useState<IModelAssignment[]>();
   const [tqf3, setTqf3] = useState<IModelTQF3>();
   const [tqf5Original, setTqf5Original] = useState<
     Partial<IModelTQF5> & { topic?: string; ploRequired?: string[] }
@@ -59,6 +60,8 @@ export default function TQF5() {
   const [selectedMethod, setSelectedMethod] = useState<METHOD_TQF5>();
   const [openModalChangeMethod, setOpenModalChangeMethod] = useState(false);
   const [openMainPopupConfirmChange, setOpenMainPopupConfirmChange] =
+    useState(false);
+  const [openModalAssignmentMapping, setOpenModalAssignmentMapping] =
     useState(false);
   const partTab = [
     {
@@ -142,9 +145,7 @@ export default function TQF5() {
         const section = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf5.topic
         );
-        setAssignments(
-          section?.assignments?.map((assi: any) => assi.name) || []
-        );
+        setAssignments(section?.assignments || []);
 
         const sectionTdf5 = section?.TQF5;
         setTqf3(section?.TQF3);
@@ -240,6 +241,7 @@ export default function TQF5() {
     });
     if (res) {
       const newTqf5 = tqf5Original;
+      delete newTqf5?.assignmentsMap;
       delete newTqf5?.part2;
       delete newTqf5?.part3;
       setTqf5Original({ ...newTqf5, method: res.method });
@@ -418,6 +420,12 @@ export default function TQF5() {
           </>
         }
       />
+      <ModalMappingAssignment
+        opened={openModalAssignmentMapping}
+        onClose={() => setOpenModalAssignmentMapping(false)}
+        tqf3={tqf3!}
+        assignments={assignments!}
+      />
       <div
         className={`flex flex-col h-full w-full overflow-hidden ${
           !checkActiveTerm() && "pb-2"
@@ -454,6 +462,16 @@ export default function TQF5() {
               </div>
               {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
                 <div className="flex gap-2 items-center">
+                  {tqf5Part == "part2" &&
+                    !!tqf5.assignmentsMap?.length &&
+                    tqf5.method == METHOD_TQF5.SCORE_OBE && (
+                      <Button
+                        onClick={() => setOpenModalAssignmentMapping(true)}
+                      >
+                        Evaluation Mapping
+                      </Button>
+                    )}
+
                   <Button
                     variant="outline"
                     onClick={() => {

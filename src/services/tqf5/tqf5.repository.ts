@@ -8,6 +8,9 @@ export const tqf5Controller = (configService = {}) => {
     changeMethodTQF5: async (id: string, params: any) => {
       return service.post(`${prefix}/${id}/change-method`, { ...params });
     },
+    mappingAssignments: async (id: string, params: any) => {
+      return service.post(`${prefix}/${id}/mapping-assignment`, { ...params });
+    },
     saveTQF5: async (part: string, params: any) => {
       return service.put(`${prefix}/${params.id}/${part}`, { ...params });
     },

@@ -27,6 +27,9 @@ export const tqf5Slice = createSlice({
     updatePartTQF5: (state, action) => {
       return { ...state, [action.payload.part]: { ...action.payload.data } };
     },
+    setAssignmentsMap: (state, action) => {
+      return { ...state, assignmentsMap: [...action.payload] };
+    },
   },
 });
 
@@ -36,6 +39,7 @@ export const {
   setPloTQF5,
   setSelectTqf5Topic,
   updatePartTQF5,
+  setAssignmentsMap,
 } = tqf5Slice.actions;
 
 export default tqf5Slice.reducer;

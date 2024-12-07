@@ -1,19 +1,10 @@
-import maintenace from "@/assets/image/maintenance.png";
 import unplug from "@/assets/image/unplug.png";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { useAppSelector, useAppDispatch } from "@/store";
-import {
-  Alert,
-  Button,
-  Group,
-  Modal,
-  MultiSelect,
-  TextInput,
-} from "@mantine/core";
+import { Button, Checkbox, TextInput } from "@mantine/core";
 import React from "react";
 import { useEffect, useRef, useState } from "react";
 import Icon from "../Icon";
-import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconAdd from "@/assets/icons/plus.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import { useForm } from "@mantine/form";
@@ -22,16 +13,16 @@ import { isEqual, cloneDeep } from "lodash";
 import { IModelTQF5Part2 } from "@/models/ModelTQF5";
 import { initialTqf5Part2 } from "@/helpers/functions/tqf5";
 import { METHOD_TQF5 } from "@/helpers/constants/enum";
+import ModalMappingAssignment from "../Modal/TQF5/ModalMappingAssignment";
 import { IModelAssignment } from "@/models/ModelCourse";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
   tqf3: IModelTQF3;
-  assignments: IModelAssignment;
+  assignments: IModelAssignment[];
 };
 
 export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
-  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const tqf5 = useAppSelector((state) => state.tqf5);
   const dispatch = useAppDispatch();
   const sectionRefs = useRef(
@@ -53,12 +44,6 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
         setForm(form);
       }
     },
-  });
-
-  const mapAssignForm = useForm({
-    mode: "controlled",
-    initialValues: { data: [] as { eval: string; assignment: string }[] },
-    validateInputOnBlur: true,
   });
 
   useEffect(() => {
@@ -115,74 +100,12 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
 
   return (
     <>
-      <Modal
+      <ModalMappingAssignment
         opened={openModalAssignmentMapping}
         onClose={() => setOpenModalAssignmentMapping(false)}
-        closeOnClickOutside={false}
-        centered
-        size="45vw"
-        title="Evaluation Mapping"
-        transitionProps={{ transition: "pop" }}
-      >
-        <div>
-          <Alert
-            radius="md"
-            icon={<Icon IconComponent={IconInfo2} />}
-            variant="light"
-            color="blue"
-            className="mb-5"
-            classNames={{
-              icon: "size-6",
-              body: " flex justify-center",
-            }}
-            title={
-              <p>
-                Course Evaluation Topics can be mapped to multiple assignment.
-              </p>
-            }
-          ></Alert>
-          <div className=" text-[15px] rounded-lg w-full h-fit px-8 mb-2 flex justify-between font-semibold text-secondary">
-            <p>From: Course Evaluation</p>
-            <p className="w-[350px]">To: Assignment</p>
-          </div>
-          {tqf3?.part3?.eval.map((eva, index) => (
-            <div
-              key={eva.id}
-              className="bg-[#F3F3F3] rounded-lg w-full h-fit px-8 py-4 mb-4 flex justify-between"
-            >
-              <div className="text-[13px]">
-                <p>{eva.topicTH}</p>
-                <p>{eva.topicEN}</p>
-              </div>
-              <MultiSelect
-                className="w-[350px]"
-                // placeholder="Choose Assignment"
-                data={Array.isArray(assignments) ? assignments : []}
-                classNames={{ pill: "bg-secondary text-white font-medium" }}
-                // searchable
-                // nothingFoundMessage="Nothing found..."
-              />
-            </div>
-          ))}
-
-          <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end  justify-end h-fit mt-4">
-            <Group className="flex w-full gap-2 h-fit items-end justify-end">
-              <Button
-                onClick={() => setOpenModalAssignmentMapping(false)}
-                variant="subtle"
-              >
-                Cancel
-              </Button>
-              <Button
-                loading={loading}
-                // onClick={}
-              >
-                Done
-              </Button>
-            </Group>
-          </div>
-        </div>
-      </Modal>
+        tqf3={tqf3}
+        assignments={assignments}
+      />
       {tqf5.part1?.updatedAt ? (
         !!tqf5.assignmentsMap?.length || tqf5.method == METHOD_TQF5.MANUAL ? (
           <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
@@ -213,6 +136,9 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                       const evaluation = tqf3.part3?.eval.find(
                         (e) => e.id == item.eval
                       );
+                      const assignment = tqf5.assignmentsMap?.find(
+                        (e) => e.eval == evaluation?.topicEN
+                      )?.assignment;
                       return (
                         <div
                           key={indexEval}
@@ -247,7 +173,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                               </Button>
                             )}
                           </div>
-                          {tqf5.method == METHOD_TQF5.MANUAL &&
+                          {tqf5.method == METHOD_TQF5.MANUAL ? (
                             item.questions.map((ques, indexQues) => (
                               <div
                                 key={form.key(
@@ -284,8 +210,47 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                                   />
                                 </Button>
                               </div>
-                            ))}
-                          <div></div>
+                            ))
+                          ) : (
+                            <Checkbox.Group
+                              {...form.getInputProps(
+                                `data.${indexClo}.assignments.${indexEval}.questions`
+                              )}
+                            >
+                              {assignment?.map((assign, indexAssign) => {
+                                const questions = assignments.find(
+                                  (e) => e.name == assign
+                                )?.questions;
+                                return (
+                                  <div
+                                    key={indexAssign}
+                                    className="flex flex-col gap-2 mb-2"
+                                  >
+                                    <p className="bg-disable px-4 py-2">
+                                      {assign}
+                                    </p>
+                                    {questions?.map((ques, indexQues) => (
+                                      <Checkbox
+                                        key={indexQues}
+                                        size="xs"
+                                        className="px-4 py-1"
+                                        classNames={{
+                                          label:
+                                            "font-medium text-[13px] text-default",
+                                        }}
+                                        label={`${ques.name}${
+                                          ques.desc.length
+                                            ? ` - ${ques.desc}`
+                                            : ""
+                                        }`}
+                                        value={ques.name}
+                                      />
+                                    ))}
+                                  </div>
+                                );
+                              })}
+                            </Checkbox.Group>
+                          )}
                         </div>
                       );
                     })}
