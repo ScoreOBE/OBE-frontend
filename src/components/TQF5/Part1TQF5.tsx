@@ -137,7 +137,7 @@ export default function Part1TQF5({ setForm }: Props) {
                 color={isEditCourseEval ? "#0eb092" : "#ee933e"}
                 onClick={() => setIsEditCourseEval(!isEditCourseEval)}
               >
-                {isEditCourseEval ? "Done" : "Edit Course Eval"}
+                {isEditCourseEval ? "Done" : "Edit Grade"}
               </Button>
             </div>
           </div>
@@ -273,7 +273,7 @@ export default function Part1TQF5({ setForm }: Props) {
               color={isEditCriteria ? "#0eb092" : "#ee933e"}
               onClick={() => setIsEditCriteria(!isEditCriteria)}
             >
-              {isEditCriteria ? "Done" : "Edit Grade criteria"}
+              {isEditCriteria ? "Done" : "Edit Criteria"}
             </Button>
           </div>
           <div

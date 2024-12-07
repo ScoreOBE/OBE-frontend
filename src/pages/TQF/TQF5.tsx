@@ -1,17 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import {
-  Alert,
-  Button,
-  Group,
-  Modal,
-  Radio,
-  Tabs,
-  MultiSelect,
-} from "@mantine/core";
+import { Alert, Button, Group, Modal, Radio, Tabs } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconCheck from "@/assets/icons/Check.svg?react";
-import IconExchange from "@/assets/icons/change.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { useParams, useSearchParams } from "react-router-dom";
@@ -67,8 +58,6 @@ export default function TQF5() {
   );
   const [selectedMethod, setSelectedMethod] = useState<METHOD_TQF5>();
   const [openModalChangeMethod, setOpenModalChangeMethod] = useState(false);
-  const [openModalAssignmentMapping, setOpenModalAssignmentMapping] =
-    useState(false);
   const [openMainPopupConfirmChange, setOpenMainPopupConfirmChange] =
     useState(false);
   const partTab = [
@@ -80,7 +69,9 @@ export default function TQF5() {
     {
       value: Object.keys(partLabel)[1],
       tab: partLabel.part2,
-      compo: <Part2TQF5 setForm={setForm} tqf3={tqf3!} />,
+      compo: (
+        <Part2TQF5 setForm={setForm} tqf3={tqf3!} assignments={assignments!} />
+      ),
     },
     {
       value: Object.keys(partLabel)[2],
@@ -151,8 +142,6 @@ export default function TQF5() {
         const section = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf5.topic
         );
-        console.log(section);
-
         setAssignments(
           section?.assignments?.map((assi: any) => assi.name) || []
         );
@@ -167,7 +156,7 @@ export default function TQF5() {
           ploRequired: ploRequire || [],
           ...sectionTdf5,
         });
-        setSelectedMethod(sectionTdf5.method);
+        setSelectedMethod(sectionTdf5?.method);
         dispatch(
           setDataTQF5({
             topic: tqf5.topic,
@@ -190,7 +179,7 @@ export default function TQF5() {
           ploRequired: ploRequire || [],
           ...resCourse.TQF5!,
         });
-        setSelectedMethod(resCourse.TQF5.method);
+        setSelectedMethod(resCourse.TQF5?.method);
         dispatch(
           setDataTQF5({
             topic: tqf5.topic,
@@ -273,6 +262,27 @@ export default function TQF5() {
       : !isEqual(tqf5Original![value], tqf5[value])
       ? "text-edit" // In Progress
       : "text-[#24b9a5]"; // Done
+  };
+
+  const showSaveTQFbar = () => {
+    if (tqf5Original && tqf5.id) {
+      if (tqf5Part == "part1") {
+        return true;
+      } else if (
+        tqf5Part == "part2" &&
+        tqf5.method == METHOD_TQF5.SCORE_OBE &&
+        !tqf5.assignmentsMap?.length
+      ) {
+        return false;
+      } else {
+        return tqf5Original[
+          Object.keys(partLabel)[
+            Object.keys(partLabel).findIndex((e) => e == tqf5Part) - 1
+          ] as keyof IModelTQF5
+        ];
+      }
+    }
+    return false;
   };
 
   return loading.loading ? (
@@ -407,77 +417,6 @@ export default function TQF5() {
           </>
         }
       />
-      <Modal
-        opened={openModalAssignmentMapping}
-        onClose={() => setOpenModalAssignmentMapping(false)}
-        closeOnClickOutside={false}
-        centered
-        size="45vw"
-        title="Evaluation Mapping"
-        transitionProps={{ transition: "pop" }}
-      >
-        <div>
-          {/* Evaluation Mapping is coming soon.*/}
-
-          <Alert
-            radius="md"
-            icon={<Icon IconComponent={IconInfo2} />}
-            variant="light"
-            color="blue"
-            className="mb-5"
-            classNames={{
-              icon: "size-6",
-              body: " flex justify-center",
-            }}
-            title={
-              <p>
-                Course Evaluation Topics can be mapped to multiple assignment.
-              </p>
-            }
-          ></Alert>
-          <div className=" text-[15px] rounded-lg w-full h-fit px-8 mb-2 flex justify-between font-semibold text-secondary">
-            <p>From: Course Evaluation</p>
-
-            <p className="w-[350px]">To: Assignment</p>
-          </div>
-          {tqf3?.part3?.eval.map((eva, index) => (
-            <div
-              key={eva.id}
-              className="bg-[#F3F3F3] rounded-lg w-full h-fit px-8 py-4 mb-4 flex justify-between"
-            >
-              <div className="text-[13px]">
-                <p>{eva.topicTH}</p>
-                <p>{eva.topicEN}</p>
-              </div>
-              <MultiSelect
-                className="w-[350px]"
-                // placeholder="Choose Assignment"
-                data={Array.isArray(assignments) ? assignments : []}
-                classNames={{ pill: "bg-secondary text-white font-medium" }}
-                // searchable
-                // nothingFoundMessage="Nothing found..."
-              />
-            </div>
-          ))}
-
-          <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end  justify-end h-fit mt-4">
-            <Group className="flex w-full gap-2 h-fit items-end justify-end">
-              <Button
-                onClick={() => setOpenModalAssignmentMapping(false)}
-                variant="subtle"
-              >
-                Cancel
-              </Button>
-              <Button
-              // loading={loading}
-              // onClick={generatePDF}
-              >
-                Done
-              </Button>
-            </Group>
-          </div>
-        </div>
-      </Modal>
       <div
         className={`flex flex-col h-full w-full overflow-hidden ${
           !checkActiveTerm() && "pb-2"
@@ -514,14 +453,6 @@ export default function TQF5() {
               </div>
               {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
                 <div className="flex gap-2 items-center">
-                  {tqf5Part == "part2" &&
-                    tqf5.method == METHOD_TQF5.SCORE_OBE && (
-                      <Button
-                        onClick={() => setOpenModalAssignmentMapping(true)}
-                      >
-                        Evaluation Mapping
-                      </Button>
-                    )}
                   <Button
                     variant="outline"
                     onClick={() => {
@@ -531,17 +462,13 @@ export default function TQF5() {
                     className="flex flex-col items-start !justify-start text-left"
                   >
                     <div className="flex items-center gap-2">
-                      {/* <Icon
-                        IconComponent={IconExchange}
-                        className="size-4 stroke-[2px]"
-                      /> */}
                       <div className="flex flex-col gap-1 font-semibold">
                         <p className="text-[13px]">
                           Change Method{" "}
                           <span className="text-primary font-medium">
                             ({tqf5.method})
                           </span>
-                        </p>{" "}
+                        </p>
                       </div>
                     </div>
                   </Button>
@@ -615,26 +542,18 @@ export default function TQF5() {
           </div>
         </Tabs>
       </div>
-      {checkActiveTerm() &&
-        tqf5Original &&
-        tqf5.id &&
-        (tqf5Part == "part1" ||
-          tqf5Original[
-            Object.keys(partLabel)[
-              Object.keys(partLabel).findIndex((e) => e == tqf5Part) - 1
-            ] as keyof IModelTQF5
-          ]) && (
-          <SaveTQFbar
-            tqf="5"
-            part={tqf5Part as partType}
-            data={tqf5Original[tqf5Part as keyof IModelTQF5]}
-            onSave={onSave}
-            disabledSave={isEqual(
-              tqf5Original[tqf5Part as keyof IModelTQF5],
-              tqf5[tqf5Part as keyof IModelTQF5]
-            )}
-          />
-        )}
+      {checkActiveTerm() && tqf5Original && tqf5.id && showSaveTQFbar() && (
+        <SaveTQFbar
+          tqf="5"
+          part={tqf5Part as partType}
+          data={tqf5Original[tqf5Part as keyof IModelTQF5]}
+          onSave={onSave}
+          disabledSave={isEqual(
+            tqf5Original[tqf5Part as keyof IModelTQF5],
+            tqf5[tqf5Part as keyof IModelTQF5]
+          )}
+        />
+      )}
     </>
   );
 }
