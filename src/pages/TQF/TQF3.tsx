@@ -327,7 +327,7 @@ export default function TQF3() {
         form
           .getInputNode(firstErrorPath)
           ?.scrollIntoView({ behavior: "smooth", block: "end" });
-        setOpenAlertDataTQF3Part4(true);
+        if (tqf3Part == "part4") setOpenAlertDataTQF3Part4(true);
       } else {
         const payload = form.getValues();
         payload.id = tqf3.id;
