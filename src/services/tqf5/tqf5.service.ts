@@ -7,6 +7,12 @@ export const changeMethodTQF5 = async (id: string, params: any) => {
   return isValidResponse(res);
 };
 
+export const mappingAssignments = async (id: string, params: any) => {
+  const tqf5Service = tqf5Controller();
+  const res = await tqf5Service.mappingAssignments(id, params);
+  return isValidResponse(res);
+};
+
 export const saveTQF5 = async (part: string, params: any) => {
   const tqf5Service = tqf5Controller();
   const res = await tqf5Service.saveTQF5(part, params);

@@ -5,7 +5,7 @@ export interface IModelTQF5 {
   id: string;
   status: TQF_STATUS;
   method?: METHOD_TQF5;
-  assignmentsMap?: { eval: IModelEval | string; assignment: string }[];
+  assignmentsMap?: { eval: string; assignment: string[] }[];
   part1?: IModelTQF5Part1;
   part2?: { data: IModelTQF5Part2[]; updatedAt: Date };
   part3?: { data: IModelTQF5Part3[]; updatedAt: Date };
