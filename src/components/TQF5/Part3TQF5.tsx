@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import maintenace from "@/assets/image/maintenance.png";
+import maintenace from "@/assets/image/maintenance.jpg";
 import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { Button, Table, TextInput } from "@mantine/core";
