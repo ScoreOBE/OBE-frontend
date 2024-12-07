@@ -265,6 +265,7 @@ export default function TQF5() {
   };
 
   const showSaveTQFbar = () => {
+    if (tqf3?.status != TQF_STATUS.DONE) return false;
     if (tqf5Original && tqf5.id) {
       if (tqf5Part == "part1") {
         return true;
