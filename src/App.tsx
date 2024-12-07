@@ -15,7 +15,7 @@ import PageError from "./pages/PageError";
 import { setLoading } from "./store/loading";
 import { checkTokenExpired } from "./helpers/functions/validation";
 import ModalTermsOfService from "./components/Modal/ModalTermOfService";
-import { LoadingOverlay } from "@mantine/core";
+import LoadingOverlay from "./components/Loading/LoadingOverlay";
 
 function App() {
   const [openModalTermsOfService, setOpenModalTermsOfService] = useState(false);
