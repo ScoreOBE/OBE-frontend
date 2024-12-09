@@ -62,12 +62,15 @@ export default function OneAssignment() {
       .filter((item) => item !== undefined) || [];
 
   const [params, setParams] = useSearchParams();
-  const scores = allStudent.map((item) => {
-    return questions?.reduce((sum, ques) => {
-      const score = item[ques.name];
-      return score >= 0 ? sum + score : sum;
-    }, 0);
-  }).filter((item) => item !== undefined).sort((a,b) => a-b);
+  const scores = allStudent
+    .map((item) => {
+      return questions?.reduce((sum, ques) => {
+        const score = item[ques.name];
+        return score >= 0 ? sum + score : sum;
+      }, 0);
+    })
+    .filter((item) => item !== undefined)
+    .sort((a, b) => a - b);
   const { mean, sd, median, maxScore, minScore, q1, q3 } = calStat(
     scores,
     allStudent.length
@@ -113,9 +116,20 @@ export default function OneAssignment() {
         ) : (
           <>
             <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
-              <p className="text-secondary text-[18px] font-semibold">
-                {name} - {fullScore} Points
-              </p>
+              <div className="flex justify-between w-full px-2 items-center">
+                <div className="flex flex-col py-1">
+                  <p className="text-[#3f4474] font-semibold  text-[16px]">
+                    {name}
+                  </p>
+                  <p className="text-secondary text-[20px] font-semibold">
+                    {fullScore?.toFixed(2)}{" "}
+                    <span className="text-[16px] ">pts.</span>
+                  </p>
+                </div>
+                <p className="text-[#3f4474] mb-1 font-semibold sm:max-macair133:text-[14px] text-[16px]">
+                  {allStudent.length} Students
+                </p>
+              </div>
               <div className="flex px-10 flex-row justify-between w-full">
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-[#777777]">
@@ -243,7 +257,7 @@ export default function OneAssignment() {
                               {item[ques.name] == undefined ||
                               item[ques.name] < 0
                                 ? "-"
-                                : item[ques.name]}
+                                : item[ques.name].toFixed(2)}
                             </Table.Td>
                           ))}
                         </Table.Tr>

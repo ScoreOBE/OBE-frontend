@@ -266,12 +266,12 @@ export default function Students() {
                             </div>
                           </Table.Td>
                           {assignment?.questions.map((ques, index) => {
-                            const score = questions?.find(
+                            const score:any = questions?.find(
                               (e) => e.name == ques.name
                             )?.score;
                             return (
                               <Table.Td key={index}>
-                                {score != undefined ? score : "-"}
+                                {score != undefined ? score.toFixed(2) : "-"}
                               </Table.Td>
                             );
                           })}
