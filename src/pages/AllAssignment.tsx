@@ -250,6 +250,22 @@ export default function AllAssignment() {
     });
   };
 
+  const uploadButton = () => {
+    return (
+      <Button
+        className="text-center px-4"
+        leftSection={<Icon IconComponent={IconUpload} className="size-4" />}
+        onClick={() =>
+          course?.sections.find(({ students }) => students?.length)
+            ? setOpenModalUploadScore(true)
+            : setOpenModalUploadStudentList(true)
+        }
+      >
+        Upload score
+      </Button>
+    );
+  };
+
   return (
     <>
       {course && (
@@ -627,20 +643,7 @@ export default function AllAssignment() {
                   {allAssignments.length} Evaluation
                   {allAssignments.length! > 1 && "s"}
                 </p>
-                <div className="flex gap-5">
-                  <Button
-                    className="text-center px-4"
-                    leftSection={
-                      <Icon IconComponent={IconUpload} className="size-4" />
-                    }
-                    onClick={() =>
-                      course?.sections.find(({ students }) => students?.length)
-                        ? setOpenModalUploadScore(true)
-                        : setOpenModalUploadStudentList(true)
-                    }
-                  >
-                    Upload score
-                  </Button>
+                <div className="flex gap-3">
                   <Menu
                     trigger="click"
                     openDelay={100}
@@ -649,14 +652,15 @@ export default function AllAssignment() {
                   >
                     <Menu.Target>
                       <Button
-                        color="#13a9a1"
+                        variant="outline"
+                
                         leftSection={
                           <Icon
                             IconComponent={IconEyePublish}
-                            className="size-5"
+                            className="size-5 "
                           />
                         }
-                        className="px-3"
+                        className="px-3   "
                       >
                         Publish score
                       </Button>
@@ -697,6 +701,7 @@ export default function AllAssignment() {
                       </Menu.Item>
                     </Menu.Dropdown>
                   </Menu>
+                  <div className="">{uploadButton()}</div>
                 </div>
               </div>
             )}
@@ -996,7 +1001,7 @@ export default function AllAssignment() {
               </Tabs>
             ) : (
               <div className="flex items-center  !h-full !w-full justify-between px-16">
-                <div className="flex flex-col gap-3 text-start">
+                <div className="flex flex-col gap-2 text-start">
                   <p className="!h-full text-[20px] text-secondary font-semibold">
                     No Evaluation
                   </p>{" "}
@@ -1004,6 +1009,7 @@ export default function AllAssignment() {
                     It seems like no evaluations have been added to this course
                     yet.
                   </p>{" "}
+                  <div className="mt-3">{uploadButton()}</div>
                 </div>
                 <div className=" items-center justify-center flex">
                   <img

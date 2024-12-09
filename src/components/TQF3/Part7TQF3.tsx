@@ -315,7 +315,7 @@ export default function Part7TQF3({ setForm }: Props) {
             </p>
           </div>
           <img
-            className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[500px] macair133:h-[500px] "
+            className=" z-50 ipad11:w-[300px] sm:w-[240px] w-[240px]  macair133:w-[350px] macair133:h-[350px] "
             src={notLinkPLO}
             alt="loginImage"
           />

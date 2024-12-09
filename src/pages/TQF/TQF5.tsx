@@ -306,13 +306,13 @@ export default function TQF5() {
               radius="md"
               icon={<Icon IconComponent={IconInfo2} />}
               variant="light"
-              color="blue"
+              color='orange'
               className="mb-5"
               classNames={{
                 icon: "size-6",
                 body: " flex justify-center",
               }}
-              title={<p>Changing the method will impact TQF 5 Part 2 & 3.</p>}
+              title={<p>Just a heads up, changing the method will impact TQF 5 Part 2 and 3.</p>}
             ></Alert>
             <Radio.Group
               classNames={{ label: "font-semibold" }}
@@ -331,18 +331,15 @@ export default function TQF5() {
                       : "border"
                   }`}
                 >
-                  <Group wrap="nowrap" align="flex-start">
+                  <Group wrap="nowrap" align="flex-start" className=" flex items-center">
                     <Radio.Indicator />
                     <div>
-                      <p className="text-b1">{METHOD_TQF5.SCORE_OBE}</p>
+                      <p className="text-b2 font-semibold">
+                        {METHOD_TQF5.SCORE_OBE}
+                      </p>
                       <p className="text-b3">
                         The smartest way to evaluate and analyze your TQF 5
                       </p>
-                      {tqf5.method === METHOD_TQF5.SCORE_OBE && (
-                        <span className="text-xs text-secondary">
-                          (Currently in use)
-                        </span>
-                      )}
                     </div>
                   </Group>
                 </Radio.Card>
@@ -357,18 +354,15 @@ export default function TQF5() {
                       : "border"
                   }`}
                 >
-                  <Group wrap="nowrap" align="flex-start">
+                  <Group wrap="nowrap" align="flex-start" className=" flex items-center">
                     <Radio.Indicator />
                     <div>
-                      <p className="text-b1">{METHOD_TQF5.MANUAL}</p>
+                      <p className="text-b2 font-semibold">
+                        {METHOD_TQF5.MANUAL}
+                      </p>
                       <p className="text-b3">
                         Customize all data what you want
                       </p>
-                      {tqf5.method === METHOD_TQF5.MANUAL && (
-                        <p className="text-xs text-secondary">
-                          (Currently in use)
-                        </p>
-                      )}
                     </div>
                   </Group>
                 </Radio.Card>
@@ -397,7 +391,7 @@ export default function TQF5() {
         labelButtonRight={`Switch to ${selectedMethod} ${
           selectedMethod !== "Manual" ? "+" : ""
         }`}
-        title={`Your save will be lost ? `}
+        title={`Your changes will be lost`}
         message={
           <>
             <Alert
@@ -483,8 +477,8 @@ export default function TQF5() {
                     <div className="flex items-center gap-2">
                       <div className="flex flex-col gap-1 font-semibold">
                         <p className="text-[13px]">
-                          Change Method{" "}
-                          <span className="text-primary font-medium">
+                          Method{" "}
+                          <span className="font-medium">
                             ({tqf5.method})
                           </span>
                         </p>
