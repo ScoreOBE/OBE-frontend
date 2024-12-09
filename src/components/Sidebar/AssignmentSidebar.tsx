@@ -95,7 +95,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                  }`}
           >
-            <p className="pl-[3px]">Chart</p>
+            <p className="pl-[3px]">Charts</p>
           </Button>
         </div>
       </div>

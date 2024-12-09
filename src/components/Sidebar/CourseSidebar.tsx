@@ -219,19 +219,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           <div className="flex flex-col gap-2">
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
-                onClick={() => goToPage(ROUTE_PATH.SECTION)}
-                leftSection={<RxDashboard size={18} />}
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-                  path.includes(ROUTE_PATH.SECTION)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                }`}
-              >
-                Sections
-              </Button>
-            )}
-            {dashboard == ROLE.INSTRUCTOR && (
-              <Button
                 onClick={() => goToPage(ROUTE_PATH.EVALUATION)}
                 leftSection={
                   <Icon IconComponent={IconTQF} className="mr-0.5" />
@@ -243,6 +230,19 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 }`}
               >
                 Evaluations
+              </Button>
+            )}
+            {dashboard == ROLE.INSTRUCTOR && (
+              <Button
+                onClick={() => goToPage(ROUTE_PATH.SECTION)}
+                leftSection={<RxDashboard size={18} />}
+                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                  path.includes(ROUTE_PATH.SECTION)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                }`}
+              >
+                Sections
               </Button>
             )}
             {dashboard == ROLE.INSTRUCTOR && (
@@ -263,6 +263,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 Roster
               </Button>
             )}
+
             {user.role != ROLE.TA && (
               <>
                 <Menu

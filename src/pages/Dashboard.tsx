@@ -133,7 +133,7 @@ export default function Dashboard() {
   };
 
   const goToCourse = (courseNo: string) => {
-    const pathname = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.SECTION}`;
+    const pathname = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.EVALUATION}`;
     navigate({
       pathname,
       search: "?" + params.toString(),
