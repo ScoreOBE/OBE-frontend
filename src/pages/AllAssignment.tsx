@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEyePublish from "@/assets/icons/eyePublish.svg?react";
+import IconUpload from "@/assets/icons/upload.svg?react";
 import IconPublish from "@/assets/icons/publish.svg?react";
 import IconUnPublish from "@/assets/icons/unPublish.svg?react";
 import IconPublishEach from "@/assets/icons/publishEach.svg?react";
@@ -46,6 +47,8 @@ import { setLoadingOverlay } from "@/store/loading";
 import { isEqual } from "lodash";
 import MainPopup from "@/components/Popup/MainPopup";
 import { IModelAssignment } from "@/models/ModelCourse";
+import ModalStudentList from "@/components/Modal/ModalStudentList";
+import ModalUploadScore from "@/components/Modal/Score/ModalUploadScore";
 import ChartContainer from "@/components/Chart/ChartContainer";
 import React from "react";
 type TabState = {
@@ -90,6 +93,9 @@ export default function AllAssignment() {
   const [editName, setEditName] = useState("");
   const [openModalEditAssignment, setOpenModalEditAssignment] = useState(false);
   const [openModalDeleteAssignment, setOpenModalDeleteAssignment] =
+    useState(false);
+  const [openModalUploadScore, setOpenModalUploadScore] = useState(false);
+  const [openModalUploadStudentList, setOpenModalUploadStudentList] =
     useState(false);
   const form = useForm({
     mode: "uncontrolled",
@@ -246,6 +252,29 @@ export default function AllAssignment() {
 
   return (
     <>
+      {course && (
+        <ModalUploadScore
+          data={course}
+          opened={openModalUploadScore}
+          onClose={() => setOpenModalUploadScore(false)}
+        />
+      )}
+      {course && (
+        <ModalStudentList
+          type="import"
+          opened={openModalUploadStudentList}
+          onClose={() => setOpenModalUploadStudentList(false)}
+          data={course}
+          selectCourse={false}
+          onBack={() => {
+            setOpenModalUploadStudentList(false);
+          }}
+          onNext={() => {
+            setOpenModalUploadStudentList(false);
+            setOpenModalUploadScore(true);
+          }}
+        />
+      )}
       {/* Select assignment to publish */}
       <Modal
         opened={openPublishScoreModal}
@@ -598,62 +627,77 @@ export default function AllAssignment() {
                   {allAssignments.length} Evaluation
                   {allAssignments.length! > 1 && "s"}
                 </p>
-                <Menu
-                  trigger="click"
-                  openDelay={100}
-                  clickOutsideEvents={["mousedown"]}
-                  classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
-                >
-                  <Menu.Target>
-                    <Button
-                      color="#13a9a1"
-                      leftSection={
-                        <Icon
-                          IconComponent={IconEyePublish}
-                          className="size-5"
-                        />
-                      }
-                      className="px-3"
-                    >
-                      Publish score
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown
-                    className="!z-50 -translate-y-[3px] translate-x-[5px] bg-white"
-                    style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
+                <div className="flex gap-5">
+                  <Button
+                    className="text-center px-4"
+                    leftSection={
+                      <Icon IconComponent={IconUpload} className="size-4" />
+                    }
+                    onClick={() =>
+                      course?.sections.find(({ students }) => students?.length)
+                        ? setOpenModalUploadScore(true)
+                        : setOpenModalUploadStudentList(true)
+                    }
                   >
-                    <Menu.Item
-                      className="text-[#3E3E3E] text-[14px] h-8 w-full "
-                      onClick={() => {
-                        setIsPublishAll(false);
-                        setOpenPublishScoreModal(true);
-                      }}
+                    Upload score
+                  </Button>
+                  <Menu
+                    trigger="click"
+                    openDelay={100}
+                    clickOutsideEvents={["mousedown"]}
+                    classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+                  >
+                    <Menu.Target>
+                      <Button
+                        color="#13a9a1"
+                        leftSection={
+                          <Icon
+                            IconComponent={IconEyePublish}
+                            className="size-5"
+                          />
+                        }
+                        className="px-3"
+                      >
+                        Publish score
+                      </Button>
+                    </Menu.Target>
+                    <Menu.Dropdown
+                      className="!z-50 -translate-y-[3px] translate-x-[5px] bg-white"
+                      style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
                     >
-                      <div className="flex items-center gap-2">
-                        <Icon
-                          IconComponent={IconPublishEach}
-                          className="size-4 text-[#000000]"
-                        />
-                        <span>Each Section</span>
-                      </div>
-                    </Menu.Item>
-                    <Menu.Item
-                      onClick={() => {
-                        setIsPublishAll(true);
-                        setOpenPublishScoreModal(true);
-                      }}
-                      className="text-[#3E3E3E] text-[14px] h-8 w-full "
-                    >
-                      <div className="flex items-center gap-2">
-                        <Icon
-                          IconComponent={IconPublishAll}
-                          className="size-4 text-[#000000]"
-                        />
-                        <span>All Sections</span>
-                      </div>
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
+                      <Menu.Item
+                        className="text-[#3E3E3E] text-[14px] h-8 w-full "
+                        onClick={() => {
+                          setIsPublishAll(false);
+                          setOpenPublishScoreModal(true);
+                        }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Icon
+                            IconComponent={IconPublishEach}
+                            className="size-4 text-[#000000]"
+                          />
+                          <span>Each Section</span>
+                        </div>
+                      </Menu.Item>
+                      <Menu.Item
+                        onClick={() => {
+                          setIsPublishAll(true);
+                          setOpenPublishScoreModal(true);
+                        }}
+                        className="text-[#3E3E3E] text-[14px] h-8 w-full "
+                      >
+                        <div className="flex items-center gap-2">
+                          <Icon
+                            IconComponent={IconPublishAll}
+                            className="size-4 text-[#000000]"
+                          />
+                          <span>All Sections</span>
+                        </div>
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </div>
               </div>
             )}
             {allAssignments.length !== 0 ? (
@@ -666,7 +710,7 @@ export default function AllAssignment() {
               >
                 <Tabs.List>
                   <Tabs.Tab value="assignment">List</Tabs.Tab>
-                  <Tabs.Tab value="chart">Chart</Tabs.Tab>
+                  <Tabs.Tab value="charts">Charts</Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value="assignment">
                   <div
@@ -855,7 +899,7 @@ export default function AllAssignment() {
                     </Table>
                   </div>
                 </Tabs.Panel>
-                <Tabs.Panel value="chart">
+                <Tabs.Panel value="charts">
                   <div className="flex overflow-y-auto overflow-x-hidden max-w-full h-full">
                     <div className="flex gap-6 w-full h-full">
                       <div className="gap-4 flex flex-col min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">

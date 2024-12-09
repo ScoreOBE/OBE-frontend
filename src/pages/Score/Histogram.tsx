@@ -46,7 +46,7 @@ export default function Histogram() {
         ROUTE_PATH.SECTION
       }?${params.toString()}`,
     },
-    { title: `Chart Section ${getSectionNo(sectionNo)}` },
+    { title: `Charts Section ${getSectionNo(sectionNo)}` },
   ]);
   const sectionRefs = useRef(
     section?.assignments!.map(() => React.createRef<HTMLDivElement>())
@@ -161,7 +161,10 @@ export default function Histogram() {
                               data={item}
                               students={section.students!}
                             />
-                            <p className=" text-[10px] translate-x-6 mb-2">Score distribution powered by Andrew C. Myers (Cornell University)</p>
+                            <p className=" text-[10px] translate-x-6 mb-2">
+                              Score distribution powered by Andrew C. Myers
+                              (Cornell University)
+                            </p>
                           </Tabs.Panel>
                         </Tabs>
                       </div>
