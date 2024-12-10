@@ -192,8 +192,8 @@ export default function ModalManageEvalTopic({
       title={
         <div className="flex flex-col gap-1">
           {upperFirst(type)} Evaluation Method
-          <p className="text-b3  text-[#808080]">
-            percent total : {percentTotal}
+          <p className="text-b3 mt-1  text-[#808080]">
+            Percent total: {percentTotal}%
           </p>
         </div>
       }

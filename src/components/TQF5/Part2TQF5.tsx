@@ -1,4 +1,5 @@
 import unplug from "@/assets/image/unplug.png";
+import pictureTQF5 from "@/assets/image/TQF5.jpg";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { Button, Checkbox, TextInput } from "@mantine/core";
@@ -6,6 +7,7 @@ import React from "react";
 import { useEffect, useRef, useState } from "react";
 import Icon from "../Icon";
 import IconAdd from "@/assets/icons/plus.svg?react";
+import IconOneToMany from "@/assets/icons/onetomany.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import { useForm } from "@mantine/form";
 import { updatePartTQF5 } from "@/store/tqf5";
@@ -109,15 +111,12 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
       {tqf5.part1?.updatedAt ? (
         !!tqf5.assignmentsMap?.length || tqf5.method == METHOD_TQF5.MANUAL ? (
           <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
-            <div className="gap-4 flex flex-col w-full overflow-y-auto pt-1 max-h-full px-1">
+            <div className="gap-4 flex flex-col w-full -mt-3 overflow-y-auto  max-h-full px-1">
               {form.getValues().data.map((item, indexClo) => {
                 const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
                 return (
                   <div
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                    }}
-                    className={`last:mb-4 flex flex-col rounded-md gap-5 px-6 py-5 ${
+                    className={` flex flex-col  border-b-[2px] last:border-none  gap-5 px-2 pb-6 first:pt-3 ${
                       activeSection === indexClo ? "active" : ""
                     }`}
                     id={`${clo?.id}`}
@@ -125,11 +124,14 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                     ref={sectionRefs.current!.at(indexClo)} // Dynamic refs
                   >
                     <div className="flex justify-between">
-                      <div className="text-default font-medium text-[15px]">
-                        <p>
-                          CLO {clo?.no} - {clo?.descTH}
+                      <div className="text-default flex items-center  font-medium text-[15px]">
+                        <p className="text-[18px] text-secondary mr-2 font-semibold">
+                          CLO {clo?.no}{" "}
                         </p>
-                        <p>{clo?.descEN}</p>
+                        <div className="flex flex-col ml-2 gap-[2px]">
+                          <p>{clo?.descTH}</p>
+                          <p>{clo?.descEN}</p>
+                        </div>
                       </div>
                     </div>
                     {item.assignments.map((item, indexEval) => {
@@ -142,35 +144,34 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                       return (
                         <div
                           key={indexEval}
-                          className="rounded-md overflow-clip text-[14px]"
-                          style={{
-                            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-                          }}
+                          className="rounded-md overflow-clip  text-[14px] mx-2 border"
                         >
-                          <div className="bg-bgTableHeader px-4 py-2 flex justify-between items-center font-medium text-secondary ">
-                            <div>
-                              <p>
-                                {evaluation?.topicTH} | {evaluation?.topicEN}
-                              </p>
-                              <p>
-                                Description:{" "}
-                                {evaluation?.desc?.length
-                                  ? evaluation.desc
-                                  : "-"}
-                              </p>
-                            </div>
+                          <div className=" px-6  flex justify-between items-center font-medium text-secondary ">
                             {tqf5.method == METHOD_TQF5.MANUAL && (
-                              <Button
-                                className="text-center px-3"
-                                onClick={() =>
-                                  form.insertListItem(
-                                    `data.${indexClo}.assignments.${indexEval}.questions`,
-                                    ""
-                                  )
-                                }
-                              >
-                                <Icon IconComponent={IconAdd} />
-                              </Button>
+                              <div className=" py-3 w-full flex justify-between items-center font-medium text-secondary ">
+                                <div className="flex flex-col">
+                                <p>
+                                  {evaluation?.topicTH} | {evaluation?.topicEN}
+                                </p>
+                                <p>
+                                  Description:{" "}
+                                  {evaluation?.desc?.length
+                                    ? evaluation.desc
+                                    : "-"}
+                                </p>
+                                </div>
+                                <Button
+                                  className="text-center px-3"
+                                  onClick={() =>
+                                    form.insertListItem(
+                                      `data.${indexClo}.assignments.${indexEval}.questions`,
+                                      ""
+                                    )
+                                  }
+                                >
+                                  <Icon IconComponent={IconAdd} />
+                                </Button>{" "}
+                              </div>
                             )}
                           </div>
                           {tqf5.method == METHOD_TQF5.MANUAL ? (
@@ -179,7 +180,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                                 key={form.key(
                                   `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
                                 )}
-                                className="flex px-4 py-4 justify-between items-center"
+                                className="flex px-4 pt-2 pb-4 justify-between items-center"
                               >
                                 <div className="flex w-[95%] gap-2 items-center">
                                   <p>{indexQues + 1}.</p>
@@ -206,7 +207,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                                 >
                                   <Icon
                                     IconComponent={IconTrash}
-                                    className="stroke-[2px] size-5"
+                                    className="stroke-[1.5px] size-5"
                                   />
                                 </Button>
                               </div>
@@ -226,7 +227,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                                     key={indexAssign}
                                     className="flex flex-col gap-2 mb-2"
                                   >
-                                    <p className="bg-disable px-4 py-2">
+                                    <p className=" bg-bgTableHeader font-semibold text-secondary px-4 py-3">
                                       {assign}
                                     </p>
                                     {questions?.map((ques, indexQues) => (
@@ -258,7 +259,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                 );
               })}
             </div>
-            <div className="min-w-fit px-2 mt-3 flex flex-col">
+            <div className="min-w-[70px] px-2 mt-1 flex flex-col">
               {tqf3.part2?.clo.map((item, index) => (
                 <div
                   key={index}
@@ -285,20 +286,25 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
           <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
             <div className="flex justify-center  h-full items-start gap-2 flex-col">
               <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-                Setup Evaluation Mapping 
+                Setup Evaluation Mapping
               </p>
               <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-              Map the course evaluation to the assignments you upload in this course <br/> to ensure accurate assessment and analysis.
+                Map the course evaluation to the assignments you upload in this
+                course <br /> to ensure accurate assessment and analysis.
               </p>
               {tqf5.method == METHOD_TQF5.SCORE_OBE && (
-                <Button className="mt-3" onClick={() => setOpenModalAssignmentMapping(true)}>
+                <Button
+                  className="mt-3"
+                  onClick={() => setOpenModalAssignmentMapping(true)}
+                >
+                  <Icon className="mr-2" IconComponent={IconOneToMany} />
                   Evaluation Mapping
                 </Button>
               )}
             </div>
             <img
-              className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
-              src={unplug}
+              className=" z-50  w-[38vw] "
+              src={pictureTQF5}
               alt="loginImage"
             />
           </div>

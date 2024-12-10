@@ -4,9 +4,11 @@ import { Alert, Button, Group, Modal, Radio, Tabs } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconCheck from "@/assets/icons/Check.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
-import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconOneToMany from "@/assets/icons/onetomany.svg?react";
+import IconHorizontalAdjustments from "@/assets/icons/horizontalAdjustments.svg?react";
 import { useParams, useSearchParams } from "react-router-dom";
 import unplug from "@/assets/image/unplug.png";
+import pictureTQF5 from "@/assets/image/TQF5.jpg";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
 import { getValueEnumByKey } from "@/helpers/functions/function";
 import { UseFormReturnType } from "@mantine/form";
@@ -249,9 +251,9 @@ export default function TQF5() {
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Change Method successfully",
-        `now method TQF5 is ${method ?? selectedMethod}.`
+        `Method TQF 5 is ${method ?? selectedMethod}.`
       );
-      setOpenMainPopupConfirmChange(false);
+      setOpenModalChangeMethod(false);
     }
   };
 
@@ -296,8 +298,8 @@ export default function TQF5() {
         opened={openModalChangeMethod}
         onClose={() => setOpenModalChangeMethod(false)}
         centered
-        size="500"
-        title="Change Method"
+        size="50vw"
+        title="Method to evaluate TQF 5"
         transitionProps={{ transition: "pop" }}
       >
         <div className="flex flex-col gap-5 justify-between ">
@@ -306,13 +308,18 @@ export default function TQF5() {
               radius="md"
               icon={<Icon IconComponent={IconInfo2} />}
               variant="light"
-              color='orange'
-              className="mb-5"
+              color="orange"
+              className="mb-3"
               classNames={{
                 icon: "size-6",
                 body: " flex justify-center",
               }}
-              title={<p>Just a heads up, changing the method will impact TQF 5 Part 2 and 3.</p>}
+              title={
+                <p>
+                  Changing the method will be removed your changes in TQF 5
+                  Parts 2 and 3
+                </p>
+              }
             ></Alert>
             <Radio.Group
               classNames={{ label: "font-semibold" }}
@@ -331,14 +338,23 @@ export default function TQF5() {
                       : "border"
                   }`}
                 >
-                  <Group wrap="nowrap" align="flex-start" className=" flex items-center">
+                  <Group
+                    wrap="nowrap"
+                    align="flex-start"
+                    className=" flex items-center"
+                  >
                     <Radio.Indicator />
                     <div>
-                      <p className="text-b2 font-semibold">
-                        {METHOD_TQF5.SCORE_OBE}
-                      </p>
+                      <span className=" font-semibold text-b2 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                        ScoreOBE+
+                      </span>
                       <p className="text-b3">
-                        The smartest way to evaluate and analyze your TQF 5
+                        The
+                        <span className=" text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                          {" "}
+                          smartest
+                        </span>{" "}
+                        way to evaluate and analyze your TQF 5
                       </p>
                     </div>
                   </Group>
@@ -354,12 +370,14 @@ export default function TQF5() {
                       : "border"
                   }`}
                 >
-                  <Group wrap="nowrap" align="flex-start" className=" flex items-center">
+                  <Group
+                    wrap="nowrap"
+                    align="flex-start"
+                    className=" flex items-center"
+                  >
                     <Radio.Indicator />
                     <div>
-                      <p className="text-b2 font-semibold">
-                        {METHOD_TQF5.MANUAL}
-                      </p>
+                      <span className="text-b2 font-semibold">Manual</span>
                       <p className="text-b3">
                         Customize all data what you want
                       </p>
@@ -369,13 +387,19 @@ export default function TQF5() {
               </Group>
             </Radio.Group>
           </div>
-          <div className="flex justify-end">
+          <div className="flex gap-2 mt-2 justify-end">
             <Button
-              className="font-bold"
+              variant="subtle"
+              onClick={() => {
+                setOpenModalChangeMethod(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
               disabled={selectedMethod === tqf5.method}
               onClick={() => {
-                setOpenMainPopupConfirmChange(true);
-                setOpenModalChangeMethod(false);
+                onChangeMethod();
               }}
             >
               Confirm
@@ -383,37 +407,6 @@ export default function TQF5() {
           </div>
         </div>
       </Modal>
-      <MainPopup
-        opened={openMainPopupConfirmChange}
-        onClose={() => setOpenMainPopupConfirmChange(false)}
-        action={() => onChangeMethod()}
-        type="warning"
-        labelButtonRight={`Switch to ${selectedMethod} ${
-          selectedMethod !== "Manual" ? "+" : ""
-        }`}
-        title={`Your changes will be lost`}
-        message={
-          <>
-            <Alert
-              variant="light"
-              color="orange"
-              title={
-                <p>
-                  Head Up!{" "}
-                  <span className="text-[#CD5E00]">
-                    {" "}
-                    Switch to {selectedMethod}
-                  </span>{" "}
-                  will be removed your save in TQF 5 Parts 2 & 3. Are you sure
-                  you want to switch?
-                </p>
-              }
-              icon={<Icon IconComponent={IconExclamationCircle} />}
-              classNames={{ icon: "size-6" }}
-            ></Alert>
-          </>
-        }
-      />
       <ModalMappingAssignment
         opened={openModalAssignmentMapping}
         onClose={() => setOpenModalAssignmentMapping(false)}
@@ -456,35 +449,30 @@ export default function TQF5() {
               </div>
               {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
                 <div className="flex gap-2 items-center">
-                  {tqf5Part == "part2" &&
-                    !!tqf5.assignmentsMap?.length &&
-                    tqf5.method == METHOD_TQF5.SCORE_OBE && (
-                      <Button
-                        onClick={() => setOpenModalAssignmentMapping(true)}
-                      >
-                        Evaluation Mapping
-                      </Button>
-                    )}
-
                   <Button
                     variant="outline"
                     onClick={() => {
                       if (tqf5.method) setSelectedMethod(tqf5.method);
                       setOpenModalChangeMethod(true);
                     }}
-                    className="flex flex-col items-start !justify-start text-left"
+                    className="flex"
                   >
-                    <div className="flex items-center gap-2">
-                      <div className="flex flex-col gap-1 font-semibold">
-                        <p className="text-[13px]">
-                          Method{" "}
-                          <span className="font-medium">
-                            ({tqf5.method})
-                          </span>
-                        </p>
-                      </div>
-                    </div>
+                    <Icon
+                      className="mr-2"
+                      IconComponent={IconHorizontalAdjustments}
+                    />
+                    Method ({tqf5.method})
                   </Button>
+                  {tqf5Part == "part2" &&
+                    !!tqf5.assignmentsMap?.length &&
+                    tqf5.method == METHOD_TQF5.SCORE_OBE && (
+                      <Button
+                        onClick={() => setOpenModalAssignmentMapping(true)}
+                      >
+                        <Icon className="mr-2" IconComponent={IconOneToMany} />
+                        Evaluation Mapping
+                      </Button>
+                    )}
                 </div>
               )}
             </div>
@@ -520,30 +508,110 @@ export default function TQF5() {
                   <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
                     <div className="flex justify-center  h-full items-start gap-2 flex-col">
                       <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-                        Choose method to evaluate TQF5 First
+                        Select method to evaluate TQF 5
                       </p>
                       <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-                        To start TQF5 Part 2, please choose method to evaluate.{" "}
-                        <br />
-                        Once done, you can continue to do it.
+                        To start TQF5 Part 2, please seleect method to evaluate.{" "}
                       </p>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          onClick={() => onChangeMethod(METHOD_TQF5.MANUAL)}
+
+                      <div className="flex flex-col mt-3 w-[410px]">
+                        <Radio.Group
+                          classNames={{ label: "font-semibold" }}
+                          value={selectedMethod}
+                          onChange={setSelectedMethod as any}
                         >
-                          {METHOD_TQF5.MANUAL}
-                        </Button>
-                        <Button
-                          onClick={() => onChangeMethod(METHOD_TQF5.SCORE_OBE)}
-                        >
-                          {METHOD_TQF5.SCORE_OBE}
-                        </Button>
+                          <Group mb={2}>
+                            <Radio.Card
+                              value={METHOD_TQF5.SCORE_OBE}
+                              style={{
+                                boxShadow:
+                                  "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
+                              }}
+                              className={`p-4 flex flex-col rounded-md ${
+                                selectedMethod === METHOD_TQF5.SCORE_OBE
+                                  ? "border-2 border-secondary"
+                                  : "border"
+                              }`}
+                            >
+                              <Group
+                                wrap="nowrap"
+                                align="flex-start"
+                                className="flex items-center"
+                              >
+                                <Radio.Indicator />
+                                <div>
+                                  <span className=" font-semibold text-b1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                                    ScoreOBE+{" "}
+                                  </span>
+                                  <p className="text-b3">
+                                    The{" "}
+                                    <span className=" text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                                      {" "}
+                                      smartest
+                                    </span>{" "}
+                                    way to evaluate and analyze your TQF 5
+                                  </p>
+                                </div>
+                              </Group>
+                            </Radio.Card>
+                            <Radio.Card
+                              value={METHOD_TQF5.MANUAL}
+                              style={{
+                                boxShadow:
+                                  "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
+                              }}
+                              className={`p-4 flex flex-col rounded-md ${
+                                selectedMethod === METHOD_TQF5.MANUAL
+                                  ? "border-2 border-secondary"
+                                  : "border"
+                              }`}
+                            >
+                              <Group
+                                wrap="nowrap"
+                                align="flex-start"
+                                className="flex items-center"
+                              >
+                                <Radio.Indicator />
+                                <div>
+                                  <p className="text-b1 font-semibold">
+                                    {METHOD_TQF5.MANUAL}
+                                  </p>
+                                  <p className="text-b3">
+                                    Customize all data what you want
+                                  </p>
+                                </div>
+                              </Group>
+                            </Radio.Card>
+                          </Group>
+                        </Radio.Group>
+
+                        {selectedMethod && (
+                          <Button
+                            onClick={() => onChangeMethod(selectedMethod)}
+                            className="!w-full mt-5 !text-[14px] !font-bold !text-[#1f69f3] !h-10"
+                            variant="light"
+                          >
+                            Get Start
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="15"
+                              height="15"
+                              viewBox="0 0 15 15"
+                              fill="none"
+                              className=" ml-3 "
+                            >
+                              <path
+                                d="M0.9375 8.4373L12.0563 8.4373L8.65312 12.5248C8.49399 12.7163 8.41744 12.9631 8.44029 13.211C8.46315 13.4589 8.58355 13.6875 8.775 13.8467C8.96645 14.0058 9.21328 14.0824 9.46118 14.0595C9.70908 14.0367 9.93775 13.9163 10.0969 13.7248L14.7844 8.0998C14.8159 8.05506 14.8441 8.00806 14.8688 7.95918C14.8688 7.9123 14.8687 7.88418 14.9344 7.8373C14.9769 7.72981 14.9991 7.61539 15 7.4998C14.9991 7.38422 14.9769 7.2698 14.9344 7.1623C14.9344 7.11543 14.9344 7.0873 14.8688 7.04043C14.8441 6.99155 14.8159 6.94454 14.7844 6.8998L10.0969 1.2748C10.0087 1.16898 9.89835 1.08387 9.77358 1.02554C9.64882 0.967205 9.51273 0.937079 9.375 0.937304C9.15595 0.936875 8.94367 1.01316 8.775 1.15293C8.68007 1.23163 8.6016 1.32829 8.54408 1.43736C8.48656 1.54644 8.45113 1.66579 8.43981 1.78858C8.42849 1.91137 8.4415 2.03519 8.47811 2.15294C8.51471 2.27069 8.57419 2.38007 8.65312 2.4748L12.0563 6.5623L0.9375 6.5623C0.68886 6.5623 0.450402 6.66108 0.274587 6.83689C0.0987711 7.01271 0 7.25116 0 7.4998C0 7.74844 0.0987711 7.9869 0.274587 8.16272C0.450402 8.33853 0.68886 8.4373 0.9375 8.4373Z"
+                                fill="#1f69f3"
+                              />
+                            </svg>
+                          </Button>
+                        )}
                       </div>
                     </div>
                     <img
-                      className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
-                      src={unplug}
+                      className=" z-50  w-[38vw] "
+                      src={pictureTQF5}
                       alt="loginImage"
                     />
                   </div>
