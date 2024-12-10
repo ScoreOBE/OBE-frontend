@@ -210,7 +210,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             }}
           >
             <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] py-3 px-5 text-secondary font-semibold">
-              <Icon IconComponent={IconCalendar} /> Added Semester
+              <Icon IconComponent={IconCalendar} className="stroke-secondary" /> Added Semester
             </div>
             {/* Show List Of Semester */}
             <div className="flex flex-col gap-2  w-full h-[350px]  p-4  overflow-y-hidden">

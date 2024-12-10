@@ -365,8 +365,8 @@ export default function Roster() {
               <Table.Tbody>{rows}</Table.Tbody>
             </Table>
           ) : (
-            <div className="flex items-center !h-screen  justify-between px-8 !w-full">
-              <p className="text-start font-semibold text-[20px] text-secondary p-6 py-10">
+            <div className="flex items-center !h-screen  justify-between px-10 !w-full">
+              <p className="text-start font-semibold text-[20px] text-secondary px-6 -translate-y-1 py-10">
                 {search
                   ? `No results for "${filter}"`
                   : "No Course Roster found"}
@@ -390,7 +390,7 @@ export default function Roster() {
                 )}
               </p>
 
-              <div className="h-full  w-[20vw] justify-center flex flex-col">
+              <div className="h-full  w-[24vw] m-6 justify-center -translate-y-1 flex flex-col">
                 <img src={notFoundImage} alt="notFound"></img>
               </div>
             </div>

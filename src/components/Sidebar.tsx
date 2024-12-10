@@ -224,6 +224,7 @@ export default function Sidebar() {
             <Alert
               variant="light"
               color="red"
+              className="mb-3"
               title={` After you leave ${course?.courseNo} course, you won't have access to Evaluations, Score, TQF document and Grades in this course `}
               icon={
                 <Icon

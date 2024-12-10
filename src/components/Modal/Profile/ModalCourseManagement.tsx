@@ -337,7 +337,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
         autoFocus={false}
         fullScreen={true}
         zIndex={50}
-        classNames={{ content: "!pt-0" }}
+        classNames={{ content: "!pt-0 !bg-[#fafafa]" }}
       >
         <Modal.Overlay />
         <Modal.Content className="overflow-hidden !rounded-none !px-0">
@@ -516,10 +516,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                 {courseManagement.courseManagements.map((course, index) => (
                   <div
                     key={index}
-                    className="bg-[#ffffff] rounded-md flex flex-col py-4 px-5"
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                    }}
+                    className="bg-[#ffffff] border-[2px] rounded-md flex flex-col py-4 px-5"
+                 
                   >
                     {/* Course Topic */}
                     <div className="gap-2 mb-3 flex items-center w-full justify-between">
