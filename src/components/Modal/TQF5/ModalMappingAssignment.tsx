@@ -1,4 +1,4 @@
-import { Modal, Alert, MultiSelect, Group, Button } from "@mantine/core";
+import { Modal, Alert, MultiSelect, Group, Button, Table } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconArrowMapping from "@/assets/icons/arrowMapping.svg?react";
@@ -82,7 +82,7 @@ export default function ModalMappingAssignment({
       onClose={onClose}
       closeOnClickOutside={false}
       centered
-      size="46vw"
+      size="70vw"
       title="Evaluation Mapping"
       transitionProps={{ transition: "pop" }}
     >
@@ -92,60 +92,82 @@ export default function ModalMappingAssignment({
           icon={<Icon IconComponent={IconInfo2} />}
           variant="light"
           color="blue"
-          className="mb-5"
+          className="mb-3"
           classNames={{
             icon: "size-6",
             body: " flex justify-center",
           }}
           title={
             <p>
-              Course Evaluation Topics can be mapped to multiple assignment.
+            Each Course Evluation must be linked to at least one assignment
             </p>
           }
         ></Alert>
-        <div
-          className="bg-white px-5 pt-5 pb-2 rounded-lg"
-          style={{
-            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-          }}
-        >
-          <div className=" text-[15px] rounded-lg w-full h-fit px-8 mb-4 flex justify-between font-semibold text-secondary">
-            <p className="text-[#575757]">From: Course Evaluation</p>
-            <p className="w-[280px]">To: Assignment</p>
-          </div>
-          {tqf3?.part3?.eval.map((eva, index) => {
-            return (
-              <div
-                key={eva.id}
-                className="bg-[#F3F3F3] rounded-lg w-full h-fit px-8 py-4 mb-4 flex justify-between items-center"
-              >
-                <div className="text-[13px] w-[30%]">
-                  <p>{eva.topicTH}</p>
-                  <p>{eva.topicEN}</p>
-                </div>
-                <Icon
-                  IconComponent={IconArrowMapping}
-                  className="text-[#9C9C9C]"
-                />
-                <MultiSelect
-                  className="w-[280px]"
-                  data={assignments?.map((item) => ({
-                    value: item.name,
-                    label: item.name,
-                    disabled: form
-                      .getValues()
-                      .assignments.flatMap((item) => item.assignment)
-                      .includes(item.name),
-                  }))}
-                  classNames={{ pill: "bg-secondary text-white font-medium" }}
-                  {...form.getInputProps(`assignments.${index}.assignment`)}
-                />
-              </div>
-            );
-          })}
+        <div className="flex flex-col max-h-[520px] h-fit rounded-lg border overflow-y-auto border-secondary">
+          <Table
+            verticalSpacing="sm"
+            stickyHeader
+            className="bg-white   rounded-lg"
+            style={{
+              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+            }}
+            striped
+          >
+            <Table.Thead>
+              <Table.Tr className="bg-[#e5e7f6] border-b-[1px] border-secondary">
+                <Table.Th className=" w-[40%] items-center justify-center text-start ">
+                  From: Course Evaluation
+                </Table.Th>
+                <Table.Th className="w-[4%]"></Table.Th>
+                <Table.Th className="items-center justify-center w-[56%]  text-start">
+                  To: Assignment
+                </Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+
+            <Table.Tbody className="justify-center items-center text-center">
+              {tqf3?.part3?.eval.map((eva, index) => (
+                <Table.Tr
+                  className="font-medium text-default text-[13px]"
+                  key={eva.id}
+                >
+                  <Table.Td className="text-start ">
+                    <p className="ml-4">{eva.topicTH}</p>
+                    <p className="ml-4">{eva.topicEN}</p>
+                  </Table.Td>
+                  <Table.Td>
+                    {" "}
+                    <Icon
+                      IconComponent={IconArrowMapping}
+                      className="text-secondary size-10"
+                    />
+                  </Table.Td>
+                  <Table.Td>
+                    <MultiSelect
+                      className="w-full"
+                      data={assignments?.map((item) => ({
+                        value: item.name,
+                        label: item.name,
+                        disabled: form
+                          .getValues()
+                          .assignments.flatMap(
+                            (assignment) => assignment.assignment
+                          )
+                          .includes(item.name),
+                      }))}
+                      classNames={{
+                        pill: "bg-secondary text-white font-medium",
+                      }}
+                      {...form.getInputProps(`assignments.${index}.assignment`)}
+                    />
+                  </Table.Td>
+                </Table.Tr>
+              ))}
+            </Table.Tbody>
+          </Table>
         </div>
 
-        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end  justify-end h-fit mt-4">
+        <div className="flex gap-2 mt-5 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8  items-end  justify-end h-fit">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
             <Button onClick={onClose} variant="subtle">
               Cancel

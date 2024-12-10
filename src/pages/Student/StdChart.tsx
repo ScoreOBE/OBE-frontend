@@ -94,7 +94,7 @@ export default function StdChart() {
         <div className="flex overflow-y-auto overflow-x-hidden max-w-full h-full">
           {course?.section?.assignments?.length !== 0 ? (
             <div className="flex gap-6 w-full h-full">
-              <div className="gap-4 flex flex-col my-2 min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
+              <div className="gap-5 flex flex-col my-2 min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
                 {course?.section &&
                   course.section.assignments?.map((item, i) => {
                     const studentScore = course.scores
@@ -102,10 +102,7 @@ export default function StdChart() {
                       ?.questions.reduce((a, { score }) => a + score, 0);
                     return (
                       <div
-                        style={{
-                          boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                        }}
-                        className={`last:mb-4 flex px-2 flex-col rounded-md gap-10 py-2 ${
+                        className={`last:mb-4 flex px-2 border flex-col rounded-md gap-10 py-2 ${
                           activeSection === i ? "active" : ""
                         }`}
                         id={`${item.name}`}

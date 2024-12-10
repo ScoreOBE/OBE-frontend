@@ -11,6 +11,9 @@ import { IModelTQF5Part1 } from "@/models/ModelTQF5";
 import ModalUploadGrade from "../Modal/Score/ModalUploadGrade";
 import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF5 } from "@/store/tqf5";
+import {
+  getSectionNo,
+} from "@/helpers/functions/function";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -121,7 +124,6 @@ export default function Part1TQF5({ setForm }: Props) {
                 leftSection={
                   <Icon IconComponent={IconUpload} className="size-4" />
                 }
-                className="font-bold"
                 onClick={() => setOpenModalUploadGrade(true)}
               >
                 Upload Grade Sheet
@@ -133,7 +135,6 @@ export default function Part1TQF5({ setForm }: Props) {
                     className="size-4"
                   />
                 }
-                className="font-bold"
                 color={isEditCourseEval ? "#0eb092" : "#ee933e"}
                 onClick={() => setIsEditCourseEval(!isEditCourseEval)}
               >
@@ -149,7 +150,7 @@ export default function Part1TQF5({ setForm }: Props) {
           >
             <Table stickyHeader striped>
               <Table.Thead>
-                <Table.Tr className="bg-[#e5e7f6] border-b-[1px] border-secondary">
+                <Table.Tr className=" border-b-[1px] border-secondary">
                   <Table.Th
                     className="!rounded-tl-[8px] items-center justify-center  text-center !rounded-tr-[8px] w-full"
                     colSpan={15}
@@ -157,7 +158,7 @@ export default function Part1TQF5({ setForm }: Props) {
                     จำนวนนักศึกษา (Number of Students)
                   </Table.Th>
                 </Table.Tr>
-                <Table.Tr className="bg-[#e5e7f6]">
+                <Table.Tr>
                   <Table.Th className=" w-[10%]">Section</Table.Th>
                   <Table.Th className=" w-[6%]">A</Table.Th>
                   <Table.Th className=" w-[6%]">B+</Table.Th>
@@ -199,7 +200,7 @@ export default function Part1TQF5({ setForm }: Props) {
                       className="font-medium text-default text-[13px]"
                       key={item.sectionNo}
                     >
-                      <Table.Td>{item.sectionNo}</Table.Td>
+                      <Table.Td>{getSectionNo(item.sectionNo)}</Table.Td>
                       {Object.keys(item)
                         .slice(1)
                         .map((key) => (
@@ -269,7 +270,6 @@ export default function Part1TQF5({ setForm }: Props) {
                   className="size-4"
                 />
               }
-              className="font-bold"
               color={isEditCriteria ? "#0eb092" : "#ee933e"}
               onClick={() => setIsEditCriteria(!isEditCriteria)}
             >

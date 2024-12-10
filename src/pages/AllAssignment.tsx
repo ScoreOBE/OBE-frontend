@@ -907,7 +907,7 @@ export default function AllAssignment() {
                 <Tabs.Panel value="charts">
                   <div className="flex overflow-y-auto overflow-x-hidden max-w-full h-full">
                     <div className="flex gap-6 w-full h-full">
-                      <div className="gap-4 flex flex-col min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
+                      <div className="gap-5 flex flex-col min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
                         {allAssignments.map((item, i) => {
                           const students =
                             course?.sections
@@ -915,11 +915,8 @@ export default function AllAssignment() {
                               .flat() || [];
                           return (
                             <div
-                              style={{
-                                boxShadow:
-                                  "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                              }}
-                              className={`last:mb-4 flex px-2 flex-col rounded-md gap-10 py-2 ${
+                           
+                              className={`last:mb-4 flex px-2 border flex-col rounded-md gap-10 py-2 ${
                                 activeSection === i ? "active" : ""
                               }`}
                               id={`${item.name}`}
