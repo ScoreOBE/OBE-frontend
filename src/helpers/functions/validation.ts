@@ -13,13 +13,13 @@ export const checkTokenExpired = async (token: string) => {
   try {
     const decode = await JSON.parse(atob(token.split(".")[1]));
     // check expired
-    if (decode.exp * 1000 < new Date().getTime()) {
+    if (decode.exp * 1000 <= new Date().getTime()) {
       return true;
     }
     return false;
   } catch (err) {
     // token invalid
-    return false;
+    return true;
   }
 };
 
@@ -40,11 +40,11 @@ export const isValidResponse = async (res: any) => {
         break;
       case STATUS_CODE.FORBIDDEN:
       case STATUS_CODE.UNAUTHORIZED:
-        const checkToken = await checkTokenExpired(
+        const isExpired = await checkTokenExpired(
           localStorage.getItem("token") || ""
         );
-        if (localStorage.getItem("token") && !checkToken) {
-          localStorage.clear();
+        if (localStorage.getItem("token") && isExpired) {
+          localStorage.removeItem("token");
           window.location.assign(ROUTE_PATH.LOGIN);
           return;
         }
