@@ -35,7 +35,6 @@ import { isEmpty, isEqual } from "lodash";
 import { changeMethodTQF5, saveTQF5 } from "@/services/tqf5/tqf5.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { getOnePLO } from "@/services/plo/plo.service";
-import MainPopup from "@/components/Popup/MainPopup";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import ModalMappingAssignment from "@/components/Modal/TQF5/ModalMappingAssignment";
 
@@ -61,8 +60,6 @@ export default function TQF5() {
   );
   const [selectedMethod, setSelectedMethod] = useState<METHOD_TQF5>();
   const [openModalChangeMethod, setOpenModalChangeMethod] = useState(false);
-  const [openMainPopupConfirmChange, setOpenMainPopupConfirmChange] =
-    useState(false);
   const [openModalAssignmentMapping, setOpenModalAssignmentMapping] =
     useState(false);
   const partTab = [
@@ -140,14 +137,27 @@ export default function TQF5() {
       getOneCourseManagement(courseNo!),
     ]);
     if (dashboard == ROLE.ADMIN) {
-      resCourse = courseAdmin;
+      resCourse = courseAdmin!;
     }
     if (resCourse) {
       if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
         const section = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf5.topic
         );
-        setAssignments(section?.assignments || []);
+        setAssignments(
+          Array.from(
+            resCourse.sections
+              .filter((sec: any) => sec.topic == tqf5.topic)
+              .flatMap((sec: any) => sec.assignments)
+              .reduce((map: any, assignment: any) => {
+                if (!map.has(assignment.name)) {
+                  map.set(assignment.name, assignment);
+                }
+                return map;
+              }, new Map<string, IModelAssignment>())
+              .values()
+          )
+        );
 
         const sectionTdf5 = section?.TQF5;
         setTqf3(section?.TQF3);
@@ -176,6 +186,19 @@ export default function TQF5() {
         const ploRequire = resPloRequired?.ploRequire.find(
           (plo: any) => plo.plo == tqf5.coursePLO?.id
         )?.list;
+        setAssignments(
+          Array.from(
+            resCourse.sections
+              .flatMap((sec: any) => sec.assignments!)
+              .reduce((map: any, assignment: any) => {
+                if (!map.has(assignment.name)) {
+                  map.set(assignment.name, assignment);
+                }
+                return map;
+              }, new Map<string, IModelAssignment>())
+              .values()
+          )
+        );
         setTqf3(resCourse.TQF3);
         setTqf5Original({
           topic: tqf5.topic,
