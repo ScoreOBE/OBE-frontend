@@ -8,12 +8,13 @@ import store from "@/store";
 import { setErrorResponse } from "@/store/errorResponse";
 import { isNumber } from "lodash";
 import { ROUTE_PATH } from "../constants/route";
+import { jwtDecode } from "jwt-decode";
 
-export const checkTokenExpired = async (token: string) => {
+export const checkTokenExpired = (token: string) => {
   try {
-    const decode = await JSON.parse(atob(token.split(".")[1]));
+    const decode: any = jwtDecode(token);
     // check expired
-    if (decode.exp * 1000 <= new Date().getTime()) {
+    if (decode.exp * 1000 <= new Date().getTime() || !decode.role) {
       return true;
     }
     return false;
