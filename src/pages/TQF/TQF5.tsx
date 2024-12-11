@@ -321,7 +321,7 @@ export default function TQF5() {
         opened={openModalChangeMethod}
         onClose={() => setOpenModalChangeMethod(false)}
         centered
-        size="50vw"
+        size="41vw"
         title="Method to evaluate TQF 5"
         transitionProps={{ transition: "pop" }}
       >

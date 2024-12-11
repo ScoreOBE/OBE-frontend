@@ -82,7 +82,7 @@ export default function ModalMappingAssignment({
       onClose={onClose}
       closeOnClickOutside={false}
       centered
-      size="70vw"
+      size="55vw"
       title="Evaluation Mapping"
       transitionProps={{ transition: "pop" }}
     >
@@ -99,10 +99,11 @@ export default function ModalMappingAssignment({
           }}
           title={
             <p>
-            Each Course Evluation must be linked to at least one assignment
+              Each Course Evluation must be linked to at least one assignment
             </p>
           }
         ></Alert>
+
         <div className="flex flex-col max-h-[520px] h-fit rounded-lg border overflow-y-auto border-secondary">
           <Table
             verticalSpacing="sm"
@@ -142,9 +143,8 @@ export default function ModalMappingAssignment({
                       className="text-secondary size-10"
                     />
                   </Table.Td>
-                  <Table.Td>
+                  <Table.Td className="pr-7">
                     <MultiSelect
-                      className="w-full"
                       data={assignments?.map((item) => ({
                         value: item.name,
                         label: item.name,
@@ -158,6 +158,7 @@ export default function ModalMappingAssignment({
                       classNames={{
                         pill: "bg-secondary text-white font-medium",
                       }}
+                      className="w-full"
                       {...form.getInputProps(`assignments.${index}.assignment`)}
                     />
                   </Table.Td>
