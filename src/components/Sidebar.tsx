@@ -28,7 +28,7 @@ import { useEffect } from "react";
 import { setAllCourseList } from "@/store/allCourse";
 import { goToDashboard, sortData } from "@/helpers/functions/function";
 import { getDepartment } from "@/services/faculty/faculty.service";
-import { setDepartment } from "@/store/department";
+import { setDepartment, setFaculty } from "@/store/faculty";
 import StdCourseSidebar from "./Sidebar/StdCourseSidebar";
 import { setEnrollCourseList } from "@/store/enrollCourse";
 import { getEnrollCourse } from "@/services/student/student.service";
@@ -106,6 +106,7 @@ export default function Sidebar() {
           user.departmentCode.includes(e.codeEN)
         );
       }
+      dispatch(setFaculty({ ...res }));
       dispatch(
         setDepartment([
           { departmentEN: "All Courses", codeEN: "All Courses" },

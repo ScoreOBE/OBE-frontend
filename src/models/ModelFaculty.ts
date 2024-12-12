@@ -7,6 +7,7 @@ export interface IModelFaculty {
   codeEN: string;
   codeTH: string;
   department: IModelDepartment[];
+  curriculum: IModelCurriculum[];
 }
 
 export interface IModelDepartment {
@@ -15,4 +16,10 @@ export interface IModelDepartment {
   courseCode: number;
   codeEN: string;
   codeTH: string;
+}
+
+export interface IModelCurriculum {
+  nameTH: string;
+  nameEN: string;
+  code: string;
 }

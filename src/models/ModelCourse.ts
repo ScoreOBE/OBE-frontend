@@ -18,6 +18,7 @@ export interface IModelCourse {
 export interface IModelSection {
   id: string;
   sectionNo: number;
+  curriculum?: string;
   topic?: string;
   semester?: number[] | string[];
   openThisTerm?: boolean;

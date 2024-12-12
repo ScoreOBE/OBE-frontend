@@ -11,6 +11,7 @@ import {
   Menu,
   Alert,
   Chip,
+  Select,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Icon from "@/components/Icon";
@@ -59,6 +60,9 @@ export default function ModalAddSection({
 }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const curriculum = useAppSelector(
+    (state) => state.faculty.faculty.curriculum
+  );
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
   const [active, setActive] = useState(0);
@@ -544,6 +548,13 @@ export default function ModalAddSection({
                   </span>
                   <div className="w-full justify-center  border-b-2  pr-[18px] pt-4 pb-1  flex flex-col ">
                     <div className="gap-2 flex flex-col">
+                      <Select
+                        label="Curriculum"
+                        size="xs"
+                        data={curriculum?.map(({ code }) => code)}
+                        classNames={{ input: "focus:border-primary" }}
+                        {...form.getInputProps(`sections.${index}.curriculum`)}
+                      />
                       <span className="font-medium text-default text-b2 ">
                         Repeat on semester
                       </span>{" "}

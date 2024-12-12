@@ -4,6 +4,7 @@ import {
   FocusTrapInitialFocus,
   Group,
   Modal,
+  Select,
   Switch,
   TextInput,
 } from "@mantine/core";
@@ -47,6 +48,9 @@ export default function ModalEditSection({
   fetchOneCourse = () => {},
 }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const curriculum = useAppSelector(
+    (state) => state.faculty.faculty.curriculum
+  );
   const dispatch = useAppDispatch();
   const [openThisTerm, setOpenThisTerm] = useState(false);
   const [semester, setSemester] = useState<string[]>([]);
@@ -97,6 +101,9 @@ export default function ModalEditSection({
     }
     payload.data.sectionNo = parseInt(form.getValues().sectionNo?.toString()!);
     payload.data.semester = semester.map((term) => parseInt(term));
+    if (form.getValues().curriculum?.length) {
+      payload.data.curriculum = form.getValues().curriculum;
+    }
     const id = payload.id;
     delete payload.id;
     let res;
@@ -178,6 +185,14 @@ export default function ModalEditSection({
           maxLength={3}
           classNames={{ input: "focus:border-primary" }}
           {...form.getInputProps("sectionNo")}
+        />
+        <Select
+          label="Curriculum"
+          size="xs"
+          data={curriculum?.map(({ code }) => code)}
+          classNames={{ input: "focus:border-primary" }}
+          value={form.getValues().curriculum}
+          {...form.getInputProps("curriculum")}
         />
         <div
           style={{

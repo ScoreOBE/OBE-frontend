@@ -11,6 +11,7 @@ import {
   Menu,
   Chip,
   Alert,
+  Select,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
@@ -55,6 +56,9 @@ export default function ModalAddCourse({
 }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const curriculum = useAppSelector(
+    (state) => state.faculty.faculty.curriculum
+  );
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
   const [active, setActive] = useState(0);
@@ -614,6 +618,13 @@ export default function ModalAddCourse({
                   </span>
                   <div className="w-full justify-center pr-[18px] border-b-2 pt-1 pb-5   flex flex-col ">
                     <div className="gap-2 flex flex-col">
+                      <Select
+                        label="Curriculum"
+                        size="xs"
+                        data={curriculum?.map(({ code }) => code)}
+                        classNames={{ input: "focus:border-primary" }}
+                        {...form.getInputProps(`sections.${index}.curriculum`)}
+                      />
                       <span className="font-medium text-default text-b2 ">
                         Repeat on semester
                       </span>
