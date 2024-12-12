@@ -37,6 +37,14 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
   const form = useForm({
     mode: "controlled",
     initialValues: { data: [] as IModelTQF5Part2[] },
+    validate: {
+      data: {
+        assignments: {
+          questions: (value) =>
+            !value.length && "Please input at least one question.",
+        },
+      },
+    },
     validateInputOnBlur: true,
     onValuesChange(values, previous) {
       if (!isEqual(values, previous)) {
@@ -80,7 +88,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
         },
         {
           root: null,
-          threshold: 0.9,
+          threshold: 0.6,
         }
       );
 
@@ -116,7 +124,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                 const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
                 return (
                   <div
-                    className={` flex flex-col  border-b-[2px] last:border-none  gap-5 px-2 pb-6 first:pt-3 ${
+                    className={` flex flex-col border-b-[2px] last:border-none  gap-5 px-2 pb-6 first:pt-3 ${
                       activeSection === indexClo ? "active" : ""
                     }`}
                     id={`${clo?.id}`}
@@ -150,15 +158,16 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                             {tqf5.method == METHOD_TQF5.MANUAL && (
                               <div className=" py-3 w-full flex justify-between items-center font-medium text-secondary ">
                                 <div className="flex flex-col">
-                                <p>
-                                  {evaluation?.topicTH} | {evaluation?.topicEN}
-                                </p>
-                                <p>
-                                  Description:{" "}
-                                  {evaluation?.desc?.length
-                                    ? evaluation.desc
-                                    : "-"}
-                                </p>
+                                  <p>
+                                    {evaluation?.topicTH} |{" "}
+                                    {evaluation?.topicEN}
+                                  </p>
+                                  <p>
+                                    Description:{" "}
+                                    {evaluation?.desc?.length
+                                      ? evaluation.desc
+                                      : "-"}
+                                  </p>
                                 </div>
                                 <Button
                                   className="text-center px-3"
@@ -217,6 +226,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                               {...form.getInputProps(
                                 `data.${indexClo}.assignments.${indexEval}.questions`
                               )}
+                              classNames={{ error: "px-4 pb-2" }}
                             >
                               {assignment?.map((assign, indexAssign) => {
                                 const questions = assignments.find(

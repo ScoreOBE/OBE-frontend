@@ -411,6 +411,7 @@ export default function Section() {
                                       semester: sec.semester?.map((e) =>
                                         e.toString()
                                       ),
+                                      curriculum: sec.curriculum,
                                     },
                                   });
                                   setOpenModalEditSec(true);
@@ -491,6 +492,11 @@ export default function Section() {
                         >
                           {sec?.topic}
                         </p>
+                        {!!sec.curriculum?.length && (
+                          <p className="tag-tqf w-fit bg-secondary text-secondary items-center bg-opacity-15 rounded-xl !text-[11px]">
+                            {sec.curriculum}
+                          </p>
+                        )}
                       </div>
                       {course?.type !== COURSE_TYPE.SEL_TOPIC.en && (
                         <div

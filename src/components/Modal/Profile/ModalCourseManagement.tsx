@@ -40,7 +40,7 @@ import ModalAddSection from "@/components/Modal/CourseManage/ModalAddSection";
 import { SearchInput } from "@/components/SearchInput";
 import { getDepartment } from "@/services/faculty/faculty.service";
 import { IModelDepartment } from "@/models/ModelFaculty";
-import { setDepartment } from "@/store/department";
+import { setDepartment } from "@/store/faculty";
 import { setLoading } from "@/store/loading";
 
 type Props = {
@@ -517,7 +517,6 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   <div
                     key={index}
                     className="bg-[#ffffff] border-[2px] rounded-md flex flex-col py-4 px-5"
-                 
                   >
                     {/* Course Topic */}
                     <div className="gap-2 mb-3 flex items-center w-full justify-between">
@@ -700,6 +699,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                                       semester: sec.semester.map((e: any) =>
                                         e.toString()
                                       ),
+                                      curriculum: sec.curriculum,
                                     },
                                   });
                                   setOpenModalEditSec(true);

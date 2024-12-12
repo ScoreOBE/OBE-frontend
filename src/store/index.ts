@@ -10,7 +10,7 @@ import courseManagementReducer from "./courseManagement";
 import tqf3Reducer from "./tqf3";
 import tqf5Reducer from "./tqf5";
 import allCourseReducer from "./allCourse";
-import facultyReducer from "./department";
+import facultyReducer from "./faculty";
 import enrollCourseReducer from "./enrollCourse";
 
 const store = configureStore({

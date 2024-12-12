@@ -19,6 +19,7 @@ export interface IModelSectionManagement {
   topic?: string;
   ploRequire?: IModelPLORequire[];
   sectionNo: number;
+  curriculum?: string;
   semester: number[] | string[];
   instructor: IModelUser;
   coInstructors: IModelUser[];
