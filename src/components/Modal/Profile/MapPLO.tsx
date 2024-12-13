@@ -62,7 +62,7 @@ import { getSectionNo, sortData } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { SearchInput } from "@/components/SearchInput";
 import { IModelCourse } from "@/models/ModelCourse";
-import { setLoading } from "@/store/loading";
+import { setLoading, setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   ploName: string;
@@ -70,7 +70,7 @@ type Props = {
 
 export default function MapPLO({ ploName = "" }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const loading = useAppSelector((state) => state.loading.loading);
+  const loading = useAppSelector((state) => state.loading);
   const dispatch = useAppDispatch();
   const [payload, setPayload] = useState<any>({});
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
@@ -131,28 +131,6 @@ export default function MapPLO({ ploName = "" }: Props) {
     },
     validateInputOnBlur: true,
   });
-
-  const editPLO = async () => {
-    const payload = ploList.data?.map((plo) => {
-      if (plo.id === formPLO.getValues().id) {
-        plo = formPLO.getValues();
-      }
-      return plo;
-    });
-
-    const res = await updatePLO(ploList.id!, {
-      data: payload,
-    });
-    if (res) {
-      fetchOnePLO();
-      setOpenModalEditPLONo(false);
-      showNotifications(
-        NOTI_TYPE.SUCCESS,
-        "Edit successfully",
-        `PLO-${formPLO.getValues().no} is edited`
-      );
-    }
-  };
 
   useEffect(() => {
     if (ploName.length) {
@@ -236,6 +214,7 @@ export default function MapPLO({ ploName = "" }: Props) {
   const onClickAddPLONo = async () => {
     const isValid = !formPLO.validate().hasErrors;
     if (isValid) {
+      dispatch(setLoadingOverlay(true));
       const no = ploList.data?.length! + 1;
       const res = await createPLONo(ploList.id!, {
         ...formPLO.getValues(),
@@ -251,10 +230,35 @@ export default function MapPLO({ ploName = "" }: Props) {
         setOpenModalAddPLONo(false);
         formPLO.reset();
       }
+      dispatch(setLoadingOverlay(false));
     }
   };
 
+  const editPLO = async () => {
+    dispatch(setLoadingOverlay(true));
+    const payload = ploList.data?.map((plo) => {
+      if (plo.id === formPLO.getValues().id) {
+        plo = formPLO.getValues();
+      }
+      return plo;
+    });
+    const res = await updatePLO(ploList.id!, {
+      data: payload,
+    });
+    if (res) {
+      fetchOnePLO();
+      setOpenModalEditPLONo(false);
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "Edit successfully",
+        `PLO-${formPLO.getValues().no} is edited`
+      );
+    }
+    dispatch(setLoadingOverlay(false));
+  };
+
   const onClickDeletePLO = async () => {
+    dispatch(setLoadingOverlay(true));
     const res = await deletePLONo(ploList.id!, { id: formPLO.getValues().id });
     if (res) {
       showNotifications(
@@ -266,6 +270,7 @@ export default function MapPLO({ ploName = "" }: Props) {
       setOpenMainPopupDelPLO(false);
       formPLO.reset();
     }
+    dispatch(setLoadingOverlay(false));
   };
 
   const onShowMore = async () => {
@@ -335,6 +340,7 @@ export default function MapPLO({ ploName = "" }: Props) {
   };
 
   const onSaveMapping = async () => {
+    dispatch(setLoadingOverlay(true));
     const res = await ploMapping({ data: courseManagement });
     if (res) {
       showNotifications(
@@ -346,6 +352,7 @@ export default function MapPLO({ ploName = "" }: Props) {
       );
       setIsMapPLO(false);
     }
+    dispatch(setLoadingOverlay(false));
   };
 
   const courseMapPloTable = (
@@ -358,7 +365,6 @@ export default function MapPLO({ ploName = "" }: Props) {
         <Table.Td className="py-4 text-b3 font-semibold pl-5 sticky left-0 z-[51]">
           {course.courseNo} {sec && `(${sec.topic})`}
         </Table.Td>
-
         {ploList.data?.map((plo) => {
           const ploRequire = (sec ? sec.ploRequire : course.ploRequire)?.find(
             (item) => item.plo == ploList.id
@@ -495,6 +501,7 @@ export default function MapPLO({ ploName = "" }: Props) {
       });
     }
     if (!form.validate().hasErrors) {
+      dispatch(setLoadingOverlay(true));
       const payload = {
         ...form.getValues(),
         updatedYear: academicYear.year,
@@ -513,6 +520,7 @@ export default function MapPLO({ ploName = "" }: Props) {
         );
         closeModalAddCourse();
       }
+      dispatch(setLoadingOverlay(false));
     }
   };
 
@@ -570,10 +578,13 @@ export default function MapPLO({ ploName = "" }: Props) {
             <Button
               variant="subtle"
               onClick={() => setOpenModalAddPLONo(false)}
+              loading={loading.loadingOverlay}
             >
               Cancel
             </Button>
-            <Button onClick={onClickAddPLONo}>Done</Button>
+            <Button onClick={onClickAddPLONo} loading={loading.loadingOverlay}>
+              Done
+            </Button>
           </div>
         </div>
       </Modal>
@@ -638,10 +649,13 @@ export default function MapPLO({ ploName = "" }: Props) {
             <Button
               variant="subtle"
               onClick={() => setOpenModalEditPLONo(false)}
+              loading={loading.loadingOverlay}
             >
               Cancel
             </Button>
-            <Button onClick={editPLO}>Save Changes</Button>
+            <Button onClick={editPLO} loading={loading.loadingOverlay}>
+              Save Changes
+            </Button>
           </div>
         </div>
       </Modal>
@@ -729,10 +743,16 @@ export default function MapPLO({ ploName = "" }: Props) {
             )}
           </div>
           <div className="flex gap-2 justify-end">
-            <Button variant="subtle" onClick={closeModalAddCourse}>
+            <Button
+              variant="subtle"
+              onClick={closeModalAddCourse}
+              loading={loading.loadingOverlay}
+            >
               Cancel
             </Button>
-            <Button onClick={addCourse}>Add</Button>
+            <Button onClick={addCourse} loading={loading.loadingOverlay}>
+              Add
+            </Button>
           </div>
         </div>
       </Modal>
@@ -1066,6 +1086,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                           variant="subtle"
                           className="bg-[#e5e7eb] hover-[#e5e7eb]/10"
                           onClick={() => setIsMapPLO(false)}
+                          loading={loading.loadingOverlay}
                         >
                           Cancel
                         </Button>
@@ -1078,6 +1099,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                             />
                           }
                           onClick={onSaveMapping}
+                          loading={loading.loadingOverlay}
                         >
                           Save Changes
                         </Button>
@@ -1087,7 +1109,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                 </div>
 
                 {/* Table */}
-                {loading ? (
+                {loading.loading ? (
                   <div className="flex w-full h-full justify-center items-center">
                     <Loading />
                   </div>
@@ -1119,11 +1141,6 @@ export default function MapPLO({ ploName = "" }: Props) {
                         </Table.Tr>
                       </Table.Thead>
                       <Table.Tbody>
-                        {/* {!loading && !courseManagement.length ? (
-                        <div className="flex flex-col w-full items-center justify-center">
-                          No Course Found
-                        </div>
-                      ) : ( */}
                         {courseManagement.map((course, index) =>
                           course.type == COURSE_TYPE.SEL_TOPIC.en
                             ? course.sections?.map((sec) =>
@@ -1131,7 +1148,6 @@ export default function MapPLO({ ploName = "" }: Props) {
                               )
                             : courseMapPloTable(index, course)
                         )}
-                        {/* )} */}
                       </Table.Tbody>
                     </Table>
                   </InfiniteScroll>

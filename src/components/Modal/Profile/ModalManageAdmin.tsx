@@ -2,7 +2,7 @@ import { Alert, Button, Modal, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { IModelUser } from "@/models/ModelUser";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { getUserName } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
@@ -13,13 +13,16 @@ import IconUserCicle from "@/assets/icons/userCircle.svg?react";
 import IconUsers from "@/assets/icons/users.svg?react";
 import Icon from "@/components/Icon";
 import MainPopup from "@/components/Popup/MainPopup";
+import { setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
 };
 export default function ModalManageAdmin({ opened, onClose }: Props) {
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [adminList, setAdminList] = useState<IModelUser[]>([]);
   const [adminFilter, setAdminFilter] = useState<IModelUser[]>([]);
@@ -45,6 +48,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
   }, [searchValue, adminList]);
 
   const deleteAdmin = async (id: string) => {
+    dispatch(setLoadingOverlay(true));
     const payload: Partial<IModelUser> = { id, role: ROLE.INSTRUCTOR };
     const res = await updateAdmin(payload);
     if (res) {
@@ -57,6 +61,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
         `${name} is deleted from admin`
       );
     }
+    dispatch(setLoadingOverlay(false));
   };
 
   return (
@@ -171,6 +176,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                             );
                             setOpenMainPopupDelAdmin(true);
                           }}
+                          loading={loading}
                         >
                           Delete
                         </Button>

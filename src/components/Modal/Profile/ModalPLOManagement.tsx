@@ -28,7 +28,7 @@ import MapPLO from "./MapPLO";
 import MainPopup from "@/components/Popup/MainPopup";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
-import { setLoading } from "@/store/loading";
+import { setLoading, setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -38,7 +38,7 @@ type Props = {
 export default function ModalPLOManagement({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const loading = useAppSelector((state) => state.loading.loading);
+  const loading = useAppSelector((state) => state.loading);
   const dispatch = useAppDispatch();
   const [ploActive, setPloActive] = useState<IModelPLO[]>([]);
   const [selectPlo, setSelectPlo] = useState<string | null>("Dashboard");
@@ -115,6 +115,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
   }, [modalAddPLO, modalDuplicatePLO]);
 
   const onClickDeletePLO = async () => {
+    dispatch(setLoadingOverlay(true));
     const res = await deletePLO(collection.id!);
     if (res) {
       fetchPLO();
@@ -126,6 +127,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
       setOpenPopupDeletePLOCollection(false);
       setCollection({});
     }
+    dispatch(setLoadingOverlay(false));
   };
 
   return (
@@ -436,7 +438,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             )}
             {/* Course Detail */}
             {selectPlo === "Dashboard" ? (
-              loading ? (
+              loading.loading ? (
                 <div className="flex justify-center items-center h-full w-full">
                   <Loading />
                 </div>

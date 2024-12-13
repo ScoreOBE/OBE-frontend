@@ -48,6 +48,30 @@ export const calStat = (scores: number[], totalStudent: number) => {
   };
 };
 
+export const scrollToStudent = (
+  studentRefs: React.MutableRefObject<Map<any, any>>,
+  studentIds: string[]
+) => {
+  studentRefs.current.forEach((row) => {
+    row.classList.remove("highlight-row");
+  });
+  studentIds.forEach((studentId, index) => {
+    const studentRow = studentRefs.current.get(studentId);
+    if (studentRow) {
+      studentRow.classList.add("highlight-row");
+      if (index == 0) {
+        studentRow.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+      setTimeout(() => {
+        studentRow.classList.remove("highlight-row");
+      }, 5000);
+    }
+  });
+};
+
 const recroot2pi = 1.0 / Math.sqrt(2.0 * Math.PI);
 const gaussian = (x1: number, spread: number, x2: number): number => {
   const invSpread = 1.0 / spread;

@@ -15,6 +15,7 @@ import Icon from "@/components/Icon";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconUserCicle from "@/assets/icons/userCircle.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
+import { setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
@@ -69,7 +71,9 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
   };
 
   const editSAdmin = async (id: string) => {
+    dispatch(setLoadingOverlay(true));
     const res = await updateSAdmin({ id });
+    dispatch(setLoadingOverlay(false));
     if (res) {
       const name = res.newSAdmin.firstNameEN?.length
         ? getUserName(res.newSAdmin, 1)
@@ -104,7 +108,9 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       >
         <Alert
           radius="md"
-         icon={<Icon IconComponent={IconExclamationCircle} className="size-6" />}
+          icon={
+            <Icon IconComponent={IconExclamationCircle} className="size-6" />
+          }
           variant="light"
           color="red"
           className="mb-2"
@@ -114,14 +120,17 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           title={
             <p>
               Changing the Supreme Admin
-              <span className=" font-extrabold underline"> will revoke </span> your
-              current role
+              <span className=" font-extrabold underline">
+                {" "}
+                will revoke{" "}
+              </span>{" "}
+              your current role
             </p>
           }
         ></Alert>
-         <Alert
+        <Alert
           radius="md"
-         icon={<Icon IconComponent={IconInfo2} className="size-6" />}
+          icon={<Icon IconComponent={IconInfo2} className="size-6" />}
           variant="light"
           color="blue"
           className="mb-4"
@@ -130,7 +139,8 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           }}
           title={
             <p>
-              You can only change the Supreme Admin who currently holds an admin role.
+              You can only change the Supreme Admin who currently holds an admin
+              role.
             </p>
           }
         ></Alert>
@@ -161,7 +171,10 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                   className="flex flex-1 items-center justify-between last:border-none border-b-[1px]  p-3 "
                 >
                   <div className="gap-3 flex items-center">
-                  <Icon IconComponent={IconUserCicle} className=" size-8 stoke-1"  />
+                    <Icon
+                      IconComponent={IconUserCicle}
+                      className=" size-8 stoke-1"
+                    />
                     <div className="flex flex-col">
                       <p className="font-semibold text-[14px] text-tertiary">
                         {getUserName(admin, 1)}
@@ -200,7 +213,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           variant="light"
           color="blue"
           title={`After you change Supreme Admin, your role will automatically switch to an admin role`}
-         icon={<Icon IconComponent={IconInfo2} className="size-6" />}
+          icon={<Icon IconComponent={IconInfo2} className="size-6" />}
           className="mb-5"
         ></Alert>
         <TextInput
@@ -217,6 +230,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
             )
           }
           onClick={() => editSAdmin(supremeAdmin.id!)}
+          loading={loading}
           className="mt-4 min-w-fit !h-[36px] !w-full"
         >
           Change Supreme Admin, Log Out

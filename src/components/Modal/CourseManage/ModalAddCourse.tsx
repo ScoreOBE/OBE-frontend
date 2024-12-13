@@ -908,7 +908,7 @@ export default function ModalAddCourse({
         <Group className="flex w-full h-fit items-end justify-between">
           <div>
             {active > 0 && (
-              <Button variant="subtle" onClick={prevStep}>
+              <Button variant="subtle" onClick={prevStep} loading={loading}>
                 Back
               </Button>
             )}

@@ -11,6 +11,22 @@
   --input-radius: 20px;
 }
 
+@keyframes blink {
+  0%,
+  100% {
+    background-color: rgba(255, 255, 0, 0.5);
+  }
+  50% {
+    background-color: transparent;
+  }
+}
+
+.highlight-row {
+  .mantine-Table-td {
+    animation: blink 1s ease-in-out infinite;
+  }
+}
+
 .error-text {
   color: var(--color-error);
   font-size: 12px;
@@ -245,12 +261,12 @@
 }
 .mantine-Table-tr[data-striped="odd"] {
   .mantine-Table-td {
-    background-color: white !important;
+    background-color: white;
   }
 }
 .mantine-Table-tr[data-striped="odd"]:nth-of-type(odd) {
   .mantine-Table-td {
-    background-color: #f8f9fa !important;
+    background-color: #f8f9fa;
   }
 }
 .mantine-Table-tbody {

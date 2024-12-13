@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useParams, useSearchParams } from "react-router-dom";
 import { getSectionNo, getUserName } from "@/helpers/functions/function";
@@ -11,7 +11,7 @@ import Loading from "@/components/Loading/Loading";
 import { Table, TextInput } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
-import { calStat } from "@/helpers/functions/score";
+import { calStat, scrollToStudent } from "@/helpers/functions/score";
 import { TbSearch } from "react-icons/tb";
 import { cloneDeep } from "lodash";
 import { ROLE } from "@/helpers/constants/enum";
@@ -28,6 +28,11 @@ export default function Students() {
     (sec) => parseInt(sectionNo!) === sec.sectionNo
   );
   const assignment = section?.assignments?.find((item) => item.name == name);
+  const studentRefs = useRef(new Map());
+  const [studentMaxMin, setStudentMaxMin] = useState({
+    max: [] as string[],
+    min: [] as string[],
+  });
   const [params, setParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const [filter, setFilter] = useState<string>("");
@@ -151,7 +156,12 @@ export default function Students() {
                     {median.toFixed(2)}
                   </p>
                 </div>
-                <div className="flex flex-col">
+                <div
+                  className="flex flex-col cursor-pointer"
+                  onClick={() =>
+                    scrollToStudent(studentRefs, studentMaxMin.max)
+                  }
+                >
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Max
                   </p>
@@ -159,7 +169,12 @@ export default function Students() {
                     {maxScore.toFixed(2)}
                   </p>
                 </div>
-                <div className="flex flex-col">
+                <div
+                  className="flex flex-col cursor-pointer"
+                  onClick={() =>
+                    scrollToStudent(studentRefs, studentMaxMin.min)
+                  }
+                >
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Min
                   </p>
@@ -227,27 +242,41 @@ export default function Students() {
                             score: item.score >= 0 ? item.score : "",
                           }))
                       );
+                      const sumScore = questions
+                        ?.filter(({ score }) => typeof score == "number")
+                        .reduce((sum, { score }: any) => sum + score, 0);
+                      const studentId = student.student.studentId!;
+                      if (
+                        sumScore == maxScore &&
+                        !studentMaxMin.max.includes(studentId)
+                      ) {
+                        setStudentMaxMin((prev) => ({
+                          ...prev,
+                          max: [...prev.max, studentId],
+                        }));
+                      } else if (
+                        sumScore == minScore &&
+                        !studentMaxMin.min.includes(studentId)
+                      ) {
+                        setStudentMaxMin((prev) => ({
+                          ...prev,
+                          min: [...prev.min, studentId],
+                        }));
+                      }
                       return (
-                        <Table.Tr key={index}>
+                        <Table.Tr
+                          key={studentId}
+                          ref={(el) => studentRefs.current.set(studentId, el)}
+                        >
                           <Table.Td className="!py-[19px]">
-                            {student.student.studentId}
+                            {studentId}
                           </Table.Td>
                           <Table.Td className="w-[25%]">
                             {getUserName(student.student, 3)}
                           </Table.Td>
                           <Table.Td className="w-[5%]">
                             <div className="flex gap-3 justify-end items-center">
-                              <p>
-                                {questions
-                                  ?.filter(
-                                    ({ score }) => typeof score == "number"
-                                  )
-                                  .reduce(
-                                    (sum, { score }: any) => sum + score,
-                                    0
-                                  )
-                                  .toFixed(2)}
-                              </p>
+                              <p>{sumScore?.toFixed(2)}</p>
                               <div
                                 className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
                                 onClick={() => {
@@ -266,7 +295,7 @@ export default function Students() {
                             </div>
                           </Table.Td>
                           {assignment?.questions.map((ques, index) => {
-                            const score:any = questions?.find(
+                            const score: any = questions?.find(
                               (e) => e.name == ques.name
                             )?.score;
                             return (
