@@ -26,7 +26,10 @@ export interface IModelSection {
   coInstructors: IModelUser[] | any[];
   isActive: boolean;
   addFirstTime?: boolean;
-  students: { student: IModelUser; scores: IModelScore[] }[];
+  students: ({
+    student: IModelUser;
+    scores: IModelScore[];
+  } & Record<string, any>)[];
   assignments: IModelAssignment[];
   TQF3?: IModelTQF3;
   TQF5?: IModelTQF5;
