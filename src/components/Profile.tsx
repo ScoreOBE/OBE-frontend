@@ -135,11 +135,11 @@ export default function Profile() {
                 {(user.role === ROLE.SUPREME_ADMIN ||
                   user.role === ROLE.ADMIN) &&
                   (dashboard === ROLE.ADMIN ? (
-                    <div>Admin</div>
+                    <span>Admin</span>
                   ) : dashboard === ROLE.INSTRUCTOR ? (
-                    <div>Instructor</div>
+                    <span>Instructor</span>
                   ) : (
-                    <div>Student</div>
+                    <span>Student</span>
                   ))}
               </p>
             </div>

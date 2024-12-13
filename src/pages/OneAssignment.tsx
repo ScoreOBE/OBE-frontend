@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Table, TextInput } from "@mantine/core";
 import { useParams, useSearchParams } from "react-router-dom";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
@@ -13,7 +13,7 @@ import { TbSearch } from "react-icons/tb";
 import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
-import { calStat } from "@/helpers/functions/score";
+import { calStat, scrollToStudent } from "@/helpers/functions/score";
 
 export default function OneAssignment() {
   const { courseNo, name } = useParams();
@@ -27,6 +27,11 @@ export default function OneAssignment() {
   );
   const fullScore =
     assignment?.questions.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
+  const studentRefs = useRef(new Map());
+  const [studentMaxMin, setStudentMaxMin] = useState({
+    max: [] as string[],
+    min: [] as string[],
+  });
   const [filter, setFilter] = useState<string>("");
   const questions = assignment?.questions;
   const allStudent: any[] =
@@ -153,7 +158,12 @@ export default function OneAssignment() {
                     {median.toFixed(2)}
                   </p>
                 </div>
-                <div className="flex flex-col">
+                <div
+                  className="flex flex-col cursor-pointer"
+                  onClick={() =>
+                    scrollToStudent(studentRefs, studentMaxMin.max)
+                  }
+                >
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Max
                   </p>
@@ -161,7 +171,12 @@ export default function OneAssignment() {
                     {maxScore.toFixed(2)}
                   </p>
                 </div>
-                <div className="flex flex-col">
+                <div
+                  className="flex flex-col cursor-pointer"
+                  onClick={() =>
+                    scrollToStudent(studentRefs, studentMaxMin.min)
+                  }
+                >
                   <p className="font-semibold text-[16px] text-[#777777]">
                     Min
                   </p>
@@ -223,13 +238,32 @@ export default function OneAssignment() {
                           const score = item[ques.name];
                           return score >= 0 ? sum + score : sum;
                         }, 0) || 0;
+                      const studentId = item.student.studentId!;
+                      if (
+                        sumScore == maxScore &&
+                        !studentMaxMin.max.includes(studentId)
+                      ) {
+                        setStudentMaxMin((prev) => ({
+                          ...prev,
+                          max: [...prev.max, studentId],
+                        }));
+                      } else if (
+                        sumScore == minScore &&
+                        !studentMaxMin.min.includes(studentId)
+                      ) {
+                        setStudentMaxMin((prev) => ({
+                          ...prev,
+                          min: [...prev.min, studentId],
+                        }));
+                      }
                       return (
                         <Table.Tr
-                          key={index}
+                          key={studentId}
+                          ref={(el) => studentRefs.current.set(studentId, el)}
                           className="hover:bg-[#F3F3F3] text-[13px] font-normal py-[14px] w-full"
                         >
                           <Table.Td>{item.sectionNo}</Table.Td>
-                          <Table.Td>{item.student.studentId}</Table.Td>
+                          <Table.Td>{studentId}</Table.Td>
                           <Table.Td>{getUserName(item.student, 3)}</Table.Td>
                           <Table.Td className="w-[5%]">
                             <div className="flex gap-3 justify-end items-center">
