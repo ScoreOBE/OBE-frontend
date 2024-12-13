@@ -23,7 +23,6 @@ import { ROLE } from "@/helpers/constants/enum";
 import ModalManageAdmin from "./Modal/Profile/ModalManageAdmin";
 import ModalChangeSupAdmin from "./Modal/Profile/ModalChangeSupremeAdmin";
 import ModalManageSemester from "./Modal/Profile/ModalManageSemester";
-// import ModalManageTQF from "./Modal/Profile/ModalManageTQF";
 import { getUserName } from "@/helpers/functions/function";
 import ModalCourseManagement from "./Modal/Profile/ModalCourseManagement";
 import ModalPLOManagement from "./Modal/Profile/ModalPLOManagement";
@@ -42,7 +41,6 @@ export default function Profile() {
   const [openModalCourseManagement, setOpenModalCourseManagement] =
     useState(false);
   const [openModalPLOManagement, setOpenModalPLOManagement] = useState(false);
-  // const [openModalManageTQF, setOpenModalManageTQF] = useState(false);
   const dispatch = useAppDispatch();
 
   const getRoleColor = (role: ROLE) => {
@@ -99,10 +97,6 @@ export default function Profile() {
         opened={openModalChangeSupAdmin}
         onClose={() => setOpenModalChangeSupAdmin(false)}
       />
-      {/* <ModalManageTQF
-        opened={openModalManageTQF}
-        onClose={() => setOpenModalManageTQF(false)}
-      /> */}
       <ModalManageSemester
         opened={openModalManageSemester}
         onClose={() => setOpenModalManageSemester(false)}
@@ -141,17 +135,11 @@ export default function Profile() {
                 {(user.role === ROLE.SUPREME_ADMIN ||
                   user.role === ROLE.ADMIN) &&
                   (dashboard === ROLE.ADMIN ? (
-                    <div >
-                      Admin 
-                    </div>
+                    <div>Admin</div>
                   ) : dashboard === ROLE.INSTRUCTOR ? (
-                    <div >
-                      Instructor
-                    </div>
+                    <div>Instructor</div>
                   ) : (
-                    <div >
-                      Student
-                    </div>
+                    <div>Student</div>
                   ))}
               </p>
             </div>
@@ -340,15 +328,6 @@ export default function Profile() {
                   </>
                 )}
                 <Menu.Divider />
-                {/* <Menu.Item
-                  className="text-[#3e3e3e] h-8 w-w-full"
-                  onMouseDown={() => setOpenModalManageTQF(true)}
-                >
-                  <div className="flex items-center gap-2">
-                    <Icon IconComponent={IconTQF} className="size-4 " />
-                    <span>TQF</span>
-                  </div>
-                </Menu.Item> */}
                 <Menu.Item
                   className="text-[#3e3e3e] h-8 w-w-full "
                   onMouseDown={() => setOpenModalPLOManagement(true)}

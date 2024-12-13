@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { editCourse } from "@/store/course";
 import { updateCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { editCourseManagement } from "@/store/courseManagement";
+import { setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -27,6 +28,7 @@ export default function ModalEditCourse({
   isCourseManage = false,
   value,
 }: Props) {
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const dispatch = useAppDispatch();
   const form = useForm({
@@ -48,6 +50,7 @@ export default function ModalEditCourse({
   }, [opened, value]);
 
   const submit = async () => {
+    dispatch(setLoadingOverlay(true));
     let payload = form.getValues();
     const id = payload.id || "";
     delete payload.id;
@@ -74,6 +77,7 @@ export default function ModalEditCourse({
         `Course is edited`
       );
     }
+    dispatch(setLoadingOverlay(false));
   };
 
   return (
@@ -120,10 +124,12 @@ export default function ModalEditCourse({
         />
 
         <div className="flex gap-2 mt-3 justify-end">
-          <Button onClick={onClose} variant="subtle">
+          <Button onClick={onClose} variant="subtle" loading={loading}>
             Cancel
           </Button>
-          <Button onClick={submit}>Save Changes</Button>
+          <Button onClick={submit} loading={loading}>
+            Save Changes
+          </Button>
         </div>
       </div>
     </Modal>

@@ -27,6 +27,7 @@ import {
 import { editSectionManagement } from "@/store/courseManagement";
 import { editCourse, editSection } from "@/store/course";
 import { getOneCourse } from "@/services/course/course.service";
+import { setLoadingOverlay } from "@/store/loading";
 
 type Props = {
   opened: boolean;
@@ -47,6 +48,7 @@ export default function ModalEditSection({
   value,
   fetchOneCourse = () => {},
 }: Props) {
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const curriculum = useAppSelector(
     (state) => state.faculty.faculty.curriculum
@@ -90,6 +92,7 @@ export default function ModalEditSection({
   }, [opened, value]);
 
   const submit = async () => {
+    dispatch(setLoadingOverlay(true));
     let payload: any = {
       ...value,
       year: academicYear.year,
@@ -150,6 +153,7 @@ export default function ModalEditSection({
       setOpenThisTerm(false);
       setSemester([]);
     }
+    dispatch(setLoadingOverlay(false));
   };
 
   return (
@@ -258,10 +262,12 @@ export default function ModalEditSection({
         </div>
 
         <div className="flex gap-2 justify-end w-full">
-          <Button variant="subtle" onClick={onClose}>
+          <Button variant="subtle" onClick={onClose} loading={loading}>
             Cancel
           </Button>
-          <Button onClick={submit}>Save Changes</Button>
+          <Button onClick={submit} loading={loading}>
+            Save Changes
+          </Button>
         </div>
       </div>
     </Modal>
