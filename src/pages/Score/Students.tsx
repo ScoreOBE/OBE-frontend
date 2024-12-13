@@ -8,7 +8,7 @@ import needAccess from "@/assets/image/needAccess.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
-import { Table, TextInput } from "@mantine/core";
+import { Button, Table, TextInput } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import { calStat, scrollToStudent } from "@/helpers/functions/score";
@@ -16,6 +16,8 @@ import { TbSearch } from "react-icons/tb";
 import { cloneDeep } from "lodash";
 import { ROLE } from "@/helpers/constants/enum";
 import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
+import { IModelScore } from "@/models/ModelCourse";
 
 export default function Students() {
   const { courseNo, sectionNo, name } = useParams();
@@ -24,9 +26,15 @@ export default function Students() {
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)
   );
-  const section = course?.sections.find(
-    (sec) => parseInt(sectionNo!) === sec.sectionNo
+  const section = cloneDeep(
+    course?.sections.find((sec) => parseInt(sectionNo!) === sec.sectionNo)
   );
+  const [students, setStudents] = useState<
+    ({
+      student: IModelUser;
+      scores: IModelScore[];
+    } & Record<string, any>)[]
+  >([]);
   const assignment = section?.assignments?.find((item) => item.name == name);
   const studentRefs = useRef(new Map());
   const [studentMaxMin, setStudentMaxMin] = useState({
@@ -35,6 +43,11 @@ export default function Students() {
   });
   const [params, setParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const [sort, setSort] = useState({
+    studentId: false,
+    score: false,
+    ...assignment?.questions.map((item) => ({ [item.name]: false })),
+  });
   const [filter, setFilter] = useState<string>("");
   const [openEditScore, setOpenEditScore] = useState(false);
   const [editScore, setEditScore] = useState<{
@@ -67,6 +80,25 @@ export default function Students() {
     dispatch(setDashboard(ROLE.INSTRUCTOR));
     localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
   }, []);
+
+  useEffect(() => {
+    if (section?.students && !students.length) {
+      setStudents(
+        section?.students?.map((student) => {
+          student.questions = student.scores
+            .find(({ assignmentName }) => assignmentName == name)
+            ?.questions.map((item) => ({
+              ...item,
+              score: item.score >= 0 ? item.score : "",
+            }));
+          student.sumScore = student.questions
+            ?.filter(({ score }: any) => typeof score == "number")
+            .reduce((sum: number, { score }: any) => sum + score, 0);
+          return { ...student };
+        })
+      );
+    }
+  }, [section]);
 
   const fullScore =
     assignment?.questions.reduce((sum, { fullScore }) => sum + fullScore, 0) ||
@@ -109,6 +141,23 @@ export default function Students() {
     }
   });
 
+  const onClickSort = (key: string) => {
+    const toggleSort = !(sort as any)[key];
+    setSort((prev) => ({ ...prev, [key]: toggleSort }));
+    let newStudents = [...students];
+    newStudents = newStudents.sort((a, b) => {
+      if (key === "studentId") {
+        return sort.studentId
+          ? a.student.studentId!.localeCompare(b.student.studentId!)
+          : b.student.studentId!.localeCompare(a.student.studentId!);
+      } else if (key === "score") {
+        return sort.score ? a.sumScore - b.sumScore : b.sumScore - a.sumScore;
+      }
+      return 0;
+    });
+    setStudents(newStudents);
+  };
+
   return (
     <>
       <ModalEditStudentScore
@@ -121,7 +170,6 @@ export default function Students() {
       />
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
         <Breadcrumbs items={items} />
-        {/* <Breadcrumbs /> */}
         {loading ? (
           <Loading />
         ) : (section?.instructor as IModelUser)?.id === user.id ||
@@ -197,14 +245,35 @@ export default function Students() {
               </div>
             </div>
 
-            <TextInput
-              leftSection={<TbSearch />}
-              placeholder="Student ID, Name"
-              size="xs"
-              rightSectionPointerEvents="all"
-              className="mx-1"
-              onChange={(event: any) => setFilter(event.currentTarget.value)}
-            ></TextInput>
+            <div className="flex mx-1 gap-2 w-full">
+              <TextInput
+                leftSection={<TbSearch />}
+                placeholder="Student ID, Name"
+                size="xs"
+                rightSectionPointerEvents="all"
+                className="w-full"
+                onChange={(event: any) => setFilter(event.currentTarget.value)}
+              ></TextInput>
+              <Button
+                className="min-w-fit"
+                onClick={() => {
+                  setSort((prev) => {
+                    const resetSort: any = {};
+                    for (const key in prev) {
+                      resetSort[key] = false;
+                    }
+                    return resetSort;
+                  });
+                  setStudents(
+                    students?.sort((a, b) =>
+                      a.student.studentId!.localeCompare(b.student.studentId!)
+                    )
+                  );
+                }}
+              >
+                Reset Sort
+              </Button>
+            </div>
 
             {/* Table */}
             <div
@@ -217,37 +286,54 @@ export default function Students() {
               <Table stickyHeader striped>
                 <Table.Thead>
                   <Table.Tr>
-                    <Table.Th className="w-[15%]">Student ID</Table.Th>
+                    <Table.Th className="w-[15%]">
+                      <div
+                        className="flex items-center gap-2 cursor-pointer"
+                        onClick={() => onClickSort("studentId")}
+                      >
+                        <p>Student ID</p>
+                        {sort.studentId ? <FaChevronUp /> : <FaChevronDown />}
+                      </div>
+                    </Table.Th>
                     <Table.Th className="w-[25%]">Name</Table.Th>
-                    <Table.Th>Score</Table.Th>
+                    <Table.Th>
+                      <div
+                        className="flex items-center gap-2 cursor-pointer"
+                        onClick={() => onClickSort("score")}
+                      >
+                        <p>Score</p>
+                        {sort.score ? <FaChevronUp /> : <FaChevronDown />}
+                      </div>
+                    </Table.Th>
                     {assignment?.questions.map((item, index) => (
-                      <Table.Th key={index}>{item.name}</Table.Th>
+                      <Table.Th key={index}>
+                        <div
+                          className="flex items-center gap-2 cursor-pointer"
+                          onClick={() => onClickSort(item.name)}
+                        >
+                          <p>{item.name}</p>
+                          {(sort as any)[item.name] ? (
+                            <FaChevronUp />
+                          ) : (
+                            <FaChevronDown />
+                          )}
+                        </div>
+                      </Table.Th>
                     ))}
                   </Table.Tr>
                 </Table.Thead>
 
-                <Table.Tbody className="text-default text-[13px] ">
-                  {section?.students
+                <Table.Tbody className="text-default text-[13px]">
+                  {students
                     ?.filter((student) =>
                       parseInt(filter)
                         ? student.student.studentId?.toString().includes(filter)
                         : getUserName(student.student, 3)?.includes(filter)
                     )
-                    ?.map((student, index) => {
-                      const questions = cloneDeep(
-                        student.scores
-                          .find(({ assignmentName }) => assignmentName == name)
-                          ?.questions.map((item) => ({
-                            ...item,
-                            score: item.score >= 0 ? item.score : "",
-                          }))
-                      );
-                      const sumScore = questions
-                        ?.filter(({ score }) => typeof score == "number")
-                        .reduce((sum, { score }: any) => sum + score, 0);
+                    ?.map((student) => {
                       const studentId = student.student.studentId!;
                       if (
-                        sumScore == maxScore &&
+                        student.sumScore == maxScore &&
                         !studentMaxMin.max.includes(studentId)
                       ) {
                         setStudentMaxMin((prev) => ({
@@ -255,7 +341,7 @@ export default function Students() {
                           max: [...prev.max, studentId],
                         }));
                       } else if (
-                        sumScore == minScore &&
+                        student.sumScore == minScore &&
                         !studentMaxMin.min.includes(studentId)
                       ) {
                         setStudentMaxMin((prev) => ({
@@ -276,13 +362,13 @@ export default function Students() {
                           </Table.Td>
                           <Table.Td className="w-[5%]">
                             <div className="flex gap-3 justify-end items-center">
-                              <p>{sumScore?.toFixed(2)}</p>
+                              <p>{student.sumScore?.toFixed(2)}</p>
                               <div
                                 className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
                                 onClick={() => {
                                   setEditScore({
                                     student: student.student,
-                                    questions: questions || [],
+                                    questions: student.questions || [],
                                   });
                                   setOpenEditScore(true);
                                 }}
@@ -295,8 +381,8 @@ export default function Students() {
                             </div>
                           </Table.Td>
                           {assignment?.questions.map((ques, index) => {
-                            const score: any = questions?.find(
-                              (e) => e.name == ques.name
+                            const score: any = student.questions?.find(
+                              (e: any) => e.name == ques.name
                             )?.score;
                             return (
                               <Table.Td key={index}>
