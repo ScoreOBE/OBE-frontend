@@ -189,7 +189,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                                 key={form.key(
                                   `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
                                 )}
-                                className="flex px-4 pt-2 pb-4 justify-between items-center"
+                                className="flex px-6 pt-2 pb-4 justify-between  gap-5 items-center"
                               >
                                 <div className="flex w-[95%] gap-2 items-center">
                                   <p>{indexQues + 1}.</p>

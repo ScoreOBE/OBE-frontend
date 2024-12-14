@@ -150,13 +150,14 @@ export default function ModalMappingAssignment({
                         label: item.name,
                         disabled: form
                           .getValues()
-                          .assignments.flatMap(
-                            (assignment) => assignment.assignment
-                          )
-                          .includes(item.name),
+                          .assignments.some(
+                            (assignment) =>
+                              assignment.assignment.includes(item.name) &&
+                              assignment.eval !== eva.topicEN
+                          ),
                       }))}
                       classNames={{
-                        pill: "bg-secondary text-white font-medium",
+                        pill: "bg-secondary text-white font-medium flex items-center pb-1 !pr-1",
                       }}
                       className="w-full"
                       {...form.getInputProps(`assignments.${index}.assignment`)}
@@ -168,9 +169,15 @@ export default function ModalMappingAssignment({
           </Table>
         </div>
 
-        <div className="flex gap-2 mt-5 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8  items-end  justify-end h-fit">
+        <div className="flex gap-2 mt-5  items-end  justify-end h-fit">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
-            <Button onClick={onClose} variant="subtle">
+            <Button
+              onClick={() => {
+                onClose();
+                form.reset();
+              }}
+              variant="subtle"
+            >
               Cancel
             </Button>
             <Button loading={loading} onClick={saveMapping}>
