@@ -11,6 +11,9 @@ import Loading from "@/components/Loading/Loading";
 import { Button, Table, TextInput } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
+import IconSortAsc from "@/assets/icons/sortAsc.svg?react";
+import IconSortDes from "@/assets/icons/sortDes.svg?react";
+import IconNotSort from "@/assets/icons/arrowUpDown.svg?react";
 import { calStat, scrollToStudent } from "@/helpers/functions/score";
 import { TbSearch } from "react-icons/tb";
 import { cloneDeep } from "lodash";
@@ -44,10 +47,11 @@ export default function Students() {
   const [params, setParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const [sort, setSort] = useState({
-    studentId: false,
-    score: false,
-    ...assignment?.questions.map((item) => ({ [item.name]: false })),
+    studentId: null,
+    score: null,
+    ...assignment?.questions.map((item) => ({ [item.name]: null })),
   });
+
   const [filter, setFilter] = useState<string>("");
   const [openEditScore, setOpenEditScore] = useState(false);
   const [editScore, setEditScore] = useState<{
@@ -142,16 +146,24 @@ export default function Students() {
   });
 
   const onClickSort = (key: string) => {
-    const toggleSort = !(sort as any)[key];
-    setSort((prev) => ({ ...prev, [key]: toggleSort }));
+    const currentSort = sort[key];
+    const toggleSort = currentSort === null ? true : !currentSort;
+
+    setSort((prev) => ({
+      ...Object.keys(prev).reduce((acc, k) => {
+        acc[k] = k === key ? toggleSort : null; // Reset other fields to null
+        return acc;
+      }, {}),
+    }));
+
     let newStudents = [...students];
     newStudents = newStudents.sort((a, b) => {
       if (key === "studentId") {
-        return sort.studentId
+        return toggleSort
           ? a.student.studentId!.localeCompare(b.student.studentId!)
           : b.student.studentId!.localeCompare(a.student.studentId!);
       } else if (key === "score") {
-        return sort.score ? a.sumScore - b.sumScore : b.sumScore - a.sumScore;
+        return toggleSort ? a.sumScore - b.sumScore : b.sumScore - a.sumScore;
       }
       return 0;
     });
@@ -260,7 +272,7 @@ export default function Students() {
                   setSort((prev) => {
                     const resetSort: any = {};
                     for (const key in prev) {
-                      resetSort[key] = false;
+                      resetSort[key] = null;
                     }
                     return resetSort;
                   });
@@ -286,36 +298,56 @@ export default function Students() {
               <Table stickyHeader striped>
                 <Table.Thead>
                   <Table.Tr>
-                    <Table.Th className="w-[15%]">
-                      <div
-                        className="flex items-center gap-2 cursor-pointer"
-                        onClick={() => onClickSort("studentId")}
-                      >
-                        <p>Student ID</p>
-                        {sort.studentId ? <FaChevronUp /> : <FaChevronDown />}
+                    <Table.Th
+                      onClick={() => onClickSort("studentId")}
+                      className={`hover:!bg-[#d0def7]  w-[15%] cursor-pointer ${
+                        sort.studentId !== null ? " !bg-[#d0def7]" : ""
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 ">
+                        <p>Student ID</p>{" "}
+                        {sort.studentId === null ? (
+                          <IconNotSort className="size-4" />
+                        ) : sort.score ? (
+                          <IconSortAsc className="size-5" /> // Icon for ascending
+                        ) : (
+                          <IconSortDes className="size-5" /> // Icon for descending
+                        )}
                       </div>
                     </Table.Th>
-                    <Table.Th className="w-[25%]">Name</Table.Th>
-                    <Table.Th>
-                      <div
-                        className="flex items-center gap-2 cursor-pointer"
-                        onClick={() => onClickSort("score")}
-                      >
+                    <Table.Th className="w-[18%]">Name</Table.Th>
+                    <Table.Th
+                      onClick={() => onClickSort("score")}
+                      className={`hover:!bg-[#d0def7] !text-end !justify-end w-[12%] cursor-pointer ${
+                        sort.score !== null ? " !bg-[#d0def7]" : ""
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 cursor-pointer !text-start !justify-start">
                         <p>Score</p>
-                        {sort.score ? <FaChevronUp /> : <FaChevronDown />}
+                        {sort.score === null ? (
+                          <IconNotSort className="size-4" />
+                        ) : sort.score ? (
+                          <IconSortAsc className="size-5" />
+                        ) : (
+                          <IconSortDes className="size-5" />
+                        )}
                       </div>
                     </Table.Th>
+
                     {assignment?.questions.map((item, index) => (
-                      <Table.Th key={index}>
+                      <Table.Th
+                        className="hover:!bg-[#d0def7] cursor-pointer"
+                        key={index}
+                      >
                         <div
-                          className="flex items-center gap-2 cursor-pointer"
+                          className="flex justify-end gap-2 cursor-pointer"
                           onClick={() => onClickSort(item.name)}
                         >
                           <p>{item.name}</p>
                           {(sort as any)[item.name] ? (
-                            <FaChevronUp />
+                            <IconSortAsc className="size-5" />
                           ) : (
-                            <FaChevronDown />
+                            <IconSortDes className="size-5" />
                           )}
                         </div>
                       </Table.Th>
@@ -357,11 +389,11 @@ export default function Students() {
                           <Table.Td className="!py-[19px]">
                             {studentId}
                           </Table.Td>
-                          <Table.Td className="w-[25%]">
+                          <Table.Td className="w-[18%]">
                             {getUserName(student.student, 3)}
                           </Table.Td>
-                          <Table.Td className="w-[5%]">
-                            <div className="flex gap-3 justify-end items-center">
+                          <Table.Td className="w-[12%]">
+                            <div className="flex gap-3 justify-start items-center">
                               <p>{student.sumScore?.toFixed(2)}</p>
                               <div
                                 className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
@@ -386,7 +418,7 @@ export default function Students() {
                             )?.score;
                             return (
                               <Table.Td key={index}>
-                                {score != undefined ? score.toFixed(2) : "-"}
+                               <div className=" justify-end flex"> {score != undefined ? score.toFixed(2) : "-"}</div>
                               </Table.Td>
                             );
                           })}
