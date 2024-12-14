@@ -172,8 +172,8 @@ export default function MapPLO({ ploName = "" }: Props) {
       if (res) {
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Update PLO",
-          "Reorder PLO successfully"
+          "PLO Reordered Successfully",
+          ""
         );
       }
     };
@@ -223,8 +223,8 @@ export default function MapPLO({ ploName = "" }: Props) {
       if (res) {
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          `Add PLO-${no} successfully`,
-          `PLO-${no} is added`
+          `PLO Added Successfully`,
+          `PLO-${no} has been successfully added`
         );
         setPloList(res);
         setOpenModalAddPLONo(false);
@@ -250,8 +250,8 @@ export default function MapPLO({ ploName = "" }: Props) {
       setOpenModalEditPLONo(false);
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Edit successfully",
-        `PLO-${formPLO.getValues().no} is edited`
+        "PLO Edited Successfully",
+        `PLO-${formPLO.getValues().no} has been successfully updated`
       );
     }
     dispatch(setLoadingOverlay(false));
@@ -263,8 +263,8 @@ export default function MapPLO({ ploName = "" }: Props) {
     if (res) {
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        `Delete PLO-${formPLO.getValues().no} Success`,
-        `PLO-${formPLO.getValues().no} is deleted`
+        `PLO Deleted Successfully`,
+        `PLO-${formPLO.getValues().no} has been successfully deleted`
       );
       setPloList(res);
       setOpenMainPopupDelPLO(false);
@@ -345,8 +345,8 @@ export default function MapPLO({ ploName = "" }: Props) {
     if (res) {
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "PLO Mapping successfully",
-        `PLO mapping completed for ${res.length} course${
+        "PLO Mapped Successfully",
+        `PLO Mapping has been successfully updated for ${res.length} course${
           res.length > 1 ? "s" : ""
         }`
       );
@@ -515,8 +515,8 @@ export default function MapPLO({ ploName = "" }: Props) {
         searchCourse("");
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Add successfully",
-          `${form.getValues().courseNo} is added`
+          "Course Added Successfully",
+          `${form.getValues().courseNo} has been successfully added`
         );
         closeModalAddCourse();
       }

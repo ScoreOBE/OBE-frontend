@@ -67,8 +67,8 @@ export default function ModalMappingAssignment({
         dispatch(setAssignmentsMap(res));
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Evaluation Mapping successfully",
-          ""
+          "Evaluation Mapping Successful",
+          "The evaluation mapping has been successfully updated."
         );
         onClose();
       }

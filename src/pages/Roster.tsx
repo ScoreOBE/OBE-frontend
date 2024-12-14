@@ -128,8 +128,8 @@ export default function Roster() {
         dispatch(updateStudentList({ id: course?.id, sections: res }));
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Add student successfully",
-          `student ${data.studentId} is added`
+          "Student Added Successfully",
+          `${data.studentId} has been successfully added to to the course roster.`
         );
         clearForm();
       }
@@ -151,8 +151,8 @@ export default function Roster() {
         dispatch(updateStudentList({ id: course?.id, sections: res }));
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Delete student successfully",
-          `student ${selectedUser.studentId} is deleted`
+          "Student Deleted Successfully",
+          `${selectedUser.studentId} has been successfully deleted from the course roster`
         );
         setOpenPopupDeleteStudent(false);
         setSelectedUser(undefined);
@@ -192,8 +192,8 @@ export default function Roster() {
         dispatch(updateStudentList({ id: course?.id, sections: res }));
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Update student successfully",
-          `student ${selectedUser?.studentId} is updated`
+          "Student Edited Successfully",
+          `${selectedUser?.studentId} has been successfully updated`
         );
         setOpenModalAddEditStudent(false);
         setSelectedUser(undefined);

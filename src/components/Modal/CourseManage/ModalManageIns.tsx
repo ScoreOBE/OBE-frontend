@@ -110,7 +110,7 @@ export default function ModalManageIns({
       );
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Change Owener section successfully",
+        "Owner section Updated Successfully",
         `${value.label} is an Owner section ${getSectionNo(
           editSec?.data.sectionNo
         )}.`
@@ -155,8 +155,8 @@ export default function ModalManageIns({
       setCoInsList(cloneDeep(editCoInsList));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Update Co-Instructor successfully",
-        `Co-Instructor for ${data.courseNo} is updated`
+        "Co-Instructor Updated Successfull",
+        `Co-Instructor for ${data.courseNo} has been successfully updated`
       );
       if (type == "course") onClose();
     }

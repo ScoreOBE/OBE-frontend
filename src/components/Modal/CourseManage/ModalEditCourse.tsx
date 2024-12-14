@@ -73,8 +73,8 @@ export default function ModalEditCourse({
       onClose();
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Edit successfully",
-        `Course is edited`
+        "Course Edited Successfully",
+        `The course has been successfully updated.`
       );
     }
     dispatch(setLoadingOverlay(false));

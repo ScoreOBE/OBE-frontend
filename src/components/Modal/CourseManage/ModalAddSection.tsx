@@ -205,8 +205,8 @@ export default function ModalAddSection({
       }
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Add successfully",
-        `${sectionNoList.join(", ")} is added`
+        "Section Added Successfully",
+        `${sectionNoList.join(", ")}  has been successfully added to this course`
       );
       closeModal();
     }

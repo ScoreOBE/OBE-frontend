@@ -186,15 +186,15 @@ export default function AllAssignment() {
       dispatch(updateAssignments({ ...res }));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        `${
-          form.getValues().isPublish ? "Published" : "Unpublished"
-        } score successfully`,
-        `evaluation ${form.getValues().assignments.join(", ")} in ${form
+        `Score${
+          form.getValues().isPublish ? " Published" : " Unpublished"
+        }  Successfully`,
+        `Evaluation ${form.getValues().assignments.join(", ")} in ${form
           .getValues()
           .sections.map((item) => getSectionNo(item))
           .join(", ")} ${
           form.getValues().assignments.length > 1 ? "are" : "is"
-        } ${form.getValues().isPublish ? "published" : "unpublished"}`
+        } ${form.getValues().isPublish ? "has been published" : "has been unpublished"}`
       );
       setOpenPublishScoreModal(false);
       setOpenSelectSecModal(false);
@@ -214,8 +214,8 @@ export default function AllAssignment() {
       dispatch(updateAssignments({ ...res }));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Edit Evaluation Name successfully",
-        `evaluation change from ${editDeleteAssignment} to ${editName}.`
+        "Evaluation Edited Successfully",
+        `Evaluation has been successfully updated.`
       );
       setOpenModalEditAssignment(false);
       setEditDeleteAssignment("");
@@ -234,8 +234,8 @@ export default function AllAssignment() {
       dispatch(updateAssignments({ ...res }));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        `Delete Evaluation successfully`,
-        `evaluation ${editDeleteAssignment} is deleted.`
+        `Evaluation Deleted Successfully`,
+        `Evaluation ${editDeleteAssignment} has been deleted.`
       );
       setOpenModalDeleteAssignment(false);
       setEditDeleteAssignment("");

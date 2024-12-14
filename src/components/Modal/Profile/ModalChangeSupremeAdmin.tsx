@@ -81,8 +81,8 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       dispatch(setUser(res.user));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Change successfully",
-        `${name} is an supreme admin`
+        "Supreme Admin Changed Successfully",
+        `${name} is an supreme admin.`
       );
       onClose();
       localStorage.removeItem("token");

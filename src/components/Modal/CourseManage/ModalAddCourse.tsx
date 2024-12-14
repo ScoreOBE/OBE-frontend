@@ -204,8 +204,8 @@ export default function ModalAddCourse({
     if (res) {
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Add successfully",
-        `${form.getValues().courseNo} is added`
+        "Course Added Successfully",
+        `${form.getValues().courseNo} has been successfully added to your course`
       );
       closeModal();
       fetchCourse(academicYear.year, academicYear.semester);

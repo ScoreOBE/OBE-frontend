@@ -167,7 +167,7 @@ export default function Sidebar() {
     if (res) {
       dispatch(removeCourse(res.id));
       closeMainPopup();
-      showNotifications(NOTI_TYPE.SUCCESS, "Leave Course Success", ``);
+      showNotifications(NOTI_TYPE.SUCCESS, "You have successfully left the course.", ``);
       navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`);
     }
   };

@@ -85,14 +85,14 @@ export default function ModalManageTopic({
         if (type === "add") {
           showNotifications(
             NOTI_TYPE.SUCCESS,
-            "Add successfully",
-            `Additional topic is added`
+            "Topic Added successfully",
+            `The Additional topic has been added to your TQF`
           );
         } else {
           showNotifications(
             NOTI_TYPE.SUCCESS,
-            "Edit successfully",
-            `Topic ${editData?.index! + 1} is edited`
+            "Topic Edited Successfully",
+            `Topic ${editData?.index! + 1} has been updated`
           );
         }
       }

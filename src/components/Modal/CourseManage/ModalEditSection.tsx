@@ -142,12 +142,8 @@ export default function ModalEditSection({
     if (res) {
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Edit successfully",
-        `${
-          payload.data.sectionNo !== value?.oldSectionNo ? "Section no." : ""
-        } ${
-          payload.data.topic !== value?.data.topic ? "Section topic" : ""
-        } is edited`
+        "Section Edited Successfully",
+        `The section has been successfully updated.`
       );
       onClose();
       setOpenThisTerm(false);

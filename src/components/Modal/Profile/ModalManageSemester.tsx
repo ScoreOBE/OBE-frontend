@@ -113,8 +113,8 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
     if (res) {
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Activate",
-        `Activate ${e.semester}, ${e.year} successfully`
+        "Semester Activated Successfully",
+        `${e.semester}, ${e.year} has been activated successfully`
       );
       setSelectSemester(undefined);
       const res = await getAcademicYear(new AcademicYearRequestDTO());
@@ -130,13 +130,10 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
     if (selectSemester) {
       const active = yearList.find((semester) => semester.isActive);
 
-      if (!active) {
-        showNotifications(NOTI_TYPE.ERROR, "No active semester found", "ihjj");
-        return;
-      }
+    
 
-      let newSemester = active.semester + 3;
-      let newYear = active.year;
+      let newSemester = active!.semester + 3;
+      let newYear = active!.year;
       // Adjust the year if the semester exceeds 3
       if (newSemester > 3) {
         newYear += Math.floor((newSemester - 1) / 3);
@@ -151,8 +148,8 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       ) {
         showNotifications(
           NOTI_TYPE.ERROR,
-          "Cannot add more than 3 semesters",
-          "You cannot add more than 3 semesters from the active semester."
+          "Semester Limit Exceeded",
+          "You cannot add more than 3 semesters starting from the active semester."
         );
         return;
       }
@@ -161,8 +158,8 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
       if (res) {
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Add successfully",
-          `Add Semester ${selectSemester.semester}, ${selectSemester.year} successfully`
+          "Semested Added Successfully",
+          `Semester ${selectSemester.semester}, ${selectSemester.year} has been added successfully`
         );
         setSelectSemester(undefined);
         fetchSemester();

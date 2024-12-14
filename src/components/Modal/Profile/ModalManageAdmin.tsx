@@ -57,8 +57,8 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
       const name = res.firstNameEN?.length ? getUserName(res, 1) : res.email;
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Delete successfully",
-        `${name} is deleted from admin`
+        "Admin Deleted Successfully",
+        `${name} has been successfully removed from the admin list.`
       );
     }
     dispatch(setLoadingOverlay(false));

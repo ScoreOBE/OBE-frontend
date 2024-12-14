@@ -129,8 +129,8 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
       if (res) {
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Upload successfully",
-          "Scores have been upload successfully"
+          "Upload Successful",
+          "Your  file has been uploaded."
         );
         const res = await getOneCourse({
           year: data.year,
@@ -145,7 +145,11 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
       }
       dispatch(setLoadingOverlay(false));
     } else {
-      showNotifications(NOTI_TYPE.ERROR, "Invalid File", "invalid scores");
+      showNotifications(
+        NOTI_TYPE.ERROR,
+        "Invalid File",
+        "The uploaded file does not contain a valid data. Please check the file and try again."
+      );
     }
   };
 
