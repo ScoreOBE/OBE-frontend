@@ -542,20 +542,23 @@ export default function ModalAddSection({
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary text-[14px] font-bold">
-                    Custom recurrence semester for Section{" "}
+                    Section{" "}
                     {getSectionNo(sec.sectionNo)}{" "}
                     <span className="text-red-500">*</span>
                   </span>
-                  <div className="w-full justify-center  border-b-2  pr-[18px] pt-4 pb-1  flex flex-col ">
+                  <div className="w-full justify-center  border-b-2  pr-[18px] pt-2 pb-1  flex flex-col ">
                     <div className="gap-2 flex flex-col">
                       <Select
-                        label="Curriculum"
+                        label={`Select the Curriculum for Section ${getSectionNo(
+                          sec.sectionNo
+                        )} `}
                         size="xs"
                         data={curriculum?.map(({ code }) => code)}
                         classNames={{ input: "focus:border-primary" }}
                         {...form.getInputProps(`sections.${index}.curriculum`)}
                       />
-                      <span className="font-medium text-default text-b2 ">
+                       <div className="p-5 mt-1 mb-3 bg-[#f7f7f7] rounded-xl">
+                      <span className="font-semibold mt-2 text-default text-b2 ">
                         Repeat on semester
                       </span>{" "}
                       <Chip.Group
@@ -566,7 +569,7 @@ export default function ModalAddSection({
                         }}
                         multiple
                       >
-                        <Group className="flex flex-row gap-4">
+                        <Group className="flex flex-row mt-2 gap-4">
                           {SEMESTER.map((item) => (
                             <Chip
                               key={item}
@@ -575,10 +578,10 @@ export default function ModalAddSection({
                                 input:
                                   "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                                 iconWrapper: "w-0",
-                                label: "text-[14px] px-4 cursor-pointer",
+                                label: "text-[14px] px-5 cursor-pointer",
                               }}
                               className=""
-                              size="xs"
+                              size="sm"
                               value={item.toString()}
                               disabled={
                                 sec.openThisTerm &&
@@ -594,13 +597,15 @@ export default function ModalAddSection({
                       <Checkbox
                         classNames={{
                           input:
-                            "bg-[black] bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                            " bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                           body: "mr-3 px-0",
-                          label: "text-[14px] text-default cursor-pointer",
+                          label: "text-[13px] font-semibold text-default cursor-pointer",
                         }}
-                        className="mt-3 mb-3"
+                        className="mt-5 mb-1"
                         size="xs"
-                        label={`Open in this semester (${
+                        label={` Section ${getSectionNo(
+                            sec.sectionNo
+                          )} open in this semester (${
                           academicYear?.semester
                         }/${academicYear?.year.toString()?.slice(-2)})`}
                         checked={sec.openThisTerm}
@@ -608,6 +613,7 @@ export default function ModalAddSection({
                           setSemesterInSec(index, event.target.checked)
                         }
                       />
+                      </div>
                     </div>
                   </div>
                 </div>

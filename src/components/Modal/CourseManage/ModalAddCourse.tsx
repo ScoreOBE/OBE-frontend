@@ -205,7 +205,9 @@ export default function ModalAddCourse({
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Course Added Successfully",
-        `${form.getValues().courseNo} has been successfully added to your course`
+        `${
+          form.getValues().courseNo
+        } has been successfully added to your course`
       );
       closeModal();
       fetchCourse(academicYear.year, academicYear.semester);
@@ -522,7 +524,7 @@ export default function ModalAddCourse({
         </Stepper.Step>
         <Stepper.Step
           allowStepSelect={false}
-          label="Course Info"
+          label="Course Infor"
           description="STEP 2"
         >
           {" "}
@@ -604,7 +606,7 @@ export default function ModalAddCourse({
         </Stepper.Step>
         <Stepper.Step
           allowStepSelect={false}
-          label="Semester"
+          label="Section Infor"
           description="STEP 3"
         >
           <div className="flex flex-col macair133:max-h-[420px]  sm:max-h-[260px] ipad11:max-h-[340px] h-fit w-full mt-2 mb-5 p-[2px] overflow-y-auto">
@@ -612,71 +614,78 @@ export default function ModalAddCourse({
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary text-[14px] font-bold">
-                    Custom recurrence semester for Section{" "}
-                    {getSectionNo(sec.sectionNo)}
+                    Section {getSectionNo(sec.sectionNo)}
                     <span className="text-red-500"> *</span>
                   </span>
                   <div className="w-full justify-center pr-[18px] border-b-2 pt-1 pb-5   flex flex-col ">
                     <div className="gap-2 flex flex-col">
                       <Select
-                        label="Curriculum"
+                        label={`Select the Curriculum for Section ${getSectionNo(
+                          sec.sectionNo
+                        )} `}
                         size="xs"
+                        placeholder="Curriculum"
                         data={curriculum?.map(({ code }) => code)}
                         classNames={{ input: "focus:border-primary" }}
                         {...form.getInputProps(`sections.${index}.curriculum`)}
                       />
-                      <span className="font-medium text-default text-b2 ">
-                        Repeat on semester
-                      </span>
-                      <Chip.Group
-                        {...form.getInputProps(`sections.${index}.semester`)}
-                        value={sec.semester}
-                        onChange={(event) => {
-                          setSemesterInSec(index, true, event as string[]);
-                        }}
-                        multiple
-                      >
-                        <Group className=" items-center h-full flex flex-row gap-4">
-                          {SEMESTER.map((item, index) => (
-                            <Chip
-                              key={index}
-                              icon={<></>}
-                              classNames={{
-                                input:
-                                  "bg-black!  border-[1.5px] border-tertiary cursor-pointer disabled:bg-gray-500",
-                                iconWrapper: "w-0",
-                                label: "text-b2 px-4 cursor-pointer",
-                              }}
-                              size="xs"
-                              value={item.toString()}
-                              disabled={
-                                sec.openThisTerm &&
-                                item == academicYear.semester &&
-                                sec.semester?.includes(item.toString())
-                              }
-                            >
-                              {item}
-                            </Chip>
-                          ))}
-                        </Group>
-                      </Chip.Group>
-                      <Checkbox
-                        classNames={{
-                          input:
-                            "bg-[black] bg-opacity-0 border-[1.5px] border-tertiary cursor-pointer disabled:bg-gray-400",
-                          body: "mr-3 px-0",
-                          label: "text-[13px]  cursor-pointer text-default",
-                        }}
-                        className="mt-3 ml-1"
-                        size="xs"
-                        label={`Open in this semester (${
-                          academicYear?.semester
-                        }/${academicYear?.year.toString()?.slice(-2)})`}
-                        checked={sec.openThisTerm}
-                        onChange={(event) =>
-                          setSemesterInSec(index, event.target.checked)
-                        }
-                      />
+                      <div className="p-5 mt-1 bg-[#f7f7f7] rounded-xl">
+                        <span className="font-semibold mt-2 text-default text-b2 ">
+                          Repeat on semester
+                        </span>
+                        <Chip.Group
+                          {...form.getInputProps(`sections.${index}.semester`)}
+                          value={sec.semester}
+                          onChange={(event) => {
+                            setSemesterInSec(index, true, event as string[]);
+                          }}
+                          multiple
+                        >
+                          <Group className=" items-center h-ful mt-2 flex flex-row gap-4">
+                            {SEMESTER.map((item, index) => (
+                              <Chip
+                                key={index}
+                                icon={<></>}
+                                classNames={{
+                                  input:
+                                    "!bg-white border-[1.5px]   disabled:bg-gray-500",
+                                  iconWrapper: "w-0",
+                                  label: "text-b2 !px-5 cursor-pointer",
+                                }}
+                                size="sm"
+                                value={item.toString()}
+                                disabled={
+                                  sec.openThisTerm &&
+                                  item == academicYear.semester &&
+                                  sec.semester?.includes(item.toString())
+                                }
+                              >
+                                {item}
+                              </Chip>
+                            ))}
+                          </Group>
+                        </Chip.Group>
+                        <Checkbox
+                          classNames={{
+                            input:
+                              "bg-white bg-opacity-0 border-[1.5px] border-tertiary cursor-pointer disabled:bg-gray-400",
+                            body: "mr-3 px-0",
+                            label:
+                              "text-[13px] text-default font-semibold  cursor-pointer ",
+                          }}
+                          className="mt-5 ml-1"
+                          size="xs"
+                          label={`Section ${getSectionNo(
+                            sec.sectionNo
+                          )} open in this semester (${
+                            academicYear?.semester
+                          }/${academicYear?.year.toString()?.slice(-2)})`}
+                          checked={sec.openThisTerm}
+                          onChange={(event) =>
+                            setSemesterInSec(index, event.target.checked)
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
