@@ -111,8 +111,8 @@ export default function Section() {
 
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        `${checked ? "Open" : "Close"} section success`,
-        `Section ${getSectionNo(sec.sectionNo)} is ${
+        `Section ${checked ? " Opened" : " Closed"}  Successfully`,
+        `Section ${getSectionNo(sec.sectionNo)} has been successfully${
           checked ? "opened" : "closed"
         }`
       );
@@ -128,8 +128,8 @@ export default function Section() {
         dispatch(removeSection({ id: editSec.courseId, secId: id }));
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Delete Section successfully",
-          `${getSectionNo(editSec?.sectionNo)} is deleted`
+          "Section Delete Successfully",
+          `${getSectionNo(editSec?.sectionNo)} has been deleted from this course`
         );
       }
     }

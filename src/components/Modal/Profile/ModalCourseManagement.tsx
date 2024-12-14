@@ -205,8 +205,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
       dispatch(removeCourse(res.courseId));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Delete successfully",
-        `${course.courseNo} is deleted`
+        "Course Deleted Successfully",
+        `${course.courseNo} has been successfully deleted`
       );
     }
   };
@@ -221,8 +221,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
       dispatch(removeSection({ id: res.courseId, secId: res.secId }));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Delete Section successfully",
-        `${getSectionNo(editSec?.sectionNo)} is deleted`
+        "Section Deleted Successfully",
+        `${getSectionNo(editSec?.sectionNo)} has been successfully deleted`
       );
     }
   };

@@ -199,8 +199,8 @@ export default function Part6TQF3({ setForm }: Props) {
     setOpenPopupDelAddTopic(false);
     showNotifications(
       NOTI_TYPE.SUCCESS,
-      "Delete Topic successfully",
-      `Topic ${deleteIndex + 1} is deleted`
+      "Topic Deleted Successfully",
+      `Topic ${deleteIndex + 1} has been deleted from list`
     );
   };
 

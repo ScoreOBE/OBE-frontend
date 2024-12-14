@@ -58,8 +58,8 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
     if (selectedParts.length === 0) {
       showNotifications(
         NOTI_TYPE.ERROR,
-        "Error",
-        "Please select at least one part to export."
+        "Select Part Required",
+        "Please select at least one part to export before proceeding"
       );
       return;
     }
@@ -94,8 +94,8 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
       window.URL.revokeObjectURL(url);
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Export successfully",
-        `TQF3 exported successfully as ${filename}.`
+        "TQF 3 Exported Successfully",
+        `TQF 3 has been exported successfully as ${filename}.`
       );
     }
     dispatch(setLoadingOverlay(false));

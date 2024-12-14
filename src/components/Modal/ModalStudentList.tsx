@@ -84,8 +84,8 @@ export default function ModalStudentList({
         setResult(undefined);
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Upload successfully",
-          "Student list have been uploaded successfully"
+          "Upload Successful",
+          "Your file has been uploaded."
         );
         onClose();
         if (onNext) {
@@ -97,7 +97,7 @@ export default function ModalStudentList({
       showNotifications(
         NOTI_TYPE.ERROR,
         "Invalid File",
-        "invalid student list"
+        "The uploaded file does not contain a valid student list. Please check the file and try again."
       );
     }
   };

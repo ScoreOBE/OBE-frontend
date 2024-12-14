@@ -249,8 +249,8 @@ export default function TQF5() {
           dispatch(setDataTQF5({ ...tqf5, ...res }));
           showNotifications(
             NOTI_TYPE.SUCCESS,
-            `TQF 5, ${tqf5Part} save successfully`,
-            `TQF 5 - ${tqf5Part} is saved`
+            `TQF 5, ${tqf5Part} Saved Successfully`,
+            `TQF 5 - ${tqf5Part} has been successfully saved`
           );
           if (tqf5Part !== "part3") {
             setTqf5Part(`part${parseInt(tqf5Part.slice(-1)) + 1}`);
@@ -273,8 +273,8 @@ export default function TQF5() {
       dispatch(setDataTQF5({ ...newTqf5, method: res.method }));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Change Method successfully",
-        `Method TQF 5 is ${method ?? selectedMethod}.`
+        "Method Changed Successfully",
+        `The evaluation method for TQF 5 has been successfully updated to ${method ?? selectedMethod}.`
       );
       setOpenModalChangeMethod(false);
     }

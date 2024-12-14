@@ -95,8 +95,8 @@ export default function ModalEditStudentScore({
         dispatch(updateStudentList({ id: course?.id, sections: res }));
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Edit score successfully",
-          `score of student ${studentId} is updated`
+          "Score Edited Successfully",
+          `Score of ${studentId} has been successfully updated`
         );
         onClose();
       }

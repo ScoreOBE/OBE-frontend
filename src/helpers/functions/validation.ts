@@ -55,8 +55,9 @@ export const isValidResponse = async (res: any) => {
         // dispatch(setErrorResponse(res));
         showNotifications(
           NOTI_TYPE.ERROR,
-          res.title ?? "Something went wrong",
-          res.message
+          res.title ?? "Something Went Wrong",
+          res.message ?? "An unexpected error occurred. Please try again later."
+          
         );
         break;
     }

@@ -242,7 +242,7 @@ export default function ModalAddPLOCollection({
       handlers.setState(form.getValues().data!);
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Add successfully",
+        "PLO added successfully",
         `PLO-${ploNo} is added`
       );
     }
@@ -275,7 +275,7 @@ export default function ModalAddPLOCollection({
     if (res) {
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Add successfully",
+        "PLO Collection added successfully",
         `${payload.name} is added`
       );
       closeModal();
