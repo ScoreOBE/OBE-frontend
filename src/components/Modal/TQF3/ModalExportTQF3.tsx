@@ -124,7 +124,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
         body: "flex flex-col overflow-hidden max-h-full h-fit",
       }}
     >
-      <div className="flex sm:max-ipad11:h-[400px] sm:max-ipad11:overflow-y-auto flex-col">
+      <div className="flex sm:max-ipad11:h-[400px] sm:max-ipad11:overflow-y-auto flex-col ">
         {!dataExport.part1?.updatedAt ? (
           <div className="flex flex-col mt-3  items-center  ">
             <p className=" text-[14px] font-semibold">
@@ -144,10 +144,22 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
               }}
               className="p-3 m-[4px] rounded-md"
             >
-              <Radio.Group classNames={{ label: "font-semibold"}} value={selectedMerge} onChange={setSelectedMerge}>
-                <Group  mb={2}>
-                  <Radio classNames={{ label: "font-medium"}} value="unzipfile" label="Single file" />
-                  <Radio classNames={{ label: "font-medium"}} value="zipfile" label="Multiple file (Zip)" />
+              <Radio.Group
+                classNames={{ label: "font-semibold" }}
+                value={selectedMerge}
+                onChange={setSelectedMerge}
+              >
+                <Group mb={2}>
+                  <Radio
+                    classNames={{ label: "font-medium" }}
+                    value="unzipfile"
+                    label="Single file"
+                  />
+                  <Radio
+                    classNames={{ label: "font-medium" }}
+                    value="zipfile"
+                    label="Multiple file (Zip)"
+                  />
                 </Group>
               </Radio.Group>
             </div>
@@ -156,7 +168,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
               classNames={{ label: "mb-1 font-semibold text-default" }}
               value={selectedParts}
               onChange={setSelectedParts}
-              className=" h-[400px] overflow-y-auto my-4 "
+              className=" h-[400px] overflow-y-auto my-4"
             >
               {Object.values(PartTopicTQF3)
                 .slice(0, 6)
@@ -198,7 +210,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
         )}
       </div>
       {dataExport.part1?.updatedAt && (
-         <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end  justify-end h-fit">
+        <div className="flex gap-2  items-end  justify-end h-fit">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
             <Button onClick={onClose} variant="subtle">
               Cancel

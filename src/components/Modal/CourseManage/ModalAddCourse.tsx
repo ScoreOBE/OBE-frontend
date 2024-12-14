@@ -584,7 +584,7 @@ export default function ModalAddCourse({
                 classNames={{
                   input:
                     " macair133:h-[130px] sm:h-[75px] ipad11:h-[90px] overflow-y-scroll bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
-                  pill: "bg-secondary text-white font-bold",
+                  pill: "bg-secondary text-white font-bold pb-1 !pr-1",
                   label: "font-semibold text-tertiary text-b2",
                   error: "text-[10px] !border-none",
                 }}

@@ -120,7 +120,7 @@ export default function ModalEditStudentScore({
       }}
     >
       <div className="flex flex-col gap-5 w-full">
-        <div className="flex flex-col gap-5 w-full max-h-[300px] overflow-y-auto ipad11:gap-5">
+        <div className="flex flex-col gap-5 w-full max-h-[300px] sm:max-macair133:max-h-[350px] overflow-y-auto ipad11:gap-5">
           {!!form.getValues().questions?.length &&
             form.getValues().questions?.map((ques, index) => (
               <div
