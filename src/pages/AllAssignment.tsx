@@ -295,7 +295,7 @@ export default function AllAssignment() {
       <Modal
         opened={openPublishScoreModal}
         closeOnClickOutside={false}
-        size="30vw"
+        size="35vw"
         title={
           <div className="flex flex-col gap-2">
             <p>Publish score {isPublishAll ? "all" : "each"} sections</p>
@@ -323,12 +323,12 @@ export default function AllAssignment() {
             className="mb-5"
           ></Alert>
         )}
-        <div className="mb-6 flex flex-col gap-3">
+        <div className="mb-6  p-4 rounded-2xl  flex flex-col gap-3">
           {course?.sections.length! > 1 && (
             <Chip
               classNames={{
                 label:
-                  "text-[13px] text-default font-semibold translate-y-[3px]",
+                  "text-[13px] text-default font-semibold ",
               }}
               size="md"
               checked={
@@ -346,7 +346,7 @@ export default function AllAssignment() {
                 }
               }}
             >
-              All Evaluation
+              All Evaluations
             </Chip>
           )}
           <Chip.Group
@@ -363,7 +363,7 @@ export default function AllAssignment() {
                     classNames={{
                       root: "h-8 !rounded-[10px] text-center justify-center items-center",
                       label:
-                        "text-[13px] text-default font-semibold translate-y-[3px] ",
+                        "text-[13px] text-default font-semibold  ",
                     }}
                     size="md"
                     value={as.name}
@@ -427,7 +427,7 @@ export default function AllAssignment() {
           variant="light"
           color="blue"
           title={
-            <p>
+            <p className="mt-[2px]">
               You choose{" "}
               {form
                 .getValues()
@@ -915,8 +915,7 @@ export default function AllAssignment() {
                               .flat() || [];
                           return (
                             <div
-                           
-                              className={`last:mb-4 flex px-2 border flex-col rounded-md gap-10 py-2 ${
+                              className={`last:mb-4 flex px-2 border bg-[#ffffff] flex-col rounded-md gap-10 py-2 ${
                                 activeSection === i ? "active" : ""
                               }`}
                               id={`${item.name}`}
