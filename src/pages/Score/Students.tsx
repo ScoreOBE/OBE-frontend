@@ -19,7 +19,6 @@ import { TbSearch } from "react-icons/tb";
 import { cloneDeep } from "lodash";
 import { ROLE } from "@/helpers/constants/enum";
 import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
 import { IModelScore } from "@/models/ModelCourse";
 
 export default function Students() {
@@ -46,12 +45,7 @@ export default function Students() {
   });
   const [params, setParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const [sort, setSort] = useState({
-    studentId: null,
-    score: null,
-    ...assignment?.questions.map((item) => ({ [item.name]: null })),
-  });
-
+  const [sort, setSort] = useState<any>({});
   const [filter, setFilter] = useState<string>("");
   const [openEditScore, setOpenEditScore] = useState(false);
   const [editScore, setEditScore] = useState<{
@@ -86,7 +80,15 @@ export default function Students() {
   }, []);
 
   useEffect(() => {
-    if (section?.students && !students.length) {
+    if (section?.students && !students.length && assignment?.questions) {
+      setSort({
+        studentId: null,
+        score: null,
+        ...assignment.questions.reduce((acc, item) => {
+          (acc as any)[item.name] = null;
+          return acc;
+        }, {}),
+      });
       setStudents(
         section?.students?.map((student) => {
           student.questions = student.scores
@@ -146,15 +148,9 @@ export default function Students() {
   });
 
   const onClickSort = (key: string) => {
-    const currentSort = sort[key];
+    const currentSort = (sort as any)[key];
     const toggleSort = currentSort === null ? true : !currentSort;
-
-    setSort((prev) => ({
-      ...Object.keys(prev).reduce((acc, k) => {
-        acc[k] = k === key ? toggleSort : null; // Reset other fields to null
-        return acc;
-      }, {}),
-    }));
+    setSort((prev: any) => ({ ...prev, [key]: toggleSort }));
 
     let newStudents = [...students];
     newStudents = newStudents.sort((a, b) => {
@@ -164,8 +160,11 @@ export default function Students() {
           : b.student.studentId!.localeCompare(a.student.studentId!);
       } else if (key === "score") {
         return toggleSort ? a.sumScore - b.sumScore : b.sumScore - a.sumScore;
+      } else {
+        const scoreA = a.questions.find((e: any) => e.name == key)?.score;
+        const scoreB = b.questions.find((e: any) => e.name == key)?.score;
+        return toggleSort ? scoreA - scoreB : scoreB - scoreA;
       }
-      return 0;
     });
     setStudents(newStudents);
   };
@@ -269,7 +268,7 @@ export default function Students() {
               <Button
                 className="min-w-fit"
                 onClick={() => {
-                  setSort((prev) => {
+                  setSort((prev: any) => {
                     const resetSort: any = {};
                     for (const key in prev) {
                       resetSort[key] = null;
@@ -308,10 +307,10 @@ export default function Students() {
                         <p>Student ID</p>{" "}
                         {sort.studentId === null ? (
                           <IconNotSort className="size-4" />
-                        ) : sort.score ? (
-                          <IconSortAsc className="size-5" /> // Icon for ascending
+                        ) : sort.studentId ? (
+                          <IconSortAsc className="size-5" />
                         ) : (
-                          <IconSortDes className="size-5" /> // Icon for descending
+                          <IconSortDes className="size-5" />
                         )}
                       </div>
                     </Table.Th>
@@ -344,7 +343,9 @@ export default function Students() {
                           onClick={() => onClickSort(item.name)}
                         >
                           <p>{item.name}</p>
-                          {(sort as any)[item.name] ? (
+                          {(sort as any)[item.name] === null ? (
+                            <IconNotSort className="size-4" />
+                          ) : (sort as any)[item.name] ? (
                             <IconSortAsc className="size-5" />
                           ) : (
                             <IconSortDes className="size-5" />
@@ -418,7 +419,9 @@ export default function Students() {
                             )?.score;
                             return (
                               <Table.Td key={index}>
-                               <div className=" justify-end flex"> {score != undefined ? score.toFixed(2) : "-"}</div>
+                                <div className=" justify-end flex">
+                                  {score != undefined ? score.toFixed(2) : "-"}
+                                </div>
                               </Table.Td>
                             );
                           })}

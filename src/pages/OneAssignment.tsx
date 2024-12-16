@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useRef, useState } from "react";
-import { Table, TextInput } from "@mantine/core";
+import { Button, Table, TextInput } from "@mantine/core";
 import { useParams, useSearchParams } from "react-router-dom";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import Loading from "@/components/Loading/Loading";
@@ -13,12 +13,14 @@ import { TbSearch } from "react-icons/tb";
 import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
+import IconSortAsc from "@/assets/icons/sortAsc.svg?react";
+import IconSortDes from "@/assets/icons/sortDes.svg?react";
+import IconNotSort from "@/assets/icons/arrowUpDown.svg?react";
 import { calStat, scrollToStudent } from "@/helpers/functions/score";
 
 export default function OneAssignment() {
   const { courseNo, name } = useParams();
   const loading = useAppSelector((state) => state.loading);
-  const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)
   );
@@ -32,40 +34,20 @@ export default function OneAssignment() {
     max: [] as string[],
     min: [] as string[],
   });
+  const [allStudent, setAllStudent] = useState<
+    ({
+      sectionNo: string;
+      student: IModelUser;
+      scores: {
+        score: string | number;
+        name: string;
+      }[];
+      sumScore: number;
+    } & Record<string, any>)[]
+  >([]);
+  const [sort, setSort] = useState<any>({});
   const [filter, setFilter] = useState<string>("");
   const questions = assignment?.questions;
-  const allStudent: any[] =
-    course?.sections
-      .flatMap((sec) => {
-        return sec.students
-          ?.map((std) => {
-            const score = std.scores.find(
-              ({ assignmentName }) => assignmentName == name
-            );
-            if (score) {
-              const questionsObject = score.questions.reduce(
-                (acc, question) => {
-                  acc[question.name] = question.score;
-                  return acc;
-                },
-                {} as Record<string, number>
-              );
-              return {
-                sectionNo: getSectionNo(sec.sectionNo),
-                student: std.student,
-                score: score.questions.map((item) => ({
-                  ...item,
-                  score: item.score >= 0 ? item.score : "",
-                })),
-                ...questionsObject,
-              };
-            }
-            return null;
-          })
-          .filter((item) => item !== null);
-      })
-      .filter((item) => item !== undefined) || [];
-
   const [params, setParams] = useSearchParams();
   const scores = allStudent
     .map((item) => {
@@ -103,6 +85,75 @@ export default function OneAssignment() {
     dispatch(setDashboard(ROLE.INSTRUCTOR));
     localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
   }, []);
+
+  useEffect(() => {
+    if (assignment && questions) {
+      setSort({
+        studentId: null,
+        score: null,
+        ...assignment.questions.reduce((acc, item) => {
+          (acc as any)[item.name] = null;
+          return acc;
+        }, {}),
+      });
+      setAllStudent(
+        (course?.sections
+          .flatMap((sec) => {
+            return sec.students
+              ?.map((std) => {
+                const score = std.scores.find(
+                  ({ assignmentName }) => assignmentName == name
+                );
+                if (score) {
+                  const questionsObject = score.questions.reduce(
+                    (acc, question) => {
+                      acc[question.name] = question.score;
+                      return acc;
+                    },
+                    {} as Record<string, number>
+                  );
+                  const sumScore =
+                    Object.values(questionsObject)?.reduce((sum, score) => {
+                      return score >= 0 ? sum + score : sum;
+                    }, 0) || 0;
+                  return {
+                    sectionNo: getSectionNo(sec.sectionNo),
+                    student: std.student,
+                    sumScore,
+                    scores: score.questions.map((item) => ({
+                      ...item,
+                      score: item.score >= 0 ? item.score : "",
+                    })),
+                    ...questionsObject,
+                  };
+                }
+                return null;
+              })
+              .filter((item) => item !== null);
+          })
+          .filter((item) => item !== undefined) as any[]) || []
+      );
+    }
+  }, [course]);
+
+  const onClickSort = (key: string) => {
+    const currentSort = (sort as any)[key];
+    const toggleSort = currentSort === null ? true : !currentSort;
+    setSort((prev: any) => ({ ...prev, [key]: toggleSort }));
+    let newStudents = [...allStudent];
+    newStudents = newStudents.sort((a, b) => {
+      if (key === "studentId") {
+        return toggleSort
+          ? a.student.studentId!.localeCompare(b.student.studentId!)
+          : b.student.studentId!.localeCompare(a.student.studentId!);
+      } else if (key === "score") {
+        return toggleSort ? a.sumScore - b.sumScore : b.sumScore - a.sumScore;
+      } else {
+        return toggleSort ? a[key] - b[key] : b[key] - a[key];
+      }
+    });
+    setAllStudent(newStudents);
+  };
 
   return (
     <>
@@ -198,14 +249,33 @@ export default function OneAssignment() {
                 </div>
               </div>
             </div>
-            <TextInput
-              leftSection={<TbSearch />}
-              placeholder="Section No, Student ID, Name"
-              size="xs"
-              className="my-2"
-              rightSectionPointerEvents="all"
-              onChange={(event: any) => setFilter(event.currentTarget.value)}
-            ></TextInput>
+            <div className="flex my-2 gap-2 w-full">
+              <TextInput
+                leftSection={<TbSearch />}
+                placeholder="Section No, Student ID, Name"
+                size="xs"
+                rightSectionPointerEvents="all"
+                className="w-full"
+                onChange={(event: any) => setFilter(event.currentTarget.value)}
+              ></TextInput>
+              <Button
+                className="min-w-fit"
+                onClick={() => {
+                  setSort((prev: any) => {
+                    const resetSort: any = {};
+                    for (const key in prev) {
+                      resetSort[key] = null;
+                    }
+                    return resetSort;
+                  });
+                  allStudent?.sort((a, b) =>
+                    a.student.studentId!.localeCompare(b.student.studentId!)
+                  );
+                }}
+              >
+                Reset Sort
+              </Button>
+            </div>
             <div
               className="relative overflow-auto border rounded-lg border-secondary"
               style={{
@@ -216,11 +286,53 @@ export default function OneAssignment() {
                 <Table.Thead>
                   <Table.Tr className="bg-[#dfebff]">
                     <Table.Th>Section</Table.Th>
-                    <Table.Th>Student ID</Table.Th>
+                    <Table.Th>
+                      <div
+                        className="flex items-center gap-2 cursor-pointer"
+                        onClick={() => onClickSort("studentId")}
+                      >
+                        <p>Student ID</p>
+                        {sort.studentId === null ? (
+                          <IconNotSort className="size-4" />
+                        ) : sort.studentId ? (
+                          <IconSortAsc className="size-5" />
+                        ) : (
+                          <IconSortDes className="size-5" />
+                        )}
+                      </div>
+                    </Table.Th>
                     <Table.Th>Name</Table.Th>
-                    <Table.Th>Score</Table.Th>
+                    <Table.Th>
+                      <div
+                        className="flex items-center gap-2 cursor-pointer"
+                        onClick={() => onClickSort("score")}
+                      >
+                        <p>Score</p>
+                        {sort.score === null ? (
+                          <IconNotSort className="size-4" />
+                        ) : sort.score ? (
+                          <IconSortAsc className="size-5" />
+                        ) : (
+                          <IconSortDes className="size-5" />
+                        )}
+                      </div>
+                    </Table.Th>
                     {questions?.map((item, index) => (
-                      <Table.Th key={index}>{item.name}</Table.Th>
+                      <Table.Th key={index}>
+                        <div
+                          className="flex justify-end gap-2 cursor-pointer"
+                          onClick={() => onClickSort(item.name)}
+                        >
+                          <p>{item.name}</p>
+                          {(sort as any)[item.name] === null ? (
+                            <IconNotSort className="size-4" />
+                          ) : (sort as any)[item.name] ? (
+                            <IconSortAsc className="size-5" />
+                          ) : (
+                            <IconSortDes className="size-5" />
+                          )}
+                        </div>
+                      </Table.Th>
                     ))}
                   </Table.Tr>
                 </Table.Thead>
@@ -232,15 +344,10 @@ export default function OneAssignment() {
                           item.student.studentId?.toString().includes(filter)
                         : getUserName(item.student, 3)?.includes(filter)
                     )
-                    .map((item, index) => {
-                      const sumScore =
-                        questions?.reduce((sum, ques) => {
-                          const score = item[ques.name];
-                          return score >= 0 ? sum + score : sum;
-                        }, 0) || 0;
+                    .map((item) => {
                       const studentId = item.student.studentId!;
                       if (
-                        sumScore == maxScore &&
+                        item.sumScore == maxScore &&
                         !studentMaxMin.max.includes(studentId)
                       ) {
                         setStudentMaxMin((prev) => ({
@@ -248,7 +355,7 @@ export default function OneAssignment() {
                           max: [...prev.max, studentId],
                         }));
                       } else if (
-                        sumScore == minScore &&
+                        item.sumScore == minScore &&
                         !studentMaxMin.min.includes(studentId)
                       ) {
                         setStudentMaxMin((prev) => ({
@@ -267,14 +374,14 @@ export default function OneAssignment() {
                           <Table.Td>{getUserName(item.student, 3)}</Table.Td>
                           <Table.Td className="w-[5%]">
                             <div className="flex gap-3 justify-end items-center">
-                              <p>{sumScore.toFixed(2)}</p>
+                              <p>{item.sumScore?.toFixed(2)}</p>
                               <div
                                 className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
                                 onClick={() => {
                                   setEditScore({
                                     section: parseInt(item.sectionNo),
                                     student: item.student,
-                                    questions: item.score || [],
+                                    questions: item.scores || [],
                                   });
                                   setOpenEditScore(true);
                                 }}
