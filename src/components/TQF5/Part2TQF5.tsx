@@ -120,8 +120,8 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
         !!tqf5.assignmentsMap?.length || tqf5.method == METHOD_TQF5.MANUAL ? (
           <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
             <div className="gap-4 flex flex-col w-full -mt-3 overflow-y-auto  max-h-full px-1">
-              {form.getValues().data.map((item, indexClo) => {
-                const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
+              {form.getValues().data.map((cloItem, indexClo) => {
+                const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
                 return (
                   <div
                     className={` flex flex-col border-b-[2px] last:border-none  gap-5 px-2 pb-6 first:pt-3 ${
@@ -129,7 +129,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                     }`}
                     id={`${clo?.id}`}
                     key={indexClo}
-                    ref={sectionRefs.current!.at(indexClo)} // Dynamic refs
+                    ref={sectionRefs.current!.at(indexClo)}
                   >
                     <div className="flex justify-between">
                       <div className="text-default flex items-center  font-medium text-[15px]">
@@ -142,7 +142,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                         </div>
                       </div>
                     </div>
-                    {item.assignments.map((item, indexEval) => {
+                    {cloItem.assignments.map((item, indexEval) => {
                       const evaluation = tqf3.part3?.eval.find(
                         (e) => e.id == item.eval
                       );
@@ -154,7 +154,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                           key={indexEval}
                           className="rounded-md overflow-clip  text-[14px] mx-2 border"
                         >
-                          <div className=" px-6  flex justify-between items-center font-medium text-secondary ">
+                          <div className="px-6 flex justify-between items-center font-medium text-secondary ">
                             {tqf5.method == METHOD_TQF5.MANUAL && (
                               <div className=" py-3 w-full flex justify-between items-center font-medium text-secondary ">
                                 <div className="flex flex-col">
@@ -170,57 +170,81 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                                   </p>
                                 </div>
                                 <Button
-                                  className="text-center px-3"
-                                  onClick={() =>
+                                  className="min-w-fit text-center px-3"
+                                  onClick={() => {
                                     form.insertListItem(
                                       `data.${indexClo}.assignments.${indexEval}.questions`,
                                       ""
-                                    )
-                                  }
+                                    );
+                                    form.validateField(
+                                      `data.${indexClo}.assignments.${indexEval}.questions`
+                                    );
+                                  }}
                                 >
                                   <Icon IconComponent={IconAdd} />
-                                </Button>{" "}
+                                </Button>
                               </div>
                             )}
                           </div>
                           {tqf5.method == METHOD_TQF5.MANUAL ? (
-                            item.questions.map((ques, indexQues) => (
-                              <div
-                                key={form.key(
-                                  `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
-                                )}
-                                className="flex px-6 pt-2 pb-4 justify-between  gap-5 items-center"
-                              >
-                                <div className="flex w-[95%] gap-2 items-center">
-                                  <p>{indexQues + 1}.</p>
-                                  <TextInput
-                                    withAsterisk={true}
-                                    size="xs"
-                                    placeholder="Question / Assignment No"
-                                    {...form.getInputProps(
-                                      `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
-                                    )}
-                                    className="w-full"
-                                  />
-                                </div>
-                                <Button
-                                  className="text-center px-2 hover:bg-[#ff4747]/10"
-                                  variant="outline"
-                                  color="#ff4747"
-                                  onClick={() =>
-                                    form.removeListItem(
-                                      `data.${indexClo}.assignments.${indexEval}.questions`,
-                                      indexQues
-                                    )
-                                  }
+                            <>
+                              {item.questions.map((ques, indexQues) => (
+                                <div
+                                  key={form.key(
+                                    `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
+                                  )}
+                                  className="flex px-6 pt-2 pb-4 justify-between gap-5 items-center"
                                 >
-                                  <Icon
-                                    IconComponent={IconTrash}
-                                    className="stroke-[1.5px] size-5"
-                                  />
-                                </Button>
-                              </div>
-                            ))
+                                  <div className="flex w-[95%] gap-2 items-center">
+                                    <p>{indexQues + 1}.</p>
+                                    <TextInput
+                                      withAsterisk={true}
+                                      size="xs"
+                                      placeholder="Question / Assignment No"
+                                      {...form.getInputProps(
+                                        `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
+                                      )}
+                                      onBlur={() => {
+                                        if (!ques.length) {
+                                          form.setFieldError(
+                                            `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`,
+                                            "Please input question."
+                                          );
+                                        } else {
+                                          form.clearFieldError(
+                                            `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`
+                                          );
+                                        }
+                                      }}
+                                      className="w-full"
+                                    />
+                                  </div>
+                                  <Button
+                                    className="min-w-fit text-center px-2 hover:bg-[#ff4747]/10"
+                                    variant="outline"
+                                    color="#ff4747"
+                                    onClick={() =>
+                                      form.removeListItem(
+                                        `data.${indexClo}.assignments.${indexEval}.questions`,
+                                        indexQues
+                                      )
+                                    }
+                                  >
+                                    <Icon
+                                      IconComponent={IconTrash}
+                                      className="stroke-[1.5px] size-5"
+                                    />
+                                  </Button>
+                                </div>
+                              ))}
+                              <p className="error-text mx-6 mb-2">
+                                {
+                                  form.getInputProps(
+                                    `data.${indexClo}.assignments.${indexEval}.questions`
+                                  ).error
+                                }
+                              </p>
+                            </>
                           ) : (
                             <Checkbox.Group
                               {...form.getInputProps(
