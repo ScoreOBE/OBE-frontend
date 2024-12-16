@@ -235,6 +235,26 @@ export default function TQF5() {
   const onSave = async () => {
     if (form && tqf5.id && tqf5Part) {
       const validationResult = form.validate();
+      switch (tqf5Part) {
+        case Object.keys(partLabel)[0]:
+          break;
+        case Object.keys(partLabel)[1]:
+          if (tqf5.method == METHOD_TQF5.MANUAL) {
+            form.getValues().data.forEach((cloItem: any, indexClo: number) =>
+              cloItem.assignments.forEach((item: any, indexEval: number) =>
+                item.questions.map((ques: any, indexQues: number) => {
+                  if (!ques.length) {
+                    form.setFieldError(
+                      `data.${indexClo}.assignments.${indexEval}.questions.${indexQues}`,
+                      "Please input question."
+                    );
+                  }
+                })
+              )
+            );
+          }
+          break;
+      }
       if (Object.keys(validationResult.errors).length > 0) {
         const firstErrorPath = Object.keys(validationResult.errors)[0];
         form
@@ -274,7 +294,9 @@ export default function TQF5() {
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Method Changed Successfully",
-        `The evaluation method for TQF 5 has been successfully updated to ${method ?? selectedMethod}.`
+        `The evaluation method for TQF 5 has been successfully updated to ${
+          method ?? selectedMethod
+        }.`
       );
       setOpenModalChangeMethod(false);
     }
