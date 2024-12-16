@@ -129,7 +129,9 @@ export default function Section() {
         showNotifications(
           NOTI_TYPE.SUCCESS,
           "Section Delete Successfully",
-          `${getSectionNo(editSec?.sectionNo)} has been deleted from this course`
+          `${getSectionNo(
+            editSec?.sectionNo
+          )} has been deleted from this course`
         );
       }
     }
@@ -308,7 +310,6 @@ export default function Section() {
                           <span>Add section</span>
                         </div>
                       </Menu.Item>
-
                       <Menu.Item
                         className="text-[#3e3e3e] font-semibold text-[12px] h-7 "
                         onClick={() => {
@@ -330,19 +331,6 @@ export default function Section() {
                           <span>Manage Co-Instructor</span>
                         </div>
                       </Menu.Item>
-
-                      {/* <Menu.Item
-                        onClick={() => setOpenModalStudentList(true)}
-                        className="text-[#3e3e3e] font-semibold text-[12px] h-7 w-[210px]"
-                      >
-                        <div className="flex items-center  gap-2">
-                          <Icon
-                            IconComponent={IconUserGroup}
-                            className="size-4"
-                          />
-                          <span>Student list {course?.courseNo}</span>
-                        </div>
-                      </Menu.Item> */}
                       <Menu.Item
                         onClick={() => setOpenModalExportScore(true)}
                         className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-[12px] h-7 "
@@ -498,15 +486,13 @@ export default function Section() {
                           </p>
                         )}
                       </div>
-                      {course?.type !== COURSE_TYPE.SEL_TOPIC.en && (
-                        <div
-                          className={` text-xs font-medium text-[#757575]  ${
-                            !sec.isActive && "text-[#c8c8c8]"
-                          }`}
-                        >
-                          {getUserName(sec.instructor as IModelUser, 1)}
-                        </div>
-                      )}
+                      <div
+                        className={` text-xs font-medium text-[#757575]  ${
+                          !sec.isActive && "text-[#c8c8c8]"
+                        }`}
+                      >
+                        {getUserName(sec.instructor as IModelUser, 1)}
+                      </div>
                     </div>
                     {sec.isActive && (
                       <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
@@ -515,9 +501,9 @@ export default function Section() {
                             ? ""
                             : sec.assignments?.length}
                           {(sec.assignments?.length ?? 0) === 1
-                            ? ` ${" "}Evaluation`
+                            ? ` Evaluation`
                             : (sec.assignments?.length ?? 0) > 1
-                            ? ` ${" "}Evaluations`
+                            ? ` Evaluations`
                             : "No Evaluation"}
                         </p>
                         {course.type == COURSE_TYPE.SEL_TOPIC.en && (
