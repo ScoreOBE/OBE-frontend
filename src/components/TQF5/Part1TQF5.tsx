@@ -11,9 +11,8 @@ import { IModelTQF5Part1 } from "@/models/ModelTQF5";
 import ModalUploadGrade from "../Modal/Score/ModalUploadGrade";
 import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF5 } from "@/store/tqf5";
-import {
-  getSectionNo,
-} from "@/helpers/functions/function";
+import { getSectionNo } from "@/helpers/functions/function";
+import { IModelUser } from "@/models/ModelUser";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -21,6 +20,7 @@ type Props = {
 
 export default function Part1TQF5({ setForm }: Props) {
   const { courseNo } = useParams();
+  const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
@@ -179,6 +179,14 @@ export default function Part1TQF5({ setForm }: Props) {
 
               <Table.Tbody>
                 {form.getValues().courseEval?.map((item, index) => {
+                  const section = course?.sections.find(
+                    ({ sectionNo }) => sectionNo == item.sectionNo
+                  );
+                  const canAccess =
+                    (section?.instructor as IModelUser).id == user.id ||
+                    section?.coInstructors?.find(
+                      (coIns) => coIns.id == user.id
+                    );
                   const data = Object.values(item)
                     .slice(1)
                     .map((e: any) => parseInt(e));
@@ -201,20 +209,34 @@ export default function Part1TQF5({ setForm }: Props) {
                       key={item.sectionNo}
                     >
                       <Table.Td>{getSectionNo(item.sectionNo)}</Table.Td>
-                      {Object.keys(item)
-                        .slice(1)
-                        .map((key) => (
-                          <Table.Td key={key}>
-                            {isEditCourseEval ? (
-                              <TextInput
-                                size="xs"
-                                {...form.getInputProps(
-                                  `courseEval.${index}.${key}`
-                                )}
-                              />
-                            ) : (
-                              (item as any)[key] ?? "-"
-                            )}
+                      {!isEditCourseEval &&
+                        Object.keys(item)
+                          .slice(1)
+                          .map((key) => (
+                            <Table.Td key={key}>
+                              {(item as any)[key] ?? "-"}
+                            </Table.Td>
+                          ))}
+                      {isEditCourseEval &&
+                        (canAccess ? (
+                          Object.keys(item)
+                            .slice(1)
+                            .map((key) => (
+                              <Table.Td key={key}>
+                                <TextInput
+                                  size="xs"
+                                  {...form.getInputProps(
+                                    `courseEval.${index}.${key}`
+                                  )}
+                                />
+                              </Table.Td>
+                            ))
+                        ) : (
+                          <Table.Td
+                            colSpan={12}
+                            className="text-error text-center"
+                          >
+                            cannot edit
                           </Table.Td>
                         ))}
                       <Table.Td>{total}</Table.Td>
