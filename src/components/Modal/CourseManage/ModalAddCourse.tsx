@@ -641,17 +641,20 @@ export default function ModalAddCourse({
                           }}
                           multiple
                         >
-                          <Group className=" items-center h-ful mt-2 flex flex-row gap-4">
+                          <Group className=" items-center  h-ful mt-2 flex flex-row gap-4">
                             {SEMESTER.map((item, index) => (
                               <Chip
+                
                                 key={index}
                                 icon={<></>}
                                 classNames={{
                                   input:
-                                    "!bg-white border-[1.5px]   disabled:bg-gray-500",
-                                  iconWrapper: "w-0",
+                                    "!bg-black border-[1.5px]   disabled:bg-gray-500",
+                                  iconWrapper: "w-0 !bg-black",
                                   label: "text-b2 !px-5 cursor-pointer",
+                                  root: ""
                                 }}
+                                
                                 size="sm"
                                 value={item.toString()}
                                 disabled={
