@@ -248,11 +248,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
 
       {/* Modal Add PLO Collection */}
       <Modal
-        title={
-          <div className="flex flex-col gap-1">
-            <p>Add PLO Collection</p>
-          </div>
-        }
+        title="Add PLO Collection"
         closeOnClickOutside={false}
         opened={modalDuplicatePLO && !!ploCollectDupli.length}
         onClose={closeModalDuplicatePLO}
@@ -274,7 +270,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               icon: "size-6",
             }}
             title={
-              <div className="flex items-center  gap-2">
+              <div className="flex items-center gap-2">
                 <Icon IconComponent={IconInfo2} />
                 <p>Duplicate PLO Collection </p>
               </div>
@@ -391,7 +387,6 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                   <p className="text-secondary text-[16px] font-bold">
                     {selectPlo}
                   </p>
-
                   {selectView == "ploview" ? (
                     <p className="text-tertiary text-[14px] font-medium">
                       {ploCollection.length} Collection

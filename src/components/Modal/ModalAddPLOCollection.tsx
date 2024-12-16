@@ -269,6 +269,7 @@ export default function ModalAddPLOCollection({
       facultyCode: user.facultyCode,
       semester: term.semester,
       year: term.year,
+      isActive: false,
       data: form.getValues().data,
     };
     const res = await createPLO(payload);
@@ -286,11 +287,7 @@ export default function ModalAddPLOCollection({
   return (
     <>
       <Modal
-        title={
-          <div className="flex flex-col gap-1">
-            <p>Select semester</p>
-          </div>
-        }
+        title="Select semester"
         closeOnClickOutside={false}
         opened={openModalSelectSemester}
         onClose={closeModal}
@@ -311,7 +308,7 @@ export default function ModalAddPLOCollection({
               body: " flex justify-center",
             }}
             title={
-              <div className="flex items-center  gap-2">
+              <div className="flex items-center gap-2">
                 <Icon IconComponent={IconInfo2} />
                 <p>
                   Select semester you would like to begin using the PLO
@@ -654,7 +651,6 @@ export default function ModalAddPLOCollection({
                       IconComponent={IconHome}
                       className="text-secondary size-5"
                     />
-
                     <span>List of Departments</span>
                   </div>
                   <p>
@@ -665,9 +661,9 @@ export default function ModalAddPLOCollection({
                 <div className="flex flex-col w-full macair133:h-[290px] h-[200px] ipad11:h-[220px] sm:h-[170px] px-3 overflow-y-auto">
                   <Checkbox
                     size="xs"
-                    className="p-3 py-5  w-full last:border-none border-b-[1px]"
+                    className="p-3 py-5 w-full last:border-none border-b-[1px]"
                     classNames={{
-                      label: "ml-2 font-medium  text-[13px]",
+                      label: "ml-2 font-medium text-[13px]",
                       input: "cursor-pointer",
                     }}
                     label="All"
@@ -686,12 +682,12 @@ export default function ModalAddPLOCollection({
                     }}
                   >
                     <Group className="gap-0">
-                      {department.map((dep, index: number) => (
+                      {department.map((dep, index) => (
                         <Checkbox
                           size="xs"
                           key={index}
                           value={dep.codeEN}
-                          className="p-3 py-4  w-full last:border-none border-b-[1px] "
+                          className="p-3 py-4 w-full last:border-none border-b-[1px]"
                           classNames={{
                             label: "ml-2 text-[13px] font-medium",
                             input: "cursor-pointer",
@@ -748,6 +744,7 @@ export default function ModalAddPLOCollection({
                   <div className="flex flex-col w-full ">
                     {state.map((item, index) => (
                       <div
+                        key={index}
                         className={`flex  py-4 w-full justify-between  border-b  ${
                           state?.length! > 1 ? "last:border-none" : ""
                         }`}
