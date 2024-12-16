@@ -670,18 +670,22 @@ export default function TQF5() {
           </div>
         </Tabs>
       </div>
-      {checkActiveTerm() && tqf5Original && tqf5.id && showSaveTQFbar() && (
-        <SaveTQFbar
-          tqf="5"
-          part={tqf5Part as partType}
-          data={tqf5Original[tqf5Part as keyof IModelTQF5]}
-          onSave={onSave}
-          disabledSave={isEqual(
-            tqf5Original[tqf5Part as keyof IModelTQF5],
-            tqf5[tqf5Part as keyof IModelTQF5]
-          )}
-        />
-      )}
+      {tqf5Part != "part3" &&
+        checkActiveTerm() &&
+        tqf5Original &&
+        tqf5.id &&
+        showSaveTQFbar() && (
+          <SaveTQFbar
+            tqf="5"
+            part={tqf5Part as partType}
+            data={tqf5Original[tqf5Part as keyof IModelTQF5]}
+            onSave={onSave}
+            disabledSave={isEqual(
+              tqf5Original[tqf5Part as keyof IModelTQF5],
+              tqf5[tqf5Part as keyof IModelTQF5]
+            )}
+          />
+        )}
     </>
   );
 }

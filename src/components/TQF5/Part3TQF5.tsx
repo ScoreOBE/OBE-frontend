@@ -60,7 +60,7 @@ export default function Part3TQF5({ setForm, tqf3 }: Props) {
     if (tqf5.part3) {
       form.setValues(cloneDeep(tqf5.part3));
     } else if (tqf3.part2) {
-      form.setValues(initialTqf5Part3(tqf3.part2.clo));
+      form.setValues(initialTqf5Part3(tqf3.part2.clo, course?.sections as any));
     }
   }, [tqf5.method]);
 
@@ -181,15 +181,16 @@ export default function Part3TQF5({ setForm, tqf3 }: Props) {
                     .slice(1)
                     .map((e: any) => parseInt(e));
                   const total = data.reduce((a, b: any) => a + b, 0);
-                  const avg =
-                    total > 0
-                      ? (0 * item.score0 +
-                          1 * item.score1 +
-                          2 * item.score2 +
-                          3 * item.score3 +
-                          4 * item.score4) /
-                        total
-                      : 0;
+                  const avg = 0;
+                  // const avg =
+                  //   total > 0
+                  //     ? (0 * item.score0 +
+                  //         1 * item.score1 +
+                  //         2 * item.score2 +
+                  //         3 * item.score3 +
+                  //         4 * item.score4) /
+                  //       total
+                  //     : 0;
                   return (
                     <Table.Tr
                       className="font-medium text-default text-[13px]"
@@ -403,15 +404,16 @@ export default function Part3TQF5({ setForm, tqf3 }: Props) {
                               .slice(1)
                               .map((e: any) => parseInt(e));
                             const total = data.reduce((a, b: any) => a + b, 0);
-                            const avg =
-                              total > 0
-                                ? (0 * item.score0 +
-                                    1 * item.score1 +
-                                    2 * item.score2 +
-                                    3 * item.score3 +
-                                    4 * item.score4) /
-                                  total
-                                : 0;
+                            const avg = 0;
+                            // const avg =
+                              //   total > 0
+                            //     ? (0 * item.score0 +
+                            //         1 * item.score1 +
+                            //         2 * item.score2 +
+                            //         3 * item.score3 +
+                            //         4 * item.score4) /
+                            //       total
+                            //     : 0;
                             return (
                               <Table.Tr
                                 className="font-medium text-default text-[13px]"

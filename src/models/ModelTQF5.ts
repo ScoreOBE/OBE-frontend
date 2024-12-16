@@ -51,9 +51,12 @@ export interface IModelTQF5Part2 {
 
 export interface IModelTQF5Part3 {
   clo: IModelCLO | string;
-  score0: number;
-  score1: number;
-  score2: number;
-  score3: number;
-  score4: number;
+  sections: {
+    sectionNo: number;
+    score0: number;
+    score1: number;
+    score2: number;
+    score3: number;
+    score4: number;
+  }[];
 }
