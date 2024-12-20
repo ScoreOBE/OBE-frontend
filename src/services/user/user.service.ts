@@ -36,6 +36,6 @@ export const updateSAdmin = async (params: Partial<IModelUser>) => {
   return isValidResponse(res);
 };
 
-export const logOut = () => {
-  userService.logOut();
+export const logout = () => {
+  userService.logout();
 };

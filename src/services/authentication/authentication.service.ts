@@ -6,7 +6,7 @@ const authService = authenticationController();
 export const logIn = async (code: string) => {
   const res = await authService.login({
     code,
-    redirectUri: import.meta.env.VITE_CMU_OAUTH_REDIRECT_URL,
+    redirectUri: import.meta.env.VITE_CMU_ENTRAID_REDIRECT_URL,
   });
   return isValidResponse(res);
 };

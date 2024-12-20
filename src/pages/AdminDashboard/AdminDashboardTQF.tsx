@@ -639,14 +639,14 @@ export default function AdminDashboardTQF() {
                           courseList.courses.length === 0) ||
                         (tqf5Filters.length &&
                           courseList.courses.length === 0) ? (
-                        <p>
+                        <span>
                           We couldn’t find any courses that match your filter.
-                        </p>
+                        </span>
                       ) : (
-                        <p>
+                        <span>
                           It looks like no courses have been added <br /> in
                           this semester yet.
-                        </p>
+                        </span>
                       )}
                     </p>
                     <br />

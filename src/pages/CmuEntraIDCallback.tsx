@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { setShowNavbar, setShowSidebar } from "@/store/config";
 import { goToDashboard } from "@/helpers/functions/function";
 
-export default function CMUOAuthCallback() {
+export default function CmuEntraIDCallback() {
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const queryParameters = new URLSearchParams(window.location.search);

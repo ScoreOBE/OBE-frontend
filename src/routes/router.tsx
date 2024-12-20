@@ -19,7 +19,7 @@ import AllAssignment from "@/pages/AllAssignment";
 import OneAssignment from "@/pages/OneAssignment";
 
 const Login = lazy(() => import("@/pages/Login"));
-const CMUOAuthCallback = lazy(() => import("@/pages/CmuOAuthCallback"));
+const CmuEntraIDCallback = lazy(() => import("@/pages/CmuEntraIDCallback"));
 const SelectDepartment = lazy(() => import("@/pages/SelectDepartment"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Section = lazy(() => import("@/pages/Section"));
@@ -50,8 +50,8 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: ROUTE_PATH.CMU_OAUTH_CALLBACK,
-        element: <CMUOAuthCallback />,
+        path: ROUTE_PATH.CMU_ENTRAID_CALLBACK,
+        element: <CmuEntraIDCallback />,
       },
       {
         path: ROUTE_PATH.SELECTED_DEPARTMENT,

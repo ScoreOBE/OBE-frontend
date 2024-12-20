@@ -49,7 +49,7 @@ function App() {
         !user.departmentCode.length &&
         ![
           ROUTE_PATH.SELECTED_DEPARTMENT,
-          ROUTE_PATH.CMU_OAUTH_CALLBACK,
+          ROUTE_PATH.CMU_ENTRAID_CALLBACK,
         ].includes(path)
       ) {
         localStorage.removeItem("token");
@@ -57,7 +57,7 @@ function App() {
         fetchData();
       }
     } else if (
-      ![ROUTE_PATH.LOGIN, ROUTE_PATH.CMU_OAUTH_CALLBACK].includes(path)
+      ![ROUTE_PATH.LOGIN, ROUTE_PATH.CMU_ENTRAID_CALLBACK].includes(path)
     ) {
       navigate(ROUTE_PATH.LOGIN);
     }
