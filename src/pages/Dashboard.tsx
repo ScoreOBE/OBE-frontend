@@ -337,7 +337,7 @@ export default function Dashboard() {
           }}
         />
       )}
-      <div className=" flex flex-col h-full w-full  overflow-hidden acerSwift:max-macair133:bg-red-400">
+      <div className=" flex flex-col h-full w-full  overflow-hidden">
         <div className="flex flex-row px-6 pt-3  items-center justify-between">
           <div className="flex flex-col">
             <p className="text-secondary text-h2 acerSwift:max-macair133:text-[17px] font-semibold ">
@@ -375,17 +375,25 @@ export default function Dashboard() {
               {user.role != ROLE.TA && (
                 <Button
                   variant="outline"
-                  className="text-center px-4 "
-                  leftSection={<Icon IconComponent={IconAdd} />}
+                  className="text-center px-4 acerSwift:max-macair133:!text-b5"
+                  leftSection={
+                    <Icon
+                      IconComponent={IconAdd}
+                      className="acerSwift:max-macair133:size-3.5"
+                    />
+                  }
                   onClick={() => setOpenAddModal(true)}
                 >
                   Add course
                 </Button>
               )}
               <Button
-                className="text-center px-4"
+                className="text-center px-4 acerSwift:max-macair133:!text-b5"
                 leftSection={
-                  <Icon IconComponent={IconUpload} className="size-4" />
+                  <Icon
+                    IconComponent={IconUpload}
+                    className="size-4 acerSwift:max-macair133:size-3.5"
+                  />
                 }
                 onClick={() => {
                   setUploadCourse(undefined);
@@ -459,7 +467,7 @@ export default function Dashboard() {
                                 <div>
                                   <Icon
                                     IconComponent={IconDots}
-                                    className="absolute top-2 right-2 rounded-full hover:bg-gray-300"
+                                    className="absolute top-2 right-2 rounded-full hover:bg-gray-300 acerSwift:max-macair133:size-5.5"
                                   />
                                 </div>
                               </Menu.Target>
@@ -479,18 +487,18 @@ export default function Dashboard() {
                                     });
                                     setOpenModalEditCourse(true);
                                   }}
-                                  className="text-[#3E3E3E] font-semibold  text-b4 h-7 w-[180px]"
+                                  className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 w-[180px]"
                                 >
                                   <div className="flex items-center gap-2">
                                     <Icon
                                       IconComponent={IconPencilMinus}
-                                      className="size-4 stroke-[2px]"
+                                      className="size-4 stroke-[2px] acerSwift:max-macair133:size-3"
                                     />
                                     <span>Edit Course</span>
                                   </div>
                                 </Menu.Item>
                                 <Menu.Item
-                                  className="text-[#FF4747] h-7 w-[180px] font-semibold text-b4 hover:bg-[#d55757]/10"
+                                  className="text-[#FF4747] h-7 w-[180px] font-semibold text-b4 acerSwift:max-macair133:!text-b5 hover:bg-[#d55757]/10"
                                   onClick={() => {
                                     setDelCourse(item);
                                     setOpenDelPopup(true);
@@ -499,7 +507,7 @@ export default function Dashboard() {
                                   <div className="flex items-center gap-2">
                                     <Icon
                                       IconComponent={IconTrash}
-                                      className="size-4 stroke-[2px]"
+                                      className="size-4 stroke-[2px] acerSwift:max-macair133:size-3"
                                     />
                                     <span>Delete Course</span>
                                   </div>
@@ -510,19 +518,19 @@ export default function Dashboard() {
                         )}
                     </div>
                     <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
-                      <p className="p-2.5 text-secondary font-[700] text-[12px]">
+                      <p className="p-2.5 text-secondary font-[700] text-b4 acerSwift:max-macair133:text-b5">
                         {item.sections.length} Section
                         {item.sections.length > 1 ? "s" : ""}
                       </p>
                       <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">
                         <p
-                          className="tag-tqf rounded-xl !text-[11px]"
+                          className="tag-tqf rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
                           tqf-status={statusTqf3}
                         >
                           TQF 3
                         </p>
                         <p
-                          className="tag-tqf rounded-xl !text-[11px]"
+                          className="tag-tqf rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
                           tqf-status={statusTqf5}
                         >
                           TQF 5

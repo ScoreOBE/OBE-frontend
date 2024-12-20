@@ -405,126 +405,128 @@ export default function ModalAddCourse({
           step: "flex flex-col items-start w-[42px]",
           stepIcon: "mb-2 text-[#E6E6FF] bg-[#E6E6FF] border-[#E6E6FF]",
           stepBody: "flex-col-reverse m-0 text-nowrap",
-          stepLabel: "text-[13px] font-semibold",
-          stepDescription: "text-[13px] font-semibold ",
+          stepLabel: "text-b3 acerSwift:max-macair133:text-b4 font-semibold",
+          stepDescription:
+            "text-b3 acerSwift:max-macair133:text-b4 font-semibold ",
         }}
-        className=" justify-center items-center mt-1  text-[14px] max-h-full"
+        className="justify-center items-center mt-1 text-b2  acerSwift:max-macair133:text-b3 max-h-full"
       >
         <Stepper.Step
           allowStepSelect={false}
           label="Course Type"
           description="STEP 1"
         >
-          <p className="font-semibold  mt-5 text-[15px]">
+          <p className="font-semibold  mt-5 text-[15px]  acerSwift:max-macair133:text-b3">
             Select type of course
           </p>
-
-          <div className="w-full mt-2 flex flex-col gap-3  bg-transparent rounded-md">
-            <Button
-              onClick={() => nextStep(COURSE_TYPE.GENERAL.en)}
-              rightSection={
-                <Icon
-                  IconComponent={IconChevronRight}
-                  className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
-                />
-              }
-              classNames={{
-                inner: "flex justify-between items-center w-full",
-              }}
-              color="#ffffff"
-              className="!w-full !h-fit !text-[13px] !border border-secondary py-3 items-center flex hover:bg-bgSecond"
-            >
-              <p className="justify-start flex flex-col">
-                <span className="flex justify-start text-default">
-                  {COURSE_TYPE.GENERAL.en}
-                </span>
-                <br />
-                <span className="flex justify-start font-medium text-b4 text-secondary -mt-1">
-                  - Learner Person
-                </span>
-                <span className="flex justify-start font-medium text-b4 text-secondary mt-2">
-                  - Innovative Co-creator
-                </span>
-                <span className="flex justify-start font-medium text-b4 text-secondary mt-2">
-                  - Active Citizen
-                </span>
-              </p>
-            </Button>
-            <Button
-              onClick={() => nextStep(COURSE_TYPE.SPECIAL.en)}
-              rightSection={
-                <Icon
-                  IconComponent={IconChevronRight}
-                  className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
-                />
-              }
-              classNames={{
-                inner: "flex justify-between items-center w-full",
-              }}
-              color="#ffffff"
-              className="!w-full !h-fit !text-[13px] !border border-secondary py-3 items-center flex hover:bg-bgSecond"
-            >
-              <p className="justify-start flex flex-col">
-                <span className="flex justify-start text-default">
-                  {COURSE_TYPE.SPECIAL.en}
-                </span>
-                <br />
-                <span className="flex justify-start font-medium text-b4 text-secondary -mt-1">
-                  - Core Courses
-                </span>
-                <span className="flex justify-start font-medium text-b4 text-secondary mt-2">
-                  - Major Courses
-                </span>
-                <span className="flex justify-start font-medium text-b4 text-secondary mt-2">
-                  - Minor Courses
-                </span>
-              </p>
-            </Button>
-            <Button
-              onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC.en)}
-              rightSection={
-                <Icon
-                  IconComponent={IconChevronRight}
-                  className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
-                />
-              }
-              classNames={{
-                inner: "flex justify-between items-center w-full",
-              }}
-              color="#ffffff"
-              className="!w-full !h-fit !text-[13px] !border border-secondary py-4 items-center flex hover:bg-bgSecond"
-            >
-              <p className="justify-start flex flex-col">
-                <span className="flex justify-start mb-1 text-default">
-                  Selected Topics Course
-                </span>
-              </p>
-            </Button>
-            <Button
-              onClick={() => nextStep(COURSE_TYPE.FREE.en)}
-              color="#ffffff"
-              rightSection={
-                <Icon
-                  IconComponent={IconChevronRight}
-                  className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
-                />
-              }
-              classNames={{
-                inner: "flex justify-between items-center w-full ",
-              }}
-              className="!w-full !h-fit !text-[13px] !border border-secondary py-4 items-center flex hover:bg-bgSecond"
-            >
-              <p className="justify-start flex flex-col">
-                <span className="flex justify-start mb-1 text-default">
-                  {COURSE_TYPE.FREE.en}
-                </span>
-              </p>
-            </Button>
+          <div className=" acerSwift:max-macair133:overflow-y-auto  acerSwift:max-macair133:overflow-clip acerSwift:max-macair133:max-h-[280px] acerSwift:max-macair133:mt-2">
+            <div className="w-full mt-2 flex flex-col gap-3  bg-transparent rounded-md ">
+              <Button
+                onClick={() => nextStep(COURSE_TYPE.GENERAL.en)}
+                rightSection={
+                  <Icon
+                    IconComponent={IconChevronRight}
+                    className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
+                  />
+                }
+                classNames={{
+                  inner: "flex justify-between items-center w-full",
+                }}
+                color="#ffffff"
+                className="!w-full !h-fit !text-b3  acerSwift:max-macair133:text-b4 !border border-secondary py-3 items-center flex hover:bg-bgSecond"
+              >
+                <p className="justify-start flex flex-col">
+                  <span className="flex justify-start text-default acerSwift:max-macair133:!text-b4">
+                    {COURSE_TYPE.GENERAL.en}
+                  </span>
+                  <br />
+                  <span className="flex justify-start font-medium text-b4 text-secondary -mt-1 acerSwift:max-macair133:!text-b5">
+                    - Learner Person
+                  </span>
+                  <span className="flex justify-start font-medium text-b4 text-secondary mt-2 acerSwift:max-macair133:!text-b5">
+                    - Innovative Co-creator
+                  </span>
+                  <span className="flex justify-start font-medium text-b4 text-secondary mt-2 acerSwift:max-macair133:!text-b5">
+                    - Active Citizen
+                  </span>
+                </p>
+              </Button>
+              <Button
+                onClick={() => nextStep(COURSE_TYPE.SPECIAL.en)}
+                rightSection={
+                  <Icon
+                    IconComponent={IconChevronRight}
+                    className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
+                  />
+                }
+                classNames={{
+                  inner: "flex justify-between items-center w-full",
+                }}
+                color="#ffffff"
+                className="!w-full !h-fit !text-b3  acerSwift:max-macair133:text-b4 !border border-secondary py-3 items-center flex hover:bg-bgSecond"
+              >
+                <p className="justify-start flex flex-col">
+                  <span className="flex justify-start text-default acerSwift:max-macair133:!text-b4">
+                    {COURSE_TYPE.SPECIAL.en}
+                  </span>
+                  <br />
+                  <span className="flex justify-start font-medium text-b4 text-secondary -mt-1 acerSwift:max-macair133:!text-b5">
+                    - Core Courses
+                  </span>
+                  <span className="flex justify-start font-medium text-b4 text-secondary mt-2 acerSwift:max-macair133:!text-b5">
+                    - Major Courses
+                  </span>
+                  <span className="flex justify-start font-medium text-b4 text-secondary mt-2 acerSwift:max-macair133:!text-b5">
+                    - Minor Courses
+                  </span>
+                </p>
+              </Button>
+              <Button
+                onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC.en)}
+                rightSection={
+                  <Icon
+                    IconComponent={IconChevronRight}
+                    className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
+                  />
+                }
+                classNames={{
+                  inner: "flex justify-between items-center w-full",
+                }}
+                color="#ffffff"
+                className="!w-full !h-fit !text-b3  acerSwift:max-macair133:text-b4 !border border-secondary py-4 items-center flex hover:bg-bgSecond"
+              >
+                <p className="justify-start flex flex-col">
+                  <span className="flex justify-start mb-1 text-default acerSwift:max-macair133:!text-b4">
+                    Selected Topics Course
+                  </span>
+                </p>
+              </Button>
+              <Button
+                onClick={() => nextStep(COURSE_TYPE.FREE.en)}
+                color="#ffffff"
+                rightSection={
+                  <Icon
+                    IconComponent={IconChevronRight}
+                    className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
+                  />
+                }
+                classNames={{
+                  inner: "flex justify-between items-center w-full ",
+                }}
+                className="!w-full !h-fit !text-b3  acerSwift:max-macair133:text-b4 !border border-secondary py-4 items-center flex hover:bg-bgSecond"
+              >
+                <p className="justify-start flex flex-col">
+                  <span className="flex justify-start mb-1 text-default acerSwift:max-macair133:!text-b4">
+                    {COURSE_TYPE.FREE.en}
+                  </span>
+                </p>
+              </Button>
+            </div>
           </div>
         </Stepper.Step>
         <Stepper.Step
           allowStepSelect={false}
-          label="Course Infor"
+          label="Course Info"
           description="STEP 2"
         >
           {" "}
@@ -535,18 +537,23 @@ export default function ModalAddCourse({
             color="blue"
             className="mb-3"
             classNames={{
-              icon: "size-6",
+              icon: "size-6 acerSwift:max-macair133:size-5",
               body: " flex  justify-center",
-              label: "sm:text-[13px] ipad11:text-b2",
+              label:
+                "sm:text-b3  acerSwift:max-macair133:text-b4 ipad11:text-b2",
             }}
             title={
               "Please fill only the section number for the section you own."
             }
           ></Alert>
-          <div className="w-full  mt-2 h-fit  bg-white mb-5 rounded-md">
-            <div className="flex flex-col gap-3">
+          <div className="w-full mt-2 h-fitbg-white mb-5 acerSwift:max-macair133:mb-3 rounded-md acerSwift:max-macair133:overflow-y-auto acerSwift:max-macair133:max-h-[240px]">
+            <div className="flex flex-col gap-3 acerSwift:max-macair133:gap-2">
               <TextInput
-                classNames={{ input: "focus:border-primary" }}
+                classNames={{
+                  input:
+                    "focus:border-primary acerSwift:max-macair133:!text-b5",
+                  label: "acerSwift:max-macair133:!text-b4",
+                }}
                 label="Course No."
                 size="xs"
                 withAsterisk
@@ -562,7 +569,11 @@ export default function ModalAddCourse({
                 label="Course Name"
                 withAsterisk
                 size="xs"
-                classNames={{ input: "focus:border-primary " }}
+                classNames={{
+                  input:
+                    "focus:border-primary acerSwift:max-macair133:!text-b5",
+                  label: "acerSwift:max-macair133:!text-b4",
+                }}
                 placeholder={
                   form.getValues().type == COURSE_TYPE.SEL_TOPIC.en
                     ? "Ex. Select Topic in Comp Engr"
@@ -575,7 +586,11 @@ export default function ModalAddCourse({
                   label="Course Topic"
                   withAsterisk
                   size="xs"
-                  classNames={{ input: "focus:border-primary" }}
+                  classNames={{
+                    input:
+                      "focus:border-primary acerSwift:max-macair133:!text-b5",
+                    label: "acerSwift:max-macair133:!text-b4",
+                  }}
                   placeholder="Ex. Full Stack Development"
                   {...form.getInputProps("sections.0.topic")}
                 />
@@ -585,10 +600,11 @@ export default function ModalAddCourse({
                 withAsterisk
                 classNames={{
                   input:
-                    " macair133:h-[130px] sm:h-[75px] ipad11:h-[90px] overflow-y-scroll bg-[#ffffff] mt-[2px] p-3 text-b4  rounded-md",
-                  pill: "bg-secondary text-white font-bold pb-1 !pr-1",
-                  label: "font-semibold text-tertiary text-b2",
-                  error: "text-[10px] !border-none",
+                    "macair133:h-[130px] sm:h-[75px] ipad11:h-[90px] acerSwift:max-macair133:h-[75px] overflow-y-scroll bg-[#ffffff] mt-[2px] p-3 text-b4 acerSwift:max-macair133:!text-b5  rounded-md",
+                  pill: "bg-secondary text-white font-bold pb-1 !pr-1 acerSwift:max-macair133:!text-b5",
+                  label:
+                    "font-semibold text-tertiary text-b2 acerSwift:max-macair133:!text-b4",
+                  error: "text-b6 !border-none",
                 }}
                 placeholder="Ex. 001 or 1 (Press Enter or Spacebar for fill the next section)"
                 splitChars={[",", " ", "|"]}
@@ -609,15 +625,15 @@ export default function ModalAddCourse({
           label="Section Infor"
           description="STEP 3"
         >
-          <div className="flex flex-col macair133:max-h-[420px]  sm:max-h-[260px] ipad11:max-h-[340px] h-fit w-full mt-2 mb-5 p-[2px] overflow-y-auto">
-            <div className="flex flex-col font-medium text-[14px] gap-4">
+          <div className="flex flex-col macair133:max-h-[420px]  sm:max-h-[260px] ipad11:max-h-[340px] acerSwift:max-macair133:max-h-[260px] h-fit w-full mt-2 mb-5 p-[2px] overflow-y-auto">
+            <div className="flex flex-col font-medium text-b2  acerSwift:max-macair133:text-b3 gap-4">
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
-                  <span className="text-secondary text-[14px] font-bold">
+                  <span className="text-secondary text-b2  acerSwift:max-macair133:text-b3 font-bold">
                     Section {getSectionNo(sec.sectionNo)}
                     <span className="text-red-500"> *</span>
                   </span>
-                  <div className="w-full justify-center pr-[18px] border-b-2 pt-1 pb-5   flex flex-col ">
+                  <div className="w-full justify-center pr-[18px] border-b-[1.5px] pt-1 pb-5   flex flex-col ">
                     <div className="gap-2 flex flex-col">
                       <Select
                         label={`Select the Curriculum for Section ${getSectionNo(
@@ -626,11 +642,15 @@ export default function ModalAddCourse({
                         size="xs"
                         placeholder="Curriculum"
                         data={curriculum?.map(({ code }) => code)}
-                        classNames={{ input: "focus:border-primary" }}
+                        classNames={{
+                          input:
+                            "focus:border-primary acerSwift:max-macair133:!text-b4",
+                          label: "acerSwift:max-macair133:!text-b4",
+                        }}
                         {...form.getInputProps(`sections.${index}.curriculum`)}
                       />
-                      <div className="p-5 mt-1 bg-[#f7f7f7] rounded-xl">
-                        <span className="font-semibold mt-2 text-default text-b2 ">
+                      <div className="p-5 acerSwift:max-macair133:p-4 mt-1 bg-[#f5f5f5] rounded-xl">
+                        <span className="font-semibold mt-2 text-default text-b2 acerSwift:max-macair133:!text-b3">
                           Repeat on semester
                         </span>
                         <Chip.Group
@@ -641,16 +661,17 @@ export default function ModalAddCourse({
                           }}
                           multiple
                         >
-                          <Group className=" items-center  h-ful mt-2 flex flex-row gap-4">
+                          <Group className=" items-center h-full mt-2 flex flex-row gap-4">
                             {SEMESTER.map((item, index) => (
                               <Chip
                                 key={index}
                                 icon={<></>}
                                 classNames={{
                                   input:
-                                    "!bg-black border-[1.5px]   disabled:bg-gray-500",
-                                  iconWrapper: "w-0 !bg-black",
-                                  label: "text-b2 !px-5 cursor-pointer",
+                                    "!bg-black border-[1.5px] disabled:bg-gray-500",
+                                  iconWrapper: "w-0 !bg-black ",
+                                  label:
+                                    "text-b2 !px-5 cursor-pointer acerSwift:max-macair133:!text-b4",
                                   root: "",
                                 }}
                                 size="sm"
@@ -672,7 +693,7 @@ export default function ModalAddCourse({
                               "bg-white bg-opacity-0 border-[1.5px] border-tertiary cursor-pointer disabled:bg-gray-400",
                             body: "mr-3 px-0",
                             label:
-                              "text-[13px] text-default font-semibold  cursor-pointer ",
+                              "text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:text-b4 text-default font-semibold  cursor-pointer ",
                           }}
                           className="mt-5 ml-1"
                           size="xs"
@@ -699,7 +720,7 @@ export default function ModalAddCourse({
           label="Co-Instructor"
           description="STEP 4"
         >
-          <div className="flex flex-col macair133:max-h-[420px] sm:max-h-[300px] ipad11:max-h-[360px] mb-5 h-fit overflow-y-scroll mt-2 p-[2px]">
+          <div className="flex flex-col macair133:max-h-[420px] sm:max-h-[300px] ipad11:max-h-[360px] acerSwift:max-macair133:max-h-[290px] mb-5 h-fit overflow-y-scroll mt-2 p-[2px]">
             <div>
               <Alert
                 radius="md"
@@ -708,9 +729,10 @@ export default function ModalAddCourse({
                 color="blue"
                 className="mb-1"
                 classNames={{
-                  icon: "size-6",
+                  icon: "size-6 acerSwift:max-macair133:size-5",
                   body: " flex justify-center",
-                  label: "sm:text-[13px] ipad11:text-b2",
+                  label:
+                    "sm:text-b3 acerSwift:max-macair133:text-b4 ipad11:text-b2 ",
                 }}
                 title={
                   <p>
@@ -729,8 +751,12 @@ export default function ModalAddCourse({
             />
             {!!coInsList.length && (
               <div className="w-full flex flex-col mt-3 bg-white border-secondary border-[1px]  rounded-md">
-                <div className=" bg-bgTableHeader flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
-                  <Icon IconComponent={IconUsers} /> Added Co-Instructor
+                <div className=" bg-bgTableHeader acerSwift:max-macair133:!text-b3 flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
+                  <Icon
+                    IconComponent={IconUsers}
+                    className="acerSwift:max-macair133:!size-5"
+                  />{" "}
+                  Added Co-Instructor
                 </div>
                 <div className="flex flex-col  h-fit w-full px-2">
                   <div className="flex flex-col h-fit p-1 ">
@@ -740,7 +766,7 @@ export default function ModalAddCourse({
                         className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none"
                       >
                         <div className="flex w-full justify-between items-center">
-                          <span className="text-tertiary -translate-y-1 font-semibold text-b2">
+                          <span className="text-tertiary -translate-y-1 font-semibold text-b2 acerSwift:max-macair133:text-b3">
                             {coIns.label}
                           </span>
 
@@ -768,7 +794,8 @@ export default function ModalAddCourse({
                                         input:
                                           "bg-black bg-opacity-0  border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                                         body: "mr-3",
-                                        label: "text-b2 cursor-pointer",
+                                        label:
+                                          "text-b2 cursor-pointer acerSwift:max-macair133:text-b4",
                                       }}
                                       size="xs"
                                       label={`Section ${sectionNo}`}
@@ -790,14 +817,14 @@ export default function ModalAddCourse({
                             <Button
                               color="#FF4747"
                               variant="outline"
-                              className="!h-7 px-3"
+                              className="!h-7 px-3 "
                               onClick={() => removeCoIns(coIns)}
                             >
                               Remove
                             </Button>
                           </div>
                         </div>
-                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-b4">
+                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-b4 acerSwift:max-macair133:text-b5 acerSwift:max-macair133:-mt-6">
                           <div className=" font-semibold">
                             Can access section:
                           </div>
@@ -826,7 +853,7 @@ export default function ModalAddCourse({
           description="STEP 5"
         >
           <div
-            className="w-full flex flex-col sm:max-h-[320px] ipad11:max-h-[380px] bg-white border-secondary mt-2 border-[1px] mb-5 rounded-md"
+            className="w-full flex flex-col sm:max-h-[320px] ipad11:max-h-[380px] acerSwift:max-macair133:max-h-[280px] bg-white border-secondary mt-2 border-[1px] mb-5 rounded-md"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
@@ -836,28 +863,28 @@ export default function ModalAddCourse({
                 {form.getValues().courseNo} - {form.getValues().courseName}
               </p>
               {form.getValues().sections?.at(0)?.topic && (
-                <p className="text-secondary text-b4">
+                <p className="text-secondary text-b4 acerSwift:max-macair133:text-b5">
                   Topic: {form.getValues().sections?.at(0)?.topic}
                 </p>
               )}
             </div>
             <div className="flex flex-col max-h-[380px] h-fit w-full px-2 overflow-y-auto ">
-              <div className="flex flex-col gap-3 mt-3 font-medium text-b4">
+              <div className="flex flex-col gap-3 mt-3 font-medium text-b4 acerSwift:max-macair133:text-b5">
                 {form.getValues().sections?.map((sec, index) => (
                   <div
                     key={index}
                     className="w-full border-b-[1px] last:border-none border-[#c9c9c9] pb-2 h-fit px-4 gap-1 flex flex-col"
                   >
-                    <span className="text-default font-semibold flex flex-col text-b2 mb-2">
+                    <span className="text-secondary font-semibold flex flex-col text-b2 acerSwift:max-macair133:text-b3 mb-2">
                       Section {getSectionNo(sec.sectionNo)}
                     </span>
                     <div className="flex flex-col gap-1">
-                      <span className="text-tertiary text-b2 font-semibold">
+                      <span className="text-tertiary text-b2 acerSwift:max-macair133:text-b3 font-semibold">
                         Owner Section
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">
                         <List size="sm" listStyleType="disc">
-                          <List.Item className="mb-[3px]">
+                          <List.Item className="mb-[3px] acerSwift:max-macair133:text-b4">
                             {getUserName(user, 1)}
                           </List.Item>
                         </List>
@@ -866,13 +893,16 @@ export default function ModalAddCourse({
 
                     {!!sec.coInstructors?.length && (
                       <div className="flex flex-col gap-1">
-                        <span className="text-tertiary text-b2 font-semibold">
+                        <span className="text-tertiary text-b2 font-semibold acerSwift:max-macair133:text-b3">
                           Co-Instructor
                         </span>
-                        <div className="ps-1.5 text-secondary mb-2">
+                        <div className="ps-1.5 text-secondary mb-2 ">
                           <List size="sm" listStyleType="disc">
                             {sec.coInstructors?.map((coIns, index) => (
-                              <List.Item className="mb-[3px]" key={index}>
+                              <List.Item
+                                className="mb-[3px] acerSwift:max-macair133:text-b4"
+                                key={index}
+                              >
                                 {coIns?.label}
                               </List.Item>
                             ))}
@@ -882,14 +912,14 @@ export default function ModalAddCourse({
                     )}
 
                     <div className="flex flex-col gap-1">
-                      <span className="text-tertiary text-b2 font-semibold">
+                      <span className="text-tertiary text-b2 font-semibold acerSwift:max-macair133:text-b3">
                         Recurrence semester
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">
                         <List
                           size="sm"
                           listStyleType="disc"
-                          className="flex flex-col gap-1"
+                          className="flex flex-col gap-1 acerSwift:max-macair133:text-b4"
                         >
                           <List.Item>
                             Repeat on semester{" "}
