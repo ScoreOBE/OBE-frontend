@@ -44,8 +44,7 @@ export default function SaveTQFbar({
   onSave,
   disabledSave,
 }: Props) {
-  const user = useAppSelector((state) => state.user);
-
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   return (
     <>
       <div
@@ -63,7 +62,12 @@ export default function SaveTQFbar({
           )}
         </p>
 
-        <Button className="!w-[128px]" onClick={onSave} disabled={disabledSave}>
+        <Button
+          className="!w-[128px]"
+          onClick={onSave}
+          disabled={disabledSave}
+          loading={loading}
+        >
           <div className="flex gap-2 items-center">
             <Icon IconComponent={Iconsave} />
             Save {partLabel[part]}

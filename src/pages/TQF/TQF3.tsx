@@ -370,6 +370,7 @@ export default function TQF3() {
           setOpenWarningEditDataTQF2Or3(true);
           return;
         }
+        dispatch(setLoadingOverlay(true));
         if (tqf3Part == "part6" && !tqf3.coursePLO?.id) payload.done = true;
         if (confirmToEditData) payload.inProgress = true;
         const res = await saveTQF3(tqf3Part, payload);
@@ -386,6 +387,7 @@ export default function TQF3() {
             setTqf3Part(`part${parseInt(tqf3Part.slice(-1)) + 1}`);
           }
         }
+        dispatch(setLoadingOverlay(false));
       }
     }
   };
