@@ -37,6 +37,7 @@ export default {
         b3: "13px",
         b4: "12px",
         b5: "11px",
+        b6: "10px",
       },
     },
     fontFamily: {

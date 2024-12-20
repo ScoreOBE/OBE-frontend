@@ -64,7 +64,7 @@ export default function Profile() {
         return (
           <Icon
             IconComponent={IconSAdminProfile}
-            className="size-8"
+            className="size-8 acerSwift:max-macair133:size-7"
             style={{ color: getRoleColor(user.role) }}
           />
         );
@@ -72,7 +72,7 @@ export default function Profile() {
         return (
           <Icon
             IconComponent={IconAdminProfile}
-            className="size-8"
+            className="size-8 acerSwift:max-macair133:size-7"
             style={{ color: getRoleColor(user.role) }}
           />
         );
@@ -80,7 +80,7 @@ export default function Profile() {
         return (
           <Icon
             IconComponent={IconUserProfile}
-            className="size-8"
+            className="size-8 acerSwift:max-macair133:size-7"
             style={{ color: getRoleColor(user.role) }}
           />
         );
@@ -123,7 +123,7 @@ export default function Profile() {
             color="#fafafa"
             className="flex hover:bg-[#efefef] flex-row pl-4 justify-end px-0 !h-10 items-center"
           >
-            <div className="flex flex-col gap-1 text-end mr-3 text-b4">
+            <div className="flex flex-col gap-1 text-end mr-3 text-b4 acerSwift:max-macair133:text-b5">
               <p className="font-semibold text-default">{getUserName(user)}</p>
               <p
                 className="font-medium"
@@ -155,7 +155,7 @@ export default function Profile() {
             <div className="flex items-center px-4 py-3 gap-3">
               {/* <Icon className="pt-[5px]" IconComponent={ProfileIcon} /> */}
               {getProfileIcon(user.role)}
-              <div className="flex flex-col text-b4">
+              <div className="flex flex-col text-b4  acerSwift:max-macair133:text-b5">
                 <p className=" font-semibold">{getUserName(user, 1)}</p>
                 <p
                   className="font-medium"
@@ -178,10 +178,10 @@ export default function Profile() {
                   })
                 }
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
                   <Icon
                     IconComponent={IconUserScreen}
-                    className=" stroke-[1.5px] size-4"
+                    className=" stroke-[1.5px] size-4  acerSwift:max-macair133:size-"
                   />
                   <span>
                     {dashboard == ROLE.ADMIN
@@ -202,10 +202,10 @@ export default function Profile() {
                     })
                   }
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
                     <Icon
                       IconComponent={IconUserScreen}
-                      className=" stroke-[1.5px] size-4"
+                      className=" stroke-[1.5px] size-4  acerSwift:max-macair133:size-"
                     />
                     <span>Switch to Student view</span>
                   </div>
@@ -225,10 +225,10 @@ export default function Profile() {
                   })
                 }
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
                   <Icon
                     IconComponent={IconUserScreen}
-                    className=" stroke-[1.5px] size-4"
+                    className=" stroke-[1.5px] size-4  acerSwift:max-macair133:size-"
                   />
                   <span>
                     {path.includes(ROUTE_PATH.INS_DASHBOARD)
@@ -245,10 +245,10 @@ export default function Profile() {
             user.role === ROLE.ADMIN ||
             user.role === ROLE.INSTRUCTOR) && (
             <Menu.Item onClick={() => navigate(ROUTE_PATH.SELECTED_DEPARTMENT)}>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
                 <Icon
                   IconComponent={IconStatusChange}
-                  className="size-4 stroke-[1.5px]"
+                  className="size-4  acerSwift:max-macair133:size- stroke-[1.5px]"
                 />
                 <span>Department</span>
               </div>
@@ -266,16 +266,16 @@ export default function Profile() {
               <Menu.Target>
                 <Menu.Item>
                   <div className="flex justify-between items-center gap-2">
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                       <Icon
                         IconComponent={IconAdjustmentsHorizontal}
-                        className="size-4 stroke-[1.5px]"
+                        className="size-4  acerSwift:max-macair133:size- stroke-[1.5px]"
                       />
                       <span>Management</span>
                     </div>
                     <Icon
                       IconComponent={IconChevronRight}
-                      className="size-4 stroke-[2px]"
+                      className="size-4  acerSwift:max-macair133:size- stroke-[2px]"
                     />
                   </div>
                 </Menu.Item>
@@ -292,16 +292,22 @@ export default function Profile() {
                     <Menu.Item
                       onMouseDown={() => setOpenModalChangeSupAdmin(true)}
                     >
-                      <div className="flex items-center gap-2">
-                        <Icon IconComponent={IconSupreme} className="size-4" />
+                      <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
+                        <Icon
+                          IconComponent={IconSupreme}
+                          className="size-4  acerSwift:max-macair133:size-"
+                        />
                         <span>Supreme Admin</span>
                       </div>
                     </Menu.Item>
                   </>
                 )}
                 <Menu.Item onMouseDown={() => setOpenModalManageAdmin(true)}>
-                  <div className="flex items-center gap-2">
-                    <Icon IconComponent={IconAdmin} className="size-4" />
+                  <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
+                    <Icon
+                      IconComponent={IconAdmin}
+                      className="size-4  acerSwift:max-macair133:size-"
+                    />
                     <span>Admin</span>
                   </div>
                 </Menu.Item>
@@ -310,8 +316,11 @@ export default function Profile() {
                   className="text-[#3e3e3e] h-8 w-w-full"
                   onMouseDown={() => setOpenModalCourseManagement(true)}
                 >
-                  <div className="flex items-center gap-2">
-                    <Icon IconComponent={IconCourse} className="size-4" />
+                  <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
+                    <Icon
+                      IconComponent={IconCourse}
+                      className="size-4  acerSwift:max-macair133:size-"
+                    />
                     <span>Course</span>
                   </div>
                 </Menu.Item>
@@ -320,8 +329,11 @@ export default function Profile() {
                     <Menu.Item
                       onMouseDown={() => setOpenModalManageSemester(true)}
                     >
-                      <div className="flex items-center gap-2">
-                        <Icon IconComponent={IconSemester} className="size-4" />
+                      <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
+                        <Icon
+                          IconComponent={IconSemester}
+                          className="size-4  acerSwift:max-macair133:size-"
+                        />
                         <span>Semester</span>
                       </div>
                     </Menu.Item>
@@ -332,8 +344,11 @@ export default function Profile() {
                   className="text-[#3e3e3e] h-8 w-w-full "
                   onMouseDown={() => setOpenModalPLOManagement(true)}
                 >
-                  <div className="flex items-center gap-2">
-                    <Icon IconComponent={IconSO} className="size-4" />
+                  <div className="flex items-center gap-2  acerSwift:max-macair133:text-b5">
+                    <Icon
+                      IconComponent={IconSO}
+                      className="size-4  acerSwift:max-macair133:size-"
+                    />
                     <span>PLO</span>
                   </div>
                 </Menu.Item>
@@ -352,7 +367,7 @@ export default function Profile() {
           >
             <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
               <div className="flex items-center gap-2">
-                <Icon className="size-4 " IconComponent={IconFeedback} />
+                <Icon className="size-4  acerSwift:max-macair133:size- " IconComponent={IconFeedback} />
                 <span>Feedback</span>
               </div>
             </Menu.Item>
@@ -360,10 +375,10 @@ export default function Profile() {
 
           <a href="https://forms.gle/haNFpme6KBzyejG18" target="_blank">
             <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
                 <Icon
                   IconComponent={IconExclamationCircle}
-                  className="size-4 stroke-[1.5px] stroke-[#3e3e3e]"
+                  className="size-4  acerSwift:max-macair133:size- stroke-[1.5px] stroke-[#3e3e3e]"
                 />
                 <span>Report issue</span>
               </div>
@@ -372,13 +387,13 @@ export default function Profile() {
 
           <Menu.Divider />
           <Menu.Item
-            className="text-[#FF4747] hover:bg-[#d55757]/10"
+            className="text-delete  hover:bg-[#d55757]/10"
             onClick={logOut}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2  acerSwift:max-macair133:text-b5">
               <Icon
                 IconComponent={IconLogout}
-                className="size-4 stroke-[1.5px] stroke-[#ff4747]"
+                className="size-4  acerSwift:max-macair133:size- stroke-[1.5px] stroke-delete "
               />
               <span>Log out</span>
             </div>

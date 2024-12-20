@@ -28,13 +28,13 @@ export function SearchInput({ onSearch, placeholder }: Props) {
   };
 
   return (
-    <div className="relative z-50 ipad11:w-[280px] macair133:w-[400px] w-[220px]">
+    <div className="relative z-50 ipad11:w-[280px] macair133:w-[400px] w-[220px]  acerSwift:max-macair133:w-[380px]">
       <TextInput
         autoFocus={false}
         leftSection={!isFocused && <TbSearch className="size-4" />}
         placeholder={placeholder}
         size="xs"
-        className="z-50"
+        className="z-50 acerSwift:max-macair133:text-b5"
         value={searchValue}
         onChange={(event: any) => setSearchValue(event.currentTarget.value)}
         onKeyDown={(event: any) => {
@@ -49,7 +49,10 @@ export function SearchInput({ onSearch, placeholder }: Props) {
         rightSectionPointerEvents="all"
         rightSection={
           !!searchValue.length && (
-            <Tooltip className="text-b4" label="Reset">
+            <Tooltip
+              className="text-b4 acerSwift:max-macair133:text-b5"
+              label="Reset"
+            >
               <div className="border-none">
                 <CloseButton size="sm" onClick={reset} />
               </div>
@@ -59,7 +62,7 @@ export function SearchInput({ onSearch, placeholder }: Props) {
       />
       {isFocused && (
         <div
-          className="z-50 mt-2 absolute cursor-pointer w-full rounded-md bg-white text-slate-800 p-3 text-b4 flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center"
+          className="z-50 mt-2 absolute cursor-pointer w-full rounded-md bg-white text-slate-800 p-3 text-b4  acerSwift:max-macair133:text-b5 flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center"
           onClick={() => {
             setIsFocused(false);
             onSearch(searchValue);
@@ -73,15 +76,17 @@ export function SearchInput({ onSearch, placeholder }: Props) {
                 {ellipsisText(searchValue, 40)}
               </p>
             ) : (
-              <p className="sm:max-ipad11:text-[11px]">Show All Course</p>
+              <p className="sm:max-ipad11:text-b5 acerSwift:max-macair133:text-b6">
+                Show All Course
+              </p>
             )}
           </div>
 
-          <div className="flex md:w-fit sm:max-ipad11:text-[11px] w-full justify-end items-center text-secondary gap-1">
+          <div className="flex md:w-fit sm:max-ipad11:text-b5 acerSwift:max-macair133:text-b6 w-full justify-end items-center text-secondary gap-1">
             Press
             <div className="ml-1 flex items-center gap-1 border border-secondary p-1 font-semibold rounded-[6px]">
               Enter{" "}
-              <AiOutlineEnter className="stroke-[50px] sm:max-ipad11:text-[11px]" />
+              <AiOutlineEnter className="stroke-[50px] sm:max-ipad11:text-b5 acerSwift:max-macair133:text-b6" />
             </div>
           </div>
         </div>
