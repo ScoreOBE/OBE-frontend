@@ -171,11 +171,11 @@ export default function Dashboard() {
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
-                <p className="text-b3 text-[#808080]">Course no.</p>
+                <p className="text-b4 text-[#808080]">Course no.</p>
                 <p className="  -translate-y-[2px] text-b1">{`${delCourse?.courseNo}`}</p>
               </div>
               <div className="flex flex-col ">
-                <p className="text-b3  text-[#808080]">Course name</p>
+                <p className="text-b4  text-[#808080]">Course name</p>
                 <p className=" -translate-y-[2px] text-b1">{`${delCourse?.courseName}`}</p>
               </div>
             </div>
@@ -337,19 +337,19 @@ export default function Dashboard() {
           }}
         />
       )}
-      <div className=" flex flex-col h-full w-full  overflow-hidden">
-        <div className="flex flex-row px-6 pt-3   items-center justify-between">
+      <div className=" flex flex-col h-full w-full  overflow-hidden acerSwift:max-macair133:bg-red-400">
+        <div className="flex flex-row px-6 pt-3  items-center justify-between">
           <div className="flex flex-col">
-            <p className="text-secondary text-[18px] font-semibold ">
+            <p className="text-secondary text-h2 acerSwift:max-macair133:text-[17px] font-semibold ">
               Hi there, {user.firstNameEN}
             </p>
             {courseList.search.length ? (
-              <p className="text-[#575757] text-[14px]">
+              <p className="text-[#575757] text-b2 acerSwift:max-macair133:text-b3">
                 {courseList.total} result{courseList.total > 1 ? "s " : " "}{" "}
                 found
               </p>
             ) : (
-              <p className="text-[#575757] text-[14px]">
+              <p className="text-[#575757] text-b2 acerSwift:max-macair133:text-b3">
                 In semester{" "}
                 <span className="text-[#1f69f3] font-semibold">
                   {" "}
@@ -360,7 +360,7 @@ export default function Dashboard() {
                 ) : (
                   <span>
                     You have{" "}
-                    <span className="text-[#1f69f3] font-semibold">
+                    <span className="text-secondary font-semibold">
                       {courseList.total} Course
                       {courseList.total > 1 ? "s " : " "}
                     </span>
@@ -375,7 +375,7 @@ export default function Dashboard() {
               {user.role != ROLE.TA && (
                 <Button
                   variant="outline"
-                  className="text-center px-4"
+                  className="text-center px-4 "
                   leftSection={<Icon IconComponent={IconAdd} />}
                   onClick={() => setOpenAddModal(true)}
                 >
@@ -407,7 +407,7 @@ export default function Dashboard() {
               height={"100%"}
               loader={<Loading />}
               hasMore={payload?.hasMore}
-              className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 macair133:grid-cols-4  pb-5 gap-4 px-6 p-3"
+              className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:max-samsungA24:grid-cols-4 pb-5 gap-4 px-6 p-3"
               style={{ height: "fit-content", maxHeight: "100%" }}
             >
               {courseList.courses.map((item) => {
@@ -438,8 +438,10 @@ export default function Dashboard() {
                     onClick={() => goToCourse(item.courseNo)}
                   >
                     <div className="p-2.5 flex flex-col">
-                      <p className="font-bold text-sm">{item.courseNo}</p>
-                      <p className="text-xs font-medium text-gray-600">
+                      <p className="font-bold text-sm acerSwift:max-macair133:text-b3">
+                        {item.courseNo}
+                      </p>
+                      <p className="text-xs acerSwift:max-macair133:text-b5 font-medium text-gray-600">
                         {item.courseName}
                       </p>
                       {item.sections.find(
@@ -477,7 +479,7 @@ export default function Dashboard() {
                                     });
                                     setOpenModalEditCourse(true);
                                   }}
-                                  className="text-[#3E3E3E] font-semibold  text-b3 h-7 w-[180px]"
+                                  className="text-[#3E3E3E] font-semibold  text-b4 h-7 w-[180px]"
                                 >
                                   <div className="flex items-center gap-2">
                                     <Icon
@@ -488,7 +490,7 @@ export default function Dashboard() {
                                   </div>
                                 </Menu.Item>
                                 <Menu.Item
-                                  className="text-[#FF4747] h-7 w-[180px] font-semibold text-b3 hover:bg-[#d55757]/10"
+                                  className="text-[#FF4747] h-7 w-[180px] font-semibold text-b4 hover:bg-[#d55757]/10"
                                   onClick={() => {
                                     setDelCourse(item);
                                     setOpenDelPopup(true);
