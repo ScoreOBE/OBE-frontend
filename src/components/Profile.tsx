@@ -26,7 +26,7 @@ import ModalManageSemester from "./Modal/Profile/ModalManageSemester";
 import { getUserName } from "@/helpers/functions/function";
 import ModalCourseManagement from "./Modal/Profile/ModalCourseManagement";
 import ModalPLOManagement from "./Modal/Profile/ModalPLOManagement";
-import { logOut } from "@/services/user/user.service";
+import { logout } from "@/services/user/user.service";
 import { resetSeachCourseManagement } from "@/store/courseManagement";
 
 export default function Profile() {
@@ -373,7 +373,7 @@ export default function Profile() {
           <Menu.Divider />
           <Menu.Item
             className="text-[#FF4747] hover:bg-[#d55757]/10"
-            onClick={logOut}
+            onClick={logout}
           >
             <div className="flex items-center gap-2">
               <Icon

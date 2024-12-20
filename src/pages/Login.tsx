@@ -177,7 +177,7 @@ export default function Login() {
 
   const ButtonLogin = () => {
     return (
-      <a href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}>
+      <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
         <Button className="z-[52] bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg !text-[14px] !h-[44px]">
           <img
             src={cmulogoLogin}
@@ -438,12 +438,12 @@ export default function Login() {
                   <div className="flex flex-col w-[50%] h-full gap-8 text-[18px] ">
                     <div className="flex flex-col gap-2 items-start mt-2 mb-2">
                       <p className="font-[700] text-[36px] max-macair133:text-[34px] text-emphasize">
-                        PLO Performance <br /> <p className="-mt-1"> Spider Chart</p>
+                        PLO Performance <br />
+                        <span className="-mt-1"> Spider Chart</span>
                       </p>
                       <p className="text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[520px] ">
                         Visualize student progress{" "}
                         <span className="text-emphasize">
-                          {" "}
                           in each course and across <br /> the entire curriculum{" "}
                         </span>
                         , aligned with Program Learning <br /> Outcomes (PLOs).
@@ -456,14 +456,12 @@ export default function Login() {
                       </p>
                       <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
                         <span className="text-emphasize">
-                          {" "}
                           Gain clear insights into your progress{" "}
                         </span>{" "}
                         across courses and learning outcomes, and discover areas
                         to improve.
                       </p>
                       <p className=" text-deemphasize underline font-[600]  mt-10 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
-                        
                         Available in February 2025
                       </p>
                     </div>

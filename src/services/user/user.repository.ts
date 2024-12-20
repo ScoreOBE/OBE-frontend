@@ -27,10 +27,10 @@ export const userController = (configService = {}) => {
     updateSAdmin: async (params: Partial<IModelUser>) => {
       return service.put(`${prefix}/s-admin`, { ...params });
     },
-    logOut: () => {
+    logout: () => {
+      window.location.assign(import.meta.env.VITE_LOGOUT_URL!);
       localStorage.removeItem("token");
       store.dispatch(setUser({}));
-      window.location.replace(ROUTE_PATH.LOGIN);
     },
   };
 };

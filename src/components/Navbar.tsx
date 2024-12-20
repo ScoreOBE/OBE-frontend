@@ -99,10 +99,7 @@ export default function Navbar() {
 
   const ButtonLogin = () => {
     return (
-      <a
-        href={import.meta.env.VITE_NEXT_PUBLIC_CMU_OAUTH_URL}
-        className="hidden sm:flex"
-      >
+      <a href={import.meta.env.VITE_CMU_ENTRAID_URL} className="hidden sm:flex">
         <Button size="xs" variant="light" className="!text-[12px]">
           Sign in CMU Account
         </Button>

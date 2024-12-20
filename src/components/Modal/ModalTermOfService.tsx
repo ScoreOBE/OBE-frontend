@@ -11,7 +11,7 @@ import IconAddressBook from "@/assets/icons/addressBook.svg?react";
 import IconListNumber from "@/assets/icons/listNumbers.svg?react";
 import IconMail from "@/assets/icons/mail.svg?react";
 import IconClipboardText from "@/assets/icons/clipboardText.svg?react";
-import { logOut, termsOfService } from "@/services/user/user.service";
+import { logout, termsOfService } from "@/services/user/user.service";
 import { useAppDispatch } from "@/store";
 import { setUser } from "@/store/user";
 import IconTh from "@/assets/icons/thai.svg?react";
@@ -35,7 +35,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         localStorage.setItem("token", res.token);
         dispatch(setUser(res.user));
       } else {
-        logOut();
+        logout();
       }
       onClose();
     }
