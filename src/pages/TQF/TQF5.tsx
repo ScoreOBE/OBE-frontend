@@ -47,6 +47,7 @@ export default function TQF5() {
   const courseAdmin = useAppSelector((state) =>
     state.allCourse.courses.find((course) => course.courseNo == courseNo)
   );
+  const [cannotSelectScoreOBE, setCannotSelectScoreOBE] = useState(false);
   const [assignments, setAssignments] = useState<IModelAssignment[]>();
   const [tqf3, setTqf3] = useState<IModelTQF3>();
   const [tqf5Original, setTqf5Original] = useState<
@@ -144,6 +145,7 @@ export default function TQF5() {
         const section = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf5.topic
         );
+        setCannotSelectScoreOBE(!section.assignments.length);
         setAssignments(
           Array.from(
             resCourse.sections
@@ -158,7 +160,6 @@ export default function TQF5() {
               .values()
           )
         );
-
         const sectionTdf5 = section?.TQF5;
         setTqf3(section?.TQF3);
         const ploRequire = resPloRequired?.sections
@@ -186,6 +187,7 @@ export default function TQF5() {
         const ploRequire = resPloRequired?.ploRequire.find(
           (plo: any) => plo.plo == tqf5.coursePLO?.id
         )?.list;
+        setCannotSelectScoreOBE(!resCourse.sections[0].assignments.length);
         setAssignments(
           Array.from(
             resCourse.sections
@@ -281,6 +283,19 @@ export default function TQF5() {
   };
 
   const onChangeMethod = async (method?: string) => {
+    if (
+      cannotSelectScoreOBE &&
+      [method, selectedMethod].includes(METHOD_TQF5.SCORE_OBE)
+    ) {
+      showNotifications(
+        NOTI_TYPE.ERROR,
+        "Method Changed Failed",
+        `This course must have upload score for use ${
+          method || selectedMethod
+        } method.`
+      );
+      return;
+    }
     const res = await changeMethodTQF5(tqf5.id, {
       method: method ?? selectedMethod,
     });
