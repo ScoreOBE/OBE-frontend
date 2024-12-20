@@ -232,9 +232,9 @@ export default function Part6TQF3({ setForm }: Props) {
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
-              <p className="text-b3  text-[#808080]">Topic Description</p>
+              <p className="text-b4  text-[#808080]">Topic Description</p>
               <p className=" -translate-y-[2px] leading-7 text-b1">
-                - {deleteOption?.th} <br/> - {deleteOption?.en}
+                - {deleteOption?.th} <br /> - {deleteOption?.en}
               </p>
             </div>
           </>
@@ -431,21 +431,21 @@ export default function Part6TQF3({ setForm }: Props) {
         </div>
       ) : (
         <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
-      <div className="flex justify-center  h-full items-start gap-2 flex-col">
-        <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-          Complete TQF3 Part 5 First
-        </p>
-        <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-          To start TQF3 Part 6, please complete and save TQF3 Part 5. <br />{" "}
-          Once done, you can continue to do it.
-        </p>
-      </div>
-      <img
-        className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
-        src={unplug}
-        alt="loginImage"
-      />
-    </div>
+          <div className="flex justify-center  h-full items-start gap-2 flex-col">
+            <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
+              Complete TQF3 Part 5 First
+            </p>
+            <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
+              To start TQF3 Part 6, please complete and save TQF3 Part 5. <br />{" "}
+              Once done, you can continue to do it.
+            </p>
+          </div>
+          <img
+            className=" z-50 ipad11:w-[380px] sm:w-[340px] w-[340px]  macair133:w-[580px] macair133:h-[300px] "
+            src={unplug}
+            alt="loginImage"
+          />
+        </div>
       )}
     </>
   );

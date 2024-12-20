@@ -122,7 +122,11 @@ export default function Assignment() {
           .sections.map((item) => getSectionNo(item))
           .join(", ")} ${
           form.getValues().assignments.length > 1 ? "are" : "is"
-        } ${form.getValues().isPublish ? "has been successfully published" : "has been successfully unpublished"}`
+        } ${
+          form.getValues().isPublish
+            ? "has been successfully published"
+            : "has been successfully unpublished"
+        }`
       );
       form.reset();
     }
@@ -263,29 +267,29 @@ export default function Assignment() {
                 <Table stickyHeader>
                   <Table.Thead>
                     <Table.Tr className="bg-[#e5e7f6]">
-                      <Table.Th className="w-20 sm:max-macair133:text-b3">
+                      <Table.Th className="w-20 sm:max-macair133:text-b4">
                         Name
                       </Table.Th>
-                      <Table.Th className="w-20 sm:max-macair133:text-b3  text-end pr-14 !pl-0">
+                      <Table.Th className="w-20 sm:max-macair133:text-b4  text-end pr-14 !pl-0">
                         Full Scores
                       </Table.Th>
-                      <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
+                      <Table.Th className=" w-10 sm:max-macair133:text-b4 text-end pr-20 !pl-0">
                         Mean
                       </Table.Th>
-                      <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b3">
+                      <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b4">
                         Created
                       </Table.Th>
-                      <Table.Th className="w-10 sm:max-macair133:text-b3">
+                      <Table.Th className="w-10 sm:max-macair133:text-b4">
                         Student(s)
                       </Table.Th>
-                      <Table.Th className="w-10 !px-4 sm:max-macair133:text-b3 text-center">
+                      <Table.Th className="w-10 !px-4 sm:max-macair133:text-b4 text-center">
                         Published
                       </Table.Th>
-                      <Table.Th className="w-5 sm:max-macair133:text-b3"></Table.Th>
+                      <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>
                     </Table.Tr>
                   </Table.Thead>
 
-                  <Table.Tbody className="text-default sm:max-macair133:text-b3 font-medium text-[13px] ">
+                  <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px] ">
                     {section?.assignments?.map((assignment, index) => {
                       const totalStudent = section.students?.filter(
                         ({ scores }) =>

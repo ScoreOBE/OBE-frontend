@@ -206,7 +206,9 @@ export default function ModalAddSection({
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Section Added Successfully",
-        `${sectionNoList.join(", ")}  has been successfully added to this course`
+        `${sectionNoList.join(
+          ", "
+        )}  has been successfully added to this course`
       );
       closeModal();
     }
@@ -454,7 +456,7 @@ export default function ModalAddSection({
                 withAsterisk
                 classNames={{
                   input:
-                    " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
+                    " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b4  rounded-md",
                   pill: "bg-secondary text-white font-bold",
                   label: "font-semibold text-tertiary text-b2",
                   error: "text-[10px] !border-none",
@@ -502,7 +504,7 @@ export default function ModalAddSection({
                         {getSectionNo(sec.sectionNo)}
                         <span className="text-red-500"> *</span>
                         <br />
-                        {/* <span className="text-b3 text-[#a2a2a2] -mt-2">Only one instructor is allowed per section</span> */}
+                        {/* <span className="text-b4 text-[#a2a2a2] -mt-2">Only one instructor is allowed per section</span> */}
                       </span>
 
                       <CompoManageIns
@@ -542,8 +544,7 @@ export default function ModalAddSection({
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
                   <span className="text-secondary text-[14px] font-bold">
-                    Section{" "}
-                    {getSectionNo(sec.sectionNo)}{" "}
+                    Section {getSectionNo(sec.sectionNo)}{" "}
                     <span className="text-red-500">*</span>
                   </span>
                   <div className="w-full justify-center  border-b-2  pr-[18px] pt-2 pb-1  flex flex-col ">
@@ -557,62 +558,63 @@ export default function ModalAddSection({
                         classNames={{ input: "focus:border-primary" }}
                         {...form.getInputProps(`sections.${index}.curriculum`)}
                       />
-                       <div className="p-5 mt-1 mb-3 bg-[#f7f7f7] rounded-xl">
-                      <span className="font-semibold mt-2 text-default text-b2 ">
-                        Repeat on semester
-                      </span>{" "}
-                      <Chip.Group
-                        {...form.getInputProps(`sections.${index}.semester`)}
-                        value={sec.semester}
-                        onChange={(event) => {
-                          setSemesterInSec(index, true, event as string[]);
-                        }}
-                        multiple
-                      >
-                        <Group className="flex flex-row mt-2 gap-4">
-                          {SEMESTER.map((item) => (
-                            <Chip
-                              key={item}
-                              icon={<></>}
-                              classNames={{
-                                input:
-                                  "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                                iconWrapper: "w-0",
-                                label: "text-[14px] px-5 cursor-pointer",
-                              }}
-                              className=""
-                              size="sm"
-                              value={item.toString()}
-                              disabled={
-                                sec.openThisTerm &&
-                                item == academicYear.semester &&
-                                sec.semester?.includes(item.toString())
-                              }
-                            >
-                              {item}
-                            </Chip>
-                          ))}
-                        </Group>
-                      </Chip.Group>
-                      <Checkbox
-                        classNames={{
-                          input:
-                            " bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
-                          body: "mr-3 px-0",
-                          label: "text-[13px] font-semibold text-default cursor-pointer",
-                        }}
-                        className="mt-5 mb-1"
-                        size="xs"
-                        label={` Section ${getSectionNo(
+                      <div className="p-5 mt-1 mb-3 bg-[#f7f7f7] rounded-xl">
+                        <span className="font-semibold mt-2 text-default text-b2 ">
+                          Repeat on semester
+                        </span>{" "}
+                        <Chip.Group
+                          {...form.getInputProps(`sections.${index}.semester`)}
+                          value={sec.semester}
+                          onChange={(event) => {
+                            setSemesterInSec(index, true, event as string[]);
+                          }}
+                          multiple
+                        >
+                          <Group className="flex flex-row mt-2 gap-4">
+                            {SEMESTER.map((item) => (
+                              <Chip
+                                key={item}
+                                icon={<></>}
+                                classNames={{
+                                  input:
+                                    "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                                  iconWrapper: "w-0",
+                                  label: "text-[14px] px-5 cursor-pointer",
+                                }}
+                                className=""
+                                size="sm"
+                                value={item.toString()}
+                                disabled={
+                                  sec.openThisTerm &&
+                                  item == academicYear.semester &&
+                                  sec.semester?.includes(item.toString())
+                                }
+                              >
+                                {item}
+                              </Chip>
+                            ))}
+                          </Group>
+                        </Chip.Group>
+                        <Checkbox
+                          classNames={{
+                            input:
+                              " bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
+                            body: "mr-3 px-0",
+                            label:
+                              "text-[13px] font-semibold text-default cursor-pointer",
+                          }}
+                          className="mt-5 mb-1"
+                          size="xs"
+                          label={` Section ${getSectionNo(
                             sec.sectionNo
                           )} open in this semester (${
-                          academicYear?.semester
-                        }/${academicYear?.year.toString()?.slice(-2)})`}
-                        checked={sec.openThisTerm}
-                        onChange={(event) =>
-                          setSemesterInSec(index, event.target.checked)
-                        }
-                      />
+                            academicYear?.semester
+                          }/${academicYear?.year.toString()?.slice(-2)})`}
+                          checked={sec.openThisTerm}
+                          onChange={(event) =>
+                            setSemesterInSec(index, event.target.checked)
+                          }
+                        />
                       </div>
                     </div>
                   </div>
@@ -767,7 +769,7 @@ export default function ModalAddSection({
                 {data.courseNo} - {data.courseName}{" "}
               </p>
               {form.getValues().sections?.at(0)?.topic && (
-                <p className="text-secondary text-b3">
+                <p className="text-secondary text-b4">
                   Topic: {form.getValues().sections.at(0)?.topic}
                 </p>
               )}

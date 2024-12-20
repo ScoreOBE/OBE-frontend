@@ -78,7 +78,7 @@ export default function StdAssignment() {
                   </Table.Tr>
                 </Table.Thead>
 
-                <Table.Tbody className="text-default sm:max-macair133:text-b3 font-medium text-[13px] ">
+                <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px] ">
                   {course?.section?.assignments?.map((assignment, index) => {
                     const totalStudent = assignment.scores.length;
                     const stat = calStat(assignment.scores, totalStudent);

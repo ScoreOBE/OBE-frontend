@@ -274,11 +274,11 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
-                <p className="text-b3 text-[#808080]">Course no.</p>
+                <p className="text-b4 text-[#808080]">Course no.</p>
                 <p className="  -translate-y-[2px] text-b1">{`${editCourse?.courseNo}`}</p>
               </div>
               <div className="flex flex-col ">
-                <p className="text-b3  text-[#808080]">Course name</p>
+                <p className="text-b4  text-[#808080]">Course name</p>
                 <p className=" -translate-y-[2px] text-b1">{`${editCourse?.courseName}`}</p>
               </div>
             </div>
@@ -314,15 +314,15 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
-                <p className="text-b3 text-[#808080]">Course no.</p>
+                <p className="text-b4 text-[#808080]">Course no.</p>
                 <p className="  -translate-y-[2px] text-b1">{`${editSec?.courseNo}`}</p>
               </div>
               <div className="flex flex-col ">
-                <p className="text-b3  text-[#808080]">Course name</p>
+                <p className="text-b4  text-[#808080]">Course name</p>
                 <p className=" -translate-y-[2px] text-b1">{`${editSec?.courseName}`}</p>
               </div>
               <div className="flex flex-col ">
-                <p className="text-b3  text-[#808080]">Section</p>
+                <p className="text-b4  text-[#808080]">Section</p>
                 <p className=" -translate-y-[2px] text-b1">{`${getSectionNo(
                   editSec?.sectionNo
                 )}`}</p>
@@ -440,7 +440,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   )}
                 </p>
               </div>
-              <div className="text-b3 gap-3 font-medium flex flex-row justify-end items-center">
+              <div className="text-b4 gap-3 font-medium flex flex-row justify-end items-center">
                 Courses per page:{" "}
                 <Select
                   size="sm"
@@ -657,11 +657,11 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                               </p>
                             </div>
                             {/* Main Instructor */}
-                            <div className="flex items-center font-medium text-[#4E5150] text-b3">
+                            <div className="flex items-center font-medium text-[#4E5150] text-b4">
                               {getUserName(sec.instructor)}
                             </div>
                             {/* Open Symester */}
-                            <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
+                            <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b4">
                               <p className="text-wrap font-medium">
                                 Open Semester
                               </p>

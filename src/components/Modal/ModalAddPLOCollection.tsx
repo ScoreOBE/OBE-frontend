@@ -727,13 +727,13 @@ export default function ModalAddPLOCollection({
                     </p>
                   </div>
 
-                  <div className="text-b3 flex gap-1">
+                  <div className="text-b4 flex gap-1">
                     <p className="text-nowrap">Criteria TH:</p>
                     <p className="text-[#444444] font-medium break-all">
                       {form.getValues().criteriaTH}
                     </p>
                   </div>
-                  <div className="text-b3 flex gap-1">
+                  <div className="text-b4 flex gap-1">
                     <p className="text-nowrap">Criteria EN:</p>
                     <p className="text-[#444444] font-medium break-all">
                       {form.getValues().criteriaEN}

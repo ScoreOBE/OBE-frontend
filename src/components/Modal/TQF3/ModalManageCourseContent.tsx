@@ -331,7 +331,7 @@ export default function ModalManageTopic({
                 {...formOneWeek.getInputProps("labHour")}
                 error=""
               />
-              <p className="text-error text-b3 -mt-1">
+              <p className="text-error text-b4 -mt-1">
                 {formOneWeek.getInputProps("lecHour").error ||
                   formOneWeek.getInputProps("labHour").error}
               </p>

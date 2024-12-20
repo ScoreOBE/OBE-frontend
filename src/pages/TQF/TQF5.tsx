@@ -411,7 +411,7 @@ export default function TQF5() {
                       <span className=" font-semibold text-b2 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                         ScoreOBE+
                       </span>
-                      <p className="text-b3">
+                      <p className="text-b4">
                         The
                         <span className=" text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                           {" "}
@@ -441,7 +441,7 @@ export default function TQF5() {
                     <Radio.Indicator />
                     <div>
                       <span className="text-b2 font-semibold">Manual</span>
-                      <p className="text-b3">
+                      <p className="text-b4">
                         Customize all data what you want
                       </p>
                     </div>
@@ -606,7 +606,7 @@ export default function TQF5() {
                                   <span className=" font-semibold text-b1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                                     ScoreOBE+{" "}
                                   </span>
-                                  <p className="text-b3">
+                                  <p className="text-b4">
                                     The{" "}
                                     <span className=" text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                                       {" "}
@@ -639,7 +639,7 @@ export default function TQF5() {
                                   <p className="text-b1 font-semibold">
                                     {METHOD_TQF5.MANUAL}
                                   </p>
-                                  <p className="text-b3">
+                                  <p className="text-b4">
                                     Customize all data what you want
                                   </p>
                                 </div>

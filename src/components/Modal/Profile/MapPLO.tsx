@@ -170,11 +170,7 @@ export default function MapPLO({ ploName = "" }: Props) {
     const reorderPLO = async (data: IModelPLONo[]) => {
       const res = await updatePLO(ploList.id!, { data });
       if (res) {
-        showNotifications(
-          NOTI_TYPE.SUCCESS,
-          "PLO Reordered Successfully",
-          ""
-        );
+        showNotifications(NOTI_TYPE.SUCCESS, "PLO Reordered Successfully", "");
       }
     };
     if (reorder && state) {
@@ -362,7 +358,7 @@ export default function MapPLO({ ploName = "" }: Props) {
   ) => {
     return (
       <Table.Tr key={index}>
-        <Table.Td className="py-4 text-b3 font-semibold pl-5 sticky left-0 z-[51]">
+        <Table.Td className="py-4 text-b4 font-semibold pl-5 sticky left-0 z-[51]">
           {course.courseNo} {sec && `(${sec.topic})`}
         </Table.Td>
         {ploList.data?.map((plo) => {
@@ -723,7 +719,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                   withAsterisk
                   classNames={{
                     input:
-                      "h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
+                      "h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b4  rounded-md",
                     pill: "bg-secondary text-white font-bold",
                     label: "font-semibold text-tertiary text-b2",
                     error: "text-[10px] !border-none",
@@ -779,17 +775,17 @@ export default function MapPLO({ ploName = "" }: Props) {
             ></Alert>
             <div className="flex flex-col mt-3 gap-2 text-[#333333]">
               <div className="flex flex-col ">
-                <p className="text-b3  text-[#808080]">PLO Collection name</p>
+                <p className="text-b4  text-[#808080]">PLO Collection name</p>
                 <p className=" -translate-y-[2px] text-b1">{`${ploList.name}`}</p>
               </div>
               <div className="flex flex-col  ">
-                <p className="text-b3 text-[#808080]">PLO no.</p>
+                <p className="text-b4 text-[#808080]">PLO no.</p>
                 <p className="  -translate-y-[2px] text-b1">
                   PLO-{`${formPLO.getValues().no}`}
                 </p>
               </div>
               <div className="flex flex-col ">
-                <p className="text-b3 text-[#808080]">PLO Description</p>
+                <p className="text-b4 text-[#808080]">PLO Description</p>
                 <p className=" text-[13px] flex flex-col gap-2 bg-[#f6f6f6] px-4 py-3 rounded-lg">
                   <li className="  -translate-y-[2px] font-normal">{`${
                     formPLO.getValues().descTH
@@ -1130,11 +1126,11 @@ export default function MapPLO({ ploName = "" }: Props) {
                     <Table stickyHeader striped>
                       <Table.Thead className="z-[52]">
                         <Table.Tr>
-                          <Table.Th className="w-[30%] sm:text-b3 sticky left-0">
+                          <Table.Th className="w-[30%] sm:text-b4 sticky left-0">
                             Course No.
                           </Table.Th>
                           {ploList.data?.map((plo, index) => (
-                            <Table.Th className="sm:text-b3" key={index}>
+                            <Table.Th className="sm:text-b4" key={index}>
                               PLO-{plo.no}
                             </Table.Th>
                           ))}

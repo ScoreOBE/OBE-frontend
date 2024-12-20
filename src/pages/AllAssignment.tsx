@@ -194,7 +194,11 @@ export default function AllAssignment() {
           .sections.map((item) => getSectionNo(item))
           .join(", ")} ${
           form.getValues().assignments.length > 1 ? "are" : "is"
-        } ${form.getValues().isPublish ? "has been published" : "has been unpublished"}`
+        } ${
+          form.getValues().isPublish
+            ? "has been published"
+            : "has been unpublished"
+        }`
       );
       setOpenPublishScoreModal(false);
       setOpenSelectSecModal(false);
@@ -327,8 +331,7 @@ export default function AllAssignment() {
           {course?.sections.length! > 1 && (
             <Chip
               classNames={{
-                label:
-                  "text-[13px] text-default font-semibold ",
+                label: "text-[13px] text-default font-semibold ",
               }}
               size="md"
               checked={
@@ -362,8 +365,7 @@ export default function AllAssignment() {
                     key={index}
                     classNames={{
                       root: "h-8 !rounded-[10px] text-center justify-center items-center",
-                      label:
-                        "text-[13px] text-default font-semibold  ",
+                      label: "text-[13px] text-default font-semibold  ",
                     }}
                     size="md"
                     value={as.name}
@@ -653,7 +655,6 @@ export default function AllAssignment() {
                     <Menu.Target>
                       <Button
                         variant="outline"
-                
                         leftSection={
                           <Icon
                             IconComponent={IconEyePublish}
@@ -727,28 +728,28 @@ export default function AllAssignment() {
                     <Table stickyHeader>
                       <Table.Thead>
                         <Table.Tr className="bg-[#e5e7f6]">
-                          <Table.Th className="w-20 sm:max-macair133:text-b3">
+                          <Table.Th className="w-20 sm:max-macair133:text-b4">
                             Name
                           </Table.Th>
-                          <Table.Th className="w-20 sm:max-macair133:text-b3  text-end pr-14 !pl-0">
+                          <Table.Th className="w-20 sm:max-macair133:text-b4  text-end pr-14 !pl-0">
                             Full Scores
                           </Table.Th>
-                          <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
+                          <Table.Th className=" w-10 sm:max-macair133:text-b4 text-end pr-20 !pl-0">
                             Mean
                           </Table.Th>
-                          <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b3">
+                          <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b4">
                             Created
                           </Table.Th>
-                          <Table.Th className="w-10 sm:max-macair133:text-b3">
+                          <Table.Th className="w-10 sm:max-macair133:text-b4">
                             Student(s)
                           </Table.Th>
-                          <Table.Th className="w-10 !px-4 sm:max-macair133:text-b3 text-center">
+                          <Table.Th className="w-10 !px-4 sm:max-macair133:text-b4 text-center">
                             Published
                           </Table.Th>
-                          <Table.Th className="w-5 sm:max-macair133:text-b3"></Table.Th>
+                          <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>
                         </Table.Tr>
                       </Table.Thead>
-                      <Table.Tbody className="text-default sm:max-macair133:text-b3 font-medium text-[13px]">
+                      <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px]">
                         {allAssignments.map((assignment, index) => {
                           const students =
                             course?.sections

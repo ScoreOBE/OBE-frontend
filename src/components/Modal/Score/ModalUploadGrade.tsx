@@ -170,7 +170,7 @@ export default function ModalUploadGrade({ opened, onClose, data }: Props) {
                     <Button
                       color="#ffcdcd"
                       variant="outline"
-                      className=" text-error pl-4 font-semibold  hover:text-[#f26c6c] text-b3 rounded-md"
+                      className=" text-error pl-4 font-semibold  hover:text-[#f26c6c] text-b4 rounded-md"
                       leftSection={
                         <Icon IconComponent={IconTrash} className="size-4" />
                       }
@@ -185,7 +185,7 @@ export default function ModalUploadGrade({ opened, onClose, data }: Props) {
                     </Button>
                     <Button
                       variant="filled"
-                      className=" text-white pl-4 font-semibold hover:text-[#ffffff] text-b3 rounded-md"
+                      className=" text-white pl-4 font-semibold hover:text-[#ffffff] text-b4 rounded-md"
                       leftSection={
                         <Icon IconComponent={IconUpload} className="size-4" />
                       }

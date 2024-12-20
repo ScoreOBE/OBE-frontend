@@ -596,22 +596,22 @@ export default function AdminDashboardTQF() {
                   <Table stickyHeader>
                     <Table.Thead>
                       <Table.Tr>
-                        <Table.Th className="border-r macair133:w-[10%] ipad11:w-[15%] !border-[#cecece] sm:text-b3 ipad11:text-b2">
+                        <Table.Th className="border-r macair133:w-[10%] ipad11:w-[15%] !border-[#cecece] sm:text-b4 ipad11:text-b2">
                           Course No.
                         </Table.Th>
-                        <Table.Th className="w-[30%] ipad11:text-b2  sm:text-b3">
+                        <Table.Th className="w-[30%] ipad11:text-b2  sm:text-b4">
                           Course Name
                         </Table.Th>
-                        <Table.Th className="w-[15%] ipad11:text-b2 sm:text-b3">
+                        <Table.Th className="w-[15%] ipad11:text-b2 sm:text-b4">
                           Instructor
                         </Table.Th>
-                        <Table.Th className="w-[10%] ipad11:text-b2 sm:text-b3 sm:max-macair133:w-[14.5%]">
+                        <Table.Th className="w-[10%] ipad11:text-b2 sm:text-b4 sm:max-macair133:w-[14.5%]">
                           TQF 3
                         </Table.Th>
-                        <Table.Th className="w-[10%] ipad11:text-b2 sm:text-b3 sm:max-macair133:w-[14.5%]">
+                        <Table.Th className="w-[10%] ipad11:text-b2 sm:text-b4 sm:max-macair133:w-[14.5%]">
                           TQF 5
                         </Table.Th>
-                        <Table.Th className="w-[10%] ipad11:text-b2 sm:text-b3 sm:max-macair133:w-[11%]">
+                        <Table.Th className="w-[10%] ipad11:text-b2 sm:text-b4 sm:max-macair133:w-[11%]">
                           Action
                         </Table.Th>
                       </Table.Tr>

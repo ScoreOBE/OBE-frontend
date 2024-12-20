@@ -32,11 +32,15 @@ export default function StdCLO() {
       ) : (
         <>
           <div className="flex flex-row  py-1  items-center justify-between">
-          {course?.clos.length !== 0 ? (<p className="text-secondary text-[16px] font-semibold">
-              ผลลัพธ์การเรียนรู้ของกระบวนวิชา
-              <br />
-              Course Learning Outcome
-            </p>) : (<></>) }
+            {course?.clos.length !== 0 ? (
+              <p className="text-secondary text-[16px] font-semibold">
+                ผลลัพธ์การเรียนรู้ของกระบวนวิชา
+                <br />
+                Course Learning Outcome
+              </p>
+            ) : (
+              <></>
+            )}
           </div>
           {course?.clos.length !== 0 ? (
             <div
@@ -55,7 +59,7 @@ export default function StdCLO() {
                   </Table.Tr>
                 </Table.Thead>
 
-                <Table.Tbody className="text-default sm:max-macair133:text-b3 font-medium text-[13px] ">
+                <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px] ">
                   {course?.clos.map(({ clo }, index) => {
                     return (
                       <Table.Tr key={index}>
@@ -79,7 +83,8 @@ export default function StdCLO() {
                   No CLO
                 </p>
                 <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                The CLO will show when the TQF 3 is submitted by the instructor.
+                  The CLO will show when the TQF 3 is submitted by the
+                  instructor.
                 </p>
               </div>
               <div className=" items-center justify-center flex">

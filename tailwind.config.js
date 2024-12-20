@@ -25,7 +25,8 @@ export default {
       screens: {
         sm: "1024px",
         ipad11: "1180px",
-        macair133: "1200px",
+        acerSwift: "1200px",
+        macair133: "1280px",
         samsungA24: "1800px",
       },
       fontSize: {
@@ -33,7 +34,9 @@ export default {
         h2: "18px",
         b1: "16px",
         b2: "14px",
-        b3: "12px",
+        b3: "13px",
+        b4: "12px",
+        b5: "11px",
       },
     },
     fontFamily: {
