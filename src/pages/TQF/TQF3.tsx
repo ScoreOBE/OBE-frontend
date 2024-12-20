@@ -63,6 +63,7 @@ export default function TQF3() {
   const [tqf3Original, setTqf3Original] = useState<
     Partial<IModelTQF3> & { topic?: string; ploRequired?: string[] }
   >();
+  const [tqf5Id, setTqf5Id] = useState("");
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<UseFormReturnType<any>>();
@@ -236,9 +237,10 @@ export default function TQF3() {
     }
     if (resCourse) {
       if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
-        const sectionTdf3 = resCourse.sections.find(
+        const section = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf3.topic
-        )?.TQF3;
+        );
+        setTqf5Id(section?.TQF5.id);
         const ploRequire = resPloRequired?.sections
           .find((item: any) => item.topic == tqf3.topic)
           ?.ploRequire.find((plo: any) => plo.plo == tqf3.coursePLO?.id)?.list;
@@ -246,24 +248,25 @@ export default function TQF3() {
           topic: tqf3.topic,
           ploRequired: ploRequire || [],
           part7: {},
-          ...sectionTdf3,
+          ...section?.TQF3,
         });
         dispatch(
           setDataTQF3({
             topic: tqf3.topic,
             ploRequired: ploRequire || [],
-            ...sectionTdf3,
+            ...section?.TQF3,
             type: resCourse.type,
             sections: [...resCourse.sections],
           })
         );
         if (firstFetch) {
-          setCurrentPartTQF3(sectionTdf3);
+          setCurrentPartTQF3(section?.TQF3);
         }
       } else {
         const ploRequire = resPloRequired?.ploRequire.find(
           (plo: any) => plo.plo == tqf3.coursePLO?.id
         )?.list;
+        setTqf5Id(resCourse.TQF5?.id);
         setTqf3Original({
           topic: tqf3.topic,
           ploRequired: ploRequire || [],
@@ -370,7 +373,10 @@ export default function TQF3() {
           setOpenWarningEditDataTQF2Or3(true);
           return;
         }
-        if (tqf3Part == "part6" && !tqf3.coursePLO?.id) payload.done = true;
+        dispatch(setLoadingOverlay(true));
+        if (tqf3Part == "part4") payload.tqf5 = tqf5Id;
+        else if (tqf3Part == "part6" && !tqf3.coursePLO?.id)
+          payload.done = true;
         if (confirmToEditData) payload.inProgress = true;
         const res = await saveTQF3(tqf3Part, payload);
         if (res) {
@@ -386,6 +392,7 @@ export default function TQF3() {
             setTqf3Part(`part${parseInt(tqf3Part.slice(-1)) + 1}`);
           }
         }
+        dispatch(setLoadingOverlay(false));
       }
     }
   };

@@ -37,6 +37,7 @@ import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { getOnePLO } from "@/services/plo/plo.service";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import ModalMappingAssignment from "@/components/Modal/TQF5/ModalMappingAssignment";
+import { setLoadingOverlay } from "@/store/loading";
 
 export default function TQF5() {
   const { courseNo } = useParams();
@@ -47,6 +48,7 @@ export default function TQF5() {
   const courseAdmin = useAppSelector((state) =>
     state.allCourse.courses.find((course) => course.courseNo == courseNo)
   );
+  const [cannotSelectScoreOBE, setCannotSelectScoreOBE] = useState(false);
   const [assignments, setAssignments] = useState<IModelAssignment[]>();
   const [tqf3, setTqf3] = useState<IModelTQF3>();
   const [tqf5Original, setTqf5Original] = useState<
@@ -144,6 +146,7 @@ export default function TQF5() {
         const section = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf5.topic
         );
+        setCannotSelectScoreOBE(!section.assignments.length);
         setAssignments(
           Array.from(
             resCourse.sections
@@ -158,7 +161,6 @@ export default function TQF5() {
               .values()
           )
         );
-
         const sectionTdf5 = section?.TQF5;
         setTqf3(section?.TQF3);
         const ploRequire = resPloRequired?.sections
@@ -186,6 +188,7 @@ export default function TQF5() {
         const ploRequire = resPloRequired?.ploRequire.find(
           (plo: any) => plo.plo == tqf5.coursePLO?.id
         )?.list;
+        setCannotSelectScoreOBE(!resCourse.sections[0].assignments.length);
         setAssignments(
           Array.from(
             resCourse.sections
@@ -261,6 +264,7 @@ export default function TQF5() {
           .getInputNode(firstErrorPath)
           ?.scrollIntoView({ behavior: "smooth", block: "end" });
       } else {
+        dispatch(setLoadingOverlay(true));
         const payload = form.getValues();
         payload.id = tqf5.id;
         const res = await saveTQF5(tqf5Part, payload);
@@ -276,11 +280,25 @@ export default function TQF5() {
             setTqf5Part(`part${parseInt(tqf5Part.slice(-1)) + 1}`);
           }
         }
+        dispatch(setLoadingOverlay(false));
       }
     }
   };
 
   const onChangeMethod = async (method?: string) => {
+    if (
+      cannotSelectScoreOBE &&
+      [method, selectedMethod].includes(METHOD_TQF5.SCORE_OBE)
+    ) {
+      showNotifications(
+        NOTI_TYPE.ERROR,
+        "Method Changed Failed",
+        `This course must have upload score for use ${
+          method || selectedMethod
+        } method.`
+      );
+      return;
+    }
     const res = await changeMethodTQF5(tqf5.id, {
       method: method ?? selectedMethod,
     });
