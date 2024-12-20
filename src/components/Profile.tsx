@@ -123,7 +123,7 @@ export default function Profile() {
             color="#fafafa"
             className="flex hover:bg-[#efefef] flex-row pl-4 justify-end px-0 !h-10 items-center"
           >
-            <div className="flex flex-col gap-1 text-end mr-3 text-b3">
+            <div className="flex flex-col gap-1 text-end mr-3 text-b4">
               <p className="font-semibold text-default">{getUserName(user)}</p>
               <p
                 className="font-medium"
@@ -155,7 +155,7 @@ export default function Profile() {
             <div className="flex items-center px-4 py-3 gap-3">
               {/* <Icon className="pt-[5px]" IconComponent={ProfileIcon} /> */}
               {getProfileIcon(user.role)}
-              <div className="flex flex-col text-b3">
+              <div className="flex flex-col text-b4">
                 <p className=" font-semibold">{getUserName(user, 1)}</p>
                 <p
                   className="font-medium"

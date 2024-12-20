@@ -160,7 +160,7 @@ export default function Part2TQF3({ setForm }: Props) {
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
-              <p className="text-b3  text-[#808080]">CLO Description</p>
+              <p className="text-b4  text-[#808080]">CLO Description</p>
               <p className=" -translate-y-[2px] text-b1">{editData?.descTH}</p>
               <p className=" -translate-y-[2px] text-b1">{editData?.descEN}</p>
             </div>
@@ -194,7 +194,7 @@ export default function Part2TQF3({ setForm }: Props) {
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
-              <p className="text-b3  text-[#808080]">Course Content Topic</p>
+              <p className="text-b4  text-[#808080]">Course Content Topic</p>
               <p className="-translate-y-[2px] text-b1">{editData?.topic}</p>
             </div>
           </>

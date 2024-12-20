@@ -246,10 +246,10 @@ export default function ModalStudentList({
               <span className="text-secondary underline">Click to import</span>{" "}
               or drag and drop
             </p>
-            <p className="-mt-2 font-medium items-center justify-center text-center text-secondary text-b3">
+            <p className="-mt-2 font-medium items-center justify-center text-center text-secondary text-b4">
               XLSX format only (up to 10MB)
             </p>
-            <div className="flex flex-col text-b3 font-medium  text-red-500  items-center text-center justify-center">
+            <div className="flex flex-col text-b4 font-medium  text-red-500  items-center text-center justify-center">
               <div className="flex gap-2 items-center justify-center">
                 <Icon
                   IconComponent={IconExclamationCircle}

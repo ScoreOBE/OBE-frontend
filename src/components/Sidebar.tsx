@@ -167,7 +167,11 @@ export default function Sidebar() {
     if (res) {
       dispatch(removeCourse(res.id));
       closeMainPopup();
-      showNotifications(NOTI_TYPE.SUCCESS, "You have successfully left the course.", ``);
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        "You have successfully left the course.",
+        ``
+      );
       navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`);
     }
   };
@@ -179,7 +183,7 @@ export default function Sidebar() {
       }}
       animate={{ x: 0 }}
       transition={{ duration: 0.3, type: "keyframes", stiffness: 100 }}
-      className="w-[255px] border-r-[1px] heig h-screen flex p-5 sidebar-linear-gradient"
+      className="w-[255px] acerSwift:max-macair133:w-[225px] border-r-[1px] heig h-screen flex p-5 sidebar-linear-gradient"
     >
       <div className="flex w-full flex-col gap-11">
         <div
@@ -191,9 +195,9 @@ export default function Sidebar() {
           <img
             src={scoreobe}
             alt="scoreOBElogo"
-            className=" h-[30px] cursor-pointer w-[30px] "
+            className=" h-[30px] cursor-pointer w-[30px] acerSwift:max-macair133:h-[27px] acerSwift:max-macair133:w-[27px]"
           />
-          <p className="text-white text-[20px] font-semibold">
+          <p className="text-white text-[20px] acerSwift:max-macair133:text-h2 font-semibold">
             ScoreOBE <span className=" text-[#FFCD1B]"> +</span>
           </p>
         </div>
@@ -235,11 +239,11 @@ export default function Sidebar() {
               }
             ></Alert>
             <div className="flex flex-col  ">
-              <p className="text-b3  text-[#808080]">Course no.</p>
+              <p className="text-b4  text-[#808080]">Course no.</p>
               <p className=" -translate-y-[2px] text-b1">{`${course?.courseNo}`}</p>
             </div>
             <div className="flex flex-col mt-3 ">
-              <p className="text-b3  text-[#808080]">Course name</p>
+              <p className="text-b4  text-[#808080]">Course name</p>
               <p className=" -translate-y-[2px] text-b1">{`${course?.courseName}`}</p>
             </div>
           </>

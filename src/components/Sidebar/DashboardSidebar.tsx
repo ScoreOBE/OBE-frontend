@@ -193,8 +193,8 @@ export default function DashboardSidebar() {
           OK
         </Button>
       </Modal>
-      <div className="flex text-white flex-col gap-11">
-        <div className="text-sm flex flex-col gap-[6px]">
+      <div className="flex text-white flex-col gap-11  acerSwift:max-macair133:gap-9">
+        <div className="text-sm acerSwift:max-macair133:text-b4 flex flex-col gap-[6px]">
           <p className="font-semibold">Welcome to ScoreOBE +</p>
           <div className="font-normal flex flex-col gap-[2px]">
             <p>
@@ -208,7 +208,9 @@ export default function DashboardSidebar() {
         </div>
 
         <div className="flex flex-col gap-3">
-          <p className="text-b2 font-semibold">Course</p>
+          <p className="text-b2 acerSwift:max-macair133:text-b3 font-semibold">
+            Course
+          </p>
           <Button
             className="bg-transparent !w-full !h-[50px] flex justify-start items-center px-3 py-1 border-none text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none group"
             leftSection={
@@ -218,8 +220,10 @@ export default function DashboardSidebar() {
             onClick={() => setOpenFilterTerm(true)}
           >
             <div className="flex flex-col justify-start items-start gap-[7px]">
-              <p className="font-medium text-[14px]">Semester</p>
-              <p className="font-normal text-[12px]">
+              <p className="font-medium text-b2  acerSwift:max-macair133:text-b3">
+                Semester
+              </p>
+              <p className="font-normal text-b4  acerSwift:max-macair133:text-b5">
                 Course (
                 {`${params.get("semester") || ""}/${
                   params.get("year")?.slice(-2) || ""

@@ -189,15 +189,15 @@ export default function Section() {
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
-                <p className="text-b3 text-[#808080]">Course no.</p>
+                <p className="text-b4 text-[#808080]">Course no.</p>
                 <p className="  -translate-y-[2px] text-b1">{`${editSec?.courseNo}`}</p>
               </div>
               <div className="flex flex-col ">
-                <p className="text-b3  text-[#808080]">Course name</p>
+                <p className="text-b4  text-[#808080]">Course name</p>
                 <p className=" -translate-y-[2px] text-b1">{`${editSec?.courseName}`}</p>
               </div>
               <div className="flex flex-col ">
-                <p className="text-b3  text-[#808080]">Section</p>
+                <p className="text-b4  text-[#808080]">Section</p>
                 <p className=" -translate-y-[2px] text-b1">{`${getSectionNo(
                   editSec?.sectionNo
                 )}`}</p>

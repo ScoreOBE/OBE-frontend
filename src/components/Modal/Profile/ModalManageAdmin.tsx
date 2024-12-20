@@ -92,7 +92,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
-                <p className="text-b3 text-[#808080]">Admin</p>
+                <p className="text-b4 text-[#808080]">Admin</p>
                 <p className="  -translate-y-[2px] text-b1">{`${targetAdminName}`}</p>
               </div>
             </div>

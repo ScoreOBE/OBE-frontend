@@ -439,13 +439,13 @@ export default function ModalAddCourse({
                   {COURSE_TYPE.GENERAL.en}
                 </span>
                 <br />
-                <span className="flex justify-start font-medium text-b3 text-secondary -mt-1">
+                <span className="flex justify-start font-medium text-b4 text-secondary -mt-1">
                   - Learner Person
                 </span>
-                <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
+                <span className="flex justify-start font-medium text-b4 text-secondary mt-2">
                   - Innovative Co-creator
                 </span>
-                <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
+                <span className="flex justify-start font-medium text-b4 text-secondary mt-2">
                   - Active Citizen
                 </span>
               </p>
@@ -469,13 +469,13 @@ export default function ModalAddCourse({
                   {COURSE_TYPE.SPECIAL.en}
                 </span>
                 <br />
-                <span className="flex justify-start font-medium text-b3 text-secondary -mt-1">
+                <span className="flex justify-start font-medium text-b4 text-secondary -mt-1">
                   - Core Courses
                 </span>
-                <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
+                <span className="flex justify-start font-medium text-b4 text-secondary mt-2">
                   - Major Courses
                 </span>
-                <span className="flex justify-start font-medium text-b3 text-secondary mt-2">
+                <span className="flex justify-start font-medium text-b4 text-secondary mt-2">
                   - Minor Courses
                 </span>
               </p>
@@ -585,7 +585,7 @@ export default function ModalAddCourse({
                 withAsterisk
                 classNames={{
                   input:
-                    " macair133:h-[130px] sm:h-[75px] ipad11:h-[90px] overflow-y-scroll bg-[#ffffff] mt-[2px] p-3 text-b3  rounded-md",
+                    " macair133:h-[130px] sm:h-[75px] ipad11:h-[90px] overflow-y-scroll bg-[#ffffff] mt-[2px] p-3 text-b4  rounded-md",
                   pill: "bg-secondary text-white font-bold pb-1 !pr-1",
                   label: "font-semibold text-tertiary text-b2",
                   error: "text-[10px] !border-none",
@@ -644,7 +644,6 @@ export default function ModalAddCourse({
                           <Group className=" items-center  h-ful mt-2 flex flex-row gap-4">
                             {SEMESTER.map((item, index) => (
                               <Chip
-                
                                 key={index}
                                 icon={<></>}
                                 classNames={{
@@ -652,9 +651,8 @@ export default function ModalAddCourse({
                                     "!bg-black border-[1.5px]   disabled:bg-gray-500",
                                   iconWrapper: "w-0 !bg-black",
                                   label: "text-b2 !px-5 cursor-pointer",
-                                  root: ""
+                                  root: "",
                                 }}
-                                
                                 size="sm"
                                 value={item.toString()}
                                 disabled={
@@ -799,7 +797,7 @@ export default function ModalAddCourse({
                             </Button>
                           </div>
                         </div>
-                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-b3">
+                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-b4">
                           <div className=" font-semibold">
                             Can access section:
                           </div>
@@ -838,13 +836,13 @@ export default function ModalAddCourse({
                 {form.getValues().courseNo} - {form.getValues().courseName}
               </p>
               {form.getValues().sections?.at(0)?.topic && (
-                <p className="text-secondary text-b3">
+                <p className="text-secondary text-b4">
                   Topic: {form.getValues().sections?.at(0)?.topic}
                 </p>
               )}
             </div>
             <div className="flex flex-col max-h-[380px] h-fit w-full px-2 overflow-y-auto ">
-              <div className="flex flex-col gap-3 mt-3 font-medium text-b3">
+              <div className="flex flex-col gap-3 mt-3 font-medium text-b4">
                 {form.getValues().sections?.map((sec, index) => (
                   <div
                     key={index}

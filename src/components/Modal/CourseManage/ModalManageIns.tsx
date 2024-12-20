@@ -499,7 +499,7 @@ export default function ModalManageIns({
             )}
             <div className="flex flex-col gap-2">
               <p>Instructor Management</p>
-              <p className="text-b3 font-medium text-[#575757]">
+              <p className="text-b4 font-medium text-[#575757]">
                 {data.courseNo} {data.courseName}
               </p>
             </div>

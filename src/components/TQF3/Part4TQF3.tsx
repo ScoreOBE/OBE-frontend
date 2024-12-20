@@ -552,7 +552,7 @@ export default function Part4TQF3({
                       return (
                         <React.Fragment key={cloIndex}>
                           {/* Main Row */}
-                          <Table.Tr className="text-b3 border-[#d9d9d9] border-b-[1px] table-row h-full text-default">
+                          <Table.Tr className="text-b4 border-[#d9d9d9] border-b-[1px] table-row h-full text-default">
                             {/* CLO Description Column */}
                             <Table.Td
                               key={form.key(`data.${cloIndex}.percent`)}

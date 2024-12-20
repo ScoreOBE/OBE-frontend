@@ -426,15 +426,15 @@ export default function Roster() {
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
-              <p className="text-b3  text-[#808080]">Section</p>
+              <p className="text-b4  text-[#808080]">Section</p>
               <p className="-translate-y-[2px] text-b1 mb-2">
                 {getSectionNo(selectedUser?.sectionNo)}
               </p>
-              <p className="text-b3  text-[#808080]">Student ID</p>
+              <p className="text-b4  text-[#808080]">Student ID</p>
               <p className="-translate-y-[2px] text-b1 mb-2">
                 {selectedUser?.studentId}
               </p>
-              <p className="text-b3  text-[#808080]">Student Name</p>
+              <p className="text-b4  text-[#808080]">Student Name</p>
 
               <p className="-translate-y-[2px] text-b1">
                 {getUserName(selectedUser!, 3)}

@@ -239,7 +239,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
-              <p className="text-b3  text-[#808080]">PLO Collection name</p>
+              <p className="text-b4  text-[#808080]">PLO Collection name</p>
               <p className=" -translate-y-[2px] text-b1">{`${collection.name}`}</p>
             </div>
           </>
@@ -465,8 +465,8 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                             </p>
                           </div>
                           {/* Main Instructor */}
-                          <div className="flex items-center font-medium text-[#4E5150] text-b3"></div>
-                          <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
+                          <div className="flex items-center font-medium text-[#4E5150] text-b4"></div>
+                          <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b4">
                             <p className="text-wrap font-semibold">
                               Start in: {plo.semester}/{plo.year}
                             </p>
@@ -524,9 +524,9 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                                   </p>
                                 </div>
                                 {/* Main Instructor */}
-                                <div className="flex items-center font-medium text-[#4E5150] text-b3"></div>
+                                <div className="flex items-center font-medium text-[#4E5150] text-b4"></div>
                                 {/* Open Semester */}
-                                <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b3">
+                                <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b4">
                                   <p className="text-wrap font-semibold">
                                     Start in: {collection.semester}/
                                     {collection.year}

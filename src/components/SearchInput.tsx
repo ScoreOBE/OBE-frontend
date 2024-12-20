@@ -49,7 +49,7 @@ export function SearchInput({ onSearch, placeholder }: Props) {
         rightSectionPointerEvents="all"
         rightSection={
           !!searchValue.length && (
-            <Tooltip className="text-b3" label="Reset">
+            <Tooltip className="text-b4" label="Reset">
               <div className="border-none">
                 <CloseButton size="sm" onClick={reset} />
               </div>
@@ -59,7 +59,7 @@ export function SearchInput({ onSearch, placeholder }: Props) {
       />
       {isFocused && (
         <div
-          className="z-50 mt-2 absolute cursor-pointer w-full rounded-md bg-white text-slate-800 p-3 text-b3 flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center"
+          className="z-50 mt-2 absolute cursor-pointer w-full rounded-md bg-white text-slate-800 p-3 text-b4 flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center"
           onClick={() => {
             setIsFocused(false);
             onSearch(searchValue);
@@ -80,7 +80,8 @@ export function SearchInput({ onSearch, placeholder }: Props) {
           <div className="flex md:w-fit sm:max-ipad11:text-[11px] w-full justify-end items-center text-secondary gap-1">
             Press
             <div className="ml-1 flex items-center gap-1 border border-secondary p-1 font-semibold rounded-[6px]">
-              Enter <AiOutlineEnter className="stroke-[50px] sm:max-ipad11:text-[11px]" />
+              Enter{" "}
+              <AiOutlineEnter className="stroke-[50px] sm:max-ipad11:text-[11px]" />
             </div>
           </div>
         </div>
