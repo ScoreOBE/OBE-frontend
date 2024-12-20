@@ -16,6 +16,7 @@ import { getDepartment } from "@/services/faculty/faculty.service";
 import { isEqual } from "lodash";
 import { setShowSidebar, setShowNavbar } from "@/store/config";
 import { IModelFaculty } from "@/models/ModelFaculty";
+import { ROLE } from "@/helpers/constants/enum";
 
 export default function SelectDepartment() {
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ export default function SelectDepartment() {
         <p className="text-white text-[20px] font-semibold">
           ScoreOBE <span className=" text-[#FFCD1B]"> +</span>
         </p>
-      </div>{" "}
+      </div>
       <div className=" h-screen w-screen flex justify-between  px-[65px] sm:px-[80px] ipad11:px-[90px] macair133:px-32 items-center font-sf-pro">
         <div className="text-white">
           <motion.div
@@ -116,15 +117,22 @@ export default function SelectDepartment() {
               <div className="text-white font-semibold text-[18px] mb-[2px] ">
                 Select department
               </div>
-              <div className="text-[#fcc087] text-b2 font-semibold mb-4">
-                Select up to 4 departments <br /> in which you are responsible
-                for teaching.
-              </div>
+              {[ROLE.STUDENT, ROLE.TA].includes(user.role) ? (
+                <div className="text-[#fcc087] text-b2 font-semibold mb-4">
+                  {/* Select a department */}
+                </div>
+              ) : (
+                <div className="text-[#fcc087] text-b2 font-semibold mb-4">
+                  Select up to 4 departments <br /> in which you are responsible
+                  for teaching.
+                </div>
+              )}
               <div className="flex flex-1 flex-col overflow-y-scroll gap-4 text-white h-[300px] sm:h-[350px] ipad11:h-[430px]">
                 {faculty.department?.map((key) => {
                   const isChecked = checkedItems.includes(key.codeEN);
                   const disabled =
-                    checkedItems.length == 4 &&
+                    checkedItems.length ==
+                      ([ROLE.STUDENT, ROLE.TA].includes(user.role) ? 1 : 4) &&
                     !checkedItems.includes(key.codeEN);
                   return (
                     <div
