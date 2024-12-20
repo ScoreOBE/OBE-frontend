@@ -110,9 +110,9 @@ export default function Navbar() {
   return (
     <>
       <div
-        className={`min-h-14 bg-[#fafafa] border-b border-[#e0e0e0] text-secondary px-6 inline-flex flex-wrap justify-between items-center z-50 ${
+        className={`min-h-14  acerSwift:max-macair133:min-h-[50px] acerSwift:max-macair133:py-1 bg-[#fafafa] border-b border-[#e0e0e0] text-secondary px-6 inline-flex flex-wrap justify-between items-center z-50 ${
           [ROUTE_PATH.LOGIN].includes(location)
-            ? "border-none min-h-14 items-center"
+            ? "border-none min-h-14 acerSwift:max-macair133:min-h-12 items-center"
             : ""
         }`}
         style={
@@ -123,7 +123,7 @@ export default function Navbar() {
       >
         <div className="flex w-fit gap-3 items-center">
           <p
-            className={`font-semibold text-h2 ${
+            className={`font-semibold text-h2 acerSwift:max-macair133:text-b1 ${
               location.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
                 ? ""
                 : "md:w-fit w-full"
@@ -173,8 +173,11 @@ export default function Navbar() {
               target="_blank"
             >
               <Button variant="light">
-                <div className="flex items-center gap-1">
-                  <Icon className="size-5" IconComponent={IconFeedback} />
+                <div className="flex items-center gap-1  acerSwift:max-macair133:text-b5">
+                  <Icon
+                    className="size-5  acerSwift:max-macair133:size-4"
+                    IconComponent={IconFeedback}
+                  />
                   <span>Feedback</span>
                 </div>
               </Button>

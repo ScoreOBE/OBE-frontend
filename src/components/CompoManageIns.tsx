@@ -234,7 +234,7 @@ export default function CompoMangeIns({
             </span>
           </p>
         </div>
-        <Icon IconComponent={IconChevronRight} className=" stroke-[2px]" />
+        <Icon IconComponent={IconChevronRight} className="stroke-[2px]" />
       </div>
 
       <div className="flex w-full  items-end h-fit ">
@@ -245,7 +245,13 @@ export default function CompoMangeIns({
             description="Make sure CMU account correct"
             label="CMU account"
             className={`w-full border-none`}
-            classNames={{ input: `${type != "mainIns" && "!rounded-r-none"}` }}
+            classNames={{
+              input: `${
+                type != "mainIns" && "!rounded-r-none"
+              } acerSwift:max-macair133:text-b4`,
+              label: "acerSwift:max-macair133:!text-b4",
+              description: "acerSwift:max-macair133:text-b5",
+            }}
             placeholder="example@cmu.ac.th"
             value={type == "mainIns" ? value.value : inputUser?.value!}
             onChange={(event) => {
@@ -288,8 +294,11 @@ export default function CompoMangeIns({
             nothingFoundMessage="No result"
             className="w-full border-none "
             classNames={{
-              input: `rounded-md ${type != "mainIns" && "rounded-e-none"}`,
-              option: `py-1`,
+              input: `rounded-md acerSwift:max-macair133:text-b4 ${
+                type != "mainIns" && "rounded-e-none"
+              }`,
+              option: `py-1 acerSwift:max-macair133:text-b4`,
+              label: "acerSwift:max-macair133:!text-b4",
             }}
             value={type == "mainIns" ? value?.value : inputUser?.value!}
             onChange={(value, option) => {
