@@ -242,18 +242,18 @@ export default function ModalStudentList({
                 className="bg-[#DDE0FF] stroke-[2px] size-16 p-3 rounded-full"
               />
             </Dropzone.Idle>
-            <p className="font-semibold text-b2 text-default">
+            <p className="font-semibold text-b2 acerSwift:max-macair133:text-b4 text-default">
               <span className="text-secondary underline">Click to import</span>{" "}
               or drag and drop
             </p>
-            <p className="-mt-2 font-medium items-center justify-center text-center text-secondary text-b4">
+            <p className="-mt-2 font-medium items-center justify-center text-center text-secondary text-b4 acerSwift:max-macair133:text-b5">
               XLSX format only (up to 10MB)
             </p>
-            <div className="flex flex-col text-b4 font-medium  text-red-500  items-center text-center justify-center">
+            <div className="flex flex-col text-b4 acerSwift:max-macair133:text-b5 font-medium  text-red-500  items-center text-center justify-center">
               <div className="flex gap-2 items-center justify-center">
                 <Icon
                   IconComponent={IconExclamationCircle}
-                  className="size-4 stroke-red-600"
+                  className="size-4 stroke-red-600 acerSwift:max-macair133:size-3.5"
                 />
                 <p>Supports only Student List ({data?.courseNo}) template</p>
               </div>
@@ -271,9 +271,9 @@ export default function ModalStudentList({
       <Modal
         title={
           type === "import" ? (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 acerSwift:max-macair133:!text-b1">
               <p>Import Student list from Reg CMU</p>
-              <p className=" text-[12px] text-noData">
+              <p className=" text-b4 acerSwift:max-macair133:text-b5 text-noData">
                 {data?.courseNo} {data?.courseName}
               </p>
             </div>
@@ -340,7 +340,7 @@ export default function ModalStudentList({
                       <img
                         src={regcmu}
                         alt="CMULogo"
-                        className=" h-[38px] w-[185px] "
+                        className=" h-[38px] w-[185px]"
                       />
                       <p className="pl-5 text-default leading-6 font-medium ">
                         You must import the student list (.xlsx) in this course
@@ -392,7 +392,7 @@ export default function ModalStudentList({
           </Tabs>
         ) : (
           <div className="flex flex-col gap-2 overflow-hidden">
-            <div className=" flex-col overflow-y-auto h-full gap-3">
+            <div className=" flex-col overflow-y-auto h-full gap-3 acerSwift:max-macair133:gap-4 acerSwift:max-macair133:mt-2">
               <Alert
                 radius="md"
                 variant="light"
@@ -402,8 +402,11 @@ export default function ModalStudentList({
                   body: " flex justify-center",
                 }}
                 title={
-                  <div className="flex items-center  gap-2">
-                    <Icon IconComponent={IconExclamationCircle} />
+                  <div className="flex items-center gap-2 acerSwift:max-macair133:text-b3">
+                    <Icon
+                      IconComponent={IconExclamationCircle}
+                      className="acerSwift:max-macair133:size-5"
+                    />
                     <p>
                       Important: Import Student List for Course {data?.courseNo}
                     </p>
@@ -415,9 +418,9 @@ export default function ModalStudentList({
                     <img
                       src={regcmu}
                       alt="CMULogo"
-                      className=" h-[38px] w-[185px] "
+                      className=" w-[185px] acerSwift:max-macair133:w-[135px]"
                     />
-                    <p className="pl-5 text-default leading-6 font-medium ">
+                    <p className="pl-5 text-default leading-6 font-medium  acerSwift:max-macair133:text-b4">
                       <span className="font-bold">
                         Before uploading scores for course {data?.courseNo}{" "}
                         {data?.courseName}
@@ -465,7 +468,7 @@ export default function ModalStudentList({
                   type == "import" ? (
                     <Icon
                       IconComponent={IconArrowRight}
-                      className="size-5 stroke-[#ffffff] stroke-[2px] items-center"
+                      className="size-5 acerSwift:max-macair133:size-4 stroke-[#ffffff] stroke-[2px] items-center"
                     />
                   ) : null
                 }

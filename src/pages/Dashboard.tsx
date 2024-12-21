@@ -195,9 +195,9 @@ export default function Dashboard() {
       <Modal
         title="Upload score"
         transitionProps={{ transition: "pop" }}
-        // size="32vw"
         centered
         classNames={{
+          title: "acerSwift:max-macair133:!text-b1",
           content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
           body: "flex flex-col overflow-hidden max-h-full h-fit",
         }}
@@ -212,25 +212,6 @@ export default function Dashboard() {
             size="sm"
             searchable
             data={courseList.courses.flatMap((course) => {
-              // if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
-              //   let uniqueTopicList: any[] = [];
-              //   course.sections.map((sec) => {
-              //     if (
-              //       sec.topic &&
-              //       !uniqueTopicList.some((item) => item.topic === sec.topic)
-              //     ) {
-              //       uniqueTopicList.push({
-              //         value: `${course.id}-${sec.topic}`,
-              //         id: course.id,
-              //         courseNo: course.courseNo,
-              //         courseName: course.courseName,
-              //         topic: sec.topic,
-              //         label: `${course.courseNo} - ${sec.topic}`,
-              //       });
-              //     }
-              //   });
-              //   return uniqueTopicList;
-              // } else {
               return {
                 value: course.id,
                 id: course.id,
@@ -241,8 +222,11 @@ export default function Dashboard() {
                 sections: course.sections,
                 label: `${course.courseNo} - ${course.courseName}`,
               };
-              // }
             })}
+            classNames={{
+              input: "acerSwift:max-macair133:text-b4",
+              label: "acerSwift:max-macair133:!text-b3",
+            }}
             value={uploadCourse?.value}
             onChange={(value, option: any) =>
               setUploadCourse({
@@ -257,9 +241,9 @@ export default function Dashboard() {
               })
             }
             renderOption={(item: any) => (
-              <div className="flex w-full gap-2">
-                <p className="w-[9%] min-w-fit">{item.option.courseNo}</p>
-                <p>
+              <div className="flex w-full gap-2 acerSwift:max-macair133:text-b4">
+                <p>{item.option.courseNo}</p>
+                <p className="">
                   {item.option.courseName}
                   {/* {item.option.topic && (
                     <>
@@ -275,6 +259,7 @@ export default function Dashboard() {
             <Group className="flex w-full h-fit items-end justify-end">
               <Button
                 variant="subtle"
+                className=" acerSwift:max-macair133:!text-b4"
                 onClick={() => {
                   setOpenModalSelectCourse(false);
                   setUploadCourse(undefined);
@@ -283,6 +268,7 @@ export default function Dashboard() {
                 Cancel
               </Button>
               <Button
+                className="acerSwift:max-macair133:!text-b4"
                 onClick={() => {
                   if (
                     courseList.courses.find(({ id }) => id == uploadCourse?.id)
@@ -415,7 +401,7 @@ export default function Dashboard() {
               height={"100%"}
               loader={<Loading />}
               hasMore={payload?.hasMore}
-              className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:max-samsungA24:grid-cols-4 pb-5 gap-4 px-6 p-3"
+              className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4 pb-5 gap-4 px-6 p-3"
               style={{ height: "fit-content", maxHeight: "100%" }}
             >
               {courseList.courses.map((item) => {

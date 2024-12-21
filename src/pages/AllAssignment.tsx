@@ -257,8 +257,13 @@ export default function AllAssignment() {
   const uploadButton = () => {
     return (
       <Button
-        className="text-center px-4"
-        leftSection={<Icon IconComponent={IconUpload} className="size-4" />}
+        className="text-center px-4 acerSwift:max-macair133:!text-b5"
+        leftSection={
+          <Icon
+            IconComponent={IconUpload}
+            className="size-4 acerSwift:max-macair133:size-3.5 acerSwift:max-macair133:stroke-2"
+          />
+        }
         onClick={() =>
           course?.sections.find(({ students }) => students?.length)
             ? setOpenModalUploadScore(true)
@@ -641,7 +646,7 @@ export default function AllAssignment() {
           <>
             {allAssignments.length !== 0 && (
               <div className="flex flex-row items-center justify-between">
-                <p className="text-secondary text-[16px] font-semibold">
+                <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 font-semibold">
                   {allAssignments.length} Evaluation
                   {allAssignments.length! > 1 && "s"}
                 </p>
@@ -658,10 +663,10 @@ export default function AllAssignment() {
                         leftSection={
                           <Icon
                             IconComponent={IconEyePublish}
-                            className="size-5 "
+                            className="size-5 acerSwift:max-macair133:size-4"
                           />
                         }
-                        className="px-3   "
+                        className="px-3 acerSwift:max-macair133:!text-b5"
                       >
                         Publish score
                       </Button>
@@ -671,7 +676,7 @@ export default function AllAssignment() {
                       style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
                     >
                       <Menu.Item
-                        className="text-[#3E3E3E] text-[14px] h-8 w-full "
+                        className="text-[#3E3E3E] text-b2 acerSwift:max-macair133:!text-b5 h-8 w-full "
                         onClick={() => {
                           setIsPublishAll(false);
                           setOpenPublishScoreModal(true);
@@ -690,7 +695,7 @@ export default function AllAssignment() {
                           setIsPublishAll(true);
                           setOpenPublishScoreModal(true);
                         }}
-                        className="text-[#3E3E3E] text-[14px] h-8 w-full "
+                        className="text-[#3E3E3E] text-b2 acerSwift:max-macair133:!text-b5 h-8 w-full "
                       >
                         <div className="flex items-center gap-2">
                           <Icon
@@ -715,8 +720,18 @@ export default function AllAssignment() {
                 }}
               >
                 <Tabs.List>
-                  <Tabs.Tab value="assignment">List</Tabs.Tab>
-                  <Tabs.Tab value="charts">Charts</Tabs.Tab>
+                  <Tabs.Tab
+                    value="assignment"
+                    className="acerSwift:max-macair133:!text-b3"
+                  >
+                    List
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    value="charts"
+                    className="acerSwift:max-macair133:!text-b3"
+                  >
+                    Charts
+                  </Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value="assignment">
                   <div
@@ -728,7 +743,7 @@ export default function AllAssignment() {
                     <Table stickyHeader>
                       <Table.Thead>
                         <Table.Tr className="bg-[#e5e7f6]">
-                          <Table.Th className="w-20 sm:max-macair133:text-b4">
+                          <Table.Th className="w-20 sm:max-macair133:text-b4 ">
                             Name
                           </Table.Th>
                           <Table.Th className="w-20 sm:max-macair133:text-b4  text-end pr-14 !pl-0">
@@ -749,7 +764,7 @@ export default function AllAssignment() {
                           <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>
                         </Table.Tr>
                       </Table.Thead>
-                      <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px]">
+                      <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-b3 acerSwift:max-macair133:text-b4">
                         {allAssignments.map((assignment, index) => {
                           const students =
                             course?.sections
@@ -785,7 +800,7 @@ export default function AllAssignment() {
                               }
                             >
                               <Table.Td>{assignment.name}</Table.Td>
-                              <Table.Td className="text-end pr-14 !pl-0">
+                              <Table.Td className="text-end pr-14 !pl-0 ">
                                 {assignment.questions.reduce(
                                   (sum, { fullScore }) => sum + fullScore,
                                   0
@@ -824,7 +839,7 @@ export default function AllAssignment() {
                                   {assignment.isPublish ? (
                                     <Icon
                                       IconComponent={IconPublish}
-                                      className="text-default"
+                                      className="text-default "
                                     />
                                   ) : (
                                     <Icon
@@ -933,10 +948,16 @@ export default function AllAssignment() {
                                 } // Update specific tab
                               >
                                 <Tabs.List className="mb-2">
-                                  <Tabs.Tab value="bellCurve">
+                                  <Tabs.Tab
+                                    value="bellCurve"
+                                    className="acerSwift:max-macair133:!text-b4"
+                                  >
                                     Distribution
                                   </Tabs.Tab>
-                                  <Tabs.Tab value="histogram">
+                                  <Tabs.Tab
+                                    value="histogram"
+                                    className="acerSwift:max-macair133:!text-b4"
+                                  >
                                     Histogram
                                   </Tabs.Tab>
                                 </Tabs.List>
@@ -980,7 +1001,7 @@ export default function AllAssignment() {
                           >
                             <a href={`#${item.name}`}>
                               <p
-                                className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
+                                className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-b3 acerSwift:max-macair133:!text-b4 ${
                                   activeSection === i
                                     ? "text-secondary"
                                     : "text-[#D2C9C9] "

@@ -183,11 +183,11 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
             className="!pt-4 flex w-full rounded-none pb-4 !px-0"
           >
             <div className="flex px-12 items-center justify-between w-full">
-              <div className="inline-flex gap-2 items-center font-semibold text-h2 text-secondary">
+              <div className="inline-flex gap-2 items-center font-semibold text-b1 text-secondary">
                 <Modal.CloseButton className="!m-0" />
                 <div className="flex flex-col">
                   <p>Upload Score</p>
-                  <p className=" text-[12px] text-noData">
+                  <p className=" text-b6 text-noData">
                     {data.courseNo} {data.courseName}
                   </p>
                 </div>
@@ -288,11 +288,11 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                       ScoreOBE + Template
                     </p>
                   </div>
-                  <div className="flex flex-col gap-1 text-[16px]">
+                  <div className="flex flex-col gap-1 text-b1 acerSwift:max-macair133:text-b2">
                     <p className="text-secondary font-semibold ">
                       Use this template to upload score
                     </p>
-                    <p className="text-[#6a6a6a] text-[14px] font-[500]">
+                    <p className="text-[#6a6a6a] text-b2 acerSwift:max-macair133:text-b3 font-[500]">
                       Accurate grades and TQF5 qualifications rely on <br />{" "}
                       using this template to submit your scores.
                     </p>
@@ -343,7 +343,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   body: " flex justify-center",
                 }}
                 title={
-                  <div className="flex items-center  gap-2">
+                  <div className="flex items-center gap-2">
                     <Icon IconComponent={IconInfo2} />
                     <p>Upload Existing Score</p>
                   </div>
