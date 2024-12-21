@@ -91,16 +91,20 @@ export default function ChartContainer({
     <>
       {!questionName && (
         <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-5 text-start mx-5">
-          <div className="flex flex-row text-secondary text-[20px] w-full justify-between font-semibold">
+          <div className="flex flex-row text-secondary text-h1 acerSwift:max-macair133:text-h2 w-full justify-between font-semibold">
             <div className="flex justify-between !w-full items-center mb-1">
               <div className="flex flex-col">
-                <p className="text-[#3f4474]  text-[16px]">{data.name}</p>
+                <p className="text-[#3f4474]  text-b1 acerSwift:max-macair133:text-b2">
+                  {data.name}
+                </p>
                 <p>
                   {fullScore?.toFixed(2)}{" "}
-                  <span className="text-[16px]">pts.</span>
+                  <span className="text-b1 acerSwift:max-macair133:text-b2">
+                    pts.
+                  </span>
                 </p>
               </div>
-              <p className="text-[#3f4474] mb-1 sm:max-macair133:text-[14px] text-[16px]">
+              <p className="text-[#3f4474] mb-1 sm:max-macair133:text-[14px] text-b1 acerSwift:max-macair133:text-b2">
                 {totalStudent} Students
               </p>
             </div>
@@ -109,55 +113,69 @@ export default function ChartContainer({
           <div className="flex  flex-row justify-between w-full">
             {studentScore && (
               <div className="flex flex-col">
-                <p className="font-semibold text-[16px] text-secondary">
+                <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-secondary">
                   Your Score
                 </p>
-                <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
                   {studentScore.toFixed(2)}
                 </p>
               </div>
             )}
             <div className="flex flex-col">
-              <p className="font-semibold text-[16px] text-[#777777]">Mean</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                Mean
+              </p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
                 {mean?.toFixed(2)}
               </p>
             </div>
             <div className="flex flex-col">
-              <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                SD
+              </p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
                 {sd?.toFixed(2)}
               </p>
             </div>
             <div className="flex flex-col">
-              <p className="font-semibold text-[16px] text-[#777777]">Median</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                Median
+              </p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
                 {median?.toFixed(2)}
               </p>
             </div>
             <div className="flex flex-col">
-              <p className="font-semibold text-[16px] text-[#777777]">Max</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                Max
+              </p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
                 {maxScore?.toFixed(2)}
               </p>
             </div>
             {!studentScore && (
               <div className="flex flex-col">
-                <p className="font-semibold text-[16px] text-[#777777]">Min</p>
-                <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                  Min
+                </p>
+                <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
                   {minScore?.toFixed(2)}
                 </p>
               </div>
             )}
             <div className="flex flex-col">
-              <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                Q3
+              </p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
                 {q3?.toFixed(2)}
               </p>
             </div>
             <div className="flex flex-col">
-              <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                Q1
+              </p>
+              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
                 {q1 ? q1?.toFixed(2) : "-"}
               </p>
             </div>
@@ -165,7 +183,7 @@ export default function ChartContainer({
         </div>
       )}
       <div
-        className={`relative h-full w-full ${
+        className={`relative h-full w-full acerSwift:max-macair133:mt-1 ${
           questionName ? "justify-items-center" : "pl-3 pr-5"
         }`}
       >

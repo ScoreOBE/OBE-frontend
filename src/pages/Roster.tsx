@@ -218,7 +218,7 @@ export default function Roster() {
       )
       ?.map((student) => (
         <Table.Tr
-          className="font-medium text-default text-[13px]"
+          className="font-medium text-default text-b3 acerSwift:max-macair133:!text-b4"
           key={student.studentId}
         >
           <Table.Td>{getSectionNo(sec.sectionNo)}</Table.Td>
@@ -247,7 +247,10 @@ export default function Roster() {
                   color="yellow"
                   className="tag-tqf !px-3 !rounded-full text-center"
                 >
-                  <Icon className="size-5" IconComponent={IconEdit} />
+                  <Icon
+                    className="size-5 acerSwift:max-macair133:size-4"
+                    IconComponent={IconEdit}
+                  />
                 </Button>
                 <Button
                   variant="outline"
@@ -261,7 +264,10 @@ export default function Roster() {
                   color="red"
                   className="tag-tqf !px-3 !rounded-full text-center"
                 >
-                  <Icon className="size-5" IconComponent={Iconbin} />
+                  <Icon
+                    className="size-5 acerSwift:max-macair133:size-4"
+                    IconComponent={Iconbin}
+                  />
                 </Button>
               </div>
             </Table.Td>
@@ -277,7 +283,7 @@ export default function Roster() {
       <>
         {(hasData || search) && (
           <div className=" px-1 flex items-center justify-between">
-            <p className="  text-secondary font-semibold">
+            <p className="  text-secondary font-semibold acerSwift:max-macair133:!text-b2">
               {(() => {
                 const totalStudents = course?.sections.reduce(
                   (total, sec) => total + (sec.students?.length || 0),
@@ -347,18 +353,28 @@ export default function Roster() {
           style={{
             boxShadow: hasData ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
           }}
-          className="mx-1 mt-3 max-h-screen sm:max-ipad11:max-h-[400px] h-fit flex flex-col bg-white mb-1 rounded-md overflow-y-auto"
+          className="mx-1 mt-3 max-h-screen sm:max-ipad11:max-h-[400px] h-fit flex flex-col bg-white mb-1 rounded-md overflow-y-auto acerSwift:max-macair133:!text-b4"
         >
           {hasData ? (
             <Table stickyHeader striped>
               <Table.Thead>
                 <Table.Tr className="bg-[#e5e7f6]">
-                  <Table.Th className="w-[10%]">Section</Table.Th>
-                  <Table.Th className="w-[17%]">Student ID</Table.Th>
-                  <Table.Th className="w-[20%]">Name</Table.Th>
-                  <Table.Th className="w-[25%]">CMU Account</Table.Th>
+                  <Table.Th className="w-[10%] acerSwift:max-macair133:!text-b3">
+                    Section
+                  </Table.Th>
+                  <Table.Th className="w-[17%] acerSwift:max-macair133:!text-b3">
+                    Student ID
+                  </Table.Th>
+                  <Table.Th className="w-[20%] acerSwift:max-macair133:!text-b3">
+                    Name
+                  </Table.Th>
+                  <Table.Th className="w-[25%] acerSwift:max-macair133:!text-b3">
+                    CMU Account
+                  </Table.Th>
                   {activeTerm && user.role != ROLE.TA && (
-                    <Table.Th className="w-[10%]">Action</Table.Th>
+                    <Table.Th className="w-[10%] acerSwift:max-macair133:!text-b3">
+                      Action
+                    </Table.Th>
                   )}
                 </Table.Tr>
               </Table.Thead>

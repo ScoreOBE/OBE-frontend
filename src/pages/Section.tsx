@@ -248,8 +248,8 @@ export default function Section() {
         <Loading />
       ) : (
         <div className=" flex flex-col h-full w-full overflow-hidden">
-          <div className="flex flex-row  px-6 pt-3 min-h-[60px]  items-center justify-between">
-            <p className="text-secondary text-[16px] font-semibold">
+          <div className="flex flex-row  px-6 pt-3 min-h-[60px] items-center justify-between">
+            <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 font-semibold">
               {course?.sections.length} Section
               {course?.sections.length! > 1 && "s"}
             </p>
@@ -257,9 +257,12 @@ export default function Section() {
               {activeTerm ? (
                 <div className="flex gap-4">
                   <Button
-                    className="text-center px-4"
+                    className="text-center px-4 acerSwift:max-macair133:!text-b5"
                     leftSection={
-                      <Icon IconComponent={IconUpload} className="size-4" />
+                      <Icon
+                        IconComponent={IconUpload}
+                        className="size-4 acerSwift:max-macair133:size-3.5"
+                      />
                     }
                     onClick={() =>
                       course?.sections.find(({ students }) => students?.length)
@@ -296,7 +299,7 @@ export default function Section() {
                       }}
                     >
                       <Menu.Item
-                        className=" text-[#3e3e3e] font-semibold text-[12px] h-7 "
+                        className=" text-[#3e3e3e] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 "
                         onClick={() => {
                           setAddSec({ ...course });
                           setOpenModalAddSec(true);
@@ -311,7 +314,7 @@ export default function Section() {
                         </div>
                       </Menu.Item>
                       <Menu.Item
-                        className="text-[#3e3e3e] font-semibold text-[12px] h-7 "
+                        className="text-[#3e3e3e] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 "
                         onClick={() => {
                           setEditCourseData({
                             ...course,
@@ -333,7 +336,7 @@ export default function Section() {
                       </Menu.Item>
                       <Menu.Item
                         onClick={() => setOpenModalExportScore(true)}
-                        className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-[12px] h-7 "
+                        className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 "
                       >
                         <div className="flex items-center  gap-2">
                           <Icon className="size-4" IconComponent={IconExcel} />
@@ -347,7 +350,7 @@ export default function Section() {
             </div>
           </div>
           <div className="flex h-full w-full rounded-[5px] overflow-hidden">
-            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 macair133:grid-cols-4  pb-5 gap-4 px-6 p-3">
+            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4  pb-5 gap-4 px-6 p-3">
               {course?.sections.map((sec, index) => {
                 const owner = (sec.instructor as IModelUser).id == user.id;
                 const addFirstTime = course.addFirstTime || sec.addFirstTime;
@@ -384,7 +387,7 @@ export default function Section() {
                               }}
                             >
                               <Menu.Item
-                                className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]"
+                                className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
                                 onClick={() => {
                                   setEditSec({
                                     id: sec.id,
@@ -414,7 +417,7 @@ export default function Section() {
                                 </div>
                               </Menu.Item>
                               <Menu.Item
-                                className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]"
+                                className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
                                 disabled={course.sections.length == 1}
                                 onClick={() => {
                                   setEditSec({
@@ -454,40 +457,40 @@ export default function Section() {
                       <div>
                         <div className="flex justify-between items-center">
                           <p
-                            className={`font-semibold text-sm ${
+                            className={`font-semibold text-sm acerSwift:max-macair133:text-b3 ${
                               !sec.isActive && "text-[#c8c8c8]"
                             }`}
                           >
                             Section {getSectionNo(sec.sectionNo)}
                           </p>
                           <p
-                            className={`tag-tqf bg-secondary text-secondary flex gap-1 items-center bg-opacity-15 rounded-xl !text-[11px] ${
+                            className={`tag-tqf bg-secondary text-secondary flex gap-1 items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 ${
                               activeTerm && owner && addFirstTime && "mr-7"
                             }`}
                           >
                             <Icon
                               IconComponent={IconStudent}
-                              className="size-[14px] text-secondary stroke-secondary"
+                              className="size-[14px] acerSwift:max-macair133:size-[11px] text-secondary stroke-secondary"
                             />
                             {sec.students?.length}
                           </p>
                         </div>
 
                         <p
-                          className={`font-semibold text-xs ${
+                          className={`font-semibold text-b4 acerSwift:max-macair133:text-b5 ${
                             !sec.isActive && "text-[#c8c8c8]"
                           }`}
                         >
                           {sec?.topic}
                         </p>
                         {!!sec.curriculum?.length && (
-                          <p className="tag-tqf w-fit bg-secondary text-secondary items-center bg-opacity-15 rounded-xl !text-[11px]">
+                          <p className="tag-tqf w-fit bg-secondary text-secondary items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 acerSwift:max-macair133:mt-1">
                             {sec.curriculum}
                           </p>
                         )}
                       </div>
                       <div
-                        className={` text-xs font-medium text-[#757575]  ${
+                        className={` text-b4 acerSwift:max-macair133:text-b5 acerSwift:max-macair133:mt-1 font-medium text-[#757575]  ${
                           !sec.isActive && "text-[#c8c8c8]"
                         }`}
                       >
@@ -496,7 +499,7 @@ export default function Section() {
                     </div>
                     {sec.isActive && (
                       <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
-                        <p className="p-2.5 text-secondary font-semibold text-[12px]">
+                        <p className="p-2.5 text-secondary font-semibold text-b4 acerSwift:max-macair133:text-b5">
                           {sec.assignments?.length == 0
                             ? ""
                             : sec.assignments?.length}
@@ -509,13 +512,13 @@ export default function Section() {
                         {course.type == COURSE_TYPE.SEL_TOPIC.en && (
                           <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">
                             <p
-                              className="tag-tqf rounded-xl !text-[11px]"
+                              className="tag-tqf rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
                               tqf-status={sec.TQF3?.status}
                             >
                               TQF 3
                             </p>
                             <p
-                              className="tag-tqf rounded-xl !text-[11px]"
+                              className="tag-tqf rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
                               tqf-status={sec.TQF5?.status}
                             >
                               TQF 5

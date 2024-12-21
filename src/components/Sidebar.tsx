@@ -185,7 +185,7 @@ export default function Sidebar() {
       transition={{ duration: 0.3, type: "keyframes", stiffness: 100 }}
       className="w-[255px] acerSwift:max-macair133:w-[225px] border-r-[1px] heig h-screen flex p-5 sidebar-linear-gradient"
     >
-      <div className="flex w-full flex-col gap-11">
+      <div className="flex w-full flex-col gap-11 acerSwift:max-macair133:gap-8">
         <div
           onClick={() =>
             navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`)

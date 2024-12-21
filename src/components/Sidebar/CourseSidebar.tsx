@@ -195,24 +195,27 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           </>
         }
       />
-      <div className="flex text-white flex-col h-full  gap-[26px]">
+      <div className="flex text-white flex-col h-full gap-[26px] acerSwift:max-macair133:gap-6">
         <div
-          className="hover:underline cursor-pointer font-bold gap-2 -translate-x-[5px]  text-[13px] p-0 flex justify-start"
+          className="hover:underline cursor-pointer font-bold gap-2 -translate-x-[5px] text-b3 acerSwift:max-macair133:text-b4 flex justify-start"
           onClick={() => {
             fetchTqf3();
           }}
         >
-          <Icon IconComponent={IconChevronLeft} className="size-5" />
+          <Icon
+            IconComponent={IconChevronLeft}
+            className="size-5 acerSwift:max-macair133:size-4"
+          />
           Back to {dashboard == ROLE.ADMIN ? "Admin Dashboard" : "Your Course"}
         </div>
 
         <div className="flex flex-col gap-5 ">
           <div className="flex flex-col flex-1 font-bold gap-1 ">
-            <p className="text-lg">
+            <p className="text-lg acerSwift:max-macair133:!text-b1">
               {course?.courseNo} ({params.get("semester")}/
               {params.get("year")?.slice(-2)})
             </p>
-            <p className="text-[13px] font-semibold text-pretty max-w-full">
+            <p className="text-b3 acerSwift:max-macair133:!text-b4 font-semibold text-pretty max-w-full acerSwift:max-macair133:max-w-[160px]">
               {course?.courseName}
             </p>
           </div>
@@ -221,9 +224,12 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               <Button
                 onClick={() => goToPage(ROUTE_PATH.EVALUATION)}
                 leftSection={
-                  <Icon IconComponent={IconTQF} className="mr-0.5" />
+                  <Icon
+                    IconComponent={IconTQF}
+                    className="mr-0.5 acerSwift:max-macair133:!size-4"
+                  />
                 }
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
                   path.includes(ROUTE_PATH.EVALUATION)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
@@ -235,8 +241,13 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
                 onClick={() => goToPage(ROUTE_PATH.SECTION)}
-                leftSection={<RxDashboard size={18} />}
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                leftSection={
+                  <RxDashboard
+                    size={18}
+                    className="acerSwift:max-macair133:size-4"
+                  />
+                }
+                className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
                   path.includes(ROUTE_PATH.SECTION)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
@@ -251,10 +262,10 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 leftSection={
                   <Icon
                     IconComponent={IconStudent}
-                    className="size-[19px] stroke-1"
+                    className="size-[19px] stroke-1 acerSwift:max-macair133:size-4"
                   />
                 }
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
                   path.includes(ROUTE_PATH.ROSTER)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
@@ -280,7 +291,10 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                         goToPage(ROUTE_PATH.TQF3);
                       }}
                       leftSection={
-                        <Icon IconComponent={IconTQF3} className="size-5" />
+                        <Icon
+                          IconComponent={IconTQF3}
+                          className="size-5 acerSwift:max-macair133:size-4"
+                        />
                       }
                       rightSection={
                         course?.type == COURSE_TYPE.SEL_TOPIC.en &&
@@ -291,7 +305,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                           />
                         )
                       }
-                      className={`!w-full !text-[13px]  flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                      className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px]  flex justify-start items-center transition-colors duration-300 focus:border-none group ${
                         path.includes(ROUTE_PATH.TQF3)
                           ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                           : "text-white bg-transparent hover:text-tertiary hover:bg-[#f0f0f0]"
@@ -347,18 +361,21 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                         goToPage(ROUTE_PATH.TQF5);
                       }}
                       leftSection={
-                        <Icon IconComponent={IconTQF5} className="size-5" />
+                        <Icon
+                          IconComponent={IconTQF5}
+                          className="size-5 acerSwift:max-macair133:size-4"
+                        />
                       }
                       rightSection={
                         course?.type == COURSE_TYPE.SEL_TOPIC.en &&
                         uniqTopic.length > 1 && (
                           <Icon
                             IconComponent={IconChevronRight}
-                            className="size-5 right-2 absolute flex"
+                            className="size-5 right-2 absolute flex acerSwift:max-macair133:size-4"
                           />
                         )
                       }
-                      className={`!w-full !text-[13px] mb-1 flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                      className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] mb-1 flex justify-start items-center transition-colors duration-300 focus:border-none group ${
                         path.includes(ROUTE_PATH.TQF5)
                           ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                           : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
@@ -405,12 +422,17 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           </div>
         </div>
 
-        <div className="flex  flex-col gap-2 ">
-          <p className="text-b2 font-bold mb-1">Owner section</p>
-          <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
+        <div className="flex  flex-col gap-2">
+          <p className="text-b2 font-bold mb-1 acerSwift:max-macair133:mb-0 acerSwift:max-macair133:text-b3">
+            Owner section
+          </p>
+          <div className="max-h-[120px] flex flex-col gap-1 acerSwift:max-macair133:overflow-y-auto">
             {instructors.map((item, index) => {
               return (
-                <p key={index} className="text-pretty font-medium text-[12px]">
+                <p
+                  key={index}
+                  className="text-pretty font-medium text-b4 acerSwift:max-macair133:text-b5"
+                >
                   {getUserName(item, 1)}
                 </p>
               );
@@ -418,9 +440,11 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           </div>
         </div>
         {!!coInstructors.length && (
-          <div className="flex  flex-col gap-2">
-            <p className="text-b2 font-bold mb-1">Co-Instructor</p>
-            <div className="max-h-[140px] gap-1 flex flex-col  overflow-y-auto">
+          <div className="flex  flex-col gap-2 acerSwift:max-macair133:hidden">
+            <p className="text-b2 font-bold mb-1 acerSwift:max-macair133:mb-0 acerSwift:max-macair133:text-b3">
+              Co-Instructor
+            </p>
+            <div className="max-h-[140px] acerSwift:max-macair133:max-h-[10px] gap-1 flex flex-col  overflow-y-auto acerSwift:max-macair133:text-b5">
               {coInstructors.map((item, index) => {
                 return (
                   <p
@@ -440,19 +464,23 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             (sec: any) => sec.instructor.email === user.email
           ) && (
             <div className="flex w-full gap-2 justify-end flex-col flex-1">
-              <p className="text-b2 text-white font-bold">Course Action</p>
+              <p className="text-b2 text-white font-bold acerSwift:max-macair133:text-b3">
+                Course Action
+              </p>
               <Button
                 onClick={onClickLeaveCourse}
                 leftSection={
                   <Icon
                     IconComponent={IconLogout}
-                    className="size-5 stroke-[2px]"
+                    className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
                   />
                 }
-                className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center transition-colors duration-300 focus:border-none group"
+                className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center transition-colors acerSwift:max-macair133:!h-8 duration-300 focus:border-none group"
               >
-                <div className="flex flex-col justify-start w-full items-start gap-[7px]">
-                  <p className="font-medium text-[13px]">Leave from Course</p>
+                <div className="flex flex-col justify-start w-full items-start gap-[7px] ">
+                  <p className="font-medium text-b3 acerSwift:max-macair133:text-b4">
+                    Leave from Course
+                  </p>
                 </div>
               </Button>
             </div>
