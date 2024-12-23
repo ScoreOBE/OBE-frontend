@@ -306,9 +306,9 @@ export default function AllAssignment() {
         closeOnClickOutside={false}
         size="35vw"
         title={
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 acerSwift:max-macair133:text-h2">
             <p>Publish score {isPublishAll ? "all" : "each"} sections</p>
-            <p className=" text-[12px] text-noData">
+            <p className=" text-b4 acerSwift:max-macair133:text-b5 text-noData">
               {courseNo} {course?.courseName}
             </p>
           </div>
@@ -322,21 +322,24 @@ export default function AllAssignment() {
             variant="light"
             color="blue"
             title={
-              <p>
+              <p className="acerSwift:max-macair133:text-b4">
                 <span className="font-extrabold underline">All students</span>
                 {` enrolled in this course will be able to see the assignments score you publish.`}
               </p>
             }
             icon={<Icon IconComponent={IconInfo2} />}
-            classNames={{ icon: "size-6" }}
+            classNames={{
+              icon: "size-6",
+            }}
             className="mb-5"
           ></Alert>
         )}
-        <div className="mb-6  p-4 rounded-2xl  flex flex-col gap-3">
+        <div className="mb-6 p-4 acerSwift:max-macair133:p-0 rounded-2xl flex flex-col gap-3">
           {course?.sections.length! > 1 && (
             <Chip
               classNames={{
-                label: "text-[13px] text-default font-semibold ",
+                label:
+                  "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold ",
               }}
               size="md"
               checked={
@@ -370,7 +373,8 @@ export default function AllAssignment() {
                     key={index}
                     classNames={{
                       root: "h-8 !rounded-[10px] text-center justify-center items-center",
-                      label: "text-[13px] text-default font-semibold  ",
+                      label:
+                        "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold  ",
                     }}
                     size="md"
                     value={as.name}
@@ -421,7 +425,7 @@ export default function AllAssignment() {
         title={
           <div className="flex flex-col gap-2">
             <p>Publish score {isPublishAll ? "all" : "each"} sections</p>
-            <p className=" text-[12px] text-noData">
+            <p className=" text-b4 acerSwift:max-macair133:text-b5 text-noData">
               {courseNo} {course?.courseName}
             </p>
           </div>
@@ -434,12 +438,14 @@ export default function AllAssignment() {
           variant="light"
           color="blue"
           title={
-            <p className="mt-[2px]">
+            <p className="mt-[2px] acerSwift:max-macair133:text-b3">
               You choose{" "}
-              {form
-                .getValues()
-                .assignments.join(", ")
-                .replace(/, ([^,]*)$/, " and $1")}{" "}
+              <span className="acerSwift:max-macair133:text-[#00559E]">
+                {form
+                  .getValues()
+                  .assignments.join(", ")
+                  .replace(/, ([^,]*)$/, "and $1")}{" "}
+              </span>
               to publish.
             </p>
           }
@@ -478,7 +484,7 @@ export default function AllAssignment() {
               color="#D0820C"
               title={
                 <p className="font-medium">
-                  <span className="font-extrabold text-[#D0820C]">
+                  <span className="font-extrabold text-[#D0820C] acerSwift:max-macair133:text-b3 acerSwift:max-macair133:font-bold">
                     The following assignments were not found in the selected
                     sections:
                   </span>
@@ -488,10 +494,11 @@ export default function AllAssignment() {
               classNames={{ icon: "size-6" }}
               className="mb-5 -mt-2"
             >
-              <ul className="list-disc pl-5">
+              <ul className="list-disc pl-5 acerSwift:max-macair133:text-b3 font-bold text-[#3E3E3E]">
                 {missingAssignments.map(({ assign, sections }: any) => (
                   <li key={assign}>
-                    {assign} not found in Section
+                    <span className="text-[#D0820C]">{assign}</span> not found
+                    in Section
                     {sections.length > 1 ? "s" : ""} {sections.join(", ")}
                   </li>
                 ))}
@@ -501,7 +508,7 @@ export default function AllAssignment() {
         })()}
 
         <div className="-mt-1 gap-2 flex flex-col mb-6">
-          <p className="text-[14px] mb-1 font-semibold text-secondary">
+          <p className="text-b2 acerSwift:max-macair133:text-b3 mb-1 font-semibold text-secondary">
             Select section to publish
           </p>
           {/* Chip */}
@@ -509,7 +516,7 @@ export default function AllAssignment() {
             <Chip
               classNames={{
                 label:
-                  "text-[13px] text-default font-semibold translate-y-[3px]",
+                  "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold translate-y-[3px]",
               }}
               size="md"
               checked={
@@ -547,7 +554,7 @@ export default function AllAssignment() {
                     classNames={{
                       root: "h-8 min-w-[114px]  !rounded-[10px] text-center justify-center items-center",
                       label:
-                        "text-[13px] text-default font-semibold translate-y-[3px] ",
+                        "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold translate-y-[3px] ",
                     }}
                     size="md"
                     value={sec.sectionNo?.toString()}
@@ -585,6 +592,7 @@ export default function AllAssignment() {
         centered
         transitionProps={{ transition: "pop" }}
         title="Edit Evaluation Name"
+        classNames={{ title: "acerSwift:max-macair133:!text-b1" }}
       >
         <TextInput
           classNames={{ input: "focus:border-primary" }}
@@ -595,7 +603,7 @@ export default function AllAssignment() {
           value={editName}
           onChange={(event) => setEditName(event.target.value)}
         />
-        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 mt-6  items-end  justify-end h-fit">
+        <div className="flex gap-2 mt-6 items-end justify-end h-fit">
           <Button
             onClick={() => setOpenModalEditAssignment(false)}
             loading={loading.loadingOverlay}
@@ -626,13 +634,18 @@ export default function AllAssignment() {
               variant="light"
               color="red"
               title={
-                <p>
+                <p className="acerSwift:max-macair133:!text-b3">
                   This action cannot be undone. After you delete this
                   assignment, <br /> it will be permanently deleted from this
                   course.
                 </p>
               }
-              icon={<Icon IconComponent={IconExclamationCircle} />}
+              icon={
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="acerSwift:max-macair133:!size-5"
+                />
+              }
               classNames={{ icon: "size-6" }}
             ></Alert>
           </>
@@ -792,7 +805,7 @@ export default function AllAssignment() {
                           return (
                             <Table.Tr
                               key={index}
-                              className={`hover:bg-[#F3F3F3] cursor-pointer ${
+                              className={`hover:bg-[#F3F3F3] cursor-pointer acerSwift:max-macair133:!text-b4 ${
                                 index % 2 === 0 && "bg-[#F8F9FA]"
                               }`}
                               onClick={() =>
@@ -875,7 +888,7 @@ export default function AllAssignment() {
                                       }}
                                     >
                                       <Menu.Item
-                                        className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]"
+                                        className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
                                         onClick={() => {
                                           setEditDeleteAssignment(
                                             assignment.name
@@ -893,7 +906,7 @@ export default function AllAssignment() {
                                         </div>
                                       </Menu.Item>
                                       <Menu.Item
-                                        className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]"
+                                        className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
                                         onClick={() => {
                                           setEditDeleteAssignment(
                                             assignment.name
@@ -950,13 +963,13 @@ export default function AllAssignment() {
                                 <Tabs.List className="mb-2">
                                   <Tabs.Tab
                                     value="bellCurve"
-                                    className="acerSwift:max-macair133:!text-b4"
+                                    className="acerSwift:max-macair133:!text-b3"
                                   >
                                     Distribution
                                   </Tabs.Tab>
                                   <Tabs.Tab
                                     value="histogram"
-                                    className="acerSwift:max-macair133:!text-b4"
+                                    className="acerSwift:max-macair133:!text-b3"
                                   >
                                     Histogram
                                   </Tabs.Tab>
