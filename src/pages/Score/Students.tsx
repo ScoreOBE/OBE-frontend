@@ -8,18 +8,21 @@ import needAccess from "@/assets/image/needAccess.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
-import { Button, Table, TextInput } from "@mantine/core";
+import { Button, Modal, Table, Tabs, TextInput } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconSortAsc from "@/assets/icons/sortAsc.svg?react";
 import IconSortDes from "@/assets/icons/sortDes.svg?react";
 import IconNotSort from "@/assets/icons/arrowUpDown.svg?react";
+import IconSearch from "@/assets/icons/search.svg?react";
+import IconChart from "@/assets/icons/histogram.svg?react";
 import { calStat, scrollToStudent } from "@/helpers/functions/score";
 import { TbSearch } from "react-icons/tb";
 import { cloneDeep } from "lodash";
 import { ROLE } from "@/helpers/constants/enum";
 import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
 import { IModelScore } from "@/models/ModelCourse";
+import ChartContainer from "@/components/Chart/ChartContainer";
 
 export default function Students() {
   const { courseNo, sectionNo, name } = useParams();
@@ -52,6 +55,8 @@ export default function Students() {
     student: IModelUser;
     questions: { name: string; score: number | string }[];
   }>();
+  const [openModalChart, setOpenModalChart] = useState(false);
+
   const [items, setItems] = useState<any[]>([
     {
       title: "Your Course",
@@ -171,6 +176,70 @@ export default function Students() {
 
   return (
     <>
+      <Modal
+        opened={openModalChart}
+        onClose={() => setOpenModalChart(false)}
+        centered
+        size="80vw"
+        title={`Chart - ${name} (${fullScore?.toFixed(2)} Points)`}
+        transitionProps={{ transition: "pop" }}
+        classNames={{
+          content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
+          body: "flex flex-col gap-4 overflow-hidden max-h-full h-fit",
+          title: "acerSwift:max-macair133:!text-b1",
+        }}
+      >
+        <div className="-mt-2">
+          <Tabs
+            classNames={{
+              root: "overflow-hidden mt-1 mx-3 flex flex-col max-h-full",
+            }}
+            defaultValue="bellCurve"
+          >
+            <Tabs.List className="mb-2">
+              <Tabs.Tab value="bellCurve" className="custom-tab-class">
+                Distribution
+              </Tabs.Tab>
+              <Tabs.Tab value="histogram" className="custom-tab-class">
+                Histogram
+              </Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel className="flex flex-col gap-1" value="histogram">
+              {assignment ? (
+                <ChartContainer
+                  type="histogram"
+                  data={assignment}
+                  inEval={true}
+                  students={section?.students || []}
+                />
+              ) : (
+                <p className="text-center text-gray-500">No data available</p>
+              )}
+            </Tabs.Panel>
+            <Tabs.Panel
+              className="flex flex-col justify-center items-center acerSwift:max-macair133:ml-12"
+              value="bellCurve"
+            >
+              {assignment ? (
+                <>
+                  <ChartContainer
+                    type="curve"
+                    data={assignment}
+                    inEval={true}
+                    students={section?.students || []}
+                  />
+                  <p className="text-b6 mb-2">
+                    Score distribution powered by Andrew C. Myers (Cornell
+                    University)
+                  </p>
+                </>
+              ) : (
+                <p className="text-center text-gray-500">No data available</p>
+              )}
+            </Tabs.Panel>
+          </Tabs>
+        </div>
+      </Modal>
       <ModalEditStudentScore
         opened={openEditScore}
         onClose={() => setOpenEditScore(false)}
@@ -189,67 +258,99 @@ export default function Students() {
             .includes(user.id) ? (
           <>
             <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3  items-start gap-4 text-start">
-              <p className="text-secondary text-[18px] font-semibold">
-                {name} - {fullScore} Points
-              </p>
+              <div className="flex justify-between w-full px-2 items-center">
+                <div className="flex flex-col py-1">
+                  <div className="flex gap-1">
+                    <p className="text-[#3f4474] font-semibold text-b1 acerSwift:max-macair133:!size-b2">
+                      {name}
+                    </p>
+                    <div
+                      className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20"
+                      onClick={() => setOpenModalChart(true)}
+                    >
+                      <Icon
+                        IconComponent={IconChart}
+                        className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474] cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-secondary text-h1 acerSwift:max-macair133:!text-h2 font-semibold">
+                    {fullScore?.toFixed(2)}{" "}
+                    <span className="text-b1 acerSwift:max-macair133:!size-b2 ">
+                      pts.
+                    </span>
+                  </p>
+                </div>
+                <p className="text-[#3f4474] mb-1 font-semibold sm:max-macair133:text-b2 text-b1 acerSwift:max-macair133:!size-b2">
+                  {totalStudent} Students
+                </p>
+              </div>
               <div className="flex px-10 flex-row justify-between w-full">
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
                     Mean
                   </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-defa">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-defa">
                     {mean.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-defa">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                    SD
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-defa">
                     {sd.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
                     Median
                   </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {median.toFixed(2)}
                   </p>
                 </div>
                 <div
-                  className="flex flex-col cursor-pointer"
+                  className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
                   onClick={() =>
                     scrollToStudent(studentRefs, studentMaxMin.max)
                   }
                 >
-                  <p className="font-semibold text-[16px] text-[#777777]">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
                     Max
                   </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {maxScore.toFixed(2)}
                   </p>
                 </div>
                 <div
-                  className="flex flex-col cursor-pointer"
+                  className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
                   onClick={() =>
                     scrollToStudent(studentRefs, studentMaxMin.min)
                   }
                 >
-                  <p className="font-semibold text-[16px] text-[#777777]">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
                     Min
                   </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {minScore.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                    Q3
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {q3.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                    Q1
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {q1 ? q1.toFixed(2) : "-"}
                   </p>
                 </div>
@@ -266,7 +367,7 @@ export default function Students() {
                 onChange={(event: any) => setFilter(event.currentTarget.value)}
               ></TextInput>
               <Button
-                className="min-w-fit"
+                className="min-w-fit acerSwift:max-macair133:!text-b5"
                 onClick={() => {
                   setSort((prev: any) => {
                     const resetSort: any = {};
@@ -299,11 +400,11 @@ export default function Students() {
                   <Table.Tr>
                     <Table.Th
                       onClick={() => onClickSort("studentId")}
-                      className={`hover:!bg-[#d0def7]  w-[15%] cursor-pointer ${
+                      className={`hover:!bg-[#d0def7]  w-[15%] cursor-pointer acerSwift:max-macair133:!text-b3 ${
                         sort.studentId !== null ? " !bg-[#d0def7]" : ""
                       }`}
                     >
-                      <div className="flex items-center gap-2 ">
+                      <div className="flex items-center gap-2 acerSwift:max-macair133:!text-b3">
                         <p>Student ID</p>{" "}
                         {sort.studentId === null ? (
                           <IconNotSort className="size-4" />
@@ -314,14 +415,16 @@ export default function Students() {
                         )}
                       </div>
                     </Table.Th>
-                    <Table.Th className="w-[18%]">Name</Table.Th>
+                    <Table.Th className="w-[18%] acerSwift:max-macair133:!text-b3">
+                      Name
+                    </Table.Th>
                     <Table.Th
                       onClick={() => onClickSort("score")}
-                      className={`hover:!bg-[#d0def7] !text-end !justify-end w-[12%] cursor-pointer ${
+                      className={`hover:!bg-[#d0def7] !text-end !justify-end w-[12%] cursor-pointer acerSwift:max-macair133:!text-b3 ${
                         sort.score !== null ? " !bg-[#d0def7]" : ""
                       }`}
                     >
-                      <div className="flex items-center gap-2 cursor-pointer !text-start !justify-start">
+                      <div className="flex items-center gap-2 cursor-pointer !text-end !justify-end pr-2">
                         <p>Score</p>
                         {sort.score === null ? (
                           <IconNotSort className="size-4" />
@@ -335,11 +438,11 @@ export default function Students() {
 
                     {assignment?.questions.map((item, index) => (
                       <Table.Th
-                        className="hover:!bg-[#d0def7] cursor-pointer"
+                        className="hover:!bg-[#d0def7] cursor-pointer pr-2"
                         key={index}
                       >
                         <div
-                          className="flex justify-end gap-2 cursor-pointer"
+                          className="flex justify-end gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
                           onClick={() => onClickSort(item.name)}
                         >
                           <p>{item.name}</p>
@@ -356,7 +459,7 @@ export default function Students() {
                   </Table.Tr>
                 </Table.Thead>
 
-                <Table.Tbody className="text-default text-[13px]">
+                <Table.Tbody className="text-default text-b3 acerSwift:max-macair133:!text-b4">
                   {students
                     ?.filter((student) =>
                       parseInt(filter)
@@ -393,8 +496,8 @@ export default function Students() {
                           <Table.Td className="w-[18%]">
                             {getUserName(student.student, 3)}
                           </Table.Td>
-                          <Table.Td className="w-[12%]">
-                            <div className="flex gap-3 justify-start items-center">
+                          <Table.Td className="w-[12%] ">
+                            <div className="flex gap-3 justify-end items-center">
                               <p>{student.sumScore?.toFixed(2)}</p>
                               <div
                                 className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
@@ -419,7 +522,7 @@ export default function Students() {
                             )?.score;
                             return (
                               <Table.Td key={index}>
-                                <div className=" justify-end flex">
+                                <div className=" justify-end flex pr-2">
                                   {score != undefined ? score.toFixed(2) : "-"}
                                 </div>
                               </Table.Td>
