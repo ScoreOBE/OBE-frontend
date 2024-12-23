@@ -28,6 +28,7 @@ import { editSectionManagement } from "@/store/courseManagement";
 import { editCourse, editSection } from "@/store/course";
 import { getOneCourse } from "@/services/course/course.service";
 import { setLoadingOverlay } from "@/store/loading";
+import { getSectionNo } from "@/helpers/functions/function";
 
 type Props = {
   opened: boolean;
@@ -162,6 +163,7 @@ export default function ModalEditSection({
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
+        title: "acerSwift:max-macair133:!text-b1",
         content:
           "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center  overflow-hidden ",
       }}
@@ -183,14 +185,21 @@ export default function ModalEditSection({
           size="xs"
           placeholder="001 or 1"
           maxLength={3}
-          classNames={{ input: "focus:border-primary" }}
+          classNames={{
+            input: "focus:border-primary acerSwift:max-macair133:!text-b4",
+            label: "acerSwift:max-macair133:!text-b4",
+          }}
           {...form.getInputProps("sectionNo")}
         />
         <Select
           label="Curriculum"
           size="xs"
           data={curriculum?.map(({ code }) => code)}
-          classNames={{ input: "focus:border-primary" }}
+          classNames={{
+            input: "focus:border-primary acerSwift:max-macair133:!text-b4",
+            label: "acerSwift:max-macair133:!text-b4",
+          }}
+          className="acerSwift:max-macair133:-mt-2"
           value={form.getValues().curriculum}
           {...form.getInputProps("curriculum")}
         />
@@ -202,7 +211,7 @@ export default function ModalEditSection({
         >
           <div className={`flex flex-row justify-between items-center`}>
             <div className="gap-3 flex flex-col">
-              <span className="font-semibold text-[13px] ">
+              <span className="font-semibold text-b3 acerSwift:max-macair133:text-b4 ">
                 Repeat on semester
               </span>
             </div>
@@ -220,7 +229,8 @@ export default function ModalEditSection({
                       input:
                         "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                       iconWrapper: "w-0",
-                      label: "text-[14px] px-4 cursor-pointer",
+                      label:
+                        "text-b4 acerSwift:max-macair133:!text-b5 font-medium px-4 cursor-pointer",
                     }}
                     size="xs"
                     value={item.toString()}
@@ -243,7 +253,7 @@ export default function ModalEditSection({
         >
           <div className={`flex flex-row justify-between items-center`}>
             <div className="gap-3 flex flex-col">
-              <span className="font-semibold text-[13px] ">
+              <span className="font-semibold text-b3 acerSwift:max-macair133:text-b4 ">
                 Open in {academicYear?.semester}/{academicYear?.year}
               </span>
             </div>
@@ -258,10 +268,19 @@ export default function ModalEditSection({
         </div>
 
         <div className="flex gap-2 justify-end w-full">
-          <Button variant="subtle" onClick={onClose} loading={loading}>
+          <Button
+            variant="subtle"
+            onClick={onClose}
+            loading={loading}
+            className="acerSwift:max-macair133:!text-b5"
+          >
             Cancel
           </Button>
-          <Button onClick={submit} loading={loading}>
+          <Button
+            onClick={submit}
+            loading={loading}
+            className="acerSwift:max-macair133:!text-b5"
+          >
             Save Changes
           </Button>
         </div>

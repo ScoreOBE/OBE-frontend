@@ -280,7 +280,10 @@ export default function ModalManageIns({
                 <Alert
                   radius="md"
                   icon={
-                    <Icon IconComponent={IconUserCicle} className="stroke-2" />
+                    <Icon
+                      IconComponent={IconUserCicle}
+                      className="stroke-2  acerSwift:max-macair133:size-6"
+                    />
                   }
                   variant="light"
                   color="orange"
@@ -289,7 +292,7 @@ export default function ModalManageIns({
                     body: "flex justify-center",
                   }}
                   title={
-                    <p>
+                    <p className=" acerSwift:max-macair133:!text-b3">
                       Co-instructors added through this modal will only have
                       access to the course for the current semester. They will
                       not automatically gain access to future semesters or years
@@ -316,7 +319,7 @@ export default function ModalManageIns({
                   body: " flex justify-center",
                 }}
                 title={
-                  <p>
+                  <p className=" acerSwift:max-macair133:!text-b3">
                     You don't have permission to manage co-instructors in this
                     course. <br /> Please contact to the Owner section for
                     manage.
@@ -324,7 +327,7 @@ export default function ModalManageIns({
                 }
               ></Alert>
               <Button
-                className="mt-1 min-w-fit !h-[36px] !text-[14px] !w-full"
+                className="mt-1 min-w-fit !h-[36px] !text-b2  acerSwift:max-macair133:!text-b5 !w-full"
                 onClick={onClose}
               >
                 I understood
@@ -343,7 +346,7 @@ export default function ModalManageIns({
                 }}
                 className="mb-4"
                 title={
-                  <p>
+                  <p className="acerSwift:max-macair133:!text-b3">
                     Co-instructors can only access and upload scores for your
                     selected sections and manage the course TQF documents.
                   </p>
@@ -364,7 +367,7 @@ export default function ModalManageIns({
           )}
           {!!editCoInsList?.length && (
             <div className="w-full flex flex-col bg-white border-secondary border-[1px] rounded-md">
-              <div className="bg-bgTableHeader flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
+              <div className="bg-bgTableHeader flex gap-3  acerSwift:max-macair133:!text-b3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                 <Icon IconComponent={IconUsers} /> Added Co-Instructor
               </div>
               <div className="flex flex-col h-fit w-full px-2">
@@ -375,15 +378,18 @@ export default function ModalManageIns({
                       className="w-full h-fit p-3 gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none "
                     >
                       <div className="flex w-full justify-between items-center">
-                        <div className="flex flex-col  font-medium text-[14px]">
-                          <span className=" -translate-y-1 font-semibold text-[13px]">
+                        <div className="flex flex-col  font-medium text-b2  acerSwift:max-macair133:!text-b3">
+                          <span className=" -translate-y-1 font-semibold text-b3  acerSwift:max-macair133:!text-b4">
                             {coIns?.label}
                           </span>
                         </div>
                         <div className="flex justify-end gap-4 mt-1">
                           <Menu shadow="md" width={200}>
                             <Menu.Target>
-                              <Button variant="outline" className="!h-7 px-3">
+                              <Button
+                                variant="outline"
+                                className="!h-7 px-3 acerSwift:max-macair133:!text-b5"
+                              >
                                 Access
                               </Button>
                             </Menu.Target>
@@ -407,7 +413,8 @@ export default function ModalManageIns({
                                       body: "mr-3",
                                       input:
                                         "bg-black bg-opacity-0 border-[1.5px] border-tertiary disabled:bg-gray-400",
-                                      label: "text-b2",
+                                      label:
+                                        "text-b2  acerSwift:max-macair133:!text-b4",
                                     }}
                                     size="xs"
                                     label={`Section ${getSectionNo(
@@ -431,14 +438,14 @@ export default function ModalManageIns({
                           <Button
                             color="red"
                             variant="outline"
-                            className="!h-7 px-3"
+                            className="!h-7 px-3 acerSwift:max-macair133:!text-b5"
                             onClick={() => removeCoIns(coIns)}
                           >
                             Remove
                           </Button>
                         </div>
                       </div>
-                      <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[13px]">
+                      <div className="flex text-secondary flex-row -mt-5 acerSwift:max-macair133:-mt-6 gap-1 font-medium text-b3  acerSwift:max-macair133:!text-b4">
                         <div className=" font-semibold">
                           Can access section:
                         </div>
@@ -468,7 +475,7 @@ export default function ModalManageIns({
                 (sec.instructor as IModelUser).id === store.getState().user.id
             )) && (
             <Button
-              className="!h-[36px] mt-4 !w-full"
+              className="!h-[36px] acerSwift:max-macair133:text-b5 mt-4 !w-full"
               onClick={onClickSave}
               disabled={isEqual(coInsList, editCoInsList)}
               loading={loading}
@@ -499,19 +506,21 @@ export default function ModalManageIns({
             )}
             <div className="flex flex-col gap-2">
               <p>Instructor Management</p>
-              <p className="text-b4 font-medium text-[#575757]">
+              <p className="text-b4  acerSwift:max-macair133:!text-b3 font-medium text-[#575757]">
                 {data.courseNo} {data.courseName}
               </p>
             </div>
           </div>
         )
       }
-      size="50vw"
+      size="auto"
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
+        title: "acerSwift:max-macair133:!text-b1 acerSwift:max-macair133:-mt-2",
+        close: "acerSwift:max-macair133:-mt-2",
         content:
-          "flex flex-col max-h-fit justify-start bg-[#F6F7FA] text-[14px] item-center overflow-hidden",
+          "flex flex-col max-h-fit justify-start bg-[#F6F7FA] text-b2 acerSwift:max-macair133:!text-b3 item-center overflow-hidden max-w-[50vw]",
         body: "!px-0 !pb-0",
       }}
     >
@@ -528,7 +537,7 @@ export default function ModalManageIns({
               className=" size-8 -translate-x-1"
             />
             <div className="flex flex-col">
-              <p className="font-semibold text-[14px] text-tertiary">
+              <p className="font-semibold text-b2  acerSwift:max-macair133:!text-b3 text-tertiary">
                 {getUserName(editSec?.instructor as IModelUser, 1)}
               </p>
               <p className="text-secondary text-[12px] font-normal">
@@ -565,7 +574,7 @@ export default function ModalManageIns({
                       className="size-8 -translate-x-1"
                     />
                     <div className="flex flex-col">
-                      <p className="font-semibold text-[14px] text-tertiary">
+                      <p className="font-semibold text-b2  acerSwift:max-macair133:!text-b3 text-tertiary">
                         {getUserName(sec.instructor, 1)}
                       </p>
                       <p className="text-secondary text-[12px] font-normal">

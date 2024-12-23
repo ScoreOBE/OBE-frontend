@@ -220,7 +220,7 @@ export default function Sidebar() {
         icon={
           <Icon
             IconComponent={IconLeave}
-            className="text-[#ff4747] -translate-x-1 size-8"
+            className="text-[#ff4747] -translate-x-1 size-8 acerSwift:max-macair133:size-7"
           />
         }
         title={`Leaving ${course?.courseNo} Course`}
@@ -234,17 +234,22 @@ export default function Sidebar() {
               icon={
                 <Icon
                   IconComponent={IconExclamationCircle}
-                  className="size-6 mt-1"
+                  className="size-6 mt-1 "
                 />
               }
+              classNames={{ title: "acerSwift:max-macair133:!text-b3" }}
             ></Alert>
-            <div className="flex flex-col  ">
-              <p className="text-b4  text-[#808080]">Course no.</p>
-              <p className=" -translate-y-[2px] text-b1">{`${course?.courseNo}`}</p>
+            <div className="flex flex-col">
+              <p className="text-b4  acerSwift:max-macair133:!text-b5  text-[#808080]">
+                Course no.
+              </p>
+              <p className=" -translate-y-[2px] text-b1  acerSwift:max-macair133:!text-b2">{`${course?.courseNo}`}</p>
             </div>
             <div className="flex flex-col mt-3 ">
-              <p className="text-b4  text-[#808080]">Course name</p>
-              <p className=" -translate-y-[2px] text-b1">{`${course?.courseName}`}</p>
+              <p className="text-b4  acerSwift:max-macair133:!text-b5 text-[#808080]">
+                Course name
+              </p>
+              <p className=" -translate-y-[2px] text-b1  acerSwift:max-macair133:!text-b2">{`${course?.courseName}`}</p>
             </div>
           </>
         }

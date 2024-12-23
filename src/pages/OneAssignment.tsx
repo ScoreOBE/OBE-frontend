@@ -15,6 +15,7 @@ import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconSortAsc from "@/assets/icons/sortAsc.svg?react";
 import IconSortDes from "@/assets/icons/sortDes.svg?react";
+import IconSearch from "@/assets/icons/search.svg?react";
 import IconNotSort from "@/assets/icons/arrowUpDown.svg?react";
 import { calStat, scrollToStudent } from "@/helpers/functions/score";
 
@@ -174,75 +175,85 @@ export default function OneAssignment() {
             <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
               <div className="flex justify-between w-full px-2 items-center">
                 <div className="flex flex-col py-1">
-                  <p className="text-[#3f4474] font-semibold  text-[16px]">
+                  <p className="text-[#3f4474] font-semibold  text-b1 acerSwift:max-macair133:!text-b2">
                     {name}
                   </p>
-                  <p className="text-secondary text-[20px] font-semibold">
+                  <p className="text-secondary text-h1 font-semibold">
                     {fullScore?.toFixed(2)}{" "}
-                    <span className="text-[16px] ">pts.</span>
+                    <span className="text-b1 acerSwift:max-macair133:!text-b2 ">
+                      pts.
+                    </span>
                   </p>
                 </div>
-                <p className="text-[#3f4474] mb-1 font-semibold sm:max-macair133:text-[14px] text-[16px]">
+                <p className="text-[#3f4474] mb-1 font-semibold sm:max-macair133:text-[14px] text-b1 acerSwift:max-macair133:!text-b2">
                   {allStudent.length} Students
                 </p>
               </div>
-              <div className="flex px-10 flex-row justify-between w-full">
+              <div className="flex px-10 flex-row justify-between w-full  ">
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
                     Mean
                   </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {mean.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">SD</p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                    SD
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {sd.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
                     Median
                   </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {median.toFixed(2)}
                   </p>
                 </div>
                 <div
-                  className="flex flex-col cursor-pointer"
+                  className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
                   onClick={() =>
                     scrollToStudent(studentRefs, studentMaxMin.max)
                   }
                 >
-                  <p className="font-semibold text-[16px] text-[#777777]">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
                     Max
                   </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {maxScore.toFixed(2)}
                   </p>
                 </div>
                 <div
-                  className="flex flex-col cursor-pointer"
+                  className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
                   onClick={() =>
-                    scrollToStudent(studentRefs, studentMaxMin.min)
+                    scrollToStudent(studentRefs, studentMaxMin.max)
                   }
                 >
-                  <p className="font-semibold text-[16px] text-[#777777]">
-                    Min
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                    Max
                   </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {minScore.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">Q3</p>
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                    Q3
+                  </p>
                   <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
                     {q3.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="font-semibold text-[16px] text-[#777777]">Q1</p>
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                    Q1
+                  </p>
                   <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
                     {q1 ? q1.toFixed(2) : "-"}
                   </p>
@@ -259,7 +270,7 @@ export default function OneAssignment() {
                 onChange={(event: any) => setFilter(event.currentTarget.value)}
               ></TextInput>
               <Button
-                className="min-w-fit"
+                className="min-w-fit acerSwift:max-macair133:!text-b5"
                 onClick={() => {
                   setSort((prev: any) => {
                     const resetSort: any = {};
@@ -285,10 +296,12 @@ export default function OneAssignment() {
               <Table stickyHeader striped>
                 <Table.Thead>
                   <Table.Tr className="bg-[#dfebff]">
-                    <Table.Th>Section</Table.Th>
+                    <Table.Th className="acerSwift:max-macair133:!text-b3">
+                      Section
+                    </Table.Th>
                     <Table.Th>
                       <div
-                        className="flex items-center gap-2 cursor-pointer"
+                        className="flex items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
                         onClick={() => onClickSort("studentId")}
                       >
                         <p>Student ID</p>
@@ -301,10 +314,12 @@ export default function OneAssignment() {
                         )}
                       </div>
                     </Table.Th>
-                    <Table.Th>Name</Table.Th>
+                    <Table.Th className="acerSwift:max-macair133:!text-b3">
+                      Name
+                    </Table.Th>
                     <Table.Th>
                       <div
-                        className="flex items-center gap-2 cursor-pointer"
+                        className="flex items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
                         onClick={() => onClickSort("score")}
                       >
                         <p>Score</p>
@@ -320,7 +335,7 @@ export default function OneAssignment() {
                     {questions?.map((item, index) => (
                       <Table.Th key={index}>
                         <div
-                          className="flex justify-end gap-2 cursor-pointer"
+                          className="flex justify-end gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
                           onClick={() => onClickSort(item.name)}
                         >
                           <p>{item.name}</p>
@@ -367,7 +382,7 @@ export default function OneAssignment() {
                         <Table.Tr
                           key={studentId}
                           ref={(el) => studentRefs.current.set(studentId, el)}
-                          className="hover:bg-[#F3F3F3] text-[13px] font-normal py-[14px] w-full"
+                          className="hover:bg-[#F3F3F3] text-b3 acerSwift:max-macair133:!text-b4 font-normal py-[14px] w-full"
                         >
                           <Table.Td>{item.sectionNo}</Table.Td>
                           <Table.Td>{studentId}</Table.Td>

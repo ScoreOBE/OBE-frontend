@@ -36,13 +36,15 @@ export default function ModalQuestionChart({
       classNames={{
         content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
         body: "flex flex-col gap-4 overflow-hidden max-h-full h-fit",
+        title: "acerSwift:max-macair133:!text-b1",
       }}
     >
       <div className="flex justify-end">
-        <p className="text-secondary text-[16px] font-semibold">
+        <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 font-semibold">
           {question?.scores?.filter((e) => e >= 0).length} Students
         </p>
       </div>
+
       <ChartContainer
         type="curve"
         data={question?.assignment}
@@ -50,6 +52,7 @@ export default function ModalQuestionChart({
         questionName={question?.name}
         studentScore={question?.studentScore}
       />
+
       <p className=" text-[10px] translate-x-6 mb-2">
         Score distribution powered by Andrew C. Myers (Cornell University)
       </p>
