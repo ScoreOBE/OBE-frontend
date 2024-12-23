@@ -51,7 +51,10 @@ export default function MainPopup({
           {icon ? (
             icon
           ) : type == "delete" ? (
-            <Icon IconComponent={IconDelete} className=" size-6 mr-2" />
+            <Icon
+              IconComponent={IconDelete}
+              className=" size-6 mr-2 acerSwift:max-macair133:!text-b1"
+            />
           ) : type == "warning" ? (
             <Icon IconComponent={IconWarning} className=" size-6 mr-2" />
           ) : (
@@ -64,9 +67,10 @@ export default function MainPopup({
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
-        title: `${titleClassName()}`,
+        title: `${titleClassName()}  acerSwift:max-macair133:!text-b1`,
+
         content:
-          "flex flex-col justify-start   font-medium leading-[24px] text-[14px] item-center  overflow-hidden max-w-[42vw] min-w-[32vw] w-fit",
+          "flex flex-col justify-start font-medium leading-[24px] text-b2 acerSwift:max-macair133:!text-b3 item-center  overflow-hidden max-w-[42vw] min-w-[32vw] w-fit",
       }}
     >
       <div className="flex flex-col">
@@ -76,7 +80,7 @@ export default function MainPopup({
             <>
               <Button
                 variant="subtle"
-                className="!text-[13px]"
+                className="!text-b3 acerSwift:max-macair133:!text-b5"
                 onClick={onClose}
                 loading={loading}
               >
@@ -84,7 +88,7 @@ export default function MainPopup({
               </Button>
               <Button
                 color="red"
-                className="!text-[13px]"
+                className="!text-b3 acerSwift:max-macair133:!text-b5"
                 onClick={action}
                 loading={loading}
               >
@@ -95,7 +99,7 @@ export default function MainPopup({
             <>
               <Button
                 variant="subtle"
-                className="!text-[13px]"
+                className="!text-b3 acerSwift:max-macair133:!text-b5"
                 onClick={
                   labelButtonLeft === "Leave without saving" ? action : onClose
                 }
@@ -104,7 +108,7 @@ export default function MainPopup({
               </Button>
               <Button
                 color="#1f69f3"
-                className="!text-[13px]"
+                className="!text-b3 acerSwift:max-macair133:!text-b5"
                 onClick={labelButtonRight === "Keep editing" ? onClose : action}
               >
                 {labelButtonRight}
@@ -114,7 +118,7 @@ export default function MainPopup({
             <>
               <Button
                 variant="subtle"
-                className="!text-[13px]"
+                className="!text-b3 acerSwift:max-macair133:!text-b5"
                 onClick={
                   labelButtonLeft === "Leave without saving" ? action : onClose
                 }
@@ -123,7 +127,7 @@ export default function MainPopup({
               </Button>
               <Button
                 color="#F58722"
-                className="!text-[13px]"
+                className="!text-b3 acerSwift:max-macair133:!text-b5"
                 onClick={labelButtonRight === "Keep editing" ? onClose : action}
               >
                 {labelButtonRight}

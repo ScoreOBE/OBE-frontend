@@ -115,6 +115,7 @@ export default function ModalEditStudentScore({
       transitionProps={{ transition: "pop" }}
       className="flex items-center justify-center"
       classNames={{
+        title: "acerSwift:max-macair133:!text-b1",
         content:
           "flex flex-col justify-center w-full font-medium leading-[24px] text-[14px] item-center  overflow-hidden ",
       }}
@@ -127,18 +128,18 @@ export default function ModalEditStudentScore({
                 key={index}
                 className="flex flex-col gap-1 w-full text-start justify-start "
               >
-                <p>{ques.name}</p>
+                <p className="acerSwift:max-macair133:!text-b3">{ques.name}</p>
                 <div className="flex text-center items-center gap-3">
                   <TextInput
                     size="xs"
                     withAsterisk={true}
                     classNames={{
                       input:
-                        "focus:border-primary text-[16px] w-20  text-center text-default ",
+                        "focus:border-primary text-b1 acerSwift:max-macair133:!text-b2 w-20  text-center text-default ",
                     }}
                     {...form.getInputProps(`questions.${index}.score`)}
                   />
-                  <p className=" text-[18px]">
+                  <p className=" text-h1 acerSwift:max-macair133:!text-h2 text-default">
                     / {assignment?.questions[index].fullScore}
                   </p>
                 </div>
@@ -154,6 +155,7 @@ export default function ModalEditStudentScore({
             }}
             loading={loading}
             variant="subtle"
+            className="acerSwift:max-macair133:!text-b5"
           >
             Cancel
           </Button>
@@ -161,6 +163,7 @@ export default function ModalEditStudentScore({
             onClick={onSaveEditScore}
             loading={loading}
             disabled={isEqual(data?.questions, form.getValues().questions)}
+            className="acerSwift:max-macair133:!text-b5"
           >
             Save Changes
           </Button>

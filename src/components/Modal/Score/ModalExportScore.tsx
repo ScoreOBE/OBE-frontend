@@ -8,6 +8,7 @@ import Icon from "../../Icon";
 import IconExcel from "@/assets/icons/excel.svg?react";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
 import { setLoadingOverlay } from "@/store/loading";
+import { getSectionNo } from "@/helpers/functions/function";
 
 type Props = {
   opened: boolean;
@@ -46,9 +47,9 @@ export default function ModalExportScore({ opened, onClose }: Props) {
       onClose={onCloseModal}
       closeOnClickOutside={true}
       title={
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 acerSwift:max-macair133:!text-b1">
           <p>Export score {courseNo}</p>
-          <p className="text-[12px] inline-flex items-center text-[#20884f] ">
+          <p className="text-b4 acerSwift:max-macair133:!text-b5 inline-flex items-center text-[#20884f] ">
             File format:{" "}
             <Icon IconComponent={IconExcel} className="ml-1 size-4" />
           </p>
@@ -65,7 +66,10 @@ export default function ModalExportScore({ opened, onClose }: Props) {
       {/* <div className="flex flex-col">
         <Checkbox.Group
           label={`Select section to export`}
-          classNames={{ label: "mb-1 font-semibold text-default" }}
+          classNames={{
+            label:
+              "mb-1 font-semibold text-default acerSwift:max-macair133:!text-b4",
+          }}
           value={selectedSecToExport}
           onChange={setSelectedSecToExport}
         >
@@ -86,8 +90,8 @@ export default function ModalExportScore({ opened, onClose }: Props) {
                     align="flex-start"
                   >
                     <Checkbox.Indicator />
-                    <div className="text-default whitespace-break-spaces font-medium text-[13px]">
-                      Section {sec.sectionNo}
+                    <div className="text-default whitespace-break-spaces font-medium text-b3 acerSwift:max-macair133:!text-b4">
+                      Section {getSectionNo(sec.sectionNo)}
                     </div>
                   </Group>
                 </Checkbox.Card>
@@ -96,9 +100,13 @@ export default function ModalExportScore({ opened, onClose }: Props) {
           })}
         </Checkbox.Group>
       </div>
-      <div className="flex justify-end mt-2 sticky w-full">
+      <div className="flex justify-end mt-2 acerSwift:max-macair133:mt-4 sticky w-full">
         <Group className="flex w-full gap-2 h-fit items-end justify-end">
-          <Button onClick={onClose} variant="subtle">
+          <Button
+            onClick={onClose}
+            variant="subtle"
+            className=" acerSwift:max-macair133:!text-b5"
+          >
             Cancel
           </Button>
           <Button
@@ -113,10 +121,11 @@ export default function ModalExportScore({ opened, onClose }: Props) {
                 } size-5 items-center stroke-[2px]`}
               />
             }
+            className="acerSwift:max-macair133:!text-b5"
             // onClick={generatePDF}
             disabled={selectedSecToExport.length === 0}
           >
-            Export TQF3
+            Export Score
           </Button>
         </Group>
       </div> */}

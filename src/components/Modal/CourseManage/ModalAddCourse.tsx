@@ -390,6 +390,7 @@ export default function ModalAddCourse({
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
+        title: "acerSwift:max-macair133:!text-b1",
         content:
           "flex flex-col justify-center bg-[#F6F7FA] item-center overflow-hidden",
       }}
@@ -638,7 +639,7 @@ export default function ModalAddCourse({
                       <Select
                         label={`Select the Curriculum for Section ${getSectionNo(
                           sec.sectionNo
-                        )} `}
+                        )} (Optional)`}
                         size="xs"
                         placeholder="Curriculum"
                         data={curriculum?.map(({ code }) => code)}
@@ -671,7 +672,7 @@ export default function ModalAddCourse({
                                     "!bg-black border-[1.5px] disabled:bg-gray-500",
                                   iconWrapper: "w-0 !bg-black ",
                                   label:
-                                    "text-b2 !px-5 cursor-pointer acerSwift:max-macair133:!text-b4",
+                                    "text-b3 !px-5 cursor-pointer acerSwift:max-macair133:!text-b4",
                                   root: "",
                                 }}
                                 size="sm"
@@ -875,11 +876,11 @@ export default function ModalAddCourse({
                     key={index}
                     className="w-full border-b-[1px] last:border-none border-[#c9c9c9] pb-2 h-fit px-4 gap-1 flex flex-col"
                   >
-                    <span className="text-secondary font-semibold flex flex-col text-b2 acerSwift:max-macair133:text-b3 mb-2">
+                    <span className="text-primary font-semibold flex flex-col text-b2 acerSwift:max-macair133:text-b3 mb-2">
                       Section {getSectionNo(sec.sectionNo)}
                     </span>
                     <div className="flex flex-col gap-1">
-                      <span className="text-tertiary text-b2 acerSwift:max-macair133:text-b3 font-semibold">
+                      <span className="text-tertiary text-b2 acerSwift:max-macair133:text-b5 font-semibold">
                         Owner Section
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">
@@ -893,7 +894,7 @@ export default function ModalAddCourse({
 
                     {!!sec.coInstructors?.length && (
                       <div className="flex flex-col gap-1">
-                        <span className="text-tertiary text-b2 font-semibold acerSwift:max-macair133:text-b3">
+                        <span className="text-tertiary text-b2 font-semibold acerSwift:max-macair133:text-b5">
                           Co-Instructor
                         </span>
                         <div className="ps-1.5 text-secondary mb-2 ">
@@ -912,7 +913,7 @@ export default function ModalAddCourse({
                     )}
 
                     <div className="flex flex-col gap-1">
-                      <span className="text-tertiary text-b2 font-semibold acerSwift:max-macair133:text-b3">
+                      <span className="text-tertiary text-b2 font-semibold acerSwift:max-macair133:text-b5">
                         Recurrence semester
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">

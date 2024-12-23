@@ -414,6 +414,7 @@ export default function ModalAddSection({
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
+        title: "acerSwift:max-macair133:!text-b1",
         content:
           "flex flex-col justify-center bg-[#F6F7FA] item-center overflow-hidden",
       }}
@@ -429,10 +430,11 @@ export default function ModalAddSection({
           step: "flex flex-col  items-start  w-[42px] ",
           stepIcon: "mb-2 text-[#E6E6FF] bg-[#E6E6FF] border-[#E6E6FF]",
           stepBody: "flex-col-reverse m-0 text-nowrap",
-          stepLabel: "text-[13px] font-semibold",
-          stepDescription: "text-[13px] font-semibold ",
+          stepLabel: "text-b3 acerSwift:max-macair133:text-b4 font-semibold",
+          stepDescription:
+            "text-b3 acerSwift:max-macair133:text-b4 font-semibold ",
         }}
-        className=" justify-center items-center mt-1  text-[14px] max-h-full"
+        className=" justify-center items-center mt-1  text-b2 acerSwift:max-macair133:text-b3 max-h-full"
       >
         <Stepper.Step
           allowStepSelect={false}
@@ -446,7 +448,11 @@ export default function ModalAddSection({
                   label="Course Topic"
                   withAsterisk
                   size="xs"
-                  classNames={{ input: "focus:border-primary" }}
+                  classNames={{
+                    input:
+                      "focus:border-primary acerSwift:max-macair133:!text-b4",
+                    label: "acerSwift:max-macair133:!text-b4",
+                  }}
                   placeholder="Ex. Full Stack Development"
                   {...form.getInputProps("sections.0.topic")}
                 />
@@ -456,9 +462,10 @@ export default function ModalAddSection({
                 withAsterisk
                 classNames={{
                   input:
-                    " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b4  rounded-md",
-                  pill: "bg-secondary text-white font-bold",
-                  label: "font-semibold text-tertiary text-b2",
+                    " h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b4 rounded-md",
+                  pill: "bg-secondary text-white font-bold !pr-1 pb-1  acerSwift:max-macair133:!text-b4",
+                  label:
+                    "font-semibold text-tertiary text-b2 acerSwift:max-macair133:!text-b4",
                   error: "text-[10px] !border-none",
                 }}
                 placeholder="Ex. 001 or 1 (Press Enter or Spacebar for fill the next section)"
@@ -494,7 +501,7 @@ export default function ModalAddSection({
               title={<p>Each section can only have one Owner section.</p>}
             ></Alert>
             <div className="flex flex-col max-h-[380px] h-fit w-full mt-1 mb-5  p-[2px]    overflow-y-auto  ">
-              <div className="flex flex-col font-medium text-[14px] gap-5">
+              <div className="flex flex-col font-medium text-b2 acerSwift:max-macair133:text-b3 gap-5">
                 {form
                   .getValues()
                   .sections?.map((sec: Partial<IModelSection>, index) => (
@@ -539,27 +546,31 @@ export default function ModalAddSection({
           label="Semester"
           description={`STEP ${isManage ? 3 : 2}`}
         >
-          <div className="flex flex-col max-h-[380px] h-fit w-full mt-2 mb-5   p-[2px]    overflow-y-auto  ">
-            <div className="flex flex-col font-medium text-[14px] gap-5">
+          <div className="flex flex-col max-h-[380px] acerSwift:max-macair133:max-h-[270px] h-fit w-full mt-2 mb-5 p-[2px] overflow-y-auto  ">
+            <div className="flex flex-col font-medium text-b2 acerSwift:max-macair133:text-b3 gap-5">
               {form.getValues().sections?.map((sec: any, index) => (
                 <div className="flex flex-col gap-1" key={index}>
-                  <span className="text-secondary text-[14px] font-bold">
+                  <span className="text-secondary text-b2 acerSwift:max-macair133:text-b3 font-bold">
                     Section {getSectionNo(sec.sectionNo)}{" "}
                     <span className="text-red-500">*</span>
                   </span>
-                  <div className="w-full justify-center  border-b-2  pr-[18px] pt-2 pb-1  flex flex-col ">
+                  <div className="w-full justify-center  border-b-[1.5px]  pr-[18px] pt-2 pb-1  flex flex-col ">
                     <div className="gap-2 flex flex-col">
                       <Select
                         label={`Select the Curriculum for Section ${getSectionNo(
                           sec.sectionNo
-                        )} `}
+                        )} (Optional) `}
                         size="xs"
                         data={curriculum?.map(({ code }) => code)}
-                        classNames={{ input: "focus:border-primary" }}
+                        classNames={{
+                          input:
+                            "focus:border-primary acerSwift:max-macair133:!text-b4",
+                          label: "acerSwift:max-macair133:!text-b4",
+                        }}
                         {...form.getInputProps(`sections.${index}.curriculum`)}
                       />
-                      <div className="p-5 mt-1 mb-3 bg-[#f7f7f7] rounded-xl">
-                        <span className="font-semibold mt-2 text-default text-b2 ">
+                      <div className="p-5 mt-1 mb-3 bg-[#f5f5f5] rounded-xl">
+                        <span className="font-semibold mt-2 text-default text-b2  acerSwift:max-macair133:text-b4">
                           Repeat on semester
                         </span>{" "}
                         <Chip.Group
@@ -579,9 +590,9 @@ export default function ModalAddSection({
                                   input:
                                     "bg-black bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                                   iconWrapper: "w-0",
-                                  label: "text-[14px] px-5 cursor-pointer",
+                                  label:
+                                    "text-b2 acerSwift:max-macair133:text-b3 px-5 cursor-pointer",
                                 }}
-                                className=""
                                 size="sm"
                                 value={item.toString()}
                                 disabled={
@@ -601,7 +612,7 @@ export default function ModalAddSection({
                               " bg-opacity-0 border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                             body: "mr-3 px-0",
                             label:
-                              "text-[13px] font-semibold text-default cursor-pointer",
+                              "text-b3 acerSwift:max-macair133:text-b4 font-semibold text-default cursor-pointer",
                           }}
                           className="mt-5 mb-1"
                           size="xs"
@@ -628,11 +639,16 @@ export default function ModalAddSection({
           label="Co-Instructor"
           description={`STEP ${isManage ? 4 : 3}`}
         >
-          <div className="flex flex-col max-h-[420px] mb-4 mt-2 h-fit overflow-y-scroll p-[2px]">
+          <div className="flex flex-col max-h-[420px] acerSwift:max-macair133:max-h-[280px] mb-4 mt-2 h-fit overflow-y-scroll p-[2px]">
             <div>
               <Alert
                 radius="md"
-                icon={<Icon IconComponent={IconInfo2} />}
+                icon={
+                  <Icon
+                    IconComponent={IconInfo2}
+                    className="acerSwift:max-macair133:size-5"
+                  />
+                }
                 variant="light"
                 color="blue"
                 className="mb-1"
@@ -641,7 +657,7 @@ export default function ModalAddSection({
                   body: " flex justify-center",
                 }}
                 title={
-                  <p>
+                  <p className="acerSwift:max-macair133:text-b3 acerSwift:max-macair133:mt-0.5">
                     Co-instructors can only access and upload scores for your
                     selected sections and manage the course TQF documents.
                   </p>
@@ -663,7 +679,7 @@ export default function ModalAddSection({
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 }}
               >
-                <div className=" bg-bgTableHeader flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
+                <div className=" bg-bgTableHeader acerSwift:max-macair133:text-b3 flex gap-3 h-fit font-semibold items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
                   <Icon IconComponent={IconUsers} /> Added Co-Instructor
                 </div>
                 <div className="flex flex-col  h-fit w-full px-2">
@@ -674,7 +690,7 @@ export default function ModalAddSection({
                         className="w-full h-fit p-3   gap-4 flex flex-col border-b-[1px] border-[#c9c9c9] last:border-none"
                       >
                         <div className="flex w-full justify-between items-center">
-                          <span className="text-[#3e3e3e] -translate-y-1 font-semibold text-[13px]">
+                          <span className="text-[#3e3e3e] -translate-y-1 font-semibold text-b3 acerSwift:max-macair133:text-b4">
                             {coIns.label}
                           </span>
 
@@ -701,7 +717,8 @@ export default function ModalAddSection({
                                         input:
                                           "bg-black bg-opacity-0  border-[1.5px] border-[#3E3E3E] cursor-pointer disabled:bg-gray-400",
                                         body: "mr-3",
-                                        label: "text-[14px] cursor-pointer",
+                                        label:
+                                          "text-b2 acerSwift:max-macair133:text-b4 font-medium cursor-pointer",
                                       }}
                                       size="xs"
                                       label={`Section ${sectionNo}`}
@@ -730,7 +747,7 @@ export default function ModalAddSection({
                             </Button>
                           </div>
                         </div>
-                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-[12px]">
+                        <div className="flex text-secondary flex-row -mt-5 gap-1 font-medium text-b4 acerSwift:max-macair133:text-b5">
                           <div className=" font-semibold">
                             Can access section:
                           </div>
@@ -765,23 +782,23 @@ export default function ModalAddSection({
             }}
           >
             <div className="bg-bgTableHeader flex flex-col justify-start gap-[2px] font-semibold  rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary ">
-              <p>
+              <p className="acerSwift:max-macair133:text-b3">
                 {data.courseNo} - {data.courseName}{" "}
               </p>
               {form.getValues().sections?.at(0)?.topic && (
-                <p className="text-secondary text-b4">
+                <p className="text-secondary text-b4 acerSwift:max-macair133:text-b5">
                   Topic: {form.getValues().sections.at(0)?.topic}
                 </p>
               )}
             </div>
-            <div className="flex flex-col max-h-[320px] h-fit w-full   px-2   overflow-y-auto ">
-              <div className="flex flex-col gap-3 mt-3   font-medium text-[12px]">
+            <div className="flex flex-col max-h-[320px] acerSwift:max-macair133:max-h-[220px] h-fit w-full   px-2   overflow-y-auto ">
+              <div className="flex flex-col gap-3 mt-3 font-medium text-b4 acerSwift:max-macair133:text-b5">
                 {form.getValues().sections.map((sec, index) => (
                   <div
                     key={index}
                     className="w-full border-b-[1px] border-[#c9c9c9] pb-2  h-fit px-4    gap-1 flex flex-col"
                   >
-                    <span className="text-secondary font-semibold text-[14px] mb-2">
+                    <span className="text-primary font-semibold text-b2 acerSwift:max-macair133:text-b3 mb-2">
                       Section {getSectionNo(sec.sectionNo)}
                     </span>
 
@@ -791,7 +808,7 @@ export default function ModalAddSection({
                       </span>
                       <div className="ps-1.5 text-secondary">
                         <List size="sm" listStyleType="disc">
-                          <List.Item className="mb-[3px]">
+                          <List.Item className="mb-[3px] acerSwift:max-macair133:text-b4">
                             {(sec?.instructor as any)?.label ??
                               getUserName(user, 1)}
                           </List.Item>
@@ -807,7 +824,10 @@ export default function ModalAddSection({
                         <div className="ps-1.5 text-secondary mb-2">
                           <List size="sm" listStyleType="disc">
                             {sec.coInstructors?.map((coIns, index) => (
-                              <List.Item className="mb-[3px]" key={index}>
+                              <List.Item
+                                className="mb-[3px] acerSwift:max-macair133:text-b4"
+                                key={index}
+                              >
                                 {coIns?.label}
                               </List.Item>
                             ))}
@@ -827,14 +847,14 @@ export default function ModalAddSection({
                           className="flex flex-col gap-1"
                         >
                           {!!sec.semester?.length && (
-                            <List.Item>
+                            <List.Item className="acerSwift:max-macair133:text-b4">
                               {sec.semester
                                 ?.join(", ")
                                 .replace(/, ([^,]*)$/, " and $1")}
                             </List.Item>
                           )}
                           {sec.openThisTerm && (
-                            <List.Item className="mb-[3px]">
+                            <List.Item className="mb-[3px] acerSwift:max-macair133:text-b4">
                               Open in this semester ({academicYear.semester}/
                               {academicYear.year.toString().slice(-2)})
                             </List.Item>
@@ -861,11 +881,12 @@ export default function ModalAddSection({
         <Button
           loading={loading}
           onClick={() => nextStep()}
+          className="acerSwift:max-macair133:!text-b5"
           rightSection={
             ((active != 3 && !isManage) || (active != 4 && isManage)) && (
               <Icon
                 IconComponent={IconArrowRight}
-                className=" stroke-[2px] size-5"
+                className=" stroke-[2px] size-5 acerSwift:max-macair133:size-4"
               />
             )
           }
