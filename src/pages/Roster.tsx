@@ -318,7 +318,7 @@ export default function Roster() {
                       }}
                     >
                       <Menu.Item
-                        className=" text-[#3e3e3e] font-semibold text-[12px] h-7 "
+                        className=" text-default font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
                         onClick={() => {
                           setActionModal("Add");
                           setOpenModalAddEditStudent(true);
@@ -334,7 +334,7 @@ export default function Roster() {
                       </Menu.Item>
 
                       <Menu.Item
-                        className="text-[#3e3e3e] font-semibold text-[12px] h-7"
+                        className="text-default font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7"
                         onClick={() => setOpenModalUploadStudentList(true)}
                       >
                         <div className="flex items-center gap-2">
@@ -485,6 +485,7 @@ export default function Roster() {
         classNames={{
           content: "flex flex-col overflow-hidden !pb-1 max-h-full h-fit",
           body: "flex flex-col overflow-hidden h-fit",
+          title: "acerSwift:max-macair133:!text-b1",
         }}
       >
         {actionModal == "Edit" && selectedUser?.termsOfService && (
@@ -496,9 +497,12 @@ export default function Roster() {
               body: " flex justify-center",
             }}
             title={
-              <div className="flex items-center  gap-2">
-                <Icon IconComponent={IconInfo2} />
-                <p>
+              <div className="flex items-center gap-2">
+                <Icon
+                  IconComponent={IconInfo2}
+                  className="acerSwift:max-macair133:!size-5"
+                />
+                <p className="acerSwift:max-macair133:!text-b3">
                   You can only edit section for the student who is currently
                   logged into ScoreOBE +.
                 </p>
@@ -512,6 +516,10 @@ export default function Roster() {
             size="xs"
             placeholder="e.g. 1 or 001"
             label="Section No."
+            classNames={{
+              input: "focus:border-primary acerSwift:max-macair133:!text-b4",
+              label: "acerSwift:max-macair133:!text-b4",
+            }}
             withAsterisk
             {...form.getInputProps("sectionNo")}
           ></TextInput>
@@ -519,6 +527,10 @@ export default function Roster() {
             size="xs"
             placeholder="9 Digits e.g. 640123456"
             label="Student ID"
+            classNames={{
+              input: "focus:border-primary acerSwift:max-macair133:!text-b4",
+              label: "acerSwift:max-macair133:!text-b4",
+            }}
             withAsterisk
             disabled={actionModal == "Edit" && selectedUser?.termsOfService}
             {...form.getInputProps("studentId")}
@@ -528,6 +540,10 @@ export default function Roster() {
             placeholder="e.g. สมชาย เรียนดี"
             label="Name"
             withAsterisk
+            classNames={{
+              input: "focus:border-primary acerSwift:max-macair133:!text-b4",
+              label: "acerSwift:max-macair133:!text-b4",
+            }}
             disabled={actionModal == "Edit" && selectedUser?.termsOfService}
             {...form.getInputProps("name")}
           ></TextInput>
@@ -536,11 +552,19 @@ export default function Roster() {
             placeholder="e.g. example@cmu.ac.th"
             label="CMU Account"
             id="email"
+            classNames={{
+              input: "focus:border-primary acerSwift:max-macair133:!text-b4",
+              label: "acerSwift:max-macair133:!text-b4",
+            }}
             disabled={actionModal == "Edit" && selectedUser?.termsOfService}
             {...form.getInputProps("email")}
           ></TextInput>
-          <div className="flex gap-2 items-end  justify-end h-fit">
-            <Button onClick={() => clearForm()} variant="subtle">
+          <div className="flex gap-2 items-end  justify-end h-fit acerSwift:max-macair133:mt-1">
+            <Button
+              onClick={() => clearForm()}
+              variant="subtle"
+              className="acerSwift:max-macair133:!text-b5"
+            >
               Cancel
             </Button>
             <Button
@@ -563,6 +587,7 @@ export default function Roster() {
                   }
                 )
               }
+              className="acerSwift:max-macair133:!text-b5"
             >
               {actionModal == "Add" ? "Add" : "Save"}
             </Button>

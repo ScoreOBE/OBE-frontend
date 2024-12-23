@@ -173,7 +173,7 @@ export default function Section() {
               variant="light"
               color="red"
               title={
-                <p>
+                <p className="acerSwift:max-macair133:!text-b3">
                   This action cannot be undone. After you delete this section,{" "}
                   <br /> it will be permanently deleted all data from the
                   current semester. Data from previous semesters will not be
@@ -183,22 +183,28 @@ export default function Section() {
               icon={
                 <Icon
                   IconComponent={IconExclamationCircle}
-                  className="size-6"
+                  className="size-6 acerSwift:max-macair133:!size-5"
                 />
               }
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
-                <p className="text-b4 text-[#808080]">Course no.</p>
-                <p className="  -translate-y-[2px] text-b1">{`${editSec?.courseNo}`}</p>
+                <p className="text-b4 acerSwift:max-macair133:!text-b5 text-[#808080]">
+                  Course no.
+                </p>
+                <p className="  -translate-y-[2px] text-b1 acerSwift:max-macair133:!text-b2">{`${editSec?.courseNo}`}</p>
               </div>
               <div className="flex flex-col ">
-                <p className="text-b4  text-[#808080]">Course name</p>
-                <p className=" -translate-y-[2px] text-b1">{`${editSec?.courseName}`}</p>
+                <p className="text-b4 acerSwift:max-macair133:!text-b5  text-[#808080]">
+                  Course name
+                </p>
+                <p className=" -translate-y-[2px] text-b1 acerSwift:max-macair133:!text-b2">{`${editSec?.courseName}`}</p>
               </div>
               <div className="flex flex-col ">
-                <p className="text-b4  text-[#808080]">Section</p>
-                <p className=" -translate-y-[2px] text-b1">{`${getSectionNo(
+                <p className="text-b4 acerSwift:max-macair133:!text-b5  text-[#808080]">
+                  Section
+                </p>
+                <p className=" -translate-y-[2px] text-b1 acerSwift:max-macair133:!text-b2">{`${getSectionNo(
                   editSec?.sectionNo
                 )}`}</p>
               </div>
@@ -293,13 +299,13 @@ export default function Section() {
                       </div>
                     </Menu.Target>
                     <Menu.Dropdown
-                      className="rounded-md translate-y-1 backdrop-blur-xl bg-white "
+                      className="rounded-md translate-y-1 backdrop-blur-xl bg-white"
                       style={{
                         boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                       }}
                     >
                       <Menu.Item
-                        className=" text-[#3e3e3e] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 "
+                        className=" text-[#3e3e3e] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5"
                         onClick={() => {
                           setAddSec({ ...course });
                           setOpenModalAddSec(true);
@@ -308,13 +314,13 @@ export default function Section() {
                         <div className="flex items-center gap-2">
                           <Icon
                             IconComponent={IconPlus2}
-                            className="stroke-2 size-4"
+                            className="stroke-2 size-4 acerSwift:max-macair133:!size-3.5"
                           />
                           <span>Add section</span>
                         </div>
                       </Menu.Item>
                       <Menu.Item
-                        className="text-[#3e3e3e] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 "
+                        className="text-[#3e3e3e] font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
                         onClick={() => {
                           setEditCourseData({
                             ...course,
@@ -328,7 +334,7 @@ export default function Section() {
                       >
                         <div className="flex items-center gap-2">
                           <Icon
-                            className="size-4"
+                            className="size-4 acerSwift:max-macair133:!size-3.5"
                             IconComponent={IconManageAdmin}
                           />
                           <span>Manage Co-Instructor</span>
@@ -336,10 +342,13 @@ export default function Section() {
                       </Menu.Item>
                       <Menu.Item
                         onClick={() => setOpenModalExportScore(true)}
-                        className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 "
+                        className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
                       >
                         <div className="flex items-center  gap-2">
-                          <Icon className="size-4" IconComponent={IconExcel} />
+                          <Icon
+                            className="size-4 acerSwift:max-macair133:!size-3.5"
+                            IconComponent={IconExcel}
+                          />
                           <span>Export score</span>
                         </div>
                       </Menu.Item>
@@ -357,7 +366,7 @@ export default function Section() {
                 return (
                   <div
                     key={index}
-                    className={`card relative justify-between h-[125px] cursor-pointer macair133:h-[135px] sm:h-[128px]  rounded-[4px] ${
+                    className={`card relative justify-between h-[135px] cursor-pointer macair133:h-[135px] sm:h-[128px]  rounded-[4px] ${
                       sec.isActive ? "hover:bg-[#F3F3F3] cursor-pointer" : ""
                     }`}
                     onClick={() => goToAssignment(sec.sectionNo!)}
@@ -387,7 +396,7 @@ export default function Section() {
                               }}
                             >
                               <Menu.Item
-                                className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
+                                className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b4 h-7 w-[180px]"
                                 onClick={() => {
                                   setEditSec({
                                     id: sec.id,
@@ -430,7 +439,7 @@ export default function Section() {
                                   setOpenMainPopupDelCourse(true);
                                 }}
                               >
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 acerSwift:max-macair133:!text-b4">
                                   <Icon
                                     IconComponent={IconTrash}
                                     className="size-4 stroke-2"
@@ -453,8 +462,8 @@ export default function Section() {
                           />
                         ))}
                     </div>
-                    <div className="p-2.5 flex h-full justify-between  flex-col">
-                      <div>
+                    <div className="p-2.5 pb-1 flex h-full justify-between flex-col">
+                      <div className="flex flex-col gap-0.5">
                         <div className="flex justify-between items-center">
                           <p
                             className={`font-semibold text-sm acerSwift:max-macair133:text-b3 ${
@@ -477,14 +486,14 @@ export default function Section() {
                         </div>
 
                         <p
-                          className={`font-semibold text-b4 acerSwift:max-macair133:text-b5 ${
+                          className={`font-semibold text-b4 acerSwift:max-macair133:text-b5 -mt-0.5 text-deemphasize ${
                             !sec.isActive && "text-[#c8c8c8]"
                           }`}
                         >
                           {sec?.topic}
                         </p>
                         {!!sec.curriculum?.length && (
-                          <p className="tag-tqf w-fit bg-secondary text-secondary items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 acerSwift:max-macair133:mt-1">
+                          <p className="tag-tqf w-fit bg-secondary text-secondary items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 mt-1">
                             {sec.curriculum}
                           </p>
                         )}

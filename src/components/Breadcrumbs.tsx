@@ -10,7 +10,7 @@ export default function Breadcrumbs({ items = [] }: Props) {
     <div className="flex gap-3 bg-[#e7f0ff] px-4 py-[10px] rounded-md">
       {items.map((item, index) => (
         <div
-          className="flex items-center justify-center gap-3 text-[14px]"
+          className="flex items-center justify-center gap-3 text-b2  acerSwift:max-macair133:!text-b3"
           key={item.title}
         >
           <Link
@@ -27,7 +27,7 @@ export default function Breadcrumbs({ items = [] }: Props) {
             <div>
               <Icon
                 IconComponent={IconChevronRight}
-                className=" stroke-[#6674d3] size-4 stroke-[2.5px]"
+                className=" stroke-[#6674d3] size-4   acerSwift:max-macair133:!size-3 stroke-[2.5px]"
               />
             </div>
           )}

@@ -12,6 +12,7 @@ import { Tabs } from "@mantine/core";
 import ChartContainer from "@/components/Chart/ChartContainer";
 import { ROLE } from "@/helpers/constants/enum";
 import { setShowSidebar, setShowNavbar, setDashboard } from "@/store/config";
+import IconChart from "@/assets/icons/histogram.svg?react";
 type TabState = {
   [key: number]: string;
 };
@@ -139,8 +140,18 @@ export default function Histogram() {
                           onChange={(newValue) => handleTabChange(i, newValue)} // Update specific tab
                         >
                           <Tabs.List className="mb-2">
-                            <Tabs.Tab value="bellCurve">Distribution</Tabs.Tab>
-                            <Tabs.Tab value="histogram">Histogram</Tabs.Tab>
+                            <Tabs.Tab
+                              value="bellCurve"
+                              className="acerSwift:max-macair133:!text-b3"
+                            >
+                              Distribution
+                            </Tabs.Tab>
+                            <Tabs.Tab
+                              value="histogram"
+                              className="acerSwift:max-macair133:!text-b3"
+                            >
+                              Histogram
+                            </Tabs.Tab>
                           </Tabs.List>
                           <Tabs.Panel
                             className="flex flex-col gap-1"
@@ -161,7 +172,7 @@ export default function Histogram() {
                               data={item}
                               students={section.students!}
                             />
-                            <p className=" text-[10px] translate-x-6 mb-2">
+                            <p className=" text-b6 translate-x-6 mb-2">
                               Score distribution powered by Andrew C. Myers
                               (Cornell University)
                             </p>
@@ -182,7 +193,7 @@ export default function Histogram() {
                   >
                     <a href={`#${item.name}`}>
                       <p
-                        className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
+                        className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-b3 acerSwift:max-macair133:!text-b4 ${
                           activeSection === i
                             ? "text-secondary"
                             : "text-[#D2C9C9] "
@@ -221,7 +232,7 @@ export default function Histogram() {
             <p className="text-secondary font-semibold text-[22px]">
               You need access
             </p>
-            <p className="text-[#333333] leading-6 font-medium text-[14px]">
+            <p className="text-[#333333] leading-6 font-medium text-b2 acerSwift:max-macair133:!text-b3">
               You're not listed as a Co-Instructor. <br /> Please contact the
               Owner section for access.
             </p>

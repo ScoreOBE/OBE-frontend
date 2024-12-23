@@ -10,6 +10,7 @@ type Props = {
   students?: { student: IModelUser; scores: IModelScore[] }[];
   questionName?: string;
   type: "histogram" | "curve";
+  inEval?: boolean;
   studentScore?: number;
 };
 
@@ -18,6 +19,7 @@ export default function ChartContainer({
   students = [],
   questionName,
   type,
+  inEval,
   studentScore,
 }: Props) {
   const fullScore =
@@ -90,24 +92,34 @@ export default function ChartContainer({
   return (
     <>
       {!questionName && (
-        <div className="flex flex-col border-b-2 border-nodata py-2 items-start gap-5 text-start mx-5">
+        <div
+          className={`flex flex-col ${
+            !inEval &&
+            "border-b-2 border-nodata items-start gap-5 text-start mx-5  py-2"
+          } `}
+        >
           <div className="flex flex-row text-secondary text-h1 acerSwift:max-macair133:text-h2 w-full justify-between font-semibold">
-            <div className="flex justify-between !w-full items-center mb-1">
-              <div className="flex flex-col">
-                <p className="text-[#3f4474]  text-b1 acerSwift:max-macair133:text-b2">
-                  {data.name}
-                </p>
-                <p>
-                  {fullScore?.toFixed(2)}{" "}
-                  <span className="text-b1 acerSwift:max-macair133:text-b2">
-                    pts.
-                  </span>
-                </p>
-              </div>
-              <p className="text-[#3f4474] mb-1 sm:max-macair133:text-[14px] text-b1 acerSwift:max-macair133:text-b2">
-                {totalStudent} Students
-              </p>
-            </div>
+            {!inEval && (
+              <>
+                <div className="flex justify-between !w-full items-center mb-1">
+                  <div className="flex flex-col">
+                    <p className="text-[#3f4474]  text-b1 acerSwift:max-macair133:text-b2">
+                      {data.name}
+                    </p>
+                    <p>
+                      {fullScore?.toFixed(2)}{" "}
+                      <span className="text-b1 acerSwift:max-macair133:text-b2">
+                        pts.
+                      </span>
+                    </p>
+                  </div>
+
+                  <p className="text-[#3f4474] mb-1 sm:max-macair133:text-[14px] text-b1 acerSwift:max-macair133:text-b2">
+                    {totalStudent} Students
+                  </p>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="flex  flex-row justify-between w-full">
@@ -121,64 +133,68 @@ export default function ChartContainer({
                 </p>
               </div>
             )}
-            <div className="flex flex-col">
-              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
-                Mean
-              </p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
-                {mean?.toFixed(2)}
-              </p>
-            </div>
-            <div className="flex flex-col">
-              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
-                SD
-              </p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
-                {sd?.toFixed(2)}
-              </p>
-            </div>
-            <div className="flex flex-col">
-              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
-                Median
-              </p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
-                {median?.toFixed(2)}
-              </p>
-            </div>
-            <div className="flex flex-col">
-              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
-                Max
-              </p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
-                {maxScore?.toFixed(2)}
-              </p>
-            </div>
-            {!studentScore && (
-              <div className="flex flex-col">
-                <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
-                  Min
-                </p>
-                <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
-                  {minScore?.toFixed(2)}
-                </p>
-              </div>
+            {!inEval && (
+              <>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                    Mean
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
+                    {mean?.toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                    SD
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
+                    {sd?.toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                    Median
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
+                    {median?.toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                    Max
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
+                    {maxScore?.toFixed(2)}
+                  </p>
+                </div>
+                {!studentScore && (
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                      Min
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
+                      {minScore?.toFixed(2)}
+                    </p>
+                  </div>
+                )}
+                <div className="flex flex-col">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                    Q3
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
+                    {q3?.toFixed(2)}
+                  </p>
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
+                    Q1
+                  </p>
+                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
+                    {q1 ? q1?.toFixed(2) : "-"}
+                  </p>
+                </div>
+              </>
             )}
-            <div className="flex flex-col">
-              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
-                Q3
-              </p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
-                {q3?.toFixed(2)}
-              </p>
-            </div>
-            <div className="flex flex-col">
-              <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-[#777777]">
-                Q1
-              </p>
-              <p className="font-bold text-[24px] sm:max-macair133:text-h1 acerSwift:max-macair133:text-h2 text-default">
-                {q1 ? q1?.toFixed(2) : "-"}
-              </p>
-            </div>
           </div>
         </div>
       )}

@@ -184,9 +184,13 @@ export default function Assignment() {
         centered
         transitionProps={{ transition: "pop" }}
         title="Edit Evaluation Name"
+        classNames={{ title: "acerSwift:max-macair133:!text-b1" }}
       >
         <TextInput
-          classNames={{ input: "focus:border-primary" }}
+          classNames={{
+            input: "focus:border-primary acerSwift:max-macair133:!text-b4",
+            label: "acerSwift:max-macair133:!text-b4",
+          }}
           label="Evaluation name"
           size="xs"
           withAsterisk
@@ -194,8 +198,9 @@ export default function Assignment() {
           value={editName}
           onChange={(event) => setEditName(event.target.value)}
         />
-        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 mt-6  items-end  justify-end h-fit">
+        <div className="flex gap-2 mt-6  items-end  justify-end h-fit">
           <Button
+            className="acerSwift:max-macair133:!text-b5"
             onClick={() => setOpenModalEditAssignment(false)}
             loading={loading.loadingOverlay}
             variant="subtle"
@@ -203,6 +208,7 @@ export default function Assignment() {
             Cancel
           </Button>
           <Button
+            className="acerSwift:max-macair133:!text-b5"
             onClick={onClickEditAssignmentName}
             disabled={isEqual(editName, editDeleteAssignment)}
             loading={loading.loadingOverlay}
@@ -225,13 +231,18 @@ export default function Assignment() {
               variant="light"
               color="red"
               title={
-                <p>
+                <p className="acerSwift:max-macair133:!text-b3">
                   This action cannot be undone. After you delete this
                   assignment, <br /> it will be permanently deleted from this
                   course.
                 </p>
               }
-              icon={<Icon IconComponent={IconExclamationCircle} />}
+              icon={
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="acerSwift:max-macair133:size-5.5"
+                />
+              }
               classNames={{ icon: "size-6" }}
             ></Alert>
           </>
@@ -249,7 +260,7 @@ export default function Assignment() {
           <>
             {section?.assignments?.length !== 0 && (
               <div className="flex flex-row  py-1  items-center justify-between">
-                <p className="text-secondary text-[18px] font-semibold">
+                <p className="text-secondary text-h1  acerSwift:max-macair133:!text-b2 font-semibold">
                   {section?.assignments?.length} Evaluation
                   {section?.assignments?.length! > 1 && "s"}
                 </p>
@@ -267,25 +278,25 @@ export default function Assignment() {
                 <Table stickyHeader>
                   <Table.Thead>
                     <Table.Tr className="bg-[#e5e7f6]">
-                      <Table.Th className="w-20 sm:max-macair133:text-b4">
+                      <Table.Th className="w-20 sm:max-macair133:text-b3">
                         Name
                       </Table.Th>
-                      <Table.Th className="w-20 sm:max-macair133:text-b4  text-end pr-14 !pl-0">
+                      <Table.Th className="w-20 sm:max-macair133:text-b3  text-end pr-14 !pl-0">
                         Full Scores
                       </Table.Th>
-                      <Table.Th className=" w-10 sm:max-macair133:text-b4 text-end pr-20 !pl-0">
+                      <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
                         Mean
                       </Table.Th>
-                      <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b4">
+                      <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b3">
                         Created
                       </Table.Th>
-                      <Table.Th className="w-10 sm:max-macair133:text-b4">
+                      <Table.Th className="w-10 sm:max-macair133:text-b3">
                         Student(s)
                       </Table.Th>
-                      <Table.Th className="w-10 !px-4 sm:max-macair133:text-b4 text-center">
+                      <Table.Th className="w-10 !px-4 sm:max-macair133:text-b3 text-center">
                         Published
                       </Table.Th>
-                      <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>
+                      <Table.Th className="w-5 sm:max-macair133:text-b3"></Table.Th>
                     </Table.Tr>
                   </Table.Thead>
 
@@ -391,7 +402,7 @@ export default function Assignment() {
                                   }}
                                 >
                                   <Menu.Item
-                                    className="text-[#3E3E3E] font-semibold text-[12px] h-7 w-[180px]"
+                                    className="text-[#3E3E3E] font-semibold text-b4 h-7 w-[180px] acerSwift:max-macair133:!text-b5"
                                     onClick={() => {
                                       setEditDeleteAssignment(assignment.name);
                                       setEditName(assignment.name);
@@ -401,13 +412,13 @@ export default function Assignment() {
                                     <div className="flex items-center gap-2">
                                       <Icon
                                         IconComponent={IconPencilMinus}
-                                        className="size-4 stroke-[2px]"
+                                        className="size-4 stroke-[2px]   acerSwift:max-macair133:!size-3.5"
                                       />
                                       <span>Edit Evaluation Name</span>
                                     </div>
                                   </Menu.Item>
                                   <Menu.Item
-                                    className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-[12px] h-7 w-[180px]"
+                                    className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 w-[180px]"
                                     onClick={() => {
                                       setEditDeleteAssignment(assignment.name);
                                       setOpenModalDeleteAssignment(true);
@@ -416,7 +427,7 @@ export default function Assignment() {
                                     <div className="flex items-center gap-2">
                                       <Icon
                                         IconComponent={IconTrash}
-                                        className="size-4 stroke-[2px]"
+                                        className="size-4 stroke-[2px] acerSwift:max-macair133:!size-3.5"
                                       />
                                       <span>Delete Evaluation</span>
                                     </div>
@@ -434,7 +445,7 @@ export default function Assignment() {
             ) : (
               <div className="flex items-center  !h-full !w-full justify-between px-16">
                 <div className="flex flex-col gap-3 text-start">
-                  <p className="!h-full text-[20px] text-secondary font-semibold">
+                  <p className="!h-full text-h1  acerSwift:max-macair133:!text-h2 text-secondary font-semibold">
                     No Evaluation
                   </p>{" "}
                   <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
