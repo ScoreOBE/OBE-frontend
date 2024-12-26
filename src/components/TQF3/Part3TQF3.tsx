@@ -148,7 +148,7 @@ export default function Part3TQF3({ setForm }: Props) {
         <div className="flex flex-col w-full">
           <div className="flex flex-col w-full h-full pb-2 gap-4">
             <div className="flex text-secondary gap-4 items-start w-full border-b-[1px] border-[#e6e6e6] pb-6 flex-col">
-              <div className="flex flex-row gap-1 text-[15px]">
+              <div className="flex flex-row gap-1 text-[15px]  acerSwift:max-macair133:!text-b3">
                 <p className="font-semibold">การกำหนดเกรด</p>
                 <p className="font-bold">
                   (Grading) <span className=" text-red-500">*</span>
@@ -166,7 +166,9 @@ export default function Part3TQF3({ setForm }: Props) {
                         key={index}
                         classNames={{
                           radio: `${disabled && "!cursor-default"}`,
-                          label: `${disabled && "!cursor-default"}`,
+                          label: `${
+                            disabled && "!cursor-default"
+                          } acerSwift:max-macair133:!text-b4`,
                         }}
                         label={item}
                         value={item}
@@ -178,7 +180,7 @@ export default function Part3TQF3({ setForm }: Props) {
               </div>
             </div>
             <div className="flex text-secondary items-center w-full justify-between">
-              <div className="flex flex-row gap-1 text-[15px]">
+              <div className="flex flex-row gap-1 text-[15px] acerSwift:max-macair133:!text-b3">
                 <p className="font-bold">
                   Course Syllabus<span className="ml-1 text-red-500">*</span>
                 </p>
@@ -188,7 +190,7 @@ export default function Part3TQF3({ setForm }: Props) {
                   className="text-center px-4"
                   onClick={() => setOpenModalAddEvalTopic(true)}
                 >
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
                     <Icon IconComponent={IconAdd} />
                     Add Evaluation Method
                   </div>
@@ -208,7 +210,7 @@ export default function Part3TQF3({ setForm }: Props) {
                   }}
                   className="w-full"
                   title={
-                    <p className="font-semibold">
+                    <p className="font-semibold acerSwift:max-macair133:!text-b3">
                       The total of all methods in the course syllabus{" "}
                       <span className=" font-extrabold">
                         must add up to 100%
@@ -238,7 +240,7 @@ export default function Part3TQF3({ setForm }: Props) {
                 }}
               >
                 <Table stickyHeader striped className="w-full">
-                  <Table.Thead>
+                  <Table.Thead className="acerSwift:max-macair133:!text-b3">
                     <Table.Tr className="bg-[#e5e7f6] ">
                       <Table.Th className="w-[5%] !rounded-tl-md">No.</Table.Th>
                       <Table.Th className=" w-[15%]">Method</Table.Th>
@@ -272,7 +274,7 @@ export default function Part3TQF3({ setForm }: Props) {
                         <Table.Tbody
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="text-[13px] font-normal text-[#333333] w-full"
+                          className="text-b3 acerSwift:max-macair133:!text-b4 font-normal text-[#333333] w-full"
                         >
                           {form.getValues().eval?.map((item, index) => (
                             <Draggable
@@ -298,7 +300,7 @@ export default function Part3TQF3({ setForm }: Props) {
                                   <Table.Td className="w-[65%] max-w-[65%] flex-wrap">
                                     {item.desc.length ? item.desc : "-"}
                                   </Table.Td>
-                                  <Table.Td className="w-[5%] text-end text-b1">
+                                  <Table.Td className="w-[5%] acerSwift:max-macair133:!text-b2 text-end text-b1">
                                     <p>{item.percent}%</p>
                                   </Table.Td>
                                   {disabled ? (
@@ -367,12 +369,12 @@ export default function Part3TQF3({ setForm }: Props) {
                   <Table.Tfoot className="text-secondary font-semibold">
                     <Table.Tr className="bg-[#e5e7f6] border-none">
                       <Table.Th
-                        className="text-[14px] !rounded-bl-md"
+                        className="text-b2 acerSwift:max-macair133:!text-b3 !rounded-bl-md"
                         colSpan={3}
                       >
                         Total
                       </Table.Th>
-                      <Table.Th className="text-[16px] text-end">
+                      <Table.Th className="text-b1 acerSwift:max-macair133:!text-b2 text-end">
                         {percentTotal}%
                       </Table.Th>
                       <Table.Th

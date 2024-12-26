@@ -47,7 +47,7 @@ export default function MainPopup({
       onClose={onClose}
       closeOnClickOutside={true}
       title={
-        <div className="flex items-center">
+        <div className="flex items-center acerSwift:max-macair133:!text-b1">
           {icon ? (
             icon
           ) : type == "delete" ? (
@@ -68,7 +68,6 @@ export default function MainPopup({
       transitionProps={{ transition: "pop" }}
       classNames={{
         title: `${titleClassName()}  acerSwift:max-macair133:!text-b1`,
-
         content:
           "flex flex-col justify-start font-medium leading-[24px] text-b2 acerSwift:max-macair133:!text-b3 item-center  overflow-hidden max-w-[42vw] min-w-[32vw] w-fit",
       }}

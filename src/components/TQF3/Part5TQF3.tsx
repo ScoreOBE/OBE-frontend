@@ -46,7 +46,7 @@ export default function Part5TQF3({ setForm }: Props) {
   return tqf3?.part4?.updatedAt ? (
     <>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 pb-5  ">
-        <div className="flex text-secondary flex-col text-[15px]">
+        <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
           <p className="font-semibold">ตำราและเอกสาร</p>
           <p className="font-semibold">Main Reference</p>
         </div>
@@ -58,8 +58,10 @@ export default function Part5TQF3({ setForm }: Props) {
             placeholder="(optional)"
             className="w-[500px]"
             classNames={{
-              input: `h-[150px] p-3 ${disabled && "!cursor-default"}`,
-              label: "text-default",
+              input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 ${
+                disabled && "!cursor-default"
+              }`,
+              label: "text-default acerSwift:max-macair133:!text-b4",
             }}
             disabled={disabled}
             {...form.getInputProps("mainRef")}
@@ -67,7 +69,7 @@ export default function Part5TQF3({ setForm }: Props) {
         </div>
       </div>
       <div className="w-full justify-between h-fit  items-top  grid grid-cols-3 pt-5 pb-6 border-b-[1px] ">
-        <div className="flex text-secondary flex-col text-[15px]">
+        <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
           <p className="font-semibold">เอกสารแนะนำ</p>
           <p className="font-semibold">
             Recommended Documents
@@ -83,8 +85,10 @@ export default function Part5TQF3({ setForm }: Props) {
             placeholder="(optional)"
             className="w-[500px]"
             classNames={{
-              input: `h-[150px] p-3 ${disabled && "!cursor-default"}`,
-              label: "text-default",
+              input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 ${
+                disabled && "!cursor-default"
+              }`,
+              label: "text-default acerSwift:max-macair133:!text-b4",
             }}
             disabled={disabled}
             {...form.getInputProps("recDoc")}

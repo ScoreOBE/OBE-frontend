@@ -261,8 +261,8 @@ export default function Part6TQF3({ setForm }: Props) {
       {tqf3.part5?.updatedAt ? (
         <div className="flex flex-col w-full  max-h-full gap-4">
           {/* Topic */}
-          <div className="flex text-secondary  items-center -mt-1 w-full justify-between">
-            <p className="text-[15px] font-semibold">
+          <div className="flex text-secondary items-center -mt-1 w-full justify-between">
+            <p className="text-[15px] acerSwift:max-macair133:!text-b3 font-semibold">
               หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
               <span className=" font-bold">(Topic)</span>
             </p>
@@ -273,7 +273,7 @@ export default function Part6TQF3({ setForm }: Props) {
                 onMouseLeave={() => setOpenedTooltip(false)}
                 className="text-center px-4"
               >
-                <div className="flex gap-2">
+                <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
                   <Icon IconComponent={IconAdd} />
                   Add Topic
                 </div>
@@ -298,10 +298,10 @@ export default function Part6TQF3({ setForm }: Props) {
                   className="w-full h-full max-h-full flex flex-col"
                 >
                   <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader">
-                    <p className="flex flex-col font-medium text-[28px]">
+                    <p className="flex flex-col font-medium text-[28px] acerSwift:max-macair133:text-[24px]">
                       {index + 1}.
                     </p>
-                    <p className="flex flex-col gap-1 text-[14px]">
+                    <p className="flex flex-col gap-1 text-b2 acerSwift:max-macair133:!text-b3">
                       <span className="font-semibold">
                         {topics[index].th}{" "}
                         <span className="text-red-500">*</span>
@@ -336,7 +336,7 @@ export default function Part6TQF3({ setForm }: Props) {
                           <Checkbox
                             classNames={{
                               label:
-                                "font-medium text-[13px] leading-6 text-[#333333]",
+                                "font-medium text-b3 acerSwift:max-macair133:!text-b4 leading-6 text-[#333333]",
                               body: "flex flex-row gap-2 items-center ",
                             }}
                             className=" whitespace-break-spaces items-center"
@@ -359,7 +359,7 @@ export default function Part6TQF3({ setForm }: Props) {
                                 className="mt-2 pl-10"
                                 placeholder="(Required)"
                                 classNames={{
-                                  input: `text-[13px] text-[#333333] h-[100px] ${
+                                  input: `text-b3 acerSwift:max-macair133:!text-b4 text-[#333333] h-[100px] ${
                                     disabled && "!cursor-default"
                                   }`,
                                 }}
@@ -378,15 +378,15 @@ export default function Part6TQF3({ setForm }: Props) {
                   className="  w-full h-full max-h-full  flex flex-col "
                 >
                   <div className="w-full sticky top-0 z-10 text-[#228BE6] flex flex-row gap-4 items-center pl-6 py-4 bg-[#E8F3FC]">
-                    <p className="flex flex-col font-medium text-[28px]">
+                    <p className="flex flex-col font-medium text-[28px] acerSwift:max-macair133:text-[24px]">
                       {index + 1}.
                     </p>
-                    <p className="flex flex-col gap-1 text-[14px]">
+                    <p className="flex flex-col gap-1 text-b2 acerSwift:max-macair133:!text-b3">
                       <span className="font-semibold">{option.th}</span>
                       <span className="font-bold ">{option.en}</span>
                     </p>
                   </div>
-                  <div className="text-default border-b-[1px] last:border-none py-4 px-6  w-full text-[13px] font-medium">
+                  <div className="text-default border-b-[1px] last:border-none py-4 px-6  w-full text-b3 acerSwift:max-macair133:!text-b4 font-medium">
                     <div className="flex justify-between items-center whitespace-pre-wrap gap-8">
                       <div className="pl-10">{topic.detail}</div>
                       {!disabled && (
