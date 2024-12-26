@@ -497,11 +497,13 @@ export default function TQF3() {
         closeOnClickOutside={false}
         onClose={onCloseReuseModal}
         transitionProps={{ transition: "pop" }}
-        size="45vw"
+        size="auto"
         centered
         classNames={{
-          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
+          content:
+            "flex flex-col overflow-hidden pb-2 max-h-full h-fit max-w-[45vw] acerSwift:max-macair133:!max-w-[47vw]",
           body: "flex flex-col overflow-hidden max-h-full h-fit",
+          title: "acerSwift:max-macair133:!text-b1",
         }}
       >
         <FocusTrapInitialFocus />
@@ -511,14 +513,24 @@ export default function TQF3() {
             color="red"
             title="After reusing TQF 3, please recheck and save the data for all 7 parts of the course you selected"
             icon={
-              <Icon IconComponent={IconExclamationCircle} className="size-6" />
+              <Icon
+                IconComponent={IconExclamationCircle}
+                className="size-6 acerSwift:max-macair133:!size-5"
+              />
             }
+            classNames={{ title: "acerSwift:max-macair133:!text-b3" }}
           ></Alert>
           <Alert
             variant="light"
             color="blue"
             title="TQF 3 Part 7  will not be reused if the reused course has a mismatched PLOs."
-            icon={<Icon IconComponent={IconInfo2} className="size-6" />}
+            icon={
+              <Icon
+                IconComponent={IconInfo2}
+                className="size-6 acerSwift:max-macair133:!size-5"
+              />
+            }
+            classNames={{ title: "acerSwift:max-macair133:!text-b3" }}
           ></Alert>
           <Select
             rightSectionPointerEvents="all"
@@ -529,17 +541,26 @@ export default function TQF3() {
             label="Select course to reuse"
             className="w-full border-none "
             classNames={{
-              input: `rounded-md`,
-              option: `py-1  `,
+              input: `rounded-md acerSwift:max-macair133:!text-b4`,
+              option: `py-1 acerSwift:max-macair133:!text-b4 `,
+              label: "acerSwift:max-macair133:!text-b4",
             }}
             data={courseReuseTqf3List}
             {...selectTqf3Reuse.getInputProps("value")}
           />
-          <div className="flex gap-2 mt-3 justify-end">
-            <Button variant="subtle" onClick={onCloseReuseModal}>
+          <div className="flex gap-2 mt-3 justify-end ">
+            <Button
+              variant="subtle"
+              onClick={onCloseReuseModal}
+              className="acerSwift:max-macair133:!text-b5"
+            >
               Cancel
             </Button>
-            <Button loading={loading.loadingOverlay} onClick={onClickReuseTQF3}>
+            <Button
+              loading={loading.loadingOverlay}
+              onClick={onClickReuseTQF3}
+              className="acerSwift:max-macair133:!text-b5"
+            >
               Reuse
             </Button>
           </div>
@@ -556,7 +577,7 @@ export default function TQF3() {
         transitionProps={{ transition: "pop" }}
         classNames={{
           content:
-            "flex flex-col justify-start bg-[#F6F7FA] text-[14px] item-center overflow-hidden",
+            "flex flex-col justify-start bg-[#F6F7FA] text-b2 acerSwift:max-macair133:!text-b3 item-center overflow-hidden",
         }}
       >
         <div className={`w-full  bg-white  rounded-md gap-2 flex flex-col`}>
@@ -623,7 +644,7 @@ export default function TQF3() {
           classNames={{
             root: "overflow-hidden w-full flex flex-col h-full",
             tab: "px-0 !bg-transparent hover:!text-tertiary",
-            tabLabel: "!font-semibold text-[12px]",
+            tabLabel: "!font-semibold text-b4",
           }}
           className="px-6 pt-2 flex flex-col h-full w-full"
         >
@@ -651,7 +672,7 @@ export default function TQF3() {
               ))}
             </Tabs.List>
             <div className="flex justify-between pt-4 items-center">
-              <div className=" text-secondary   overflow-y-auto font-semibold  whitespace-break-spaces">
+              <div className=" text-secondary acerSwift:max-macair133:!text-b2  overflow-y-auto font-semibold  whitespace-break-spaces">
                 {getValueEnumByKey(PartTopicTQF3, tqf3Part!)}
               </div>
               <div className="flex flex-row flex-wrap gap-3">
@@ -664,7 +685,7 @@ export default function TQF3() {
                     arrowSize={7}
                     position="bottom-end"
                     label={
-                      <div className="text-default text-[13px] p-2 flex flex-col gap-2">
+                      <div className="text-default text-b3 acerSwift:max-macair133:text-b4 p-2 flex flex-col gap-2">
                         <p className=" font-medium">
                           <span className="text-secondary font-bold">
                             Reuse TQF 3
@@ -682,11 +703,11 @@ export default function TQF3() {
                       leftSection={
                         <Icon
                           IconComponent={IconDupTQF}
-                          className="text-[#ee933e] size-5 -mr-1"
+                          className="text-[#ee933e] size-5 -mr-1 acerSwift:max-macair133:size-4"
                         />
                       }
                       color="#ee933e"
-                      className="pr-4 px-3"
+                      className="pr-4 px-3 acerSwift:max-macair133:!text-b5"
                     >
                       Reuse TQF 3
                     </Button>
@@ -697,8 +718,11 @@ export default function TQF3() {
                   color="#24b9a5"
                   className="px-4"
                 >
-                  <div className="flex gap-2 items-center">
-                    <Icon className="size-5" IconComponent={exportFile} />
+                  <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+                    <Icon
+                      className="size-5 acerSwift:max-macair133:size-4"
+                      IconComponent={exportFile}
+                    />
                     Export TQF3
                   </div>
                 </Button>
@@ -706,7 +730,7 @@ export default function TQF3() {
             </div>
           </div>
           <div
-            className={`h-full w-full flex overflow-y-auto text-[14px]
+            className={`h-full w-full flex overflow-y-auto text-b2 acerSwift:max-macair133:text-b3
               ${
                 tqf3Original &&
                 (tqf3Original.part3 && tqf3Part === "part4" ? "" : "pt-3 px-3")

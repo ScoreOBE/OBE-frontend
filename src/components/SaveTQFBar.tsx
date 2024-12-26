@@ -51,7 +51,7 @@ export default function SaveTQFbar({
         className={`min-h-14 justify-end gap-x-4 overflow-y-auto bottom-0 w-full bg-white border-[#e0e0e0] px-6 inline-flex flex-wrap items-center z-50 text-secondary`}
         style={{ boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" }}
       >
-        <p className="text-[11px] flex flex-col text-end text-secondary font-medium">
+        <p className="text-b5 acerSwift:max-macair133:text-b6 flex flex-col text-end text-secondary font-medium">
           {data ? (
             <>
               <span className="font-bold">Saved:</span>{" "}
@@ -63,13 +63,17 @@ export default function SaveTQFbar({
         </p>
 
         <Button
-          className="!w-[128px]"
+          className="!w-[128px] acerSwift:max-macair133:!w-[115px]"
           onClick={onSave}
           disabled={disabledSave}
           loading={loading}
         >
-          <div className="flex gap-2 items-center">
-            <Icon IconComponent={Iconsave} />
+          <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+            <Icon
+              IconComponent={Iconsave}
+              className="acerSwift:max-macair133:"
+              size-4
+            />
             Save {partLabel[part]}
           </div>
         </Button>
