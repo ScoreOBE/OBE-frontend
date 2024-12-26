@@ -147,7 +147,7 @@ export default function Part2TQF3({ setForm }: Props) {
               variant="light"
               color="red"
               title={
-                <p>
+                <p className="acerSwift:max-macair133:!text-b3">
                   This action cannot be undone. After you delete this CLO,{" "}
                   <br /> it will be permanently deleted from this course.
                 </p>
@@ -155,14 +155,20 @@ export default function Part2TQF3({ setForm }: Props) {
               icon={
                 <Icon
                   IconComponent={IconExclamationCircle}
-                  className="size-6"
+                  className="size-6 acerSwift:max-macair133:size-5"
                 />
               }
             ></Alert>
             <div className="flex flex-col mt-3 ">
-              <p className="text-b4  text-[#808080]">CLO Description</p>
-              <p className=" -translate-y-[2px] text-b1">{editData?.descTH}</p>
-              <p className=" -translate-y-[2px] text-b1">{editData?.descEN}</p>
+              <p className="text-b4 acerSwift:max-macair133:!text-b5 text-[#808080]">
+                CLO Description
+              </p>
+              <p className=" -translate-y-[2px] text-b1 acerSwift:max-macair133:!text-b2">
+                {editData?.descTH}
+              </p>
+              <p className=" -translate-y-[2px] text-b1 acerSwift:max-macair133:!text-b2">
+                {editData?.descEN}
+              </p>
             </div>
           </>
         }
@@ -205,7 +211,7 @@ export default function Part2TQF3({ setForm }: Props) {
       {tqf3.part1?.updatedAt ? (
         <div className="flex flex-col w-full max-h-full gap-5 ">
           <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 pb-5   ">
-            <div className="flex text-secondary flex-col  text-[15px]">
+            <div className="flex text-secondary flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
               <p className="font-semibold">
                 ลักษณะของกระบวนวิชา <span className=" text-red-500">*</span>
               </p>
@@ -223,7 +229,10 @@ export default function Part2TQF3({ setForm }: Props) {
                 {Object.values(TEACHING_METHOD).map((key) => (
                   <Checkbox
                     key={key.en}
-                    classNames={{ label: "font-medium text-[13px]" }}
+                    classNames={{
+                      label:
+                        "font-medium text-b3 acerSwift:max-macair133:!text-b4",
+                    }}
                     label={`${key.th} (${key.en})`}
                     value={key.en}
                     disabled={disabled}
@@ -233,8 +242,8 @@ export default function Part2TQF3({ setForm }: Props) {
             </Checkbox.Group>
           </div>
           <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 pb-5  ">
-            <div className="flex text-secondary flex-col text-[15px]">
-              <p className="font-semibold text-[15px]">
+            <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+              <p className="font-semibold">
                 การวัดและประเมินผล <span className=" text-red-500">*</span>
               </p>
               <p className="font-semibold">Evaluation</p>
@@ -255,7 +264,7 @@ export default function Part2TQF3({ setForm }: Props) {
                       radio: `${disabled && "!cursor-default"}`,
                       label: `${
                         disabled && "!cursor-default"
-                      } font-medium text-[13px]`,
+                      } font-medium text-b3 acerSwift:max-macair133:!text-b4`,
                     }}
                     label={item}
                     value={item}
@@ -272,7 +281,7 @@ export default function Part2TQF3({ setForm }: Props) {
             className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 pb-2"
           >
             <div className="flex text-secondary items-center w-full justify-between">
-              <p className="font-semibold text-[15px]">
+              <p className="font-semibold text-[15px] acerSwift:max-macair133:!text-b2">
                 ผลลัพธ์การเรียนรู้ของกระบวนวิชา{" "}
                 <span className="font-bold">
                   (Course Learning Objective: CLO)
@@ -284,7 +293,7 @@ export default function Part2TQF3({ setForm }: Props) {
                   className="text-center px-4"
                   onClick={() => setOpenModalAddCLO(true)}
                 >
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
                     <Icon IconComponent={IconAdd} />
                     Add CLO
                   </div>
@@ -308,7 +317,7 @@ export default function Part2TQF3({ setForm }: Props) {
                 }}
               >
                 <Table stickyHeader striped className="w-full">
-                  <Table.Thead>
+                  <Table.Thead className="acerSwift:max-macair133:!text-b3">
                     <Table.Tr className="bg-[#e5e7f6]">
                       <Table.Th className="w-[10%]">CLO No.</Table.Th>
                       <Table.Th className="w-[50%]">CLO Description</Table.Th>
@@ -336,7 +345,7 @@ export default function Part2TQF3({ setForm }: Props) {
                         <Table.Tbody
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="text-default text-[13px] font-normal w-full"
+                          className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full"
                         >
                           {form.getValues().clo?.map((item, index) => (
                             <Draggable
@@ -397,7 +406,7 @@ export default function Part2TQF3({ setForm }: Props) {
                                           >
                                             <Icon
                                               IconComponent={IconTrash}
-                                              className="size-4 stroke-[2px]"
+                                              className="size-4 stroke-[2px] acerSwift:max-macair133:!size-4"
                                             />
                                           </div>
                                         </div>
@@ -442,7 +451,7 @@ export default function Part2TQF3({ setForm }: Props) {
             className="flex flex-col  w-full gap-4 pb-2"
           >
             <div className="flex text-secondary items-center w-full justify-between">
-              <p className="font-semibold text-[15px]">
+              <p className="font-semibold text-[15px] acerSwift:max-macair133:!text-b2">
                 เนื้อหาวิชาและแผนการสอน{" "}
                 <span className="font-bold">
                   (Course content and Schedule){" "}
@@ -454,7 +463,7 @@ export default function Part2TQF3({ setForm }: Props) {
                   className="text-center px-4"
                   onClick={() => setOpenModalAddTopic(true)}
                 >
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
                     <Icon IconComponent={IconAdd} />
                     Add Course Content
                   </div>
@@ -478,7 +487,7 @@ export default function Part2TQF3({ setForm }: Props) {
                 }}
               >
                 <Table stickyHeader striped className="w-full">
-                  <Table.Thead>
+                  <Table.Thead className="acerSwift:max-macair133:!text-b3">
                     <Table.Tr className="bg-[#e5e7f6]">
                       <Table.Th className="w-[10%] ">Week No.</Table.Th>
                       <Table.Th className="w-[30%]">Topic</Table.Th>
@@ -511,7 +520,7 @@ export default function Part2TQF3({ setForm }: Props) {
                         <Table.Tbody
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="text-default text-[13px] font-normal w-full"
+                          className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full"
                         >
                           {form.getValues().schedule?.map((item, index) => (
                             <Draggable
@@ -596,7 +605,7 @@ export default function Part2TQF3({ setForm }: Props) {
                     </Droppable>
                   )}
 
-                  <Table.Tfoot className="text-secondary font-semibold !h-[10px] ">
+                  <Table.Tfoot className="text-secondary font-semibold !h-[10px] acerSwift:max-macair133:!text-b3">
                     <Table.Tr className="bg-[#e5e7f6] border-none">
                       <Table.Th className="!rounded-bl-md" colSpan={2}>
                         Total
@@ -638,10 +647,10 @@ export default function Part2TQF3({ setForm }: Props) {
       ) : (
         <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
           <div className="flex justify-center  h-full items-start gap-2 flex-col">
-            <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
+            <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-h1">
               Complete TQF3 Part 1 First
             </p>
-            <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
+            <p className=" text-[#333333] leading-6 font-medium text-b2 sm:max-ipad11:text-b3">
               To start TQF3 Part 2, please complete and save TQF3 Part 1. <br />{" "}
               Once done, you can continue to do it.
             </p>

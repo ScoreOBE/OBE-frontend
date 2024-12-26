@@ -163,14 +163,14 @@ export default function Part1TQF3({ setForm }: Props) {
   }, [checked]);
 
   return (
-    <div className="flex w-full flex-col text-[15px] max-h-full text-default">
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3  pb-4">
+    <div className="flex w-full flex-col text-[15px] acerSwift:max-macair133:text-b3 max-h-full text-default">
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit   items-top  grid grid-cols-3  pb-4">
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">
             หลักสูตร <span className="text-red-500">*</span>
           </p>
           <p className="font-semibold">Curriculum</p>
-          {/* <p className="font-semibold text-[#888888] mt-3 text-[13px] text-pretty pr-12 ">
+          {/* <p className="font-semibold text-[#888888] mt-3 text-b3 acerSwift:max-macair133:text-b4 text-pretty pr-12 ">
             <span className="underline"> For Multiple Curriculums</span> Choose
             this option if the course is taught across multiple faculties or
             departments. For example, a general course that students from
@@ -193,10 +193,10 @@ export default function Part1TQF3({ setForm }: Props) {
                 <Radio
                   key={item.value}
                   classNames={{
-                    radio: `${disabled && "!cursor-default"}`,
+                    radio: `${disabled && "!cursor-default"} `,
                     label: `${
                       disabled && "!cursor-default"
-                    } font-medium text-[13px]`,
+                    } font-medium text-b3 acerSwift:max-macair133:text-b4`,
                   }}
                   label={item.label}
                   value={item.value}
@@ -214,12 +214,12 @@ export default function Part1TQF3({ setForm }: Props) {
                     multiline
                     withArrow
                     label={
-                      <div className="text-[#888888] text-[13px] p-2 flex flex-col gap-1 w-[380px]">
+                      <div className="text-[#888888] text-b3 acerSwift:max-macair133:text-b4 p-2 flex flex-col gap-1 w-[380px]">
                         <p className="text-secondary font-bold">
                           For a Multiple Curriculums
                         </p>
 
-                        <p className="font-medium text-[13px] text-pretty ">
+                        <p className="font-medium text-b3 acerSwift:max-macair133:text-b4 text-pretty ">
                           Choose this option if{" "}
                           <span className="text-emphasize">
                             the course is taught across multiple faculties or
@@ -253,8 +253,9 @@ export default function Part1TQF3({ setForm }: Props) {
                   withAsterisk
                   size="xs"
                   classNames={{
-                    label: "font-medium text-[13px]",
-                    input: "w-[300px]",
+                    label:
+                      "font-medium text-b3 acerSwift:max-macair133:!text-b4",
+                    input: "w-[300px] acerSwift:max-macair133:!text-b4",
                   }}
                   placeholder="Curriculum name e.g วิศวกรรมศาสตร์ (Engineer)"
                   {...curriculumForm.getInputProps("name")}
@@ -266,8 +267,9 @@ export default function Part1TQF3({ setForm }: Props) {
                   withAsterisk
                   size="xs"
                   classNames={{
-                    label: "font-medium text-[13px]",
-                    input: "w-[300px]",
+                    label:
+                      "font-medium text-b3 acerSwift:max-macair133:!text-b4",
+                    input: "w-[300px] acerSwift:max-macair133:text-b4",
                   }}
                   placeholder="Department name e.g คอมพิวเตอร์ (Computer)"
                   {...curriculumForm.getInputProps("department")}
@@ -297,7 +299,7 @@ export default function Part1TQF3({ setForm }: Props) {
                   input: `${disabled && "!cursor-default"}`,
                   label: `${
                     disabled && "!cursor-default"
-                  } font-medium text-[13px]`,
+                  } font-medium text-b3 acerSwift:max-macair133:text-b4`,
                 }}
                 label={`${key.th} (${key.en})`}
                 value={key.en}
@@ -333,7 +335,9 @@ export default function Part1TQF3({ setForm }: Props) {
             {studentYear.map((item) => (
               <Checkbox
                 key={item.year}
-                classNames={{ label: `font-medium text-[13px]` }}
+                classNames={{
+                  label: `font-medium text-b3 acerSwift:max-macair133:text-b4`,
+                }}
                 label={`${item.th} (${item.en})`}
                 value={item.year.toString()}
                 disabled={disabled}
@@ -359,10 +363,10 @@ export default function Part1TQF3({ setForm }: Props) {
             size="xs"
             label="Instructor"
             classNames={{
-              label: "text-default",
+              label: "text-default acerSwift:max-macair133:!text-b4",
               input: `${disabled && "!cursor-default"}`,
             }}
-            className={`w-[440px]`}
+            className={`w-[440px] acerSwift:max-macair133:w-[370px]`}
             placeholder="(required)"
             disabled={disabled}
             {...form.getInputProps("mainInstructor")}
@@ -392,10 +396,10 @@ export default function Part1TQF3({ setForm }: Props) {
                 size="xs"
                 label={`Instructor ${index + 1}`}
                 classNames={{
-                  label: "text-default",
+                  label: "text-default acerSwift:max-macair133:!text-b4",
                   input: `${disabled && "!cursor-default"}`,
                 }}
-                className="w-[440px]"
+                className="w-[440px] acerSwift:max-macair133:w-[370px]"
                 placeholder={index === 0 ? "(required)" : "(optional)"}
                 disabled={disabled}
                 {...form.getInputProps(`instructors.${index}`)}
@@ -410,20 +414,23 @@ export default function Part1TQF3({ setForm }: Props) {
                 >
                   <Icon
                     IconComponent={IconTrash}
-                    className=" stroke-[2px] size-5"
+                    className="stroke-[2px] size-5 acerSwift:max-macair133:!size-4"
                   />
                 </Button>
               )}
             </div>
           ))}
-          <div className=" w-[440px] flex ">
+          <div className=" w-[440px] acerSwift:max-macair133:w-[370px] flex ">
             <Button
-              className="text-center px-4  mt-2"
+              className="text-center px-4 mt-2 "
               variant="outline"
               onClick={() => form.insertListItem("instructors", "")}
             >
-              <div className="flex gap-2">
-                <Icon IconComponent={IconAdd} />
+              <div className="flex gap-2 acerSwift:max-macair133:!text-b4">
+                <Icon
+                  IconComponent={IconAdd}
+                  className="acerSwift:max-macair133:size-3"
+                />
                 Add
               </div>
             </Button>
@@ -450,7 +457,10 @@ export default function Part1TQF3({ setForm }: Props) {
           <Group className="flex flex-col gap-5 w-full items-start">
             <div className=" last:border-none ">
               <Checkbox
-                classNames={{ label: "font-medium text-[13px] w-full" }}
+                classNames={{
+                  label:
+                    "font-medium text-b3 acerSwift:max-macair133:text-b4 w-full",
+                }}
                 label={`ในสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Inside of Chiang Mai University)`}
                 value={"in"}
                 disabled={disabled}
@@ -460,7 +470,7 @@ export default function Part1TQF3({ setForm }: Props) {
                 className="mt-2 pl-8"
                 placeholder="(optional)"
                 classNames={{
-                  input: `text-[13px] text-default h-[80px] w-[408px] ${
+                  input: `text-b3 acerSwift:max-macair133:text-b4 text-default h-[80px] w-[408px] ${
                     disabled && "!cursor-default"
                   }`,
                 }}
@@ -471,7 +481,8 @@ export default function Part1TQF3({ setForm }: Props) {
             <div className="last:border-none ">
               <Checkbox
                 classNames={{
-                  label: "font-medium text-[13px] flex flex-nowrap",
+                  label:
+                    "font-medium text-b3 acerSwift:max-macair133:text-b4 flex flex-nowrap",
                 }}
                 label={`นอกสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Outside of Chiang Mai University)`}
                 value={"out"}
@@ -482,7 +493,7 @@ export default function Part1TQF3({ setForm }: Props) {
                 className="mt-2 pl-8"
                 placeholder="(optional)"
                 classNames={{
-                  input: `text-[13px] text-default h-[80px] w-[408px] ${
+                  input: `text-b3 acerSwift:max-macair133:text-b4 text-default h-[80px] w-[408px] ${
                     disabled && "!cursor-default"
                   }`,
                 }}
@@ -494,7 +505,7 @@ export default function Part1TQF3({ setForm }: Props) {
         </Checkbox.Group>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
-        <div className="flex text-secondary flex-col sm:max-macair133:pr-8">
+        <div className="flex text-secondary flex-col sm:max-macair133:pr-8 acerSwift:max-macair133:pr-6">
           <p className="font-semibold">
             ชั่วโมงต่อสัปดาห์ในการให้คำปรึกษาแก่นักศึกษารายบุคคล
             <span className="text-red-500"> *</span>
@@ -504,15 +515,17 @@ export default function Part1TQF3({ setForm }: Props) {
           </p>
         </div>
 
-        <div className="flex items-center text-[13px] font-medium gap-4">
+        <div className="flex items-center text-b3 acerSwift:max-macair133:text-b4 font-medium gap-4">
           <NumberInput
             classNames={{
-              input: `${disabled && "!cursor-default"}`,
+              input: `${
+                disabled && "!cursor-default"
+              } acerSwift:max-macair133:text-b4`,
             }}
             key={form.key("consultHoursWk")}
             max={168}
             min={1}
-            className="w-[86px]"
+            className="w-[86px] acerSwift:max-macair133:w-[80px]"
             disabled={disabled}
             {...form.getInputProps("consultHoursWk")}
           />

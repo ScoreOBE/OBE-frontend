@@ -114,15 +114,18 @@ export default function Part7TQF3({ setForm }: Props) {
         <div className="flex flex-col w-full max-h-full gap-4 -mt-1 pb-4">
           {/* Topic */}
           <div className="flex text-secondary items-center w-full justify-between">
-            <span className="text-[15px] font-semibold">
+            <span className="text-[15px] acerSwift:max-macair133:!text-b3 font-semibold">
               CLO Mapping <span className=" text-red-500">*</span>
             </span>
             <Button
               className="text-center px-4"
               onClick={() => setOpenDrawerPLOdes(true)}
             >
-              <div className="flex gap-2">
-                <Icon IconComponent={IconPLO} />
+              <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
+                <Icon
+                  IconComponent={IconPLO}
+                  className="acerSwift:max-macair133:!size-3"
+                />
                 PLO Description
               </div>
             </Button>
@@ -135,11 +138,11 @@ export default function Part7TQF3({ setForm }: Props) {
               color="rgba(6, 158, 110, 1)"
               classNames={{
                 icon: "size-6",
-                body: " flex justify-center",
+                body: "flex justify-center",
               }}
               className="w-full"
               title={
-                <p className="font-semibold">
+                <p className="font-semibold acerSwift:max-macair133:!text-b3">
                   Each CLO must be linked to at least one PLO.
                   {tqf3.ploRequired?.length && (
                     <>
@@ -166,7 +169,7 @@ export default function Part7TQF3({ setForm }: Props) {
             className=" overflow-x-auto w-full h-full max-h-full border flex flex-col rounded-lg border-secondary relative"
           >
             <Table stickyHeader striped>
-              <Table.Thead className="z-[2]">
+              <Table.Thead className="z-[2] acerSwift:max-macair133:!text-b3">
                 <Table.Tr>
                   <Table.Th
                     style={{
@@ -184,7 +187,7 @@ export default function Part7TQF3({ setForm }: Props) {
                       key={id}
                       className="min-w-[100px] !pt-3 !pb-2 w-fit"
                     >
-                      <p className="">
+                      <p className="acerSwift:max-macair133:!text-b3">
                         PLO-{no}{" "}
                         <span className="text-red-500">
                           {tqf3.ploRequired?.includes(id) && "*"}
@@ -221,10 +224,10 @@ export default function Part7TQF3({ setForm }: Props) {
                         {...form.getInputProps(`data.${cloIndex}.plos`)}
                       >
                         <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
-                          <div className="text-secondary min-w-fit font-bold">
+                          <div className="text-secondary min-w-fit font-bold acerSwift:max-macair133:!text-b3">
                             CLO-{cloItem?.no}
                           </div>
-                          <p className="flex w-fit font-medium justify-between flex-col ">
+                          <p className="flex w-fit font-medium justify-between flex-col acerSwift:max-macair133:!text-b4">
                             <span className="mb-2">{cloItem?.descTH}</span>
                             <span>{cloItem?.descEN}</span>
                             <span className="error-text mt-1">
@@ -248,7 +251,7 @@ export default function Part7TQF3({ setForm }: Props) {
                                 classNames={{
                                   body: "mr-3 px-0",
                                   label:
-                                    "text-[14px] text-[#615F5F] cursor-pointer",
+                                    "text-b4 text-[#615F5F] cursor-pointer",
                                 }}
                                 disabled={disabled}
                                 checked={(
@@ -306,12 +309,11 @@ export default function Part7TQF3({ setForm }: Props) {
         <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
           <div className="flex justify-center  h-full items-start gap-2 flex-col">
             <p className="text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-              This Course not linked to PLO 
+              This Course not linked to PLO
             </p>
             <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-               
               If you need to do this part, please contact your department
-              administrator. <br/> You can still  proceed with completing TQF 5
+              administrator. <br /> You can still proceed with completing TQF 5
             </p>
           </div>
           <img

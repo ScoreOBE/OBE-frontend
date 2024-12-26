@@ -252,7 +252,7 @@ export default function Part4TQF3({
           classNames={{
             root: "flex flex-col w-full h-full",
             tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
-            tabLabel: "!font-semibold text-[13px]",
+            tabLabel: "!font-semibold text-b3",
             panel: "w-full h-fit max-h-full flex flex-col gap-2 rounded-lg",
           }}
         >
@@ -268,7 +268,12 @@ export default function Part4TQF3({
                 <div className="w-full">
                   <Alert
                     radius="md"
-                    icon={<Icon IconComponent={IconCheckbox} />}
+                    icon={
+                      <Icon
+                        IconComponent={IconCheckbox}
+                        className="acerSwift:max-macair133:size-5"
+                      />
+                    }
                     variant="light"
                     color="rgba(6, 158, 110, 1)"
                     classNames={{
@@ -277,7 +282,7 @@ export default function Part4TQF3({
                     }}
                     className="w-full mb-1"
                     title={
-                      <p className="font-semibold">
+                      <p className="font-semibold acerSwift:max-macair133:!text-b4">
                         Each CLO must be linked to at least one evaluation
                         topic, and{" "}
                         <span className="font-extrabold">
@@ -297,7 +302,7 @@ export default function Part4TQF3({
                 }}
               >
                 <Table stickyHeader striped>
-                  <Table.Thead className="z-[2]">
+                  <Table.Thead className="z-[2] acerSwift:max-macair133:!text-b3">
                     <Table.Tr>
                       <Table.Th
                         className="min-w-[400px] sticky left-0 !p-0"
@@ -366,10 +371,10 @@ export default function Part4TQF3({
                               )}
                             >
                               <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
-                                <div className="text-secondary min-w-fit font-bold">
+                                <div className="text-secondary min-w-fit font-bold acerSwift:max-macair133:!text-b3">
                                   CLO-{cloItem?.no}
                                 </div>
-                                <p className="flex w-fit   font-medium justify-between flex-col ">
+                                <p className="flex w-fit   font-medium justify-between flex-col acerSwift:max-macair133:!text-b4">
                                   <span className="mb-1">
                                     {cloItem?.descTH}
                                   </span>
@@ -415,7 +420,7 @@ export default function Part4TQF3({
                                       classNames={{
                                         input: `${
                                           evalItem &&
-                                          "!border-secondary border-[2px]"
+                                          "!border-secondary border-[2px] acerSwift:max-macair133:!text-b3"
                                         } ${disabled && "!cursor-default"}`,
                                       }}
                                       disabled={disabled}
@@ -448,7 +453,7 @@ export default function Part4TQF3({
                               }}
                               className="!bg-[#e4f5ff] !p-0 !h-full sticky z-[1] right-0 "
                             >
-                              <div className="  max-h-full items-center justify-center px-[25px]  font-semibold text-b2">
+                              <div className="  max-h-full items-center justify-center px-[25px] font-semibold text-b2 acerSwift:max-macair133:!text-b3">
                                 {percent % 1 === 0
                                   ? percent
                                   : percent.toFixed(2)}
@@ -465,7 +470,7 @@ export default function Part4TQF3({
                         style={{
                           filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
                         }}
-                        className="!bg-bgTableHeader sticky left-0 text-b2 !rounded-bl-md"
+                        className="!bg-bgTableHeader sticky left-0 text-b2 acerSwift:max-macair133:!text-b3 !rounded-bl-md"
                       >
                         Total Assessment (%)
                       </Table.Th>
@@ -473,7 +478,7 @@ export default function Part4TQF3({
                         return (
                           <Table.Th
                             key={evalIndex}
-                            className={`!bg-bgTableHeader text-b2 ${
+                            className={`!bg-bgTableHeader text-b2 acerSwift:max-macair133:!text-b3 ${
                               item.curPercent > item.percent && "text-delete"
                             } ${
                               item.curPercent == item.percent &&
@@ -496,7 +501,7 @@ export default function Part4TQF3({
                           filter:
                             "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.1))",
                         }}
-                        className={`!bg-[#bae0f7] sticky right-0 text-b1 font-extrabold !rounded-br-md ${
+                        className={`!bg-[#bae0f7] acerSwift:max-macair133:!text-b2 sticky right-0 text-b1 font-extrabold !rounded-br-md ${
                           form
                             .getValues()
                             .data.reduce((acc, cur) => acc + cur.percent, 0) >
@@ -527,7 +532,7 @@ export default function Part4TQF3({
             <Tabs.Panel value="week">
               <div className="overflow-auto border border-secondary rounded-lg relative">
                 <Table stickyHeader className="!w-full">
-                  <Table.Thead className=" z-[2]">
+                  <Table.Thead className=" z-[2] acerSwift:max-macair133:!text-b3">
                     <Table.Tr>
                       <Table.Th className="w-[25%] !p-0">
                         <div className="w-full flex items-center px-[25px] h-[24px]">
@@ -561,11 +566,11 @@ export default function Part4TQF3({
                                 `data.${cloIndex}.percent`
                               )}
                             >
-                              <div className="flex gap-5 text-[13px] !justify-start !items-start !text-start  !h-full !flex-1 !self-start !snap-start  px-[20px] ">
+                              <div className="flex gap-5 text-b3 !justify-start !items-start !text-start  !h-full !flex-1 !self-start !snap-start  px-[20px] ">
                                 <div className="text-secondary min-w-fit font-bold">
                                   CLO-{cloItem?.no}
                                 </div>
-                                <p className="flex w-fit font-medium  justify-between flex-col">
+                                <p className="flex w-fit font-medium  justify-between flex-col acerSwift:max-macair133:!text-b4">
                                   <span>{cloItem?.descTH}</span>
                                   <span>{cloItem?.descEN}</span>
                                   <span className="error-text">
@@ -596,7 +601,7 @@ export default function Part4TQF3({
                                         className="!p-0 border-[#d9d9d9] border-b-[1px] flex !h-full !w-full"
                                       >
                                         {/* Evaluation Topic Column */}
-                                        <Table.Td className="!w-[24%] text-[13px] !h-ful text-default font-medium flex flex-col justify-center !min-w-[24%] ">
+                                        <Table.Td className="!w-[24%] text-b3 acerSwift:max-macair133:!text-b3 !h-ful text-default font-medium flex flex-col justify-center !min-w-[24%] ">
                                           <p className="text-ellipsis overflow-hidden whitespace-nowrap">
                                             {evalTopic?.topicTH}
                                           </p>
@@ -631,7 +636,7 @@ export default function Part4TQF3({
                                                       label: `${
                                                         disabled &&
                                                         `!cursor-default`
-                                                      } py-4 font-medium text-[13px]`,
+                                                      } py-4 font-medium text-b3 acerSwift:max-macair133:!text-b5`,
                                                     }}
                                                     disabled={disabled}
                                                     value={weekNo}
