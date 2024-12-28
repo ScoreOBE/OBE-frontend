@@ -49,7 +49,7 @@ export default function ModalErrorUploadFile({
       size="43vw"
       withCloseButton={false}
     >
-      <div className="h-fit max-h-[500px] mb-10 overflow-y-auto">
+      <div className="h-fit max-h-[500px] w-full mb-10 overflow-y-auto">
         {!!errorSectionNoStudents?.length && (
           <div className="flex flex-col gap-2">
             <Alert
@@ -285,7 +285,7 @@ export default function ModalErrorUploadFile({
             )}
           </div>
         )}
-        <div className="flex fixed bottom-2 !w-[91%] justify-center ">
+        <div className="flex fixed flex-1 right-7 bottom-2 text-center  justify-center ">
           <Button
             onClick={() => onClose()}
             className="mt-4 !h-[36px] mb-2 !text-[14px] !w-full "

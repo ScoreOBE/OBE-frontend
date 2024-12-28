@@ -187,7 +187,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 <Modal.CloseButton className="!m-0" />
                 <div className="flex flex-col">
                   <p>Upload Score</p>
-                  <p className=" text-b6 text-noData">
+                  <p className=" text-[12px] text-noData">
                     {data.courseNo} {data.courseName}
                   </p>
                 </div>
