@@ -17,6 +17,7 @@ export const ROUTE_PATH = {
   HISTOGRAM: "histogram",
   SCORE: "score",
   STUDENTS: "students",
+  SKILLS: "skills",
 };
 
 export const PATH = {
