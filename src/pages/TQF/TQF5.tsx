@@ -80,7 +80,9 @@ export default function TQF5() {
     {
       value: Object.keys(partLabel)[2],
       tab: partLabel.part3,
-      compo: <Part3TQF5 setForm={setForm} tqf3={tqf3!} />,
+      compo: (
+        <Part3TQF5 setForm={setForm} tqf3={tqf3!} assignments={assignments!} />
+      ),
     },
   ];
 

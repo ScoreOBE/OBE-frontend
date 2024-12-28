@@ -14,6 +14,7 @@ import { updatePartTQF5 } from "@/store/tqf5";
 import { isEqual, cloneDeep } from "lodash";
 import { initialTqf5Part3 } from "@/helpers/functions/tqf5";
 import { IModelTQF3 } from "@/models/ModelTQF3";
+import { IModelAssignment } from "@/models/ModelCourse";
 
 type TabState = {
   [key: number]: string;
@@ -21,12 +22,13 @@ type TabState = {
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
   tqf3: IModelTQF3;
+  assignments: IModelAssignment[];
 };
 
-export default function Part3TQF5({ setForm, tqf3 }: Props) {
+export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
+  const { courseNo } = useParams();
   const tqf5 = useAppSelector((state) => state.tqf5);
   const dispatch = useAppDispatch();
-  const { courseNo } = useParams();
   const [isEdit, setIsEdit] = useState(false);
   const [activeSection, setActiveSection] = useState<number>(0);
   const [tabStates, setTabStates] = useState<TabState>({});
@@ -269,9 +271,9 @@ export default function Part3TQF5({ setForm, tqf3 }: Props) {
       //   <div className="gap-2 flex flex-col w-full -mt-3 overflow-y-auto  max-h-full">
       //     {form.getValues().data?.map((item, index) => {
       //       const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
-      //       const assessment = tqf3.part4?.data.find(
+      //       const assessment = tqf5.part2?.data.find(
       //         (cl) => cl.clo === clo?.id
-      //       )?.evals;
+      //       )?.assignments;
 
       //       return (
       //         <div
@@ -301,7 +303,7 @@ export default function Part3TQF5({ setForm, tqf3 }: Props) {
       //                 <div className="flex justify-between">
       //                   <div className="text-default flex items-center  font-medium text-[15px]">
       //                     <p className="text-[18px] text-secondary mr-2 font-semibold">
-      //                       CLO {clo?.no}{" "}
+      //                       CLO {clo?.no}
       //                     </p>
       //                     <div className="flex flex-col ml-2 gap-[2px]">
       //                       <p>{clo?.descTH}</p>
@@ -312,22 +314,36 @@ export default function Part3TQF5({ setForm, tqf3 }: Props) {
 
       //                 <Button>See Detail Criteria</Button>
       //               </div>
-
       //               {assessment?.map((eva, evaIndex) => {
       //                 const evaluation = tqf3.part3?.eval.find(
       //                   (e) => e.id === eva.eval
       //                 );
-      //                 const assignment = tqf5.assignmentsMap?.find(
-      //                   (as) => as.eval === evaluation?.topicEN
-      //                 )?.assignment;
-
+      //                 const assess = [
+      //                   ...new Set(
+      //                     eva.questions.flatMap((e) =>
+      //                       e.substring(0, e.lastIndexOf("-"))
+      //                     )
+      //                   ),
+      //                 ].sort();
+      //                 const fullScore = assignments
+      //                   .filter((e) => assess.includes(e.name))
+      //                   .flatMap((e) =>
+      //                     e.questions.map((question) => ({
+      //                       sheet: e.name,
+      //                       ...question,
+      //                     }))
+      //                   )
+      //                   .filter((e) =>
+      //                     eva.questions.includes(`${e.sheet}-${e.name}`)
+      //                   )
+      //                   .reduce((a, b) => a + b.fullScore, 0);
       //                 return (
       //                   <div
       //                     key={evaIndex}
       //                     className="rounded-md overflow-clip text-[14px] border ml-1"
       //                   >
       //                     <div className="flex flex-col">
-      //                       <p className="bg-bgTableHeader font-semibold text-secondary px-4 py-3">
+      //                       <div className="bg-bgTableHeader font-semibold text-secondary px-4 py-3 flex justify-between items-center">
       //                         <div className="flex flex-col gap-[2px]">
       //                           <p className="text-[15px]">
       //                             {evaluation?.topicTH} | {evaluation?.topicEN}
@@ -339,22 +355,46 @@ export default function Part3TQF5({ setForm, tqf3 }: Props) {
       //                               : "-"}
       //                           </p>
       //                         </div>
-      //                       </p>
+      //                         <p>{fullScore}</p>
+      //                       </div>
 
-      //                       {assignment?.map((as, assignIndex) => (
-      //                         <div
-      //                           key={assignIndex}
-      //                           className=" font-medium text-default"
-      //                         >
-      //                           <div className="bg-[#F3F3F3] text-default font-semibold px-4 py-3">
-      //                             <p>{as}</p>
+      //                       {assess?.map((sheet, sheetIndex) => {
+      //                         const questions = eva.questions
+      //                           .filter((e) => e.includes(sheet))
+      //                           .map((e) =>
+      //                             e.substring(e.lastIndexOf("-")).slice(1)
+      //                           );
+      //                         return (
+      //                           <div
+      //                             key={sheetIndex}
+      //                             className=" font-medium text-default"
+      //                           >
+      //                             <div className="bg-[#F3F3F3] text-default font-semibold px-4 py-3">
+      //                               <p>{sheet}</p>
+      //                             </div>
+
+      //                             {questions.map((ques, quesIndex) => {
+      //                               const question = assignments
+      //                                 ?.find((e) => e.name == sheet)
+      //                                 ?.questions.find((e) => e.name == ques);
+      //                               return (
+      //                                 <div
+      //                                   key={quesIndex}
+      //                                   className="flex justify-between items-center pl-8 px-4 py-3 "
+      //                                 >
+      //                                   <p className="font-medium text-[13px] text-default">
+      //                                     {ques}
+      //                                     {question?.desc?.length
+      //                                       ? ` - ${question.desc}`
+      //                                       : ""}
+      //                                   </p>
+      //                                   <p>{question?.fullScore}</p>
+      //                                 </div>
+      //                               );
+      //                             })}
       //                           </div>
-
-      //                           <p className="flex items-center px-4 py-3 font-medium text-[13px] text-default pl-8">
-      //                             1 - wkok
-      //                           </p>
-      //                         </div>
-      //                       ))}
+      //                         );
+      //                       })}
       //                     </div>
       //                   </div>
       //                 );
@@ -408,27 +448,25 @@ export default function Part3TQF5({ setForm, tqf3 }: Props) {
       //                     </Table.Tr>
       //                   </Table.Thead>
       //                   <Table.Tbody>
-      //                     {form.getValues().data?.map((item, index) => {
+      //                     {form.getValues().data?.map((item) => {
       //                       const clo = tqf3.part2?.clo.find(
       //                         (e) => e.id == item.clo
       //                       );
-      //                       item.sections.map((sec, index) => {
+      //                       item.sections.map((sec) => {
       //                         const data = Object.values(item)
       //                           .slice(1)
       //                           .map((e: any) => parseInt(e));
-      //                         const total = data.reduce(
-      //                           (a, b: any) => a + b,
-      //                           0
-      //                         )||0;
+      //                         const total =
+      //                           data.reduce((a, b: any) => a + b, 0) || 0;
       //                         const avg =
-      //                          total > 0
-      //                          ? (0 * sec.score0 +
-      //                              1 * sec.score1 +
-      //                              2 * sec.score2 +
-      //                              3 * sec.score3 +
-      //                              4 * sec.score4) /
-      //                            total
-      //                            : 0;
+      //                           total > 0
+      //                             ? (0 * sec.score0 +
+      //                                 1 * sec.score1 +
+      //                                 2 * sec.score2 +
+      //                                 3 * sec.score3 +
+      //                                 4 * sec.score4) /
+      //                               total
+      //                             : 0;
       //                         return (
       //                           <Table.Tr
       //                             className="font-medium text-default text-[13px]"
@@ -492,7 +530,6 @@ export default function Part3TQF5({ setForm, tqf3 }: Props) {
       //       );
       //     })}
       //   </div>
-
       //   <div className="min-w-[70px] px-2 mt-1 flex flex-col">
       //     {form.getValues().data?.map((item, index) => {
       //       const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
