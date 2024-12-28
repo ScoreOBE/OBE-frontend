@@ -105,7 +105,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         sec.students?.forEach(({ student }) => {
           const existStudent = result.sections
             .find((item: any) => item.sectionNo == sec.sectionNo)
-            .students.find((item: any) => item.student == student.id);
+            ?.students.find((item: any) => item.student == student.id);
           if (!existStudent) {
             notExistStudent.push({
               studentId: student.studentId!,
