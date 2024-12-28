@@ -18,7 +18,9 @@ import IconSortDes from "@/assets/icons/sortDes.svg?react";
 import IconSearch from "@/assets/icons/search.svg?react";
 import IconNotSort from "@/assets/icons/arrowUpDown.svg?react";
 import IconListSearch from "@/assets/icons/listSearch.svg?react";
+import IconChart from "@/assets/icons/histogram.svg?react";
 import { calStat, scrollToStudent } from "@/helpers/functions/score";
+import ModalEvalChart from "@/components/Modal/Score/ModalEvalChart";
 
 export default function OneAssignment() {
   const { courseNo, name } = useParams();
@@ -48,6 +50,7 @@ export default function OneAssignment() {
       sumScore: number;
     } & Record<string, any>)[]
   >([]);
+  const students = course?.sections.map((sec) => sec.students!).flat() || [];
   const [sort, setSort] = useState<any>({});
   const [filter, setFilter] = useState<string>("");
   const questions = assignment?.questions;
@@ -67,6 +70,7 @@ export default function OneAssignment() {
   );
   const dispatch = useAppDispatch();
   const [openEditScore, setOpenEditScore] = useState(false);
+  const [openModalChart, setOpenModalChart] = useState(false);
   const [editScore, setEditScore] = useState<{
     section: number;
     student: IModelUser;
@@ -168,6 +172,15 @@ export default function OneAssignment() {
 
   return (
     <>
+      <ModalEvalChart
+        opened={openModalChart}
+        onClose={() => setOpenModalChart(false)}
+        fullScore={fullScore}
+        totalStudent={allStudent.length}
+        assignment={assignment!}
+        students={students}
+        isAllsec={true}
+      />
       <ModalEditStudentScore
         opened={openEditScore}
         onClose={() => setOpenEditScore(false)}
@@ -185,9 +198,20 @@ export default function OneAssignment() {
             <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
               <div className="flex justify-between w-full px-2 items-center">
                 <div className="flex flex-col py-1">
-                  <p className="text-[#3f4474] font-semibold  text-b1 acerSwift:max-macair133:!text-b2">
-                    {name}
-                  </p>
+                  <div className="flex gap-1">
+                    <p className="text-[#3f4474] font-semibold text-b1 acerSwift:max-macair133:!size-b2">
+                      {name}
+                    </p>
+                    <div
+                      className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20 cursor-pointer"
+                      onClick={() => setOpenModalChart(true)}
+                    >
+                      <Icon
+                        IconComponent={IconChart}
+                        className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474]"
+                      />
+                    </div>
+                  </div>
                   <p className="text-secondary text-h1 font-semibold">
                     {fullScore?.toFixed(2)}{" "}
                     <span className="text-b1 acerSwift:max-macair133:!text-b2 ">

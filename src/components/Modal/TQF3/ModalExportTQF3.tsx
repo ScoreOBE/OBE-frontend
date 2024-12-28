@@ -176,7 +176,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
               }}
               value={selectedParts}
               onChange={setSelectedParts}
-              className="h-[400px] acerSwift:max-macair133:max-h-[330px] overflow-y-auto my-4"
+              className="h-[400px] acerSwift:max-macair133:max-h-[305px] overflow-y-auto my-4"
             >
               {Object.values(PartTopicTQF3)
                 .slice(0, 6)

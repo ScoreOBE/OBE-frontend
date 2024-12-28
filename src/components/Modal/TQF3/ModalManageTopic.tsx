@@ -114,6 +114,7 @@ export default function ModalManageTopic({
         body: `${
           type === "add" ? "h-full" : "h-fit"
         } flex flex-col overflow-hidden max-h-full h-fit`,
+        title: "acerSwift:max-macair133:!text-b1",
       }}
     >
       {optionsTopicPart6.every((e) =>
@@ -170,9 +171,13 @@ export default function ModalManageTopic({
                   .some((e: any) => e.topic.includes(item.th)),
               }))}
               classNames={{
-                option: "text-[13px] py-2 px-3",
-                options: "whitespace-pre-wrap leading-5 overflow-y-auto",
-                input: "whitespace-break-spaces  flex flex-col flex-wrap",
+                option:
+                  "text-[13px] py-2 px-3 flex-wrap acerSwift:max-macair133:!text-b4",
+                options:
+                  "whitespace-pre-wrap leading-5 overflow-y-auto flex-wrap acerSwift:max-macair133:!text-b4",
+                input:
+                  "whitespace-break-spaces flex flex-col flex-wrap acerSwift:max-macair133:!text-b4",
+                label: "flex-wrap acerSwift:max-macair133:!text-b4",
               }}
               renderOption={(item: any) => (
                 <div className="flex w-full justify-between items-center gap-1">
@@ -232,8 +237,9 @@ export default function ModalManageTopic({
                 }
                 className="w-full border-none rounded-r-none"
                 classNames={{
-                  input: "flex h-[200px] py-2 px-3 text-[13px]",
-                  label: "flex pb-1",
+                  input:
+                    "flex h-[200px] py-2 px-3 text-[13px] flex-wrap acerSwift:max-macair133:!text-b4",
+                  label: "flex pb-1 flex-wrap acerSwift:max-macair133:!text-b4",
                 }}
                 placeholder="Ex. แบบสอบถามความพึงพอใจให้นักศึกษาประเมิน (Student satisfaction questionnaire)"
                 {...form.getInputProps("detail")}
@@ -246,13 +252,17 @@ export default function ModalManageTopic({
       <div className="flex justify-end w-full">
         <Group className="flex w-full h-fit items-end justify-end">
           <div>
-            <Button variant="subtle" onClick={onCloseModal}>
+            <Button
+              variant="subtle"
+              onClick={onCloseModal}
+              className="flex-wrap acerSwift:max-macair133:!text-b5"
+            >
               Cancel
             </Button>
           </div>
           <Button
             onClick={addEditTopic}
-            className="pl-4"
+            className="pl-4 flex-wrap acerSwift:max-macair133:!text-b5"
             disabled={optionsTopicPart6.every((e) =>
               data
                 ?.slice(5)

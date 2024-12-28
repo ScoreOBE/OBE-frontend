@@ -22,7 +22,7 @@ import { cloneDeep } from "lodash";
 import { ROLE } from "@/helpers/constants/enum";
 import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
 import { IModelScore } from "@/models/ModelCourse";
-import ChartContainer from "@/components/Chart/ChartContainer";
+import ModalEvalChart from "@/components/Modal/Score/ModalEvalChart";
 import IconListSearch from "@/assets/icons/listSearch.svg?react";
 
 export default function Students() {
@@ -186,81 +186,14 @@ export default function Students() {
 
   return (
     <>
-      <Modal
+      <ModalEvalChart
         opened={openModalChart}
         onClose={() => setOpenModalChart(false)}
-        centered
-        size="80vw"
-        title={
-          <div>
-            <p>
-              Chart - {name} ({fullScore?.toFixed(2)} Points)
-            </p>
-            <p className="text-[#3f4474]/80 font-semibold sm:max-macair133:text-b2 text-b2 acerSwift:max-macair133:!size-b2 mt-2">
-              {totalStudent} Students
-            </p>
-          </div>
-        }
-        transitionProps={{ transition: "pop" }}
-        classNames={{
-          content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit py-1",
-          body: "flex flex-col gap-4 overflow-hidden max-h-full h-fit",
-          title: "acerSwift:max-macair133:!text-b1",
-        }}
-      >
-        <div className="-mt-2">
-          <Tabs
-            classNames={{
-              root: "overflow-hidden mt-1 mx-3 flex flex-col max-h-full",
-            }}
-            defaultValue="bellCurve"
-          >
-            <Tabs.List className="mb-2">
-              <Tabs.Tab value="bellCurve" className="custom-tab-class">
-                Distribution
-              </Tabs.Tab>
-              <Tabs.Tab value="histogram" className="custom-tab-class">
-                Histogram
-              </Tabs.Tab>
-            </Tabs.List>
-            <Tabs.Panel className="flex flex-col gap-1" value="histogram">
-              {assignment ? (
-                <ChartContainer
-                  type="histogram"
-                  data={assignment}
-                  inEval={true}
-                  students={section?.students || []}
-                />
-              ) : (
-                <p className="text-center text-gray-500">No data available</p>
-              )}
-            </Tabs.Panel>
-            <Tabs.Panel
-              className="flex flex-col justify-center items-center acerSwift:max-macair133:ml-12 mb-2"
-              value="bellCurve"
-            >
-              {assignment ? (
-                <>
-                  <div className="macair133:-[70vh] w-full mt-4 !ml-20">
-                    <ChartContainer
-                      type="curve"
-                      data={assignment}
-                      inEval={true}
-                      students={section?.students || []}
-                    />
-                  </div>
-                  <p className="text-b6 mb-4">
-                    Score distribution powered by Andrew C. Myers (Cornell
-                    University)
-                  </p>
-                </>
-              ) : (
-                <p className="text-center text-gray-500">No data available</p>
-              )}
-            </Tabs.Panel>
-          </Tabs>
-        </div>
-      </Modal>
+        fullScore={fullScore}
+        totalStudent={totalStudent}
+        assignment={assignment!}
+        students={section?.students}
+      />
       <ModalEditStudentScore
         opened={openEditScore}
         onClose={() => setOpenEditScore(false)}
