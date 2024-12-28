@@ -31,11 +31,11 @@ export default function DrawerPLOdes({ opened, onClose, data }: Props) {
                 <div className="flex items-center justify-between w-full mt-2 ">
                   <Drawer.Title className="w-full">
                     <div className="flex flex-col gap-2 items-start">
-                      <p className="text-secondary text-[16px] font-bold">
+                      <p className="text-secondary text-b1 acerSwift:max-macair133:!text-b2 font-bold">
                         PLO Description
                       </p>
 
-                      <p className="text-[#909090] text-[13px] font-medium">
+                      <p className="text-[#909090] text-b3 acerSwift:max-macair133:!text-b4 font-medium">
                         This course uses {data.name}
                       </p>
                     </div>
@@ -44,7 +44,7 @@ export default function DrawerPLOdes({ opened, onClose, data }: Props) {
                 </div>
 
                 <div className="flex w-full justify-between items-center gap-4">
-                  <p className="flex flex-wrap items-center font-medium text-tertiary text-[14px] break-all ">
+                  <p className="flex flex-wrap items-center font-medium text-tertiary text-b2 acerSwift:max-macair133:!text-b3 break-all ">
                     {isTH === "TH" ? data.criteriaTH : data.criteriaEN}
                   </p>
                   <Tabs
@@ -55,13 +55,13 @@ export default function DrawerPLOdes({ opened, onClose, data }: Props) {
                   >
                     <Tabs.List>
                       <Tabs.Tab value="TH">
-                        <div className="flex flex-row items-center gap-2 ">
+                        <div className="flex flex-row items-center gap-2 acerSwift:max-macair133:!text-b4">
                           <Icon IconComponent={IconTh} />
                           ไทย
                         </div>
                       </Tabs.Tab>
                       <Tabs.Tab value="EN">
-                        <div className="flex flex-row items-center gap-2 ">
+                        <div className="flex flex-row items-center gap-2 acerSwift:max-macair133:!text-b4">
                           <Icon IconComponent={IconEng} />
                           Eng
                         </div>
@@ -76,12 +76,12 @@ export default function DrawerPLOdes({ opened, onClose, data }: Props) {
               {data.data?.map((plo, index) => (
                 <div
                   key={index}
-                  className="flex flex-col gap-2 border-b-[1px] px-2  py-4 text-[13px]"
+                  className="flex flex-col gap-2 border-b-[1px] px-2  py-4 text-b3 acerSwift:max-macair133:!text-b4"
                 >
-                  <p className="text-[15px] font-semibold text-secondary">
+                  <p className="text-[15px] acerSwift:max-macair133:!text-b3 font-semibold text-secondary">
                     PLO-{plo.no}
                   </p>
-                  <div className="flex flex-row leading-6 font-normal text-[13px]">
+                  <div className="flex flex-row leading-6 font-normal text-b3 acerSwift:max-macair133:!text-b4">
                     {isTH === "TH" ? plo.descTH : plo.descEN}
                   </div>
                 </div>

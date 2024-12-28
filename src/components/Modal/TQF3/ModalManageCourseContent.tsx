@@ -199,6 +199,7 @@ export default function ModalManageTopic({
         content: `flex flex-col bg-[#F6F7FA] overflow-hidden `,
         body: `overflow-hidden ${height}`,
         header: `mb-1`,
+        title: "acerSwift:max-macair133:!text-b1",
       }}
     >
       <FocusTrapInitialFocus />
@@ -236,8 +237,9 @@ export default function ModalManageTopic({
                 }
                 className="w-full border-none rounded-r-none"
                 classNames={{
-                  input: "flex h-[100px] p-3 text-[13px]",
-                  label: "flex pb-1",
+                  input:
+                    "flex h-[100px] acerSwift:max-macair133:!h-[108px] p-3 text-b3 acerSwift:max-macair133:!text-b4",
+                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
                 placeholder="Ex. การอินทิเกรต (Integration)"
                 {...formOneWeek.getInputProps("topic")}
@@ -251,8 +253,9 @@ export default function ModalManageTopic({
                   </p>
                 }
                 classNames={{
-                  input: "flex px-3 py-5 text-[13px]",
-                  label: "flex pb-1",
+                  input:
+                    "flex px-3 py-5 text-b3 acerSwift:max-macair133:!text-b4",
+                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
                 size="xs"
                 allowNegative={false}
@@ -295,8 +298,9 @@ export default function ModalManageTopic({
                   </p>
                 }
                 classNames={{
-                  input: "flex px-3 py-5 text-[13px]",
-                  label: "flex pb-1",
+                  input:
+                    "flex px-3 py-5 text-b3 acerSwift:max-macair133:!text-b4",
+                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
                 size="xs"
                 allowNegative={false}
@@ -346,7 +350,7 @@ export default function ModalManageTopic({
                 overflowY: "auto",
               }}
             >
-              <div className="sticky top-0 z-10 bg-bgTableHeader text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
+              <div className="sticky top-0 z-10 bg-bgTableHeader text-b2 acerSwift:max-macair133:!text-b3 flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={IconList2} className="size-5" />
                   <span className="flex flex-row items-center gap-2">
@@ -375,7 +379,7 @@ export default function ModalManageTopic({
                   >
                     <div className="flex flex-col w-full">
                       <div className="flex items-center justify-between">
-                        <p className="text-secondary mb-2 font-semibold text-[14px]">
+                        <p className="text-secondary mb-2 font-semibold text-b2 acerSwift:max-macair133:!text-b3">
                           {/* Course Content {item.weekNo} */}
                           Week {item.weekNo}
                         </p>
@@ -392,7 +396,7 @@ export default function ModalManageTopic({
                       </div>
                     </div>
 
-                    <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
+                    <div className="text-tertiary text-b3 acerSwift:max-macair133:!text-b4 font-medium flex flex-col gap-1">
                       <div className="flex text-pretty font-semibold">
                         {/* <li></li> Week {item.weekNo}: {item.topic} */}
                         <li></li> Topic: {item.topic}
@@ -414,7 +418,11 @@ export default function ModalManageTopic({
         </div>
         {/* Button */}
         <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8  items-end  justify-end h-fit">
-          <Button variant="subtle" onClick={closeModal}>
+          <Button
+            variant="subtle"
+            onClick={closeModal}
+            className="acerSwift:max-macair133:!text-b5"
+          >
             Cancel
           </Button>
 
@@ -439,13 +447,18 @@ export default function ModalManageTopic({
               className="w-fit border  rounded-md "
               position="top"
             >
-              <Button variant="subtle" onClick={addMore}>
+              <Button
+                variant="subtle"
+                onClick={addMore}
+                className="acerSwift:max-macair133:!text-b5"
+              >
                 Add more Content
               </Button>
             </Tooltip>
           )}
           <Button
             onClick={onClickDone}
+            className="acerSwift:max-macair133:!text-b5"
             disabled={
               form.getValues().schedule?.length == 0 && !formOneWeek.errors
             }

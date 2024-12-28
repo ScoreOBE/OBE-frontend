@@ -215,15 +215,16 @@ export default function ModalManageCLO({
       transitionProps={{ transition: "pop" }}
       classNames={{
         root: `!h-fit`,
-        content: `flex flex-col bg-[#F6F7FA] overflow-hidden`,
+        content: `flex flex-col bg-[#F6F7FA] overflow-hidden bg-red-400`,
         body: `overflow-hidden `,
         header: `mb-1`,
+        title: "acerSwift:max-macair133:!text-b1",
       }}
     >
       <FocusTrapInitialFocus />
-      <div className={`flex flex-col  ${height}`}>
+      <div className={`flex flex-col ${height}`}>
         <div
-          className={`flex gap-5 py-1 sm:max-macair133:h-[460px] sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]  ${
+          className={`flex gap-5 py-1 sm:max-macair133:h-[460px] acerSwift:max-macair133:!h-fit sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]  ${
             type === "add"
               ? form
                   .getValues()
@@ -241,7 +242,7 @@ export default function ModalManageCLO({
           <div
             id="description"
             ref={descriptionRef}
-            className={`flex flex-col rounded-md sm:max-macair133:h-[400px] sm:overflow-y-auto justify-between ${
+            className={`flex flex-col rounded-md sm:max-macair133:h-[380px]  sm:overflow-y-auto justify-between  ${
               type === "add" && "p-5"
             } gap-1 overflow-hidden ${
               form.getValues().clo?.length! > 0 && type === "add"
@@ -264,8 +265,9 @@ export default function ModalManageCLO({
                 }
                 className="w-full border-none"
                 classNames={{
-                  input: "flex h-[80px] px-3 py-2 text-[13px]",
-                  label: "flex pb-1",
+                  input:
+                    "flex h-[80px] acerSwift:max-macair133:!h-[70px] px-3 py-2 text-b3 acerSwift:max-macair133:!text-b4",
+                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
                 placeholder="Ex. อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
                 {...formOneCLO.getInputProps("descTH")}
@@ -280,15 +282,16 @@ export default function ModalManageCLO({
                 }
                 className="w-full border-none"
                 classNames={{
-                  input: "flex h-[80px] px-3 py-2 text-[13px]",
-                  label: "flex pb-1",
+                  input:
+                    "flex h-[80px] px-3 acerSwift:max-macair133:!h-[70px] py-2 text-b3 acerSwift:max-macair133:!text-b4",
+                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
                 placeholder="Ex. Explain the working principle of computer operating systems."
                 {...formOneCLO.getInputProps("descEN")}
               />
 
               <div className="flex flex-col gap-2 pb-1 ">
-                <p className="text-secondary text-[13px] mb-1 font-semibold">
+                <p className="text-secondary text-b3 acerSwift:max-macair133:!text-b4 mb-1 font-semibold">
                   Learning Method <span className="text-error">*</span>
                 </p>
                 <Checkbox.Group {...formOneCLO.getInputProps("learningMethod")}>
@@ -300,7 +303,8 @@ export default function ModalManageCLO({
                       <Checkbox
                         size="xs"
                         classNames={{
-                          label: "font-medium text-[13px] text-default",
+                          label:
+                            "font-medium text-b3 acerSwift:max-macair133:!text-b4 text-default",
                         }}
                         label={item.label}
                         value={item.label}
@@ -334,7 +338,7 @@ export default function ModalManageCLO({
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
               }}
             >
-              <div className="sticky top-0 z-10 bg-bgTableHeader text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
+              <div className="sticky top-0 z-10 bg-bgTableHeader text-b2 acerSwift:max-macair133:!text-b3 flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={IconList2} className="size-5" />
                   <span className="flex flex-row items-center gap-2">
@@ -362,7 +366,7 @@ export default function ModalManageCLO({
                   >
                     <div className="flex flex-col gap-2 w-full">
                       <div className="flex items-center justify-between">
-                        <p className="text-secondary font-semibold text-[14px]">
+                        <p className="text-secondary font-semibold text-b2 acerSwift:max-macair133:!text-b3">
                           CLO-{item.no}
                         </p>
                         <div
@@ -377,7 +381,7 @@ export default function ModalManageCLO({
                       </div>
                     </div>
 
-                    <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
+                    <div className="text-tertiary text-b3 acerSwift:max-macair133:!text-b4 font-medium flex flex-col gap-1">
                       <div className="flex text-pretty">
                         <li></li>
                         {item.descTH}
@@ -402,8 +406,12 @@ export default function ModalManageCLO({
           )}
         </div>
         {/* Button */}
-        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8  items-end  justify-end h-fit">
-          <Button variant="subtle" onClick={closeModal}>
+        <div className="flex gap-2 items-end  justify-end h-fit">
+          <Button
+            variant="subtle"
+            onClick={closeModal}
+            className="acerSwift:max-macair133:!text-b5"
+          >
             Cancel
           </Button>
           {/* Add More Button */}
@@ -431,13 +439,18 @@ export default function ModalManageCLO({
                 className="w-fit border  rounded-md "
                 position="top"
               >
-                <Button variant="subtle" onClick={addMore}>
+                <Button
+                  variant="subtle"
+                  onClick={addMore}
+                  className="acerSwift:max-macair133:!text-b5"
+                >
                   Add more CLO
                 </Button>
               </Tooltip>
             </div>
           )}
           <Button
+            className="acerSwift:max-macair133:!text-b5"
             onClick={onClickDone}
             disabled={form.getValues().clo?.length == 0 && !formOneCLO.errors}
           >

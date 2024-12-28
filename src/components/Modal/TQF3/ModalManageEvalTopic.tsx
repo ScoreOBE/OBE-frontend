@@ -205,6 +205,7 @@ export default function ModalManageEvalTopic({
       classNames={{
         content: `flex flex-col bg-[#F6F7FA] overflow-hidden`,
         body: `overflow-hidden ${height}`,
+        title: "acerSwift:max-macair133:!text-b1",
       }}
     >
       {percentTotal == 100 && (
@@ -217,8 +218,11 @@ export default function ModalManageEvalTopic({
           }}
           className="mb-2"
           title={
-            <div className="flex items-center  gap-2">
-              <Icon IconComponent={IconInfo2} />
+            <div className="flex items-center  gap-2 acerSwift:max-macair133:!text-b3">
+              <Icon
+                IconComponent={IconInfo2}
+                className="acerSwift:max-macair133:!size-6"
+              />
               <p className="pl-2">
                 Your Evaluation methods in your course now add up to 100%.
               </p>
@@ -231,6 +235,10 @@ export default function ModalManageEvalTopic({
           type === "add"
             ? "h-fit macair133:h-fit  sm:max-macair133:h-[320px]  sm:max-macair133:mb-14 sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]"
             : "h-fit  "
+        } ${
+          percentTotal == 100
+            ? "acerSwift:max-macair133:!h-[320px]"
+            : "acerSwift:max-macair133:!h-[500px]"
         } `}
       >
         <div
@@ -263,8 +271,8 @@ export default function ModalManageEvalTopic({
                 }
                 className="w-full border-none   rounded-r-none "
                 classNames={{
-                  input: "flex p-3 text-[13px]",
-                  label: "flex pb-1",
+                  input: "flex p-3 text-b3 acerSwift:max-macair133:!text-b4",
+                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
                 placeholder="Ex. แบบทดสอบ 1"
                 {...formOneTopic.getInputProps("topicTH")}
@@ -281,8 +289,8 @@ export default function ModalManageEvalTopic({
                 }
                 className="w-full border-none rounded-r-none"
                 classNames={{
-                  input: "flex p-3 text-[13px]",
-                  label: "flex pb-1",
+                  input: "flex p-3 text-b3 acerSwift:max-macair133:!text-b4",
+                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
                 placeholder="Ex. Test 1"
                 {...formOneTopic.getInputProps("topicEN")}
@@ -293,8 +301,9 @@ export default function ModalManageEvalTopic({
                 label={<p className="font-semibold flex gap-1">Description</p>}
                 className="w-full border-none rounded-r-none"
                 classNames={{
-                  input: "flex h-[70px] px-3 py-2 text-[13px]",
-                  label: "flex pb-1",
+                  input:
+                    "flex h-[70px] px-3 py-2 text-b3 acerSwift:max-macair133:!text-b4",
+                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
                 placeholder="(Optional)"
                 {...formOneTopic.getInputProps("desc")}
@@ -309,8 +318,9 @@ export default function ModalManageEvalTopic({
                   </p>
                 }
                 classNames={{
-                  input: "flex px-3 py-5 text-[13px]  ",
-                  label: "flex pb-1",
+                  input:
+                    "flex px-3 py-5 text-b3 acerSwift:max-macair133:!text-b4",
+                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                   wrapper: "!border-none",
                 }}
                 allowNegative={false}
@@ -350,17 +360,20 @@ export default function ModalManageEvalTopic({
           {/* List CLO */}
           {!!form.getValues().eval?.length! && type === "add" && (
             <div
-              className="flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-[370px]"
+              className={`flex flex-col bg-white border-secondary border-[1px] rounded-md w-[55%] h-[370px]`}
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                 overflowY: "auto",
               }}
             >
-              <div className="sticky top-0 z-10 bg-bgTableHeader text-[14px] flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
+              <div className="sticky top-0 z-10 bg-bgTableHeader text-b2 acerSwift:max-macair133:!text-b3 flex items-center justify-between border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold ">
                 <div className="flex items-center gap-2">
                   <span className="flex flex-row items-center gap-2">
-                    <Icon IconComponent={IconList2} /> List Evaluation Topic
-                    Added
+                    <Icon
+                      IconComponent={IconList2}
+                      className="acerSwift:max-macair133:size-5"
+                    />{" "}
+                    List Evaluation Topic Added
                   </span>
                 </div>
                 <p>
@@ -384,7 +397,7 @@ export default function ModalManageEvalTopic({
                   >
                     <div className="flex flex-col gap-2 w-full">
                       <div className="flex items-center justify-between">
-                        <p className="text-secondary mb-2 font-semibold text-[14px]">
+                        <p className="text-secondary mb-2 font-semibold text-b3 acerSwift:max-macair133:text-b4">
                           Eval Topic {item.no} ({item.percent}%)
                         </p>
 
@@ -400,7 +413,7 @@ export default function ModalManageEvalTopic({
                       </div>
                     </div>
 
-                    <div className="text-tertiary text-[13px] font-medium flex flex-col gap-1">
+                    <div className="text-tertiary text-b3 acerSwift:max-macair133:text-b4 font-medium flex flex-col gap-1">
                       <div className="flex justify-between items-center font-semibold">
                         <div className="flex text-pretty">
                           <li></li> {item.topicTH} ({item.topicEN})
@@ -420,7 +433,11 @@ export default function ModalManageEvalTopic({
         </div>
         {/* Button */}
         <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8  items-end  justify-end h-fit">
-          <Button variant="subtle" onClick={closeModal}>
+          <Button
+            variant="subtle"
+            onClick={closeModal}
+            className="acerSwift:max-macair133:!text-b5"
+          >
             Cancel
           </Button>
           {/* Add More Button */}
@@ -449,6 +466,7 @@ export default function ModalManageEvalTopic({
                 variant="subtle"
                 disabled={percentTotal == 100}
                 onClick={addMore}
+                className="acerSwift:max-macair133:!text-b5"
               >
                 Add more method
               </Button>
@@ -456,6 +474,7 @@ export default function ModalManageEvalTopic({
           )}
           <Button
             onClick={onClickDone}
+            className="acerSwift:max-macair133:!text-b5"
             disabled={
               form.getValues().eval?.length == 0 && !formOneTopic.errors
             }
