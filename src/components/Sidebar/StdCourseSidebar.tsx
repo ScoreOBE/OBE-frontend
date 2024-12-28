@@ -12,6 +12,7 @@ import IconList from "@/assets/icons/list.svg?react";
 import IconArrow from "@/assets/icons/targetArrow.svg?react";
 import IconHistogram from "@/assets/icons/histogram.svg?react";
 import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
+import IconSkills from "@/assets/icons/briftcase.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { getUserName } from "@/helpers/functions/function";
 import Loading from "../Loading/Loading";
@@ -117,7 +118,7 @@ export default function StdCourseSidebar() {
               leftSection={
                 <Icon
                   IconComponent={IconSpiderChart}
-                  className="pb-1 pl-[2px] size-[22px]"
+                  className="pl-[2px] size-[22px]"
                 />
               }
               className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
@@ -127,6 +128,22 @@ export default function StdCourseSidebar() {
               }`}
             >
               <p className="pl-[3px]">PLO</p>
+            </Button>
+            <Button
+              onClick={() => gotoPage(ROUTE_PATH.SKILLS)}
+              leftSection={
+                <Icon
+                  IconComponent={IconSkills}
+                  className="pl-[2px] size-[22px]"
+                />
+              }
+              className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                path.includes(ROUTE_PATH.SKILLS)
+                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+              }`}
+            >
+              <p className="pl-[3px]">Skills</p>
             </Button>
           </div>
         )}

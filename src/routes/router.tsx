@@ -15,6 +15,7 @@ import StdChart from "@/pages/Student/StdChart";
 import StdScore from "@/pages/Student/StdScore";
 import StdCLO from "@/pages/Student/StdCLO";
 import StdPLO from "@/pages/Student/StdPLO";
+import StdSkills from "@/pages/Student/StdSkills";
 import AllAssignment from "@/pages/AllAssignment";
 import OneAssignment from "@/pages/OneAssignment";
 
@@ -28,6 +29,7 @@ const Assignment = lazy(() => import("@/pages/Score/Assignment"));
 const Histogram = lazy(() => import("@/pages/Score/Histogram"));
 const Score = lazy(() => import("@/pages/Score/Score"));
 const Students = lazy(() => import("@/pages/Score/Students"));
+const Skills = lazy(() => import("@/pages/Skills"));
 const Page404 = lazy(() => import("@/pages/Page404"));
 // const PageError = lazy(() => import("@/pages/PageError"));
 
@@ -152,6 +154,14 @@ const router = createBrowserRouter([
             ),
           },
           {
+            path: ROUTE_PATH.SKILLS,
+            element: (
+              <Suspense fallback={loadingPage}>
+                <Skills />
+              </Suspense>
+            ),
+          },
+          {
             path: ROUTE_PATH.TQF3,
             element: (
               <Suspense fallback={loadingPage}>
@@ -262,6 +272,14 @@ const router = createBrowserRouter([
                 element: (
                   <Suspense fallback={loadingPage}>
                     <StdPLO />
+                  </Suspense>
+                ),
+              },
+              {
+                path: `${ROUTE_PATH.SKILLS}`,
+                element: (
+                  <Suspense fallback={loadingPage}>
+                    <StdSkills />
                   </Suspense>
                 ),
               },

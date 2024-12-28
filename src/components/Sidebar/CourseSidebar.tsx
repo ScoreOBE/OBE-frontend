@@ -17,6 +17,7 @@ import IconTQF from "@/assets/icons/TQF.svg?react";
 import IconStudent from "@/assets/icons/student.svg?react";
 import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconSkills from "@/assets/icons/briftcase.svg?react";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import { IModelUser } from "@/models/ModelUser";
 import { getUserName, sortData } from "@/helpers/functions/function";
@@ -274,6 +275,24 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 Roster
               </Button>
             )}
+            {dashboard == ROLE.INSTRUCTOR && (
+              <Button
+                onClick={() => goToPage(ROUTE_PATH.SKILLS)}
+                leftSection={
+                  <Icon
+                    IconComponent={IconSkills}
+                    className="size-[20px] stroke-[1.5px] acerSwift:max-macair133:size-4 -ml-0.5"
+                  />
+                }
+                className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                  path.includes(ROUTE_PATH.SKILLS)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                }`}
+              >
+                Skills
+              </Button>
+            )}
 
             {user.role != ROLE.TA && (
               <>
@@ -441,7 +460,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         </div>
         {!!coInstructors.length && (
           <div className="flex  flex-col gap-2 acerSwift:max-macair133:hidden">
-            <p className="text-b2 font-bold mb-1 acerSwift:max-macair133:mb-0 acerSwift:max-macair133:text-b3">
+            <p className="text-b2 font-bold mb-1 acerSwift:max-macair133:mb-0 acerSwift:max-macair133:text-b3 bg-red">
               Co-Instructor
             </p>
             <div className="max-h-[140px] acerSwift:max-macair133:max-h-[10px] gap-1 flex flex-col  overflow-y-auto acerSwift:max-macair133:text-b5">
