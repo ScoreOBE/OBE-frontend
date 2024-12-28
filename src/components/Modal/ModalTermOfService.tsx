@@ -74,8 +74,8 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             )}
             <p className=" text-default text-b2">
               {isEN === "EN"
-                ? "Last updated: September 9, 2024"
-                : "อัปเดตล่าสุด: 9 กันยายน 2567"}
+                ? "Last updated: December 20, 2024"
+                : "อัปเดตล่าสุด: 20 ธันวาคม 2567"}
             </p>
           </div>
           <div>
@@ -131,7 +131,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
 
         <Alert
           radius="md"
-          icon={<Icon className="size-8" IconComponent={IconExclamamtion} />}
+          icon={<Icon className="size-8  stroke-[1.5px]" IconComponent={IconExclamamtion} />}
           variant="light"
           color="orange"
           className="mb-3"
@@ -163,7 +163,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         </Alert>
         <Alert
           radius="md"
-          icon={<Icon className=" size-8" IconComponent={IconUserScan} />}
+          icon={<Icon className=" stroke-[1.5px] size-8" IconComponent={IconUserScan} />}
           variant="light"
           color="indigo"
           className="mb-3"
@@ -176,15 +176,15 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             isEN === "EN" ? (
               <p>Data Linked to You</p>
             ) : (
-              <p className=" font-semibold">ข้อมูลที่เชื่อมโยงกับคุณ</p>
+              <p className=" font-semibold"> ข้อมูลที่เชื่อมโยงกับคุณ</p>
             )
           }
         >
           <div className=" justify-start leading-6 text-b2 text-default text-start items-start">
             <p className="mb-2">
               {isEN === "EN"
-                ? "The following data from CMU OAuth and ScoreOBE + will be collected after you agree these Terms of Service and linked to your identity to enhance the functionality of web application:"
-                : "ข้อมูลต่อไปนี้ที่มาจากการลงชื่อเข้าสู่ระบบผ่าน CMU OAuth และ ScoreOBE + จะถูกเก็บหลังจากคุณยอมรับข้อตกลงและเงื่อนไขในการให้บริการนี้ และเชื่อมโยงกับตัวตนของคุณ เพื่อปรับปรุงการทำงานของเว็บแอปพลิเคชั่น:"}
+                ? "The following data from CMU EntraID and ScoreOBE + will be collected after you agree these Terms of Service and linked to your identity to enhance the functionality of web application:"
+                : "ข้อมูลต่อไปนี้ที่มาจากการลงชื่อเข้าสู่ระบบผ่าน CMU EntraID และ ScoreOBE + จะถูกเก็บหลังจากคุณยอมรับข้อตกลงและเงื่อนไขในการให้บริการนี้ และเชื่อมโยงกับตัวตนของคุณ เพื่อปรับปรุงการทำงานของเว็บแอปพลิเคชั่น:"}
             </p>{" "}
             <br />
             <div className="flex gap-8 -mt-4">
@@ -281,7 +281,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         </Alert>
         <Alert
           radius="md"
-          icon={<Icon className=" size-8 stroke-2" IconComponent={IconCPE} />}
+          icon={<Icon className=" size-8 stroke-[1.5px]" IconComponent={IconCPE} />}
           variant="light"
           color="blue"
           className="mb-3"
@@ -399,7 +399,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             expressly prohibited from further use of the ScoreOBE + and must
             discontinue immediately by selecting the "Log out" option located in
             the bottom-left corner. Upon logging out, ScoreOBE + will cease any
-            data collection through CMU OAuth.
+            data collection through CMU EntraID.
           </p>
         ) : (
           <p className=" text-b2 mb-6 leading-6">
@@ -412,7 +412,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               หากผู้ใช้ไม่ยอมรับข้อกำหนดในการให้บริการ ผู้ใช้จะถูกห้ามใช้
               ScoreOBE + โดยเด็ดขาดและต้องยุติการใช้งานทันที โดยเลือก
               "ออกจากระบบ" ที่มุมล่างซ้าย เมื่อออกจากระบบแล้ว ScoreOBE +
-              จะหยุดการเก็บข้อมูลใด ๆ ผ่าน CMU OAuth
+              จะหยุดการเก็บข้อมูลใด ๆ ผ่าน CMU EntraID
             </p>
           </p>
         )}
