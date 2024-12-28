@@ -60,9 +60,6 @@ export default function ModalAddSection({
 }: Props) {
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const curriculum = useAppSelector(
-    (state) => state.faculty.faculty.curriculum
-  );
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
   const [active, setActive] = useState(0);
@@ -556,15 +553,16 @@ export default function ModalAddSection({
                   </span>
                   <div className="w-full justify-center  border-b-[1.5px]  pr-[18px] pt-2 pb-1  flex flex-col ">
                     <div className="gap-2 flex flex-col">
-                      <Select
+                      <TextInput
                         label={`Select the Curriculum for Section ${getSectionNo(
                           sec.sectionNo
                         )} (Optional) `}
                         size="xs"
-                        data={curriculum?.map(({ code }) => code)}
+                        maxLength={5}
+                        placeholder="Curriculum"
                         classNames={{
                           input:
-                            "focus:border-primary acerSwift:max-macair133:!text-b4",
+                            "focus:border-primary acerSwift:max-macair133:!text-b5",
                           label: "acerSwift:max-macair133:!text-b4",
                         }}
                         {...form.getInputProps(`sections.${index}.curriculum`)}
