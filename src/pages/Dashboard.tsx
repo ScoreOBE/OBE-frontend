@@ -413,17 +413,21 @@ export default function Dashboard() {
                 );
                 const statusTqf3 =
                   item.TQF3?.status ??
-                  (statusTqf3Sec.some((e) => e == TQF_STATUS.IN_PROGRESS)
-                    ? TQF_STATUS.IN_PROGRESS
-                    : statusTqf3Sec.every((e) => e == TQF_STATUS.DONE)
+                  (statusTqf3Sec.every((e) => e == TQF_STATUS.DONE)
                     ? TQF_STATUS.DONE
+                    : statusTqf3Sec.some((e) =>
+                        [TQF_STATUS.IN_PROGRESS, TQF_STATUS.DONE].includes(e)
+                      )
+                    ? TQF_STATUS.IN_PROGRESS
                     : TQF_STATUS.NO_DATA);
                 const statusTqf5 =
                   item.TQF5?.status ??
-                  (statusTqf5Sec.some((e) => e == TQF_STATUS.IN_PROGRESS)
-                    ? TQF_STATUS.IN_PROGRESS
-                    : statusTqf5Sec.every((e) => e == TQF_STATUS.DONE)
+                  (statusTqf5Sec.every((e) => e == TQF_STATUS.DONE)
                     ? TQF_STATUS.DONE
+                    : statusTqf5Sec.some((e) =>
+                        [TQF_STATUS.IN_PROGRESS, TQF_STATUS.DONE].includes(e)
+                      )
+                    ? TQF_STATUS.IN_PROGRESS
                     : TQF_STATUS.NO_DATA);
                 return (
                   <div
