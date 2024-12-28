@@ -289,10 +289,10 @@ const scoreOBETemplete = (
       ) {
         errorSection.push(getSectionNo(sectionNo));
       }
-      const firstNameTH = data.firstName.endsWith(" ")
+      const firstNameTH = data.firstName?.endsWith(" ")
         ? data.firstName.slice(0, -1)
         : data.firstName;
-      const lastNameTH = data.lastName.endsWith(" ")
+      const lastNameTH = data.lastName?.endsWith(" ")
         ? data.lastName.slice(0, -1)
         : data.lastName;
       const checkSection = canUpload?.students?.find(

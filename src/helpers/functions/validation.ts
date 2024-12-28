@@ -14,7 +14,11 @@ export const checkTokenExpired = (token: string) => {
   try {
     const decode: any = jwtDecode(token);
     // check expired
-    if (decode.exp * 1000 <= new Date().getTime() || !decode.role) {
+    if (
+      !decode.exp ||
+      decode.exp * 1000 <= new Date().getTime() ||
+      !decode.role
+    ) {
       return true;
     }
     return false;
@@ -57,7 +61,6 @@ export const isValidResponse = async (res: any) => {
           NOTI_TYPE.ERROR,
           res.title ?? "Something Went Wrong",
           res.message ?? "An unexpected error occurred. Please try again later."
-          
         );
         break;
     }

@@ -246,45 +246,61 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                               </p>
                             </>
                           ) : (
-                            <Checkbox.Group
-                              {...form.getInputProps(
-                                `data.${indexClo}.assignments.${indexEval}.questions`
-                              )}
-                              classNames={{ error: "px-4 pb-2" }}
-                            >
-                              {assignment?.map((assign, indexAssign) => {
-                                const questions = assignments.find(
-                                  (e) => e.name == assign
-                                )?.questions;
-                                return (
-                                  <div
-                                    key={indexAssign}
-                                    className="flex flex-col gap-2 mb-2"
-                                  >
-                                    <p className=" bg-bgTableHeader font-semibold text-secondary px-4 py-3">
-                                      {assign}
-                                    </p>
-                                    {questions?.map((ques, indexQues) => (
-                                      <Checkbox
-                                        key={indexQues}
-                                        size="xs"
-                                        className="px-4 py-1"
-                                        classNames={{
-                                          label:
-                                            "font-medium text-[13px] text-default",
-                                        }}
-                                        label={`${ques.name}${
-                                          ques.desc.length
-                                            ? ` - ${ques.desc}`
-                                            : ""
-                                        }`}
-                                        value={ques.name}
-                                      />
-                                    ))}
-                                  </div>
-                                );
-                              })}
-                            </Checkbox.Group>
+                            <div>
+                              <p className="bg-bgTableHeader font-semibold text-secondary px-4 py-3">
+                                <div className="flex flex-col gap-[2px]">
+                                  <p className="text-[15px]">
+                                    {evaluation?.topicTH} |{" "}
+                                    {evaluation?.topicEN}
+                                  </p>
+                                  <p>
+                                    Description:
+                                    {evaluation?.desc?.length
+                                      ? evaluation.desc
+                                      : "-"}
+                                  </p>
+                                </div>
+                              </p>
+                              <Checkbox.Group
+                                {...form.getInputProps(
+                                  `data.${indexClo}.assignments.${indexEval}.questions`
+                                )}
+                                classNames={{ error: "px-4 pb-2" }}
+                              >
+                                {assignment?.map((assign, indexAssign) => {
+                                  const questions = assignments.find(
+                                    (e) => e.name == assign
+                                  )?.questions;
+                                  return (
+                                    <div
+                                      key={indexAssign}
+                                      className="flex flex-col gap-2 mb-2"
+                                    >
+                                      <div className="bg-[#F3F3F3] text-default font-semibold px-4 py-3">
+                                        <p>{assign}</p>
+                                      </div>
+                                      {questions?.map((ques, indexQues) => (
+                                        <Checkbox
+                                          key={`${ques.name}-${indexQues}`}
+                                          size="xs"
+                                          className="px-4 py-1"
+                                          classNames={{
+                                            label:
+                                              "font-medium text-[13px] text-default",
+                                          }}
+                                          label={`${ques.name}${
+                                            ques.desc?.length
+                                              ? ` - ${ques.desc}`
+                                              : ""
+                                          }`}
+                                          value={`${assign}-${ques.name}`}
+                                        />
+                                      ))}
+                                    </div>
+                                  );
+                                })}
+                              </Checkbox.Group>
+                            </div>
                           )}
                         </div>
                       );
