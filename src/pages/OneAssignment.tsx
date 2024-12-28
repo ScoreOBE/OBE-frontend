@@ -271,7 +271,7 @@ export default function OneAssignment() {
                 <div
                   className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
                   onClick={() =>
-                    scrollToStudent(studentRefs, studentMaxMin.max)
+                    scrollToStudent(studentRefs, studentMaxMin.min)
                   }
                 >
                   <div className="flex gap-1">

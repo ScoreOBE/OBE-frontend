@@ -38,7 +38,7 @@ export default function ModalQuestionChart({
             Chart - {name} ({fullScore?.toFixed(2)} Points)
           </p>
           <p className="text-[#3f4474]/80 font-semibold sm:max-macair133:text-b3 text-b2 acerSwift:max-macair133:!size-b2 mt-2">
-            {totalStudent} Students {isAllsec && "(All Section)"}
+            {totalStudent} Students {isAllsec && "(All Sections)"}
           </p>
         </div>
       }
