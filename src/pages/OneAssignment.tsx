@@ -143,7 +143,14 @@ export default function OneAssignment() {
     setIsSort(true);
     const currentSort = (sort as any)[key];
     const toggleSort = currentSort === null ? true : !currentSort;
-    setSort((prev: any) => ({ ...prev, [key]: toggleSort }));
+    setSort((prev: any) => {
+      const resetSort: any = {};
+      for (const key in prev) {
+        resetSort[key] = null;
+      }
+      resetSort[key] = toggleSort;
+      return resetSort;
+    });
     let newStudents = [...allStudent];
     newStudents = newStudents.sort((a, b) => {
       if (key === "studentId") {
