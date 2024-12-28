@@ -27,6 +27,9 @@ type Props = {
 
 export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
   const { courseNo } = useParams();
+  const course = useAppSelector((state) =>
+    state.course.courses.find((e) => e.courseNo == courseNo)
+  );
   const tqf5 = useAppSelector((state) => state.tqf5);
   const dispatch = useAppDispatch();
   const [isEdit, setIsEdit] = useState(false);
@@ -38,9 +41,6 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
       [index]: newValue,
     }));
   };
-  const course = useAppSelector((state) =>
-    state.course.courses.find((e) => e.courseNo == courseNo)
-  );
   const sectionRefs = useRef(
     tqf3.part2?.clo.map(() => React.createRef<HTMLDivElement>())
   );
@@ -62,7 +62,9 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
     if (tqf5.part3) {
       form.setValues(cloneDeep(tqf5.part3));
     } else if (tqf3.part2) {
-      form.setValues(initialTqf5Part3(tqf3.part2.clo, course?.sections as any));
+      form.setValues(
+        initialTqf5Part3(tqf5, tqf3.part4?.data, course?.sections as any)
+      );
     }
   }, [tqf5.method]);
 
@@ -269,8 +271,8 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
 
       // <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
       //   <div className="gap-2 flex flex-col w-full -mt-3 overflow-y-auto  max-h-full">
-      //     {form.getValues().data?.map((item, index) => {
-      //       const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
+      //     {form.getValues().data?.map((cloItem, cloIndex) => {
+      //       const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
       //       const assessment = tqf5.part2?.data.find(
       //         (cl) => cl.clo === clo?.id
       //       )?.assignments;
@@ -278,18 +280,18 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
       //       return (
       //         <div
       //           className={`last:mb-4 flex flex-col gap-10 pb-4 border-b-2 mr-1 ${
-      //             activeSection === index ? "active" : ""
+      //             activeSection === cloIndex ? "active" : ""
       //           }`}
       //           id={`${clo?.no}`}
       //           key={clo?.id}
-      //           ref={sectionRefs.current!.at(index)}
+      //           ref={sectionRefs.current!.at(cloIndex)}
       //         >
       //           <Tabs
       //             classNames={{
       //               root: "overflow-hidden mt-1 flex flex-col max-h-full",
       //             }}
-      //             value={tabStates[index] || "assessmentTool"}
-      //             onChange={(newValue) => handleTabChange(index, newValue)}
+      //             value={tabStates[cloIndex] || "assessmentTool"}
+      //             onChange={(newValue) => handleTabChange(cloIndex, newValue)}
       //           >
       //             <Tabs.List className="mb-2">
       //               <Tabs.Tab value="assessmentTool">Assessment Tool</Tabs.Tab>
@@ -448,52 +450,42 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
       //                     </Table.Tr>
       //                   </Table.Thead>
       //                   <Table.Tbody>
-      //                     {form.getValues().data?.map((item) => {
-      //                       const clo = tqf3.part2?.clo.find(
-      //                         (e) => e.id == item.clo
+      //                     {cloItem.sections?.map((sec) => {
+      //                       const data = Object.values(sec)
+      //                         .slice(1)
+      //                         .map((e: any) => parseInt(e));
+      //                       const total =
+      //                         data.reduce((a, b: any) => a + b, 0) || 0;
+      //                       const avg =
+      //                         total > 0
+      //                           ? (0 * sec.score0 +
+      //                               1 * sec.score1 +
+      //                               2 * sec.score2 +
+      //                               3 * sec.score3 +
+      //                               4 * sec.score4) /
+      //                             total
+      //                           : 0;
+      //                       return (
+      //                         <Table.Tr
+      //                           className="font-medium text-default text-[13px]"
+      //                           key={sec.sectionNo}
+      //                         >
+      //                           <Table.Td>{sec.sectionNo}</Table.Td>
+      //                           {Object.keys(sec)
+      //                             .slice(1)
+      //                             .map((key) => (
+      //                               <Table.Td key={key} className={`text-end `}>
+      //                                 {(sec as any)[key] ?? "-"}
+      //                               </Table.Td>
+      //                             ))}
+      //                           <Table.Td className="text-end pr-3 w-[13%]">
+      //                             {total}
+      //                           </Table.Td>
+      //                           <Table.Td className="text-end  pr-8 w-[13%]">
+      //                             {avg.toFixed(2)}
+      //                           </Table.Td>
+      //                         </Table.Tr>
       //                       );
-      //                       item.sections.map((sec) => {
-      //                         const data = Object.values(item)
-      //                           .slice(1)
-      //                           .map((e: any) => parseInt(e));
-      //                         const total =
-      //                           data.reduce((a, b: any) => a + b, 0) || 0;
-      //                         const avg =
-      //                           total > 0
-      //                             ? (0 * sec.score0 +
-      //                                 1 * sec.score1 +
-      //                                 2 * sec.score2 +
-      //                                 3 * sec.score3 +
-      //                                 4 * sec.score4) /
-      //                               total
-      //                             : 0;
-      //                         return (
-      //                           <Table.Tr
-      //                             className="font-medium text-default text-[13px]"
-      //                             key={sec.sectionNo}
-      //                           >
-      //                             <Table.Td>{clo?.no}</Table.Td>
-      //                             <Table.Td>{sec.sectionNo}</Table.Td>
-      //                             {Object.keys(sec)
-      //                               .slice(1)
-      //                               .map((key) => (
-      //                                 <Table.Td
-      //                                   key={key}
-      //                                   className={`text-end `}
-      //                                 >
-      //                                   {(sec as any)[key] ?? "-"}
-      //                                 </Table.Td>
-      //                               ))}
-      //                             <Table.Td className="text-end pr-3 w-[13%]">
-      //                               {total}
-      //                             </Table.Td>
-      //                             <Table.Td className="text-end  pr-8 w-[13%]">
-      //                               {avg.toFixed(2)}
-      //                             </Table.Td>
-      //                           </Table.Tr>
-      //                         );
-      //                       });
-      //                       return <></>;
       //                     })}
       //                   </Table.Tbody>
       //                   <Table.Tfoot>
