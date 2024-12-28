@@ -14,7 +14,7 @@ import { ROLE } from "@/helpers/constants/enum";
 import ModalQuestionChart from "@/components/Modal/ModalQuestionChart";
 import Icon from "@/components/Icon";
 import IconChart from "@/assets/icons/histogram.svg?react";
-import ChartContainer from "@/components/Chart/ChartContainer";
+import ModalEvalChart from "@/components/Modal/Score/ModalEvalChart";
 
 export default function Overall() {
   const { courseNo, sectionNo, name } = useParams();
@@ -102,81 +102,14 @@ export default function Overall() {
 
   return (
     <>
-      <Modal
+      <ModalEvalChart
         opened={openModalChart}
         onClose={() => setOpenModalChart(false)}
-        centered
-        size="80vw"
-        title={
-          <div>
-            <p>
-              Chart - {name} ({fullScore?.toFixed(2)} Points)
-            </p>
-            <p className="text-[#3f4474]/80 font-semibold sm:max-macair133:text-b2 text-b2 acerSwift:max-macair133:!size-b2 mt-2">
-              {totalStudent} Students
-            </p>
-          </div>
-        }
-        transitionProps={{ transition: "pop" }}
-        classNames={{
-          content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
-          body: "flex flex-col gap-4 overflow-hidden max-h-full h-fit py-1",
-          title: "acerSwift:max-macair133:!text-b1",
-        }}
-      >
-        <div className="-mt-2">
-          <Tabs
-            classNames={{
-              root: "overflow-hidden mt-1 mx-3 flex flex-col max-h-full",
-            }}
-            defaultValue="bellCurve"
-          >
-            <Tabs.List className="mb-2">
-              <Tabs.Tab value="bellCurve" className="custom-tab-class">
-                Distribution
-              </Tabs.Tab>
-              <Tabs.Tab value="histogram" className="custom-tab-class">
-                Histogram
-              </Tabs.Tab>
-            </Tabs.List>
-            <Tabs.Panel className="flex flex-col gap-1" value="histogram">
-              {assignment ? (
-                <ChartContainer
-                  type="histogram"
-                  data={assignment}
-                  inEval={true}
-                  students={section?.students || []}
-                />
-              ) : (
-                <p className="text-center text-gray-500">No data available</p>
-              )}
-            </Tabs.Panel>
-            <Tabs.Panel
-              className="flex flex-col justify-center items-center acerSwift:max-macair133:ml-12 mb-2"
-              value="bellCurve"
-            >
-              {assignment ? (
-                <>
-                  <div className="macair133:-[70vh] w-full mt-4 !ml-20">
-                    <ChartContainer
-                      type="curve"
-                      data={assignment}
-                      inEval={true}
-                      students={section?.students || []}
-                    />
-                  </div>
-                  <p className="text-b6 mb-4">
-                    Score distribution powered by Andrew C. Myers (Cornell
-                    University)
-                  </p>
-                </>
-              ) : (
-                <p className="text-center text-gray-500">No data available</p>
-              )}
-            </Tabs.Panel>
-          </Tabs>
-        </div>
-      </Modal>
+        fullScore={fullScore}
+        totalStudent={totalStudent}
+        assignment={assignment!}
+        students={section?.students}
+      />
       <ModalQuestionChart
         opened={openModalQuestionChart}
         onClose={() => setOpenModalQuestionChart(false)}
@@ -191,7 +124,7 @@ export default function Overall() {
             ?.map(({ id }) => id)
             .includes(user.id) ? (
           <>
-            <div className="flex flex-col pt-2 pb-3 items-start gap-4 text-start">
+            <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
               <div className="flex justify-between w-full px-2 items-center">
                 <div className="flex flex-col py-1">
                   <div className="flex gap-1">

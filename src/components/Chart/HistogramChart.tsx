@@ -46,12 +46,16 @@ export default function HistogramChart({ scoresData, studentScore }: Props) {
             const data = payload[0].value;
             return (
               <div className="bg-gray-900 text-white p-4 rounded-xl shadow-lg min-w-[180px]">
-                <p className="text-sm font-semibold mb-2">Score: {label}</p>
+                <p className="text-sm acerSwift:max-macair133:text-b3 font-semibold mb-2">
+                  Score: {label}
+                </p>
                 <div className="flex flex-col gap-0 items-start justify-between pt-2 border-t-[1px] border-[#747575]">
-                  <span className=" text-[#AAB1B4] text-[14px]">
+                  <span className=" text-[#AAB1B4] text-b2 acerSwift:max-macair133:text-b3">
                     Number of Students
                   </span>
-                  <span className="font-bold text-[22px]">{data}</span>
+                  <span className="font-bold text-[22px] acerSwift:max-macair133:!text-h2">
+                    {data}
+                  </span>
                 </div>
               </div>
             );
