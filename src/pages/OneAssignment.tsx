@@ -17,11 +17,13 @@ import IconSortAsc from "@/assets/icons/sortAsc.svg?react";
 import IconSortDes from "@/assets/icons/sortDes.svg?react";
 import IconSearch from "@/assets/icons/search.svg?react";
 import IconNotSort from "@/assets/icons/arrowUpDown.svg?react";
+import IconListSearch from "@/assets/icons/listSearch.svg?react";
 import { calStat, scrollToStudent } from "@/helpers/functions/score";
 
 export default function OneAssignment() {
   const { courseNo, name } = useParams();
   const loading = useAppSelector((state) => state.loading);
+  const [isSort, setIsSort] = useState(false);
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)
   );
@@ -138,6 +140,7 @@ export default function OneAssignment() {
   }, [course]);
 
   const onClickSort = (key: string) => {
+    setIsSort(true);
     const currentSort = (sort as any)[key];
     const toggleSort = currentSort === null ? true : !currentSort;
     setSort((prev: any) => ({ ...prev, [key]: toggleSort }));
@@ -220,9 +223,15 @@ export default function OneAssignment() {
                     scrollToStudent(studentRefs, studentMaxMin.max)
                   }
                 >
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Max
-                  </p>
+                  <div className="flex gap-1">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Max
+                    </p>
+                    <Icon
+                      IconComponent={IconListSearch}
+                      className="text-default size-4"
+                    />
+                  </div>
 
                   <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {maxScore.toFixed(2)}
@@ -234,9 +243,15 @@ export default function OneAssignment() {
                     scrollToStudent(studentRefs, studentMaxMin.max)
                   }
                 >
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Max
-                  </p>
+                  <div className="flex gap-1">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Min
+                    </p>
+                    <Icon
+                      IconComponent={IconListSearch}
+                      className="text-default size-4"
+                    />
+                  </div>
 
                   <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {minScore.toFixed(2)}
@@ -270,7 +285,8 @@ export default function OneAssignment() {
                 onChange={(event: any) => setFilter(event.currentTarget.value)}
               ></TextInput>
               <Button
-                className="min-w-fit acerSwift:max-macair133:!text-b5"
+                className="min-w-fit acerSwift:max-macair133:!text-b5 !h-full"
+                disabled={!isSort}
                 onClick={() => {
                   setSort((prev: any) => {
                     const resetSort: any = {};
@@ -282,6 +298,7 @@ export default function OneAssignment() {
                   allStudent?.sort((a, b) =>
                     a.student.studentId!.localeCompare(b.student.studentId!)
                   );
+                  setIsSort(false);
                 }}
               >
                 Reset Sort
@@ -335,7 +352,7 @@ export default function OneAssignment() {
                     {questions?.map((item, index) => (
                       <Table.Th key={index}>
                         <div
-                          className="flex justify-end gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
+                          className="flex justify-end gap-2 cursor-pointer acerSwift:max-macair133:!text-b3  pr-6"
                           onClick={() => onClickSort(item.name)}
                         >
                           <p>{item.name}</p>
@@ -409,7 +426,7 @@ export default function OneAssignment() {
                             </div>
                           </Table.Td>
                           {questions?.map((ques, index) => (
-                            <Table.Td key={index}>
+                            <Table.Td key={index} className="text-end pr-9">
                               {item[ques.name] == undefined ||
                               item[ques.name] < 0
                                 ? "-"

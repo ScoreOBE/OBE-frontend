@@ -23,6 +23,7 @@ import { ROLE } from "@/helpers/constants/enum";
 import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
 import { IModelScore } from "@/models/ModelCourse";
 import ChartContainer from "@/components/Chart/ChartContainer";
+import IconListSearch from "@/assets/icons/listSearch.svg?react";
 
 export default function Students() {
   const { courseNo, sectionNo, name } = useParams();
@@ -51,6 +52,7 @@ export default function Students() {
   const [sort, setSort] = useState<any>({});
   const [filter, setFilter] = useState<string>("");
   const [openEditScore, setOpenEditScore] = useState(false);
+  const [isSort, setIsSort] = useState(false);
   const [editScore, setEditScore] = useState<{
     student: IModelUser;
     questions: { name: string; score: number | string }[];
@@ -153,6 +155,7 @@ export default function Students() {
   });
 
   const onClickSort = (key: string) => {
+    setIsSort(true);
     const currentSort = (sort as any)[key];
     const toggleSort = currentSort === null ? true : !currentSort;
     setSort((prev: any) => ({ ...prev, [key]: toggleSort }));
@@ -181,10 +184,19 @@ export default function Students() {
         onClose={() => setOpenModalChart(false)}
         centered
         size="80vw"
-        title={`Chart - ${name} (${fullScore?.toFixed(2)} Points)`}
+        title={
+          <div>
+            <p>
+              Chart - {name} ({fullScore?.toFixed(2)} Points)
+            </p>
+            <p className="text-[#3f4474]/80 font-semibold sm:max-macair133:text-b2 text-b2 acerSwift:max-macair133:!size-b2 mt-2">
+              {totalStudent} Students
+            </p>
+          </div>
+        }
         transitionProps={{ transition: "pop" }}
         classNames={{
-          content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
+          content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit py-1",
           body: "flex flex-col gap-4 overflow-hidden max-h-full h-fit",
           title: "acerSwift:max-macair133:!text-b1",
         }}
@@ -217,18 +229,20 @@ export default function Students() {
               )}
             </Tabs.Panel>
             <Tabs.Panel
-              className="flex flex-col justify-center items-center acerSwift:max-macair133:ml-12"
+              className="flex flex-col justify-center items-center acerSwift:max-macair133:ml-12 mb-2"
               value="bellCurve"
             >
               {assignment ? (
                 <>
-                  <ChartContainer
-                    type="curve"
-                    data={assignment}
-                    inEval={true}
-                    students={section?.students || []}
-                  />
-                  <p className="text-b6 mb-2">
+                  <div className="macair133:-[70vh] w-full mt-4 !ml-20">
+                    <ChartContainer
+                      type="curve"
+                      data={assignment}
+                      inEval={true}
+                      students={section?.students || []}
+                    />
+                  </div>
+                  <p className="text-b6 mb-4">
                     Score distribution powered by Andrew C. Myers (Cornell
                     University)
                   </p>
@@ -265,12 +279,12 @@ export default function Students() {
                       {name}
                     </p>
                     <div
-                      className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20"
+                      className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20 cursor-pointer"
                       onClick={() => setOpenModalChart(true)}
                     >
                       <Icon
                         IconComponent={IconChart}
-                        className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474] cursor-pointer"
+                        className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474]"
                       />
                     </div>
                   </div>
@@ -316,9 +330,15 @@ export default function Students() {
                     scrollToStudent(studentRefs, studentMaxMin.max)
                   }
                 >
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Max
-                  </p>
+                  <div className="flex gap-1">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Max
+                    </p>
+                    <Icon
+                      IconComponent={IconListSearch}
+                      className="text-default size-4"
+                    />
+                  </div>
 
                   <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {maxScore.toFixed(2)}
@@ -330,9 +350,15 @@ export default function Students() {
                     scrollToStudent(studentRefs, studentMaxMin.min)
                   }
                 >
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Min
-                  </p>
+                  <div className="flex gap-1">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Min
+                    </p>
+                    <Icon
+                      IconComponent={IconListSearch}
+                      className="text-default size-4"
+                    />
+                  </div>
 
                   <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
                     {minScore.toFixed(2)}
@@ -367,7 +393,8 @@ export default function Students() {
                 onChange={(event: any) => setFilter(event.currentTarget.value)}
               ></TextInput>
               <Button
-                className="min-w-fit acerSwift:max-macair133:!text-b5"
+                className="min-w-fit acerSwift:max-macair133:!text-b5 !h-full"
+                disabled={!isSort}
                 onClick={() => {
                   setSort((prev: any) => {
                     const resetSort: any = {};
@@ -381,6 +408,7 @@ export default function Students() {
                       a.student.studentId!.localeCompare(b.student.studentId!)
                     )
                   );
+                  setIsSort(false);
                 }}
               >
                 Reset Sort
@@ -442,7 +470,7 @@ export default function Students() {
                         key={index}
                       >
                         <div
-                          className="flex justify-end gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
+                          className="flex justify-end gap-2 cursor-pointer acerSwift:max-macair133:!text-b3 pr-10"
                           onClick={() => onClickSort(item.name)}
                         >
                           <p>{item.name}</p>
@@ -522,7 +550,7 @@ export default function Students() {
                             )?.score;
                             return (
                               <Table.Td key={index}>
-                                <div className=" justify-end flex pr-2">
+                                <div className=" justify-end flex pr-10">
                                   {score != undefined ? score.toFixed(2) : "-"}
                                 </div>
                               </Table.Td>

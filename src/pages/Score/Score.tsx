@@ -107,11 +107,20 @@ export default function Overall() {
         onClose={() => setOpenModalChart(false)}
         centered
         size="80vw"
-        title={`Chart - ${name} (${fullScore?.toFixed(2)} Points)`}
+        title={
+          <div>
+            <p>
+              Chart - {name} ({fullScore?.toFixed(2)} Points)
+            </p>
+            <p className="text-[#3f4474]/80 font-semibold sm:max-macair133:text-b2 text-b2 acerSwift:max-macair133:!size-b2 mt-2">
+              {totalStudent} Students
+            </p>
+          </div>
+        }
         transitionProps={{ transition: "pop" }}
         classNames={{
           content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit",
-          body: "flex flex-col gap-4 overflow-hidden max-h-full h-fit",
+          body: "flex flex-col gap-4 overflow-hidden max-h-full h-fit py-1",
           title: "acerSwift:max-macair133:!text-b1",
         }}
       >
@@ -143,18 +152,20 @@ export default function Overall() {
               )}
             </Tabs.Panel>
             <Tabs.Panel
-              className="flex flex-col justify-center items-center acerSwift:max-macair133:ml-12"
+              className="flex flex-col justify-center items-center acerSwift:max-macair133:ml-12 mb-2"
               value="bellCurve"
             >
               {assignment ? (
                 <>
-                  <ChartContainer
-                    type="curve"
-                    data={assignment}
-                    inEval={true}
-                    students={section?.students || []}
-                  />
-                  <p className="text-b6 mb-2">
+                  <div className="macair133:-[70vh] w-full mt-4 !ml-20">
+                    <ChartContainer
+                      type="curve"
+                      data={assignment}
+                      inEval={true}
+                      students={section?.students || []}
+                    />
+                  </div>
+                  <p className="text-b6 mb-4">
                     Score distribution powered by Andrew C. Myers (Cornell
                     University)
                   </p>
@@ -188,12 +199,12 @@ export default function Overall() {
                       {name}
                     </p>
                     <div
-                      className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20"
+                      className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20 cursor-pointer"
                       onClick={() => setOpenModalChart(true)}
                     >
                       <Icon
                         IconComponent={IconChart}
-                        className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474] cursor-pointer"
+                        className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474]"
                       />
                     </div>
                   </div>

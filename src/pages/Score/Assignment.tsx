@@ -260,7 +260,7 @@ export default function Assignment() {
           <>
             {section?.assignments?.length !== 0 && (
               <div className="flex flex-row  py-1  items-center justify-between">
-                <p className="text-secondary text-h1  acerSwift:max-macair133:!text-b2 font-semibold">
+                <p className="text-secondary text-h1 macair133:text-b1  acerSwift:max-macair133:!text-b2 font-semibold">
                   {section?.assignments?.length} Evaluation
                   {section?.assignments?.length! > 1 && "s"}
                 </p>
