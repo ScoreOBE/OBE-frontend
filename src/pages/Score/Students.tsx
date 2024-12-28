@@ -158,7 +158,14 @@ export default function Students() {
     setIsSort(true);
     const currentSort = (sort as any)[key];
     const toggleSort = currentSort === null ? true : !currentSort;
-    setSort((prev: any) => ({ ...prev, [key]: toggleSort }));
+    setSort((prev: any) => {
+      const resetSort: any = {};
+      for (const key in prev) {
+        resetSort[key] = null;
+      }
+      resetSort[key] = toggleSort;
+      return resetSort;
+    });
 
     let newStudents = [...students];
     newStudents = newStudents.sort((a, b) => {
