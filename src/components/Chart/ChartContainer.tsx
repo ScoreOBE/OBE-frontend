@@ -95,7 +95,7 @@ export default function ChartContainer({
         <div
           className={`flex flex-col ${
             !inEval &&
-            "border-b-2 border-nodata items-start gap-5 text-start mx-5  py-2"
+            "border-b-2 border-nodata items-start gap-5 text-start mx-5 py-2"
           } `}
         >
           <div className="flex flex-row text-secondary text-h1 acerSwift:max-macair133:text-h2 w-full justify-between font-semibold">
@@ -123,7 +123,7 @@ export default function ChartContainer({
           </div>
 
           <div className="flex  flex-row justify-between w-full">
-            {studentScore && (
+            {studentScore && !inEval && (
               <div className="flex flex-col">
                 <p className="font-semibold text-b1 acerSwift:max-macair133:text-b2 text-secondary">
                   Your Score

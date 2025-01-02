@@ -12,7 +12,9 @@ type Props = {
   totalStudent: number;
   assignment: IModelAssignment;
   students?: { student: IModelUser; scores: IModelScore[] }[];
+  studentScore?: number;
   isAllsec?: boolean;
+  isStudent?: boolean;
 };
 
 export default function ModalQuestionChart({
@@ -22,7 +24,9 @@ export default function ModalQuestionChart({
   totalStudent,
   assignment,
   students,
+  studentScore,
   isAllsec,
+  isStudent,
 }: Props) {
   const { name } = useParams();
 
@@ -45,7 +49,7 @@ export default function ModalQuestionChart({
       transitionProps={{ transition: "pop" }}
       classNames={{
         content: "flex flex-col overflow-hidden pb-2 max-h-full h-fit py-1",
-        body: "flex flex-col gap-4 overflow-hidden max-h-full h-fit",
+        body: "flex flex-col gap-4 overflow-hidden max-h-full  h-fit",
         title: "acerSwift:max-macair133:!text-b1",
       }}
     >
@@ -68,12 +72,21 @@ export default function ModalQuestionChart({
           <Tabs.Panel className="flex flex-col gap-1" value="histogram">
             {assignment ? (
               <div className="acerSwift:max-macair133:h-[470px]">
-                <ChartContainer
-                  type="histogram"
-                  data={assignment}
-                  inEval={true}
-                  students={students}
-                />
+                {isStudent ? (
+                  <ChartContainer
+                    type="histogram"
+                    data={assignment}
+                    inEval={true}
+                    studentScore={studentScore}
+                  />
+                ) : (
+                  <ChartContainer
+                    type="histogram"
+                    data={assignment}
+                    inEval={true}
+                    students={students}
+                  />
+                )}
               </div>
             ) : (
               <p className="text-center text-gray-500">No data available</p>
@@ -91,6 +104,7 @@ export default function ModalQuestionChart({
                     data={assignment}
                     inEval={true}
                     students={students}
+                    studentScore={studentScore}
                   />
                 </div>
                 <p className="text-b6 mb-4">
