@@ -184,7 +184,7 @@ export default function Login() {
             alt="CMULogo"
             className="h-[13px] mr-3 rounded-1xl"
           />
-          Sign in CMU Account
+          Sign in CMU account
         </Button>
       </a>
     );

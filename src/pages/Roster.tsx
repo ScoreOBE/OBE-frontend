@@ -282,7 +282,7 @@ export default function Roster() {
     return (
       <>
         {(hasData || search) && (
-          <div className=" px-1 flex items-center justify-between">
+          <div className=" px-1 mb-2 flex items-center justify-between">
             <p className="  text-secondary font-semibold acerSwift:max-macair133:!text-b2">
               {(() => {
                 const totalStudents = course?.sections.reduce(
@@ -369,7 +369,7 @@ export default function Roster() {
                     Name
                   </Table.Th>
                   <Table.Th className="w-[25%] acerSwift:max-macair133:!text-b3">
-                    CMU Account
+                    CMU account
                   </Table.Th>
                   {activeTerm && user.role != ROLE.TA && (
                     <Table.Th className="w-[10%] acerSwift:max-macair133:!text-b3">
@@ -550,7 +550,7 @@ export default function Roster() {
           <TextInput
             size="xs"
             placeholder="e.g. example@cmu.ac.th"
-            label="CMU Account"
+            label="CMU account"
             id="email"
             classNames={{
               input: "focus:border-primary acerSwift:max-macair133:!text-b4",
@@ -559,7 +559,7 @@ export default function Roster() {
             disabled={actionModal == "Edit" && selectedUser?.termsOfService}
             {...form.getInputProps("email")}
           ></TextInput>
-          <div className="flex gap-2 items-end  justify-end h-fit acerSwift:max-macair133:mt-1">
+          <div className="flex gap-2 items-end mt-3 justify-end h-fit acerSwift:max-macair133:mt-1">
             <Button
               onClick={() => clearForm()}
               variant="subtle"

@@ -26,14 +26,15 @@ export default function StdCLO() {
   }, []);
 
   return (
-    <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
+    <div className="bg-white flex flex-col h-full w-full px-6 pt-5  gap-3 overflow-hidden">
       {loading ? (
         <Loading />
       ) : (
-        <>
-          <div className="flex flex-row  py-1  items-center justify-between">
+        <div className="flex flex-col  overflow-y-auto overflow-x-hidden max-w-full h-full">
+
+          <div className="flex flex-row  py-1   items-center justify-between">
             {course?.clos.length !== 0 ? (
-              <p className="text-secondary text-[16px] font-semibold">
+              <p className="text-secondary text-[16px] mb-[18px] -mt-1 font-semibold">
                 ผลลัพธ์การเรียนรู้ของกระบวนวิชา
                 <br />
                 Course Learning Outcome
@@ -77,7 +78,7 @@ export default function StdCLO() {
               </Table>
             </div>
           ) : (
-            <div className="flex items-center  !h-full !w-full justify-between px-16">
+            <div className="flex items-center  !h-full !w-full -mt-[10px] justify-between  px-16">
               <div className="flex flex-col gap-3 text-start">
                 <p className="!h-full text-[20px] text-secondary font-semibold">
                   No CLO
@@ -96,7 +97,7 @@ export default function StdCLO() {
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

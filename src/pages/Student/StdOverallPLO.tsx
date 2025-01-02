@@ -215,7 +215,7 @@ export default function StdOverallPLO() {
               </div>
             </div>
 
-            <div className="flex items-center  !h-full !w-full justify-between px-[88px]">
+            <div className="flex items-center  !h-full !w-full justify-between px-16">
               <div className="h-full  translate-y-2  justify-center flex flex-col">
                 <p className="text-secondary text-[21px] font-semibold">
                   Overall PLO is coming soon to{" "}

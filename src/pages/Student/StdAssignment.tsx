@@ -47,7 +47,7 @@ export default function StdAssignment() {
         <>
           {course?.section?.assignments?.length !== 0 && (
             <div className="flex flex-row  py-1  items-center justify-between">
-              <p className="text-secondary text-[18px] font-semibold">
+            <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 mb-2 font-semibold">
                 {course?.section?.assignments?.length} Evaluation
                 {course?.section?.assignments?.length! > 1 && "s"}
               </p>
