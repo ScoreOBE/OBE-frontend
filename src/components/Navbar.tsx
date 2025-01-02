@@ -105,7 +105,7 @@ export default function Navbar() {
     return (
       <a href={import.meta.env.VITE_CMU_ENTRAID_URL} className="hidden sm:flex">
         <Button size="xs" variant="light" className="!text-[12px]">
-          Sign in CMU Account
+          Sign in CMU account
         </Button>
       </a>
     );
