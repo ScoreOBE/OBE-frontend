@@ -475,7 +475,7 @@ export default function Roster() {
         opened={openModalAddEditStudent}
         closeOnEscape={false}
         onClose={clearForm}
-        size="47vw"
+        size="35vw"
         title={`${actionModal} Student ${
           actionModal == "Add" ? courseNo : selectedUser?.studentId
         }`}

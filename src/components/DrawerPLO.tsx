@@ -9,9 +9,15 @@ type Props = {
   opened: boolean;
   onClose: () => void;
   data: Partial<IModelPLO>;
+  department?: string;
 };
 
-export default function DrawerPLOdes({ opened, onClose, data }: Props) {
+export default function DrawerPLOdes({
+  opened,
+  onClose,
+  data,
+  department,
+}: Props) {
   const [isTH, setIsTH] = useState<string | null>("TH");
 
   return (
@@ -36,7 +42,10 @@ export default function DrawerPLOdes({ opened, onClose, data }: Props) {
                       </p>
 
                       <p className="text-[#909090] text-b3 acerSwift:max-macair133:!text-b4 font-medium">
-                        This course uses {data.name}
+                        {department
+                          ? department + " Department"
+                          : "This course"}{" "}
+                        uses {data.name}
                       </p>
                     </div>
                   </Drawer.Title>

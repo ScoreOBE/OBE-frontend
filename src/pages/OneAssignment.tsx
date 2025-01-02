@@ -15,7 +15,6 @@ import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconSortAsc from "@/assets/icons/sortAsc.svg?react";
 import IconSortDes from "@/assets/icons/sortDes.svg?react";
-import IconSearch from "@/assets/icons/search.svg?react";
 import IconNotSort from "@/assets/icons/arrowUpDown.svg?react";
 import IconListSearch from "@/assets/icons/listSearch.svg?react";
 import IconChart from "@/assets/icons/histogram.svg?react";

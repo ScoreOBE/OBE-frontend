@@ -7,11 +7,11 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import Loading from "@/components/Loading/Loading";
 import Icon from "@/components/Icon";
-import IconChevronDown from "@/assets/icons/chevronDown.svg?react";
-import ChartContainer from "@/components/Chart/ChartContainer";
+import IconChart from "@/assets/icons/histogram.svg?react";
 import { calStat } from "@/helpers/functions/score";
 import { ROLE } from "@/helpers/constants/enum";
 import ModalQuestionChart from "@/components/Modal/ModalQuestionChart";
+import ModalEvalChart from "@/components/Modal/Score/ModalEvalChart";
 
 export default function StdScore() {
   const { courseNo, name } = useParams();
@@ -19,6 +19,10 @@ export default function StdScore() {
   const course = useAppSelector((state) =>
     state.enrollCourse.courses.find((e) => e.courseNo == courseNo)
   );
+  const studentScore = course!.scores
+    .find(({ assignmentName }) => assignmentName == name)
+    ?.questions.reduce((a, { score }) => a + score, 0);
+
   const assignment = course?.section?.assignments?.find(
     (item) => item.name == name
   );
@@ -42,6 +46,7 @@ export default function StdScore() {
   ]);
   const [selectQuestion, setSelectQuestion] = useState<any>();
   const [openModalChart, setOpenModalChart] = useState(false);
+  const [openModalEvalChart, setOpenModalEvalChart] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -80,6 +85,15 @@ export default function StdScore() {
 
   return (
     <>
+      <ModalEvalChart
+        opened={openModalEvalChart}
+        onClose={() => setOpenModalEvalChart(false)}
+        fullScore={fullScore}
+        totalStudent={totalStudent}
+        assignment={assignment!}
+        isStudent={true}
+        studentScore={studentScore}
+      />
       <ModalQuestionChart
         opened={openModalChart}
         onClose={() => setOpenModalChart(false)}
@@ -92,9 +106,28 @@ export default function StdScore() {
         ) : (
           <>
             <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
-              <p className="text-secondary text-[18px] font-semibold">
-                {name} - {fullScore} Points
-              </p>
+              <div className="flex flex-col pb-1 px-2">
+                <div className="flex gap-1">
+                  <p className="text-[#3f4474] font-semibold text-b1 acerSwift:max-macair133:!size-b2">
+                    {name}
+                  </p>
+                  <div
+                    className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20 cursor-pointer"
+                    onClick={() => setOpenModalEvalChart(true)}
+                  >
+                    <Icon
+                      IconComponent={IconChart}
+                      className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474]"
+                    />
+                  </div>
+                </div>
+                <p className="text-secondary text-h1 font-semibold">
+                  {fullScore?.toFixed(2)}{" "}
+                  <span className="text-b1 acerSwift:max-macair133:!text-b2 ">
+                    pts.
+                  </span>
+                </p>
+              </div>
               <div className="flex px-10 flex-row justify-between w-full">
                 <div className="flex flex-col">
                   <p className="font-semibold text-[16px] text-secondary">
