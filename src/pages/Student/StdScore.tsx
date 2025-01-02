@@ -19,9 +19,10 @@ export default function StdScore() {
   const course = useAppSelector((state) =>
     state.enrollCourse.courses.find((e) => e.courseNo == courseNo)
   );
-  const studentScore = course!.scores
-    .find(({ assignmentName }) => assignmentName == name)
-    ?.questions.reduce((a, { score }) => a + score, 0);
+  const studentScore =
+    course?.scores
+      ?.find(({ assignmentName }) => assignmentName === name)
+      ?.questions?.reduce((a, { score }) => a + score, 0) || 0;
 
   const assignment = course?.section?.assignments?.find(
     (item) => item.name == name
