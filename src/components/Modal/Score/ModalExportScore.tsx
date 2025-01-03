@@ -132,7 +132,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
 
       <div className="h-full items-start justify-center flex flex-col">
         <p className=" mb-7 mt-1 text-b2 break-words text-[#777777] font-medium leading-relaxed">
-          Available in January
+          Available in February 2025
         </p>
       </div>
       {/* <img className=" z-50  w-[25vw]  " src={maintenace} alt="loginImage" /> */}

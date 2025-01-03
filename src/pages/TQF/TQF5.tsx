@@ -37,7 +37,10 @@ import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { getOnePLO } from "@/services/plo/plo.service";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import ModalMappingAssignment from "@/components/Modal/TQF5/ModalMappingAssignment";
+import exportFile from "@/assets/icons/fileExport.svg?react";
 import { setLoadingOverlay } from "@/store/loading";
+import ModalExportTQF3 from "@/components/Modal/TQF5/ModalExportTQF5";
+import ModalExportTQF5 from "@/components/Modal/TQF5/ModalExportTQF5";
 
 export default function TQF5() {
   const { courseNo } = useParams();
@@ -62,6 +65,7 @@ export default function TQF5() {
   );
   const [selectedMethod, setSelectedMethod] = useState<METHOD_TQF5>();
   const [openModalChangeMethod, setOpenModalChangeMethod] = useState(false);
+  const [openModalExportTQF5, setOpenModalExportTQF5] = useState(false);
   const [openModalAssignmentMapping, setOpenModalAssignmentMapping] =
     useState(false);
   const partTab = [
@@ -478,6 +482,10 @@ export default function TQF5() {
         tqf3={tqf3!}
         assignments={assignments!}
       />
+      <ModalExportTQF5
+        opened={openModalExportTQF5}
+        onClose={() => setOpenModalExportTQF5(false)}
+      />
       <div
         className={`flex flex-col h-full w-full overflow-hidden ${
           !checkActiveTerm() && "pb-2"
@@ -512,34 +520,52 @@ export default function TQF5() {
               <div className=" text-secondary overflow-y-auto font-semibold min-h-14 whitespace-break-spaces">
                 {getValueEnumByKey(PartTopicTQF5, tqf5Part!)}
               </div>
-              {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
-                <div className="flex gap-2 items-center">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      if (tqf5.method) setSelectedMethod(tqf5.method);
-                      setOpenModalChangeMethod(true);
-                    }}
-                    className="flex"
-                  >
+              <div className="flex gap-2">
+                {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
+                  <div className="flex gap-2 items-center">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        if (tqf5.method) setSelectedMethod(tqf5.method);
+                        setOpenModalChangeMethod(true);
+                      }}
+                      className="flex"
+                    >
+                      <Icon
+                        className="mr-2"
+                        IconComponent={IconHorizontalAdjustments}
+                      />
+                      Method ({tqf5.method})
+                    </Button>
+                    {tqf5Part == "part2" &&
+                      !!tqf5.assignmentsMap?.length &&
+                      tqf5.method == METHOD_TQF5.SCORE_OBE && (
+                        <Button
+                          onClick={() => setOpenModalAssignmentMapping(true)}
+                        >
+                          <Icon
+                            className="mr-2"
+                            IconComponent={IconOneToMany}
+                          />
+                          Evaluation Mapping
+                        </Button>
+                      )}
+                  </div>
+                )}
+                <Button
+                  onClick={() => setOpenModalExportTQF5(true)}
+                  color="#24b9a5"
+                  className="px-4"
+                >
+                  <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                     <Icon
-                      className="mr-2"
-                      IconComponent={IconHorizontalAdjustments}
+                      className="size-5 acerSwift:max-macair133:size-4"
+                      IconComponent={exportFile}
                     />
-                    Method ({tqf5.method})
-                  </Button>
-                  {tqf5Part == "part2" &&
-                    !!tqf5.assignmentsMap?.length &&
-                    tqf5.method == METHOD_TQF5.SCORE_OBE && (
-                      <Button
-                        onClick={() => setOpenModalAssignmentMapping(true)}
-                      >
-                        <Icon className="mr-2" IconComponent={IconOneToMany} />
-                        Evaluation Mapping
-                      </Button>
-                    )}
-                </div>
-              )}
+                    Export TQF5
+                  </div>
+                </Button>
+              </div>
             </div>
           </div>
           <div className="h-full w-full flex overflow-y-auto text-[14px] pt-3">
