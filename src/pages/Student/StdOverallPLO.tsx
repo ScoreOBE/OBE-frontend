@@ -94,13 +94,40 @@ export default function StdOverallPLO() {
     },
   ];
 
+  type Course = {
+    id: number;
+    code: string;
+    name: string;
+    data: any;
+  };
+
+  const courses: Course[] = [
+    { id: 1, code: "261101", name: "Introduction to Programming", data: [] },
+    { id: 2, code: "261102", name: "Object-Oriented Programming", data: [] },
+    { id: 3, code: "261103", name: "Data Structures", data: [] },
+    { id: 4, code: "261104", name: "Algorithms", data: [] },
+    { id: 5, code: "261105", name: "Database Systems", data: [] },
+    { id: 6, code: "261106", name: "Operating Systems", data: [] },
+    { id: 7, code: "261107", name: "Computer Networks", data: [] },
+    { id: 8, code: "261108", name: "Software Engineering", data: [] },
+    { id: 9, code: "261109", name: "Web Development", data: [] },
+    {
+      id: 10,
+      code: "261110",
+      name: "Mobile Application Development",
+      data: [],
+    },
+    { id: 11, code: "261111", name: "Machine Learning", data: [] },
+    { id: 12, code: "261112", name: "Artificial Intelligence", data: [] },
+  ];
+
   return (
-    <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
+    <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3">
       {loading ? (
         <Loading />
       ) : (
         <>
-          {/* {departmentPLO && (
+          {departmentPLO && (
             <DrawerPLOdes
               opened={openDrawerPLOdes}
               onClose={() => setOpenDrawerPLOdes(false)}
@@ -108,15 +135,27 @@ export default function StdOverallPLO() {
               department={user.departmentCode[0]}
             />
           )}
-
-          <div className="flex flex-row  py-1  items-center justify-between">
+          {/* 
+          <div className="flex flex-row -mt-2 items-center justify-between">
             {test ? (
-              <p className="text-secondary text-[16px] font-semibold">
-                ผลการเรียนรู้ของผู้เรียน
-                <span className="">ตลอดหลักสูตร</span> อ้างอิงตามเกณฑ์ของ ABET
-                <br />
-                Overall Program Learning Outcome
-              </p>
+              // <p className="text-secondary text-[16px] font-semibold">
+              //   ผลการเรียนรู้ของผู้เรียน
+              //   <span className="">ตลอดหลักสูตร</span> อ้างอิงตามเกณฑ์ของ ABET
+              //   <br />
+              //   Overall Program Learning Outcome
+              // </p>
+              <div className="flex flex-col">
+                <p className="text-secondary text-[18px] font-semibold ">
+                  Hi there, {user.firstNameEN}
+                </p>
+                <p className="text-[#575757] text-[14px]">
+                  You have completed{" "}
+                  <span className="text-[#1f69f3] font-semibold">
+                    12 Courses{" "}
+                  </span>
+                  In CPE curriculum
+                </p>
+              </div>
             ) : (
               <></>
             )}
@@ -136,7 +175,7 @@ export default function StdOverallPLO() {
 
           <Tabs
             classNames={{
-              root: "overflow-hidden mt-1 flex flex-col h-full",
+              root: "overflow-hidden -mt-0.5 flex flex-col h-full",
             }}
             value={activeTab}
             onChange={setActiveTab}
@@ -149,7 +188,7 @@ export default function StdOverallPLO() {
               className="flex flex-col gap-1 h-full"
               value="curriculum"
             >
-              <div className="flex px-24 h-full items-center border rounded-lg">
+              <div className="flex px-24 h-full items-center border rounded-lg mt-2">
                 <div className="flex flex-col justify-center items-center w-[50%] -mt-8">
                   <RadarChart
                     h={500}
@@ -164,7 +203,8 @@ export default function StdOverallPLO() {
                     ]}
                     gridColor="#C5C5DA"
                     textColor="#000000"
-                    withPolarAngleAxis
+                    polarAngleAxisProps={{}}
+                    withPolarRadiusAxis
                     className="w-full"
                   />
                   <div className="flex gap-2 items-center -mt-8">
@@ -203,8 +243,40 @@ export default function StdOverallPLO() {
                 </div>
               </div>
             </Tabs.Panel>
-            <Tabs.Panel className="flex flex-col gap-1" value="course">
-              <p>course</p>
+            <Tabs.Panel
+              className="flex flex-col gap-1 overflow-y-auto mb-12"
+              value="course"
+            >
+              <div className="grid grid-cols-3 gap-4 mt-2 h-full">
+                {courses.map((course) => (
+                  <div
+                    key={course.id}
+                    className="border rounded-lg text-b2 shadow-sm flex flex-col gap-4"
+                  >
+                    <div className="px-4 pt-4">
+                      <p className="font-bold">{course.code}</p>
+                      <p className="text-b4 text-[#4b5563]">{course.name}</p>
+                    </div>
+                    <RadarChart
+                      h={320}
+                      data={data}
+                      dataKey="product"
+                      series={[
+                        {
+                          name: "ผลการประเมินเฉลี่ยรวม",
+                          color: "blue",
+                          strokeColor: "blue",
+                        },
+                      ]}
+                      gridColor="#C5C5DA"
+                      textColor="#000000"
+                      // polarAngleAxisProps={{}}
+                      withPolarRadiusAxis
+                      className=""
+                    />
+                  </div>
+                ))}
+              </div>
             </Tabs.Panel>
           </Tabs> */}
 
