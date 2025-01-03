@@ -36,8 +36,11 @@ export default function ModalQuestionChart({
           <p>
             Chart - {question?.name} ({question?.fullScore?.toFixed(2)} Points)
           </p>
+
           <p className="text-[#3f4474]/80 font-semibold sm:max-macair133:text-b2 text-b2 acerSwift:max-macair133:!size-b2 mt-2">
-            {question?.scores?.filter((e) => e >= 0).length} Students
+            {question?.studentScore
+              ? `Your Score: ${question?.studentScore}`
+              : `${question?.scores?.filter((e) => e >= 0).length} Students`}
           </p>
         </div>
       }

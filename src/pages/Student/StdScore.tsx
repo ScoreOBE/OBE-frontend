@@ -107,26 +107,31 @@ export default function StdScore() {
         ) : (
           <>
             <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
-              <div className="flex flex-col pb-1 px-2">
-                <div className="flex gap-1">
-                  <p className="text-[#3f4474] font-semibold text-b1 acerSwift:max-macair133:!size-b2">
-                    {name}
-                  </p>
-                  <div
-                    className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20 cursor-pointer"
-                    onClick={() => setOpenModalEvalChart(true)}
-                  >
-                    <Icon
-                      IconComponent={IconChart}
-                      className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474]"
-                    />
+              <div className="flex justify-between w-full px-2 items-center">
+                <div className="flex flex-col pb-1 px-2">
+                  <div className="flex gap-1">
+                    <p className="text-[#3f4474] font-semibold text-b1 acerSwift:max-macair133:!size-b2">
+                      {name}
+                    </p>
+                    <div
+                      className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20 cursor-pointer"
+                      onClick={() => setOpenModalEvalChart(true)}
+                    >
+                      <Icon
+                        IconComponent={IconChart}
+                        className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474]"
+                      />
+                    </div>
                   </div>
+                  <p className="text-secondary text-h1 font-semibold">
+                    {fullScore?.toFixed(2)}{" "}
+                    <span className="text-b1 acerSwift:max-macair133:!text-b2 ">
+                      pts.
+                    </span>
+                  </p>
                 </div>
-                <p className="text-secondary text-h1 font-semibold">
-                  {fullScore?.toFixed(2)}{" "}
-                  <span className="text-b1 acerSwift:max-macair133:!text-b2 ">
-                    pts.
-                  </span>
+                <p className="text-[#3f4474] mb-1 font-semibold sm:max-macair133:text-[14px] text-b1 acerSwift:max-macair133:!text-b2">
+                  {totalStudent} Students
                 </p>
               </div>
               <div className="flex px-10 flex-row justify-between w-full">
