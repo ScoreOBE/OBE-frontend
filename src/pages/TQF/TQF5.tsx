@@ -498,7 +498,7 @@ export default function TQF5() {
           classNames={{
             root: "overflow-hidden w-full flex flex-col h-full",
             tab: "px-0 !bg-transparent hover:!text-tertiary",
-            tabLabel: "!font-semibold text-[12px]",
+            tabLabel: "!font-semibold text-b4",
           }}
           className="px-6 pt-2 flex flex-col h-full w-full"
         >
@@ -516,11 +516,11 @@ export default function TQF5() {
                 </Tabs.Tab>
               ))}
             </Tabs.List>
-            <div className="flex justify-between pt-4 items-center">
-              <div className=" text-secondary overflow-y-auto font-semibold min-h-14 whitespace-break-spaces">
+            <div className="flex justify-between pt-4 items-center ">
+              <div className=" text-secondary overflow-y-auto font-semibold min-h-14 acerSwift:max-macair133:!min-h-12 whitespace-break-spaces acerSwift:max-macair133:!text-b2 ">
                 {getValueEnumByKey(PartTopicTQF5, tqf5Part!)}
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 ">
                 {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
                   <div className="flex gap-2 items-center">
                     <Button
@@ -529,7 +529,7 @@ export default function TQF5() {
                         if (tqf5.method) setSelectedMethod(tqf5.method);
                         setOpenModalChangeMethod(true);
                       }}
-                      className="flex"
+                      className="flex acerSwift:max-macair133:!text-b5"
                     >
                       <Icon
                         className="mr-2"
@@ -541,6 +541,7 @@ export default function TQF5() {
                       !!tqf5.assignmentsMap?.length &&
                       tqf5.method == METHOD_TQF5.SCORE_OBE && (
                         <Button
+                          className="acerSwift:max-macair133:!text-b5"
                           onClick={() => setOpenModalAssignmentMapping(true)}
                         >
                           <Icon
@@ -568,7 +569,7 @@ export default function TQF5() {
               </div>
             </div>
           </div>
-          <div className="h-full w-full flex overflow-y-auto text-[14px] pt-3">
+          <div className="h-full w-full flex overflow-y-auto text-b2 acerSwift:max-macair133:!text-b3 pt-3">
             {partTab.map((part, index) => (
               <Tabs.Panel key={index} value={part.value} className="w-full">
                 {tqf5Part === part.value &&
@@ -601,7 +602,7 @@ export default function TQF5() {
                       <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
                         Select method to evaluate TQF 5
                       </p>
-                      <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
+                      <p className=" text-[#333333] leading-6 font-medium text-b2 acerSwift:max-macair133:!text-b3 sm:max-ipad11:text-[13px]">
                         To start TQF5 Part 2, please seleect method to evaluate.{" "}
                       </p>
 
@@ -679,7 +680,7 @@ export default function TQF5() {
                         {selectedMethod && (
                           <Button
                             onClick={() => onChangeMethod(selectedMethod)}
-                            className="!w-full mt-5 !text-[14px] !font-bold !text-[#1f69f3] !h-10"
+                            className="!w-full mt-5 !text-b2 acerSwift:max-macair133:!text-b3 !font-bold !text-[#1f69f3] !h-10"
                             variant="light"
                           >
                             Get Start

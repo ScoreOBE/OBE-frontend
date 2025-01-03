@@ -112,9 +112,9 @@ export default function Part1TQF5({ setForm }: Props) {
         data={course!}
       />
 
-      <div className="flex w-full flex-col text-[15px] max-h-full gap-3 text-default px-3">
+      <div className="flex w-full flex-col text-[15px] acerSwift:max-macair133:text-b1 max-h-full gap-3 text-default px-3">
         <div className="flex text-secondary gap-4 w-full border-b-[1px] border-[#e6e6e6] pb-6 flex-col">
-          <div className="flex text-secondary items-center justify-between flex-row gap-1 text-[15px]">
+          <div className="flex text-secondary items-center justify-between flex-row gap-1 text-[15px] acerSwift:max-macair133:!text-b3">
             <p className="font-bold">
               Student grading<span className="ml-1 text-red-500">*</span>
             </p>
@@ -125,6 +125,7 @@ export default function Part1TQF5({ setForm }: Props) {
                   <Icon IconComponent={IconUpload} className="size-4" />
                 }
                 onClick={() => setOpenModalUploadGrade(true)}
+                className="acerSwift:max-macair133:!text-b5"
               >
                 Upload Grade Sheet
               </Button>
@@ -137,6 +138,7 @@ export default function Part1TQF5({ setForm }: Props) {
                 }
                 color={isEditCourseEval ? "#0eb092" : "#ee933e"}
                 onClick={() => setIsEditCourseEval(!isEditCourseEval)}
+                className="acerSwift:max-macair133:!text-b5"
               >
                 {isEditCourseEval ? "Done" : "Edit Grade"}
               </Button>
@@ -150,7 +152,7 @@ export default function Part1TQF5({ setForm }: Props) {
           >
             <Table stickyHeader striped>
               <Table.Thead>
-                <Table.Tr className=" border-b-[1px] border-secondary">
+                <Table.Tr className=" border-b-[1px] border-secondary acerSwift:max-macair133:!text-b4 ">
                   <Table.Th
                     className="!rounded-tl-[8px] items-center justify-center  text-center !rounded-tr-[8px] w-full"
                     colSpan={15}
@@ -158,7 +160,7 @@ export default function Part1TQF5({ setForm }: Props) {
                     จำนวนนักศึกษา (Number of Students)
                   </Table.Th>
                 </Table.Tr>
-                <Table.Tr>
+                <Table.Tr className="acerSwift:max-macair133:!text-b4">
                   <Table.Th className=" w-[10%]">Section</Table.Th>
                   <Table.Th className=" w-[6%]">A</Table.Th>
                   <Table.Th className=" w-[6%]">B+</Table.Th>
@@ -205,7 +207,7 @@ export default function Part1TQF5({ setForm }: Props) {
                       : 0;
                   return (
                     <Table.Tr
-                      className="font-medium text-default text-[13px]"
+                      className="font-medium text-default text-b3 acerSwift:max-macair133:!text-b4"
                       key={item.sectionNo}
                     >
                       <Table.Td>{getSectionNo(item.sectionNo)}</Table.Td>
@@ -225,6 +227,10 @@ export default function Part1TQF5({ setForm }: Props) {
                               <Table.Td key={key}>
                                 <TextInput
                                   size="xs"
+                                  classNames={{
+                                    input:
+                                      "acerSwift:max-macair133:!text-b5 acerSwift:max-macair133:w-[40px]",
+                                  }}
                                   {...form.getInputProps(
                                     `courseEval.${index}.${key}`
                                   )}
@@ -245,7 +251,7 @@ export default function Part1TQF5({ setForm }: Props) {
                   );
                 })}
               </Table.Tbody>
-              <Table.Tfoot className="!bg-bgTableHeader  !border-t-[1px] border-secondary sticky bottom-0">
+              <Table.Tfoot className="!bg-bgTableHeader !border-t-[1px] border-secondary sticky bottom-0">
                 {(() => {
                   const totals = calculateTotals(form.getValues().courseEval);
                   const avg =
@@ -261,7 +267,7 @@ export default function Part1TQF5({ setForm }: Props) {
                         totals.total
                       : 0;
                   return (
-                    <Table.Tr className="border-none text-secondary font-semibold">
+                    <Table.Tr className="border-none text-secondary font-semibold acerSwift:max-macair133:!text-b4">
                       <Table.Th className="rounded-bl-[8px] w-[10%]">
                         Total
                       </Table.Th>
@@ -281,7 +287,7 @@ export default function Part1TQF5({ setForm }: Props) {
           </div>
         </div>
         <div className="flex text-secondary gap-4 items-center justify-center w-full border-b-[1px] border-[#e6e6e6] pb-6 flex-col">
-          <div className="flex text-secondary items-center w-full justify-between flex-row gap-1 mt-2 text-[15px]">
+          <div className="flex text-secondary items-center w-full justify-between flex-row gap-1 mt-2 text-[15px] acerSwift:max-macair133:!text-b3">
             <p className="font-bold">
               Grading criteria<span className="ml-1 text-red-500">*</span>
             </p>
@@ -294,6 +300,7 @@ export default function Part1TQF5({ setForm }: Props) {
               }
               color={isEditCriteria ? "#0eb092" : "#ee933e"}
               onClick={() => setIsEditCriteria(!isEditCriteria)}
+              className="acerSwift:max-macair133:!text-b5"
             >
               {isEditCriteria ? "Done" : "Edit Criteria"}
             </Button>
@@ -305,7 +312,7 @@ export default function Part1TQF5({ setForm }: Props) {
             }}
           >
             <Table striped>
-              <Table.Thead>
+              <Table.Thead className="acerSwift:max-macair133:!text-b4">
                 <Table.Tr className="bg-[#e5e7f6] border-b-[1px] border-secondary">
                   <Table.Th className=" items-center justify-center text-center min-w-[100px]">
                     Grade
@@ -319,7 +326,7 @@ export default function Part1TQF5({ setForm }: Props) {
               <Table.Tbody className="justify-center items-center text-center ">
                 {Object.keys(form.getValues().gradingCriteria).map((key) => (
                   <Table.Tr
-                    className="font-medium text-default text-[13px]"
+                    className="font-medium text-default text-b3 acerSwift:max-macair133:!text-b4"
                     key={key}
                   >
                     <Table.Td>{key.replace("plus", "+")}</Table.Td>
@@ -329,6 +336,9 @@ export default function Part1TQF5({ setForm }: Props) {
                       ) : (
                         <TextInput
                           size="xs"
+                          classNames={{
+                            input: "acerSwift:max-macair133:!text-b4",
+                          }}
                           {...form.getInputProps(`gradingCriteria.${key}`)}
                         />
                       )}
