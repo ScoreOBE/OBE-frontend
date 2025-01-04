@@ -13,6 +13,7 @@ import Icon from "@/components/Icon";
 import { log } from "console";
 import { IModelPLO } from "@/models/ModelPLO";
 import { getOnePLO } from "@/services/plo/plo.service";
+import SpiderChart from "@/components/Chart/SpiderChart";
 
 export default function StdPLO() {
   const [params, setParams] = useSearchParams();
@@ -113,7 +114,7 @@ export default function StdPLO() {
             />
           )}
 
-          <div className="flex flex-row  py-1  items-center justify-between">
+          <div className="flex flex-row pb-2 items-center justify-between">
             {test ? (
               <p className="text-secondary text-[16px] font-semibold">
                 ผลการเรียนรู้ของผู้เรียนอ้างอิงตามเกณฑ์ของ ABET
@@ -138,23 +139,8 @@ export default function StdPLO() {
           </div>
 
           <div className="flex px-24 h-full items-center border rounded-lg">
-            <div className="flex flex-col justify-center items-center w-[50%] -mt-8">
-              <RadarChart
-                h={500}
-                data={data}
-                dataKey="product"
-                series={[
-                  {
-                    name: "ผลการประเมินเฉลี่ยรวม",
-                    color: "blue",
-                    strokeColor: "blue",
-                  },
-                ]}
-                gridColor="#C5C5DA"
-                textColor="#000000"
-                withPolarAngleAxis
-                className="w-full"
-              />
+            <div className="flex flex-col justify-center items-center w-[50%]">
+              <SpiderChart data={data} height={500} />
               <div className="flex gap-2 items-center -mt-8">
                 <div className="bg-blue-600 h-3 w-3 rounded-full"></div>
                 <p> ผลการประเมินเฉลี่ยรวม </p>
