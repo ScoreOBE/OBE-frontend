@@ -522,7 +522,7 @@ export default function TQF5() {
               </div>
               <div className="flex gap-2 ">
                 {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
-                  <div className="flex gap-2 items-center">
+                  <div className="flex flex-wrap gap-2 items-center">
                     <Button
                       variant="outline"
                       onClick={() => {
@@ -556,7 +556,7 @@ export default function TQF5() {
                 <Button
                   onClick={() => setOpenModalExportTQF5(true)}
                   color="#24b9a5"
-                  className="px-4"
+                  className="px-4 min-w-max"
                 >
                   <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                     <Icon

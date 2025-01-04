@@ -15,6 +15,7 @@ import { isEqual, cloneDeep } from "lodash";
 import { initialTqf5Part3 } from "@/helpers/functions/tqf5";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelAssignment } from "@/models/ModelCourse";
+import { getSectionNo } from "@/helpers/functions/function";
 
 type TabState = {
   [key: number]: string;
@@ -32,6 +33,9 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
   );
   const tqf5 = useAppSelector((state) => state.tqf5);
   const dispatch = useAppDispatch();
+  const [assessmentCloScores, setAssessmentCloScores] = useState<
+    IModelTQF5Part3[]
+  >([]);
   const [isEdit, setIsEdit] = useState(false);
   const [activeSection, setActiveSection] = useState<number>(0);
   const [tabStates, setTabStates] = useState<TabState>({});
@@ -61,10 +65,14 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
   useEffect(() => {
     if (tqf5.part3) {
       form.setValues(cloneDeep(tqf5.part3));
+      setAssessmentCloScores(
+        initialTqf5Part3(tqf5, tqf3.part4?.data, course?.sections as any).data
+      );
     } else if (tqf3.part2) {
       form.setValues(
         initialTqf5Part3(tqf5, tqf3.part4?.data, course?.sections as any)
       );
+      setAssessmentCloScores(form.getValues().data);
     }
   }, [tqf5.method]);
 
@@ -252,302 +260,292 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
         </div>
       </div>
     ) : (
-      <div className="flex px-16 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
-        <div className="h-full  justify-center flex flex-col">
-          <p className="text-secondary text-[21px] font-semibold">
-            TQF 5 is coming soon to{" "}
-            <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-              ScoreOBE +{" "}
-            </span>{" "}
-          </p>
-          <br />
-          <p className=" -mt-3 mb-6 text-b2 break-words font-medium leading-relaxed">
-            Instructors, get ready to experience a new and improved way to
-            complete TQF 5 <br /> starting February 2025.
-          </p>
+      <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
+        <div className="gap-2 flex flex-col w-full -mt-3 overflow-y-auto  max-h-full">
+          {form.getValues().data?.map((cloItem, cloIndex) => {
+            const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
+            const assessment = tqf5.part2?.data.find(
+              (cl) => cl.clo === clo?.id
+            )?.assignments;
+
+            return (
+              <div
+                className={`last:mb-4 flex flex-col gap-10 pb-4 border-b-2 mr-1 ${
+                  activeSection === cloIndex ? "active" : ""
+                }`}
+                id={`${clo?.no}`}
+                key={clo?.id}
+                ref={sectionRefs.current!.at(cloIndex)}
+              >
+                <Tabs
+                  classNames={{
+                    root: "overflow-hidden mt-1 flex flex-col max-h-full",
+                  }}
+                  value={tabStates[cloIndex] || "assessmentTool"}
+                  onChange={(newValue) => handleTabChange(cloIndex, newValue)}
+                >
+                  <Tabs.List className="mb-2">
+                    <Tabs.Tab value="assessmentTool">Assessment Tool</Tabs.Tab>
+                    <Tabs.Tab value="scoreRange">Score Range</Tabs.Tab>
+                  </Tabs.List>
+                  <Tabs.Panel
+                    className="flex flex-col gap-5 py-3 px-4"
+                    value="assessmentTool"
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="flex justify-between">
+                        <div className="text-default flex items-center  font-medium text-[15px]">
+                          <p className="text-[18px] text-secondary mr-2 font-semibold">
+                            CLO {clo?.no}
+                          </p>
+                          <div className="flex flex-col ml-2 gap-[2px]">
+                            <p>{clo?.descTH}</p>
+                            <p>{clo?.descEN}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <Button className="min-w-max">See Detail Criteria</Button>
+                    </div>
+                    {assessment?.map((eva, evaIndex) => {
+                      const evaluation = tqf3.part3?.eval.find(
+                        (e) => e.id === eva.eval
+                      );
+                      const assess = [
+                        ...new Set(
+                          eva.questions.flatMap((e) =>
+                            e.substring(0, e.lastIndexOf("-"))
+                          )
+                        ),
+                      ].sort();
+                      const fullScore = assignments
+                        .filter((e) => assess.includes(e.name))
+                        .flatMap((e) =>
+                          e.questions.map((question) => ({
+                            sheet: e.name,
+                            ...question,
+                          }))
+                        )
+                        .filter((e) =>
+                          eva.questions.includes(`${e.sheet}-${e.name}`)
+                        )
+                        .reduce((a, b) => a + b.fullScore, 0);
+                      const percent = tqf3.part4?.data[cloIndex].evals.find(
+                        (e) => e.eval == eva.eval
+                      )?.percent;
+                      return (
+                        <div
+                          key={evaIndex}
+                          className="rounded-md overflow-clip text-[14px] border ml-1"
+                        >
+                          <div className="flex flex-col">
+                            <div className="bg-bgTableHeader font-semibold text-secondary px-4 py-3 flex justify-between items-center">
+                              <div className="flex flex-col gap-[2px]">
+                                <p className="text-[15px]">
+                                  {evaluation?.topicTH} | {evaluation?.topicEN}{" "}
+                                  ({percent} %)
+                                </p>
+                                <p>
+                                  Description:
+                                  {evaluation?.desc?.length
+                                    ? evaluation.desc
+                                    : "-"}
+                                </p>
+                              </div>
+
+                              <p>{fullScore}</p>
+                            </div>
+
+                            {assess?.map((sheet, sheetIndex) => {
+                              const questions = eva.questions
+                                .filter((e) => e.includes(sheet))
+                                .map((e) =>
+                                  e.substring(e.lastIndexOf("-")).slice(1)
+                                );
+                              return (
+                                <div
+                                  key={sheetIndex}
+                                  className=" font-medium text-default"
+                                >
+                                  <div className="bg-[#F3F3F3] text-default font-semibold px-4 py-3">
+                                    <p>{sheet}</p>
+                                  </div>
+
+                                  {questions.map((ques, quesIndex) => {
+                                    const question = assignments
+                                      ?.find((e) => e.name == sheet)
+                                      ?.questions.find((e) => e.name == ques);
+
+                                    return (
+                                      <div
+                                        key={quesIndex}
+                                        className="flex justify-between items-center pl-8 px-4 py-3 "
+                                      >
+                                        <p className="font-medium text-[13px] text-default">
+                                          {ques}
+                                          {question?.desc?.length
+                                            ? ` - ${question.desc}`
+                                            : ""}
+                                        </p>
+                                        <p>{question?.fullScore}</p>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </Tabs.Panel>
+                  <Tabs.Panel
+                    className="flex flex-col gap-5 py-3 px-4"
+                    value="scoreRange"
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="flex justify-between">
+                        <div className="text-default flex items-center  font-medium text-[15px]">
+                          <p className="text-[18px] text-secondary mr-2 font-semibold">
+                            CLO {clo?.no}{" "}
+                          </p>
+                          <div className="flex flex-col ml-2 gap-[2px]">
+                            <p>{clo?.descTH}</p>
+                            <p>{clo?.descEN}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <Button className="min-w-max">See Detail Criteria</Button>
+                    </div>
+                    <div className="overflow-x-auto h-fit bg max-h-full border flex flex-col rounded-lg border-secondary">
+                      <Table stickyHeader striped>
+                        <Table.Thead>
+                          <Table.Tr>
+                            <Table.Th>Section</Table.Th>
+                            <Table.Th className={`text-nowrap text-end`}>
+                              Score 0
+                            </Table.Th>
+                            <Table.Th className={`text-nowrap text-end`}>
+                              Score 1
+                            </Table.Th>
+                            <Table.Th className={`text-nowrap text-end`}>
+                              Score 2
+                            </Table.Th>
+                            <Table.Th className={`text-nowrap text-end`}>
+                              Score 3
+                            </Table.Th>
+                            <Table.Th className={`text-nowrap text-end`}>
+                              Score 4
+                            </Table.Th>
+                            <Table.Th className="w-[15%] text-end pr-3">
+                              Number of Student
+                            </Table.Th>
+                            <Table.Th className="w-[13%] text-end pr-8">
+                              Average
+                            </Table.Th>
+                          </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody>
+                          {cloItem.sections?.map((sec) => {
+                            const data = Object.values(sec)
+                              .slice(-5)
+                              .map((e: any) => parseInt(e));
+                            const total =
+                              data.reduce((a, b: any) => a + b, 0) || 0;
+                            const avg =
+                              total > 0
+                                ? (0 * sec.score0 +
+                                    1 * sec.score1 +
+                                    2 * sec.score2 +
+                                    3 * sec.score3 +
+                                    4 * sec.score4) /
+                                  total
+                                : 0;
+                            return (
+                              <Table.Tr
+                                className="font-medium text-default text-[13px]"
+                                key={sec.sectionNo}
+                              >
+                                <Table.Td>
+                                  {getSectionNo(sec.sectionNo)}
+                                </Table.Td>
+                                {Object.keys(sec)
+                                  .slice(-5)
+                                  .map((key) => (
+                                    <Table.Td key={key} className={`text-end `}>
+                                      {(sec as any)[key] ?? "-"}
+                                    </Table.Td>
+                                  ))}
+                                <Table.Td className="text-end pr-3 w-[13%]">
+                                  {total}
+                                </Table.Td>
+                                <Table.Td className="text-end  pr-8 w-[13%]">
+                                  {avg.toFixed(2)}
+                                </Table.Td>
+                              </Table.Tr>
+                            );
+                          })}
+                        </Table.Tbody>
+                        <Table.Tfoot>
+                          <Table.Tr className="bg-bgTableHeader text-secondary">
+                            <Table.Th>Total</Table.Th>
+                            <Table.Th className={`text-nowrap text-end`}>
+                              0
+                            </Table.Th>
+                            <Table.Th className={`text-nowrap text-end`}>
+                              0
+                            </Table.Th>
+                            <Table.Th className={`text-nowrap text-end`}>
+                              0
+                            </Table.Th>
+                            <Table.Th className={`text-nowrap text-end`}>
+                              0
+                            </Table.Th>
+                            <Table.Th className={`text-nowrap text-end`}>
+                              0
+                            </Table.Th>
+                            <Table.Th className="w-[15%] text-end pr-3">
+                              0
+                            </Table.Th>
+                            <Table.Th className="w-[13%] text-end pr-8">
+                              0.00
+                            </Table.Th>
+                          </Table.Tr>
+                        </Table.Tfoot>
+                      </Table>
+                    </div>
+                  </Tabs.Panel>
+                </Tabs>
+              </div>
+            );
+          })}
         </div>
-        <img className=" z-50  w-[25vw] " src={maintenace} alt="loginImage" />
+        <div className="min-w-[70px] px-2 mt-1 flex flex-col">
+          {form.getValues().data?.map((item, index) => {
+            const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
+            return (
+              <div
+                key={index}
+                className={`max-w-fit ${
+                  activeSection === index ? "active" : ""
+                }`}
+              >
+                <a href={`#${clo?.no}`}>
+                  <p
+                    className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
+                      activeSection === index
+                        ? "text-secondary"
+                        : "text-[#D2C9C9]"
+                    }`}
+                  >
+                    CLO {clo?.no}
+                  </p>
+                </a>
+              </div>
+            );
+          })}
+        </div>
       </div>
-
-      // <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
-      //   <div className="gap-2 flex flex-col w-full -mt-3 overflow-y-auto  max-h-full">
-      //     {form.getValues().data?.map((cloItem, cloIndex) => {
-      //       const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
-      //       const assessment = tqf5.part2?.data.find(
-      //         (cl) => cl.clo === clo?.id
-      //       )?.assignments;
-
-      //       return (
-      //         <div
-      //           className={`last:mb-4 flex flex-col gap-10 pb-4 border-b-2 mr-1 ${
-      //             activeSection === cloIndex ? "active" : ""
-      //           }`}
-      //           id={`${clo?.no}`}
-      //           key={clo?.id}
-      //           ref={sectionRefs.current!.at(cloIndex)}
-      //         >
-      //           <Tabs
-      //             classNames={{
-      //               root: "overflow-hidden mt-1 flex flex-col max-h-full",
-      //             }}
-      //             value={tabStates[cloIndex] || "assessmentTool"}
-      //             onChange={(newValue) => handleTabChange(cloIndex, newValue)}
-      //           >
-      //             <Tabs.List className="mb-2">
-      //               <Tabs.Tab value="assessmentTool">Assessment Tool</Tabs.Tab>
-      //               <Tabs.Tab value="scoreRange">Score Range</Tabs.Tab>
-      //             </Tabs.List>
-      //             <Tabs.Panel
-      //               className="flex flex-col gap-5 py-3 px-4"
-      //               value="assessmentTool"
-      //             >
-      //               <div className="flex justify-between items-center">
-      //                 <div className="flex justify-between">
-      //                   <div className="text-default flex items-center  font-medium text-[15px]">
-      //                     <p className="text-[18px] text-secondary mr-2 font-semibold">
-      //                       CLO {clo?.no}
-      //                     </p>
-      //                     <div className="flex flex-col ml-2 gap-[2px]">
-      //                       <p>{clo?.descTH}</p>
-      //                       <p>{clo?.descEN}</p>
-      //                     </div>
-      //                   </div>
-      //                 </div>
-
-      //                 <Button>See Detail Criteria</Button>
-      //               </div>
-      //               {assessment?.map((eva, evaIndex) => {
-      //                 const evaluation = tqf3.part3?.eval.find(
-      //                   (e) => e.id === eva.eval
-      //                 );
-      //                 const assess = [
-      //                   ...new Set(
-      //                     eva.questions.flatMap((e) =>
-      //                       e.substring(0, e.lastIndexOf("-"))
-      //                     )
-      //                   ),
-      //                 ].sort();
-      //                 const fullScore = assignments
-      //                   .filter((e) => assess.includes(e.name))
-      //                   .flatMap((e) =>
-      //                     e.questions.map((question) => ({
-      //                       sheet: e.name,
-      //                       ...question,
-      //                     }))
-      //                   )
-      //                   .filter((e) =>
-      //                     eva.questions.includes(`${e.sheet}-${e.name}`)
-      //                   )
-      //                   .reduce((a, b) => a + b.fullScore, 0);
-      //                 return (
-      //                   <div
-      //                     key={evaIndex}
-      //                     className="rounded-md overflow-clip text-[14px] border ml-1"
-      //                   >
-      //                     <div className="flex flex-col">
-      //                       <div className="bg-bgTableHeader font-semibold text-secondary px-4 py-3 flex justify-between items-center">
-      //                         <div className="flex flex-col gap-[2px]">
-      //                           <p className="text-[15px]">
-      //                             {evaluation?.topicTH} | {evaluation?.topicEN}
-      //                           </p>
-      //                           <p>
-      //                             Description:
-      //                             {evaluation?.desc?.length
-      //                               ? evaluation.desc
-      //                               : "-"}
-      //                           </p>
-      //                         </div>
-      //                         <p>{fullScore}</p>
-      //                       </div>
-
-      //                       {assess?.map((sheet, sheetIndex) => {
-      //                         const questions = eva.questions
-      //                           .filter((e) => e.includes(sheet))
-      //                           .map((e) =>
-      //                             e.substring(e.lastIndexOf("-")).slice(1)
-      //                           );
-      //                         return (
-      //                           <div
-      //                             key={sheetIndex}
-      //                             className=" font-medium text-default"
-      //                           >
-      //                             <div className="bg-[#F3F3F3] text-default font-semibold px-4 py-3">
-      //                               <p>{sheet}</p>
-      //                             </div>
-
-      //                             {questions.map((ques, quesIndex) => {
-      //                               const question = assignments
-      //                                 ?.find((e) => e.name == sheet)
-      //                                 ?.questions.find((e) => e.name == ques);
-      //                               return (
-      //                                 <div
-      //                                   key={quesIndex}
-      //                                   className="flex justify-between items-center pl-8 px-4 py-3 "
-      //                                 >
-      //                                   <p className="font-medium text-[13px] text-default">
-      //                                     {ques}
-      //                                     {question?.desc?.length
-      //                                       ? ` - ${question.desc}`
-      //                                       : ""}
-      //                                   </p>
-      //                                   <p>{question?.fullScore}</p>
-      //                                 </div>
-      //                               );
-      //                             })}
-      //                           </div>
-      //                         );
-      //                       })}
-      //                     </div>
-      //                   </div>
-      //                 );
-      //               })}
-      //             </Tabs.Panel>
-      //             <Tabs.Panel
-      //               className="flex flex-col gap-5 py-3 px-4"
-      //               value="scoreRange"
-      //             >
-      //               <div className="flex justify-between items-center">
-      //                 <div className="flex justify-between">
-      //                   <div className="text-default flex items-center  font-medium text-[15px]">
-      //                     <p className="text-[18px] text-secondary mr-2 font-semibold">
-      //                       CLO {clo?.no}{" "}
-      //                     </p>
-      //                     <div className="flex flex-col ml-2 gap-[2px]">
-      //                       <p>{clo?.descTH}</p>
-      //                       <p>{clo?.descEN}</p>
-      //                     </div>
-      //                   </div>
-      //                 </div>
-
-      //                 <Button>See Detail Criteria</Button>
-      //               </div>
-      //               <div className="overflow-x-auto h-fit bg max-h-full border flex flex-col rounded-lg border-secondary">
-      //                 <Table stickyHeader striped>
-      //                   <Table.Thead>
-      //                     <Table.Tr>
-      //                       <Table.Th>Section</Table.Th>
-      //                       <Table.Th className={`text-nowrap text-end`}>
-      //                         Score 0
-      //                       </Table.Th>
-      //                       <Table.Th className={`text-nowrap text-end`}>
-      //                         Score 1
-      //                       </Table.Th>
-      //                       <Table.Th className={`text-nowrap text-end`}>
-      //                         Score 2
-      //                       </Table.Th>
-      //                       <Table.Th className={`text-nowrap text-end`}>
-      //                         Score 3
-      //                       </Table.Th>
-      //                       <Table.Th className={`text-nowrap text-end`}>
-      //                         Score 4
-      //                       </Table.Th>
-      //                       <Table.Th className="w-[15%] text-end pr-3">
-      //                         Number of Student
-      //                       </Table.Th>
-      //                       <Table.Th className="w-[13%] text-end pr-8">
-      //                         Average
-      //                       </Table.Th>
-      //                     </Table.Tr>
-      //                   </Table.Thead>
-      //                   <Table.Tbody>
-      //                     {cloItem.sections?.map((sec) => {
-      //                       const data = Object.values(sec)
-      //                         .slice(1)
-      //                         .map((e: any) => parseInt(e));
-      //                       const total =
-      //                         data.reduce((a, b: any) => a + b, 0) || 0;
-      //                       const avg =
-      //                         total > 0
-      //                           ? (0 * sec.score0 +
-      //                               1 * sec.score1 +
-      //                               2 * sec.score2 +
-      //                               3 * sec.score3 +
-      //                               4 * sec.score4) /
-      //                             total
-      //                           : 0;
-      //                       return (
-      //                         <Table.Tr
-      //                           className="font-medium text-default text-[13px]"
-      //                           key={sec.sectionNo}
-      //                         >
-      //                           <Table.Td>{sec.sectionNo}</Table.Td>
-      //                           {Object.keys(sec)
-      //                             .slice(1)
-      //                             .map((key) => (
-      //                               <Table.Td key={key} className={`text-end `}>
-      //                                 {(sec as any)[key] ?? "-"}
-      //                               </Table.Td>
-      //                             ))}
-      //                           <Table.Td className="text-end pr-3 w-[13%]">
-      //                             {total}
-      //                           </Table.Td>
-      //                           <Table.Td className="text-end  pr-8 w-[13%]">
-      //                             {avg.toFixed(2)}
-      //                           </Table.Td>
-      //                         </Table.Tr>
-      //                       );
-      //                     })}
-      //                   </Table.Tbody>
-      //                   <Table.Tfoot>
-      //                     <Table.Tr className="bg-bgTableHeader text-secondary">
-      //                       <Table.Th>Total</Table.Th>
-      //                       <Table.Th className={`text-nowrap text-end`}>
-      //                         0
-      //                       </Table.Th>
-      //                       <Table.Th className={`text-nowrap text-end`}>
-      //                         0
-      //                       </Table.Th>
-      //                       <Table.Th className={`text-nowrap text-end`}>
-      //                         0
-      //                       </Table.Th>
-      //                       <Table.Th className={`text-nowrap text-end`}>
-      //                         0
-      //                       </Table.Th>
-      //                       <Table.Th className={`text-nowrap text-end`}>
-      //                         0
-      //                       </Table.Th>
-      //                       <Table.Th className="w-[15%] text-end pr-3">
-      //                         0
-      //                       </Table.Th>
-      //                       <Table.Th className="w-[13%] text-end pr-8">
-      //                         0.00
-      //                       </Table.Th>
-      //                     </Table.Tr>
-      //                   </Table.Tfoot>
-      //                 </Table>
-      //               </div>
-      //             </Tabs.Panel>
-      //           </Tabs>
-      //         </div>
-      //       );
-      //     })}
-      //   </div>
-      //   <div className="min-w-[70px] px-2 mt-1 flex flex-col">
-      //     {form.getValues().data?.map((item, index) => {
-      //       const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
-      //       return (
-      //         <div
-      //           key={index}
-      //           className={`max-w-fit ${
-      //             activeSection === index ? "active" : ""
-      //           }`}
-      //         >
-      //           <a href={`#${clo?.no}`}>
-      //             <p
-      //               className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
-      //                 activeSection === index
-      //                   ? "text-secondary"
-      //                   : "text-[#D2C9C9]"
-      //               }`}
-      //             >
-      //               CLO {clo?.no}
-      //             </p>
-      //           </a>
-      //         </div>
-      //       );
-      //     })}
-      //   </div>
-      // </div>
     )
   ) : (
     <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
