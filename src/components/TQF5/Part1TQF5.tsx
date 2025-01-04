@@ -13,6 +13,7 @@ import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF5 } from "@/store/tqf5";
 import { getSectionNo } from "@/helpers/functions/function";
 import { IModelUser } from "@/models/ModelUser";
+import { ROLE } from "@/helpers/constants/enum";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -21,8 +22,11 @@ type Props = {
 export default function Part1TQF5({ setForm }: Props) {
   const { courseNo } = useParams();
   const user = useAppSelector((state) => state.user);
+  const dashboard = useAppSelector((state) => state.config.dashboard);
   const course = useAppSelector((state) =>
-    state.course.courses.find((c) => c.courseNo == courseNo)
+    (dashboard == ROLE.ADMIN ? state.allCourse : state.course).courses.find(
+      (c) => c.courseNo == courseNo
+    )
   );
   const tqf5 = useAppSelector((state) => state.tqf5);
   const dispatch = useAppDispatch();
