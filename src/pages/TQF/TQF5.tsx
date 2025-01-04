@@ -39,7 +39,6 @@ import { IModelTQF3 } from "@/models/ModelTQF3";
 import ModalMappingAssignment from "@/components/Modal/TQF5/ModalMappingAssignment";
 import exportFile from "@/assets/icons/fileExport.svg?react";
 import { setLoadingOverlay } from "@/store/loading";
-import ModalExportTQF3 from "@/components/Modal/TQF5/ModalExportTQF5";
 import ModalExportTQF5 from "@/components/Modal/TQF5/ModalExportTQF5";
 
 export default function TQF5() {
@@ -119,6 +118,7 @@ export default function TQF5() {
     if (
       academicYear &&
       courseNo &&
+      (dashboard == ROLE.ADMIN ? courseAdmin : true) &&
       tqf5.coursePLO &&
       (tqf5.topic !== tqf5Original?.topic || !tqf5Original)
     ) {
@@ -126,7 +126,7 @@ export default function TQF5() {
         fetchOneCourse(true);
       }
     }
-  }, [academicYear, tqf5.topic, tqf5.coursePLO]);
+  }, [academicYear, courseAdmin, tqf5.topic, tqf5.coursePLO]);
 
   const checkActiveTerm = () => {
     return (
@@ -144,8 +144,8 @@ export default function TQF5() {
       }),
       getOneCourseManagement(courseNo!),
     ]);
-    if (dashboard == ROLE.ADMIN) {
-      resCourse = courseAdmin!;
+    if (dashboard == ROLE.ADMIN && courseAdmin) {
+      resCourse = courseAdmin;
     }
     if (resCourse) {
       if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
