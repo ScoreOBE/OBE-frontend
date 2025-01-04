@@ -226,7 +226,7 @@ export default function Part1TQF5({ setForm }: Props) {
                             </Table.Td>
                           ))}
                       {isEditCourseEval &&
-                        (canAccess ? (
+                        (canAccess || dashboard == ROLE.ADMIN ? (
                           Object.keys(item)
                             .slice(1)
                             .map((key) => (
