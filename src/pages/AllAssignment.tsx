@@ -23,6 +23,7 @@ import IconTrash from "@/assets/icons/trash.svg?react";
 import IconPencilMinus from "@/assets/icons/pencilMinus.svg?react";
 import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
+import IconExcel from "@/assets/icons/excel.svg?react";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import {
   useLocation,
@@ -51,6 +52,7 @@ import ModalStudentList from "@/components/Modal/ModalStudentList";
 import ModalUploadScore from "@/components/Modal/Score/ModalUploadScore";
 import ChartContainer from "@/components/Chart/ChartContainer";
 import React from "react";
+import ModalExportScore from "@/components/Modal/Score/ModalExportScore";
 type TabState = {
   [key: number]: string;
 };
@@ -95,6 +97,7 @@ export default function AllAssignment() {
   const [openModalDeleteAssignment, setOpenModalDeleteAssignment] =
     useState(false);
   const [openModalUploadScore, setOpenModalUploadScore] = useState(false);
+  const [openModalExportScore, setOpenModalExportScore] = useState(false);
   const [openModalUploadStudentList, setOpenModalUploadStudentList] =
     useState(false);
   const form = useForm({
@@ -651,6 +654,10 @@ export default function AllAssignment() {
           </>
         }
       />
+      <ModalExportScore
+        opened={openModalExportScore}
+        onClose={() => setOpenModalExportScore(false)}
+      />
 
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-2 overflow-hidden">
         {loading.loading ? (
@@ -663,7 +670,7 @@ export default function AllAssignment() {
                   {allAssignments.length} Evaluation
                   {allAssignments.length! > 1 && "s"}
                 </p>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap justify-end items-center gap-3">
                   <Menu
                     trigger="click"
                     openDelay={100}
@@ -721,6 +728,19 @@ export default function AllAssignment() {
                     </Menu.Dropdown>
                   </Menu>
                   <div className="">{uploadButton()}</div>
+                  <Button
+                    color="#20884f"
+                    leftSection={
+                      <Icon
+                        IconComponent={IconExcel}
+                        className="size-5 acerSwift:max-macair133:size-4"
+                      />
+                    }
+                    className="px-3 acerSwift:max-macair133:!text-b5"
+                    onClick={() => setOpenModalExportScore(true)}
+                  >
+                    Export score
+                  </Button>
                 </div>
               </div>
             )}
