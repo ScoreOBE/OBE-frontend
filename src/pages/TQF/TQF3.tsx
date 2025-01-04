@@ -152,12 +152,13 @@ export default function TQF3() {
     if (
       academicYear &&
       courseNo &&
+      (dashboard == ROLE.ADMIN ? courseAdmin : true) &&
       tqf3.coursePLO &&
       (tqf3.topic !== tqf3Original?.topic || !tqf3Original)
     ) {
       fetchOneCourse(true);
     }
-  }, [academicYear, tqf3.topic, tqf3.coursePLO]);
+  }, [academicYear, courseAdmin, tqf3.topic, tqf3.coursePLO]);
 
   useEffect(() => {
     if (localStorage.getItem(`reuse${tqf3.id}-part1`)?.length) {
@@ -232,7 +233,7 @@ export default function TQF3() {
       }),
       getOneCourseManagement(courseNo!),
     ]);
-    if (dashboard == ROLE.ADMIN) {
+    if (dashboard == ROLE.ADMIN && courseAdmin) {
       resCourse = courseAdmin;
     }
     if (resCourse) {

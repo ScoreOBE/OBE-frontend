@@ -32,21 +32,23 @@ export default function Part1TQF5({ setForm }: Props) {
   const form = useForm({
     mode: "controlled",
     initialValues: {
-      courseEval: course?.sections.map((sec) => ({
-        sectionNo: sec.sectionNo,
-        A: 0,
-        Bplus: 0,
-        B: 0,
-        Cplus: 0,
-        C: 0,
-        Dplus: 0,
-        D: 0,
-        F: 0,
-        W: 0,
-        S: 0,
-        U: 0,
-        P: 0,
-      })),
+      courseEval: course?.sections
+        .filter((sec) => sec.isActive)
+        .map((sec) => ({
+          sectionNo: sec.sectionNo,
+          A: 0,
+          Bplus: 0,
+          B: 0,
+          Cplus: 0,
+          C: 0,
+          Dplus: 0,
+          D: 0,
+          F: 0,
+          W: 0,
+          S: 0,
+          U: 0,
+          P: 0,
+        })),
       gradingCriteria: {
         A: ">= 80.00",
         Bplus: "75.00 - 79.99",
