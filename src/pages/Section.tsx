@@ -280,15 +280,7 @@ export default function Section() {
                   </Button>
                 </div>
               ) : (
-                <Button
-                  color="#20884f"
-                  leftSection={
-                    <Icon className="size-4" IconComponent={IconExcel} />
-                  }
-                  className="!font-medium px-3"
-                >
-                  Export score
-                </Button>
+              <></>
               )}
               {activeTerm && user.role != ROLE.TA && (
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">

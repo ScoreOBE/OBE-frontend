@@ -78,6 +78,12 @@ export default function Assignment() {
   ]);
   const [editDeleteAssignment, setEditDeleteAssignment] = useState("");
   const [editName, setEditName] = useState("");
+   const academicYear = useAppSelector((state) => state.academicYear);
+    const activeTerm = academicYear.find(
+      (term) =>
+        term.year == parseInt(params.get("year") || "") &&
+        term.semester == parseInt(params.get("semester") || "")
+    )?.isActive;
   const [openModalEditAssignment, setOpenModalEditAssignment] = useState(false);
   const [openModalDeleteAssignment, setOpenModalDeleteAssignment] =
     useState(false);
@@ -260,7 +266,7 @@ export default function Assignment() {
           <>
             {section?.assignments?.length !== 0 && (
               <div className="flex flex-row  py-1  items-center justify-between">
-                <p className="text-secondary text-h1 macair133:text-b1  acerSwift:max-macair133:!text-b2 font-semibold">
+                <p className="text-secondary text-h1 macair133:text-b1 py-2 acerSwift:max-macair133:!text-b2 font-semibold">
                   {section?.assignments?.length} Evaluation
                   {section?.assignments?.length! > 1 && "s"}
                 </p>
@@ -293,10 +299,10 @@ export default function Assignment() {
                       <Table.Th className="w-10 sm:max-macair133:text-b3">
                         Student(s)
                       </Table.Th>
-                      <Table.Th className="w-10 !px-4 sm:max-macair133:text-b3 text-center">
+                     {activeTerm && <Table.Th className="w-10 !px-4 sm:max-macair133:text-b3 text-center">
                         Published
-                      </Table.Th>
-                      <Table.Th className="w-5 sm:max-macair133:text-b3"></Table.Th>
+                      </Table.Th>}
+                  { activeTerm &&   <Table.Th className="w-5 sm:max-macair133:text-b3"></Table.Th>}
                     </Table.Tr>
                   </Table.Thead>
 
@@ -345,7 +351,7 @@ export default function Assignment() {
                             {dateFormatter(assignment.createdAt, 3)}
                           </Table.Td>
                           <Table.Td>{totalStudent || 0}</Table.Td>
-                          <Table.Td className="text-center justify-items-center">
+                         {activeTerm && <Table.Td className="text-center justify-items-center">
                             <div
                               className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
                               onClick={(event) => {
@@ -375,8 +381,8 @@ export default function Assignment() {
                                 />
                               )}
                             </div>
-                          </Table.Td>
-                          <Table.Td className="text-center flex items-center justify-center">
+                          </Table.Td>}
+                         {activeTerm && <Table.Td className="text-center flex items-center justify-center">
                             <div
                               className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
                               onClick={(event) => event.stopPropagation()}
@@ -435,7 +441,7 @@ export default function Assignment() {
                                 </Menu.Dropdown>
                               </Menu>
                             </div>
-                          </Table.Td>
+                          </Table.Td>}
                         </Table.Tr>
                       );
                     })}

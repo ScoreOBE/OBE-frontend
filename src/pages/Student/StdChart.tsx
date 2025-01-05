@@ -102,9 +102,12 @@ export default function StdChart() {
                       ?.questions.reduce((a, { score }) => a + score, 0);
                     return (
                       <div
-                        className={`last:mb-4 flex px-2 border flex-col rounded-md gap-10 py-2 ${
+                        className={`last:mb-[2px] flex px-2  flex-col rounded-md gap-10 py-2 ${
                           activeSection === i ? "active" : ""
                         }`}
+                        style={{
+                          boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                        }}
                         id={`${item.name}`}
                         key={i}
                         ref={sectionRefs.current!.at(i)} // Dynamic refs
