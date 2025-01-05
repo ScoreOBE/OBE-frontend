@@ -23,6 +23,13 @@ import ModalEvalChart from "@/components/Modal/Score/ModalEvalChart";
 
 export default function OneAssignment() {
   const { courseNo, name } = useParams();
+  const [params, setParams] = useSearchParams();
+    const academicYear = useAppSelector((state) => state.academicYear);
+    const activeTerm = academicYear.find(
+      (term) =>
+        term.year == parseInt(params.get("year") || "") &&
+        term.semester == parseInt(params.get("semester") || "")
+    )?.isActive;
   const loading = useAppSelector((state) => state.loading);
   const [isSort, setIsSort] = useState(false);
   const course = useAppSelector((state) =>
@@ -53,7 +60,6 @@ export default function OneAssignment() {
   const [sort, setSort] = useState<any>({});
   const [filter, setFilter] = useState<string>("");
   const questions = assignment?.questions;
-  const [params, setParams] = useSearchParams();
   const scores = allStudent
     .map((item) => {
       return questions?.reduce((sum, ques) => {
@@ -382,7 +388,7 @@ export default function OneAssignment() {
                     {questions?.map((item, index) => (
                       <Table.Th key={index}>
                         <div
-                          className="flex justify-end gap-2 cursor-pointer acerSwift:max-macair133:!text-b3  pr-6"
+                          className="flex justify-end items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3  pr-6"
                           onClick={() => onClickSort(item.name)}
                         >
                           <p>{item.name}</p>
@@ -437,7 +443,7 @@ export default function OneAssignment() {
                           <Table.Td className="w-[5%]">
                             <div className="flex gap-3 justify-end items-center">
                               <p>{item.sumScore?.toFixed(2)}</p>
-                              <div
+                            { activeTerm && <div
                                 className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
                                 onClick={() => {
                                   setEditScore({
@@ -452,7 +458,7 @@ export default function OneAssignment() {
                                   IconComponent={IconEdit}
                                   className="size-4 cursor-pointer text-default"
                                 />
-                              </div>
+                              </div>}
                             </div>
                           </Table.Td>
                           {questions?.map((ques, index) => (

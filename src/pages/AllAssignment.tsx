@@ -17,6 +17,7 @@ import IconUpload from "@/assets/icons/upload.svg?react";
 import IconPublish from "@/assets/icons/publish.svg?react";
 import IconUnPublish from "@/assets/icons/unPublish.svg?react";
 import IconPublishEach from "@/assets/icons/publishEach.svg?react";
+import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import IconPublishAll from "@/assets/icons/publishAll.svg?react";
 import IconDots from "@/assets/icons/dots.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
@@ -59,7 +60,14 @@ type TabState = {
 export default function AllAssignment() {
   const { courseNo } = useParams();
   const path = useLocation().pathname;
+  const [params, setParams] = useSearchParams();
   const loading = useAppSelector((state) => state.loading);
+  const academicYear = useAppSelector((state) => state.academicYear);
+  const activeTerm = academicYear.find(
+    (term) =>
+      term.year == parseInt(params.get("year") || "") &&
+      term.semester == parseInt(params.get("semester") || "")
+  )?.isActive;
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)
@@ -85,7 +93,6 @@ export default function AllAssignment() {
     allAssignments!.map(() => React.createRef<HTMLDivElement>())
   );
   const [activeSection, setActiveSection] = useState<number>(0);
-  const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [openPublishScoreModal, setOpenPublishScoreModal] = useState(false);
@@ -671,76 +678,114 @@ export default function AllAssignment() {
                   {allAssignments.length! > 1 && "s"}
                 </p>
                 <div className="flex flex-wrap justify-end items-center gap-3">
-                  <Menu
-                    trigger="click"
-                    openDelay={100}
-                    clickOutsideEvents={["mousedown"]}
-                    classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
-                  >
-                    <Menu.Target>
-                      <Button
-                        variant="outline"
-                        leftSection={
-                          <Icon
-                            IconComponent={IconEyePublish}
-                            className="size-5 acerSwift:max-macair133:size-4"
-                          />
-                        }
-                        className="px-3 acerSwift:max-macair133:!text-b5"
-                      >
-                        Publish score
-                      </Button>
-                    </Menu.Target>
-                    <Menu.Dropdown
-                      className="!z-50 -translate-y-[3px] translate-x-[5px] bg-white"
-                      style={{ boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px" }}
-                    >
-                      <Menu.Item
-                        className="text-[#3E3E3E] text-b2 acerSwift:max-macair133:!text-b5 h-8 w-full "
-                        onClick={() => {
-                          setIsPublishAll(false);
-                          setOpenPublishScoreModal(true);
-                        }}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Icon
-                            IconComponent={IconPublishEach}
-                            className="size-4 text-[#000000]"
-                          />
-                          <span>Each Section</span>
-                        </div>
-                      </Menu.Item>
-                      <Menu.Item
-                        onClick={() => {
-                          setIsPublishAll(true);
-                          setOpenPublishScoreModal(true);
-                        }}
-                        className="text-[#3E3E3E] text-b2 acerSwift:max-macair133:!text-b5 h-8 w-full "
-                      >
-                        <div className="flex items-center gap-2">
-                          <Icon
-                            IconComponent={IconPublishAll}
-                            className="size-4 text-[#000000]"
-                          />
-                          <span>All Sections</span>
-                        </div>
-                      </Menu.Item>
-                    </Menu.Dropdown>
-                  </Menu>
-                  <div className="">{uploadButton()}</div>
-                  <Button
-                    color="#20884f"
-                    leftSection={
-                      <Icon
-                        IconComponent={IconExcel}
-                        className="size-5 acerSwift:max-macair133:size-4"
-                      />
-                    }
-                    className="px-3 acerSwift:max-macair133:!text-b5"
-                    onClick={() => setOpenModalExportScore(true)}
-                  >
-                    Export score
-                  </Button>
+                {activeTerm ? (<div className="">{uploadButton()}</div>) :  <Button
+                  color="#20884f"
+                  onClick={() => setOpenModalExportScore(true)}
+                  leftSection={
+                    <Icon className="size-4" IconComponent={IconExcel} />
+                  }
+                  className="!font-medium px-3"
+                >
+                  Export score
+                </Button> }
+
+                  {activeTerm && user.role != ROLE.TA && (
+                    <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
+                      <Menu trigger="click" position="bottom-end">
+                        <Menu.Target>
+                          <div>
+                            <Icon IconComponent={IconDots} />
+                          </div>
+                        </Menu.Target>
+                        <Menu.Dropdown
+                          className="rounded-md translate-y-1 backdrop-blur-xl bg-white"
+                          style={{
+                            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                          }}
+                        >
+                          <Menu
+                            trigger="hover"
+                            openDelay={100}
+                            closeDelay={200}
+                            classNames={{ item: "text-[#3e3e3e] h-8 w-full " }}
+                          >
+                            <Menu.Target>
+                              <Menu.Item className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5">
+                                <div className="flex justify-between items-center gap-2">
+                                  <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+                                    <Icon
+                                      IconComponent={IconEyePublish}
+                                      className="size-5 acerSwift:max-macair133:size-4 -ml-1"
+                                    />
+
+                                    <span className="pr-10">
+                                      {" "}
+                                      Publish score{" "}
+                                    </span>
+                                  </div>{" "}
+                                  <Icon
+                                    IconComponent={IconChevronRight}
+                                    className="size-4  acerSwift:max-macair133:size- stroke-[2px]"
+                                  />
+                                </div>
+                              </Menu.Item>
+                            </Menu.Target>
+                            <Menu.Dropdown
+                              className="z-50 rounded-md -translate-y-[45px] -translate-x-[195px] bg-white"
+                              style={{
+                                width: "200px",
+                                boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px",
+                              }}
+                            >
+                              <>
+                                <Menu.Item
+                                  onClick={() => {
+                                    setIsPublishAll(false);
+                                    setOpenPublishScoreModal(true);
+                                  }}
+                                >
+                                  <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
+                                    <Icon
+                                      IconComponent={IconPublishEach}
+                                      className="size-4 text-[#000000]"
+                                    />
+                                    <span>Each Section</span>
+                                  </div>
+                                </Menu.Item>
+                                <Menu.Item
+                                  onClick={() => {
+                                    setIsPublishAll(true);
+                                    setOpenPublishScoreModal(true);
+                                  }}
+                                >
+                                  <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
+                                    <Icon
+                                      IconComponent={IconPublishAll}
+                                      className="size-4 text-[#000000]"
+                                    />
+                                    <span>All Sections</span>
+                                  </div>
+                                </Menu.Item>
+                              </>
+                            </Menu.Dropdown>
+                          </Menu>
+
+                          <Menu.Item
+                            onClick={() => setOpenModalExportScore(true)}
+                            className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
+                          >
+                            <div className="flex items-center  gap-2">
+                              <Icon
+                                className="size-4 acerSwift:max-macair133:!size-3.5"
+                                IconComponent={IconExcel}
+                              />
+                              <span>Export score</span>
+                            </div>
+                          </Menu.Item>
+                        </Menu.Dropdown>
+                      </Menu>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -791,10 +836,10 @@ export default function AllAssignment() {
                           <Table.Th className="w-10 sm:max-macair133:text-b4">
                             Student(s)
                           </Table.Th>
-                          <Table.Th className="w-10 !px-4 sm:max-macair133:text-b4 text-center">
+                         {activeTerm && <Table.Th className="w-10 !px-4 sm:max-macair133:text-b4 text-center">
                             Published
-                          </Table.Th>
-                          <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>
+                          </Table.Th>}
+                         {activeTerm && <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>}
                         </Table.Tr>
                       </Table.Thead>
                       <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-b3 acerSwift:max-macair133:text-b4">
@@ -848,7 +893,7 @@ export default function AllAssignment() {
                                 {dateFormatter(assignment.createdAt, 3)}
                               </Table.Td>
                               <Table.Td>{totalStudent || 0}</Table.Td>
-                              <Table.Td className="text-center justify-items-center">
+                              {activeTerm &&   <Table.Td className="text-center justify-items-center">
                                 <div
                                   className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
                                   onClick={(event) => {
@@ -881,8 +926,8 @@ export default function AllAssignment() {
                                     />
                                   )}
                                 </div>
-                              </Table.Td>
-                              <Table.Td className="text-center flex items-center justify-center">
+                              </Table.Td> }
+                              {activeTerm && <Table.Td className="text-center flex items-center justify-center">
                                 <div
                                   className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
                                   onClick={(event) => event.stopPropagation()}
@@ -945,7 +990,7 @@ export default function AllAssignment() {
                                     </Menu.Dropdown>
                                   </Menu>
                                 </div>
-                              </Table.Td>
+                              </Table.Td>}
                             </Table.Tr>
                           );
                         })}
@@ -964,9 +1009,12 @@ export default function AllAssignment() {
                               .flat() || [];
                           return (
                             <div
-                              className={`last:mb-4 flex px-2 border bg-[#ffffff] flex-col rounded-md gap-10 py-2 ${
+                              className={`last:mb-[2px] flex px-2  bg-[#ffffff] flex-col rounded-md gap-10 py-2 ${
                                 activeSection === i ? "active" : ""
                               }`}
+                              style={{
+                                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                              }}
                               id={`${item.name}`}
                               key={i}
                               ref={sectionRefs.current!.at(i)} // Dynamic refs
@@ -1060,7 +1108,7 @@ export default function AllAssignment() {
                     It seems like no evaluations have been added to this course
                     yet.
                   </p>{" "}
-                  <div className="mt-3">{uploadButton()}</div>
+                 {activeTerm && <div className="mt-3">{uploadButton()}</div>}
                 </div>
                 <div className=" items-center justify-center flex">
                   <img
