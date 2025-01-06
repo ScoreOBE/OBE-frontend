@@ -26,11 +26,11 @@ export default function StdCLO() {
   }, []);
 
   return (
-    <div className="bg-white flex flex-col h-full w-full px-6 pt-5  gap-3 overflow-hidden">
+    <div className="bg-white flex flex-col h-full w-full px-6 py-5  gap-3 overflow-hidden">
       {loading ? (
         <Loading />
       ) : (
-        <div className="flex flex-col  overflow-y-auto overflow-x-hidden max-w-full h-full">
+        <div className="flex flex-col   overflow-y-auto overflow-x-hidden max-w-full h-full">
 
           <div className="flex flex-row  py-1   items-center justify-between">
             {course?.clos.length !== 0 ? (
@@ -45,7 +45,7 @@ export default function StdCLO() {
           </div>
           {course?.clos.length !== 0 ? (
             <div
-              className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full  border flex flex-col rounded-lg border-secondary"
+              className="overflow-y-auto overflow-x-auto w-full  h-fit max-h-full  border flex flex-col rounded-lg border-secondary"
               style={{
                 boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
               }}

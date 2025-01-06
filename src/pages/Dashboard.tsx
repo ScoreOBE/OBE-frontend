@@ -6,6 +6,7 @@ import Icon from "@/components/Icon";
 import IconAdd from "@/assets/icons/plus.svg?react";
 import IconDots from "@/assets/icons/dots.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconUpload from "@/assets/icons/upload.svg?react";
 import IconPencilMinus from "@/assets/icons/pencilMinus.svg?react";
 import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
@@ -324,8 +325,27 @@ export default function Dashboard() {
         />
       )}
       <div className=" flex flex-col h-full w-full  overflow-hidden">
+        <Alert
+          radius="md"
+          variant="light"
+          classNames={{
+            body: " flex justify-center",
+          }}
+          className="mt-4 mx-6 pb-6"
+           color='orange'
+          title={
+            <div className="flex items-center gap-2">
+              <Icon IconComponent={IconInfo2} className="mr-2" />
+              <p>
+                ScoreOBE+ is currently in its development (beta) phase. You may
+                encounter unstable features or bugs. <br /> Please report any
+                issues using the button at the top right of your profile.
+              </p>
+            </div>
+          }
+        ></Alert>
         <div className="flex flex-row px-6 pt-3  items-center justify-between">
-          <div className="flex flex-col">
+          <div className="flex flex-col ">
             <p className="text-secondary text-h2 acerSwift:max-macair133:text-[17px] font-semibold ">
               Hi there, {user.firstNameEN}
             </p>

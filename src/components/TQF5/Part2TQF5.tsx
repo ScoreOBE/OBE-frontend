@@ -124,7 +124,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                 const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
                 return (
                   <div
-                    className={` flex flex-col border-b-[2px] last:border-none  gap-5 px-2 pb-6 first:pt-3 ${
+                    className={` flex flex-col border-b-[2px] last:border-none  gap-5  pb-6 first:pt-3 ${
                       activeSection === indexClo ? "active" : ""
                     }`}
                     id={`${clo?.id}`}
@@ -132,8 +132,8 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                     ref={sectionRefs.current!.at(indexClo)}
                   >
                     <div className="flex justify-between">
-                      <div className="text-default flex items-center  font-medium text-[15px]">
-                        <p className="text-[18px] text-secondary mr-2 font-semibold">
+                      <div className="text-default flex items-center  font-medium text-[14px]">
+                        <p className="text-[16px] text-secondary mr-2 font-semibold">
                           CLO {clo?.no}{" "}
                         </p>
                         <div className="flex flex-col ml-2 gap-[2px]">

@@ -1,8 +1,10 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Alert, Button, Group, Modal, Radio, Tabs } from "@mantine/core";
+import { Alert, Button, Group, Menu, Modal, Radio, Tabs } from "@mantine/core";
 import Icon from "@/components/Icon";
+import IconDots from "@/assets/icons/dots.svg?react";
 import IconCheck from "@/assets/icons/Check.svg?react";
+import IconEdit from "@/assets/icons/edit.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconOneToMany from "@/assets/icons/onetomany.svg?react";
 import IconHorizontalAdjustments from "@/assets/icons/horizontalAdjustments.svg?react";
@@ -38,6 +40,7 @@ import { getOnePLO } from "@/services/plo/plo.service";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import ModalMappingAssignment from "@/components/Modal/TQF5/ModalMappingAssignment";
 import exportFile from "@/assets/icons/fileExport.svg?react";
+import IconEye from "@/assets/icons/publishEach.svg?react";
 import { setLoadingOverlay } from "@/store/loading";
 import ModalExportTQF5 from "@/components/Modal/TQF5/ModalExportTQF5";
 
@@ -521,42 +524,68 @@ export default function TQF5() {
                 {getValueEnumByKey(PartTopicTQF5, tqf5Part!)}
               </div>
               <div className="flex gap-2 ">
-                {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
-                  <div className="flex flex-wrap gap-2 items-center">
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        if (tqf5.method) setSelectedMethod(tqf5.method);
-                        setOpenModalChangeMethod(true);
-                      }}
-                      className="flex acerSwift:max-macair133:!text-b5"
-                    >
+                {checkActiveTerm() && tqf5Part == "part3" && tqf5.method && (
+                   <Menu
+                   trigger="click"
+                   openDelay={100}
+                   closeDelay={200}
+                   classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+                 >
+                   <Menu.Target>
+                  <Button variant="outline" className="px-4 min-w-max mr-2">
+                    <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                       <Icon
-                        className="mr-2"
-                        IconComponent={IconHorizontalAdjustments}
+                        className="size-5 acerSwift:max-macair133:size-4"
+                        IconComponent={IconEye}
                       />
-                      Method ({tqf5.method})
-                    </Button>
-                    {tqf5Part == "part2" &&
-                      !!tqf5.assignmentsMap?.length &&
-                      tqf5.method == METHOD_TQF5.SCORE_OBE && (
-                        <Button
-                          className="acerSwift:max-macair133:!text-b5"
-                          onClick={() => setOpenModalAssignmentMapping(true)}
+                      View as
+                    </div>
+                  </Button>
+                  </Menu.Target>
+                  <Menu.Dropdown
+                        className="rounded-md -translate-y-1 -translate-x-10 backdrop-blur-xl bg-white"
+                        style={{
+                          boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                        }}
+                      >
+                        <Menu.Item
+                       
+                          className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5"
                         >
-                          <Icon
-                            className="mr-2"
-                            IconComponent={IconOneToMany}
-                          />
-                          Evaluation Mapping
-                        </Button>
-                      )}
-                  </div>
+                          <div className="flex justify-between items-center gap-2">
+                            <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+                              <Icon
+                                className="mr-3"
+                                IconComponent={IconHorizontalAdjustments}
+                              />
+                             Section
+                            </div>
+                          </div>
+                        </Menu.Item>
+                      
+                            <Menu.Item
+                              className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5"
+                            
+                            >
+                              <div className="flex justify-between items-center gap-2">
+                                <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+                                  <Icon
+                                    className="mr-2"
+                                    IconComponent={IconOneToMany}
+                                  />
+                                Assessment tool
+                                </div>
+                              </div>
+                            </Menu.Item>
+                          
+                        
+                      </Menu.Dropdown>
+                  </Menu>
                 )}
                 <Button
                   onClick={() => setOpenModalExportTQF5(true)}
                   color="#24b9a5"
-                  className="px-4 min-w-max"
+                  className="px-4 min-w-max mr-2"
                 >
                   <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                     <Icon
@@ -566,6 +595,87 @@ export default function TQF5() {
                     Export TQF5
                   </div>
                 </Button>
+
+                {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
+                  <div className="rounded-full hover:bg-gray-300 p-1 mr-2 cursor-pointer">
+                    <Menu
+                      trigger="click"
+                      openDelay={100}
+                      closeDelay={200}
+                      classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+                    >
+                      <Menu.Target>
+                        <div className="cursor-pointer">
+                          <Icon IconComponent={IconDots} />
+                        </div>
+                      </Menu.Target>
+                      <Menu.Dropdown
+                        className="rounded-md translate-y-1 -translate-x-6 backdrop-blur-xl bg-white"
+                        style={{
+                          boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                        }}
+                      >
+                        <Menu.Item
+                          onClick={() => {
+                            if (tqf5.method) setSelectedMethod(tqf5.method);
+                            setOpenModalChangeMethod(true);
+                          }}
+                          className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5"
+                        >
+                          <div className="flex justify-between items-center gap-2">
+                            <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+                              <Icon
+                                className="mr-3"
+                                IconComponent={IconHorizontalAdjustments}
+                              />
+                              Method ({tqf5.method})
+                            </div>
+                          </div>
+                        </Menu.Item>
+                        {tqf5Part == "part2" &&
+                          !!tqf5.assignmentsMap?.length &&
+                          tqf5.method == METHOD_TQF5.SCORE_OBE && (
+                            <Menu.Item
+                              className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5"
+                              onClick={() =>
+                                setOpenModalAssignmentMapping(true)
+                              }
+                            >
+                              <div className="flex justify-between items-center gap-2">
+                                <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+                                  <Icon
+                                    className="mr-2"
+                                    IconComponent={IconOneToMany}
+                                  />
+                                  Evaluation Mapping
+                                </div>
+                              </div>
+                            </Menu.Item>
+                          )}
+                          {tqf5Part == "part3" &&
+                          !!tqf5.assignmentsMap?.length &&
+                          tqf5.method == METHOD_TQF5.SCORE_OBE && (
+                            <Menu.Item
+                              className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5"
+                              onClick={() =>
+                                setOpenModalAssignmentMapping(true)
+                              }
+                            >
+                              <div className="flex justify-between items-center gap-2">
+                                <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+                                  <Icon
+                                    className="mr-[12px] size-5 stroke-[1.4px]"
+                                    IconComponent={IconEdit}
+                                  />
+                                  Set Weight Assessment tool
+                                </div>
+                              </div>
+                            </Menu.Item>
+                          )}
+                      </Menu.Dropdown>
+                    </Menu>
+                  </div>
+                )}
               </div>
             </div>
           </div>
