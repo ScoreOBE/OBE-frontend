@@ -94,7 +94,7 @@ export default function StdChart() {
         <div className="flex overflow-y-auto overflow-x-hidden max-w-full h-full">
           {course?.section?.assignments?.length !== 0 ? (
             <div className="flex gap-6 w-full h-full">
-              <div className="gap-5 flex flex-col my-2 min-w-[86%] max-w-[87%] overflow-y-auto  pt-1 max-h-full">
+              <div className="gap-5 flex flex-col my-2 px-[2px] min-w-[86%] max-w-[87%] overflow-y-auto  pt-1 max-h-full">
                 {course?.section &&
                   course.section.assignments?.map((item, i) => {
                     const studentScore = course.scores

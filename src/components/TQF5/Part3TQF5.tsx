@@ -329,8 +329,8 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
                   >
                     <div className="flex justify-between items-center">
                       <div className="flex justify-between">
-                        <div className="text-default flex items-center  font-medium text-[15px]">
-                          <p className="text-[18px] text-secondary mr-2 font-semibold">
+                        <div className="text-default flex items-center  font-medium text-[14px]">
+                          <p className="text-[16px] text-secondary mr-2 font-semibold">
                             CLO {clo?.no}
                           </p>
                           <div className="flex flex-col ml-2 gap-[2px]">

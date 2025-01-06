@@ -6,11 +6,14 @@ import notFoundImage from "@/assets/image/notFound.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { ROLE } from "@/helpers/constants/enum";
 import { setLoading } from "@/store/loading";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import { getEnrollCourse } from "@/services/student/student.service";
 import { setEnrollCourseList } from "@/store/enrollCourse";
 import Loading from "@/components/Loading/Loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { getSectionNo } from "@/helpers/functions/function";
+import { Alert } from "@mantine/core";
+import Icon from "@/components/Icon";
 
 export default function StdDashboard() {
   const navigate = useNavigate();
@@ -82,6 +85,25 @@ export default function StdDashboard() {
 
   return (
     <div className=" flex flex-col h-full w-full  overflow-hidden">
+        <Alert
+          radius="md"
+          variant="light"
+          classNames={{
+            body: " flex justify-center",
+          }}
+          color='orange'
+          className="mt-4 mx-6 pb-6"
+          title={
+            <div className="flex items-center gap-2">
+              <Icon IconComponent={IconInfo2} className="mr-2" />
+              <p>
+                ScoreOBE+ is currently in its development (beta) phase. You may
+                encounter unstable features or bugs. <br /> Please report any
+                issues using the button at the top right of your profile.
+              </p>
+            </div>
+          }
+        ></Alert>
       <div className="flex flex-row px-6 pt-3   items-center justify-between">
         <div className="flex flex-col">
           <p className="text-secondary text-[18px] font-semibold ">
