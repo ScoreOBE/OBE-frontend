@@ -513,14 +513,14 @@ export default function ModalManageIns({
           </div>
         )
       }
-      size="auto"
+      size="50vw"
       centered
       transitionProps={{ transition: "pop" }}
       classNames={{
         title: "acerSwift:max-macair133:!text-b1 acerSwift:max-macair133:-mt-2",
         close: "acerSwift:max-macair133:-mt-2",
         content:
-          "flex flex-col max-h-fit justify-start bg-[#F6F7FA] text-b2 acerSwift:max-macair133:!text-b3 item-center overflow-hidden max-w-[50vw]",
+          "flex flex-col max-h-fit justify-start bg-[#F6F7FA] text-b2 acerSwift:max-macair133:!text-b3 item-center overflow-hidden max-w-[40vw] max-w-[50vw]",
         body: "!px-0 !pb-0",
       }}
     >
@@ -566,7 +566,7 @@ export default function ModalManageIns({
               {data.sections?.map((sec, index) => (
                 <div
                   key={index}
-                  className="w-full items-center last:border-none border-b-[1px] justify-between  p-3  flex"
+                  className="w-full items-center last:border-none border-b-[1px] justify-between p-3 flex"
                 >
                   <div className="gap-3 flex items-center">
                     <Icon
