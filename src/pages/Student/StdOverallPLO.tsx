@@ -13,13 +13,14 @@ import SpiderChart from "@/components/Chart/SpiderChart";
 import { IModelPLO } from "@/models/ModelPLO";
 import { getOnePLO } from "@/services/plo/plo.service";
 import Icon from "@/components/Icon";
+import { SearchInput } from "@/components/SearchInput";
 
 export default function StdOverallPLO() {
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading.loading);
   const [activeTab, setActiveTab] = useState<string | null>("curriculum");
-  const [activeTab2, setActiveTab2] = useState<string | null>("Evaluation");
+  const [activeSection, setActiveSection] = useState<number>(0);
   const [departmentPLO, setDepartmentPLO] = useState<Partial<IModelPLO>>({});
   const [isRadarChartVisible, setIsRadarChartVisible] = useState<
     Record<string, boolean>
@@ -71,33 +72,66 @@ export default function StdOverallPLO() {
   const data = [
     {
       product: "PLO 1",
-      ผลการประเมินเฉลี่ยรวม: 1,
+      AveragePLO: 2.7,
     },
     {
       product: "PLO 2",
-      ผลการประเมินเฉลี่ยรวม: 4,
+      AveragePLO: 3.2,
     },
     {
       product: "PLO 3",
-      ผลการประเมินเฉลี่ยรวม: 3,
+      AveragePLO: 3.5,
     },
     {
       product: "PLO 4",
-      ผลการประเมินเฉลี่ยรวม: 2,
+      AveragePLO: 4.0,
     },
     {
       product: "PLO 5",
-      ผลการประเมินเฉลี่ยรวม: 4,
+      AveragePLO: 2.8,
     },
     {
       product: "PLO 6",
-      ผลการประเมินเฉลี่ยรวม: 2,
+      AveragePLO: 2.0,
     },
     {
       product: "PLO 7",
-      ผลการประเมินเฉลี่ยรวม: 4,
+      AveragePLO: 3,
     },
   ];
+
+  const searchCourse = async (searchValue: string, reset?: boolean) => {
+    // const path = "/" + location.split("/")[1];
+    // let res;
+    // let payloadCourse: any = {};
+    // if (reset) payloadCourse.search = "";
+    // else payloadCourse.search = searchValue;
+    // switch (path) {
+    //   case ROUTE_PATH.INS_DASHBOARD:
+    //   case ROUTE_PATH.ADMIN_DASHBOARD:
+    //     payloadCourse = {
+    //       ...new CourseRequestDTO(),
+    //       ...payloadCourse,
+    //       departmentCode,
+    //       manage: path.includes(ROUTE_PATH.ADMIN_DASHBOARD),
+    //     };
+    //     payloadCourse.year = parseInt(params.get("year") ?? "");
+    //     payloadCourse.semester = parseInt(params.get("semester") ?? "");
+    //     res = await getCourse(payloadCourse);
+    //     if (res) {
+    //       res.search = payloadCourse.search;
+    //       if (path.includes(ROUTE_PATH.ADMIN_DASHBOARD)) {
+    //         dispatch(setAllCourseList(res));
+    //       } else {
+    //         dispatch(setCourseList(res));
+    //       }
+    //     }
+    //     break;
+    //   default:
+    //     break;
+    // }
+    // localStorage.setItem("search", "true");
+  };
 
   type Course = {
     id: number;
@@ -132,7 +166,7 @@ export default function StdOverallPLO() {
         <Loading />
       ) : (
         <>
-          {/* {departmentPLO && (
+          {departmentPLO && (
             <DrawerPLOdes
               opened={openDrawerPLOdes}
               onClose={() => setOpenDrawerPLOdes(false)}
@@ -164,23 +198,31 @@ export default function StdOverallPLO() {
             ) : (
               <></>
             )}
-            <Button
-              className="text-center px-4"
-              onClick={() => setOpenDrawerPLOdes(true)}
-            >
-              <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
-                <Icon
-                  IconComponent={IconPLO}
-                  className="acerSwift:max-macair133:!size-3"
+            <div className="flex gap-3">
+              {activeTab === "course" && (
+                <SearchInput
+                  onSearch={searchCourse}
+                  placeholder="Course No / Course Name"
                 />
-                PLO Description
-              </div>
-            </Button>
+              )}
+              <Button
+                className="text-center px-4"
+                onClick={() => setOpenDrawerPLOdes(true)}
+              >
+                <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
+                  <Icon
+                    IconComponent={IconPLO}
+                    className="acerSwift:max-macair133:!size-3"
+                  />
+                  PLO Description
+                </div>
+              </Button>
+            </div>
           </div>
 
           <Tabs
             classNames={{
-              root: "overflow-hidden -mt-0.5 flex flex-col h-full",
+              root: "overflow-hidden -mt-0.5 flex flex-col max-h-full",
             }}
             value={activeTab}
             onChange={setActiveTab}
@@ -189,9 +231,9 @@ export default function StdOverallPLO() {
               <Tabs.Tab value="curriculum">Curriculum</Tabs.Tab>
               <Tabs.Tab value="course">Course</Tabs.Tab>
             </Tabs.List>
-            <Tabs.Panel className="flex gap-3 h-full" value="curriculum">
-              <div className="flex px-20 items-center border rounded-lg mt-2 w-[50%]">
-                <div className="flex flex-col justify-center items-center">
+            <Tabs.Panel className="flex h-full max-h-[75vh]" value="curriculum">
+              <div className="flex py-6 items-between justify-center border-t border-l border-b rounded-lg rounded-r-none mt-2 w-[62%] ">
+                <div className="flex flex-col justify-between items-center h-full">
                   <div className="flex flex-col">
                     <p className="text-secondary text-b1 font-semibold text-center">
                       ผลการเรียนรู้ของผู้เรียนตลอดหลักสูตร อ้างอิงตามเกณฑ์ของ
@@ -201,76 +243,105 @@ export default function StdOverallPLO() {
                       Overall Program Learning Outcome
                     </p>
                   </div>
-                  <SpiderChart data={data} height={450} />
-                  <div className="flex gap-2 items-center -mt-8">
-                    <div className="bg-[#6EB4F1] h-3 w-3 rounded-full"></div>
-                    <p> ผลการประเมินเฉลี่ยรวม </p>
+                  <div className="w-full h-full flex items-center justify-center">
+                    <SpiderChart data={data} height={450} />
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-center w-[50%] rounded-lg mt-2 border">
-                <Tabs
-                  classNames={{
-                    root: "overflow-hidden mt-4 flex flex-col h-full w-full px-4",
-                  }}
-                  value={activeTab2}
-                  onChange={setActiveTab2}
-                >
-                  <Tabs.List className="mb-2">
-                    <Tabs.Tab value="Evaluation">Evaluation</Tabs.Tab>
-                    <Tabs.Tab value="criteria">Criteria</Tabs.Tab>
-                  </Tabs.List>
-                  <Tabs.Panel
-                    className="flex gap-3 h-full justify-center items-center"
-                    value="Evaluation"
-                  >
-                    <div className="overflow-y-auto flex overflow-x-auto w-80 h-fit max-h-full border rounded-lg border-secondary">
-                      <Table stickyHeader>
-                        <Table.Thead>
-                          <Table.Tr className="bg-[#e5e7f6]">
-                            <Table.Th>PLO</Table.Th>
-                            <Table.Th>Score</Table.Th>
-                            <Table.Th>Evaluation</Table.Th>
-                          </Table.Tr>
-                        </Table.Thead>
+              <div className="flex flex-col items-start justify-start w-[38%] rounded-lg rounded-l-none border-l-none mt-2 px-8 py-5 border ">
+                <div className="flex overflow-y-auto overflow-x-hidden w-full max-h-full gap-4">
+                  <div className="gap-5 flex flex-col my-2 px-[2px] w-full overflow-y-auto max-h-full text-b2">
+                    {[...Array(7)].map((_, i) => (
+                      <div
+                        key={`sidebar-${i}`}
+                        className="flex flex-col gap-2 text-b3 border-b pb-5 last:border-none"
+                      >
+                        <p className=" text-secondary text-b2 mb-2">
+                          <span className="text-secondary text-h1 font-semibold">
+                            PLO {i + 1}
+                          </span>{" "}
+                          is based on the following{" "}
+                          <span className="text-secondary font-semibold">
+                            6 courses.
+                          </span>{" "}
+                        </p>
+                        <div className="flex flex-col gap-2.5 ml-4">
+                          <p>
+                            <span className="font-medium text-default">
+                              261101
+                            </span>{" "}
+                            - Introduction to Programming
+                          </p>
+                          <p>
+                            <span className="font-medium text-default">
+                              261102
+                            </span>{" "}
+                            - Object-Oriented Programming
+                          </p>
+                          <p>
+                            <span className="font-medium text-default">
+                              261103
+                            </span>{" "}
+                            - Data Structures
+                          </p>
+                          <p>
+                            <span className="font-medium text-default">
+                              261104
+                            </span>{" "}
+                            - Algorithms
+                          </p>
 
-                        <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px] ">
-                          {data.map((Item, index) => {
-                            return (
-                              <Table.Tr key={index}>
-                                <Table.Td>PLO {index + 1}</Table.Td>
-                                <Table.Td>
-                                  <p>4</p>
-                                </Table.Td>
-                                <Table.Td>
-                                  <p>Excellent</p>
-                                </Table.Td>
-                              </Table.Tr>
-                            );
-                          })}
-                        </Table.Tbody>
-                      </Table>
-                    </div>
-                    <div></div>
-                  </Tabs.Panel>
-                  <Tabs.Panel
-                    className="flex flex-col gap-1 overflow-y-auto mb-12"
-                    value="criteria"
-                  >
-                    <div></div>
-                  </Tabs.Panel>
-                </Tabs>
+                          <p>
+                            <span className="font-medium text-default">
+                              261105
+                            </span>{" "}
+                            - Database Systems
+                          </p>
+                          <p>
+                            <span className="font-medium text-default">
+                              261106
+                            </span>{" "}
+                            - Operating Systems
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className=" mt-3 flex flex-col">
+                    {[...Array(7)].map((_, i) => (
+                      <div
+                        key={`sidebar-${i}`}
+                        className={`max-w-fit ${
+                          activeSection === i ? "active" : ""
+                        }`}
+                      >
+                        <a href={`#${i}`}>
+                          <p
+                            className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
+                              activeSection === i
+                                ? "text-secondary"
+                                : "text-[#D2C9C9]"
+                            }`}
+                          >
+                            PLO {i + 1}
+                          </p>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </Tabs.Panel>
             <Tabs.Panel
               className="flex flex-col gap-1 overflow-y-auto mb-12"
               value="course"
             >
-              <div className="grid grid-cols-3 gap-4 mt-2 h-full">
+              <div className="grid grid-cols-3 gap-4 mt-2 h-full ">
                 {courses.map((course) => (
                   <div
                     key={course.id}
-                    className="border rounded-lg text-b2 shadow-sm flex flex-col gap-4 overflow-clip"
+                    className="border rounded-lg text-b2 shadow-sm flex flex-col gap-0 overflow-clip pb-4"
                   >
                     <div className="px-5 pt-4 flex justify-between">
                       <div>
@@ -279,53 +350,15 @@ export default function StdOverallPLO() {
                           {course.name}
                         </p>
                       </div>
-                      <Button
-                        variant="outline"
-                        className="border-[#DDDDDD]"
-                        onClick={() =>
-                          setIsRadarChartVisible((prev) => ({
-                            ...prev,
-                            [course.id]: !prev[course.id],
-                          }))
-                        }
-                      >
-                        {isRadarChartVisible[course.id]
-                          ? "Hide Score"
-                          : "View Score"}
-                      </Button>
                     </div>
-                    {isRadarChartVisible[course.id] ? (
-                      <div className="flex flex-col items-center justify-center pb-4 mx-4">
-                        <div className="flex w-full gap-24 py-2 border-b-2 px-8 font-semibold text-b3">
-                          <div className="text-secondary w-[120px]">PLO</div>
-                          <div className="">Score</div>
-                          <div className="">Evaluation</div>
-                        </div>
 
-                        {data.map((Item, index) => {
-                          return (
-                            <div
-                              key={index}
-                              className={`flex w-full gap-24 py-3.5 px-8 font-medium text-b3  ${
-                                index % 2 === 0 ? "bg-deemphasize/5" : ""
-                              } `}
-                            >
-                              <p className="w-[120px]">PLO {index + 1}</p>
-                              <p className="">4</p>
-                              <p>Excellent</p>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <SpiderChart data={data} height={350} />
-                    )}
+                    <SpiderChart data={data} height={350} />
                   </div>
                 ))}
               </div>
             </Tabs.Panel>
-          </Tabs> */}
-          <div className=" flex flex-col h-full w-full  overflow-hidden">
+          </Tabs>
+          {/* <div className=" flex flex-col h-full w-full  overflow-hidden">
             <div className="flex flex-row px-6 pt-3   items-center justify-between">
               <div className="flex flex-col">
                 <p className="text-secondary text-[18px] font-semibold "></p>
@@ -349,7 +382,7 @@ export default function StdOverallPLO() {
                 <img src={maintenace} alt="notFound"></img>
               </div>
             </div>
-          </div>
+          </div> */}
         </>
       )}
     </div>

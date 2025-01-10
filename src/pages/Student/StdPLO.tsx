@@ -16,6 +16,7 @@ import { getOnePLO } from "@/services/plo/plo.service";
 import SpiderChart from "@/components/Chart/SpiderChart";
 
 export default function StdPLO() {
+  const { courseNo } = useParams();
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading.loading);
@@ -31,7 +32,7 @@ export default function StdPLO() {
   const department = useAppSelector((state) =>
     state.faculty.department.slice(1)
   );
-  const { courseNo } = useParams();
+
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
@@ -72,31 +73,31 @@ export default function StdPLO() {
   const data = [
     {
       product: "PLO 1",
-      ผลการประเมินเฉลี่ยรวม: 1,
+      AveragePLO: 1.9,
     },
     {
       product: "PLO 2",
-      ผลการประเมินเฉลี่ยรวม: 4,
+      AveragePLO: 3.2,
     },
     {
       product: "PLO 3",
-      ผลการประเมินเฉลี่ยรวม: 3,
+      AveragePLO: 3.3,
     },
     {
       product: "PLO 4",
-      ผลการประเมินเฉลี่ยรวม: 2,
+      AveragePLO: 2.2,
     },
     {
       product: "PLO 5",
-      ผลการประเมินเฉลี่ยรวม: 4,
+      AveragePLO: 4,
     },
     {
       product: "PLO 6",
-      ผลการประเมินเฉลี่ยรวม: 2,
+      AveragePLO: 2,
     },
     {
       product: "PLO 7",
-      ผลการประเมินเฉลี่ยรวม: 4,
+      AveragePLO: 4,
     },
   ];
 
@@ -106,7 +107,7 @@ export default function StdPLO() {
         <Loading />
       ) : (
         <>
-          {/* {departmentPLO && (
+          {departmentPLO && (
             <DrawerPLOdes
               opened={openDrawerPLOdes}
               onClose={() => setOpenDrawerPLOdes(false)}
@@ -117,7 +118,7 @@ export default function StdPLO() {
           <div className="flex flex-row pb-2 items-center justify-between">
             {test ? (
               <p className="text-secondary text-[16px] font-semibold">
-                ผลการเรียนรู้ของผู้เรียนอ้างอิงตามเกณฑ์ของ ABET
+                ผลการเรียนรู้ของผู้เรียน
                 <br />
                 Program Learning Outcome
               </p>
@@ -137,47 +138,22 @@ export default function StdPLO() {
               </div>
             </Button>
           </div>
-
-          <div className="flex px-24 h-full items-center border rounded-lg">
-            <div className="flex flex-col justify-center items-center w-[50%]">
-              <SpiderChart data={data} height={500} />
-              <div className="flex gap-2 items-center -mt-8">
-                <div className="bg-blue-600 h-3 w-3 rounded-full"></div>
-                <p> ผลการประเมินเฉลี่ยรวม </p>
-              </div>
+          <div
+            className="flex flex-col justify-center items-center border rounded-lg h-full mt-0.5 py-8"
+            style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+          >
+            <div className="flex flex-col">
+              <p className="text-secondary text-b1 font-semibold text-center">
+                ผลการเรียนรู้ของผู้เรียนประจำรหัสวิชา {courseNo}
+              </p>
+              <p className="text-[#575757] text-[14px] text-center">
+                Program Learning Outcome
+              </p>
             </div>
-            <div className="flex items-center justify-center w-[50%] ">
-              <div className="overflow-y-auto flex overflow-x-auto w-80 h-fit max-h-full border rounded-lg border-secondary">
-                <Table stickyHeader>
-                  <Table.Thead>
-                    <Table.Tr className="bg-[#e5e7f6]">
-                      <Table.Th>PLO</Table.Th>
-                      <Table.Th>Score</Table.Th>
-                      <Table.Th>Evaluation</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
+            <SpiderChart data={data} height={460} />
+          </div>
 
-                  <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px] ">
-                    {data.map((Item, index) => {
-                      return (
-                        <Table.Tr key={index}>
-                          <Table.Td>PLO {index + 1}</Table.Td>
-                          <Table.Td>
-                            <p>4</p>
-                          </Table.Td>
-                          <Table.Td>
-                            <p>Excellent</p>
-                          </Table.Td>
-                        </Table.Tr>
-                      );
-                    })}
-                  </Table.Tbody>
-                </Table>
-              </div>
-            </div>
-          </div> */}
-
-          <div className=" flex flex-col h-full w-full  overflow-hidden">
+          {/* <div className=" flex flex-col h-full w-full  overflow-hidden">
             <div className="flex flex-row px-6 pt-3   items-center justify-between">
               <div className="flex flex-col">
                 <p className="text-secondary text-[18px] font-semibold "></p>
@@ -201,7 +177,7 @@ export default function StdPLO() {
                 <img src={maintenace} alt="notFound"></img>
               </div>
             </div>
-          </div>
+          </div> */}
         </>
       )}
     </div>
