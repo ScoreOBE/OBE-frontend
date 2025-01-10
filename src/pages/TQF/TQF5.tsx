@@ -18,7 +18,7 @@ import Loading from "@/components/Loading/Loading";
 import { setShowNavbar, setShowSidebar } from "@/store/config";
 import Part1TQF5 from "@/components/TQF5/Part1TQF5";
 import Part2TQF5 from "@/components/TQF5/Part2TQF5";
-import Part3TQF5 from "@/components/TQF5/Part3TQF5";
+import Part3TQF5, { ViewPart3TQF5 } from "@/components/TQF5/Part3TQF5";
 import { IModelTQF5 } from "@/models/ModelTQF5";
 import { PartTopicTQF5 } from "@/helpers/constants/TQF5.enum";
 import {
@@ -65,6 +65,7 @@ export default function TQF5() {
   const [tqf5Part, setTqf5Part] = useState<string | null>(
     Object.keys(partLabel)[0]
   );
+  const [selectedView, setSelectedView] = useState<ViewPart3TQF5>("assessment");
   const [selectedMethod, setSelectedMethod] = useState<METHOD_TQF5>();
   const [openModalChangeMethod, setOpenModalChangeMethod] = useState(false);
   const [openModalExportTQF5, setOpenModalExportTQF5] = useState(false);
@@ -87,7 +88,12 @@ export default function TQF5() {
       value: Object.keys(partLabel)[2],
       tab: partLabel.part3,
       compo: (
-        <Part3TQF5 setForm={setForm} tqf3={tqf3!} assignments={assignments!} />
+        <Part3TQF5
+          setForm={setForm}
+          tqf3={tqf3!}
+          assignments={assignments!}
+          view={selectedView}
+        />
       ),
     },
   ];
@@ -553,7 +559,12 @@ export default function TQF5() {
                           boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                         }}
                       >
-                        <Menu.Item className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5">
+                        <Menu.Item
+                          className={`text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7 acerSwift:max-macair133:!text-b5 ${
+                            selectedView == "section" && "bg-bgTableHeader"
+                          }`}
+                          onClick={() => setSelectedView("section")}
+                        >
                           <div className="flex justify-between items-center gap-2">
                             <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                               <Icon
@@ -564,8 +575,12 @@ export default function TQF5() {
                             </div>
                           </div>
                         </Menu.Item>
-
-                        <Menu.Item className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5">
+                        <Menu.Item
+                          className={`text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5 ${
+                            selectedView == "assessment" && "bg-bgTableHeader"
+                          }`}
+                          onClick={() => setSelectedView("assessment")}
+                        >
                           <div className="flex justify-between items-center gap-2">
                             <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                               <Icon
