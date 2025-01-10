@@ -377,7 +377,7 @@ export default function AllAssignment() {
             onChange={(event) => form.setFieldValue("assignments", event)}
           >
             <Group>
-              <div className="flex gap-3">
+              <div className="flex gap-3 flex-wrap">
                 {allAssignments.map((as, index) => (
                   <Chip
                     key={index}
@@ -557,22 +557,20 @@ export default function AllAssignment() {
             }}
           >
             <Group className="flex gap-3">
-              <div className="flex gap-3">
-                {course?.sections.map((sec) => (
-                  <Chip
-                    key={sec.id}
-                    classNames={{
-                      root: "h-8 min-w-[114px]  !rounded-[10px] text-center justify-center items-center",
-                      label:
-                        "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold translate-y-[3px] ",
-                    }}
-                    size="md"
-                    value={sec.sectionNo?.toString()}
-                  >
-                    Section {sec.sectionNo}
-                  </Chip>
-                ))}
-              </div>
+              {course?.sections.map((sec) => (
+                <Chip
+                  key={sec.id}
+                  classNames={{
+                    root: "h-8 min-w-[114px]  !rounded-[10px] text-center justify-center items-center",
+                    label:
+                      "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold translate-y-[3px] ",
+                  }}
+                  size="md"
+                  value={sec.sectionNo?.toString()}
+                >
+                  Section {sec.sectionNo}
+                </Chip>
+              ))}
             </Group>
           </Chip.Group>
         </div>
@@ -678,16 +676,20 @@ export default function AllAssignment() {
                   {allAssignments.length! > 1 && "s"}
                 </p>
                 <div className="flex flex-wrap justify-end items-center gap-3">
-                {activeTerm ? (<div className="">{uploadButton()}</div>) :  <Button
-                  color="#20884f"
-                  onClick={() => setOpenModalExportScore(true)}
-                  leftSection={
-                    <Icon className="size-4" IconComponent={IconExcel} />
-                  }
-                  className="!font-medium px-3"
-                >
-                  Export score
-                </Button> }
+                  {activeTerm ? (
+                    <div className="">{uploadButton()}</div>
+                  ) : (
+                    <Button
+                      color="#20884f"
+                      onClick={() => setOpenModalExportScore(true)}
+                      leftSection={
+                        <Icon className="size-4" IconComponent={IconExcel} />
+                      }
+                      className="!font-medium px-3"
+                    >
+                      Export score
+                    </Button>
+                  )}
 
                   {activeTerm && user.role != ROLE.TA && (
                     <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
@@ -836,10 +838,14 @@ export default function AllAssignment() {
                           <Table.Th className="w-10 sm:max-macair133:text-b4">
                             Student(s)
                           </Table.Th>
-                         {activeTerm && <Table.Th className="w-10 !px-4 sm:max-macair133:text-b4 text-center">
-                            Published
-                          </Table.Th>}
-                         {activeTerm && <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>}
+                          {activeTerm && (
+                            <Table.Th className="w-10 !px-4 sm:max-macair133:text-b4 text-center">
+                              Published
+                            </Table.Th>
+                          )}
+                          {activeTerm && (
+                            <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>
+                          )}
                         </Table.Tr>
                       </Table.Thead>
                       <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-b3 acerSwift:max-macair133:text-b4">
@@ -893,104 +899,108 @@ export default function AllAssignment() {
                                 {dateFormatter(assignment.createdAt, 3)}
                               </Table.Td>
                               <Table.Td>{totalStudent || 0}</Table.Td>
-                              {activeTerm &&   <Table.Td className="text-center justify-items-center">
-                                <div
-                                  className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
-                                  onClick={(event) => {
-                                    event.stopPropagation();
-                                    form.setFieldValue(
-                                      "isPublish",
-                                      !assignment.isPublish
-                                    );
-                                    form.setFieldValue(
-                                      "sections",
-                                      course?.sections.map(
-                                        (sec) => sec.sectionNo
-                                      ) || []
-                                    );
-                                    form.setFieldValue("assignments", [
-                                      assignment.name,
-                                    ]);
-                                    onClickPublish();
-                                  }}
-                                >
-                                  {assignment.isPublish ? (
-                                    <Icon
-                                      IconComponent={IconPublish}
-                                      className="text-default "
-                                    />
-                                  ) : (
-                                    <Icon
-                                      IconComponent={IconUnPublish}
-                                      className="text-default"
-                                    />
-                                  )}
-                                </div>
-                              </Table.Td> }
-                              {activeTerm && <Table.Td className="text-center flex items-center justify-center">
-                                <div
-                                  className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
-                                  onClick={(event) => event.stopPropagation()}
-                                >
-                                  <Menu
-                                    trigger="click"
-                                    position="bottom-end"
-                                    offset={2}
+                              {activeTerm && (
+                                <Table.Td className="text-center justify-items-center">
+                                  <div
+                                    className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                                    onClick={(event) => {
+                                      event.stopPropagation();
+                                      form.setFieldValue(
+                                        "isPublish",
+                                        !assignment.isPublish
+                                      );
+                                      form.setFieldValue(
+                                        "sections",
+                                        course?.sections.map(
+                                          (sec) => sec.sectionNo
+                                        ) || []
+                                      );
+                                      form.setFieldValue("assignments", [
+                                        assignment.name,
+                                      ]);
+                                      onClickPublish();
+                                    }}
                                   >
-                                    <Menu.Target>
-                                      <div>
-                                        <Icon
-                                          IconComponent={IconDots}
-                                          className=" rounded-full w-fit hover:bg-gray-300"
-                                        />
-                                      </div>
-                                    </Menu.Target>
-                                    <Menu.Dropdown
-                                      className="rounded-md backdrop-blur-xl bg-white/70 "
-                                      style={{
-                                        boxShadow:
-                                          "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                                      }}
+                                    {assignment.isPublish ? (
+                                      <Icon
+                                        IconComponent={IconPublish}
+                                        className="text-default "
+                                      />
+                                    ) : (
+                                      <Icon
+                                        IconComponent={IconUnPublish}
+                                        className="text-default"
+                                      />
+                                    )}
+                                  </div>
+                                </Table.Td>
+                              )}
+                              {activeTerm && (
+                                <Table.Td className="text-center flex items-center justify-center">
+                                  <div
+                                    className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                                    onClick={(event) => event.stopPropagation()}
+                                  >
+                                    <Menu
+                                      trigger="click"
+                                      position="bottom-end"
+                                      offset={2}
                                     >
-                                      <Menu.Item
-                                        className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
-                                        onClick={() => {
-                                          setEditDeleteAssignment(
-                                            assignment.name
-                                          );
-                                          setEditName(assignment.name);
-                                          setOpenModalEditAssignment(true);
+                                      <Menu.Target>
+                                        <div>
+                                          <Icon
+                                            IconComponent={IconDots}
+                                            className=" rounded-full w-fit hover:bg-gray-300"
+                                          />
+                                        </div>
+                                      </Menu.Target>
+                                      <Menu.Dropdown
+                                        className="rounded-md backdrop-blur-xl bg-white/70 "
+                                        style={{
+                                          boxShadow:
+                                            "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                                         }}
                                       >
-                                        <div className="flex items-center gap-2">
-                                          <Icon
-                                            IconComponent={IconPencilMinus}
-                                            className="size-4 stroke-[2px]"
-                                          />
-                                          <span>Edit Evaluation Name</span>
-                                        </div>
-                                      </Menu.Item>
-                                      <Menu.Item
-                                        className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
-                                        onClick={() => {
-                                          setEditDeleteAssignment(
-                                            assignment.name
-                                          );
-                                          setOpenModalDeleteAssignment(true);
-                                        }}
-                                      >
-                                        <div className="flex items-center gap-2">
-                                          <Icon
-                                            IconComponent={IconTrash}
-                                            className="size-4 stroke-[2px]"
-                                          />
-                                          <span>Delete Evaluation</span>
-                                        </div>
-                                      </Menu.Item>
-                                    </Menu.Dropdown>
-                                  </Menu>
-                                </div>
-                              </Table.Td>}
+                                        <Menu.Item
+                                          className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
+                                          onClick={() => {
+                                            setEditDeleteAssignment(
+                                              assignment.name
+                                            );
+                                            setEditName(assignment.name);
+                                            setOpenModalEditAssignment(true);
+                                          }}
+                                        >
+                                          <div className="flex items-center gap-2">
+                                            <Icon
+                                              IconComponent={IconPencilMinus}
+                                              className="size-4 stroke-[2px]"
+                                            />
+                                            <span>Edit Evaluation Name</span>
+                                          </div>
+                                        </Menu.Item>
+                                        <Menu.Item
+                                          className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
+                                          onClick={() => {
+                                            setEditDeleteAssignment(
+                                              assignment.name
+                                            );
+                                            setOpenModalDeleteAssignment(true);
+                                          }}
+                                        >
+                                          <div className="flex items-center gap-2">
+                                            <Icon
+                                              IconComponent={IconTrash}
+                                              className="size-4 stroke-[2px]"
+                                            />
+                                            <span>Delete Evaluation</span>
+                                          </div>
+                                        </Menu.Item>
+                                      </Menu.Dropdown>
+                                    </Menu>
+                                  </div>
+                                </Table.Td>
+                              )}
                             </Table.Tr>
                           );
                         })}
@@ -1013,7 +1023,8 @@ export default function AllAssignment() {
                                 activeSection === i ? "active" : ""
                               }`}
                               style={{
-                                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                                boxShadow:
+                                  "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                               }}
                               id={`${item.name}`}
                               key={i}
@@ -1108,7 +1119,7 @@ export default function AllAssignment() {
                     It seems like no evaluations have been added to this course
                     yet.
                   </p>{" "}
-                 {activeTerm && <div className="mt-3">{uploadButton()}</div>}
+                  {activeTerm && <div className="mt-3">{uploadButton()}</div>}
                 </div>
                 <div className=" items-center justify-center flex">
                   <img

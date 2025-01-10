@@ -1,4 +1,4 @@
-import { Button, Checkbox, Group, Modal } from "@mantine/core";
+import { Button, Checkbox, Chip, Group, Modal } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
@@ -9,6 +9,7 @@ import IconExcel from "@/assets/icons/excel.svg?react";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
 import { setLoadingOverlay } from "@/store/loading";
 import { getSectionNo } from "@/helpers/functions/function";
+import * as XLSX from "xlsx";
 
 type Props = {
   opened: boolean;
@@ -17,28 +18,111 @@ type Props = {
 
 export default function ModalExportScore({ opened, onClose }: Props) {
   const { courseNo } = useParams();
-  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [selectedSecToExport, setSelectedSecToExport] = useState<string[]>([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
-  const dispatch = useAppDispatch();
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
 
-  // useEffect(() => {
-  //   if (opened) {
-  //   }
-  // }, [opened]);
-
   useEffect(() => {
-    if (selectedSecToExport) {
-      console.log(selectedSecToExport);
+    if (opened) {
+      setSelectedSecToExport(
+        course?.sections?.map((sec) => sec.sectionNo!.toString()) || []
+      );
     }
-  }, [selectedSecToExport]);
+  }, [opened]);
 
   const onCloseModal = () => {
     onClose();
     setSelectedSecToExport([]);
+  };
+
+  const exportScore = () => {
+    if (!course) return;
+
+    const workbook = XLSX.utils.book_new();
+
+    course.sections
+      .flatMap(({ assignments }) => assignments)
+      .forEach((assignment) => {
+        if (workbook.SheetNames.includes(assignment?.name!)) return;
+        const rows: any[][] = [];
+        const questionHeaders: string[] = [];
+        const fullScores: string[] = [];
+        const descriptions: string[] = [];
+        const headerRow1 = [
+          "section",
+          "studentId",
+          "firstName",
+          "lastName",
+          "Question",
+        ];
+        const headerRow2 = ["", "", "", "", "Full Score"];
+        const headerRow3 = ["", "", "", "", "Description (Optional)"];
+
+        assignment?.questions.forEach((q) => {
+          questionHeaders.push(q.name);
+          fullScores.push(q.fullScore.toString() || "");
+          descriptions.push(q.desc || "");
+        });
+
+        headerRow1.push(...questionHeaders);
+        headerRow2.push(...fullScores);
+        headerRow3.push(...descriptions);
+
+        rows.push(headerRow1, headerRow2, headerRow3);
+
+        selectedSecToExport.forEach((secNo) => {
+          const section = course.sections.find(
+            (sec) => sec.sectionNo?.toString() === secNo
+          );
+          if (section) {
+            section.students?.forEach(({ student, scores }) => {
+              const scoreGroup = scores?.find(
+                (sg) => sg.assignmentName === assignment?.name
+              );
+              if (!scoreGroup) return;
+              const row = [
+                secNo,
+                student.studentId,
+                student.firstNameTH || student.firstNameEN,
+                student.lastNameTH || student.lastNameEN,
+                "",
+              ];
+              assignment?.questions.forEach((q) => {
+                const questionScore = scoreGroup?.questions.find(
+                  (qs) => qs.name === q.name
+                );
+                row.push(questionScore?.score?.toFixed(2) || "");
+              });
+              rows.push(row);
+            });
+          }
+        });
+
+        const worksheet = XLSX.utils.aoa_to_sheet(rows);
+        const merges = [
+          { s: { r: 0, c: 0 }, e: { r: 2, c: 0 } }, // Merge "Section"
+          { s: { r: 0, c: 1 }, e: { r: 2, c: 1 } }, // Merge "Student ID"
+          { s: { r: 0, c: 2 }, e: { r: 2, c: 2 } }, // Merge "First Name"
+          { s: { r: 0, c: 3 }, e: { r: 2, c: 3 } }, // Merge "Last Name"
+        ];
+        questionHeaders.forEach((_, index) => {
+          merges.push({
+            s: { r: 0, c: 4 + index },
+            e: { r: 0, c: 4 + index },
+          });
+        });
+        worksheet["!merges"] = merges;
+        XLSX.utils.book_append_sheet(workbook, worksheet, assignment?.name);
+      });
+
+    XLSX.writeFile(
+      workbook,
+      `scores_${courseNo}_${course.semester}${course.year
+        .toString()
+        .slice(-2)}.xlsx`
+    );
   };
 
   return (
@@ -63,8 +147,55 @@ export default function ModalExportScore({ opened, onClose }: Props) {
         body: "flex flex-col overflow-hidden max-h-full h-fit",
       }}
     >
-      {/* <div className="flex flex-col">
-        <Checkbox.Group
+      <p className="text-b2 acerSwift:max-macair133:text-b3 mb-1 font-semibold">
+        Select section to export
+      </p>
+      <div className="flex flex-col gap-4">
+        {!!course?.sections.length && (
+          <Chip
+            classNames={{
+              label:
+                "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold translate-y-[3px]",
+            }}
+            size="md"
+            checked={selectedSecToExport.length === course?.sections.length}
+            onChange={() => {
+              if (selectedSecToExport.length === course?.sections.length) {
+                setSelectedSecToExport([]);
+              } else {
+                setSelectedSecToExport(
+                  course?.sections?.map((sec) => sec.sectionNo!.toString()) ||
+                    []
+                );
+              }
+            }}
+          >
+            All Sections
+          </Chip>
+        )}
+        <Chip.Group
+          multiple
+          value={selectedSecToExport}
+          onChange={(event) => setSelectedSecToExport(event)}
+        >
+          <Group className="flex gap-3">
+            {course?.sections.map((sec, index) => (
+              <Chip
+                key={index}
+                classNames={{
+                  root: "h-8 !rounded-[10px] text-center justify-center items-center",
+                  label:
+                    "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold  ",
+                }}
+                size="md"
+                value={sec.sectionNo?.toString()}
+              >
+                {getSectionNo(sec.sectionNo)}
+              </Chip>
+            ))}
+          </Group>
+        </Chip.Group>
+        {/* <Checkbox.Group
           label={`Select section to export`}
           classNames={{
             label:
@@ -98,7 +229,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
               </div>
             );
           })}
-        </Checkbox.Group>
+        </Checkbox.Group> */}
       </div>
       <div className="flex justify-end mt-2 acerSwift:max-macair133:mt-4 sticky w-full">
         <Group className="flex w-full gap-2 h-fit items-end justify-end">
@@ -122,23 +253,13 @@ export default function ModalExportScore({ opened, onClose }: Props) {
               />
             }
             className="acerSwift:max-macair133:!text-b5"
-            // onClick={generatePDF}
+            onClick={exportScore}
             disabled={selectedSecToExport.length === 0}
           >
             Export Score
           </Button>
         </Group>
-      </div> */}
-
-      <div className="h-full items-start justify-center flex flex-col">
-        <p className=" mb-7 mt-1 text-b2 break-words text-[#777777] font-medium leading-relaxed">
-          Available in February 2025
-        </p>
       </div>
-      {/* <img className=" z-50  w-[25vw]  " src={maintenace} alt="loginImage" /> */}
-      <Button onClick={onClose} className="!w-full">
-        OK
-      </Button>
     </Modal>
   );
 }
