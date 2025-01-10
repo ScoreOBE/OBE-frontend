@@ -620,7 +620,7 @@ export default function ModalAddCourse({
         </Stepper.Step>
         <Stepper.Step
           allowStepSelect={false}
-          label="Section Infor"
+          label="Section Info"
           description="STEP 3"
         >
           <div className="flex flex-col macair133:max-h-[420px]  sm:max-h-[260px] ipad11:max-h-[340px] acerSwift:max-macair133:max-h-[260px] h-fit w-full mt-2 mb-5 p-[2px] overflow-y-auto">
