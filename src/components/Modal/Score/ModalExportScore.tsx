@@ -135,7 +135,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
           <p>Export score {courseNo}</p>
           <p className="text-b4 acerSwift:max-macair133:!text-b5 inline-flex items-center text-[#20884f] ">
             File format:{" "}
-            <Icon IconComponent={IconExcel} className="ml-1 size-4" />
+            <Icon IconComponent={IconExcel} className="ml-1 mr-2 size-4" />  .xlsx
           </p>
         </div>
       }
@@ -147,7 +147,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
         body: "flex flex-col overflow-hidden max-h-full h-fit",
       }}
     >
-      <p className="text-b2 acerSwift:max-macair133:text-b3 mb-1 font-semibold">
+      <p className="text-b2 text-default acerSwift:max-macair133:text-b3 mb-1 mt-2 font-semibold">
         Select section to export
       </p>
       <div className="flex flex-col gap-4">
@@ -231,7 +231,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
           })}
         </Checkbox.Group> */}
       </div>
-      <div className="flex justify-end mt-2 acerSwift:max-macair133:mt-4 sticky w-full">
+      <div className="flex justify-end mt-12 acerSwift:max-macair133:mt-4 sticky w-full">
         <Group className="flex w-full gap-2 h-fit items-end justify-end">
           <Button
             onClick={onClose}
@@ -256,7 +256,7 @@ export default function ModalExportScore({ opened, onClose }: Props) {
             onClick={exportScore}
             disabled={selectedSecToExport.length === 0}
           >
-            Export Score
+            Export score
           </Button>
         </Group>
       </div>

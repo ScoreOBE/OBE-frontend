@@ -180,22 +180,23 @@ export default function StdOverallPLO() {
               //   <br />
               //   Overall Program Learning Outcome
               // </p>
-              <div className="flex flex-col">
-                <p className="text-secondary text-[18px] font-semibold ">
-                  Hi there, {user.firstNameEN}
-                </p>
-                <p className="text-[#575757] text-[14px]">
-                  You have completed{" "}
-                  <span className="text-[#1f69f3] font-semibold">
-                    12 Courses{" "}
-                  </span>
-                  In CPE curriculum
-                </p>
-              </div>
+              // <div className="flex flex-col">
+              //   <p className="text-secondary text-[18px] font-semibold ">
+              //     Hi there, {user.firstNameEN}
+              //   </p>
+              //   <p className="text-[#575757] text-[14px]">
+              //     You have completed{" "}
+              //     <span className="text-[#1f69f3] font-semibold">
+              //       12 Courses{" "}
+              //     </span>
+              //     In CPE curriculum
+              //   </p>
+              // </div>
+              <></>
             ) : (
               <></>
             )}
-            <div className="flex gap-3">
+            {/* <div className="flex gap-3">
               {activeTab === "course" && (
                 <SearchInput
                   onSearch={searchCourse}
@@ -214,10 +215,10 @@ export default function StdOverallPLO() {
                   PLO Description
                 </div>
               </Button>
-            </div>
+            </div> */}
           </div>
 
-          <Tabs
+          {/* <Tabs
             classNames={{
               root: "overflow-hidden -mt-0.5 flex flex-col max-h-full",
             }}
@@ -244,7 +245,7 @@ export default function StdOverallPLO() {
                   </div>
                 </div>
               </div>
-              {/* <div className="flex flex-col items-start justify-start w-[38%] rounded-lg mt-2 px-5 py-5 border ">
+              <div className="flex flex-col items-start justify-start w-[38%] rounded-lg mt-2 px-5 py-5 border ">
                 <div className="flex overflow-y-auto overflow-x-hidden w-full max-h-full gap-4">
                   <div className="gap-5 flex flex-col my-2 px-[2px] w-full overflow-y-auto max-h-full text-b2">
                     {[...Array(7)].map((_, i) => (
@@ -331,7 +332,7 @@ export default function StdOverallPLO() {
                     ))}
                   </div>
                 </div>
-              </div> */}
+              </div>
 
               <div className="flex flex-col items-start justify-start w-[38%] rounded-lg mt-2 border overflow-y-auto overflow-x-hidden max-h-full ">
                 <Accordion
@@ -407,8 +408,8 @@ export default function StdOverallPLO() {
                 ))}
               </div>
             </Tabs.Panel>
-          </Tabs>
-          {/* <div className=" flex flex-col h-full w-full  overflow-hidden">
+          </Tabs> */}
+          <div className=" flex flex-col h-full w-full  overflow-hidden">
             <div className="flex flex-row px-6 pt-3   items-center justify-between">
               <div className="flex flex-col">
                 <p className="text-secondary text-[18px] font-semibold "></p>
@@ -432,7 +433,7 @@ export default function StdOverallPLO() {
                 <img src={maintenace} alt="notFound"></img>
               </div>
             </div>
-          </div> */}
+          </div>
         </>
       )}
     </div>

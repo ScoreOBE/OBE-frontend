@@ -338,7 +338,7 @@ export default function Dashboard() {
               <Icon IconComponent={IconInfo2} className="mr-2" />
               <p>
                 ScoreOBE+ is currently in its development (beta) phase. You may
-                encounter unstable features or bugs. <br /> Please report any
+                encounter unstable features or bugs. Please report any
                 issues using the button at the top right of your profile.
               </p>
             </div>
@@ -390,7 +390,7 @@ export default function Dashboard() {
                   }
                   onClick={() => setOpenAddModal(true)}
                 >
-                  Add course
+                  Add Course
                 </Button>
               )}
               <Button
@@ -579,7 +579,7 @@ export default function Dashboard() {
                   >
                     <div className="flex gap-2">
                       <Icon IconComponent={IconAdd} />
-                      Add course
+                      Add Course
                     </div>
                   </Button>
                 )}

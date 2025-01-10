@@ -677,7 +677,7 @@ export default function AllAssignment() {
                 </p>
                 <div className="flex flex-wrap justify-end items-center gap-3">
                   {activeTerm ? (
-                    <div className="">{uploadButton()}</div>
+                    <div className=" mr-2">{uploadButton()}</div>
                   ) : (
                     <Button
                       color="#20884f"

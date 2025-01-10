@@ -84,7 +84,7 @@ export default function StdCLO() {
                   No CLO
                 </p>
                 <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                  The CLO will show when the TQF 3 is submitted by the
+                  The CLO will show when the course specification is submitted <br/> by the
                   instructor.
                 </p>
               </div>
