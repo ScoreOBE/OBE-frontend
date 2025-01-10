@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { Button, Checkbox, Menu, Table, Tabs, Tooltip } from "@mantine/core";
 import Icon from "@/components/Icon";
-import IconFilter from "@/assets/icons/filter.svg?react";
+import IconFilter from "@/assets/icons/horizontalAdjustments.svg?react";
 import IconEye from "@/assets/icons/eyePublish.svg?react";
 import IconActionTQF from "@/assets/icons/actionTQF.svg?react";
 import IconTQF3 from "@/assets/icons/TQF3.svg?react";
