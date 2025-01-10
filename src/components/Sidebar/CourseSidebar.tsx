@@ -343,8 +343,9 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                           <div className="flex gap-[2px] flex-col  ">
                             <p className="my-1 text-[14px] pl-2">TQF 3</p>
                             <Menu.Divider />
-                            {uniqTopic.map((topic) => (
+                            {uniqTopic.map((topic, index) => (
                               <Menu.Item
+                                key={index}
                                 className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
                                 variant="outline"
                                 onClick={() => {
@@ -413,8 +414,9 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                           <div className="flex gap-[2px] flex-col  ">
                             <p className="my-1 text-[14px] pl-2">TQF 5</p>
                             <Menu.Divider />
-                            {uniqTopic.map((topic) => (
+                            {uniqTopic.map((topic, index) => (
                               <Menu.Item
+                                key={index}
                                 className="justify-between bg-transparent !max-w-full  py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
                                 variant="outline"
                                 onClick={() => {

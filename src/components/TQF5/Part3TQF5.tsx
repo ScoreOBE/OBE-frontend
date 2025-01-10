@@ -119,39 +119,41 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
   }, [sectionRefs.current]);
 
   const combinedAssess = (data?: IModelTQF5Part3[]) => {
-    const dataAssess =
-      data ??
-      initialTqf5Part3(tqf5, tqf3.part4?.data, course?.sections as any).data;
-    const result = dataAssess.map((cloData) => {
-      const aggregatedAssess = cloData.sections
-        .flatMap((section: any) => section.assess)
-        .reduce((acc, assess) => {
-          if (!acc[assess.eval]) {
-            acc[assess.eval] = {
-              eval: assess.eval,
-              fullScore: assess.fullScore,
-              percent: assess.percent,
-              score0: 0,
-              score1: 0,
-              score2: 0,
-              score3: 0,
-              score4: 0,
-            };
-          }
-          acc[assess.eval].score0 += assess.score0;
-          acc[assess.eval].score1 += assess.score1;
-          acc[assess.eval].score2 += assess.score2;
-          acc[assess.eval].score3 += assess.score3;
-          acc[assess.eval].score4 += assess.score4;
-          return acc;
-        }, {});
+    if (tqf5.method == METHOD_TQF5.SCORE_OBE) {
+      const dataAssess =
+        data ??
+        initialTqf5Part3(tqf5, tqf3.part4?.data, course?.sections as any).data;
+      const result = dataAssess.map((cloData) => {
+        const aggregatedAssess = cloData.sections
+          .flatMap((section: any) => section.assess)
+          .reduce((acc, assess) => {
+            if (!acc[assess.eval]) {
+              acc[assess.eval] = {
+                eval: assess.eval,
+                fullScore: assess.fullScore,
+                percent: assess.percent,
+                score0: 0,
+                score1: 0,
+                score2: 0,
+                score3: 0,
+                score4: 0,
+              };
+            }
+            acc[assess.eval].score0 += assess.score0;
+            acc[assess.eval].score1 += assess.score1;
+            acc[assess.eval].score2 += assess.score2;
+            acc[assess.eval].score3 += assess.score3;
+            acc[assess.eval].score4 += assess.score4;
+            return acc;
+          }, {});
 
-      return {
-        clo: cloData.clo as string,
-        assess: Object.values(aggregatedAssess),
-      };
-    });
-    setAssessmentCloScores(result);
+        return {
+          clo: cloData.clo as string,
+          assess: Object.values(aggregatedAssess),
+        };
+      });
+      setAssessmentCloScores(result);
+    }
   };
 
   return tqf5.part2?.updatedAt ? (
