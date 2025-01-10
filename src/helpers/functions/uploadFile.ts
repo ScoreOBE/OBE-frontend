@@ -553,9 +553,72 @@ const gradeTemplete = (
     studentIdNotMatch: boolean;
     sectionNotMatch: boolean;
   }[] = [];
-  for (const sheet of workbook.SheetNames) {
-    const worksheet = workbook.Sheets[sheet];
+  const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+  if (
+    worksheet.A1?.v != "Course No." ||
+    worksheet.A2?.v != "SECLEC" ||
+    worksheet.B2?.v != "SECLAB" ||
+    worksheet.C2?.v != "StudentID" ||
+    worksheet.D2?.v != "Firstname" ||
+    worksheet.E2?.v != "Lastname" ||
+    worksheet.F2?.v != "Grade"
+  ) {
+    files = [];
+    templateNotMatch();
+    return;
   }
+  const courseNo = worksheet.B1?.v;
+  if (course.courseNo != courseNo) {
+    showNotifications(NOTI_TYPE.ERROR, "Course No. not match", "");
+    return;
+  }
+  delete worksheet.A1;
+  delete worksheet.B1;
+  delete worksheet.I3;
+
+  const resultsData: any[] = XLSX.utils
+    .sheet_to_json(worksheet, { header: 1 })
+    .filter((arr: any) => arr.length);
+
+  const headers = resultsData[0];
+  const formattedData = resultsData.slice(2).map((row: any[]) => {
+    const rowObject: { [key: string]: any } = {};
+    headers.forEach((header: string, index: number) => {
+      if (header == "Grade") {
+        rowObject[header] = row[index].replace("+", "plus");
+      } else if (!["SECLEC", "SECLAB"].includes(header)) {
+        rowObject[header] = row[index];
+      } else if (row[index] != "000") {
+        rowObject.section = parseInt(row[index]);
+      }
+    });
+    return rowObject;
+  });
+
+  formattedData.forEach((std) => {
+    const existSec = result.find((sec) => sec.sectionNo == std.section);
+    if (!existSec) {
+      result.push({
+        sectionNo: std.section,
+        A: 0,
+        Bplus: 0,
+        B: 0,
+        Cplus: 0,
+        C: 0,
+        Dplus: 0,
+        D: 0,
+        F: 0,
+        W: 0,
+        S: 0,
+        U: 0,
+        P: 0,
+      });
+      result[result.length - 1][std.Grade]++;
+    } else {
+      existSec[std.Grade]++;
+    }
+  });
+
   if (
     errorStudentIdList.length ||
     errorSection.length ||

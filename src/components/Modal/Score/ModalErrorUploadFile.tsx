@@ -4,7 +4,7 @@ import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconBan from "@/assets/icons/ban.svg?react";
 
 type Props = {
-  type: "students" | "scores";
+  type: "students" | "scores" | "grade";
   opened: boolean;
   onClose: () => void;
   errorStudentId?: { name: string; cell: string[] }[] | string[];
