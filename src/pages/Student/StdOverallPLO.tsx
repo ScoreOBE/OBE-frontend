@@ -7,7 +7,7 @@ import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import { ROLE } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading/Loading";
 import { RadarChart } from "@mantine/charts";
-import { Button, Table, Tabs } from "@mantine/core";
+import { Accordion, Button, Table, Tabs } from "@mantine/core";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import SpiderChart from "@/components/Chart/SpiderChart";
 import { IModelPLO } from "@/models/ModelPLO";
@@ -20,12 +20,9 @@ export default function StdOverallPLO() {
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading.loading);
   const [activeTab, setActiveTab] = useState<string | null>("curriculum");
-  const [activeSection, setActiveSection] = useState<number>(0);
   const [departmentPLO, setDepartmentPLO] = useState<Partial<IModelPLO>>({});
-  const [isRadarChartVisible, setIsRadarChartVisible] = useState<
-    Record<string, boolean>
-  >({});
-
+  const [activeItem, setActiveItem] = useState();
+  const [activeSection, setActiveSection] = useState<string | null>(); // Track active section
   const user = useAppSelector((state) => state.user);
   const term = useAppSelector((state) =>
     state.academicYear.find(
@@ -232,12 +229,11 @@ export default function StdOverallPLO() {
               <Tabs.Tab value="course">Course</Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel className="flex h-full max-h-[75vh]" value="curriculum">
-              <div className="flex py-6 items-between justify-center border-t border-l border-b rounded-lg rounded-r-none mt-2 w-[62%] ">
-                <div className="flex flex-col justify-between items-center h-full">
+              <div className="flex py-6 items-between justify-center rounded-lg rounded-r-none mt-2 w-[62%] ">
+                <div className="flex flex-col justify-between items-center h-full w-[90vw]">
                   <div className="flex flex-col">
-                    <p className="text-secondary text-b1 font-semibold text-center">
-                      ผลการเรียนรู้ของผู้เรียนตลอดหลักสูตร อ้างอิงตามเกณฑ์ของ
-                      ABET
+                    <p className="text-secondary text-b1 font-semibold text-center ">
+                      ผลการเรียนรู้ของผู้เรียนตลอดหลักสูตร
                     </p>
                     <p className="text-[#575757] text-[14px] text-center">
                       Overall Program Learning Outcome
@@ -248,15 +244,15 @@ export default function StdOverallPLO() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col items-start justify-start w-[38%] rounded-lg rounded-l-none border-l-none mt-2 px-8 py-5 border ">
+              {/* <div className="flex flex-col items-start justify-start w-[38%] rounded-lg mt-2 px-5 py-5 border ">
                 <div className="flex overflow-y-auto overflow-x-hidden w-full max-h-full gap-4">
                   <div className="gap-5 flex flex-col my-2 px-[2px] w-full overflow-y-auto max-h-full text-b2">
                     {[...Array(7)].map((_, i) => (
                       <div
                         key={`sidebar-${i}`}
-                        className="flex flex-col gap-2 text-b3 border-b pb-5 last:border-none"
+                        className="flex flex-col gap-2 text-b3 border-b pb-5 last:pb-0 last:border-none"
                       >
-                        <p className=" text-secondary text-b2 mb-2">
+                        <p className="text-secondary/90 text-b2 mb-2">
                           <span className="text-secondary text-h1 font-semibold">
                             PLO {i + 1}
                           </span>{" "}
@@ -265,44 +261,48 @@ export default function StdOverallPLO() {
                             6 courses.
                           </span>{" "}
                         </p>
-                        <div className="flex flex-col gap-2.5 ml-4">
-                          <p>
-                            <span className="font-medium text-default">
-                              261101
-                            </span>{" "}
-                            - Introduction to Programming
-                          </p>
-                          <p>
-                            <span className="font-medium text-default">
-                              261102
-                            </span>{" "}
-                            - Object-Oriented Programming
-                          </p>
-                          <p>
-                            <span className="font-medium text-default">
-                              261103
-                            </span>{" "}
-                            - Data Structures
-                          </p>
-                          <p>
-                            <span className="font-medium text-default">
-                              261104
-                            </span>{" "}
-                            - Algorithms
-                          </p>
 
-                          <p>
-                            <span className="font-medium text-default">
+                        <div className="flex flex-col gap-2.5">
+                          <div className="flex gap-0.5 ml-2 text-pretty mr-2">
+                            <p className="font-semibold text-default !w-[50px]">
+                              261101
+                            </p>
+                            <p className="break-words">
+                              Introduction to Programming
+                            </p>
+                          </div>
+                          <div className="flex gap-0.5 ml-2 text-pretty mr-2">
+                            <p className="font-semibold text-default !w-[50px]">
+                              261102
+                            </p>
+                            <p className="break-words">
+                              Object-Oriented Programming
+                            </p>
+                          </div>
+                          <div className="flex gap-0.5 ml-2 text-pretty mr-2">
+                            <p className="font-semibold text-default !w-[50px]">
+                              261103
+                            </p>
+                            <p className="break-words"> Data Structures</p>
+                          </div>
+                          <div className="flex gap-0.5 ml-2 text-pretty mr-2">
+                            <p className="font-semibold text-default !w-[50px]">
+                              261104
+                            </p>
+                            <p className="break-words"> Algorithms</p>
+                          </div>
+                          <div className="flex gap-0.5 ml-2 text-pretty mr-2">
+                            <p className="font-semibold text-default !w-[50px]">
                               261105
-                            </span>{" "}
-                            - Database Systems
-                          </p>
-                          <p>
-                            <span className="font-medium text-default">
+                            </p>
+                            <p className="break-words"> Database Systems</p>
+                          </div>
+                          <div className="flex gap-0.5 ml-2 text-pretty mr-2">
+                            <p className="font-semibold text-default !w-[50px]">
                               261106
-                            </span>{" "}
-                            - Operating Systems
-                          </p>
+                            </p>
+                            <p className="break-words"> Operating Systems</p>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -331,6 +331,56 @@ export default function StdOverallPLO() {
                     ))}
                   </div>
                 </div>
+              </div> */}
+
+              <div className="flex flex-col items-start justify-start w-[38%] rounded-lg mt-2 border overflow-y-auto overflow-x-hidden max-h-full ">
+                <Accordion
+                  defaultValue="1"
+                  className="w-full"
+                  onChange={(value) => setActiveSection(value)} // Update active section
+                >
+                  {[...Array(7)].map((_, i) => (
+                    <Accordion.Item
+                      key={i}
+                      value={i.toString()}
+                      className={`group w-full`}
+                    >
+                      <Accordion.Control
+                        className={`px-7 py-1 h-full  ${
+                          activeSection === i.toString()
+                            ? "bg-bgTableHeader hover:bg-[#D3E4FF]"
+                            : ""
+                        }`}
+                      >
+                        <p className="text-secondary text-b1 font-semibold h-full">
+                          PLO {i + 1}
+                        </p>
+                        <p className="text-[14px] font-medium text-deemphasize">
+                          is based on the following{" "}
+                          <span className="text-secondary font-semibold">
+                            12 courses.
+                          </span>{" "}
+                        </p>
+                      </Accordion.Control>
+                      <Accordion.Panel className="text-start text-b3 !p-0">
+                        <div className="flex flex-col">
+                          {courses.map((co) => (
+                            <div
+                              key={co.code}
+                              className="flex w-full text-pretty py-3 pl-6 border-b last:border-none last:pb-0"
+                            >
+                              <p className="font-semibold text-default !w-[50px]">
+                                {co.code}
+                              </p>
+                              <p className="break-words">{co.name}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </Accordion.Panel>
+                    </Accordion.Item>
+                  ))}
+                </Accordion>
+                ;
               </div>
             </Tabs.Panel>
             <Tabs.Panel
