@@ -10,23 +10,35 @@ import Icon from "../../Icon";
 import IconExcel from "@/assets/icons/excel.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconDownload from "@/assets/icons/download.svg?react";
 import IconUpload from "@/assets/icons/upload.svg?react";
 import IconX from "@/assets/icons/x.svg?react";
+import Template from "@/assets/TemplateGrade.xlsx";
 import { IModelCourse } from "@/models/ModelCourse";
 import { onUploadFile, onRejectFile } from "@/helpers/functions/uploadFile";
 import ModalErrorUploadFile from "./ModalErrorUploadFile";
-import { setLoadingOverlay } from "@/store/loading";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
+import { UseFormReturnType } from "@mantine/form";
+import { IModelTQF5Part1 } from "@/models/ModelTQF5";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
   data: Partial<IModelCourse>;
+  form: UseFormReturnType<
+    IModelTQF5Part1,
+    (values: IModelTQF5Part1) => IModelTQF5Part1
+  >;
 };
 
-export default function ModalUploadGrade({ opened, onClose, data }: Props) {
+export default function ModalUploadGrade({
+  opened,
+  onClose,
+  data,
+  form,
+}: Props) {
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
   const [openModalWarningStudentList, setOpenModalWarningStudentList] =
     useState(false);
@@ -79,43 +91,51 @@ export default function ModalUploadGrade({ opened, onClose, data }: Props) {
     }
   }, [openModalUploadError]);
 
-  // useEffect(() => {
-  //   if (result?.sections) {
-  //     const notExistStudent: {
-  //       studentId: string;
-  //       firstName: string;
-  //       lastName: string;
-  //     }[] = [];
-  //     data.sections?.forEach((sec) => {
-  //       sec.students?.forEach(({ student }) => {
-  //         const existStudent = result.sections
-  //           .find((item: any) => item.sectionNo == sec.sectionNo)
-  //           .students.find((item: any) => item.student == student.id);
-  //         if (!existStudent) {
-  //           notExistStudent.push({
-  //             studentId: student.studentId!,
-  //             firstName: student.firstNameTH || student.firstNameEN,
-  //             lastName: student.lastNameTH || student.lastNameEN,
-  //           });
-  //         }
-  //       });
-  //     });
-  //     if (notExistStudent.length) {
-  //       setWarningStudentList(notExistStudent);
-  //       setOpenModalWarningStudentList(true);
-  //     }
-  //   }
-  // }, [result]);
+  useEffect(() => {
+    if (result?.sections) {
+      const notExistStudent: {
+        studentId: string;
+        firstName: string;
+        lastName: string;
+      }[] = [];
+      data.sections?.forEach((sec) => {
+        sec.students?.forEach(({ student }) => {
+          const existStudent = result.sections
+            .find((item: any) => item.sectionNo == sec.sectionNo)
+            ?.students?.find((item: any) => item.student == student.id);
+          if (!existStudent) {
+            notExistStudent.push({
+              studentId: student.studentId!,
+              firstName: student.firstNameTH || student.firstNameEN,
+              lastName: student.lastNameTH || student.lastNameEN,
+            });
+          }
+        });
+      });
+      if (notExistStudent.length) {
+        setWarningStudentList(notExistStudent);
+        setOpenModalWarningStudentList(true);
+      }
+    }
+  }, [result]);
 
-  // const onClickUpload = async () => {
-  //   if (result) {
-  //     dispatch(setLoadingOverlay(true));
-
-  //     dispatch(setLoadingOverlay(false));
-  //   } else {
-  //     showNotifications(NOTI_TYPE.ERROR, "Invalid File", "invalid grade");
-  //   }
-  // };
+  const onClickUpload = async () => {
+    if (result) {
+      const courseEval = [...form.getValues().courseEval];
+      courseEval.forEach((sec) => {
+        const newData = result.sections.find(
+          ({ sectionNo }: any) => sec.sectionNo == sectionNo
+        );
+        if (newData) {
+          sec = { ...newData };
+        }
+      });
+      form.setFieldValue("courseEval", courseEval);
+      onClose();
+    } else {
+      showNotifications(NOTI_TYPE.ERROR, "Invalid File", "invalid grade");
+    }
+  };
 
   return (
     <>
@@ -133,9 +153,25 @@ export default function ModalUploadGrade({ opened, onClose, data }: Props) {
         }}
       >
         <div className="flex flex-col gap-2 overflow-hidden">
+          <a
+            href={Template}
+            download="Template"
+            target="_blank"
+            rel="noreferrer"
+            className="h-fit w-fit"
+          >
+            <Button
+              variant="filled"
+              leftSection={
+                <Icon IconComponent={IconDownload} className="size-4" />
+              }
+              className="size-4 "
+            >
+              Download template
+            </Button>
+          </a>
           <div className=" flex-col overflow-y-auto h-full gap-3">
-            Upload Grade is coming soon.
-            {/* <Dropzone
+            <Dropzone
               onDrop={(files) => {
                 onUploadFile(
                   data,
@@ -191,6 +227,7 @@ export default function ModalUploadGrade({ opened, onClose, data }: Props) {
                       }
                       onClick={(event) => {
                         event.stopPropagation();
+                        onClickUpload();
                       }}
                       loading={loading}
                     >
@@ -232,13 +269,13 @@ export default function ModalUploadGrade({ opened, onClose, data }: Props) {
                   </p>
                 </div>
               )}
-            </Dropzone> */}
+            </Dropzone>
           </div>
         </div>
       </Modal>
 
-      {/* <ModalErrorUploadFile
-        type='grade'
+      <ModalErrorUploadFile
+        type="grade"
         opened={openModalUploadError}
         onClose={() => setOpenModalUploadError(false)}
         errorStudentId={errorStudentId}
@@ -246,7 +283,7 @@ export default function ModalUploadGrade({ opened, onClose, data }: Props) {
         errorPoint={errorPoint}
         errorStudent={errorStudent}
         errorSectionNoStudents={errorSectionNoStudents}
-      /> */}
+      />
     </>
   );
 }

@@ -116,6 +116,7 @@ export default function Part1TQF5({ setForm }: Props) {
         opened={openModalUploadGrade}
         onClose={() => setOpenModalUploadGrade(false)}
         data={course!}
+        form={form}
       />
 
       <div className="flex w-full flex-col text-[15px] acerSwift:max-macair133:text-b1 max-h-full gap-3 text-default px-3">
