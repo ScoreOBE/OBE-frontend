@@ -155,7 +155,7 @@ export default function TQF5() {
         const section = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf5.topic
         );
-        setCannotSelectScoreOBE(!section.assignments.length);
+        setCannotSelectScoreOBE(!section?.assignments?.length);
         setAssignments(
           Array.from(
             resCourse.sections
@@ -524,64 +524,61 @@ export default function TQF5() {
                 {getValueEnumByKey(PartTopicTQF5, tqf5Part!)}
               </div>
               <div className="flex gap-2 ">
-                {checkActiveTerm() && tqf5Part == "part3" && tqf5.method && (
-                   <Menu
-                   trigger="click"
-                   openDelay={100}
-                   closeDelay={200}
-                   classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
-                 >
-                   <Menu.Target>
-                  <Button variant="outline" className="px-4 min-w-max mr-2">
-                    <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
-                      <Icon
-                        className="size-5 acerSwift:max-macair133:size-4"
-                        IconComponent={IconEye}
-                      />
-                      View as
-                    </div>
-                  </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown
+                {checkActiveTerm() &&
+                  tqf5Part == "part3" &&
+                  tqf5.method == METHOD_TQF5.SCORE_OBE && (
+                    <Menu
+                      trigger="click"
+                      openDelay={100}
+                      closeDelay={200}
+                      classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+                    >
+                      <Menu.Target>
+                        <Button
+                          variant="outline"
+                          className="px-4 min-w-max mr-2"
+                        >
+                          <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+                            <Icon
+                              className="size-5 acerSwift:max-macair133:size-4"
+                              IconComponent={IconEye}
+                            />
+                            View as
+                          </div>
+                        </Button>
+                      </Menu.Target>
+                      <Menu.Dropdown
                         className="rounded-md -translate-y-1 -translate-x-10 backdrop-blur-xl bg-white"
                         style={{
                           boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                         }}
                       >
-                        <Menu.Item
-                       
-                          className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5"
-                        >
+                        <Menu.Item className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5">
                           <div className="flex justify-between items-center gap-2">
                             <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                               <Icon
                                 className="mr-3"
                                 IconComponent={IconHorizontalAdjustments}
                               />
-                             Section
+                              Section
                             </div>
                           </div>
                         </Menu.Item>
-                      
-                            <Menu.Item
-                              className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5"
-                            
-                            >
-                              <div className="flex justify-between items-center gap-2">
-                                <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
-                                  <Icon
-                                    className="mr-2"
-                                    IconComponent={IconOneToMany}
-                                  />
-                                Assessment tool
-                                </div>
-                              </div>
-                            </Menu.Item>
-                          
-                        
+
+                        <Menu.Item className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5">
+                          <div className="flex justify-between items-center gap-2">
+                            <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+                              <Icon
+                                className="mr-2"
+                                IconComponent={IconOneToMany}
+                              />
+                              Assessment tool
+                            </div>
+                          </div>
+                        </Menu.Item>
                       </Menu.Dropdown>
-                  </Menu>
-                )}
+                    </Menu>
+                  )}
                 <Button
                   onClick={() => setOpenModalExportTQF5(true)}
                   color="#24b9a5"
@@ -652,7 +649,7 @@ export default function TQF5() {
                               </div>
                             </Menu.Item>
                           )}
-                          {tqf5Part == "part3" &&
+                        {tqf5Part == "part3" &&
                           !!tqf5.assignmentsMap?.length &&
                           tqf5.method == METHOD_TQF5.SCORE_OBE && (
                             <Menu.Item
