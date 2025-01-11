@@ -124,7 +124,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
 
             {/* Added Admin */}
             <div className="w-full  flex flex-col bg-white mt-3 border-secondary border-[1px]  rounded-md">
-              <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
+              <div className=" bg-bgTableHeader flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
                 <Icon IconComponent={IconUsers} /> Added Admin
               </div>
               {/* Show List Of Admin */}

@@ -597,9 +597,10 @@ export default function TQF3() {
                 />
                 <p>
                   Your changes affected in TQF 3 Part
-                  {[tqf3Original.part4 && " 4 ", tqf3Original.part7 && " 7 "]
+                  {[tqf3Original.part4 && " 4", tqf3Original.part7 && " 7 "]
                     .filter(Boolean)
-                    .join("&")}
+                    .join(",")}
+                    and TQF 5 Part 2 ,3
                 </p>
               </div>
             }
@@ -608,10 +609,10 @@ export default function TQF3() {
             <p className="pl-8 text-default -mt-1 leading-6 font-medium ">
               After you save this changes, you will need to update data in TQF 3
               Part
-              {[tqf3Original.part4 && " 4 ", tqf3Original.part7 && " 7 "]
+              {[tqf3Original.part4 && " 4", tqf3Original.part7 && "  7 "]
                 .filter(Boolean)
-                .join("&")}
-              again. Do you want to save this changes?
+                .join(",")}
+              again and data in TQF 5 Part 2, 3 will be deleted.
             </p>
           </Alert>
         </div>
