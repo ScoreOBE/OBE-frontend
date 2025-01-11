@@ -53,6 +53,7 @@ export interface IModelTQF5Part3 {
   clo: IModelCLO | string;
   assess: {
     eval: string;
+    sheet: string[];
     percent: number;
     fullScore: number;
     range0: number;
