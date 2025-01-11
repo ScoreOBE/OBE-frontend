@@ -79,14 +79,27 @@ export default function MultiRangeSlider({
         {values.map((value, index) => (
           <div key={index}>
             <div
-              className="absolute items-center -translate-y-8 w-[120px] flex flex-col select-none text-default text-b4 rounded-full -top-5 -translate-x-1/2"
+              className={`absolute items-center -translate-y-8 w-[120px] flex flex-col select-none text-default text-b4 rounded-full -top-5 -translate-x-1/2`}
               style={{
                 left: `${((value - min) / (max - min)) * 100}%`,
               }}
             >
-              <p className=" text-secondary font-bold">
-                Score {index} 
+              <p
+                className={`font-bold ${
+                  index === 0
+                    ? "text-[#FF5E57]"
+                    : index === 1
+                    ? "text-[#e8a934]"
+                    : index === 2
+                    ? "text-[#90851f]"
+                    : index === 3
+                    ? "text-[#21a457]"
+                    : 'text-[#1E90FF]'
+                }`}
+              >
+                Score {index}
               </p>
+
               <p>
                 Range:{" "}
                 {index === 0
