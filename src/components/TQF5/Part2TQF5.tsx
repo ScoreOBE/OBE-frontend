@@ -247,7 +247,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                             </>
                           ) : (
                             <div>
-                              <p className="bg-bgTableHeader font-semibold text-secondary px-4 py-3">
+                              <div className="bg-bgTableHeader font-semibold text-secondary px-4 py-3">
                                 <div className="flex flex-col gap-[2px]">
                                   <p className="text-[15px]">
                                     {evaluation?.topicTH} |{" "}
@@ -260,7 +260,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                                       : "-"}
                                   </p>
                                 </div>
-                              </p>
+                              </div>
                               <Checkbox.Group
                                 {...form.getInputProps(
                                   `data.${indexClo}.assignments.${indexEval}.questions`
