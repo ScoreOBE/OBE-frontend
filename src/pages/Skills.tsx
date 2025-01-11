@@ -36,11 +36,14 @@ export default function Skills() {
               Let's add some skills for {courseNo}
             </p>
             <br />
-            <p className=" -mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
+            <p className="-mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
               No skills here yet! Click 'Add Skill' to guide your students{" "}
               <br /> and make {courseNo} even more impactful.
             </p>
-            <Button onClick={() => setOpenModalAddSkill(true)} className="text-center px-4">
+            <Button
+              onClick={() => setOpenModalAddSkill(true)}
+              className="text-center px-4"
+            >
               <div className="flex gap-2">
                 <Icon IconComponent={IconAdd} />
                 Add Skill

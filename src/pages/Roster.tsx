@@ -353,7 +353,7 @@ export default function Roster() {
           style={{
             boxShadow: hasData ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
           }}
-          className="mx-1 mt-3 max-h-screen sm:max-ipad11:max-h-[400px] h-fit flex flex-col bg-white mb-1 rounded-md overflow-y-auto acerSwift:max-macair133:!text-b4"
+          className="mx-1 mt-3 max-h-screen h-fit flex flex-col bg-white mb-1 rounded-md overflow-y-auto acerSwift:max-macair133:!text-b4"
         >
           {hasData ? (
             <Table stickyHeader striped>

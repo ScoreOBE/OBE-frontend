@@ -344,7 +344,7 @@ export default function AllAssignment() {
             className="mb-5"
           ></Alert>
         )}
-        <div className="mb-6 p-4 acerSwift:max-macair133:p-0 rounded-2xl flex flex-col gap-3">
+        <div className="mb-6 acerSwift:max-macair133:p-0 rounded-2xl flex flex-col gap-3">
           {course?.sections.length! > 1 && (
             <Chip
               classNames={{

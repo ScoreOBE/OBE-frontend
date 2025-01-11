@@ -45,6 +45,10 @@ export default function ModalAddSkill({ opened, onClose }: Props) {
     state.faculty.department.slice(1)
   );
 
+  const course = useAppSelector((state) =>
+    state.allCourse.courses.find((e) => e.courseNo == courseNo)
+  );
+
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
 
   const handleCheckboxChange = (title: string) => {
@@ -124,12 +128,12 @@ export default function ModalAddSkill({ opened, onClose }: Props) {
           <p>Add skill </p>
 
           <p className="text-[12px] inline-flex items-center text-noData -mt-[4px]">
-            {courseNo}
+            {courseNo} - {course?.courseName}
           </p>
         </div>
       }
       centered
-      size="65vw"
+      size="66vw"
       transitionProps={{ transition: "pop" }}
       classNames={{
         header: "bg-red-400",
@@ -155,16 +159,16 @@ export default function ModalAddSkill({ opened, onClose }: Props) {
                   }`}
                 >
                   <Group>
-                    <Checkbox.Indicator  />{" "}
+                    <Checkbox.Indicator />{" "}
                     {/* Just use value, no onChange needed */}
                     <div className="flex flex-col ml-1">
                       <p className="font-bold text-[15px] text-secondary">
                         {skill.title}
                       </p>
-                      <p className="font-medium mt-[2px] text-default text-[13px]">
+                      <p className="font-medium mt-[2px] text-default text-[13px] ">
                         {skill.descriptionTH}
                       </p>
-                      <p className="font-semibold text-default text-[13px]">
+                      <p className="font-semibold text-default text-[13px] w-[50vw]">
                         {skill.descriptionEN}
                       </p>
                     </div>
@@ -175,7 +179,7 @@ export default function ModalAddSkill({ opened, onClose }: Props) {
           </Group>
         </Checkbox.Group>
 
-        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end  justify-end h-fit">
+        <div className="flex gap-2 items-end  justify-end h-fit">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
             <Button onClick={onClose} variant="subtle">
               Cancel

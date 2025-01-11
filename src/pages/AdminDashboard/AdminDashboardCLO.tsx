@@ -210,8 +210,8 @@ export default function AdminDashboardCLO() {
               </div>
             </Table.Td>
           )}
-          <Table.Td className="flex gap-2 ">
-            <p>CLO {clo.no}</p>
+          <Table.Td className="flex gap-2 items-center">
+            <p className="">CLO {clo.no}</p>
             <Tooltip
               arrowOffset={150}
               arrowSize={8}
@@ -244,7 +244,7 @@ export default function AdminDashboardCLO() {
               className="w-fit border  rounded-md "
               position="bottom-start"
             >
-              <div className="border-none">
+              <div className="border-none  p-0.5">
                 <Icon
                   IconComponent={IconInfo2}
                   className="-ml-0 size-5 text-secondary"

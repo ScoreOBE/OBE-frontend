@@ -196,7 +196,7 @@ export default function Part1TQF3({ setForm }: Props) {
                     radio: `${disabled && "!cursor-default"} `,
                     label: `${
                       disabled && "!cursor-default"
-                    } font-medium text-b3 acerSwift:max-macair133:text-b4`,
+                    } font-medium text-b3 acerSwift:max-macair133:text-b4 sm:max-acerSwift:w-[300px]`,
                   }}
                   label={item.label}
                   value={item.value}
@@ -231,13 +231,13 @@ export default function Part1TQF3({ setForm }: Props) {
                       </div>
                     }
                     color="#FCFCFC"
-                    className="w-fit border  rounded-md "
+                    className="w-fit border rounded-md sm:max-acerSwift:!-ml-2"
                     position="bottom-start"
                   >
-                    <div className="border-none">
+                    <div className="border-nonep-0.5">
                       <Icon
                         IconComponent={IconInfo2}
-                        className="-ml-0 size-5 text-secondary"
+                        className="-ml-0 size-5 text-secondary "
                       />
                     </div>
                   </Tooltip>
