@@ -161,7 +161,8 @@ export default function Profile() {
                   className="font-medium"
                   style={{ color: getRoleColor(user.role) }}
                 >
-                  {user.role}
+                  {user.role}  {user.role === ROLE.STUDENT && `- ${user.studentId}`}
+
                 </p>
               </div>
             </div>
@@ -295,7 +296,7 @@ export default function Profile() {
                       <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
                         <Icon
                           IconComponent={IconSupreme}
-                          className="size-4  acerSwift:max-macair133:size-"
+   className="size-[16px] mr-[2px] -translate-x-[2px]"
                         />
                         <span>Supreme Admin</span>
                       </div>
@@ -306,7 +307,7 @@ export default function Profile() {
                   <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
                     <Icon
                       IconComponent={IconAdmin}
-                      className="size-4  acerSwift:max-macair133:size-"
+                      className="size-[16px] mr-[2px] -translate-x-[2px]  "
                     />
                     <span>Admin</span>
                   </div>

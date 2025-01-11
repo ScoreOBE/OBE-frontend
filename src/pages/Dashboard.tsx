@@ -324,26 +324,7 @@ export default function Dashboard() {
           }}
         />
       )}
-      <div className=" flex flex-col h-full w-full  overflow-hidden">
-        <Alert
-          radius="md"
-          variant="light"
-          classNames={{
-            body: " flex justify-center",
-          }}
-          className="mt-4 mx-6 pb-6"
-           color='orange'
-          title={
-            <div className="flex items-center gap-2">
-              <Icon IconComponent={IconInfo2} className="mr-2" />
-              <p>
-                ScoreOBE+ is currently in its development (beta) phase. You may
-                encounter unstable features or bugs. Please report any
-                issues using the button at the top right of your profile.
-              </p>
-            </div>
-          }
-        ></Alert>
+      <div className=" flex flex-col ">
         <div className="flex flex-row px-6 pt-3  items-center justify-between">
           <div className="flex flex-col ">
             <p className="text-secondary text-h2 acerSwift:max-macair133:text-[17px] font-semibold ">
@@ -415,6 +396,26 @@ export default function Dashboard() {
           {loading ? (
             <Loading />
           ) : courseList.total ? (
+            <div className="w-full">
+            <Alert
+          radius="md"
+          variant="light"
+          classNames={{
+            body: " flex justify-center",
+          }}
+          className=" mt-3 mb-2 mx-6 "
+           color='orange'
+          title={
+            <div className="flex items-center gap-2">
+              <Icon IconComponent={IconInfo2} className="mr-2" />
+              <p>
+                ScoreOBE+ is currently in its development (beta) phase. You may
+                encounter unstable features or bugs. Please report any
+                issues using the button at the top right of your profile.
+              </p>
+            </div>
+          }
+        ></Alert>
             <InfiniteScroll
               dataLength={courseList.courses.length}
               next={onShowMore}
@@ -550,7 +551,7 @@ export default function Dashboard() {
                   </div>
                 );
               })}
-            </InfiniteScroll>
+            </InfiniteScroll></div>
           ) : (
             <div className=" flex flex-row flex-1 px-[95px] sm:max-ipad11:px-[70px] justify-between">
               <div className="h-full  justify-center flex flex-col">
