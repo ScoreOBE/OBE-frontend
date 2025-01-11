@@ -517,7 +517,7 @@ export default function TQF5() {
               tqf5Part == "part3" && tqf5.method == METHOD_TQF5.SCORE_OBE
                 ? "border-none"
                 : "border-b-[2px]"
-            }  pb-2 mb-1`}
+            }  `}
           >
             <Tabs.List className="md:gap-x-5 gap-x-3 w-full">
               {partTab.map(({ tab, value }) => (
@@ -533,7 +533,7 @@ export default function TQF5() {
               ))}
             </Tabs.List>
             <div className="flex justify-between pt-4 items-center ">
-              <div className=" text-secondary overflow-y-auto font-semibold min-h-14 acerSwift:max-macair133:!min-h-12 whitespace-break-spaces acerSwift:max-macair133:!text-b2 ">
+              <div className=" text-secondary mb-2 overflow-y-auto font-semibold min-h-14 acerSwift:max-macair133:!min-h-12 whitespace-break-spaces acerSwift:max-macair133:!text-b2 ">
                 {getValueEnumByKey(PartTopicTQF5, tqf5Part!)}
               </div>
               <div className="flex gap-2 ">

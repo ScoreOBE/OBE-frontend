@@ -577,6 +577,22 @@
   animation: animate 2s infinite;
 }
 
+.range-0 {
+  background: linear-gradient(to right, #FF7B7B, #FFA07A);
+}
+.range-1 {
+  background: linear-gradient(to right, #FFA07A, #FFD700);
+}
+.range-2 {
+  background: linear-gradient(to right, #FFD700, #98FB98);
+}
+.range-3 {
+  background: linear-gradient(to right, #98FB98, #00BFFF);
+}
+.range-4 {
+  background: linear-gradient(to right, #00BFFF, #9370DB);
+}
+
 
 .arrowCTA span:nth-child(2) {
   animation-delay: -0.2s;

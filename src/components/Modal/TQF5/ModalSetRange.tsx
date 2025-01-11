@@ -44,19 +44,25 @@ export default function ModalSetRange({
       onClose={onClose}
       closeOnClickOutside={false}
       centered
-      size="55vw"
+      size="80vw"
       title="Set Range Assessment tool"
       transitionProps={{ transition: "pop" }}
     >
       <div>
-        <div className="flex flex-col gap-2 h-fit rounded-lg overflow-y-auto">
+        <div className="flex flex-col macair133:h-[550px] gap-4 sm:max-ipad11:max-h-[450px] sm px-2 py-2  overflow-y-auto">
           {form.getValues().data.map((cloItem, cloIndex) => {
             const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
             return (
-              <div key={cloIndex} className="flex flex-col gap-2">
-                <div className="flex justify-between items-center">
-                  <div className="flex justify-between">
-                    <div className="text-default flex items-center  font-medium text-[14px]">
+              <div
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
+                key={cloIndex}
+                className="flex bg-slate-100 p-5 rounded-lg flex-col gap-2"
+              >
+                <div className="flex  justify-between items-center">
+                  <div className="flex  justify-between">
+                    <div className="text-default mb-3 flex items-center  font-medium text-[14px]">
                       <p className="text-[16px] text-secondary mr-2 font-semibold">
                         CLO {clo?.no}
                       </p>
@@ -76,19 +82,18 @@ export default function ModalSetRange({
                       key={asIndex}
                       className="rounded-md overflow-clip text-[14px] border ml-1"
                     >
-                      <div className="bg-bgTableHeader font-semibold text-secondary px-4 py-3 flex flex-col justify-between items-center">
-                        <div className="flex w-full justify-between">
+                      <div className="bg-white font-semibold text-secondary px-4 py-3 flex flex-col justify-between items-center">
+                        <div className="flex w-full">
                           <div className="flex flex-col gap-[2px]">
                             <p className="text-[15px]">
                               {evaluation?.topicTH} | {evaluation?.topicEN} (
-                              {assess.percent} %)
+                              {assess.fullScore} point {assess.percent} %)
                             </p>
                             <p>
                               Description:
                               {evaluation?.desc?.length ? evaluation.desc : "-"}
                             </p>
                           </div>
-                          <p>{assess.fullScore} pts.</p>
                         </div>
                         <MultiRangeSlider
                           min={0}
@@ -124,7 +129,7 @@ export default function ModalSetRange({
           })}
         </div>
 
-        <div className="flex gap-2 mt-5  items-end  justify-end h-fit">
+        <div className="flex gap-2 mt-5  items-end  justify-end">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
             <Button onClick={onClose} variant="subtle">
               Cancel
