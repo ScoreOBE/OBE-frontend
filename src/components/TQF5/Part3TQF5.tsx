@@ -559,28 +559,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
                                   ) ?? 0}
                                 </Table.Th>
                                 <Table.Th className="w-[13%] text-end pr-8">
-                                  {(
-                                    cloItem.sections?.reduce((sum, sec) => {
-                                      const data = Object.values(sec)
-                                        .slice(-5)
-                                        .map((e: any) => parseInt(e));
-                                      const total = data.reduce(
-                                        (a, b) => a + b,
-                                        0
-                                      );
-                                      return (
-                                        sum +
-                                        (total > 0
-                                          ? (0 * sec.score0 +
-                                              1 * sec.score1 +
-                                              2 * sec.score2 +
-                                              3 * sec.score3 +
-                                              4 * sec.score4) /
-                                            total
-                                          : 0)
-                                      );
-                                    }, 0) / cloItem.sections?.length || 0
-                                  ).toFixed(2)}
+                                  {cloItem.score.toFixed(2)}
                                 </Table.Th>
                               </Table.Tr>
                             </Table.Tfoot>
