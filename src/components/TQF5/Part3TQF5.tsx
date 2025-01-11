@@ -126,9 +126,8 @@ export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
         data ??
         initialTqf5Part3(tqf5, tqf3.part4?.data, course?.sections as any).data;
       const result = dataAssess.map((cloData) => {
-        const aggregatedAssess = cloData.sections
-          .flatMap((section: any) => section.assess)
-          .reduce((acc, assess) => {
+        const aggregatedAssess = cloData.assess.reduce(
+          (acc: any, assess: any) => {
             if (!acc[assess.eval]) {
               acc[assess.eval] = {
                 eval: assess.eval,
@@ -147,7 +146,9 @@ export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
             acc[assess.eval].score3 += assess.score3;
             acc[assess.eval].score4 += assess.score4;
             return acc;
-          }, {});
+          },
+          {}
+        );
 
         return {
           clo: cloData.clo as string,
@@ -862,25 +863,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
                               ) ?? 0}
                             </Table.Th>
                             <Table.Th className="w-[13%] text-end pr-8">
-                              {(
-                                cloItem.sections?.reduce((sum, sec) => {
-                                  const data = Object.values(sec)
-                                    .slice(-5)
-                                    .map((e: any) => parseInt(e));
-                                  const total = data.reduce((a, b) => a + b, 0);
-                                  return (
-                                    sum +
-                                    (total > 0
-                                      ? (0 * sec.score0 +
-                                          1 * sec.score1 +
-                                          2 * sec.score2 +
-                                          3 * sec.score3 +
-                                          4 * sec.score4) /
-                                        total
-                                      : 0)
-                                  );
-                                }, 0) / cloItem.sections?.length || 0
-                              ).toFixed(2)}
+                              {cloItem.score.toFixed(2)}
                             </Table.Th>
                           </Table.Tr>
                         </Table.Tfoot>
@@ -931,7 +914,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
                           </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
-                          {assessmentCloScores[cloIndex].assess.map(
+                          {assessmentCloScores[cloIndex]?.assess.map(
                             (assess) => {
                               const evaluation = tqf3.part3?.eval.find(
                                 (e) => e.id === assess.eval
@@ -991,7 +974,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
                         </Table.Tbody>
                         <Table.Tfoot>
                           <Table.Tr className="bg-bgTableHeader text-secondary">
-                            <Table.Th>Total</Table.Th>
+                            {/* <Table.Th>Total</Table.Th>
                             {[
                               "score0",
                               "score1",
@@ -1019,34 +1002,12 @@ export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
                                 },
                                 0
                               )}
-                            </Table.Th>
-                            <Table.Th className="w-[13%] text-end pr-8">
-                              {(() => {
-                                const totals = assessmentCloScores[
-                                  cloIndex
-                                ].assess.map((assess) => {
-                                  const data = Object.values(assess)
-                                    .slice(-5)
-                                    .map((e: any) => parseInt(e));
-                                  const total = data.reduce((a, b) => a + b, 0);
-                                  return total > 0
-                                    ? (0 * assess.score0 +
-                                        1 * assess.score1 +
-                                        2 * assess.score2 +
-                                        3 * assess.score3 +
-                                        4 * assess.score4) /
-                                        total
-                                    : 0;
-                                });
-                                const overallTotal = totals.reduce(
-                                  (a, b) => a + b,
-                                  0
-                                );
-                                return (
-                                  overallTotal /
-                                  assessmentCloScores[cloIndex].assess.length
-                                ).toFixed(2);
-                              })()}
+                            </Table.Th> */}
+                            <Table.Th
+                              className="w-[13%] text-end pr-8"
+                              colSpan={8}
+                            >
+                              {cloItem.score.toFixed(2)}
                             </Table.Th>
                           </Table.Tr>
                         </Table.Tfoot>
