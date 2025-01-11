@@ -118,10 +118,11 @@ export default function Part7TQF3({ setForm }: Props) {
               CLO Mapping <span className=" text-red-500">*</span>
             </span>
             <Button
+              color="#e9e9e9"
               className="text-center px-4"
               onClick={() => setOpenDrawerPLOdes(true)}
             >
-              <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
+              <div className="flex gap-2 acerSwift:max-macair133:!text-b5 !text-default">
                 <Icon
                   IconComponent={IconPLO}
                   className="acerSwift:max-macair133:!size-3"

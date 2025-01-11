@@ -73,7 +73,7 @@ export default function ModalQuestionChart({
 
           <Tabs.Panel className="flex flex-col gap-1" value="histogram">
             {assignment ? (
-              <div className="acerSwift:max-macair133:h-[470px]">
+              <div className="acerSwift:max-macair133:h-[470px] ">
                 {isStudent ? (
                   <ChartContainer
                     type="histogram"
@@ -100,7 +100,7 @@ export default function ModalQuestionChart({
           >
             {assignment ? (
               <>
-                <div className="acerSwift:max-macair133:h-[61vh] w-full mt-4 !ml-20">
+                <div className="acerSwift:max-macair133:h-[61vh] w-full mt-4 !ml-20 sm:max-acerSwift:h-[55vh] sm:max-acerSwift:ml-0">
                   <ChartContainer
                     type="curve"
                     data={assignment}
