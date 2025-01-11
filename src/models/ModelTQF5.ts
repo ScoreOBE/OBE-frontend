@@ -51,6 +51,15 @@ export interface IModelTQF5Part2 {
 
 export interface IModelTQF5Part3 {
   clo: IModelCLO | string;
+  assess: {
+    eval: string;
+    percent: number;
+    fullScore: number;
+    range0: number;
+    range1: number;
+    range2: number;
+    range3: number;
+  }[];
   sections: {
     sectionNo: number;
     score0: number;
@@ -59,4 +68,5 @@ export interface IModelTQF5Part3 {
     score3: number;
     score4: number;
   }[];
+  score: number;
 }
