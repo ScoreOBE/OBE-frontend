@@ -1,7 +1,7 @@
 import { IModelTQF3Part4 } from "@/models/ModelTQF3";
 import { partLabel } from "@/components/SaveTQFBar";
 import { cloneDeep } from "lodash";
-import { IModelSection } from "@/models/ModelCourse";
+import { IModelAssignment, IModelSection } from "@/models/ModelCourse";
 import { IModelTQF5, IModelTQF5Part3 } from "@/models/ModelTQF5";
 import { METHOD_TQF5 } from "../constants/enum";
 
@@ -9,7 +9,8 @@ export const initialTqf5Part = (
   tqf5: any,
   part: any,
   tqf3?: any,
-  sections?: IModelSection[]
+  sections?: IModelSection[],
+  assignments?: IModelAssignment[]
 ) => {
   switch (part) {
     case Object.keys(partLabel)[0]: // part 1
@@ -17,7 +18,7 @@ export const initialTqf5Part = (
     case Object.keys(partLabel)[1]: // part 2
       return initialTqf5Part2(tqf3.part4.data);
     case Object.keys(partLabel)[2]: // part 3
-      return initialTqf5Part3(tqf5, tqf3.part4.data, sections!);
+      return initialTqf5Part3(tqf5, tqf3.part4.data, sections!, assignments!);
   }
 };
 
@@ -40,7 +41,8 @@ export const initialTqf5Part2 = (part4: IModelTQF3Part4[] | undefined) => {
 export const initialTqf5Part3 = (
   tqf5: IModelTQF5,
   part4: IModelTQF3Part4[] | undefined,
-  sections: IModelSection[]
+  sections: IModelSection[],
+  assignments: IModelAssignment[]
 ) => {
   if (tqf5.part2?.updatedAt) {
     const data: IModelTQF5Part3[] = [];
@@ -49,16 +51,9 @@ export const initialTqf5Part3 = (
       const cloEval = part4?.find(({ clo }) => clo == item.clo)!;
       let assess: any[] = [];
       if (tqf5.method == METHOD_TQF5.SCORE_OBE) {
-        const uniqueAssignments = [
-          ...new Map(
-            sections
-              .flatMap(({ assignments }) => assignments)
-              .map((assignment) => [assignment.name, assignment])
-          ).values(),
-        ];
         assess = item.assignments.map((e) => {
           const fullScore =
-            uniqueAssignments
+            assignments
               .filter(({ name }) =>
                 e.questions
                   .flatMap((s) => s.substring(0, s.lastIndexOf("-")))

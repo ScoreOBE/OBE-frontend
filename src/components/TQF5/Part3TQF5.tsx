@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import maintenace from "@/assets/image/maintenance.jpg";
 import unplug from "@/assets/image/unplug.png";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -17,18 +16,13 @@ import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelAssignment } from "@/models/ModelCourse";
 import { getSectionNo } from "@/helpers/functions/function";
 
-export type ViewPart3TQF5 = "section" | "assessment";
-type TabState = {
-  [key: number]: string;
-};
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
   tqf3: IModelTQF3;
   assignments: IModelAssignment[];
-  view: ViewPart3TQF5;
 };
 
-export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
+export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
   const { courseNo } = useParams();
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)
@@ -40,13 +34,9 @@ export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
   >([]);
   const [isEdit, setIsEdit] = useState(false);
   const [activeSection, setActiveSection] = useState<number>(0);
-  const [tabStates, setTabStates] = useState<TabState>({});
-  const handleTabChange = (index: any, newValue: any) => {
-    setTabStates((prevStates) => ({
-      ...prevStates,
-      [index]: newValue,
-    }));
-  };
+  const [selectedTab, setSelectedTab] = useState<string | null>(
+    "assessmentTool"
+  );
   const sectionRefs = useRef(
     tqf3.part2?.clo.map(() => React.createRef<HTMLDivElement>())
   );
@@ -70,11 +60,16 @@ export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
       combinedAssess();
     } else if (tqf3.part2) {
       form.setValues(
-        initialTqf5Part3(tqf5, tqf3.part4?.data, course?.sections as any)
+        initialTqf5Part3(
+          tqf5,
+          tqf3.part4?.data,
+          course?.sections as any,
+          assignments
+        )
       );
       combinedAssess(form.getValues().data);
     }
-  }, [tqf5.method]);
+  }, [tqf5.method, tqf5.part2]);
 
   useEffect(() => {
     if (tqf3.part2) {
@@ -124,7 +119,12 @@ export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
     if (tqf5.method == METHOD_TQF5.SCORE_OBE) {
       const dataAssess =
         data ??
-        initialTqf5Part3(tqf5, tqf3.part4?.data, course?.sections as any).data;
+        initialTqf5Part3(
+          tqf5,
+          tqf3.part4?.data,
+          course?.sections as any,
+          assignments
+        ).data;
       const result = dataAssess.map((cloData) => {
         const aggregatedAssess = cloData.assess.reduce(
           (acc: any, assess: any) => {
@@ -264,7 +264,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
                             </Table.Td>
                           </>
                         )}
-                        <Table.Td>{sec.sectionNo}</Table.Td>
+                        <Table.Td>{getSectionNo(sec.sectionNo)}</Table.Td>
                         {Object.keys(sec)
                           .slice(1)
                           .map((key) => (
@@ -301,723 +301,413 @@ export default function Part3TQF5({ setForm, tqf3, assignments, view }: Props) {
     ) : (
       <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
         <div className="gap-2 flex flex-col w-full -mt-3 overflow-y-auto  max-h-full">
-          {form.getValues().data?.map((cloItem, cloIndex) => {
-            const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
-            const assessment = tqf5.part2?.data.find(
-              (cl) => cl.clo === clo?.id
-            )?.assignments;
-
-            return (
-              <div
-                className={`last:mb-4 flex flex-col gap-10 pb-4 border-b-2 mr-1 ${
-                  activeSection === cloIndex ? "active" : ""
-                }`}
-                id={`${clo?.no}`}
-                key={clo?.id}
-                ref={sectionRefs.current!.at(cloIndex)}
-              >
-                {/* <Tabs
-                  classNames={{
-                    root: "overflow-hidden mt-1 flex flex-col max-h-full",
-                  }}
-                  value={tabStates[cloIndex] || "assessmentTool"}
-                  onChange={(newValue) => handleTabChange(cloIndex, newValue)}
-                >
-                  <Tabs.List className="mb-2">
-                    <Tabs.Tab value="assessmentTool">Assessment Tool</Tabs.Tab>
-                    <Tabs.Tab value="scoreRange">Score Range</Tabs.Tab>
-                    <Tabs.Tab value="detailCriteria">Detail Criteria</Tabs.Tab>
-                  </Tabs.List>
-                  <Tabs.Panel
-                    className="flex flex-col gap-5 py-3 px-4"
-                    value="assessmentTool"
+          <Tabs
+            classNames={{
+              root: "overflow-hidden mt-1 flex flex-col max-h-full",
+            }}
+            value={selectedTab}
+            onChange={(newValue) => setSelectedTab(newValue)}
+          >
+            <Tabs.List className="mb-2">
+              <Tabs.Tab value="assessmentTool">Assessment Tool</Tabs.Tab>
+              <Tabs.Tab value="scoreRange">Score Range</Tabs.Tab>
+              <Tabs.Tab value="detailCriteria">Detail Criteria</Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel
+              className="flex flex-col gap-5 py-3 px-4 overflow-y-auto"
+              value={selectedTab!}
+            >
+              {form.getValues().data?.map((cloItem, cloIndex) => {
+                const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
+                const assessment = tqf5.part2?.data.find(
+                  (cl) => cl.clo === clo?.id
+                )?.assignments;
+                return (
+                  <div
+                    className={`last:mb-4 flex flex-col gap-4 pb-4 border-b-2 mr-1 ${
+                      activeSection === cloIndex ? "active" : ""
+                    }`}
+                    id={`${clo?.no}`}
+                    key={clo?.id}
+                    ref={sectionRefs.current!.at(cloIndex)}
                   >
-                    <div className="flex justify-between items-center">
-                      <div className="flex justify-between">
-                        <div className="text-default flex items-center  font-medium text-[14px]">
-                          <p className="text-[16px] text-secondary mr-2 font-semibold">
-                            CLO {clo?.no}
-                          </p>
-                          <div className="flex flex-col ml-2 gap-[2px]">
-                            <p>{clo?.descTH}</p>
-                            <p>{clo?.descEN}</p>
+                    {selectedTab == "assessmentTool" ? (
+                      <>
+                        <div className="flex justify-between items-center">
+                          <div className="flex justify-between">
+                            <div className="text-default flex items-center  font-medium text-[14px]">
+                              <p className="text-[16px] text-secondary mr-2 font-semibold">
+                                CLO {clo?.no}
+                              </p>
+                              <div className="flex flex-col ml-2 gap-[2px]">
+                                <p>{clo?.descTH}</p>
+                                <p>{clo?.descEN}</p>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    {assessment?.map((eva, evaIndex) => {
-                      const evaluation = tqf3.part3?.eval.find(
-                        (e) => e.id === eva.eval
-                      );
-                      const assess = [
-                        ...new Set(
-                          eva.questions.flatMap((e) =>
-                            e.substring(0, e.lastIndexOf("-"))
-                          )
-                        ),
-                      ].sort();
-                      const fullScore = assignments
-                        .filter((e) => assess.includes(e.name))
-                        .flatMap((e) =>
-                          e.questions.map((question) => ({
-                            sheet: e.name,
-                            ...question,
-                          }))
-                        )
-                        .filter((e) =>
-                          eva.questions.includes(`${e.sheet}-${e.name}`)
-                        )
-                        .reduce((a, b) => a + b.fullScore, 0);
-                      const percent = tqf3.part4?.data[cloIndex].evals.find(
-                        (e) => e.eval == eva.eval
-                      )?.percent;
-                      return (
-                        <div
-                          key={evaIndex}
-                          className="rounded-md overflow-clip text-[14px] border ml-1"
-                        >
-                          <div className="flex flex-col">
-                            <div className="bg-bgTableHeader font-semibold text-secondary px-4 py-3 flex justify-between items-center">
-                              <div className="flex flex-col gap-[2px]">
-                                <p className="text-[15px]">
-                                  {evaluation?.topicTH} | {evaluation?.topicEN}{" "}
-                                  ({percent} %)
-                                </p>
-                                <p>
-                                  Description:
-                                  {evaluation?.desc?.length
-                                    ? evaluation.desc
-                                    : "-"}
-                                </p>
-                              </div>
-
-                              <p>{fullScore}</p>
-                            </div>
-
-                            {assess?.map((sheet, sheetIndex) => {
-                              const questions = eva.questions
-                                .filter((e) => e.includes(sheet))
-                                .map((e) =>
-                                  e.substring(e.lastIndexOf("-")).slice(1)
-                                );
-                              return (
-                                <div
-                                  key={sheetIndex}
-                                  className=" font-medium text-default"
-                                >
-                                  <div className="bg-[#F3F3F3] text-default font-semibold px-4 py-3">
-                                    <p>{sheet}</p>
+                        {assessment?.map((eva, evaIndex) => {
+                          const evaluation = tqf3.part3?.eval.find(
+                            (e) => e.id === eva.eval
+                          );
+                          const assess = [
+                            ...new Set(
+                              eva.questions.flatMap((e) =>
+                                e.substring(0, e.lastIndexOf("-"))
+                              )
+                            ),
+                          ].sort();
+                          const fullScore = assignments
+                            .filter((e) => assess.includes(e.name))
+                            .flatMap((e) =>
+                              e.questions.map((question) => ({
+                                sheet: e.name,
+                                ...question,
+                              }))
+                            )
+                            .filter((e) =>
+                              eva.questions.includes(`${e.sheet}-${e.name}`)
+                            )
+                            .reduce((a, b) => a + b.fullScore, 0);
+                          const percent = tqf3.part4?.data[cloIndex].evals.find(
+                            (e) => e.eval == eva.eval
+                          )?.percent;
+                          return (
+                            <div
+                              key={evaIndex}
+                              className="rounded-md overflow-clip text-[14px] border ml-1"
+                            >
+                              <div className="flex flex-col">
+                                <div className="bg-bgTableHeader font-semibold text-secondary px-4 py-3 flex justify-between items-center">
+                                  <div className="flex flex-col gap-[2px]">
+                                    <p className="text-[15px]">
+                                      {evaluation?.topicTH} |{" "}
+                                      {evaluation?.topicEN} ({percent} %)
+                                    </p>
+                                    <p>
+                                      Description:
+                                      {evaluation?.desc?.length
+                                        ? evaluation.desc
+                                        : "-"}
+                                    </p>
                                   </div>
 
-                                  {questions.map((ques, quesIndex) => {
-                                    const question = assignments
-                                      ?.find((e) => e.name == sheet)
-                                      ?.questions.find((e) => e.name == ques);
-
-                                    return (
-                                      <div
-                                        key={quesIndex}
-                                        className="flex justify-between items-center pl-8 px-4 py-3 "
-                                      >
-                                        <p className="font-medium text-[13px] text-default">
-                                          {ques}
-                                          {question?.desc?.length
-                                            ? ` - ${question.desc}`
-                                            : ""}
-                                        </p>
-                                        <p>{question?.fullScore}</p>
-                                      </div>
-                                    );
-                                  })}
+                                  <p>{fullScore}</p>
                                 </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </Tabs.Panel>
-                  <Tabs.Panel
-                    className="flex flex-col gap-5 py-3 px-4"
-                    value="scoreRange"
-                  >
-                    <div className="flex justify-between items-center">
-                      <div className="flex justify-between">
-                        <div className="text-default flex items-center  font-medium text-[15px]">
-                          <p className="text-[18px] text-secondary mr-2 font-semibold">
-                            CLO {clo?.no}{" "}
-                          </p>
-                          <div className="flex flex-col ml-2 gap-[2px]">
-                            <p>{clo?.descTH}</p>
-                            <p>{clo?.descEN}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="overflow-x-auto h-fit bg max-h-full border flex flex-col rounded-lg border-secondary">
-                      <Table stickyHeader striped>
-                        <Table.Thead>
-                          <Table.Tr>
-                            <Table.Th>Section</Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 0
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 1
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 2
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 3
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 4
-                            </Table.Th>
-                            <Table.Th className="w-[15%] text-end pr-3">
-                              Number of Student
-                            </Table.Th>
-                            <Table.Th className="w-[13%] text-end pr-8">
-                              Average
-                            </Table.Th>
-                          </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                          {cloItem.sections?.map((sec) => {
-                            const data = Object.values(sec)
-                              .slice(-5)
-                              .map((e: any) => parseInt(e));
-                            const total =
-                              data.reduce((a, b: any) => a + b, 0) || 0;
-                            const avg =
-                              total > 0
-                                ? (0 * sec.score0 +
-                                    1 * sec.score1 +
-                                    2 * sec.score2 +
-                                    3 * sec.score3 +
-                                    4 * sec.score4) /
-                                  total
-                                : 0;
-                            return (
-                              <Table.Tr
-                                className="font-medium text-default text-[13px]"
-                                key={sec.sectionNo}
-                              >
-                                <Table.Td>
-                                  {getSectionNo(sec.sectionNo)}
-                                </Table.Td>
-                                {Object.keys(sec)
-                                  .slice(-5)
-                                  .map((key) => (
-                                    <Table.Td key={key} className={`text-end `}>
-                                      {(sec as any)[key] ?? "-"}
-                                    </Table.Td>
-                                  ))}
-                                <Table.Td className="text-end pr-3 w-[13%]">
-                                  {total}
-                                </Table.Td>
-                                <Table.Td className="text-end  pr-8 w-[13%]">
-                                  {avg.toFixed(2)}
-                                </Table.Td>
-                              </Table.Tr>
-                            );
-                          })}
-                        </Table.Tbody>
-                        <Table.Tfoot>
-                          <Table.Tr className="bg-bgTableHeader text-secondary">
-                            <Table.Th>Total</Table.Th>
-                            {[
-                              "score0",
-                              "score1",
-                              "score2",
-                              "score3",
-                              "score4",
-                            ].map((key) => (
-                              <Table.Th key={key} className="text-end">
-                                {cloItem.sections?.reduce(
-                                  (sum, sec) => sum + ((sec as any)[key] || 0),
-                                  0
-                                ) ?? 0}
-                              </Table.Th>
-                            ))}
-                            <Table.Th className="w-[15%] text-end pr-3">
-                              {cloItem.sections?.reduce(
-                                (sum, sec) =>
-                                  sum +
-                                  Object.values(sec)
-                                    .slice(-5)
-                                    .reduce(
-                                      (a, b: any) => a + parseInt(b || 0),
-                                      0
-                                    ),
-                                0
-                              ) ?? 0}
-                            </Table.Th>
-                            <Table.Th className="w-[13%] text-end pr-8">
-                              {(
-                                cloItem.sections?.reduce((sum, sec) => {
-                                  const data = Object.values(sec)
-                                    .slice(-5)
-                                    .map((e: any) => parseInt(e));
-                                  const total = data.reduce((a, b) => a + b, 0);
+
+                                {assess?.map((sheet, sheetIndex) => {
+                                  const questions = eva.questions
+                                    .filter((e) => e.includes(sheet))
+                                    .map((e) =>
+                                      e.substring(e.lastIndexOf("-")).slice(1)
+                                    );
                                   return (
-                                    sum +
-                                    (total > 0
-                                      ? (0 * sec.score0 +
-                                          1 * sec.score1 +
-                                          2 * sec.score2 +
-                                          3 * sec.score3 +
-                                          4 * sec.score4) /
-                                        total
-                                      : 0)
+                                    <div
+                                      key={sheetIndex}
+                                      className=" font-medium text-default"
+                                    >
+                                      <div className="bg-[#F3F3F3] text-default font-semibold px-4 py-3">
+                                        <p>{sheet}</p>
+                                      </div>
+
+                                      {questions.map((ques, quesIndex) => {
+                                        const question = assignments
+                                          ?.find((e) => e.name == sheet)
+                                          ?.questions.find(
+                                            (e) => e.name == ques
+                                          );
+
+                                        return (
+                                          <div
+                                            key={quesIndex}
+                                            className="flex justify-between items-center pl-8 px-4 py-3 "
+                                          >
+                                            <p className="font-medium text-[13px] text-default">
+                                              {ques}
+                                              {question?.desc?.length
+                                                ? ` - ${question.desc}`
+                                                : ""}
+                                            </p>
+                                            <p>{question?.fullScore}</p>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
                                   );
-                                }, 0) / cloItem.sections?.length || 0
-                              ).toFixed(2)}
-                            </Table.Th>
-                          </Table.Tr>
-                        </Table.Tfoot>
-                      </Table>
-                    </div>
-                  </Tabs.Panel>
-                  <Tabs.Panel
-                    className="flex flex-col gap-5 py-3 px-4"
-                    value="detailCriteria"
-                  >
-                    <div className="flex justify-between items-center">
-                      <div className="flex justify-between">
-                        <div className="text-default flex items-center  font-medium text-[15px]">
-                          <p className="text-[18px] text-secondary mr-2 font-semibold">
-                            CLO {clo?.no}{" "}
-                          </p>
-                          <div className="flex flex-col ml-2 gap-[2px]">
-                            <p>{clo?.descTH}</p>
-                            <p>{clo?.descEN}</p>
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </>
+                    ) : selectedTab == "scoreRange" ? (
+                      <>
+                        <div className="flex justify-between items-center">
+                          <div className="flex justify-between">
+                            <div className="text-default flex items-center  font-medium text-[15px]">
+                              <p className="text-[18px] text-secondary mr-2 font-semibold">
+                                CLO {clo?.no}{" "}
+                              </p>
+                              <div className="flex flex-col ml-2 gap-[2px]">
+                                <p>{clo?.descTH}</p>
+                                <p>{clo?.descEN}</p>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="overflow-x-auto h-fit bg max-h-full border flex flex-col rounded-lg border-secondary">
-                      <Table stickyHeader striped>
-                        <Table.Thead>
-                          <Table.Tr>
-                            <Table.Th>Assessment Tool</Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 0
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 1
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 2
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 3
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 4
-                            </Table.Th>
-                            <Table.Th className="w-[15%] text-end pr-3">
-                              Number of Student
-                            </Table.Th>
-                            <Table.Th className="w-[13%] text-end pr-8">
-                              Average
-                            </Table.Th>
-                          </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                          {assessmentCloScores[cloIndex].assess.map(
-                            (assess) => {
-                              const evaluation = tqf3.part3?.eval.find(
-                                (e) => e.id === assess.eval
-                              );
-                              const data = Object.values(assess)
-                                .slice(-5)
-                                .map((e: any) => parseInt(e));
-                              const total =
-                                data.reduce((a, b: any) => a + b, 0) || 0;
-                              const avg =
-                                total > 0
-                                  ? (0 * assess.score0 +
-                                      1 * assess.score1 +
-                                      2 * assess.score2 +
-                                      3 * assess.score3 +
-                                      4 * assess.score4) /
-                                    total
-                                  : 0;
-                              return (
-                                <Table.Tr
-                                  className="font-medium text-default text-[13px]"
-                                  key={assess.eval}
-                                >
-                                  <Table.Td>
-                                    <div>
-                                      <p>
-                                        {evaluation?.topicTH} |{" "}
-                                        {evaluation?.topicEN}
-                                        <span className="text-secondary">
-                                          {" "}
-                                          {assess.fullScore} pts.
-                                        </span>
-                                        ({assess.percent} %)
-                                      </p>
-                                    </div>
-                                  </Table.Td>
-                                  {Object.keys(assess)
-                                    .slice(-5)
-                                    .map((key) => (
-                                      <Table.Td
-                                        key={key}
-                                        className={`text-end `}
-                                      >
-                                        {(assess as any)[key] ?? "-"}
-                                      </Table.Td>
-                                    ))}
-                                  <Table.Td className="text-end pr-3 w-[13%]">
-                                    {total}
-                                  </Table.Td>
-                                  <Table.Td className="text-end  pr-8 w-[13%]">
-                                    {avg.toFixed(2)}
-                                  </Table.Td>
-                                </Table.Tr>
-                              );
-                            }
-                          )}
-                        </Table.Tbody>
-                        <Table.Tfoot>
-                          <Table.Tr className="bg-bgTableHeader text-secondary">
-                            <Table.Th>Total</Table.Th>
-                            {[
-                              "score0",
-                              "score1",
-                              "score2",
-                              "score3",
-                              "score4",
-                            ].map((key) => (
-                              <Table.Th
-                                key={key}
-                                className="text-nowrap text-end"
-                              >
-                                {assessmentCloScores[cloIndex].assess.reduce(
-                                  (sum, assess) => sum + (assess[key] || 0),
-                                  0
-                                ) ?? 0}
-                              </Table.Th>
-                            ))}
-                            <Table.Th className="w-[15%] text-end pr-3">
-                              {assessmentCloScores[cloIndex].assess.reduce(
-                                (sum, assess) => {
-                                  const data = Object.values(assess)
-                                    .slice(-5)
-                                    .map((e: any) => parseInt(e));
-                                  return sum + data.reduce((a, b) => a + b, 0);
-                                },
-                                0
-                              )}
-                            </Table.Th>
-                            <Table.Th className="w-[13%] text-end pr-8">
-                              {(() => {
-                                const totals = assessmentCloScores[
-                                  cloIndex
-                                ].assess.map((assess) => {
-                                  const data = Object.values(assess)
-                                    .slice(-5)
-                                    .map((e: any) => parseInt(e));
-                                  const total = data.reduce((a, b) => a + b, 0);
-                                  return total > 0
-                                    ? (0 * assess.score0 +
-                                        1 * assess.score1 +
-                                        2 * assess.score2 +
-                                        3 * assess.score3 +
-                                        4 * assess.score4) /
-                                        total
-                                    : 0;
-                                });
-                                const overallTotal = totals.reduce(
-                                  (a, b) => a + b,
-                                  0
-                                );
-                                return (
-                                  overallTotal /
-                                  assessmentCloScores[cloIndex].assess.length
-                                ).toFixed(2);
-                              })()}
-                            </Table.Th>
-                          </Table.Tr>
-                        </Table.Tfoot>
-                      </Table>
-                    </div>
-                  </Tabs.Panel>
-                </Tabs> */}
-                {view == "section" ? (
-                  <div className="flex flex-col gap-5 py-3 px-4">
-                    <div className="flex justify-between items-center">
-                      <div className="flex justify-between">
-                        <div className="text-default flex items-center  font-medium text-[15px]">
-                          <p className="text-[18px] text-secondary mr-2 font-semibold">
-                            CLO {clo?.no}{" "}
-                          </p>
-                          <div className="flex flex-col ml-2 gap-[2px]">
-                            <p>{clo?.descTH}</p>
-                            <p>{clo?.descEN}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="overflow-x-auto h-fit bg max-h-full border flex flex-col rounded-lg border-secondary">
-                      <Table stickyHeader striped>
-                        <Table.Thead>
-                          <Table.Tr>
-                            <Table.Th>Section</Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 0
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 1
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 2
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 3
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 4
-                            </Table.Th>
-                            <Table.Th className="w-[15%] text-end pr-3">
-                              Number of Student
-                            </Table.Th>
-                            <Table.Th className="w-[13%] text-end pr-8">
-                              Average
-                            </Table.Th>
-                          </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                          {cloItem.sections?.map((sec) => {
-                            const data = Object.values(sec)
-                              .slice(-5)
-                              .map((e: any) => parseInt(e));
-                            const total =
-                              data.reduce((a, b: any) => a + b, 0) || 0;
-                            const avg =
-                              total > 0
-                                ? (0 * sec.score0 +
-                                    1 * sec.score1 +
-                                    2 * sec.score2 +
-                                    3 * sec.score3 +
-                                    4 * sec.score4) /
-                                  total
-                                : 0;
-                            return (
-                              <Table.Tr
-                                className="font-medium text-default text-[13px]"
-                                key={sec.sectionNo}
-                              >
-                                <Table.Td>
-                                  {getSectionNo(sec.sectionNo)}
-                                </Table.Td>
-                                {Object.keys(sec)
-                                  .slice(-5)
-                                  .map((key) => (
-                                    <Table.Td key={key} className={`text-end `}>
-                                      {(sec as any)[key] ?? "-"}
-                                    </Table.Td>
-                                  ))}
-                                <Table.Td className="text-end pr-3 w-[13%]">
-                                  {total}
-                                </Table.Td>
-                                <Table.Td className="text-end  pr-8 w-[13%]">
-                                  {avg.toFixed(2)}
-                                </Table.Td>
+                        <div className="overflow-x-auto h-fit bg max-h-full border flex flex-col rounded-lg border-secondary">
+                          <Table stickyHeader striped>
+                            <Table.Thead>
+                              <Table.Tr>
+                                <Table.Th>Section</Table.Th>
+                                <Table.Th className={`text-nowrap text-end`}>
+                                  Score 0
+                                </Table.Th>
+                                <Table.Th className={`text-nowrap text-end`}>
+                                  Score 1
+                                </Table.Th>
+                                <Table.Th className={`text-nowrap text-end`}>
+                                  Score 2
+                                </Table.Th>
+                                <Table.Th className={`text-nowrap text-end`}>
+                                  Score 3
+                                </Table.Th>
+                                <Table.Th className={`text-nowrap text-end`}>
+                                  Score 4
+                                </Table.Th>
+                                <Table.Th className="w-[15%] text-end pr-3">
+                                  Number of Student
+                                </Table.Th>
+                                <Table.Th className="w-[13%] text-end pr-8">
+                                  Average
+                                </Table.Th>
                               </Table.Tr>
-                            );
-                          })}
-                        </Table.Tbody>
-                        <Table.Tfoot>
-                          <Table.Tr className="bg-bgTableHeader text-secondary">
-                            <Table.Th>Total</Table.Th>
-                            {[
-                              "score0",
-                              "score1",
-                              "score2",
-                              "score3",
-                              "score4",
-                            ].map((key) => (
-                              <Table.Th key={key} className="text-end">
-                                {cloItem.sections?.reduce(
-                                  (sum, sec) => sum + ((sec as any)[key] || 0),
-                                  0
-                                ) ?? 0}
-                              </Table.Th>
-                            ))}
-                            <Table.Th className="w-[15%] text-end pr-3">
-                              {cloItem.sections?.reduce(
-                                (sum, sec) =>
-                                  sum +
-                                  Object.values(sec)
-                                    .slice(-5)
-                                    .reduce(
-                                      (a, b: any) => a + parseInt(b || 0),
+                            </Table.Thead>
+                            <Table.Tbody>
+                              {cloItem.sections?.map((sec) => {
+                                const data = Object.values(sec)
+                                  .slice(-5)
+                                  .map((e: any) => parseInt(e));
+                                const total =
+                                  data.reduce((a, b: any) => a + b, 0) || 0;
+                                const avg =
+                                  total > 0
+                                    ? (0 * sec.score0 +
+                                        1 * sec.score1 +
+                                        2 * sec.score2 +
+                                        3 * sec.score3 +
+                                        4 * sec.score4) /
+                                      total
+                                    : 0;
+                                return (
+                                  <Table.Tr
+                                    className="font-medium text-default text-[13px]"
+                                    key={sec.sectionNo}
+                                  >
+                                    <Table.Td>
+                                      {getSectionNo(sec.sectionNo)}
+                                    </Table.Td>
+                                    {Object.keys(sec)
+                                      .slice(-5)
+                                      .map((key) => (
+                                        <Table.Td
+                                          key={key}
+                                          className={`text-end `}
+                                        >
+                                          {(sec as any)[key] ?? "-"}
+                                        </Table.Td>
+                                      ))}
+                                    <Table.Td className="text-end pr-3 w-[13%]">
+                                      {total}
+                                    </Table.Td>
+                                    <Table.Td className="text-end  pr-8 w-[13%]">
+                                      {avg.toFixed(2)}
+                                    </Table.Td>
+                                  </Table.Tr>
+                                );
+                              })}
+                            </Table.Tbody>
+                            <Table.Tfoot>
+                              <Table.Tr className="bg-bgTableHeader text-secondary">
+                                <Table.Th>Total</Table.Th>
+                                {[
+                                  "score0",
+                                  "score1",
+                                  "score2",
+                                  "score3",
+                                  "score4",
+                                ].map((key) => (
+                                  <Table.Th key={key} className="text-end">
+                                    {cloItem.sections?.reduce(
+                                      (sum, sec) =>
+                                        sum + ((sec as any)[key] || 0),
                                       0
-                                    ),
-                                0
-                              ) ?? 0}
-                            </Table.Th>
-                            <Table.Th className="w-[13%] text-end pr-8">
-                              {cloItem.score.toFixed(2)}
-                            </Table.Th>
-                          </Table.Tr>
-                        </Table.Tfoot>
-                      </Table>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-5 py-3 px-4">
-                    <div className="flex justify-between items-center">
-                      <div className="flex justify-between">
-                        <div className="text-default flex items-center  font-medium text-[15px]">
-                          <p className="text-[18px] text-secondary mr-2 font-semibold">
-                            CLO {clo?.no}{" "}
-                          </p>
-                          <div className="flex flex-col ml-2 gap-[2px]">
-                            <p>{clo?.descTH}</p>
-                            <p>{clo?.descEN}</p>
+                                    ) ?? 0}
+                                  </Table.Th>
+                                ))}
+                                <Table.Th className="w-[15%] text-end pr-3">
+                                  {cloItem.sections?.reduce(
+                                    (sum, sec) =>
+                                      sum +
+                                      Object.values(sec)
+                                        .slice(-5)
+                                        .reduce(
+                                          (a, b: any) => a + parseInt(b || 0),
+                                          0
+                                        ),
+                                    0
+                                  ) ?? 0}
+                                </Table.Th>
+                                <Table.Th className="w-[13%] text-end pr-8">
+                                  {(
+                                    cloItem.sections?.reduce((sum, sec) => {
+                                      const data = Object.values(sec)
+                                        .slice(-5)
+                                        .map((e: any) => parseInt(e));
+                                      const total = data.reduce(
+                                        (a, b) => a + b,
+                                        0
+                                      );
+                                      return (
+                                        sum +
+                                        (total > 0
+                                          ? (0 * sec.score0 +
+                                              1 * sec.score1 +
+                                              2 * sec.score2 +
+                                              3 * sec.score3 +
+                                              4 * sec.score4) /
+                                            total
+                                          : 0)
+                                      );
+                                    }, 0) / cloItem.sections?.length || 0
+                                  ).toFixed(2)}
+                                </Table.Th>
+                              </Table.Tr>
+                            </Table.Tfoot>
+                          </Table>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex justify-between items-center">
+                          <div className="flex justify-between">
+                            <div className="text-default flex items-center  font-medium text-[15px]">
+                              <p className="text-[18px] text-secondary mr-2 font-semibold">
+                                CLO {clo?.no}{" "}
+                              </p>
+                              <div className="flex flex-col ml-2 gap-[2px]">
+                                <p>{clo?.descTH}</p>
+                                <p>{clo?.descEN}</p>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="overflow-x-auto h-fit bg max-h-full border flex flex-col rounded-lg border-secondary">
-                      <Table stickyHeader striped>
-                        <Table.Thead>
-                          <Table.Tr>
-                            <Table.Th>Assessment Tool</Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 0
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 1
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 2
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 3
-                            </Table.Th>
-                            <Table.Th className={`text-nowrap text-end`}>
-                              Score 4
-                            </Table.Th>
-                            <Table.Th className="w-[15%] text-end pr-3">
-                              Number of Student
-                            </Table.Th>
-                            <Table.Th className="w-[13%] text-end pr-8">
-                              Average
-                            </Table.Th>
-                          </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                          {assessmentCloScores[cloIndex]?.assess.map(
-                            (assess) => {
-                              const evaluation = tqf3.part3?.eval.find(
-                                (e) => e.id === assess.eval
-                              );
-                              const data = Object.values(assess)
-                                .slice(-5)
-                                .map((e: any) => parseInt(e));
-                              const total =
-                                data.reduce((a, b: any) => a + b, 0) || 0;
-                              const avg =
-                                total > 0
-                                  ? (0 * assess.score0 +
-                                      1 * assess.score1 +
-                                      2 * assess.score2 +
-                                      3 * assess.score3 +
-                                      4 * assess.score4) /
-                                    total
-                                  : 0;
-                              return (
-                                <Table.Tr
-                                  className="font-medium text-default text-[13px]"
-                                  key={assess.eval}
-                                >
-                                  <Table.Td>
-                                    <div>
-                                      <p>
-                                        {evaluation?.topicTH} |{" "}
-                                        {evaluation?.topicEN}
-                                        <span className="text-secondary">
-                                          {" "}
-                                          {assess.fullScore} pts.
-                                        </span>
-                                        ({assess.percent} %)
-                                      </p>
-                                    </div>
-                                  </Table.Td>
-                                  {Object.keys(assess)
-                                    .slice(-5)
-                                    .map((key) => (
-                                      <Table.Td
-                                        key={key}
-                                        className={`text-end `}
-                                      >
-                                        {(assess as any)[key] ?? "-"}
-                                      </Table.Td>
-                                    ))}
-                                  <Table.Td className="text-end pr-3 w-[13%]">
-                                    {total}
-                                  </Table.Td>
-                                  <Table.Td className="text-end  pr-8 w-[13%]">
-                                    {avg.toFixed(2)}
-                                  </Table.Td>
-                                </Table.Tr>
-                              );
-                            }
-                          )}
-                        </Table.Tbody>
-                        <Table.Tfoot>
-                          <Table.Tr className="bg-bgTableHeader text-secondary">
-                            {/* <Table.Th>Total</Table.Th>
-                            {[
-                              "score0",
-                              "score1",
-                              "score2",
-                              "score3",
-                              "score4",
-                            ].map((key) => (
-                              <Table.Th
-                                key={key}
-                                className="text-nowrap text-end"
-                              >
-                                {assessmentCloScores[cloIndex].assess.reduce(
-                                  (sum, assess) => sum + (assess[key] || 0),
-                                  0
-                                ) ?? 0}
-                              </Table.Th>
-                            ))}
-                            <Table.Th className="w-[15%] text-end pr-3">
-                              {assessmentCloScores[cloIndex].assess.reduce(
-                                (sum, assess) => {
+                        <div className="overflow-x-auto h-fit bg max-h-full border flex flex-col rounded-lg border-secondary">
+                          <Table stickyHeader striped>
+                            <Table.Thead>
+                              <Table.Tr>
+                                <Table.Th>Assessment Tool</Table.Th>
+                                <Table.Th className={`text-nowrap text-end`}>
+                                  Score 0
+                                </Table.Th>
+                                <Table.Th className={`text-nowrap text-end`}>
+                                  Score 1
+                                </Table.Th>
+                                <Table.Th className={`text-nowrap text-end`}>
+                                  Score 2
+                                </Table.Th>
+                                <Table.Th className={`text-nowrap text-end`}>
+                                  Score 3
+                                </Table.Th>
+                                <Table.Th className={`text-nowrap text-end`}>
+                                  Score 4
+                                </Table.Th>
+                                <Table.Th className="w-[15%] text-end pr-3">
+                                  Number of Student
+                                </Table.Th>
+                                <Table.Th className="w-[13%] text-end pr-8">
+                                  Average
+                                </Table.Th>
+                              </Table.Tr>
+                            </Table.Thead>
+                            <Table.Tbody>
+                              {assessmentCloScores[cloIndex]?.assess.map(
+                                (assess) => {
+                                  const evaluation = tqf3.part3?.eval.find(
+                                    (e) => e.id === assess.eval
+                                  );
                                   const data = Object.values(assess)
                                     .slice(-5)
                                     .map((e: any) => parseInt(e));
-                                  return sum + data.reduce((a, b) => a + b, 0);
-                                },
-                                0
+                                  const total =
+                                    data.reduce((a, b: any) => a + b, 0) || 0;
+                                  const avg =
+                                    total > 0
+                                      ? (0 * assess.score0 +
+                                          1 * assess.score1 +
+                                          2 * assess.score2 +
+                                          3 * assess.score3 +
+                                          4 * assess.score4) /
+                                        total
+                                      : 0;
+                                  return (
+                                    <Table.Tr
+                                      className="font-medium text-default text-[13px]"
+                                      key={assess.eval}
+                                    >
+                                      <Table.Td>
+                                        <div>
+                                          <p>
+                                            {evaluation?.topicTH} |{" "}
+                                            {evaluation?.topicEN}
+                                            <span className="text-secondary">
+                                              {" "}
+                                              {assess.fullScore} pts.
+                                            </span>
+                                            ({assess.percent} %)
+                                          </p>
+                                        </div>
+                                      </Table.Td>
+                                      {Object.keys(assess)
+                                        .slice(-5)
+                                        .map((key) => (
+                                          <Table.Td
+                                            key={key}
+                                            className={`text-end `}
+                                          >
+                                            {(assess as any)[key] ?? "-"}
+                                          </Table.Td>
+                                        ))}
+                                      <Table.Td className="text-end pr-3 w-[13%]">
+                                        {total}
+                                      </Table.Td>
+                                      <Table.Td className="text-end  pr-8 w-[13%]">
+                                        {avg.toFixed(2)}
+                                      </Table.Td>
+                                    </Table.Tr>
+                                  );
+                                }
                               )}
-                            </Table.Th> */}
-                            <Table.Th
-                              className="w-[13%] text-end pr-8"
-                              colSpan={8}
-                            >
-                              {cloItem.score.toFixed(2)}
-                            </Table.Th>
-                          </Table.Tr>
-                        </Table.Tfoot>
-                      </Table>
-                    </div>
+                            </Table.Tbody>
+                            <Table.Tfoot>
+                              <Table.Tr className="bg-bgTableHeader text-secondary">
+                                <Table.Th
+                                  className="w-[13%] text-end pr-8"
+                                  colSpan={8}
+                                >
+                                  {cloItem.score.toFixed(2)}
+                                </Table.Th>
+                              </Table.Tr>
+                            </Table.Tfoot>
+                          </Table>
+                        </div>
+                      </>
+                    )}
                   </div>
-                )}
-              </div>
-            );
-          })}
+                );
+              })}
+            </Tabs.Panel>
+          </Tabs>
         </div>
         <div className="min-w-[70px] px-2 mt-1 flex flex-col">
           {form.getValues().data?.map((item, index) => {
