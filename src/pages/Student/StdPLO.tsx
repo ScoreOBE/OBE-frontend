@@ -109,7 +109,7 @@ export default function StdPLO() {
         <Loading />
       ) : (
         <>
-          {departmentPLO && (
+          {/* {departmentPLO && (
             <DrawerPLOdes
               opened={openDrawerPLOdes}
               onClose={() => setOpenDrawerPLOdes(false)}
@@ -154,9 +154,9 @@ export default function StdPLO() {
               </p>
             </div>
             <SpiderChart data={data} height={height} />
-          </div>
+          </div> */}
 
-          {/* <div className=" flex flex-col h-full w-full  overflow-hidden">
+          <div className=" flex flex-col h-full w-full  overflow-hidden">
             <div className="flex flex-row px-6 pt-3   items-center justify-between">
               <div className="flex flex-col">
                 <p className="text-secondary text-[18px] font-semibold "></p>
@@ -180,7 +180,7 @@ export default function StdPLO() {
                 <img src={maintenace} alt="notFound"></img>
               </div>
             </div>
-          </div> */}
+          </div>
         </>
       )}
     </div>

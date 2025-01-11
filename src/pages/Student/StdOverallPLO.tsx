@@ -128,7 +128,7 @@ export default function StdOverallPLO() {
         <Loading />
       ) : (
         <>
-          {departmentPLO && (
+          {/* {departmentPLO && (
             <DrawerPLOdes
               opened={openDrawerPLOdes}
               onClose={() => setOpenDrawerPLOdes(false)}
@@ -278,8 +278,8 @@ export default function StdOverallPLO() {
                 ))}
               </div>
             </Tabs.Panel>
-          </Tabs>
-          {/* <div className=" flex flex-col h-full w-full  overflow-hidden">
+          </Tabs> */}
+          <div className=" flex flex-col h-full w-full  overflow-hidden">
             <div className="flex flex-row px-6 pt-3   items-center justify-between">
               <div className="flex flex-col">
                 <p className="text-secondary text-[18px] font-semibold "></p>
@@ -303,7 +303,7 @@ export default function StdOverallPLO() {
                 <img src={maintenace} alt="notFound"></img>
               </div>
             </div>
-          </div> */}
+          </div>
         </>
       )}
     </div>
