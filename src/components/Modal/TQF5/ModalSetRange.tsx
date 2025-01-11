@@ -35,16 +35,20 @@ export default function ModalSetRange({
     }
   }, [opened]);
 
-  const saveSetRange = async () => {
-    tqf5Form.setFieldValue("data", form.getValues().data);
+  const closeModal = () => {
     onClose();
     form.reset();
+  };
+
+  const saveSetRange = async () => {
+    tqf5Form.setFieldValue("data", form.getValues().data);
+    closeModal();
   };
 
   return (
     <Modal
       opened={opened}
-      onClose={onClose}
+      onClose={closeModal}
       closeOnClickOutside={false}
       centered
       size="55vw"
@@ -129,7 +133,7 @@ export default function ModalSetRange({
 
         <div className="flex gap-2 mt-5  items-end  justify-end h-fit">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
-            <Button onClick={() => onClose()} variant="subtle">
+            <Button onClick={closeModal} variant="subtle">
               Cancel
             </Button>
             <Button onClick={saveSetRange}>Done</Button>
