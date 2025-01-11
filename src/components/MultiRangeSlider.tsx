@@ -79,7 +79,7 @@ export default function MultiRangeSlider({
         {values.map((value, index) => (
           <div key={index}>
             <div
-              className="absolute text-default text-b4 rounded-full -top-5 -translate-x-1/2"
+              className="absolute select-none text-default text-b4 rounded-full -top-5 -translate-x-1/2"
               style={{
                 left: `${((value - min) / (max - min)) * 100}%`,
               }}

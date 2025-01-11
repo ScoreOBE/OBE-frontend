@@ -25,30 +25,23 @@ export default function ModalSetRange({
   const form = useForm({
     mode: "controlled",
     initialValues: { data: [] as IModelTQF5Part3[] },
-    validate: {},
-    validateInputOnBlur: true,
   });
 
   useEffect(() => {
-    if (opened) {
+    if (tqf5Form) {
       form.setFieldValue("data", cloneDeep(tqf5Form.getValues().data));
     }
   }, [opened]);
 
-  const closeModal = () => {
-    onClose();
-    form.reset();
-  };
-
   const saveSetRange = async () => {
     tqf5Form.setFieldValue("data", form.getValues().data);
-    closeModal();
+    onClose();
   };
 
   return (
     <Modal
       opened={opened}
-      onClose={closeModal}
+      onClose={onClose}
       closeOnClickOutside={false}
       centered
       size="55vw"
@@ -133,7 +126,7 @@ export default function ModalSetRange({
 
         <div className="flex gap-2 mt-5  items-end  justify-end h-fit">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
-            <Button onClick={closeModal} variant="subtle">
+            <Button onClick={onClose} variant="subtle">
               Cancel
             </Button>
             <Button onClick={saveSetRange}>Done</Button>
