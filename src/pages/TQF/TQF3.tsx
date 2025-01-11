@@ -49,6 +49,7 @@ import { initialTqf3Part } from "@/helpers/functions/tqf3";
 import { setLoadingOverlay } from "@/store/loading";
 import { getOnePLO } from "@/services/plo/plo.service";
 import { setPloTQF5 } from "@/store/tqf5";
+import { IModelTQF5 } from "@/models/ModelTQF5";
 
 export default function TQF3() {
   const { courseNo } = useParams();
@@ -63,7 +64,7 @@ export default function TQF3() {
   const [tqf3Original, setTqf3Original] = useState<
     Partial<IModelTQF3> & { topic?: string; ploRequired?: string[] }
   >();
-  const [tqf5Id, setTqf5Id] = useState("");
+  const [tqf5, setTqf5] = useState<IModelTQF5>();
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<UseFormReturnType<any>>();
@@ -241,7 +242,7 @@ export default function TQF3() {
         const section = resCourse.sections.find(
           (sec: IModelSection) => sec.topic == tqf3.topic
         );
-        setTqf5Id(section?.TQF5.id);
+        setTqf5(section?.TQF5);
         const ploRequire = resPloRequired?.sections
           .find((item: any) => item.topic == tqf3.topic)
           ?.ploRequire.find((plo: any) => plo.plo == tqf3.coursePLO?.id)?.list;
@@ -267,7 +268,7 @@ export default function TQF3() {
         const ploRequire = resPloRequired?.ploRequire.find(
           (plo: any) => plo.plo == tqf3.coursePLO?.id
         )?.list;
-        setTqf5Id(resCourse.TQF5?.id);
+        setTqf5(resCourse.TQF5);
         setTqf3Original({
           topic: tqf3.topic,
           ploRequired: ploRequire || [],
@@ -375,7 +376,7 @@ export default function TQF3() {
           return;
         }
         dispatch(setLoadingOverlay(true));
-        if (tqf3Part == "part4") payload.tqf5 = tqf5Id;
+        if (tqf3Part == "part4") payload.tqf5 = tqf5?.id;
         else if (tqf3Part == "part6" && !tqf3.coursePLO?.id)
           payload.done = true;
         if (confirmToEditData) payload.inProgress = true;
@@ -600,7 +601,7 @@ export default function TQF3() {
                   {[tqf3Original.part4 && " 4", tqf3Original.part7 && " 7 "]
                     .filter(Boolean)
                     .join(",")}
-                    and TQF 5 Part 2 ,3
+                  {tqf5?.part2 && `and TQF 5 Part 2${tqf5?.part3 ? ", 3" : ""}`}
                 </p>
               </div>
             }
@@ -612,7 +613,11 @@ export default function TQF3() {
               {[tqf3Original.part4 && " 4", tqf3Original.part7 && "  7 "]
                 .filter(Boolean)
                 .join(",")}
-              again and data in TQF 5 Part 2, 3 will be deleted.
+              again
+              {tqf5?.part2 &&
+                ` and data in TQF 5 Part 2${
+                  tqf5?.part3 ? ", 3" : ""
+                } will be deleted.`}
             </p>
           </Alert>
         </div>
