@@ -40,9 +40,9 @@ import { getOnePLO } from "@/services/plo/plo.service";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import ModalMappingAssignment from "@/components/Modal/TQF5/ModalMappingAssignment";
 import exportFile from "@/assets/icons/fileExport.svg?react";
-import IconEye from "@/assets/icons/publishEach.svg?react";
 import { setLoadingOverlay } from "@/store/loading";
 import ModalExportTQF5 from "@/components/Modal/TQF5/ModalExportTQF5";
+import ModalSetRange from "@/components/Modal/TQF5/ModalSetRange";
 
 export default function TQF5() {
   const { courseNo } = useParams();
@@ -70,6 +70,7 @@ export default function TQF5() {
   const [openModalExportTQF5, setOpenModalExportTQF5] = useState(false);
   const [openModalAssignmentMapping, setOpenModalAssignmentMapping] =
     useState(false);
+  const [openModalSetRange, setOpenModalSetRange] = useState(false);
   const partTab = [
     {
       value: Object.keys(partLabel)[0],
@@ -485,6 +486,14 @@ export default function TQF5() {
         tqf3={tqf3!}
         assignments={assignments!}
       />
+      {tqf5Part == "part3" && (
+        <ModalSetRange
+          opened={openModalSetRange}
+          onClose={() => setOpenModalSetRange(false)}
+          tqf3={tqf3!}
+          tqf5Form={form!}
+        />
+      )}
       <ModalExportTQF5
         opened={openModalExportTQF5}
         onClose={() => setOpenModalExportTQF5(false)}
@@ -543,7 +552,6 @@ export default function TQF5() {
                     Export TQF5
                   </div>
                 </Button>
-
                 {checkActiveTerm() && tqf5Part != "part1" && tqf5.method && (
                   <div className="rounded-full hover:bg-gray-300 p-1 mr-2 cursor-pointer">
                     <Menu
@@ -605,9 +613,7 @@ export default function TQF5() {
                           tqf5.method == METHOD_TQF5.SCORE_OBE && (
                             <Menu.Item
                               className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5"
-                              onClick={() =>
-                                setOpenModalAssignmentMapping(true)
-                              }
+                              onClick={() => setOpenModalSetRange(true)}
                             >
                               <div className="flex justify-between items-center gap-2">
                                 <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
@@ -615,7 +621,7 @@ export default function TQF5() {
                                     className="mr-[12px] size-5 stroke-[1.4px]"
                                     IconComponent={IconEdit}
                                   />
-                                  Set Weight Assessment tool
+                                  Set Range Assessment tool
                                 </div>
                               </div>
                             </Menu.Item>

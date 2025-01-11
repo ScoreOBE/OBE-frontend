@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import unplug from "@/assets/image/unplug.png";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { Button, Table, Tabs, TextInput, Checkbox } from "@mantine/core";
+import { Button, Table, Tabs, TextInput } from "@mantine/core";
 import Icon from "../Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconCheck2 from "@/assets/icons/Check2.svg?react";
@@ -11,7 +11,7 @@ import { useForm } from "@mantine/form";
 import { IModelTQF5Part3 } from "@/models/ModelTQF5";
 import { updatePartTQF5 } from "@/store/tqf5";
 import { isEqual, cloneDeep } from "lodash";
-import { initialTqf5Part3 } from "@/helpers/functions/tqf5";
+import { calCloScore, initialTqf5Part3 } from "@/helpers/functions/tqf5";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelAssignment } from "@/models/ModelCourse";
 import { getSectionNo } from "@/helpers/functions/function";
@@ -34,9 +34,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
   >([]);
   const [isEdit, setIsEdit] = useState(false);
   const [activeSection, setActiveSection] = useState<number>(0);
-  const [selectedTab, setSelectedTab] = useState<string | null>(
-    "assessmentTool"
-  );
+  const [selectedTab, setSelectedTab] = useState<string | null>("section");
   const sectionRefs = useRef(
     tqf3.part2?.clo.map(() => React.createRef<HTMLDivElement>())
   );
@@ -54,10 +52,10 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
       }
     },
   });
+
   useEffect(() => {
     if (tqf5.part3) {
       form.setValues(cloneDeep(tqf5.part3));
-      combinedAssess();
     } else if (tqf3.part2) {
       form.setValues(
         initialTqf5Part3(
@@ -67,9 +65,25 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
           assignments
         )
       );
-      combinedAssess(form.getValues().data);
     }
   }, [tqf5.method, tqf5.part2]);
+
+  useEffect(() => {
+    if (form.getValues().data[0].assess) {
+      const newCalCloScore = [...form.getValues().data];
+      newCalCloScore.forEach((cloItem, index) => {
+        const { sectionsData, score } = calCloScore(
+          tqf5.part2?.data[index]!,
+          tqf5.method!,
+          course?.sections as any,
+          cloItem.assess
+        );
+        cloItem.sections = sectionsData;
+        cloItem.score = score;
+      });
+      setAssessmentCloScores(newCalCloScore as any);
+    }
+  }, [form.getValues().data]);
 
   useEffect(() => {
     if (tqf3.part2) {
@@ -114,50 +128,6 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
       };
     }
   }, [sectionRefs.current]);
-
-  const combinedAssess = (data?: IModelTQF5Part3[]) => {
-    if (tqf5.method == METHOD_TQF5.SCORE_OBE) {
-      const dataAssess =
-        data ??
-        initialTqf5Part3(
-          tqf5,
-          tqf3.part4?.data,
-          course?.sections as any,
-          assignments
-        ).data;
-      const result = dataAssess.map((cloData) => {
-        const aggregatedAssess = cloData.assess.reduce(
-          (acc: any, assess: any) => {
-            if (!acc[assess.eval]) {
-              acc[assess.eval] = {
-                eval: assess.eval,
-                fullScore: assess.fullScore,
-                percent: assess.percent,
-                score0: 0,
-                score1: 0,
-                score2: 0,
-                score3: 0,
-                score4: 0,
-              };
-            }
-            acc[assess.eval].score0 += assess.score0;
-            acc[assess.eval].score1 += assess.score1;
-            acc[assess.eval].score2 += assess.score2;
-            acc[assess.eval].score3 += assess.score3;
-            acc[assess.eval].score4 += assess.score4;
-            return acc;
-          },
-          {}
-        );
-
-        return {
-          clo: cloData.clo as string,
-          assess: Object.values(aggregatedAssess),
-        };
-      });
-      setAssessmentCloScores(result);
-    }
-  };
 
   return tqf5.part2?.updatedAt ? (
     tqf5.method == METHOD_TQF5.MANUAL ? (
@@ -309,9 +279,8 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
             onChange={(newValue) => setSelectedTab(newValue)}
           >
             <Tabs.List className="mb-2">
+              <Tabs.Tab value="section">Section</Tabs.Tab>
               <Tabs.Tab value="assessmentTool">Assessment Tool</Tabs.Tab>
-              <Tabs.Tab value="scoreRange">Score Range</Tabs.Tab>
-              <Tabs.Tab value="detailCriteria">Detail Criteria</Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel
               className="flex flex-col gap-5 py-3 px-4 overflow-y-auto"
@@ -319,9 +288,6 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
             >
               {form.getValues().data?.map((cloItem, cloIndex) => {
                 const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
-                const assessment = tqf5.part2?.data.find(
-                  (cl) => cl.clo === clo?.id
-                )?.assignments;
                 return (
                   <div
                     className={`last:mb-4 flex flex-col gap-4 pb-4 border-b-2 mr-1 ${
@@ -331,116 +297,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
                     key={clo?.id}
                     ref={sectionRefs.current!.at(cloIndex)}
                   >
-                    {selectedTab == "assessmentTool" ? (
-                      <>
-                        <div className="flex justify-between items-center">
-                          <div className="flex justify-between">
-                            <div className="text-default flex items-center  font-medium text-[14px]">
-                              <p className="text-[16px] text-secondary mr-2 font-semibold">
-                                CLO {clo?.no}
-                              </p>
-                              <div className="flex flex-col ml-2 gap-[2px]">
-                                <p>{clo?.descTH}</p>
-                                <p>{clo?.descEN}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        {assessment?.map((eva, evaIndex) => {
-                          const evaluation = tqf3.part3?.eval.find(
-                            (e) => e.id === eva.eval
-                          );
-                          const assess = [
-                            ...new Set(
-                              eva.questions.flatMap((e) =>
-                                e.substring(0, e.lastIndexOf("-"))
-                              )
-                            ),
-                          ].sort();
-                          const fullScore = assignments
-                            .filter((e) => assess.includes(e.name))
-                            .flatMap((e) =>
-                              e.questions.map((question) => ({
-                                sheet: e.name,
-                                ...question,
-                              }))
-                            )
-                            .filter((e) =>
-                              eva.questions.includes(`${e.sheet}-${e.name}`)
-                            )
-                            .reduce((a, b) => a + b.fullScore, 0);
-                          const percent = tqf3.part4?.data[cloIndex].evals.find(
-                            (e) => e.eval == eva.eval
-                          )?.percent;
-                          return (
-                            <div
-                              key={evaIndex}
-                              className="rounded-md overflow-clip text-[14px] border ml-1"
-                            >
-                              <div className="flex flex-col">
-                                <div className="bg-bgTableHeader font-semibold text-secondary px-4 py-3 flex justify-between items-center">
-                                  <div className="flex flex-col gap-[2px]">
-                                    <p className="text-[15px]">
-                                      {evaluation?.topicTH} |{" "}
-                                      {evaluation?.topicEN} ({percent} %)
-                                    </p>
-                                    <p>
-                                      Description:
-                                      {evaluation?.desc?.length
-                                        ? evaluation.desc
-                                        : "-"}
-                                    </p>
-                                  </div>
-
-                                  <p>{fullScore}</p>
-                                </div>
-
-                                {assess?.map((sheet, sheetIndex) => {
-                                  const questions = eva.questions
-                                    .filter((e) => e.includes(sheet))
-                                    .map((e) =>
-                                      e.substring(e.lastIndexOf("-")).slice(1)
-                                    );
-                                  return (
-                                    <div
-                                      key={sheetIndex}
-                                      className=" font-medium text-default"
-                                    >
-                                      <div className="bg-[#F3F3F3] text-default font-semibold px-4 py-3">
-                                        <p>{sheet}</p>
-                                      </div>
-
-                                      {questions.map((ques, quesIndex) => {
-                                        const question = assignments
-                                          ?.find((e) => e.name == sheet)
-                                          ?.questions.find(
-                                            (e) => e.name == ques
-                                          );
-
-                                        return (
-                                          <div
-                                            key={quesIndex}
-                                            className="flex justify-between items-center pl-8 px-4 py-3 "
-                                          >
-                                            <p className="font-medium text-[13px] text-default">
-                                              {ques}
-                                              {question?.desc?.length
-                                                ? ` - ${question.desc}`
-                                                : ""}
-                                            </p>
-                                            <p>{question?.fullScore}</p>
-                                          </div>
-                                        );
-                                      })}
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </>
-                    ) : selectedTab == "scoreRange" ? (
+                    {selectedTab == "section" ? (
                       <>
                         <div className="flex justify-between items-center">
                           <div className="flex justify-between">
