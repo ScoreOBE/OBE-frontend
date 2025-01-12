@@ -64,7 +64,7 @@ export default function MultiRangeSlider({
       case 3:
         return "border-[#2ED573]";
       case 4:
-        return "border-[#4e77fc]";
+        return "border-[#1E90FF]";
       default:
         return "";
     }
