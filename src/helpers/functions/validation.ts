@@ -28,7 +28,7 @@ export const checkTokenExpired = (token: string) => {
   }
 };
 
-export const isValidResponse = async (res: any) => {
+export const isValidResponse = (res: any) => {
   if (
     res.headers &&
     ["application/pdf", "application/zip"].includes(res.headers["content-type"])
@@ -45,10 +45,13 @@ export const isValidResponse = async (res: any) => {
         break;
       case STATUS_CODE.FORBIDDEN:
       case STATUS_CODE.UNAUTHORIZED:
-        const isExpired = await checkTokenExpired(
+        const isExpired = checkTokenExpired(
           localStorage.getItem("token") || ""
         );
-        if (localStorage.getItem("token") && isExpired) {
+        if (
+          (localStorage.getItem("token") && isExpired) ||
+          !localStorage.getItem("token")
+        ) {
           localStorage.removeItem("token");
           window.location.assign(ROUTE_PATH.LOGIN);
           return;
