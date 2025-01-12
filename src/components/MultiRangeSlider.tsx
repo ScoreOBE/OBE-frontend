@@ -15,7 +15,7 @@ export default function MultiRangeSlider({
   defaultValues,
   onChange,
 }: MultiRangeSliderProps) {
-  const [values, setValues] = useState<number[]>(defaultValues);
+  const [values, setValues] = useState<number[]>([...defaultValues, max]);
 
   const handleChange = (index: number, newValue: number) => {
     const newValues = [...values];
@@ -63,6 +63,8 @@ export default function MultiRangeSlider({
         return "border-[#FFE81D]";
       case 3:
         return "border-[#2ED573]";
+      case 4:
+        return "border-[#1E90FF]";
       default:
         return "";
     }
@@ -108,29 +110,51 @@ export default function MultiRangeSlider({
               </p>
             </div>
             <div
-              className={`absolute cursor-pointer size-4 border-2 rounded-full -top-1 -translate-x-1/2 bg-white ${getColor(
+              className={`absolute size-4 border-2 rounded-full -top-1 -translate-x-1/2 bg-white ${getColor(
                 index
-              )}`}
+              )} ${index != 4 && "cursor-pointer"}`}
               style={{
                 left: `${((value - min) / (max - min)) * 100}%`,
               }}
               onMouseDown={(e) => {
+                if (index == 4) return;
+
                 const sliderRect =
                   e.currentTarget.parentElement!.getBoundingClientRect();
-                const handleMouseMove = (event: MouseEvent) => {
+
+                const handlePointerMove = (clientX: number) => {
                   let newPercentage =
-                    ((event.clientX - sliderRect.left) / sliderRect.width) *
+                    ((clientX - sliderRect.left) / sliderRect.width) *
                       (max - min) +
                     min;
                   newPercentage = Math.max(min, Math.min(newPercentage, max));
                   handleChange(index, Math.round(newPercentage / step) * step);
                 };
-                const handleMouseUp = () => {
-                  window.removeEventListener("mousemove", handleMouseMove);
-                  window.removeEventListener("mouseup", handleMouseUp);
+
+                const handleMouseMove = (event: MouseEvent) => {
+                  handlePointerMove(event.clientX);
                 };
-                window.addEventListener("mousemove", handleMouseMove);
-                window.addEventListener("mouseup", handleMouseUp);
+
+                const handleTouchMove = (event: TouchEvent) => {
+                  if (event.touches.length > 0) {
+                    handlePointerMove(event.touches[0].clientX);
+                  }
+                };
+
+                const handlePointerUp = () => {
+                  window.removeEventListener("mousemove", handleMouseMove);
+                  window.removeEventListener("mouseup", handlePointerUp);
+                  window.removeEventListener("touchmove", handleTouchMove);
+                  window.removeEventListener("touchend", handlePointerUp);
+                };
+
+                if (e.type === "mousedown") {
+                  window.addEventListener("mousemove", handleMouseMove);
+                  window.addEventListener("mouseup", handlePointerUp);
+                } else if (e.type === "touchstart") {
+                  window.addEventListener("touchmove", handleTouchMove);
+                  window.addEventListener("touchend", handlePointerUp);
+                }
               }}
             ></div>
           </div>
