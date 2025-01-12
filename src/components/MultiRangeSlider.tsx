@@ -67,8 +67,9 @@ export default function MultiRangeSlider({
     window.addEventListener("touchend", handlePointerUp);
   };
 
+  const colors = ["#FF5E57", "#FFA502", "#FFE81D", "#2ED573", "#1E90FF"];
+  
   const generateColorRanges = () => {
-    const colors = ["#FF5E57", "#FFA502", "#FFE81D", "#2ED573", "#1E90FF"];
     const stops = [min, ...values, max];
     const colorRanges = [];
 
@@ -83,11 +84,6 @@ export default function MultiRangeSlider({
     }
 
     return colorRanges.join(", ");
-  };
-
-  const getColor = (index: number): string => {
-    const colors = ["#FF5E57", "#FFA502", "#FFE81D", "#2ED573", "#1E90FF"];
-    return `border-[${colors[index % colors.length]}]`;
   };
 
   return (
@@ -130,11 +126,12 @@ export default function MultiRangeSlider({
               </p>
             </div>
             <div
-              className={`absolute size-4 border-2 rounded-full -top-1 -translate-x-1/2 bg-white ${getColor(
-                index
-              )} ${index != 4 && "cursor-pointer"}`}
+              className={`absolute size-4 border-2 rounded-full -top-1 -translate-x-1/2 bg-white ${
+                index != 4 && "cursor-pointer"
+              }`}
               style={{
                 left: `${((value - min) / (max - min)) * 100}%`,
+                borderColor: colors[index],
               }}
               onMouseDown={(e) => {
                 if (index === 4) return;
