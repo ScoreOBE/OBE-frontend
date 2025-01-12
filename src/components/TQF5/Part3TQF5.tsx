@@ -69,7 +69,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
   }, [tqf5.method, tqf5.part2]);
 
   useEffect(() => {
-    if (form.getValues().data[0].assess) {
+    if (form.getValues().data[0]?.assess) {
       const newCalCloScore = [...form.getValues().data];
       newCalCloScore.forEach((cloItem, index) => {
         const { sectionsData, score } = calCloScore(
@@ -269,28 +269,31 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
         </div>
       </div>
     ) : (
-      <div className="flex w-full text-[15px] max-h-full gap-4 text-default">
-        <div className="gap-2 flex flex-col w-full -mt-3 overflow-y-auto  max-h-full">
+      <div className="flex w-full text-[15px] -mt-[12px] max-h-full gap-4 text-default">
+        <div className="gap-2 flex flex-col w-full  overflow-y-auto  max-h-full">
           <Tabs
             classNames={{
-              root: "overflow-hidden mt-1 flex flex-col max-h-full",
+              root: "flex flex-col w-full h-full",
+              tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
+              tabLabel: "!font-semibold text-b3",
+              panel: "w-full h-fit max-h-full flex flex-col gap-2 rounded-lg",
             }}
             value={selectedTab}
             onChange={(newValue) => setSelectedTab(newValue)}
           >
-            <Tabs.List className="mb-2">
+            <Tabs.List className="!bg-transparent items-center flex w-full gap-5">
               <Tabs.Tab value="section">Section</Tabs.Tab>
               <Tabs.Tab value="assessmentTool">Assessment Tool</Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel
-              className="flex flex-col gap-5 py-3 px-4 overflow-y-auto"
+              className="flex flex-col gap-5 py-3 mt-2 px-3 overflow-y-auto"
               value={selectedTab!}
             >
               {form.getValues().data?.map((cloItem, cloIndex) => {
                 const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
                 return (
                   <div
-                    className={`last:mb-4 flex flex-col gap-4 pb-4 border-b-2 mr-1 ${
+                    className={`last:mb-4 flex flex-col gap-4 pb-8 border-b-2 mr-1 ${
                       activeSection === cloIndex ? "active" : ""
                     }`}
                     id={`${clo?.no}`}
@@ -301,11 +304,11 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
                       <>
                         <div className="flex justify-between items-center">
                           <div className="flex justify-between">
-                            <div className="text-default flex items-center  font-medium text-[15px]">
-                              <p className="text-[18px] text-secondary mr-2 font-semibold">
+                            <div className="text-default flex items-center pb-2 font-medium ">
+                              <p className="text-[16px] text-secondary mr-2 font-semibold">
                                 CLO {clo?.no}{" "}
                               </p>
-                              <div className="flex flex-col ml-2 gap-[2px]">
+                              <div className="flex text-[14px] flex-col ml-2 gap-[2px]">
                                 <p>{clo?.descTH}</p>
                                 <p>{clo?.descEN}</p>
                               </div>
@@ -428,10 +431,10 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
                         <div className="flex justify-between items-center">
                           <div className="flex justify-between">
                             <div className="text-default flex items-center  font-medium text-[15px]">
-                              <p className="text-[18px] text-secondary mr-2 font-semibold">
+                              <p className="text-[16px] text-secondary mr-2 font-semibold">
                                 CLO {clo?.no}{" "}
                               </p>
-                              <div className="flex flex-col ml-2 gap-[2px]">
+                              <div className="flex flex-col text-[14px] ml-2 gap-[2px]">
                                 <p>{clo?.descTH}</p>
                                 <p>{clo?.descEN}</p>
                               </div>

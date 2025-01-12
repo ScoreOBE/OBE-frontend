@@ -36,7 +36,7 @@ export default function MultiRangeSlider({
   };
 
   const generateColorRanges = () => {
-    const colors = ["#ff5252", "#ffd752", "#66ffbf", "#66deff", "#4e77fc"];
+    const colors = ["#FF5E57", "#FFA502", "#FFE81D", "#2ED573", "#1E90FF"];
     const stops = [min, ...values, max];
     const colorRanges = [];
 
@@ -56,13 +56,13 @@ export default function MultiRangeSlider({
   const getColor = (index: number): string => {
     switch (index) {
       case 0:
-        return "border-[#ff5252]";
+        return "border-[#FF5E57]";
       case 1:
-        return "border-[#ffd752]";
+        return "border-[#FFA502]";
       case 2:
-        return "border-[#66ffbf]";
+        return "border-[#FFE81D]";
       case 3:
-        return "border-[#66deff]";
+        return "border-[#2ED573]";
       case 4:
         return "border-[#4e77fc]";
       default:
@@ -71,9 +71,9 @@ export default function MultiRangeSlider({
   };
 
   return (
-    <div className="relative w-full p-5">
+    <div className="relative w-full p-5 px-16">
       <div
-        className={`relative rounded-lg h-2 border border-noData`}
+        className={`relative rounded-lg mt-12 h-3 border border-noData`}
         style={{
           background: `linear-gradient(to right, ${generateColorRanges()})`,
         }}
@@ -81,12 +81,33 @@ export default function MultiRangeSlider({
         {values.map((value, index) => (
           <div key={index}>
             <div
-              className="absolute select-none text-default text-b4 rounded-full -top-5 -translate-x-1/2"
+              className={`absolute items-center -translate-y-8 w-[120px] flex flex-col select-none text-default text-b4 rounded-full -top-5 -translate-x-1/2`}
               style={{
                 left: `${((value - min) / (max - min)) * 100}%`,
               }}
             >
-              {value.toFixed(2)}
+              <p
+                className={`font-bold ${
+                  index === 0
+                    ? "text-[#FF5E57]"
+                    : index === 1
+                    ? "text-[#e8a934]"
+                    : index === 2
+                    ? "text-[#90851f]"
+                    : index === 3
+                    ? "text-[#21a457]"
+                    : 'text-[#1E90FF]'
+                }`}
+              >
+                Score {index}
+              </p>
+
+              <p>
+                Range:{" "}
+                {index === 0
+                  ? `${min} - ${value.toFixed(2)}`
+                  : `${values[index - 1].toFixed(2)} - ${value.toFixed(2)}`}
+              </p>
             </div>
             <div
               className={`absolute size-4 border-2 rounded-full -top-1 -translate-x-1/2 bg-white ${getColor(

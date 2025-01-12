@@ -40,6 +40,8 @@ export default function StdPLO() {
     (dep) => dep.courseCode == parseInt(course?.courseNo.substring(0, 3)!)
   );
 
+  const height = window.innerWidth >= 1800 ? 650 : 450;
+
   useEffect(() => {
     if (courseDep) {
       fetchPLO();
@@ -107,7 +109,7 @@ export default function StdPLO() {
         <Loading />
       ) : (
         <>
-          {departmentPLO && (
+          {/* {departmentPLO && (
             <DrawerPLOdes
               opened={openDrawerPLOdes}
               onClose={() => setOpenDrawerPLOdes(false)}
@@ -115,7 +117,7 @@ export default function StdPLO() {
             />
           )}
 
-          {/* <div className="flex flex-row pb-2 items-center justify-between">
+          <div className="flex flex-row pb-2 items-center justify-between">
             {test ? (
               <p className="text-secondary text-[16px] font-semibold">
                 ผลการเรียนรู้ของผู้เรียน
@@ -128,8 +130,9 @@ export default function StdPLO() {
             <Button
               className="text-center px-4"
               onClick={() => setOpenDrawerPLOdes(true)}
+              color="#e9e9e9"
             >
-              <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
+              <div className="flex gap-2 acerSwift:max-macair133:!text-b5 !text-default">
                 <Icon
                   IconComponent={IconPLO}
                   className="acerSwift:max-macair133:!size-3"
@@ -150,7 +153,7 @@ export default function StdPLO() {
                 Program Learning Outcome
               </p>
             </div>
-            <SpiderChart data={data} height={460} />
+            <SpiderChart data={data} height={height} />
           </div> */}
 
           <div className=" flex flex-col h-full w-full  overflow-hidden">

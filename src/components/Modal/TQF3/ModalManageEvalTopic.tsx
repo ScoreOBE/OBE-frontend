@@ -233,7 +233,7 @@ export default function ModalManageEvalTopic({
       <div
         className={`flex flex-col !gap-5 ${
           type === "add"
-            ? "h-fit macair133:h-fit  sm:max-macair133:h-[320px]  sm:max-macair133:mb-14 sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]"
+            ? "h-fit macair133:h-fit sm:max-ipad11:h-fit sm:max-macair133:h-[320px]  sm:max-macair133:mb-14 sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px]"
             : "h-fit  "
         } ${
           percentTotal == 100

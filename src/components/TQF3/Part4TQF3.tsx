@@ -262,7 +262,7 @@ export default function Part4TQF3({
             </Tabs.Tab>
             <Tabs.Tab value="week">Evaluation Week</Tabs.Tab>
           </Tabs.List>
-          <div className="overflow-auto flex w-full max-h-full  mt-3">
+          <div className="overflow-auto flex px-3 w-full max-h-full  mt-3">
             <Tabs.Panel value="percent">
               {!disabled && (
                 <div className="w-full">
