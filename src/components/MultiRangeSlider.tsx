@@ -35,6 +35,38 @@ export default function MultiRangeSlider({
     }
   };
 
+  const handlePointerDown = (index: number, sliderRect: DOMRect) => {
+    const handlePointerMove = (eventClientX: number) => {
+      let newPercentage =
+        ((eventClientX - sliderRect.left) / sliderRect.width) * (max - min) +
+        min;
+      newPercentage = Math.max(min, Math.min(newPercentage, max));
+      handleChange(index, Math.round(newPercentage / step) * step);
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      handlePointerMove(event.clientX);
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (event.touches.length > 0) {
+        handlePointerMove(event.touches[0].clientX);
+      }
+    };
+
+    const handlePointerUp = () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handlePointerUp);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handlePointerUp);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handlePointerUp);
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handlePointerUp);
+  };
+
   const generateColorRanges = () => {
     const colors = ["#FF5E57", "#FFA502", "#FFE81D", "#2ED573", "#1E90FF"];
     const stops = [min, ...values, max];
@@ -54,20 +86,8 @@ export default function MultiRangeSlider({
   };
 
   const getColor = (index: number): string => {
-    switch (index) {
-      case 0:
-        return "border-[#FF5E57]";
-      case 1:
-        return "border-[#FFA502]";
-      case 2:
-        return "border-[#FFE81D]";
-      case 3:
-        return "border-[#2ED573]";
-      case 4:
-        return "border-[#1E90FF]";
-      default:
-        return "";
-    }
+    const colors = ["#FF5E57", "#FFA502", "#FFE81D", "#2ED573", "#1E90FF"];
+    return `border-[${colors[index % colors.length]}]`;
   };
 
   return (
@@ -96,7 +116,7 @@ export default function MultiRangeSlider({
                     ? "text-[#90851f]"
                     : index === 3
                     ? "text-[#21a457]"
-                    : 'text-[#1E90FF]'
+                    : "text-[#1E90FF]"
                 }`}
               >
                 Score {index}
@@ -117,44 +137,17 @@ export default function MultiRangeSlider({
                 left: `${((value - min) / (max - min)) * 100}%`,
               }}
               onMouseDown={(e) => {
-                if (index == 4) return;
-
+                if (index === 4) return;
                 const sliderRect =
                   e.currentTarget.parentElement!.getBoundingClientRect();
-
-                const handlePointerMove = (clientX: number) => {
-                  let newPercentage =
-                    ((clientX - sliderRect.left) / sliderRect.width) *
-                      (max - min) +
-                    min;
-                  newPercentage = Math.max(min, Math.min(newPercentage, max));
-                  handleChange(index, Math.round(newPercentage / step) * step);
-                };
-
-                const handleMouseMove = (event: MouseEvent) => {
-                  handlePointerMove(event.clientX);
-                };
-
-                const handleTouchMove = (event: TouchEvent) => {
-                  if (event.touches.length > 0) {
-                    handlePointerMove(event.touches[0].clientX);
-                  }
-                };
-
-                const handlePointerUp = () => {
-                  window.removeEventListener("mousemove", handleMouseMove);
-                  window.removeEventListener("mouseup", handlePointerUp);
-                  window.removeEventListener("touchmove", handleTouchMove);
-                  window.removeEventListener("touchend", handlePointerUp);
-                };
-
-                if (e.type === "mousedown") {
-                  window.addEventListener("mousemove", handleMouseMove);
-                  window.addEventListener("mouseup", handlePointerUp);
-                } else if (e.type === "touchstart") {
-                  window.addEventListener("touchmove", handleTouchMove);
-                  window.addEventListener("touchend", handlePointerUp);
-                }
+                handlePointerDown(index, sliderRect);
+              }}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                if (index === 4) return;
+                const sliderRect =
+                  e.currentTarget.parentElement!.getBoundingClientRect();
+                handlePointerDown(index, sliderRect);
               }}
             ></div>
           </div>
