@@ -10,6 +10,8 @@ import {
   Stepper,
   Textarea,
   TextInput,
+  Tooltip,
+  Kbd,
 } from "@mantine/core";
 import Icon from "../Icon";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
@@ -33,6 +35,7 @@ import { validateTextInput } from "@/helpers/functions/validation";
 import { checkCanCreatePLO, createPLO } from "@/services/plo/plo.service";
 import { IModelDepartment } from "@/models/ModelFaculty";
 import { setLoadingOverlay } from "@/store/loading";
+import { useHotkeys } from "react-hotkeys-hook";
 
 type Props = {
   opened: boolean;
@@ -61,6 +64,7 @@ export default function ModalAddPLOCollection({
   const [openModalSelectSemester, setOpenModalSelectSemester] = useState(false);
   const [semesterOption, setSemesterOption] = useState<any[]>([]);
   const [selectSemester, setSelectSemester] = useState("");
+  const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 
   const form = useForm({
     mode: "uncontrolled",
@@ -247,6 +251,16 @@ export default function ModalAddPLOCollection({
       );
     }
   };
+
+    useHotkeys(
+      "ctrl+enter, meta+enter",
+      () => {
+        onClickAddAnother();
+      },
+      {
+        enableOnFormTags: ["INPUT", "TEXTAREA", "SELECT"],
+      }
+    );
 
   const setDepartmentCode = (checked: boolean, value?: string[]) => {
     let departmentCode = form.getValues().departmentCode;
@@ -785,13 +799,36 @@ export default function ModalAddPLOCollection({
 
             <div className="flex gap-3">
               {active === 1 && (
-                <Button
-                  variant="subtle"
-                  disabled={form.getValues().data?.length === 0}
-                  onClick={onClickAddAnother}
+                <Tooltip
+                  arrowOffset={20}
+                  arrowSize={8}
+                  arrowRadius={1}
+                  transitionProps={{
+                    transition: "fade",
+                    duration: 300,
+                  }}
+                  multiline
+                  withArrow
+                  label={
+                    <div className="text-default text-[12px] p-2 font-medium gap-2">
+                      <Kbd className=" text-secondary">
+                        {isMac ? "⌘" : "Ctrl"}
+                      </Kbd>{" "}
+                      + <Kbd className=" text-secondary">Enter</Kbd>
+                    </div>
+                  }
+                  color="#FCFCFC"
+                  className="w-fit border  rounded-md "
+                  position="top"
                 >
-                  Add more PLO
-                </Button>
+                  <Button
+                    variant="subtle"
+                    disabled={form.getValues().data?.length === 0}
+                    onClick={onClickAddAnother}
+                  >
+                    Add more PLO
+                  </Button>
+                </Tooltip>
               )}
 
               <Button
