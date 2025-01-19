@@ -132,11 +132,7 @@ export default function Sidebar() {
       [ROLE.SUPREME_ADMIN, ROLE.ADMIN].includes(user.role) &&
       !allCourseList.length
     ) {
-      const resAllCourse = await getCourse({
-        ...payload,
-        curriculum: curriculum.map(({ code }) => code),
-        manage: true,
-      });
+      const resAllCourse = await getCourse({ ...payload, manage: true });
       if (resAllCourse) {
         dispatch(setAllCourseList(resAllCourse));
       }
