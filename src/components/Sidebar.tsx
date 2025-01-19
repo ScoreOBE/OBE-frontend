@@ -44,6 +44,7 @@ export default function Sidebar() {
   const [params, setParams] = useSearchParams();
   const loading = useAppSelector((state) => state.loading.loading);
   const academicYear = useAppSelector((state) => state.academicYear);
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const courseList = useAppSelector((state) => state.course.courses);
   const allCourseList = useAppSelector((state) => state.allCourse.courses);
   const enrollCourseList = useAppSelector(
@@ -89,6 +90,12 @@ export default function Sidebar() {
     }
   }, [path, academicYear, params]);
 
+  useEffect(() => {
+    if (curriculum?.length && (!courseList.length || !allCourseList.length)) {
+      fetchCourse();
+    }
+  }, [curriculum]);
+
   const fetchCur = async () => {
     const res = await getFaculty(user.facultyCode);
     if (res) {
@@ -125,7 +132,11 @@ export default function Sidebar() {
       [ROLE.SUPREME_ADMIN, ROLE.ADMIN].includes(user.role) &&
       !allCourseList.length
     ) {
-      const resAllCourse = await getCourse({ ...payload, manage: true });
+      const resAllCourse = await getCourse({
+        ...payload,
+        curriculum: curriculum.map(({ code }) => code),
+        manage: true,
+      });
       if (resAllCourse) {
         dispatch(setAllCourseList(resAllCourse));
       }
