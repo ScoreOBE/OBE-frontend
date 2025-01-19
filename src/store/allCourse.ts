@@ -3,26 +3,22 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const allCourseSlice = createSlice({
   name: "allCourse",
-  initialState: { total: 0, search: "", departmentCode: [], courses: [] } as {
+  initialState: { total: 0, search: "", curriculum: [], courses: [] } as {
     total: number;
     search: string;
-    departmentCode: string[];
     courses: IModelCourse[];
   },
   reducers: {
     resetSeachAllCourse: (state) => {
       return { ...state, search: "" };
     },
-    setSearchDepartmentCode: (state, action) => {
-      return { ...state, departmentCode: [...action.payload] };
+    setSearchCurriculum: (state, action) => {
+      return { ...state, curriculum: [...action.payload] };
     },
     setAllCourseList: (state, action) => {
       return {
         total: action.payload.totalCount ?? state.total,
         search: action.payload.search ?? state.search,
-        departmentCode: [
-          ...(action.payload.departmentCode ?? state.departmentCode),
-        ],
         courses: [...(action.payload.courses ?? action.payload)],
       };
     },
@@ -34,7 +30,7 @@ export const allCourseSlice = createSlice({
 
 export const {
   resetSeachAllCourse,
-  setSearchDepartmentCode,
+  setSearchCurriculum,
   setAllCourseList,
   addLoadMoreAllCourse,
 } = allCourseSlice.actions;

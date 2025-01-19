@@ -3,19 +3,8 @@ export interface IModelFaculty {
   facultyCode: string;
   facultyTH: string;
   facultyEN: string;
-  courseCode: number;
-  codeEN: string;
-  codeTH: string;
-  department: IModelDepartment[];
+  code: string;
   curriculum: IModelCurriculum[];
-}
-
-export interface IModelDepartment {
-  departmentTH: string;
-  departmentEN: string;
-  courseCode: number;
-  codeEN: string;
-  codeTH: string;
 }
 
 export interface IModelCurriculum {

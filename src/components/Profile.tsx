@@ -161,8 +161,8 @@ export default function Profile() {
                   className="font-medium"
                   style={{ color: getRoleColor(user.role) }}
                 >
-                  {user.role}  {user.role === ROLE.STUDENT && `- ${user.studentId}`}
-
+                  {user.role}{" "}
+                  {user.role === ROLE.STUDENT && `- ${user.studentId}`}
                 </p>
               </div>
             </div>
@@ -242,7 +242,7 @@ export default function Profile() {
             {user.role === ROLE.TA && <Menu.Divider />}
           </>
 
-          {(user.role === ROLE.SUPREME_ADMIN ||
+          {/* {(user.role === ROLE.SUPREME_ADMIN ||
             user.role === ROLE.ADMIN ||
             user.role === ROLE.INSTRUCTOR) && (
             <Menu.Item onClick={() => navigate(ROUTE_PATH.SELECTED_DEPARTMENT)}>
@@ -254,7 +254,7 @@ export default function Profile() {
                 <span>Department</span>
               </div>
             </Menu.Item>
-          )}
+          )} */}
 
           {/* SUB MENU MANAGEMENT */}
           {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
@@ -296,7 +296,7 @@ export default function Profile() {
                       <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
                         <Icon
                           IconComponent={IconSupreme}
-   className="size-[16px] mr-[2px] -translate-x-[2px]"
+                          className="size-[16px] mr-[2px] -translate-x-[2px]"
                         />
                         <span>Supreme Admin</span>
                       </div>

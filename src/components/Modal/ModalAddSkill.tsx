@@ -41,10 +41,6 @@ export default function ModalAddSkill({ opened, onClose }: Props) {
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
   const [dataExport, setDataExport] = useState<Partial<IModelTQF3>>({});
-  const department = useAppSelector((state) =>
-    state.faculty.department.slice(1)
-  );
-
   const course = useAppSelector((state) =>
     state.allCourse.courses.find((e) => e.courseNo == courseNo)
   );

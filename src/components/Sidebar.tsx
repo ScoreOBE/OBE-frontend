@@ -27,8 +27,8 @@ import { setLoading } from "@/store/loading";
 import { useEffect } from "react";
 import { setAllCourseList } from "@/store/allCourse";
 import { goToDashboard, sortData } from "@/helpers/functions/function";
-import { getDepartment } from "@/services/faculty/faculty.service";
-import { setDepartment, setFaculty } from "@/store/faculty";
+import { getFaculty } from "@/services/faculty/faculty.service";
+import { setFaculty } from "@/store/faculty";
 import StdCourseSidebar from "./Sidebar/StdCourseSidebar";
 import { setEnrollCourseList } from "@/store/enrollCourse";
 import { getEnrollCourse } from "@/services/student/student.service";
@@ -44,7 +44,6 @@ export default function Sidebar() {
   const [params, setParams] = useSearchParams();
   const loading = useAppSelector((state) => state.loading.loading);
   const academicYear = useAppSelector((state) => state.academicYear);
-  const department = useAppSelector((state) => state.faculty.department);
   const courseList = useAppSelector((state) => state.course.courses);
   const allCourseList = useAppSelector((state) => state.allCourse.courses);
   const enrollCourseList = useAppSelector(
@@ -82,42 +81,18 @@ export default function Sidebar() {
 
   useEffect(() => {
     if (params.get("year") && params.get("semester") && academicYear.length) {
-      if (user.role != ROLE.STUDENT && !department.length) {
-        fetchDep();
+      if (user.role != ROLE.STUDENT) {
+        fetchCur();
       } else if (user.role == ROLE.STUDENT) {
         fetchCourse();
       }
     }
   }, [path, academicYear, params]);
 
-  useEffect(() => {
-    if (department.length && (!courseList.length || !allCourseList.length)) {
-      fetchCourse();
-    }
-  }, [department]);
-
-  const fetchDep = async () => {
-    const res = await getDepartment(user.facultyCode);
+  const fetchCur = async () => {
+    const res = await getFaculty(user.facultyCode);
     if (res) {
-      sortData(res.department, "courseCode");
-      let dep = res.department;
-      if (user.role !== ROLE.SUPREME_ADMIN) {
-        dep = res.department.filter((e) =>
-          user.departmentCode.includes(e.codeEN)
-        );
-      }
       dispatch(setFaculty({ ...res }));
-      dispatch(
-        setDepartment([
-          { departmentEN: "All Courses", codeEN: "All Courses" },
-          {
-            departmentEN: res.facultyEN.replace("Faculty of ", "Genaral "),
-            courseCode: res.courseCode,
-            codeEN: res.codeEN,
-          },
-          ...dep,
-        ])
-      );
     }
   };
 
@@ -150,11 +125,7 @@ export default function Sidebar() {
       [ROLE.SUPREME_ADMIN, ROLE.ADMIN].includes(user.role) &&
       !allCourseList.length
     ) {
-      const resAllCourse = await getCourse({
-        ...payload,
-        departmentCode: department.map((dep) => dep.codeEN!),
-        manage: true,
-      });
+      const resAllCourse = await getCourse({ ...payload, manage: true });
       if (resAllCourse) {
         dispatch(setAllCourseList(resAllCourse));
       }

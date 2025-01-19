@@ -21,14 +21,10 @@ export default function Navbar() {
   const showButtonLogin = useAppSelector(
     (state) => state.config.showButtonLogin
   );
-  const dashboard = useAppSelector((state) => state.config.dashboard);
   const [params, setParams] = useSearchParams();
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
   const tqf5Topic = useAppSelector((state) => state.tqf5.topic);
   const dispatch = useAppDispatch();
-  const departmentCode = useAppSelector(
-    (state) => state.allCourse.departmentCode
-  );
 
   const searchCourse = async (searchValue: string, reset?: boolean) => {
     const path = "/" + location.split("/")[1];
@@ -42,7 +38,6 @@ export default function Navbar() {
         payloadCourse = {
           ...new CourseRequestDTO(),
           ...payloadCourse,
-          departmentCode,
           manage: path.includes(ROUTE_PATH.ADMIN_DASHBOARD),
         };
         payloadCourse.year = parseInt(params.get("year") ?? "");

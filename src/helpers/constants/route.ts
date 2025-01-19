@@ -1,7 +1,7 @@
 export const ROUTE_PATH = {
   LOGIN: "/",
   CMU_ENTRAID_CALLBACK: "/cmuEntraIDCallback",
-  SELECTED_DEPARTMENT: "/select-department",
+  // SELECTED_DEPARTMENT: "/select-department",
   INS_DASHBOARD: "/dashboard",
   ADMIN_DASHBOARD: "/admin-dashboard",
   TQF: "tqf",

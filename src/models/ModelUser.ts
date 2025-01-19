@@ -10,7 +10,6 @@ export interface IModelUser {
   lastNameEN: string;
   email: string;
   facultyCode: string;
-  departmentCode: string[];
   role: ROLE;
   termsOfService?: boolean;
   enrollCourses?: {

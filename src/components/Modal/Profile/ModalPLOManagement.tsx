@@ -43,7 +43,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
   const [ploActive, setPloActive] = useState<IModelPLO[]>([]);
   const [selectPlo, setSelectPlo] = useState<string | null>("Dashboard");
   const [ploCollection, setPloCollection] = useState<IModelPLO[]>([]);
-  const [departmentPloCollection, setDepartmentPLOCollection] = useState<
+  const [curriculumPloCollection, setCurriculumPLOCollection] = useState<
     IModelPLOCollection[]
   >([]);
   const [totalPLOs, setTotalPLOs] = useState<number>(0);
@@ -67,12 +67,8 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
     useState(false);
 
   const fetchPLO = async (all = false) => {
-    const payload = {
-      all,
-      role: user.role,
-      departmentCode: user.departmentCode,
-    };
-    const [resPLO, resDep] = await Promise.all([
+    const payload = { all, role: user.role };
+    const [resPLO, resCur] = await Promise.all([
       getPLOs({ ...payload, all: true }),
       getPLOs(payload),
     ]);
@@ -81,19 +77,15 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
       setPloCollection(resPLO.plos);
       setTotalPLOs(resPLO.totalCount);
     }
-    if (resDep) {
-      setTotalPLOs(resDep.totalCount);
-      setDepartmentPLOCollection(resDep.plos);
+    if (resCur) {
+      setTotalPLOs(resCur.totalCount);
+      setCurriculumPLOCollection(resCur.plos);
     }
   };
 
   useEffect(() => {
     const fetchPLOTab = async () => {
-      const res = await getPLOs({
-        manage: true,
-        role: user.role,
-        departmentCode: user.departmentCode,
-      });
+      const res = await getPLOs({ manage: true, role: user.role });
       if (res) {
         setSelectPlo("Dashboard");
         setPloActive([{ name: "Dashboard" }, ...res.plos]);
@@ -390,12 +382,12 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                   {selectView == "ploview" ? (
                     <p className="text-tertiary text-[14px] font-medium">
                       {ploCollection.length} Collection
-                      {departmentPloCollection.length > 1 ? "s " : " "}
+                      {curriculumPloCollection.length > 1 ? "s " : " "}
                     </p>
                   ) : (
                     <p className="text-tertiary text-[14px] font-medium">
-                      {departmentPloCollection.length} Department
-                      {departmentPloCollection.length > 1 ? "s " : " "}
+                      {curriculumPloCollection.length} Curriculum
+                      {curriculumPloCollection.length > 1 ? "s " : " "}
                     </p>
                   )}
                 </div>
@@ -427,7 +419,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               >
                 <Tabs.List className="!gap-6 !bg-transparent">
                   <Tabs.Tab value="ploview">PLO List</Tabs.Tab>
-                  <Tabs.Tab value="departmentview">Department</Tabs.Tab>
+                  <Tabs.Tab value="curriculumview">Curriculum</Tabs.Tab>
                 </Tabs.List>
               </Tabs>
             )}
@@ -480,7 +472,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                           </div>
                         </div>
                       ))
-                    : departmentPloCollection?.map((department, indexPLO) => (
+                    : curriculumPloCollection?.map((curriculum, indexPLO) => (
                         <div
                           className="bg-[#ffffff] rounded-md flex  flex-col py-4 px-5"
                           key={indexPLO}
@@ -490,11 +482,11 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                         >
                           <div className="flex flex-col mb-4  w-fit">
                             <p className=" font-bold text-b2 text-secondary">
-                              {department.departmentEN}
+                              {curriculum.nameEN}
                             </p>
                           </div>
                           <div className="flex flex-col">
-                            {department.collections.map((collection, index) => (
+                            {curriculum.collections.map((collection, index) => (
                               <div
                                 key={` ${index}`}
                                 onClick={() => {

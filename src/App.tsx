@@ -44,18 +44,7 @@ function App() {
       )
         return;
       checkToken(token);
-      if (
-        user.departmentCode &&
-        !user.departmentCode.length &&
-        ![
-          ROUTE_PATH.SELECTED_DEPARTMENT,
-          ROUTE_PATH.CMU_ENTRAID_CALLBACK,
-        ].includes(path)
-      ) {
-        localStorage.removeItem("token");
-      } else {
-        fetchData();
-      }
+      fetchData();
     } else if (
       ![ROUTE_PATH.LOGIN, ROUTE_PATH.CMU_ENTRAID_CALLBACK].includes(path)
     ) {

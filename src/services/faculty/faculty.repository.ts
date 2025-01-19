@@ -5,7 +5,7 @@ export const facultyController = (configService = {}) => {
   const prefix = "/faculty";
 
   return {
-    getDepartment: async (facultyCode: string) => {
+    getFaculty: async (facultyCode: string) => {
       return service.get(`${prefix}`, { facultyCode });
     },
   };

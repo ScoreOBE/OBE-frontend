@@ -18,12 +18,12 @@ import { setShowNavbar, setShowSidebar } from "@/store/config";
 import {
   addLoadMoreAllCourse,
   setAllCourseList,
-  setSearchDepartmentCode,
+  setSearchCurriculum,
 } from "@/store/allCourse";
 import { getUniqueTopicsWithTQF } from "@/helpers/functions/function";
 import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { IModelCourse, IModelSection } from "@/models/ModelCourse";
-import { IModelDepartment } from "@/models/ModelFaculty";
+import { IModelCurriculum } from "@/models/ModelFaculty";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import ModalExportPLO from "@/components/Modal/ModalExportPLO";
 import { IModelPLO } from "@/models/ModelPLO";
@@ -33,21 +33,19 @@ import { setCourseManagementList } from "@/store/courseManagement";
 export default function AdminDashboardCLO() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
-  const department = useAppSelector((state) =>
-    state.faculty.department.slice(1)
-  );
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const academicYear = useAppSelector((state) => state.academicYear);
   const courseManagements = useAppSelector(
     (state) => state.courseManagement.courseManagements
   );
   const courseList = useAppSelector((state) => state.allCourse);
-  const [departmentPLO, setDepartmentPLO] = useState<Partial<IModelPLO>>({});
+  const [curriculumPLO, setCurriculumPLO] = useState<Partial<IModelPLO>>({});
   const dispatch = useAppDispatch();
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
-  const [selectDepartment, setSelectDepartment] = useState<
-    Partial<IModelDepartment>
+  const [selectCurriculum, setSelectCurriculum] = useState<
+    Partial<IModelCurriculum>
   >({});
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
   const [openModalExportPLO, setOpenModalExportPLO] = useState(false);
@@ -71,10 +69,10 @@ export default function AdminDashboardCLO() {
   }, [academicYear, term, params]);
 
   useEffect(() => {
-    if (!selectDepartment.codeEN && department.length) {
-      setSelectDepartment(department[0]);
+    if (!selectCurriculum.code && curriculum?.length) {
+      setSelectCurriculum(curriculum[0]);
     }
-  }, [department]);
+  }, [curriculum]);
 
   useEffect(() => {
     if (term) {
@@ -84,35 +82,35 @@ export default function AdminDashboardCLO() {
   }, [localStorage.getItem("search")]);
 
   useEffect(() => {
-    if (term.id && department.length && selectDepartment.codeEN) {
-      if (!departmentPLO.departmentCode?.includes(selectDepartment.codeEN)) {
+    if (term.id && curriculum?.length && selectCurriculum.code) {
+      if (!curriculumPLO.curriculum?.includes(selectCurriculum.code)) {
         fetchPLO();
       }
       fetchCourse();
       fetchCourseManagement();
     }
-  }, [selectDepartment]);
+  }, [selectCurriculum]);
 
   const fetchPLO = async () => {
     const resPloCol = await getOnePLO({
       year: term.year,
       semester: term.semester,
-      codeEN: selectDepartment.codeEN,
+      curriculum: selectCurriculum.code,
     });
     if (resPloCol) {
-      setDepartmentPLO(resPloCol);
+      setCurriculumPLO(resPloCol);
     }
   };
 
   const initialPayload = () => {
-    const dep = [selectDepartment.codeEN!];
-    dispatch(setSearchDepartmentCode(dep));
+    const dep = [selectCurriculum.code!];
+    dispatch(setSearchCurriculum(dep));
     return {
       ...new CourseRequestDTO(),
       manage: true,
       year: term.year!,
       semester: term.semester!,
-      departmentCode: dep,
+      curriculum: dep,
       search: courseList.search,
       hasMore: courseList.total >= payload?.limit,
     };
@@ -120,7 +118,7 @@ export default function AdminDashboardCLO() {
 
   const fetchCourseManagement = async () => {
     dispatch(setLoading(true));
-    if (department.length) {
+    if (curriculum?.length) {
       const payloadCourse = initialPayload();
       const res = await getCourseManagement({
         ...payloadCourse,
@@ -136,7 +134,7 @@ export default function AdminDashboardCLO() {
   const fetchCourse = async () => {
     if (!user.termsOfService) return;
     dispatch(setLoading(true));
-    if (department.length) {
+    if (curriculum?.length) {
       const payloadCourse = initialPayload();
       setPayload(payloadCourse);
       const res = await getCourse(payloadCourse);
@@ -179,7 +177,7 @@ export default function AdminDashboardCLO() {
           ?.sections.find(({ topic }) => topic == sec.topic)?.ploRequire
       : courseManagements.find((e) => e.courseNo === course.courseNo)
           ?.ploRequire;
-    const ploRequireNo = departmentPLO?.data?.filter((plo) => {
+    const ploRequireNo = curriculumPLO?.data?.filter((plo) => {
       if (ploRequire?.[0]?.list) {
         return ploRequire[0].list.some((item) =>
           plo.id.includes(item.toString())
@@ -253,7 +251,7 @@ export default function AdminDashboardCLO() {
             </Tooltip>
           </Table.Td>
 
-          {departmentPLO.data?.map((plo) => (
+          {curriculumPLO.data?.map((plo) => (
             <Table.Td key={plo.no} className={`text-secondary `}>
               {dataTQF3?.part7 ? (
                 dataTQF3.part7!.data.some(
@@ -295,7 +293,7 @@ export default function AdminDashboardCLO() {
           </div>
         </Table.Td>
         <Table.Td>TQF 3 {dataTQF3?.status}</Table.Td>
-        {departmentPLO.data?.map((plo) => (
+        {curriculumPLO.data?.map((plo) => (
           <Table.Td key={plo.no} className="text-secondary">
             -
           </Table.Td>
@@ -313,11 +311,11 @@ export default function AdminDashboardCLO() {
 
   return (
     <>
-      {departmentPLO && (
+      {curriculumPLO && (
         <DrawerPLOdes
           opened={openDrawerPLOdes}
           onClose={() => setOpenDrawerPLOdes(false)}
-          data={departmentPLO}
+          data={curriculumPLO}
         />
       )}
       <ModalExportPLO
@@ -337,7 +335,7 @@ export default function AdminDashboardCLO() {
               </p>
             ) : (
               <p className="text-[#575757] text-[14px]">
-                In {selectDepartment.codeEN} Department{" "}
+                In {selectCurriculum.code} Curriculum{" "}
                 {courseList.courses.length === 0 ? (
                   <span>Course is currently empty</span>
                 ) : (
@@ -370,22 +368,22 @@ export default function AdminDashboardCLO() {
           classNames={{
             root: "overflow-hidden flex -mt-1 px-6 flex-col h-full",
           }}
-          value={selectDepartment.codeEN}
+          value={selectCurriculum.code}
           onChange={(event) => {
-            setSelectDepartment(department.find((dep) => dep.codeEN == event)!);
+            setSelectCurriculum(curriculum.find(({ code }) => code == event)!);
             setPayload({ ...payload });
           }}
         >
           <Tabs.List className="mb-2">
-            {department.map((dep) => (
-              <Tabs.Tab key={dep.codeEN} value={dep.codeEN!}>
-                {dep.codeEN}
+            {curriculum?.map((cur) => (
+              <Tabs.Tab key={cur.code} value={cur.code!}>
+                {cur.code}
               </Tabs.Tab>
             ))}
           </Tabs.List>
           <Tabs.Panel
             className="flex flex-col h-full w-full overflow-auto gap-1"
-            value={selectDepartment.codeEN || "All"}
+            value={selectCurriculum.code || "All"}
           >
             <div className="flex h-full w-full pb-5 pt-2 overflow-hidden">
               {loading ? (
@@ -405,7 +403,7 @@ export default function AdminDashboardCLO() {
                       <Table.Tr>
                         <Table.Th>Course</Table.Th>
                         <Table.Th className="w-[15%]">CLO</Table.Th>
-                        {departmentPLO.data?.map((plo) => (
+                        {curriculumPLO.data?.map((plo) => (
                           <Table.Th key={plo.no}>PLO {plo.no}</Table.Th>
                         ))}
                       </Table.Tr>
