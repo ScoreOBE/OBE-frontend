@@ -61,7 +61,9 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
         initialTqf5Part3(
           tqf5,
           tqf3.part4?.data,
-          course?.sections as any,
+          course?.sections.filter(
+            (sec) => sec.isActive && sec.topic == tqf5.topic
+          ) as any,
           assignments
         )
       );
@@ -75,7 +77,9 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
         const { sectionsData, score } = calCloScore(
           tqf5.part2?.data[index]!,
           tqf5.method!,
-          course?.sections as any,
+          course?.sections.filter(
+            (sec) => sec.isActive && sec.topic == tqf5.topic
+          ) as any,
           cloItem.assess
         );
         cloItem.sections = sectionsData;

@@ -9,14 +9,14 @@ type Props = {
   opened: boolean;
   onClose: () => void;
   data: Partial<IModelPLO>;
-  department?: string;
+  curriculum?: string;
 };
 
 export default function DrawerPLOdes({
   opened,
   onClose,
   data,
-  department,
+  curriculum,
 }: Props) {
   const [isTH, setIsTH] = useState<string | null>("TH");
 
@@ -42,8 +42,8 @@ export default function DrawerPLOdes({
                       </p>
 
                       <p className="text-[#909090] text-b3 acerSwift:max-macair133:!text-b4 font-medium">
-                        {department
-                          ? department + " Department"
+                        {curriculum
+                          ? curriculum + " Curriculum"
                           : "This course"}{" "}
                         uses {data.name}
                       </p>

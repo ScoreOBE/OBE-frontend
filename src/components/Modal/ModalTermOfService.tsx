@@ -131,7 +131,12 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
 
         <Alert
           radius="md"
-          icon={<Icon className="size-8  stroke-[1.5px]" IconComponent={IconExclamamtion} />}
+          icon={
+            <Icon
+              className="size-8  stroke-[1.5px]"
+              IconComponent={IconExclamamtion}
+            />
+          }
           variant="light"
           color="orange"
           className="mb-3"
@@ -163,7 +168,12 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         </Alert>
         <Alert
           radius="md"
-          icon={<Icon className=" stroke-[1.5px] size-8" IconComponent={IconUserScan} />}
+          icon={
+            <Icon
+              className=" stroke-[1.5px] size-8"
+              IconComponent={IconUserScan}
+            />
+          }
           variant="light"
           color="indigo"
           className="mb-3"
@@ -228,7 +238,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <div className="flex items-center justify-start">
                   <Icon className="size-5" IconComponent={IconSchool} />
                   <span className="ml-2">
-                    {isEN === "EN" ? "Faculty and Department" : "คณะและสาขา"}
+                    {isEN === "EN" ? "Faculty" : "คณะ"}
                   </span>
                 </div>
                 <div className="flex items-center justify-start">
@@ -281,7 +291,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         </Alert>
         <Alert
           radius="md"
-          icon={<Icon className=" size-8 stroke-[1.5px]" IconComponent={IconCPE} />}
+          icon={
+            <Icon className=" size-8 stroke-[1.5px]" IconComponent={IconCPE} />
+          }
           variant="light"
           color="blue"
           className="mb-3"

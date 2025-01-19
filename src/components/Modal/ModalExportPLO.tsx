@@ -33,16 +33,13 @@ type Props = {
 
 export default function ModalExportPLO({ opened, onClose }: Props) {
   const { courseNo } = useParams();
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const tqf3 = useAppSelector((state) => state.tqf3);
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
+  const dispatch = useAppDispatch();
   const [selectedMerge, setSelectedMerge] = useState("unzipfile");
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
-  const loading = useAppSelector((state) => state.loading.loadingOverlay);
-  const dispatch = useAppDispatch();
   const [dataExport, setDataExport] = useState<Partial<IModelTQF3>>({});
-  const department = useAppSelector((state) =>
-    state.faculty.department.slice(1)
-  );
 
   return (
     <Modal
@@ -71,11 +68,11 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
       <div className="flex flex-col gap-5 ">
         <Select
           rightSectionPointerEvents="all"
-          label={`Select Department to Export PLO.`}
+          label={`Select Curriculum to Export PLO.`}
           // placeholder={}
-          data={department.map((dep) => ({
-            value: dep.codeEN!,
-            label: dep.departmentEN!,
+          data={curriculum?.map((cur) => ({
+            value: cur.code,
+            label: cur.nameEN,
           }))}
           allowDeselect
           searchable

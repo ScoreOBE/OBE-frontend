@@ -53,7 +53,6 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import MainPopup from "@/components/Popup/MainPopup";
 import {
-  validateCourseNo,
   validateSectionNo,
   validateTextInput,
 } from "@/helpers/functions/validation";
@@ -78,7 +77,6 @@ export default function MapPLO({ ploName = "" }: Props) {
   const [state, handlers] = useListState(ploList.data || []);
   const [isMapPLO, setIsMapPLO] = useState(false);
   const [totalCourse, setTotalCourse] = useState<number>(0);
-  const [courseCode, setCourseCode] = useState({});
   const isFirstSemester =
     ploList.semester === academicYear?.semester &&
     ploList.year === academicYear?.year;
@@ -102,7 +100,6 @@ export default function MapPLO({ ploName = "" }: Props) {
     } as Partial<IModelCourse>,
     validate: {
       type: (value) => !value && "Course Type is required",
-      courseNo: (value) => validateCourseNo(value, courseCode),
       courseName: (value) => validateTextInput(value, "Course Name"),
       sections: {
         topic: (value) => {
@@ -140,12 +137,12 @@ export default function MapPLO({ ploName = "" }: Props) {
   }, [ploName]);
 
   useEffect(() => {
-    if (ploList.departmentCode && !courseManagement.length) {
+    if (ploList.curriculum && !courseManagement.length) {
       const payloadCourse = {
         ...new CourseManagementSearchDTO(),
         isPloMapping: true,
         limit: 20,
-        departmentCode: ploList.departmentCode,
+        curriculum: ploList.curriculum,
       };
       setPayload(payloadCourse);
       fetchCourse(payloadCourse);
@@ -202,7 +199,6 @@ export default function MapPLO({ ploName = "" }: Props) {
       setTotalCourse(res.totalCount);
       res.courses = filterSectionWithTopic(res.courses);
       setCourseManagement(res.courses);
-      setCourseCode(res.courseCode);
     }
     dispatch(setLoading(false));
   };
@@ -328,7 +324,7 @@ export default function MapPLO({ ploName = "" }: Props) {
       ...new CourseManagementSearchDTO(),
       isPloMapping: true,
       limit: 20,
-      departmentCode: ploList.departmentCode,
+      curriculum: ploList.curriculum,
     };
     if (reset) payloadCourse.search = "";
     else payloadCourse.search = searchValue;
@@ -832,11 +828,10 @@ export default function MapPLO({ ploName = "" }: Props) {
                       </div>
                       <div className="flex gap-2">
                         <p className="text-secondary font-semibold">
-                          Department:
+                          Curriculum:
                         </p>
-
                         <p className="font-medium flex flex-col gap-1 ">
-                          {ploList.departmentCode?.join(", ")}
+                          {ploList.curriculum?.join(", ")}
                         </p>
                       </div>
                     </div>

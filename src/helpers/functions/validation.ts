@@ -10,9 +10,9 @@ import { isNumber } from "lodash";
 import { ROUTE_PATH } from "../constants/route";
 import { jwtDecode } from "jwt-decode";
 
-export const checkTokenExpired = (token: string) => {
+export const checkTokenExpired = async (token: string) => {
   try {
-    const decode: any = jwtDecode(token);
+    const decode: any = await jwtDecode(token);
     // check expired
     if (
       !decode.exp ||
@@ -28,7 +28,7 @@ export const checkTokenExpired = (token: string) => {
   }
 };
 
-export const isValidResponse = (res: any) => {
+export const isValidResponse = async (res: any) => {
   if (
     res.headers &&
     ["application/pdf", "application/zip"].includes(res.headers["content-type"])
@@ -45,7 +45,7 @@ export const isValidResponse = (res: any) => {
         break;
       case STATUS_CODE.FORBIDDEN:
       case STATUS_CODE.UNAUTHORIZED:
-        const isExpired = checkTokenExpired(
+        const isExpired = await checkTokenExpired(
           localStorage.getItem("token") || ""
         );
         if (

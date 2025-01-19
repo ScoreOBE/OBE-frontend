@@ -35,11 +35,7 @@ export default function CmuEntraIDCallback() {
 
   useEffect(() => {
     if (user.id) {
-      if (user.departmentCode.length) {
-        goToDashboard(user.role);
-      } else {
-        navigate(ROUTE_PATH.SELECTED_DEPARTMENT, { replace: true });
-      }
+      goToDashboard(user.role);
     }
   }, [user]);
 

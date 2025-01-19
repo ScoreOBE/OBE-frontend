@@ -4,9 +4,9 @@ import { IModelFaculty } from "@/models/ModelFaculty";
 
 const userService = facultyController();
 
-export const getDepartment = async (
+export const getFaculty = async (
   facultyCode: string
 ): Promise<IModelFaculty> => {
-  const res = await userService.getDepartment(facultyCode);
+  const res = await userService.getFaculty(facultyCode);
   return isValidResponse(res);
 };

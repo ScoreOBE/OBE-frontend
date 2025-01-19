@@ -38,9 +38,7 @@ import {
 import { removeCourse, removeSection } from "@/store/course";
 import ModalAddSection from "@/components/Modal/CourseManage/ModalAddSection";
 import { SearchInput } from "@/components/SearchInput";
-import { getDepartment } from "@/services/faculty/faculty.service";
-import { IModelDepartment } from "@/models/ModelFaculty";
-import { setDepartment } from "@/store/faculty";
+import { IModelCurriculum } from "@/models/ModelFaculty";
 import { setLoading } from "@/store/loading";
 
 type Props = {
@@ -50,7 +48,6 @@ type Props = {
 
 export default function ModalCourseManagement({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
-  const department = useAppSelector((state) => state.faculty.department);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const courseManagement = useAppSelector((state) => state.courseManagement);
   const loading = useAppSelector((state) => state.loading.loading);
@@ -69,9 +66,6 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
-  const [selectDepartment, setSelectDepartment] = useState<
-    Partial<IModelDepartment>
-  >({});
 
   useLayoutEffect(() => {
     const updateSize = () => {
@@ -101,63 +95,24 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
 
   useEffect(() => {
     if (opened) {
-      if (!department.length) {
-        fetchDep();
-      }
-      setSelectDepartment({
-        departmentEN: "All Courses",
-        codeEN: "All Courses",
-      });
+      fetchCourse();
     }
   }, [opened]);
-
-  useEffect(() => {
-    if (opened && selectDepartment.codeEN) fetchCourse();
-  }, [department, selectDepartment]);
-
-  const fetchDep = async () => {
-    const res = await getDepartment(user.facultyCode);
-    if (res) {
-      sortData(res.department, "courseCode");
-      let dep = res.department;
-      if (user.role !== ROLE.SUPREME_ADMIN) {
-        dep = res.department.filter((e) =>
-          user.departmentCode.includes(e.codeEN)
-        );
-      }
-      dispatch(
-        setDepartment([
-          { departmentEN: "All Courses", codeEN: "All Courses" },
-          {
-            departmentEN: res.facultyEN.replace("Faculty of ", "Genaral "),
-            courseCode: res.courseCode,
-            codeEN: res.codeEN,
-          },
-          ...dep,
-        ])
-      );
-    }
-  };
 
   const initialPayload = () => {
     return {
       ...new CourseManagementSearchDTO(),
-      departmentCode: selectDepartment.codeEN?.includes("All")
-        ? department.map((dep) => dep.codeEN!)
-        : [selectDepartment.codeEN!],
       search: courseManagement.search,
     };
   };
 
   const fetchCourse = async () => {
     dispatch(setLoading(true));
-    if (department.length) {
-      const payloadCourse = initialPayload();
-      setPayload(payloadCourse);
-      const res = await getCourseManagement(payloadCourse);
-      if (res) {
-        dispatch(setCourseManagementList(res));
-      }
+    const payloadCourse = initialPayload();
+    setPayload(payloadCourse);
+    const res = await getCourseManagement(payloadCourse);
+    if (res) {
+      dispatch(setCourseManagementList(res));
     }
     dispatch(setLoading(false));
   };
@@ -355,76 +310,14 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   placeholder="Course No / Course Name"
                 />
               </div>
-              <Tabs
-                classNames={{
-                  root: "w-full left-0",
-                  tab: "px-1 !bg-transparent hover:!text-tertiary",
-                  tabLabel: "!font-semibold",
-                }}
-                value={selectDepartment.codeEN}
-                onChange={(event) => {
-                  setSelectDepartment(
-                    department.find((dep) => dep.codeEN == event)!
-                  );
-                  setPayload({ ...payload });
-                }}
-              >
-                <Tabs.List
-                  grow
-                  className="!bg-transparent px-[53px] items-center flex w-full"
-                >
-                  {department.length > maxTabs && (
-                    <div
-                      aria-disabled={startEndTab.start == 0}
-                      onClick={() =>
-                        startEndTab.start > 0 &&
-                        setStartEndTab(({ start, end }) => {
-                          return { start: start - maxTabs, end: end - maxTabs };
-                        })
-                      }
-                      className={`justify-start cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
-                        startEndTab.start !== 1 && "hover:bg-[#eeeeee]"
-                      } rounded-full`}
-                    >
-                      <Icon IconComponent={IconChevronLeft} />
-                    </div>
-                  )}
-                  {department
-                    .slice(startEndTab.start, startEndTab.end)
-                    .map((dep) => (
-                      <Tabs.Tab key={dep.codeEN} value={dep.codeEN!}>
-                        {dep.codeEN}
-                        {dep.courseCode && `-${dep.courseCode}`}
-                      </Tabs.Tab>
-                    ))}
-                  {department.length > maxTabs && (
-                    <div
-                      aria-disabled={startEndTab.end == department.length}
-                      onClick={() =>
-                        startEndTab.end < department.length &&
-                        setStartEndTab(({ start, end }) => {
-                          return { start: start + maxTabs, end: end + maxTabs };
-                        })
-                      }
-                      className={`justify-end cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
-                        startEndTab.end !== courseManagement.total &&
-                        "hover:bg-[#eeeeee]"
-                      } rounded-full`}
-                    >
-                      <Icon IconComponent={IconChevronRight} />
-                    </div>
-                  )}
-                  {/* </div> */}
-                </Tabs.List>
-              </Tabs>
             </div>
           </Modal.Header>
           <Modal.Body className="px-28  flex flex-col h-full pb-24 w-full overflow-hidden">
             <div className="flex flex-row py-6 px-6 items-center justify-between">
               <div className="flex flex-col items-start">
-                <p className="text-secondary text-[16px] font-bold">
+                {/* <p className="text-secondary text-[16px] font-bold">
                   {selectDepartment.departmentEN}
-                </p>
+                </p> */}
                 <p className="text-tertiary text-[14px] font-medium">
                   {courseManagement.search.length ? (
                     <>
@@ -492,10 +385,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
               <div className="text-center h-full gap-1 justify-center items-center flex flex-col ">
                 <p className=" text-secondary text-[18px] font-semibold">
                   {courseManagement.search.length ? (
-                    <>
-                      No results for {courseManagement.search} in{" "}
-                      {selectDepartment.departmentEN}
-                    </>
+                    <>No results for {courseManagement.search}</>
                   ) : (
                     <>Oops, No Courses here!</>
                   )}
@@ -504,10 +394,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   {courseManagement.search.length ? (
                     <>Check the spelling or try a new search.</>
                   ) : (
-                    <>
-                      Currently, No {selectDepartment.departmentEN} courses are
-                      added.
-                    </>
+                    <>Currently, No courses are added.</>
                   )}
                 </p>
               </div>

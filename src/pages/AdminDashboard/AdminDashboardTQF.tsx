@@ -21,14 +21,14 @@ import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import {
   addLoadMoreAllCourse,
   setAllCourseList,
-  setSearchDepartmentCode,
+  setSearchCurriculum,
 } from "@/store/allCourse";
 import {
   getUniqueInstructors,
   getUniqueTopicsWithTQF,
 } from "@/helpers/functions/function";
 import { IModelCourse } from "@/models/ModelCourse";
-import { IModelDepartment } from "@/models/ModelFaculty";
+import { IModelCurriculum } from "@/models/ModelFaculty";
 import ModalExportTQF3 from "@/components/Modal/TQF3/ModalExportTQF3";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { ROUTE_PATH } from "@/helpers/constants/route";
@@ -39,7 +39,7 @@ export default function AdminDashboardTQF() {
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
-  const department = useAppSelector((state) => state.faculty.department);
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const academicYear = useAppSelector((state) => state.academicYear);
   const courseList = useAppSelector((state) => state.allCourse);
   const dispatch = useAppDispatch();
@@ -50,8 +50,8 @@ export default function AdminDashboardTQF() {
     Partial<IModelTQF3> & { courseNo?: string }
   >({});
   const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
-  const [selectDepartment, setSelectDepartment] = useState<
-    Partial<IModelDepartment>
+  const [selectCurriculum, setSelectCurriculum] = useState<
+    Partial<IModelCurriculum>
   >({});
   const [tqf3Filters, setTqf3Filters] = useState<string[]>([]);
   const [tqf5Filters, setTqf5Filters] = useState<string[]>([]);
@@ -74,17 +74,17 @@ export default function AdminDashboardTQF() {
         setTerm(acaYear);
       }
       if (term) {
-        setSelectDepartment({
-          departmentEN: "All Courses",
-          codeEN: "All Courses",
+        setSelectCurriculum({
+          nameEN: "All Courses",
+          code: "All Courses",
         });
       }
     }
   }, [academicYear, term, params]);
 
   useEffect(() => {
-    if (term.id && department.length && selectDepartment.codeEN) fetchCourse();
-  }, [department, selectDepartment]);
+    if (term.id && curriculum?.length && selectCurriculum.code) fetchCourse();
+  }, [curriculum, selectCurriculum]);
 
   useEffect(() => {
     if (term) {
@@ -103,16 +103,16 @@ export default function AdminDashboardTQF() {
   }, [tqf3Filters, tqf5Filters]);
 
   const initialPayload = () => {
-    const dep = selectDepartment.codeEN?.includes("All")
-      ? department.map((dep) => dep.codeEN!)
-      : [selectDepartment.codeEN!];
-    dispatch(setSearchDepartmentCode(dep));
+    const cur = selectCurriculum.code?.includes("All")
+      ? ["All"]
+      : [selectCurriculum.code!];
+    dispatch(setSearchCurriculum(cur));
     return {
       ...new CourseRequestDTO(),
       manage: true,
       year: term.year!,
       semester: term.semester!,
-      departmentCode: dep,
+      curriculum: cur,
       search: courseList.search,
       tqf3: tqf3Filters,
       tqf5: tqf5Filters,
@@ -136,7 +136,7 @@ export default function AdminDashboardTQF() {
   const fetchCourse = async () => {
     if (!user.termsOfService) return;
     dispatch(setLoading(true));
-    if (department.length) {
+    if (curriculum?.length) {
       const payloadCourse = initialPayload();
       setPayload(payloadCourse);
       const res = await getCourse(payloadCourse);
@@ -505,9 +505,9 @@ export default function AdminDashboardTQF() {
             ) : (
               <p className="text-[#575757] text-[14px]">
                 In{" "}
-                {selectDepartment.codeEN?.includes("All")
-                  ? selectDepartment.codeEN
-                  : `${selectDepartment.codeEN} Department`}{" "}
+                {selectCurriculum.code?.includes("All")
+                  ? selectCurriculum.code
+                  : `${selectCurriculum.code} Curriculum`}{" "}
                 {courseList.courses.length === 0 ? (
                   <span>Course is currently empty</span>
                 ) : (
@@ -558,23 +558,32 @@ export default function AdminDashboardTQF() {
           classNames={{
             root: "overflow-hidden flex -mt-1 px-6 flex-col h-full",
           }}
-          value={selectDepartment.codeEN}
+          value={selectCurriculum.code}
           onChange={(event) => {
-            setSelectDepartment(department.find((dep) => dep.codeEN == event)!);
+            if (event?.includes("All"))
+              setSelectCurriculum({
+                nameEN: "All Courses",
+                code: "All Courses",
+              });
+            else
+              setSelectCurriculum(
+                curriculum.find(({ code }) => code == event)!
+              );
             setPayload({ ...payload });
           }}
         >
           <Tabs.List className="mb-2">
-            {department.map((dep) => (
-              <Tabs.Tab key={dep.codeEN} value={dep.codeEN!}>
-                {dep.codeEN}
+            <Tabs.Tab value="All Courses">All Courses</Tabs.Tab>
+            {curriculum?.map((cur) => (
+              <Tabs.Tab key={cur.code} value={cur.code!}>
+                {cur.code}
               </Tabs.Tab>
             ))}
           </Tabs.List>
 
           <Tabs.Panel
             className="flex flex-col h-full w-full overflow-auto gap-1"
-            value={selectDepartment?.codeEN || "All"}
+            value={selectCurriculum?.code || "All"}
           >
             <div className="flex h-full w-full pt-2 pb-5 overflow-hidden">
               {loading ? (

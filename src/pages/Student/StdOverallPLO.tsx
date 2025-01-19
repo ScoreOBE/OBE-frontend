@@ -32,12 +32,9 @@ export default function StdOverallPLO() {
   );
   const height = window.innerWidth >= 1800 ? 650 : 450;
   const fetchPLO = async () => {
-    const departmentCode = user?.departmentCode?.[0];
-
     const resPloCol = await getOnePLO({
       year: term?.year,
       semester: term?.semester,
-      codeEN: departmentCode,
     });
     if (resPloCol) {
       setDepartmentPLO(resPloCol);

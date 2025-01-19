@@ -50,6 +50,9 @@ export default function TQF5() {
   const loading = useAppSelector((state) => state.loading);
   const dashboard = useAppSelector((state) => state.config.dashboard);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const course = useAppSelector((state) =>
+    state.course.courses.find((course) => course.courseNo == courseNo)
+  );
   const courseAdmin = useAppSelector((state) =>
     state.allCourse.courses.find((course) => course.courseNo == courseNo)
   );
@@ -110,7 +113,9 @@ export default function TQF5() {
     const resPloCol = await getOnePLO({
       year: params.get("year"),
       semester: params.get("semester"),
-      courseCode: courseNo?.slice(0, -3),
+      curriculum: courseAdmin
+        ? courseAdmin.sections.map(({ curriculum }) => curriculum)
+        : course?.sections.map(({ curriculum }) => curriculum),
     });
     if (resPloCol) {
       dispatch(setPloTQF3(resPloCol));

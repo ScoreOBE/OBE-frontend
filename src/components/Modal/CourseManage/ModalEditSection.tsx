@@ -28,7 +28,6 @@ import { editSectionManagement } from "@/store/courseManagement";
 import { editCourse, editSection } from "@/store/course";
 import { getOneCourse } from "@/services/course/course.service";
 import { setLoadingOverlay } from "@/store/loading";
-import { getSectionNo } from "@/helpers/functions/function";
 
 type Props = {
   opened: boolean;
@@ -51,6 +50,7 @@ export default function ModalEditSection({
 }: Props) {
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const dispatch = useAppDispatch();
   const [openThisTerm, setOpenThisTerm] = useState(false);
   const [semester, setSemester] = useState<string[]>([]);
@@ -188,11 +188,11 @@ export default function ModalEditSection({
           }}
           {...form.getInputProps("sectionNo")}
         />
-        <TextInput
+        <Select
           label="Select the Curriculum for Section (Optional)"
           size="xs"
-          maxLength={5}
           placeholder="Curriculum"
+          data={curriculum?.map(({ code }) => code)}
           classNames={{
             input: "focus:border-primary acerSwift:max-macair133:!text-b5",
             label: "acerSwift:max-macair133:!text-b4",

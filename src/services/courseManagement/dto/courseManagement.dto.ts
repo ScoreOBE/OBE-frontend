@@ -1,5 +1,5 @@
 export class CourseManagementSearchDTO {
-  departmentCode?: string[];
+  curriculum?: string[] = [];
   orderBy: string = "courseNo";
   orderType: string = "asc";
   search: string = "";

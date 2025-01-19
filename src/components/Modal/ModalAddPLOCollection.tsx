@@ -22,7 +22,6 @@ import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import IconSO from "@/assets/icons/SO.svg?react";
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
-import { getDepartment } from "@/services/faculty/faculty.service";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { sortData } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
@@ -33,7 +32,7 @@ import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { validateTextInput } from "@/helpers/functions/validation";
 import { checkCanCreatePLO, createPLO } from "@/services/plo/plo.service";
-import { IModelDepartment } from "@/models/ModelFaculty";
+import { IModelCurriculum } from "@/models/ModelFaculty";
 import { setLoadingOverlay } from "@/store/loading";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -52,12 +51,12 @@ export default function ModalAddPLOCollection({
   collection,
   fetchPLO,
 }: Props) {
+  const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const loading = useAppSelector((state) => state.loading.loadingOverlay);
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const dispatch = useAppDispatch();
   const [active, setActive] = useState(0);
-  const [department, setDepartment] = useState<Partial<IModelDepartment>[]>([]);
   const [state, handlers] = useListState<Partial<IModelPLONo>>([]);
   const [reorder, setReorder] = useState(false);
   const [firstInput, setFirstInput] = useState(false);
@@ -69,7 +68,7 @@ export default function ModalAddPLOCollection({
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
-      departmentCode: [],
+      curriculum: [],
       data: [{ descTH: "", descEN: "" }] as Partial<IModelPLONo[]>,
     } as Partial<IModelPLO>,
     validate: {
@@ -79,8 +78,7 @@ export default function ModalAddPLOCollection({
         validateTextInput(value, "Criteria Thai language", 105, false),
       criteriaEN: (value) =>
         validateTextInput(value, "Criteria English language", 70, false),
-      departmentCode: (value) =>
-        !value?.length && "Select department at least one",
+      curriculum: (value) => !value?.length && "Select curriculum at least one",
     },
     validateInputOnBlur: true,
   });
@@ -142,8 +140,8 @@ export default function ModalAddPLOCollection({
         }
         break;
       case 2:
-        form.validateField("departmentCode");
-        isValid = form.getValues().departmentCode?.length! > 0;
+        form.validateField("curriculum");
+        isValid = form.getValues().curriculum?.length! > 0;
     }
     if (isValid) {
       setActive((cur) => (cur < 3 ? cur + 1 : cur));
@@ -166,38 +164,8 @@ export default function ModalAddPLOCollection({
     onClose();
   };
 
-  const fetchDep = async () => {
-    const res = await getDepartment(user.facultyCode);
-    if (res) {
-      sortData(res.department, "codeEN", "string");
-      if (user.role === ROLE.SUPREME_ADMIN) {
-        setDepartment([
-          {
-            departmentEN: res.facultyEN,
-            codeEN: res.codeEN,
-            courseCode: res.courseCode,
-          },
-          ...res.department,
-        ]);
-      } else {
-        const dep = res.department.filter((e) =>
-          user.departmentCode.includes(e.codeEN)
-        );
-        setDepartment([
-          {
-            departmentEN: res.facultyEN,
-            codeEN: res.codeEN,
-            courseCode: res.courseCode,
-          },
-          ...dep,
-        ]);
-      }
-    }
-  };
-
   useEffect(() => {
     if (opened && !form.getValues().name?.length) {
-      fetchDep();
       if (!isEmpty(collection)) {
         formOnePLONo.setFieldValue("no", collection.data?.length! + 1);
         form.setValues(collection);
@@ -252,26 +220,26 @@ export default function ModalAddPLOCollection({
     }
   };
 
-    useHotkeys(
-      "ctrl+enter, meta+enter",
-      () => {
-        onClickAddAnother();
-      },
-      {
-        enableOnFormTags: ["INPUT", "TEXTAREA", "SELECT"],
-      }
-    );
-
-  const setDepartmentCode = (checked: boolean, value?: string[]) => {
-    let departmentCode = form.getValues().departmentCode;
-    if (value) {
-      departmentCode = value.sort();
-    } else if (checked) {
-      departmentCode = department.map((dep) => dep.codeEN!);
-    } else {
-      departmentCode = [];
+  useHotkeys(
+    "ctrl+enter, meta+enter",
+    () => {
+      onClickAddAnother();
+    },
+    {
+      enableOnFormTags: ["INPUT", "TEXTAREA", "SELECT"],
     }
-    form.setFieldValue("departmentCode", departmentCode);
+  );
+
+  const setCurriculumCode = (checked: boolean, value?: string[]) => {
+    let curriculumCode = form.getValues().curriculum;
+    if (value) {
+      curriculumCode = value.sort();
+    } else if (checked) {
+      curriculumCode = curriculum.map(({ code }) => code);
+    } else {
+      curriculumCode = [];
+    }
+    form.setFieldValue("curriculum", curriculumCode);
   };
 
   const addPLOCollection = async () => {
@@ -632,7 +600,7 @@ export default function ModalAddPLOCollection({
           </Stepper.Step>
           <Stepper.Step
             allowStepSelect={false}
-            label="Map Department"
+            label="Map Curriculum"
             description="STEP 3"
           >
             <div className="mt-3 flex flex-col">
@@ -648,7 +616,7 @@ export default function ModalAddPLOCollection({
                 }}
                 title={
                   <p>
-                    Select the department you would like to use for the PLO
+                    Select the curriculum you would like to use for the PLO
                     collection.
                   </p>
                 }
@@ -665,11 +633,11 @@ export default function ModalAddPLOCollection({
                       IconComponent={IconHome}
                       className="text-secondary size-5"
                     />
-                    <span>List of Departments</span>
+                    <span>List of Curriculums</span>
                   </div>
                   <p>
-                    {department.length} Department
-                    {department.length > 1 ? "s" : ""}
+                    {curriculum?.length} Curriculum
+                    {curriculum?.length > 1 ? "s" : ""}
                   </p>
                 </div>
                 <div className="flex flex-col w-full macair133:h-[290px] h-[200px] ipad11:h-[220px] sm:h-[170px] px-3 overflow-y-auto">
@@ -682,31 +650,31 @@ export default function ModalAddPLOCollection({
                     }}
                     label="All"
                     checked={isEqual(
-                      form.getValues().departmentCode,
-                      department.map((dep) => dep.codeEN)
+                      form.getValues().curriculum,
+                      curriculum?.map(({ code }) => code)
                     )}
                     onChange={(event) => {
-                      setDepartmentCode(event.target.checked);
+                      setCurriculumCode(event.target.checked);
                     }}
                   />
                   <Checkbox.Group
-                    value={form.getValues().departmentCode}
+                    value={form.getValues().curriculum}
                     onChange={(event) => {
-                      setDepartmentCode(false, event);
+                      setCurriculumCode(false, event);
                     }}
                   >
                     <Group className="gap-0">
-                      {department.map((dep, index) => (
+                      {curriculum?.map((cur, index) => (
                         <Checkbox
                           size="xs"
                           key={index}
-                          value={dep.codeEN}
+                          value={cur.code}
                           className="p-3 py-4 w-full last:border-none border-b-[1px]"
                           classNames={{
                             label: "ml-2 text-[13px] font-medium",
                             input: "cursor-pointer",
                           }}
-                          label={`${dep.departmentEN} (${dep.codeEN} - ${dep.courseCode})`}
+                          label={`${cur.nameEN} (${cur.code})`}
                         />
                       ))}
                     </Group>
@@ -715,7 +683,7 @@ export default function ModalAddPLOCollection({
               </div>
               {!firstInput && (
                 <div className="text-[#FA5252] text-[12px] mt-2">
-                  {form.validateField("departmentCode").error}
+                  {form.validateField("curriculum").error}
                 </div>
               )}
             </div>
@@ -736,8 +704,8 @@ export default function ModalAddPLOCollection({
                   <div className="flex justify-between w-full">
                     <p>PLO Collection Name - {form.getValues().name}</p>
                     <p>
-                      {form.getValues().departmentCode?.length} Department
-                      {form.getValues().departmentCode?.length! > 1 ? "s" : ""}
+                      {form.getValues().curriculum?.length} Curriculum
+                      {form.getValues().curriculum?.length! > 1 ? "s" : ""}
                     </p>
                   </div>
 

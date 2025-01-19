@@ -20,7 +20,6 @@ export default function StdPLO() {
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading.loading);
-  const [departmentPLO, setDepartmentPLO] = useState<Partial<IModelPLO>>({});
   const user = useAppSelector((state) => state.user);
   const term = useAppSelector((state) =>
     state.academicYear.find(
@@ -29,41 +28,7 @@ export default function StdPLO() {
         term.semester == parseInt(params.get("semester") || "")
     )
   );
-  const department = useAppSelector((state) =>
-    state.faculty.department.slice(1)
-  );
-
-  const course = useAppSelector((state) =>
-    state.course.courses.find((c) => c.courseNo == courseNo)
-  );
-  const courseDep = department.find(
-    (dep) => dep.courseCode == parseInt(course?.courseNo.substring(0, 3)!)
-  );
-
-  const height = window.innerWidth >= 1800 ? 650 : 450;
-
-  useEffect(() => {
-    if (courseDep) {
-      fetchPLO();
-    }
-  }, [courseDep]);
-
-  const fetchPLO = async () => {
-    const resPloCol = await getOnePLO({
-      year: term?.year,
-      semester: term?.semester,
-      codeEN: courseDep?.codeEN,
-    });
-    if (resPloCol) {
-      setDepartmentPLO(resPloCol);
-    }
-  };
-
-  const enrollCourses = useAppSelector((state) => state.enrollCourse);
   const dispatch = useAppDispatch();
-
-  const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
-  const [test, setTest] = useState(true);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));

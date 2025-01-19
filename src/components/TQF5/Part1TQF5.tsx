@@ -37,7 +37,7 @@ export default function Part1TQF5({ setForm }: Props) {
     mode: "controlled",
     initialValues: {
       courseEval: course?.sections
-        .filter((sec) => sec.isActive)
+        .filter((sec) => sec.isActive && sec.topic == tqf5.topic)
         .map((sec) => ({
           sectionNo: sec.sectionNo,
           A: 0,

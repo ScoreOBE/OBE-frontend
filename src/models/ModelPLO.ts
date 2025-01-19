@@ -1,6 +1,7 @@
 export interface IModelPLOCollection {
-  departmentCode: string;
-  departmentEN: string;
+  code: string;
+  nameEN: string;
+  nameTH: string;
   collections: IModelPLO[];
 }
 export interface IModelPLO {
@@ -10,7 +11,7 @@ export interface IModelPLO {
   semester: number;
   isActive: boolean;
   facultyCode: string;
-  departmentCode: string[];
+  curriculum: string[];
   criteriaTH: string;
   criteriaEN: string;
   data: IModelPLONo[];
