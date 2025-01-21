@@ -341,11 +341,11 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
         autoFocus={false}
         fullScreen={true}
         zIndex={50}
-        classNames={{ content: "!pt-0" }}
+        classNames={{ content: "!pt-0 !bg-[#fafafa]" }}
       >
         <Modal.Overlay />
         <Modal.Content className="overflow-hidden !rounded-none !px-0">
-          <Modal.Header className="!pt-4  flex w-full rounded-none  pb-0 !px-0">
+          <Modal.Header className="!pt-4 !bg-[#fafafa] flex w-full rounded-none  pb-0 !px-0">
             <div className="flex flex-col gap-2 items-start w-full ">
               <div className="inline-flex px-12 w-full gap-2 font-semibold text-h2 text-secondary">
                 <Modal.CloseButton className="!m-0" />
@@ -438,7 +438,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                             setCollection({ ...plo });
                             setOpenModal(true);
                           }}
-                          className=" text-[14px] cursor-pointer first:mt-0 rounded-md hover:bg-[#eeeeee] grid grid-cols-5 items-center  justify-between  py-3 px-7"
+                          className=" text-[14px] bg-white cursor-pointer first:mt-0 rounded-md hover:bg-[#f8f8f8] grid grid-cols-5 items-center  justify-between  py-3 px-7"
                           key={index}
                           style={{
                             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -474,7 +474,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                       ))
                     : curriculumPloCollection?.map((curriculum, indexPLO) => (
                         <div
-                          className="bg-[#ffffff] rounded-md flex  flex-col py-4 px-5"
+                          className="bg-[#fafafa] rounded-md flex  flex-col py-4 px-5"
                           key={indexPLO}
                           style={{
                             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",

@@ -69,7 +69,7 @@ export default function MainPopup({
       classNames={{
         title: `${titleClassName()}  acerSwift:max-macair133:!text-b1`,
         content:
-          "flex flex-col justify-start font-medium leading-[24px] text-b2 acerSwift:max-macair133:!text-b3 item-center  overflow-hidden max-w-[42vw] min-w-[32vw] w-fit",
+          "flex flex-col justify-start font-medium leading-[24px] text-b2 acerSwift:max-macair133:!text-b3 item-center  overflow-hidden max-w-[60vw] min-w-[32vw] w-fit",
       }}
     >
       <div className="flex flex-col">

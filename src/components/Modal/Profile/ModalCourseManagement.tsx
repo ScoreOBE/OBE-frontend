@@ -296,7 +296,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
       >
         <Modal.Overlay />
         <Modal.Content className="overflow-hidden !rounded-none !px-0">
-          <Modal.Header className="flex w-full !pb-0 !px-0 !pt-4 rounded-none">
+          <Modal.Header className="flex w-full !bg-[#fafafa] !pb-0 !px-0 !pt-4 rounded-none">
             <div className="flex  flex-col gap-[6px] items-start w-full">
               <div className="inline-flex relative px-12 w-full items-center justify-center gap-2  ">
                 <div className="flex absolute left-12 gap-2">
@@ -315,9 +315,9 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
           <Modal.Body className="px-28  flex flex-col h-full pb-24 w-full overflow-hidden">
             <div className="flex flex-row py-6 px-6 items-center justify-between">
               <div className="flex flex-col items-start">
-                {/* <p className="text-secondary text-[16px] font-bold">
-                  {selectDepartment.departmentEN}
-                </p> */}
+                <p className="text-secondary text-[16px] font-bold">
+                {courseManagement.search ? 'Search' : 'All Courses'}
+                </p>
                 <p className="text-tertiary text-[14px] font-medium">
                   {courseManagement.search.length ? (
                     <>
