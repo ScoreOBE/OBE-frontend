@@ -14,11 +14,7 @@ export const checkTokenExpired = async (token: string) => {
   try {
     const decode: any = await jwtDecode(token);
     // check expired
-    if (
-      !decode.exp ||
-      decode.exp * 1000 <= new Date().getTime() ||
-      !decode.role
-    ) {
+    if (!decode.exp || decode.exp * 1000 <= new Date().getTime()) {
       return true;
     }
     return false;
@@ -48,10 +44,7 @@ export const isValidResponse = async (res: any) => {
         const isExpired = await checkTokenExpired(
           localStorage.getItem("token") || ""
         );
-        if (
-          (localStorage.getItem("token") && isExpired) ||
-          !localStorage.getItem("token")
-        ) {
+        if (localStorage.getItem("token") && isExpired) {
           localStorage.removeItem("token");
           window.location.assign(ROUTE_PATH.LOGIN);
           return;
