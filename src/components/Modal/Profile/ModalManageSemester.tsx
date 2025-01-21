@@ -206,12 +206,12 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
           >
-            <div className="bg-[#e7eaff] flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] py-3 px-5 text-secondary font-semibold">
+            <div className="flex bg-bgTableHeader gap-3 items-center rounded-t-md border-b-secondary border-[1px] py-3 px-5 text-secondary font-semibold">
               <Icon IconComponent={IconCalendar} className="stroke-secondary" />{" "}
               Added Semester
             </div>
             {/* Show List Of Semester */}
-            <div className="flex flex-col gap-2  w-full h-[350px]  p-4  overflow-y-hidden">
+            <div className="flex flex-col gap-2  w-full h-[350px] px-3 py-2  overflow-y-hidden">
               {/* <TextInput
                 leftSection={<TbSearch />}
                 size="xs"
@@ -222,7 +222,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
               />
               List of Semester */}
 
-              <div className="flex flex-col gap-3   p-1 overflow-y-auto">
+              <div className="flex flex-col gap-3  p-1 overflow-y-auto">
                 {Object.keys(yearFilter).map((year) => (
                   <div
                     key={year}
@@ -235,7 +235,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
                           className={`flex flex-row items-center h-[56px]  px-4 w-full justify-between
                             ${
                               semester.isActive
-                                ? "bg-[#E5E8FF]"
+                                ? " bg-bgTableHeader"
                                 : "bg-[#ffffff]"
                             }`}
                         >

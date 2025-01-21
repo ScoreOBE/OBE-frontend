@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { Menu, Button } from "@mantine/core";
 import Icon from "./Icon";
 import IconUserProfile from "@/assets/icons/profile/userProfile.svg?react";
-import IconFeedback from "@/assets/icons/feedback.svg?react";
 import IconAdminProfile from "@/assets/icons/profile/adminProfile.svg?react";
 import IconSAdminProfile from "@/assets/icons/profile/s.AdminProfile.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -12,8 +11,8 @@ import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import IconSupreme from "@/assets/icons/supremeAdmin.svg?react";
 import IconCourse from "@/assets/icons/course.svg?react";
 import IconUserScreen from "@/assets/icons/userScreen.svg?react";
-import IconAdjustmentsHorizontal from "@/assets/icons/horizontalAdjustments.svg?react";
-import IconStatusChange from "@/assets/icons/statusChange.svg?react";
+import IconGear from "@/assets/icons/gear.svg?react";
+import IconBooks from "@/assets/icons/books.svg?react";
 import IconSO from "@/assets/icons/SO.svg?react";
 import IconAdmin from "@/assets/icons/admin.svg?react";
 import IconSemester from "@/assets/icons/calendar.svg?react";
@@ -23,6 +22,7 @@ import { ROLE } from "@/helpers/constants/enum";
 import ModalManageAdmin from "./Modal/Profile/ModalManageAdmin";
 import ModalChangeSupAdmin from "./Modal/Profile/ModalChangeSupremeAdmin";
 import ModalManageSemester from "./Modal/Profile/ModalManageSemester";
+import ModalCurriculum from "./Modal/Profile/ModalCurriculum";
 import { getUserName } from "@/helpers/functions/function";
 import ModalCourseManagement from "./Modal/Profile/ModalCourseManagement";
 import ModalPLOManagement from "./Modal/Profile/ModalPLOManagement";
@@ -36,6 +36,7 @@ export default function Profile() {
   const dashboard = useAppSelector((state) => state.config.dashboard);
   const user = useAppSelector((state) => state.user);
   const [openModalChangeSupAdmin, setOpenModalChangeSupAdmin] = useState(false);
+  const [openModalCurriculum, setOpenModalCurriculum] = useState(false);
   const [openModalManageSemester, setOpenModalManageSemester] = useState(false);
   const [openModalManageAdmin, setOpenModalManageAdmin] = useState(false);
   const [openModalCourseManagement, setOpenModalCourseManagement] =
@@ -100,6 +101,10 @@ export default function Profile() {
       <ModalManageSemester
         opened={openModalManageSemester}
         onClose={() => setOpenModalManageSemester(false)}
+      />
+      <ModalCurriculum
+        opened={openModalCurriculum}
+        onClose={() => setOpenModalCurriculum(false)}
       />
       <ModalCourseManagement
         opened={openModalCourseManagement}
@@ -269,7 +274,7 @@ export default function Profile() {
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                       <Icon
-                        IconComponent={IconAdjustmentsHorizontal}
+                        IconComponent={IconGear}
                         className="size-4  acerSwift:max-macair133:size- stroke-[1.5px]"
                       />
                       <span>Management</span>
@@ -327,6 +332,15 @@ export default function Profile() {
                 </Menu.Item>
                 {user.role === ROLE.SUPREME_ADMIN && (
                   <>
+                    <Menu.Item onMouseDown={() => setOpenModalCurriculum(true)}>
+                      <div className="flex items-center -ml-[2px] gap-2 acerSwift:max-macair133:text-b5">
+                        <Icon
+                          IconComponent={IconBooks}
+                          className="size-[18px] stroke-[1px]  acerSwift:max-macair133:size-"
+                        />
+                        <span>Curriculum</span>
+                      </div>
+                    </Menu.Item>
                     <Menu.Item
                       onMouseDown={() => setOpenModalManageSemester(true)}
                     >

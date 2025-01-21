@@ -871,7 +871,7 @@ export default function MapPLO({ ploName = "" }: Props) {
               value="plodescription"
               className="overflow-hidden flex h-full mt-3"
             >
-              <div className=" overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full  ">
+              <div className=" overflow-hidden  bg-[#fafafa] flex flex-col h-full w-full  ">
                 <div className="flex items-center  justify-between  pt-2 pb-5">
                   <div className="flex flex-col items-start ">
                     <div className="flex items-center text-primary gap-1">
@@ -921,7 +921,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                             >
                               {(provided, snapshot) => (
                                 <div
-                                  className={`flex p-4 w-full justify-between first:-mt-2 border-b last:border-none ${
+                                  className={`flex p-4 w-full bg-blackjustify-between first:-mt-2 border-b last:border-none ${
                                     snapshot.isDragging
                                       ? "bg-hover rounded-md"
                                       : ""
@@ -1001,7 +1001,7 @@ export default function MapPLO({ ploName = "" }: Props) {
               className="overflow-hidden mt-1 h-full"
               value="plomapping"
             >
-              <div className="overflow-hidden  bg-[#ffffff] flex flex-col h-full w-full p">
+              <div className="overflow-hidden  bg-[#fafafa] flex flex-col h-full w-full p">
                 <div className="flex items-center  justify-between pt-4 pb-5">
                   <div className="flex flex-col items-start ">
                     <p className="text-secondary text-[16px] font-bold">
