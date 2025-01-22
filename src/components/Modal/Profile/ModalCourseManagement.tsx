@@ -38,7 +38,6 @@ import {
 import { removeCourse, removeSection } from "@/store/course";
 import ModalAddSection from "@/components/Modal/CourseManage/ModalAddSection";
 import { SearchInput } from "@/components/SearchInput";
-import { IModelCurriculum } from "@/models/ModelFaculty";
 import { setLoading } from "@/store/loading";
 
 type Props = {
@@ -52,8 +51,6 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const courseManagement = useAppSelector((state) => state.courseManagement);
   const loading = useAppSelector((state) => state.loading.loading);
   const dispatch = useAppDispatch();
-  const [maxTabs, setMaxTabs] = useState(0);
-  const [startEndTab, setStartEndTab] = useState({ start: 0, end: maxTabs });
   const [payload, setPayload] = useState<any>({ page: 1, limit: 10 });
   const [startEndPage, setStartEndPage] = useState({ start: 1, end: 10 });
   const [editCourse, setEditCourse] = useState<any>();
@@ -66,32 +63,6 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
-
-  useLayoutEffect(() => {
-    const updateSize = () => {
-      let tabs;
-      if (window.innerWidth >= 1440) {
-        tabs = 16;
-      } else if (window.innerWidth >= 1280) {
-        tabs = 14;
-      } else if (window.innerWidth >= 1024) {
-        tabs = 10;
-        // } else if (window.innerWidth >= 768) {
-        //   tabs = 6;
-      } else if (window.innerWidth >= 640) {
-        tabs = 6;
-      } else {
-        tabs = 4;
-      }
-      setMaxTabs(tabs);
-      setStartEndTab(({ start, end }) => {
-        return { start: 0, end: tabs };
-      });
-    };
-    window.addEventListener("resize", updateSize);
-    updateSize();
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
 
   useEffect(() => {
     if (opened) {
@@ -316,7 +287,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
             <div className="flex flex-row py-6 px-6 items-center justify-between">
               <div className="flex flex-col items-start">
                 <p className="text-secondary text-[16px] font-bold">
-                {courseManagement.search ? 'Search' : 'All Courses'}
+                  {courseManagement.search ? "Search" : "All Courses"}
                 </p>
                 <p className="text-tertiary text-[14px] font-medium">
                   {courseManagement.search.length ? (

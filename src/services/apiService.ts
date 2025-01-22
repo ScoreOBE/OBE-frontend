@@ -22,12 +22,14 @@ const getConfig = (configService: any, params?: any) => {
     },
     headers: {
       lang: params?.data?.lang,
-      ...(params?.token
+      ...(configService.noAuth
+        ? {}
+        : params?.token
         ? { Authorization: "Bearer " + params?.token }
         : token
         ? { Authorization: "Bearer " + token }
         : {}),
-      ...(configService?.headers || {}),
+      ...(configService.headers || {}),
     },
     params: params || configService.params,
     data: configService.data,
