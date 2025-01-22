@@ -22,6 +22,7 @@ type Props = {
 export default function ModalCurriculum({ opened, onClose }: Props) {
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const user = useAppSelector((state) => state.user);
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const [searchValue, setSearchValue] = useState("");
   const [adminList, setAdminList] = useState<IModelUser[]>([]);
   const [adminFilter, setAdminFilter] = useState<IModelUser[]>([]);
@@ -29,69 +30,6 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
   const [openDeleteCurriculum, setOpenDeleteCurriculum] = useState(false);
   const [targetAdminId, setTargetAdminId] = useState("");
   const [targetAdminName, setTargetAdminName] = useState("");
-
-  const curriculum = [
-    {
-      nameTh: "หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมคอมพิวเตอร์ (2563)",
-      nameEn: "Bachelor of Engineering Program in Computer Engineering (2563)",
-      code: "CPE-2563",
-    },
-    {
-      nameTh: "หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมเครื่องกล (2565)",
-      nameEn:
-        "Bachelor of Engineering Program in Mechanical Engineering (2565)",
-      code: "ME-2565",
-    },
-    {
-      nameTh:
-        "หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมเครื่องกลและการบริหารโครงการวิศวกรรม หลักสูตรนานาชาติ (2562)",
-      nameEn:
-        "Bachelor of Engineering Program in Mechanical Engineering and Engineering Project Management International Program (2562)",
-      code: "ME-INTER-2565",
-    },
-    {
-      nameTh: "หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมบูรณาการ (2566)",
-      nameEn:
-        "Bachelor of Engineering Program in Integrated Engineering (2566)",
-      code: "INE-2566",
-    },
-    {
-      nameTh: "หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมบูรณาการ (2566)",
-      nameEn:
-        "Bachelor of Engineering Program in Integrated Engineering (2566)",
-      code: "INE-2566",
-    },
-    {
-      nameTh: "หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมบูรณาการ (2566)",
-      nameEn:
-        "Bachelor of Engineering Program in Integrated Engineering (2566)",
-      code: "INE-2566",
-    },
-    {
-      nameTh: "หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมบูรณาการ (2566)",
-      nameEn:
-        "Bachelor of Engineering Program in Integrated Engineering (2566)",
-      code: "INE-2566",
-    },
-    {
-      nameTh: "หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมบูรณาการ (2566)",
-      nameEn:
-        "Bachelor of Engineering Program in Integrated Engineering (2566)",
-      code: "INE-2566",
-    },
-    {
-      nameTh: "หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมบูรณาการ (2566)",
-      nameEn:
-        "Bachelor of Engineering Program in Integrated Engineering (2566)",
-      code: "INE-2566",
-    },
-    {
-      nameTh: "หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมบูรณาการ (2566)",
-      nameEn:
-        "Bachelor of Engineering Program in Integrated Engineering (2566)",
-      code: "INE-2566",
-    },
-  ];
 
   useEffect(() => {
     if (opened) {
@@ -150,7 +88,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                 size="xs"
               />
               <TextInput
-              withAsterisk
+                withAsterisk
                 classNames={{
                   input: ` acerSwift:max-macair133:text-b4 mb-3`,
                   label: "acerSwift:max-macair133:!text-b4 mb-1",
@@ -236,7 +174,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                 />
                 {/* List of Admin */}
                 <div className="flex flex-col overflow-y-auto p-1">
-                  {curriculum.map((item) => (
+                  {curriculum?.map((item) => (
                     <div className="w-full items-center last:border-none border-b-[1px] justify-between  px-3 py-4 first:pt-1  flex">
                       <div className="gap-3 flex items-center">
                         <Icon
@@ -245,10 +183,10 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                         />
                         <div className="flex flex-col">
                           <p className="font-semibold text-[14px] text-tertiary">
-                            {item.nameTh}
+                            {item.nameTH}
                           </p>
                           <p className="text-secondary text-[12px] font-normal">
-                            {item.nameEn}
+                            {item.nameEN}
                           </p>
                         </div>
                       </div>

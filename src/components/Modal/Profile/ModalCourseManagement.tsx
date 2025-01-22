@@ -283,7 +283,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
               </div>
             </div>
           </Modal.Header>
-          <Modal.Body className="px-28  flex flex-col h-full pb-24 w-full overflow-hidden">
+          <Modal.Body className="px-28 flex flex-col h-full pb-24 w-full overflow-hidden">
             <div className="flex flex-row py-6 px-6 items-center justify-between">
               <div className="flex flex-col items-start">
                 <p className="text-secondary text-[16px] font-bold">
@@ -493,11 +493,21 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                           <div className="grid grid-cols-5 items-center justify-between py-4 px-7">
                             {/* Section No & Topic */}
                             <div className="flex flex-col ">
-                              <p className="font-medium text-[13px] text-black">
-                                Section {getSectionNo(sec.sectionNo)}
-                              </p>
+                              <div className="flex flex-wrap items-center gap-1">
+                                <p className="font-medium text-[13px] text-black">
+                                  Section {getSectionNo(sec.sectionNo)}
+                                </p>
+                                {/* Curriculum */}
+                                {sec.curriculum && (
+                                  <div className="flex justify-center items-center text-center px-3 py-1 w-fit min-w-10 rounded-[20px] font-medium bg-[#1057e58e] text-[#222f87]">
+                                    <p className="font-semibold text-[12px]">
+                                      {sec.curriculum}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
                               {course.type === COURSE_TYPE.SEL_TOPIC.en && (
-                                <p className="text-[12px] font-normal text-[#4E5150] flex-wrap ">
+                                <p className="text-[12px] font-normal text-[#4E5150] flex-wrap">
                                   {sec.topic}
                                 </p>
                               )}
