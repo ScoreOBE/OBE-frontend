@@ -12,7 +12,10 @@ import { useParams, useSearchParams } from "react-router-dom";
 import unplug from "@/assets/image/unplug.png";
 import pictureTQF5 from "@/assets/image/TQF5.jpg";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
-import { getValueEnumByKey } from "@/helpers/functions/function";
+import {
+  findMostDuplicateCurriculum,
+  getValueEnumByKey,
+} from "@/helpers/functions/function";
 import { UseFormReturnType } from "@mantine/form";
 import Loading from "@/components/Loading/Loading";
 import { setShowNavbar, setShowSidebar } from "@/store/config";
@@ -113,9 +116,7 @@ export default function TQF5() {
     const resPloCol = await getOnePLO({
       year: params.get("year"),
       semester: params.get("semester"),
-      curriculum: courseAdmin
-        ? courseAdmin.sections.map(({ curriculum }) => curriculum)
-        : course?.sections.map(({ curriculum }) => curriculum),
+      curriculum: findMostDuplicateCurriculum(courseAdmin ?? course),
     });
     if (resPloCol) {
       dispatch(setPloTQF3(resPloCol));

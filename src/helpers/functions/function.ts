@@ -1,4 +1,4 @@
-import { IModelSection } from "@/models/ModelCourse";
+import { IModelCourse, IModelSection } from "@/models/ModelCourse";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelTQF5 } from "@/models/ModelTQF5";
 import { IModelUser } from "@/models/ModelUser";
@@ -150,4 +150,15 @@ export const sortData = (
         : Number(aValue) - Number(bValue);
     } else return 0;
   });
+};
+
+export const findMostDuplicateCurriculum = (
+  course: IModelCourse | undefined
+): string | undefined => {
+  const sections = course?.sections.map(({ curriculum }) => curriculum);
+  return sections?.sort(
+    (a, b) =>
+      sections.filter((item) => item === b).length -
+      sections.filter((item) => item === a).length
+  )[0];
 };

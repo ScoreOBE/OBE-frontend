@@ -30,7 +30,10 @@ import {
   reuseTQF3,
   saveTQF3,
 } from "@/services/tqf3/tqf3.service";
-import { getValueEnumByKey } from "@/helpers/functions/function";
+import {
+  findMostDuplicateCurriculum,
+  getValueEnumByKey,
+} from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { COURSE_TYPE, NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { useForm, UseFormReturnType } from "@mantine/form";
@@ -144,9 +147,7 @@ export default function TQF3() {
     const resPloCol = await getOnePLO({
       year: params.get("year"),
       semester: params.get("semester"),
-      curriculum: courseAdmin
-        ? courseAdmin.sections.map(({ curriculum }) => curriculum)
-        : course?.sections.map(({ curriculum }) => curriculum),
+      curriculum: findMostDuplicateCurriculum(courseAdmin ?? course),
     });
     if (resPloCol) {
       dispatch(setPloTQF3(resPloCol));
