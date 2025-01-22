@@ -192,7 +192,11 @@ export default function ModalEditSection({
           label="Select the Curriculum for Section (Optional)"
           size="xs"
           placeholder="Curriculum"
-          data={curriculum?.map(({ code }) => code)}
+          data={curriculum?.map((item) => ({
+            value: item.code,
+            label: `${item.nameTH} [${item.code}]`,
+          }))}
+          value={form.getValues().curriculum}
           classNames={{
             input: "focus:border-primary acerSwift:max-macair133:!text-b5",
             label: "acerSwift:max-macair133:!text-b4",
