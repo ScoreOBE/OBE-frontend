@@ -234,8 +234,8 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
 
                       <div className="flex flex-row gap-3">
                         <Button
-                          color="yellow"
                           variant="outline"
+                          className="!text-edit border-edit  hover:bg-[#F39D4E]/10"
                           onClick={() => {
                             setSelectCurriculum(item);
                             form.setFieldValue("nameTH", item.nameTH);
@@ -257,6 +257,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                           variant="outline"
                           onClick={() => {
                             setOpenDeleteCurriculum(true);
+                            setSelectCurriculum(item);
                           }}
                           loading={loading}
                         >
