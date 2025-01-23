@@ -1,3 +1,5 @@
+import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
+
 export const calStat = (scores: number[], totalStudent: number) => {
   const maxScore = Math.max(...scores);
   const minScore = Math.min(...scores);
@@ -127,4 +129,57 @@ export const generateBellCurveData = (
   // }
 
   return bellCurveData;
+};
+
+export const calCloStudentScore = (course: IModelEnrollCourse) => {
+  const closScore: (0 | 1 | 2 | 3 | 4 | undefined)[] = [];
+  course.clos.forEach((item) => {
+    const tqf5Part2 = item.tqf5Part2.find(({ clo }) => clo == item.clo.id);
+    const assigns = course.scores
+      .filter(({ assignmentName }) =>
+        tqf5Part2?.assignments.map((e) =>
+          e.questions
+            .flatMap((s) => s.substring(0, s.lastIndexOf("-")))
+            .includes(assignmentName)
+        )
+      )
+      .flatMap((e) =>
+        e.questions.map((question) => ({
+          sheet: e.assignmentName,
+          ...question,
+        }))
+      )
+      .filter((e) =>
+        tqf5Part2?.assignments
+          .flatMap((s) => s.questions)
+          .includes(`${e.sheet}-${e.name}`)
+      );
+    const cloScores: { score: number; percent: number }[] = [];
+    item.assess.forEach((e) => {
+      const score = assigns
+        .filter((as) => e.sheet.includes(as.sheet))
+        .reduce((a, b) => a + b.score, 0);
+      if (0 <= score && score < e.range0) {
+        cloScores.push({ score: 0, percent: e.percent! });
+      } else if (e.range0 <= score && score <= e.range1) {
+        cloScores.push({ score: 1, percent: e.percent! });
+      } else if (e.range1 < score && score <= e.range2) {
+        cloScores.push({ score: 2, percent: e.percent! });
+      } else if (e.range2 < score && score <= e.range3) {
+        cloScores.push({ score: 3, percent: e.percent! });
+      } else {
+        cloScores.push({ score: 4, percent: e.percent! });
+      }
+    });
+    const avgCloScore =
+      cloScores.reduce((a: number, b) => a + b.score * b.percent, 0) /
+      cloScores.reduce((a: number, b) => a + b.percent, 0);
+    if (0 <= avgCloScore && avgCloScore < 1) closScore.push(0);
+    else if (1 <= avgCloScore && avgCloScore < 2) closScore.push(1);
+    else if (2 <= avgCloScore && avgCloScore < 3) closScore.push(2);
+    else if (3 <= avgCloScore && avgCloScore < 4) closScore.push(3);
+    else if (4 <= avgCloScore) closScore.push(4);
+    else closScore.push(undefined);
+  });
+  return closScore;
 };

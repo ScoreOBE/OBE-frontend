@@ -1,20 +1,21 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
-import { ROLE } from "@/helpers/constants/enum";
+import { CLO_EVAL, ROLE } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading/Loading";
 import { Table } from "@mantine/core";
+import { calCloStudentScore } from "@/helpers/functions/score";
 
 export default function StdCLO() {
   const { courseNo } = useParams();
-  const [params, setParams] = useSearchParams();
-  const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading.loading);
-  const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
     state.enrollCourse.courses.find((c) => c.courseNo == courseNo)
+  );
+  const [closScore, setClosScore] = useState<(0 | 1 | 2 | 3 | 4 | undefined)[]>(
+    []
   );
   const dispatch = useAppDispatch();
 
@@ -25,13 +26,18 @@ export default function StdCLO() {
     localStorage.setItem("dashboard", ROLE.STUDENT);
   }, []);
 
+  useEffect(() => {
+    if (course?.clos) {
+      setClosScore(calCloStudentScore(course));
+    }
+  }, [course]);
+
   return (
     <div className="bg-white flex flex-col h-full w-full px-6 py-5  gap-3 overflow-hidden">
       {loading ? (
         <Loading />
       ) : (
         <div className="flex flex-col   overflow-y-auto overflow-x-hidden max-w-full h-full">
-
           <div className="flex flex-row  py-1   items-center justify-between">
             {course?.clos.length !== 0 ? (
               <p className="text-secondary text-[16px] mb-[18px] -mt-1 font-semibold">
@@ -69,8 +75,12 @@ export default function StdCLO() {
                           <p>{clo.descTH}</p>
                           <p>{clo.descEN}</p>
                         </Table.Td>
-                        <Table.Td>-</Table.Td>
-                        <Table.Td>-</Table.Td>
+                        <Table.Td>{closScore[index] ?? "-"}</Table.Td>
+                        <Table.Td>
+                          {closScore[index] != undefined
+                            ? CLO_EVAL[closScore[index]]
+                            : "-"}
+                        </Table.Td>
                       </Table.Tr>
                     );
                   })}
@@ -84,8 +94,8 @@ export default function StdCLO() {
                   No CLO
                 </p>
                 <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                  The CLO will show when the course specification is submitted <br/> by the
-                  instructor.
+                  The CLO will show when the course specification is submitted{" "}
+                  <br /> by the instructor.
                 </p>
               </div>
               <div className=" items-center justify-center flex">
