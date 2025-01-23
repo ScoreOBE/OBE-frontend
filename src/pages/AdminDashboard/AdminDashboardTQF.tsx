@@ -572,7 +572,7 @@ export default function AdminDashboardTQF() {
             setPayload({ ...payload });
           }}
         >
-          <Tabs.List className="mb-2">
+          <Tabs.List className="mb-2 flex flex-nowrap overflow-x-auto">
             <Tabs.Tab value="All Courses">All Courses</Tabs.Tab>
             {curriculum?.map((cur) => (
               <Tabs.Tab key={cur.code} value={cur.code!}>

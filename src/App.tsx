@@ -95,7 +95,6 @@ function App() {
         />
         <Outlet />
       </div>
-      {/* <PageError /> */}
     </div>
   );
 }

@@ -46,3 +46,11 @@ export enum METHOD_TQF5 {
   SCORE_OBE = "ScoreOBE+",
   MANUAL = "Manual",
 }
+
+export const CLO_EVAL = {
+  "0": "Very Poor",
+  "1": "Poor",
+  "2": "Average",
+  "3": "Good",
+  "4": "Excellent",
+};

@@ -220,7 +220,7 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: `${ROUTE_PATH.PLO}`,
+            path: ROUTE_PATH.PLO,
             element: (
               <Suspense fallback={loadingPage}>
                 <StdOverallPLO />
@@ -268,7 +268,7 @@ const router = createBrowserRouter([
                 ),
               },
               {
-                path: `${ROUTE_PATH.PLO}`,
+                path: ROUTE_PATH.PLO,
                 element: (
                   <Suspense fallback={loadingPage}>
                     <StdPLO />
@@ -276,7 +276,7 @@ const router = createBrowserRouter([
                 ),
               },
               {
-                path: `${ROUTE_PATH.SKILLS}`,
+                path: ROUTE_PATH.SKILLS,
                 element: (
                   <Suspense fallback={loadingPage}>
                     <StdSkills />
