@@ -132,7 +132,7 @@ export default function ModalExportTQF3({
         title: "acerSwift:max-macair133:!text-b1",
       }}
     >
-      <div className="flex sm:max-ipad11:h-[500px] acerSwift:max-macair133:h-[400px] acerSwift:max-macair133:mb-4 sm:max-ipad11:overflow-y-hidden flex-col">
+      {/* <div className="flex sm:max-ipad11:h-[500px] acerSwift:max-macair133:h-[400px] acerSwift:max-macair133:mb-4 sm:max-ipad11:overflow-y-hidden flex-col">
         {!dataExport.part1?.updatedAt ? (
           <div className="flex flex-col mt-3  items-center  ">
             <p className=" text-b2 acerSwift:max-macair133:!text-b3 font-semibold">
@@ -256,15 +256,15 @@ export default function ModalExportTQF3({
             </Button>
           </Group>
         </div>
-      )}
-      {/* <div className="h-full items-start justify-center flex flex-col">
+      )} */}
+      <div className="h-full items-start justify-center flex flex-col">
         <p className=" mb-7 mt-1 text-b2 break-words text-[#777777] font-medium leading-relaxed">
           Available in February 2025
         </p>
       </div>
       <Button onClick={onClose} className="!w-full">
         OK
-      </Button> */}
+      </Button>
     </Modal>
   );
 }
