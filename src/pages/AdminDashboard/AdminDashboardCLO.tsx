@@ -374,7 +374,7 @@ export default function AdminDashboardCLO() {
             setPayload({ ...payload });
           }}
         >
-          <Tabs.List className="mb-2">
+          <Tabs.List className="mb-2 flex flex-nowrap overflow-x-auto">
             {curriculum?.map((cur) => (
               <Tabs.Tab key={cur.code} value={cur.code!}>
                 {cur.code}
