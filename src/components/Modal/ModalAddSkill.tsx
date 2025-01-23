@@ -23,6 +23,7 @@ import { setLoadingOverlay } from "@/store/loading";
 import { getSkills } from "@/services/skill/skill.service";
 import { SkillRequestDTO } from "@/services/skill/dto/skill.dto";
 import { IModelSkill } from "@/models/ModelSkill";
+import { SearchInput } from "../SearchInput";
 
 type Props = {
   opened: boolean;
@@ -53,6 +54,8 @@ export default function ModalAddSkill({ opened, onClose }: Props) {
         : [...prev, title]
     );
   };
+
+  const searchSkill = () => {};
 
   useEffect(() => {
     fetchSkills();
@@ -99,49 +102,54 @@ export default function ModalAddSkill({ opened, onClose }: Props) {
         body: "flex flex-col gap-2 overflow-hidden max-h-full h-fit",
       }}
     >
-      <div className="text-b4 gap-2 font-medium flex justify-end items-center">
+      <div className="text-b4 font-medium flex justify-between items-center mt-2">
+        <SearchInput onSearch={searchSkill} placeholder="Skill Topic" />
         {/* <MultiSelect /> */}
-        <div className="flex items-center gap-1">
-          Skills per page:
-          <Select
-            size="sm"
-            allowDeselect={false}
-            classNames={{
-              input: "border-none !h-[32px]",
-              wrapper: "!h-[32px]",
-            }}
-            className=" w-[74px] h-[32px]"
-            data={["10", "20", "30"]}
-            value={payload.perPage.toString()}
-            onChange={(event) => {
-              setPayload((prev: any) => {
-                return { ...prev, perPage: parseInt(event!) };
-              });
-              onChangePage(1, parseInt(event!));
-            }}
-          />
-        </div>
-        <div className="flex items-center">
-          <div
-            aria-disabled={payload.page == 1}
-            onClick={() => onChangePage(payload.page - 1)}
-            className={`cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
-              payload.page !== 1 && "hover:bg-[#eeeeee]"
-            } rounded-full`}
-          >
-            <Icon IconComponent={IconChevronLeft} />
+        <div className="flex flex-row ">
+          <div className="flex items-center gap-1">
+            Skills per page:
+            <Select
+              size="sm"
+              allowDeselect={false}
+              classNames={{
+                input: "border-none !h-[32px]",
+                wrapper: "!h-[32px]",
+              }}
+              className=" w-[74px] h-[32px]"
+              data={["10", "20", "30"]}
+              value={payload.perPage.toString()}
+              onChange={(event) => {
+                setPayload((prev: any) => {
+                  return { ...prev, perPage: parseInt(event!) };
+                });
+                onChangePage(1, parseInt(event!));
+              }}
+            />
           </div>
-          <div>
-            {payload.page} of {payload.totalPage}
-          </div>
-          <div
-            aria-disabled={payload.page == payload.totalPage}
-            onClick={() => onChangePage(payload.page + 1)}
-            className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
-              payload.page !== payload.totalPage && "hover:bg-[#eeeeee]"
-            } rounded-full`}
-          >
-            <Icon IconComponent={IconChevronRight} />
+          <div className="flex items-center">
+            <div
+              aria-disabled={payload.page == 1}
+              onClick={() => {
+                payload.page != 1 && onChangePage(payload.page - 1);
+              }}
+              className={`cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                payload.page !== 1 && "hover:bg-[#eeeeee]"
+              } rounded-full`}
+            >
+              <Icon IconComponent={IconChevronLeft} />
+            </div>
+            <div>
+              {payload.page} of {payload.totalPage}
+            </div>
+            <div
+              aria-disabled={payload.page == payload.totalPage}
+              onClick={() => onChangePage(payload.page + 1)}
+              className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                payload.page !== payload.totalPage && "hover:bg-[#eeeeee]"
+              } rounded-full`}
+            >
+              <Icon IconComponent={IconChevronRight} />
+            </div>
           </div>
         </div>
       </div>
@@ -163,11 +171,12 @@ export default function ModalAddSkill({ opened, onClose }: Props) {
                 >
                   <Group>
                     <Checkbox.Indicator />
+
                     <div className="flex flex-col ml-1">
-                      <p className="font-bold text-[15px] text-secondary">
+                      <p className="font-semibold text-[15px] text-secondary mb-1">
                         {skill.name}
                       </p>
-                      <PillGroup>
+                      <PillGroup className="w-[55vw]">
                         {skill.tags.map((tag, index) => (
                           <Pill key={index}>{tag}</Pill>
                         ))}

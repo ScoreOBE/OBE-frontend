@@ -14,6 +14,11 @@ import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import Icon from "@/components/Icon";
 import MainPopup from "@/components/Popup/MainPopup";
 import { setLoadingOverlay } from "@/store/loading";
+import IconTrash from "@/assets/icons/trash.svg?react";
+import IconEdit from "@/assets/icons/edit.svg?react";
+import { useForm } from "@mantine/form";
+import { IModelCurriculum } from "@/models/ModelFaculty";
+import { validateTextInput } from "@/helpers/functions/validation";
 
 type Props = {
   opened: boolean;
@@ -30,7 +35,10 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
   const [openDeleteCurriculum, setOpenDeleteCurriculum] = useState(false);
   const [targetAdminId, setTargetAdminId] = useState("");
   const [targetAdminName, setTargetAdminName] = useState("");
-
+  const [isEditCurriculum, setIsEditCurriculum] = useState(false);
+  const [selectCurriculum, setSelectCurriculum] = useState<
+    Partial<IModelCurriculum>
+  >({});
   useEffect(() => {
     if (opened) {
       setSearchValue("");
@@ -47,21 +55,47 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
     );
   }, [searchValue, adminList]);
 
-  const addCurriculum = async () => {};
+  const addCurriculum = async () => {
+    if (!form.validate().hasErrors) {
+      setOpenAddCurriculum(false);
+      form.reset();
+    }
+  };
   const deleteCurriculum = async () => {};
+
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      nameTH: "",
+      nameEN: "",
+      code: "",
+    } as Partial<IModelCurriculum>,
+    validate: {
+      nameTH: (value) =>
+        validateTextInput(value, "Curriculum Thai Name", 250, false),
+      nameEN: (value) =>
+        validateTextInput(value, "Curriculum English Name", 250, false),
+      code: (value) =>
+        validateTextInput(value, "Code of Curriculum", 70, false),
+    },
+    validateInputOnBlur: true,
+  });
 
   return (
     <>
       <MainPopup
         opened={openAddCurriculum}
-        onClose={() => setOpenAddCurriculum(false)}
+        onClose={() => {
+          setOpenAddCurriculum(false);
+          setIsEditCurriculum(false);
+          form.reset();
+        }}
         action={() => {
           addCurriculum();
-          setOpenAddCurriculum(false);
         }}
         type="unsaved"
-        labelButtonRight="Add Curriculum"
-        title={`Add Curriculum`}
+        labelButtonRight={`${isEditCurriculum ? "Edit" : "Add"} Curriculum`}
+        title={`${isEditCurriculum ? "Edit" : "Add"} Curriculum`}
         message={
           <>
             <div className="flex flex-col gap-4 w-[50vw]  ">
@@ -75,6 +109,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                 label="Curriculum Thai Name"
                 placeholder="หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิศวกรรมคอมพิวเตอร์ (2563)"
                 size="xs"
+                {...form.getInputProps("nameTH")}
               />
               <TextInput
                 withAsterisk
@@ -86,6 +121,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                 label="Curriculum English Name"
                 placeholder="Bachelor of Engineering Program in Computer Engineering (2563)"
                 size="xs"
+                {...form.getInputProps("nameEN")}
               />
               <TextInput
                 withAsterisk
@@ -97,6 +133,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                 label="Code of Curriculum"
                 placeholder="CPE-2563"
                 size="xs"
+                {...form.getInputProps("code")}
               />
             </div>
           </>
@@ -130,11 +167,15 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
                 <p className="text-b4 text-[#808080]">Curriculum Thai Name</p>
-                <p className="  -translate-y-[2px] text-b1">test</p>
+                <p className="  -translate-y-[2px] text-b2">
+                  {selectCurriculum.nameTH}
+                </p>
                 <p className="text-b4 text-[#808080]">
                   Curriculum English Name
                 </p>
-                <p className="  -translate-y-[2px] text-b1">test</p>
+                <p className="  -translate-y-[2px] text-b2">
+                  {selectCurriculum.nameEN}
+                </p>
               </div>
             </div>
           </>
@@ -145,7 +186,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
           opened={opened}
           onClose={onClose}
           title="Curriculum Management"
-          size="65vw"
+          size="70vw"
           centered
           transitionProps={{ transition: "pop" }}
           classNames={{
@@ -175,8 +216,8 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                 {/* List of Admin */}
                 <div className="flex flex-col overflow-y-auto p-1">
                   {curriculum?.map((item) => (
-                    <div className="w-full items-center last:border-none border-b-[1px] justify-between  px-3 py-4 first:pt-1  flex">
-                      <div className="gap-3 flex items-center">
+                    <div className="w-full items-center last:border-none border-b-[1px] justify-between px-3 py-4 first:pt-1  flex">
+                      <div className="gap-3 flex items-center w-[85%]">
                         <Icon
                           IconComponent={IconPaperClip}
                           className=" size-6 stroke-1 -translate-x-1"
@@ -191,21 +232,51 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                         </div>
                       </div>
 
-                      <Button
-                        color="red"
-                        variant="outline"
-                        onClick={() => setOpenDeleteCurriculum(true)}
-                        loading={loading}
-                      >
-                        Delete
-                      </Button>
+                      <div className="flex flex-row gap-3">
+                        <Button
+                          color="yellow"
+                          variant="outline"
+                          onClick={() => {
+                            setSelectCurriculum(item);
+                            form.setFieldValue("nameTH", item.nameTH);
+                            form.setFieldValue("nameEN", item.nameEN);
+                            form.setFieldValue("code", item.code);
+                            setOpenAddCurriculum(true);
+                            setIsEditCurriculum(true);
+                          }}
+                          loading={loading}
+                        >
+                          {/* <Icon
+                            IconComponent={IconEdit}
+                            className="size-4 stroke-2"
+                          /> */}
+                          Edit
+                        </Button>
+                        <Button
+                          color="red"
+                          variant="outline"
+                          onClick={() => {
+                            setOpenDeleteCurriculum(true);
+                          }}
+                          loading={loading}
+                        >
+                          {/* <Icon
+                            IconComponent={IconTrash}
+                            className="size-4 stroke-2"
+                          /> */}
+                          Delete
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
             <Button
-              onClick={() => setOpenAddCurriculum(true)}
+              onClick={() => {
+                setOpenAddCurriculum(true);
+                setIsEditCurriculum(false);
+              }}
               leftSection={
                 <Icon
                   IconComponent={IconPlus2}
