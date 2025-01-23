@@ -501,6 +501,7 @@ export default function TQF5() {
       <ModalExportTQF5
         opened={openModalExportTQF5}
         onClose={() => setOpenModalExportTQF5(false)}
+        tqf3={tqf3?.id!}
       />
       <div
         className={`flex flex-col h-full w-full overflow-hidden ${
