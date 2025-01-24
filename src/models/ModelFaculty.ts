@@ -11,4 +11,5 @@ export interface IModelCurriculum {
   nameTH: string;
   nameEN: string;
   code: string;
+  disable?: boolean;
 }

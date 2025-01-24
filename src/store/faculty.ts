@@ -8,9 +8,12 @@ export const facultySlice = createSlice({
     setFaculty: (state, action) => {
       return { ...action.payload };
     },
+    updateCurriculumList: (state, action) => {
+      return { ...state, curriculum: [...action.payload] };
+    },
   },
 });
 
-export const { setFaculty } = facultySlice.actions;
+export const { setFaculty, updateCurriculumList } = facultySlice.actions;
 
 export default facultySlice.reducer;
