@@ -1,24 +1,34 @@
-import { Alert, Button, Modal, TextInput } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  FocusTrapInitialFocus,
+  Modal,
+  TextInput,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
-import { IModelUser } from "@/models/ModelUser";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { TbSearch } from "react-icons/tb";
-import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
-import { getUserName } from "@/helpers/functions/function";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
-import { updateAdmin } from "@/services/user/user.service";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconPaperClip from "@/assets/icons/paperClip.svg?react";
 import IconBooks from "@/assets/icons/books.svg?react";
 import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import Icon from "@/components/Icon";
 import MainPopup from "@/components/Popup/MainPopup";
-import { setLoadingOverlay } from "@/store/loading";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import { useForm } from "@mantine/form";
 import { IModelCurriculum } from "@/models/ModelFaculty";
 import { validateTextInput } from "@/helpers/functions/validation";
+import {
+  createCurriculum,
+  deleteCurriculum,
+  getFaculty,
+  updateCurriculum,
+} from "@/services/faculty/faculty.service";
+import { setFaculty, updateCurriculumList } from "@/store/faculty";
+import { isEqual } from "lodash";
 
 type Props = {
   opened: boolean;
@@ -27,125 +37,199 @@ type Props = {
 export default function ModalCurriculum({ opened, onClose }: Props) {
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const user = useAppSelector((state) => state.user);
-  const curriculum = useAppSelector((state) => state.faculty.curriculum);
+  const faculty = useAppSelector((state) => state.faculty);
+  const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
-  const [adminList, setAdminList] = useState<IModelUser[]>([]);
-  const [adminFilter, setAdminFilter] = useState<IModelUser[]>([]);
+  const [curriculumFilter, setCurriculumFilter] = useState<IModelCurriculum[]>(
+    []
+  );
   const [openAddCurriculum, setOpenAddCurriculum] = useState(false);
   const [openDeleteCurriculum, setOpenDeleteCurriculum] = useState(false);
-  const [targetAdminId, setTargetAdminId] = useState("");
-  const [targetAdminName, setTargetAdminName] = useState("");
   const [isEditCurriculum, setIsEditCurriculum] = useState(false);
   const [selectCurriculum, setSelectCurriculum] = useState<
     Partial<IModelCurriculum>
   >({});
-  useEffect(() => {
-    if (opened) {
-      setSearchValue("");
-    }
-  }, [opened]);
-
-  useEffect(() => {
-    setAdminFilter(
-      adminList.filter(
-        (admin) =>
-          `${getUserName(admin, 2)}`.includes(searchValue.toLowerCase()) ||
-          admin.email.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    );
-  }, [searchValue, adminList]);
-
-  const addCurriculum = async () => {
-    if (!form.validate().hasErrors) {
-      setOpenAddCurriculum(false);
-      form.reset();
-    }
-  };
-  const deleteCurriculum = async () => {};
 
   const form = useForm({
-    mode: "uncontrolled",
+    mode: "controlled",
     initialValues: {
       nameTH: "",
       nameEN: "",
       code: "",
-    } as Partial<IModelCurriculum>,
+    } as IModelCurriculum,
     validate: {
       nameTH: (value) =>
         validateTextInput(value, "Curriculum Thai Name", 250, false),
       nameEN: (value) =>
         validateTextInput(value, "Curriculum English Name", 250, false),
       code: (value) =>
-        validateTextInput(value, "Code of Curriculum", 70, false),
+        validateTextInput(value, "Code of Curriculum", 20, false),
     },
     validateInputOnBlur: true,
   });
 
+  useEffect(() => {
+    if (opened) {
+      fetchCur();
+      setSearchValue("");
+    }
+  }, [opened]);
+
+  useEffect(() => {
+    if (faculty.curriculum) {
+      setCurriculumFilter(
+        faculty.curriculum.filter(
+          (cur) =>
+            cur.nameTH.includes(searchValue) ||
+            cur.nameEN.toLowerCase().includes(searchValue.toLowerCase())
+        )
+      );
+    }
+  }, [searchValue, faculty]);
+
+  const fetchCur = async () => {
+    const res = await getFaculty(user.facultyCode);
+    if (res) {
+      setCurriculumFilter(res.curriculum);
+      dispatch(setFaculty({ ...res }));
+    }
+  };
+
+  const addCurriculum = async () => {
+    if (!form.validate().hasErrors) {
+      const res = await createCurriculum(faculty.id, form.getValues());
+      if (res) {
+        dispatch(updateCurriculumList(res.curriculum));
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          "Curriculum Added Successfully",
+          `${form.getValues().code} has been successfully added.`
+        );
+        setOpenAddCurriculum(false);
+        form.reset();
+      }
+    }
+  };
+
+  const editCurriculum = async () => {
+    if (!form.validate().hasErrors) {
+      const res = await updateCurriculum(
+        faculty.id,
+        selectCurriculum.code!,
+        form.getValues()
+      );
+      if (res) {
+        dispatch(updateCurriculumList(res.curriculum));
+        showNotifications(
+          NOTI_TYPE.SUCCESS,
+          `Curriculum ${form.getValues().code} Edited Successfully`,
+          `${form.getValues().code} has been successfully updated.`
+        );
+        setOpenAddCurriculum(false);
+        setSelectCurriculum({});
+        form.reset();
+      }
+    }
+  };
+
+  const removeCurriculum = async () => {
+    const res = await deleteCurriculum(faculty.id, selectCurriculum.code!);
+    if (res) {
+      dispatch(updateCurriculumList(res.curriculum));
+      showNotifications(
+        NOTI_TYPE.SUCCESS,
+        `Curriculum ${form.getValues().code} Deleted Successfully`,
+        `${form.getValues().code} has been successfully removed.`
+      );
+      setOpenDeleteCurriculum(false);
+      setSelectCurriculum({});
+    }
+  };
+
+  const closeModalAddEdit = () => {
+    setOpenAddCurriculum(false);
+    setIsEditCurriculum(false);
+    form.reset();
+  };
+
   return (
     <>
-      <MainPopup
+      <Modal
         opened={openAddCurriculum}
-        onClose={() => {
-          setOpenAddCurriculum(false);
-          setIsEditCurriculum(false);
-          form.reset();
-        }}
-        action={() => {
-          addCurriculum();
-        }}
-        type="unsaved"
-        labelButtonRight={`${isEditCurriculum ? "Edit" : "Add"} Curriculum`}
+        onClose={closeModalAddEdit}
+        closeOnClickOutside={false}
         title={`${isEditCurriculum ? "Edit" : "Add"} Curriculum`}
-        message={
-          <>
-            <div className="flex flex-col gap-4 w-[50vw]  ">
-              <TextInput
-                withAsterisk
-                classNames={{
-                  input: ` acerSwift:max-macair133:text-b4`,
-                  label: "acerSwift:max-macair133:!text-b4 mb-1",
-                  description: "acerSwift:max-macair133:text-b5",
-                }}
-                label="Curriculum Thai Name"
-                placeholder="หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิศวกรรมคอมพิวเตอร์ (2563)"
-                size="xs"
-                {...form.getInputProps("nameTH")}
-              />
-              <TextInput
-                withAsterisk
-                classNames={{
-                  input: ` acerSwift:max-macair133:text-b4`,
-                  label: "acerSwift:max-macair133:!text-b4 mb-1",
-                  description: "acerSwift:max-macair133:text-b5",
-                }}
-                label="Curriculum English Name"
-                placeholder="Bachelor of Engineering Program in Computer Engineering (2563)"
-                size="xs"
-                {...form.getInputProps("nameEN")}
-              />
-              <TextInput
-                withAsterisk
-                classNames={{
-                  input: ` acerSwift:max-macair133:text-b4 mb-3`,
-                  label: "acerSwift:max-macair133:!text-b4 mb-1",
-                  description: "acerSwift:max-macair133:text-b5",
-                }}
-                label="Code of Curriculum"
-                placeholder="CPE-2563"
-                size="xs"
-                {...form.getInputProps("code")}
-              />
-            </div>
-          </>
-        }
-      />
+        size="50vw"
+        centered
+        transitionProps={{ transition: "pop" }}
+        classNames={{
+          title: "",
+          content:
+            "flex flex-col justify-start font-medium leading-[24px] text-[14px] item-center  overflow-hidden ",
+        }}
+      >
+        <FocusTrapInitialFocus />
+        <div className="flex flex-col gap-4">
+          <TextInput
+            withAsterisk
+            classNames={{
+              input: ` acerSwift:max-macair133:text-b4`,
+              label: "acerSwift:max-macair133:!text-b4 mb-1",
+              description: "acerSwift:max-macair133:text-b5",
+            }}
+            label="Curriculum Thai Name"
+            placeholder="หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิศวกรรมคอมพิวเตอร์ (2563)"
+            size="xs"
+            {...form.getInputProps("nameTH")}
+          />
+          <TextInput
+            withAsterisk
+            classNames={{
+              input: ` acerSwift:max-macair133:text-b4`,
+              label: "acerSwift:max-macair133:!text-b4 mb-1",
+              description: "acerSwift:max-macair133:text-b5",
+            }}
+            label="Curriculum English Name"
+            placeholder="Bachelor of Engineering Program in Computer Engineering (2563)"
+            size="xs"
+            {...form.getInputProps("nameEN")}
+          />
+          <TextInput
+            withAsterisk
+            classNames={{
+              input: ` acerSwift:max-macair133:text-b4 mb-3`,
+              label: "acerSwift:max-macair133:!text-b4 mb-1",
+              description: "acerSwift:max-macair133:text-b5",
+            }}
+            label="Code of Curriculum"
+            placeholder="CPE-2563"
+            size="xs"
+            {...form.getInputProps("code")}
+          />
+          <div className="flex gap-2 justify-end">
+            <Button
+              onClick={closeModalAddEdit}
+              variant="subtle"
+              loading={loading}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={isEditCurriculum ? editCurriculum : addCurriculum}
+              loading={loading}
+              disabled={
+                isEditCurriculum && isEqual(selectCurriculum, form.getValues())
+              }
+            >
+              {isEditCurriculum ? "Edit" : "Add"} Curriculum
+            </Button>
+          </div>
+        </div>
+      </Modal>
       <MainPopup
         opened={openDeleteCurriculum}
         onClose={() => setOpenDeleteCurriculum(false)}
-        action={() => {
-          deleteCurriculum();
-          setOpenDeleteCurriculum(false);
-        }}
+        action={() => removeCurriculum()}
         type="delete"
         labelButtonRight="Delete Curriculum"
         title={`Delete Curriculum`}
@@ -213,9 +297,8 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                   }
                   rightSectionPointerEvents="all"
                 />
-                {/* List of Admin */}
                 <div className="flex flex-col overflow-y-auto p-1">
-                  {curriculum?.map((item) => (
+                  {curriculumFilter?.map((item) => (
                     <div className="w-full items-center last:border-none border-b-[1px] justify-between px-3 py-4 first:pt-1  flex">
                       <div className="gap-3 flex items-center w-[85%]">
                         <Icon
@@ -234,10 +317,15 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
 
                       <div className="flex flex-row gap-3">
                         <Button
+                          color="#f39d4e"
                           variant="outline"
-                          className="!text-edit border-edit  hover:bg-[#F39D4E]/10"
+                          // className="!text-edit border-edit  hover:bg-[#F39D4E]/10"
                           onClick={() => {
-                            setSelectCurriculum(item);
+                            setSelectCurriculum({
+                              nameTH: item.nameTH,
+                              nameEN: item.nameEN,
+                              code: item.code,
+                            });
                             form.setFieldValue("nameTH", item.nameTH);
                             form.setFieldValue("nameEN", item.nameEN);
                             form.setFieldValue("code", item.code);
@@ -245,6 +333,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                             setIsEditCurriculum(true);
                           }}
                           loading={loading}
+                          disabled={item.disable}
                         >
                           {/* <Icon
                             IconComponent={IconEdit}
@@ -256,10 +345,11 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                           color="red"
                           variant="outline"
                           onClick={() => {
-                            setOpenDeleteCurriculum(true);
                             setSelectCurriculum(item);
+                            setOpenDeleteCurriculum(true);
                           }}
                           loading={loading}
+                          disabled={item.disable}
                         >
                           {/* <Icon
                             IconComponent={IconTrash}
