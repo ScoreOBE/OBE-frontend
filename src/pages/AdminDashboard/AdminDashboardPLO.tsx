@@ -171,7 +171,7 @@ export default function AdminDashboardPLO() {
               coursesForPLO.map((course, courseIndex) => {
                 const insList = getUniqueInstructors(course.sections!);
                 const uniqueTopics = getUniqueTopicsWithTQF(course.sections!);
-                let ploScore;
+                let ploScore: number | undefined;
                 return course.type === COURSE_TYPE.SEL_TOPIC.en ? (
                   uniqueTopics.map((sec, topicIndex) => {
                     return (
