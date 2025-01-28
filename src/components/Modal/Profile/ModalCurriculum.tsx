@@ -299,7 +299,10 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                 />
                 <div className="flex flex-col overflow-y-auto p-1">
                   {curriculumFilter?.map((item) => (
-                    <div className="w-full items-center last:border-none border-b-[1px] justify-between px-3 py-4 first:pt-1  flex">
+                    <div
+                      key={item.code}
+                      className="w-full items-center last:border-none border-b-[1px] justify-between px-3 py-4 first:pt-1  flex"
+                    >
                       <div className="gap-3 flex items-center w-[85%]">
                         <Icon
                           IconComponent={IconPaperClip}

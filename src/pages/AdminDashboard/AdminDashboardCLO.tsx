@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Button, Table, Tabs, Tooltip } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
-import IconExcel from "@/assets/icons/excel.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconCheck from "@/assets/icons/Check.svg?react";
 import { useSearchParams } from "react-router-dom";
@@ -30,6 +29,7 @@ import { IModelPLO } from "@/models/ModelPLO";
 import { getOnePLO } from "@/services/plo/plo.service";
 import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { setCourseManagementList } from "@/store/courseManagement";
+
 export default function AdminDashboardCLO() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);

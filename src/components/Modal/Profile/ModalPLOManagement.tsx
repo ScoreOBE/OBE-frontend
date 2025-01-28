@@ -55,14 +55,12 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
   >({});
   const [ploCollectDupli, setPLOCollectionDupli] = useState<IModelPLO[]>([]);
   const [selectPloDupli, setSelectPloDupli] = useState<Partial<IModelPLO>>({});
-
   const [modalAddPLO, { open: openModalAddPLO, close: closeModalAddPLO }] =
     useDisclosure(false);
   const [
     modalDuplicatePLO,
     { open: openModalDuplicatePLO, close: closeModalDuplicatePLO },
   ] = useDisclosure(false);
-  const [openModalAddPLONo, setOpenModalAddPLONo] = useState(false);
   const [openPopupDeletePLOCollection, setOpenPopupDeletePLOCollection] =
     useState(false);
 
@@ -85,7 +83,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
 
   useEffect(() => {
     const fetchPLOTab = async () => {
-      const res = await getPLOs({ manage: true, role: user.role });
+      const res = await getPLOs({ manage: true });
       if (res) {
         setSelectPlo("Dashboard");
         setPloActive([{ name: "Dashboard" }, ...res.plos]);
