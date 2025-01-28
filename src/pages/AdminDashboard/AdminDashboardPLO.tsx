@@ -353,11 +353,13 @@ export default function AdminDashboardPLO() {
 
   return (
     <>
-      <DrawerPLOdes
-        opened={openDrawerPLOdes}
-        onClose={() => setOpenDrawerPLOdes(false)}
-        data={curriculumPLO}
-      />
+      {curriculumPLO && (
+        <DrawerPLOdes
+          opened={openDrawerPLOdes}
+          onClose={() => setOpenDrawerPLOdes(false)}
+          data={curriculumPLO}
+        />
+      )}
 
       <ModalExportPLO
         opened={openModalExportPLO}
