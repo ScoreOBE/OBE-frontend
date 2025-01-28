@@ -27,7 +27,12 @@ import {
   getFaculty,
   updateCurriculum,
 } from "@/services/faculty/faculty.service";
-import { setFaculty, updateCurriculumList } from "@/store/faculty";
+import {
+  addCurriculum,
+  editCurriculum,
+  removeCurriculum,
+  setFaculty,
+} from "@/store/faculty";
 import { isEqual } from "lodash";
 
 type Props = {
@@ -63,7 +68,11 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
       nameEN: (value) =>
         validateTextInput(value, "Curriculum English Name", 250, false),
       code: (value) =>
-        validateTextInput(value, "Code of Curriculum", 20, false),
+        validateTextInput(value, "Code of Curriculum", 20, false) ??
+        (faculty.curriculum.some(
+          ({ code }) => code == value && code != selectCurriculum.code
+        ) &&
+          `${value} is already exists.`),
     },
     validateInputOnBlur: true,
   });
@@ -95,11 +104,11 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
     }
   };
 
-  const addCurriculum = async () => {
+  const onClickAddCurriculum = async () => {
     if (!form.validate().hasErrors) {
       const res = await createCurriculum(faculty.id, form.getValues());
       if (res) {
-        dispatch(updateCurriculumList(res.curriculum));
+        dispatch(addCurriculum(form.getValues()));
         showNotifications(
           NOTI_TYPE.SUCCESS,
           "Curriculum Added Successfully",
@@ -111,7 +120,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
     }
   };
 
-  const editCurriculum = async () => {
+  const onClickEditCurriculum = async () => {
     if (!form.validate().hasErrors) {
       const res = await updateCurriculum(
         faculty.id,
@@ -119,7 +128,12 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
         form.getValues()
       );
       if (res) {
-        dispatch(updateCurriculumList(res.curriculum));
+        dispatch(
+          editCurriculum({
+            code: selectCurriculum.code,
+            value: form.getValues(),
+          })
+        );
         showNotifications(
           NOTI_TYPE.SUCCESS,
           `Curriculum ${form.getValues().code} Edited Successfully`,
@@ -132,10 +146,10 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
     }
   };
 
-  const removeCurriculum = async () => {
+  const onClickRemoveCurriculum = async () => {
     const res = await deleteCurriculum(faculty.id, selectCurriculum.code!);
     if (res) {
-      dispatch(updateCurriculumList(res.curriculum));
+      dispatch(removeCurriculum(selectCurriculum.code));
       showNotifications(
         NOTI_TYPE.SUCCESS,
         `Curriculum ${form.getValues().code} Deleted Successfully`,
@@ -215,7 +229,9 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
               Cancel
             </Button>
             <Button
-              onClick={isEditCurriculum ? editCurriculum : addCurriculum}
+              onClick={
+                isEditCurriculum ? onClickEditCurriculum : onClickAddCurriculum
+              }
               loading={loading}
               disabled={
                 isEditCurriculum && isEqual(selectCurriculum, form.getValues())
@@ -229,7 +245,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
       <MainPopup
         opened={openDeleteCurriculum}
         onClose={() => setOpenDeleteCurriculum(false)}
-        action={() => removeCurriculum()}
+        action={() => onClickRemoveCurriculum()}
         type="delete"
         labelButtonRight="Delete Curriculum"
         title={`Delete Curriculum`}

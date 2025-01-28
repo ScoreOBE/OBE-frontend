@@ -8,12 +8,28 @@ export const facultySlice = createSlice({
     setFaculty: (state, action) => {
       return { ...action.payload };
     },
-    updateCurriculumList: (state, action) => {
-      return { ...state, curriculum: [...action.payload] };
+    addCurriculum: (state, action) => {
+      state.curriculum.push({ ...action.payload });
+      return state;
+    },
+    editCurriculum: (state, action) => {
+      state.curriculum = state.curriculum.map((item) =>
+        item.code === action.payload.code
+          ? { ...item, ...action.payload.value }
+          : item
+      );
+      return state;
+    },
+    removeCurriculum: (state, action) => {
+      state.curriculum = state.curriculum.filter(
+        ({ code }) => code != action.payload
+      );
+      return state;
     },
   },
 });
 
-export const { setFaculty, updateCurriculumList } = facultySlice.actions;
+export const { setFaculty, addCurriculum, editCurriculum, removeCurriculum } =
+  facultySlice.actions;
 
 export default facultySlice.reducer;
