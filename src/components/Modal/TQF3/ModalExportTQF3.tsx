@@ -125,7 +125,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
         title: "acerSwift:max-macair133:!text-b1",
       }}
     >
-      <div className="flex sm:max-ipad11:h-[500px] acerSwift:max-macair133:h-[400px] acerSwift:max-macair133:mb-4 sm:max-ipad11:overflow-y-hidden flex-col">
+      <div className="flex sm:max-ipad11:h-[500px] acerSwift:max-macair133:h-[400px] macair133:max-samsungA24:h-[500px] acerSwift:max-macair133:mb-4 sm:max-ipad11:overflow-y-hidden flex-col">
         {!dataExport.part1?.updatedAt ? (
           <div className="flex flex-col mt-3  items-center  ">
             <p className=" text-b2 acerSwift:max-macair133:!text-b3 font-semibold">
@@ -176,7 +176,7 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
               }}
               value={selectedParts}
               onChange={setSelectedParts}
-              className="sm:max-ipad11:max-h-[420px] acerSwift:max-macair133:max-h-[305px] overflow-y-auto my-4"
+              className="sm:max-ipad11:max-h-[420px] acerSwift:max-macair133:max-h-[305px] macair133:max-samsungA24:max-h-[420px] overflow-y-auto my-4"
             >
               {Object.values(PartTopicTQF3)
                 .slice(0, 6)
