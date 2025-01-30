@@ -145,7 +145,7 @@ export default function Part7TQF3({ setForm }: Props) {
               title={
                 <p className="font-semibold acerSwift:max-macair133:!text-b3">
                   Each CLO must be linked to at least one PLO.
-                  {tqf3.ploRequired?.length && (
+                  {!!tqf3.ploRequired?.length && (
                     <>
                       And if you see
                       <span className="text-red-500 font-bold">'*'</span>
