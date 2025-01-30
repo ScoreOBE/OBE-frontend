@@ -7,13 +7,12 @@ import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import { useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowNavbar, setShowSidebar } from "@/store/config";
-import { addLoadMoreAllCourse, setAllCourseList } from "@/store/allCourse";
+import { setAllCourseList } from "@/store/allCourse";
 import { IModelPLO } from "@/models/ModelPLO";
 import ModalExportPLO from "@/components/Modal/ModalExportPLO";
 import { getPLOs } from "@/services/plo/plo.service";
@@ -56,11 +55,15 @@ export default function AdminDashboardPLO() {
       if (acaYear && acaYear.id != term.id) {
         setTerm(acaYear);
         fetchPLOList(acaYear.year, acaYear.semester);
-        const payloadCourse = initialPayload();
-        setPayload(payloadCourse);
       }
     }
   }, [academicYear, term, params]);
+
+  useEffect(() => {
+    if (term.id) {
+      fetchCourse();
+    }
+  }, [term]);
 
   useEffect(() => {
     if (term) {
@@ -88,10 +91,11 @@ export default function AdminDashboardPLO() {
     return {
       ...new CourseRequestDTO(),
       manage: true,
+      ploRequire: true,
       year: term.year!,
       semester: term.semester!,
       search: courseList.search,
-      hasMore: courseList.total >= payload?.limit,
+      ignorePage: true,
     };
   };
 
@@ -111,36 +115,20 @@ export default function AdminDashboardPLO() {
     dispatch(setLoading(false));
   };
 
-  const onShowMore = async () => {
-    if (payload.year && payload.semester) {
-      const res = await getCourse({ ...payload, page: payload.page + 1 });
-      if (res.length) {
-        dispatch(addLoadMoreAllCourse(res));
-        setPayload({
-          ...payload,
-          page: payload.page + 1,
-          hasMore: res.length >= payload.limit,
-        });
-      } else {
-        setPayload({ ...payload, hasMore: false });
-      }
-    }
-  };
-
   const ploView = (plo: IModelPLO) => {
     const filterCoursesForPLO = (item: any) => {
       return courseList.courses.filter(
         (course) =>
-          course.TQF3?.part7?.data.some(({ plos }) =>
-            (plos as string[]).includes(item.id)
-          ) ||
+          course.ploRequire
+            ?.find((e) => e.plo == plo.id)
+            ?.list.some((e) => e == item.id) ||
           course.sections.some(
             (sec) =>
               sec.curriculum &&
               plo.curriculum.includes(sec.curriculum) &&
-              sec.TQF3?.part7?.data.some(({ plos }) =>
-                (plos as string[]).includes(item.id)
-              )
+              sec.ploRequire
+                ?.find((e) => e.plo == plo.id)
+                ?.list.some((e) => e == item.id)
           )
       );
     };
@@ -171,9 +159,28 @@ export default function AdminDashboardPLO() {
               coursesForPLO.map((course, courseIndex) => {
                 const insList = getUniqueInstructors(course.sections!);
                 const uniqueTopics = getUniqueTopicsWithTQF(course.sections!);
-                let ploScore: number | undefined;
+                let clos = course.TQF3?.part7?.data
+                  .filter(({ plos }) => (plos as string[]).includes(item.id))
+                  .map(({ clo }) => clo);
+                let sum = clos?.length
+                  ? course.TQF5?.part3?.data
+                      .filter(({ clo }) => clos?.includes(clo))
+                      .reduce((a, b) => a + b.score, 0)
+                  : undefined;
+                let ploScore = sum ? sum / (clos?.length ?? 1) : undefined;
                 return course.type === COURSE_TYPE.SEL_TOPIC.en ? (
                   uniqueTopics.map((sec, topicIndex) => {
+                    clos = sec.TQF3?.part7?.data
+                      .filter(({ plos }) =>
+                        (plos as string[]).includes(item.id)
+                      )
+                      .map(({ clo }) => clo);
+                    sum = clos?.length
+                      ? sec.TQF5?.part3?.data
+                          .filter(({ clo }) => clos?.includes(clo))
+                          .reduce((a, b) => a + b.score, 0)
+                      : undefined;
+                    ploScore = sum ? sum / (clos?.length ?? 1) : undefined;
                     return (
                       <Table.Tr
                         key={`${item.id}-${course.courseNo}-${sec.topic}`}
@@ -205,7 +212,7 @@ export default function AdminDashboardPLO() {
                             {sec && <p>({sec.topic})</p>}
                           </div>
                         </Table.Td>
-                        <Table.Td>{ploScore ?? "-"}</Table.Td>
+                        <Table.Td>{ploScore?.toFixed(2) ?? "-"}</Table.Td>
                         <Table.Td>
                           {insList.map((ins, index1) => {
                             return (
@@ -240,7 +247,7 @@ export default function AdminDashboardPLO() {
                       {course.courseNo}
                     </Table.Td>
                     <Table.Td>{course.courseName}</Table.Td>
-                    <Table.Td>{ploScore ?? "-"}</Table.Td>
+                    <Table.Td>{ploScore?.toFixed(2) ?? "-"}</Table.Td>
                     <Table.Td>
                       {insList.map((ins, index1) => {
                         return (
@@ -279,8 +286,15 @@ export default function AdminDashboardPLO() {
   };
 
   const courseView = (plo: IModelPLO) => {
-    const ploScores = (tqf3: IModelTQF3, tqf5: IModelTQF5) => {
+    const ploScores = (
+      ploRequire: string[],
+      tqf3: IModelTQF3,
+      tqf5: IModelTQF5
+    ) => {
       return plo.data.map((item) => {
+        if (!ploRequire.includes(item.id)) {
+          return <Table.Th key={item.id}>-</Table.Th>;
+        }
         const clos = tqf3.part7?.data
           .filter(({ plos }) => (plos as string[]).includes(item.id))
           .map(({ clo }) => clo);
@@ -332,7 +346,12 @@ export default function AdminDashboardPLO() {
                           {sec && <p>({sec.topic})</p>}
                         </div>
                       </Table.Td>
-                      {ploScores(sec.TQF3!, sec.TQF5!)}
+                      {ploScores(
+                        sec.ploRequire?.find((e) => e.plo == plo.id)
+                          ?.list as string[],
+                        sec.TQF3!,
+                        sec.TQF5!
+                      )}
                     </Table.Tr>
                   );
                 })
@@ -342,7 +361,12 @@ export default function AdminDashboardPLO() {
                     {course.courseNo}
                   </Table.Td>
                   <Table.Td>{course.courseName}</Table.Td>
-                  {ploScores(course.TQF3!, course.TQF5!)}
+                  {ploScores(
+                    course.ploRequire?.find((e) => e.plo == plo.id)
+                      ?.list as string[],
+                    course.TQF3!,
+                    course.TQF5!
+                  )}
                 </Table.Tr>
               );
             })}
@@ -442,6 +466,7 @@ export default function AdminDashboardPLO() {
               </Tabs.List>
               {ploList.map((plo) => (
                 <Tabs.Panel
+                  key={plo.id}
                   className="flex flex-col h-full w-full overflow-hidden gap-1"
                   value={plo.id}
                 >
@@ -461,19 +486,11 @@ export default function AdminDashboardPLO() {
                       value={selectTab || "ploView"}
                     >
                       {selectTab == "ploView" || courseList.courses.length ? (
-                        <InfiniteScroll
-                          dataLength={courseList.courses.length}
-                          next={onShowMore}
-                          height={"100%"}
-                          hasMore={payload?.hasMore}
-                          className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
-                          style={{ height: "fit-content" }}
-                          loader={<Loading />}
-                        >
+                        <div className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary">
                           {selectTab == "ploView"
                             ? ploView(plo)
                             : courseView(plo)}
-                        </InfiniteScroll>
+                        </div>
                       ) : (
                         <div className=" flex flex-row px-[75px] flex-1 justify-between">
                           <div className="h-full  justify-center flex flex-col">

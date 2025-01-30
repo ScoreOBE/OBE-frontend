@@ -27,17 +27,13 @@ import DrawerPLOdes from "@/components/DrawerPLO";
 import ModalExportPLO from "@/components/Modal/ModalExportPLO";
 import { IModelPLO } from "@/models/ModelPLO";
 import { getOnePLO } from "@/services/plo/plo.service";
-import { getCourseManagement } from "@/services/courseManagement/courseManagement.service";
-import { setCourseManagementList } from "@/store/courseManagement";
+import { IModelPLORequire } from "@/models/ModelCourseManagement";
 
 export default function AdminDashboardCLO() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const academicYear = useAppSelector((state) => state.academicYear);
-  const courseManagements = useAppSelector(
-    (state) => state.courseManagement.courseManagements
-  );
   const courseList = useAppSelector((state) => state.allCourse);
   const [curriculumPLO, setCurriculumPLO] = useState<Partial<IModelPLO>>({});
   const dispatch = useAppDispatch();
@@ -87,7 +83,6 @@ export default function AdminDashboardCLO() {
         fetchPLO();
       }
       fetchCourse();
-      fetchCourseManagement();
     }
   }, [selectCurriculum]);
 
@@ -108,27 +103,13 @@ export default function AdminDashboardCLO() {
     return {
       ...new CourseRequestDTO(),
       manage: true,
+      ploRequire: true,
       year: term.year!,
       semester: term.semester!,
       curriculum: dep,
       search: courseList.search,
       hasMore: courseList.total >= payload?.limit,
     };
-  };
-
-  const fetchCourseManagement = async () => {
-    dispatch(setLoading(true));
-    if (curriculum?.length) {
-      const payloadCourse = initialPayload();
-      const res = await getCourseManagement({
-        ...payloadCourse,
-        ignorePage: true,
-      });
-      if (res) {
-        dispatch(setCourseManagementList(res));
-      }
-    }
-    dispatch(setLoading(false));
   };
 
   const fetchCourse = async () => {
@@ -171,12 +152,9 @@ export default function AdminDashboardCLO() {
     sec?: Partial<IModelSection>
   ) => {
     const dataTQF3 = sec?.TQF3 || course.TQF3;
-    const ploRequire = sec
-      ? courseManagements
-          .find((e) => e.courseNo === course.courseNo)
-          ?.sections.find(({ topic }) => topic == sec.topic)?.ploRequire
-      : courseManagements.find((e) => e.courseNo === course.courseNo)
-          ?.ploRequire;
+    const ploRequire: IModelPLORequire[] = sec
+      ? (sec as any).ploRequire
+      : (course as any).ploRequire;
     const ploRequireNo = curriculumPLO?.data?.filter((plo) => {
       if (ploRequire?.[0]?.list) {
         return ploRequire[0].list.some((item) =>
@@ -184,7 +162,6 @@ export default function AdminDashboardCLO() {
         );
       }
     });
-
     return dataTQF3?.part2 ? (
       dataTQF3.part2!.clo.map((clo) => (
         <Table.Tr key={`${index}-${clo.id}`}>

@@ -130,7 +130,8 @@ export default function Sidebar() {
     }
     if (
       [ROLE.SUPREME_ADMIN, ROLE.ADMIN].includes(user.role) &&
-      !allCourseList.length
+      !allCourseList.length &&
+      !path.includes(ROUTE_PATH.ADMIN_DASHBOARD)
     ) {
       const resAllCourse = await getCourse({ ...payload, manage: true });
       if (resAllCourse) {

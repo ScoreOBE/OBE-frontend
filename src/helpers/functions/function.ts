@@ -6,6 +6,7 @@ import { isEmpty } from "lodash";
 import moment from "moment";
 import { ROLE } from "../constants/enum";
 import { ROUTE_PATH } from "../constants/route";
+import { IModelPLORequire } from "@/models/ModelCourseManagement";
 
 export const goToDashboard = (role: ROLE) => {
   switch (role) {
@@ -77,7 +78,12 @@ export const getUniqueInstructors = (
 export const getUniqueTopicsWithTQF = (sections: Partial<IModelSection>[]) => {
   const uniqueTopics = new Map<
     string,
-    { topic: string; TQF3?: IModelTQF3; TQF5?: IModelTQF5 }
+    {
+      topic: string;
+      TQF3?: IModelTQF3;
+      TQF5?: IModelTQF5;
+      ploRequire: IModelPLORequire[];
+    }
   >();
   sections.forEach((sec) => {
     if (sec.topic && (sec.TQF3 || sec.TQF5)) {
@@ -86,6 +92,7 @@ export const getUniqueTopicsWithTQF = (sections: Partial<IModelSection>[]) => {
           topic: sec.topic,
           TQF3: sec.TQF3,
           TQF5: sec.TQF5,
+          ploRequire: sec.ploRequire || [],
         });
       }
     }

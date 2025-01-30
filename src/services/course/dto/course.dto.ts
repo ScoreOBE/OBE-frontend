@@ -11,4 +11,5 @@ export class CourseRequestDTO {
   curriculum?: string[] = [];
   tqf3?: string[] = [];
   tqf5?: string[] = [];
+  ploRequire: boolean = false;
 }
