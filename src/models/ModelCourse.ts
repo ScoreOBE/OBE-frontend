@@ -1,6 +1,7 @@
 import { IModelUser } from "./ModelUser";
 import { IModelTQF3 } from "./ModelTQF3";
 import { IModelTQF5 } from "./ModelTQF5";
+import { IModelPLORequire } from "./ModelCourseManagement";
 
 export interface IModelCourse {
   id: string;
@@ -13,6 +14,7 @@ export interface IModelCourse {
   addFirstTime?: boolean;
   TQF3?: IModelTQF3;
   TQF5?: IModelTQF5;
+  ploRequire?: IModelPLORequire[];
 }
 
 export interface IModelSection {
@@ -33,6 +35,7 @@ export interface IModelSection {
   assignments: IModelAssignment[];
   TQF3?: IModelTQF3;
   TQF5?: IModelTQF5;
+  ploRequire?: IModelPLORequire[];
 }
 
 export interface IModelAssignment {
