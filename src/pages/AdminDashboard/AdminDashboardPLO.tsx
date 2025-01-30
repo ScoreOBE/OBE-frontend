@@ -56,11 +56,15 @@ export default function AdminDashboardPLO() {
       if (acaYear && acaYear.id != term.id) {
         setTerm(acaYear);
         fetchPLOList(acaYear.year, acaYear.semester);
-        const payloadCourse = initialPayload();
-        setPayload(payloadCourse);
       }
     }
   }, [academicYear, term, params]);
+
+  useEffect(() => {
+    if (term.id) {
+      fetchCourse();
+    }
+  }, [term]);
 
   useEffect(() => {
     if (term) {
