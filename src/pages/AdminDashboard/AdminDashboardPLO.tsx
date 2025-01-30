@@ -292,7 +292,7 @@ export default function AdminDashboardPLO() {
       tqf5: IModelTQF5
     ) => {
       return plo.data.map((item) => {
-        if (!ploRequire.includes(item.id)) {
+        if (!ploRequire?.includes(item.id)) {
           return <Table.Th key={item.id}>-</Table.Th>;
         }
         const clos = tqf3.part7?.data
