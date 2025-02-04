@@ -44,7 +44,6 @@ function App() {
       )
         return;
       checkToken(token);
-      fetchData();
     } else if (
       ![ROUTE_PATH.LOGIN, ROUTE_PATH.CMU_ENTRAID_CALLBACK].includes(path)
     ) {
@@ -57,6 +56,8 @@ function App() {
     if (isExpired) {
       localStorage.removeItem("token");
       navigate(ROUTE_PATH.LOGIN);
+    } else {
+      fetchData();
     }
   };
 

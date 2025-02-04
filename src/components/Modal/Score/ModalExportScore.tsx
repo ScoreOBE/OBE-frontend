@@ -1,13 +1,10 @@
-import { Button, Checkbox, Chip, Group, Modal } from "@mantine/core";
+import { Button, Chip, Group, Modal } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { showNotifications } from "@/helpers/notifications/showNotifications";
-import { NOTI_TYPE } from "@/helpers/constants/enum";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppSelector } from "@/store";
 import { useParams } from "react-router-dom";
 import Icon from "../../Icon";
 import IconExcel from "@/assets/icons/excel.svg?react";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
-import { setLoadingOverlay } from "@/store/loading";
 import { getSectionNo } from "@/helpers/functions/function";
 import * as XLSX from "xlsx";
 
@@ -135,7 +132,8 @@ export default function ModalExportScore({ opened, onClose }: Props) {
           <p>Export score {courseNo}</p>
           <p className="text-b4 acerSwift:max-macair133:!text-b5 inline-flex items-center text-[#20884f] ">
             File format:{" "}
-            <Icon IconComponent={IconExcel} className="ml-1 mr-2 size-4" />  .xlsx
+            <Icon IconComponent={IconExcel} className="ml-1 mr-2 size-4" />
+            .xlsx
           </p>
         </div>
       }
