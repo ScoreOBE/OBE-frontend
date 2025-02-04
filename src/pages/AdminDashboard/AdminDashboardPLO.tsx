@@ -13,17 +13,31 @@ import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
 import { setShowNavbar, setShowSidebar } from "@/store/config";
 import { setAllCourseList } from "@/store/allCourse";
-import { IModelPLO } from "@/models/ModelPLO";
+import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import ModalExportPLO from "@/components/Modal/ModalExportPLO";
 import { getPLOs } from "@/services/plo/plo.service";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import {
+  findMostDuplicateCurriculum,
   getUniqueInstructors,
   getUniqueTopicsWithTQF,
 } from "@/helpers/functions/function";
 import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelTQF5 } from "@/models/ModelTQF5";
+
+export type PloScore = {
+  plo: IModelPLONo;
+  courses: CoursePloScore[];
+};
+
+export type CoursePloScore = {
+  courseNo: string;
+  courseName: string;
+  curriculum?: string;
+  topic?: string;
+  avgScore: number;
+};
 
 export default function AdminDashboardPLO() {
   const loading = useAppSelector((state) => state.loading.loading);
@@ -37,6 +51,7 @@ export default function AdminDashboardPLO() {
   const [ploList, setPloList] = useState<IModelPLO[]>([]);
   const [selectTab, setSelectTab] = useState<string | null>("ploView");
   const [curriculumPLO, setCurriculumPLO] = useState<Partial<IModelPLO>>({});
+  const [ploScores, setPloScores] = useState<PloScore[]>([]);
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
   const [openModalExportPLO, setOpenModalExportPLO] = useState(false);
 
@@ -79,6 +94,12 @@ export default function AdminDashboardPLO() {
     }
   }, [localStorage.getItem("search")]);
 
+  useEffect(() => {
+    if (curriculumPLO.id && courseList.courses.length) {
+      calculatePloScores();
+    }
+  }, [courseList, curriculumPLO]);
+
   const fetchPLOList = async (year: number, semester: number) => {
     const res = await getPLOs({ year, semester });
     if (res) {
@@ -115,23 +136,76 @@ export default function AdminDashboardPLO() {
     dispatch(setLoading(false));
   };
 
-  const ploView = (plo: IModelPLO) => {
-    const filterCoursesForPLO = (item: any) => {
-      return courseList.courses.filter(
-        (course) =>
-          course.ploRequire
-            ?.find((e) => e.plo == plo.id)
-            ?.list.some((e) => e == item.id) ||
-          course.sections.some(
-            (sec) =>
-              sec.curriculum &&
-              plo.curriculum.includes(sec.curriculum) &&
-              sec.ploRequire
-                ?.find((e) => e.plo == plo.id)
-                ?.list.some((e) => e == item.id)
+  const filterCoursesForPLO = (plo: Partial<IModelPLO>, item: any) => {
+    return courseList.courses.filter((course) => {
+      const hasPloRequirement = course.ploRequire?.some(
+        (e) => e.plo == plo.id && e.list.includes(item.id)
+      );
+      const hasSectionPlo = course.sections.some(
+        (sec) =>
+          sec.curriculum &&
+          plo.curriculum?.includes(sec.curriculum) &&
+          sec.ploRequire?.some(
+            (e) => e.plo == plo.id && e.list.includes(item.id)
           )
       );
-    };
+      return hasPloRequirement || hasSectionPlo;
+    });
+  };
+
+  const calculatePloScores = () => {
+    const updatedPloScores: PloScore[] = curriculumPLO.data!.map((item) => {
+      const coursesForPLO = filterCoursesForPLO(curriculumPLO, item);
+      const courseScores: CoursePloScore[] = coursesForPLO.flatMap((course) => {
+        if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
+          return getUniqueTopicsWithTQF(course.sections!)
+            .map((sec) => {
+              const clos = sec.TQF3?.part7?.data
+                .filter(({ plos }) => (plos as string[]).includes(item.id))
+                .map(({ clo }) => clo);
+              const sum = clos?.length
+                ? sec.TQF5?.part3?.data
+                    .filter(({ clo }) => clos?.includes(clo))
+                    .reduce((a, b) => a + b.score, 0)
+                : undefined;
+              return sum !== undefined
+                ? {
+                    courseNo: course.courseNo,
+                    courseName: course.courseName,
+                    curriculum: findMostDuplicateCurriculum(course),
+                    topic: sec.topic,
+                    avgScore: sum / (clos?.length ?? 1),
+                  }
+                : null;
+            })
+            .filter((c) => c !== null);
+        } else {
+          const clos = course.TQF3?.part7?.data
+            .filter(({ plos }) => (plos as string[]).includes(item.id))
+            .map(({ clo }) => clo);
+          const sum = clos?.length
+            ? course.TQF5?.part3?.data
+                .filter(({ clo }) => clos?.includes(clo))
+                .reduce((a, b) => a + b.score, 0)
+            : undefined;
+          return sum !== undefined
+            ? [
+                {
+                  courseNo: course.courseNo,
+                  courseName: course.courseName,
+                  curriculum: findMostDuplicateCurriculum(course),
+                  avgScore: sum / (clos?.length ?? 1),
+                },
+              ]
+            : [];
+        }
+      });
+      return { plo: item, courses: courseScores };
+    });
+    setPloScores(updatedPloScores);
+  };
+
+  const ploView = (plo: IModelPLO) => {
     return (
       <Table stickyHeader striped>
         <Table.Thead>
@@ -145,7 +219,7 @@ export default function AdminDashboardPLO() {
         </Table.Thead>
         <Table.Tbody className="text-default font-medium text-[13px]">
           {plo.data.map((item, index) => {
-            const coursesForPLO = filterCoursesForPLO(item);
+            const coursesForPLO = filterCoursesForPLO(plo, item);
             let rowSpan = 0;
             coursesForPLO.forEach((course) => {
               if (course.type === COURSE_TYPE.SEL_TOPIC.en) {
@@ -155,32 +229,22 @@ export default function AdminDashboardPLO() {
                 rowSpan += 1;
               }
             });
+            const coursePlo = ploScores.find(
+              (p) => p.plo.id == item.id
+            )?.courses;
             return coursesForPLO.length > 0 ? (
               coursesForPLO.map((course, courseIndex) => {
                 const insList = getUniqueInstructors(course.sections!);
                 const uniqueTopics = getUniqueTopicsWithTQF(course.sections!);
-                let clos = course.TQF3?.part7?.data
-                  .filter(({ plos }) => (plos as string[]).includes(item.id))
-                  .map(({ clo }) => clo);
-                let sum = clos?.length
-                  ? course.TQF5?.part3?.data
-                      .filter(({ clo }) => clos?.includes(clo))
-                      .reduce((a, b) => a + b.score, 0)
-                  : undefined;
-                let ploScore = sum ? sum / (clos?.length ?? 1) : undefined;
+                let ploScore = coursePlo?.find(
+                  ({ courseNo }) => courseNo == course.courseNo
+                )?.avgScore;
                 return course.type === COURSE_TYPE.SEL_TOPIC.en ? (
                   uniqueTopics.map((sec, topicIndex) => {
-                    clos = sec.TQF3?.part7?.data
-                      .filter(({ plos }) =>
-                        (plos as string[]).includes(item.id)
-                      )
-                      .map(({ clo }) => clo);
-                    sum = clos?.length
-                      ? sec.TQF5?.part3?.data
-                          .filter(({ clo }) => clos?.includes(clo))
-                          .reduce((a, b) => a + b.score, 0)
-                      : undefined;
-                    ploScore = sum ? sum / (clos?.length ?? 1) : undefined;
+                    ploScore = coursePlo?.find(
+                      ({ courseNo, topic }) =>
+                        courseNo == course.courseNo && topic == sec.topic
+                    )?.avgScore;
                     return (
                       <Table.Tr
                         key={`${item.id}-${course.courseNo}-${sec.topic}`}
@@ -384,10 +448,10 @@ export default function AdminDashboardPLO() {
           data={curriculumPLO}
         />
       )}
-
       <ModalExportPLO
         opened={openModalExportPLO}
         onClose={() => setOpenModalExportPLO(false)}
+        data={ploScores}
       />
       <div className=" flex flex-col h-full w-full gap-2 overflow-hidden">
         <div className="flex flex-row px-6 pt-3 items-center justify-between">

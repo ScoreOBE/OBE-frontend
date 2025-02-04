@@ -80,6 +80,7 @@ export const getUniqueTopicsWithTQF = (sections: Partial<IModelSection>[]) => {
     string,
     {
       topic: string;
+      curriculum?: string;
       TQF3?: IModelTQF3;
       TQF5?: IModelTQF5;
       ploRequire: IModelPLORequire[];
@@ -90,6 +91,7 @@ export const getUniqueTopicsWithTQF = (sections: Partial<IModelSection>[]) => {
       if (!uniqueTopics.has(sec.topic)) {
         uniqueTopics.set(sec.topic, {
           topic: sec.topic,
+          curriculum: sec.curriculum,
           TQF3: sec.TQF3,
           TQF5: sec.TQF5,
           ploRequire: sec.ploRequire || [],
@@ -98,7 +100,6 @@ export const getUniqueTopicsWithTQF = (sections: Partial<IModelSection>[]) => {
     }
   });
 
-  // Convert map values to an array
   return Array.from(uniqueTopics.values());
 };
 

@@ -1,45 +1,121 @@
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Group,
-  Modal,
-  Radio,
-  Select,
-} from "@mantine/core";
+import { Alert, Button, Checkbox, Group, Modal, Select } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { showNotifications } from "@/helpers/notifications/showNotifications";
-import { NOTI_TYPE } from "@/helpers/constants/enum";
-import {
-  getKeyPartTopicTQF3,
-  PartTopicTQF3,
-} from "@/helpers/constants/TQF3.enum";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
-import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useParams } from "react-router-dom";
-import { IModelTQF3 } from "@/models/ModelTQF3";
 import noData from "@/assets/image/noData.jpg";
 import IconExcel from "@/assets/icons/excel.svg?react";
 import Icon from "@/components/Icon";
-import { setLoadingOverlay } from "@/store/loading";
-import { IModelPLOCollection } from "@/models/ModelPLO";
+import { PloScore } from "@/pages/AdminDashboard/AdminDashboardPLO";
+import * as XLSX from "xlsx";
+import { useSearchParams } from "react-router-dom";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
-  // dataPLO?: Partial<IModelPLOCollection>;
+  data: PloScore[];
 };
 
-export default function ModalExportPLO({ opened, onClose }: Props) {
-  const { courseNo } = useParams();
+export default function ModalExportPLO({ opened, onClose, data }: Props) {
+  const [params, setParams] = useSearchParams({});
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
-  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const dispatch = useAppDispatch();
-  const [selectedMerge, setSelectedMerge] = useState("unzipfile");
-  const [selectedParts, setSelectedParts] = useState<string[]>([]);
-  const [dataExport, setDataExport] = useState<Partial<IModelTQF3>>({});
+  const [courseList, setCourseList] = useState<
+    { courseNo: string; courseName: string; topic?: string; label: string }[]
+  >([]);
+  const [selectedCurriculum, setSelectedCurriculum] = useState<string | null>();
+  const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (data.length && selectedCurriculum?.length) {
+      const list: {
+        courseNo: string;
+        courseName: string;
+        topic?: string;
+        label: string;
+      }[] = [];
+      data.forEach(({ courses }) => {
+        courses.forEach(({ courseNo, courseName, topic, curriculum }) => {
+          if (
+            curriculum == selectedCurriculum &&
+            !list.find((c) => c.courseNo == courseNo && c.topic == topic)
+          ) {
+            list.push({
+              courseNo,
+              courseName,
+              topic,
+              label: `${courseNo}${topic ? ` - ${topic}` : ""}`,
+            });
+          }
+        });
+      });
+      setCourseList(list);
+    }
+  }, [data, selectedCurriculum]);
+
+  const exportPloScore = () => {
+    const workbook = XLSX.utils.book_new();
+    const rows: any[][] = [];
+    const headerRow1 = [
+      "PLO",
+      "Direct Assessment",
+      "",
+      "Indirect Assessment",
+      "",
+      "Average Score (6:4)",
+    ];
+    const headerRow2 = [
+      "",
+      "Tool",
+      "Average Score",
+      "Tool",
+      "Average Score",
+      "",
+    ];
+    rows.push(headerRow1, headerRow2);
+    const merges: any[] = [];
+    let currentRow = 2;
+    data.forEach(({ plo, courses }) => {
+      const filterCourses = courses.filter(({ courseNo, topic }) =>
+        selectedCourses.includes(`${courseNo}${topic ? ` - ${topic}` : ""}`)
+      );
+      filterCourses.forEach((course, index) => {
+        const row = [
+          index === 0 ? `SO-${plo.no}` : "",
+          course.courseNo,
+          course.avgScore.toFixed(2),
+        ];
+        rows.push(row);
+        currentRow++;
+      });
+      if (filterCourses.length) {
+        merges.push({
+          s: { r: currentRow - courses.length, c: 0 },
+          e: { r: currentRow - 1, c: 0 },
+        });
+      } else {
+        const row = [`SO-${plo.no}`, "-", "-"];
+        rows.push(row);
+        currentRow++;
+      }
+    });
+    const worksheet = XLSX.utils.aoa_to_sheet(rows);
+    worksheet["!merges"] = [
+      { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } }, // Merge "PLO"
+      { s: { r: 0, c: 1 }, e: { r: 0, c: 2 } }, // Merge "Direct Assessment"
+      { s: { r: 0, c: 3 }, e: { r: 0, c: 4 } }, // Merge "Indirect Assessment"
+      { s: { r: 0, c: 5 }, e: { r: 1, c: 5 } }, // Merge "Average Score (6:4)"
+      ...merges,
+    ];
+    XLSX.utils.book_append_sheet(workbook, worksheet, "PLO Scores");
+    XLSX.writeFile(
+      workbook,
+      `plo_scores_(${selectedCurriculum})_${params.get("semester")}${params
+        .get("year")
+        ?.toString()
+        .slice(-2)}.xlsx`
+    );
+  };
 
   return (
     <Modal
@@ -49,7 +125,6 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
       title={
         <div className="flex flex-col gap-3">
           <p>Export PLO</p>
-
           <p className="text-[12px] inline-flex items-center text-[#20884f] -mt-[6px]">
             File format: <Icon IconComponent={IconExcel} className="ml-1 " />
           </p>
@@ -69,11 +144,13 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
         <Select
           rightSectionPointerEvents="all"
           label={`Select Curriculum to Export PLO.`}
-          // placeholder={}
+          placeholder="Curriculum"
           data={curriculum?.map((cur) => ({
             value: cur.code,
             label: cur.nameEN,
           }))}
+          value={selectedCurriculum}
+          onChange={(event) => setSelectedCurriculum(event)}
           allowDeselect
           searchable
           clearable
@@ -93,7 +170,7 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
             body: " flex justify-center",
           }}
           title={
-            <div className="flex items-center  gap-2">
+            <div className="flex items-center gap-2">
               <Icon IconComponent={IconInfo2} />
               <p>
                 The <span>list of courses mapped to each PLO</span> can be
@@ -102,8 +179,39 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
             </div>
           }
         ></Alert>
-
-        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end  justify-end h-fit">
+        {!!selectedCurriculum?.length ? (
+          !!courseList.length ? (
+            <Checkbox.Group
+              value={selectedCourses}
+              onChange={(event) => setSelectedCourses(event)}
+            >
+              <Group className="gap-0">
+                {courseList?.map((course, index) => (
+                  <Checkbox
+                    size="xs"
+                    key={index}
+                    value={course.label}
+                    className="p-3 py-4 w-full last:border-none border-b-[1px]"
+                    classNames={{
+                      label: "ml-2 text-[13px] font-medium",
+                      input: "cursor-pointer",
+                    }}
+                    label={course.label}
+                  />
+                ))}
+              </Group>
+            </Checkbox.Group>
+          ) : (
+            <div className="flex justify-center text-b2">
+              <p>Course Not Found.</p>
+            </div>
+          )
+        ) : (
+          <div className="flex justify-center text-b2">
+            <p>Please Select Curriculum.</p>
+          </div>
+        )}
+        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end justify-end h-fit">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
             <Button onClick={onClose} variant="subtle">
               Cancel
@@ -114,16 +222,14 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
                 <Icon
                   IconComponent={IconExcel}
                   className={` ${
-                    !dataExport.part1?.updatedAt
+                    !selectedCourses.length
                       ? "text-[#adb5bd]"
                       : "text-[#ffffff]"
                   } stroke-[2px] size-5 items-center`}
                 />
               }
-              // onClick={generatePDF}
-              disabled={
-                !dataExport.part1?.updatedAt || selectedParts.length === 0
-              }
+              onClick={exportPloScore}
+              disabled={selectedCourses.length === 0}
             >
               Export PLO
             </Button>
