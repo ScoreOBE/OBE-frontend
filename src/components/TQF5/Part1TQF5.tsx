@@ -1,4 +1,4 @@
-import { Button, Table, TextInput } from "@mantine/core";
+import { Button, Table, Textarea, TextInput } from "@mantine/core";
 import Icon from "../Icon";
 import IconUpload from "@/assets/icons/upload.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
@@ -293,7 +293,7 @@ export default function Part1TQF5({ setForm }: Props) {
             </Table>
           </div>
         </div>
-        <div className="flex text-secondary gap-4 items-center justify-center w-full border-b-[1px] border-[#e6e6e6] pb-6 flex-col">
+        <div className="flex text-secondary gap-4 items-center justify-center w-full border-[#e6e6e6] pb-6 flex-col border-b-[1px] mb-2">
           <div className="flex text-secondary items-center w-full justify-between flex-row gap-1 mt-2 text-[15px] acerSwift:max-macair133:!text-b3">
             <p className="font-bold">
               Grading criteria<span className="ml-1 text-red-500">*</span>
@@ -356,6 +356,44 @@ export default function Part1TQF5({ setForm }: Props) {
             </Table>
           </div>
         </div>
+        {/* <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 pb-5">
+          <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+            <p className="font-semibold">ปัจจัยที่ทำให้ระดับคะแนนผิดปกติ</p>
+          </div>
+          <div className="flex flex-col gap-3 text-default">
+            <Textarea
+              label="Description"
+              size="xs"
+              placeholder="(optional)"
+              className="w-[500px]"
+              classNames={{
+                input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 `,
+                label: "text-default acerSwift:max-macair133:!text-b4",
+              }}
+            ></Textarea>
+          </div>
+        </div>
+        <div className="w-full justify-between h-fit  items-top  grid grid-cols-3 pt-5 pb-6 border-b-[1px] !-mt-3">
+          <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+            <p className="font-semibold">
+              การทวนสอบผลสัมฤทธิ์ของนักศึกษา <br /> (ให้อ้างอิงจาก มคอ. 2 และ 3)
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 text-default ">
+            <Textarea
+              key={form.key("recDoc")}
+              label="Description"
+              size="xs"
+              placeholder="(optional)"
+              className="w-[500px]"
+              classNames={{
+                input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4`,
+                label: "text-default acerSwift:max-macair133:!text-b4",
+              }}
+            ></Textarea>
+          </div>
+        </div> */}
       </div>
     </>
   );
