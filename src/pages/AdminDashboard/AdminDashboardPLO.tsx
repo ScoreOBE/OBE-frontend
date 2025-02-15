@@ -1,7 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button, Table, Tabs } from "@mantine/core";
+import { Button, Menu, Table, Tabs } from "@mantine/core";
 import Icon from "@/components/Icon";
+import IconDots from "@/assets/icons/dots.svg?react";
 import IconExcel from "@/assets/icons/excel.svg?react";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import { useSearchParams } from "react-router-dom";
@@ -25,6 +26,8 @@ import {
 import { COURSE_TYPE } from "@/helpers/constants/enum";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelTQF5 } from "@/models/ModelTQF5";
+import PLOSelectCourseView from "@/components/Modal/PLOAdmin/PLOSelectCourseView";
+import PLOYearView from "@/components/Modal/PLOAdmin/PLOYearView";
 
 export type PloScore = {
   plo: IModelPLONo;
@@ -54,6 +57,8 @@ export default function AdminDashboardPLO() {
   const [ploScores, setPloScores] = useState<PloScore[]>([]);
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
   const [openModalExportPLO, setOpenModalExportPLO] = useState(false);
+  const [openPLOYearView, setOpenPLOYearView] = useState(false);
+  const [openPLOSelectCourseView, setOpenPLOSelectCourseView] = useState(false);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -453,6 +458,13 @@ export default function AdminDashboardPLO() {
         onClose={() => setOpenModalExportPLO(false)}
         data={ploScores}
       />
+      <PLOSelectCourseView
+      opened={openPLOSelectCourseView}
+      onClose={() => setOpenPLOSelectCourseView(false)}
+      />
+      <PLOYearView 
+      opened={openPLOYearView}
+      onClose={() => setOpenPLOYearView(false)} />
       <div className=" flex flex-col h-full w-full gap-2 overflow-hidden">
         <div className="flex flex-row px-6 pt-3 items-center justify-between">
           <div className="flex flex-col">
@@ -497,15 +509,48 @@ export default function AdminDashboardPLO() {
                 PLO Description
               </div>
             </Button>
-            <Button
-              className="text-center px-4"
-              leftSection={
-                <Icon IconComponent={IconExcel} className="size-4" />
-              }
-              onClick={() => setOpenModalExportPLO(true)}
-            >
-              Export PLO
-            </Button>
+
+            <Menu trigger="click" position="bottom-end">
+              <Menu.Target>
+                <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
+                  <Icon IconComponent={IconDots} />
+                </div>
+              </Menu.Target>
+              <Menu.Dropdown
+                className="rounded-md translate-y-1 backdrop-blur-xl bg-white"
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+              >
+                <Menu.Item onClick={() => setOpenPLOYearView(true)} className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5">
+                  <div className="flex justify-between items-center gap-2">
+                    <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+                      <span className="pr-10"> Year View </span>
+                    </div>{" "}
+                  </div>
+                </Menu.Item>
+                <Menu.Item onClick={() => setOpenPLOSelectCourseView(true)} className=" text-[#3e3e3e] mb-[2px] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5">
+                  <div className="flex justify-between items-center gap-2">
+                    <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
+                      <span className="pr-10">Academic View </span>
+                    </div>{" "}
+                  </div>
+                </Menu.Item>
+
+                <Menu.Item
+                  onClick={() => setOpenModalExportPLO(true)}
+                  className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
+                >
+                  <div className="flex items-center  gap-2">
+                    <Icon
+                      className="size-4 acerSwift:max-macair133:!size-3.5"
+                      IconComponent={IconExcel}
+                    />
+                    <span>Export PLO</span>
+                  </div>
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
           </div>
         </div>
         <div className="flex h-full w-full px-6 pb-3 overflow-hidden">
