@@ -324,8 +324,8 @@ export default function Dashboard() {
           }}
         />
       )}
-      <div className=" flex flex-col ">
-        <div className="flex flex-row px-6 pt-3  items-center justify-between">
+      <div className="flex flex-col h-full w-full overflow-hidden">
+        <div className="flex flex-row px-6 pt-3 items-center justify-between">
           <div className="flex flex-col ">
             <p className="text-secondary text-h2 acerSwift:max-macair133:text-[17px] font-semibold ">
               Hi there, {user.firstNameEN}
@@ -396,162 +396,164 @@ export default function Dashboard() {
           {loading ? (
             <Loading />
           ) : courseList.total ? (
-            <div className="w-full">
-            <Alert
-          radius="md"
-          variant="light"
-          classNames={{
-            body: " flex justify-center",
-          }}
-          className=" mt-3 mb-2 mx-6 "
-           color='orange'
-          title={
-            <div className="flex items-center gap-2">
-              <Icon IconComponent={IconInfo2} className="mr-2" />
-              <p>
-                ScoreOBE+ is currently in its development (beta) phase. You may
-                encounter unstable features or bugs. Please report any
-                issues using the button at the top right of your profile.
-              </p>
-            </div>
-          }
-        ></Alert>
-            <InfiniteScroll
-              dataLength={courseList.courses.length}
-              next={onShowMore}
-              height={"100%"}
-              loader={<Loading />}
-              hasMore={payload?.hasMore}
-              className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4 pb-5 gap-4 px-6 p-3"
-              style={{ height: "fit-content", maxHeight: "100%" }}
-            >
-              {courseList.courses.map((item) => {
-                const statusTqf3Sec: any[] = item.sections.map(
-                  (sec) => sec.TQF3?.status
-                );
-                const statusTqf5Sec: any[] = item.sections.map(
-                  (sec) => sec.TQF5?.status
-                );
-                const statusTqf3 =
-                  item.TQF3?.status ??
-                  (statusTqf3Sec.every((e) => e == TQF_STATUS.DONE)
-                    ? TQF_STATUS.DONE
-                    : statusTqf3Sec.some((e) =>
-                        [TQF_STATUS.IN_PROGRESS, TQF_STATUS.DONE].includes(e)
-                      )
-                    ? TQF_STATUS.IN_PROGRESS
-                    : TQF_STATUS.NO_DATA);
-                const statusTqf5 =
-                  item.TQF5?.status ??
-                  (statusTqf5Sec.every((e) => e == TQF_STATUS.DONE)
-                    ? TQF_STATUS.DONE
-                    : statusTqf5Sec.some((e) =>
-                        [TQF_STATUS.IN_PROGRESS, TQF_STATUS.DONE].includes(e)
-                      )
-                    ? TQF_STATUS.IN_PROGRESS
-                    : TQF_STATUS.NO_DATA);
-                return (
-                  <div
-                    key={item.id}
-                    className="card relative justify-between h-[125px] macair133:h-[135px] sm:h-[128px] cursor-pointer rounded-[4px] hover:bg-[#f3f3f3]"
-                    onClick={() => goToCourse(item.courseNo)}
-                  >
-                    <div className="p-2.5 flex flex-col">
-                      <p className="font-bold text-sm acerSwift:max-macair133:text-b3">
-                        {item.courseNo}
-                      </p>
-                      <p className="text-xs acerSwift:max-macair133:text-b5 font-medium text-gray-600">
-                        {item.courseName}
-                      </p>
-                      {item.sections.find(
-                        (sec) => (sec.instructor as IModelUser).id == user.id
-                      ) &&
-                        item.addFirstTime &&
-                        term?.isActive && (
-                          <div onClick={(event) => event.stopPropagation()}>
-                            <Menu
-                              trigger="click"
-                              position="bottom-end"
-                              offset={-15}
-                            >
-                              <Menu.Target>
-                                <div>
-                                  <Icon
-                                    IconComponent={IconDots}
-                                    className="absolute top-2 right-2 rounded-full hover:bg-gray-300 acerSwift:max-macair133:size-5.5"
-                                  />
-                                </div>
-                              </Menu.Target>
-                              <Menu.Dropdown
-                                className="rounded-md backdrop-blur-xl bg-white/70 "
-                                style={{
-                                  boxShadow:
-                                    "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                                }}
+            <div className="flex flex-col h-full w-full overflow-hidden">
+              <Alert
+                radius="md"
+                variant="light"
+                classNames={{
+                  body: " flex justify-center",
+                }}
+                className=" mt-3 mb-2 mx-6 "
+                color="orange"
+                title={
+                  <div className="flex items-center gap-2">
+                    <Icon IconComponent={IconInfo2} className="mr-2" />
+                    <p>
+                      ScoreOBE+ is currently in its development (beta) phase.
+                      You may encounter unstable features or bugs. Please report
+                      any issues using the button at the top right of your
+                      profile.
+                    </p>
+                  </div>
+                }
+              ></Alert>
+              <InfiniteScroll
+                dataLength={courseList.courses.length}
+                next={onShowMore}
+                height={"100%"}
+                loader={<Loading />}
+                hasMore={payload?.hasMore}
+                className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4 pb-5 gap-4 px-6 p-3"
+                style={{ height: "fit-content", maxHeight: "100%" }}
+              >
+                {courseList.courses.map((item) => {
+                  const statusTqf3Sec: any[] = item.sections.map(
+                    (sec) => sec.TQF3?.status
+                  );
+                  const statusTqf5Sec: any[] = item.sections.map(
+                    (sec) => sec.TQF5?.status
+                  );
+                  const statusTqf3 =
+                    item.TQF3?.status ??
+                    (statusTqf3Sec.every((e) => e == TQF_STATUS.DONE)
+                      ? TQF_STATUS.DONE
+                      : statusTqf3Sec.some((e) =>
+                          [TQF_STATUS.IN_PROGRESS, TQF_STATUS.DONE].includes(e)
+                        )
+                      ? TQF_STATUS.IN_PROGRESS
+                      : TQF_STATUS.NO_DATA);
+                  const statusTqf5 =
+                    item.TQF5?.status ??
+                    (statusTqf5Sec.every((e) => e == TQF_STATUS.DONE)
+                      ? TQF_STATUS.DONE
+                      : statusTqf5Sec.some((e) =>
+                          [TQF_STATUS.IN_PROGRESS, TQF_STATUS.DONE].includes(e)
+                        )
+                      ? TQF_STATUS.IN_PROGRESS
+                      : TQF_STATUS.NO_DATA);
+                  return (
+                    <div
+                      key={item.id}
+                      className="card relative justify-between h-[125px] macair133:h-[135px] sm:h-[128px] cursor-pointer rounded-[4px] hover:bg-[#f3f3f3]"
+                      onClick={() => goToCourse(item.courseNo)}
+                    >
+                      <div className="p-2.5 flex flex-col">
+                        <p className="font-bold text-sm acerSwift:max-macair133:text-b3">
+                          {item.courseNo}
+                        </p>
+                        <p className="text-xs acerSwift:max-macair133:text-b5 font-medium text-gray-600">
+                          {item.courseName}
+                        </p>
+                        {item.sections.find(
+                          (sec) => (sec.instructor as IModelUser).id == user.id
+                        ) &&
+                          item.addFirstTime &&
+                          term?.isActive && (
+                            <div onClick={(event) => event.stopPropagation()}>
+                              <Menu
+                                trigger="click"
+                                position="bottom-end"
+                                offset={-15}
                               >
-                                <Menu.Item
-                                  onClick={() => {
-                                    setEditCourse({
-                                      id: item.id,
-                                      courseNo: item.courseNo,
-                                      courseName: item.courseName,
-                                    });
-                                    setOpenModalEditCourse(true);
-                                  }}
-                                  className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 w-[180px]"
-                                >
-                                  <div className="flex items-center gap-2">
+                                <Menu.Target>
+                                  <div>
                                     <Icon
-                                      IconComponent={IconPencilMinus}
-                                      className="size-4 stroke-[2px] acerSwift:max-macair133:size-3"
+                                      IconComponent={IconDots}
+                                      className="absolute top-2 right-2 rounded-full hover:bg-gray-300 acerSwift:max-macair133:size-5.5"
                                     />
-                                    <span>Edit Course</span>
                                   </div>
-                                </Menu.Item>
-                                <Menu.Item
-                                  className="text-[#FF4747] h-7 w-[180px] font-semibold text-b4 acerSwift:max-macair133:!text-b5 hover:bg-[#d55757]/10"
-                                  onClick={() => {
-                                    setDelCourse(item);
-                                    setOpenDelPopup(true);
+                                </Menu.Target>
+                                <Menu.Dropdown
+                                  className="rounded-md backdrop-blur-xl bg-white/70 "
+                                  style={{
+                                    boxShadow:
+                                      "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                                   }}
                                 >
-                                  <div className="flex items-center gap-2">
-                                    <Icon
-                                      IconComponent={IconTrash}
-                                      className="size-4 stroke-[2px] acerSwift:max-macair133:size-3"
-                                    />
-                                    <span>Delete Course</span>
-                                  </div>
-                                </Menu.Item>
-                              </Menu.Dropdown>
-                            </Menu>
-                          </div>
-                        )}
-                    </div>
-                    <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
-                      <p className="p-2.5 text-secondary font-[700] text-b4 acerSwift:max-macair133:text-b5">
-                        {item.sections.length} Section
-                        {item.sections.length > 1 ? "s" : ""}
-                      </p>
-                      <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">
-                        <p
-                          className="tag-tqf rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
-                          tqf-status={statusTqf3}
-                        >
-                          TQF 3
+                                  <Menu.Item
+                                    onClick={() => {
+                                      setEditCourse({
+                                        id: item.id,
+                                        courseNo: item.courseNo,
+                                        courseName: item.courseName,
+                                      });
+                                      setOpenModalEditCourse(true);
+                                    }}
+                                    className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 w-[180px]"
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <Icon
+                                        IconComponent={IconPencilMinus}
+                                        className="size-4 stroke-[2px] acerSwift:max-macair133:size-3"
+                                      />
+                                      <span>Edit Course</span>
+                                    </div>
+                                  </Menu.Item>
+                                  <Menu.Item
+                                    className="text-[#FF4747] h-7 w-[180px] font-semibold text-b4 acerSwift:max-macair133:!text-b5 hover:bg-[#d55757]/10"
+                                    onClick={() => {
+                                      setDelCourse(item);
+                                      setOpenDelPopup(true);
+                                    }}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <Icon
+                                        IconComponent={IconTrash}
+                                        className="size-4 stroke-[2px] acerSwift:max-macair133:size-3"
+                                      />
+                                      <span>Delete Course</span>
+                                    </div>
+                                  </Menu.Item>
+                                </Menu.Dropdown>
+                              </Menu>
+                            </div>
+                          )}
+                      </div>
+                      <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
+                        <p className="p-2.5 text-secondary font-[700] text-b4 acerSwift:max-macair133:text-b5">
+                          {item.sections.length} Section
+                          {item.sections.length > 1 ? "s" : ""}
                         </p>
-                        <p
-                          className="tag-tqf rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
-                          tqf-status={statusTqf5}
-                        >
-                          TQF 5
-                        </p>
+                        <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">
+                          <p
+                            className="tag-tqf rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
+                            tqf-status={statusTqf3}
+                          >
+                            TQF 3
+                          </p>
+                          <p
+                            className="tag-tqf rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
+                            tqf-status={statusTqf5}
+                          >
+                            TQF 5
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </InfiniteScroll></div>
+                  );
+                })}
+              </InfiniteScroll>
+            </div>
           ) : (
             <div className=" flex flex-row flex-1 px-[95px] sm:max-ipad11:px-[70px] justify-between">
               <div className="h-full  justify-center flex flex-col">

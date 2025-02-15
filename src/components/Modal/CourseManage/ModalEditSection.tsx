@@ -55,7 +55,7 @@ export default function ModalEditSection({
   const [openThisTerm, setOpenThisTerm] = useState(false);
   const [semester, setSemester] = useState<string[]>([]);
   const form = useForm({
-    mode: "uncontrolled",
+    mode: "controlled",
     initialValues: {} as Partial<IModelSection | IModelSectionManagement> &
       Record<string, any>,
     validate: {
@@ -71,7 +71,7 @@ export default function ModalEditSection({
       setSemester(
         res.sections
           .find((sec: any) => sec.sectionNo == value?.oldSectionNo)
-          .semester.map((sec: any) => sec.toString())
+          ?.semester.map((sec: any) => sec.toString()) || []
       );
     }
   };
@@ -82,6 +82,7 @@ export default function ModalEditSection({
       setSemester([]);
       form.setValues(value.data);
       setOpenThisTerm(value.isActive!);
+      if (!value.data.curriculum) form.setFieldValue("curriculum", "-");
       if (value.data.semester) setSemester(value.data.semester as string[]);
       if (!isCourseManage) fetchOneCourseManagement();
     } else {
@@ -102,9 +103,8 @@ export default function ModalEditSection({
     }
     payload.data.sectionNo = parseInt(form.getValues().sectionNo?.toString()!);
     payload.data.semester = semester.map((term) => parseInt(term));
-    if (form.getValues().curriculum?.length) {
-      payload.data.curriculum = form.getValues().curriculum;
-    }
+    payload.data.curriculum =
+      form.getValues().curriculum == "-" ? null : form.getValues().curriculum;
     const id = payload.id;
     delete payload.id;
     let res;
@@ -189,14 +189,16 @@ export default function ModalEditSection({
           {...form.getInputProps("sectionNo")}
         />
         <Select
-          label="Select the Curriculum for Section (Optional)"
+          label="Select the Curriculum for Section"
           size="xs"
           placeholder="Curriculum"
-          data={curriculum?.map((item) => ({
-            value: item.code,
-            label: `${item.nameTH} [${item.code}]`,
-          }))}
-          value={form.getValues().curriculum}
+          data={[
+            { value: "-", label: "-" },
+            ...(curriculum?.map((item) => ({
+              value: item.code,
+              label: `${item.nameTH} [${item.code}]`,
+            })) || []),
+          ]}
           classNames={{
             input: "focus:border-primary acerSwift:max-macair133:!text-b5",
             label: "acerSwift:max-macair133:!text-b4",

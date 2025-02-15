@@ -175,6 +175,9 @@ export default function ModalAddSection({
       if (payload.type == COURSE_TYPE.SEL_TOPIC.en) {
         sec.topic = form.getValues().sections![0].topic;
       }
+      if (sec.curriculum == "-") {
+        delete sec.curriculum;
+      }
       sec.semester = sec.semester?.map((term: string) => parseInt(term));
       if (isManage) {
         sec.instructor = sec.instructor.value;
@@ -232,6 +235,7 @@ export default function ModalAddSection({
     if (type == COURSE_TYPE.SEL_TOPIC.en) {
       initialSection.topic = sections[0]?.topic;
     }
+    initialSection.curriculum = "-";
     if (!sectionNo.length) {
       sections = [{ ...initialSection }];
       setCoInsList([]);
@@ -557,10 +561,17 @@ export default function ModalAddSection({
                       <Select
                         label={`Select the Curriculum for Section ${getSectionNo(
                           sec.sectionNo
-                        )} (Optional) `}
+                        )}`}
                         size="xs"
                         placeholder="Curriculum"
-                        data={curriculum?.map(({ code }) => code)}
+                        data={[
+                          { value: "-", label: "-" },
+                          ...(curriculum?.map((item) => ({
+                            value: item.code,
+                            label: `${item.nameTH} [${item.code}]`,
+                          })) || []),
+                        ]}
+                        allowDeselect={false}
                         classNames={{
                           input:
                             "focus:border-primary acerSwift:max-macair133:!text-b5",
@@ -571,7 +582,7 @@ export default function ModalAddSection({
                       <div className="p-5 mt-1 mb-3 bg-[#f5f5f5] rounded-xl">
                         <span className="font-semibold mt-2 text-default text-b2  acerSwift:max-macair133:text-b4">
                           Repeat on semester
-                        </span>{" "}
+                        </span>
                         <Chip.Group
                           {...form.getInputProps(`sections.${index}.semester`)}
                           value={sec.semester}
@@ -615,7 +626,7 @@ export default function ModalAddSection({
                           }}
                           className="mt-5 mb-1"
                           size="xs"
-                          label={` Section ${getSectionNo(
+                          label={`Section ${getSectionNo(
                             sec.sectionNo
                           )} open in this semester (${
                             academicYear?.semester

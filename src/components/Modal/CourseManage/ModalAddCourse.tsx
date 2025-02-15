@@ -191,6 +191,9 @@ export default function ModalAddCourse({
       if (payload.type == COURSE_TYPE.SEL_TOPIC.en) {
         sec.topic = form.getValues().sections![0].topic;
       }
+      if (sec.curriculum == "-") {
+        delete sec.curriculum;
+      }
       sec.semester = sec.semester?.map((term: string) => parseInt(term));
       sec.coInstructors = sec.coInstructors?.map((coIns: any) => coIns.value);
     });
@@ -232,6 +235,7 @@ export default function ModalAddCourse({
     if (type == COURSE_TYPE.SEL_TOPIC.en) {
       initialSection.topic = sections[0]?.topic;
     }
+    initialSection.curriculum = "-";
     if (!sectionNo.length) {
       sections = [{ ...initialSection }];
       setCoInsList([]);
@@ -637,10 +641,17 @@ export default function ModalAddCourse({
                       <Select
                         label={`Select the Curriculum for Section ${getSectionNo(
                           sec.sectionNo
-                        )} (Optional)`}
+                        )}`}
                         size="xs"
                         placeholder="Curriculum"
-                        data={curriculum?.map(({ code }) => code)}
+                        data={[
+                          { value: "-", label: "-" },
+                          ...(curriculum?.map((item) => ({
+                            value: item.code,
+                            label: `${item.nameTH} [${item.code}]`,
+                          })) || []),
+                        ]}
+                        allowDeselect={false}
                         classNames={{
                           input:
                             "focus:border-primary acerSwift:max-macair133:!text-b5",
