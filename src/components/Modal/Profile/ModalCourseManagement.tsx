@@ -488,18 +488,18 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                       {course.sections.map((sec: any, index: number) => (
                         <div
                           key={sec.sectionNo}
-                          className="first:rounded-t-md last:rounded-b-md bg-[#eef4ff]"
+                          className="first:rounded-t-md last:rounded-b-md bg-blue-100"
                         >
                           <div className="grid grid-cols-5 items-center justify-between py-4 px-7">
                             {/* Section No & Topic */}
                             <div className="flex flex-col ">
                               <div className="flex flex-wrap items-center gap-1">
-                                <p className="font-medium text-[13px] text-black">
+                                <p className="font-medium text-[13px] text-black w-[79px]">
                                   Section {getSectionNo(sec.sectionNo)}
                                 </p>
                                 {/* Curriculum */}
                                 {sec.curriculum && (
-                                  <div className="flex justify-center items-center text-center px-3 py-1 w-fit min-w-10 rounded-[20px] font-medium bg-[#1057e58e] text-[#222f87]">
+                                  <div className="flex justify-center items-center text-center px-3 py-1 ml-1 w-fit min-w-10 rounded-[20px] font-medium bg-[#8DBEFF] text-[#26257D]">
                                     <p className="font-semibold text-[12px]">
                                       {sec.curriculum}
                                     </p>
@@ -516,7 +516,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                             <div
                               className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
                                 sec.isActive
-                                  ? "bg-[#10e5908e] text-[#228762]"
+                                  ? "bg-[#71EBC1] text-[#0D6C49]"
                                   : "bg-[#a2a2a2] text-[#ffffff]"
                               } `}
                             >
@@ -609,7 +609,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                             </div>
                           </div>
                           {index < course.sections.length - 1 && (
-                            <div className="border-b-[1px] mx-5 border-[#1f69f34a]"></div>
+                            <div className="border-b-[1px] mx-5 border-blue-300"></div>
                           )}
                         </div>
                       ))}
