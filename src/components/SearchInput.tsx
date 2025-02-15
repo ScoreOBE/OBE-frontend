@@ -8,9 +8,14 @@ import { TbSearch } from "react-icons/tb";
 type Props = {
   onSearch: (value: string, reset?: boolean) => void;
   placeholder?: string;
+  isCurriculumView?: boolean;
 };
 
-export function SearchInput({ onSearch, placeholder }: Props) {
+export function SearchInput({
+  onSearch,
+  placeholder,
+  isCurriculumView,
+}: Props) {
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const dispatch = useAppDispatch();
@@ -28,7 +33,11 @@ export function SearchInput({ onSearch, placeholder }: Props) {
   };
 
   return (
-    <div className="relative z-50 ipad11:w-[280px] macair133:w-[400px] w-[220px]  acerSwift:max-macair133:w-[380px]">
+    <div
+      className={`relative z-50 ipad11:w-[280px] macair133:w-[400px] w-[220px] ${
+        isCurriculumView && "!w-full"
+      } acerSwift:max-macair133:w-[380px]`}
+    >
       <TextInput
         autoFocus={false}
         leftSection={!isFocused && <TbSearch className="size-4" />}
