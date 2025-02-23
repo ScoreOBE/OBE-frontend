@@ -423,53 +423,29 @@ export default function MapPLO({ ploName = "" }: Props) {
                     checked={ploRequire?.includes(plo.id)}
                     onChange={(event) => {
                       const newData = { ...course };
-                      const newPlo = newData.ploRequire?.find(
-                        (item) =>
-                          item.plo == ploList.id &&
-                          item.curriculum == selectedCurriculum
-                      )!;
+                      const newPlo = sec
+                        ? newData.sections
+                            ?.find((e) => e.topic === sec.topic)
+                            ?.ploRequire?.find(
+                              (item) =>
+                                item.plo === ploList.id &&
+                                item.curriculum === selectedCurriculum
+                            )!
+                        : newData.ploRequire?.find(
+                            (item) =>
+                              item.plo == ploList.id &&
+                              item.curriculum == selectedCurriculum
+                          )!;
                       if (event.target.checked) {
-                        if (sec) {
-                          newData.sections?.forEach((e) => {
-                            if (
-                              e.topic === sec.topic &&
-                              e.curriculum == selectedCurriculum &&
-                              !ploRequire?.includes(plo.id)
-                            ) {
-                              ploRequire?.push(plo.id);
-                            }
-                          });
-                        } else {
-                          if (!ploRequire?.includes(plo.id)) {
-                            newPlo.list = [...newPlo.list, plo.id] as string[];
-                          }
+                        if (!ploRequire?.includes(plo.id)) {
+                          newPlo.list = [...newPlo.list, plo.id] as string[];
                         }
                       } else {
-                        if (sec) {
-                          newData.sections?.forEach((e) => {
-                            if (
-                              e.topic === sec.topic &&
-                              e.curriculum == selectedCurriculum
-                            ) {
-                              const selectPlo = e.ploRequire?.find(
-                                (item) =>
-                                  item.plo == ploList.id &&
-                                  item.curriculum == selectedCurriculum
-                              );
-                              const index = (
-                                selectPlo?.list as string[]
-                              )?.indexOf(plo.id);
-                              if (index !== -1)
-                                selectPlo?.list?.splice(index, 1);
-                            }
-                          });
-                        } else {
-                          const index = (newPlo.list as string[])?.indexOf(
-                            plo.id
-                          );
-                          if (index !== -1) {
-                            newPlo.list?.splice(index, 1);
-                          }
+                        const index = (newPlo.list as string[])?.indexOf(
+                          plo.id
+                        );
+                        if (index !== -1) {
+                          newPlo.list?.splice(index, 1);
                         }
                       }
                       setCourseManagement((prev) =>
