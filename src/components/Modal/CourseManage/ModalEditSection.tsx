@@ -192,6 +192,7 @@ export default function ModalEditSection({
           label="Select the Curriculum for Section"
           size="xs"
           placeholder="Curriculum"
+          searchable
           data={[
             { value: "-", label: "-" },
             ...(curriculum?.map((item) => ({

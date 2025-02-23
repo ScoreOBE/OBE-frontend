@@ -47,7 +47,6 @@ import {
   updatePLO,
 } from "@/services/plo/plo.service";
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
-import { rem } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
@@ -83,6 +82,7 @@ export default function MapPLO({ ploName = "" }: Props) {
   const [courseManagement, setCourseManagement] = useState<
     Partial<IModelCourseManagement>[]
   >([]);
+  const [selectedCurriculum, setSelectedCurriculum] = useState<string | null>();
   const [openMainPopupDelPLO, setOpenMainPopupDelPLO] = useState(false);
   const [openModalAddPLONo, setOpenModalAddPLONo] = useState(false);
   const [openModalEditPLONo, setOpenModalEditPLONo] = useState(false);
@@ -106,10 +106,7 @@ export default function MapPLO({ ploName = "" }: Props) {
           if (form.getValues().type == COURSE_TYPE.SEL_TOPIC.en)
             return validateTextInput(value, "Topic");
         },
-        sectionNo: (value) => {
-          if (form.getValues().type == COURSE_TYPE.SEL_TOPIC.en)
-            return validateSectionNo(value);
-        },
+        sectionNo: (value) => validateSectionNo(value),
       },
     },
     validateInputOnBlur: true,
@@ -137,17 +134,23 @@ export default function MapPLO({ ploName = "" }: Props) {
   }, [ploName]);
 
   useEffect(() => {
-    if (ploList.curriculum && !courseManagement.length) {
+    if (ploList.curriculum) {
+      setSelectedCurriculum(ploList.curriculum[0]);
+    }
+  }, [ploList]);
+
+  useEffect(() => {
+    if (selectedCurriculum) {
       const payloadCourse = {
         ...new CourseManagementSearchDTO(),
         isPloMapping: true,
         limit: 20,
-        curriculum: ploList.curriculum,
+        curriculum: [selectedCurriculum],
       };
       setPayload(payloadCourse);
       fetchCourse(payloadCourse);
     }
-  }, [ploList]);
+  }, [selectedCurriculum]);
 
   useEffect(() => {
     if (openModalAddCourse) {
@@ -288,12 +291,29 @@ export default function MapPLO({ ploName = "" }: Props) {
     courses.map((course: IModelCourseManagement) => {
       if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
         const sections = course.sections.reduce((acc, sec) => {
-          if (sec.topic && !acc.some((item) => item.topic === sec.topic)) {
+          if (
+            sec.topic &&
+            !acc.some((item) => item.topic === sec.topic) &&
+            sec.curriculum == selectedCurriculum
+          ) {
+            const curriculum = [
+              ...new Set(
+                course?.sections
+                  .filter((item) => item.topic === sec.topic)
+                  .flatMap(({ curriculum }) => curriculum)
+                  .flat()
+                  .filter(Boolean)
+              ),
+            ];
             acc.push({
               topic: sec.topic,
               ploRequire: sec.ploRequire?.length
                 ? sec.ploRequire
-                : [{ plo: ploList.id as string, list: [] }],
+                : curriculum.map((cur) => ({
+                    plo: ploList.id as string,
+                    curriculum: cur!,
+                    list: [],
+                  })) || [],
             });
           }
           return acc;
@@ -305,13 +325,25 @@ export default function MapPLO({ ploName = "" }: Props) {
           sections,
         });
       } else {
+        const curriculum = [
+          ...new Set(
+            course?.sections
+              .flatMap(({ curriculum }) => curriculum)
+              .flat()
+              .filter(Boolean)
+          ),
+        ];
         data.push({
           id: course.id,
           courseNo: course.courseNo,
           type: course.type,
           ploRequire: course.ploRequire?.length
             ? course.ploRequire
-            : [{ plo: ploList.id as string, list: [] }],
+            : curriculum.map((cur) => ({
+                plo: ploList.id as string,
+                curriculum: cur!,
+                list: [],
+              })) || [],
         });
       }
     });
@@ -324,7 +356,7 @@ export default function MapPLO({ ploName = "" }: Props) {
       ...new CourseManagementSearchDTO(),
       isPloMapping: true,
       limit: 20,
-      curriculum: ploList.curriculum,
+      curriculum: [selectedCurriculum],
     };
     if (reset) payloadCourse.search = "";
     else payloadCourse.search = searchValue;
@@ -347,6 +379,13 @@ export default function MapPLO({ ploName = "" }: Props) {
     dispatch(setLoadingOverlay(false));
   };
 
+  const totalRows = courseManagement.reduce((count, course) => {
+    if (course.type === COURSE_TYPE.SEL_TOPIC.en) {
+      return count + (course.sections?.length ?? 0);
+    }
+    return count + 1;
+  }, 0);
+
   const courseMapPloTable = (
     index: number,
     course: Partial<IModelCourseManagement>,
@@ -359,10 +398,11 @@ export default function MapPLO({ ploName = "" }: Props) {
         </Table.Td>
         {ploList.data?.map((plo) => {
           const ploRequire = (sec ? sec.ploRequire : course.ploRequire)?.find(
-            (item) => item.plo == ploList.id
+            (item) =>
+              item.plo == ploList.id && item.curriculum == selectedCurriculum
           )?.list as string[];
           return (
-            <Table.Td key={plo.id} className="z-50">
+            <Table.Td key={`${selectedCurriculum}-${plo.id}`} className="z-50">
               <div className="flex justify-start items-center">
                 {!isMapPLO ? (
                   ploRequire?.includes(plo.id) ? (
@@ -384,13 +424,16 @@ export default function MapPLO({ ploName = "" }: Props) {
                     onChange={(event) => {
                       const newData = { ...course };
                       const newPlo = newData.ploRequire?.find(
-                        (item) => item.plo == ploList.id
+                        (item) =>
+                          item.plo == ploList.id &&
+                          item.curriculum == selectedCurriculum
                       )!;
                       if (event.target.checked) {
                         if (sec) {
                           newData.sections?.forEach((e) => {
                             if (
                               e.topic === sec.topic &&
+                              e.curriculum == selectedCurriculum &&
                               !ploRequire?.includes(plo.id)
                             ) {
                               ploRequire?.push(plo.id);
@@ -404,9 +447,14 @@ export default function MapPLO({ ploName = "" }: Props) {
                       } else {
                         if (sec) {
                           newData.sections?.forEach((e) => {
-                            if (e.topic === sec.topic) {
+                            if (
+                              e.topic === sec.topic &&
+                              e.curriculum == selectedCurriculum
+                            ) {
                               const selectPlo = e.ploRequire?.find(
-                                (item) => item.plo == ploList.id
+                                (item) =>
+                                  item.plo == ploList.id &&
+                                  item.curriculum == selectedCurriculum
                               );
                               const index = (
                                 selectPlo?.list as string[]
@@ -462,7 +510,10 @@ export default function MapPLO({ ploName = "" }: Props) {
     const sectionNo: string[] = value.sort((a, b) => parseInt(a) - parseInt(b));
     setSectionNoList(sectionNo.map((secNo) => getSectionNo(secNo)));
 
-    let initialSection = { topic: sections[0]?.topic };
+    let initialSection = {
+      topic: sections[0]?.topic,
+      curriculum: selectedCurriculum!,
+    };
     if (!sectionNo.length) {
       sections = [{ ...initialSection }];
     } else if (sections?.length == sectionNo.length) {
@@ -486,12 +537,16 @@ export default function MapPLO({ ploName = "" }: Props) {
   };
 
   const addCourse = async () => {
-    if (form.getValues().type == COURSE_TYPE.SEL_TOPIC.en) {
-      setFirstInput(false);
-      form.getValues().sections?.forEach((e: any) => {
+    setFirstInput(false);
+    form.getValues().sections?.forEach((e: any) => {
+      if (form.getValues().type == COURSE_TYPE.SEL_TOPIC.en) {
         e.topic = form.getValues().sections![0].topic;
-      });
-    }
+      } else {
+        delete e.topic;
+      }
+      e.curriculum = selectedCurriculum;
+    });
+
     if (!form.validate().hasErrors) {
       dispatch(setLoadingOverlay(true));
       const payload = {
@@ -499,9 +554,6 @@ export default function MapPLO({ ploName = "" }: Props) {
         updatedYear: academicYear.year,
         updatedSemester: academicYear.semester,
       } as CourseManagementRequestDTO & Record<string, any>;
-      if (payload.type !== COURSE_TYPE.SEL_TOPIC.en) {
-        delete payload.sections;
-      }
       const res = await createCourseManagement(payload);
       if (res) {
         searchCourse("");
@@ -701,38 +753,35 @@ export default function MapPLO({ ploName = "" }: Props) {
               {...form.getInputProps("courseName")}
             />
             {form.getValues().type == COURSE_TYPE.SEL_TOPIC.en && (
-              <>
-                <TextInput
-                  label="Course Topic"
-                  withAsterisk
-                  size="xs"
-                  classNames={{ input: "focus:border-primary" }}
-                  placeholder="Ex. Full Stack Development"
-                  {...form.getInputProps("sections.0.topic")}
-                />
-                <TagsInput
-                  label="Section"
-                  withAsterisk
-                  classNames={{
-                    input:
-                      "h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b4  rounded-md",
-                    pill: "bg-secondary text-white font-bold",
-                    label: "font-semibold text-tertiary text-b2",
-                    error: "text-[10px] !border-none",
-                  }}
-                  placeholder="Ex. 001 or 1 (Press Enter or Spacebar for fill the next section)"
-                  splitChars={[",", " ", "|"]}
-                  {...form.getInputProps(`section.sectionNo`)}
-                  error={
-                    !firstInput &&
-                    form.validateField(`sections.0.sectionNo`).error
-                  }
-                  value={sectionNoList}
-                  onChange={setSectionList}
-                />
-                <p>{form.validateField("sections.sectionNo").error}</p>
-              </>
+              <TextInput
+                label="Course Topic"
+                withAsterisk
+                size="xs"
+                classNames={{ input: "focus:border-primary" }}
+                placeholder="Ex. Full Stack Development"
+                {...form.getInputProps("sections.0.topic")}
+              />
             )}
+            <TagsInput
+              label="Section"
+              withAsterisk
+              classNames={{
+                input:
+                  "h-[145px] bg-[#ffffff] mt-[2px] p-3 text-b4  rounded-md",
+                pill: "bg-secondary text-white font-bold",
+                label: "font-semibold text-tertiary text-b2",
+                error: "text-[10px] !border-none",
+              }}
+              placeholder="Ex. 001 or 1 (Press Enter or Spacebar for fill the next section)"
+              splitChars={[",", " ", "|"]}
+              {...form.getInputProps(`sections.sectionNo`)}
+              error={
+                !firstInput && form.validateField(`sections.0.sectionNo`).error
+              }
+              value={sectionNoList}
+              onChange={setSectionList}
+            />
+            <p>{form.validateField("sections.sectionNo").error}</p>
           </div>
           <div className="flex gap-2 justify-end">
             <Button
@@ -1014,12 +1063,25 @@ export default function MapPLO({ ploName = "" }: Props) {
 
                   <div className="flex gap-3">
                     {!isMapPLO ? (
-                      <div className="flex gap-5 z-[60]">
+                      <div className="flex flex-wrap justify-end gap-5 z-[60]">
                         <SearchInput
                           onSearch={searchCourse}
                           placeholder="Course No / Course Name"
                         />
-
+                        <Select
+                          placeholder="Curriculum"
+                          data={ploList.curriculum?.map((cur) => cur)}
+                          value={selectedCurriculum}
+                          onChange={(event) => setSelectedCurriculum(event)}
+                          allowDeselect={false}
+                          size="xs"
+                          className="w-[130px] border-none"
+                          classNames={{
+                            input:
+                              "rounded-md focus:border-primary acerSwift:max-macair133:!text-b5",
+                            option: "acerSwift:max-macair133:!text-b5",
+                          }}
+                        />
                         <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
                           <Menu
                             trigger="click"
@@ -1076,7 +1138,9 @@ export default function MapPLO({ ploName = "" }: Props) {
                         <Button
                           variant="subtle"
                           className="bg-[#e5e7eb] hover-[#e5e7eb]/10"
-                          onClick={() => setIsMapPLO(false)}
+                          onClick={() => {
+                            setIsMapPLO(false);
+                          }}
                           loading={loading.loadingOverlay}
                         >
                           Cancel
@@ -1110,7 +1174,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                   </div>
                 ) : (
                   <InfiniteScroll
-                    dataLength={courseManagement.length}
+                    dataLength={totalRows}
                     next={onShowMore}
                     height={"100%"}
                     hasMore={payload?.hasMore}

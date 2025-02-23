@@ -13,14 +13,14 @@ import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
-import { setShowNavbar, setShowSidebar } from "@/store/config";
+import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import {
   addLoadMoreAllCourse,
   setAllCourseList,
   setSearchCurriculum,
 } from "@/store/allCourse";
 import { getUniqueTopicsWithTQF } from "@/helpers/functions/function";
-import { COURSE_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
 import { IModelCourse, IModelSection } from "@/models/ModelCourse";
 import { IModelCurriculum } from "@/models/ModelFaculty";
 import DrawerPLOdes from "@/components/DrawerPLO";
@@ -47,6 +47,8 @@ export default function AdminDashboardCLO() {
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
+    localStorage.setItem("dashboard", ROLE.ADMIN);
+    dispatch(setDashboard(ROLE.ADMIN));
   }, []);
 
   useEffect(() => {
@@ -198,8 +200,7 @@ export default function AdminDashboardCLO() {
               label={
                 <div className="text-emphasize text-[13px] p-2 flex flex-col gap-1 w-fit max-w-[800px]">
                   <p className="text-secondary font-bold">CLO {clo.no}</p>
-
-                  <p className="font-medium text-[13px] text-pretty ">
+                  <div className="font-medium text-[13px] text-pretty ">
                     <div className="border-none">
                       <div className="flex">
                         <li></li>
@@ -210,7 +211,7 @@ export default function AdminDashboardCLO() {
                         <p>{clo.descEN}</p>
                       </div>
                     </div>
-                  </p>
+                  </div>
                 </div>
               }
               color="#FCFCFC"
@@ -229,11 +230,15 @@ export default function AdminDashboardCLO() {
           {curriculumPLO.data?.map((plo) => (
             <Table.Td key={plo.no} className={`text-secondary `}>
               {dataTQF3?.part7 ? (
-                dataTQF3.part7!.data.some(
-                  (item) =>
-                    item.clo === clo.id &&
-                    (item.plos as string[]).includes(plo.id)
-                ) ? (
+                dataTQF3
+                  .part7!.list.find(
+                    ({ curriculum }) => curriculum == selectCurriculum
+                  )
+                  ?.data.some(
+                    (item) =>
+                      item.clo === clo.id &&
+                      (item.plos as string[]).includes(plo.id)
+                  ) ? (
                   <div className="flex text-start">
                     <Icon IconComponent={IconCheck} />
                   </div>

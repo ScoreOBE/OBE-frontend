@@ -1,4 +1,5 @@
 import { IModelCourse } from "@/models/ModelCourse";
+import { IModelPLORequire } from "@/models/ModelCourseManagement";
 import { IModelPLO } from "@/models/ModelPLO";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { createSlice } from "@reduxjs/toolkit";
@@ -8,18 +9,28 @@ export const tqf3Slice = createSlice({
   initialState: {} as IModelTQF3 &
     IModelCourse & {
       topic?: string;
-      ploRequired?: string[];
-      coursePLO?: Partial<IModelPLO>;
+      curriculum?: string[];
+      ploRequired?: IModelPLORequire[];
+      coursePLO?: Partial<IModelPLO>[];
     },
   reducers: {
     resetDataTQF3: () => {
       return {} as any;
     },
     setDataTQF3: (state, action) => {
-      return { coursePLO: { ...state.coursePLO }, ...action.payload };
+      return {
+        topic: state.topic,
+        curriculum: state.curriculum,
+        coursePLO: state.coursePLO,
+        ...action.payload,
+      };
     },
     setPloTQF3: (state, action) => {
-      return { ...state, coursePLO: action.payload };
+      return {
+        ...state,
+        curriculum: action.payload.curriculum,
+        coursePLO: action.payload.coursePLO,
+      };
     },
     setSelectTqf3Topic: (state, action) => {
       return { ...state, topic: action.payload };

@@ -159,14 +159,3 @@ export const sortData = (
     } else return 0;
   });
 };
-
-export const findMostDuplicateCurriculum = (
-  course: IModelCourse | undefined
-): string | undefined => {
-  const sections = course?.sections.map(({ curriculum }) => curriculum);
-  return sections?.sort(
-    (a, b) =>
-      sections.filter((item) => item === b).length -
-      sections.filter((item) => item === a).length
-  )[0];
-};

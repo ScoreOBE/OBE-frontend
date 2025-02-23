@@ -644,6 +644,7 @@ export default function ModalAddCourse({
                         )}`}
                         size="xs"
                         placeholder="Curriculum"
+                        searchable
                         data={[
                           { value: "-", label: "-" },
                           ...(curriculum?.map((item) => ({

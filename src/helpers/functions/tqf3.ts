@@ -20,7 +20,7 @@ export const initialTqf3Part = (tqf3: any, part: any) => {
     case Object.keys(partLabel)[5]: // part 6
       return;
     case Object.keys(partLabel)[6]: // part 7
-      return initialTqf3Part7(tqf3.part2);
+      return initialTqf3Part7(tqf3.part2, tqf3.curriculum);
   }
 };
 
@@ -53,10 +53,16 @@ export const initialTqf3Part4 = (part2: IModelTQF3Part2 | undefined) => {
 export const initialTqf3Part5 = () => {
   return { mainRef: "", recDoc: "" };
 };
-export const initialTqf3Part7 = (part2: IModelTQF3Part2 | undefined) => {
+export const initialTqf3Part7 = (
+  part2: IModelTQF3Part2 | undefined,
+  curriculum: string[]
+) => {
   return {
-    data: !part2
-      ? []
-      : cloneDeep(part2.clo.map(({ id }) => ({ clo: id, plos: [] }))),
+    list: curriculum.map((cur) => ({
+      curriculum: cur,
+      data: !part2
+        ? []
+        : cloneDeep(part2.clo.map(({ id }) => ({ clo: id, plos: [] }))),
+    })),
   };
 };

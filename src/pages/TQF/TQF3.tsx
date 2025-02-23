@@ -23,17 +23,14 @@ import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
 import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
-import { isEmpty, isEqual } from "lodash";
+import { isEmpty, isEqual, unionBy, uniq } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
 import {
   getCourseReuseTQF3,
   reuseTQF3,
   saveTQF3,
 } from "@/services/tqf3/tqf3.service";
-import {
-  findMostDuplicateCurriculum,
-  getValueEnumByKey,
-} from "@/helpers/functions/function";
+import { getValueEnumByKey } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { COURSE_TYPE, NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { useForm, UseFormReturnType } from "@mantine/form";
@@ -48,11 +45,12 @@ import { setDataTQF3, setPloTQF3, updatePartTQF3 } from "@/store/tqf3";
 import { IModelSection } from "@/models/ModelCourse";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { IModelCourse } from "@/models/ModelCourse";
-import { initialTqf3Part } from "@/helpers/functions/tqf3";
+import { initialTqf3Part, initialTqf3Part7 } from "@/helpers/functions/tqf3";
 import { setLoadingOverlay } from "@/store/loading";
-import { getOnePLO } from "@/services/plo/plo.service";
+import { getPLOs } from "@/services/plo/plo.service";
 import { setPloTQF5 } from "@/store/tqf5";
 import { IModelTQF5 } from "@/models/ModelTQF5";
+import { IModelPLORequire } from "@/models/ModelCourseManagement";
 
 export default function TQF3() {
   const { courseNo } = useParams();
@@ -68,7 +66,7 @@ export default function TQF3() {
     state.allCourse.courses.find((course) => course.courseNo == courseNo)
   );
   const [tqf3Original, setTqf3Original] = useState<
-    Partial<IModelTQF3> & { topic?: string; ploRequired?: string[] }
+    Partial<IModelTQF3> & { topic?: string; ploRequired?: IModelPLORequire[] }
   >();
   const [tqf5, setTqf5] = useState<IModelTQF5>();
   const tqf3 = useAppSelector((state) => state.tqf3);
@@ -77,6 +75,7 @@ export default function TQF3() {
   const [tqf3Part, setTqf3Part] = useState<string | null>(
     Object.keys(partLabel)[0]
   );
+  const [selectedCurriculum, setSelectedCurriculum] = useState<string | null>();
   const [openWarningEditDataTQF2Or3, setOpenWarningEditDataTQF2Or3] =
     useState(false);
   const [confirmToEditData, setConfirmToEditData] = useState(false);
@@ -123,7 +122,9 @@ export default function TQF3() {
     {
       value: Object.keys(partLabel)[6],
       tab: partLabel.part7,
-      compo: <Part7TQF3 setForm={setForm} />,
+      compo: (
+        <Part7TQF3 setForm={setForm} selectCurriculum={selectedCurriculum} />
+      ),
     },
   ];
 
@@ -134,24 +135,63 @@ export default function TQF3() {
 
   useEffect(() => {
     if (academicYear && params.get("year") && params.get("semester")) {
-      if (!tqf3.coursePLO?.id) {
-        fetchPLO();
-      }
       if (checkActiveTerm()) {
         fetchTqf3Reuse();
       }
     }
   }, [academicYear]);
 
+  useEffect(() => {
+    if (
+      academicYear &&
+      (course || courseAdmin) &&
+      (tqf3.topic != tqf3Original?.topic || !tqf3.coursePLO?.length)
+    ) {
+      fetchPLO();
+    } else if (tqf3.coursePLO?.length) {
+      const curriculum = uniqueCurriculum();
+      if (curriculum.length) {
+        setSelectedCurriculum(curriculum[0]);
+      }
+    }
+  }, [academicYear, courseAdmin, course, tqf3.topic]);
+
+  const uniqueCurriculum = () => {
+    if ((courseAdmin ?? course)?.type == COURSE_TYPE.SEL_TOPIC.en) {
+      return uniq(
+        (courseAdmin ?? course)?.sections
+          .filter((item) => item.topic == tqf3.topic)
+          .flatMap(({ curriculum }) => curriculum)
+          .flat()
+          .filter(Boolean)
+      );
+    } else {
+      return uniq(
+        (courseAdmin ?? course)?.sections
+          .flatMap(({ curriculum }) => curriculum)
+          .flat()
+          .filter(Boolean)
+      );
+    }
+  };
+
   const fetchPLO = async () => {
-    const resPloCol = await getOnePLO({
-      year: params.get("year"),
-      semester: params.get("semester"),
-      curriculum: findMostDuplicateCurriculum(courseAdmin ?? course),
-    });
-    if (resPloCol) {
-      dispatch(setPloTQF3(resPloCol));
-      dispatch(setPloTQF5(resPloCol));
+    const curriculum = uniqueCurriculum();
+    if (curriculum.length) {
+      setSelectedCurriculum(curriculum[0]);
+      const resPloCol = await getPLOs({
+        year: params.get("year"),
+        semester: params.get("semester"),
+        curriculum,
+      });
+      if (resPloCol) {
+        dispatch(setPloTQF3({ curriculum, coursePLO: resPloCol.plos }));
+        dispatch(setPloTQF5({ curriculum, coursePLO: resPloCol.plos }));
+      }
+    } else {
+      setSelectedCurriculum(null);
+      dispatch(setPloTQF3({ curriculum, coursePLO: [] }));
+      dispatch(setPloTQF5({ curriculum, coursePLO: [] }));
     }
   };
 
@@ -249,18 +289,21 @@ export default function TQF3() {
           (sec: IModelSection) => sec.topic == tqf3.topic
         );
         setTqf5(section?.TQF5);
-        const ploRequire = resPloRequired?.sections
-          .find((item: any) => item.topic == tqf3.topic)
-          ?.ploRequire.find((plo: any) => plo.plo == tqf3.coursePLO?.id)?.list;
+        const ploRequire = unionBy(
+          resPloRequired?.sections
+            .filter((item: any) => item.topic == tqf3.topic)
+            .flatMap((item: any) => item.ploRequire),
+          "curriculum"
+        )?.filter((plo: any) =>
+          tqf3.coursePLO?.find((cPlo) => cPlo.id == plo.plo)
+        );
         setTqf3Original({
           topic: tqf3.topic,
           ploRequired: ploRequire || [],
-          part7: {},
           ...section?.TQF3,
         });
         dispatch(
           setDataTQF3({
-            topic: tqf3.topic,
             ploRequired: ploRequire || [],
             ...section?.TQF3,
             type: resCourse.type,
@@ -271,19 +314,17 @@ export default function TQF3() {
           setCurrentPartTQF3(section?.TQF3);
         }
       } else {
-        const ploRequire = resPloRequired?.ploRequire.find(
-          (plo: any) => plo.plo == tqf3.coursePLO?.id
-        )?.list;
+        const ploRequire = resPloRequired?.ploRequire.filter((plo: any) =>
+          tqf3.coursePLO?.find((cPlo) => cPlo.id == plo.plo)
+        );
         setTqf5(resCourse.TQF5);
         setTqf3Original({
           topic: tqf3.topic,
           ploRequired: ploRequire || [],
-          part7: {},
           ...resCourse.TQF3!,
         });
         dispatch(
           setDataTQF3({
-            topic: tqf3.topic,
             ploRequired: ploRequire || [],
             ...resCourse.TQF3!,
             type: resCourse.type,
@@ -383,7 +424,7 @@ export default function TQF3() {
         }
         dispatch(setLoadingOverlay(true));
         if (tqf3Part == "part4") payload.tqf5 = tqf5?.id;
-        else if (tqf3Part == "part6" && !tqf3.coursePLO?.id)
+        else if (tqf3Part == "part6" && !tqf3.coursePLO?.length)
           payload.done = true;
         if (confirmToEditData) payload.inProgress = true;
         const res = await saveTQF3(tqf3Part, payload);
@@ -477,16 +518,40 @@ export default function TQF3() {
                   .map(({ evals }) => evals.find((e) => e.eval == id))
                   .reduce((acc, cur) => acc + (cur?.percent || 0), 0)
             ))) ||
-        (value === "part7" &&
-          (tqf3.part7?.data?.some(({ plos }) => plos.length == 0) ||
-            !tqf3.ploRequired?.every((plo) =>
-              tqf3.part7?.data?.some(({ plos }) =>
-                (plos as string[]).includes(plo)
-              )
-            ))) ||
         localStorage.getItem(`reuse${tqf3.id}-${value}`)
       ? "text-edit" // In Progress
       : "text-[#24b9a5]"; // Done
+  };
+
+  const checkPart7Status = () => {
+    const part7Select = tqf3.part7?.list.find(
+      (e) => e.curriculum == selectedCurriculum
+    );
+    const curIndex = tqf3.part7?.list.findIndex(
+      (e) => e.curriculum == selectedCurriculum
+    );
+    return !part7Select ||
+      curIndex == undefined ||
+      curIndex < 0 ||
+      isEqual(
+        tqf3Original?.part7?.list[curIndex],
+        initialTqf3Part7(tqf3.part2, tqf3.curriculum!).list[curIndex]
+      )
+      ? "text-[#DEE2E6]"
+      : !isEqual(
+          tqf3Original?.part7?.list[curIndex],
+          tqf3.part7?.list[curIndex]
+        ) ||
+        part7Select?.data?.some(({ plos }) => plos.length == 0) ||
+        !tqf3.ploRequired
+          ?.find((e) => e.curriculum == selectedCurriculum)
+          ?.list.every((plo) =>
+            part7Select?.data?.some(({ plos }) =>
+              (plos as string[]).includes(plo)
+            )
+          )
+      ? "text-edit"
+      : "text-[#24b9a5]";
   };
 
   return loading.loading || !tqf3Original ? (
@@ -547,7 +612,7 @@ export default function TQF3() {
             allowDeselect
             size="sm"
             label="Select course to reuse"
-            className="w-full border-none "
+            className="w-full border-none"
             classNames={{
               input: `rounded-md acerSwift:max-macair133:!text-b4`,
               option: `py-1 acerSwift:max-macair133:!text-b4 `,
@@ -675,10 +740,12 @@ export default function TQF3() {
               {partTab.map(({ tab, value }) => (
                 <Tabs.Tab key={value} value={value}>
                   <div className="flex flex-row items-center gap-2">
-                    <Icon
-                      IconComponent={IconCheck}
-                      className={checkPartStatus(value as keyof IModelTQF3)}
-                    />
+                    {value != "part7" && (
+                      <Icon
+                        IconComponent={IconCheck}
+                        className={checkPartStatus(value as keyof IModelTQF3)}
+                      />
+                    )}
                     {tab}
                   </div>
                 </Tabs.Tab>
@@ -689,6 +756,28 @@ export default function TQF3() {
                 {getValueEnumByKey(PartTopicTQF3, tqf3Part!)}
               </div>
               <div className="flex flex-row flex-wrap gap-3">
+                {tqf3Part == "part7" && (
+                  <div className="flex gap-2">
+                    <Icon
+                      IconComponent={IconCheck}
+                      className={checkPart7Status()}
+                    />
+                    <Select
+                      placeholder="Curriculum"
+                      data={tqf3.curriculum?.map((cur) => cur)}
+                      value={selectedCurriculum}
+                      onChange={(event) => setSelectedCurriculum(event)}
+                      allowDeselect={false}
+                      size="xs"
+                      className="w-[130px] border-none"
+                      classNames={{
+                        input:
+                          "rounded-md focus:border-primary acerSwift:max-macair133:!text-b5",
+                        option: "acerSwift:max-macair133:!text-b5",
+                      }}
+                    />
+                  </div>
+                )}
                 {checkActiveTerm() && (
                   <Tooltip
                     onClick={() => setOpenModalReuse(true)}

@@ -12,7 +12,7 @@ export interface IModelEnrollCourse {
   clos: {
     clo: IModelCLO;
     evals: { eval: IModelEval; percent: number }[];
-    plos: string[];
+    plos: { curriculum: string; list: string[] }[][];
     assess: {
       eval: string;
       sheet: string[];

@@ -1,5 +1,5 @@
 import { IModelUser } from "./ModelUser";
-import { IModelPLO, IModelPLONo } from "./ModelPLO";
+import { IModelPLO } from "./ModelPLO";
 
 export interface IModelCourseManagement {
   id: string;
@@ -28,5 +28,6 @@ export interface IModelSectionManagement {
 
 export interface IModelPLORequire {
   plo: IModelPLO | string;
-  list: IModelPLONo[] | string[];
+  curriculum: string;
+  list: string[];
 }

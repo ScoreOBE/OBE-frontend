@@ -30,6 +30,7 @@ import { IModelSection } from "@/models/ModelCourse";
 import { isEmpty, isEqual } from "lodash";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";
 import { resetDataTQF5, setSelectTqf5Topic } from "@/store/tqf5";
+import { IModelPLORequire } from "@/models/ModelCourseManagement";
 
 type Props = {
   onClickLeaveCourse: () => void;
@@ -56,7 +57,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const tqf5 = useAppSelector((state) => state.tqf5);
   const [openAlertPopup, setOpenAlertPopup] = useState(false);
   const [tqf3Original, setTqf3Original] = useState<
-    Partial<IModelTQF3> & { topic?: string; ploRequired?: string[] }
+    Partial<IModelTQF3> & { topic?: string; ploRequired?: IModelPLORequire[] }
   >();
 
   useEffect(() => {
@@ -180,7 +181,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             true
           );
         }}
-type='unsaved'
+        type="unsaved"
         labelButtonRight={`Keep editing`}
         labelButtonLeft="Leave without saving"
         title={`TQF 3 unsaved changes?`}
