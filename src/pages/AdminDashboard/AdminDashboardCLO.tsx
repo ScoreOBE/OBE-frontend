@@ -232,7 +232,7 @@ export default function AdminDashboardCLO() {
               {dataTQF3?.part7 ? (
                 dataTQF3
                   .part7!.list.find(
-                    ({ curriculum }) => curriculum == selectCurriculum
+                    ({ curriculum }) => curriculum == selectCurriculum.code
                   )
                   ?.data.some(
                     (item) =>
@@ -253,7 +253,7 @@ export default function AdminDashboardCLO() {
         </Table.Tr>
       ))
     ) : (
-      <Table.Tr key={`${index}-no-data`}>
+      <Table.Tr key={`${sec ? sec.topic : course.courseNo}-no-data`}>
         <Table.Td>
           <div>
             <p>{course.courseNo}</p>
