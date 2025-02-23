@@ -6,13 +6,14 @@ export interface IModelTQF5 {
   status: TQF_STATUS;
   method?: METHOD_TQF5;
   assignmentsMap?: { eval: string; assignment: string[] }[];
-  part1?: IModelTQF5Part1;
+  part1?: { list: IModelTQF5Part1[]; updatedAt: Date };
   part2?: { data: IModelTQF5Part2[]; updatedAt: Date };
   part3?: { data: IModelTQF5Part3[]; updatedAt: Date };
   updatedAt: Date;
 }
 
 export interface IModelTQF5Part1 {
+  curriculum: string | null;
   courseEval: {
     sectionNo: number;
     A: number;
@@ -41,7 +42,6 @@ export interface IModelTQF5Part1 {
     S: string;
     U: string;
   };
-  updatedAt: Date;
 }
 
 export interface IModelTQF5Part2 {

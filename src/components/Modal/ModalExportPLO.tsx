@@ -55,6 +55,23 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
   //   }
   // }, [data]);
 
+  // const filterCoursesForPLO = (plo: Partial<IModelPLO>, item: any) => {
+  //   return courseList.courses.filter((course) => {
+  //     const hasPloRequirement = course.ploRequire?.some(
+  //       (e) => e.plo == plo.id && e.list.includes(item.id)
+  //     );
+  //     const hasSectionPlo = course.sections.some(
+  //       (sec) =>
+  //         sec.curriculum &&
+  //         plo.curriculum?.includes(sec.curriculum) &&
+  //         sec.ploRequire?.some(
+  //           (e) => e.plo == plo.id && e.list.includes(item.id)
+  //         )
+  //     );
+  //     return hasPloRequirement || hasSectionPlo;
+  //   });
+  // };
+
   // const calculatePloScores = () => {
   //   const updatedPloScores: PloScore[] = curriculumPLO.data!.map((item) => {
   //     const coursesForPLO = filterCoursesForPLO(curriculumPLO, item);
