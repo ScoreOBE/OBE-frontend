@@ -31,18 +31,6 @@ import PLOYearView from "@/components/Modal/PLOAdmin/PLOYearView";
 import { IModelCurriculum } from "@/models/ModelFaculty";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export type PloScore = {
-  plo: IModelPLONo;
-  courses: CoursePloScore[];
-};
-
-export type CoursePloScore = {
-  courseNo: string;
-  courseName: string;
-  topic?: string;
-  avgScore: number;
-};
-
 export default function AdminDashboardPLO() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
@@ -57,7 +45,6 @@ export default function AdminDashboardPLO() {
     Partial<IModelCurriculum>
   >({});
   const [curriculumPLO, setCurriculumPLO] = useState<Partial<IModelPLO>>({});
-  const [ploScores, setPloScores] = useState<PloScore[]>([]);
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
   const [openModalExportPLO, setOpenModalExportPLO] = useState(false);
   const [openPLOYearView, setOpenPLOYearView] = useState(false);
@@ -180,60 +167,6 @@ export default function AdminDashboardPLO() {
     });
   };
 
-  const calculatePloScores = () => {
-    const updatedPloScores: PloScore[] = curriculumPLO.data!.map((item) => {
-      const coursesForPLO = filterCoursesForPLO(curriculumPLO, item);
-      const courseScores: CoursePloScore[] = coursesForPLO.flatMap((course) => {
-        if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
-          return getUniqueTopicsWithTQF(course.sections!)
-            .map((sec) => {
-              const clos = sec.TQF3?.part7?.list
-                .find(({ curriculum }) => curriculum == selectCurriculum)
-                ?.data.filter(({ plos }) =>
-                  (plos as string[]).includes(item.id)
-                )
-                .map(({ clo }) => clo);
-              const sum = clos?.length
-                ? sec.TQF5?.part3?.data
-                    .filter(({ clo }) => clos?.includes(clo))
-                    .reduce((a, b) => a + b.score, 0)
-                : undefined;
-              return sum !== undefined
-                ? {
-                    courseNo: course.courseNo,
-                    courseName: course.courseName,
-                    topic: sec.topic,
-                    avgScore: sum / (clos?.length ?? 1),
-                  }
-                : null;
-            })
-            .filter((c) => c !== null);
-        } else {
-          const clos = course.TQF3?.part7?.list
-            .find(({ curriculum }) => curriculum == selectCurriculum)
-            ?.data.filter(({ plos }) => (plos as string[]).includes(item.id))
-            .map(({ clo }) => clo);
-          const sum = clos?.length
-            ? course.TQF5?.part3?.data
-                .filter(({ clo }) => clos?.includes(clo))
-                .reduce((a, b) => a + b.score, 0)
-            : undefined;
-          return sum !== undefined
-            ? [
-                {
-                  courseNo: course.courseNo,
-                  courseName: course.courseName,
-                  avgScore: sum / (clos?.length ?? 1),
-                },
-              ]
-            : [];
-        }
-      });
-      return { plo: item, courses: courseScores };
-    });
-    setPloScores(updatedPloScores);
-  };
-
   const totalRows = courseList.courses.reduce((count, course) => {
     if (course.type === COURSE_TYPE.SEL_TOPIC.en) {
       return count + getUniqueTopicsWithTQF(course.sections!).length;
@@ -344,7 +277,6 @@ export default function AdminDashboardPLO() {
       <ModalExportPLO
         opened={openModalExportPLO}
         onClose={() => setOpenModalExportPLO(false)}
-        data={ploScores}
       />
       <PLOSelectCourseView
         opened={openPLOSelectCourseView}

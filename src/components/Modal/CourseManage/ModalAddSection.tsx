@@ -565,6 +565,7 @@ export default function ModalAddSection({
                         size="xs"
                         placeholder="Curriculum"
                         searchable
+                        nothingFoundMessage="No result"
                         data={[
                           { value: "-", label: "-" },
                           ...(curriculum?.map((item) => ({
