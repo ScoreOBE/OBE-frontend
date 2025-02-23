@@ -1,6 +1,15 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Alert, Button, Group, Menu, Modal, Radio, Tabs } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Group,
+  Menu,
+  Modal,
+  Radio,
+  Select,
+  Tabs,
+} from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconDots from "@/assets/icons/dots.svg?react";
 import IconCheck from "@/assets/icons/Check.svg?react";
@@ -44,6 +53,7 @@ import { setLoadingOverlay } from "@/store/loading";
 import ModalExportTQF5 from "@/components/Modal/TQF5/ModalExportTQF5";
 import ModalSetRange from "@/components/Modal/TQF5/ModalSetRange";
 import { IModelPLORequire } from "@/models/ModelCourseManagement";
+import { initialTqf5Part1 } from "@/helpers/functions/tqf5";
 
 export default function TQF5() {
   const { courseNo } = useParams();
@@ -69,6 +79,7 @@ export default function TQF5() {
   const [tqf5Part, setTqf5Part] = useState<string | null>(
     Object.keys(partLabel)[0]
   );
+  const [selectedCurriculum, setSelectedCurriculum] = useState<string | null>();
   const [selectedMethod, setSelectedMethod] = useState<METHOD_TQF5>();
   const [openModalChangeMethod, setOpenModalChangeMethod] = useState(false);
   const [openModalExportTQF5, setOpenModalExportTQF5] = useState(false);
@@ -79,7 +90,9 @@ export default function TQF5() {
     {
       value: Object.keys(partLabel)[0],
       tab: partLabel.part1,
-      compo: <Part1TQF5 setForm={setForm} />,
+      compo: (
+        <Part1TQF5 setForm={setForm} selectCurriculum={selectedCurriculum} />
+      ),
     },
     {
       value: Object.keys(partLabel)[1],
@@ -103,10 +116,19 @@ export default function TQF5() {
   }, []);
 
   useEffect(() => {
-    if (academicYear && (course || courseAdmin) && !tqf5.coursePLO?.length) {
+    if (
+      academicYear &&
+      (course || courseAdmin) &&
+      (tqf5.topic != tqf5Original?.topic || !tqf5.coursePLO?.length)
+    ) {
       fetchPLO();
+    } else if (tqf5.coursePLO?.length) {
+      const curriculum = uniqueCurriculum();
+      if (curriculum.length) {
+        setSelectedCurriculum(curriculum[0]);
+      }
     }
-  }, [academicYear, courseAdmin]);
+  }, [academicYear, courseAdmin, course, tqf5.topic]);
 
   const uniqueCurriculum = () => {
     if ((courseAdmin ?? course)?.type == COURSE_TYPE.SEL_TOPIC.en) {
@@ -130,7 +152,7 @@ export default function TQF5() {
   const fetchPLO = async () => {
     const curriculum = uniqueCurriculum();
     if (curriculum.length) {
-      // setSelectedCurriculum(curriculum[0]);
+      setSelectedCurriculum(curriculum[0]);
       const resPloCol = await getPLOs({
         year: params.get("year"),
         semester: params.get("semester"),
@@ -141,6 +163,7 @@ export default function TQF5() {
         dispatch(setPloTQF5({ curriculum, coursePLO: resPloCol.plos }));
       }
     } else {
+      setSelectedCurriculum(null);
       dispatch(setPloTQF3({ curriculum, coursePLO: [] }));
       dispatch(setPloTQF5({ curriculum, coursePLO: [] }));
     }
@@ -377,6 +400,30 @@ export default function TQF5() {
       : "text-[#24b9a5]"; // Done
   };
 
+  const checkPart1Status = () => {
+    const part1Select = tqf5.part1?.list.find(
+      (e) => e.curriculum == selectedCurriculum
+    );
+    const curIndex = tqf5.part1?.list.findIndex(
+      (e) => e.curriculum == selectedCurriculum
+    );
+    return !part1Select ||
+      curIndex == undefined ||
+      curIndex < 0 ||
+      isEqual(
+        tqf5Original?.part1?.list[curIndex],
+        initialTqf5Part1((courseAdmin ?? course)!, tqf5.topic, tqf5.curriculum!)
+          .list[curIndex]
+      )
+      ? "text-[#DEE2E6]"
+      : !isEqual(
+          tqf5Original?.part1?.list[curIndex],
+          tqf5.part1?.list[curIndex]
+        )
+      ? "text-edit"
+      : "text-[#24b9a5]";
+  };
+
   const showSaveTQFbar = () => {
     if (tqf3?.status != TQF_STATUS.DONE) return false;
     if (tqf5Original && tqf5.id) {
@@ -560,10 +607,12 @@ export default function TQF5() {
               {partTab.map(({ tab, value }) => (
                 <Tabs.Tab key={value} value={value}>
                   <div className="flex flex-row items-center gap-2">
-                    <Icon
-                      IconComponent={IconCheck}
-                      className={checkPartStatus(value as keyof IModelTQF5)}
-                    />
+                    {value != "part1" && (
+                      <Icon
+                        IconComponent={IconCheck}
+                        className={checkPartStatus(value as keyof IModelTQF5)}
+                      />
+                    )}
                     {tab}
                   </div>
                 </Tabs.Tab>
@@ -574,6 +623,28 @@ export default function TQF5() {
                 {getValueEnumByKey(PartTopicTQF5, tqf5Part!)}
               </div>
               <div className="flex gap-2 ">
+                {tqf5Part == "part1" && (
+                  <div className="flex gap-2">
+                    <Icon
+                      IconComponent={IconCheck}
+                      className={checkPart1Status()}
+                    />
+                    <Select
+                      placeholder="Curriculum"
+                      data={tqf5.curriculum?.map((cur) => cur)}
+                      value={selectedCurriculum}
+                      onChange={(event) => setSelectedCurriculum(event)}
+                      allowDeselect={false}
+                      size="xs"
+                      className="w-[130px] border-none"
+                      classNames={{
+                        input:
+                          "rounded-md focus:border-primary acerSwift:max-macair133:!text-b5",
+                        option: "acerSwift:max-macair133:!text-b5",
+                      }}
+                    />
+                  </div>
+                )}
                 <Button
                   onClick={() => setOpenModalExportTQF5(true)}
                   color="#24b9a5"

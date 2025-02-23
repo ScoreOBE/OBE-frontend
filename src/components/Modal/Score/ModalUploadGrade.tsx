@@ -27,10 +27,8 @@ type Props = {
   opened: boolean;
   onClose: () => void;
   data: Partial<IModelCourse>;
-  form: UseFormReturnType<
-    IModelTQF5Part1,
-    (values: IModelTQF5Part1) => IModelTQF5Part1
-  >;
+  form: UseFormReturnType<{ list: IModelTQF5Part1[] }>;
+  curIndex: number;
 };
 
 export default function ModalUploadGrade({
@@ -38,6 +36,7 @@ export default function ModalUploadGrade({
   onClose,
   data,
   form,
+  curIndex,
 }: Props) {
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
   const [openModalWarningStudentList, setOpenModalWarningStudentList] =
@@ -120,17 +119,15 @@ export default function ModalUploadGrade({
   }, [result]);
 
   const onClickUpload = async () => {
-    if (result) {
-      const courseEval = [...form.getValues().courseEval];
-      courseEval.forEach((sec) => {
+    if (result?.sections) {
+      let courseEval = [...(form.getValues().list[curIndex]?.courseEval || [])];
+      courseEval = courseEval.map((sec) => {
         const newData = result.sections.find(
           ({ sectionNo }: any) => sec.sectionNo == sectionNo
         );
-        if (newData) {
-          sec = { ...newData };
-        }
+        return newData ? { ...newData } : sec;
       });
-      form.setFieldValue("courseEval", courseEval);
+      form.setFieldValue(`list.${curIndex}.courseEval`, courseEval);
       onClose();
     } else {
       showNotifications(NOTI_TYPE.ERROR, "Invalid File", "invalid grade");

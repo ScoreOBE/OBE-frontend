@@ -14,12 +14,14 @@ import { updatePartTQF5 } from "@/store/tqf5";
 import { getSectionNo } from "@/helpers/functions/function";
 import { IModelUser } from "@/models/ModelUser";
 import { ROLE } from "@/helpers/constants/enum";
+import { initialTqf5Part1 } from "@/helpers/functions/tqf5";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
+  selectCurriculum: string | null | undefined;
 };
 
-export default function Part1TQF5({ setForm }: Props) {
+export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
   const { courseNo } = useParams();
   const user = useAppSelector((state) => state.user);
   const dashboard = useAppSelector((state) => state.config.dashboard);
@@ -30,43 +32,13 @@ export default function Part1TQF5({ setForm }: Props) {
   );
   const tqf5 = useAppSelector((state) => state.tqf5);
   const dispatch = useAppDispatch();
+  const [curIndex, setCurIndex] = useState(0);
   const [openModalUploadGrade, setOpenModalUploadGrade] = useState(false);
   const [isEditCourseEval, setIsEditCourseEval] = useState(false);
   const [isEditCriteria, setIsEditCriteria] = useState(false);
   const form = useForm({
     mode: "controlled",
-    initialValues: {
-      courseEval: course?.sections
-        .filter((sec) => sec.isActive && sec.topic == tqf5.topic)
-        .map((sec) => ({
-          sectionNo: sec.sectionNo,
-          A: 0,
-          Bplus: 0,
-          B: 0,
-          Cplus: 0,
-          C: 0,
-          Dplus: 0,
-          D: 0,
-          F: 0,
-          W: 0,
-          S: 0,
-          U: 0,
-          P: 0,
-        })),
-      gradingCriteria: {
-        A: ">= 80.00",
-        Bplus: "75.00 - 79.99",
-        B: "70.00 - 74.99",
-        Cplus: "65.00 - 69.99",
-        C: "60.00 - 64.99",
-        Dplus: "55.00 - 59.99",
-        D: "50.00 - 54.99",
-        F: "0.00 - 49.99",
-        W: "-",
-        S: "-",
-        U: "-",
-      },
-    } as IModelTQF5Part1,
+    initialValues: { list: [] as IModelTQF5Part1[] },
     validateInputOnBlur: true,
     onValuesChange(values, previous) {
       if (!isEqual(values, previous)) {
@@ -107,8 +79,15 @@ export default function Part1TQF5({ setForm }: Props) {
   useEffect(() => {
     if (tqf5.part1) {
       form.setValues(cloneDeep(tqf5.part1));
+      setCurIndex(
+        !selectCurriculum
+          ? 0
+          : tqf5.curriculum!.findIndex((cur) => cur == selectCurriculum)
+      );
+    } else {
+      form.setValues(initialTqf5Part1(course!, tqf5.topic, tqf5.curriculum!));
     }
-  }, []);
+  }, [tqf5.ploRequired, selectCurriculum]);
 
   return (
     <>
@@ -117,6 +96,7 @@ export default function Part1TQF5({ setForm }: Props) {
         onClose={() => setOpenModalUploadGrade(false)}
         data={course!}
         form={form}
+        curIndex={curIndex}
       />
 
       <div className="flex w-full flex-col text-[15px] acerSwift:max-macair133:text-b1 max-h-full gap-3 text-default px-3">
@@ -187,80 +167,84 @@ export default function Part1TQF5({ setForm }: Props) {
               </Table.Thead>
 
               <Table.Tbody>
-                {form.getValues().courseEval?.map((item, index) => {
-                  const section = course?.sections.find(
-                    ({ sectionNo }) => sectionNo == item.sectionNo
-                  );
-                  const canAccess =
-                    (section?.instructor as IModelUser).id == user.id ||
-                    section?.coInstructors?.find(
-                      (coIns) => coIns.id == user.id
+                {form
+                  .getValues()
+                  .list[curIndex]?.courseEval.map((item, index) => {
+                    const section = course?.sections.find(
+                      ({ sectionNo }) => sectionNo == item.sectionNo
                     );
-                  const data = Object.values(item)
-                    .slice(1)
-                    .map((e: any) => parseInt(e));
-                  const total = data.reduce((a, b: any) => a + b, 0);
-                  const avg =
-                    total > 0
-                      ? (4 * data[0] +
-                          3.5 * data[1] +
-                          3 * data[2] +
-                          2.5 * data[3] +
-                          2 * data[4] +
-                          1.5 * data[5] +
-                          1 * data[6] +
-                          0 * data[7]) /
-                        total
-                      : 0;
-                  return (
-                    <Table.Tr
-                      className="font-medium text-default text-b3 acerSwift:max-macair133:!text-b4"
-                      key={item.sectionNo}
-                    >
-                      <Table.Td>{getSectionNo(item.sectionNo)}</Table.Td>
-                      {!isEditCourseEval &&
-                        Object.keys(item)
-                          .slice(1)
-                          .map((key) => (
-                            <Table.Td key={key}>
-                              {(item as any)[key] ?? "-"}
-                            </Table.Td>
-                          ))}
-                      {isEditCourseEval &&
-                        (canAccess || dashboard == ROLE.ADMIN ? (
+                    const canAccess =
+                      (section?.instructor as IModelUser).id == user.id ||
+                      section?.coInstructors?.find(
+                        (coIns) => coIns.id == user.id
+                      );
+                    const data = Object.values(item)
+                      .slice(1)
+                      .map((e: any) => parseInt(e));
+                    const total = data.reduce((a, b: any) => a + b, 0);
+                    const avg =
+                      total > 0
+                        ? (4 * data[0] +
+                            3.5 * data[1] +
+                            3 * data[2] +
+                            2.5 * data[3] +
+                            2 * data[4] +
+                            1.5 * data[5] +
+                            1 * data[6] +
+                            0 * data[7]) /
+                          total
+                        : 0;
+                    return (
+                      <Table.Tr
+                        className="font-medium text-default text-b3 acerSwift:max-macair133:!text-b4"
+                        key={item.sectionNo}
+                      >
+                        <Table.Td>{getSectionNo(item.sectionNo)}</Table.Td>
+                        {!isEditCourseEval &&
                           Object.keys(item)
                             .slice(1)
                             .map((key) => (
                               <Table.Td key={key}>
-                                <TextInput
-                                  size="xs"
-                                  classNames={{
-                                    input:
-                                      "acerSwift:max-macair133:!text-b5 acerSwift:max-macair133:w-[40px]",
-                                  }}
-                                  {...form.getInputProps(
-                                    `courseEval.${index}.${key}`
-                                  )}
-                                />
+                                {(item as any)[key] ?? "-"}
                               </Table.Td>
-                            ))
-                        ) : (
-                          <Table.Td
-                            colSpan={12}
-                            className="text-error text-center"
-                          >
-                            cannot edit
-                          </Table.Td>
-                        ))}
-                      <Table.Td>{total}</Table.Td>
-                      <Table.Td>{avg.toFixed(2)}</Table.Td>
-                    </Table.Tr>
-                  );
-                })}
+                            ))}
+                        {isEditCourseEval &&
+                          (canAccess || dashboard == ROLE.ADMIN ? (
+                            Object.keys(item)
+                              .slice(1)
+                              .map((key) => (
+                                <Table.Td key={key}>
+                                  <TextInput
+                                    size="xs"
+                                    classNames={{
+                                      input:
+                                        "acerSwift:max-macair133:!text-b5 acerSwift:max-macair133:w-[40px]",
+                                    }}
+                                    {...form.getInputProps(
+                                      `list.${curIndex}.courseEval.${index}.${key}`
+                                    )}
+                                  />
+                                </Table.Td>
+                              ))
+                          ) : (
+                            <Table.Td
+                              colSpan={12}
+                              className="text-error text-center"
+                            >
+                              cannot edit
+                            </Table.Td>
+                          ))}
+                        <Table.Td>{total}</Table.Td>
+                        <Table.Td>{avg.toFixed(2)}</Table.Td>
+                      </Table.Tr>
+                    );
+                  })}
               </Table.Tbody>
               <Table.Tfoot className="!bg-bgTableHeader !border-t-[1px] border-secondary sticky bottom-0">
                 {(() => {
-                  const totals = calculateTotals(form.getValues().courseEval);
+                  const totals = calculateTotals(
+                    form.getValues().list[curIndex]?.courseEval
+                  );
                   const avg =
                     totals.total > 0
                       ? (4 * totals.A +
@@ -331,7 +315,9 @@ export default function Part1TQF5({ setForm }: Props) {
               </Table.Thead>
 
               <Table.Tbody className="justify-center items-center text-center ">
-                {Object.keys(form.getValues().gradingCriteria).map((key) => (
+                {Object.keys(
+                  form.getValues().list[curIndex]?.gradingCriteria || {}
+                ).map((key) => (
                   <Table.Tr
                     className="font-medium text-default text-b3 acerSwift:max-macair133:!text-b4"
                     key={key}
@@ -339,14 +325,19 @@ export default function Part1TQF5({ setForm }: Props) {
                     <Table.Td>{key.replace("plus", "+")}</Table.Td>
                     <Table.Td>
                       {!isEditCriteria ? (
-                        (form.getValues().gradingCriteria as any)[key]
+                        (
+                          form.getValues().list[curIndex]
+                            ?.gradingCriteria as any
+                        )[key]
                       ) : (
                         <TextInput
                           size="xs"
                           classNames={{
                             input: "acerSwift:max-macair133:!text-b4",
                           }}
-                          {...form.getInputProps(`gradingCriteria.${key}`)}
+                          {...form.getInputProps(
+                            `list.${curIndex}.gradingCriteria.${key}`
+                          )}
                         />
                       )}
                     </Table.Td>

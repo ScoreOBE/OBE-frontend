@@ -1,7 +1,11 @@
 import { IModelTQF3Part4 } from "@/models/ModelTQF3";
 import { partLabel } from "@/components/SaveTQFBar";
 import { cloneDeep } from "lodash";
-import { IModelAssignment, IModelSection } from "@/models/ModelCourse";
+import {
+  IModelAssignment,
+  IModelCourse,
+  IModelSection,
+} from "@/models/ModelCourse";
 import {
   IModelTQF5,
   IModelTQF5Part2,
@@ -10,6 +14,7 @@ import {
 import { METHOD_TQF5 } from "../constants/enum";
 
 export const initialTqf5Part = (
+  course: IModelCourse,
   tqf5: any,
   part: any,
   tqf3?: any,
@@ -18,7 +23,7 @@ export const initialTqf5Part = (
 ) => {
   switch (part) {
     case Object.keys(partLabel)[0]: // part 1
-      return;
+      return initialTqf5Part1(course, tqf5.topic, tqf5.curriculum);
     case Object.keys(partLabel)[1]: // part 2
       return initialTqf5Part2(tqf3.part4.data);
     case Object.keys(partLabel)[2]: // part 3
@@ -30,6 +35,88 @@ export const initialTqf5Part = (
         tqf5.part3?.data
       );
   }
+};
+
+export const initialTqf5Part1 = (
+  course: IModelCourse,
+  topic: string | undefined,
+  curriculum: string[]
+) => {
+  return {
+    list:
+      curriculum.length > 0
+        ? curriculum.map((cur) => ({
+            curriculum: cur,
+            courseEval: course?.sections
+              .filter(
+                (sec) =>
+                  sec.isActive && sec.topic == topic && sec.curriculum == cur
+              )
+              .map((sec) => ({
+                sectionNo: sec.sectionNo!,
+                A: 0,
+                Bplus: 0,
+                B: 0,
+                Cplus: 0,
+                C: 0,
+                Dplus: 0,
+                D: 0,
+                F: 0,
+                W: 0,
+                S: 0,
+                U: 0,
+                P: 0,
+              })),
+            gradingCriteria: {
+              A: ">= 80.00",
+              Bplus: "75.00 - 79.99",
+              B: "70.00 - 74.99",
+              Cplus: "65.00 - 69.99",
+              C: "60.00 - 64.99",
+              Dplus: "55.00 - 59.99",
+              D: "50.00 - 54.99",
+              F: "0.00 - 49.99",
+              W: "-",
+              S: "-",
+              U: "-",
+            },
+          }))
+        : [
+            {
+              curriculum: null,
+              courseEval: course?.sections
+                .filter((sec) => sec.isActive && sec.topic == topic)
+                .map((sec) => ({
+                  sectionNo: sec.sectionNo!,
+                  A: 0,
+                  Bplus: 0,
+                  B: 0,
+                  Cplus: 0,
+                  C: 0,
+                  Dplus: 0,
+                  D: 0,
+                  F: 0,
+                  W: 0,
+                  S: 0,
+                  U: 0,
+                  P: 0,
+                })),
+              gradingCriteria: {
+                A: ">= 80.00",
+                Bplus: "75.00 - 79.99",
+                B: "70.00 - 74.99",
+                Cplus: "65.00 - 69.99",
+                C: "60.00 - 64.99",
+                Dplus: "55.00 - 59.99",
+                D: "50.00 - 54.99",
+                F: "0.00 - 49.99",
+                W: "-",
+                S: "-",
+                U: "-",
+              },
+            },
+          ],
+  };
 };
 
 export const initialTqf5Part2 = (part4: IModelTQF3Part4[] | undefined) => {
