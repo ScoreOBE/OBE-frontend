@@ -126,12 +126,15 @@ export default function Part7TQF3({ setForm, selectCurriculum }: Props) {
         form.setFieldValue(
           "list",
           cloneDeep(
-            tqf3.part7.list.map((dataItem) => {
+            tqf3.curriculum?.map((cur) => {
+              const dataItem = tqf3.part7?.list.find(
+                ({ curriculum }) => curriculum == cur
+              );
               return {
-                curriculum: dataItem.curriculum,
+                curriculum: cur,
                 data:
                   tqf3?.part2?.clo?.map((cloItem) => {
-                    const item = dataItem.data.find(
+                    const item = dataItem?.data.find(
                       ({ clo }) => clo == cloItem.id
                     );
                     ploForm
@@ -331,7 +334,7 @@ export default function Part7TQF3({ setForm, selectCurriculum }: Props) {
                                   onChange={(event) => {
                                     const ploIndex = ploForm
                                       .getValues()
-                                      .list[curIndex].data.findIndex(
+                                      .list[curIndex]?.data.findIndex(
                                         (plo) => plo.id == id
                                       );
                                     form.setFieldValue(
