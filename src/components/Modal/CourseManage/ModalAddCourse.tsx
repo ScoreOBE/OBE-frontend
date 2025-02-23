@@ -77,6 +77,12 @@ export default function ModalAddCourse({
         semester: (value) => {
           return value?.length ? null : "Please choose semester at least one.";
         },
+        curriculum: (value) => {
+          if (!value) {
+            return "Curriculum is required";
+          }
+          return null;
+        },
       },
     },
     validateInputOnBlur: true,
@@ -131,24 +137,31 @@ export default function ModalAddCourse({
       case 2:
         const secNoList: string[] = [];
         for (let i = 0; i < length; i++) {
-          const isError = form.validateField(`sections.${i}.semester`).hasError;
-          if (isValid) {
-            isValid = !isError;
-          } else {
-            form.validateField(`sections.${i}.semester`);
-          }
-          if (isError) {
+          const semesterError = form.validateField(
+            `sections.${i}.semester`
+          ).hasError;
+          const curriculumError = form.validateField(
+            `sections.${i}.curriculum`
+          ).hasError;
+
+          if (
+            semesterError ||
+            (curriculumError &&
+              form.getValues().sections?.[i]?.curriculum !== "-")
+          ) {
             secNoList.push(
-              getSectionNo(form.getValues().sections?.at(i)?.sectionNo)
+              getSectionNo(form.getValues().sections?.[i]?.sectionNo)
             );
+            isValid = false; 
           }
         }
+
         if (secNoList.length) {
           secNoList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
           showNotifications(
             NOTI_TYPE.ERROR,
-            "Missing Recurrence Semester",
-            `Please select a semester for recurrence in section ${secNoList.join(
+            "Missing Required Fields",
+            `Please select a semester and a valid curriculum for section ${secNoList.join(
               ", "
             )}`
           );
@@ -235,7 +248,6 @@ export default function ModalAddCourse({
     if (type == COURSE_TYPE.SEL_TOPIC.en) {
       initialSection.topic = sections[0]?.topic;
     }
-    initialSection.curriculum = "-";
     if (!sectionNo.length) {
       sections = [{ ...initialSection }];
       setCoInsList([]);
@@ -643,11 +655,11 @@ export default function ModalAddCourse({
                           sec.sectionNo
                         )}`}
                         size="xs"
-                        placeholder="Curriculum"
+                        placeholder="Select curriculum"
                         searchable
                         nothingFoundMessage="No result"
                         data={[
-                          { value: "-", label: "-" },
+                          { value: "-", label: "ไม่มีหลักสูตรสำหรับเซคชั่นนี้ (No curriculum for this section.)" },
                           ...(curriculum?.map((item) => ({
                             value: item.code,
                             label: `${item.nameTH} [${item.code}]`,
@@ -659,8 +671,11 @@ export default function ModalAddCourse({
                             "focus:border-primary acerSwift:max-macair133:!text-b5",
                           label: "acerSwift:max-macair133:!text-b4",
                         }}
-                        {...form.getInputProps(`sections.${index}.curriculum`)}
+                        {...form.getInputProps(`sections.${index}.curriculum`, {
+                          withError: true,
+                        })}
                       />
+
                       <div className="p-5 acerSwift:max-macair133:p-4 mt-1 bg-[#f5f5f5] rounded-xl">
                         <span className="font-semibold mt-2 text-default text-b2 acerSwift:max-macair133:!text-b3">
                           Repeat on semester

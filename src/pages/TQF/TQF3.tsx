@@ -4,12 +4,14 @@ import {
   Alert,
   Button,
   FocusTrapInitialFocus,
+  Menu,
   Modal,
   Select,
   Tabs,
   Tooltip,
 } from "@mantine/core";
 import Icon from "@/components/Icon";
+import IconDots from "@/assets/icons/dots.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconDupTQF from "@/assets/icons/dupTQF.svg?react";
 import IconCheck from "@/assets/icons/Check.svg?react";
@@ -778,56 +780,72 @@ export default function TQF3() {
                     />
                   </div>
                 )}
-                {checkActiveTerm() && (
-                  <Tooltip
-                    onClick={() => setOpenModalReuse(true)}
-                    withArrow
-                    arrowPosition="side"
-                    arrowOffset={50}
-                    arrowSize={7}
-                    position="bottom-end"
-                    label={
-                      <div className="text-default text-b3 acerSwift:max-macair133:text-b4 p-2 flex flex-col gap-2">
-                        <p className=" font-medium">
-                          <span className="text-secondary font-bold">
-                            Reuse TQF 3
-                          </span>
-                          <br />
-                          We'll automatically import all 7 parts of the TQF 3
-                          data from your selected course.
-                        </p>
+                <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
+                  <Menu trigger="click" position="bottom-end">
+                    <Menu.Target>
+                      <div>
+                        <Icon IconComponent={IconDots} />
                       </div>
-                    }
-                    color="#FCFCFC"
-                  >
-                    <Button
-                      variant="outline"
-                      leftSection={
-                        <Icon
-                          IconComponent={IconDupTQF}
-                          className="text-[#ee933e] size-5 -mr-1 acerSwift:max-macair133:size-4"
-                        />
-                      }
-                      color="#ee933e"
-                      className="pr-4 px-3 acerSwift:max-macair133:!text-b5"
+                    </Menu.Target>
+                    <Menu.Dropdown
+                      className="rounded-md translate-y-1 backdrop-blur-xl bg-white"
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      }}
                     >
-                      Reuse TQF 3
-                    </Button>
-                  </Tooltip>
-                )}
-                <Button
-                  onClick={() => setOpenModalExportTQF3(true)}
-                  color="#24b9a5"
-                  className="px-4"
-                >
-                  <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
-                    <Icon
-                      className="size-5 acerSwift:max-macair133:size-4"
-                      IconComponent={exportFile}
-                    />
-                    Export TQF3
-                  </div>
-                </Button>
+                      <Menu.Item
+                        className="text-[#3e3e3e] font-semibold text-b4
+                      acerSwift:max-macair133:!text-b5 h-7 "
+                        disabled={!checkActiveTerm()}
+                      >
+                        <Tooltip
+                          onClick={() => setOpenModalReuse(true)}
+                          withArrow
+                          arrowPosition="center"
+                          arrowOffset={50}
+                          arrowSize={7}
+                          position="left-start"
+                          label={
+                            <div className="text-default text-b3 acerSwift:max-macair133:text-b4 p-2 flex flex-col gap-2">
+                              <p className=" font-medium">
+                                <span className="text-secondary font-bold">
+                                  Reuse TQF 3
+                                </span>
+                                <br />
+                                We'll automatically import all 7 parts of the
+                                TQF 3 data from your selected course.
+                              </p>
+                            </div>
+                          }
+                          color="#FCFCFC"
+                        >
+                          <div className="flex items-center  gap-2">
+                            <Icon
+                              IconComponent={IconDupTQF}
+                              className="size-4 acerSwift:max-macair133:!size-3.5"
+                            />
+                            <span> Reuse TQF 3</span>
+                          </div>
+                        </Tooltip>
+                      </Menu.Item>
+
+                      <Menu.Item
+                        className="text-[#3e3e3e] font-semibold text-b4
+                      acerSwift:max-macair133:!text-b5 h-7 "
+                        onClick={() => setOpenModalExportTQF3(true)}
+                      >
+                        <div className="flex items-center gap-2">
+                          {" "}
+                          <Icon
+                            className="size-[16px] stroke-[1.8px] acerSwift:max-macair133:size-4"
+                            IconComponent={exportFile}
+                          />
+                          <span>Export TQF3</span>
+                        </div>
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </div>
               </div>
             </div>
           </div>
