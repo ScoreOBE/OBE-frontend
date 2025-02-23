@@ -488,7 +488,7 @@ export default function Part2TQF3({ setForm }: Props) {
               >
                 <Table stickyHeader striped className="w-full">
                   <Table.Thead className="acerSwift:max-macair133:!text-b3">
-                    <Table.Tr className="bg-[#e5e7f6]">
+                    <Table.Tr className=" bg-bgTableHeader">
                       <Table.Th className="w-[10%] ">Week No.</Table.Th>
                       <Table.Th className="w-[30%]">Topic</Table.Th>
                       <Table.Th className="w-[20%] text-end">
@@ -606,7 +606,7 @@ export default function Part2TQF3({ setForm }: Props) {
                   )}
 
                   <Table.Tfoot className="text-secondary font-semibold !h-[10px] acerSwift:max-macair133:!text-b3">
-                    <Table.Tr className="bg-[#e5e7f6] border-none">
+                    <Table.Tr className=" bg-bgTableHeader border-none">
                       <Table.Th className="!rounded-bl-md" colSpan={2}>
                         Total
                       </Table.Th>
