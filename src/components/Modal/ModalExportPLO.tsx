@@ -239,7 +239,7 @@ export default function ModalExportPLO({ opened, onClose }: Props) {
           }
         ></Alert>
         {!!selectedCurriculum?.length ? (
-          !!courseList.length ? (
+          !!courseList?.length ? (
             <Checkbox.Group
               value={selectedCourses}
               onChange={(event) => setSelectedCourses(event)}
