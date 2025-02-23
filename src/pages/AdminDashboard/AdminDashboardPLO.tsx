@@ -30,6 +30,7 @@ import PLOSelectCourseView from "@/components/Modal/PLOAdmin/PLOSelectCourseView
 import PLOYearView from "@/components/Modal/PLOAdmin/PLOYearView";
 import { IModelCurriculum } from "@/models/ModelFaculty";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { sortBy } from "lodash";
 
 export default function AdminDashboardPLO() {
   const loading = useAppSelector((state) => state.loading.loading);
@@ -150,23 +151,6 @@ export default function AdminDashboardPLO() {
     }
   };
 
-  const filterCoursesForPLO = (plo: Partial<IModelPLO>, item: any) => {
-    return courseList.courses.filter((course) => {
-      const hasPloRequirement = course.ploRequire?.some(
-        (e) => e.plo == plo.id && e.list.includes(item.id)
-      );
-      const hasSectionPlo = course.sections.some(
-        (sec) =>
-          sec.curriculum &&
-          plo.curriculum?.includes(sec.curriculum) &&
-          sec.ploRequire?.some(
-            (e) => e.plo == plo.id && e.list.includes(item.id)
-          )
-      );
-      return hasPloRequirement || hasSectionPlo;
-    });
-  };
-
   const totalRows = courseList.courses.reduce((count, course) => {
     if (course.type === COURSE_TYPE.SEL_TOPIC.en) {
       return count + getUniqueTopicsWithTQF(course.sections!).length;
@@ -218,8 +202,32 @@ export default function AdminDashboardPLO() {
             )
             .map((course, index) => {
               const uniqueTopic = getUniqueTopicsWithTQF(course.sections!);
+              let ploRequire =
+                course.ploRequire?.find(
+                  (item) =>
+                    item.curriculum == selectCurriculum.code &&
+                    item.plo == plo.id
+                )?.list || [];
+              let ploItem = sortBy(
+                ploRequire.map((plo) => ({
+                  plo: curriculumPLO.data?.find(({ id }) => id == plo)?.no,
+                })),
+                "plo"
+              );
               return course.type == COURSE_TYPE.SEL_TOPIC.en ? (
                 uniqueTopic.map((sec, indexSec) => {
+                  ploRequire =
+                    sec.ploRequire?.find(
+                      (item) =>
+                        item.curriculum == selectCurriculum.code &&
+                        item.plo == plo.id
+                    )?.list || [];
+                  ploItem = sortBy(
+                    ploRequire.map((plo) => ({
+                      plo: curriculumPLO.data?.find(({ id }) => id == plo)?.no,
+                    })),
+                    "plo"
+                  );
                   return (
                     <Table.Tr key={`${course.courseNo}${sec.topic}${index}`}>
                       {indexSec == 0 && (
@@ -234,14 +242,25 @@ export default function AdminDashboardPLO() {
                         <div>
                           <p>{course.courseName}</p>
                           {sec && <p>({sec.topic})</p>}
+                          {!!ploItem.length && (
+                            <>
+                              <span>PLO Require: </span>
+                              {ploItem.map((plo, ploIndex) => {
+                                return (
+                                  <span
+                                    key={ploIndex}
+                                    className="text-secondary"
+                                  >
+                                    PLO {plo.plo}
+                                    {ploIndex < ploItem.length - 1 && ", "}
+                                  </span>
+                                );
+                              })}
+                            </>
+                          )}
                         </div>
                       </Table.Td>
-                      {ploScores(
-                        sec.ploRequire?.find((e) => e.plo == plo.id)
-                          ?.list as string[],
-                        sec.TQF3!,
-                        sec.TQF5!
-                      )}
+                      {ploScores(ploRequire, sec.TQF3!, sec.TQF5!)}
                     </Table.Tr>
                   );
                 })
@@ -250,13 +269,25 @@ export default function AdminDashboardPLO() {
                   <Table.Td className="border-r !border-[#cecece]">
                     {course.courseNo}
                   </Table.Td>
-                  <Table.Td>{course.courseName}</Table.Td>
-                  {ploScores(
-                    course.ploRequire?.find((e) => e.plo == plo.id)
-                      ?.list as string[],
-                    course.TQF3!,
-                    course.TQF5!
-                  )}
+                  <Table.Td>
+                    <div>
+                      <p>{course.courseName}</p>
+                      {!!ploItem.length && (
+                        <>
+                          <span>PLO Require: </span>
+                          {ploItem.map((plo, ploIndex) => {
+                            return (
+                              <span key={ploIndex} className="text-secondary">
+                                PLO {plo.plo}
+                                {ploIndex < ploItem.length - 1 && ", "}
+                              </span>
+                            );
+                          })}
+                        </>
+                      )}
+                    </div>
+                  </Table.Td>
+                  {ploScores(ploRequire, course.TQF3!, course.TQF5!)}
                 </Table.Tr>
               );
             })}
