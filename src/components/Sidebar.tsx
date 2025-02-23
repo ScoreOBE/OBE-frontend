@@ -44,6 +44,7 @@ export default function Sidebar() {
   const [params, setParams] = useSearchParams();
   const loading = useAppSelector((state) => state.loading.loading);
   const academicYear = useAppSelector((state) => state.academicYear);
+  const faculty = useAppSelector((state) => state.faculty);
   const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const courseList = useAppSelector((state) => state.course.courses);
   const allCourseList = useAppSelector((state) => state.allCourse.courses);
@@ -82,7 +83,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     if (params.get("year") && params.get("semester") && academicYear.length) {
-      if (user.role != ROLE.STUDENT) {
+      if (user.role != ROLE.STUDENT && !faculty.id) {
         fetchCur();
       } else if (user.role == ROLE.STUDENT) {
         fetchCourse();

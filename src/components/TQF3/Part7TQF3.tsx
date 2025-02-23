@@ -13,41 +13,57 @@ import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useSearchParams } from "react-router-dom";
 import { initialTqf3Part7 } from "@/helpers/functions/tqf3";
+import { IModelPLO } from "@/models/ModelPLO";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
+  selectCurriculum: string | null | undefined;
 };
 
-export default function Part7TQF3({ setForm }: Props) {
+export default function Part7TQF3({ setForm, selectCurriculum }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [params, setParams] = useSearchParams({});
   const disabled =
     parseInt(params.get("year") || "") !== academicYear.year &&
     parseInt(params.get("semester") || "") !== academicYear.semester;
   const tqf3 = useAppSelector((state) => state.tqf3);
-  const coursePLO = useAppSelector((state) => state.tqf3.coursePLO);
   const dispatch = useAppDispatch();
+  const [curIndex, setCurIndex] = useState(0);
+  const [ploRequire, setPloRequire] = useState<string[]>([]);
+  const [coursePLO, setCoursePLO] = useState<Partial<IModelPLO>>({});
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
 
   const form = useForm({
     mode: "controlled",
-    initialValues: { data: [] as IModelTQF3Part7[] },
+    initialValues: {
+      list: [] as { curriculum: string; data: IModelTQF3Part7[] }[],
+    },
     validate: {
-      data: {
-        plos: (value) => {
-          const ploFormError = ploForm.validate();
-          return !value.length
-            ? "CLO must be linked to at least one PLO"
-            : ploFormError.hasErrors
-            ? ""
-            : null;
+      list: {
+        data: {
+          plos: (value, values, path) => {
+            if (
+              values.list[parseInt(path.split(".")[1])]?.curriculum !=
+              selectCurriculum
+            )
+              return null;
+            const ploFormError = ploForm.validate();
+            return !value.length
+              ? "CLO must be linked to at least one PLO"
+              : ploFormError.hasErrors
+              ? ""
+              : null;
+          },
         },
       },
     },
     onValuesChange(values, previous) {
       if (!isEqual(values, previous)) {
         dispatch(
-          updatePartTQF3({ part: "part7", data: cloneDeep(form.getValues()) })
+          updatePartTQF3({
+            part: "part7",
+            data: cloneDeep(form.getValues()),
+          })
         );
         setForm(form);
       }
@@ -56,49 +72,95 @@ export default function Part7TQF3({ setForm }: Props) {
 
   const ploForm = useForm({
     mode: "controlled",
-    initialValues: { data: [] as { id: string; clos: string[] }[] },
+    initialValues: {
+      list: [] as {
+        curriculum: string;
+        data: { id: string; clos: string[] }[];
+      }[],
+    },
     validate: {
-      data: {
-        clos: (value) => !value.length && `Select CLO at least one`,
+      list: {
+        data: {
+          clos: (value, values, path) =>
+            values.list[parseInt(path.split(".")[1])]?.curriculum ==
+              selectCurriculum &&
+            !value.length &&
+            `Select CLO at least one`,
+        },
       },
     },
   });
 
   useEffect(() => {
-    if (coursePLO?.data?.length) {
-      const ploIds: string[] = coursePLO.data.map((item: any) => item.id) || [];
+    if (tqf3.coursePLO?.length && selectCurriculum) {
+      const plo = tqf3.coursePLO.find(({ curriculum }) =>
+        curriculum?.includes(selectCurriculum)
+      )!;
+      setCoursePLO(plo);
+      const ploR =
+        tqf3.ploRequired?.find(
+          ({ curriculum }) => curriculum == selectCurriculum
+        )?.list || [];
+      setPloRequire(ploR);
+      setCurIndex(tqf3.curriculum!.findIndex((cur) => cur == selectCurriculum));
+    } else {
+      setCoursePLO({});
+      setPloRequire([]);
+    }
+  }, [tqf3.ploRequired, tqf3.coursePLO, selectCurriculum]);
+
+  useEffect(() => {
+    if (tqf3.coursePLO?.length && selectCurriculum) {
       ploForm.setFieldValue(
-        "data",
-        tqf3.ploRequired
-          ?.filter((plo) => ploIds.includes(plo))
-          ?.map((plo) => ({ id: plo, clos: [] })) || []
+        "list",
+        tqf3.ploRequired?.map((item) => ({
+          curriculum: item.curriculum,
+          data: item.list.map((plo) => ({
+            id: plo,
+            clos: [],
+          })),
+        })) || []
       );
       if (tqf3.part7) {
         form.setFieldValue("updatedAt", tqf3.part7.updatedAt);
         form.setFieldValue(
-          "data",
+          "list",
           cloneDeep(
-            tqf3?.part2?.clo?.map((cloItem) => {
-              const item = tqf3.part7?.data.find(
-                ({ clo }) => clo == cloItem.id
-              );
-              ploForm.getValues().data.forEach(({ id }, index) => {
-                if ((item?.plos as string[])?.includes(id)) {
-                  ploForm.insertListItem(`data.${index}.clos`, cloItem.id);
-                }
-              });
+            tqf3.part7.list.map((dataItem) => {
               return {
-                clo: cloItem.id,
-                plos: cloneDeep(item?.plos) || [],
+                curriculum: dataItem.curriculum,
+                data:
+                  tqf3?.part2?.clo?.map((cloItem) => {
+                    const item = dataItem.data.find(
+                      ({ clo }) => clo == cloItem.id
+                    );
+                    ploForm
+                      .getValues()
+                      .list[curIndex]?.data.forEach(({ id }, index) => {
+                        if ((item?.plos as string[])?.includes(id)) {
+                          ploForm.insertListItem(
+                            `list.${curIndex}.data.${index}.clos`,
+                            cloItem.id
+                          );
+                        }
+                      });
+                    return {
+                      clo: cloItem.id,
+                      plos: cloneDeep(item?.plos) || [],
+                    };
+                  }) || [],
               };
             })
           ) ?? []
         );
       } else if (tqf3.part2) {
-        form.setValues(initialTqf3Part7(tqf3.part2));
+        form.setValues(initialTqf3Part7(tqf3.part2, tqf3.curriculum!));
       }
+    } else {
+      form.reset();
+      ploForm.reset();
     }
-  }, [coursePLO]);
+  }, [tqf3.ploRequired, tqf3.coursePLO]);
 
   return tqf3?.part6?.updatedAt ? (
     coursePLO?.data?.length ? (
@@ -163,7 +225,7 @@ export default function Part7TQF3({ setForm }: Props) {
 
           {/* Table */}
           <div
-            key={form.key("data")}
+            key={form.key(`list.data`)}
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}
@@ -183,123 +245,124 @@ export default function Part7TQF3({ setForm }: Props) {
                       {tqf3.part2?.clo.length! > 1 ? "s" : ""} )
                     </div>
                   </Table.Th>
-                  {coursePLO?.data?.map(({ no, id }) => (
-                    <Table.Th
-                      key={id}
-                      className="min-w-[100px] !pt-3 !pb-2 w-fit"
-                    >
-                      <p className="acerSwift:max-macair133:!text-b3">
-                        PLO-{no}{" "}
-                        <span className="text-red-500">
-                          {tqf3.ploRequired?.includes(id) && "*"}
-                        </span>
-                      </p>
-                      <p className="error-text mt-1">
-                        {ploForm.errors &&
-                          tqf3.ploRequired?.includes(id) &&
-                          !form
-                            .getValues()
-                            .data.some(({ plos }) =>
-                              (plos as string[]).includes(id)
-                            ) &&
-                          "Select CLO at least one"}
-                      </p>
-                    </Table.Th>
-                  ))}
+                  {coursePLO?.data?.map(({ no, id }) => {
+                    const ploIndex = ploForm
+                      .getValues()
+                      .list[curIndex]?.data.findIndex((plo) => plo.id == id);
+                    return (
+                      <Table.Th
+                        key={id}
+                        className="min-w-[100px] !pt-3 !pb-2 w-fit"
+                      >
+                        <p className="acerSwift:max-macair133:!text-b3">
+                          PLO-{no}{" "}
+                          <span className="text-red-500">
+                            {ploRequire.includes(id) && "*"}
+                          </span>
+                        </p>
+                        <p className="error-text mt-1">
+                          {
+                            ploForm.getInputProps(
+                              `list.${curIndex}.data.${ploIndex}.clos`
+                            ).error
+                          }
+                        </p>
+                      </Table.Th>
+                    );
+                  })}
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>
-                {form.getValues().data.map(({ clo }, cloIndex) => {
-                  const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
-                  return (
-                    <Table.Tr
-                      key={cloIndex}
-                      className="text-[13px] text-default"
-                    >
-                      <Table.Td
-                        key={form.key(`data.${cloIndex}.plos`)}
-                        style={{
-                          filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
-                        }}
-                        className="!p-0 !py-1 sticky left-0 z-[1]"
-                        {...form.getInputProps(`data.${cloIndex}.plos`)}
+                {form
+                  .getValues()
+                  .list.find(({ curriculum }) => curriculum == selectCurriculum)
+                  ?.data.map(({ clo }, cloIndex) => {
+                    const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
+                    return (
+                      <Table.Tr
+                        key={cloIndex}
+                        className="text-[13px] text-default"
                       >
-                        <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
-                          <div className="text-secondary min-w-fit font-bold acerSwift:max-macair133:!text-b3">
-                            CLO-{cloItem?.no}
-                          </div>
-                          <p className="flex w-fit font-medium justify-between flex-col acerSwift:max-macair133:!text-b4">
-                            <span className="mb-2">{cloItem?.descTH}</span>
-                            <span>{cloItem?.descEN}</span>
-                            <span className="error-text mt-1">
-                              {
-                                form.getInputProps(`data.${cloIndex}.plos`)
-                                  .error
-                              }
-                            </span>
-                          </p>
-                        </div>
-                      </Table.Td>
-                      {coursePLO?.data?.map(({ id }, index) => {
-                        const ploIndex = form
-                          .getValues()
-                          .data[cloIndex].plos?.findIndex((plo) => plo == id);
-                        return (
-                          <Table.Td key={index}>
-                            <div className="flex items-start">
-                              <Checkbox
-                                size="sm"
-                                classNames={{
-                                  body: "mr-3 px-0",
-                                  label:
-                                    "text-b4 text-[#615F5F] cursor-pointer",
-                                }}
-                                disabled={disabled}
-                                checked={(
-                                  form.getValues().data[cloIndex]
-                                    .plos as string[]
-                                ).includes(id)}
-                                onChange={(event) => {
-                                  const ploRequired = ploForm
-                                    .getValues()
-                                    .data.findIndex((plo) => plo.id == id);
-                                  const existClo = ploForm
-                                    .getValues()
-                                    .data[ploRequired]?.clos.findIndex(
-                                      (item) => item == clo
-                                    );
-                                  if (event.target.checked) {
-                                    form.insertListItem(
-                                      `data.${cloIndex}.plos`,
-                                      id
-                                    );
-                                    if (ploRequired >= 0) {
-                                      ploForm.insertListItem(
-                                        `data.${ploRequired}.clos`,
-                                        clo
-                                      );
-                                    }
-                                  } else if (ploIndex >= 0) {
-                                    form.removeListItem(
-                                      `data.${cloIndex}.plos`,
-                                      ploIndex
-                                    );
-                                    if (ploRequired >= 0) {
-                                      ploForm.removeListItem(
-                                        `data.${ploRequired}.clos`,
-                                        existClo
-                                      );
-                                    }
-                                  }
-                                }}
-                              />
+                        <Table.Td
+                          key={form.key(`data.${cloIndex}.plos`)}
+                          style={{
+                            filter:
+                              "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
+                          }}
+                          className="!p-0 !py-1 sticky left-0 z-[1]"
+                          {...form.getInputProps(
+                            `list.${curIndex}.data.${cloIndex}.plos`
+                          )}
+                        >
+                          <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
+                            <div className="text-secondary min-w-fit font-bold acerSwift:max-macair133:!text-b3">
+                              CLO-{cloItem?.no}
                             </div>
-                          </Table.Td>
-                        );
-                      })}
-                    </Table.Tr>
-                  );
-                })}
+                            <p className="flex w-fit font-medium justify-between flex-col acerSwift:max-macair133:!text-b4">
+                              <span className="mb-2">{cloItem?.descTH}</span>
+                              <span>{cloItem?.descEN}</span>
+                              <span className="error-text mt-1">
+                                {
+                                  form.getInputProps(
+                                    `list.${curIndex}.data.${cloIndex}.plos`
+                                  ).error
+                                }
+                              </span>
+                            </p>
+                          </div>
+                        </Table.Td>
+                        {coursePLO?.data?.map(({ id }, index) => {
+                          return (
+                            <Table.Td key={index}>
+                              <div className="flex items-start">
+                                <Checkbox
+                                  size="sm"
+                                  classNames={{
+                                    body: "mr-3 px-0",
+                                    label:
+                                      "text-b4 text-[#615F5F] cursor-pointer",
+                                  }}
+                                  disabled={disabled}
+                                  checked={(
+                                    form.getValues().list[curIndex]?.data[
+                                      cloIndex
+                                    ].plos as string[]
+                                  )?.includes(id)}
+                                  onChange={(event) => {
+                                    const ploIndex = ploForm
+                                      .getValues()
+                                      .list[curIndex].data.findIndex(
+                                        (plo) => plo.id == id
+                                      );
+                                    form.setFieldValue(
+                                      `list.${curIndex}.data.${cloIndex}.plos`,
+                                      (prev: string[] = []) => {
+                                        return event.target.checked
+                                          ? [...prev, id].sort()
+                                          : prev.filter((plo) => plo !== id);
+                                      }
+                                    );
+                                    if (ploIndex >= 0) {
+                                      ploForm.setFieldValue(
+                                        `list.${curIndex}.data.${ploIndex}.clos`,
+                                        (prev: string[] = []) => {
+                                          return event.target.checked
+                                            ? [...prev, clo].sort()
+                                            : prev.filter(
+                                                (item) => item !== clo
+                                              );
+                                        }
+                                      );
+                                    }
+                                  }}
+                                />
+                              </div>
+                            </Table.Td>
+                          );
+                        })}
+                      </Table.Tr>
+                    );
+                  })}
               </Table.Tbody>
             </Table>
           </div>

@@ -17,7 +17,7 @@ import IconAdd from "@/assets/icons/plus.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import { useForm } from "@mantine/form";
-import { cloneDeep, isEqual } from "lodash";
+import { cloneDeep, isEqual, uniq } from "lodash";
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { initialTqf3Part1 } from "@/helpers/functions/tqf3";
@@ -85,7 +85,7 @@ export default function Part1TQF3({ setForm }: Props) {
           (item, index) => value.indexOf(item) !== index
         );
         if (duplicates.length) {
-          const uniqueDuplicates = [...new Set(duplicates)];
+          const uniqueDuplicates = uniq(duplicates);
           return `Duplicate instructors "${uniqueDuplicates.join(", ")}"`;
         }
         if (value.find((e) => e === "")) return "Input instructor name";
@@ -189,7 +189,7 @@ export default function Part1TQF3({ setForm }: Props) {
         >
           <div className="flex text-default gap-3 flex-col">
             {curriculum.map((item) => (
-              <div className="flex gap-1 items-center">
+              <div key={item.value} className="flex gap-1 items-center">
                 <Radio
                   key={item.value}
                   classNames={{

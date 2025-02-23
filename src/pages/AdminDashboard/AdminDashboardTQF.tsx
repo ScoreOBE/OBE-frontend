@@ -178,6 +178,13 @@ export default function AdminDashboardTQF() {
     );
   };
 
+  const totalRows = courseList.courses.reduce((count, course) => {
+    if (course.type === COURSE_TYPE.SEL_TOPIC.en) {
+      return count + getUniqueTopicsWithTQF(course.sections!).length;
+    }
+    return count + 1;
+  }, 0);
+
   const courseTable = (index: number, course: Partial<IModelCourse>) => {
     const insList = getUniqueInstructors(course.sections!);
     const uniqueTopic = getUniqueTopicsWithTQF(course.sections!);
@@ -589,7 +596,7 @@ export default function AdminDashboardTQF() {
                 <Loading />
               ) : courseList.courses.length ? (
                 <InfiniteScroll
-                  dataLength={courseList.courses.length}
+                  dataLength={totalRows}
                   next={onShowMore}
                   height={"100%"}
                   hasMore={

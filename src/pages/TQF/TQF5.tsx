@@ -12,10 +12,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import unplug from "@/assets/image/unplug.png";
 import pictureTQF5 from "@/assets/image/TQF5.jpg";
 import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
-import {
-  findMostDuplicateCurriculum,
-  getValueEnumByKey,
-} from "@/helpers/functions/function";
+import { getValueEnumByKey } from "@/helpers/functions/function";
 import { UseFormReturnType } from "@mantine/form";
 import Loading from "@/components/Loading/Loading";
 import { setShowNavbar, setShowSidebar } from "@/store/config";
@@ -36,16 +33,17 @@ import { getOneCourse } from "@/services/course/course.service";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { setDataTQF5, setPloTQF5 } from "@/store/tqf5";
 import { setPloTQF3 } from "@/store/tqf3";
-import { isEmpty, isEqual } from "lodash";
+import { isEmpty, isEqual, unionBy, uniq } from "lodash";
 import { changeMethodTQF5, saveTQF5 } from "@/services/tqf5/tqf5.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
-import { getOnePLO } from "@/services/plo/plo.service";
+import { getPLOs } from "@/services/plo/plo.service";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import ModalMappingAssignment from "@/components/Modal/TQF5/ModalMappingAssignment";
 import exportFile from "@/assets/icons/fileExport.svg?react";
 import { setLoadingOverlay } from "@/store/loading";
 import ModalExportTQF5 from "@/components/Modal/TQF5/ModalExportTQF5";
 import ModalSetRange from "@/components/Modal/TQF5/ModalSetRange";
+import { IModelPLORequire } from "@/models/ModelCourseManagement";
 
 export default function TQF5() {
   const { courseNo } = useParams();
@@ -63,7 +61,7 @@ export default function TQF5() {
   const [assignments, setAssignments] = useState<IModelAssignment[]>();
   const [tqf3, setTqf3] = useState<IModelTQF3>();
   const [tqf5Original, setTqf5Original] = useState<
-    Partial<IModelTQF5> & { topic?: string; ploRequired?: string[] }
+    Partial<IModelTQF5> & { topic?: string; ploRequired?: IModelPLORequire[] }
   >();
   const tqf5 = useAppSelector((state) => state.tqf5);
   const dispatch = useAppDispatch();
@@ -105,22 +103,46 @@ export default function TQF5() {
   }, []);
 
   useEffect(() => {
-    if (academicYear && params.get("year") && params.get("semester")) {
-      if (!tqf5.coursePLO?.id) {
-        fetchPLO();
-      }
+    if (academicYear && (course || courseAdmin) && !tqf5.coursePLO?.length) {
+      fetchPLO();
     }
-  }, [academicYear]);
+  }, [academicYear, courseAdmin]);
+
+  const uniqueCurriculum = () => {
+    if ((courseAdmin ?? course)?.type == COURSE_TYPE.SEL_TOPIC.en) {
+      return uniq(
+        (courseAdmin ?? course)?.sections
+          .filter((item) => item.topic == tqf5.topic)
+          .flatMap(({ curriculum }) => curriculum)
+          .flat()
+          .filter(Boolean)
+      );
+    } else {
+      return uniq(
+        (courseAdmin ?? course)?.sections
+          .flatMap(({ curriculum }) => curriculum)
+          .flat()
+          .filter(Boolean)
+      );
+    }
+  };
 
   const fetchPLO = async () => {
-    const resPloCol = await getOnePLO({
-      year: params.get("year"),
-      semester: params.get("semester"),
-      curriculum: findMostDuplicateCurriculum(courseAdmin ?? course),
-    });
-    if (resPloCol) {
-      dispatch(setPloTQF3(resPloCol));
-      dispatch(setPloTQF5(resPloCol));
+    const curriculum = uniqueCurriculum();
+    if (curriculum.length) {
+      // setSelectedCurriculum(curriculum[0]);
+      const resPloCol = await getPLOs({
+        year: params.get("year"),
+        semester: params.get("semester"),
+        curriculum,
+      });
+      if (resPloCol) {
+        dispatch(setPloTQF3({ curriculum, coursePLO: resPloCol.plos }));
+        dispatch(setPloTQF5({ curriculum, coursePLO: resPloCol.plos }));
+      }
+    } else {
+      dispatch(setPloTQF3({ curriculum, coursePLO: [] }));
+      dispatch(setPloTQF5({ curriculum, coursePLO: [] }));
     }
   };
 
@@ -132,7 +154,11 @@ export default function TQF5() {
       tqf5.coursePLO &&
       (tqf5.topic !== tqf5Original?.topic || !tqf5Original)
     ) {
-      if (!tqf3?.status || tqf3?.status == TQF_STATUS.DONE) {
+      if (
+        tqf5.topic !== tqf5Original?.topic ||
+        !tqf3?.status ||
+        tqf3?.status == TQF_STATUS.DONE
+      ) {
         fetchOneCourse(true);
       }
     }
@@ -177,33 +203,37 @@ export default function TQF5() {
               .values()
           )
         );
-        const sectionTdf5 = section?.TQF5;
         setTqf3(section?.TQF3);
-        const ploRequire = resPloRequired?.sections
-          .find((item: any) => item.topic == tqf5.topic)
-          ?.ploRequire.find((plo: any) => plo.plo == tqf5.coursePLO?.id)?.list;
+        const ploRequire = unionBy(
+          resPloRequired?.sections
+            .filter((item: any) => item.topic == tqf5.topic)
+            .flatMap((item: any) => item.ploRequire),
+          "curriculum"
+        )?.filter((plo: any) =>
+          tqf5.coursePLO?.find((cPlo) => cPlo.id == plo.plo)
+        );
         setTqf5Original({
           topic: tqf5.topic,
           ploRequired: ploRequire || [],
-          ...sectionTdf5,
+          ...section?.TQF5,
         });
-        setSelectedMethod(sectionTdf5?.method);
+        setSelectedMethod(section?.TQF5?.method);
         dispatch(
           setDataTQF5({
             topic: tqf5.topic,
             ploRequired: ploRequire || [],
-            ...sectionTdf5,
+            ...section?.TQF5,
             type: resCourse.type,
             sections: [...resCourse.sections],
           })
         );
         if (firstFetch) {
-          setCurrentPartTQF5(sectionTdf5);
+          setCurrentPartTQF5(section?.TQF5);
         }
       } else {
-        const ploRequire = resPloRequired?.ploRequire.find(
-          (plo: any) => plo.plo == tqf5.coursePLO?.id
-        )?.list;
+        const ploRequire = resPloRequired?.ploRequire.filter((plo: any) =>
+          tqf5.coursePLO?.find((cPlo) => cPlo.id == plo.plo)
+        );
         setCannotSelectScoreOBE(!resCourse.sections[0].assignments.length);
         setAssignments(
           Array.from(
