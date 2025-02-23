@@ -193,6 +193,7 @@ export default function ModalEditSection({
           size="xs"
           placeholder="Curriculum"
           searchable
+          nothingFoundMessage="No result"
           data={[
             { value: "-", label: "-" },
             ...(curriculum?.map((item) => ({
