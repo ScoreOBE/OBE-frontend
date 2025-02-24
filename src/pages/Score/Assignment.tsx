@@ -200,7 +200,7 @@ export default function Assignment() {
           label="Evaluation name"
           size="xs"
           withAsterisk
-          placeholder="Ex. Quiz 1"
+          placeholder="Quiz 1"
           value={editName}
           onChange={(event) => setEditName(event.target.value)}
         />

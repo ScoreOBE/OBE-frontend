@@ -274,7 +274,7 @@ export default function ModalManageEvalTopic({
                   input: "flex p-3 text-b3 acerSwift:max-macair133:!text-b4",
                   label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
-                placeholder="Ex. แบบทดสอบ 1"
+                placeholder="แบบทดสอบ 1"
                 {...formOneTopic.getInputProps("topicTH")}
               />
               <TextInput
@@ -292,7 +292,7 @@ export default function ModalManageEvalTopic({
                   input: "flex p-3 text-b3 acerSwift:max-macair133:!text-b4",
                   label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
-                placeholder="Ex. Test 1"
+                placeholder="Test 1"
                 {...formOneTopic.getInputProps("topicEN")}
               />
               <Textarea

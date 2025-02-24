@@ -104,8 +104,8 @@ export default function ModalEditCourse({
           withAsterisk
           placeholder={
             form.getValues().type == COURSE_TYPE.SEL_TOPIC.en
-              ? "Ex. 26X4XX"
-              : "Ex. 001102"
+              ? "26X4XX"
+              : "001102"
           }
           maxLength={6}
           {...form.getInputProps("courseNo")}
@@ -117,8 +117,8 @@ export default function ModalEditCourse({
           classNames={{ input: "focus:border-primary" }}
           placeholder={
             form.getValues().type == COURSE_TYPE.SEL_TOPIC.en
-              ? "Ex. Select Topic in Comp Engr"
-              : "Ex. English 2"
+              ? "Select Topic in Comp Engr"
+              : "English 2"
           }
           {...form.getInputProps("courseName")}
         />
