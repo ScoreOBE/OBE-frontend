@@ -241,7 +241,7 @@ export default function ModalManageTopic({
                     "flex h-[200px] py-2 px-3 text-[13px] flex-wrap acerSwift:max-macair133:!text-b4",
                   label: "flex pb-1 flex-wrap acerSwift:max-macair133:!text-b4",
                 }}
-                placeholder="Ex. แบบสอบถามความพึงพอใจให้นักศึกษาประเมิน (Student satisfaction questionnaire)"
+                placeholder="แบบสอบถามความพึงพอใจให้นักศึกษาประเมิน (Student satisfaction questionnaire)"
                 {...form.getInputProps("detail")}
               />
             </>

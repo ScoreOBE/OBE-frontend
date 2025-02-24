@@ -269,7 +269,7 @@ export default function ModalManageCLO({
                     "flex h-[80px] acerSwift:max-macair133:!h-[70px] px-3 py-2 text-b3 acerSwift:max-macair133:!text-b4",
                   label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
-                placeholder="Ex. อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
+                placeholder="อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
                 {...formOneCLO.getInputProps("descTH")}
               />
               <Textarea
@@ -286,7 +286,7 @@ export default function ModalManageCLO({
                     "flex h-[80px] px-3 acerSwift:max-macair133:!h-[70px] py-2 text-b3 acerSwift:max-macair133:!text-b4",
                   label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
-                placeholder="Ex. Explain the working principle of computer operating systems."
+                placeholder="Explain the working principle of computer operating systems."
                 {...formOneCLO.getInputProps("descEN")}
               />
 

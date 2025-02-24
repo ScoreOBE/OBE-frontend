@@ -457,7 +457,7 @@ export default function ModalAddSection({
                       "focus:border-primary acerSwift:max-macair133:!text-b4",
                     label: "acerSwift:max-macair133:!text-b4",
                   }}
-                  placeholder="Ex. Full Stack Development"
+                  placeholder="Full Stack Development"
                   {...form.getInputProps("sections.0.topic")}
                 />
               )}
@@ -472,7 +472,7 @@ export default function ModalAddSection({
                     "font-semibold text-tertiary text-b2 acerSwift:max-macair133:!text-b4",
                   error: "text-[10px] !border-none",
                 }}
-                placeholder="Ex. 001 or 1 (Press Enter or Spacebar for fill the next section)"
+                placeholder="001 or 1 (Press Enter or Spacebar for fill the next section)"
                 splitChars={[",", " ", "|"]}
                 {...form.getInputProps(`section.sectionNo`)}
                 error={

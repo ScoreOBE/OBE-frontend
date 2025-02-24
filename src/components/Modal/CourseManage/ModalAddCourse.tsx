@@ -435,78 +435,19 @@ export default function ModalAddCourse({
                     className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
                   />
                 }
-                classNames={{
-                  inner: "flex justify-between items-center w-full",
-                }}
                 color="#ffffff"
-                className="!w-full !h-fit !text-b3  acerSwift:max-macair133:text-b4 !border border-secondary py-3 items-center flex hover:bg-bgSecond"
+                classNames={{
+                  inner: "flex justify-between items-center w-full ",
+                }}
+                className="!w-full !h-fit !text-b3  acerSwift:max-macair133:text-b4 !border bg-gray-100  py-4 items-center flex hover:bg-bgSecond"
               >
                 <p className="justify-start flex flex-col">
                   <span className="flex justify-start text-default acerSwift:max-macair133:!text-b4">
                     {COURSE_TYPE.GENERAL.en}
                   </span>
-                  <br />
-                  <span className="flex justify-start font-medium text-b4 text-secondary -mt-1 acerSwift:max-macair133:!text-b5">
-                    - Learner Person
-                  </span>
-                  <span className="flex justify-start font-medium text-b4 text-secondary mt-2 acerSwift:max-macair133:!text-b5">
-                    - Innovative Co-creator
-                  </span>
-                  <span className="flex justify-start font-medium text-b4 text-secondary mt-2 acerSwift:max-macair133:!text-b5">
-                    - Active Citizen
-                  </span>
                 </p>
               </Button>
-              <Button
-                onClick={() => nextStep(COURSE_TYPE.SPECIAL.en)}
-                rightSection={
-                  <Icon
-                    IconComponent={IconChevronRight}
-                    className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
-                  />
-                }
-                classNames={{
-                  inner: "flex justify-between items-center w-full",
-                }}
-                color="#ffffff"
-                className="!w-full !h-fit !text-b3  acerSwift:max-macair133:text-b4 !border border-secondary py-3 items-center flex hover:bg-bgSecond"
-              >
-                <p className="justify-start flex flex-col">
-                  <span className="flex justify-start text-default acerSwift:max-macair133:!text-b4">
-                    {COURSE_TYPE.SPECIAL.en}
-                  </span>
-                  <br />
-                  <span className="flex justify-start font-medium text-b4 text-secondary -mt-1 acerSwift:max-macair133:!text-b5">
-                    - Core Courses
-                  </span>
-                  <span className="flex justify-start font-medium text-b4 text-secondary mt-2 acerSwift:max-macair133:!text-b5">
-                    - Major Courses
-                  </span>
-                  <span className="flex justify-start font-medium text-b4 text-secondary mt-2 acerSwift:max-macair133:!text-b5">
-                    - Minor Courses
-                  </span>
-                </p>
-              </Button>
-              <Button
-                onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC.en)}
-                rightSection={
-                  <Icon
-                    IconComponent={IconChevronRight}
-                    className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
-                  />
-                }
-                classNames={{
-                  inner: "flex justify-between items-center w-full",
-                }}
-                color="#ffffff"
-                className="!w-full !h-fit !text-b3  acerSwift:max-macair133:text-b4 !border border-secondary py-4 items-center flex hover:bg-bgSecond"
-              >
-                <p className="justify-start flex flex-col">
-                  <span className="flex justify-start mb-1 text-default acerSwift:max-macair133:!text-b4">
-                    Selected Topics Course
-                  </span>
-                </p>
-              </Button>
+
               <Button
                 onClick={() => nextStep(COURSE_TYPE.FREE.en)}
                 color="#ffffff"
@@ -519,14 +460,68 @@ export default function ModalAddCourse({
                 classNames={{
                   inner: "flex justify-between items-center w-full ",
                 }}
-                className="!w-full !h-fit !text-b3  acerSwift:max-macair133:text-b4 !border border-secondary py-4 items-center flex hover:bg-bgSecond"
+                className="!w-full !h-fit !text-b3  acerSwift:max-macair133:text-b4 !border bg-gray-100  py-4 items-center flex hover:bg-bgSecond"
               >
                 <p className="justify-start flex flex-col">
-                  <span className="flex justify-start mb-1 text-default acerSwift:max-macair133:!text-b4">
+                  <span className="flex justify-start  text-default acerSwift:max-macair133:!text-b4">
                     {COURSE_TYPE.FREE.en}
                   </span>
                 </p>
               </Button>
+              <div className="w-full flex p-4 border rounded-lg gap-2 flex-col bg-white">
+                <p className="flex justify-start font-semibold text-default acerSwift:max-macair133:!text-b4">
+                  {COURSE_TYPE.SPECIAL.en}
+                </p>
+                <div className="flex justify-center items-start flex-row gap-4">
+                  <Button
+                    onClick={() => nextStep(COURSE_TYPE.SPECIAL.en)}
+                    rightSection={
+                      <Icon
+                        IconComponent={IconChevronRight}
+                        className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
+                      />
+                    }
+                    classNames={{
+                      inner: "flex justify-between items-center w-full",
+                    }}
+                    color="#ffffff"
+                    className="!w-full !h-[86px] !text-b3  acerSwift:max-macair133:text-b4 !border bg-gray-100  py-4 items-center flex hover:bg-bgSecond"
+                  >
+                    <div className="justify-start flex flex-col">
+                      <span className="flex justify-start font-medium text-b4 text-secondary acerSwift:max-macair133:!text-b5">
+                        Core Courses
+                      </span>
+                      <span className="flex justify-start font-medium text-b4 text-secondary mt-2 acerSwift:max-macair133:!text-b5">
+                        Major Courses
+                      </span>
+                      <span className="flex justify-start font-medium text-b4 text-secondary mt-2 acerSwift:max-macair133:!text-b5">
+                        Minor Courses
+                      </span>
+                    </div>
+                  </Button>
+
+                  <Button
+                    onClick={() => nextStep(COURSE_TYPE.SEL_TOPIC.en)}
+                    rightSection={
+                      <Icon
+                        IconComponent={IconChevronRight}
+                        className="size-5 stroke-[#1f69f3] stroke-[2px] items-center pt-1"
+                      />
+                    }
+                    classNames={{
+                      inner: "flex justify-between items-center w-full",
+                    }}
+                    color="#ffffff"
+                    className="!w-full !h-[86px] !text-b3  acerSwift:max-macair133:text-b4 !border bg-gray-100  py-4 items-center flex hover:bg-bgSecond"
+                  >
+                    <div className="justify-start flex flex-col">
+                      <span className="flex justify-start font-medium text-b4 text-secondary acerSwift:max-macair133:!text-b5">
+                        Selected Topics Course
+                      </span>
+                    </div>
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </Stepper.Step>
@@ -565,8 +560,8 @@ export default function ModalAddCourse({
                 withAsterisk
                 placeholder={
                   form.getValues().type == COURSE_TYPE.SEL_TOPIC.en
-                    ? "Ex. 26X4XX"
-                    : "Ex. 001102"
+                    ? "26X4XX"
+                    : "001102"
                 }
                 maxLength={6}
                 {...form.getInputProps("courseNo")}
@@ -582,8 +577,8 @@ export default function ModalAddCourse({
                 }}
                 placeholder={
                   form.getValues().type == COURSE_TYPE.SEL_TOPIC.en
-                    ? "Ex. Select Topic in Comp Engr"
-                    : "Ex. English 2"
+                    ? "Select Topic in Comp Engr"
+                    : "English 2"
                 }
                 {...form.getInputProps("courseName")}
               />
@@ -597,7 +592,7 @@ export default function ModalAddCourse({
                       "focus:border-primary acerSwift:max-macair133:!text-b5",
                     label: "acerSwift:max-macair133:!text-b4",
                   }}
-                  placeholder="Ex. Full Stack Development"
+                  placeholder="Full Stack Development"
                   {...form.getInputProps("sections.0.topic")}
                 />
               )}
@@ -612,7 +607,7 @@ export default function ModalAddCourse({
                     "font-semibold text-tertiary text-b2 acerSwift:max-macair133:!text-b4",
                   error: "text-b6 !border-none",
                 }}
-                placeholder="Ex. 001 or 1 (Press Enter or Spacebar for fill the next section)"
+                placeholder="001 or 1 (Press Enter or Spacebar for fill the next section)"
                 splitChars={[",", " ", "|"]}
                 {...form.getInputProps(`section.sectionNo`)}
                 error={
@@ -653,7 +648,7 @@ export default function ModalAddCourse({
                           {
                             value: "-",
                             label:
-                              "ไม่มีหลักสูตรสำหรับเซคชั่นนี้ (No curriculum for this section.)",
+                              "หลักสูตรอื่นๆ (No curriculum for this section.)",
                           },
                           ...(curriculum?.map((item) => ({
                             value: item.code,
