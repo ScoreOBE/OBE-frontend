@@ -35,7 +35,7 @@ export default function Part1TQF3({ setForm }: Props) {
     parseInt(params.get("semester") || "") !== academicYear.semester;
   const dashboard = useAppSelector((state) => state.config.dashboard);
   const courseType = useAppSelector((state) =>
-    dashboard == ROLE.ADMIN
+    dashboard == ROLE.CURRICULUM_ADMIN
       ? state.allCourse.courses.find((c) => c.courseNo == courseNo)?.type
       : state.course.courses.find((c) => c.courseNo == courseNo)?.type
   );

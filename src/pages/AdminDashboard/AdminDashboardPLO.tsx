@@ -54,8 +54,8 @@ export default function AdminDashboardPLO() {
   useEffect(() => {
     dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
-    localStorage.setItem("dashboard", ROLE.ADMIN);
-    dispatch(setDashboard(ROLE.ADMIN));
+    localStorage.setItem("dashboard", ROLE.CURRICULUM_ADMIN);
+    dispatch(setDashboard(ROLE.CURRICULUM_ADMIN));
   }, []);
 
   useEffect(() => {

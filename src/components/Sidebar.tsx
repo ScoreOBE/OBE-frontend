@@ -130,7 +130,7 @@ export default function Sidebar() {
       }
     }
     if (
-      [ROLE.SUPREME_ADMIN, ROLE.ADMIN].includes(user.role) &&
+      [ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) &&
       !allCourseList.length &&
       !path.includes(ROUTE_PATH.ADMIN_DASHBOARD)
     ) {

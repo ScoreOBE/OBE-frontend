@@ -140,22 +140,22 @@ export default function CompoMangeIns({
               label: getUserName(e, 1),
               value: e.id,
               disabled:
-                (type == "admin" && e.role == ROLE.ADMIN) ||
+                (type == "admin" && e.role == ROLE.CURRICULUM_ADMIN) ||
                 currentMainIns == e.id
                   ? true
                   : false,
             };
           })
       );
-      // Manage Admin
+      // Manage Curr. Admin
       if (type == "admin") {
         let adminList = res.filter((e: IModelUser) => {
-          if (e.id !== user.id && e.role === ROLE.ADMIN) {
+          if (e.id !== user.id && e.role === ROLE.CURRICULUM_ADMIN) {
             return { ...e };
           }
         });
         // Add current user to the top of the admin list
-        if (user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) {
+        if (user.role === ROLE.ADMIN || user.role === ROLE.CURRICULUM_ADMIN) {
           adminList = [{ ...user }, ...adminList];
         }
         if (setUserList) setUserList(adminList);
@@ -168,7 +168,7 @@ export default function CompoMangeIns({
     if (inputUser?.value) {
       // Add Admin
       if (type == "admin") {
-        const payload: Partial<IModelUser> = { role: ROLE.ADMIN };
+        const payload: Partial<IModelUser> = { role: ROLE.CURRICULUM_ADMIN };
         if (swapMethodAddUser) {
           if (invalidEmail) return;
           payload.email = inputUser.value;
@@ -182,8 +182,8 @@ export default function CompoMangeIns({
           fetchIns();
           showNotifications(
             NOTI_TYPE.SUCCESS,
-            "Admin added successfully",
-            `${name} is added to admin`
+            "Curriculum Admin added successfully",
+            `${name} is added to curriculum admin`
           );
         }
       }
@@ -205,7 +205,7 @@ export default function CompoMangeIns({
     return type == "changeMain" || type == "mainIns"
       ? TITLE_ROLE.OWNER_SEC
       : type == "admin"
-      ? ROLE.ADMIN
+      ? TITLE_ROLE.CURR_ADMIN
       : TITLE_ROLE.CO_INS;
   };
 

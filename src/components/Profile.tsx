@@ -19,8 +19,8 @@ import IconSemester from "@/assets/icons/calendar.svg?react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { ROLE } from "@/helpers/constants/enum";
-import ModalManageAdmin from "./Modal/Profile/ModalManageAdmin";
-import ModalChangeSupAdmin from "./Modal/Profile/ModalChangeSupremeAdmin";
+import ModalManageCurrAdmin from "./Modal/Profile/ModalManageAdmin";
+import ModalChangeAdmin from "./Modal/Profile/ModalChangeSupremeAdmin";
 import ModalManageSemester from "./Modal/Profile/ModalManageSemester";
 import ModalCurriculum from "./Modal/Profile/ModalCurriculum";
 import { getUserName } from "@/helpers/functions/function";
@@ -35,10 +35,11 @@ export default function Profile() {
   const navigate = useNavigate();
   const dashboard = useAppSelector((state) => state.config.dashboard);
   const user = useAppSelector((state) => state.user);
-  const [openModalChangeSupAdmin, setOpenModalChangeSupAdmin] = useState(false);
+  const [openModalChangeAdmin, setOpenModalChangeAdmin] = useState(false);
   const [openModalCurriculum, setOpenModalCurriculum] = useState(false);
   const [openModalManageSemester, setOpenModalManageSemester] = useState(false);
-  const [openModalManageAdmin, setOpenModalManageAdmin] = useState(false);
+  const [openModalManageCurrAdmin, setOpenModalManageCurrAdmin] =
+    useState(false);
   const [openModalCourseManagement, setOpenModalCourseManagement] =
     useState(false);
   const [openModalPLOManagement, setOpenModalPLOManagement] = useState(false);
@@ -46,9 +47,9 @@ export default function Profile() {
 
   const getRoleColor = (role: ROLE) => {
     switch (role) {
-      case ROLE.SUPREME_ADMIN:
-        return "#1B75DF";
       case ROLE.ADMIN:
+        return "#1B75DF";
+      case ROLE.CURRICULUM_ADMIN:
         return "#009BCC";
       case ROLE.INSTRUCTOR:
         return "#13A5A5";
@@ -61,7 +62,7 @@ export default function Profile() {
 
   const getProfileIcon = (role: ROLE) => {
     switch (role) {
-      case ROLE.SUPREME_ADMIN:
+      case ROLE.ADMIN:
         return (
           <Icon
             IconComponent={IconSAdminProfile}
@@ -69,7 +70,7 @@ export default function Profile() {
             style={{ color: getRoleColor(user.role) }}
           />
         );
-      case ROLE.ADMIN:
+      case ROLE.CURRICULUM_ADMIN:
         return (
           <Icon
             IconComponent={IconAdminProfile}
@@ -90,13 +91,13 @@ export default function Profile() {
 
   return (
     <>
-      <ModalManageAdmin
-        opened={openModalManageAdmin}
-        onClose={() => setOpenModalManageAdmin(false)}
+      <ModalManageCurrAdmin
+        opened={openModalManageCurrAdmin}
+        onClose={() => setOpenModalManageCurrAdmin(false)}
       />
-      <ModalChangeSupAdmin
-        opened={openModalChangeSupAdmin}
-        onClose={() => setOpenModalChangeSupAdmin(false)}
+      <ModalChangeAdmin
+        opened={openModalChangeAdmin}
+        onClose={() => setOpenModalChangeAdmin(false)}
       />
       <ModalManageSemester
         opened={openModalManageSemester}
@@ -134,13 +135,11 @@ export default function Profile() {
                 className="font-medium"
                 style={{ color: getRoleColor(user.role) }}
               >
-                {user.role !== ROLE.SUPREME_ADMIN &&
-                  user.role !== ROLE.ADMIN &&
+                {![ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) &&
                   user.role}
-                {(user.role === ROLE.SUPREME_ADMIN ||
-                  user.role === ROLE.ADMIN) &&
-                  (dashboard === ROLE.ADMIN ? (
-                    <span>Admin</span>
+                {[ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) &&
+                  (dashboard === ROLE.CURRICULUM_ADMIN ? (
+                    <span>Curr. Admin</span>
                   ) : dashboard === ROLE.INSTRUCTOR ? (
                     <span>Instructor</span>
                   ) : (
@@ -172,12 +171,12 @@ export default function Profile() {
               </div>
             </div>
             <Menu.Divider />
-            {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
+            {[ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) && (
               <Menu.Item
                 onClick={() =>
                   navigate({
                     pathname:
-                      dashboard == ROLE.ADMIN
+                      dashboard == ROLE.CURRICULUM_ADMIN
                         ? ROUTE_PATH.INS_DASHBOARD
                         : `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`,
                     search: "?" + params.toString(),
@@ -190,9 +189,9 @@ export default function Profile() {
                     className=" stroke-[1.5px] size-4  acerSwift:max-macair133:size-"
                   />
                   <span>
-                    {dashboard == ROLE.ADMIN
+                    {dashboard == ROLE.CURRICULUM_ADMIN
                       ? "Switch to Instructor view"
-                      : "Switch to Admin view"}
+                      : "Switch to Curriculum Admin view"}
                   </span>
                 </div>
               </Menu.Item>
@@ -217,7 +216,7 @@ export default function Profile() {
                   </div>
                 </Menu.Item>
               )}
-            {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
+            {[ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) && (
               <Menu.Divider />
             )}
             {user.role === ROLE.TA && (
@@ -247,22 +246,8 @@ export default function Profile() {
             {user.role === ROLE.TA && <Menu.Divider />}
           </>
 
-          {/* {(user.role === ROLE.SUPREME_ADMIN ||
-            user.role === ROLE.ADMIN ||
-            user.role === ROLE.INSTRUCTOR) && (
-            <Menu.Item onClick={() => navigate(ROUTE_PATH.SELECTED_DEPARTMENT)}>
-              <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
-                <Icon
-                  IconComponent={IconStatusChange}
-                  className="size-4  acerSwift:max-macair133:size- stroke-[1.5px]"
-                />
-                <span>Department</span>
-              </div>
-            </Menu.Item>
-          )} */}
-
           {/* SUB MENU MANAGEMENT */}
-          {(user.role === ROLE.SUPREME_ADMIN || user.role === ROLE.ADMIN) && (
+          {[ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) && (
             <Menu
               trigger="hover"
               openDelay={100}
@@ -293,31 +278,33 @@ export default function Profile() {
                   boxShadow: "rgba(0, 0, 0, 0.15) 0px 2px 8px",
                 }}
               >
-                {user.role === ROLE.SUPREME_ADMIN && (
+                {user.role === ROLE.ADMIN && (
                   <>
                     <Menu.Item
-                      onMouseDown={() => setOpenModalChangeSupAdmin(true)}
+                      onMouseDown={() => setOpenModalChangeAdmin(true)}
                     >
                       <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
                         <Icon
                           IconComponent={IconSupreme}
                           className="size-[16px] mr-[2px] -translate-x-[2px]"
                         />
-                        <span>Supreme Admin</span>
+                        <span>Admin</span>
                       </div>
                     </Menu.Item>
+                    <Menu.Item
+                      onMouseDown={() => setOpenModalManageCurrAdmin(true)}
+                    >
+                      <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
+                        <Icon
+                          IconComponent={IconAdmin}
+                          className="size-[16px] mr-[2px] -translate-x-[2px]  "
+                        />
+                        <span>Curriculum Admin</span>
+                      </div>
+                    </Menu.Item>
+                    <Menu.Divider />
                   </>
                 )}
-                <Menu.Item onMouseDown={() => setOpenModalManageAdmin(true)}>
-                  <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
-                    <Icon
-                      IconComponent={IconAdmin}
-                      className="size-[16px] mr-[2px] -translate-x-[2px]  "
-                    />
-                    <span>Admin</span>
-                  </div>
-                </Menu.Item>
-                <Menu.Divider />
                 <Menu.Item
                   className="text-[#3e3e3e] h-8 w-w-full"
                   onMouseDown={() => setOpenModalCourseManagement(true)}
@@ -330,7 +317,7 @@ export default function Profile() {
                     <span>Course</span>
                   </div>
                 </Menu.Item>
-                {user.role === ROLE.SUPREME_ADMIN && (
+                {user.role === ROLE.ADMIN && (
                   <>
                     <Menu.Item onMouseDown={() => setOpenModalCurriculum(true)}>
                       <div className="flex items-center -ml-[2px] gap-2 acerSwift:max-macair133:text-b5">

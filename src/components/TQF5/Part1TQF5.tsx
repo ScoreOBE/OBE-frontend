@@ -26,7 +26,7 @@ export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
   const user = useAppSelector((state) => state.user);
   const dashboard = useAppSelector((state) => state.config.dashboard);
   const course = useAppSelector((state) =>
-    (dashboard == ROLE.ADMIN ? state.allCourse : state.course).courses.find(
+    (dashboard == ROLE.CURRICULUM_ADMIN ? state.allCourse : state.course).courses.find(
       (c) => c.courseNo == courseNo
     )
   );
@@ -209,7 +209,7 @@ export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
                               </Table.Td>
                             ))}
                         {isEditCourseEval &&
-                          (canAccess || dashboard == ROLE.ADMIN ? (
+                          (canAccess || dashboard == ROLE.CURRICULUM_ADMIN ? (
                             Object.keys(item)
                               .slice(1)
                               .map((key) => (
