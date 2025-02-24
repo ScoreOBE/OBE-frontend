@@ -144,7 +144,7 @@ export default function ModalManageCurrAdmin({ opened, onClose }: Props) {
                   {adminFilter.map((admin, index) => (
                     <div
                       key={index}
-                      className="w-full items-center last:border-none border-b-[1px] justify-between  p-3  flex"
+                      className="w-full items-center last:border-none border-b-[1px] justify-between p-3 flex"
                     >
                       <div className="gap-3 flex items-center">
                         <Icon
@@ -160,26 +160,39 @@ export default function ModalManageCurrAdmin({ opened, onClose }: Props) {
                           </p>
                         </div>
                       </div>
+
                       {admin.firstNameEN === user.firstNameEN &&
                       admin.lastNameEN === user.lastNameEN ? (
                         <p className="mr-1 text-secondary text-[14px] font-normal">
                           You
                         </p>
                       ) : (
-                        <Button
-                          color="red"
-                          variant="outline"
-                          onClick={() => {
-                            setTargetAdminId(admin.id);
-                            setTargetAdminName(
-                              `${admin.firstNameEN} ${admin.lastNameEN}`
-                            );
-                            setOpenMainPopupDelAdmin(true);
-                          }}
-                          loading={loading}
-                        >
-                          Delete
-                        </Button>
+                        <div className="flex gap-4">
+                          <div className="flex flex-col">
+                            {admin.curriculums?.map((cur) => (
+                              <p
+                                key={cur}
+                                className="text-secondary text-[12px] font-normal"
+                              >
+                                {cur}
+                              </p>
+                            ))}
+                          </div>
+                          <Button
+                            color="red"
+                            variant="outline"
+                            onClick={() => {
+                              setTargetAdminId(admin.id);
+                              setTargetAdminName(
+                                `${admin.firstNameEN} ${admin.lastNameEN}`
+                              );
+                              setOpenMainPopupDelAdmin(true);
+                            }}
+                            loading={loading}
+                          >
+                            Delete
+                          </Button>
+                        </div>
                       )}
                     </div>
                   ))}
