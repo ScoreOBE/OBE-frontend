@@ -575,7 +575,7 @@ export default function MapPLO({ ploName = "" }: Props) {
               input: "flex  h-[150px] p-3 ",
               label: "flex pb-1",
             }}
-            placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
+            placeholder="ความสามารถในการแก้ปัญหาทางวิศวกรรม"
             {...formPLO.getInputProps("descTH")}
           />
           <Textarea
@@ -590,7 +590,7 @@ export default function MapPLO({ ploName = "" }: Props) {
               input: "flex  h-[150px] p-3",
               label: "flex pb-1",
             }}
-            placeholder="Ex. An ability to solve complex engineering problems."
+            placeholder="An ability to solve complex engineering problems."
             {...formPLO.getInputProps("descEN")}
           />
 
@@ -637,7 +637,7 @@ export default function MapPLO({ ploName = "" }: Props) {
               input: "flex !rounded-md h-[150px] p-3",
               label: "flex pb-1",
             }}
-            placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
+            placeholder="ความสามารถในการแก้ปัญหาทางวิศวกรรม"
             {...formPLO.getInputProps("descTH")}
             value={formPLO.getValues().descTH}
             onChange={(event) => {
@@ -657,7 +657,7 @@ export default function MapPLO({ ploName = "" }: Props) {
               input: "flex !rounded-md h-[150px] p-3",
               label: "flex pb-1",
             }}
-            placeholder="Ex. An ability to solve complex engineering problems."
+            placeholder="An ability to solve complex engineering problems."
             {...formPLO.getInputProps("descEN")}
             value={formPLO.getValues().descEN}
             onChange={(event) => {
@@ -710,8 +710,8 @@ export default function MapPLO({ ploName = "" }: Props) {
               withAsterisk
               placeholder={
                 form.getValues().type == COURSE_TYPE.SEL_TOPIC.en
-                  ? "Ex. 26X4XX"
-                  : "Ex. 261XXX"
+                  ? "26X4XX"
+                  : "261XXX"
               }
               maxLength={6}
               {...form.getInputProps("courseNo")}
@@ -723,8 +723,8 @@ export default function MapPLO({ ploName = "" }: Props) {
               classNames={{ input: "focus:border-primary " }}
               placeholder={
                 form.getValues().type == COURSE_TYPE.SEL_TOPIC.en
-                  ? "Ex. Select Topic in Comp Engr"
-                  : "Ex. English 2"
+                  ? "Select Topic in Comp Engr"
+                  : "English 2"
               }
               {...form.getInputProps("courseName")}
             />
@@ -734,7 +734,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                 withAsterisk
                 size="xs"
                 classNames={{ input: "focus:border-primary" }}
-                placeholder="Ex. Full Stack Development"
+                placeholder="Full Stack Development"
                 {...form.getInputProps("sections.0.topic")}
               />
             )}
@@ -748,7 +748,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                 label: "font-semibold text-tertiary text-b2",
                 error: "text-[10px] !border-none",
               }}
-              placeholder="Ex. 001 or 1 (Press Enter or Spacebar for fill the next section)"
+              placeholder="001 or 1 (Press Enter or Spacebar for fill the next section)"
               splitChars={[",", " ", "|"]}
               {...form.getInputProps(`sections.sectionNo`)}
               error={

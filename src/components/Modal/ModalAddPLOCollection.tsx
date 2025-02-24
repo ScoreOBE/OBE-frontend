@@ -398,7 +398,7 @@ export default function ModalAddPLOCollection({
                     input: "flex p-3",
                     label: "flex pb-1 gap-1",
                   }}
-                  placeholder="Ex. PLO 1/67"
+                  placeholder="PLO 1/67"
                   {...form.getInputProps("name")}
                 />
               </div>
@@ -415,7 +415,7 @@ export default function ModalAddPLOCollection({
                   input: "flex p-3",
                   label: "flex pb-1 gap-1",
                 }}
-                placeholder="Ex. เกณฑ์ของ ABET"
+                placeholder="เกณฑ์ของ ABET"
                 {...form.getInputProps("criteriaTH")}
               />
               <TextInput
@@ -431,7 +431,7 @@ export default function ModalAddPLOCollection({
                   input: "flex p-3",
                   label: "flex pb-1 gap-1",
                 }}
-                placeholder="Ex. ABET Criteria"
+                placeholder="ABET Criteria"
                 {...form.getInputProps("criteriaEN")}
               />
             </div>
@@ -464,7 +464,7 @@ export default function ModalAddPLOCollection({
                       "flex macair133:h-[120px] sm:h-[75px] ipad11:h-[95px] p-3 ",
                     label: "flex pb-1 gap-1",
                   }}
-                  placeholder="Ex. ความสามารถในการแก้ปัญหาทางวิศวกรรม"
+                  placeholder="ความสามารถในการแก้ปัญหาทางวิศวกรรม"
                   {...formOnePLONo.getInputProps("descTH")}
                 />
                 <Textarea
@@ -481,7 +481,7 @@ export default function ModalAddPLOCollection({
                       "flex macair133:h-[120px] sm:h-[75px] ipad11:h-[95px] p-3",
                     label: "flex pb-1 gap-1",
                   }}
-                  placeholder="Ex. An ability to solve complex engineering problems."
+                  placeholder="An ability to solve complex engineering problems."
                   {...formOnePLONo.getInputProps("descEN")}
                 />
               </div>

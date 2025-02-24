@@ -241,7 +241,7 @@ export default function ModalManageTopic({
                     "flex h-[100px] acerSwift:max-macair133:!h-[108px] p-3 text-b3 acerSwift:max-macair133:!text-b4",
                   label: "flex pb-1 acerSwift:max-macair133:!text-b4",
                 }}
-                placeholder="Ex. การอินทิเกรต (Integration)"
+                placeholder="การอินทิเกรต (Integration)"
                 {...formOneWeek.getInputProps("topic")}
               />
 

@@ -488,7 +488,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                       {course.sections.map((sec: any, index: number) => (
                         <div
                           key={sec.sectionNo}
-                          className="first:rounded-t-md last:rounded-b-md bg-blue-100"
+                          className="first:rounded-t-md last:rounded-b-md bg-blue-50"
                         >
                           <div className="grid grid-cols-5 items-center justify-between py-4 px-7">
                             {/* Section No & Topic */}
@@ -531,7 +531,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                             {/* Open Symester */}
                             <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b4">
                               <p className="text-wrap font-medium">
-                                Open Semester
+                                Semester
                               </p>
                               <div className="flex gap-1">
                                 {sec.semester.map(
