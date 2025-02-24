@@ -61,6 +61,7 @@ export default function ModalEditSection({
     validate: {
       topic: (value) => validateTextInput(value, "Topic"),
       sectionNo: (value) => validateSectionNo(value),
+      curriculum: (value) => !value && "Curriculum is required",
     },
     validateInputOnBlur: true,
   });
@@ -195,7 +196,11 @@ export default function ModalEditSection({
           searchable
           nothingFoundMessage="No result"
           data={[
-            { value: "-", label: "-" },
+            {
+              value: "-",
+              label:
+                "หลักสูตรอื่นๆ (No curriculum for this section.)",
+            },
             ...(curriculum?.map((item) => ({
               value: item.code,
               label: `${item.nameTH} [${item.code}]`,

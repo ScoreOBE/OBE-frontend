@@ -173,7 +173,7 @@ export default function TQF5() {
     if (
       academicYear &&
       courseNo &&
-      (dashboard == ROLE.ADMIN ? courseAdmin : true) &&
+      (dashboard == ROLE.CURRICULUM_ADMIN ? courseAdmin : true) &&
       tqf5.coursePLO &&
       (tqf5.topic !== tqf5Original?.topic || !tqf5Original)
     ) {
@@ -203,7 +203,7 @@ export default function TQF5() {
       }),
       getOneCourseManagement(courseNo!),
     ]);
-    if (dashboard == ROLE.ADMIN && courseAdmin) {
+    if (dashboard == ROLE.CURRICULUM_ADMIN && courseAdmin) {
       resCourse = courseAdmin;
     }
     if (resCourse) {

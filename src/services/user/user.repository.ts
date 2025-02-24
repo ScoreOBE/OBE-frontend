@@ -22,10 +22,10 @@ export const userController = (configService = {}) => {
       return service.put(`${prefix}`, { ...params });
     },
     updateAdmin: async (params: Partial<IModelUser>) => {
-      return service.put(`${prefix}/admin`, { ...params });
+      return service.put(`${prefix}/curr-admin`, { ...params });
     },
     updateSAdmin: async (params: Partial<IModelUser>) => {
-      return service.put(`${prefix}/s-admin`, { ...params });
+      return service.put(`${prefix}/admin`, { ...params });
     },
     logout: () => {
       window.location.assign(import.meta.env.VITE_LOGOUT_URL!);

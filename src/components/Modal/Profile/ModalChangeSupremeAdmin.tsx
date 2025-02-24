@@ -30,7 +30,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
   const [adminList, setAdminList] = useState<any[]>([]);
   const [adminFilter, setAdminFilter] = useState<IModelUser[]>([]);
   const [openSetSAdminModal, setOpenSetSAdminModal] = useState(false);
-  const [supremeAdmin, setSupremeAdmin] = useState<Partial<IModelUser>>({});
+  const [admin, setAdmin] = useState<Partial<IModelUser>>({});
   const [textActivate, setTextActivate] = useState("");
   const navigate = useNavigate();
 
@@ -56,7 +56,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
     const res = await getInstructor();
     if (res) {
       const list = res.filter((e: IModelUser) => {
-        if (e.id !== user.id && e.role === ROLE.ADMIN) {
+        if (e.id !== user.id && e.role === ROLE.CURRICULUM_ADMIN) {
           return {
             id: e.id,
             firstNameEN: e.firstNameEN,
@@ -70,7 +70,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
     }
   };
 
-  const editSAdmin = async (id: string) => {
+  const editAdmin = async (id: string) => {
     dispatch(setLoadingOverlay(true));
     const res = await updateSAdmin({ id });
     dispatch(setLoadingOverlay(false));
@@ -81,8 +81,8 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
       dispatch(setUser(res.user));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Supreme Admin Changed Successfully",
-        `${name} is an supreme admin.`
+        "Admin Changed Successfully",
+        `${name} is an admin.`
       );
       onClose();
       localStorage.removeItem("token");
@@ -97,7 +97,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
         opened={opened}
         onClose={onClose}
         closeOnClickOutside={true}
-        title="Supreme Admin Management"
+        title="Admin Management"
         size="43vw"
         centered
         transitionProps={{ transition: "pop" }}
@@ -119,7 +119,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           }}
           title={
             <p>
-              Changing the Supreme Admin
+              Changing the Admin
               <span className=" font-extrabold underline">
                 {" "}
                 will revoke{" "}
@@ -139,8 +139,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           }}
           title={
             <p>
-              You can only change the Supreme Admin who currently holds an admin
-              role.
+              You can only change the Admin who currently holds a curriculum admin role.
             </p>
           }
         ></Alert>
@@ -163,7 +162,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
               rightSectionPointerEvents="all"
             />
 
-            {/* List of Admin */}
+            {/* List of Curriculum Admin */}
             <div className="flex flex-1 flex-col gap-2 sm:max-macair133:h-[300px] macair133:h-[400px] h-[250px] overflow-y-auto">
               {adminFilter.map((admin) => (
                 <div
@@ -187,7 +186,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      setSupremeAdmin(admin);
+                      setAdmin(admin);
                       onClose();
                       setOpenSetSAdminModal(true);
                     }}
@@ -204,7 +203,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
         opened={openSetSAdminModal}
         closeOnClickOutside={false}
         size="47vw"
-        title="Change Supreme Admin"
+        title="Change Admin"
         transitionProps={{ transition: "pop" }}
         centered
         onClose={() => setOpenSetSAdminModal(false)}
@@ -212,12 +211,12 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
         <Alert
           variant="light"
           color="blue"
-          title={`After you change Supreme Admin, your role will automatically switch to an admin role`}
+          title={`After you change Admin, your role will automatically switch to a curriculum admin role`}
           icon={<Icon IconComponent={IconInfo2} className="size-6" />}
           className="mb-5"
         ></Alert>
         <TextInput
-          label={`To confirm, type "${supremeAdmin?.firstNameEN}${supremeAdmin?.lastNameEN}"`}
+          label={`To confirm, type "${admin?.firstNameEN}${admin?.lastNameEN}"`}
           value={textActivate}
           classNames={{ label: "select-none" }}
           onChange={(event) => setTextActivate(event.target.value)}
@@ -225,15 +224,15 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
         <Button
           disabled={
             !isEqual(
-              `${supremeAdmin?.firstNameEN}${supremeAdmin?.lastNameEN}`,
+              `${admin?.firstNameEN}${admin?.lastNameEN}`,
               textActivate
             )
           }
-          onClick={() => editSAdmin(supremeAdmin.id!)}
+          onClick={() => editAdmin(admin.id!)}
           loading={loading}
           className="mt-4 min-w-fit !h-[36px] !w-full"
         >
-          Change Supreme Admin, Log Out
+          Change Admin, Log Out
         </Button>
       </Modal>
     </>

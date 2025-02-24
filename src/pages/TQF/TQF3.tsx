@@ -201,7 +201,7 @@ export default function TQF3() {
     if (
       academicYear &&
       courseNo &&
-      (dashboard == ROLE.ADMIN ? courseAdmin : true) &&
+      (dashboard == ROLE.CURRICULUM_ADMIN ? courseAdmin : true) &&
       tqf3.coursePLO &&
       (tqf3.topic !== tqf3Original?.topic || !tqf3Original)
     ) {
@@ -282,7 +282,7 @@ export default function TQF3() {
       }),
       getOneCourseManagement(courseNo!),
     ]);
-    if (dashboard == ROLE.ADMIN && courseAdmin) {
+    if (dashboard == ROLE.CURRICULUM_ADMIN && courseAdmin) {
       resCourse = courseAdmin;
     }
     if (resCourse) {

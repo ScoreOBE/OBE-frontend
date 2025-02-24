@@ -9,10 +9,11 @@ export enum ROLE {
   STUDENT = "Student",
   TA = "TA",
   INSTRUCTOR = "Instructor",
+  CURRICULUM_ADMIN = "Curr. Admin",
   ADMIN = "Admin",
-  SUPREME_ADMIN = "S. Admin",
 }
 export enum TITLE_ROLE {
+  CURR_ADMIN = "Curriculum Admin",
   CO_INS = "Co-Instructor (Optional)",
   OWNER_SEC = "Owner section",
 }

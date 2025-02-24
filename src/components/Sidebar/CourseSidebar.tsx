@@ -45,7 +45,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const user = useAppSelector((state) => state.user);
   const dashboard = useAppSelector((state) => state.config.dashboard);
   const course = useAppSelector((state) =>
-    dashboard == ROLE.ADMIN
+    dashboard == ROLE.CURRICULUM_ADMIN
       ? state.allCourse.courses.find((e) => e.courseNo == courseNo)
       : state.course.courses.find((e) => e.courseNo == courseNo)
   );
@@ -156,7 +156,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         dispatch(resetDataTQF3());
         dispatch(resetDataTQF5());
         goToPage(
-          dashboard == ROLE.ADMIN
+          dashboard == ROLE.CURRICULUM_ADMIN
             ? `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
             : ROUTE_PATH.INS_DASHBOARD,
           true
@@ -175,7 +175,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           dispatch(resetDataTQF5());
           setOpenAlertPopup(false);
           goToPage(
-            dashboard == ROLE.ADMIN
+            dashboard == ROLE.CURRICULUM_ADMIN
               ? `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
               : ROUTE_PATH.INS_DASHBOARD,
             true
@@ -208,7 +208,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             IconComponent={IconChevronLeft}
             className="size-5 acerSwift:max-macair133:size-4"
           />
-          Back to {dashboard == ROLE.ADMIN ? "Admin Dashboard" : "Your Course"}
+          Back to {dashboard == ROLE.CURRICULUM_ADMIN ? "Curriculum Admin Dashboard" : "Your Course"}
         </div>
 
         <div className="flex flex-col gap-5 ">

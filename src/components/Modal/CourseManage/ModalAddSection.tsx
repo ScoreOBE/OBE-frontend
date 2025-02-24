@@ -80,6 +80,7 @@ export default function ModalAddSection({
             ? null
             : "Please choose at least one semester.";
         },
+        curriculum: (value) => !value && "Curriculum is required",
         instructor: (value: any) =>
           value?.value?.length ? null : "Please select one Owner Section.",
       },
@@ -121,24 +122,25 @@ export default function ModalAddSection({
     } else if (isManage ? active == 2 : active == 1) {
       const secNoList: string[] = [];
       for (let i = 0; i < length; i++) {
-        const isError = form.validateField(`sections.${i}.semester`).hasError;
-        if (isValid) {
-          isValid = !isError;
-        } else {
-          form.validateField(`sections.${i}.semester`);
-        }
-        if (isError) {
+        const semesterError = form.validateField(
+          `sections.${i}.semester`
+        ).hasError;
+        const curriculumError = form.validateField(
+          `sections.${i}.curriculum`
+        ).hasError;
+        if (semesterError || curriculumError) {
           secNoList.push(
-            getSectionNo(form.getValues().sections.at(i)?.sectionNo)
+            getSectionNo(form.getValues().sections?.[i]?.sectionNo)
           );
+          isValid = false;
         }
       }
       if (secNoList.length) {
         secNoList.sort((a: any, b: any) => parseInt(a) - parseInt(b));
         showNotifications(
           NOTI_TYPE.ERROR,
-          "Missing Recurrence Semester",
-          `Please select a semester for recurrence in section ${secNoList.join(
+          "Missing Required Fields",
+          `Please select a semester and a valid curriculum for section ${secNoList.join(
             ", "
           )}`
         );
@@ -567,7 +569,11 @@ export default function ModalAddSection({
                         searchable
                         nothingFoundMessage="No result"
                         data={[
-                          { value: "-", label: "-" },
+                          {
+                            value: "-",
+                            label:
+                              "หลักสูตรอื่นๆ (No curriculum for this section.)",
+                          },
                           ...(curriculum?.map((item) => ({
                             value: item.code,
                             label: `${item.nameTH} [${item.code}]`,

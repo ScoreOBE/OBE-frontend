@@ -13,8 +13,8 @@ export const goToDashboard = (role: ROLE) => {
     case ROLE.STUDENT:
       window.location.replace(ROUTE_PATH.STD_DASHBOARD);
       return;
-    case ROLE.SUPREME_ADMIN:
     case ROLE.ADMIN:
+    case ROLE.CURRICULUM_ADMIN:
       window.location.replace(
         `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
       );

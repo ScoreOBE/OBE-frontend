@@ -57,8 +57,8 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
       const name = res.firstNameEN?.length ? getUserName(res, 1) : res.email;
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Admin Deleted Successfully",
-        `${name} has been successfully removed from the admin list.`
+        "Curriculum Admin Deleted Successfully",
+        `${name} has been successfully removed from the curriculum admin list.`
       );
     }
     dispatch(setLoadingOverlay(false));
@@ -74,8 +74,8 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
           setOpenMainPopupDelAdmin(false);
         }}
         type="delete"
-        labelButtonRight="Delete admin"
-        title={`Delete admin`}
+        labelButtonRight="Delete Curriculum admin"
+        title={`Delete Curriculum admin`}
         message={
           <>
             <Alert
@@ -83,7 +83,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
               color="red"
               title={
                 <p>
-                  After you delete this admin, they will no longer have access
+                  After you delete this curriculum admin, they will no longer have access
                   to the management system.
                 </p>
               }
@@ -92,8 +92,8 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
-                <p className="text-b4 text-[#808080]">Admin</p>
-                <p className="  -translate-y-[2px] text-b1">{`${targetAdminName}`}</p>
+                <p className="text-b4 text-[#808080]">Curriculum Admin</p>
+                <p className="-translate-y-[2px] text-b1">{`${targetAdminName}`}</p>
               </div>
             </div>
           </>
@@ -103,7 +103,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
         <Modal
           opened={opened}
           onClose={onClose}
-          title="Admin Management"
+          title="Curriculum Admin Management"
           size="45vw"
           centered
           transitionProps={{ transition: "pop" }}
@@ -125,7 +125,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
             {/* Added Admin */}
             <div className="w-full  flex flex-col bg-white mt-3 border-secondary border-[1px]  rounded-md">
               <div className=" bg-bgTableHeader flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
-                <Icon IconComponent={IconUsers} /> Added Admin
+                <Icon IconComponent={IconUsers} /> Added Curriculum Admin
               </div>
               {/* Show List Of Admin */}
               <div className="flex flex-col gap-2 w-full sm:max-macair133:h-[300px] macair133:h-[400px] h-[250px]  p-4 py-3  overflow-y-auto">
@@ -139,7 +139,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
                   }
                   rightSectionPointerEvents="all"
                 />
-                {/* List of Admin */}
+                {/* List of Curriculum Admin */}
                 <div className="flex flex-col overflow-y-auto p-1">
                   {adminFilter.map((admin, index) => (
                     <div

@@ -77,12 +77,7 @@ export default function ModalAddCourse({
         semester: (value) => {
           return value?.length ? null : "Please choose semester at least one.";
         },
-        curriculum: (value) => {
-          if (!value) {
-            return "Curriculum is required";
-          }
-          return null;
-        },
+        curriculum: (value) => !value && "Curriculum is required",
       },
     },
     validateInputOnBlur: true,
@@ -144,11 +139,7 @@ export default function ModalAddCourse({
             `sections.${i}.curriculum`
           ).hasError;
 
-          if (
-            semesterError ||
-            (curriculumError &&
-              form.getValues().sections?.[i]?.curriculum !== "-")
-          ) {
+          if (semesterError || curriculumError) {
             secNoList.push(
               getSectionNo(form.getValues().sections?.[i]?.sectionNo)
             );
