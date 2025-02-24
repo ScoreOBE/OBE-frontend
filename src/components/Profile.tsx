@@ -191,7 +191,7 @@ export default function Profile() {
                   <span>
                     {dashboard == ROLE.CURRICULUM_ADMIN
                       ? "Switch to Instructor view"
-                      : "Switch to Curriculum Admin view"}
+                      : "Switch to Curr. Admin view"}
                   </span>
                 </div>
               </Menu.Item>

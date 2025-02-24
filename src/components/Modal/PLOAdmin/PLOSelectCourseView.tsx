@@ -76,14 +76,14 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
 
   return (
     <Modal.Root
-    opened={opened}
-    onClose={onClose}
-    autoFocus={false}
-    fullScreen={true}
-    zIndex={50}
-    classNames={{ content: "!p-0 !bg-[#fafafa]" }}
+      opened={opened}
+      onClose={onClose}
+      autoFocus={false}
+      fullScreen={true}
+      zIndex={50}
+      classNames={{ content: "!p-0 !bg-[#fafafa]" }}
     >
-      <Modal.Content >
+      <Modal.Content>
         {/* Header */}
 
         <Modal.Header className="flex w-full h-[64px] !bg-white px-6 !py-4 border-b">
