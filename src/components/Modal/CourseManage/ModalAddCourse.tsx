@@ -77,12 +77,7 @@ export default function ModalAddCourse({
         semester: (value) => {
           return value?.length ? null : "Please choose semester at least one.";
         },
-        curriculum: (value) => {
-          if (!value) {
-            return "Curriculum is required";
-          }
-          return null;
-        },
+        curriculum: (value) => !value && "Curriculum is required",
       },
     },
     validateInputOnBlur: true,
@@ -144,15 +139,11 @@ export default function ModalAddCourse({
             `sections.${i}.curriculum`
           ).hasError;
 
-          if (
-            semesterError ||
-            (curriculumError &&
-              form.getValues().sections?.[i]?.curriculum !== "-")
-          ) {
+          if (semesterError || curriculumError) {
             secNoList.push(
               getSectionNo(form.getValues().sections?.[i]?.sectionNo)
             );
-            isValid = false; 
+            isValid = false;
           }
         }
 
@@ -659,7 +650,11 @@ export default function ModalAddCourse({
                         searchable
                         nothingFoundMessage="No result"
                         data={[
-                          { value: "-", label: "ไม่มีหลักสูตรสำหรับเซคชั่นนี้ (No curriculum for this section.)" },
+                          {
+                            value: "-",
+                            label:
+                              "ไม่มีหลักสูตรสำหรับเซคชั่นนี้ (No curriculum for this section.)",
+                          },
                           ...(curriculum?.map((item) => ({
                             value: item.code,
                             label: `${item.nameTH} [${item.code}]`,
