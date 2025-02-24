@@ -151,7 +151,8 @@ export default function CompoMangeIns({
               label: getUserName(e, 1),
               value: e.id,
               disabled:
-                (type == "admin" && e.role == ROLE.CURRICULUM_ADMIN) ||
+                (type == "admin" &&
+                  [ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(e.role)) ||
                 currentMainIns == e.id
                   ? true
                   : false,
