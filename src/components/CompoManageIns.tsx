@@ -1,4 +1,4 @@
-import { Button, Select, TextInput } from "@mantine/core";
+import { Button, MultiSelect, Select, TextInput } from "@mantine/core";
 import IconAddCo from "@/assets/icons/addCo.svg?react";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import { useEffect, useState } from "react";
@@ -7,10 +7,11 @@ import { useAppSelector } from "@/store";
 import { validateEmail } from "@/helpers/functions/validation";
 import { NOTI_TYPE, ROLE, TITLE_ROLE } from "@/helpers/constants/enum";
 import { IModelUser } from "@/models/ModelUser";
-import { getInstructor, updateAdmin } from "@/services/user/user.service";
+import { getInstructor, updateCurrAdmin } from "@/services/user/user.service";
 import { getUserName } from "@/helpers/functions/function";
 import { IModelSection } from "@/models/ModelCourse";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
+import { useForm } from "@mantine/form";
 
 type actionType =
   | "add"
@@ -52,6 +53,7 @@ export default function CompoMangeIns({
   setUserFilter,
 }: Props) {
   const user = useAppSelector((state) => state.user);
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const [openFirst, setOpenFirst] = useState(false);
   const [swapMethodAddUser, setSwapMethodAddUser] = useState(false);
   const [instructorOption, setInstructorOption] = useState<any[]>([]);
@@ -59,6 +61,15 @@ export default function CompoMangeIns({
   const [isFocus, setIsFocus] = useState(false);
   const [firstInput, setFirstInput] = useState(true);
   const [invalidEmail, setInvalidEmail] = useState(false);
+
+  const form = useForm({
+    mode: "controlled",
+    initialValues: { curriculums: [] as string[] },
+    validate: {
+      curriculums: (value) => !value.length && "Curriculum is required",
+    },
+    validateInputOnBlur: true,
+  });
 
   useEffect(() => {
     if (opened) {
@@ -168,16 +179,19 @@ export default function CompoMangeIns({
     if (inputUser?.value) {
       // Add Admin
       if (type == "admin") {
+        if (form.validate().hasErrors) return;
         const payload: Partial<IModelUser> = { role: ROLE.CURRICULUM_ADMIN };
         if (swapMethodAddUser) {
           if (invalidEmail) return;
           payload.email = inputUser.value;
         } else payload.id = inputUser.value;
-        const res = await updateAdmin(payload);
+        payload.curriculums = form.getValues().curriculums;
+        const res = await updateCurrAdmin(payload);
         if (res) {
           const name = res.firstNameEN?.length
             ? getUserName(res, 1)
             : res.email;
+          form.reset();
           setInputUser({ value: null });
           fetchIns();
           showNotifications(
@@ -236,6 +250,28 @@ export default function CompoMangeIns({
         </div>
         <Icon IconComponent={IconChevronRight} className="stroke-[2px]" />
       </div>
+
+      {type == "admin" && (
+        <MultiSelect
+          label="Select Curriculums for access management"
+          size="xs"
+          placeholder="Select curriculum"
+          searchable
+          clearable
+          nothingFoundMessage="No result"
+          data={[
+            ...(curriculum?.map((item) => ({
+              value: item.code,
+              label: `${item.nameTH} [${item.code}]`,
+            })) || []),
+          ]}
+          classNames={{
+            input: "focus:border-primary acerSwift:max-macair133:!text-b5",
+            label: "acerSwift:max-macair133:!text-b4",
+          }}
+          {...form.getInputProps("curriculums")}
+        />
+      )}
 
       <div className="flex w-full  items-end h-fit ">
         {swapMethodAddUser ? (

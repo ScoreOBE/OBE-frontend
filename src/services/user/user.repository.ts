@@ -21,10 +21,10 @@ export const userController = (configService = {}) => {
     updateUser: async (params: Partial<IModelUser>) => {
       return service.put(`${prefix}`, { ...params });
     },
-    updateAdmin: async (params: Partial<IModelUser>) => {
+    updateCurrAdmin: async (params: Partial<IModelUser>) => {
       return service.put(`${prefix}/curr-admin`, { ...params });
     },
-    updateSAdmin: async (params: Partial<IModelUser>) => {
+    updateAdmin: async (params: Partial<IModelUser>) => {
       return service.put(`${prefix}/admin`, { ...params });
     },
     logout: () => {

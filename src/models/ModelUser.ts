@@ -11,6 +11,7 @@ export interface IModelUser {
   email: string;
   facultyCode: string;
   role: ROLE;
+  curriculums?: string[];
   termsOfService?: boolean;
   enrollCourses?: {
     year: number;
