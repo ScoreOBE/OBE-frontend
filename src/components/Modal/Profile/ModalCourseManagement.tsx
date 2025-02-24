@@ -18,11 +18,7 @@ import {
   getCourseManagement,
 } from "@/services/courseManagement/courseManagement.service";
 import { COURSE_TYPE, NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
-import {
-  getSectionNo,
-  getUserName,
-  sortData,
-} from "@/helpers/functions/function";
+import { getSectionNo, getUserName } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import MainPopup from "@/components/Popup/MainPopup";
 import { IModelSection } from "@/models/ModelCourse";
@@ -39,6 +35,7 @@ import { removeCourse, removeSection } from "@/store/course";
 import ModalAddSection from "@/components/Modal/CourseManage/ModalAddSection";
 import { SearchInput } from "@/components/SearchInput";
 import { setLoading } from "@/store/loading";
+import { IModelCurriculum } from "@/models/ModelFaculty";
 
 type Props = {
   opened: boolean;
@@ -47,10 +44,13 @@ type Props = {
 
 export default function ModalCourseManagement({ opened, onClose }: Props) {
   const user = useAppSelector((state) => state.user);
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const courseManagement = useAppSelector((state) => state.courseManagement);
   const loading = useAppSelector((state) => state.loading.loading);
   const dispatch = useAppDispatch();
+  const [maxTabs, setMaxTabs] = useState(0);
+  const [startEndTab, setStartEndTab] = useState({ start: 0, end: maxTabs });
   const [payload, setPayload] = useState<any>({ page: 1, limit: 10 });
   const [startEndPage, setStartEndPage] = useState({ start: 1, end: 10 });
   const [editCourse, setEditCourse] = useState<any>();
@@ -63,17 +63,79 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
   const [openModalEditCourse, setOpenModalEditCourse] = useState(false);
   const [openModalEditSec, setOpenModalEditSec] = useState(false);
   const [openModalAddSec, setOpenModalAddSec] = useState(false);
+  const [curriculumList, setCurriculumList] = useState<
+    Partial<IModelCurriculum>[]
+  >([]);
+  const [selectCurriculum, setSelectCurriculum] = useState<
+    Partial<IModelCurriculum>
+  >({});
+
+  useLayoutEffect(() => {
+    const updateSize = () => {
+      let tabs;
+      if (window.innerWidth >= 1440) {
+        tabs = 16;
+      } else if (window.innerWidth >= 1280) {
+        tabs = 14;
+      } else if (window.innerWidth >= 1024) {
+        tabs = 10;
+        // } else if (window.innerWidth >= 768) {
+        //   tabs = 6;
+      } else if (window.innerWidth >= 640) {
+        tabs = 6;
+      } else {
+        tabs = 4;
+      }
+      setMaxTabs(tabs);
+      setStartEndTab(({ start, end }) => {
+        return { start: 0, end: tabs };
+      });
+    };
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
 
   useEffect(() => {
     if (opened) {
-      fetchCourse();
+      if (user.role == ROLE.ADMIN) {
+        setCurriculumList([
+          {
+            nameEN: "All Courses",
+            code: "All Courses",
+          },
+          ...curriculum,
+        ]);
+        setSelectCurriculum({
+          nameEN: "All Courses",
+          code: "All Courses",
+        });
+      } else {
+        setCurriculumList(
+          curriculum.filter(({ code }) => user.curriculums?.includes(code))
+        );
+        setSelectCurriculum({
+          nameEN: user.curriculums![0],
+          code: user.curriculums![0],
+        });
+      }
     }
   }, [opened]);
 
+  useEffect(() => {
+    if (opened && selectCurriculum.code) {
+      fetchCourse();
+    }
+  }, [selectCurriculum]);
+
   const initialPayload = () => {
+    const cur = selectCurriculum.code?.includes("All")
+      ? ["All"]
+      : [selectCurriculum.code!];
     return {
       ...new CourseManagementSearchDTO(),
       search: courseManagement.search,
+      curriculum: cur,
     };
   };
 
@@ -281,6 +343,67 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   placeholder="Course No / Course Name"
                 />
               </div>
+              <Tabs
+                classNames={{
+                  root: "w-full left-0",
+                  tab: "px-1 !bg-transparent hover:!text-tertiary",
+                  tabLabel: "!font-semibold",
+                }}
+                value={selectCurriculum.code}
+                onChange={(event) => {
+                  setSelectCurriculum(
+                    curriculumList.find(({ code }) => code == event)!
+                  );
+                  setPayload({ ...payload });
+                }}
+              >
+                <Tabs.List
+                  grow
+                  className="!bg-transparent px-[53px] items-center flex w-full"
+                >
+                  {curriculumList.length > maxTabs && (
+                    <div
+                      aria-disabled={startEndTab.start == 0}
+                      onClick={() =>
+                        startEndTab.start > 0 &&
+                        setStartEndTab(({ start, end }) => {
+                          return { start: start - maxTabs, end: end - maxTabs };
+                        })
+                      }
+                      className={`justify-start cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                        startEndTab.start !== 1 && "hover:bg-[#eeeeee]"
+                      } rounded-full`}
+                    >
+                      <Icon IconComponent={IconChevronLeft} />
+                    </div>
+                  )}
+                  {curriculumList
+                    .slice(startEndTab.start, startEndTab.end)
+                    .map((cur) => (
+                      <Tabs.Tab key={cur.code} value={cur.code!}>
+                        {cur.code}
+                      </Tabs.Tab>
+                    ))}
+                  {curriculumList.length > maxTabs && (
+                    <div
+                      aria-disabled={startEndTab.end == curriculumList.length}
+                      onClick={() =>
+                        startEndTab.end < curriculumList.length &&
+                        setStartEndTab(({ start, end }) => {
+                          return { start: start + maxTabs, end: end + maxTabs };
+                        })
+                      }
+                      className={`justify-end cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                        startEndTab.end !== courseManagement.total &&
+                        "hover:bg-[#eeeeee]"
+                      } rounded-full`}
+                    >
+                      <Icon IconComponent={IconChevronRight} />
+                    </div>
+                  )}
+                  {/* </div> */}
+                </Tabs.List>
+              </Tabs>
             </div>
           </Modal.Header>
           <Modal.Body className="px-28 flex flex-col h-full pb-24 w-full overflow-hidden">
@@ -297,7 +420,6 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                     </>
                   ) : (
                     <>
-                      {" "}
                       {courseManagement.total} Course
                       {courseManagement.total > 1 ? "s" : ""}
                     </>
@@ -530,9 +652,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                             </div>
                             {/* Open Symester */}
                             <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b4">
-                              <p className="text-wrap font-medium">
-                                Semester
-                              </p>
+                              <p className="text-wrap font-medium">Semester</p>
                               <div className="flex gap-1">
                                 {sec.semester.map(
                                   (term: any, index: number) => (

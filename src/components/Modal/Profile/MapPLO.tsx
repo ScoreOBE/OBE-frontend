@@ -49,7 +49,7 @@ import {
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
+import { COURSE_TYPE, NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import MainPopup from "@/components/Popup/MainPopup";
 import {
   validateSectionNo,
@@ -67,6 +67,7 @@ type Props = {
 };
 
 export default function MapPLO({ ploName = "" }: Props) {
+  const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const loading = useAppSelector((state) => state.loading);
   const dispatch = useAppDispatch();
@@ -135,7 +136,9 @@ export default function MapPLO({ ploName = "" }: Props) {
 
   useEffect(() => {
     if (ploList.curriculum) {
-      setSelectedCurriculum(ploList.curriculum[0]);
+      setSelectedCurriculum(
+        user.role == ROLE.ADMIN ? ploList.curriculum[0] : user.curriculums![0]
+      );
     }
   }, [ploList]);
 
@@ -1046,7 +1049,10 @@ export default function MapPLO({ ploName = "" }: Props) {
                         />
                         <Select
                           placeholder="Curriculum"
-                          data={ploList.curriculum?.map((cur) => cur)}
+                          data={(user.role == ROLE.ADMIN
+                            ? ploList.curriculum
+                            : user.curriculums
+                          )?.map((cur) => cur)}
                           value={selectedCurriculum}
                           onChange={(event) => setSelectedCurriculum(event)}
                           allowDeselect={false}
