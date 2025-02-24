@@ -7,7 +7,7 @@ import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { getUserName } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import CompoManageIns from "@/components/CompoManageIns";
-import { updateAdmin } from "@/services/user/user.service";
+import { updateCurrAdmin } from "@/services/user/user.service";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconUserCicle from "@/assets/icons/userCircle.svg?react";
 import IconUsers from "@/assets/icons/users.svg?react";
@@ -19,7 +19,7 @@ type Props = {
   opened: boolean;
   onClose: () => void;
 };
-export default function ModalManageAdmin({ opened, onClose }: Props) {
+export default function ModalManageCurrAdmin({ opened, onClose }: Props) {
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
@@ -50,7 +50,7 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
   const deleteAdmin = async (id: string) => {
     dispatch(setLoadingOverlay(true));
     const payload: Partial<IModelUser> = { id, role: ROLE.INSTRUCTOR };
-    const res = await updateAdmin(payload);
+    const res = await updateCurrAdmin(payload);
     if (res) {
       setIsNewFetch(true);
       setAdminList(adminList.filter((admin) => admin.id !== res.id));
@@ -83,8 +83,8 @@ export default function ModalManageAdmin({ opened, onClose }: Props) {
               color="red"
               title={
                 <p>
-                  After you delete this curriculum admin, they will no longer have access
-                  to the management system.
+                  After you delete this curriculum admin, they will no longer
+                  have access to the management system.
                 </p>
               }
               icon={<Icon IconComponent={IconExclamationCircle} />}

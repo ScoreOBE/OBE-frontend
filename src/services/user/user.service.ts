@@ -26,13 +26,13 @@ export const updateUser = async (params: Partial<IModelUser>) => {
   return isValidResponse(res);
 };
 
-export const updateAdmin = async (params: Partial<IModelUser>) => {
-  const res = await userService.updateAdmin(params);
+export const updateCurrAdmin = async (params: Partial<IModelUser>) => {
+  const res = await userService.updateCurrAdmin(params);
   return isValidResponse(res);
 };
 
-export const updateSAdmin = async (params: Partial<IModelUser>) => {
-  const res = await userService.updateSAdmin(params);
+export const updateAdmin = async (params: Partial<IModelUser>) => {
+  const res = await userService.updateAdmin(params);
   return isValidResponse(res);
 };
 

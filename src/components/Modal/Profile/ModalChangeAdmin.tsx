@@ -1,8 +1,8 @@
-import { Alert, Button, Modal, TextInput } from "@mantine/core";
+import { Alert, Button, Modal, MultiSelect, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import { IModelUser } from "@/models/ModelUser";
-import { getInstructor, updateSAdmin } from "@/services/user/user.service";
+import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { setUser } from "@/store/user";
@@ -16,15 +16,17 @@ import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconUserCicle from "@/assets/icons/userCircle.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import { setLoadingOverlay } from "@/store/loading";
+import { useForm } from "@mantine/form";
 
 type Props = {
   opened: boolean;
   onClose: () => void;
 };
 
-export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
+export default function ModalChangeAdmin({ opened, onClose }: Props) {
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const user = useAppSelector((state) => state.user);
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const dispatch = useAppDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [adminList, setAdminList] = useState<any[]>([]);
@@ -70,14 +72,26 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
     }
   };
 
+  const form = useForm({
+    mode: "controlled",
+    initialValues: { curriculums: [] as string[] },
+    validate: {
+      curriculums: (value) => !value.length && "Curriculum is required",
+    },
+    validateInputOnBlur: true,
+  });
+
   const editAdmin = async (id: string) => {
     dispatch(setLoadingOverlay(true));
-    const res = await updateSAdmin({ id });
+    const res = await updateAdmin({
+      id,
+      curriculums: form.getValues().curriculums,
+    });
     dispatch(setLoadingOverlay(false));
     if (res) {
-      const name = res.newSAdmin.firstNameEN?.length
-        ? getUserName(res.newSAdmin, 1)
-        : res.newSAdmin.email;
+      const name = res.newAdmin.firstNameEN?.length
+        ? getUserName(res.newAdmin, 1)
+        : res.newAdmin.email;
       dispatch(setUser(res.user));
       showNotifications(
         NOTI_TYPE.SUCCESS,
@@ -139,7 +153,8 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           }}
           title={
             <p>
-              You can only change the Admin who currently holds a curriculum admin role.
+              You can only change the Admin who currently holds a curriculum
+              admin role.
             </p>
           }
         ></Alert>
@@ -215,6 +230,25 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
           icon={<Icon IconComponent={IconInfo2} className="size-6" />}
           className="mb-5"
         ></Alert>
+        <MultiSelect
+          label="Select Curriculums for you can access management"
+          size="xs"
+          placeholder="Select curriculum"
+          searchable
+          clearable
+          nothingFoundMessage="No result"
+          data={[
+            ...(curriculum?.map((item) => ({
+              value: item.code,
+              label: `${item.nameTH} [${item.code}]`,
+            })) || []),
+          ]}
+          classNames={{
+            input: "focus:border-primary acerSwift:max-macair133:!text-b5",
+            label: "acerSwift:max-macair133:!text-b4",
+          }}
+          {...form.getInputProps("curriculums")}
+        />
         <TextInput
           label={`To confirm, type "${admin?.firstNameEN}${admin?.lastNameEN}"`}
           value={textActivate}
@@ -226,7 +260,7 @@ export default function ModalChangeSupremeAdmin({ opened, onClose }: Props) {
             !isEqual(
               `${admin?.firstNameEN}${admin?.lastNameEN}`,
               textActivate
-            )
+            ) || !form.getValues().curriculums.length
           }
           onClick={() => editAdmin(admin.id!)}
           loading={loading}
