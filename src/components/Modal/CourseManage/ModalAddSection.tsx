@@ -572,7 +572,7 @@ export default function ModalAddSection({
                           {
                             value: "-",
                             label:
-                              "ไม่มีหลักสูตรสำหรับเซคชั่นนี้ (No curriculum for this section.)",
+                              "หลักสูตรอื่นๆ (No curriculum for this section.)",
                           },
                           ...(curriculum?.map((item) => ({
                             value: item.code,
