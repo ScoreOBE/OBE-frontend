@@ -49,6 +49,7 @@ export default function AdminDashboardTQF() {
     Partial<IModelTQF3> & { courseNo?: string }
   >({});
   const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
+  const [curriculumList, setCurriculumList] = useState<IModelCurriculum[]>([]);
   const [selectCurriculum, setSelectCurriculum] = useState<
     Partial<IModelCurriculum>
   >({});
@@ -63,6 +64,18 @@ export default function AdminDashboardTQF() {
   }, []);
 
   useEffect(() => {
+    if (curriculum?.length) {
+      if (user.role == ROLE.ADMIN) {
+        setCurriculumList(curriculum);
+      } else {
+        setCurriculumList(
+          curriculum.filter(({ code }) => user.curriculums?.includes(code))
+        );
+      }
+    }
+  }, [curriculum]);
+
+  useEffect(() => {
     const year = parseInt(params.get("year")!);
     const semester = parseInt(params.get("semester")!);
     if (academicYear.length) {
@@ -72,18 +85,26 @@ export default function AdminDashboardTQF() {
       if (acaYear && acaYear.id != term.id) {
         setTerm(acaYear);
       }
-      if (term) {
-        setSelectCurriculum({
-          nameEN: "All Courses",
-          code: "All Courses",
-        });
+      if (term && curriculumList.length) {
+        if (user.role == ROLE.ADMIN) {
+          setSelectCurriculum({
+            nameEN: "All Courses",
+            code: "All Courses",
+          });
+        } else {
+          setSelectCurriculum({
+            nameEN: curriculumList[0].code,
+            code: curriculumList[0].code,
+          });
+        }
       }
     }
-  }, [academicYear, term, params]);
+  }, [academicYear, term, params, curriculumList]);
 
   useEffect(() => {
-    if (term.id && curriculum?.length && selectCurriculum.code) fetchCourse();
-  }, [curriculum, selectCurriculum]);
+    if (term.id && curriculumList?.length && selectCurriculum.code)
+      fetchCourse();
+  }, [curriculumList, selectCurriculum]);
 
   useEffect(() => {
     if (term) {
@@ -135,7 +156,7 @@ export default function AdminDashboardTQF() {
   const fetchCourse = async () => {
     if (!user.termsOfService) return;
     dispatch(setLoading(true));
-    if (curriculum?.length) {
+    if (curriculumList?.length) {
       const payloadCourse = initialPayload();
       setPayload(payloadCourse);
       const res = await getCourse(payloadCourse);
@@ -573,15 +594,17 @@ export default function AdminDashboardTQF() {
               });
             else
               setSelectCurriculum(
-                curriculum.find(({ code }) => code == event)!
+                curriculumList.find(({ code }) => code == event)!
               );
             setPayload({ ...payload });
           }}
         >
           <Tabs.List className="mb-2 flex flex-nowrap overflow-x-auto">
-            <Tabs.Tab value="All Courses">All Courses</Tabs.Tab>
-            {curriculum?.map((cur) => (
-              <Tabs.Tab key={cur.code} value={cur.code!}>
+            {user.role == ROLE.ADMIN && (
+              <Tabs.Tab value="All Courses">All Courses</Tabs.Tab>
+            )}
+            {curriculumList?.map((cur) => (
+              <Tabs.Tab key={cur.code} value={cur.code}>
                 {cur.code}
               </Tabs.Tab>
             ))}
@@ -589,7 +612,7 @@ export default function AdminDashboardTQF() {
 
           <Tabs.Panel
             className="flex flex-col h-full w-full overflow-auto gap-1"
-            value={selectCurriculum?.code || "All"}
+            value={selectCurriculum.code || "All"}
           >
             <div className="flex h-full w-full pt-2 pb-5 overflow-hidden">
               {loading ? (

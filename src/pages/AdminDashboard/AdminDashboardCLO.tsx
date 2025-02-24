@@ -39,6 +39,7 @@ export default function AdminDashboardCLO() {
   const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
+  const [curriculumList, setCurriculumList] = useState<IModelCurriculum[]>([]);
   const [selectCurriculum, setSelectCurriculum] = useState<
     Partial<IModelCurriculum>
   >({});
@@ -50,6 +51,18 @@ export default function AdminDashboardCLO() {
     localStorage.setItem("dashboard", ROLE.CURRICULUM_ADMIN);
     dispatch(setDashboard(ROLE.CURRICULUM_ADMIN));
   }, []);
+
+  useEffect(() => {
+    if (curriculum?.length) {
+      if (user.role == ROLE.ADMIN) {
+        setCurriculumList(curriculum);
+      } else {
+        setCurriculumList(
+          curriculum.filter(({ code }) => user.curriculums?.includes(code))
+        );
+      }
+    }
+  }, [curriculum]);
 
   useEffect(() => {
     const year = parseInt(params.get("year")!);
@@ -65,10 +78,13 @@ export default function AdminDashboardCLO() {
   }, [academicYear, term, params]);
 
   useEffect(() => {
-    if (!selectCurriculum.code && curriculum?.length) {
-      setSelectCurriculum(curriculum[0]);
+    if (!selectCurriculum.code && curriculumList.length) {
+      setSelectCurriculum({
+        nameEN: curriculumList[0].code,
+        code: curriculumList[0].code,
+      });
     }
-  }, [curriculum]);
+  }, [curriculumList]);
 
   useEffect(() => {
     if (term) {
@@ -78,7 +94,7 @@ export default function AdminDashboardCLO() {
   }, [localStorage.getItem("search")]);
 
   useEffect(() => {
-    if (term.id && curriculum?.length && selectCurriculum.code) {
+    if (term.id && curriculumList?.length && selectCurriculum.code) {
       if (!curriculumPLO.curriculum?.includes(selectCurriculum.code)) {
         fetchPLO();
       }
@@ -346,12 +362,14 @@ export default function AdminDashboardCLO() {
           }}
           value={selectCurriculum.code}
           onChange={(event) => {
-            setSelectCurriculum(curriculum.find(({ code }) => code == event)!);
+            setSelectCurriculum(
+              curriculumList.find(({ code }) => code == event)!
+            );
             setPayload({ ...payload });
           }}
         >
           <Tabs.List className="mb-2 flex flex-nowrap overflow-x-auto">
-            {curriculum?.map((cur) => (
+            {curriculumList?.map((cur) => (
               <Tabs.Tab key={cur.code} value={cur.code!}>
                 {cur.code}
               </Tabs.Tab>
