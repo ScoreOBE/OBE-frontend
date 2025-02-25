@@ -157,6 +157,8 @@ export default function PLOYearView({ opened, onClose }: Props) {
         }
       });
       setCoursePloScoreList(list);
+    } else {
+      setCoursePloScoreList([]);
     }
   }, [courses]);
 
@@ -204,7 +206,7 @@ export default function PLOYearView({ opened, onClose }: Props) {
         autoFocus={false}
         fullScreen={true}
         zIndex={50}
-        classNames={{ content: "!p-0 !bg-[#fafafa]" }}
+        classNames={{ content: "!pt-0 !bg-[#fafafa]" }}
       >
         <Modal.Content className="overflow-hidden !rounded-none !px-0">
           {/* Header */}
@@ -268,9 +270,8 @@ export default function PLOYearView({ opened, onClose }: Props) {
               </Tabs>
             </div>
           </Modal.Header>
-
           {/* Body */}
-          <Modal.Body className="flex h-full max-h-[92vh] !w-full  p-6 px-10   gap-4 overflow-hidden">
+          <Modal.Body className="flex h-full w-full gap-4 pt-4 pb-[104px] overflow-hidden">
             {semesters.map((semester) => {
               const courseList = coursePloScoreList.filter(
                 (course) => course.semester == semester.semester
