@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Button, Menu, Table, Tabs } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconDots from "@/assets/icons/dots.svg?react";
-import IconExcel from "@/assets/icons/excel.svg?react";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import { useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
@@ -18,8 +17,7 @@ import {
   setAllCourseList,
   setSearchCurriculum,
 } from "@/store/allCourse";
-import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
-import ModalExportPLO from "@/components/Modal/ModalExportPLO";
+import { IModelPLO } from "@/models/ModelPLO";
 import { getOnePLO } from "@/services/plo/plo.service";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import { getUniqueTopicsWithTQF } from "@/helpers/functions/function";
@@ -48,7 +46,6 @@ export default function AdminDashboardPLO() {
   >({});
   const [curriculumPLO, setCurriculumPLO] = useState<Partial<IModelPLO>>({});
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
-  const [openModalExportPLO, setOpenModalExportPLO] = useState(false);
   const [openPLOYearView, setOpenPLOYearView] = useState(false);
   const [openPLOSelectCourseView, setOpenPLOSelectCourseView] = useState(false);
 
@@ -321,10 +318,6 @@ export default function AdminDashboardPLO() {
           data={curriculumPLO}
         />
       )}
-      <ModalExportPLO
-        opened={openModalExportPLO}
-        onClose={() => setOpenModalExportPLO(false)}
-      />
       <PLOSelectCourseView
         opened={openPLOSelectCourseView}
         onClose={() => setOpenPLOSelectCourseView(false)}
@@ -411,19 +404,6 @@ export default function AdminDashboardPLO() {
                     </div>{" "}
                   </div>
                 </Menu.Item>
-
-                <Menu.Item
-                  onClick={() => setOpenModalExportPLO(true)}
-                  className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
-                >
-                  <div className="flex items-center  gap-2">
-                    <Icon
-                      className="size-4 acerSwift:max-macair133:!size-3.5"
-                      IconComponent={IconExcel}
-                    />
-                    <span>Export PLO</span>
-                  </div>
-                </Menu.Item>
               </Menu.Dropdown>
             </Menu>
           </div>
@@ -466,7 +446,6 @@ export default function AdminDashboardPLO() {
                       style={{ height: "fit-content" }}
                       loader={<Loading />}
                     >
-                      {/* <div className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"> */}
                       {courseView(curriculumPLO)}
                     </InfiniteScroll>
                   ) : (
