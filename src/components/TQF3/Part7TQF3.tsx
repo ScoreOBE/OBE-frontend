@@ -33,6 +33,7 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
     parseInt(params.get("semester") || "") !== academicYear.semester;
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
+  const [curIndex, setCurIndex] = useState(0);
   const [ploRequire, setPloRequire] = useState<string[]>([]);
   const [coursePLO, setCoursePLO] = useState<Partial<IModelPLO>>({});
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
@@ -115,6 +116,7 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
           ({ curriculum }) => curriculum == selectCurriculum
         )?.list || [];
       setPloRequire(ploR);
+      setCurIndex(tqf3.curriculum!.findIndex((cur) => cur == selectCurriculum));
     } else {
       setCoursePLO({});
       setPloRequire([]);
@@ -151,10 +153,10 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
                     );
                     ploForm
                       .getValues()
-                      .list[index]?.data.forEach(({ id }, index) => {
+                      .list[index]?.data.forEach(({ id }, ploIndex) => {
                         if ((item?.plos as string[])?.includes(id)) {
                           ploForm.insertListItem(
-                            `list.${index}.data.${index}.clos`,
+                            `list.${index}.data.${ploIndex}.clos`,
                             cloItem.id
                           );
                         }
@@ -236,7 +238,10 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
             </Tabs.List>
             <div className="overflow-auto flex px-3 w-full max-h-full mt-3">
               {form.getValues().list?.map((cur, index) => (
-                <Tabs.Panel key={index} value={cur.curriculum}>
+                <Tabs.Panel
+                  key={`${cur.curriculum}-${index}`}
+                  value={cur.curriculum}
+                >
                   <div className="flex flex-col w-full max-h-full gap-4 pb-4">
                     {/* Topic */}
                     <div className="flex text-secondary items-center w-full justify-between">
@@ -291,7 +296,7 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
 
                     {/* Table */}
                     <div
-                      key={form.key(`list.data`)}
+                      key={form.key(`list.${index}.data`)}
                       className="overflow-auto border border-secondary rounded-lg relative"
                       style={{
                         boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
@@ -352,7 +357,9 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
                                 className="text-[13px] text-default"
                               >
                                 <Table.Td
-                                  key={form.key(`data.${cloIndex}.plos`)}
+                                  key={form.key(
+                                    `list.${index}.data.${cloIndex}.plos`
+                                  )}
                                   style={{
                                     filter:
                                       "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
@@ -381,9 +388,9 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
                                     </p>
                                   </div>
                                 </Table.Td>
-                                {coursePLO?.data?.map(({ id }, index) => {
+                                {coursePLO?.data?.map(({ id }, ploIndex) => {
                                   return (
-                                    <Table.Td key={index}>
+                                    <Table.Td key={ploIndex}>
                                       <div className="flex items-start">
                                         <Checkbox
                                           size="sm"
