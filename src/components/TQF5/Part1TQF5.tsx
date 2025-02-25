@@ -1,13 +1,14 @@
-import { Button, Table, Textarea, TextInput } from "@mantine/core";
+import { Button, Table, Tabs, Textarea, TextInput } from "@mantine/core";
 import Icon from "../Icon";
 import IconUpload from "@/assets/icons/upload.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconCheck2 from "@/assets/icons/Check2.svg?react";
+import IconCheck from "@/assets/icons/Check.svg?react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IModelTQF5Part1 } from "@/models/ModelTQF5";
+import { IModelTQF5, IModelTQF5Part1 } from "@/models/ModelTQF5";
 import ModalUploadGrade from "../Modal/Score/ModalUploadGrade";
 import { cloneDeep, isEqual } from "lodash";
 import { updatePartTQF5 } from "@/store/tqf5";
@@ -15,20 +16,25 @@ import { getSectionNo } from "@/helpers/functions/function";
 import { IModelUser } from "@/models/ModelUser";
 import { ROLE } from "@/helpers/constants/enum";
 import { initialTqf5Part1 } from "@/helpers/functions/tqf5";
+import { IModelPLORequire } from "@/models/ModelCourseManagement";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
-  selectCurriculum: string | null | undefined;
+  tqf5Original: Partial<IModelTQF5> & {
+    topic?: string;
+    ploRequired?: IModelPLORequire[];
+  };
 };
 
-export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
+export default function Part1TQF5({ setForm, tqf5Original }: Props) {
   const { courseNo } = useParams();
   const user = useAppSelector((state) => state.user);
   const dashboard = useAppSelector((state) => state.config.dashboard);
   const course = useAppSelector((state) =>
-    (dashboard == ROLE.CURRICULUM_ADMIN ? state.allCourse : state.course).courses.find(
-      (c) => c.courseNo == courseNo
-    )
+    (dashboard == ROLE.CURRICULUM_ADMIN
+      ? state.allCourse
+      : state.course
+    ).courses.find((c) => c.courseNo == courseNo)
   );
   const tqf5 = useAppSelector((state) => state.tqf5);
   const dispatch = useAppDispatch();
@@ -36,6 +42,8 @@ export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
   const [openModalUploadGrade, setOpenModalUploadGrade] = useState(false);
   const [isEditCourseEval, setIsEditCourseEval] = useState(false);
   const [isEditCriteria, setIsEditCriteria] = useState(false);
+  const [selectCurriculum, setSelectCurriculum] = useState<string | null>();
+
   const form = useForm({
     mode: "controlled",
     initialValues: { list: [] as IModelTQF5Part1[] },
@@ -77,6 +85,14 @@ export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
   };
 
   useEffect(() => {
+    if (tqf5.curriculum?.length) {
+      setSelectCurriculum(tqf5.curriculum[0]);
+    } else {
+      setSelectCurriculum(null);
+    }
+  }, [tqf5.curriculum]);
+
+  useEffect(() => {
     if (tqf5.part1) {
       form.setValues(cloneDeep(tqf5.part1));
       setCurIndex(
@@ -89,16 +105,27 @@ export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
     }
   }, [tqf5.ploRequired, selectCurriculum]);
 
-  return (
-    <>
-      <ModalUploadGrade
-        opened={openModalUploadGrade}
-        onClose={() => setOpenModalUploadGrade(false)}
-        data={course!}
-        form={form}
-        curIndex={curIndex}
-      />
+  const normalizeData = (data: any) => {
+    if (!data) return data;
+    return JSON.parse(JSON.stringify(data), (_, value) =>
+      typeof value === "string" && !isNaN(Number(value)) ? Number(value) : value
+    );
+  };
 
+  const checkPart1Status = (item: IModelTQF5Part1, index: number) => {
+    const current = normalizeData(item);
+    return isEqual(
+      current,
+      initialTqf5Part1(course!, tqf5.topic, tqf5.curriculum!).list[index]
+    )
+      ? "text-[#DEE2E6]"
+      : !isEqual(tqf5Original?.part1?.list[index], current)
+      ? "text-edit"
+      : "text-[#24b9a5]";
+  };
+
+  const contentPart1TQF5 = (cur: IModelTQF5Part1, index: number) => {
+    return (
       <div className="flex w-full flex-col text-[15px] acerSwift:max-macair133:text-b1 max-h-full gap-3 text-default px-3">
         <div className="flex text-secondary gap-4 w-full border-b-[1px] border-[#e6e6e6] pb-6 flex-col">
           <div className="flex text-secondary items-center justify-between flex-row gap-1 text-[15px] acerSwift:max-macair133:!text-b3">
@@ -167,84 +194,80 @@ export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
               </Table.Thead>
 
               <Table.Tbody>
-                {form
-                  .getValues()
-                  .list[curIndex]?.courseEval.map((item, index) => {
-                    const section = course?.sections.find(
-                      ({ sectionNo }) => sectionNo == item.sectionNo
+                {cur.courseEval.map((item, index) => {
+                  const section = course?.sections.find(
+                    ({ sectionNo }) => sectionNo == item.sectionNo
+                  );
+                  const canAccess =
+                    (section?.instructor as IModelUser).id == user.id ||
+                    section?.coInstructors?.find(
+                      (coIns) => coIns.id == user.id
                     );
-                    const canAccess =
-                      (section?.instructor as IModelUser).id == user.id ||
-                      section?.coInstructors?.find(
-                        (coIns) => coIns.id == user.id
-                      );
-                    const data = Object.values(item)
-                      .slice(1)
-                      .map((e: any) => parseInt(e));
-                    const total = data.reduce((a, b: any) => a + b, 0);
-                    const avg =
-                      total > 0
-                        ? (4 * data[0] +
-                            3.5 * data[1] +
-                            3 * data[2] +
-                            2.5 * data[3] +
-                            2 * data[4] +
-                            1.5 * data[5] +
-                            1 * data[6] +
-                            0 * data[7]) /
-                          total
-                        : 0;
-                    return (
-                      <Table.Tr
-                        className="font-medium text-default text-b3 acerSwift:max-macair133:!text-b4"
-                        key={item.sectionNo}
-                      >
-                        <Table.Td>{getSectionNo(item.sectionNo)}</Table.Td>
-                        {!isEditCourseEval &&
+                  const data = Object.values(item)
+                    .slice(1)
+                    .map((e: any) => parseInt(e));
+                  const total = data.reduce((a, b: any) => a + b, 0);
+                  const avg =
+                    total > 0
+                      ? (4 * data[0] +
+                          3.5 * data[1] +
+                          3 * data[2] +
+                          2.5 * data[3] +
+                          2 * data[4] +
+                          1.5 * data[5] +
+                          1 * data[6] +
+                          0 * data[7]) /
+                        total
+                      : 0;
+                  return (
+                    <Table.Tr
+                      className="font-medium text-default text-b3 acerSwift:max-macair133:!text-b4"
+                      key={item.sectionNo}
+                    >
+                      <Table.Td>{getSectionNo(item.sectionNo)}</Table.Td>
+                      {!isEditCourseEval &&
+                        Object.keys(item)
+                          .slice(1)
+                          .map((key) => (
+                            <Table.Td key={key}>
+                              {(item as any)[key] ?? "-"}
+                            </Table.Td>
+                          ))}
+                      {isEditCourseEval &&
+                        (canAccess || dashboard == ROLE.CURRICULUM_ADMIN ? (
                           Object.keys(item)
                             .slice(1)
                             .map((key) => (
                               <Table.Td key={key}>
-                                {(item as any)[key] ?? "-"}
+                                <TextInput
+                                  size="xs"
+                                  classNames={{
+                                    input:
+                                      "acerSwift:max-macair133:!text-b5 acerSwift:max-macair133:w-[40px]",
+                                  }}
+                                  {...form.getInputProps(
+                                    `list.${curIndex}.courseEval.${index}.${key}`
+                                  )}
+                                />
                               </Table.Td>
-                            ))}
-                        {isEditCourseEval &&
-                          (canAccess || dashboard == ROLE.CURRICULUM_ADMIN ? (
-                            Object.keys(item)
-                              .slice(1)
-                              .map((key) => (
-                                <Table.Td key={key}>
-                                  <TextInput
-                                    size="xs"
-                                    classNames={{
-                                      input:
-                                        "acerSwift:max-macair133:!text-b5 acerSwift:max-macair133:w-[40px]",
-                                    }}
-                                    {...form.getInputProps(
-                                      `list.${curIndex}.courseEval.${index}.${key}`
-                                    )}
-                                  />
-                                </Table.Td>
-                              ))
-                          ) : (
-                            <Table.Td
-                              colSpan={12}
-                              className="text-error text-center"
-                            >
-                              cannot edit
-                            </Table.Td>
-                          ))}
-                        <Table.Td>{total}</Table.Td>
-                        <Table.Td>{avg.toFixed(2)}</Table.Td>
-                      </Table.Tr>
-                    );
-                  })}
+                            ))
+                        ) : (
+                          <Table.Td
+                            colSpan={12}
+                            className="text-error text-center"
+                          >
+                            cannot edit
+                          </Table.Td>
+                        ))}
+                      <Table.Td>{total}</Table.Td>
+                      <Table.Td>{avg.toFixed(2)}</Table.Td>
+                    </Table.Tr>
+                  );
+                })}
               </Table.Tbody>
               <Table.Tfoot className="!bg-bgTableHeader !border-t-[1px] border-secondary sticky bottom-0">
                 {(() => {
-                  const totals = calculateTotals(
-                    form.getValues().list[curIndex]?.courseEval
-                  );
+                  const totals = calculateTotals(cur.courseEval);
                   const avg =
                     totals.total > 0
                       ? (4 * totals.A +
@@ -315,9 +338,7 @@ export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
               </Table.Thead>
 
               <Table.Tbody className="justify-center items-center text-center ">
-                {Object.keys(
-                  form.getValues().list[curIndex]?.gradingCriteria || {}
-                ).map((key) => (
+                {Object.keys(cur.gradingCriteria || {}).map((key) => (
                   <Table.Tr
                     className="font-medium text-default text-b3 acerSwift:max-macair133:!text-b4"
                     key={key}
@@ -325,10 +346,7 @@ export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
                     <Table.Td>{key.replace("plus", "+")}</Table.Td>
                     <Table.Td>
                       {!isEditCriteria ? (
-                        (
-                          form.getValues().list[curIndex]
-                            ?.gradingCriteria as any
-                        )[key]
+                        (cur.gradingCriteria as any)[key]
                       ) : (
                         <TextInput
                           size="xs"
@@ -336,7 +354,7 @@ export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
                             input: "acerSwift:max-macair133:!text-b4",
                           }}
                           {...form.getInputProps(
-                            `list.${curIndex}.gradingCriteria.${key}`
+                            `list.${index}.gradingCriteria.${key}`
                           )}
                         />
                       )}
@@ -386,6 +404,59 @@ export default function Part1TQF5({ setForm, selectCurriculum }: Props) {
           </div>
         </div> */}
       </div>
+    );
+  };
+
+  return (
+    <>
+      <ModalUploadGrade
+        opened={openModalUploadGrade}
+        onClose={() => setOpenModalUploadGrade(false)}
+        data={course!}
+        form={form}
+        curIndex={curIndex}
+      />
+      {!!form.getValues().list.length &&
+        (!!tqf5.curriculum?.length ? (
+          <div className="flex w-full h-full -mt-3">
+            <Tabs
+              value={selectCurriculum}
+              onChange={(event) => setSelectCurriculum(event)}
+              classNames={{
+                root: "flex flex-col w-full h-full",
+                tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
+                tabLabel: "!font-semibold text-b3",
+                panel: "w-full h-fit max-h-full flex flex-col gap-2 rounded-lg",
+              }}
+            >
+              <Tabs.List className="!bg-transparent items-center flex w-full gap-5">
+                {form.getValues().list.map((cur, index) => (
+                  <Tabs.Tab key={cur.curriculum} value={cur.curriculum!}>
+                    <div className="flex items-center gap-2">
+                      <Icon
+                        IconComponent={IconCheck}
+                        className={checkPart1Status(cur, index)}
+                      />
+                      {cur.curriculum}
+                    </div>
+                  </Tabs.Tab>
+                ))}
+              </Tabs.List>
+              <div className="overflow-auto flex px-3 w-full max-h-full mt-3">
+                {form.getValues().list?.map((cur, index) => (
+                  <Tabs.Panel
+                    key={`${cur.curriculum}-${index}`}
+                    value={cur.curriculum!}
+                  >
+                    {contentPart1TQF5(cur, index)}
+                  </Tabs.Panel>
+                ))}
+              </div>
+            </Tabs>
+          </div>
+        ) : (
+          contentPart1TQF5(form.getValues().list[0], 0)
+        ))}
     </>
   );
 }
