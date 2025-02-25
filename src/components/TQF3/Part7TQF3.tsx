@@ -16,6 +16,7 @@ import { useSearchParams } from "react-router-dom";
 import { initialTqf3Part7 } from "@/helpers/functions/tqf3";
 import { IModelPLO } from "@/models/ModelPLO";
 import { IModelPLORequire } from "@/models/ModelCourseManagement";
+import { getSectionNo } from "@/helpers/functions/function";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -33,7 +34,7 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
     parseInt(params.get("semester") || "") !== academicYear.semester;
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
-  const [curIndex, setCurIndex] = useState(0);
+  const [sectionList, setSectionList] = useState<string[]>([]);
   const [ploRequire, setPloRequire] = useState<string[]>([]);
   const [coursePLO, setCoursePLO] = useState<Partial<IModelPLO>>({});
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
@@ -116,7 +117,11 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
           ({ curriculum }) => curriculum == selectCurriculum
         )?.list || [];
       setPloRequire(ploR);
-      setCurIndex(tqf3.curriculum!.findIndex((cur) => cur == selectCurriculum));
+      setSectionList(
+        tqf3.sections
+          .filter(({ curriculum }) => curriculum == selectCurriculum)
+          .map(({ sectionNo }) => getSectionNo(sectionNo))
+      );
     } else {
       setCoursePLO({});
       setPloRequire([]);
@@ -187,7 +192,7 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
     index: number
   ) => {
     return isEqual(
-      tqf3Original?.part7?.list[index],
+      item,
       initialTqf3Part7(tqf3.part2, tqf3.curriculum!).list[index]
     )
       ? "text-[#DEE2E6]"
@@ -246,7 +251,11 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
                     {/* Topic */}
                     <div className="flex text-secondary items-center w-full justify-between">
                       <span className="text-[15px] acerSwift:max-macair133:!text-b3 font-semibold">
-                        CLO Mapping <span className=" text-red-500">*</span>
+                        CLO Mapping <span className=" text-red-500">*</span>{" "}
+                        <br />
+                        <span className="text-b3 text-default">
+                          (section {sectionList.join(", ")})
+                        </span>
                       </span>
                       <Button
                         color="#e9e9e9"

@@ -79,7 +79,6 @@ export default function TQF5() {
   const [tqf5Part, setTqf5Part] = useState<string | null>(
     Object.keys(partLabel)[0]
   );
-  const [selectedCurriculum, setSelectedCurriculum] = useState<string | null>();
   const [selectedMethod, setSelectedMethod] = useState<METHOD_TQF5>();
   const [openModalChangeMethod, setOpenModalChangeMethod] = useState(false);
   const [openModalExportTQF5, setOpenModalExportTQF5] = useState(false);
@@ -90,9 +89,7 @@ export default function TQF5() {
     {
       value: Object.keys(partLabel)[0],
       tab: partLabel.part1,
-      compo: (
-        <Part1TQF5 setForm={setForm} selectCurriculum={selectedCurriculum} />
-      ),
+      compo: <Part1TQF5 setForm={setForm} tqf5Original={tqf5Original!} />,
     },
     {
       value: Object.keys(partLabel)[1],
@@ -122,11 +119,6 @@ export default function TQF5() {
       (tqf5.topic != tqf5Original?.topic || !tqf5.coursePLO?.length)
     ) {
       fetchPLO();
-    } else if (tqf5.coursePLO?.length) {
-      const curriculum = uniqueCurriculum();
-      if (curriculum.length) {
-        setSelectedCurriculum(curriculum[0]);
-      }
     }
   }, [academicYear, courseAdmin, course, tqf5.topic]);
 
@@ -152,7 +144,6 @@ export default function TQF5() {
   const fetchPLO = async () => {
     const curriculum = uniqueCurriculum();
     if (curriculum.length) {
-      setSelectedCurriculum(curriculum[0]);
       const resPloCol = await getPLOs({
         year: params.get("year"),
         semester: params.get("semester"),
@@ -163,7 +154,6 @@ export default function TQF5() {
         dispatch(setPloTQF5({ curriculum, coursePLO: resPloCol.plos }));
       }
     } else {
-      setSelectedCurriculum(null);
       dispatch(setPloTQF3({ curriculum, coursePLO: [] }));
       dispatch(setPloTQF5({ curriculum, coursePLO: [] }));
     }
@@ -243,7 +233,6 @@ export default function TQF5() {
         setSelectedMethod(section?.TQF5?.method);
         dispatch(
           setDataTQF5({
-            topic: tqf5.topic,
             ploRequired: ploRequire || [],
             ...section?.TQF5,
             type: resCourse.type,
@@ -280,7 +269,6 @@ export default function TQF5() {
         setSelectedMethod(resCourse.TQF5?.method);
         dispatch(
           setDataTQF5({
-            topic: tqf5.topic,
             ploRequired: ploRequire || [],
             ...resCourse.TQF5!,
             type: resCourse.type,
@@ -398,30 +386,6 @@ export default function TQF5() {
       : !isEqual(tqf5Original![value], tqf5[value])
       ? "text-edit" // In Progress
       : "text-[#24b9a5]"; // Done
-  };
-
-  const checkPart1Status = () => {
-    const part1Select = tqf5.part1?.list.find(
-      (e) => e.curriculum == selectedCurriculum
-    );
-    const curIndex = tqf5.part1?.list.findIndex(
-      (e) => e.curriculum == selectedCurriculum
-    );
-    return !part1Select ||
-      curIndex == undefined ||
-      curIndex < 0 ||
-      isEqual(
-        tqf5Original?.part1?.list[curIndex],
-        initialTqf5Part1((courseAdmin ?? course)!, tqf5.topic, tqf5.curriculum!)
-          .list[curIndex]
-      )
-      ? "text-[#DEE2E6]"
-      : !isEqual(
-          tqf5Original?.part1?.list[curIndex],
-          tqf5.part1?.list[curIndex]
-        )
-      ? "text-edit"
-      : "text-[#24b9a5]";
   };
 
   const showSaveTQFbar = () => {
@@ -598,8 +562,9 @@ export default function TQF5() {
         >
           <div
             className={`flex flex-col w-full h-fit ${
-              tqf5Part == "part3" && tqf5.method == METHOD_TQF5.SCORE_OBE
-                ? "border-none"
+              (tqf5Part == "part3" && tqf5.method == METHOD_TQF5.SCORE_OBE) ||
+              (tqf5Part == "part1" && !!tqf5.curriculum?.length)
+                ? ""
                 : "border-b-[2px]"
             }  `}
           >
@@ -623,28 +588,6 @@ export default function TQF5() {
                 {getValueEnumByKey(PartTopicTQF5, tqf5Part!)}
               </div>
               <div className="flex gap-2 ">
-                {tqf5Part == "part1" && (
-                  <div className="flex gap-2">
-                    <Icon
-                      IconComponent={IconCheck}
-                      className={checkPart1Status()}
-                    />
-                    <Select
-                      placeholder="Curriculum"
-                      data={tqf5.curriculum?.map((cur) => cur)}
-                      value={selectedCurriculum}
-                      onChange={(event) => setSelectedCurriculum(event)}
-                      allowDeselect={false}
-                      size="xs"
-                      className="w-[130px] border-none"
-                      classNames={{
-                        input:
-                          "rounded-md focus:border-primary acerSwift:max-macair133:!text-b5",
-                        option: "acerSwift:max-macair133:!text-b5",
-                      }}
-                    />
-                  </div>
-                )}
                 <Button
                   onClick={() => setOpenModalExportTQF5(true)}
                   color="#24b9a5"
