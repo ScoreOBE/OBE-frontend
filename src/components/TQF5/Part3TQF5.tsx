@@ -71,7 +71,10 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
   }, [tqf5.method, tqf5.part2]);
 
   useEffect(() => {
-    if (form.getValues().data[0]?.assess) {
+    if (
+      tqf5.method == METHOD_TQF5.SCORE_OBE &&
+      form.getValues().data[0]?.assess
+    ) {
       const newCalCloScore = [...form.getValues().data];
       newCalCloScore.forEach((cloItem, index) => {
         const { sectionsData, score } = calCloScore(
