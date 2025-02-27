@@ -179,37 +179,46 @@ export default function ModalChangeAdmin({ opened, onClose }: Props) {
 
             {/* List of Curriculum Admin */}
             <div className="flex flex-1 flex-col gap-2 sm:max-macair133:h-[300px] macair133:h-[400px] h-[250px] overflow-y-auto">
-              {adminFilter.map((admin) => (
-                <div
-                  key={admin.id}
-                  className="flex flex-1 items-center justify-between last:border-none border-b-[1px]  p-3 "
-                >
-                  <div className="gap-3 flex items-center">
-                    <Icon
-                      IconComponent={IconUserCicle}
-                      className=" size-8 stoke-1"
-                    />
-                    <div className="flex flex-col">
-                      <p className="font-semibold text-[14px] text-tertiary">
-                        {getUserName(admin, 1)}
-                      </p>
-                      <p className="text-secondary text-[12px] font-normal">
-                        {admin.email}
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setAdmin(admin);
-                      onClose();
-                      setOpenSetSAdminModal(true);
-                    }}
+              {adminFilter.length > 0 ? (
+                adminFilter.map((admin) => (
+                  <div
+                    key={admin.id}
+                    className="flex flex-1 items-center justify-between last:border-none border-b-[1px]  p-3 "
                   >
-                    Change
-                  </Button>
+                    <div className="gap-3 flex items-center">
+                      <Icon
+                        IconComponent={IconUserCicle}
+                        className=" size-8 stoke-1"
+                      />
+                      <div className="flex flex-col">
+                        <p className="font-semibold text-[14px] text-tertiary">
+                          {getUserName(admin, 1)}
+                        </p>
+                        <p className="text-secondary text-[12px] font-normal">
+                          {admin.email}
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setAdmin(admin);
+                        onClose();
+                        setOpenSetSAdminModal(true);
+                      }}
+                    >
+                      Change
+                    </Button>
+                  </div>
+                ))
+              ) : (
+                <div className="text-deemphasize text-b3 font-medium text-center flex flex-col gap-2 items-center pt-2">
+                  <div className="bg-bgTableHeader text-primary/70 w-fit rounded-full p-2">
+                    <TbSearch className="size-4" />
+                  </div>
+                  <p>No result</p>{" "}
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
