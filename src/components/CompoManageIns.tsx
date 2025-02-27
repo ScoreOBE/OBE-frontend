@@ -77,9 +77,14 @@ export default function CompoMangeIns({
       setFirstInput(true);
       setInputUser({ value: null });
       setSwapMethodAddUser(swapMethod);
+      form.reset();
       fetchIns();
     }
   }, [opened]);
+
+  useEffect(() => {
+    form.reset();
+  }, [swapMethodAddUser]);
 
   useEffect(() => {
     if (swapMethodAddUser) {
@@ -252,28 +257,6 @@ export default function CompoMangeIns({
         <Icon IconComponent={IconChevronRight} className="stroke-[2px]" />
       </div>
 
-      {type == "admin" && (
-        <MultiSelect
-          label="Select Curriculums for access management"
-          size="xs"
-          placeholder="Select curriculum"
-          searchable
-          clearable
-          nothingFoundMessage="No result"
-          data={[
-            ...(curriculum?.map((item) => ({
-              value: item.code,
-              label: `${item.nameTH} [${item.code}]`,
-            })) || []),
-          ]}
-          classNames={{
-            input: "focus:border-primary acerSwift:max-macair133:!text-b5",
-            label: "acerSwift:max-macair133:!text-b4",
-          }}
-          {...form.getInputProps("curriculums")}
-        />
-      )}
-
       <div className="flex w-full  items-end h-fit ">
         {swapMethodAddUser ? (
           <TextInput
@@ -284,9 +267,9 @@ export default function CompoMangeIns({
             className={`w-full border-none`}
             classNames={{
               input: `${
-                type != "mainIns" && "!rounded-r-none"
-              } acerSwift:max-macair133:text-b4`,
-              label: "acerSwift:max-macair133:!text-b4",
+                type != "mainIns" && type != "admin" && "!rounded-r-none"
+              } acerSwift:max-macair133:text-b4  macair133:text-b4 font-medium !pl-4`,
+              label: "acerSwift:max-macair133:!text-b4 ",
               description: "acerSwift:max-macair133:text-b5",
             }}
             placeholder="example@cmu.ac.th"
@@ -331,8 +314,8 @@ export default function CompoMangeIns({
             nothingFoundMessage="No result"
             className="w-full border-none "
             classNames={{
-              input: `rounded-md acerSwift:max-macair133:text-b4 ${
-                type != "mainIns" && "rounded-e-none"
+              input: `rounded-md acerSwift:max-macair133:text-b4  ${
+                type != "mainIns" && type != "admin" && "rounded-e-none"
               }`,
               option: `py-1 acerSwift:max-macair133:text-b4`,
               label: "acerSwift:max-macair133:!text-b4",
@@ -347,7 +330,7 @@ export default function CompoMangeIns({
             error={type == "mainIns" && error && "Please select the instructor"}
           />
         )}
-        {type != "mainIns" && (
+        {type != "mainIns" && type != "admin" && (
           <Button
             color="#13A9A1"
             className="!rounded-s-none !rounded-e-md !h-[36px] min-w-fit border-l-0 disabled:border-[#cecece]"
@@ -360,6 +343,54 @@ export default function CompoMangeIns({
           </Button>
         )}
       </div>
+
+      {type == "admin" && (
+        <>
+          {inputUser?.value && (
+            <MultiSelect
+              label="Select Curriculums for access management"
+              size="xs"
+              placeholder="Select curriculum"
+              searchable
+              clearable
+              nothingFoundMessage="No result"
+              data={[
+                ...(curriculum?.map((item) => ({
+                  value: item.code,
+                  label: `${item.nameTH} [${item.code}]`,
+                })) || []),
+              ]}
+              className=""
+              classNames={{
+                input:
+                  "focus:border-primary acerSwift:max-macair133:!text-b5 py-2 rounded-md max-h-[48px] overflow-auto ",
+                label:
+                  "acerSwift:max-macair133:!text-b4 macair133:text-b3 text-default font-semibold",
+                pill: "bg-secondary text-white !text-center font-bold pb-1 !pr-1 acerSwift:max-macair133:!text-b5 text-b4",
+                inputField: `${
+                  form.getValues().curriculums.length ? "h-0" : ""
+                }`,
+                section: "w-12",
+              }}
+              {...form.getInputProps("curriculums")}
+            />
+          )}
+          <div className="w-full flex items-end justify-end mt-1.5">
+            <Button
+              color="#13A9A1"
+              className=" !rounded-md !h-[36px] min-w-fit px-7 !w-full  disabled:border-[#cecece]"
+              disabled={
+                !inputUser?.value ||
+                (swapMethodAddUser && invalidEmail) ||
+                !form.getValues().curriculums.length
+              }
+              onClick={() => addUser()}
+            >
+              Add
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

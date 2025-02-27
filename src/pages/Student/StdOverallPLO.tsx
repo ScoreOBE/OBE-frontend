@@ -23,6 +23,7 @@ export default function StdOverallPLO() {
   const [departmentPLO, setDepartmentPLO] = useState<Partial<IModelPLO>>({});
   const [activeSection, setActiveSection] = useState<string | null>();
   const user = useAppSelector((state) => state.user);
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const term = useAppSelector((state) =>
     state.academicYear.find(
       (term) =>
@@ -31,6 +32,7 @@ export default function StdOverallPLO() {
     )
   );
   const height = window.innerWidth >= 1800 ? 650 : 450;
+
   const fetchPLO = async () => {
     const resPloCol = await getOnePLO({
       year: term?.year,
@@ -46,14 +48,10 @@ export default function StdOverallPLO() {
   const [test, setTest] = useState(true);
 
   useEffect(() => {
-    console.log(user);
-  });
-
-  useEffect(() => {
     if (user) {
       fetchPLO();
     }
-  }, [user]);
+  }, [user, term]);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -125,12 +123,12 @@ export default function StdOverallPLO() {
         <Loading />
       ) : (
         <>
-          {/* {departmentPLO && (
+          {departmentPLO && (
             <DrawerPLOdes
               opened={openDrawerPLOdes}
               onClose={() => setOpenDrawerPLOdes(false)}
               data={departmentPLO}
-              department={user.departmentCode?.at(0)}
+              curriculum={user.curriculums?.[0] ?? ""}
             />
           )}
 
@@ -252,10 +250,10 @@ export default function StdOverallPLO() {
               </div>
             </Tabs.Panel>
             <Tabs.Panel
-              className="flex flex-col gap-1 overflow-y-auto mb-12 "
+              className="flex flex-col gap-1 overflow-y-auto "
               value="course"
             >
-              <div className="grid grid-cols-2 acerSwift:grid-cols-3 samsungA24:grid-cols-4 gap-4 mt-2 h-full ">
+              <div className="grid grid-cols-2 acerSwift:grid-cols-3 samsungA24:grid-cols-4 gap-4 mt-2 h-full">
                 {courses.map((course) => (
                   <div
                     key={course.id}
@@ -275,8 +273,8 @@ export default function StdOverallPLO() {
                 ))}
               </div>
             </Tabs.Panel>
-          </Tabs> */}
-          <div className=" flex flex-col h-full w-full  overflow-hidden">
+          </Tabs>
+          {/* <div className=" flex flex-col h-full w-full  overflow-hidden">
             <div className="flex flex-row px-6 pt-3   items-center justify-between">
               <div className="flex flex-col">
                 <p className="text-secondary text-[18px] font-semibold "></p>
@@ -300,7 +298,7 @@ export default function StdOverallPLO() {
                 <img src={maintenace} alt="notFound"></img>
               </div>
             </div>
-          </div>
+          </div> */}
         </>
       )}
     </div>

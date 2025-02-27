@@ -610,7 +610,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                       {course.sections.map((sec: any, index: number) => (
                         <div
                           key={sec.sectionNo}
-                          className="first:rounded-t-md last:rounded-b-md bg-blue-50"
+                          className="first:rounded-t-md last:rounded-b-md bg-blue-50 "
                         >
                           <div className="grid grid-cols-5 items-center justify-between py-4 px-7">
                             {/* Section No & Topic */}
@@ -621,7 +621,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                                 </p>
                                 {/* Curriculum */}
                                 {sec.curriculum && (
-                                  <div className="flex justify-center items-center text-center px-3 py-1 ml-1 w-fit min-w-10 rounded-[20px] font-medium bg-[#8DBEFF] text-[#26257D]">
+                                  <div className="flex justify-center items-center text-center px-3 py-1 ml-1 w-fit min-w-10 rounded-[20px] font-medium bg-[#8DBEFF]/70 text-[#26257D]">
                                     <p className="font-semibold text-[12px]">
                                       {sec.curriculum}
                                     </p>
@@ -729,7 +729,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                             </div>
                           </div>
                           {index < course.sections.length - 1 && (
-                            <div className="border-b-[1px] mx-5 border-blue-300"></div>
+                            <div className="border-b-[1px] mx-5 border-blue-200"></div>
                           )}
                         </div>
                       ))}

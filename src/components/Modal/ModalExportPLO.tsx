@@ -164,7 +164,7 @@ export default function ModalExportPLO({
             <p>Course Not Found.</p>
           </div>
         )}
-        <div className="flex gap-2 sm:max-macair133:fixed sm:max-macair133:bottom-6 sm:max-macair133:right-8 items-end justify-end h-fit">
+        <div className="flex gap-2  items-end justify-end h-fit">
           <Group className="flex w-full gap-2 h-fit items-end justify-end">
             <Button onClick={onClose} variant="subtle">
               Cancel
