@@ -1,4 +1,4 @@
-import { Button, Checkbox, Group, Modal, Radio } from "@mantine/core";
+import { Button, Checkbox, Group, Modal, Radio, Select } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import IconPDF from "@/assets/icons/pdf.svg?react";
@@ -38,19 +38,13 @@ export default function ModalExportTQF3({
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
   const [dataExport, setDataExport] = useState<Partial<IModelTQF5>>({});
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
+  const [selectCurriculum, setSelectCurriculum] = useState<string | null>();
 
   useEffect(() => {
     if (opened) {
       const select: string[] = ["part1"];
       setDataExport(dataTQF ?? tqf5);
-      // Object.keys(dataTQF ?? tqf5).forEach((part) => {
-      //   if (
-      //     part.includes("part") &&
-      //     ((dataTQF ?? tqf5)[part as keyof IModelTQF5] as any)?.updatedAt
-      //   ) {
-      //     select.push(part);
-      //   }
-      // });
       setSelectedParts(select);
     }
   }, [opened, dataTQF]);
@@ -72,6 +66,7 @@ export default function ModalExportTQF3({
     dispatch(setLoadingOverlay(true));
 
     const payload: any = {
+      curriculum: selectCurriculum,
       courseNo: dataTQF?.courseNo ?? courseNo,
       academicYear: academicYear.year,
       academicTerm: academicYear.semester,
@@ -109,8 +104,6 @@ export default function ModalExportTQF3({
     onCloseModal();
   };
 
-  let test = 0;
-
   return (
     <Modal
       opened={opened}
@@ -134,147 +127,158 @@ export default function ModalExportTQF3({
         title: "acerSwift:max-macair133:!text-b1",
       }}
     >
-      {test === 7 ? (
-        <>
-          <div className="flex sm:max-ipad11:h-[500px] acerSwift:max-macair133:h-[400px] acerSwift:max-macair133:mb-4 sm:max-ipad11:overflow-y-hidden flex-col">
-            {!dataExport.part1?.updatedAt ? (
-              <div className="flex flex-col mt-3  items-center  ">
-                <p className=" text-b2 acerSwift:max-macair133:!text-b3 font-semibold">
-                  No parts of TQF5 are available for export.
-                </p>
-                <img
-                  className=" z-50  w-[320px] h-[220px] "
-                  src={noData}
-                  alt="loginImage"
-                />
-              </div>
-            ) : (
-              <div>
-                <div
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  }}
-                  className="p-3 m-[4px] rounded-md"
+      <>
+        <div className="flex sm:max-ipad11:h-[500px] acerSwift:max-macair133:h-[400px] acerSwift:max-macair133:mb-4 sm:max-ipad11:overflow-y-hidden flex-col">
+          {!dataExport.part1?.updatedAt ? (
+            <div className="flex flex-col mt-3  items-center  ">
+              <p className=" text-b2 acerSwift:max-macair133:!text-b3 font-semibold">
+                No parts of TQF5 are available for export.
+              </p>
+              <img
+                className=" z-50  w-[320px] h-[220px] "
+                src={noData}
+                alt="loginImage"
+              />
+            </div>
+          ) : (
+            <div>
+              <Select
+                label="Select the Curriculum for Export TQF5"
+                size="xs"
+                placeholder="Select curriculum"
+                searchable
+                nothingFoundMessage="No result"
+                data={(tqf5.part1?.list ?? []).map((item) => {
+                  const value = item.curriculum ?? "-";
+
+                  const matchedCurriculum = (curriculum ?? []).find(
+                    (e) => e.code === item.curriculum
+                  );
+
+                  return {
+                    value,
+                    label: matchedCurriculum
+                      ? `${matchedCurriculum.nameTH} [${matchedCurriculum.code}]`
+                      : "หลักสูตรอื่นๆ (No curriculum for this section.)",
+                  };
+                })}
+                allowDeselect={false}
+                className="mb-3"
+                classNames={{
+                  input:
+                    "focus:border-primary acerSwift:max-macair133:!text-b5 mx-0",
+                  label:
+                    "mb-1 font-semibold text-default acerSwift:max-macair133:!text-b4",
+                }}
+                value={selectCurriculum}
+                onChange={(value) => setSelectCurriculum(value)}
+              />
+
+              <div
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.2)",
+                }}
+                className="px-5 py-3 rounded-md"
+              >
+                <Radio.Group
+                  classNames={{ label: "font-semibold" }}
+                  value={selectedMerge}
+                  onChange={setSelectedMerge}
                 >
-                  <Radio.Group
-                    classNames={{ label: "font-semibold" }}
-                    value={selectedMerge}
-                    onChange={setSelectedMerge}
-                  >
-                    <Group mb={2}>
-                      <Radio
-                        classNames={{
-                          label: "font-medium acerSwift:max-macair133:!text-b4",
-                        }}
-                        value="unzipfile"
-                        label="Single file"
-                      />
-                      <Radio
-                        classNames={{
-                          label: "font-medium acerSwift:max-macair133:!text-b4",
-                        }}
-                        value="zipfile"
-                        label="Multiple file (Zip)"
-                      />
-                    </Group>
-                  </Radio.Group>
-                </div>
-                <Checkbox.Group
-                  label="Select part to export"
-                  classNames={{
-                    label:
-                      "mb-1 font-semibold text-default acerSwift:max-macair133:!text-b4",
-                  }}
-                  value={selectedParts}
-                  onChange={setSelectedParts}
-                  className="sm:max-ipad11:max-h-[420px] acerSwift:max-macair133:max-h-[305px] overflow-y-auto my-4"
-                >
-                  {/* {Object.values(PartTopicTQF5)
-                .slice(0, 6)
-                .filter(
-                  (item) =>
-                    dataExport &&
-                    dataExport[getKeyPartTopicTQF5(item)!]?.updatedAt
-                )
-                .map((item, index) => ( */}
-                  <div
-                    // key={index}
-                    className="flex p-1 mb-1 w-full  flex-col overflow-y-auto"
-                  >
-                    <Checkbox.Card
-                      className={`p-3 items-center px-4 flex  h-fit rounded-md w-full ${
-                        selectedParts.includes(
-                          getKeyPartTopicTQF5(PartTopicTQF5.part1)!
-                        ) && "!border-[1px] !border-secondary "
-                      }`}
-                      style={{
-                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
+                  <Group mb={2}>
+                    <Radio
+                      classNames={{
+                        label: "font-medium acerSwift:max-macair133:!text-b4",
                       }}
-                      value={getKeyPartTopicTQF5(PartTopicTQF5.part1)}
-                    >
-                      <Group
-                        wrap="nowrap"
-                        className="item-center flex"
-                        align="flex-start"
-                      >
-                        <Checkbox.Indicator className="mt-1" />
-                        <div className="text-default whitespace-break-spaces font-medium text-b3 acerSwift:max-macair133:!text-b4">
-                          {PartTopicTQF5.part1}
-                        </div>
-                      </Group>
-                    </Checkbox.Card>
-                  </div>
-                  {/* ))} */}
-                </Checkbox.Group>
-              </div>
-            )}
-          </div>
-          {dataExport.part1?.updatedAt && (
-            <div className="flex gap-2 items-end justify-end h-fit">
-              <Group className="flex w-full gap-2 h-fit items-end justify-end">
-                <Button
-                  onClick={onClose}
-                  variant="subtle"
-                  className="acerSwift:max-macair133:!text-b5"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  loading={loading}
-                  rightSection={
-                    <Icon
-                      IconComponent={IconFileExport}
-                      className={` ${
-                        !dataExport.part1?.updatedAt
-                          ? "text-[#adb5bd]"
-                          : "text-[#ffffff]"
-                      } stroke-[2px] size-5 items-center acerSwift:max-macair133:!size-4`}
+                      value="unzipfile"
+                      label="Single file"
                     />
-                  }
-                  className="acerSwift:max-macair133:!text-b5"
-                  onClick={generatePDF}
-                  disabled={
-                    !dataExport.part1?.updatedAt || selectedParts.length === 0
-                  }
-                >
-                  Export TQF5
-                </Button>
-              </Group>
+                    <Radio
+                      classNames={{
+                        label: "font-medium acerSwift:max-macair133:!text-b4",
+                      }}
+                      value="zipfile"
+                      label="Multiple file (Zip)"
+                    />
+                  </Group>
+                </Radio.Group>
+              </div>
+              <Checkbox.Group
+                label="Select part to export"
+                classNames={{
+                  label:
+                    "mb-1 font-semibold text-default acerSwift:max-macair133:!text-b4",
+                }}
+                value={selectedParts}
+                onChange={setSelectedParts}
+                className="sm:max-ipad11:max-h-[420px] acerSwift:max-macair133:max-h-[305px] overflow-y-auto my-4"
+              >
+                <div className="flex p-1 mb-1 w-full  flex-col overflow-y-auto">
+                  <Checkbox.Card
+                    className={`p-3 items-center px-4 flex  h-fit rounded-md w-full ${
+                      selectedParts.includes(
+                        getKeyPartTopicTQF5(PartTopicTQF5.part1)!
+                      ) && "!border-[1px] !border-secondary "
+                    }`}
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
+                    }}
+                    value={getKeyPartTopicTQF5(PartTopicTQF5.part1)}
+                  >
+                    <Group
+                      wrap="nowrap"
+                      className="item-center flex"
+                      align="flex-start"
+                    >
+                      <Checkbox.Indicator className="mt-1" />
+                      <div className="text-default whitespace-break-spaces font-medium text-b3 acerSwift:max-macair133:!text-b4">
+                        {PartTopicTQF5.part1}
+                      </div>
+                    </Group>
+                  </Checkbox.Card>
+                </div>
+              </Checkbox.Group>
             </div>
           )}
-        </>
-      ) : (
-        <>
-          <div className="h-full items-start justify-center flex flex-col">
-            <p className=" mb-7 mt-1 text-b2 break-words text-[#777777] font-medium leading-relaxed">
-              Available in February 2025
-            </p>
+        </div>
+        {dataExport.part1?.updatedAt && (
+          <div className="flex gap-2 items-end justify-end h-fit">
+            <Group className="flex w-full gap-2 h-fit items-end justify-end">
+              <Button
+                onClick={onClose}
+                variant="subtle"
+                className="acerSwift:max-macair133:!text-b5"
+              >
+                Cancel
+              </Button>
+              <Button
+                loading={loading}
+                rightSection={
+                  <Icon
+                    IconComponent={IconFileExport}
+                    className={` ${
+                      !dataExport.part1?.updatedAt ||
+                      selectedParts.length === 0 ||
+                      !selectCurriculum
+                        ? "text-[#adb5bd]"
+                        : "text-[#ffffff]"
+                    } stroke-[2px] size-5 items-center acerSwift:max-macair133:!size-4`}
+                  />
+                }
+                className="acerSwift:max-macair133:!text-b5"
+                onClick={generatePDF}
+                disabled={
+                  !dataExport.part1?.updatedAt ||
+                  selectedParts.length === 0 ||
+                  !selectCurriculum
+                }
+              >
+                Export TQF5
+              </Button>
+            </Group>
           </div>
-          <Button onClick={onClose} className="!w-full">
-            OK
-          </Button>
-        </>
-      )}
+        )}
+      </>
     </Modal>
   );
 }

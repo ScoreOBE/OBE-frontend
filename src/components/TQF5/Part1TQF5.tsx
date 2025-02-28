@@ -103,7 +103,38 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                 )!;
                 return {
                   curriculum: cur,
-                  courseEval: cloneDeep(temp.courseEval),
+                  courseEval: course!.sections
+                    .filter(
+                      (sec) =>
+                        sec.isActive &&
+                        sec.topic == tqf5.topic &&
+                        sec.curriculum == cur
+                    )
+                    .map((sec) => {
+                      const oldData = tqf5.part1?.list
+                        .find(({ curriculum }) => curriculum == cur)
+                        ?.courseEval.find(
+                          ({ sectionNo }) => sectionNo == sec.sectionNo!
+                        );
+                      if (oldData) {
+                        return cloneDeep(oldData);
+                      }
+                      return {
+                        sectionNo: sec.sectionNo!,
+                        A: 0,
+                        Bplus: 0,
+                        B: 0,
+                        Cplus: 0,
+                        C: 0,
+                        Dplus: 0,
+                        D: 0,
+                        F: 0,
+                        W: 0,
+                        S: 0,
+                        U: 0,
+                        P: 0,
+                      };
+                    }),
                   gradingCriteria: cloneDeep(temp.gradingCriteria),
                   abnormalScoreFactor: temp.abnormalScoreFactor,
                   reviewingSLO: temp.reviewingSLO,
@@ -127,8 +158,6 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
       );
     }
   }, [tqf5.ploRequired, selectCurriculum]);
-
-  // useEffect;
 
   const normalizeData = (data: any) => {
     if (!data) return data;
@@ -465,23 +494,35 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
               }}
             >
               <Tabs.List className="!bg-transparent items-center flex w-full gap-5">
-                {form.getValues().list.map((cur, index) => (
-                  <Tabs.Tab key={cur.curriculum} value={cur.curriculum!}>
-                    <div className="flex items-center gap-2">
-                      <Icon
-                        IconComponent={IconCheck}
-                        className={checkPart1Status(cur, index)}
-                      />
-                      {cur.curriculum}
-                    </div>
-                  </Tabs.Tab>
-                ))}
+                {form.getValues().list?.map((cur, index) => {
+                  const activeSection = tqf5.sections.find(
+                    (sec) =>
+                      cur.curriculum?.includes(sec.curriculum!) &&
+                      sec.isActive === true
+                  );
+
+                  if (activeSection) {
+                    return (
+                      <Tabs.Tab key={cur.curriculum} value={cur.curriculum!}>
+                        <div className="flex items-center gap-2">
+                          <Icon
+                            IconComponent={IconCheck}
+                            className={checkPart1Status(cur, index)}
+                          />
+                          {cur.curriculum}
+                        </div>
+                      </Tabs.Tab>
+                    );
+                  }
+
+                  return null;
+                })}
               </Tabs.List>
               <div className="overflow-auto flex px-3 w-full max-h-full mt-3">
                 {form.getValues().list?.map((cur, index) => (
                   <Tabs.Panel
-                    key={`${cur.curriculum}-${index}`}
-                    value={cur.curriculum!}
+                    key={`${cur.curriculum || "no-curriculum"}-${index}`}
+                    value={cur.curriculum || "no-curriculum"}
                   >
                     {contentPart1TQF5(cur, index)}
                   </Tabs.Panel>
