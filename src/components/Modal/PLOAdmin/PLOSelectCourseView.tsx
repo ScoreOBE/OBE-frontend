@@ -1,12 +1,30 @@
-import { Checkbox, Modal, Select, Group, Button } from "@mantine/core";
+import {
+  Checkbox,
+  Modal,
+  Select,
+  Group,
+  Button,
+  TextInput,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
-import { useAppSelector } from "@/store";
-import { SearchInput } from "../../../components/SearchInput";
-import { useSearchParams, useLocation } from "react-router-dom";
-import { getSkills } from "@/services/skill/skill.service";
-import { SkillRequestDTO } from "@/services/skill/dto/skill.dto";
-import { IModelSkill } from "@/models/ModelSkill";
-import { IModelAcademicYear } from "@/models/ModelAcademicYear";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { TbSearch } from "react-icons/tb";
+import { IModelCourse } from "@/models/ModelCourse";
+import { IModelCurriculum } from "@/models/ModelFaculty";
+import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
+import { getCourse } from "@/services/course/course.service";
+import { CourseRequestDTO } from "@/services/course/dto/course.dto";
+import { setLoadingOverlay } from "@/store/loading";
+import { CoursePloScore } from "./PLOYearView";
+import {
+  getSectionNo,
+  getUniqueTopicsWithTQF,
+  sortData,
+} from "@/helpers/functions/function";
+import { IModelTQF3 } from "@/models/ModelTQF3";
+import { IModelTQF5 } from "@/models/ModelTQF5";
+import { IModelPLO } from "@/models/ModelPLO";
+import { getPLOs } from "@/services/plo/plo.service";
 
 type Props = {
   opened: boolean;
@@ -14,64 +32,228 @@ type Props = {
 };
 
 export default function PLOSelectCourseView({ opened, onClose }: Props) {
-  const [params, setParams] = useSearchParams();
-  const academicYear = useAppSelector((state) => state.academicYear);
-  const curriculum = useAppSelector((state) => state.faculty.curriculum);
-  const termOption = academicYear.map((e) => {
-    return `${e.semester}/${e.year}`;
-  });
-  const [skills, setSkills] = useState<IModelSkill[]>([]);
-  const [payload, setPayload] = useState<
-    SkillRequestDTO & { totalPage: number }
-  >({
-    page: 1,
-    perPage: 10,
-    totalPage: 1,
-  });
-
-  const location = useLocation().pathname;
-  const [selectedCurriculum, setSelectedCurriculum] = useState<string | null>();
-  const [selectedCourse, setSelectedCourse] = useState<string[]>([]);
-  const checkAcademic = (term: string, data?: IModelAcademicYear) => {
-    return (
-      term.split("/")[0] ==
-        (data ? data.semester.toString() : params.get("semester")) &&
-      term.split("/")[1] == (data ? data.year.toString() : params.get("year"))
-    );
-  };
-  const [selectedTerm, setSelectedTerm] = useState<any>(
-    termOption.find((term) => checkAcademic(term))
+  const user = useAppSelector((state) => state.user);
+  const currentYear = useAppSelector(
+    (state) => state.academicYear.find(({ isActive }) => isActive)?.year
   );
-
-  const searchCourse = async (searchValue: string, reset?: boolean) => {
-    const path = "/" + location.split("/")[1];
-    let res;
-    let payloadCourse: any = {};
-    if (reset) payloadCourse.search = "";
-    else payloadCourse.search = searchValue;
-
-    localStorage.setItem("search", "true");
-  };
+  const dispatch = useAppDispatch();
+  const curriculum = useAppSelector((state) => state.faculty.curriculum);
+  const [curriculumList, setCurriculumList] = useState<IModelCurriculum[]>([]);
+  const [selectedCurriculum, setSelectedCurriculum] = useState<string | null>();
+  const [curriculumPLOs, setCurriculumPLOs] = useState<Partial<IModelPLO>[]>(
+    []
+  );
+  const [courses, setCourses] = useState<IModelCourse[]>([]);
+  const [courseOption, setCourseOption] = useState<
+    { value: string; courseNo: string; courseName: string; topic?: string }[]
+  >([]);
+  const [coursePloScoreList, setCoursePloScoreList] = useState<
+    CoursePloScore[]
+  >([]);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [selectedCourse, setSelectedCourse] = useState<string[]>([]);
 
   useEffect(() => {
-    fetchSkills();
-  }, []);
+    if (curriculum?.length) {
+      if (user.role == ROLE.ADMIN) {
+        setCurriculumList(curriculum);
+      } else {
+        setCurriculumList(
+          curriculum.filter(({ code }) => user.curriculums?.includes(code))
+        );
+      }
+    }
+  }, [curriculum]);
 
-  const fetchSkills = async () => {
-    const res = await getSkills(payload);
+  useEffect(() => {
+    if (selectedCurriculum?.length) {
+      fetchCourse();
+    } else {
+      setCourses([]);
+      setSelectedCourse([]);
+    }
+  }, [selectedCurriculum]);
+
+  useEffect(() => {
+    if (opened && currentYear && selectedCurriculum?.length) {
+      clearFilter();
+      fetchPLO();
+      fetchCourse();
+    } else {
+      setSelectedCurriculum(undefined);
+    }
+  }, [opened, selectedCurriculum]);
+
+  useEffect(() => {
+    if (courses.length) {
+      const ploScore = (tqf3: IModelTQF3, tqf5: IModelTQF5, plo: string) => {
+        const clos = tqf3.part7?.list
+          ?.find((e) => e.curriculum == selectedCurriculum)
+          ?.data.filter(({ plos }) => (plos as string[]).includes(plo))
+          .map(({ clo }) => clo);
+        const sum = clos?.length
+          ? tqf5.part3?.data
+              .filter(({ clo }) => clos?.includes(clo))
+              .reduce((a, b) => a + b.score, 0)
+          : undefined;
+        const score = sum ? sum / (clos?.length ?? 1) : "N/A";
+        return score;
+      };
+      const options: {
+        value: string;
+        courseNo: string;
+        courseName: string;
+        topic?: string;
+      }[] = [];
+      const list: CoursePloScore[] = [];
+      courses.map((course) => {
+        const uniqueTopic = getUniqueTopicsWithTQF(course.sections!);
+        let ploRequire = course.ploRequire?.find(
+          (item) =>
+            item.curriculum == selectedCurriculum &&
+            curriculumPLOs.find(({ id }) => id == item.plo)
+        );
+        let tempPlo = curriculumPLOs.find(({ id }) => id == ploRequire?.plo)!;
+        let ploItem: any = course.TQF3
+          ? ploRequire?.list.map((plo) => {
+              return {
+                ...tempPlo.data?.find(({ id }) => id == plo),
+                avgScore: ploScore(course.TQF3!, course.TQF5!, plo),
+              };
+            })
+          : [];
+        sortData(ploItem, "no");
+        if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
+          uniqueTopic.map((sec) => {
+            ploRequire = sec.ploRequire?.find(
+              (item) =>
+                item.curriculum == selectedCurriculum &&
+                curriculumPLOs.find(({ id }) => id == item.plo)
+            );
+            tempPlo = curriculumPLOs.find(({ id }) => id == ploRequire?.plo)!;
+            ploItem = ploRequire?.list.map((plo) => {
+              return {
+                ...tempPlo.data?.find(({ id }) => id == plo),
+                avgScore: ploScore(sec.TQF3!, sec.TQF5!, plo),
+              };
+            });
+            sortData(ploItem, "no");
+            if (ploRequire?.list.length) {
+              if (
+                !options.find(
+                  (item) =>
+                    item.courseNo == course.courseNo && item.topic == sec.topic
+                )
+              ) {
+                options.push({
+                  value: `${course.courseNo} - ${sec.topic}`,
+                  courseNo: course.courseNo,
+                  courseName: course.courseName,
+                  topic: sec.topic,
+                });
+              }
+              console.log(
+                course.sections
+                  .filter(
+                    ({ curriculum, topic, isActive }) =>
+                      curriculum == selectedCurriculum &&
+                      isActive &&
+                      topic == sec.topic
+                  )
+                  .map(({ sectionNo }) => getSectionNo(sectionNo))
+              );
+
+              list.push({
+                label: `${course.courseNo} - ${sec.topic}`,
+                year: course.year,
+                semester: course.semester,
+                courseNo: course.courseNo,
+                courseName: course.courseName,
+                sections: course.sections
+                  .filter(
+                    ({ curriculum, topic, isActive }) =>
+                      curriculum == selectedCurriculum &&
+                      isActive &&
+                      topic == sec.topic
+                  )
+                  .map(({ sectionNo }) => getSectionNo(sectionNo)),
+                topic: sec.topic,
+                ploRequire: ploItem,
+              });
+            }
+          });
+        } else if (ploRequire?.list.length) {
+          if (!options.find((item) => item.courseNo == course.courseNo)) {
+            options.push({
+              value: course.courseNo,
+              courseNo: course.courseNo,
+              courseName: course.courseName,
+            });
+          }
+          console.log(
+            course.sections
+              .filter(
+                ({ curriculum, isActive }) =>
+                  curriculum == selectedCurriculum && isActive
+              )
+              .map(({ sectionNo }) => getSectionNo(sectionNo))
+          );
+          list.push({
+            label: course.courseNo,
+            year: course.year,
+            semester: course.semester,
+            courseNo: course.courseNo,
+            courseName: course.courseName,
+            sections: course.sections
+              .filter(
+                ({ curriculum, isActive }) =>
+                  curriculum == selectedCurriculum && isActive
+              )
+              .map(({ sectionNo }) => getSectionNo(sectionNo)),
+            ploRequire: ploItem,
+          });
+        }
+      });
+      setCoursePloScoreList(list);
+      setCourseOption(options);
+    } else {
+      setCoursePloScoreList([]);
+      setCourseOption([]);
+    }
+  }, [courses]);
+
+  const fetchCourse = async () => {
+    dispatch(setLoadingOverlay(true));
+    const res = await getCourse({
+      ...new CourseRequestDTO(),
+      manage: true,
+      ignorePage: true,
+      ploRequire: true,
+      curriculumPlo: true,
+      year: currentYear!,
+      curriculum: [selectedCurriculum!],
+    });
     if (res) {
-      setSkills(res.datas);
-      setPayload({ ...payload, ...res.meta });
+      setCourses(res.courses);
+    }
+    dispatch(setLoadingOverlay(false));
+  };
+
+  const fetchPLO = async () => {
+    const resPloCol = await getPLOs({
+      curriculum: [selectedCurriculum],
+    });
+    if (resPloCol) {
+      setCurriculumPLOs(
+        resPloCol.plos.find((item: any) => item.code == selectedCurriculum)
+          .collections
+      );
     }
   };
 
-  const onChangePage = async (page: number, selectLimit?: number) => {
-    const perPage = selectLimit ?? payload.perPage;
-    const res = await getSkills({ ...payload, page, perPage });
-    if (res) {
-      setSkills(res.datas);
-      setPayload({ ...payload, page, perPage, ...res.meta });
-    }
+  const clearFilter = () => {
+    setSearchValue("");
+    setSelectedCourse([]);
   };
 
   return (
@@ -85,7 +267,6 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
     >
       <Modal.Content>
         {/* Header */}
-
         <Modal.Header className="flex w-full h-[64px] !bg-white px-6 !py-4 border-b">
           <div className="flex items-center gap-3">
             <Modal.CloseButton className="ml-0" />
@@ -94,10 +275,9 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
             </p>
           </div>
         </Modal.Header>
-
         {/* Body */}
         <Modal.Body className="flex h-full max-h-[92vh] m p-6 px-10   gap-4 overflow-hidden">
-          {/* Left Section - Course List */}
+          {/* Left Section */}
           <div className="w-1/3 bg-white shadow-lg flex flex-col rounded-lg p-5 border justify-between overflow-y-clip border-gray-200">
             <div className="flex flex-col w-full">
               <div className="flex flex-col w-full ">
@@ -113,17 +293,15 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
                 <div className="flex gap-3 mb-4 pb-4 border-b ">
                   <Select
                     rightSectionPointerEvents="all"
-                    label={`Select Curriculum`}
+                    label="Select Curriculum"
                     placeholder="Curriculum"
-                    data={curriculum?.map((cur) => ({
+                    data={curriculumList?.map((cur) => ({
                       value: cur.code,
-                      label: cur.nameEN,
+                      label: `${cur.nameTH} [${cur.code}]`,
                     }))}
                     value={selectedCurriculum}
                     onChange={(event) => setSelectedCurriculum(event)}
-                    allowDeselect
                     searchable
-                    clearable
                     size="xs"
                     nothingFoundMessage="No result"
                     className="w-full border-none "
@@ -140,17 +318,21 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
                   <p className="text-[14px] font-semibold">
                     Step 2: Select Courses
                   </p>
-                  {(!selectedCurriculum || !selectedTerm) && (
+                  {!selectedCurriculum && (
                     <p className="text-[12px] text-gray-500">
                       Please select a curriculum first.
                     </p>
                   )}
                 </div>
-                <div className=" ">
-                  <SearchInput
-                    onSearch={searchCourse}
-                    placeholder="Course No / Course Name"
-                    isCurriculumView={true}
+                <div>
+                  <TextInput
+                    leftSection={<TbSearch />}
+                    placeholder="Course No / Course Name / Course Topic"
+                    size="xs"
+                    value={searchValue}
+                    onChange={(event: any) =>
+                      setSearchValue(event.currentTarget.value)
+                    }
                   />
                   <Checkbox.Group
                     classNames={{
@@ -162,99 +344,135 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
                     className="!h-full   my-3 "
                   >
                     <div className="flex flex-col gap-4 overflow-y-auto h-[40vh]">
-                      {Array.from({ length: 20 }).map((_, index) => (
-                        <Checkbox.Card
-                          key={index}
-                          className={`p-3 items-center px-4 flex h-fit rounded-md w-full ${
-                            selectedCourse.includes(`course-${index}`) &&
-                            "!border-[1px] !border-secondary"
-                          }`}
-                          style={{
-                            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
-                          }}
-                        >
-                          <Group
-                            wrap="nowrap"
-                            className="items-center flex"
-                            align="flex-start"
+                      {courseOption
+                        .filter(
+                          (item) =>
+                            item.courseNo
+                              .toLowerCase()
+                              .includes(searchValue.toLowerCase()) ||
+                            item.courseName
+                              .toLowerCase()
+                              .includes(searchValue.toLowerCase()) ||
+                            item.topic
+                              ?.toLowerCase()
+                              .includes(searchValue.toLowerCase())
+                        )
+                        .map((item) => (
+                          <Checkbox.Card
+                            key={item.value}
+                            className={`p-3 items-center px-4 flex h-fit rounded-md w-full ${
+                              selectedCourse.includes(item.value) &&
+                              "!border-[1px] !border-secondary"
+                            }`}
+                            style={{
+                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
+                            }}
+                            value={item.value}
                           >
-                            <Checkbox.Indicator className="mt-1" />
-                            {/* <div className="text-default whitespace-break-spaces font-medium text-b3 acerSwift:max-macair133:!text-b4">
-                        Computer Programming for Engineers {index + 1}
-                      </div> */}
-                            <div className="flex flex-col w-fit !text-b4">
-                              <p className="font-bold text-secondary">259201</p>
-                              <p className="font-medium text-[#4E5150] flex-wrap ">
-                                Computer Programming for Engineers
-                              </p>
-                            </div>
-                          </Group>
-                        </Checkbox.Card>
-                      ))}
+                            <Group
+                              wrap="nowrap"
+                              className="items-center flex"
+                              align="flex-start"
+                            >
+                              <Checkbox.Indicator className="mt-1" />
+                              <div className="flex flex-col w-fit !text-b4">
+                                <p className="font-bold text-secondary">
+                                  {item.courseNo}
+                                </p>
+                                <p className="font-medium text-[#4E5150] flex-wrap ">
+                                  {item.courseName}
+                                  <br />
+                                  {item.topic && `(${item.topic})`}
+                                </p>
+                              </div>
+                            </Group>
+                          </Checkbox.Card>
+                        ))}
                     </div>
                   </Checkbox.Group>
                 </div>
               </div>
             </div>
-
-            <Button className="!w-full bg-delete hover:bg-[#ed4141] !text-[13px] !font-semibold !h-10">
+            <Button
+              className="!w-full bg-delete hover:bg-[#ed4141] !text-[13px] !font-semibold !h-10"
+              onClick={clearFilter}
+            >
               Clear Filter
             </Button>
           </div>
-          {/* Right Section - Sidebar */}
 
+          {/* Right Section */}
           <div className="w-2/3 flex flex-col gap-6">
             <div className="flex justify-between items-center">
-              <p className="text-lg font-bold text-secondary">CPE Curriculum</p>
-              <p className="text-sm text-gray-600">4 Courses</p>
+              <p className="text-lg font-bold text-secondary">
+                {selectedCurriculum} Curriculum
+              </p>
+              <p className="text-sm text-gray-600">
+                {courseOption.length} Courses
+              </p>
             </div>
-
             <div className="h-full overflow-y-auto space-y-4">
-              {Array.from({ length: 4 }).map((_, courseIndex) => (
-                <div
-                  key={courseIndex}
-                  className="bg-white shadow-md rounded-lg p-5 border"
-                >
-                  <div className="flex justify-between items-center mb-3">
-                    <div>
-                      <p className="text-sm font-bold text-secondary">259201</p>
-                      <p className="text-xs text-gray-600">
-                        Computer Programming for Engineers
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Sections */}
-                  {Array.from({ length: 2 }).map((_, sectionIndex) => (
-                    <div
-                      key={sectionIndex}
-                      className="bg-gray-100 rounded-md p-4 mb-2"
-                    >
-                      <p className="text-sm font-semibold text-default">
-                        Section: 001, 002, 801, 802
-                      </p>
-                      <p className="text-xs text-gray-600">
-                        Semester {sectionIndex + 1}
-                      </p>
-
-                      {/* PLO Scores */}
-                      <div className="mt-3 p-3 bg-bgTableHeader rounded-md">
-                        {["PLO 1", "PLO 2", "PLO 3"].map((plo, idx) => (
-                          <div
-                            key={idx}
-                            className="flex justify-between py-1 text-xs"
-                          >
-                            <p>{plo}</p>
-                            <p className="font-medium text-secondary">
-                              {(8.9 + idx).toFixed(2)}
-                            </p>
-                          </div>
-                        ))}
+              {selectedCourse.map((item) => {
+                const course = courseOption.find(({ value }) => value == item)!;
+                const list = coursePloScoreList.filter(
+                  ({ label }) => label == item
+                );
+                return (
+                  <div
+                    key={item}
+                    className="bg-white shadow-md rounded-lg p-5 border"
+                  >
+                    <div className="flex justify-between items-center mb-3">
+                      <div>
+                        <p className="text-sm font-bold text-secondary">
+                          {course.courseNo}
+                        </p>
+                        <p className="text-xs text-gray-600">
+                          {course.courseName} <br />
+                          {course.topic && `(${course.topic})`}
+                        </p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              ))}
+
+                    {/* Sections */}
+                    {list.map((course, index) => (
+                      <div
+                        key={index}
+                        className="bg-gray-100 rounded-md p-4 mb-2"
+                      >
+                        <p className="text-sm font-semibold text-default">
+                          Section:{" "}
+                          {course.sections?.length
+                            ? course.sections?.join(", ")
+                            : "All Section not active"}
+                        </p>
+                        <p className="text-xs text-gray-600">
+                          Semester {course.semester}/{course.year}
+                        </p>
+
+                        {/* PLO Scores */}
+                        {!!course.sections?.length && (
+                          <div className="mt-3 p-3 bg-bgTableHeader rounded-md">
+                            {course.ploRequire.map((plo, ploIndex) => (
+                              <div
+                                key={ploIndex}
+                                className="flex justify-between py-1 text-xs"
+                              >
+                                <p>PLO {plo.no}</p>
+                                <p className="font-medium text-secondary">
+                                  {plo.avgScore != "N/A"
+                                    ? plo.avgScore.toFixed(2)
+                                    : plo.avgScore}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </Modal.Body>

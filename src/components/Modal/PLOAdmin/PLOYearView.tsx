@@ -19,11 +19,13 @@ import { IModelTQF5 } from "@/models/ModelTQF5";
 
 export type CoursePloScore = {
   label: string;
+  year: number;
   semester: number;
   courseNo: string;
   courseName: string;
+  sections?: string[];
   topic?: string;
-  ploRequire: { plo: Partial<IModelPLONo>; avgScore: number | "N/A" }[];
+  ploRequire: (Partial<IModelPLONo> & { avgScore: number | "N/A" })[];
 };
 
 type Props = {
@@ -138,6 +140,7 @@ export default function PLOYearView({ opened, onClose }: Props) {
             if (ploRequire.length) {
               list.push({
                 label: `${course.courseNo} - ${sec.topic}`,
+                year: course.year,
                 semester: course.semester,
                 courseNo: course.courseNo,
                 courseName: course.courseName,
@@ -149,6 +152,7 @@ export default function PLOYearView({ opened, onClose }: Props) {
         } else if (ploRequire.length) {
           list.push({
             label: course.courseNo,
+            year: course.year,
             semester: course.semester,
             courseNo: course.courseNo,
             courseName: course.courseName,
@@ -307,7 +311,7 @@ export default function PLOYearView({ opened, onClose }: Props) {
                                   key={ploIndex}
                                   className="flex justify-between py-1 text-xs"
                                 >
-                                  <p>PLO {plo.plo.no}</p>
+                                  <p>PLO {plo.no}</p>
                                   <p className="font-medium text-blue-600">
                                     {plo.avgScore != "N/A"
                                       ? plo.avgScore.toFixed(2)
