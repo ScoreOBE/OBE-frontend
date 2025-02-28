@@ -50,13 +50,13 @@ export default function ModalSetRange({
     >
       <div>
         <div className="flex flex-col macair133:h-[550px] gap-4 sm:max-ipad11:max-h-[450px] sm px-2 py-2  overflow-y-auto">
-          {form.getValues().data.map((cloItem, cloIndex) => {
+          {form.getValues().data?.map((cloItem, cloIndex) => {
             const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
             return (
               <div
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-              }}
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
                 key={cloIndex}
                 className="flex bg-slate-100 p-5 rounded-lg flex-col gap-2"
               >
