@@ -1,4 +1,6 @@
 import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
+import { IModelTQF3 } from "@/models/ModelTQF3";
+import { IModelTQF5 } from "@/models/ModelTQF5";
 
 export const calStat = (scores: number[], totalStudent: number) => {
   const maxScore = Math.max(...scores);
@@ -182,4 +184,23 @@ export const calCloStudentScore = (course: IModelEnrollCourse) => {
     else closScore.push(undefined);
   });
   return closScore;
+};
+
+export const calPloScore = (
+  curriculum: string | null | undefined,
+  tqf3: IModelTQF3,
+  tqf5: IModelTQF5,
+  plo: string,
+  dash: boolean = false
+) => {
+  const clos = tqf3.part7?.list
+    ?.find((e) => e.curriculum == curriculum)
+    ?.data.filter(({ plos }) => (plos as string[]).includes(plo))
+    .map(({ clo }) => clo);
+  const sum = clos?.length
+    ? tqf5.part3?.data
+        .filter(({ clo }) => clos?.includes(clo))
+        .reduce((a, b) => a + b.score, 0)
+    : undefined;
+  return sum ? (sum / (clos?.length ?? 1)).toFixed(2) : dash ? "-" : "N/A";
 };
