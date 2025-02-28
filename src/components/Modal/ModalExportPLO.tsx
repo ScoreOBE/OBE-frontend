@@ -69,7 +69,7 @@ export default function ModalExportPLO({
         const row = [
           index === 0 ? `PLO-${item.no}` : "",
           courseNo,
-          curPlo.avgScore.toFixed(2),
+          curPlo.avgScore,
         ];
         rows.push(row);
         currentRow++;

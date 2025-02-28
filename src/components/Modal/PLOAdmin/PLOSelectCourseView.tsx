@@ -21,10 +21,9 @@ import {
   getUniqueTopicsWithTQF,
   sortData,
 } from "@/helpers/functions/function";
-import { IModelTQF3 } from "@/models/ModelTQF3";
-import { IModelTQF5 } from "@/models/ModelTQF5";
 import { IModelPLO } from "@/models/ModelPLO";
 import { getPLOs } from "@/services/plo/plo.service";
+import { calPloScore } from "@/helpers/functions/score";
 
 type Props = {
   opened: boolean;
@@ -86,19 +85,6 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
 
   useEffect(() => {
     if (courses.length) {
-      const ploScore = (tqf3: IModelTQF3, tqf5: IModelTQF5, plo: string) => {
-        const clos = tqf3.part7?.list
-          ?.find((e) => e.curriculum == selectedCurriculum)
-          ?.data.filter(({ plos }) => (plos as string[]).includes(plo))
-          .map(({ clo }) => clo);
-        const sum = clos?.length
-          ? tqf5.part3?.data
-              .filter(({ clo }) => clos?.includes(clo))
-              .reduce((a, b) => a + b.score, 0)
-          : undefined;
-        const score = sum ? sum / (clos?.length ?? 1) : "N/A";
-        return score;
-      };
       const options: {
         value: string;
         courseNo: string;
@@ -118,7 +104,12 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
           ? ploRequire?.list.map((plo) => {
               return {
                 ...tempPlo.data?.find(({ id }) => id == plo),
-                avgScore: ploScore(course.TQF3!, course.TQF5!, plo),
+                avgScore: calPloScore(
+                  selectedCurriculum,
+                  course.TQF3!,
+                  course.TQF5!,
+                  plo
+                ),
               };
             })
           : [];
@@ -134,7 +125,12 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
             ploItem = ploRequire?.list.map((plo) => {
               return {
                 ...tempPlo.data?.find(({ id }) => id == plo),
-                avgScore: ploScore(sec.TQF3!, sec.TQF5!, plo),
+                avgScore: calPloScore(
+                  selectedCurriculum,
+                  sec.TQF3!,
+                  sec.TQF5!,
+                  plo
+                ),
               };
             });
             sortData(ploItem, "no");
@@ -152,17 +148,6 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
                   topic: sec.topic,
                 });
               }
-              console.log(
-                course.sections
-                  .filter(
-                    ({ curriculum, topic, isActive }) =>
-                      curriculum == selectedCurriculum &&
-                      isActive &&
-                      topic == sec.topic
-                  )
-                  .map(({ sectionNo }) => getSectionNo(sectionNo))
-              );
-
               list.push({
                 label: `${course.courseNo} - ${sec.topic}`,
                 year: course.year,
@@ -190,14 +175,6 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
               courseName: course.courseName,
             });
           }
-          console.log(
-            course.sections
-              .filter(
-                ({ curriculum, isActive }) =>
-                  curriculum == selectedCurriculum && isActive
-              )
-              .map(({ sectionNo }) => getSectionNo(sectionNo))
-          );
           list.push({
             label: course.courseNo,
             year: course.year,
@@ -460,9 +437,7 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
                               >
                                 <p>PLO {plo.no}</p>
                                 <p className="font-medium text-secondary">
-                                  {plo.avgScore != "N/A"
-                                    ? plo.avgScore.toFixed(2)
-                                    : plo.avgScore}
+                                  {plo.avgScore}
                                 </p>
                               </div>
                             ))}

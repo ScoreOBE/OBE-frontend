@@ -14,8 +14,7 @@ import { ScrollArea } from "@mantine/core";
 import { useEffect, useState } from "react";
 import ModalExportPLO from "../ModalExportPLO";
 import { getUniqueTopicsWithTQF, sortData } from "@/helpers/functions/function";
-import { IModelTQF3 } from "@/models/ModelTQF3";
-import { IModelTQF5 } from "@/models/ModelTQF5";
+import { calPloScore } from "@/helpers/functions/score";
 
 export type CoursePloScore = {
   label: string;
@@ -91,19 +90,6 @@ export default function PLOYearView({ opened, onClose }: Props) {
 
   useEffect(() => {
     if (courses.length) {
-      const ploScore = (tqf3: IModelTQF3, tqf5: IModelTQF5, plo: string) => {
-        const clos = tqf3.part7?.list
-          ?.find((e) => e.curriculum == selectCurriculum.code)
-          ?.data.filter(({ plos }) => (plos as string[]).includes(plo))
-          .map(({ clo }) => clo);
-        const sum = clos?.length
-          ? tqf5.part3?.data
-              .filter(({ clo }) => clos?.includes(clo))
-              .reduce((a, b) => a + b.score, 0)
-          : undefined;
-        const score = sum ? sum / (clos?.length ?? 1) : "N/A";
-        return score;
-      };
       const list: CoursePloScore[] = [];
       courses.map((course) => {
         const uniqueTopic = getUniqueTopicsWithTQF(course.sections!);
@@ -116,8 +102,13 @@ export default function PLOYearView({ opened, onClose }: Props) {
         let ploItem: any = course.TQF3
           ? ploRequire.map((plo) => {
               return {
-                plo: { ...curriculumPLO.data?.find(({ id }) => id == plo) },
-                avgScore: ploScore(course.TQF3!, course.TQF5!, plo),
+                ...curriculumPLO.data?.find(({ id }) => id == plo),
+                avgScore: calPloScore(
+                  selectCurriculum.code,
+                  course.TQF3!,
+                  course.TQF5!,
+                  plo
+                ),
               };
             })
           : [];
@@ -132,8 +123,13 @@ export default function PLOYearView({ opened, onClose }: Props) {
               )?.list || [];
             ploItem = ploRequire.map((plo) => {
               return {
-                plo: { ...curriculumPLO.data?.find(({ id }) => id == plo) },
-                avgScore: ploScore(sec.TQF3!, sec.TQF5!, plo),
+                ...curriculumPLO.data?.find(({ id }) => id == plo),
+                avgScore: calPloScore(
+                  selectCurriculum.code,
+                  sec.TQF3!,
+                  sec.TQF5!,
+                  plo
+                ),
               };
             });
             sortData(ploItem, "no");
@@ -313,9 +309,7 @@ export default function PLOYearView({ opened, onClose }: Props) {
                                 >
                                   <p>PLO {plo.no}</p>
                                   <p className="font-medium text-blue-600">
-                                    {plo.avgScore != "N/A"
-                                      ? plo.avgScore.toFixed(2)
-                                      : plo.avgScore}
+                                    {plo.avgScore}
                                   </p>
                                 </div>
                               ))}
