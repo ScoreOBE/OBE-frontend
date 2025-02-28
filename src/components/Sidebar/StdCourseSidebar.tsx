@@ -129,7 +129,7 @@ export default function StdCourseSidebar() {
             >
               <p className="pl-[6px]">PLO</p>
             </Button>
-            <Button
+            {/* <Button
               onClick={() => gotoPage(ROUTE_PATH.SKILLS)}
               leftSection={
                 <Icon
@@ -144,7 +144,7 @@ export default function StdCourseSidebar() {
               }`}
             >
               <p className="pl-[3px]">Skills</p>
-            </Button>
+            </Button> */}
           </div>
         )}
       </div>
