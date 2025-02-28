@@ -80,6 +80,8 @@ export const initialTqf5Part1 = (
               S: "-",
               U: "-",
             },
+            abnormalScoreFactor: "",
+            reviewingSLO: "",
           }))
         : [
             {
@@ -114,6 +116,8 @@ export const initialTqf5Part1 = (
                 S: "-",
                 U: "-",
               },
+              abnormalScoreFactor: "",
+              reviewingSLO: "",
             },
           ],
   };

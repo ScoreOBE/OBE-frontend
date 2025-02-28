@@ -533,12 +533,14 @@ export default function TQF5() {
         tqf3={tqf3!}
         assignments={assignments!}
       />
-      <ModalSetRange
-        opened={openModalSetRange}
-        onClose={() => setOpenModalSetRange(false)}
-        tqf3={tqf3!}
-        tqf5Form={form!}
-      />
+      {tqf5Part == "part3" && (
+        <ModalSetRange
+          opened={openModalSetRange}
+          onClose={() => setOpenModalSetRange(false)}
+          tqf3={tqf3!}
+          tqf5Form={form!}
+        />
+      )}
       <ModalExportTQF5
         opened={openModalExportTQF5}
         onClose={() => setOpenModalExportTQF5(false)}

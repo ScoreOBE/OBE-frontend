@@ -94,7 +94,25 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
 
   useEffect(() => {
     if (tqf5.part1) {
-      form.setValues(cloneDeep(tqf5.part1));
+      form.setValues(
+        !!tqf5.curriculum?.length
+          ? {
+              list: tqf5.curriculum.map((cur) => {
+                const temp = tqf5.part1?.list.find(
+                  ({ curriculum }) => curriculum == cur
+                )!;
+                return {
+                  curriculum: cur,
+                  courseEval: cloneDeep(temp.courseEval),
+                  gradingCriteria: cloneDeep(temp.gradingCriteria),
+                  abnormalScoreFactor: temp.abnormalScoreFactor,
+                  reviewingSLO: temp.reviewingSLO,
+                };
+              }),
+              updatedAt: tqf5.part1.updatedAt,
+            }
+          : cloneDeep(tqf5.part1)
+      );
       setCurIndex(
         !selectCurriculum
           ? 0
@@ -102,8 +120,15 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
       );
     } else {
       form.setValues(initialTqf5Part1(course!, tqf5.topic, tqf5.curriculum!));
+      setCurIndex(
+        !selectCurriculum
+          ? 0
+          : tqf5.curriculum!.findIndex((cur) => cur == selectCurriculum)
+      );
     }
   }, [tqf5.ploRequired, selectCurriculum]);
+
+  // useEffect;
 
   const normalizeData = (data: any) => {
     if (!data) return data;
@@ -365,12 +390,16 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
             </Table>
           </div>
         </div>
-        {/* <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 pb-5">
+        <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 pb-5">
           <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
             <p className="font-semibold">ปัจจัยที่ทำให้ระดับคะแนนผิดปกติ</p>
+            <p className="font-semibold">
+              Factors Contributing to Abnormal Score Levels
+            </p>
           </div>
           <div className="flex flex-col gap-3 text-default">
             <Textarea
+              key={form.key(`list.${curIndex}.abnormalScoreFactor`)}
               label="Description"
               size="xs"
               placeholder="(optional)"
@@ -379,6 +408,7 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                 input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 `,
                 label: "text-default acerSwift:max-macair133:!text-b4",
               }}
+              {...form.getInputProps(`list.${curIndex}.abnormalScoreFactor`)}
             ></Textarea>
           </div>
         </div>
@@ -387,11 +417,15 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
             <p className="font-semibold">
               การทวนสอบผลสัมฤทธิ์ของนักศึกษา <br /> (ให้อ้างอิงจาก มคอ. 2 และ 3)
             </p>
+            <p className="font-semibold">
+              Reviewing Student Learning Outcome <br /> (According to TQF 2 and
+              TQF 3)
+            </p>
           </div>
 
           <div className="flex flex-col gap-3 text-default ">
             <Textarea
-              key={form.key("recDoc")}
+              key={form.key(`list.${curIndex}.reviewingSLO`)}
               label="Description"
               size="xs"
               placeholder="(optional)"
@@ -400,9 +434,10 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                 input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4`,
                 label: "text-default acerSwift:max-macair133:!text-b4",
               }}
+              {...form.getInputProps(`list.${curIndex}.reviewingSLO`)}
             ></Textarea>
           </div>
-        </div> */}
+        </div>
       </div>
     );
   };
