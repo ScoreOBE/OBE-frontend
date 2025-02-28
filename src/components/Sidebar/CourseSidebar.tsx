@@ -276,7 +276,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 Roster
               </Button>
             )}
-            {dashboard == ROLE.INSTRUCTOR && (
+            {/* {dashboard == ROLE.INSTRUCTOR && (
               <Button
                 onClick={() => goToPage(ROUTE_PATH.SKILLS)}
                 leftSection={
@@ -293,7 +293,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               >
                 Skills
               </Button>
-            )}
+            )} */}
 
             {user.role != ROLE.TA && (
               <>
