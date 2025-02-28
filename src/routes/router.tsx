@@ -153,14 +153,14 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
-          {
-            path: ROUTE_PATH.SKILLS,
-            element: (
-              <Suspense fallback={loadingPage}>
-                <Skills />
-              </Suspense>
-            ),
-          },
+          // {
+          //   path: ROUTE_PATH.SKILLS,
+          //   element: (
+          //     <Suspense fallback={loadingPage}>
+          //       <Skills />
+          //     </Suspense>
+          //   ),
+          // },
           {
             path: ROUTE_PATH.TQF3,
             element: (
@@ -275,14 +275,14 @@ const router = createBrowserRouter([
                   </Suspense>
                 ),
               },
-              {
-                path: ROUTE_PATH.SKILLS,
-                element: (
-                  <Suspense fallback={loadingPage}>
-                    <StdSkills />
-                  </Suspense>
-                ),
-              },
+              // {
+              //   path: ROUTE_PATH.SKILLS,
+              //   element: (
+              //     <Suspense fallback={loadingPage}>
+              //       <StdSkills />
+              //     </Suspense>
+              //   ),
+              // },
             ],
           },
         ],

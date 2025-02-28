@@ -72,7 +72,7 @@ export default function Navbar() {
         else if (location.includes(ROUTE_PATH.PLO) && /\d/.test(location))
           return `Course PLO`;
         else if (location.includes(ROUTE_PATH.PLO)) return `Overall PLO`;
-        else if (location.includes(ROUTE_PATH.SKILLS)) return `Skills`;
+        // else if (location.includes(ROUTE_PATH.SKILLS)) return `Skills`;
         return "Dashboard";
       case ROUTE_PATH.ADMIN_DASHBOARD:
         if (location.includes(ROUTE_PATH.TQF)) return `TQF ${semester}/${year}`;
@@ -86,7 +86,7 @@ export default function Navbar() {
           return `TQF 5${tqf5Topic ? ` - ${tqf5Topic}` : ""}`;
         else if (location.includes(ROUTE_PATH.SCORE)) return `${name}`;
         else if (location.includes(ROUTE_PATH.ROSTER)) return `Course Roster`;
-        else if (location.includes(ROUTE_PATH.SKILLS)) return "Skills";
+        // else if (location.includes(ROUTE_PATH.SKILLS)) return "Skills";
         else if (location.includes(ROUTE_PATH.STUDENTS)) return `${name}`;
         else if (location.includes(ROUTE_PATH.EVALUATION)) return "Evaluations";
         else if (location.includes(ROUTE_PATH.HISTOGRAM)) return "Chart";

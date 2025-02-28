@@ -29,6 +29,7 @@ import PLOYearView from "@/components/Modal/PLOAdmin/PLOYearView";
 import { IModelCurriculum } from "@/models/ModelFaculty";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { sortBy } from "lodash";
+import { calPloScore } from "@/helpers/functions/score";
 
 export default function AdminDashboardPLO() {
   const loading = useAppSelector((state) => state.loading.loading);
@@ -181,17 +182,14 @@ export default function AdminDashboardPLO() {
         // if (!ploRequire?.includes(item.id)) {
         //   return <Table.Th key={item.id}>-</Table.Th>;
         // }
-        const clos = tqf3.part7?.list
-          ?.find((e) => e.curriculum == selectCurriculum.code)
-          ?.data.filter(({ plos }) => (plos as string[]).includes(item.id))
-          .map(({ clo }) => clo);
-        const sum = clos?.length
-          ? tqf5.part3?.data
-              .filter(({ clo }) => clos?.includes(clo))
-              .reduce((a, b) => a + b.score, 0)
-          : undefined;
-        const score = sum ? sum / (clos?.length ?? 1) : undefined;
-        return <Table.Th key={item.id}>{score?.toFixed(2) ?? "-"}</Table.Th>;
+        const score = calPloScore(
+          selectCurriculum.code,
+          tqf3,
+          tqf5,
+          item.id,
+          true
+        );
+        return <Table.Th key={item.id}>{score}</Table.Th>;
       });
     };
     return (

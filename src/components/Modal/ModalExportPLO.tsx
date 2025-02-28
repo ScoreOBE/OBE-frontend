@@ -61,15 +61,15 @@ export default function ModalExportPLO({
       const filterCourses = data.filter(
         ({ label, ploRequire }) =>
           selectedCourses.includes(label) &&
-          ploRequire.find((p) => p.plo.id == item.id && p.avgScore != "N/A")
+          ploRequire.find((p) => p.id == item.id && p.avgScore != "N/A")
       );
       filterCourses.forEach(({ courseNo, ploRequire }, index) => {
-        const curPlo = ploRequire.find((p) => p.plo.id == item.id);
+        const curPlo = ploRequire.find((p) => p.id == item.id);
         if (!curPlo || curPlo?.avgScore == "N/A") return;
         const row = [
           index === 0 ? `PLO-${item.no}` : "",
           courseNo,
-          curPlo.avgScore.toFixed(2),
+          curPlo.avgScore,
         ];
         rows.push(row);
         currentRow++;
