@@ -674,7 +674,7 @@ export default function ModalAddPLOCollection({
                             label: "ml-2 text-[13px] font-medium",
                             input: "cursor-pointer",
                           }}
-                          label={`${cur.nameEN} (${cur.code})`}
+                          label={`${cur.nameEN} [${cur.code}]`}
                         />
                       ))}
                     </Group>
