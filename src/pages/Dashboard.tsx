@@ -77,6 +77,12 @@ export default function Dashboard() {
   }, [academicYear, term, params]);
 
   useEffect(() => {
+    if (term.id) {
+      fetchCourse(term.year!, term.semester!);
+    }
+  }, [term]);
+
+  useEffect(() => {
     if (term) {
       setPayload({
         ...new CourseRequestDTO(),

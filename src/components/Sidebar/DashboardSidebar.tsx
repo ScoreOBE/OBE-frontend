@@ -29,6 +29,7 @@ export default function DashboardSidebar() {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
+  const dashboard = useAppSelector((state) => state.config.dashboard);
   const dispatch = useAppDispatch();
   const termOption = academicYear.map((e) => {
     return `${e.semester}/${e.year}`;
@@ -101,23 +102,7 @@ export default function DashboardSidebar() {
 
   const fetchCourse = async (year: number, semester: number) => {
     dispatch(setLoading(true));
-    if (user.role != ROLE.STUDENT) {
-      const payloadCourse = new CourseRequestDTO();
-      const res = await getCourse({
-        ...payloadCourse,
-        year,
-        semester,
-        manage: path.includes(ROUTE_PATH.ADMIN_DASHBOARD),
-      });
-      if (res) {
-        if (path.includes(ROUTE_PATH.ADMIN_DASHBOARD)) {
-          dispatch(setAllCourseList(res));
-        } else {
-          dispatch(setCourseList(res));
-        }
-      }
-    }
-    if (user.studentId) {
+    if (user.studentId && dashboard == ROLE.STUDENT) {
       const res = await getEnrollCourse({ year, semester });
       if (res) {
         dispatch(setEnrollCourseList(res));

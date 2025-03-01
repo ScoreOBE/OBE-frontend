@@ -111,7 +111,7 @@ export default function AdminDashboardTQF() {
   useEffect(() => {
     if (term.id && curriculumList?.length && selectCurriculum.code)
       fetchCourse();
-  }, [curriculumList, selectCurriculum]);
+  }, [curriculumList, selectCurriculum, term]);
 
   useEffect(() => {
     if (term) {

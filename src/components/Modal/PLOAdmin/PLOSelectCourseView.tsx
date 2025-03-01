@@ -253,7 +253,7 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
           </div>
         </Modal.Header>
         {/* Body */}
-        <Modal.Body className="flex h-full max-h-[92vh] m p-6 px-10   gap-4 overflow-hidden">
+        <Modal.Body className="flex h-full max-h-[92vh]  p-3 px-4  gap-4 overflow-hidden">
           {/* Left Section */}
           <div className="w-1/3 bg-white shadow-lg flex flex-col rounded-lg p-5 border justify-between overflow-y-clip border-gray-200">
             <div className="flex flex-col w-full">
@@ -290,85 +290,87 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
                   />
                 </div>
               </div>
-              <div className="flex flex-col border-b w-full  mb-4">
-                <div className="mb-3 text-secondary">
-                  <p className="text-[14px] font-semibold">
-                    Step 2: Select Courses
-                  </p>
-                  {!selectedCurriculum && (
-                    <p className="text-[12px] text-gray-500">
-                      Please select a curriculum first.
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <TextInput
-                    leftSection={<TbSearch />}
-                    placeholder="Course No / Course Name / Course Topic"
-                    size="xs"
-                    value={searchValue}
-                    onChange={(event: any) =>
-                      setSearchValue(event.currentTarget.value)
-                    }
-                  />
-                  <Checkbox.Group
-                    classNames={{
-                      label:
-                        "mb-1 font-semibold text-default acerSwift:max-macair133:!text-b4",
-                    }}
-                    value={selectedCourse}
-                    onChange={setSelectedCourse}
-                    className="!h-full   my-3 "
-                  >
-                    <div className="flex flex-col gap-4 overflow-y-auto h-[40vh]">
-                      {courseOption
-                        .filter(
-                          (item) =>
-                            item.courseNo
-                              .toLowerCase()
-                              .includes(searchValue.toLowerCase()) ||
-                            item.courseName
-                              .toLowerCase()
-                              .includes(searchValue.toLowerCase()) ||
-                            item.topic
-                              ?.toLowerCase()
-                              .includes(searchValue.toLowerCase())
-                        )
-                        .map((item) => (
-                          <Checkbox.Card
-                            key={item.value}
-                            className={`p-3 items-center px-4 flex h-fit rounded-md w-full ${
-                              selectedCourse.includes(item.value) &&
-                              "!border-[1px] !border-secondary"
-                            }`}
-                            style={{
-                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
-                            }}
-                            value={item.value}
-                          >
-                            <Group
-                              wrap="nowrap"
-                              className="items-center flex"
-                              align="flex-start"
-                            >
-                              <Checkbox.Indicator className="mt-1" />
-                              <div className="flex flex-col w-fit !text-b4">
-                                <p className="font-bold text-secondary">
-                                  {item.courseNo}
-                                </p>
-                                <p className="font-medium text-[#4E5150] flex-wrap ">
-                                  {item.courseName}
-                                  <br />
-                                  {item.topic && `(${item.topic})`}
-                                </p>
-                              </div>
-                            </Group>
-                          </Checkbox.Card>
-                        ))}
+              {selectedCurriculum ? (
+                courseOption.length > 0 ? (
+                  <div className="flex flex-col border-b w-full mb-4">
+                    <div className="mb-3 text-secondary">
+                      <p className="text-[14px] font-semibold">
+                        Step 2: Select Courses
+                      </p>
                     </div>
-                  </Checkbox.Group>
-                </div>
-              </div>
+
+                    <div>
+                      <TextInput
+                        leftSection={<TbSearch />}
+                        placeholder="Course No / Course Name / Course Topic"
+                        size="xs"
+                        value={searchValue}
+                        onChange={(event: any) =>
+                          setSearchValue(event.currentTarget.value)
+                        }
+                      />
+
+                      <Checkbox.Group
+                        classNames={{
+                          label:
+                            "mb-1 font-semibold text-default acerSwift:max-macair133:!text-b4",
+                        }}
+                        value={selectedCourse}
+                        onChange={setSelectedCourse}
+                        className="!h-full my-3"
+                      >
+                        <div className="flex flex-col gap-4 overflow-y-auto h-[40vh]">
+                          {courseOption
+                            .filter(({ courseNo, courseName, topic }) => {
+                              const query = searchValue.toLowerCase();
+                              return (
+                                courseNo.toLowerCase().includes(query) ||
+                                courseName.toLowerCase().includes(query) ||
+                                topic?.toLowerCase().includes(query)
+                              );
+                            })
+                            .map((item) => (
+                              <Checkbox.Card
+                                key={item.value}
+                                className={`p-3 px-4 flex items-center h-fit rounded-md w-full ${
+                                  selectedCourse.includes(item.value) &&
+                                  "!border-[1px] !border-secondary"
+                                }`}
+                                style={{
+                                  boxShadow:
+                                    "0px 0px 4px 0px rgba(0, 0, 0, 0.15)",
+                                }}
+                                value={item.value}
+                              >
+                                <Group
+                                  wrap="nowrap"
+                                  className="items-center flex"
+                                  align="flex-start"
+                                >
+                                  <Checkbox.Indicator className="mt-1" />
+                                  <div className="flex flex-col w-fit !text-b4">
+                                    <p className="font-bold text-secondary">
+                                      {item.courseNo}
+                                    </p>
+                                    <p className="font-medium text-[#4E5150] flex-wrap">
+                                      {item.courseName}
+                                      {item.topic && <br />}
+                                      {item.topic && `(${item.topic})`}
+                                    </p>
+                                  </div>
+                                </Group>
+                              </Checkbox.Card>
+                            ))}
+                        </div>
+                      </Checkbox.Group>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-gray-500 text-center mt-3">
+                    Course not found.
+                  </div>
+                )
+              ) : null}
             </div>
             <Button
               className="!w-full bg-delete hover:bg-[#ed4141] !text-[13px] !font-semibold !h-10"
@@ -379,77 +381,100 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
           </div>
 
           {/* Right Section */}
-          <div className="w-2/3 flex flex-col gap-6">
-            <div className="flex justify-between items-center">
-              <p className="text-lg font-bold text-secondary">
-                {selectedCurriculum} Curriculum
-              </p>
-              <p className="text-sm text-gray-600">
-                {courseOption.length} Courses
-              </p>
-            </div>
-            <div className="h-full overflow-y-auto space-y-4">
-              {selectedCourse.map((item) => {
-                const course = courseOption.find(({ value }) => value == item)!;
-                const list = coursePloScoreList.filter(
-                  ({ label }) => label == item
-                );
-                return (
-                  <div
-                    key={item}
-                    className="bg-white shadow-md rounded-lg p-5 border"
-                  >
-                    <div className="flex justify-between items-center mb-3">
-                      <div>
-                        <p className="text-sm font-bold text-secondary">
-                          {course.courseNo}
-                        </p>
-                        <p className="text-xs text-gray-600">
-                          {course.courseName} <br />
-                          {course.topic && `(${course.topic})`}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Sections */}
-                    {list.map((course, index) => (
-                      <div
-                        key={index}
-                        className="bg-gray-100 rounded-md p-4 mb-2"
-                      >
-                        <p className="text-sm font-semibold text-default">
-                          Section:{" "}
-                          {course.sections?.length
-                            ? course.sections?.join(", ")
-                            : "All Section not active"}
-                        </p>
-                        <p className="text-xs text-gray-600">
-                          Semester {course.semester}/{course.year}
-                        </p>
-
-                        {/* PLO Scores */}
-                        {!!course.sections?.length && (
-                          <div className="mt-3 p-3 bg-bgTableHeader rounded-md">
-                            {course.ploRequire.map((plo, ploIndex) => (
-                              <div
-                                key={ploIndex}
-                                className="flex justify-between py-1 text-xs"
-                              >
-                                <p>PLO {plo.no}</p>
-                                <p className="font-medium text-secondary">
-                                  {plo.avgScore}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
+          {selectedCurriculum ? (
+            courseOption.length > 0 ? (
+              selectedCourse.length > 0 ? (
+                <div className="w-2/3 flex flex-col gap-6">
+                  <div className="flex mt-2 justify-between items-center">
+                    <p className="text-lg font-bold text-secondary">
+                      {selectedCurriculum} Curriculum
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {selectedCourse.length}  {selectedCourse.length > 1 ? "Courses" : "Course"} Selected
+                    </p>
                   </div>
-                );
-              })}
+
+                  <div className="h-full overflow-y-auto space-y-4">
+                    {selectedCourse.map((item) => {
+                      const course = courseOption.find(
+                        ({ value }) => value == item
+                      )!;
+                      const list = coursePloScoreList.filter(
+                        ({ label }) => label == item
+                      );
+
+                      return (
+                        <div
+                          key={item}
+                          className="bg-white shadow-md rounded-lg p-5 border"
+                        >
+                          <div className="flex justify-between items-center mb-3">
+                            <div>
+                              <p className="text-sm font-bold text-secondary">
+                                {course.courseNo}
+                              </p>
+                              <p className="text-xs text-gray-600">
+                                {course.courseName} <br />
+                                {course.topic && `(${course.topic})`}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Sections */}
+                          {list.map((course, index) => (
+                            <div
+                              key={index}
+                              className="bg-gray-100 rounded-md p-4 mb-2"
+                            >
+                              <p className="text-sm font-semibold text-default">
+                              Semester {course.semester}/{course.year}
+                              </p>
+                              <p className="text-xs text-gray-600">
+                               
+                                Section:{" "}
+                                {course.sections?.length
+                                  ? course.sections?.join(", ")
+                                  : "All Sections not active"}
+                              </p>
+
+                              {/* PLO Scores */}
+                              {!!course.sections?.length && (
+                                <div className="mt-3 p-3 bg-bgTableHeader rounded-md">
+                                  {course.ploRequire.map((plo, ploIndex) => (
+                                    <div
+                                      key={ploIndex}
+                                      className="flex justify-between py-1 text-xs"
+                                    >
+                                      <p>PLO {plo.no}</p>
+                                      <p className="font-medium text-secondary">
+                                        {plo.avgScore}
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <div className="w-2/3 flex justify-center items-center text-noData font-bold text-[18px]">
+                  No Course Selected
+                </div>
+              )
+            ) : (
+              <div className="w-2/3 flex justify-center items-center text-noData font-bold text-[18px]">
+                No Course Selected
+              </div>
+            )
+          ) : (
+            <div className="w-2/3 flex justify-center items-center text-noData font-bold text-[18px]">
+              No Curriculum Selected
             </div>
-          </div>
+          )}
         </Modal.Body>
       </Modal.Content>
     </Modal.Root>

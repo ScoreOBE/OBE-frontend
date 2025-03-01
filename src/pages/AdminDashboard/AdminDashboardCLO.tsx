@@ -100,7 +100,7 @@ export default function AdminDashboardCLO() {
       }
       fetchCourse();
     }
-  }, [selectCurriculum]);
+  }, [selectCurriculum, term]);
 
   const fetchPLO = async () => {
     const resPloCol = await getOnePLO({

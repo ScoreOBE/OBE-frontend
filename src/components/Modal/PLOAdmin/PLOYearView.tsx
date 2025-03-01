@@ -211,15 +211,13 @@ export default function PLOYearView({ opened, onClose }: Props) {
         <Modal.Content className="overflow-hidden !rounded-none !px-0">
           {/* Header */}
           <Modal.Header className="flex w-full !bg-[#fafafa] !pb-0 !px-0 !pt-4 rounded-none">
-            <div className="flex flex-col gap-1 w-full">
+            <div className="flex flex-col gap-4 w-full">
               <div className="flex px-12 w-full justify-between items-center">
                 <div className="flex items-center gap-3">
                   <Modal.CloseButton className="ml-0" />
                   <p className="font-semibold text-h2  text-secondary">
                     Year View
                   </p>
-                </div>
-                <div className="flex gap-2">
                   <Select
                     size="xs"
                     data={yearOption}
@@ -228,24 +226,25 @@ export default function PLOYearView({ opened, onClose }: Props) {
                     allowDeselect={false}
                     classNames={{
                       input:
-                        "focus:border-primary acerSwift:max-macair133:!text-b5",
+                        "focus:border-primary w-24 acerSwift:max-macair133:!text-b5",
                       label: "acerSwift:max-macair133:!text-b4",
                     }}
                   />
-                  <Button
-                    color="#20884f"
-                    onClick={() => setOpenModalExportPLO(true)}
-                    className="font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
-                  >
-                    <div className="flex items-center  gap-2">
-                      <Icon
-                        className="size-4 acerSwift:max-macair133:!size-3.5"
-                        IconComponent={IconExcel}
-                      />
-                      <span>Export PLO</span>
-                    </div>
-                  </Button>
                 </div>
+
+                <Button
+                  color="#20884f"
+                  onClick={() => setOpenModalExportPLO(true)}
+                  className="font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
+                >
+                  <div className="flex items-center  gap-2">
+                    <Icon
+                      className="size-4 acerSwift:max-macair133:!size-3.5"
+                      IconComponent={IconExcel}
+                    />
+                    <span>Export PLO</span>
+                  </div>
+                </Button>
               </div>
               <Tabs
                 classNames={{
@@ -274,7 +273,7 @@ export default function PLOYearView({ opened, onClose }: Props) {
             </div>
           </Modal.Header>
           {/* Body */}
-          <Modal.Body className="flex h-full w-full gap-4 pt-4 pb-[104px] overflow-hidden">
+          <Modal.Body className="flex h-full  w-full gap-4 pt-4 pb-[104px] overflow-hidden">
             {semesters.map((semester) => {
               const courseList = coursePloScoreList.filter(
                 (course) => course.semester == semester.semester
@@ -282,15 +281,15 @@ export default function PLOYearView({ opened, onClose }: Props) {
               return (
                 <div
                   key={semester.semester}
-                  className="bg-white w-full rounded-xl shadow p-5 border h-full flex flex-col"
+                  className="bg-white w-full rounded-xl shadow p-5 border h-full flex flex-col flex-1"
                 >
-                  <h3 className="text-lg font-bold text-gray-800">
+                  <h3 className="text-lg font-bold text-gray-700">
                     {semester.title}
                   </h3>
                   <p className="text-sm text-gray-500">
-                    {courseList.length} Courses
+                    {courseList.length} {courseList?.length <=1 ? 'Course' : 'Courses'}
                   </p>
-                  <ScrollArea className="mt-4 flex-1 overflow-auto">
+                  <ScrollArea className="mt-4 flex-1 h-full  overflow-auto">
                     {!!courseList.length ? (
                       courseList.map((course, index) => {
                         return (
@@ -321,7 +320,9 @@ export default function PLOYearView({ opened, onClose }: Props) {
                         );
                       })
                     ) : (
-                      <div>Course Not Found</div>
+                      <div className="h-[65vh] w-full flex items-center text-center justify-center flex-1">
+                       <p className=" text-noData font-semibold">No Course Found</p>
+                      </div>
                     )}
                   </ScrollArea>
                 </div>
