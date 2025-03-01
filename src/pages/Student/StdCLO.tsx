@@ -1,21 +1,17 @@
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { CLO_EVAL, ROLE } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading/Loading";
 import { Table } from "@mantine/core";
-import { calCloStudentScore } from "@/helpers/functions/score";
 
 export default function StdCLO() {
   const { courseNo } = useParams();
   const loading = useAppSelector((state) => state.loading.loading);
   const course = useAppSelector((state) =>
     state.enrollCourse.courses.find((c) => c.courseNo == courseNo)
-  );
-  const [closScore, setClosScore] = useState<(0 | 1 | 2 | 3 | 4 | undefined)[]>(
-    []
   );
   const dispatch = useAppDispatch();
 
@@ -25,12 +21,6 @@ export default function StdCLO() {
     dispatch(setDashboard(ROLE.STUDENT));
     localStorage.setItem("dashboard", ROLE.STUDENT);
   }, []);
-
-  useEffect(() => {
-    if (course?.clos) {
-      setClosScore(calCloStudentScore(course));
-    }
-  }, [course]);
 
   return (
     <div className="bg-white flex flex-col h-full w-full px-6 py-5  gap-3 overflow-hidden">
@@ -67,7 +57,7 @@ export default function StdCLO() {
                 </Table.Thead>
 
                 <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px] ">
-                  {course?.clos.map(({ clo }, index) => {
+                  {course?.clos.map(({ clo, score }, index) => {
                     return (
                       <Table.Tr key={index}>
                         <Table.Td>{clo.no}</Table.Td>
@@ -75,11 +65,9 @@ export default function StdCLO() {
                           <p>{clo.descTH}</p>
                           <p>{clo.descEN}</p>
                         </Table.Td>
-                        <Table.Td>{closScore[index] ?? "-"}</Table.Td>
+                        <Table.Td>{score}</Table.Td>
                         <Table.Td>
-                          {closScore[index] != undefined
-                            ? CLO_EVAL[closScore[index]]
-                            : "-"}
+                          {score != "-" ? CLO_EVAL[score] : "-"}
                         </Table.Td>
                       </Table.Tr>
                     );

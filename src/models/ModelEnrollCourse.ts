@@ -1,4 +1,5 @@
 import { IModelAssignment, IModelQuestion } from "./ModelCourse";
+import { IModelPLO, IModelPLONo } from "./ModelPLO";
 import { IModelCLO, IModelEval } from "./ModelTQF3";
 import { IModelTQF5Part2 } from "./ModelTQF5";
 import { IModelUser } from "./ModelUser";
@@ -11,20 +12,10 @@ export interface IModelEnrollCourse {
   section: IModelEnrollSection;
   clos: {
     clo: IModelCLO;
-    evals: { eval: IModelEval; percent: number }[];
-    plos: { curriculum: string; list: string[] }[][];
-    assess: {
-      eval: string;
-      sheet: string[];
-      percent: number;
-      fullScore: number;
-      range0: number;
-      range1: number;
-      range2: number;
-      range3: number;
-    }[];
-    tqf5Part2: IModelTQF5Part2[];
+    score: 0 | 1 | 2 | 3 | 4 | "-";
   }[];
+  plo: IModelPLO;
+  plos: (IModelPLONo & { avgScore: number | "-" })[];
   scores: IModelStudentScore[];
 }
 
