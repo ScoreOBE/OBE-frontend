@@ -33,6 +33,8 @@ import { IModelTQF3 } from "@/models/ModelTQF3";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { setDataTQF3, setSelectTqf3Topic } from "@/store/tqf3";
 import { setDataTQF5, setSelectTqf5Topic } from "@/store/tqf5";
+import ModalExportTQF5 from "@/components/Modal/TQF5/ModalExportTQF5";
+import { IModelTQF5 } from "@/models/ModelTQF5";
 
 export default function AdminDashboardTQF() {
   const navigate = useNavigate();
@@ -45,16 +47,21 @@ export default function AdminDashboardTQF() {
   const [payload, setPayload] = useState<any>({ page: 1, limit: 20 });
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
-  const [exportDataTQF, setExportDataTQF] = useState<
+  const [exportDataTQF3, setExportDataTQF3] = useState<
     Partial<IModelTQF3> & { courseNo?: string }
   >({});
+  const [exportDataTQF5, setExportDataTQF5] = useState<
+    Partial<IModelTQF5> & { courseNo?: string }
+  >({});
   const [openModalExportTQF3, setOpenModalExportTQF3] = useState(false);
+  const [openModalExportTQF5, setOpenModalExportTQF5] = useState(false);
   const [curriculumList, setCurriculumList] = useState<IModelCurriculum[]>([]);
   const [selectCurriculum, setSelectCurriculum] = useState<
     Partial<IModelCurriculum>
   >({});
   const [tqf3Filters, setTqf3Filters] = useState<string[]>([]);
   const [tqf5Filters, setTqf5Filters] = useState<string[]>([]);
+  const [tqf3, setTqf3] = useState<IModelTQF3>();
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -254,7 +261,7 @@ export default function AdminDashboardTQF() {
                     position="bottom-end"
                     label={
                       <div className="text-default font-semibold text-[13px] p-1">
-                        Export TQF
+                        Export TQF3
                       </div>
                     }
                     color="#FCFCFC"
@@ -263,7 +270,7 @@ export default function AdminDashboardTQF() {
                       variant="light"
                       className="tag-tqf  !px-3 !rounded-full text-center"
                       onClick={() => {
-                        setExportDataTQF({
+                        setExportDataTQF3({
                           ...sec.TQF3!,
                           courseNo: course.courseNo,
                         });
@@ -277,11 +284,44 @@ export default function AdminDashboardTQF() {
               </div>
             </Table.Td>
             <Table.Td>
-              <div
-                className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
-                tqf-status={sec ? sec.TQF5?.status : course.TQF5?.status}
-              >
-                {sec ? sec.TQF5?.status : course.TQF5?.status}
+              <div className="flex gap-2">
+                <div
+                  className="px-4 py-2 w-fit tag-tqf rounded-[20px] text-[12px] font-medium flex items-center"
+                  tqf-status={sec ? sec.TQF5?.status : course.TQF5?.status}
+                >
+                  {sec ? sec.TQF5?.status : course.TQF5?.status}
+                </div>
+
+                {sec.TQF5?.status === TQF_STATUS.DONE && (
+                  <Tooltip
+                    withArrow
+                    arrowPosition="side"
+                    arrowOffset={50}
+                    arrowSize={7}
+                    position="bottom-end"
+                    label={
+                      <div className="text-default font-semibold text-[13px] p-1">
+                        Export TQF5
+                      </div>
+                    }
+                    color="#FCFCFC"
+                  >
+                    <Button
+                      variant="light"
+                      className="tag-tqf  !px-3 !rounded-full text-center"
+                      onClick={() => {
+                        setExportDataTQF5({
+                          ...sec.TQF5!,
+                          courseNo: course.courseNo,
+                        });
+                        setTqf3(sec.TQF3!);
+                        setOpenModalExportTQF5(true);
+                      }}
+                    >
+                      <Icon className="size-5" IconComponent={IconFileExport} />
+                    </Button>
+                  </Tooltip>
+                )}
               </div>
             </Table.Td>
             <Table.Td>
@@ -373,7 +413,7 @@ export default function AdminDashboardTQF() {
                 position="bottom-end"
                 label={
                   <div className="text-default font-semibold text-[13px] p-1">
-                    Export TQF
+                    Export TQF3
                   </div>
                 }
                 color="#FCFCFC"
@@ -382,7 +422,7 @@ export default function AdminDashboardTQF() {
                   variant="light"
                   className="tag-tqf !px-3 !rounded-full text-center"
                   onClick={() => {
-                    setExportDataTQF({
+                    setExportDataTQF3({
                       ...course.TQF3!,
                       courseNo: course.courseNo,
                     });
@@ -396,11 +436,43 @@ export default function AdminDashboardTQF() {
           </div>
         </Table.Td>
         <Table.Td>
-          <div
-            className="px-3 py-2 w-fit tag-tqf rounded-[20px]  text-[12px] font-medium"
-            tqf-status={course.TQF5?.status}
-          >
-            {course.TQF5?.status}
+          <div className="flex gap-2 ">
+            <div
+              className="px-4 py-2 w-fit tag-tqf rounded-[20px] text-[12px] font-medium flex items-center"
+              tqf-status={course.TQF5?.status}
+            >
+              {course.TQF5?.status}
+            </div>
+            {course.TQF5?.status === TQF_STATUS.DONE && (
+              <Tooltip
+                withArrow
+                arrowPosition="side"
+                arrowOffset={50}
+                arrowSize={7}
+                position="bottom-end"
+                label={
+                  <div className="text-default font-semibold text-[13px] p-1">
+                    Export TQF5
+                  </div>
+                }
+                color="#FCFCFC"
+              >
+                <Button
+                  variant="light"
+                  className="tag-tqf !px-3 !rounded-full text-center"
+                  onClick={() => {
+                    setExportDataTQF5({
+                      ...course.TQF5!,
+                      courseNo: course.courseNo,
+                    });
+                    setTqf3(course.TQF3!);
+                    setOpenModalExportTQF5(true);
+                  }}
+                >
+                  <Icon className="size-5" IconComponent={IconFileExport} />
+                </Button>
+              </Tooltip>
+            )}
           </div>
         </Table.Td>
         <Table.Td>
@@ -513,9 +585,18 @@ export default function AdminDashboardTQF() {
         opened={openModalExportTQF3}
         onClose={() => {
           setOpenModalExportTQF3(false);
-          setExportDataTQF({});
+          setExportDataTQF3({});
         }}
-        dataTQF={exportDataTQF}
+        dataTQF={exportDataTQF3}
+      />
+      <ModalExportTQF5
+        opened={openModalExportTQF5}
+        onClose={() => {
+          setOpenModalExportTQF5(false);
+          setExportDataTQF5({});
+        }}
+        dataTQF={exportDataTQF5}
+        tqf3={tqf3?.id!}
       />
 
       <div className=" flex flex-col h-full w-full gap-2 overflow-hidden">

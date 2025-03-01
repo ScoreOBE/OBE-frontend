@@ -4,7 +4,14 @@ export interface IModelFaculty {
   facultyTH: string;
   facultyEN: string;
   code: string;
+  department: IModelDepartment[];
   curriculum: IModelCurriculum[];
+}
+
+export interface IModelDepartment {
+  nameTH: string;
+  nameEN: string;
+  code: string;
 }
 
 export interface IModelCurriculum {

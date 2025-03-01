@@ -357,19 +357,16 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   setPayload({ ...payload });
                 }}
               >
-                 <Tabs.List
+                <Tabs.List
                   grow
                   className="!bg-transparent gap-3 flex-nowrap px-[53px] overflow-x-auto items-center flex w-full"
                 >
-                 
-                  {curriculumList
-                   
-                    .map((cur) => (
-                      <Tabs.Tab key={cur.code} value={cur.code!}>
-                        {cur.code}
-                      </Tabs.Tab>
-                    ))}
-                  
+                  {curriculumList.map((cur) => (
+                    <Tabs.Tab key={cur.code} value={cur.code!}>
+                      {cur.code}
+                    </Tabs.Tab>
+                  ))}
+
                   {/* </div> */}
                 </Tabs.List>
               </Tabs>
@@ -607,7 +604,7 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                             <div
                               className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
                                 sec.isActive
-                                  ? "bg-[#71EBC1] text-[#0D6C49]"
+                                  ? "bg-[#71EBC1] text-[#164232]"
                                   : "bg-[#a2a2a2] text-[#ffffff]"
                               } `}
                             >

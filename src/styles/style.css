@@ -330,7 +330,11 @@
 
 /* Chip */
 .mantine-Chip-label:not([data-disabled]):not([data-checked]) {
-  background-color: #ffffff;
+  background-color: #ebebeb;
+}
+.mantine-Chip-label:not([data-disabled]):not([data-checked]):hover {
+  background-color: #d6d6d6;
+  cursor: pointer;
 }
 
 /* Switch */
