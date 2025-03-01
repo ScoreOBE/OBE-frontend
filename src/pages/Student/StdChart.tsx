@@ -183,8 +183,8 @@ export default function StdChart() {
                   No Chart
                 </p>{" "}
                 <p className=" text-[#333333] -mt-1 text-b2 break-words font-medium leading-relaxed">
-                  The chart will show when the assignment is published by the
-                  instructor.
+                  The chart will show when the evaluation is published  <br />  by the
+                  instructor or co-instructor.
                 </p>{" "}
               </div>
               <div className=" items-center justify-center flex">

@@ -138,8 +138,8 @@ export default function StdAssignment() {
                   No Evaluation
                 </p>
                 <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                  The evaluation will show to you once the instructor publishes
-                  it.
+                The evaluation will show when your score is published{" "}
+                <br /> by the instructor or co-instructor.
                 </p>
               </div>
               <div className=" items-center justify-center flex">

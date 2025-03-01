@@ -70,7 +70,7 @@ export default function Navbar() {
         else if (location.includes(ROUTE_PATH.HISTOGRAM)) return `Chart`;
         else if (location.includes(ROUTE_PATH.CLO)) return `CLO`;
         else if (location.includes(ROUTE_PATH.PLO) && /\d/.test(location))
-          return `Course PLO`;
+          return `PLO`;
         else if (location.includes(ROUTE_PATH.PLO)) return `Overall PLO`;
         // else if (location.includes(ROUTE_PATH.SKILLS)) return `Skills`;
         return "Dashboard";
