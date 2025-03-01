@@ -1,14 +1,15 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import maintenace from "@/assets/image/maintenance.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import { ROLE } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading/Loading";
-import { Button } from "@mantine/core";
+import { Alert, Button, Tooltip } from "@mantine/core";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import Icon from "@/components/Icon";
+import notFoundImage from "@/assets/image/notFound.jpg";
+import IconBulb from "@/assets/icons/bulb.svg?react";
 import SpiderChart from "@/components/Chart/SpiderChart";
 
 export default function StdPLO() {
@@ -41,76 +42,161 @@ export default function StdPLO() {
               data={course.plo}
             />
           )}
-
-          <div className="flex flex-row pb-2 items-center justify-between">
-            {course?.plo.id ? (
-              <>
-                <p className="text-secondary text-[16px] font-semibold">
-                  ผลการเรียนรู้ของผู้เรียน
-                  <br />
-                  Program Learning Outcome
-                </p>
-                <Button
-                  className="text-center px-4"
-                  onClick={() => setOpenDrawerPLOdes(true)}
-                  color="#e9e9e9"
+          <div className="flex flex-col   overflow-y-auto overflow-x-hidden max-w-full h-full">
+            <div className="flex flex-row pb-[14px] items-center justify-between">
+              {course?.plo.id ? (
+                <>
+                  <p className="text-secondary text-[16px] font-semibold">
+                    ผลลัพธ์การเรียนรู้ของหลักสูตร
+                    <br />
+                    Program Learning Outcome
+                  </p>
+                  <Button
+                    className="text-center px-4"
+                    onClick={() => setOpenDrawerPLOdes(true)}
+                    color="#e9e9e9"
+                  >
+                    <div className="flex gap-2 acerSwift:max-macair133:!text-b5 !text-default">
+                      <Icon
+                        IconComponent={IconPLO}
+                        className="acerSwift:max-macair133:!size-3"
+                      />
+                      PLO Description
+                    </div>
+                  </Button>
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
+            {!!course?.plos.length ? (
+              <div className="flex flex-col gap-1   w-full">
+                <Alert
+                  variant="light"
+                  className="mb-3 "
+                  title={` What is PLO? `}
+                  icon={<Icon IconComponent={IconBulb} className="size-6 " />}
+                  classNames={{ title: "acerSwift:max-macair133:!text-b3" }}
                 >
-                  <div className="flex gap-2 acerSwift:max-macair133:!text-b5 !text-default">
-                    <Icon
-                      IconComponent={IconPLO}
-                      className="acerSwift:max-macair133:!size-3"
-                    />
-                    PLO Description
+                  <p className="font-normal -mt-1 leading-[22px] text-[13px]">
+                          <span className="font-bold">
+                            {" "}
+                            Program Learning Outcomes (PLO)
+                          </span>{" "}
+                          defines the overall knowledge, skills, and abilities
+                          that students should develop by the time they{" "}
+                          <span className="font-bold">
+                            {" "}
+                            complete a degree program
+                          </span>
+                          . It's like the{" "}
+                          <span className="font-bold"> big goals</span> of an
+                          entire study program, ensuring that graduates are
+                          well-prepared for their careers or further studies.{" "}
+                          <br /> Unlike{" "}
+                          <span className="font-bold">
+                            {" "}
+                            Course Learning Outcomes (CLOs)
+                          </span>
+                          , which focus on individual courses, PLOs cover
+                          multiple courses and integrate various aspects of
+                          learning across the program
+                        </p>
+                </Alert>
+                <div
+                  className="flex flex-col justify-center items-center border rounded-lg  py-8"
+                  style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
+                >
+                  <div className="flex flex-col">
+                    <p className="text-secondary text-b1 font-semibold text-center">
+                      ผลลัพธ์การเรียนรู้ของหลักสูตรประจำกระบวนวิชา {courseNo}
+                    </p>
+                    <p className="text-[#575757] text-[14px] text-center">
+                      Program Learning Outcomes for {courseNo} Course
+                    </p>
                   </div>
-                </Button>
-              </>
+
+                  <SpiderChart data={course.plos} height={500} />
+                </div>
+              </div>
             ) : (
-              <></>
+              <div className="flex items-center  !h-full !w-full -mt-[20px] justify-between  px-16">
+                <div className="flex flex-col gap-3 text-start">
+                  <p className="!h-full text-[20px] text-secondary font-semibold">
+                    No PLO
+                  </p>
+                  <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
+                    The PLO will show when the TQF 5 (Course Report) is
+                    submitted <br /> by the instructor or co-instructor.
+                  </p>
+                  <Tooltip
+                    arrowOffset={125}
+                    arrowSize={8}
+                    arrowRadius={1}
+                    transitionProps={{
+                      transition: "fade",
+                      duration: 300,
+                    }}
+                    multiline
+                    withArrow
+                    label={
+                      <div className=" text-default text-b3 acerSwift:max-macair133:text-b4 p-2 flex flex-col gap-1 w-[40vw]">
+                        <p className="text-secondary font-bold">What is PLO?</p>
+
+                        <p className="font-normal text-b3 acerSwift:max-macair133:text-b4  ">
+                          <span className="font-bold">
+                            {" "}
+                            Program Learning Outcomes (PLO)
+                          </span>{" "}
+                          defines the overall knowledge, skills, and abilities
+                          that students should develop by the time they{" "}
+                          <span className="font-bold">
+                            {" "}
+                            complete a degree program
+                          </span>
+                          . It's like the{" "}
+                          <span className="font-bold"> big goals</span> of an
+                          entire study program, ensuring that graduates are
+                          well-prepared for their careers or further studies.{" "}
+                          <br /> Unlike{" "}
+                          <span className="font-bold">
+                            {" "}
+                            Course Learning Outcomes (CLOs)
+                          </span>
+                          , which focus on individual courses, PLOs cover
+                          multiple courses and integrate various aspects of
+                          learning across the program
+                        </p>
+                      </div>
+                    }
+                    color="#FCFCFC"
+                    className="w-fit border rounded-md sm:max-acerSwift:!-ml-2"
+                    position="bottom-start"
+                  >
+                    <Button
+                      className="mt-3 flex justify-center items-center"
+                      variant="light"
+                      leftSection={
+                        <Icon
+                          IconComponent={IconBulb}
+                          className="size-[20px] stroke-[1.5px] -mt-[2px]  items-center"
+                        />
+                      }
+                    >
+                      What is PLO?
+                    </Button>
+                  </Tooltip>
+                </div>
+                <div className=" items-center justify-center flex">
+                  <img
+                    src={notFoundImage}
+                    className="h-full items-center  w-[24vw] justify-center flex flex-col"
+                    alt="notFound"
+                  ></img>
+                </div>
+              </div>
             )}
           </div>
-          {!!course?.plos.length ? (
-            <div
-              className="flex flex-col justify-center items-center border rounded-lg h-full mt-0.5 py-8"
-              style={{ boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.05)" }}
-            >
-              <div className="flex flex-col">
-                <p className="text-secondary text-b1 font-semibold text-center">
-                  ผลการเรียนรู้ของผู้เรียนประจำรหัสวิชา {courseNo}
-                </p>
-                <p className="text-[#575757] text-[14px] text-center">
-                  Program Learning Outcome
-                </p>
-              </div>
-              <SpiderChart data={course.plos} height={500} />
-            </div>
-          ) : (
-            <div className=" flex flex-col h-full w-full  overflow-hidden">
-              <div className="flex flex-row px-6 pt-3   items-center justify-between">
-                <div className="flex flex-col">
-                  <p className="text-secondary text-[18px] font-semibold "></p>
-                </div>
-              </div>
-
-              <div className="flex items-center  !h-full !w-full justify-between px-16">
-                <div className="h-full  translate-y-2  justify-center flex flex-col">
-                  <p className="text-secondary text-[21px] font-semibold">
-                    TQF5 not completed
-                    {/* PLO is coming soon to{" "} */}
-                    {/* <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                      ScoreOBE +{" "}
-                    </span>{" "} */}
-                  </p>
-                  <br />
-                  <p className=" -mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
-                    {/* PLO will be available for students February 2025. */}
-                  </p>
-                </div>
-                <div className="h-full  w-[25vw] justify-center flex flex-col">
-                  <img src={maintenace} alt="notFound"></img>
-                </div>
-              </div>
-            </div>
-          )}
         </>
       )}
     </div>
