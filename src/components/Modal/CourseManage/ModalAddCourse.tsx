@@ -661,9 +661,7 @@ export default function ModalAddCourse({
                             "focus:border-primary acerSwift:max-macair133:!text-b5",
                           label: "acerSwift:max-macair133:!text-b4",
                         }}
-                        {...form.getInputProps(`sections.${index}.curriculum`, {
-                          withError: true,
-                        })}
+                        {...form.getInputProps(`sections.${index}.curriculum`)}
                       />
 
                       <div className="p-5 acerSwift:max-macair133:p-4 mt-1 bg-[#f5f5f5] rounded-xl">
@@ -897,7 +895,7 @@ export default function ModalAddCourse({
                     </span>
                     <div className="flex flex-col gap-1">
                       <span className="text-tertiary text-b2 acerSwift:max-macair133:text-b5 font-semibold">
-                        Owner Section
+                        Instructor
                       </span>
                       <div className="ps-1.5 text-secondary mb-2">
                         <List size="sm" listStyleType="disc">

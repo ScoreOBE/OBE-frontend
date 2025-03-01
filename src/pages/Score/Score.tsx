@@ -317,7 +317,7 @@ export default function Overall() {
               </p>
               <p className=" text-[#333333] leading-6 font-medium text-[14px]">
                 You're not listed as a Co-Instructor. <br /> Please contact the
-                Owner section for access.
+                instructor for access.
               </p>
             </div>
             <img

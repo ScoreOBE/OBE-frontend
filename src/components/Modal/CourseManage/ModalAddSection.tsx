@@ -80,9 +80,9 @@ export default function ModalAddSection({
             ? null
             : "Please choose at least one semester.";
         },
-        curriculum: (value) => !value && "Curriculum is required",
+        curriculum: (value) => (!value ? "Curriculum is required" : null),
         instructor: (value: any) =>
-          value?.value?.length ? null : "Please select one Owner Section.",
+          value?.value?.length ? null : "Please select one instructor",
       },
     },
     validateInputOnBlur: true,
@@ -237,7 +237,6 @@ export default function ModalAddSection({
     if (type == COURSE_TYPE.SEL_TOPIC.en) {
       initialSection.topic = sections[0]?.topic;
     }
-    initialSection.curriculum = "-";
     if (!sectionNo.length) {
       sections = [{ ...initialSection }];
       setCoInsList([]);
@@ -489,7 +488,7 @@ export default function ModalAddSection({
         {isManage && (
           <Stepper.Step
             allowStepSelect={false}
-            label="Owner Section"
+            label="Instructor"
             description="STEP 2"
           >
             <Alert
@@ -502,7 +501,7 @@ export default function ModalAddSection({
                 icon: "size-6",
                 body: " flex justify-center",
               }}
-              title={<p>Each section can only have one Owner section.</p>}
+              title={<p>Each section can only have one instructor.</p>}
             ></Alert>
             <div className="flex flex-col max-h-[380px] h-fit w-full mt-1 mb-5  p-[2px]    overflow-y-auto  ">
               <div className="flex flex-col font-medium text-b2 acerSwift:max-macair133:text-b3 gap-5">
@@ -511,7 +510,7 @@ export default function ModalAddSection({
                   .sections?.map((sec: Partial<IModelSection>, index) => (
                     <div className="flex flex-col" key={index}>
                       <span className="text-secondary font-semibold">
-                        Select Owner section for Section{" "}
+                        Select instructor for section{" "}
                         {getSectionNo(sec.sectionNo)}
                         <span className="text-red-500"> *</span>
                         <br />
@@ -565,7 +564,7 @@ export default function ModalAddSection({
                           sec.sectionNo
                         )}`}
                         size="xs"
-                        placeholder="Curriculum"
+                        placeholder="Select curriculum"
                         searchable
                         nothingFoundMessage="No result"
                         data={[
@@ -822,7 +821,7 @@ export default function ModalAddSection({
 
                     <div className="flex flex-col gap-1">
                       <span className="text-[#3E3E3E] font-semibold">
-                        Owner section
+                        instructor
                       </span>
                       <div className="ps-1.5 text-secondary">
                         <List size="sm" listStyleType="disc">

@@ -226,7 +226,7 @@ export default function ModalChangeAdmin({ opened, onClose }: Props) {
       <Modal
         opened={openSetSAdminModal}
         closeOnClickOutside={false}
-        size="47vw"
+        size="50vw"
         title="Change Admin"
         transitionProps={{ transition: "pop" }}
         centered
@@ -234,13 +234,14 @@ export default function ModalChangeAdmin({ opened, onClose }: Props) {
       >
         <Alert
           variant="light"
-          color="blue"
-          title={`After you change Admin, your role will automatically switch to a curriculum admin role`}
+          color="red"
+          title={`After you change your role, it will automatically be updated from Admin to Curriculum Admin.`}
           icon={<Icon IconComponent={IconInfo2} className="size-6" />}
           className="mb-5"
         ></Alert>
+        <div className="px-4 pt-3 pb-4 rounded-md bg-gray-100 mb-4">
         <MultiSelect
-          label="Select Curriculums for you can access management"
+          label="Select the curriculums you want to access as a Curriculum Admin."
           size="xs"
           placeholder="Select curriculum"
           searchable
@@ -254,10 +255,12 @@ export default function ModalChangeAdmin({ opened, onClose }: Props) {
           ]}
           classNames={{
             input: "focus:border-primary acerSwift:max-macair133:!text-b5",
-            label: "acerSwift:max-macair133:!text-b4",
+            label: "text-[13px]",
           }}
           {...form.getInputProps("curriculums")}
         />
+        </div>
+      
         <TextInput
           label={`To confirm, type "${admin?.firstNameEN}${admin?.lastNameEN}"`}
           value={textActivate}
@@ -273,7 +276,7 @@ export default function ModalChangeAdmin({ opened, onClose }: Props) {
           }
           onClick={() => editAdmin(admin.id!)}
           loading={loading}
-          className="mt-4 min-w-fit !h-[36px] !w-full"
+          className="mt-4 bg-delete hover:bg-[#e83f3f] font-bold min-w-fit !h-[36px] !w-full"
         >
           Change Admin, Log Out
         </Button>

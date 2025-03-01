@@ -446,7 +446,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
 
         <div className="flex  flex-col gap-2">
           <p className="text-b2 font-bold mb-1 acerSwift:max-macair133:mb-0 acerSwift:max-macair133:text-b3">
-            Owner section
+            Instructor
           </p>
           <div className="max-h-[120px] flex flex-col gap-1 acerSwift:max-macair133:overflow-y-auto">
             {instructors.map((item, index) => {

@@ -357,50 +357,19 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                   setPayload({ ...payload });
                 }}
               >
-                <Tabs.List
+                 <Tabs.List
                   grow
-                  className="!bg-transparent px-[53px] items-center flex w-full"
+                  className="!bg-transparent gap-3 flex-nowrap px-[53px] overflow-x-auto items-center flex w-full"
                 >
-                  {curriculumList.length > maxTabs && (
-                    <div
-                      aria-disabled={startEndTab.start == 0}
-                      onClick={() =>
-                        startEndTab.start > 0 &&
-                        setStartEndTab(({ start, end }) => {
-                          return { start: start - maxTabs, end: end - maxTabs };
-                        })
-                      }
-                      className={`justify-start cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
-                        startEndTab.start !== 1 && "hover:bg-[#eeeeee]"
-                      } rounded-full`}
-                    >
-                      <Icon IconComponent={IconChevronLeft} />
-                    </div>
-                  )}
+                 
                   {curriculumList
-                    .slice(startEndTab.start, startEndTab.end)
+                   
                     .map((cur) => (
                       <Tabs.Tab key={cur.code} value={cur.code!}>
                         {cur.code}
                       </Tabs.Tab>
                     ))}
-                  {curriculumList.length > maxTabs && (
-                    <div
-                      aria-disabled={startEndTab.end == curriculumList.length}
-                      onClick={() =>
-                        startEndTab.end < curriculumList.length &&
-                        setStartEndTab(({ start, end }) => {
-                          return { start: start + maxTabs, end: end + maxTabs };
-                        })
-                      }
-                      className={`justify-end cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
-                        startEndTab.end !== courseManagement.total &&
-                        "hover:bg-[#eeeeee]"
-                      } rounded-full`}
-                    >
-                      <Icon IconComponent={IconChevronRight} />
-                    </div>
-                  )}
+                  
                   {/* </div> */}
                 </Tabs.List>
               </Tabs>

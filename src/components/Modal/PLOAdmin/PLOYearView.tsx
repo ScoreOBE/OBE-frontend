@@ -210,9 +210,9 @@ export default function PLOYearView({ opened, onClose }: Props) {
       >
         <Modal.Content className="overflow-hidden !rounded-none !px-0">
           {/* Header */}
-          <Modal.Header className="flex w-full !pb-0 !px-0 !pt-4 border-b rounded-none">
+          <Modal.Header className="flex w-full !bg-[#fafafa] !pb-0 !px-0 !pt-4 rounded-none">
             <div className="flex flex-col gap-1 w-full">
-              <div className="flex px-6 w-full justify-between items-center">
+              <div className="flex px-12 w-full justify-between items-center">
                 <div className="flex items-center gap-3">
                   <Modal.CloseButton className="ml-0" />
                   <p className="font-semibold text-h2  text-secondary">
@@ -249,8 +249,8 @@ export default function PLOYearView({ opened, onClose }: Props) {
               </div>
               <Tabs
                 classNames={{
-                  root: "px-6 w-full left-0",
-                  tab: "!bg-transparent hover:!text-tertiary",
+                  root: "w-full left-0",
+                  tab: "px-1 !bg-transparent hover:!text-tertiary",
                   tabLabel: "!font-semibold",
                 }}
                 value={selectCurriculum.code}
@@ -260,7 +260,10 @@ export default function PLOYearView({ opened, onClose }: Props) {
                   );
                 }}
               >
-                <Tabs.List className="flex flex-nowrap overflow-x-auto">
+                <Tabs.List
+                  grow
+                  className="!bg-transparent gap-3 flex-nowrap px-[53px] overflow-x-auto items-center flex w-full"
+                >
                   {curriculumList?.map((cur) => (
                     <Tabs.Tab key={cur.code} value={cur.code!}>
                       {cur.code}

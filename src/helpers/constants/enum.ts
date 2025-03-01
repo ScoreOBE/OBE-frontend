@@ -15,7 +15,7 @@ export enum ROLE {
 export enum TITLE_ROLE {
   CURR_ADMIN = "Curriculum Admin",
   CO_INS = "Co-Instructor (Optional)",
-  OWNER_SEC = "Owner section",
+  OWNER_SEC = "Instructor",
 }
 
 export const COURSE_TYPE = {

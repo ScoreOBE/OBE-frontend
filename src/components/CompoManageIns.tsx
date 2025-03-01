@@ -339,7 +339,7 @@ export default function CompoMangeIns({
               type == "changeMain" && action ? action(inputUser) : addUser()
             }
           >
-            {type == "changeMain" ? "Change" : "Add"}
+            {type == "changeMain" ? "Change Admin" : "Add Admin"}
           </Button>
         )}
       </div>
@@ -348,7 +348,7 @@ export default function CompoMangeIns({
         <>
           {inputUser?.value && (
             <MultiSelect
-              label="Select Curriculums for access management"
+              label="Select Curriculums for access"
               size="xs"
               placeholder="Select curriculum"
               searchable
@@ -386,7 +386,7 @@ export default function CompoMangeIns({
               }
               onClick={() => addUser()}
             >
-              Add
+              Add Admin
             </Button>
           </div>
         </>

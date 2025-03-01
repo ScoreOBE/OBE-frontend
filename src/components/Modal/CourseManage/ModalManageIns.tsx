@@ -110,8 +110,8 @@ export default function ModalManageIns({
       );
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Owner section Updated Successfully",
-        `${value.label} is an Owner section ${getSectionNo(
+        "Instrcutor Updated Successfully",
+        `${value.label} is a instructor ${getSectionNo(
           editSec?.data.sectionNo
         )}.`
       );
@@ -321,7 +321,7 @@ export default function ModalManageIns({
                 title={
                   <p className=" acerSwift:max-macair133:!text-b3">
                     You don't have permission to manage co-instructors in this
-                    course. <br /> Please contact to the Owner section for
+                    course. <br /> Please contact to the instructor for
                     manage.
                   </p>
                 }
@@ -541,7 +541,7 @@ export default function ModalManageIns({
                 {getUserName(editSec?.instructor as IModelUser, 1)}
               </p>
               <p className="text-secondary text-[12px] font-normal">
-                Owner section {getSectionNo(editSec.data.sectionNo)}{" "}
+                Instructor {getSectionNo(editSec.data.sectionNo)}{" "}
               </p>
             </div>
           </div>
@@ -557,8 +557,8 @@ export default function ModalManageIns({
       ) : (
         <Tabs defaultValue="mainInstructor" className="px-4 pb-2">
           <Tabs.List>
-            <Tabs.Tab value="mainInstructor">Owner section</Tabs.Tab>
-            <Tabs.Tab value="coInstructor">Co-Instructor section</Tabs.Tab>
+            <Tabs.Tab value="mainInstructor">Instructor</Tabs.Tab>
+            <Tabs.Tab value="coInstructor">Co-Instructor</Tabs.Tab>
           </Tabs.List>
 
           <Tabs.Panel value="mainInstructor">
@@ -578,7 +578,7 @@ export default function ModalManageIns({
                         {getUserName(sec.instructor, 1)}
                       </p>
                       <p className="text-secondary text-[12px] font-normal">
-                        Owner section {getSectionNo(sec.sectionNo)}{" "}
+                        Instructor {getSectionNo(sec.sectionNo)}{" "}
                       </p>
                     </div>
                   </div>

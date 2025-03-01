@@ -107,7 +107,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
 
       <div className="flex  flex-col gap-2 mt-5">
         <p className="text-b2 acerSwift:max-macair133:!text-b3 font-bold mb-1">
-          Owner section
+          Instructor
         </p>
         <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
           <p className="text-pretty font-medium text-b4 acerSwift:max-macair133:!text-b5">

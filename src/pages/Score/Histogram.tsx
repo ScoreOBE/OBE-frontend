@@ -234,7 +234,7 @@ export default function Histogram() {
             </p>
             <p className="text-[#333333] leading-6 font-medium text-b2 acerSwift:max-macair133:!text-b3">
               You're not listed as a Co-Instructor. <br /> Please contact the
-              Owner section for access.
+              Instructor for access.
             </p>
           </div>
           <img
