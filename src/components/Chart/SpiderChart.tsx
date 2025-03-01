@@ -11,10 +11,10 @@ export default function SpiderChart({ data, height }: Props) {
     <RadarChart
       h={height}
       data={data}
-      dataKey="product"
+      dataKey="name"
       series={[
         {
-          name: "AveragePLO",
+          name: "score",
           color: "#6EB4F1",
           strokeColor: "#6EB4F1",
         },
@@ -28,12 +28,15 @@ export default function SpiderChart({ data, height }: Props) {
         content: ({ payload }: any) => (
           <ul className="flex justify-center gap-4 mt-4">
             {payload.map((entry: any, index: number) => (
-              <li className="flex items-center gap-2 text-default text-sm font-medium  -mt-4">
+              <li
+                key={index}
+                className="flex items-center gap-2 text-default text-sm font-medium  -mt-4"
+              >
                 <span
                   className="inline-block w-3 h-3 rounded-full"
                   style={{ backgroundColor: entry.color }}
                 ></span>
-                Average PLO
+                Score
               </li>
             ))}
           </ul>
@@ -41,9 +44,7 @@ export default function SpiderChart({ data, height }: Props) {
       }}
       polarAngleAxisProps={{
         className: "text-b3 font-medium ",
-        style: {
-          height: 10,
-        },
+        style: { height: 10 },
         dy: 3,
       }}
       polarRadiusAxisProps={{
@@ -64,17 +65,17 @@ export default function SpiderChart({ data, height }: Props) {
                 <p className="text-sm font-semibold mb-3">{label}</p>
                 <div className="flex justify-between gap-0 items-start pt-2 border-t-[1px] border-[#747575]">
                   <div className="flex flex-col items-center w-full py-1">
-                    <span className="font-bold text-[22px]">
-                      {data["AveragePLO"]}{" "}
-                    </span>
+                    <span className="font-bold text-[22px]">{data.score}</span>
                     <span className="text-white text-b3 font-medium">
-                      {data["AveragePLO"] < 1
+                      {data.score == "-"
+                        ? "-"
+                        : data.score < 1
                         ? "Poor"
-                        : data["AveragePLO"] < 2
+                        : data.score < 2
                         ? "Fair"
-                        : data["AveragePLO"] < 3
+                        : data.score < 3
                         ? "Good"
-                        : data["AveragePLO"] < 4
+                        : data.score < 4
                         ? "Very Good"
                         : "Excellent"}
                     </span>

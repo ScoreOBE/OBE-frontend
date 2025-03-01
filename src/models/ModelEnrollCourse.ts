@@ -1,7 +1,6 @@
 import { IModelAssignment, IModelQuestion } from "./ModelCourse";
 import { IModelPLO, IModelPLONo } from "./ModelPLO";
-import { IModelCLO, IModelEval } from "./ModelTQF3";
-import { IModelTQF5Part2 } from "./ModelTQF5";
+import { IModelCLO } from "./ModelTQF3";
 import { IModelUser } from "./ModelUser";
 
 export interface IModelEnrollCourse {
@@ -15,7 +14,7 @@ export interface IModelEnrollCourse {
     score: 0 | 1 | 2 | 3 | 4 | "-";
   }[];
   plo: IModelPLO;
-  plos: (IModelPLONo & { avgScore: number | "-" })[];
+  plos: (IModelPLONo & { name: string; score: number | "-" })[];
   scores: IModelStudentScore[];
 }
 
