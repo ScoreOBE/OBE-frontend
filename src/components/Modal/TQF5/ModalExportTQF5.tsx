@@ -24,7 +24,7 @@ type Props = {
   tqf3: string;
 };
 
-export default function ModalExportTQF3({
+export default function ModalExportTQF5({
   opened,
   onClose,
   dataTQF,
@@ -33,6 +33,7 @@ export default function ModalExportTQF3({
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const tqf5 = useAppSelector((state) => state.tqf5);
+  const course = useAppSelector((state) => state.course.courses);
   const [selectedMerge, setSelectedMerge] = useState("unzipfile");
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
@@ -49,8 +50,27 @@ export default function ModalExportTQF3({
     }
   }, [opened, dataTQF]);
 
+  const activeCurriculums = dataExport.part1?.list?.filter((cur) => {
+    let courseSection;
+
+    if (dataTQF) {
+      courseSection = course?.find(
+        (e) => e.courseNo === dataTQF.courseNo
+      )?.sections;
+    } else {
+      courseSection = tqf5?.sections;
+    }
+
+    return (
+      courseSection?.some(
+        (sec) => cur.curriculum?.includes(sec.curriculum!) && sec.isActive
+      ) ?? false
+    );
+  });
+
   const onCloseModal = () => {
     onClose();
+    setSelectCurriculum(null);
     setSelectedParts([]);
   };
 
@@ -148,7 +168,7 @@ export default function ModalExportTQF3({
                 placeholder="Select curriculum"
                 searchable
                 nothingFoundMessage="No result"
-                data={(tqf5.part1?.list ?? []).map((item) => {
+                data={(activeCurriculums ?? []).map((item) => {
                   const value = item.curriculum ?? "-";
 
                   const matchedCurriculum = (curriculum ?? []).find(

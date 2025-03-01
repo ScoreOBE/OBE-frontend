@@ -58,6 +58,20 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
     },
   });
 
+  const activeCurriculums = form
+    .getValues()
+    .list?.filter((cur) =>
+      tqf5.sections.some(
+        (sec) => cur.curriculum?.includes(sec.curriculum!) && sec.isActive
+      )
+    );
+
+  useEffect(() => {
+    if (!selectCurriculum && activeCurriculums.length > 0) {
+      setSelectCurriculum(activeCurriculums[0].curriculum);
+    }
+  }, [activeCurriculums, selectCurriculum]);
+
   const calculateTotals = (courseEval: any[]) => {
     const totals = {
       A: 0,
@@ -494,32 +508,20 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
               }}
             >
               <Tabs.List className="!bg-transparent items-center flex w-full gap-5">
-                {form.getValues().list?.map((cur, index) => {
-                  const activeSection = tqf5.sections.find(
-                    (sec) =>
-                      cur.curriculum?.includes(sec.curriculum!) &&
-                      sec.isActive === true
-                  );
-
-                  if (activeSection) {
-                    return (
-                      <Tabs.Tab key={cur.curriculum} value={cur.curriculum!}>
-                        <div className="flex items-center gap-2">
-                          <Icon
-                            IconComponent={IconCheck}
-                            className={checkPart1Status(cur, index)}
-                          />
-                          {cur.curriculum}
-                        </div>
-                      </Tabs.Tab>
-                    );
-                  }
-
-                  return null;
-                })}
+                {activeCurriculums.map((cur, index) => (
+                  <Tabs.Tab key={cur.curriculum} value={cur.curriculum!}>
+                    <div className="flex items-center gap-2">
+                      <Icon
+                        IconComponent={IconCheck}
+                        className={checkPart1Status(cur, index)}
+                      />
+                      {cur.curriculum}
+                    </div>
+                  </Tabs.Tab>
+                ))}
               </Tabs.List>
               <div className="overflow-auto flex px-3 w-full max-h-full mt-3">
-                {form.getValues().list?.map((cur, index) => (
+                {activeCurriculums.map((cur, index) => (
                   <Tabs.Panel
                     key={`${cur.curriculum || "no-curriculum"}-${index}`}
                     value={cur.curriculum || "no-curriculum"}
