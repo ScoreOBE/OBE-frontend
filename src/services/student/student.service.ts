@@ -5,8 +5,9 @@ import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
 const studentService = studentController();
 
 export const getEnrollCourse = async (params: {
-  year: number;
-  semester: number;
+  year?: number;
+  semester?: number;
+  all?: boolean;
 }): Promise<IModelEnrollCourse[]> => {
   const res = await studentService.getEnrollCourse(params);
   return isValidResponse(res);

@@ -53,6 +53,7 @@ export default function SpiderChart({ data, height }: Props) {
         style: { fill: "#A1A1B2" },
         dx: -12,
         dy: 18,
+        domain: [0, 4],
       }}
       className="w-full"
     >
