@@ -5,7 +5,7 @@ export const ploController = (configService = {}) => {
   const prefix = "/plo";
 
   return {
-    getPLOs: async (params: any) => {
+    getPLOs: async (params?: any) => {
       return service.get(`${prefix}`, { ...params });
     },
     getOnePLO: async (params: any) => {

@@ -1,20 +1,12 @@
-export interface IModelPLOCollection {
-  code: string;
-  nameEN: string;
-  nameTH: string;
-  collections: IModelPLO[];
-}
 export interface IModelPLO {
   id: string;
   name: string;
-  year: number;
-  semester: number;
-  isActive: boolean;
   facultyCode: string;
   curriculum: string[];
   criteriaTH: string;
   criteriaEN: string;
   data: IModelPLONo[];
+  canEdit?: boolean;
 }
 
 export interface IModelPLONo {

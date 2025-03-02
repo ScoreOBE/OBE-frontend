@@ -3,6 +3,7 @@ import {
   Button,
   FocusTrapInitialFocus,
   Modal,
+  Select,
   TextInput,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
@@ -34,6 +35,8 @@ import {
   setFaculty,
 } from "@/store/faculty";
 import { isEqual } from "lodash";
+import { getPLOs } from "@/services/plo/plo.service";
+import { IModelPLO } from "@/models/ModelPLO";
 
 type Props = {
   opened: boolean;
@@ -48,11 +51,12 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
   const [curriculumFilter, setCurriculumFilter] = useState<IModelCurriculum[]>(
     []
   );
+  const [ploCollection, setPloCollection] = useState<IModelPLO[]>([]);
   const [openAddCurriculum, setOpenAddCurriculum] = useState(false);
   const [openDeleteCurriculum, setOpenDeleteCurriculum] = useState(false);
   const [isEditCurriculum, setIsEditCurriculum] = useState(false);
   const [selectCurriculum, setSelectCurriculum] = useState<
-    Partial<IModelCurriculum>
+    Partial<IModelCurriculum & { plo: string }>
   >({});
 
   const form = useForm({
@@ -61,7 +65,8 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
       nameTH: "",
       nameEN: "",
       code: "",
-    } as IModelCurriculum,
+      plo: "",
+    } as IModelCurriculum & { plo: string },
     validate: {
       nameTH: (value) =>
         validateTextInput(value, "Curriculum Thai Name", 250, false),
@@ -73,6 +78,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
           ({ code }) => code == value && code != selectCurriculum.code
         ) &&
           `${value} is already exists.`),
+      plo: (value) => !value.length && "PLO is require",
     },
     validateInputOnBlur: true,
   });
@@ -80,6 +86,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
   useEffect(() => {
     if (opened) {
       fetchCur();
+      fetchPLO();
       setSearchValue("");
     }
   }, [opened]);
@@ -104,6 +111,13 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
     }
   };
 
+  const fetchPLO = async () => {
+    const res = await getPLOs();
+    if (res) {
+      setPloCollection(res.plos);
+    }
+  };
+
   const onClickAddCurriculum = async () => {
     if (!form.validate().hasErrors) {
       const res = await createCurriculum(faculty.id, form.getValues());
@@ -116,6 +130,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
         );
         setOpenAddCurriculum(false);
         form.reset();
+        fetchPLO();
       }
     }
   };
@@ -142,6 +157,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
         setOpenAddCurriculum(false);
         setSelectCurriculum({});
         form.reset();
+        fetchPLO();
       }
     }
   };
@@ -157,6 +173,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
       );
       setOpenDeleteCurriculum(false);
       setSelectCurriculum({});
+      fetchPLO();
     }
   };
 
@@ -219,6 +236,25 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
             placeholder="CPE-2563"
             size="xs"
             {...form.getInputProps("code")}
+          />
+          <Select
+            label="Select the PLO for Curriculum"
+            size="xs"
+            placeholder="Select PLO"
+            searchable
+            nothingFoundMessage="No result"
+            data={[
+              ...(ploCollection?.map((item) => ({
+                value: item.id,
+                label: item.name,
+              })) || []),
+            ]}
+            allowDeselect={false}
+            classNames={{
+              input: "focus:border-primary acerSwift:max-macair133:!text-b5",
+              label: "acerSwift:max-macair133:!text-b4",
+            }}
+            {...form.getInputProps("plo")}
           />
           <div className="flex gap-2 justify-end">
             <Button
@@ -344,10 +380,19 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                               nameTH: item.nameTH,
                               nameEN: item.nameEN,
                               code: item.code,
+                              plo: ploCollection.find((plo) =>
+                                plo.curriculum.includes(item.code)
+                              )!.id,
                             });
                             form.setFieldValue("nameTH", item.nameTH);
                             form.setFieldValue("nameEN", item.nameEN);
                             form.setFieldValue("code", item.code);
+                            form.setFieldValue(
+                              "plo",
+                              ploCollection.find((plo) =>
+                                plo.curriculum.includes(item.code)
+                              )!.id
+                            );
                             setOpenAddCurriculum(true);
                             setIsEditCurriculum(true);
                           }}

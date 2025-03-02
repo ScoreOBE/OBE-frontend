@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading/Loading";
 import { deletePLO, getPLOs } from "@/services/plo/plo.service";
-import { IModelPLO, IModelPLOCollection } from "@/models/ModelPLO";
+import { IModelPLO } from "@/models/ModelPLO";
 import ModalAddPLOCollection from "@/components/Modal/ModalAddPLOCollection";
 import {
   Alert,
@@ -36,27 +36,19 @@ type Props = {
 };
 
 export default function ModalPLOManagement({ opened, onClose }: Props) {
-  const user = useAppSelector((state) => state.user);
-  const academicYear = useAppSelector((state) => state.academicYear[0]);
   const loading = useAppSelector((state) => state.loading);
   const dispatch = useAppDispatch();
-  const [ploActive, setPloActive] = useState<IModelPLO[]>([]);
+  const [plos, setPlos] = useState<IModelPLO[]>([]);
   const [selectPlo, setSelectPlo] = useState<string | null>("Dashboard");
   const [ploCollection, setPloCollection] = useState<IModelPLO[]>([]);
-  const [curriculumPloCollection, setCurriculumPLOCollection] = useState<
-    IModelPLOCollection[]
-  >([]);
-  const [totalPLOs, setTotalPLOs] = useState<number>(0);
-  const [openModal, setOpenModal] = useState(false);
-  const [isTH, setIsTH] = useState<string | null>("TH");
-  const [selectView, setSelectView] = useState<string | null>("ploview");
   const [collection, setCollection] = useState<
     Partial<IModelPLO> & Record<string, any>
   >({});
-  const [ploCollectDupli, setPLOCollectionDupli] = useState<IModelPLO[]>([]);
+  const [totalPLOs, setTotalPLOs] = useState<number>(0);
+  const [openModal, setOpenModal] = useState(false);
+  const [isTH, setIsTH] = useState<string | null>("TH");
   const [selectPloDupli, setSelectPloDupli] = useState<Partial<IModelPLO>>({});
-  const [modalAddPLO, { open: openModalAddPLO, close: closeModalAddPLO }] =
-    useDisclosure(false);
+  const [openModalAddPLO, setOpenModalAddPLO] = useState(false);
   const [
     modalDuplicatePLO,
     { open: openModalDuplicatePLO, close: closeModalDuplicatePLO },
@@ -64,45 +56,23 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
   const [openPopupDeletePLOCollection, setOpenPopupDeletePLOCollection] =
     useState(false);
 
-  const fetchPLO = async (all = false) => {
-    const payload = { all, role: user.role };
-    const [resPLO, resCur] = await Promise.all([
-      getPLOs({ ...payload, all: true }),
-      getPLOs(payload),
-    ]);
-    if (resPLO) {
-      setPLOCollectionDupli(resPLO.plos);
-      setPloCollection(resPLO.plos);
-      setTotalPLOs(resPLO.totalCount);
-    }
-    if (resCur) {
-      setTotalPLOs(resCur.totalCount);
-      setCurriculumPLOCollection(resCur.plos);
+  const fetchPLO = async () => {
+    const res = await getPLOs();
+    if (res) {
+      setSelectPlo("Dashboard");
+      setPlos([{ name: "Dashboard" }, ...res.plos]);
+      setPloCollection(res.plos);
+      setTotalPLOs(res.totalCount);
     }
   };
 
   useEffect(() => {
-    const fetchPLOTab = async () => {
-      const res = await getPLOs({ manage: true });
-      if (res) {
-        setSelectPlo("Dashboard");
-        setPloActive([{ name: "Dashboard" }, ...res.plos]);
-      }
-    };
     if (opened) {
       dispatch(setLoading(true));
-      fetchPLOTab();
       fetchPLO();
       dispatch(setLoading(false));
     }
   }, [opened]);
-
-  useEffect(() => {
-    if (modalDuplicatePLO) {
-      setSelectPloDupli({});
-      fetchPLO();
-    }
-  }, [modalAddPLO, modalDuplicatePLO]);
 
   const onClickDeletePLO = async () => {
     dispatch(setLoadingOverlay(true));
@@ -179,10 +149,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               </Table.Tbody>
             </Table>
           </div>
-          {((!ploActive.find((plo) => plo.name == collection.name) &&
-            collection?.year! > academicYear?.year) ||
-            (collection?.year == academicYear?.year &&
-              collection?.semester! > academicYear?.semester)) && (
+          {collection?.canEdit && (
             <Button
               color="red"
               leftSection={
@@ -240,7 +207,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
       <Modal
         title="Add PLO Collection"
         closeOnClickOutside={false}
-        opened={modalDuplicatePLO && !!ploCollectDupli.length}
+        opened={modalDuplicatePLO && !!ploCollection.length}
         onClose={closeModalDuplicatePLO}
         transitionProps={{ transition: "pop" }}
         size="42vw"
@@ -276,13 +243,13 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             value={selectPloDupli.name}
             onChange={(event) =>
               setSelectPloDupli(
-                ploCollectDupli.find((plo) => plo.name === event) ?? {}
+                ploCollection.find((plo) => plo.name === event) ?? {}
               )
             }
           >
             <Group className="flex overflow-y-auto max-h-[265px]">
               <div className="flex p-1 w-full h-full flex-col overflow-y-auto gap-3">
-                {ploCollectDupli.map((plo, index) => (
+                {ploCollection.map((plo, index) => (
                   <RadioCard
                     key={index}
                     value={plo.name}
@@ -290,7 +257,6 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                       boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                     }}
                     className="p-3 px-3 flex border-none h-fit rounded-md w-full"
-                    // label={plo.name}
                   >
                     <Group>
                       <Radio.Indicator />
@@ -307,7 +273,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               variant="subtle"
               onClick={() => {
                 setSelectPloDupli({});
-                openModalAddPLO();
+                setOpenModalAddPLO(true);
                 closeModalDuplicatePLO();
               }}
             >
@@ -315,7 +281,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             </Button>
             <Button
               onClick={() => {
-                openModalAddPLO();
+                setOpenModalAddPLO(true);
                 closeModalDuplicatePLO();
               }}
               disabled={isEmpty(selectPloDupli)}
@@ -326,9 +292,8 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
         </div>
       </Modal>
       <ModalAddPLOCollection
-        opened={modalAddPLO}
-        onOpen={openModalAddPLO}
-        onClose={closeModalAddPLO}
+        opened={openModalAddPLO}
+        onClose={() => setOpenModalAddPLO(false)}
         collection={selectPloDupli}
         fetchPLO={fetchPLO}
       />
@@ -359,7 +324,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 }}
               >
                 <Tabs.List className="!gap-6 !bg-transparent px-[53px]">
-                  {ploActive.map((collection) => (
+                  {plos.map((collection) => (
                     <Tabs.Tab key={collection.name} value={collection.name}>
                       {collection.name}
                     </Tabs.Tab>
@@ -377,17 +342,10 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                   <p className="text-secondary text-[16px] font-bold">
                     {selectPlo}
                   </p>
-                  {selectView == "ploview" ? (
-                    <p className="text-tertiary text-[14px] font-medium">
-                      {ploCollection.length} Collection
-                      {curriculumPloCollection.length > 1 ? "s " : " "}
-                    </p>
-                  ) : (
-                    <p className="text-tertiary text-[14px] font-medium">
-                      {curriculumPloCollection.length} Curriculum
-                      {curriculumPloCollection.length > 1 ? "s " : " "}
-                    </p>
-                  )}
+                  <p className="text-tertiary text-[14px] font-medium">
+                    {ploCollection.length} Collection
+                    {ploCollection.length > 1 ? "s " : " "}
+                  </p>
                 </div>
                 <div className="flex gap-4">
                   <Button
@@ -404,23 +362,6 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 </div>
               </div>
             )}
-            {selectPlo == "Dashboard" && (
-              <Tabs
-                value={selectView}
-                onChange={setSelectView}
-                className="px-6"
-                classNames={{
-                  root: "mt-2",
-                  tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
-                  tabLabel: "!font-semibold",
-                }}
-              >
-                <Tabs.List className="!gap-6 !bg-transparent">
-                  <Tabs.Tab value="ploview">PLO List</Tabs.Tab>
-                  <Tabs.Tab value="curriculumview">Curriculum</Tabs.Tab>
-                </Tabs.List>
-              </Tabs>
-            )}
             {/* Course Detail */}
             {selectPlo === "Dashboard" ? (
               loading.loading ? (
@@ -429,112 +370,27 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                 </div>
               ) : (
                 <div className="flex flex-col mt-3 overflow-y-auto gap-4 px-6 pb-1 pt-1">
-                  {selectView == "ploview"
-                    ? ploCollection.map((plo, index) => (
-                        <div
-                          onClick={() => {
-                            setCollection({ ...plo });
-                            setOpenModal(true);
-                          }}
-                          className=" text-[14px] bg-white cursor-pointer first:mt-0 rounded-md hover:bg-[#f8f8f8] grid grid-cols-5 items-center  justify-between  py-3 px-7"
-                          key={index}
-                          style={{
-                            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                          }}
-                        >
-                          <p className=" font-medium">{plo.name}</p>
-                          <div
-                            className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
-                              plo.isActive
-                                ? "bg-[#10e5908e] text-[#228762]"
-                                : "bg-[#a2a2a2] text-[#ffffff]"
-                            } `}
-                          >
-                            <p className=" font-medium">
-                              {plo.isActive ? "Active" : "Inactive"}
-                            </p>
-                          </div>
-                          {/* Main Instructor */}
-                          <div className="flex items-center font-medium text-[#4E5150] text-b4"></div>
-                          <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b4">
-                            <p className="text-wrap font-semibold">
-                              Start in: {plo.semester}/{plo.year}
-                            </p>
-                            <div className="flex gap-1"></div>
-                          </div>
-                          <div className="flex w-full justify-end items-center   text-[#858585]   size-8 ">
-                            <Icon
-                              IconComponent={IconChevronRight}
-                              className="size-4 stroke-[2px]"
-                            />
-                          </div>
-                        </div>
-                      ))
-                    : curriculumPloCollection?.map((curriculum, indexPLO) => (
-                        <div
-                          className="bg-[#fafafa] rounded-md flex  flex-col py-4 px-5"
-                          key={indexPLO}
-                          style={{
-                            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                          }}
-                        >
-                          <div className="flex flex-col mb-4  w-fit">
-                            <p className=" font-bold text-b2 text-secondary">
-                              {curriculum.nameEN}
-                            </p>
-                          </div>
-                          <div className="flex flex-col">
-                            {curriculum.collections.map((collection, index) => (
-                              <div
-                                key={` ${index}`}
-                                onClick={() => {
-                                  setCollection({ index, ...collection });
-                                  setOpenModal(true);
-                                }}
-                                className="bg-[#f5f6ff] cursor-pointer first:rounded-t-md last:rounded-b-md last:border-none hover:bg-[#E4E4FF] grid grid-cols-5 items-center  justify-between  py-3 border-b-[1px] border-[#eeeeee] px-7"
-                              >
-                                {/* PLO List */}
-                                <div className="flex flex-col">
-                                  <p className="font-semibold text-[13px] text-tertiary">
-                                    {collection.name}
-                                  </p>
-                                </div>
-                                {/* Status */}
-                                <div
-                                  className={`px-3 py-1 w-fit rounded-[20px]  text-[12px] font-medium ${
-                                    collection.isActive
-                                      ? "bg-[#10e5908e] text-[#228762]"
-                                      : "bg-[#a2a2a2] text-[#ffffff]"
-                                  } `}
-                                >
-                                  <p className=" font-semibold ">
-                                    {collection.isActive
-                                      ? "Active"
-                                      : "Inactive"}
-                                  </p>
-                                </div>
-                                {/* Main Instructor */}
-                                <div className="flex items-center font-medium text-[#4E5150] text-b4"></div>
-                                {/* Open Semester */}
-                                <div className="flex justify-start items-center gap-1 text-[#4E5150] text-b4">
-                                  <p className="text-wrap font-semibold">
-                                    Start in: {collection.semester}/
-                                    {collection.year}
-                                  </p>
-                                  <div className="flex gap-1"></div>
-                                </div>
-
-                                <div className="flex w-full justify-end items-center   text-[#858585]   size-8 ">
-                                  <Icon
-                                    IconComponent={IconChevronRight}
-                                    className="size-4 stroke-[2px]"
-                                  />
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
+                  {ploCollection.map((plo, index) => (
+                    <div
+                      onClick={() => {
+                        setCollection({ ...plo });
+                        setOpenModal(true);
+                      }}
+                      className=" text-[14px] bg-white cursor-pointer first:mt-0 rounded-md hover:bg-[#f8f8f8] flex items-center justify-between w-full py-3 px-7"
+                      key={index}
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                      }}
+                    >
+                      <p className="w-full font-medium">{plo.name}</p>
+                      <div className="flex w-full justify-end items-center text-[#858585] size-8 ">
+                        <Icon
+                          IconComponent={IconChevronRight}
+                          className="size-4 stroke-[2px]"
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )
             ) : (

@@ -1,57 +1,23 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import maintenace from "@/assets/image/maintenance.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import { ROLE } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading/Loading";
-import { RadarChart } from "@mantine/charts";
-import { Accordion, Button, Table, Tabs } from "@mantine/core";
+import { Accordion, Button, Tabs } from "@mantine/core";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import SpiderChart from "@/components/Chart/SpiderChart";
-import { IModelPLO } from "@/models/ModelPLO";
-import { getOnePLO } from "@/services/plo/plo.service";
 import Icon from "@/components/Icon";
 import { SearchInput } from "@/components/SearchInput";
 
 export default function StdOverallPLO() {
-  const [params, setParams] = useSearchParams();
-  const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading.loading);
   const [activeTab, setActiveTab] = useState<string | null>("curriculum");
-  const [departmentPLO, setDepartmentPLO] = useState<Partial<IModelPLO>>({});
   const [activeSection, setActiveSection] = useState<string | null>();
   const user = useAppSelector((state) => state.user);
-  const curriculum = useAppSelector((state) => state.faculty.curriculum);
-  const term = useAppSelector((state) =>
-    state.academicYear.find(
-      (term) =>
-        term.year == parseInt(params.get("year") || "") &&
-        term.semester == parseInt(params.get("semester") || "")
-    )
-  );
   const height = window.innerWidth >= 1800 ? 650 : 450;
-
-  const fetchPLO = async () => {
-    const resPloCol = await getOnePLO({
-      year: term?.year,
-      semester: term?.semester,
-    });
-    if (resPloCol) {
-      setDepartmentPLO(resPloCol);
-    }
-  };
-
   const dispatch = useAppDispatch();
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
-  const [test, setTest] = useState(true);
-
-  useEffect(() => {
-    if (user) {
-      fetchPLO();
-    }
-  }, [user, term]);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -123,17 +89,17 @@ export default function StdOverallPLO() {
         <Loading />
       ) : (
         <>
-          {departmentPLO && (
+          {/* {departmentPLO && (
             <DrawerPLOdes
               opened={openDrawerPLOdes}
               onClose={() => setOpenDrawerPLOdes(false)}
               data={departmentPLO}
               curriculum={user.curriculums?.[0] ?? ""}
             />
-          )}
+          )} */}
 
           <div className="flex flex-row -mt-2 items-center justify-between">
-            {test ? (
+            {true ? (
               <div className="flex flex-col">
                 <p className="text-secondary text-[18px] font-semibold ">
                   Hi there, {user.firstNameEN}

@@ -95,9 +95,7 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
       courses.map((course) => {
         const uniqueTopic = getUniqueTopicsWithTQF(course.sections!);
         let ploRequire = course.ploRequire?.find(
-          (item) =>
-            item.curriculum == selectedCurriculum &&
-            curriculumPLOs.find(({ id }) => id == item.plo)
+          (item) => item.curriculum == selectedCurriculum
         );
         let tempPlo = curriculumPLOs.find(({ id }) => id == ploRequire?.plo)!;
         let ploItem: any = course.TQF3
@@ -117,9 +115,7 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
         if (course.type == COURSE_TYPE.SEL_TOPIC.en) {
           uniqueTopic.map((sec) => {
             ploRequire = sec.ploRequire?.find(
-              (item) =>
-                item.curriculum == selectedCurriculum &&
-                curriculumPLOs.find(({ id }) => id == item.plo)
+              (item) => item.curriculum == selectedCurriculum
             );
             tempPlo = curriculumPLOs.find(({ id }) => id == ploRequire?.plo)!;
             ploItem = ploRequire?.list.map((plo) => {
@@ -217,14 +213,9 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
   };
 
   const fetchPLO = async () => {
-    const resPloCol = await getPLOs({
-      curriculum: [selectedCurriculum],
-    });
+    const resPloCol = await getPLOs({ curriculum: [selectedCurriculum] });
     if (resPloCol) {
-      setCurriculumPLOs(
-        resPloCol.plos.find((item: any) => item.code == selectedCurriculum)
-          .collections
-      );
+      setCurriculumPLOs(resPloCol.plos);
     }
   };
 
@@ -390,7 +381,9 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
                       {selectedCurriculum} Curriculum
                     </p>
                     <p className="text-sm text-gray-600">
-                      {selectedCourse.length}  {selectedCourse.length > 1 ? "Courses" : "Course"} Selected
+                      {selectedCourse.length}{" "}
+                      {selectedCourse.length > 1 ? "Courses" : "Course"}{" "}
+                      Selected
                     </p>
                   </div>
 
@@ -427,10 +420,9 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
                               className="bg-gray-100 rounded-md p-4 mb-2"
                             >
                               <p className="text-sm font-semibold text-default">
-                              Semester {course.semester}/{course.year}
+                                Semester {course.semester}/{course.year}
                               </p>
                               <p className="text-xs text-gray-600">
-                               
                                 Section:{" "}
                                 {course.sections?.length
                                   ? course.sections?.join(", ")
