@@ -390,7 +390,7 @@ export default function AdminDashboardPLO() {
                 >
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
-                      <span className="pr-10">Academic View </span>
+                      <span className="pr-10">Curriculum View </span>
                     </div>{" "}
                   </div>
                 </Menu.Item>

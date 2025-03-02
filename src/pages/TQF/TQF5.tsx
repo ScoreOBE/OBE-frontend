@@ -581,14 +581,14 @@ export default function TQF5() {
               ))}
             </Tabs.List>
             <div className="flex justify-between pt-4 items-center ">
-              <div className=" text-secondary mb-2 overflow-y-auto font-semibold min-h-14 acerSwift:max-macair133:!min-h-12 whitespace-break-spaces acerSwift:max-macair133:!text-b2 ">
+              <div className=" text-secondary mb-4 -mt-1 overflow-y-auto items-center justify-normal flex font-semibold min-h-14 acerSwift:max-macair133:!min-h-12 whitespace-break-spaces acerSwift:max-macair133:!text-b2 ">
                 {getValueEnumByKey(PartTopicTQF5, tqf5Part!)}
               </div>
               <div className="flex gap-2 ">
                 <Button
                   onClick={() => setOpenModalExportTQF5(true)}
                   color="#24b9a5"
-                  className="px-4 min-w-max mr-2"
+                  className="px-4 min-w-max mr-2 -mt-4"
                 >
                   <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                     <Icon

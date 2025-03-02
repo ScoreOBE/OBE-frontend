@@ -199,13 +199,13 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
 
   const contentPart1TQF5 = (cur: IModelTQF5Part1) => {
     return (
-      <div className="flex w-full flex-col text-[15px] acerSwift:max-macair133:text-b1 max-h-full gap-3 text-default px-3">
+      <div className="flex w-full flex-col text-[15px] acerSwift:max-macair133:text-b1 max-h-full gap-3 text-default px-1">
         <div className="flex text-secondary gap-4 w-full border-b-[1px] border-[#e6e6e6] pb-6 flex-col">
-          <div className="flex text-secondary items-center justify-between flex-row gap-1 text-[15px] acerSwift:max-macair133:!text-b3">
+          <div className="flex text-secondary mt-1 items-center justify-between flex-row gap-1 text-[15px] acerSwift:max-macair133:!text-b3">
             <p className="font-bold">
               Student grading<span className="ml-1 text-red-500">*</span>
             </p>
-            <div className="flex gap-2">
+            <div className="flex gap-4">
               <Button
                 variant="outline"
                 leftSection={
