@@ -14,25 +14,21 @@ import {
   Kbd,
 } from "@mantine/core";
 import Icon from "../Icon";
-import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import IconCircleFilled from "@/assets/icons/circleFilled.svg?react";
-import IconHome from "@/assets/icons/home.svg?react";
 import IconGripVertical from "@/assets/icons/verticalGrip.svg?react";
 import IconArrowRight from "@/assets/icons/arrowRight.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import IconSO from "@/assets/icons/SO.svg?react";
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { sortData } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { useListState } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import { isEmpty, isEqual } from "lodash";
-import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
+import { isEmpty } from "lodash";
+import { NOTI_TYPE } from "@/helpers/constants/enum";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { validateTextInput } from "@/helpers/functions/validation";
 import { checkCanCreatePLO, createPLO } from "@/services/plo/plo.service";
-import { IModelCurriculum } from "@/models/ModelFaculty";
 import { setLoadingOverlay } from "@/store/loading";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -53,23 +49,18 @@ export default function ModalAddPLOCollection({
 }: Props) {
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const user = useAppSelector((state) => state.user);
-  const academicYear = useAppSelector((state) => state.academicYear[0]);
-  const curriculum = useAppSelector((state) => state.faculty.curriculum);
   const dispatch = useAppDispatch();
   const [active, setActive] = useState(0);
   const [state, handlers] = useListState<Partial<IModelPLONo>>([]);
   const [reorder, setReorder] = useState(false);
   const [firstInput, setFirstInput] = useState(false);
-  const [openModalSelectSemester, setOpenModalSelectSemester] = useState(false);
-  const [semesterOption, setSemesterOption] = useState<any[]>([]);
-  const [selectSemester, setSelectSemester] = useState("");
   const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
       curriculum: [],
-      data: [{ descTH: "", descEN: "" }] as Partial<IModelPLONo[]>,
+      data: [] as Partial<IModelPLONo[]>,
     } as Partial<IModelPLO>,
     validate: {
       name: (value) =>
@@ -119,7 +110,7 @@ export default function ModalAddPLOCollection({
         formOnePLONo.clearErrors();
         break;
       case 1:
-        isValid = form.getValues().data?.length! > 1;
+        isValid = form.getValues().data?.length! > 0;
         if (!isValid) {
           setFirstInput(true);
           showNotifications(
@@ -147,7 +138,6 @@ export default function ModalAddPLOCollection({
       setActive((cur) => (cur < 3 ? cur + 1 : cur));
       setFirstInput(true);
       if (active == 3) {
-        setOpenModalSelectSemester(true);
         onClose();
       }
     }
@@ -155,8 +145,6 @@ export default function ModalAddPLOCollection({
   };
   const prevStep = () => setActive((cur) => (cur > 0 ? cur - 1 : cur));
   const closeModal = () => {
-    setOpenModalSelectSemester(false);
-    setSelectSemester("");
     setActive(0);
     handlers.setState([]);
     form.reset();
@@ -171,24 +159,8 @@ export default function ModalAddPLOCollection({
         form.setValues(collection);
         form.setFieldValue("name", "");
         handlers.setState(collection.data!);
-      }
-      if (academicYear) {
-        const option: any[] = [];
-        for (let i = 0; i < 3; i++) {
-          let semester =
-            (i > 0 ? option[i - 1].semester : academicYear.semester) + 1;
-          let year = i > 0 ? option[i - 1].year : academicYear.year;
-          if (semester > 3) {
-            year += Math.floor((semester - 1) / 3);
-            semester = semester % 3 || 3;
-          }
-          option.push({
-            label: `${semester}/${year}`,
-            semester,
-            year,
-          });
-          setSemesterOption(option);
-        }
+      } else {
+        formOnePLONo.reset();
       }
     }
   }, [opened]);
@@ -209,7 +181,7 @@ export default function ModalAddPLOCollection({
     if (!formOnePLONo.validate().hasErrors) {
       form.insertListItem("data", formOnePLONo.getValues());
       formOnePLONo.reset();
-      const ploNo = form.getValues().data?.length!;
+      const ploNo = form.getValues().data?.length! + 1;
       formOnePLONo.setFieldValue("no", ploNo);
       handlers.setState(form.getValues().data!);
       showNotifications(
@@ -230,28 +202,10 @@ export default function ModalAddPLOCollection({
     }
   );
 
-  const setCurriculumCode = (checked: boolean, value?: string[]) => {
-    let curriculumCode = form.getValues().curriculum;
-    if (value) {
-      curriculumCode = value.sort();
-    } else if (checked) {
-      curriculumCode = curriculum.map(({ code }) => code);
-    } else {
-      curriculumCode = [];
-    }
-    form.setFieldValue("curriculum", curriculumCode);
-  };
-
   const addPLOCollection = async () => {
-    const term = semesterOption.find(
-      (option) => option.label == selectSemester
-    );
     const payload = {
       ...form.getValues(),
       facultyCode: user.facultyCode,
-      semester: term.semester,
-      year: term.year,
-      isActive: false,
       data: form.getValues().data,
     };
     const res = await createPLO(payload);
@@ -269,87 +223,8 @@ export default function ModalAddPLOCollection({
   return (
     <>
       <Modal
-        title="Select semester"
-        closeOnClickOutside={false}
-        opened={openModalSelectSemester}
-        onClose={closeModal}
-        transitionProps={{ transition: "pop" }}
-        size="39vw"
-        centered
-        classNames={{
-          content: "flex flex-col overflow-hidden pb-2  max-h-full h-fit",
-          body: "flex flex-col overflow-hidden max-h-full h-fit",
-        }}
-      >
-        <div className="flex flex-col gap-5 pt-1 w-full">
-          <Alert
-            radius="md"
-            variant="light"
-            color="blue"
-            classNames={{
-              body: " flex justify-center",
-            }}
-            title={
-              <div className="flex items-center gap-2">
-                <Icon IconComponent={IconInfo2} />
-                <p>
-                  Select semester you would like to begin using the PLO
-                  Collection.
-                </p>
-              </div>
-            }
-          ></Alert>
-          <Radio.Group
-            value={selectSemester}
-            onChange={(event) => setSelectSemester(event)}
-          >
-            <Group className="overflow-y-hidden max-h-[200px]">
-              <div className="flex p-1 w-full h-full flex-col overflow-y-auto gap-3">
-                {semesterOption.map((e, index) => (
-                  <RadioCard
-                    key={index}
-                    value={e.label}
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                    }}
-                    className="p-3 flex border-none h-full rounded-md w-full"
-                  >
-                    <Group>
-                      <Radio.Indicator />
-                      <div className="text-b2 font-medium ">{e.label}</div>
-                    </Group>
-                  </RadioCard>
-                ))}
-              </div>
-            </Group>
-          </Radio.Group>
-
-          <div className="flex  justify-end w-full">
-            <Group className="flex w-full h-fit items-end justify-between">
-              <div>
-                <Button
-                  variant="subtle"
-                  onClick={() => {
-                    onOpen();
-                    setOpenModalSelectSemester(false);
-                  }}
-                >
-                  Back
-                </Button>
-              </div>
-              <Button
-                disabled={isEmpty(selectSemester)}
-                onClick={addPLOCollection}
-              >
-                Done
-              </Button>
-            </Group>
-          </div>
-        </div>
-      </Modal>
-      <Modal
         opened={opened}
-        onClose={openModalSelectSemester ? onClose : closeModal}
+        onClose={closeModal}
         closeOnClickOutside={false}
         title="Add PLO Collection"
         size={
@@ -485,7 +360,7 @@ export default function ModalAddPLOCollection({
                   {...formOnePLONo.getInputProps("descEN")}
                 />
               </div>
-              {form.getValues().data?.length! > 1 && (
+              {form.getValues().data?.length! > 0 && (
                 <div
                   className="flex flex-col bg-white border-secondary border-[1px] macair133:h-full sm:h-[320px] ipad11:h-[360px] rounded-md w-[50%] h-full"
                   style={{
@@ -600,98 +475,8 @@ export default function ModalAddPLOCollection({
           </Stepper.Step>
           <Stepper.Step
             allowStepSelect={false}
-            label="Map Curriculum"
-            description="STEP 3"
-          >
-            <div className="mt-3 flex flex-col">
-              <Alert
-                radius="md"
-                icon={<Icon IconComponent={IconInfo2} />}
-                variant="light"
-                color="blue"
-                className="mb-5"
-                classNames={{
-                  icon: "size-6",
-                  body: " flex justify-center",
-                }}
-                title={
-                  <p>
-                    Select the curriculum you would like to use for the PLO
-                    collection.
-                  </p>
-                }
-              ></Alert>
-              <div
-                className="w-full  flex flex-col bg-white border-secondary border-[1px] rounded-md overflow-clip"
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-              >
-                <div className="bg-bgTableHeader flex items-center justify-between rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
-                  <div className="flex items-center gap-2">
-                    <Icon
-                      IconComponent={IconHome}
-                      className="text-secondary size-5"
-                    />
-                    <span>List of Curriculums</span>
-                  </div>
-                  <p>
-                    {curriculum?.length} Curriculum
-                    {curriculum?.length > 1 ? "s" : ""}
-                  </p>
-                </div>
-                <div className="flex flex-col w-full macair133:h-[290px] h-[200px] ipad11:h-[220px] sm:h-[170px] px-3 overflow-y-auto">
-                  <Checkbox
-                    size="xs"
-                    className="p-3 py-5 w-full last:border-none border-b-[1px]"
-                    classNames={{
-                      label: "ml-2 font-medium text-[13px]",
-                      input: "cursor-pointer",
-                    }}
-                    label="All"
-                    checked={isEqual(
-                      form.getValues().curriculum,
-                      curriculum?.map(({ code }) => code)
-                    )}
-                    onChange={(event) => {
-                      setCurriculumCode(event.target.checked);
-                    }}
-                  />
-                  <Checkbox.Group
-                    value={form.getValues().curriculum}
-                    onChange={(event) => {
-                      setCurriculumCode(false, event);
-                    }}
-                  >
-                    <Group className="gap-0">
-                      {curriculum?.map((cur, index) => (
-                        <Checkbox
-                          size="xs"
-                          key={index}
-                          value={cur.code}
-                          className="p-3 py-4 w-full last:border-none border-b-[1px]"
-                          classNames={{
-                            label: "ml-2 text-[13px] font-medium",
-                            input: "cursor-pointer",
-                          }}
-                          label={`${cur.nameEN} [${cur.code}]`}
-                        />
-                      ))}
-                    </Group>
-                  </Checkbox.Group>
-                </div>
-              </div>
-              {!firstInput && (
-                <div className="text-[#FA5252] text-[12px] mt-2">
-                  {form.validateField("curriculum").error}
-                </div>
-              )}
-            </div>
-          </Stepper.Step>
-          <Stepper.Step
-            allowStepSelect={false}
             label="Review"
-            description="STEP 4"
+            description="STEP 3"
           >
             <div className="flex gap-5 mt-3 sm:max-h-[280px] ipad11:max-h-[340px] macair133:max-h-[440px]">
               <div
@@ -703,10 +488,6 @@ export default function ModalAddPLOCollection({
                 <div className="bg-bgTableHeader flex flex-col items-start justify-start rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
                   <div className="flex justify-between w-full">
                     <p>PLO Collection Name - {form.getValues().name}</p>
-                    <p>
-                      {form.getValues().curriculum?.length} Curriculum
-                      {form.getValues().curriculum?.length! > 1 ? "s" : ""}
-                    </p>
                   </div>
 
                   <div className="text-b4 flex gap-1">
@@ -789,11 +570,7 @@ export default function ModalAddPLOCollection({
                   className="w-fit border  rounded-md "
                   position="top"
                 >
-                  <Button
-                    variant="subtle"
-                    disabled={form.getValues().data?.length === 0}
-                    onClick={onClickAddAnother}
-                  >
+                  <Button variant="subtle" onClick={onClickAddAnother}>
                     Add more PLO
                   </Button>
                 </Tooltip>
@@ -801,11 +578,9 @@ export default function ModalAddPLOCollection({
 
               <Button
                 loading={loading}
-                onClick={() => {
-                  nextStep();
-                }}
+                onClick={active == 2 ? addPLOCollection : nextStep}
                 rightSection={
-                  active != 4 && (
+                  active != 2 && (
                     <Icon
                       IconComponent={IconArrowRight}
                       className=" stroke-[2px] size-5"
@@ -813,7 +588,7 @@ export default function ModalAddPLOCollection({
                   )
                 }
               >
-                {active == 3 ? "Select semester" : "Next step"}
+                {active == 2 ? "Done" : "Next step"}
               </Button>
             </div>
           </Group>

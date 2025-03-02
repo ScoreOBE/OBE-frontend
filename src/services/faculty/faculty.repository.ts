@@ -9,14 +9,10 @@ export const facultyController = (configService = {}) => {
     getFaculty: async (facultyCode: string) => {
       return service.get(`${prefix}`, { facultyCode });
     },
-    createCurriculum: async (id: string, params: IModelCurriculum) => {
+    createCurriculum: async (id: string, params: any) => {
       return service.post(`${prefix}/${id}`, { ...params });
     },
-    updateCurriculum: async (
-      id: string,
-      code: string,
-      params: IModelCurriculum
-    ) => {
+    updateCurriculum: async (id: string, code: string, params: any) => {
       return service.put(`${prefix}/${id}/${code}`, { ...params });
     },
     deleteCurriculum: async (id: string, code: string) => {

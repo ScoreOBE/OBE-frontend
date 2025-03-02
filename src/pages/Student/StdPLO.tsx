@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import { ROLE } from "@/helpers/constants/enum";
@@ -14,7 +14,6 @@ import SpiderChart from "@/components/Chart/SpiderChart";
 
 export default function StdPLO() {
   const { courseNo } = useParams();
-  const [params, setParams] = useSearchParams();
   const loading = useAppSelector((state) => state.loading.loading);
   const course = useAppSelector((state) =>
     state.enrollCourse.courses.find((c) => c.courseNo == courseNo)
@@ -79,29 +78,28 @@ export default function StdPLO() {
                   classNames={{ title: "acerSwift:max-macair133:!text-b3" }}
                 >
                   <p className="font-normal -mt-1 leading-[22px] text-[13px]">
-                          <span className="font-bold">
-                            {" "}
-                            Program Learning Outcomes (PLO)
-                          </span>{" "}
-                          defines the overall knowledge, skills, and abilities
-                          that students should develop by the time they{" "}
-                          <span className="font-bold">
-                            {" "}
-                            complete a degree program
-                          </span>
-                          . It's like the{" "}
-                          <span className="font-bold"> big goals</span> of an
-                          entire study program, ensuring that graduates are
-                          well-prepared for their careers or further studies.{" "}
-                          <br /> Unlike{" "}
-                          <span className="font-bold">
-                            {" "}
-                            Course Learning Outcomes (CLOs)
-                          </span>
-                          , which focus on individual courses, PLOs cover
-                          multiple courses and integrate various aspects of
-                          learning across the program
-                        </p>
+                    <span className="font-bold">
+                      {" "}
+                      Program Learning Outcomes (PLO)
+                    </span>{" "}
+                    defines the overall knowledge, skills, and abilities that
+                    students should develop by the time they{" "}
+                    <span className="font-bold">
+                      {" "}
+                      complete a degree program
+                    </span>
+                    . It's like the{" "}
+                    <span className="font-bold"> big goals</span> of an entire
+                    study program, ensuring that graduates are well-prepared for
+                    their careers or further studies. <br /> Unlike{" "}
+                    <span className="font-bold">
+                      {" "}
+                      Course Learning Outcomes (CLOs)
+                    </span>
+                    , which focus on individual courses, PLOs cover multiple
+                    courses and integrate various aspects of learning across the
+                    program
+                  </p>
                 </Alert>
                 <div
                   className="flex flex-col justify-center items-center border rounded-lg  py-8"

@@ -1,5 +1,5 @@
 import { RadarChart } from "@mantine/charts";
-import { Radar, Tooltip, Legend } from "recharts";
+import { Tooltip } from "recharts";
 
 type Props = {
   data: object[];

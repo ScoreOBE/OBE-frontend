@@ -77,9 +77,6 @@ export default function MapPLO({ ploName = "" }: Props) {
   const [state, handlers] = useListState(ploList.data || []);
   const [isMapPLO, setIsMapPLO] = useState(false);
   const [totalCourse, setTotalCourse] = useState<number>(0);
-  const isFirstSemester =
-    ploList.semester === academicYear?.semester &&
-    ploList.year === academicYear?.year;
   const [courseManagement, setCourseManagement] = useState<
     Partial<IModelCourseManagement>[]
   >([]);
@@ -135,14 +132,6 @@ export default function MapPLO({ ploName = "" }: Props) {
   }, [ploName]);
 
   useEffect(() => {
-    if (ploList.curriculum) {
-      setSelectedCurriculum(
-        user.role == ROLE.ADMIN ? ploList.curriculum[0] : user.curriculums![0]
-      );
-    }
-  }, [ploList]);
-
-  useEffect(() => {
     if (selectedCurriculum) {
       const payloadCourse = {
         ...new CourseManagementSearchDTO(),
@@ -191,6 +180,13 @@ export default function MapPLO({ ploName = "" }: Props) {
     const res = await getOnePLO({ name: ploName });
     if (res) {
       setPloList(res);
+      if (res.curriculum?.length) {
+        setSelectedCurriculum(
+          user.role == ROLE.ADMIN ? res.curriculum[0] : user.curriculums![0]
+        );
+      } else {
+        setSelectedCurriculum(null);
+      }
     }
   };
 
@@ -847,19 +843,12 @@ export default function MapPLO({ ploName = "" }: Props) {
                     <div className="text-default text-[13px] p-2 flex flex-col gap-2">
                       <div className="flex gap-2">
                         <p className="text-secondary font-semibold">
-                          Active in:
-                        </p>
-                        <p className=" font-medium">
-                          {ploList.semester}/{ploList.year} -{" "}
-                          {ploList.isActive ? "Currently" : ""}
-                        </p>
-                      </div>
-                      <div className="flex gap-2">
-                        <p className="text-secondary font-semibold">
                           Curriculum:
                         </p>
                         <p className="font-medium flex flex-col gap-1 ">
-                          {ploList.curriculum?.join(", ")}
+                          {ploList.curriculum?.length
+                            ? ploList.curriculum?.join(", ")
+                            : "Not Map"}
                         </p>
                       </div>
                     </div>
@@ -911,7 +900,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                       {ploList.data?.length} PLOs
                     </div>
                   </div>
-                  {isFirstSemester && (
+                  {ploList.canEdit && (
                     <Button
                       leftSection={
                         <Icon
@@ -972,7 +961,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                                   </div>
 
                                   <div className="flex gap-1 items-center">
-                                    {isFirstSemester && (
+                                    {ploList.canEdit && (
                                       <>
                                         <div
                                           className="flex items-center justify-center border-[#F39D4E] size-8 rounded-full  hover:bg-[#F39D4E]/10  cursor-pointer"
