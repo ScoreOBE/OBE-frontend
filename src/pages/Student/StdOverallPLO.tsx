@@ -1,22 +1,27 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
+import Icon from "@/components/Icon";
 import IconPLO from "@/assets/icons/PLOdescription.svg?react";
 import { ROLE } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading/Loading";
-import { Accordion, Button, Tabs } from "@mantine/core";
+import { Accordion, Button, Tabs, TextInput } from "@mantine/core";
 import DrawerPLOdes from "@/components/DrawerPLO";
 import SpiderChart from "@/components/Chart/SpiderChart";
-import Icon from "@/components/Icon";
-import { SearchInput } from "@/components/SearchInput";
+import { TbSearch } from "react-icons/tb";
+import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
+import { setLoading } from "@/store/loading";
+import { getEnrollCourse } from "@/services/student/student.service";
 
 export default function StdOverallPLO() {
   const loading = useAppSelector((state) => state.loading.loading);
-  const [activeTab, setActiveTab] = useState<string | null>("curriculum");
-  const [activeSection, setActiveSection] = useState<string | null>();
+  // const [activeTab, setActiveTab] = useState<string | null>("curriculum");
+  // const [activeSection, setActiveSection] = useState<string | null>();
   const user = useAppSelector((state) => state.user);
   const height = window.innerWidth >= 1800 ? 650 : 450;
   const dispatch = useAppDispatch();
+  const [courses, setCourses] = useState<IModelEnrollCourse[]>([]);
+  const [searchValue, setSearchValue] = useState<string>("");
   const [openDrawerPLOdes, setOpenDrawerPLOdes] = useState(false);
 
   useEffect(() => {
@@ -26,119 +31,83 @@ export default function StdOverallPLO() {
     localStorage.setItem("dashboard", ROLE.STUDENT);
   }, []);
 
-  const data = [
-    {
-      product: "PLO 1",
-      AveragePLO: 2.7,
-    },
-    {
-      product: "PLO 2",
-      AveragePLO: 3.2,
-    },
-    {
-      product: "PLO 3",
-      AveragePLO: 3.5,
-    },
-    {
-      product: "PLO 4",
-      AveragePLO: 4.0,
-    },
-    {
-      product: "PLO 5",
-      AveragePLO: 2.8,
-    },
-    {
-      product: "PLO 6",
-      AveragePLO: 2.0,
-    },
-    {
-      product: "PLO 7",
-      AveragePLO: 3,
-    },
-  ];
-  const searchCourse = async (searchValue: string, reset?: boolean) => {};
-  type Course = {
-    id: number;
-    code: string;
-    name: string;
-    data: any;
+  useEffect(() => {
+    if (!courses.length) {
+      fetchCourse();
+    }
+  }, [user]);
+
+  const fetchCourse = async () => {
+    if (!user.termsOfService) return;
+    dispatch(setLoading(true));
+    const res: any = await getEnrollCourse({ all: true });
+    if (res) {
+      setCourses(res.courses);
+    }
+    dispatch(setLoading(false));
   };
-  const courses: Course[] = [
-    { id: 1, code: "261101", name: "Introduction to Programming", data: [] },
-    { id: 2, code: "261102", name: "Object-Oriented Programming", data: [] },
-    { id: 3, code: "261103", name: "Data Structures", data: [] },
-    { id: 4, code: "261104", name: "Algorithms", data: [] },
-    { id: 5, code: "261105", name: "Database Systems", data: [] },
-    { id: 6, code: "261106", name: "Operating Systems", data: [] },
-    { id: 7, code: "261107", name: "Computer Networks", data: [] },
-    { id: 8, code: "261108", name: "Software Engineering", data: [] },
-    { id: 9, code: "261109", name: "Web Development", data: [] },
-    {
-      id: 10,
-      code: "261110",
-      name: "Mobile Application Development",
-      data: [],
-    },
-    { id: 11, code: "261111", name: "Machine Learning", data: [] },
-    { id: 12, code: "261112", name: "Artificial Intelligence", data: [] },
-  ];
 
   return (
-    <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3">
-      {loading ? (
-        <Loading />
-      ) : (
-        <>
-          {/* {departmentPLO && (
-            <DrawerPLOdes
-              opened={openDrawerPLOdes}
-              onClose={() => setOpenDrawerPLOdes(false)}
-              data={departmentPLO}
-              curriculum={user.curriculums?.[0] ?? ""}
-            />
-          )} */}
-
-          <div className="flex flex-row -mt-2 items-center justify-between">
-            {true ? (
-              <div className="flex flex-col">
-                <p className="text-secondary text-[18px] font-semibold ">
-                  Hi there, {user.firstNameEN}
-                </p>
-                <p className="text-[#575757] text-[14px]">
-                  You have completed{" "}
-                  <span className="text-[#1f69f3] font-semibold">
-                    12 Courses{" "}
-                  </span>
-                  In CPE curriculum
-                </p>
-              </div>
-            ) : (
-              <></>
+    <div className=" flex flex-col h-full w-full  overflow-hidden">
+      <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3">
+        {loading ? (
+          <Loading />
+        ) : (
+          <>
+            {!!courses.length && (
+              <DrawerPLOdes
+                opened={openDrawerPLOdes}
+                onClose={() => setOpenDrawerPLOdes(false)}
+                data={courses[0].plo}
+              />
             )}
-            <div className="flex gap-3">
-              {activeTab === "course" && (
-                <SearchInput
-                  onSearch={searchCourse}
-                  placeholder="Course No / Course Name"
-                />
-              )}
-              <Button
-                color="#e9e9e9"
-                className="text-center px-4"
-                onClick={() => setOpenDrawerPLOdes(true)}
-              >
-                <div className="flex gap-2 acerSwift:max-macair133:!text-b5 !text-default">
-                  <Icon
-                    IconComponent={IconPLO}
-                    className="acerSwift:max-macair133:!size-3"
-                  />
-                  PLO Description
-                </div>
-              </Button>
-            </div>
-          </div>
 
-          <Tabs
+            <div className="flex flex-row -mt-2 items-center justify-between">
+              {!!courses.length ? (
+                <div className="flex flex-col">
+                  <p className="text-secondary text-[18px] font-semibold ">
+                    Hi there, {user.firstNameEN}
+                  </p>
+                  <p className="text-[#575757] text-[14px]">
+                    You have completed{" "}
+                    <span className="text-[#1f69f3] font-semibold">
+                      12 Courses{" "}
+                    </span>
+                    In CPE curriculum
+                  </p>
+                </div>
+              ) : (
+                <></>
+              )}
+              <div className="flex gap-3">
+                {/* {activeTab === "course" && ( */}
+                <TextInput
+                  leftSection={<TbSearch />}
+                  placeholder="Course No / Course Name / Course Topic"
+                  size="xs"
+                  value={searchValue}
+                  onChange={(event: any) =>
+                    setSearchValue(event.currentTarget.value)
+                  }
+                />
+                {/* )} */}
+                <Button
+                  color="#e9e9e9"
+                  className="text-center px-4"
+                  onClick={() => setOpenDrawerPLOdes(true)}
+                >
+                  <div className="flex gap-2 acerSwift:max-macair133:!text-b5 !text-default">
+                    <Icon
+                      IconComponent={IconPLO}
+                      className="acerSwift:max-macair133:!size-3"
+                    />
+                    PLO Description
+                  </div>
+                </Button>
+              </div>
+            </div>
+
+            {/* <Tabs
             classNames={{
               root: "overflow-hidden -mt-0.5 flex flex-col h-full max-h-full mb-12",
             }}
@@ -148,8 +117,8 @@ export default function StdOverallPLO() {
             <Tabs.List className="mb-2">
               <Tabs.Tab value="curriculum">Curriculum</Tabs.Tab>
               <Tabs.Tab value="course">Course</Tabs.Tab>
-            </Tabs.List>
-            <Tabs.Panel className="flex h-full max-h-full " value="curriculum">
+            </Tabs.List> */}
+            {/* <Tabs.Panel className="flex h-full max-h-full " value="curriculum">
               <div className="flex py-6 items-between justify-center rounded-lg rounded-r-none mt-2 w-[62%] mb-12">
                 <div className="flex flex-col justify-between items-center h-full w-[90vw]">
                   <div className="flex flex-col">
@@ -214,11 +183,8 @@ export default function StdOverallPLO() {
                   ))}
                 </Accordion>
               </div>
-            </Tabs.Panel>
-            <Tabs.Panel
-              className="flex flex-col gap-1 overflow-y-auto "
-              value="course"
-            >
+            </Tabs.Panel> */}
+            <div className="flex flex-col gap-1 overflow-auto">
               <div className="grid grid-cols-2 acerSwift:grid-cols-3 samsungA24:grid-cols-4 gap-4 mt-2 h-full">
                 {courses.map((course) => (
                   <div
@@ -227,46 +193,29 @@ export default function StdOverallPLO() {
                   >
                     <div className="px-5 pt-4 flex justify-between">
                       <div>
-                        <p className="font-bold">{course.code}</p>
+                        <p className="font-bold">
+                          {course.courseNo} ({course.semester}/{course.year})
+                        </p>
                         <p className="text-b4 text-[#4b5563] font-medium">
-                          {course.name}
+                          {course.courseName}
                         </p>
                       </div>
                     </div>
-
-                    <SpiderChart data={data} height={350} />
+                    {course.plos.length ? (
+                      <SpiderChart data={course.plos} height={350} />
+                    ) : (
+                      <div className="flex h-full justify-center items-center">
+                        No Data
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
-            </Tabs.Panel>
-          </Tabs>
-          {/* <div className=" flex flex-col h-full w-full  overflow-hidden">
-            <div className="flex flex-row px-6 pt-3   items-center justify-between">
-              <div className="flex flex-col">
-                <p className="text-secondary text-[18px] font-semibold "></p>
-              </div>
             </div>
-
-            <div className="flex items-center  !h-full !w-full justify-between px-16">
-              <div className="h-full  translate-y-2  justify-center flex flex-col">
-                <p className="text-secondary text-[21px] font-semibold">
-                  Overall PLO is coming soon to{" "}
-                  <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                    ScoreOBE +{" "}
-                  </span>{" "}
-                </p>
-                <br />
-                <p className=" -mt-4 mb-6 text-b2 break-words font-medium leading-relaxed">
-                  Overall PLO will be available for students February 2025.
-                </p>
-              </div>
-              <div className="h-full  w-[25vw] justify-center flex flex-col">
-                <img src={maintenace} alt="notFound"></img>
-              </div>
-            </div>
-          </div> */}
-        </>
-      )}
+            {/* </Tabs> */}
+          </>
+        )}
+      </div>
     </div>
   );
 }

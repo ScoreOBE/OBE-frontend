@@ -5,6 +5,8 @@ import { IModelUser } from "./ModelUser";
 
 export interface IModelEnrollCourse {
   id: string;
+  year: number;
+  semester: number;
   courseNo: string;
   courseName: string;
   type: string;
