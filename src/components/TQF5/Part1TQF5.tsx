@@ -150,8 +150,8 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                       };
                     }),
                   gradingCriteria: cloneDeep(temp.gradingCriteria),
-                  abnormalScoreFactor: temp.abnormalScoreFactor,
-                  reviewingSLO: temp.reviewingSLO,
+                  abnormalScoreFactor: temp.abnormalScoreFactor ?? "",
+                  reviewingSLO: temp.reviewingSLO ?? "",
                 };
               }),
               updatedAt: tqf5.part1.updatedAt,
@@ -161,38 +161,45 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
       setCurIndex(
         !selectCurriculum
           ? 0
-          : tqf5.curriculum!.findIndex((cur) => cur == selectCurriculum)
+          : form
+              .getValues()
+              .list.findIndex(
+                ({ curriculum }) => curriculum == selectCurriculum
+              )
       );
     } else {
       form.setValues(initialTqf5Part1(course!, tqf5.topic, tqf5.curriculum!));
       setCurIndex(
         !selectCurriculum
           ? 0
-          : tqf5.curriculum!.findIndex((cur) => cur == selectCurriculum)
+          : form
+              .getValues()
+              .list.findIndex(
+                ({ curriculum }) => curriculum == selectCurriculum
+              )
       );
     }
   }, [tqf5.ploRequired, selectCurriculum]);
 
-  const normalizeData = (data: any) => {
-    if (!data) return data;
-    return JSON.parse(JSON.stringify(data), (_, value) =>
-      typeof value === "string" && !isNaN(Number(value)) ? Number(value) : value
-    );
-  };
-
-  const checkPart1Status = (item: IModelTQF5Part1, index: number) => {
-    const current = normalizeData(item);
+  const checkPart1Status = (item: IModelTQF5Part1) => {
     return isEqual(
-      current,
-      initialTqf5Part1(course!, tqf5.topic, tqf5.curriculum!).list[index]
+      item,
+      initialTqf5Part1(course!, tqf5.topic, tqf5.curriculum!).list.find(
+        ({ curriculum }) => curriculum == selectCurriculum
+      )
     )
       ? "text-[#DEE2E6]"
-      : !isEqual(tqf5Original?.part1?.list[index], current)
+      : !isEqual(
+          tqf5Original?.part1?.list.find(
+            ({ curriculum }) => curriculum == selectCurriculum
+          ),
+          item
+        )
       ? "text-edit"
       : "text-[#24b9a5]";
   };
 
-  const contentPart1TQF5 = (cur: IModelTQF5Part1, index: number) => {
+  const contentPart1TQF5 = (cur: IModelTQF5Part1) => {
     return (
       <div className="flex w-full flex-col text-[15px] acerSwift:max-macair133:text-b1 max-h-full gap-3 text-default px-3">
         <div className="flex text-secondary gap-4 w-full border-b-[1px] border-[#e6e6e6] pb-6 flex-col">
@@ -422,7 +429,7 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                             input: "acerSwift:max-macair133:!text-b4",
                           }}
                           {...form.getInputProps(
-                            `list.${index}.gradingCriteria.${key}`
+                            `list.${curIndex}.gradingCriteria.${key}`
                           )}
                         />
                       )}
@@ -508,12 +515,12 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
               }}
             >
               <Tabs.List className="!bg-transparent items-center flex w-full gap-5">
-                {activeCurriculums.map((cur, index) => (
+                {activeCurriculums.map((cur) => (
                   <Tabs.Tab key={cur.curriculum} value={cur.curriculum!}>
                     <div className="flex items-center gap-2">
                       <Icon
                         IconComponent={IconCheck}
-                        className={checkPart1Status(cur, index)}
+                        className={checkPart1Status(cur)}
                       />
                       {cur.curriculum}
                     </div>
@@ -526,14 +533,14 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                     key={`${cur.curriculum || "no-curriculum"}-${index}`}
                     value={cur.curriculum || "no-curriculum"}
                   >
-                    {contentPart1TQF5(cur, index)}
+                    {contentPart1TQF5(cur)}
                   </Tabs.Panel>
                 ))}
               </div>
             </Tabs>
           </div>
         ) : (
-          contentPart1TQF5(form.getValues().list[0], 0)
+          contentPart1TQF5(form.getValues().list[0])
         ))}
     </>
   );
