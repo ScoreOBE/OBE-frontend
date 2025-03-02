@@ -103,11 +103,7 @@ export default function AdminDashboardCLO() {
   }, [selectCurriculum, term]);
 
   const fetchPLO = async () => {
-    const resPloCol = await getOnePLO({
-      year: term.year,
-      semester: term.semester,
-      curriculum: selectCurriculum.code,
-    });
+    const resPloCol = await getOnePLO({ curriculum: selectCurriculum.code });
     if (resPloCol) {
       setCurriculumPLO(resPloCol);
     }

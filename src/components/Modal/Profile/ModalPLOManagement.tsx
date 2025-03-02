@@ -48,8 +48,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
   const [openModal, setOpenModal] = useState(false);
   const [isTH, setIsTH] = useState<string | null>("TH");
   const [selectPloDupli, setSelectPloDupli] = useState<Partial<IModelPLO>>({});
-  const [modalAddPLO, { open: openModalAddPLO, close: closeModalAddPLO }] =
-    useDisclosure(false);
+  const [openModalAddPLO, setOpenModalAddPLO] = useState(false);
   const [
     modalDuplicatePLO,
     { open: openModalDuplicatePLO, close: closeModalDuplicatePLO },
@@ -274,7 +273,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               variant="subtle"
               onClick={() => {
                 setSelectPloDupli({});
-                openModalAddPLO();
+                setOpenModalAddPLO(true);
                 closeModalDuplicatePLO();
               }}
             >
@@ -282,7 +281,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             </Button>
             <Button
               onClick={() => {
-                openModalAddPLO();
+                setOpenModalAddPLO(true);
                 closeModalDuplicatePLO();
               }}
               disabled={isEmpty(selectPloDupli)}
@@ -293,9 +292,8 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
         </div>
       </Modal>
       <ModalAddPLOCollection
-        opened={modalAddPLO}
-        onOpen={openModalAddPLO}
-        onClose={closeModalAddPLO}
+        opened={openModalAddPLO}
+        onClose={() => setOpenModalAddPLO(false)}
         collection={selectPloDupli}
         fetchPLO={fetchPLO}
       />

@@ -426,14 +426,10 @@ export default function MapPLO({ ploName = "" }: Props) {
                         ? newData.sections
                             ?.find((e) => e.topic === sec.topic)
                             ?.ploRequire?.find(
-                              (item) =>
-                                item.plo === ploList.id &&
-                                item.curriculum === selectedCurriculum
+                              (item) => item.curriculum === selectedCurriculum
                             )!
                         : newData.ploRequire?.find(
-                            (item) =>
-                              item.plo == ploList.id &&
-                              item.curriculum == selectedCurriculum
+                            (item) => item.curriculum == selectedCurriculum
                           )!;
                       if (event.target.checked) {
                         if (!ploRequire?.includes(plo.id)) {

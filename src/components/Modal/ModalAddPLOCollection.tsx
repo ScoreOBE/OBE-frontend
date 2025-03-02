@@ -1,12 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Alert,
   Button,
-  Checkbox,
   Group,
   Modal,
-  Radio,
-  RadioCard,
   Stepper,
   Textarea,
   TextInput,
@@ -34,7 +30,6 @@ import { useHotkeys } from "react-hotkeys-hook";
 
 type Props = {
   opened: boolean;
-  onOpen: () => void;
   onClose: () => void;
   collection: Partial<IModelPLO>;
   fetchPLO: () => void;
@@ -42,7 +37,6 @@ type Props = {
 
 export default function ModalAddPLOCollection({
   opened,
-  onOpen,
   onClose,
   collection,
   fetchPLO,

@@ -53,7 +53,6 @@ import { setLoadingOverlay } from "@/store/loading";
 import ModalExportTQF5 from "@/components/Modal/TQF5/ModalExportTQF5";
 import ModalSetRange from "@/components/Modal/TQF5/ModalSetRange";
 import { IModelPLORequire } from "@/models/ModelCourseManagement";
-import { initialTqf5Part1 } from "@/helpers/functions/tqf5";
 
 export default function TQF5() {
   const { courseNo } = useParams();
@@ -144,11 +143,7 @@ export default function TQF5() {
   const fetchPLO = async () => {
     const curriculum = uniqueCurriculum();
     if (curriculum.length) {
-      const resPloCol = await getPLOs({
-        year: params.get("year"),
-        semester: params.get("semester"),
-        curriculum,
-      });
+      const resPloCol = await getPLOs({ curriculum });
       if (resPloCol) {
         dispatch(setPloTQF3({ curriculum, coursePLO: resPloCol.plos }));
         dispatch(setPloTQF5({ curriculum, coursePLO: resPloCol.plos }));

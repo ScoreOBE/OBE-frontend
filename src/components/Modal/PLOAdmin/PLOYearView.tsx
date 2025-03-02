@@ -95,9 +95,7 @@ export default function PLOYearView({ opened, onClose }: Props) {
         const uniqueTopic = getUniqueTopicsWithTQF(course.sections!);
         let ploRequire =
           course.ploRequire?.find(
-            (item) =>
-              item.curriculum == selectCurriculum.code &&
-              item.plo == curriculumPLO.id
+            (item) => item.curriculum == selectCurriculum.code
           )?.list || [];
         let ploItem: any = course.TQF3
           ? ploRequire.map((plo) => {
@@ -117,9 +115,7 @@ export default function PLOYearView({ opened, onClose }: Props) {
           uniqueTopic.map((sec) => {
             ploRequire =
               sec.ploRequire?.find(
-                (item) =>
-                  item.curriculum == selectCurriculum.code &&
-                  item.plo == curriculumPLO.id
+                (item) => item.curriculum == selectCurriculum.code
               )?.list || [];
             ploItem = ploRequire.map((plo) => {
               return {
@@ -179,10 +175,7 @@ export default function PLOYearView({ opened, onClose }: Props) {
   };
 
   const fetchPLO = async () => {
-    const resPloCol = await getOnePLO({
-      year: selectYear,
-      curriculum: selectCurriculum.code,
-    });
+    const resPloCol = await getOnePLO({ curriculum: selectCurriculum.code });
     if (resPloCol) {
       setCurriculumPLO(resPloCol);
     }
@@ -287,7 +280,8 @@ export default function PLOYearView({ opened, onClose }: Props) {
                     {semester.title}
                   </h3>
                   <p className="text-sm text-gray-500">
-                    {courseList.length} {courseList?.length <=1 ? 'Course' : 'Courses'}
+                    {courseList.length}{" "}
+                    {courseList?.length <= 1 ? "Course" : "Courses"}
                   </p>
                   <ScrollArea className="mt-4 flex-1 h-full  overflow-auto">
                     {!!courseList.length ? (
@@ -321,7 +315,9 @@ export default function PLOYearView({ opened, onClose }: Props) {
                       })
                     ) : (
                       <div className="h-[65vh] w-full flex items-center text-center justify-center flex-1">
-                       <p className=" text-noData font-semibold">No Course Found</p>
+                        <p className=" text-noData font-semibold">
+                          No Course Found
+                        </p>
                       </div>
                     )}
                   </ScrollArea>

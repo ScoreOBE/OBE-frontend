@@ -172,11 +172,7 @@ export default function TQF3() {
   const fetchPLO = async () => {
     const curriculum = uniqueCurriculum();
     if (curriculum.length) {
-      const resPloCol = await getPLOs({
-        year: params.get("year"),
-        semester: params.get("semester"),
-        curriculum,
-      });
+      const resPloCol = await getPLOs({ curriculum });
       if (resPloCol) {
         dispatch(setPloTQF3({ curriculum, coursePLO: resPloCol.plos }));
         dispatch(setPloTQF5({ curriculum, coursePLO: resPloCol.plos }));
