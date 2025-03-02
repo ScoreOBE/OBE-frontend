@@ -65,9 +65,11 @@ export default function SpiderChart({ data, height }: Props) {
                 <p className="text-sm font-semibold mb-3">{label}</p>
                 <div className="flex justify-between gap-0 items-start pt-2 border-t-[1px] border-[#747575]">
                   <div className="flex flex-col items-center w-full py-1">
-                    <span className="font-bold text-[22px]">{data.score}</span>
+                    <span className="font-bold text-[22px]">
+                      {data.notMap ? "-" : data.score}
+                    </span>
                     <span className="text-white text-b3 font-medium">
-                      {data.score == "-"
+                      {data.notMap
                         ? "-"
                         : data.score < 1
                         ? "Poor"

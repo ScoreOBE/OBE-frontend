@@ -14,7 +14,11 @@ export interface IModelEnrollCourse {
     score: 0 | 1 | 2 | 3 | 4 | "-";
   }[];
   plo: IModelPLO;
-  plos: (IModelPLONo & { name: string; score: number | "-" })[];
+  plos: (IModelPLONo & {
+    name: string;
+    score: number | "-";
+    notMap?: boolean;
+  })[];
   scores: IModelStudentScore[];
 }
 
