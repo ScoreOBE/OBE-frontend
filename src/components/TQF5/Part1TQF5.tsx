@@ -181,18 +181,16 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
     }
   }, [tqf5.ploRequired, selectCurriculum]);
 
-  const checkPart1Status = (item: IModelTQF5Part1) => {
+  const checkPart1Status = (item: IModelTQF5Part1, cur: string) => {
     return isEqual(
       item,
       initialTqf5Part1(course!, tqf5.topic, tqf5.curriculum!).list.find(
-        ({ curriculum }) => curriculum == selectCurriculum
+        ({ curriculum }) => curriculum == cur
       )
     )
       ? "text-[#DEE2E6]"
       : !isEqual(
-          tqf5Original?.part1?.list.find(
-            ({ curriculum }) => curriculum == selectCurriculum
-          ),
+          tqf5Original?.part1?.list.find(({ curriculum }) => curriculum == cur),
           item
         )
       ? "text-edit"
@@ -520,7 +518,7 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                     <div className="flex items-center gap-2">
                       <Icon
                         IconComponent={IconCheck}
-                        className={checkPart1Status(cur)}
+                        className={checkPart1Status(cur, cur.curriculum!)}
                       />
                       {cur.curriculum}
                     </div>
