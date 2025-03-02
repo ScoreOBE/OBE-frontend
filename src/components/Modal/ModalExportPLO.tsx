@@ -121,7 +121,7 @@ export default function ModalExportPLO({
       }}
     >
       <div className="flex flex-col gap-5 ">
-        <Alert
+        {/* <Alert
           radius="md"
           variant="light"
           color="blue"
@@ -137,25 +137,47 @@ export default function ModalExportPLO({
               </p>
             </div>
           }
-        ></Alert>
+        ></Alert> */}
         {!!data?.length ? (
           <Checkbox.Group
             value={selectedCourses}
+            label="Select course to export"
+            className="sm:max-ipad11:max-h-[420px]  acerSwift:max-macair133:max-h-[305px] macair133:max-samsungA24:max-h-[420px] overflow-y-auto  my-2"
+            classNames={{
+              label:
+                "mb-1 font-semibold text-default acerSwift:max-macair133:!text-b4",
+            }}
             onChange={(event) => setSelectedCourses(event)}
           >
             <Group className="gap-0">
               {data?.map((course, index) => (
-                <Checkbox
-                  size="xs"
+                <div
                   key={index}
-                  value={course.label}
-                  className="p-3 py-4 w-full last:border-none border-b-[1px]"
-                  classNames={{
-                    label: "ml-2 text-[13px] font-medium",
-                    input: "cursor-pointer",
-                  }}
-                  label={course.label}
-                />
+                  className="flex p-1 mb-1  w-full flex-col overflow-y-auto"
+                >
+                  <Checkbox.Card
+                    value={course.label}
+                    className={`p-3 items-center py-4 px-4 flex h-fit rounded-md w-full border transition-all ${
+                      selectedCourses.includes(course.label)
+                        ? "border-secondary"
+                        : "border-transparent"
+                    }`}
+                    style={{
+                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    }}
+                  >
+                    <Group
+                      wrap="nowrap"
+                      className="item-center flex"
+                      align="flex-start"
+                    >
+                      <Checkbox.Indicator className="" />
+                      <div className="text-default whitespace-break-spaces font-medium text-b3 acerSwift:max-macair133:!text-b4">
+                        {course.label}
+                      </div>
+                    </Group>
+                  </Checkbox.Card>
+                </div>
               ))}
             </Group>
           </Checkbox.Group>

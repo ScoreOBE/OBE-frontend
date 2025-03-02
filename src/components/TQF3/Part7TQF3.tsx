@@ -247,14 +247,14 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
                   key={`${cur.curriculum}-${index}`}
                   value={cur.curriculum}
                 >
-                  <div className="flex flex-col w-full max-h-full gap-4 pb-4">
+                  <div className="flex flex-col w-full max-h-full gap-4 mt-1 pb-4">
                     {/* Topic */}
                     <div className="flex text-secondary items-center w-full justify-between">
                       <span className="text-[15px] acerSwift:max-macair133:!text-b3 font-semibold">
                         CLO Mapping <span className=" text-red-500">*</span>{" "}
                         <br />
                         <span className="text-b3 text-default">
-                          (section {sectionList.join(", ")})
+                          Section {sectionList.join(", ")}
                         </span>
                       </span>
                       <Button

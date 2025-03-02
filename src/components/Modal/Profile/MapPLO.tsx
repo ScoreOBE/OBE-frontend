@@ -91,7 +91,7 @@ export default function MapPLO({ ploName = "" }: Props) {
   const form = useForm({
     mode: "controlled",
     initialValues: {
-      type: COURSE_TYPE.GENERAL.en,
+      type: "",
       courseNo: "",
       courseName: "",
       sections: [{}],
@@ -696,8 +696,13 @@ export default function MapPLO({ ploName = "" }: Props) {
               defaultValue={COURSE_TYPE.GENERAL.en}
               data={Object.values(COURSE_TYPE).map((e) => e.en)}
               allowDeselect={false}
+              placeholder="Select Course Type"
+              className="mt-2"
+              size="xs"
+              label="Course Type"
               {...form.getInputProps("type")}
             />
+            <div className="w-full border-b-[1px] mt-3 my-1"></div>
             <TextInput
               classNames={{ input: "focus:border-primary" }}
               label="Course No."
@@ -844,7 +849,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                         <p className="font-medium flex flex-col gap-1 ">
                           {ploList.curriculum?.length
                             ? ploList.curriculum?.join(", ")
-                            : "Not Map"}
+                            : "This PLO Collect has not been mapped to any curriculum"}
                         </p>
                       </div>
                     </div>
@@ -1137,7 +1142,7 @@ export default function MapPLO({ ploName = "" }: Props) {
                   </div>
                 ) : !courseManagement.length ? (
                   <div className="flex w-full h-full justify-center items-center">
-                    No Course Found
+                    No Course Found {selectedCurriculum}
                   </div>
                 ) : (
                   <InfiniteScroll

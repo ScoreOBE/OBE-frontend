@@ -71,9 +71,9 @@ export default function StdOverallPLO() {
                   <p className="text-[#575757] text-[14px]">
                     You have completed{" "}
                     <span className="text-[#1f69f3] font-semibold">
-                      12 Courses{" "}
+                     {courses.length} Course {" "} 
                     </span>
-                    In CPE curriculum
+                    in CPE curriculum
                   </p>
                 </div>
               ) : (
@@ -83,6 +83,7 @@ export default function StdOverallPLO() {
                 {/* {activeTab === "course" && ( */}
                 <TextInput
                   leftSection={<TbSearch />}
+                  className="w-[350px]"
                   placeholder="Course No / Course Name / Course Topic"
                   size="xs"
                   value={searchValue}
@@ -193,7 +194,7 @@ export default function StdOverallPLO() {
                   >
                     <div className="px-5 pt-4 flex justify-between">
                       <div>
-                        <p className="font-bold">
+                        <p className="font-bold text-secondary">
                           {course.courseNo} ({course.semester}/{course.year})
                         </p>
                         <p className="text-b4 text-[#4b5563] font-medium">
@@ -205,7 +206,7 @@ export default function StdOverallPLO() {
                       <SpiderChart data={course.plos} height={350} />
                     ) : (
                       <div className="flex h-full justify-center items-center">
-                        No Data
+                       This Course has no PLO data
                       </div>
                     )}
                   </div>
