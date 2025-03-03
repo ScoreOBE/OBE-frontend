@@ -280,7 +280,7 @@ export default function Section() {
                   </Button>
                 </div>
               ) : (
-              <></>
+                <></>
               )}
               {activeTerm && user.role != ROLE.TA && (
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
@@ -364,95 +364,77 @@ export default function Section() {
                     onClick={() => goToAssignment(sec.sectionNo!)}
                   >
                     <div onClick={(event) => event.stopPropagation()}>
-                      {activeTerm &&
-                        owner &&
-                        (addFirstTime ? (
-                          <Menu
-                            trigger="click"
-                            position="bottom-end"
-                            offset={30}
+                      <Menu trigger="click" position="bottom-end" offset={30}>
+                        <Menu.Target>
+                          <div>
+                            <Icon
+                              IconComponent={IconDots}
+                              className="absolute top-2 right-2 rounded-full hover:bg-gray-300"
+                            />
+                          </div>
+                        </Menu.Target>
+                        <Menu.Dropdown
+                          className="rounded-md -translate-x-2 backdrop-blur-xl bg-white/70 "
+                          style={{
+                            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                          }}
+                        >
+                          <Menu.Item
+                            className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b4 h-7 w-[180px]"
+                            onClick={() => {
+                              setEditSec({
+                                id: sec.id,
+                                courseId: course.id,
+                                oldSectionNo: sec.sectionNo,
+                                courseNo: course.courseNo,
+                                type: course.type,
+                                isActive: sec.isActive,
+                                data: {
+                                  topic: sec.topic,
+                                  sectionNo: sec.sectionNo,
+                                  semester: sec.semester?.map((e) =>
+                                    e.toString()
+                                  ),
+                                  curriculum: sec.curriculum,
+                                },
+                              });
+                              setOpenModalEditSec(true);
+                            }}
                           >
-                            <Menu.Target>
-                              <div>
-                                <Icon
-                                  IconComponent={IconDots}
-                                  className="absolute top-2 right-2 rounded-full hover:bg-gray-300"
-                                />
-                              </div>
-                            </Menu.Target>
-                            <Menu.Dropdown
-                              className="rounded-md -translate-x-2 backdrop-blur-xl bg-white/70 "
-                              style={{
-                                boxShadow:
-                                  "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                            <div className="flex items-center gap-2">
+                              <Icon
+                                IconComponent={IconPencilMinus}
+                                className="size-4 stroke-2"
+                              />
+                              <span>Edit Section</span>
+                            </div>
+                          </Menu.Item>
+                          {activeTerm && owner && addFirstTime && (
+                            <Menu.Item
+                              className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
+                              disabled={course.sections.length == 1}
+                              onClick={() => {
+                                setEditSec({
+                                  id: sec.id,
+                                  courseId: course.id,
+                                  courseNo: course.courseNo,
+                                  sectionNo: sec.sectionNo,
+                                  courseName: course.courseName,
+                                });
+                                setOpenMainPopupDelCourse(true);
                               }}
                             >
-                              <Menu.Item
-                                className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b4 h-7 w-[180px]"
-                                onClick={() => {
-                                  setEditSec({
-                                    id: sec.id,
-                                    courseId: course.id,
-                                    oldSectionNo: sec.sectionNo,
-                                    courseNo: course.courseNo,
-                                    type: course.type,
-                                    isActive: sec.isActive,
-                                    data: {
-                                      topic: sec.topic,
-                                      sectionNo: sec.sectionNo,
-                                      semester: sec.semester?.map((e) =>
-                                        e.toString()
-                                      ),
-                                      curriculum: sec.curriculum,
-                                    },
-                                  });
-                                  setOpenModalEditSec(true);
-                                }}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <Icon
-                                    IconComponent={IconPencilMinus}
-                                    className="size-4 stroke-2"
-                                  />
-                                  <span>Edit Section</span>
-                                </div>
-                              </Menu.Item>
-                              <Menu.Item
-                                className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
-                                disabled={course.sections.length == 1}
-                                onClick={() => {
-                                  setEditSec({
-                                    id: sec.id,
-                                    courseId: course.id,
-                                    courseNo: course.courseNo,
-                                    sectionNo: sec.sectionNo,
-                                    courseName: course.courseName,
-                                  });
-                                  setOpenMainPopupDelCourse(true);
-                                }}
-                              >
-                                <div className="flex items-center gap-2 acerSwift:max-macair133:!text-b4">
-                                  <Icon
-                                    IconComponent={IconTrash}
-                                    className="size-4 stroke-2"
-                                  />
-                                  <span>Delete Section</span>
-                                </div>
-                              </Menu.Item>
-                            </Menu.Dropdown>
-                          </Menu>
-                        ) : (
-                          <Switch
-                            size="sm"
-                            onLabel="ON"
-                            offLabel="OFF"
-                            className="absolute top-[11px] right-[60px]"
-                            checked={sec.isActive}
-                            onChange={(event) =>
-                              onClickActiveSection(sec, event.target.checked)
-                            }
-                          />
-                        ))}
+                              <div className="flex items-center gap-2 acerSwift:max-macair133:!text-b4">
+                                <Icon
+                                  IconComponent={IconTrash}
+                                  className="size-4 stroke-2"
+                                />
+                                <span>Delete Section</span>
+                              </div>
+                            </Menu.Item>
+                          )}
+                        </Menu.Dropdown>
+                      </Menu>
                     </div>
                     <div className="p-2.5 pb-1 flex h-full justify-between flex-col">
                       <div className="flex flex-col gap-0.5">
