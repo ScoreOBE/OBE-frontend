@@ -4,7 +4,7 @@ import { TbSearch } from "react-icons/tb";
 import { IModelUser } from "@/models/ModelUser";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
-import { getUserName } from "@/helpers/functions/function";
+import { checkStringContain, getUserName } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import CompoManageIns from "@/components/CompoManageIns";
 import { updateCurrAdmin } from "@/services/user/user.service";
@@ -39,10 +39,11 @@ export default function ModalManageCurrAdmin({ opened, onClose }: Props) {
 
   useEffect(() => {
     setAdminFilter(
-      adminList.filter(
-        (admin) =>
-          `${getUserName(admin, 2)}`.includes(searchValue.toLowerCase()) ||
-          admin.email.toLowerCase().includes(searchValue.toLowerCase())
+      adminList.filter((admin) =>
+        checkStringContain(
+          [`${getUserName(admin, 2)}`, admin.email],
+          searchValue
+        )
       )
     );
   }, [searchValue, adminList]);
@@ -113,7 +114,6 @@ export default function ModalManageCurrAdmin({ opened, onClose }: Props) {
           }}
         >
           <div className="flex flex-col flex-1 gap-2  h-full ">
-         
             <CompoManageIns
               opened={opened}
               type="admin"
@@ -124,7 +124,7 @@ export default function ModalManageCurrAdmin({ opened, onClose }: Props) {
             />
 
             {/* Added Admin */}
-          <div className="w-full  flex flex-col bg-white mt-2 border-secondary border-[1px]  rounded-md">
+            <div className="w-full  flex flex-col bg-white mt-2 border-secondary border-[1px]  rounded-md">
               <div className=" bg-bgTableHeader flex gap-3 items-center rounded-t-md border-b-secondary border-[1px] px-4 py-3 text-secondary font-semibold">
                 <Icon IconComponent={IconUsers} /> Added Curriculum Admin
               </div>

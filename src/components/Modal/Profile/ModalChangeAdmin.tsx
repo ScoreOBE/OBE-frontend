@@ -6,7 +6,7 @@ import { getInstructor, updateAdmin } from "@/services/user/user.service";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { NOTI_TYPE, ROLE } from "@/helpers/constants/enum";
 import { setUser } from "@/store/user";
-import { getUserName } from "@/helpers/functions/function";
+import { checkStringContain, getUserName } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { isEqual } from "lodash";
 import { ROUTE_PATH } from "@/helpers/constants/route";
@@ -46,10 +46,11 @@ export default function ModalChangeAdmin({ opened, onClose }: Props) {
 
   useEffect(() => {
     setAdminFilter(
-      adminList.filter(
-        (admin) =>
-          `${getUserName(admin, 2)}`.includes(searchValue.toLowerCase()) ||
-          admin.email.toLowerCase().includes(searchValue.toLowerCase())
+      adminList.filter((admin) =>
+        checkStringContain(
+          [`${getUserName(admin, 2)}`, admin.email],
+          searchValue
+        )
       )
     );
   }, [searchValue]);
@@ -240,27 +241,27 @@ export default function ModalChangeAdmin({ opened, onClose }: Props) {
           className="mb-5"
         ></Alert>
         <div className="px-4 pt-3 pb-4 rounded-md bg-gray-100 mb-4">
-        <MultiSelect
-          label="Select the curriculums you want to access as a Curriculum Admin."
-          size="xs"
-          placeholder="Select curriculum"
-          searchable
-          clearable
-          nothingFoundMessage="No result"
-          data={[
-            ...(curriculum?.map((item) => ({
-              value: item.code,
-              label: `${item.nameTH} [${item.code}]`,
-            })) || []),
-          ]}
-          classNames={{
-            input: "focus:border-primary acerSwift:max-macair133:!text-b5",
-            label: "text-[13px]",
-          }}
-          {...form.getInputProps("curriculums")}
-        />
+          <MultiSelect
+            label="Select the curriculums you want to access as a Curriculum Admin."
+            size="xs"
+            placeholder="Select curriculum"
+            searchable
+            clearable
+            nothingFoundMessage="No result"
+            data={[
+              ...(curriculum?.map((item) => ({
+                value: item.code,
+                label: `${item.nameTH} [${item.code}]`,
+              })) || []),
+            ]}
+            classNames={{
+              input: "focus:border-primary acerSwift:max-macair133:!text-b5",
+              label: "text-[13px]",
+            }}
+            {...form.getInputProps("curriculums")}
+          />
         </div>
-      
+
         <TextInput
           label={`To confirm, type "${admin?.firstNameEN}${admin?.lastNameEN}"`}
           value={textActivate}

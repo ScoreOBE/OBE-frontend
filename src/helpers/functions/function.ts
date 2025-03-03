@@ -29,6 +29,7 @@ export const getSectionNo = (sectionNo: number | string | undefined) => {
   if (!sectionNo) return "";
   return ("000" + parseInt(sectionNo.toString())).slice(-3);
 };
+
 export const getUserName = (
   user: Partial<IModelUser> | undefined,
   format?: number
@@ -53,6 +54,13 @@ export const getUserName = (
     default:
       return `${user.firstNameEN} ${user.lastNameEN?.slice(0, 1)}.`; // John D.
   }
+};
+
+export const checkStringContain = (
+  data: (string | undefined)[],
+  value: string
+) => {
+  return data.some((s) => s?.toLowerCase().includes(value.toLowerCase()));
 };
 
 export const getUniqueInstructors = (

@@ -17,6 +17,7 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { setLoadingOverlay } from "@/store/loading";
 import { CoursePloScore } from "./PLOYearView";
 import {
+  checkStringContain,
   getSectionNo,
   getUniqueTopicsWithTQF,
   sortData,
@@ -312,14 +313,12 @@ export default function PLOSelectCourseView({ opened, onClose }: Props) {
                       >
                         <div className="flex flex-col gap-4 overflow-y-auto h-[40vh]">
                           {courseOption
-                            .filter(({ courseNo, courseName, topic }) => {
-                              const query = searchValue.toLowerCase();
-                              return (
-                                courseNo.toLowerCase().includes(query) ||
-                                courseName.toLowerCase().includes(query) ||
-                                topic?.toLowerCase().includes(query)
-                              );
-                            })
+                            .filter(({ courseNo, courseName, topic }) =>
+                              checkStringContain(
+                                [courseNo, courseName, topic],
+                                searchValue
+                              )
+                            )
                             .map((item) => (
                               <Checkbox.Card
                                 key={item.value}

@@ -37,6 +37,7 @@ import {
 import { isEqual } from "lodash";
 import { getPLOs } from "@/services/plo/plo.service";
 import { IModelPLO } from "@/models/ModelPLO";
+import { checkStringContain } from "@/helpers/functions/function";
 
 type Props = {
   opened: boolean;
@@ -94,10 +95,8 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
   useEffect(() => {
     if (faculty.curriculum) {
       setCurriculumFilter(
-        faculty.curriculum.filter(
-          (cur) =>
-            cur.nameTH.includes(searchValue) ||
-            cur.nameEN.toLowerCase().includes(searchValue.toLowerCase())
+        faculty.curriculum.filter((cur) =>
+          checkStringContain([cur.nameTH, cur.nameEN], searchValue)
         )
       );
     }

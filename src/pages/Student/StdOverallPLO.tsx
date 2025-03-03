@@ -12,6 +12,7 @@ import { TbSearch } from "react-icons/tb";
 import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
 import { setLoading } from "@/store/loading";
 import { getEnrollCourse } from "@/services/student/student.service";
+import { checkStringContain } from "@/helpers/functions/function";
 
 export default function StdOverallPLO() {
   const loading = useAppSelector((state) => state.loading.loading);
@@ -187,30 +188,40 @@ export default function StdOverallPLO() {
             </Tabs.Panel> */}
             <div className="flex flex-col gap-1 overflow-auto">
               <div className="grid grid-cols-2 acerSwift:grid-cols-3 samsungA24:grid-cols-4 gap-4 mt-2 h-full">
-                {courses.map((course) => (
-                  <div
-                    key={course.id}
-                    className="border rounded-lg text-b2 shadow-sm flex flex-col gap-0 overflow-clip pb-4"
-                  >
-                    <div className="px-5 pt-4 flex justify-between">
-                      <div>
-                        <p className="font-bold text-secondary">
-                          {course.courseNo} ({course.semester}/{course.year})
-                        </p>
-                        <p className="text-b4 text-[#4b5563] font-medium">
-                          {course.courseName}
-                        </p>
+                {courses
+                  .filter(({ courseNo, courseName, section }) =>
+                    checkStringContain(
+                      [courseNo, courseName, section.topic],
+                      searchValue
+                    )
+                  )
+                  .map((course) => (
+                    <div
+                      key={course.id}
+                      className="border rounded-lg text-b2 shadow-sm flex flex-col gap-0 overflow-clip pb-4"
+                    >
+                      <div className="px-5 pt-4 flex justify-between">
+                        <div>
+                          <p className="font-bold text-secondary">
+                            {course.courseNo} ({course.semester}/{course.year})
+                          </p>
+                          <p className="text-b4 text-[#4b5563] font-medium">
+                            {course.courseName}
+                            <br />{" "}
+                            {course.section.topic &&
+                              `(${course.section.topic})`}
+                          </p>
+                        </div>
                       </div>
+                      {course.plos.length ? (
+                        <SpiderChart data={course.plos} height={350} />
+                      ) : (
+                        <div className="flex h-full justify-center items-center">
+                         This Course has no PLO data
+                        </div>
+                      )}
                     </div>
-                    {course.plos.length ? (
-                      <SpiderChart data={course.plos} height={350} />
-                    ) : (
-                      <div className="flex h-full justify-center items-center">
-                       This Course has no PLO data
-                      </div>
-                    )}
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
             {/* </Tabs> */}
