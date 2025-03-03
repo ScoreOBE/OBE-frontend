@@ -363,79 +363,82 @@ export default function Section() {
                     }`}
                     onClick={() => goToAssignment(sec.sectionNo!)}
                   >
-                    <div onClick={(event) => event.stopPropagation()}>
-                      <Menu trigger="click" position="bottom-end" offset={30}>
-                        <Menu.Target>
-                          <div>
-                            <Icon
-                              IconComponent={IconDots}
-                              className="absolute top-2 right-2 rounded-full hover:bg-gray-300"
-                            />
-                          </div>
-                        </Menu.Target>
-                        <Menu.Dropdown
-                          className="rounded-md -translate-x-2 backdrop-blur-xl bg-white/70 "
-                          style={{
-                            boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                          }}
-                        >
-                        {owner && activeTerm &&  <Menu.Item
-                            className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b4 h-7 w-[180px]"
-                            onClick={() => {
-                              setEditSec({
-                                id: sec.id,
-                                courseId: course.id,
-                                oldSectionNo: sec.sectionNo,
-                                courseNo: course.courseNo,
-                                type: course.type,
-                                isActive: sec.isActive,
-                                data: {
-                                  topic: sec.topic,
-                                  sectionNo: sec.sectionNo,
-                                  semester: sec.semester?.map((e) =>
-                                    e.toString()
-                                  ),
-                                  curriculum: sec.curriculum,
-                                },
-                              });
-                              setOpenModalEditSec(true);
+                    {activeTerm && owner && (
+                      <div onClick={(event) => event.stopPropagation()}>
+                        <Menu trigger="click" position="bottom-end" offset={30}>
+                          <Menu.Target>
+                            <div>
+                              <Icon
+                                IconComponent={IconDots}
+                                className="absolute top-2 right-2 rounded-full hover:bg-gray-300"
+                              />
+                            </div>
+                          </Menu.Target>
+                          <Menu.Dropdown
+                            className="rounded-md -translate-x-2 backdrop-blur-xl bg-white/70 "
+                            style={{
+                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                             }}
                           >
-                            <div className="flex items-center gap-2">
-                              <Icon
-                                IconComponent={IconPencilMinus}
-                                className="size-4 stroke-2"
-                              />
-                              <span>Edit Section</span>
-                            </div>
-                          </Menu.Item>}
-                          {activeTerm && owner && addFirstTime && (
                             <Menu.Item
-                              className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
-                              disabled={course.sections.length == 1}
+                              className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b4 h-7 w-[180px]"
                               onClick={() => {
                                 setEditSec({
                                   id: sec.id,
                                   courseId: course.id,
+                                  oldSectionNo: sec.sectionNo,
                                   courseNo: course.courseNo,
-                                  sectionNo: sec.sectionNo,
-                                  courseName: course.courseName,
+                                  type: course.type,
+                                  isActive: sec.isActive,
+                                  data: {
+                                    topic: sec.topic,
+                                    sectionNo: sec.sectionNo,
+                                    semester: sec.semester?.map((e) =>
+                                      e.toString()
+                                    ),
+                                    curriculum: sec.curriculum,
+                                  },
                                 });
-                                setOpenMainPopupDelCourse(true);
+                                setOpenModalEditSec(true);
                               }}
                             >
-                              <div className="flex items-center gap-2 acerSwift:max-macair133:!text-b4">
+                              <div className="flex items-center gap-2">
                                 <Icon
-                                  IconComponent={IconTrash}
+                                  IconComponent={IconPencilMinus}
                                   className="size-4 stroke-2"
                                 />
-                                <span>Delete Section</span>
+                                <span>Edit Section</span>
                               </div>
                             </Menu.Item>
-                          )}
-                        </Menu.Dropdown>
-                      </Menu>
-                    </div>
+
+                            { addFirstTime && (
+                              <Menu.Item
+                                className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
+                                disabled={course.sections.length == 1}
+                                onClick={() => {
+                                  setEditSec({
+                                    id: sec.id,
+                                    courseId: course.id,
+                                    courseNo: course.courseNo,
+                                    sectionNo: sec.sectionNo,
+                                    courseName: course.courseName,
+                                  });
+                                  setOpenMainPopupDelCourse(true);
+                                }}
+                              >
+                                <div className="flex items-center gap-2 acerSwift:max-macair133:!text-b4">
+                                  <Icon
+                                    IconComponent={IconTrash}
+                                    className="size-4 stroke-2"
+                                  />
+                                  <span>Delete Section</span>
+                                </div>
+                              </Menu.Item>
+                            )}
+                          </Menu.Dropdown>
+                        </Menu>
+                      </div>
+                    )}
                     <div className="p-2.5 pb-1 flex h-full justify-between flex-col">
                       <div className="flex flex-col gap-0.5">
                         <div className="flex justify-between items-center">
@@ -447,7 +450,7 @@ export default function Section() {
                             Section {getSectionNo(sec.sectionNo)}
                           </p>
                           <p
-                            className={`tag-tqf bg-secondary text-secondary flex gap-1 items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 mr-7
+                            className={`tag-tqf bg-secondary text-secondary flex gap-1 items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 ${owner && activeTerm && 'mr-7'} 
                           
                            `}
                           >
