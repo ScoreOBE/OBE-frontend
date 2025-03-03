@@ -379,7 +379,7 @@ export default function Section() {
                             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                           }}
                         >
-                          <Menu.Item
+                        {owner && activeTerm &&  <Menu.Item
                             className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b4 h-7 w-[180px]"
                             onClick={() => {
                               setEditSec({
@@ -408,7 +408,7 @@ export default function Section() {
                               />
                               <span>Edit Section</span>
                             </div>
-                          </Menu.Item>
+                          </Menu.Item>}
                           {activeTerm && owner && addFirstTime && (
                             <Menu.Item
                               className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
@@ -447,9 +447,9 @@ export default function Section() {
                             Section {getSectionNo(sec.sectionNo)}
                           </p>
                           <p
-                            className={`tag-tqf bg-secondary text-secondary flex gap-1 items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 ${
-                              activeTerm && owner && addFirstTime && "mr-7"
-                            }`}
+                            className={`tag-tqf bg-secondary text-secondary flex gap-1 items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 mr-7
+                          
+                           `}
                           >
                             <Icon
                               IconComponent={IconStudent}
