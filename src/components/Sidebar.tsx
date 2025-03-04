@@ -32,7 +32,7 @@ import { setFaculty } from "@/store/faculty";
 import StdCourseSidebar from "./Sidebar/StdCourseSidebar";
 import { setEnrollCourseList } from "@/store/enrollCourse";
 import { getEnrollCourse } from "@/services/student/student.service";
-import { RxHamburgerMenu } from "react-icons/rx";
+import { PiTextAlignLeft } from "react-icons/pi";
 import { setOpenSidebar } from "@/store/config";
 
 export default function Sidebar() {
@@ -173,29 +173,44 @@ export default function Sidebar() {
       } border-r-[1px] heig h-screen flex sidebar-linear-gradient transition-all duration-300 ease-in-out`}
     >
       <div className="flex w-full flex-col gap-11 acerSwift:max-macair133:gap-8">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-2 items-center">
           <div
-            className="cursor-pointer flex items-center gap-2"
-            onClick={() =>
-              navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`)
-            }
+            className={`flex items-center justify-between ${
+              openSidebar ? "w-full" : ""
+            }`}
           >
-            <img
-              src={scoreobe}
-              alt="scoreOBElogo"
-              className=" h-[30px] cursor-pointer w-[30px] acerSwift:max-macair133:h-[27px] acerSwift:max-macair133:w-[27px]"
-            />
+            <div
+              className="cursor-pointer flex items-center gap-2"
+              onClick={() =>
+                navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`)
+              }
+            >
+              <img
+                src={scoreobe}
+                alt="scoreOBElogo"
+                className="h-[30px] cursor-pointer w-[30px] acerSwift:max-macair133:h-[27px] acerSwift:max-macair133:w-[27px]"
+              />
+              {openSidebar && (
+                <p className="text-white text-[20px] acerSwift:max-macair133:text-h2 font-semibold">
+                  ScoreOBE <span className="text-[#FFCD1B]"> +</span>
+                </p>
+              )}
+            </div>
             {openSidebar && (
-              <p className="text-white text-[20px] acerSwift:max-macair133:text-h2 font-semibold">
-                ScoreOBE <span className=" text-[#FFCD1B]"> +</span>
-              </p>
+              <PiTextAlignLeft
+                size={22}
+                className="cursor-pointer p-1.5 w-fit h-fit rounded-full text-white hover:bg-white hover:text-black rotate-180"
+                onClick={() => dispatch(setOpenSidebar(!openSidebar))}
+              />
             )}
           </div>
-          <RxHamburgerMenu
-            size={30}
-            className="cursor-pointer p-1 rounded-full text-white hover:bg-white hover:text-black"
-            onClick={() => dispatch(setOpenSidebar(!openSidebar))}
-          />
+          {!openSidebar && (
+            <PiTextAlignLeft
+              size={22}
+              className="cursor-pointer p-1.5 w-fit h-fit rounded-full text-white hover:bg-white hover:text-black"
+              onClick={() => dispatch(setOpenSidebar(!openSidebar))}
+            />
+          )}
         </div>
         {getSidebar()}
       </div>
