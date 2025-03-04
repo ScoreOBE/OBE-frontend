@@ -7,6 +7,7 @@ export const showSidebarSlice = createSlice({
     showButtonLogin: false,
     showNavbar: false,
     showSidebar: false,
+    openSidebar: false,
   },
   reducers: {
     setDashboard: (state, action) => {
@@ -21,6 +22,9 @@ export const showSidebarSlice = createSlice({
     setShowSidebar: (state, action) => {
       return { ...state, showSidebar: action.payload };
     },
+    setOpenSidebar: (state, action) => {
+      return { ...state, openSidebar: action.payload };
+    },
   },
 });
 
@@ -29,6 +33,7 @@ export const {
   setShowButtonLogin,
   setShowNavbar,
   setShowSidebar,
+  setOpenSidebar,
 } = showSidebarSlice.actions;
 
 export default showSidebarSlice.reducer;

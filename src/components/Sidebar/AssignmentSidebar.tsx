@@ -6,7 +6,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { Button } from "@mantine/core";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppSelector } from "@/store";
 import Icon from "@/components/Icon";
 import IconLogout from "@/assets/icons/logout.svg?react";
 import IconList from "@/assets/icons/list.svg?react";
@@ -27,11 +27,10 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
-  const prefix = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.SECTION}/${sectionNo}`;
+  const openSidebar = useAppSelector((state) => state.config.openSidebar);
   const user = useAppSelector((state) => state.user);
   const courseList = useAppSelector((state) => state.course.courses);
   const loading = useAppSelector((state) => state.loading.loading);
-  const dispatch = useAppDispatch();
   const [course, setCourse] = useState<IModelCourse>();
   const [section, setSection] = useState<Partial<IModelSection>>();
 
@@ -107,58 +106,79 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
         </div>
       </div>
 
-      <div className="flex  flex-col gap-2 mt-5">
-        <p className="text-b2 acerSwift:max-macair133:!text-b3 font-bold mb-1">
-          Instructor
-        </p>
-        <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
-          <p className="text-pretty font-medium text-b4 acerSwift:max-macair133:!text-b5">
-            {getUserName(section?.instructor as IModelUser, 1)}
-          </p>
-        </div>
-      </div>
-      {!!section?.coInstructors?.length && (
-        <div className="flex  flex-col gap-2">
-          <p className="text-b2 acerSwift:max-macair133:!text-b3 font-bold mb-1">
-            Co-Instructor
-          </p>
-          <div className="max-h-[140px] gap-1 flex flex-col  overflow-y-auto">
-            {section.coInstructors.map((item, index) => {
-              return (
-                <p
-                  key={index}
-                  className="text-pretty font-medium text-b4 acerSwift:max-macair133:!text-b5"
-                >
-                  {getUserName(item, 1)}
-                </p>
-              );
-            })}
+      {openSidebar && (
+        <>
+          <div className="flex  flex-col gap-2 mt-5">
+            <p className="text-b2 acerSwift:max-macair133:!text-b3 font-bold mb-1">
+              Instructor
+            </p>
+            <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
+              <p className="text-pretty font-medium text-b4 acerSwift:max-macair133:!text-b5">
+                {getUserName(section?.instructor as IModelUser, 1)}
+              </p>
+            </div>
           </div>
-        </div>
+          {!!section?.coInstructors?.length && (
+            <div className="flex  flex-col gap-2">
+              <p className="text-b2 acerSwift:max-macair133:!text-b3 font-bold mb-1">
+                Co-Instructor
+              </p>
+              <div className="max-h-[140px] gap-1 flex flex-col  overflow-y-auto">
+                {section.coInstructors.map((item, index) => {
+                  return (
+                    <p
+                      key={index}
+                      className="text-pretty font-medium text-b4 acerSwift:max-macair133:!text-b5"
+                    >
+                      {getUserName(item, 1)}
+                    </p>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </>
       )}
       {course &&
         !course?.sections.find(
           (sec: any) => sec.instructor.email === user.email
         ) && (
-          <div className="flex  w-full gap-2 justify-end flex-col flex-1">
+          <div
+            className={`flex w-full gap-2 justify-end flex-col flex-1 ${
+              openSidebar ? "" : "items-center text-center"
+            }`}
+          >
             <p className="text-b2 acerSwift:max-macair133:!text-b3 text-white font-bold">
               Course Action
             </p>
             <Button
               onClick={onClickLeaveCourse}
               leftSection={
+                openSidebar && (
+                  <Icon
+                    IconComponent={IconLogout}
+                    className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
+                  />
+                )
+              }
+              className={`text-[#ffffff] bg-transparent hover:bg-[#d55757] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                openSidebar
+                  ? "!w-full !h-9 acerSwift:max-macair133:!h-8"
+                  : "!h-fit !w-fit p-2 !rounded-full"
+              }`}
+            >
+              {openSidebar ? (
+                <div className="flex flex-col justify-start w-full items-start gap-[7px] ">
+                  <p className="font-medium text-b3 acerSwift:max-macair133:text-b4">
+                    Leave from Course
+                  </p>
+                </div>
+              ) : (
                 <Icon
                   IconComponent={IconLogout}
                   className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
                 />
-              }
-              className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 acerSwift:max-macair133:!h-8 flex justify-start items-center transition-colors duration-300 focus:border-none group"
-            >
-              <div className="flex flex-col justify-start w-full items-start gap-[7px] ">
-                <p className="font-medium text-b3 acerSwift:max-macair133:text-b4">
-                  Leave from Course
-                </p>
-              </div>
+              )}
             </Button>
           </div>
         )}
