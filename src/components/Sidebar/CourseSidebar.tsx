@@ -238,59 +238,98 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               </p>
             )}
           </div>
-          <div className="flex flex-col gap-2">
+          <div
+            className={`flex flex-col gap-2 ${
+              openSidebar
+                ? ""
+                : "w-full justify-center items-center text-center"
+            }`}
+          >
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
                 onClick={() => goToPage(ROUTE_PATH.EVALUATION)}
                 leftSection={
+                  openSidebar && (
+                    <Icon
+                      IconComponent={IconTQF}
+                      className="mr-0.5 acerSwift:max-macair133:!size-4"
+                    />
+                  )
+                }
+                className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                  path.includes(ROUTE_PATH.EVALUATION)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                } ${
+                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                }`}
+              >
+                {openSidebar ? (
+                  "Evaluations"
+                ) : (
                   <Icon
                     IconComponent={IconTQF}
                     className="mr-0.5 acerSwift:max-macair133:!size-4"
                   />
-                }
-                className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-                  path.includes(ROUTE_PATH.EVALUATION)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                }`}
-              >
-                Evaluations
+                )}
               </Button>
             )}
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
                 onClick={() => goToPage(ROUTE_PATH.SECTION)}
                 leftSection={
+                  openSidebar && (
+                    <RxDashboard
+                      size={18}
+                      className="acerSwift:max-macair133:size-4"
+                    />
+                  )
+                }
+                className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                  path.includes(ROUTE_PATH.SECTION)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                } ${
+                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                }`}
+              >
+                {openSidebar ? (
+                  "Sections"
+                ) : (
                   <RxDashboard
                     size={18}
                     className="acerSwift:max-macair133:size-4"
                   />
-                }
-                className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-                  path.includes(ROUTE_PATH.SECTION)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                }`}
-              >
-                Sections
+                )}
               </Button>
             )}
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
                 onClick={() => goToPage(ROUTE_PATH.ROSTER)}
                 leftSection={
+                  openSidebar && (
+                    <Icon
+                      IconComponent={IconStudent}
+                      className="size-[19px] stroke-1 acerSwift:max-macair133:size-4"
+                    />
+                  )
+                }
+                className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                  path.includes(ROUTE_PATH.ROSTER)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                } ${
+                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                }`}
+              >
+                {openSidebar ? (
+                  "Roster"
+                ) : (
                   <Icon
                     IconComponent={IconStudent}
                     className="size-[19px] stroke-1 acerSwift:max-macair133:size-4"
                   />
-                }
-                className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-                  path.includes(ROUTE_PATH.ROSTER)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                }`}
-              >
-                Roster
+                )}
               </Button>
             )}
             {/* {dashboard == ROLE.INSTRUCTOR && (
@@ -302,7 +341,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                     className="size-[20px] stroke-[1.5px] acerSwift:max-macair133:size-4 -ml-0.5"
                   />
                 }
-                className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
                   path.includes(ROUTE_PATH.SKILLS)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
@@ -341,13 +380,17 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                           />
                         )
                       }
-                      className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px]  flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                      className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 flex justify-start items-center transition-colors duration-300 focus:border-none ${
                         path.includes(ROUTE_PATH.TQF3)
                           ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                           : "text-white bg-transparent hover:text-tertiary hover:bg-[#f0f0f0]"
+                      } ${
+                        openSidebar
+                          ? "acerSwift:max-macair133:!h-[30px]"
+                          : "!h-fit p-2"
                       }`}
                     >
-                      TQF 3
+                      {openSidebar && "TQF 3"}
                     </Button>
                   </Menu.Target>
                   {course?.type == COURSE_TYPE.SEL_TOPIC.en &&
@@ -363,7 +406,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                             {uniqTopic.map((topic, index) => (
                               <Menu.Item
                                 key={index}
-                                className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary group"
+                                className="justify-between bg-transparent !max-w-full    py-4  !h-[30px] flex items-center  border-white text-default !font-extrabold transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary"
                                 variant="outline"
                                 onClick={() => {
                                   if (topic !== tqf3.topic) {
@@ -416,9 +459,13 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                         path.includes(ROUTE_PATH.TQF5)
                           ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                           : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                      } ${
+                        openSidebar
+                          ? "acerSwift:max-macair133:!h-[30px]"
+                          : "!h-fit p-2"
                       }`}
                     >
-                      TQF 5
+                      {openSidebar && "TQF 5"}
                     </Button>
                   </Menu.Target>
                   {course?.type == COURSE_TYPE.SEL_TOPIC.en &&
