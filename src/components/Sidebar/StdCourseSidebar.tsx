@@ -22,6 +22,7 @@ export default function StdCourseSidebar() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
+  const openSidebar = useAppSelector((state) => state.config.openSidebar);
   const course = useAppSelector((state) =>
     state.enrollCourse.courses.find((c) => c.courseNo == courseNo)
   );
@@ -63,9 +64,11 @@ export default function StdCourseSidebar() {
             {courseNo} (
             {`${params?.get("semester")}/${params?.get("year")?.slice(-2)}`})
           </p>
-          <p className="text-[13px] font-semibold text-pretty max-w-full">
-            {course?.courseName}
-          </p>
+          {openSidebar && (
+            <p className="text-[13px] font-semibold text-pretty max-w-full">
+              {course?.courseName}
+            </p>
+          )}
         </div>
         {!name && (
           <div className="flex flex-col gap-2">
@@ -149,31 +152,38 @@ export default function StdCourseSidebar() {
         )}
       </div>
 
-      <div className="flex  flex-col gap-2 mt-5">
-        <p className="text-b2 font-bold mb-1">Instructor</p>
-        <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
-          <p className="text-pretty font-medium text-[12px]">
-            {getUserName(course?.section?.instructor, 1)}
-          </p>
-        </div>
-      </div>
-      {!!course?.section?.coInstructors?.length && (
-        <div className="flex  flex-col gap-2">
-          <p className="text-b2 font-bold mb-1">Co-Instructor</p>
-          <div
-            className={`${
-              name ? "max-h-[200px]" : "max-h-[140px]"
-            } gap-1 flex flex-col  overflow-y-auto`}
-          >
-            {course?.section.coInstructors.map((item, index) => {
-              return (
-                <p key={index} className="text-pretty font-medium text-[12px]">
-                  {getUserName(item, 1)}
-                </p>
-              );
-            })}
+      {openSidebar && (
+        <>
+          <div className="flex  flex-col gap-2 mt-5">
+            <p className="text-b2 font-bold mb-1">Instructor</p>
+            <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
+              <p className="text-pretty font-medium text-[12px]">
+                {getUserName(course?.section?.instructor, 1)}
+              </p>
+            </div>
           </div>
-        </div>
+          {!!course?.section?.coInstructors?.length && (
+            <div className="flex  flex-col gap-2">
+              <p className="text-b2 font-bold mb-1">Co-Instructor</p>
+              <div
+                className={`${
+                  name ? "max-h-[200px]" : "max-h-[140px]"
+                } gap-1 flex flex-col  overflow-y-auto`}
+              >
+                {course?.section.coInstructors.map((item, index) => {
+                  return (
+                    <p
+                      key={index}
+                      className="text-pretty font-medium text-[12px]"
+                    >
+                      {getUserName(item, 1)}
+                    </p>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

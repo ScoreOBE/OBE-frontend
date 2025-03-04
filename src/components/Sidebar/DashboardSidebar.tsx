@@ -8,12 +8,8 @@ import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { setAcademicYear } from "@/store/academicYear";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { getCourse } from "@/services/course/course.service";
-import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import { setCourseList } from "@/store/course";
 import { setLoading } from "@/store/loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import { setAllCourseList } from "@/store/allCourse";
 import IconSO from "@/assets/icons/SO.svg?react";
 import IconTQF from "@/assets/icons/TQF.svg?react";
 import IconCLO from "@/assets/icons/targetArrow.svg?react";
@@ -27,6 +23,7 @@ export default function DashboardSidebar() {
   const path = useLocation().pathname;
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
+  const openSidebar = useAppSelector((state) => state.config.openSidebar);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
   const dashboard = useAppSelector((state) => state.config.dashboard);
@@ -179,54 +176,79 @@ export default function DashboardSidebar() {
         </Button>
       </Modal>
       <div className="flex text-white flex-col gap-11  acerSwift:max-macair133:gap-9">
-        <div className="text-sm acerSwift:max-macair133:text-b4 flex flex-col gap-[6px]">
-          <p className="font-semibold">Welcome to ScoreOBE +</p>
-          <div className="font-normal flex flex-col gap-[2px]">
-            <p>
-              Your courses are waiting
-              <br />
-              on the right to jump in!
-              <br />
-              Account? Top right menu
-            </p>
+        {openSidebar && (
+          <div className="text-sm acerSwift:max-macair133:text-b4 flex flex-col gap-[6px]">
+            <p className="font-semibold">Welcome to ScoreOBE +</p>
+            <div className="font-normal flex flex-col gap-[2px]">
+              <p>
+                Your courses are waiting
+                <br />
+                on the right to jump in!
+                <br />
+                Account? Top right menu
+              </p>
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="flex flex-col gap-3">
-          <p className="text-b2 acerSwift:max-macair133:text-b3 font-semibold">
+        <div className="flex flex-col w-full justify-center items-center gap-3">
+          <p
+            className={`text-b2 acerSwift:max-macair133:text-b3 font-semibold ${
+              openSidebar ? "w-full" : ""
+            }`}
+          >
             Course
           </p>
           <Button
-            className="bg-transparent !w-full !h-[50px] flex justify-start items-center px-3 py-1 border-none text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none group"
+            className={`bg-transparent flex justify-start items-center border-none text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none ${
+              openSidebar
+                ? "px-3 py-1 !w-full !h-[50px]"
+                : "!rounded-full !h-fit !w-fit p-2"
+            }`}
             leftSection={
-              <Icon className="-mt-4 mr-1" IconComponent={IconCalendar} />
+              openSidebar && (
+                <Icon className="-mt-4 mr-1" IconComponent={IconCalendar} />
+              )
             }
             variant="default"
             onClick={() => setOpenFilterTerm(true)}
           >
-            <div className="flex flex-col justify-start items-start gap-[7px]">
-              <p className="font-medium text-b2  acerSwift:max-macair133:text-b3">
-                Semester
-              </p>
-              <p className="font-normal text-b4  acerSwift:max-macair133:text-b5">
-                Course (
-                {`${params.get("semester") || ""}/${
-                  params.get("year")?.slice(-2) || ""
-                }`}
-                )
-              </p>
-            </div>
+            {openSidebar ? (
+              <div className="flex flex-col justify-start items-start gap-[7px]">
+                <p className="font-medium text-b2  acerSwift:max-macair133:text-b3">
+                  Semester
+                </p>
+                <p className="font-normal text-b4  acerSwift:max-macair133:text-b5">
+                  Course (
+                  {`${params.get("semester") || ""}/${
+                    params.get("year")?.slice(-2) || ""
+                  }`}
+                  )
+                </p>
+              </div>
+            ) : (
+              <Icon className="size-6" IconComponent={IconCalendar} />
+            )}
           </Button>
         </div>
 
         {path.includes(ROUTE_PATH.ADMIN_DASHBOARD) && (
-          <div className="flex flex-col gap-3">
-            <p className="text-b2 font-semibold">Menu</p>
-            <div className="flex flex-col gap-2">
+          <div className="flex flex-col w-full justify-center items-center gap-3">
+            <p
+              className={`text-b2 font-semibold ${openSidebar ? "w-full" : ""}`}
+            >
+              Menu
+            </p>
+            <div className="flex flex-col w-full justify-center items-center gap-2">
               <Button
                 onClick={() => gotoPage(ROUTE_PATH.TQF)}
                 leftSection={
-                  <Icon className=" size-4 mr-[5px]" IconComponent={IconTQF} />
+                  openSidebar && (
+                    <Icon
+                      className=" size-4 mr-[5px]"
+                      IconComponent={IconTQF}
+                    />
+                  )
                 }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
@@ -240,10 +262,12 @@ export default function DashboardSidebar() {
               <Button
                 onClick={() => gotoPage(ROUTE_PATH.CLO)}
                 leftSection={
-                  <Icon
-                    IconComponent={IconCLO}
-                    className=" size-[21px] mr-[1px] -translate-x-[2px]"
-                  />
+                  openSidebar && (
+                    <Icon
+                      IconComponent={IconCLO}
+                      className=" size-[21px] mr-[1px] -translate-x-[2px]"
+                    />
+                  )
                 }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
@@ -257,7 +281,9 @@ export default function DashboardSidebar() {
               <Button
                 onClick={() => gotoPage(ROUTE_PATH.PLO)}
                 leftSection={
-                  <Icon IconComponent={IconSO} className=" size-[18px]" />
+                  openSidebar && (
+                    <Icon IconComponent={IconSO} className=" size-[18px]" />
+                  )
                 }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
@@ -272,35 +298,52 @@ export default function DashboardSidebar() {
           </div>
         )}
         {path.includes(ROUTE_PATH.STD_DASHBOARD) && (
-          <div className="flex flex-col gap-3">
-            <p className="text-b2 font-semibold">Menu</p>
-            <div className="flex flex-col gap-2">
+          <div className="flex flex-col w-full justify-center items-center gap-3">
+            <p
+              className={`text-b2 font-semibold ${openSidebar ? "w-full" : ""}`}
+            >
+              Menu
+            </p>
+            <div className="flex flex-col w-full justify-center items-center gap-2">
               <Button
                 onClick={() => stdGotoPage("")}
-                leftSection={<RxDashboard size={18} />}
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                leftSection={openSidebar && <RxDashboard size={18} />}
+                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
                   !path.includes(ROUTE_PATH.PLO)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                } ${
+                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
                 }`}
               >
-                Dashboard
+                {openSidebar ? "Dashboard" : <RxDashboard size={20} />}
               </Button>
               <Button
                 onClick={() => stdGotoPage(`/${ROUTE_PATH.PLO}`)}
                 leftSection={
-                  <Icon
-                    IconComponent={IconSpiderChart}
-                    className="size-[18px] -translate-x-[1px] stroke-1"
-                  />
+                  openSidebar && (
+                    <Icon
+                      IconComponent={IconSpiderChart}
+                      className="size-[18px] -translate-x-[1px] stroke-1"
+                    />
+                  )
                 }
                 className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
                   path.includes(ROUTE_PATH.PLO)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                } ${
+                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
                 }`}
               >
-                Overall PLO
+                {openSidebar ? (
+                  "Overall PLO"
+                ) : (
+                  <Icon
+                    IconComponent={IconSpiderChart}
+                    className="size-5 stroke-1"
+                  />
+                )}
               </Button>
             </div>
           </div>

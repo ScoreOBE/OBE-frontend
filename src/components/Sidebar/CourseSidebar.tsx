@@ -42,6 +42,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const [params, setParams] = useSearchParams();
   const path = useLocation().pathname;
   const prefix = `${ROUTE_PATH.COURSE}/${courseNo}`;
+  const openSidebar = useAppSelector((state) => state.config.openSidebar);
   const user = useAppSelector((state) => state.user);
   const dashboard = useAppSelector((state) => state.config.dashboard);
   const course = useAppSelector((state) =>
@@ -197,29 +198,45 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           </>
         }
       />
-      <div className="flex text-white flex-col h-full gap-[26px] acerSwift:max-macair133:gap-6">
+      <div
+        className={`flex text-white flex-col h-full gap-[26px] acerSwift:max-macair133:gap-6 ${
+          openSidebar ? "" : "items-center"
+        }`}
+      >
         <div
-          className="hover:underline cursor-pointer font-bold gap-2 -translate-x-[5px] text-b3 acerSwift:max-macair133:text-b4 flex justify-start"
-          onClick={() => {
-            fetchTqf3();
-          }}
+          className={`w-fit hover:underline cursor-pointer font-bold gap-2 text-b3 acerSwift:max-macair133:text-b4 flex ${
+            openSidebar
+              ? "justify-start -translate-x-[5px]"
+              : "p-1 justify-center items-center rounded-full text-white hover:bg-white hover:text-black"
+          }`}
+          onClick={() => fetchTqf3()}
         >
           <Icon
             IconComponent={IconChevronLeft}
-            className="size-5 acerSwift:max-macair133:size-4"
+            className={`${
+              openSidebar ? "size-5 acerSwift:max-macair133:size-4" : ""
+            }`}
           />
-          Back to {dashboard == ROLE.CURRICULUM_ADMIN ? "Curriculum Admin Dashboard" : "Your Course"}
+          {openSidebar &&
+            `Back to
+          ${
+            dashboard == ROLE.CURRICULUM_ADMIN
+              ? "Curriculum Admin Dashboard"
+              : "Your Course"
+          }`}
         </div>
 
-        <div className="flex flex-col gap-5 ">
+        <div className="flex flex-col w-full gap-5 ">
           <div className="flex flex-col flex-1 font-bold gap-1 ">
             <p className="text-lg acerSwift:max-macair133:!text-b1">
               {course?.courseNo} ({params.get("semester")}/
               {params.get("year")?.slice(-2)})
             </p>
-            <p className="text-b3 acerSwift:max-macair133:!text-b4 font-semibold text-pretty max-w-full acerSwift:max-macair133:max-w-[160px]">
-              {course?.courseName}
-            </p>
+            {openSidebar && (
+              <p className="text-b3 acerSwift:max-macair133:!text-b4 font-semibold text-pretty max-w-full acerSwift:max-macair133:max-w-[160px]">
+                {course?.courseName}
+              </p>
+            )}
           </div>
           <div className="flex flex-col gap-2">
             {dashboard == ROLE.INSTRUCTOR && (
@@ -294,7 +311,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 Skills
               </Button>
             )} */}
-
             {user.role != ROLE.TA && (
               <>
                 <Menu
@@ -444,66 +460,87 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           </div>
         </div>
 
-        <div className="flex  flex-col gap-2">
-          <p className="text-b2 font-bold mb-1 acerSwift:max-macair133:mb-0 acerSwift:max-macair133:text-b3">
-            Instructor
-          </p>
-          <div className="max-h-[120px] flex flex-col gap-1 acerSwift:max-macair133:overflow-y-auto">
-            {instructors.map((item, index) => {
-              return (
-                <p
-                  key={index}
-                  className="text-pretty font-medium text-b4 acerSwift:max-macair133:text-b5"
-                >
-                  {getUserName(item, 1)}
-                </p>
-              );
-            })}{" "}
-          </div>
-        </div>
-        {!!coInstructors.length && (
-          <div className="flex  flex-col gap-2 acerSwift:max-macair133:hidden">
-            <p className="text-b2 font-bold mb-1 acerSwift:max-macair133:mb-0 acerSwift:max-macair133:text-b3 bg-red">
-              Co-Instructor
-            </p>
-            <div className="max-h-[140px] acerSwift:max-macair133:max-h-[10px] gap-1 flex flex-col  overflow-y-auto acerSwift:max-macair133:text-b5">
-              {coInstructors.map((item, index) => {
-                return (
-                  <p
-                    key={index}
-                    className="text-pretty font-medium text-[12px]"
-                  >
-                    {getUserName(item, 1)}
-                  </p>
-                );
-              })}
+        {openSidebar && (
+          <>
+            <div className="flex  flex-col gap-2">
+              <p className="text-b2 font-bold mb-1 acerSwift:max-macair133:mb-0 acerSwift:max-macair133:text-b3">
+                Instructor
+              </p>
+              <div className="max-h-[120px] flex flex-col gap-1 acerSwift:max-macair133:overflow-y-auto">
+                {instructors.map((item, index) => {
+                  return (
+                    <p
+                      key={index}
+                      className="text-pretty font-medium text-b4 acerSwift:max-macair133:text-b5"
+                    >
+                      {getUserName(item, 1)}
+                    </p>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+            {!!coInstructors.length && (
+              <div className="flex  flex-col gap-2 acerSwift:max-macair133:hidden">
+                <p className="text-b2 font-bold mb-1 acerSwift:max-macair133:mb-0 acerSwift:max-macair133:text-b3 bg-red">
+                  Co-Instructor
+                </p>
+                <div className="max-h-[140px] acerSwift:max-macair133:max-h-[10px] gap-1 flex flex-col  overflow-y-auto acerSwift:max-macair133:text-b5">
+                  {coInstructors.map((item, index) => {
+                    return (
+                      <p
+                        key={index}
+                        className="text-pretty font-medium text-[12px]"
+                      >
+                        {getUserName(item, 1)}
+                      </p>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </>
         )}
         {dashboard == ROLE.INSTRUCTOR &&
           course &&
           !course?.sections.find(
             (sec: any) => sec.instructor.email === user.email
           ) && (
-            <div className="flex w-full gap-2 justify-end flex-col flex-1">
+            <div
+              className={`flex w-full gap-2 justify-end flex-col flex-1 ${
+                openSidebar ? "" : "items-center text-center"
+              }`}
+            >
               <p className="text-b2 text-white font-bold acerSwift:max-macair133:text-b3">
                 Course Action
               </p>
               <Button
                 onClick={onClickLeaveCourse}
                 leftSection={
+                  openSidebar && (
+                    <Icon
+                      IconComponent={IconLogout}
+                      className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
+                    />
+                  )
+                }
+                className={`text-[#ffffff] bg-transparent hover:bg-[#d55757] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                  openSidebar
+                    ? "!w-full !h-9 acerSwift:max-macair133:!h-8"
+                    : "!h-fit !w-fit p-2 !rounded-full"
+                }`}
+              >
+                {openSidebar ? (
+                  <div className="flex flex-col justify-start w-full items-start gap-[7px] ">
+                    <p className="font-medium text-b3 acerSwift:max-macair133:text-b4">
+                      Leave from Course
+                    </p>
+                  </div>
+                ) : (
                   <Icon
                     IconComponent={IconLogout}
                     className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
                   />
-                }
-                className="text-[#ffffff] bg-transparent hover:bg-[#d55757] !w-full !h-9 flex justify-start items-center transition-colors acerSwift:max-macair133:!h-8 duration-300 focus:border-none group"
-              >
-                <div className="flex flex-col justify-start w-full items-start gap-[7px] ">
-                  <p className="font-medium text-b3 acerSwift:max-macair133:text-b4">
-                    Leave from Course
-                  </p>
-                </div>
+                )}
               </Button>
             </div>
           )}
