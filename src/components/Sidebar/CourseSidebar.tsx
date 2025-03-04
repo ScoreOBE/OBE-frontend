@@ -366,31 +366,42 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                         goToPage(ROUTE_PATH.TQF3);
                       }}
                       leftSection={
-                        <Icon
-                          IconComponent={IconTQF3}
-                          className="size-5 acerSwift:max-macair133:size-4"
-                        />
+                        openSidebar && (
+                          <Icon
+                            IconComponent={IconTQF3}
+                            className="size-5 acerSwift:max-macair133:size-4"
+                          />
+                        )
                       }
                       rightSection={
                         course?.type == COURSE_TYPE.SEL_TOPIC.en &&
                         uniqTopic.length > 1 && (
                           <Icon
                             IconComponent={IconChevronRight}
-                            className="size-5 right-2 absolute flex"
+                            className={`size-5 absolute flex ${
+                              openSidebar ? "right-2" : ""
+                            }`}
                           />
                         )
                       }
-                      className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                      className={`!text-b3 acerSwift:max-macair133:!text-b4 flex justify-start items-center transition-colors duration-300 focus:border-none ${
                         path.includes(ROUTE_PATH.TQF3)
                           ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                           : "text-white bg-transparent hover:text-tertiary hover:bg-[#f0f0f0]"
                       } ${
                         openSidebar
-                          ? "acerSwift:max-macair133:!h-[30px]"
-                          : "!h-fit p-2"
+                          ? "!w-full acerSwift:max-macair133:!h-[30px]"
+                          : "!rounded-full !h-fit !w-fit p-2"
                       }`}
                     >
-                      {openSidebar && "TQF 3"}
+                      {openSidebar ? (
+                        "TQF 3"
+                      ) : (
+                        <Icon
+                          IconComponent={IconTQF3}
+                          className="size-5 acerSwift:max-macair133:size-4"
+                        />
+                      )}
                     </Button>
                   </Menu.Target>
                   {course?.type == COURSE_TYPE.SEL_TOPIC.en &&
@@ -441,31 +452,42 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                         goToPage(ROUTE_PATH.TQF5);
                       }}
                       leftSection={
-                        <Icon
-                          IconComponent={IconTQF5}
-                          className="size-5 acerSwift:max-macair133:size-4"
-                        />
+                        openSidebar && (
+                          <Icon
+                            IconComponent={IconTQF5}
+                            className="size-5 acerSwift:max-macair133:size-4"
+                          />
+                        )
                       }
                       rightSection={
                         course?.type == COURSE_TYPE.SEL_TOPIC.en &&
                         uniqTopic.length > 1 && (
                           <Icon
                             IconComponent={IconChevronRight}
-                            className="size-5 right-2 absolute flex acerSwift:max-macair133:size-4"
+                            className={`size-5 absolute flex acerSwift:max-macair133:size-4 ${
+                              openSidebar ? "right-2" : ""
+                            }`}
                           />
                         )
                       }
-                      className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] mb-1 flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                      className={`!text-b3 acerSwift:max-macair133:!text-b4 mb-1 flex justify-start items-center transition-colors duration-300 focus:border-none group ${
                         path.includes(ROUTE_PATH.TQF5)
                           ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                           : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                       } ${
                         openSidebar
-                          ? "acerSwift:max-macair133:!h-[30px]"
-                          : "!h-fit p-2"
+                          ? "!w-full acerSwift:max-macair133:!h-[30px]"
+                          : "!rounded-full !h-fit !w-fit p-2"
                       }`}
                     >
-                      {openSidebar && "TQF 5"}
+                      {openSidebar ? (
+                        "TQF 5"
+                      ) : (
+                        <Icon
+                          IconComponent={IconTQF5}
+                          className="size-5 acerSwift:max-macair133:size-4"
+                        />
+                      )}
                     </Button>
                   </Menu.Target>
                   {course?.type == COURSE_TYPE.SEL_TOPIC.en &&
