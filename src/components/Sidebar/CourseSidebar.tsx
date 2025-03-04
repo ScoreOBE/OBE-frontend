@@ -204,6 +204,15 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
         }`}
       >
         <div
+          title={
+            openSidebar
+              ? undefined
+              : `Back to ${
+                  dashboard == ROLE.CURRICULUM_ADMIN
+                    ? "Curriculum Admin Dashboard"
+                    : "Your Course"
+                }`
+          }
           className={`w-fit hover:underline cursor-pointer font-bold gap-2 text-b3 acerSwift:max-macair133:text-b4 flex ${
             openSidebar
               ? "justify-start -translate-x-[5px]"
@@ -218,35 +227,35 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             }`}
           />
           {openSidebar &&
-            `Back to
-          ${
-            dashboard == ROLE.CURRICULUM_ADMIN
-              ? "Curriculum Admin Dashboard"
-              : "Your Course"
-          }`}
+            `Back to ${
+              dashboard == ROLE.CURRICULUM_ADMIN
+                ? "Curriculum Admin Dashboard"
+                : "Your Course"
+            }`}
         </div>
 
         <div className="flex flex-col w-full gap-5 ">
-          <div className="flex flex-col flex-1 font-bold gap-1 ">
-            <p className="text-lg acerSwift:max-macair133:!text-b1">
-              {course?.courseNo} ({params.get("semester")}/
-              {params.get("year")?.slice(-2)})
-            </p>
-            {openSidebar && (
+          {openSidebar && (
+            <div className="flex flex-col flex-1 font-bold gap-1 ">
+              <p className="text-lg acerSwift:max-macair133:!text-b1">
+                {course?.courseNo} ({params.get("semester")}/
+                {params.get("year")?.slice(-2)})
+              </p>
               <p className="text-b3 acerSwift:max-macair133:!text-b4 font-semibold text-pretty max-w-full acerSwift:max-macair133:max-w-[160px]">
                 {course?.courseName}
               </p>
-            )}
-          </div>
+            </div>
+          )}
           <div
-            className={`flex flex-col gap-2 ${
+            className={`flex flex-col ${
               openSidebar
-                ? ""
-                : "w-full justify-center items-center text-center"
+                ? "gap-2"
+                : "gap-3 w-full justify-center items-center text-center"
             }`}
           >
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
+                title={openSidebar ? undefined : "Evaluations"}
                 onClick={() => goToPage(ROUTE_PATH.EVALUATION)}
                 leftSection={
                   openSidebar && (
@@ -276,6 +285,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             )}
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
+                title={openSidebar ? undefined : "Sections"}
                 onClick={() => goToPage(ROUTE_PATH.SECTION)}
                 leftSection={
                   openSidebar && (
@@ -305,6 +315,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             )}
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
+                title={openSidebar ? undefined : "Roster"}
                 onClick={() => goToPage(ROUTE_PATH.ROSTER)}
                 leftSection={
                   openSidebar && (
@@ -362,6 +373,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 >
                   <Menu.Target>
                     <Button
+                      title={openSidebar ? undefined : "TQF 3"}
                       onClick={() => {
                         goToPage(ROUTE_PATH.TQF3);
                       }}
@@ -448,6 +460,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 >
                   <Menu.Target>
                     <Button
+                      title={openSidebar ? undefined : "TQF 5"}
                       onClick={() => {
                         goToPage(ROUTE_PATH.TQF5);
                       }}

@@ -192,14 +192,23 @@ export default function DashboardSidebar() {
         )}
 
         <div className="flex flex-col w-full justify-center items-center gap-3">
-          <p
-            className={`text-b2 acerSwift:max-macair133:text-b3 font-semibold ${
-              openSidebar ? "w-full" : ""
-            }`}
-          >
-            Course
-          </p>
+          {openSidebar && (
+            <p
+              className={`text-b2 acerSwift:max-macair133:text-b3 font-semibold ${
+                openSidebar ? "w-full" : ""
+              }`}
+            >
+              Course
+            </p>
+          )}
           <Button
+            title={
+              openSidebar
+                ? undefined
+                : `Semester ${params.get("semester") || ""}/${
+                    params.get("year")?.slice(-2) || ""
+                  }`
+            }
             className={`bg-transparent flex justify-start items-center border-none text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none ${
               openSidebar
                 ? "px-3 py-1 !w-full !h-[50px]"
@@ -234,13 +243,22 @@ export default function DashboardSidebar() {
 
         {path.includes(ROUTE_PATH.ADMIN_DASHBOARD) && (
           <div className="flex flex-col w-full justify-center items-center gap-3">
-            <p
-              className={`text-b2 font-semibold ${openSidebar ? "w-full" : ""}`}
+            {openSidebar && (
+              <p
+                className={`text-b2 font-semibold ${
+                  openSidebar ? "w-full" : ""
+                }`}
+              >
+                Menu
+              </p>
+            )}
+            <div
+              className={`flex flex-col w-full justify-center items-center ${
+                openSidebar ? "gap-2" : "gap-3"
+              }`}
             >
-              Menu
-            </p>
-            <div className="flex flex-col w-full justify-center items-center gap-2">
               <Button
+                title={openSidebar ? undefined : "TQF"}
                 onClick={() => gotoPage(ROUTE_PATH.TQF)}
                 leftSection={
                   openSidebar && (
@@ -264,6 +282,7 @@ export default function DashboardSidebar() {
                 )}
               </Button>
               <Button
+                title={openSidebar ? undefined : "CLO"}
                 onClick={() => gotoPage(ROUTE_PATH.CLO)}
                 leftSection={
                   openSidebar && (
@@ -289,6 +308,7 @@ export default function DashboardSidebar() {
                 )}
               </Button>
               <Button
+                title={openSidebar ? undefined : "PLO"}
                 onClick={() => gotoPage(ROUTE_PATH.PLO)}
                 leftSection={
                   openSidebar && (
@@ -315,13 +335,22 @@ export default function DashboardSidebar() {
         )}
         {path.includes(ROUTE_PATH.STD_DASHBOARD) && (
           <div className="flex flex-col w-full justify-center items-center gap-3">
-            <p
-              className={`text-b2 font-semibold ${openSidebar ? "w-full" : ""}`}
+            {openSidebar && (
+              <p
+                className={`text-b2 font-semibold ${
+                  openSidebar ? "w-full" : ""
+                }`}
+              >
+                Menu
+              </p>
+            )}
+            <div
+              className={`flex flex-col w-full justify-center items-center ${
+                openSidebar ? "gap-2" : "gap-3"
+              }`}
             >
-              Menu
-            </p>
-            <div className="flex flex-col w-full justify-center items-center gap-2">
               <Button
+                title={openSidebar ? undefined : "Dashboard"}
                 onClick={() => stdGotoPage("")}
                 leftSection={openSidebar && <RxDashboard size={18} />}
                 className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
@@ -335,6 +364,7 @@ export default function DashboardSidebar() {
                 {openSidebar ? "Dashboard" : <RxDashboard size={20} />}
               </Button>
               <Button
+                title={openSidebar ? undefined : "Overall PLO"}
                 onClick={() => stdGotoPage(`/${ROUTE_PATH.PLO}`)}
                 leftSection={
                   openSidebar && (

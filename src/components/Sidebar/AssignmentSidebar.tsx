@@ -61,21 +61,23 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
           openSidebar ? "" : "w-full justify-center items-center text-center"
         }`}
       >
-        <div className="flex flex-col flex-1 font-bold gap-1 ">
-          <p className="text-lg acerSwift:max-macair133:!text-b1">
-            {courseNo} ({course?.semester}/{course?.year.toString().slice(-2)})
-          </p>
-          <p className="text-lg acerSwift:max-macair133:!text-b1 -mt-1">
-            Section {getSectionNo(sectionNo)}
-          </p>
-          {openSidebar && (
+        {openSidebar && (
+          <div className="flex flex-col flex-1 font-bold gap-1 ">
+            <p className="text-lg acerSwift:max-macair133:!text-b1">
+              {courseNo} ({course?.semester}/{course?.year.toString().slice(-2)}
+              )
+            </p>
+            <p className="text-lg acerSwift:max-macair133:!text-b1 -mt-1">
+              Section {getSectionNo(sectionNo)}
+            </p>
             <p className="text-b3   acerSwift:max-macair133:!text-b4 font-semibold text-pretty max-w-full">
               {course?.courseName}
             </p>
-          )}
-        </div>
-        <div className="flex flex-col gap-2">
+          </div>
+        )}
+        <div className={`flex flex-col ${openSidebar ? "gap-2" : "gap-3"}`}>
           <Button
+            title={openSidebar ? undefined : "Evaluations"}
             onClick={() => gotoPage(ROUTE_PATH.EVALUATION)}
             leftSection={
               openSidebar && (
@@ -93,12 +95,13 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
               } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-1"}`}
           >
             {openSidebar ? (
-              "Evaluation"
+              "Evaluations"
             ) : (
               <Icon IconComponent={IconList} className="size-7" />
             )}
           </Button>
           <Button
+            title={openSidebar ? undefined : "Charts"}
             onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
             leftSection={
               openSidebar && (

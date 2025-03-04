@@ -44,10 +44,11 @@ export default function StdCourseSidebar() {
     <div className="flex text-white flex-col h-full items-center gap-[26px]">
       {!name && (
         <div
+          title={openSidebar ? undefined : "Back to Dashboard"}
           className={`hover:underline cursor-pointer font-bold gap-2 text-[13px] flex ${
             openSidebar
               ? "p-0 w-full justify-start -translate-x-[5px]"
-              : "p-1 w-fit justify-center items-center rounded-full text-white hover:bg-white hover:text-black"
+              : "p-1.5 w-fit justify-center items-center rounded-full text-white hover:bg-white hover:text-black"
           }`}
           onClick={() => gotoPage(ROUTE_PATH.STD_DASHBOARD, true)}
         >
@@ -63,33 +64,34 @@ export default function StdCourseSidebar() {
           openSidebar ? "" : "w-full justify-center items-center text-center"
         }`}
       >
-        <div className="flex flex-col flex-1 font-bold gap-1 ">
-          {name && <p className="text-lg">{name}</p>}
-          <p
-            className={
-              name
-                ? "text-[14px] font-semibold text-pretty max-w-full"
-                : "text-lg"
-            }
-          >
-            {courseNo} (
-            {`${params?.get("semester")}/${params?.get("year")?.slice(-2)}`})
-          </p>
-          {openSidebar && (
+        {openSidebar && (
+          <div className="flex flex-col flex-1 font-bold gap-1 ">
+            {name && <p className="text-lg">{name}</p>}
+            <p
+              className={
+                name
+                  ? "text-[14px] font-semibold text-pretty max-w-full"
+                  : "text-lg"
+              }
+            >
+              {courseNo} (
+              {`${params?.get("semester")}/${params?.get("year")?.slice(-2)}`})
+            </p>
             <p className="text-[13px] font-semibold text-pretty max-w-full">
               {course?.courseName}
             </p>
-          )}
-        </div>
+          </div>
+        )}
         {!name && (
           <div
-            className={`flex flex-col gap-2 ${
+            className={`flex flex-col ${
               openSidebar
-                ? ""
-                : "w-full justify-center items-center text-center"
+                ? "gap-2"
+                : "gap-3 w-full justify-center items-center text-center"
             }`}
           >
             <Button
+              title={openSidebar ? undefined : "Evaluations"}
               onClick={() => gotoPage(ROUTE_PATH.EVALUATION)}
               leftSection={openSidebar && <Icon IconComponent={IconList} />}
               className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
@@ -97,11 +99,16 @@ export default function StdCourseSidebar() {
                 path.includes(ROUTE_PATH.EVALUATION)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-              } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"}`}
+              } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-1"}`}
             >
-              {openSidebar ? "Evaluations" : <Icon IconComponent={IconList} />}
+              {openSidebar ? (
+                "Evaluations"
+              ) : (
+                <Icon IconComponent={IconList} className="size-7" />
+              )}
             </Button>
             <Button
+              title={openSidebar ? undefined : "Chart"}
               onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
               leftSection={
                 openSidebar && (
@@ -127,6 +134,7 @@ export default function StdCourseSidebar() {
               )}
             </Button>
             <Button
+              title={openSidebar ? undefined : "CLO"}
               onClick={() => gotoPage(ROUTE_PATH.CLO)}
               leftSection={
                 openSidebar && (
@@ -152,6 +160,7 @@ export default function StdCourseSidebar() {
               )}
             </Button>
             <Button
+              title={openSidebar ? undefined : "PLO"}
               onClick={() => gotoPage(ROUTE_PATH.PLO)}
               leftSection={
                 openSidebar && (
