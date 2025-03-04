@@ -55,8 +55,12 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
   return loading ? (
     <Loading />
   ) : (
-    <div className="flex text-white flex-col h-full  gap-[26px]">
-      <div className="flex flex-col gap-5 ">
+    <div className="flex text-white flex-col h-full gap-[26px]">
+      <div
+        className={`flex flex-col gap-5 ${
+          openSidebar ? "" : "w-full justify-center items-center text-center"
+        }`}
+      >
         <div className="flex flex-col flex-1 font-bold gap-1 ">
           <p className="text-lg acerSwift:max-macair133:!text-b1">
             {courseNo} ({course?.semester}/{course?.year.toString().slice(-2)})
@@ -64,44 +68,60 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
           <p className="text-lg acerSwift:max-macair133:!text-b1 -mt-1">
             Section {getSectionNo(sectionNo)}
           </p>
-          <p className="text-b3   acerSwift:max-macair133:!text-b4 font-semibold text-pretty max-w-full">
-            {course?.courseName}
-          </p>
+          {openSidebar && (
+            <p className="text-b3   acerSwift:max-macair133:!text-b4 font-semibold text-pretty max-w-full">
+              {course?.courseName}
+            </p>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <Button
             onClick={() => gotoPage(ROUTE_PATH.EVALUATION)}
             leftSection={
-              <Icon
-                IconComponent={IconList}
-                className=" acerSwift:max-macair133:!size-5"
-              />
+              openSidebar && (
+                <Icon
+                  IconComponent={IconList}
+                  className=" acerSwift:max-macair133:!size-5"
+                />
+              )
             }
-            className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+            className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
                 path.includes(ROUTE_PATH.EVALUATION)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-              }`}
+              } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-1"}`}
           >
-            Evaluation
+            {openSidebar ? (
+              "Evaluation"
+            ) : (
+              <Icon IconComponent={IconList} className="size-7" />
+            )}
           </Button>
           <Button
             onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
             leftSection={
-              <Icon
-                IconComponent={IconHistogram}
-                className="pb-1 pl-[2px] size-[22px]  acerSwift:max-macair133:!size-5"
-              />
+              openSidebar && (
+                <Icon
+                  IconComponent={IconHistogram}
+                  className="pb-1 pl-[2px] size-[22px]  acerSwift:max-macair133:!size-5"
+                />
+              )
             }
-            className={`!w-full !text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+            className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
                    path.includes(ROUTE_PATH.HISTOGRAM)
                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                 }`}
+                 } ${
+              openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+            }`}
           >
-            <p className="pl-[3px]">Charts</p>
+            {openSidebar ? (
+              <p className="pl-[3px]">Charts</p>
+            ) : (
+              <Icon IconComponent={IconHistogram} className="size-5" />
+            )}
           </Button>
         </div>
       </div>

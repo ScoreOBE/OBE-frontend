@@ -250,14 +250,18 @@ export default function DashboardSidebar() {
                     />
                   )
                 }
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
                 path.includes(ROUTE_PATH.TQF)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-              }`}
+              } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"}`}
               >
-                TQF
+                {openSidebar ? (
+                  "TQF"
+                ) : (
+                  <Icon className="size-4" IconComponent={IconTQF} />
+                )}
               </Button>
               <Button
                 onClick={() => gotoPage(ROUTE_PATH.CLO)}
@@ -269,14 +273,20 @@ export default function DashboardSidebar() {
                     />
                   )
                 }
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
                    path.includes(ROUTE_PATH.CLO)
                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                 }`}
+                 } ${
+                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                }`}
               >
-                <p>CLO</p>
+                {openSidebar ? (
+                  "CLO"
+                ) : (
+                  <Icon IconComponent={IconCLO} className="size-[21px]" />
+                )}
               </Button>
               <Button
                 onClick={() => gotoPage(ROUTE_PATH.PLO)}
@@ -285,14 +295,20 @@ export default function DashboardSidebar() {
                     <Icon IconComponent={IconSO} className=" size-[18px]" />
                   )
                 }
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
                    path.includes(ROUTE_PATH.PLO)
                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                 }`}
+                 } ${
+                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                }`}
               >
-                <p className="pl-1">PLO</p>
+                {openSidebar ? (
+                  <p className="pl-1">PLO</p>
+                ) : (
+                  <Icon IconComponent={IconSO} className="size-[18px]" />
+                )}
               </Button>
             </div>
           </div>
@@ -328,7 +344,7 @@ export default function DashboardSidebar() {
                     />
                   )
                 }
-                className={`!w-full !text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
                   path.includes(ROUTE_PATH.PLO)
                     ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                     : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
