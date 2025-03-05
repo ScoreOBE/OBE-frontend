@@ -191,7 +191,7 @@ export default function Sidebar() {
                 className="h-[30px] cursor-pointer w-[30px] acerSwift:max-macair133:h-[27px] acerSwift:max-macair133:w-[27px]"
               />
               {openSidebar && (
-                <p className="text-white text-[20px] acerSwift:max-macair133:text-h2 font-semibold">
+                <p className="text-white text-[19px] acerSwift:max-macair133:text-h2 font-semibold">
                   ScoreOBE <span className="text-[#FFCD1B]"> +</span>
                 </p>
               )}
