@@ -592,9 +592,11 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 openSidebar ? "" : "items-center text-center"
               }`}
             >
-              <p className="text-b2 text-white font-bold acerSwift:max-macair133:text-b3">
-                Course Action
-              </p>
+              {openSidebar && (
+                <p className="text-b2 text-white font-bold acerSwift:max-macair133:text-b3">
+                  Course Action
+                </p>
+              )}
               <Button
                 onClick={onClickLeaveCourse}
                 leftSection={
