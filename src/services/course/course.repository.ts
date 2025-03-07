@@ -13,8 +13,8 @@ export const courseController = (configService = {}) => {
     getOneCourse: async (params?: CourseRequestDTO) => {
       return service.get(`${prefix}/one`, { ...params });
     },
-    getExistsCourseName: async (courseNo: string, params: any) => {
-      return service.get(`${prefix}/name/${courseNo}`, { ...params });
+    getExistsCourseData: async (courseNo: string, params: any) => {
+      return service.get(`${prefix}/data/${courseNo}`, { ...params });
     },
     checkCanCreateCourse: async (params: Partial<IModelCourse>) => {
       return service.get(`${prefix}/check`, { ...params });

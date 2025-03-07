@@ -9,6 +9,8 @@ export interface IModelCourse {
   semester: number;
   courseNo: string;
   courseName: string;
+  descTH: string;
+  descEN: string;
   type: string;
   sections: Partial<IModelSection>[];
   addFirstTime?: boolean;

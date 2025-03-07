@@ -7,7 +7,7 @@ export const showSidebarSlice = createSlice({
     showButtonLogin: false,
     showNavbar: false,
     showSidebar: false,
-    openSidebar: false,
+    openSidebar: true,
   },
   reducers: {
     setDashboard: (state, action) => {

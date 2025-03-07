@@ -472,69 +472,72 @@ export default function Dashboard() {
                         </p>
                         {item.sections.find(
                           (sec) => (sec.instructor as IModelUser).id == user.id
-                        ) && (
-                          <div onClick={(event) => event.stopPropagation()}>
-                            <Menu
-                              trigger="click"
-                              position="bottom-end"
-                              offset={-15}
-                            >
-                              <Menu.Target>
-                                <div>
-                                  <Icon
-                                    IconComponent={IconDots}
-                                    className="absolute top-2 right-2 rounded-full hover:bg-gray-300 acerSwift:max-macair133:size-5.5"
-                                  />
-                                </div>
-                              </Menu.Target>
-                              <Menu.Dropdown
-                                className="rounded-md backdrop-blur-xl bg-white/70 "
-                                style={{
-                                  boxShadow:
-                                    "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                                }}
+                        ) &&
+                          term?.isActive && (
+                            <div onClick={(event) => event.stopPropagation()}>
+                              <Menu
+                                trigger="click"
+                                position="bottom-end"
+                                offset={-15}
                               >
-                                <Menu.Item
-                                  onClick={() => {
-                                    setEditCourse({
-                                      id: item.id,
-                                      courseNo: item.courseNo,
-                                      courseName: item.courseName,
-                                      addFirstTime: item.addFirstTime,
-                                    });
-                                    setOpenModalEditCourse(true);
-                                  }}
-                                  className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 w-[180px]"
-                                >
-                                  <div className="flex items-center gap-2">
+                                <Menu.Target>
+                                  <div>
                                     <Icon
-                                      IconComponent={IconPencilMinus}
-                                      className="size-4 stroke-[2px] acerSwift:max-macair133:size-3"
+                                      IconComponent={IconDots}
+                                      className="absolute top-2 right-2 rounded-full hover:bg-gray-300 acerSwift:max-macair133:size-5.5"
                                     />
-                                    <span>Edit Course</span>
                                   </div>
-                                </Menu.Item>
-                                {item.addFirstTime && (
+                                </Menu.Target>
+                                <Menu.Dropdown
+                                  className="rounded-md backdrop-blur-xl bg-white/70 "
+                                  style={{
+                                    boxShadow:
+                                      "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                                  }}
+                                >
                                   <Menu.Item
-                                    className="text-[#FF4747] h-7 w-[180px] font-semibold text-b4 acerSwift:max-macair133:!text-b5 hover:bg-[#d55757]/10"
                                     onClick={() => {
-                                      setDelCourse(item);
-                                      setOpenDelPopup(true);
+                                      setEditCourse({
+                                        id: item.id,
+                                        courseNo: item.courseNo,
+                                        courseName: item.courseName,
+                                        descTH: item.descTH,
+                                        descEN: item.descEN,
+                                        addFirstTime: item.addFirstTime,
+                                      });
+                                      setOpenModalEditCourse(true);
                                     }}
+                                    className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 w-[180px]"
                                   >
                                     <div className="flex items-center gap-2">
                                       <Icon
-                                        IconComponent={IconTrash}
+                                        IconComponent={IconPencilMinus}
                                         className="size-4 stroke-[2px] acerSwift:max-macair133:size-3"
                                       />
-                                      <span>Delete Course</span>
+                                      <span>Edit Course</span>
                                     </div>
                                   </Menu.Item>
-                                )}
-                              </Menu.Dropdown>
-                            </Menu>
-                          </div>
-                        )}
+                                  {item.addFirstTime && (
+                                    <Menu.Item
+                                      className="text-[#FF4747] h-7 w-[180px] font-semibold text-b4 acerSwift:max-macair133:!text-b5 hover:bg-[#d55757]/10"
+                                      onClick={() => {
+                                        setDelCourse(item);
+                                        setOpenDelPopup(true);
+                                      }}
+                                    >
+                                      <div className="flex items-center gap-2">
+                                        <Icon
+                                          IconComponent={IconTrash}
+                                          className="size-4 stroke-[2px] acerSwift:max-macair133:size-3"
+                                        />
+                                        <span>Delete Course</span>
+                                      </div>
+                                    </Menu.Item>
+                                  )}
+                                </Menu.Dropdown>
+                              </Menu>
+                            </div>
+                          )}
                       </div>
                       <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
                         <p className="p-2.5 text-secondary font-[700] text-b4 acerSwift:max-macair133:text-b5">

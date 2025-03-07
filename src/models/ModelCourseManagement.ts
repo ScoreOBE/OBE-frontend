@@ -5,6 +5,8 @@ export interface IModelCourseManagement {
   id: string;
   courseNo: string;
   courseName: string;
+  descTH: string;
+  descEN: string;
   updatedYear: number;
   updatedSemester: number;
   type: string;

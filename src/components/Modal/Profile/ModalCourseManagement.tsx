@@ -518,6 +518,8 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                                   oldCourseNo: course.courseNo,
                                   courseNo: course.courseNo,
                                   courseName: course.courseName,
+                                  descTH: course.descTH,
+                                  descEN: course.descEN,
                                 });
                                 setOpenModalEditCourse(true);
                               }}
