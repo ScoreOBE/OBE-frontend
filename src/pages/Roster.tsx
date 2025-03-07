@@ -504,7 +504,7 @@ export default function Roster() {
                 />
                 <p className="acerSwift:max-macair133:!text-b3">
                   You can only edit section for the student who is currently
-                  logged into ScoreOBE +.
+                  logged into ScoreOBE+.
                 </p>
               </div>
             }

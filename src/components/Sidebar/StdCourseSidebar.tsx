@@ -4,7 +4,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { Button } from "@mantine/core";
+import { Button, Tooltip } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import Icon from "@/components/Icon";
 import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
@@ -52,10 +52,24 @@ export default function StdCourseSidebar() {
           }`}
           onClick={() => gotoPage(ROUTE_PATH.STD_DASHBOARD, true)}
         >
+           <Tooltip
+                transitionProps={{ transition: "fade-right", duration: 200 }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Back to Dashboard"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+              ><div>
           <Icon
             IconComponent={IconChevronLeft}
             className={`${openSidebar ? "size-5" : ""}`}
           />
+          </div></Tooltip>
           {openSidebar && "Back to Dashboard"}
         </div>
       )}
@@ -103,8 +117,20 @@ export default function StdCourseSidebar() {
             >
               {openSidebar ? (
                 "Evaluations"
-              ) : (
-                <Icon IconComponent={IconList} className="size-7" />
+              ) : ( <Tooltip
+                transitionProps={{ transition: "fade-right", duration: 200 }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Evaluations"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+              ><div>
+                <Icon IconComponent={IconList} className="size-7" /></div></Tooltip>
               )}
             </Button>
             <Button
@@ -127,10 +153,23 @@ export default function StdCourseSidebar() {
               {openSidebar ? (
                 <p className="pl-[3px]">Chart</p>
               ) : (
+                <Tooltip
+                transitionProps={{ transition: "fade-right", duration: 200 }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Chart"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+              ><div>
                 <Icon
                   IconComponent={IconHistogram}
                   className="pb-1 pl-[2px] size-[22px]"
-                />
+                /></div></Tooltip>
               )}
             </Button>
             <Button
@@ -153,10 +192,23 @@ export default function StdCourseSidebar() {
               {openSidebar ? (
                 <p className="pl-[3px]">CLO</p>
               ) : (
+                <Tooltip
+                transitionProps={{ transition: "fade-right", duration: 200 }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="CLO"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+              ><div>
                 <Icon
                   IconComponent={IconArrow}
                   className=" stroke-[1.5px] size-[22px] "
-                />
+                /></div></Tooltip>
               )}
             </Button>
             <Button
@@ -179,10 +231,23 @@ export default function StdCourseSidebar() {
               {openSidebar ? (
                 <p className="pl-[6px]">PLO</p>
               ) : (
+                <Tooltip
+                transitionProps={{ transition: "fade-right", duration: 200 }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="PLO"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+              ><div>
                 <Icon
                   IconComponent={IconSpiderChart}
                   className="stroke-[1.2px] size-[20px]"
-                />
+                /></div></Tooltip>
               )}
             </Button>
             {/* <Button

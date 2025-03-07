@@ -148,7 +148,7 @@ export default function Navbar() {
                 className=" sm:h-[28px] h-[22px] "
               />
               <span className="font-[600] sm:text-[18px] text-[14px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                ScoreOBE +
+                ScoreOBE+
               </span>
             </div>
             <div className="py-5 flex items-end gap-5 justify-end h-full">

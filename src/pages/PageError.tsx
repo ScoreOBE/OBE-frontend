@@ -57,7 +57,7 @@ export default function PageError() {
                 className=" h-[60px] w-[60px] "
               />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                ScoreOBE +
+                ScoreOBE+
               </span>{" "}
               <p className="-translate-x-2 text-amber-600 ">Bad Request</p>{" "}
             </div>
@@ -93,7 +93,7 @@ export default function PageError() {
                 className=" h-[60px] w-[60px] "
               />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                ScoreOBE +
+                ScoreOBE+
               </span>
               <p className="-translate-x-2 text-pink-500 ">Unauthorized</p>
             </div>
@@ -130,7 +130,7 @@ export default function PageError() {
                 className=" h-[60px] w-[60px] "
               />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                ScoreOBE +
+                ScoreOBE+
               </span>
               <p className=" -translate-x-2 text-[#24aa79] ">Access Denied</p>
             </div>
@@ -170,7 +170,7 @@ export default function PageError() {
               />
               <p className="text-4xl text-gray-600   font-semibold">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                  ScoreOBE +
+                  ScoreOBE+
                 </span>{" "}
                 LOST
               </p>

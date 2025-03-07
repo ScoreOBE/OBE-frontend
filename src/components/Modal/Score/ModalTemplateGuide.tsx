@@ -39,7 +39,7 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
         return (
           <>
             <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] mb-10 leading-[38px] text-[28px]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] font-semibold text-[24px]">
-              ScoreOBE + <br /> Template Guide <br /> for Upload Score
+              ScoreOBE+ <br /> Template Guide <br /> for Upload Score
             </p>
             <p className="text-[14px] mb-16 text-default font-medium">
               This template helps you easily upload student grades for your

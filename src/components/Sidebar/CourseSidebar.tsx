@@ -5,7 +5,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { Alert, Button, Menu } from "@mantine/core";
+import { Alert, Button, Menu, Tooltip } from "@mantine/core";
 import store, { useAppDispatch, useAppSelector } from "@/store";
 import { RxDashboard } from "react-icons/rx";
 import { ROUTE_PATH } from "@/helpers/constants/route";
@@ -220,12 +220,30 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           }`}
           onClick={() => fetchTqf3()}
         >
+           <Tooltip  
+  transitionProps={{ transition: 'fade-right', duration: 200 }} 
+  classNames={{ tooltip: "font-semibold text-[15px] py-2 bg-default stroke-default border-default" }}  
+  label={`Back to ${
+    dashboard === ROLE.CURRICULUM_ADMIN
+      ? "Curriculum Admin Dashboard"
+      : "Your Course"
+  }`} 
+  position="right-end" 
+  withArrow 
+  arrowPosition="side"  
+  arrowOffset={15} 
+  arrowSize={10}
+>
+
+           <div>
           <Icon
             IconComponent={IconChevronLeft}
             className={`${
               openSidebar ? "size-5 acerSwift:max-macair133:size-4" : ""
             }`}
           />
+          </div>
+          </Tooltip>
           {openSidebar &&
             `Back to ${
               dashboard == ROLE.CURRICULUM_ADMIN
@@ -276,10 +294,12 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 {openSidebar ? (
                   "Evaluations"
                 ) : (
+                  <Tooltip  transitionProps={{ transition: 'fade-right', duration: 200 }} classNames={{ tooltip: " font-semibold text-[15px] py-2 bg-default stroke-default border-default" }}  label="Evaluations" position="right-end" withArrow arrowPosition="side"  arrowOffset={15} arrowSize={10}  >
+              <div>
                   <Icon
                     IconComponent={IconTQF}
                     className="mr-0.5 acerSwift:max-macair133:!size-4"
-                  />
+                  /></div></Tooltip>
                 )}
               </Button>
             )}
@@ -306,10 +326,12 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 {openSidebar ? (
                   "Sections"
                 ) : (
+                  <Tooltip  transitionProps={{ transition: 'fade-right', duration: 200 }} classNames={{ tooltip: " font-semibold text-[15px] py-2 bg-default stroke-default border-default" }}  label="Sections" position="right-end" withArrow arrowPosition="side"  arrowOffset={15} arrowSize={10}  >
+              <div>
                   <RxDashboard
                     size={18}
                     className="acerSwift:max-macair133:size-4"
-                  />
+                  /></div></Tooltip>
                 )}
               </Button>
             )}
@@ -336,10 +358,12 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 {openSidebar ? (
                   "Roster"
                 ) : (
+                  <Tooltip  transitionProps={{ transition: 'fade-right', duration: 200 }} classNames={{ tooltip: " font-semibold text-[15px] py-2 bg-default stroke-default border-default" }}  label="Roster" position="right-end" withArrow arrowPosition="side"  arrowOffset={15} arrowSize={10}  >
+              <div>
                   <Icon
                     IconComponent={IconStudent}
                     className="size-[19px] stroke-1 acerSwift:max-macair133:size-4"
-                  />
+                  /></div></Tooltip>
                 )}
               </Button>
             )}
@@ -409,10 +433,12 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                       {openSidebar ? (
                         "TQF 3"
                       ) : (
+                        <Tooltip  transitionProps={{ transition: 'fade-right', duration: 200 }} classNames={{ tooltip: " font-semibold text-[15px] py-2 bg-default stroke-default border-default" }}  label="TQF 3" position="right-end" withArrow arrowPosition="side"  arrowOffset={15} arrowSize={10}  >
+              <div>
                         <Icon
                           IconComponent={IconTQF3}
                           className="size-5 acerSwift:max-macair133:size-4"
-                        />
+                        /></div></Tooltip>
                       )}
                     </Button>
                   </Menu.Target>
@@ -496,10 +522,29 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                       {openSidebar ? (
                         "TQF 5"
                       ) : (
-                        <Icon
-                          IconComponent={IconTQF5}
-                          className="size-5 acerSwift:max-macair133:size-4"
-                        />
+                        <Tooltip
+                          transitionProps={{
+                            transition: "fade-right",
+                            duration: 200,
+                          }}
+                          classNames={{
+                            tooltip:
+                              " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                          }}
+                          label="TQF 5"
+                          position="right-end"
+                          withArrow
+                          arrowPosition="side"
+                          arrowOffset={15}
+                          arrowSize={10}
+                        >
+                          <div>
+                            <Icon
+                              IconComponent={IconTQF5}
+                              className="size-5 acerSwift:max-macair133:size-4"
+                            />
+                          </div>
+                        </Tooltip>
                       )}
                     </Button>
                   </Menu.Target>
@@ -620,10 +665,29 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                     </p>
                   </div>
                 ) : (
-                  <Icon
-                    IconComponent={IconLogout}
-                    className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
-                  />
+                  <Tooltip
+                    transitionProps={{
+                      transition: "fade-right",
+                      duration: 200,
+                    }}
+                    classNames={{
+                      tooltip:
+                        " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                    }}
+                    label="Leave Course"
+                    position="right-end"
+                    withArrow
+                    arrowPosition="side"
+                    arrowOffset={15}
+                    arrowSize={10}
+                  >
+                    <div>
+                      <Icon
+                        IconComponent={IconLogout}
+                        className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
+                      />
+                    </div>
+                  </Tooltip>
                 )}
               </Button>
             </div>

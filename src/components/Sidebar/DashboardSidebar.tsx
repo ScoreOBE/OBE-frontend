@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Modal, Select } from "@mantine/core";
+import { Button, Modal, Select, Tooltip } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import Icon from "@/components/Icon";
 import IconCalendar from "@/assets/icons/calendar.svg?react";
@@ -178,7 +178,7 @@ export default function DashboardSidebar() {
       <div className="flex text-white flex-col gap-11  acerSwift:max-macair133:gap-9">
         {openSidebar && (
           <div className="text-sm acerSwift:max-macair133:text-b4 flex flex-col gap-[6px]">
-            <p className="font-semibold">Welcome to ScoreOBE +</p>
+            <p className="font-semibold">Welcome to ScoreOBE+</p>
             <div className="font-normal flex flex-col gap-[2px]">
               <p>
                 Your courses are waiting
@@ -236,7 +236,20 @@ export default function DashboardSidebar() {
                 </p>
               </div>
             ) : (
-              <Icon className="size-6" IconComponent={IconCalendar} />
+              <Tooltip
+              transitionProps={{ transition: "fade-right", duration: 200 }}
+              classNames={{
+                tooltip:
+                  "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+              }}
+              label="Semester"
+              position="right-end"
+              withArrow
+              arrowPosition="side"
+              arrowOffset={15}
+              arrowSize={10}
+            ><div>
+              <Icon className="size-5" IconComponent={IconCalendar} /></div></Tooltip>
             )}
           </Button>
         </div>
@@ -278,7 +291,20 @@ export default function DashboardSidebar() {
                 {openSidebar ? (
                   "TQF"
                 ) : (
-                  <Icon className="size-4" IconComponent={IconTQF} />
+                  <Tooltip
+                  transitionProps={{ transition: "fade-right", duration: 200 }}
+                  classNames={{
+                    tooltip:
+                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                  }}
+                  label="TQF"
+                  position="right-end"
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={15}
+                  arrowSize={10}
+                ><div>
+                  <Icon className="size-4" IconComponent={IconTQF} /></div></Tooltip>
                 )}
               </Button>
               <Button
@@ -304,7 +330,20 @@ export default function DashboardSidebar() {
                 {openSidebar ? (
                   "CLO"
                 ) : (
-                  <Icon IconComponent={IconCLO} className="size-[21px]" />
+                  <Tooltip
+                  transitionProps={{ transition: "fade-right", duration: 200 }}
+                  classNames={{
+                    tooltip:
+                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                  }}
+                  label="CLO"
+                  position="right-end"
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={15}
+                  arrowSize={10}
+                ><div>
+                  <Icon IconComponent={IconCLO} className="size-[21px]" /></div></Tooltip>
                 )}
               </Button>
               <Button
@@ -327,7 +366,20 @@ export default function DashboardSidebar() {
                 {openSidebar ? (
                   <p className="pl-1">PLO</p>
                 ) : (
-                  <Icon IconComponent={IconSO} className="size-[18px]" />
+                  <Tooltip
+                  transitionProps={{ transition: "fade-right", duration: 200 }}
+                  classNames={{
+                    tooltip:
+                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                  }}
+                  label="PLO"
+                  position="right-end"
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={15}
+                  arrowSize={10}
+                ><div>
+                  <Icon IconComponent={IconSO} className="size-[18px]" /></div></Tooltip>
                 )}
               </Button>
             </div>
@@ -385,10 +437,23 @@ export default function DashboardSidebar() {
                 {openSidebar ? (
                   "Overall PLO"
                 ) : (
+                  <Tooltip
+                  transitionProps={{ transition: "fade-right", duration: 200 }}
+                  classNames={{
+                    tooltip:
+                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                  }}
+                  label="Overall PLO"
+                  position="right-end"
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={15}
+                  arrowSize={10}
+                ><div>
                   <Icon
                     IconComponent={IconSpiderChart}
                     className="size-5 stroke-1"
-                  />
+                  /></div></Tooltip>
                 )}
               </Button>
             </div>

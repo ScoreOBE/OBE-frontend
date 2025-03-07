@@ -219,7 +219,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 title={
                   <div className="flex items-center gap-2">
                     <Icon IconComponent={IconExclamationCircle} />
-                    <p>Important: ScoreOBE + required</p>
+                    <p>Important: ScoreOBE+ required</p>
                   </div>
                 }
               >
@@ -227,7 +227,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   Use only
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] font-extrabold">
                     {" "}
-                    ScoreOBE + Template{" "}
+                    ScoreOBE+ Template{" "}
                   </span>
                   provided below to submit your scores. Please read the template
                   guide carefully, then download the template to upload your
@@ -248,7 +248,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                       Tips:{" "}
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                         {" "}
-                        ScoreOBE +{" "}
+                        ScoreOBE+{" "}
                       </span>
                       support{" "}
                       <span style={{ fontFamily: "Lexand" }}>
@@ -266,7 +266,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     className=" h-[35px] ml-8  w-[156px] "
                   />
                   <p className="pl-8 text-default font-medium leading-[22px]">
-                    To upload scores from Gradescope to the ScoreOBE +, simply{" "}
+                    To upload scores from Gradescope to the ScoreOBE+, simply{" "}
                     <span className="font-extrabold">
                       export the assignment scores
                     </span>{" "}
@@ -285,7 +285,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 <div className="flex flex-col gap-10">
                   <div className="flex gap-3">
                     <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] font-semibold text-[24px]">
-                      ScoreOBE + Template
+                      ScoreOBE+ Template
                     </p>
                   </div>
                   <div className="flex flex-col gap-1 text-b1 acerSwift:max-macair133:text-b2">
@@ -459,7 +459,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                           IconComponent={IconExclamationCircle}
                           className="size-4 stroke-red-600"
                         />
-                        <p>Supports only ScoreOBE +</p>
+                        <p>Supports only ScoreOBE+</p>
                       </div>
                       <p> Gradescope assignment template</p>
                     </div>

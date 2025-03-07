@@ -5,7 +5,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { Button } from "@mantine/core";
+import { Button, Tooltip } from "@mantine/core";
 import { useAppSelector } from "@/store";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import Icon from "@/components/Icon";
@@ -95,7 +95,20 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             {openSidebar ? (
               "Scores"
             ) : (
-              <Icon IconComponent={IconList} className="size-7" />
+              <Tooltip
+                transitionProps={{ transition: "fade-right", duration: 200 }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Scores"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+              ><div>
+              <Icon IconComponent={IconList} className="size-7" /></div></Tooltip>
             )}
           </Button>
           <Button
@@ -119,10 +132,26 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             {openSidebar ? (
               <p className="pl-[3px]">Students</p>
             ) : (
-              <Icon
-                IconComponent={IconStudent}
-                className="size-[22px] acerSwift:max-macair133:!size-5"
-              />
+              <Tooltip
+                transitionProps={{ transition: "fade-right", duration: 200 }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Students"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+              >
+                <div>
+                  <Icon
+                    IconComponent={IconStudent}
+                    className="size-[22px] acerSwift:max-macair133:!size-5"
+                  />
+                </div>
+              </Tooltip>
             )}
           </Button>
         </div>
@@ -198,10 +227,26 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
                   </p>
                 </div>
               ) : (
-                <Icon
-                  IconComponent={IconLogout}
-                  className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
-                />
+                <Tooltip
+                  transitionProps={{ transition: "fade-right", duration: 200 }}
+                  classNames={{
+                    tooltip:
+                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                  }}
+                  label="Leave Course"
+                  position="right-end"
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={15}
+                  arrowSize={10}
+                >
+                  <div>
+                    <Icon
+                      IconComponent={IconLogout}
+                      className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
+                    />
+                  </div>
+                </Tooltip>
               )}
             </Button>
           </div>

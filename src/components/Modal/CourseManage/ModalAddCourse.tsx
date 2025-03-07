@@ -593,7 +593,7 @@ export default function ModalAddCourse({
                 autoFocus={false}
                 label={
                   <p className="font-semibold flex gap-1 h-full">
-                    Description <span className="text-secondary">Thai</span>
+                    Course Description <span className="text-secondary">Thai</span>
                   </p>
                 }
                 size="xs"
@@ -611,7 +611,7 @@ export default function ModalAddCourse({
                 autoFocus={false}
                 label={
                   <p className="font-semibold flex gap-1 h-full">
-                    Description <span className="text-secondary">English</span>
+                    Course Description <span className="text-secondary">English</span>
                   </p>
                 }
                 size="xs"

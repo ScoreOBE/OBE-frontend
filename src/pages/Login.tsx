@@ -214,7 +214,7 @@ export default function Login() {
 
         <p className="!font-[600] text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 sm:font-[600] item-start rounded text-emphasize sm:text-[48px] text-[28px] mb-5 sm:mb-0  ipad11:text-[50px] leading-[48px] sm:leading-[66px]">
           <span className=" text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-            ScoreOBE +{" "}
+            ScoreOBE+{" "}
           </span>
           Academic Supercharger
           <br />
@@ -228,11 +228,11 @@ export default function Login() {
         <div className="flex items-center  mt-8 text-center w-full justify-center px-[40px] mb-8  sm:hidden">
           <p className="text-center  font-medium flex flex-col  text-[#4F4D55]">
             <span className="font-bold text-b1 text-secondary ">
-              ScoreOBE + is not available <br /> on your current window size.
+              ScoreOBE+ is not available <br /> on your current window size.
             </span>
             <br />
             <span className="text-b2">
-              To log in, please use ScoreOBE + on a tablet in landscape mode{" "}
+              To log in, please use ScoreOBE+ on a tablet in landscape mode{" "}
               <br /> or a desktop for the best experience.
             </span>
           </p>
