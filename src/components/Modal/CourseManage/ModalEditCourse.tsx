@@ -13,10 +13,7 @@ import {
   validateTextInput,
   validateCourseNo,
 } from "@/helpers/functions/validation";
-import {
-  getExistsCourseData,
-  updateCourse,
-} from "@/services/course/course.service";
+import { updateCourse } from "@/services/course/course.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { editCourse } from "@/store/course";
@@ -57,21 +54,10 @@ export default function ModalEditCourse({
   useEffect(() => {
     if (opened && value) {
       form.setValues(value);
-      getCourseData(value.courseNo!);
     } else {
       form.reset();
     }
   }, [opened, value]);
-
-  const getCourseData = async (courseNo: string) => {
-    const res = await getExistsCourseData(courseNo, {
-      academicyear: academicYear.year,
-      academicterm: academicYear.semester,
-    });
-    form.setFieldValue("courseName", res.name);
-    form.setFieldValue("descTH", res.descTH);
-    form.setFieldValue("descEN", res.descEN);
-  };
 
   const submit = async () => {
     if (form.validate().hasErrors) return;
