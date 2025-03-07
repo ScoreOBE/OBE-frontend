@@ -3,9 +3,14 @@ import { useState } from "react";
 import Icon from "../Icon";
 import IconExclamamtion from "@/assets/icons/exclamationCircle.svg?react";
 import IconUserScan from "@/assets/icons/userScan.svg?react";
+import IconCalendar from "@/assets/icons/calendar.svg?react";
 import IconBook from "@/assets/icons/book.svg?react";
+import IconDes from "@/assets/icons/descripico.svg?react";
+import IconCredit from "@/assets/icons/ballpen.svg?react";
 import IconBooks from "@/assets/icons/books.svg?react";
-import IconCPE from "@/assets/icons/userCircle.svg?react";
+import IconNumber from "@/assets/icons/numberico.svg?react";
+import IconPrere from "@/assets/icons/prerequisite.svg?react";
+import IconAPI from "@/assets/icons/apiico.svg?react";
 import IconSchool from "@/assets/icons/school.svg?react";
 import IconAddressBook from "@/assets/icons/addressBook.svg?react";
 import IconListNumber from "@/assets/icons/listNumbers.svg?react";
@@ -208,13 +213,13 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <div className="flex items-center justify-start">
                   <Icon className="size-5" IconComponent={IconListNumber} />
                   <span className="ml-2">
-                    {isEN === "EN" ? "Academic record" : "บันทึกผลการเรียน"}
+                    {isEN === "EN" ? "Academic Record" : "บันทึกผลการเรียน"}
                   </span>
                 </div>
                 <div className="flex items-center justify-start">
                   <Icon className="size-5" IconComponent={IconBook} />
                   <span className="ml-2">
-                    {isEN === "EN" ? "Course information" : "ข้อมูลกระบวนวิชา"}
+                    {isEN === "EN" ? "Data in Course Information" : "ข้อมูลในกระบวนวิชา"}
                   </span>
                 </div>
               </div>
@@ -223,13 +228,13 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 <div className="flex items-center justify-start">
                   <Icon className="size-5" IconComponent={IconMail} />
                   <span className="ml-2">
-                    {isEN === "EN" ? "CMU email" : "อีเมล CMU"}
+                    {isEN === "EN" ? "CMU Email" : "อีเมล CMU"}
                   </span>
                 </div>
                 <div className="flex items-center justify-start">
                   <Icon className="size-5" IconComponent={IconClipboardText} />
                   <span className="ml-2">
-                    {isEN === "EN" ? "TQF document" : "เอกสาร TQF"}
+                    {isEN === "EN" ? "Data in TQF Document" : "ข้อมูลในเอกสาร TQF"}
                   </span>
                 </div>
               </div>
@@ -242,10 +247,10 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                   </span>
                 </div>
                 <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconBooks} />
+                  <Icon className="size-5 stroke-[1.4px]" IconComponent={IconBooks} />
                   <span className="ml-2">
                     {isEN === "EN"
-                      ? "Enrolled course"
+                      ? "Enrolled Course"
                       : "กระบวนวิชาที่ลงทะเบียนเรียน"}
                   </span>
                 </div>
@@ -292,7 +297,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         <Alert
           radius="md"
           icon={
-            <Icon className=" size-8 stroke-[1.5px]" IconComponent={IconCPE} />
+            <Icon className=" size-8 stroke-[1.5px]" IconComponent={IconAPI} />
           }
           variant="light"
           color="blue"
@@ -304,9 +309,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           }}
           title={
             isEN === "EN" ? (
-              <p>CPE API</p>
+              <p>CMU API</p>
             ) : (
-              <p className=" font-bold">CPE API</p>
+              <p className=" font-bold">CMU API</p>
             )
           }
         >
@@ -314,25 +319,25 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             <p className="mb-2">
               {isEN === "EN" ? (
                 <p>
-                  The CPE API is a service designed for Computer Engineering
+                  The CMU API is a service designed for Computer Engineering
                   department and Information System and Network Engineering
                   department students at Chiang Mai University. It provides API
                   routes that offer essential information exclusively about
                   instructors and courses within these departments, including
                   course data and instructor information. <br /> The following
-                  data from the CPE API has been collected and integrated into
+                  data from the CMU API has been collected and integrated into
                   ScoreOBE+, linked to your identity to enhance the
                   functionality of the web application:
                 </p>
               ) : (
                 <p>
-                  CPE API
+                  CMU API
                   เป็นบริการที่ออกแบบมาสำหรับนักศึกษาสาขาวิศวกรรมคอมพิวเตอร์
                   และวิศวกรรมระบบสารสนเทศและเครือข่ายของมหาวิทยาลัยเชียงใหม่
                   บริการนี้ให้บริการ API routes
                   ที่ให้ข้อมูลที่จำเป็นโดยเฉพาะเกี่ยวกับผู้สอนและหลักสูตรภายในสาขาดังกล่าวเท่านั้น
                   รวมถึงข้อมูลหลักสูตรและข้อมูลของผู้สอน <br /> ข้อมูลต่อไปนี้
-                  จาก CPE API ได้ถูกเก็บและนำไปใช้ใน ScoreOBE+
+                  จาก CMU API ได้ถูกเก็บและนำไปใช้ใน ScoreOBE+
                   เป็นที่เรียบร้อยแล้ว และเชื่อมโยงกับตัวตนของคุณ
                   เพื่อปรับปรุงการทำงานของเว็บแอปพลิเคชัน:
                 </p>
@@ -340,8 +345,8 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>{" "}
             <br />
             <div className="flex gap-8 -mt-4">
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-start">
+            <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-start">
                   <Icon className="size-5" IconComponent={IconAddressBook} />
                   <span className="ml-2">
                     {isEN === "EN"
@@ -349,16 +354,57 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                       : "ชื่อและสกุลของอาจารย์"}
                   </span>
                 </div>
-              </div>
-
-              <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-start">
+                  <Icon className="size-5" IconComponent={IconSchool} />
+                  <span className="ml-2">
+                    {isEN === "EN" ? "Faculty" : "คณะ"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-start">
+                  <Icon className="size-5" IconComponent={IconCalendar} />
+                  <span className="ml-2">
+                    {isEN === "EN" ? "Academic Year" : "ปีการศึกษา"}
+                  </span>
+                </div>
+               
+              </div>
+              <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-start">
                   <Icon className="size-5" IconComponent={IconBook} />
                   <span className="ml-2">
-                    {isEN === "EN" ? "Course information" : "ข้อมูลกระบวนวิชา"}
+                    {isEN === "EN" ? "Course Title" : "ชื่อกระบวนวิชา"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-start">
+                  <Icon className="size-5" IconComponent={IconNumber} />
+                  <span className="ml-2">
+                    {isEN === "EN" ? "Course Code" : "รหัสกระบวนวิชา"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-start">
+                  <Icon className="size-5" IconComponent={IconDes} />
+                  <span className="ml-2">
+                    {isEN === "EN" ? "Course Description" : "คำบรรยายกระบวนวิชา"}
                   </span>
                 </div>
               </div>
+
+              <div className="flex flex-col gap-3">
+                
+                <div className="flex items-center justify-start">
+                  <Icon className="size-5" IconComponent={IconPrere} />
+                  <span className="ml-2">
+                    {isEN === "EN" ? "Prerequisite Course" : "เงื่อนไขทีต้องผ่านก่อนของกระบวนวิชา"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-start">
+                  <Icon className="size-5" IconComponent={IconCredit} />
+                  <span className="ml-2">
+                    {isEN === "EN" ? "Course Credit" : "หน่วยกิตของกระบวนวิชา"}
+                  </span>
+                </div>
+              </div>
+              
             </div>
             {isEN === "EN" ? (
               <p className="mt-3 leading-6">
@@ -368,15 +414,15 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                   Department of Computer Engineering, Faculty of Engineering,
                   Chiang Mai University
                 </span>
-                , have been granted proper authorization and access CPE API data
+                , have been granted proper authorization and access CMU API data
                 by Assistant Professor Dome Potikanond, an instructor in the
                 Department of Computer Engineering at Chiang Mai University. For
                 more information, see the{" "}
                 <a
                   className=" text-blue-500 font-semibold hover:underline"
-                  href="https://api.cpe.eng.cmu.ac.th/"
+                  href="https://apidoc.mis.cmu.ac.th/"
                 >
-                  CPE API{" "}
+                  CMU API{" "}
                 </a>{" "}
               </p>
             ) : (
@@ -387,14 +433,14 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                   ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์
                   มหาวิทยาลัยเชียงใหม่
                 </span>{" "}
-                ได้รับการอนุญาตและการเข้าถึงข้อมูล CPE API อย่างถูกต้องจาก
+                ได้รับการอนุญาตและการเข้าถึงข้อมูล CMU API อย่างถูกต้องจาก
                 ผศ.โดม โพธิการนนท์ อาจารย์ประจำภาควิชาวิศวกรรมคอมพิวเตอร์
                 มหาวิทยาลัยเชียงใหม่ สำหรับข้อมูลเพิ่มเติม ให้ดูที่{" "}
                 <a
                   className=" text-blue-500 font-semibold hover:underline"
-                  href="https://api.cpe.eng.cmu.ac.th/"
+                  href="https://apidoc.mis.cmu.ac.th/"
                 >
-                  CPE API{" "}
+                  CMU API{" "}
                 </a>{" "}
               </p>
             )}
@@ -506,7 +552,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                     ซึ่งให้บริการโดยภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์
                     มหาวิทยาลัยเชียงใหม่ โดยรวมถึงในส่วนที่ได้มีการเปลี่ยนแปลง
                     ปรับปรุง อัปเดต หรือเพิ่มเติมโดยภาควิชาวิศวกรรมคอมพิวเตอร์
-                    คณะวิศวกรรมศาสตร์
+                    คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเชียงใหม่
                   </Table.Td>
                 </Table.Tr>
               </Table.Tbody>
