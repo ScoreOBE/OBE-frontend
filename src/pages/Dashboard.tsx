@@ -496,18 +496,12 @@ export default function Dashboard() {
                               >
                                 <Menu.Item
                                   onClick={() => {
-                                    setEditCourse(
-                                      item.addFirstTime
-                                        ? {
-                                            id: item.id,
-                                            courseNo: item.courseNo,
-                                            courseName: item.courseName,
-                                          }
-                                        : {
-                                            id: item.id,
-                                            courseName: item.courseName,
-                                          }
-                                    );
+                                    setEditCourse({
+                                      id: item.id,
+                                      courseNo: item.courseNo,
+                                      courseName: item.courseName,
+                                      addFirstTime: item.addFirstTime,
+                                    });
                                     setOpenModalEditCourse(true);
                                   }}
                                   className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 w-[180px]"
@@ -520,23 +514,23 @@ export default function Dashboard() {
                                     <span>Edit Course</span>
                                   </div>
                                 </Menu.Item>
-                                item.addFirstTime && (
-                                <Menu.Item
-                                  className="text-[#FF4747] h-7 w-[180px] font-semibold text-b4 acerSwift:max-macair133:!text-b5 hover:bg-[#d55757]/10"
-                                  onClick={() => {
-                                    setDelCourse(item);
-                                    setOpenDelPopup(true);
-                                  }}
-                                >
-                                  <div className="flex items-center gap-2">
-                                    <Icon
-                                      IconComponent={IconTrash}
-                                      className="size-4 stroke-[2px] acerSwift:max-macair133:size-3"
-                                    />
-                                    <span>Delete Course</span>
-                                  </div>
-                                </Menu.Item>
-                                )
+                                {item.addFirstTime && (
+                                  <Menu.Item
+                                    className="text-[#FF4747] h-7 w-[180px] font-semibold text-b4 acerSwift:max-macair133:!text-b5 hover:bg-[#d55757]/10"
+                                    onClick={() => {
+                                      setDelCourse(item);
+                                      setOpenDelPopup(true);
+                                    }}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <Icon
+                                        IconComponent={IconTrash}
+                                        className="size-4 stroke-[2px] acerSwift:max-macair133:size-3"
+                                      />
+                                      <span>Delete Course</span>
+                                    </div>
+                                  </Menu.Item>
+                                )}
                               </Menu.Dropdown>
                             </Menu>
                           </div>
