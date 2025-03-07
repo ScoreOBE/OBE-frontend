@@ -47,9 +47,9 @@ export default function ModalEditCourse({
       courseNo: (value) => validateCourseNo(value),
       courseName: (value) => validateTextInput(value, "Course Name", 100),
       descTH: (value) =>
-        validateTextInput(value, "Description Thai", 1500, false),
+        validateTextInput(value, "Description Thai", 1600, false),
       descEN: (value) =>
-        validateTextInput(value, "Description English", 1500, false),
+        validateTextInput(value, "Description English", 1600, false),
     },
     validateInputOnBlur: true,
   });
