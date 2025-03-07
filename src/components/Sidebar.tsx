@@ -13,7 +13,7 @@ import AssignmentSidebar from "./Sidebar/AssignmentSidebar";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { getCourse, leaveCourse } from "@/services/course/course.service";
 import { removeCourse, setCourseList } from "@/store/course";
-import { Alert } from "@mantine/core";
+import { Alert, Tooltip } from "@mantine/core";
 import Icon from "./Icon";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconLeave from "@/assets/icons/leave.svg?react";
@@ -197,19 +197,51 @@ export default function Sidebar() {
               )}
             </div>
             {openSidebar && (
-              <PiTextAlignLeft
-                size={22}
-                className="cursor-pointer p-1.5 w-fit h-fit rounded-full text-white hover:bg-white hover:text-black rotate-180"
-                onClick={() => dispatch(setOpenSidebar(!openSidebar))}
-              />
+              <Tooltip
+                transitionProps={{ transition: "fade-right", duration: 200 }}
+                classNames={{
+                  tooltip:
+                    " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Hide Sidebar"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+              >
+                <div>
+                  <PiTextAlignLeft
+                    size={22}
+                    className="cursor-pointer p-1.5 w-fit h-fit rounded-full text-white hover:bg-white hover:text-black rotate-180"
+                    onClick={() => dispatch(setOpenSidebar(!openSidebar))}
+                  />
+                </div>
+              </Tooltip>
             )}
           </div>
           {!openSidebar && (
-            <PiTextAlignLeft
-              size={22}
-              className="cursor-pointer p-1.5 w-fit h-fit rounded-full text-white hover:bg-white hover:text-black"
-              onClick={() => dispatch(setOpenSidebar(!openSidebar))}
-            />
+            <Tooltip
+              transitionProps={{ transition: "fade-right", duration: 200 }}
+              classNames={{
+                tooltip:
+                  " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+              }}
+              label="Show Sidebar"
+              position="right-end"
+              withArrow
+              arrowPosition="side"
+              arrowOffset={15}
+              arrowSize={10}
+            >
+              <div>
+                <PiTextAlignLeft
+                  size={22}
+                  className="cursor-pointer p-1.5 w-fit mt-2 h-fit rounded-full  text-white hover:bg-white hover:text-black"
+                  onClick={() => dispatch(setOpenSidebar(!openSidebar))}
+                />
+              </div>
+            </Tooltip>
           )}
         </div>
         {getSidebar()}

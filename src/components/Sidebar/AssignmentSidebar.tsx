@@ -5,7 +5,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { Button } from "@mantine/core";
+import { Button, Tooltip } from "@mantine/core";
 import { useAppSelector } from "@/store";
 import Icon from "@/components/Icon";
 import IconLogout from "@/assets/icons/logout.svg?react";
@@ -97,7 +97,8 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             {openSidebar ? (
               "Evaluations"
             ) : (
-              <Icon IconComponent={IconList} className="size-7" />
+              <Tooltip  transitionProps={{ transition: 'fade-right', duration: 200 }} classNames={{ tooltip: " font-semibold text-[15px] py-2 bg-default stroke-default border-default" }}  label="Evaluation" position="right-end" withArrow arrowPosition="side"  arrowOffset={15} arrowSize={10}  >
+              <div> <Icon IconComponent={IconList} className="size-7" /></div></Tooltip>
             )}
           </Button>
           <Button
@@ -123,7 +124,8 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             {openSidebar ? (
               <p className="pl-[3px]">Charts</p>
             ) : (
-              <Icon IconComponent={IconHistogram} className="size-5" />
+              <Tooltip  transitionProps={{ transition: 'fade-right', duration: 200 }} classNames={{ tooltip: " font-semibold text-[15px] py-2 bg-default stroke-default border-default" }}  label="Chart" position="right-end" withArrow arrowPosition="side"  arrowOffset={15} arrowSize={10}  >
+              <div> <Icon IconComponent={IconHistogram} className="size-5" /></div></Tooltip>
             )}
           </Button>
         </div>
@@ -199,10 +201,14 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
                   </p>
                 </div>
               ) : (
+                <Tooltip  transitionProps={{ transition: 'fade-right', duration: 200 }} classNames={{ tooltip: " font-semibold text-[15px] py-2 bg-default stroke-default border-default" }}  label="Leave Course" position="right-end" withArrow arrowPosition="side"  arrowOffset={15} arrowSize={10}  >
+              <div>
                 <Icon
                   IconComponent={IconLogout}
                   className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
                 />
+                </div>
+                </Tooltip>
               )}
             </Button>
           </div>
