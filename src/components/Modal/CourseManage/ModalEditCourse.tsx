@@ -45,11 +45,11 @@ export default function ModalEditCourse({
     initialValues: {} as Partial<IModelCourse> & Record<string, any>,
     validate: {
       courseNo: (value) => validateCourseNo(value),
-      courseName: (value) => validateTextInput(value, "Course Name"),
+      courseName: (value) => validateTextInput(value, "Course Name", 100),
       descTH: (value) =>
-        validateTextInput(value, "Description Thai", 600, false),
+        validateTextInput(value, "Description Thai", 1500, false),
       descEN: (value) =>
-        validateTextInput(value, "Description English", 600, false),
+        validateTextInput(value, "Description English", 1500, false),
     },
     validateInputOnBlur: true,
   });
@@ -159,7 +159,8 @@ export default function ModalEditCourse({
           size="xs"
           className="w-full border-none rounded-r-none"
           classNames={{
-            input: "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[120px] sm:h-[75px] ipad11:h-[95px]",
+            input:
+              "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[120px] sm:h-[75px] ipad11:h-[95px]",
             label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
           }}
           placeholder=""
@@ -176,7 +177,8 @@ export default function ModalEditCourse({
           size="xs"
           className="w-full border-none rounded-r-none"
           classNames={{
-            input: "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[120px] sm:h-[75px] ipad11:h-[95px]",
+            input:
+              "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[120px] sm:h-[75px] ipad11:h-[95px]",
             label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
           }}
           placeholder=""

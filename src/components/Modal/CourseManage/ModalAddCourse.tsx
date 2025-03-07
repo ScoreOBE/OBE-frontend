@@ -71,11 +71,11 @@ export default function ModalAddCourse({
     validate: {
       type: (value) => !value && "Course Type is required",
       courseNo: (value) => validateCourseNo(value),
-      courseName: (value) => validateTextInput(value, "Course Name"),
+      courseName: (value) => validateTextInput(value, "Course Name", 100),
       descTH: (value) =>
-        validateTextInput(value, "Description Thai", 600, false),
+        validateTextInput(value, "Description Thai", 1500, false),
       descEN: (value) =>
-        validateTextInput(value, "Description English", 600, false),
+        validateTextInput(value, "Description English", 1500, false),
       sections: {
         topic: (value) => validateTextInput(value, "Topic"),
         sectionNo: (value) => validateSectionNo(value),
