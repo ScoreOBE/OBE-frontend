@@ -77,7 +77,6 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
         )}
         <div className={`flex flex-col ${openSidebar ? "gap-2" : "gap-3"}`}>
           <Button
-            title={openSidebar ? undefined : "Evaluations"}
             onClick={() => gotoPage(ROUTE_PATH.EVALUATION)}
             leftSection={
               openSidebar && (
@@ -97,12 +96,27 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             {openSidebar ? (
               "Evaluations"
             ) : (
-              <Tooltip  transitionProps={{ transition: 'fade-right', duration: 200 }} classNames={{ tooltip: " font-semibold text-[15px] py-2 bg-default stroke-default border-default" }}  label="Evaluation" position="right-end" withArrow arrowPosition="side"  arrowOffset={15} arrowSize={10}  >
-              <div> <Icon IconComponent={IconList} className="size-7" /></div></Tooltip>
+              <Tooltip
+                transitionProps={{ transition: "fade-right", duration: 200 }}
+                classNames={{
+                  tooltip:
+                    " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Evaluation"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+              >
+                <div>
+                  {" "}
+                  <Icon IconComponent={IconList} className="size-7" />
+                </div>
+              </Tooltip>
             )}
           </Button>
           <Button
-            title={openSidebar ? undefined : "Charts"}
             onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
             leftSection={
               openSidebar && (
@@ -124,8 +138,24 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             {openSidebar ? (
               <p className="pl-[3px]">Charts</p>
             ) : (
-              <Tooltip  transitionProps={{ transition: 'fade-right', duration: 200 }} classNames={{ tooltip: " font-semibold text-[15px] py-2 bg-default stroke-default border-default" }}  label="Chart" position="right-end" withArrow arrowPosition="side"  arrowOffset={15} arrowSize={10}  >
-              <div> <Icon IconComponent={IconHistogram} className="size-5" /></div></Tooltip>
+              <Tooltip
+                transitionProps={{ transition: "fade-right", duration: 200 }}
+                classNames={{
+                  tooltip:
+                    " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Chart"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+              >
+                <div>
+                  {" "}
+                  <Icon IconComponent={IconHistogram} className="size-5" />
+                </div>
+              </Tooltip>
             )}
           </Button>
         </div>
@@ -201,13 +231,25 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
                   </p>
                 </div>
               ) : (
-                <Tooltip  transitionProps={{ transition: 'fade-right', duration: 200 }} classNames={{ tooltip: " font-semibold text-[15px] py-2 bg-default stroke-default border-default" }}  label="Leave Course" position="right-end" withArrow arrowPosition="side"  arrowOffset={15} arrowSize={10}  >
-              <div>
-                <Icon
-                  IconComponent={IconLogout}
-                  className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
-                />
-                </div>
+                <Tooltip
+                  transitionProps={{ transition: "fade-right", duration: 200 }}
+                  classNames={{
+                    tooltip:
+                      " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                  }}
+                  label="Leave Course"
+                  position="right-end"
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={15}
+                  arrowSize={10}
+                >
+                  <div>
+                    <Icon
+                      IconComponent={IconLogout}
+                      className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
+                    />
+                  </div>
                 </Tooltip>
               )}
             </Button>

@@ -75,7 +75,6 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
         )}
         <div className={`flex flex-col ${openSidebar ? "gap-2" : "gap-3"}`}>
           <Button
-            title={openSidebar ? undefined : "Scores"}
             onClick={() => gotoPage(ROUTE_PATH.SCORE)}
             leftSection={
               openSidebar && (
@@ -112,7 +111,6 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
             )}
           </Button>
           <Button
-            title={openSidebar ? undefined : "Students"}
             onClick={() => gotoPage(ROUTE_PATH.STUDENTS)}
             leftSection={
               openSidebar && (

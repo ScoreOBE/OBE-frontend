@@ -275,7 +275,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           >
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
-                title={openSidebar ? undefined : "Evaluations"}
                 onClick={() => goToPage(ROUTE_PATH.EVALUATION)}
                 leftSection={
                   openSidebar && (
@@ -324,7 +323,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             )}
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
-                title={openSidebar ? undefined : "Sections"}
                 onClick={() => goToPage(ROUTE_PATH.SECTION)}
                 leftSection={
                   openSidebar && (
@@ -373,7 +371,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             )}
             {dashboard == ROLE.INSTRUCTOR && (
               <Button
-                title={openSidebar ? undefined : "Roster"}
                 onClick={() => goToPage(ROUTE_PATH.ROSTER)}
                 leftSection={
                   openSidebar && (
@@ -450,7 +447,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 >
                   <Menu.Target>
                     <Button
-                      title={openSidebar ? undefined : "TQF 3"}
                       onClick={() => {
                         goToPage(ROUTE_PATH.TQF3);
                       }}
@@ -556,7 +552,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                 >
                   <Menu.Target>
                     <Button
-                      title={openSidebar ? undefined : "TQF 5"}
                       onClick={() => {
                         goToPage(ROUTE_PATH.TQF5);
                       }}

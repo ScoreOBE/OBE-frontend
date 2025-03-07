@@ -44,7 +44,6 @@ export default function StdCourseSidebar() {
     <div className="flex text-white flex-col h-full items-center gap-[26px]">
       {!name && (
         <div
-          title={openSidebar ? undefined : "Back to Dashboard"}
           className={`hover:underline cursor-pointer font-bold gap-2 text-[13px] flex ${
             openSidebar
               ? "p-0 w-full justify-start -translate-x-[5px]"
@@ -105,7 +104,6 @@ export default function StdCourseSidebar() {
             }`}
           >
             <Button
-              title={openSidebar ? undefined : "Evaluations"}
               onClick={() => gotoPage(ROUTE_PATH.EVALUATION)}
               leftSection={openSidebar && <Icon IconComponent={IconList} />}
               className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
@@ -134,7 +132,6 @@ export default function StdCourseSidebar() {
               )}
             </Button>
             <Button
-              title={openSidebar ? undefined : "Chart"}
               onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
               leftSection={
                 openSidebar && (
@@ -173,7 +170,6 @@ export default function StdCourseSidebar() {
               )}
             </Button>
             <Button
-              title={openSidebar ? undefined : "CLO"}
               onClick={() => gotoPage(ROUTE_PATH.CLO)}
               leftSection={
                 openSidebar && (
@@ -212,7 +208,6 @@ export default function StdCourseSidebar() {
               )}
             </Button>
             <Button
-              title={openSidebar ? undefined : "PLO"}
               onClick={() => gotoPage(ROUTE_PATH.PLO)}
               leftSection={
                 openSidebar && (

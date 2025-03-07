@@ -271,7 +271,6 @@ export default function DashboardSidebar() {
               }`}
             >
               <Button
-                title={openSidebar ? undefined : "TQF"}
                 onClick={() => gotoPage(ROUTE_PATH.TQF)}
                 leftSection={
                   openSidebar && (
@@ -308,7 +307,6 @@ export default function DashboardSidebar() {
                 )}
               </Button>
               <Button
-                title={openSidebar ? undefined : "CLO"}
                 onClick={() => gotoPage(ROUTE_PATH.CLO)}
                 leftSection={
                   openSidebar && (
@@ -347,7 +345,6 @@ export default function DashboardSidebar() {
                 )}
               </Button>
               <Button
-                title={openSidebar ? undefined : "PLO"}
                 onClick={() => gotoPage(ROUTE_PATH.PLO)}
                 leftSection={
                   openSidebar && (
@@ -402,7 +399,6 @@ export default function DashboardSidebar() {
               }`}
             >
               <Button
-                title={openSidebar ? undefined : "Dashboard"}
                 onClick={() => stdGotoPage("")}
                 leftSection={openSidebar && <RxDashboard size={18} />}
                 className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
@@ -416,7 +412,6 @@ export default function DashboardSidebar() {
                 {openSidebar ? "Dashboard" : <RxDashboard size={20} />}
               </Button>
               <Button
-                title={openSidebar ? undefined : "Overall PLO"}
                 onClick={() => stdGotoPage(`/${ROUTE_PATH.PLO}`)}
                 leftSection={
                   openSidebar && (
