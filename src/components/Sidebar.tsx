@@ -169,7 +169,7 @@ export default function Sidebar() {
       className={`${
         openSidebar
           ? "w-[255px] acerSwift:max-macair133:w-[225px] p-5"
-          : "w-[90px] acerSwift:max-macair133:w-[90px] py-5 px-3"
+          : "w-[65px] acerSwift:max-macair133:w-[90px] py-5 px-3"
       } border-r-[1px] heig h-screen flex sidebar-linear-gradient transition-all duration-300 ease-in-out`}
     >
       <div className="flex w-full flex-col gap-11 acerSwift:max-macair133:gap-8">
