@@ -319,11 +319,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             <p className="mb-2">
               {isEN === "EN" ? (
                 <p>
-                  The CMU API is a service designed for Computer Engineering
-                  department and Information System and Network Engineering
-                  department students at Chiang Mai University. It provides API
+                  The CMU API is a service designed by Chiang Mai University. It provides API
                   routes that offer essential information exclusively about
-                  instructors and courses within these departments, including
+                  instructors and courses for Chiang Mai University, including
                   course data and instructor information. <br /> The following
                   data from the CMU API has been collected and integrated into
                   ScoreOBE+, linked to your identity to enhance the
@@ -332,10 +330,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               ) : (
                 <p>
                   CMU API
-                  เป็นบริการที่ออกแบบมาสำหรับนักศึกษาสาขาวิศวกรรมคอมพิวเตอร์
-                  และวิศวกรรมระบบสารสนเทศและเครือข่ายของมหาวิทยาลัยเชียงใหม่
+                  เป็นบริการที่ออกแบบโดยของมหาวิทยาลัยเชียงใหม่
                   บริการนี้ให้บริการ API routes
-                  ที่ให้ข้อมูลที่จำเป็นโดยเฉพาะเกี่ยวกับผู้สอนและหลักสูตรภายในสาขาดังกล่าวเท่านั้น
+                  ที่ให้ข้อมูลที่จำเป็นโดยเฉพาะเกี่ยวกับผู้สอนและหลักสูตรภายในมหาวิทยาลัยเชียงใหม่เท่านั้น
                   รวมถึงข้อมูลหลักสูตรและข้อมูลของผู้สอน <br /> ข้อมูลต่อไปนี้
                   จาก CMU API ได้ถูกเก็บและนำไปใช้ใน ScoreOBE+
                   เป็นที่เรียบร้อยแล้ว และเชื่อมโยงกับตัวตนของคุณ
