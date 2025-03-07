@@ -10,6 +10,7 @@ export interface IModelEnrollCourse {
   courseNo: string;
   courseName: string;
   type: string;
+  curriculum?: string;
   section: IModelEnrollSection;
   clos: {
     clo: IModelCLO;
