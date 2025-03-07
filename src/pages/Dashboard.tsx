@@ -501,6 +501,8 @@ export default function Dashboard() {
                                         id: item.id,
                                         courseNo: item.courseNo,
                                         courseName: item.courseName,
+                                        descTH: item.descTH,
+                                        descEN: item.descEN,
                                         addFirstTime: item.addFirstTime,
                                       });
                                       setOpenModalEditCourse(true);
