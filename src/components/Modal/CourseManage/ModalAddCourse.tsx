@@ -12,6 +12,7 @@ import {
   Chip,
   Alert,
   Select,
+  Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
@@ -31,7 +32,7 @@ import {
 import {
   checkCanCreateCourse,
   createCourse,
-  getExistsCourseName,
+  getExistsCourseData,
 } from "@/services/course/course.service";
 import {
   getSectionNo,
@@ -71,6 +72,10 @@ export default function ModalAddCourse({
       type: (value) => !value && "Course Type is required",
       courseNo: (value) => validateCourseNo(value),
       courseName: (value) => validateTextInput(value, "Course Name"),
+      descTH: (value) =>
+        validateTextInput(value, "Description Thai", 600, false),
+      descEN: (value) =>
+        validateTextInput(value, "Description English", 600, false),
       sections: {
         topic: (value) => validateTextInput(value, "Topic"),
         sectionNo: (value) => validateSectionNo(value),
@@ -83,7 +88,7 @@ export default function ModalAddCourse({
     validateInputOnBlur: true,
     onValuesChange: (values, prev) => {
       if (prev.courseNo !== values.courseNo && values.courseNo?.length == 6) {
-        getCourseName(values.courseNo!);
+        getCourseData(values.courseNo!);
       }
     },
   });
@@ -177,12 +182,14 @@ export default function ModalAddCourse({
     onClose();
   };
 
-  const getCourseName = async (courseNo: string) => {
-    const res = await getExistsCourseName(courseNo, {
+  const getCourseData = async (courseNo: string) => {
+    const res = await getExistsCourseData(courseNo, {
       academicyear: academicYear.year,
       academicterm: academicYear.semester,
     });
-    form.setFieldValue("courseName", res);
+    form.setFieldValue("courseName", res.name);
+    form.setFieldValue("descTH", res.descTH);
+    form.setFieldValue("descEN", res.descEN);
   };
 
   const setPayload = () => {
@@ -413,9 +420,9 @@ export default function ModalAddCourse({
           stepBody: "flex-col-reverse m-0 text-nowrap",
           stepLabel: "text-b3 acerSwift:max-macair133:text-b4 font-semibold",
           stepDescription:
-            "text-b3 acerSwift:max-macair133:text-b4 font-semibold ",
+            "text-b3 acerSwift:max-macair133:text-b4 font-semibold",
         }}
-        className="justify-center items-center mt-1 text-b2  acerSwift:max-macair133:text-b3 max-h-full"
+        className="max-h-full justify-center items-center mt-1 text-b2 acerSwift:max-macair133:text-b3"
       >
         <Stepper.Step
           allowStepSelect={false}
@@ -530,7 +537,6 @@ export default function ModalAddCourse({
           label="Course Info"
           description="STEP 2"
         >
-          {" "}
           <Alert
             radius="md"
             icon={<Icon IconComponent={IconInfo2} />}
@@ -547,8 +553,8 @@ export default function ModalAddCourse({
               "Please fill only the section number for the section you own."
             }
           ></Alert>
-          <div className="w-full mt-2 h-fitbg-white mb-5 acerSwift:max-macair133:mb-3 rounded-md acerSwift:max-macair133:overflow-y-auto acerSwift:max-macair133:max-h-[240px]">
-            <div className="flex flex-col gap-3 acerSwift:max-macair133:gap-2">
+          <div className="flex flex-col max-h-[430px] mt-2 w-full h-fit overflow-hidden bg-white mb-5 acerSwift:max-macair133:mb-3 rounded-md acerSwift:max-macair133:max-h-[240px]">
+            <div className="flex flex-col max-h-full overflow-auto gap-3 acerSwift:max-macair133:gap-2">
               <TextInput
                 classNames={{
                   input:
@@ -582,6 +588,42 @@ export default function ModalAddCourse({
                 }
                 {...form.getInputProps("courseName")}
               />
+              <Textarea
+                withAsterisk={true}
+                autoFocus={false}
+                label={
+                  <p className="font-semibold flex gap-1 h-full">
+                    Description <span className="text-secondary">Thai</span>
+                  </p>
+                }
+                size="xs"
+                className="w-full border-none rounded-r-none "
+                classNames={{
+                  input:
+                    "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[100px] sm:h-[45px] ipad11:h-[60px] acerSwift:max-macair133:h-[45px]",
+                  label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
+                }}
+                placeholder=""
+                {...form.getInputProps("descTH")}
+              />
+              <Textarea
+                withAsterisk={true}
+                autoFocus={false}
+                label={
+                  <p className="font-semibold flex gap-1 h-full">
+                    Description <span className="text-secondary">English</span>
+                  </p>
+                }
+                size="xs"
+                className="w-full border-none rounded-r-none "
+                classNames={{
+                  input:
+                    "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[100px] sm:h-[45px] ipad11:h-[60px] acerSwift:max-macair133:h-[45px]",
+                  label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
+                }}
+                placeholder=""
+                {...form.getInputProps("descEN")}
+              />
               {form.getValues().type == COURSE_TYPE.SEL_TOPIC.en && (
                 <TextInput
                   label="Course Topic"
@@ -599,9 +641,10 @@ export default function ModalAddCourse({
               <TagsInput
                 label="Section No."
                 withAsterisk
+                size="xs"
                 classNames={{
                   input:
-                    "macair133:h-[130px] sm:h-[75px] ipad11:h-[90px] acerSwift:max-macair133:h-[75px] overflow-y-scroll bg-[#ffffff] mt-[2px] p-3 text-b4 acerSwift:max-macair133:!text-b5  rounded-md",
+                    "macair133:h-[100px] sm:h-[45px] ipad11:h-[60px] acerSwift:max-macair133:h-[45px] overflow-y-scroll bg-[#ffffff] mt-[2px] p-3 text-b4 acerSwift:max-macair133:!text-b5 rounded-md",
                   pill: "bg-secondary text-white font-bold pb-1 !pr-1 acerSwift:max-macair133:!text-b5",
                   label:
                     "font-semibold text-tertiary text-b2 acerSwift:max-macair133:!text-b4",

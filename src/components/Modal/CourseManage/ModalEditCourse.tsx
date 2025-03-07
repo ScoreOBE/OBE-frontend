@@ -1,4 +1,10 @@
-import { Button, FocusTrapInitialFocus, Modal, TextInput } from "@mantine/core";
+import {
+  Button,
+  FocusTrapInitialFocus,
+  Modal,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
 import { useEffect } from "react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
@@ -7,7 +13,10 @@ import {
   validateTextInput,
   validateCourseNo,
 } from "@/helpers/functions/validation";
-import { updateCourse } from "@/services/course/course.service";
+import {
+  getExistsCourseData,
+  updateCourse,
+} from "@/services/course/course.service";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { editCourse } from "@/store/course";
@@ -37,6 +46,10 @@ export default function ModalEditCourse({
     validate: {
       courseNo: (value) => validateCourseNo(value),
       courseName: (value) => validateTextInput(value, "Course Name"),
+      descTH: (value) =>
+        validateTextInput(value, "Description Thai", 600, false),
+      descEN: (value) =>
+        validateTextInput(value, "Description English", 600, false),
     },
     validateInputOnBlur: true,
   });
@@ -44,12 +57,24 @@ export default function ModalEditCourse({
   useEffect(() => {
     if (opened && value) {
       form.setValues(value);
+      getCourseData(value.courseNo!);
     } else {
       form.reset();
     }
   }, [opened, value]);
 
+  const getCourseData = async (courseNo: string) => {
+    const res = await getExistsCourseData(courseNo, {
+      academicyear: academicYear.year,
+      academicterm: academicYear.semester,
+    });
+    form.setFieldValue("courseName", res.name);
+    form.setFieldValue("descTH", res.descTH);
+    form.setFieldValue("descEN", res.descEN);
+  };
+
   const submit = async () => {
+    if (form.validate().hasErrors) return;
     dispatch(setLoadingOverlay(true));
     let payload = form.getValues();
     const id = payload.id || "";
@@ -108,6 +133,7 @@ export default function ModalEditCourse({
               : "001102"
           }
           maxLength={6}
+          disabled={!value?.addFirstTime}
           {...form.getInputProps("courseNo")}
         />
         <TextInput
@@ -122,7 +148,40 @@ export default function ModalEditCourse({
           }
           {...form.getInputProps("courseName")}
         />
-
+        <Textarea
+          withAsterisk={true}
+          autoFocus={false}
+          label={
+            <p className="font-semibold flex gap-1 h-full">
+              Description <span className="text-secondary">Thai</span>
+            </p>
+          }
+          size="xs"
+          className="w-full border-none rounded-r-none"
+          classNames={{
+            input: "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[120px] sm:h-[75px] ipad11:h-[95px]",
+            label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
+          }}
+          placeholder=""
+          {...form.getInputProps("descTH")}
+        />
+        <Textarea
+          withAsterisk={true}
+          autoFocus={false}
+          label={
+            <p className="font-semibold flex gap-1 h-full">
+              Description <span className="text-secondary">English</span>
+            </p>
+          }
+          size="xs"
+          className="w-full border-none rounded-r-none"
+          classNames={{
+            input: "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[120px] sm:h-[75px] ipad11:h-[95px]",
+            label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
+          }}
+          placeholder=""
+          {...form.getInputProps("descEN")}
+        />
         <div className="flex gap-2 mt-3 justify-end">
           <Button onClick={onClose} variant="subtle" loading={loading}>
             Cancel
