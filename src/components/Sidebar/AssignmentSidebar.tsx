@@ -110,7 +110,6 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
                 arrowSize={10}
               >
                 <div>
-                  {" "}
                   <Icon IconComponent={IconList} className="size-7" />
                 </div>
               </Tooltip>
@@ -152,7 +151,6 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
                 arrowSize={10}
               >
                 <div>
-                  {" "}
                   <Icon IconComponent={IconHistogram} className="size-5" />
                 </div>
               </Tooltip>
