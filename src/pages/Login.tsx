@@ -1162,7 +1162,7 @@ export default function Login() {
                 </p>
                 <div className="flex flex-col items-end text-end gap-1">
                   <p className="text-xs text-slate-600 ">
-                    Designed and developed by the by the Department of Computer
+                    Designed and developed by the Department of Computer
                     Engineering,
                   </p>
                   <p className="text-xs text-slate-600 ">
