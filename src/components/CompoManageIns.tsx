@@ -339,7 +339,7 @@ export default function CompoMangeIns({
               type == "changeMain" && action ? action(inputUser) : addUser()
             }
           >
-            {type == "changeMain" ? "Change Admin" : "Add Admin"}
+            {type == "changeMain" ? "Change" : "Add"}
           </Button>
         )}
       </div>
@@ -386,7 +386,7 @@ export default function CompoMangeIns({
               }
               onClick={() => addUser()}
             >
-              Add Admin
+            Add
             </Button>
           </div>
         </>

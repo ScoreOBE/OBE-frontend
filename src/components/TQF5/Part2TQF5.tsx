@@ -309,7 +309,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                 );
               })}
             </div>
-            <div className="min-w-[70px] px-2 mt-1 flex flex-col">
+            <div className="min-w-[70px] px-2 mt-[26px] flex flex-col">
               {tqf3.part2?.clo.map((item, index) => (
                 <div
                   key={index}

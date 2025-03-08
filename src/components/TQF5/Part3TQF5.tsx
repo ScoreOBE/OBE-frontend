@@ -293,14 +293,14 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
               <Tabs.Tab value="assessmentTool">Assessment Tool</Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel
-              className="flex flex-col gap-5 py-3 mt-2 px-3 overflow-y-auto"
+              className="flex flex-col gap-5 pt-3 mt-2 px-3 overflow-y-auto"
               value={selectedTab!}
             >
               {form.getValues().data?.map((cloItem, cloIndex) => {
                 const clo = tqf3.part2?.clo.find((e) => e.id == cloItem.clo);
                 return (
                   <div
-                    className={`last:mb-4 flex flex-col gap-4 pb-8 border-b-2 mr-1 ${
+                    className={`last:mb-4 flex flex-col gap-4 pb-8 last:border-none last:pb-0 border-b-2 mr-1 ${
                       activeSection === cloIndex ? "active" : ""
                     }`}
                     id={`${clo?.no}`}
@@ -555,7 +555,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
             </Tabs.Panel>
           </Tabs>
         </div>
-        <div className="min-w-[70px] px-2 mt-1 flex flex-col">
+        <div className="min-w-[70px] px-2 mt-10 flex flex-col">
           {form.getValues().data?.map((item, index) => {
             const clo = tqf3.part2?.clo.find((e) => e.id == item.clo);
             return (

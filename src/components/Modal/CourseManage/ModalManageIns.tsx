@@ -266,7 +266,7 @@ export default function ModalManageIns({
         }`}
       >
         <div
-          className={`flex flex-col px-2 pb-1 gap-3 overflow-y-auto`}
+          className={`flex flex-col px-5 pb-1 gap-3 overflow-y-auto`}
           style={{
             maxHeight: contentHeight ? `${contentHeight}px` : "auto",
           }}
