@@ -460,7 +460,7 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
             ></Textarea>
           </div>
         </div>
-        <div className="w-full justify-between h-fit  items-top  grid grid-cols-3 pt-5 pb-6 border-b-[1px] !-mt-3">
+        <div className="w-full justify-between h-fit  items-top  grid grid-cols-3 pt-5 pb-6  !-mt-3">
           <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
             <p className="font-semibold">
               การทวนสอบผลสัมฤทธิ์ของนักศึกษา <br /> (ให้อ้างอิงจาก มคอ. 2 และ 3)
@@ -506,7 +506,7 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
               value={selectCurriculum}
               onChange={(event) => setSelectCurriculum(event)}
               classNames={{
-                root: "flex flex-col w-full h-full",
+                root: "flex flex-col w-full  h-full",
                 tab: "px-0 pt-0 !bg-transparent hover:!text-tertiary",
                 tabLabel: "!font-semibold text-b3",
                 panel: "w-full h-fit max-h-full flex flex-col gap-2 rounded-lg",
