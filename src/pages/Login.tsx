@@ -3,9 +3,11 @@ import cmulogoLogin from "@/assets/image/cmuLogoLoginWhite.png";
 import loginImage from "@/assets/image/loginPage.png";
 import { Accordion, Button, Tabs, Title } from "@mantine/core";
 import { Image } from "@mantine/core";
+import ModalTermsOfService from "@/components/Modal/ModalTermOfService";
+import scoreobe from "@/assets/image/scoreOBElogobold.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { isEmpty } from "lodash";
 import {
   setShowSidebar,
@@ -14,6 +16,7 @@ import {
 } from "@/store/config";
 import Icon from "@/components/Icon";
 import IconLock from "@/assets/icons/lockIcon.svg?react";
+import IconExternal from "@/assets/icons/externalLink.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconRefresh from "@/assets/icons/refresh.svg?react";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
@@ -46,6 +49,9 @@ import tqf3Pt4Img from "@/assets/image/tqf3pt4.png";
 import tqf3Pt5Img from "@/assets/image/tqf3pt5.png";
 import tqf3Pt6Img from "@/assets/image/tqf3pt6.png";
 import tqf3Pt7Img from "@/assets/image/tqf3pt7.png";
+import tqf5Pt1Img from "@/assets/image/tqf5pt1.png";
+import tqf5Pt2Img from "@/assets/image/tqf5pt2.png";
+import tqf5Pt3Img from "@/assets/image/tqf5pt3.png";
 import chartImg from "@/assets/image/chart.png";
 import tqf5ComingImg from "@/assets/image/tqf5Coming.png";
 import tqfOverviewImg from "@/assets/image/tqfOverview.png";
@@ -118,6 +124,8 @@ export default function Login() {
       img: tqf3Pt7Img,
     },
   ];
+  const [openModalTOS, setOpenModalTOS] = useState(false);
+  const currentYear = new Date().getFullYear();
 
   const tqf5List = [
     {
@@ -125,24 +133,25 @@ export default function Login() {
       topic: "Course Evaluation",
       description:
         "Upload grade sheets for processing, or manually enter the number of students who received each grade and complete the corresponding criteria.",
-      img: tqf5ComingImg,
+      img: tqf5Pt1Img,
     },
     {
       id: "2",
       topic: "Assessment tool mapping to CLO",
       description:
         "Select the assessment tool to use for this CLO and determine which items to process.",
-      img: tqf5ComingImg,
+      img: tqf5Pt2Img,
     },
     {
       id: "3",
       topic: "(Rubrics for CLO evaluation",
       description:
         "Review the assessment tool scores and score ranges for each CLO, and include the rubrics for CLO/CSO evaluation.",
-      img: tqf5ComingImg,
+      img: tqf5Pt3Img,
     },
   ];
   const [selectTQF3Image, setSelectTQF3Image] = useState(tqf3List[0].img);
+  const [selectTQF5Image, setSelectTQF5Image] = useState(tqf5List[0].img);
 
   useEffect(() => {
     dispatch(setShowSidebar(false));
@@ -195,6 +204,10 @@ export default function Login() {
       className=" bg-[#fafafa] h-full w-screen items-center flex flex-col overflow-y-auto overflow-x-hidden"
       ref={scrollableRef}
     >
+      <ModalTermsOfService
+        opened={openModalTOS}
+        onClose={() => setOpenModalTOS(false)}
+      />
       {loading && <LoadingOverlay />}
       <div className="relative flex flex-col w-full">
         <div className="max-sm:hidden absolute z-10 h-screen w-screen top-screen flex justify-center items-end pb-28 max-macair133:pb-32">
@@ -462,7 +475,7 @@ export default function Login() {
                         to improve.
                       </p>
                       <p className=" text-deemphasize underline font-[600]  mt-10 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
-                        Available in February 2025
+                        Available now
                       </p>
                     </div>
                   </div>
@@ -556,7 +569,7 @@ export default function Login() {
                       <div className="absolute top-2 left-2 rounded-xl">
                         <div className="top-0 flex flex-col justify-end p-6 ">
                           <p className="opacity-70 font-bold  cursor-default  text-white">
-                            EXPORT (Available in February 2025)
+                            EXPORT
                           </p>
                           <Title
                             order={3}
@@ -799,6 +812,9 @@ export default function Login() {
                           key={item.id}
                           value={item.id}
                           className="w-[400px] max-macair133:w-[300px]"
+                          onClick={() => {
+                            setSelectTQF5Image(item.img);
+                          }}
                         >
                           <Accordion.Control className="h-full min-h-[160px] samsungA24:min-h-[200px] text-[18px]">
                             <p className="text-[17px] font-[700] text-emphasize">
@@ -818,26 +834,10 @@ export default function Login() {
 
                   <div className="relative flex items-center justify-center py-2">
                     <Image
-                      src={tqf5ComingImg}
+                      src={selectTQF5Image}
                       alt="Background Image"
                       className="w-[85%]  max-macair133:w-full max-macair133:translate-x-14 samsungA24:w-[80%] object-cover"
                     />
-
-                    <div className="absolute bg-black opacity-80 w-full h-full backdrop-blur-[160px]"></div>
-
-                    <div className="absolute text-center text-white z-10">
-                      <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px] ">
-                        <h1 className="text-[48px]  max-macair133:text-[40px] leading-[64px] font-semibold">
-                          <span className="text-[rgb(106,163,255)] ">
-                            TQF 5 is coming soon <br /> to
-                          </span>{" "}
-                          ScoreOBE+
-                        </h1>
-                      </div>
-                      <p className="text-sm mt-2 text-[28px] text-white underline ">
-                        Available in February 2025
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -1009,31 +1009,29 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="sm:flex flex-col gap-16 items-center bg-black h-fit text-white px-28 py-20 hidden">
+        <div className="sm:flex flex-col gap-16 items-center bg-slate-100 h-fit text-white px-28 py-20 hidden">
           <div className="flex flex-col gap-20 items-center">
             <div className="text-[21px] text-center">
-              <p className="font-[600] text-[60px] max-macair133:text-[48px]">
+              <p className="font-[600] text-[60px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] max-macair133:text-[48px]">
                 Boost Student Success with{" "}
-                <span className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                  ScoreOBE+!
-                </span>
+                <span className="font-[600] ">ScoreOBE+!</span>
               </p>
-              <p className="max-macair133:text-[18px] ">
+              <p className="max-macair133:text-[18px] text-black font-[600] ">
                 Simplifies score announcements, tracks student progress, and
                 helps instructors align with educational goals.
               </p>
             </div>
 
             <div className="flex flex-col gap-16 justify-center w-full font-[600] text-[17px] max-macair133:text-[15px]  px-10">
-              <div className="flex items-start justify-center gap-28">
+              <div className="flex items-start text-default justify-center gap-28">
                 <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
                   <Icon
                     IconComponent={IconWand}
-                    className="size-16 max-macair133:size-12 stroke-1"
+                    className="size-16 stroke-default max-macair133:size-12 stroke-1"
                   />
-                  <p>
+                  <p className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                     Effortless -{"  "}
-                    <span className="text-[#86868B]">
+                    <span className="text-default">
                       Easily upload, publish, and manage course scores in just a
                       few clicks, saving you time and effort.
                     </span>
@@ -1042,11 +1040,11 @@ export default function Login() {
                 <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
                   <Icon
                     IconComponent={IconChartBar}
-                    className="size-16 max-macair133:size-12 stroke-1"
+                    className="size-16  max-macair133:size-12 stroke-1"
                   />
-                  <p>
+                  <p className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                     Insightful -{"  "}
-                    <span className="text-[#86868B]">
+                    <span className="text-default">
                       Access powerful, clear charts that provide deep insights
                       into scores for each assignment.
                     </span>
@@ -1054,15 +1052,15 @@ export default function Login() {
                 </div>
               </div>
 
-              <div className="flex items-start justify-center gap-28">
+              <div className="flex items-start text-default justify-center gap-28">
                 <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
                   <Icon
                     IconComponent={IconRocket}
                     className="size-16 max-macair133:size-12 stroke-1"
                   />
-                  <p>
+                  <p className="text-transparent font-[600] bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                     Empowering -{" "}
-                    <span className="text-[#86868B]">
+                    <span className="text-default">
                       Seamlessly align assessments with learning goals, ensuring
                       accuracy and alignment with program objectives.
                     </span>
@@ -1073,9 +1071,9 @@ export default function Login() {
                     IconComponent={IconChecklist}
                     className="size-16 max-macair133:size-12 stroke-1"
                   />
-                  <p>
+                  <p className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                     Streamlined -{" "}
-                    <span className="text-[#86868B]">
+                    <span className="text-default">
                       Quickly generate TQF reports for course evaluations,
                       simplifying the process with minimal effort required.
                     </span>
@@ -1084,6 +1082,96 @@ export default function Login() {
               </div>
             </div>
           </div>
+          <footer className="w-full border-t text-default  pt-10 ">
+            <div className="container px-4 mx-auto">
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
+                {/* Logo and main info */}
+                <div className="md:col-span-5 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={scoreobe}
+                      alt="cpeLogo"
+                      className=" sm:h-[28px] h-[22px] "
+                    />
+                    <h2 className="font-[600] sm:text-[18px] text-[14px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                      ScoreOBE+
+                    </h2>
+                  </div>
+                  <p className="text-sm  max-w-md">
+                    Advanced scoring and assessment software designed to
+                    streamline educational evaluation processes.
+                  </p>
+                </div>
+
+                {/* Quick links */}
+                <div className="md:col-span-3 space-y-4">
+                  <h3 className="text-sm font-semibold text-secondary ">
+                    Quick Links
+                  </h3>
+                  <ul className="space-y-2 text-[14px]">
+                    <li>
+                      <a href="#">Documentation</a>
+                    </li>
+
+                    <li>
+                      <a href="https://www.cmu.ac.th/th/privacy">
+                        Privacy Policy
+                      </a>
+                    </li>
+                    <li>
+                      <a onClick={() => setOpenModalTOS(true)}>
+                        Terms of Service
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* University links */}
+                <div className="md:col-span-4 space-y-4">
+                  <h3 className="text-sm font-semibold text-secondary ">
+                    Chiang Mai University
+                  </h3>
+                  <ul className="space-y-2 text-[14px]">
+                  <a className="flex items-center flex-row ">
+                      <a href="https://www.cpe.eng.cmu.ac.th/" target="_blank">
+                        Department of Computer Engineering
+                      </a>
+                      <Icon IconComponent={IconExternal} className="size-4 ml-1" />
+                    </a>
+                    <a className="flex items-center flex-row ">
+                      <a href="https://eng.cmu.ac.th/" target="_blank">
+                        Faculty of Engineering
+                      </a>
+                      <Icon IconComponent={IconExternal} className="size-4 ml-1" />
+                    </a>
+                    <a className="flex items-center flex-row ">
+                      <a href="https://www.cmu.ac.th/" target="_blank">
+                        Chiang Mai University
+                      </a>
+                      <Icon IconComponent={IconExternal} className="size-4 ml-1" />
+                    </a>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="my-8 border bg-slate-200 dark:bg-slate-700"></div>
+
+              <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                <p className="text-xs text-slate-600  text-center md:text-left">
+                  &copy; {currentYear} ScoreOBE+ Software. All rights reserved.
+                </p>
+                <div className="flex flex-col items-end text-end gap-1">
+                  <p className="text-xs text-slate-600 ">
+                    Designed and developed by the by the Department of Computer
+                    Engineering,
+                  </p>
+                  <p className="text-xs text-slate-600 ">
+                    Faculty of Engineering, Chiang Mai University
+                  </p>
+                </div>
+              </div>
+            </div>
+          </footer>
         </div>
       </div>
     </div>
