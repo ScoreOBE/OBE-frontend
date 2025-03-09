@@ -9,6 +9,7 @@ import {
   Textarea,
   Tooltip,
   Kbd,
+  FocusTrap,
 } from "@mantine/core";
 import IconTrash from "@/assets/icons/trash.svg?react";
 import IconList2 from "@/assets/icons/list2.svg?react";
@@ -52,6 +53,7 @@ export default function ModalManageCLO({
   const cloRef = useRef<HTMLDivElement>(null);
   const [isAdded, setIsAdded] = useState(false);
   const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+  const refTextarea = useRef<HTMLTextAreaElement>(null);
 
   const updateHeight = () => {
     if (descriptionRef.current) {
@@ -178,6 +180,7 @@ export default function ModalManageCLO({
         learningMethod: [],
         other: "",
       });
+      refTextarea.current!.focus();
     }
   };
 
@@ -221,7 +224,6 @@ export default function ModalManageCLO({
         title: "acerSwift:max-macair133:!text-b1",
       }}
     >
-      <FocusTrapInitialFocus />
       <div className={`flex flex-col ${height}`}>
         <div
           className={`flex gap-5 py-1 h-fit sm:max-macair133:overflow-y-auto sm:max-macair133:px-[2px] ${
@@ -238,97 +240,104 @@ export default function ModalManageCLO({
               : "h-fit"
           }`}
         >
-          {/* Input Field */}
-          <div
-            id="description"
-            ref={descriptionRef}
-            className={`flex flex-col rounded-md sm:overflow-y-auto justify-between  ${
-              type === "add" && "p-5"
-            } gap-1 overflow-y-hidden ${
-              form.getValues().clo?.length! > 0 && type === "add"
-                ? "w-[45%]"
-                : "w-full"
-            } h-full`}
-            style={{
-              boxShadow:
-                type === "add" ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
-            }}
-          >
-            <div className="flex flex-col gap-4 h-[90%]">
-              <Textarea
-                autoFocus={false}
-                label={
-                  <p className="font-semibold flex gap-1 h-full ">
-                    CLO <span className="text-secondary">Thai</span>
-                    <span className=" text-error">*</span>
-                  </p>
-                }
-                className="w-full border-none"
-                classNames={{
-                  input:
-                    "flex h-[80px] acerSwift:max-macair133:!h-[70px] px-3 py-2 text-b3 acerSwift:max-macair133:!text-b4",
-                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
-                }}
-                placeholder="อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
-                {...formOneCLO.getInputProps("descTH")}
-              />
-              <Textarea
-                autoFocus={false}
-                label={
-                  <p className="font-semibold flex gap-1">
-                    CLO <span className="text-secondary">English</span>
-                    <span className=" text-error">*</span>
-                  </p>
-                }
-                className="w-full border-none"
-                classNames={{
-                  input:
-                    "flex h-[80px] px-3 acerSwift:max-macair133:!h-[70px] py-2 text-b3 acerSwift:max-macair133:!text-b4",
-                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
-                }}
-                placeholder="Explain the working principle of computer operating systems."
-                {...formOneCLO.getInputProps("descEN")}
-              />
+          {/* Input Field */}{" "}
+          <FocusTrap>
+            <div
+              id="description"
+              ref={descriptionRef}
+              className={`flex flex-col rounded-md sm:overflow-y-auto justify-between  ${
+                type === "add" && "p-5"
+              } gap-1 overflow-y-hidden ${
+                form.getValues().clo?.length! > 0 && type === "add"
+                  ? "w-[45%]"
+                  : "w-full"
+              } h-full`}
+              style={{
+                boxShadow:
+                  type === "add"
+                    ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)"
+                    : "none",
+              }}
+            >
+              <div className="flex flex-col gap-4 h-[90%]">
+                <Textarea
+                  data-autoFocus={true}
+                  ref={refTextarea}
+                  label={
+                    <p className="font-semibold flex gap-1 h-full ">
+                      CLO <span className="text-secondary">Thai</span>
+                      <span className=" text-error">*</span>
+                    </p>
+                  }
+                  className="w-full border-none"
+                  classNames={{
+                    input:
+                      "flex h-[80px] acerSwift:max-macair133:!h-[70px] px-3 py-2 text-b3 acerSwift:max-macair133:!text-b4",
+                    label: "flex pb-1 acerSwift:max-macair133:!text-b4",
+                  }}
+                  placeholder="อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
+                  {...formOneCLO.getInputProps("descTH")}
+                />
 
-              <div className="flex flex-col gap-2 pb-1 ">
-                <p className="text-secondary text-b3 acerSwift:max-macair133:!text-b4 mb-1 font-semibold">
-                  Learning Method <span className="text-error">*</span>
-                </p>
-                <Checkbox.Group {...formOneCLO.getInputProps("learningMethod")}>
-                  {options.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex-col pb-[14px] items-center w-full"
-                    >
-                      <Checkbox
-                        size="xs"
-                        classNames={{
-                          label:
-                            "font-medium text-b3 acerSwift:max-macair133:!text-b4 text-default",
-                        }}
-                        label={item.label}
-                        value={item.label}
-                      />
-                      {item.label === LearningMethod.Other &&
-                        formOneCLO
-                          .getValues()
-                          .learningMethod?.includes(LearningMethod.Other) && (
-                          <Textarea
-                            size="xs"
-                            className="mt-2 pl-8"
-                            placeholder="(Required)"
-                            classNames={{
-                              input: "text-[13px] text-default",
-                            }}
-                            {...formOneCLO.getInputProps("other")}
-                          />
-                        )}
-                    </div>
-                  ))}
-                </Checkbox.Group>
+                <Textarea
+                  label={
+                    <p className="font-semibold flex gap-1">
+                      CLO <span className="text-secondary">English</span>
+                      <span className=" text-error">*</span>
+                    </p>
+                  }
+                  className="w-full border-none"
+                  classNames={{
+                    input:
+                      "flex h-[80px] px-3 acerSwift:max-macair133:!h-[70px] py-2 text-b3 acerSwift:max-macair133:!text-b4",
+                    label: "flex pb-1 acerSwift:max-macair133:!text-b4",
+                  }}
+                  placeholder="Explain the working principle of computer operating systems."
+                  {...formOneCLO.getInputProps("descEN")}
+                />
+
+                <div className="flex flex-col gap-2 pb-1 ">
+                  <p className="text-secondary text-b3 acerSwift:max-macair133:!text-b4 mb-1 font-semibold">
+                    Learning Method <span className="text-error">*</span>
+                  </p>
+                  <Checkbox.Group
+                    {...formOneCLO.getInputProps("learningMethod")}
+                  >
+                    {options.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex-col pb-[14px] items-center w-full"
+                      >
+                        <Checkbox
+                          size="xs"
+                          classNames={{
+                            label:
+                              "font-medium text-b3 acerSwift:max-macair133:!text-b4 text-default",
+                          }}
+                          label={item.label}
+                          value={item.label}
+                        />
+                        {item.label === LearningMethod.Other &&
+                          formOneCLO
+                            .getValues()
+                            .learningMethod?.includes(LearningMethod.Other) && (
+                            <Textarea
+                              size="xs"
+                              className="mt-2 pl-8"
+                              placeholder="(Required)"
+                              classNames={{
+                                input: "text-[13px] text-default",
+                              }}
+                              {...formOneCLO.getInputProps("other")}
+                            />
+                          )}
+                      </div>
+                    ))}
+                  </Checkbox.Group>
+                </div>
               </div>
             </div>
-          </div>
+          </FocusTrap>
           {/* List CLO */}
           {!!form.getValues().clo?.length && type === "add" && (
             <div

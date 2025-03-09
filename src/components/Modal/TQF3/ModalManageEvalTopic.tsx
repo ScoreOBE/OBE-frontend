@@ -10,6 +10,7 @@ import {
   Alert,
   Tooltip,
   Kbd,
+  FocusTrap,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Icon from "@/components/Icon";
@@ -46,6 +47,7 @@ export default function ModalManageEvalTopic({
   const [isAdded, setIsAdded] = useState(false);
   const [percentTotal, setPercentTotal] = useState(0);
   const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+  const refTextinput = useRef<HTMLInputElement>(null);
 
   const form = useForm({
     mode: "controlled",
@@ -159,6 +161,7 @@ export default function ModalManageEvalTopic({
         desc: "",
         percent: 0,
       });
+      refTextinput.current?.focus();
     }
   };
 
@@ -245,118 +248,125 @@ export default function ModalManageEvalTopic({
           className={`flex gap-5 py-1 ${type === "add" ? " h-fit " : "h-fit"}`}
         >
           {/* Input Field */}
-          <div
-            className={`flex flex-col justify-between rounded-md ${
-              type === "add" && "p-5"
-            } gap-1 overflow-hidden ${
-              form.getValues().eval?.length! > 0 && type === "add"
-                ? "w-[45%]"
-                : "w-full"
-            } h-full`}
-            style={{
-              boxShadow:
-                type === "add" ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)" : "none",
-            }}
-          >
-            <div className="flex flex-col gap-4 h-[88%]">
-              <TextInput
-                disabled={percentTotal == 100}
-                autoFocus={false}
-                label={
-                  <p className="font-semibold flex gap-1 h-full ">
-                    Evaluation Method{" "}
-                    <span className="text-secondary">Thai</span>
-                    <span className=" text-error">*</span>
-                  </p>
-                }
-                className="w-full border-none   rounded-r-none "
-                classNames={{
-                  input: "flex p-3 text-b3 acerSwift:max-macair133:!text-b4",
-                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
-                }}
-                placeholder="แบบทดสอบ 1"
-                {...formOneTopic.getInputProps("topicTH")}
-              />
-              <TextInput
-                disabled={percentTotal == 100}
-                autoFocus={false}
-                label={
-                  <p className="font-semibold flex gap-1">
-                    Evaluation Method{" "}
-                    <span className="text-secondary">English</span>
-                    <span className=" text-error">*</span>
-                  </p>
-                }
-                className="w-full border-none rounded-r-none"
-                classNames={{
-                  input: "flex p-3 text-b3 acerSwift:max-macair133:!text-b4",
-                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
-                }}
-                placeholder="Test 1"
-                {...formOneTopic.getInputProps("topicEN")}
-              />
-              <Textarea
-                disabled={percentTotal == 100}
-                autoFocus={false}
-                label={<p className="font-semibold flex gap-1">Description</p>}
-                className="w-full border-none rounded-r-none"
-                classNames={{
-                  input:
-                    "flex h-[70px] px-3 py-2 text-b3 acerSwift:max-macair133:!text-b4",
-                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
-                }}
-                placeholder="(Optional)"
-                {...formOneTopic.getInputProps("desc")}
-              />
-              <NumberInput
-                size="xs"
-                disabled={percentTotal == 100}
-                label={
-                  <p className="font-semibold flex gap-1 h-full">
-                    Evaluation Percentage (%)
-                    <span className="text-error">*</span>
-                  </p>
-                }
-                classNames={{
-                  input:
-                    "flex px-3 py-5 text-b3 acerSwift:max-macair133:!text-b4",
-                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
-                  wrapper: "!border-none",
-                }}
-                allowNegative={false}
-                handlersRef={handlersRef}
-                step={5}
-                min={0}
-                max={100 - percentTotal}
-                rightSection={
-                  <div className="flex gap-2 items-center mr-16">
-                    <div
-                      className="p-1 rounded-md hover:bg-bgTableHeader"
-                      onClick={() => handlersRef.current?.decrement()}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <Icon
-                        IconComponent={IconMinus}
-                        className=" size-4 stroke-[#1f69f3]"
-                      />
+          <FocusTrap>
+            <div
+              className={`flex flex-col justify-between rounded-md ${
+                type === "add" && "p-5"
+              } gap-1 overflow-hidden ${
+                form.getValues().eval?.length! > 0 && type === "add"
+                  ? "w-[45%]"
+                  : "w-full"
+              } h-full`}
+              style={{
+                boxShadow:
+                  type === "add"
+                    ? "0px 0px 4px 0px rgba(0, 0, 0, 0.25)"
+                    : "none",
+              }}
+            >
+              <div className="flex flex-col gap-4 h-[88%]">
+                <TextInput
+                  disabled={percentTotal == 100}
+                  data-autoFocus={true}
+                  ref={refTextinput}
+                  label={
+                    <p className="font-semibold flex gap-1 h-full ">
+                      Evaluation Method{" "}
+                      <span className="text-secondary">Thai</span>
+                      <span className=" text-error">*</span>
+                    </p>
+                  }
+                  className="w-full border-none   rounded-r-none "
+                  classNames={{
+                    input: "flex p-3 text-b3 acerSwift:max-macair133:!text-b4",
+                    label: "flex pb-1 acerSwift:max-macair133:!text-b4",
+                  }}
+                  placeholder="แบบทดสอบ 1"
+                  {...formOneTopic.getInputProps("topicTH")}
+                />
+                <TextInput
+                  disabled={percentTotal == 100}
+                  autoFocus={false}
+                  label={
+                    <p className="font-semibold flex gap-1">
+                      Evaluation Method{" "}
+                      <span className="text-secondary">English</span>
+                      <span className=" text-error">*</span>
+                    </p>
+                  }
+                  className="w-full border-none rounded-r-none"
+                  classNames={{
+                    input: "flex p-3 text-b3 acerSwift:max-macair133:!text-b4",
+                    label: "flex pb-1 acerSwift:max-macair133:!text-b4",
+                  }}
+                  placeholder="Test 1"
+                  {...formOneTopic.getInputProps("topicEN")}
+                />
+                <Textarea
+                  disabled={percentTotal == 100}
+                  autoFocus={false}
+                  label={
+                    <p className="font-semibold flex gap-1">Description</p>
+                  }
+                  className="w-full border-none rounded-r-none"
+                  classNames={{
+                    input:
+                      "flex h-[70px] px-3 py-2 text-b3 acerSwift:max-macair133:!text-b4",
+                    label: "flex pb-1 acerSwift:max-macair133:!text-b4",
+                  }}
+                  placeholder="(Optional)"
+                  {...formOneTopic.getInputProps("desc")}
+                />
+                <NumberInput
+                  size="xs"
+                  disabled={percentTotal == 100}
+                  label={
+                    <p className="font-semibold flex gap-1 h-full">
+                      Evaluation Percentage (%)
+                      <span className="text-error">*</span>
+                    </p>
+                  }
+                  classNames={{
+                    input:
+                      "flex px-3 py-5 text-b3 acerSwift:max-macair133:!text-b4",
+                    label: "flex pb-1 acerSwift:max-macair133:!text-b4",
+                    wrapper: "!border-none",
+                  }}
+                  allowNegative={false}
+                  handlersRef={handlersRef}
+                  step={5}
+                  min={0}
+                  max={100 - percentTotal}
+                  rightSection={
+                    <div className="flex gap-2 items-center mr-16">
+                      <div
+                        className="p-1 rounded-md hover:bg-bgTableHeader"
+                        onClick={() => handlersRef.current?.decrement()}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <Icon
+                          IconComponent={IconMinus}
+                          className=" size-4 stroke-[#1f69f3]"
+                        />
+                      </div>
+                      <div className="h-8 border"></div>
+                      <div
+                        className=" p-1 rounded-md hover:bg-bgTableHeader"
+                        onClick={() => handlersRef.current?.increment()}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <Icon
+                          IconComponent={IconPlus2}
+                          className="size-4 stroke-[#1f69f3]"
+                        />
+                      </div>
                     </div>
-                    <div className="h-8 border"></div>
-                    <div
-                      className=" p-1 rounded-md hover:bg-bgTableHeader"
-                      onClick={() => handlersRef.current?.increment()}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <Icon
-                        IconComponent={IconPlus2}
-                        className="size-4 stroke-[#1f69f3]"
-                      />
-                    </div>
-                  </div>
-                }
-                {...formOneTopic.getInputProps("percent")}
-              />
+                  }
+                  {...formOneTopic.getInputProps("percent")}
+                />
+              </div>
             </div>
-          </div>
+          </FocusTrap>
           {/* List CLO */}
           {!!form.getValues().eval?.length! && type === "add" && (
             <div

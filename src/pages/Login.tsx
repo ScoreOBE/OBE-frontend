@@ -1118,8 +1118,8 @@ export default function Login() {
                         Privacy Policy
                       </a>
                     </li>
-                    <li>
-                      <a onClick={() => setOpenModalTOS(true)}>
+                    <li >
+                      <a className=" cursor-pointer" onClick={() => setOpenModalTOS(true)}>
                         Terms of Service
                       </a>
                     </li>
