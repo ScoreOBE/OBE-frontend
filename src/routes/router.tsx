@@ -18,6 +18,8 @@ import StdPLO from "@/pages/Student/StdPLO";
 import StdSkills from "@/pages/Student/StdSkills";
 import AllAssignment from "@/pages/AllAssignment";
 import OneAssignment from "@/pages/OneAssignment";
+import { isMobile } from "@/helpers/functions/function";
+import NotAvailablePage from "@/pages/NotAvailable";
 
 const Login = lazy(() => import("@/pages/Login"));
 const CmuEntraIDCallback = lazy(() => import("@/pages/CmuEntraIDCallback"));
@@ -186,7 +188,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.TQF,
             element: (
               <Suspense fallback={loadingPage}>
-                <AdminDashboardTQF />
+                {!isMobile ? <AdminDashboardTQF /> : <NotAvailablePage />}
               </Suspense>
             ),
           },
@@ -194,7 +196,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.PLO,
             element: (
               <Suspense fallback={loadingPage}>
-                <AdminDashboardPLO />
+               {!isMobile ?  <AdminDashboardPLO /> : <NotAvailablePage />}
               </Suspense>
             ),
           },
@@ -202,7 +204,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.CLO,
             element: (
               <Suspense fallback={loadingPage}>
-                <AdminDashboardCLO />
+               {!isMobile ?  <AdminDashboardCLO /> : <NotAvailablePage />}
               </Suspense>
             ),
           },
@@ -255,7 +257,7 @@ const router = createBrowserRouter([
                 path: ROUTE_PATH.HISTOGRAM,
                 element: (
                   <Suspense fallback={loadingPage}>
-                    <StdChart />
+                   {!isMobile? <StdChart /> : <NotAvailablePage />}
                   </Suspense>
                 ),
               },

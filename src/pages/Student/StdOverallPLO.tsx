@@ -12,7 +12,7 @@ import { TbSearch } from "react-icons/tb";
 import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
 import { setLoading } from "@/store/loading";
 import { getEnrollCourse } from "@/services/student/student.service";
-import { checkStringContain } from "@/helpers/functions/function";
+import { checkStringContain, isMobile } from "@/helpers/functions/function";
 import { IModelPLO, IModelPLONo } from "@/models/ModelPLO";
 
 export default function StdOverallPLO() {
@@ -82,7 +82,7 @@ export default function StdOverallPLO() {
               />
             )}
 
-            <div className="flex flex-row -mt-2 items-center justify-between">
+           { !isMobile && <div className="flex flex-row -mt-2 items-center justify-between">
               {!!courses.length ? (
                 <div className="flex flex-col">
                   <p className="text-secondary text-[18px] font-semibold ">
@@ -128,7 +128,7 @@ export default function StdOverallPLO() {
                   </Button>
                 )}
               </div>
-            </div>
+            </div>}
 
             <Tabs
               classNames={{

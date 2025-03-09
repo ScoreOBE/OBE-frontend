@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { Menu, Button } from "@mantine/core";
 import Icon from "./Icon";
 import IconUserProfile from "@/assets/icons/profile/userProfile.svg?react";
+import IconFeedback from "@/assets/icons/feedback.svg?react";
 import IconAdminProfile from "@/assets/icons/profile/adminProfile.svg?react";
 import IconSAdminProfile from "@/assets/icons/profile/s.AdminProfile.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -23,7 +24,7 @@ import ModalManageCurrAdmin from "./Modal/Profile/ModalManageCurrAdmin";
 import ModalChangeAdmin from "./Modal/Profile/ModalChangeAdmin";
 import ModalManageSemester from "./Modal/Profile/ModalManageSemester";
 import ModalCurriculum from "./Modal/Profile/ModalCurriculum";
-import { getUserName } from "@/helpers/functions/function";
+import { getUserName, isMobile } from "@/helpers/functions/function";
 import ModalCourseManagement from "./Modal/Profile/ModalCourseManagement";
 import ModalPLOManagement from "./Modal/Profile/ModalPLOManagement";
 import { logout } from "@/services/user/user.service";
@@ -66,7 +67,7 @@ export default function Profile() {
         return (
           <Icon
             IconComponent={IconSAdminProfile}
-            className="size-8 acerSwift:max-macair133:size-7"
+            className="sm:size-8 iphone:max-sm:size-7 acerSwift:max-macair133:size-7"
             style={{ color: getRoleColor(user.role) }}
           />
         );
@@ -74,7 +75,7 @@ export default function Profile() {
         return (
           <Icon
             IconComponent={IconAdminProfile}
-            className="size-8 acerSwift:max-macair133:size-7"
+            className="sm:size-8 iphone:max-sm:size-7 acerSwift:max-macair133:size-7"
             style={{ color: getRoleColor(user.role) }}
           />
         );
@@ -82,7 +83,7 @@ export default function Profile() {
         return (
           <Icon
             IconComponent={IconUserProfile}
-            className="size-8 acerSwift:max-macair133:size-7"
+            className="sm:size-8 iphone:max-sm:size-7 acerSwift:max-macair133:size-7"
             style={{ color: getRoleColor(user.role) }}
           />
         );
@@ -127,9 +128,9 @@ export default function Profile() {
         <Menu.Target>
           <Button
             color="#fafafa"
-            className="flex hover:bg-[#efefef] flex-row pl-4 justify-end px-0 !h-10 items-center"
+            className="flex hover:bg-[#efefef] flex-row  justify-end px-0 !h-10 items-center"
           >
-            <div className="flex flex-col gap-1 text-end mr-3 text-b4 acerSwift:max-macair133:text-b5">
+           { !isMobile && <div className="flex flex-col gap-1 pl-4 text-end mr-3 text-b4 acerSwift:max-macair133:text-b5">
               <p className="font-semibold text-default">{getUserName(user)}</p>
               <p
                 className="font-medium"
@@ -146,7 +147,7 @@ export default function Profile() {
                     <span>Student</span>
                   ))}
               </p>
-            </div>
+            </div>}
             {/* <Icon IconComponent={ProfileIcon} /> */}
             {getProfileIcon(user.role)}
           </Button>
@@ -247,15 +248,16 @@ export default function Profile() {
           </>
 
           {/* SUB MENU MANAGEMENT */}
-          {[ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) && (
+          {[ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role)  && (
             <Menu
               trigger="hover"
               openDelay={100}
               closeDelay={200}
               classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
+            
             >
               <Menu.Target>
-                <Menu.Item>
+                <Menu.Item  disabled={isMobile}>
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                       <Icon
@@ -358,8 +360,8 @@ export default function Profile() {
             </Menu>
           )}
 
-          {![ROLE.STUDENT, ROLE.TA].includes(user.role) && <Menu.Divider />}
-          {/* <a
+          {![ROLE.STUDENT, ROLE.TA].includes(user.role) && !isMobile && <Menu.Divider />}
+ {    isMobile &&     <a
             href={
               [ROLE.STUDENT, ROLE.TA].includes(user.role)
                 ? "https://docs.google.com/forms/d/e/1FAIpQLSfstqyy0ijNp8u0JU0a7bBU_x0HGPhJ5V7flAD0ZymzD9cZqA/viewform"
@@ -373,7 +375,7 @@ export default function Profile() {
                 <span>Feedback</span>
               </div>
             </Menu.Item>
-          </a> */}
+          </a>}
 
           <a href="https://forms.gle/haNFpme6KBzyejG18" target="_blank">
             <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">

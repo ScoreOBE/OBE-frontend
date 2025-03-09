@@ -32,6 +32,7 @@ import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import ModalUploadScore from "../components/Modal/Score/ModalUploadScore";
 import { IModelSection } from "@/models/ModelCourse";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
+import { isMobile } from "@/helpers/functions/function";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -331,7 +332,7 @@ export default function Dashboard() {
         />
       )}
       <div className="flex flex-col h-full w-full overflow-hidden">
-        <div className="flex flex-row px-6 pt-3 items-center justify-between">
+       { !isMobile && <div className="flex flex-row px-6 pt-3 items-center justify-between">
           <div className="flex flex-col ">
             <p className="text-secondary text-h2 acerSwift:max-macair133:text-[17px] font-semibold ">
               Hi there, {user.firstNameEN}
@@ -363,7 +364,7 @@ export default function Dashboard() {
               </p>
             )}
           </div>
-          {term?.isActive && !!courseList.courses.length && (
+          {term?.isActive && !!courseList.courses.length  && (
             <div className="flex gap-3 flex-wrap">
               {user.role != ROLE.TA && (
                 <Button
@@ -397,13 +398,13 @@ export default function Dashboard() {
               </Button>
             </div>
           )}
-        </div>
+        </div>}
         <div className="flex h-full w-full overflow-hidden">
           {loading ? (
             <Loading />
           ) : courseList.total ? (
             <div className="flex flex-col h-full w-full overflow-hidden">
-              <Alert
+              {/* <Alert
                 radius="md"
                 variant="light"
                 classNames={{
@@ -422,14 +423,14 @@ export default function Dashboard() {
                     </p>
                   </div>
                 }
-              ></Alert>
+              ></Alert> */}
               <InfiniteScroll
                 dataLength={courseList.courses.length}
                 next={onShowMore}
                 height={"100%"}
                 loader={<Loading />}
                 hasMore={payload?.hasMore}
-                className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4 pb-5 gap-4 px-6 p-3"
+                className="overflow-y-auto w-full h-fit iphone:max-sm:grid-cols-1 max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4 pb-5 gap-4 px-6 p-3"
                 style={{ height: "fit-content", maxHeight: "100%" }}
               >
                 {courseList.courses.map((item) => {

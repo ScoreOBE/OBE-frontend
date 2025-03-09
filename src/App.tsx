@@ -16,6 +16,9 @@ import { setLoading } from "./store/loading";
 import { checkTokenExpired } from "./helpers/functions/validation";
 import ModalTermsOfService from "./components/Modal/ModalTermOfService";
 import LoadingOverlay from "./components/Loading/LoadingOverlay";
+import { setOpenSidebar } from "./store/config";
+import { isMobile } from "./helpers/functions/function";
+import { ROLE } from "./helpers/constants/enum";
 
 function App() {
   const [openModalTermsOfService, setOpenModalTermsOfService] = useState(false);
@@ -28,6 +31,12 @@ function App() {
   const dispatch = useAppDispatch();
   const path = useLocation().pathname;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isMobile) {
+      dispatch(setOpenSidebar(false));
+    }
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
