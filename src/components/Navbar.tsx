@@ -180,7 +180,7 @@ export default function Navbar() {
               <img
                 src={cpeLogoRed}
                 alt="cpeLogo"
-                className="sm:h-[40px] h-[32px]"
+                className="sm:h-[36px] h-[26px]"
               />
             </div>
           </div>
