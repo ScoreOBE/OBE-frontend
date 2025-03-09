@@ -17,10 +17,11 @@ import IconListNumber from "@/assets/icons/listNumbers.svg?react";
 import IconMail from "@/assets/icons/mail.svg?react";
 import IconClipboardText from "@/assets/icons/clipboardText.svg?react";
 import { logout, termsOfService } from "@/services/user/user.service";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { setUser } from "@/store/user";
 import IconTh from "@/assets/icons/thai.svg?react";
 import IconEng from "@/assets/icons/eng.svg?react";
+import { isEmpty } from "lodash";
 
 type Props = {
   opened: boolean;
@@ -31,6 +32,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [isEN, setIsEN] = useState<string | null>("TH");
+  const user = useAppSelector((state) => state.user);
 
   const submitTermsOfService = async (isAgree: boolean) => {
     setLoading(true);
@@ -52,7 +54,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
       opened={opened}
       onClose={onClose}
       withCloseButton={false}
-      closeOnClickOutside={false}
+      closeOnClickOutside={isEmpty(user)}
       overlayProps={{
         backgroundOpacity: 0.55,
         blur: 10,
@@ -881,7 +883,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </p>
         )}
       </div>
-      <div className="flex justify-end mt-6 sticky w-full">
+     {!isEmpty(user) && <div className="flex justify-end mt-6 sticky w-full">
         <Group className="flex w-full gap-2 h-fit items-end justify-between">
           <Button
             loading={loading}
@@ -908,7 +910,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             )}
           </Button>
         </Group>
-      </div>
+      </div>}
     </Modal>
   );
 }
