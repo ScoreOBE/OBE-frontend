@@ -474,7 +474,7 @@ export default function Dashboard() {
                         {item.sections.find(
                           (sec) => (sec.instructor as IModelUser).id == user.id
                         ) &&
-                          term?.isActive && (
+                          term?.isActive && !isMobile && (
                             <div onClick={(event) => event.stopPropagation()}>
                               <Menu
                                 trigger="click"

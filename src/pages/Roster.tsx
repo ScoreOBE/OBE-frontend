@@ -418,7 +418,7 @@ export default function Roster() {
   };
 
   return (
-    <div className=" flex flex-col p-5 h-full w-full overflow-hidden">
+    <div className=" flex flex-col sm:p-5 iphone:max-sm:p-3 h-full w-full overflow-hidden">
       <MainPopup
         opened={openPopupDeleteStudent}
         onClose={() => setOpenPopupDeleteStudent(false)}
