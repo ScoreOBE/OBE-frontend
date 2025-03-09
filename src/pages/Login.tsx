@@ -227,7 +227,7 @@ export default function Login() {
         </div>
 
         <p className="!font-[600] text-center drop-shadow-xl cursor-default px-[12px]  w-full mt-[70px] sm:mt-8 sm:font-[600] item-start rounded text-emphasize sm:text-[48px] text-[32px] mb-5 sm:mb-0  ipad11:text-[50px] leading-[48px] sm:leading-[66px]">
-          <span className=" text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+          <span className=" !drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE+{" "}
           </span>
           {!isMobile && (
@@ -238,7 +238,7 @@ export default function Login() {
             </>
           )}
         </p>
-        <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[14px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[20px] font-[500]">
+        <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[14px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[40px] font-[500]">
           Discover A Better Way to Do OBE Simplify Your Academic Journey
         </p>
 
@@ -257,7 +257,7 @@ export default function Login() {
             boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          <div className=" sm:flex relative hidden items-center rounded-t-xl justify-center p-5 py-[9px] border-b-[1px] border-[#eeeeee] flex-row gap-0 w-full bg-white">
+          <div className=" sm:flex relative hidden  items-center rounded-t-xl justify-center p-5 py-[9px] border-b-[1px] border-[#eeeeee] flex-row gap-0 w-full bg-white">
             <div className=" absolute -top-10 py-20 max-macair133:py-40  rotate-180 -z-50 w-screen h-screen  flex justify-center">
               <div className="rounded-full h-full w-3/6 bg-[#FF7847] opacityy-50 bg-blur"></div>
               <div className="rounded-full h-[97%] w-3/6 bg-[#FF469D] opacityy-50 bg-blur"></div>
@@ -265,7 +265,7 @@ export default function Login() {
               <div className="rounded-full h-[97%] w-3/6 bg-[#0A7CFF] opacityy-50 bg-blur"></div>{" "}
               <div className="rounded-full h-[97%] w-3/6 bg-[#00abdf] opacityy-50 bg-blur"></div>
             </div>
-            <div className="flex justify-start w-[35%] flex-row gap-6 items-center">
+            <div className=" justify-start w-[35%] sm:flex hidden flex-row gap-6 items-center">
               <div className="flex  flex-row gap-2">
                 <div className=" rounded-full w-[12px] h-[12px] bg-[#ED6A5E]"></div>
                 <div className=" rounded-full w-[12px] h-[12px] bg-[#F4BF4F]"></div>
@@ -283,7 +283,7 @@ export default function Login() {
                 />
               </div>
             </div>
-            <div className="flex w-[30%] flex-row gap-2">
+            <div className="sm:flex w-[30%] hidden  flex-row gap-2">
               <div className=" h-[28px] relative rounded-lg w-full text-[12px] gap-2 font-medium flex  items-center bg-[#F1F1F1]">
                 <div className="justify-center gap-2 items-center w-full flex">
                   <Icon
@@ -314,34 +314,34 @@ export default function Login() {
         </div>
 
         {/* Upload, Publish grading efficiency. */}
-        <div className="bg-[#fafafa] sm:flex hidden h-full w-full gap-16 ">
+        <div className="bg-[#fafafa] sm:flex  h-full w-full gap-16 ">
           <div className="relative items-start text-start pb-32 justify-start w-full overflow-clip">
             {" "}
             <div className="absolute left-0 right-0 bottom-0 z-0 h-40 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
             <div className="relative">
               <div
-                className="relative h-fit w-full py-20 mt-16 max-macair133:mt-8 px-[118px]"
+                className="relative h-fit w-full py-20 mt-16 max-macair133:mt-8 sm:px-[118px] iphone:max-sm:px-8"
                 ref={targetRef}
               >
                 <div className="absolute ml-[40%] max-macair133:ml-0 left-0 right-0 bottom-40 z-0 max-macair133:h-16 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px] max-macair133:blur-[200px]"></div>
-                <p className="drop-shadow-xl pb-2 cursor-default leading-[56px] max-macair133:text-center text-[#000000] text-[48px] ">
-                  <span className="font-[700] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px] text-[48px] max-macair133:text-[44px]">
+                <p className="drop-shadow-xl pb-2 cursor-default leading-[56px] iphone:max-sm:!leading-[36px] max-macair133:text-center text-[#000000] text-[48px] ">
+                  <span className="font-[700] iphone:max-sm:!text-[24px] iphone:max-sm:!leading-[12px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default sm:leading-[56px] sm:text-[48px] max-macair133:text-[44px]">
                     Upload, Publish
                     <br /> grading efficiency.
                   </span>{" "}
                   <br />
                 </p>
                 <div className="flex max-macair133:flex-col max-macair133:gap-24 items-center justify-between">
-                  <p className="mt-5 text-[19px] max-macair133:text-[17px] max-macair133:text-center text-black font-[600]">
+                  <p className="mt-5 iphone:max-sm:text-[14px] text-[19px] max-macair133:text-[17px] max-macair133:text-center text-black font-[600]">
                     Effortless score uploads, instant analytics, <br /> and
                     visual insights! Elevate your grading today! <br />
                   </p>
-                  <div className="flex justify-end gap-10 ml-12 -mt-14">
+                  <div className="flex iphone:max-sm:flex-col justify-end gap-10 iphone:max-sm:gap-2 iphone:max-sm:ml-0 ml-12 -mt-14">
                     <div className="flex justify-start flex-col items-start mt-2 mb-2 p-7 rounded-xl bg-white/65 backdrop-blur-[100px] shadow-lg">
                       <img
                         src={gradescope}
                         alt="CMULogo"
-                        className="h-[32px]"
+                        className="h-[32px] sm:flex "
                       />
                       <p className=" text-black font-[700] pt-4 ">
                         Gradescope Support
@@ -371,15 +371,15 @@ export default function Login() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-20 px-[118px]">
+              <div className="flex flex-col gap-20 sm:px-[118px] iphone:max-sm:px-8">
                 <div className="flex flex-col items-start text-start">
-                  <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start text-[48px] ">
+                  <div className="font-[700] iphone:max-sm:!text-[28px] iphone:max-sm:!leading-[36px] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start text-[48px] ">
                     <p>See Beyond the Scores</p>
                     <p className="text-[#1D1D1F]">
                       Where Insight Ignites Impact
                     </p>
                   </div>
-                  <p className="mt-5 text-[17px] text-deemphasize font-[600] text-wrap w-[750px]">
+                  <p className="mt-5 text-[17px] iphone:max-sm:!text-[14px] text-deemphasize font-[600] text-wrap sm:w-[750px]">
                     ScoreOBE+ turns data into actionable insights that{" "}
                     <span className="text-emphasize">
                       support teaching excellence <br /> and elevate learning
@@ -391,11 +391,11 @@ export default function Login() {
                   <Image
                     src={chartImg}
                     alt="chartImg"
-                    className="w-[85%] max-macair133:w-[95%] max-macair133:-ml-[30%]  -ml-[20%] mx-0"
+                    className="w-[85%] sm:flex iphone:max-sm:hidden max-macair133:w-[95%] max-macair133:-ml-[30%]  -ml-[20%] mx-0"
                   />
                   <div className="flex flex-col w-[40%] h-full gap-8 max-macair133:gap-4 text-[18px] ">
                     <div className="flex flex-col gap-2 items-start mt-2 mb-2">
-                      <p className="font-[700] text-[36px] max-macair133:text-[34px] text-emphasize">
+                      <p className="font-[700] text-[36px] iphone:max-sm:!text-[24px] max-macair133:text-[34px] text-emphasize">
                         Statistics & Chart
                       </p>
                       <p className="text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[750px]">
@@ -407,10 +407,10 @@ export default function Login() {
                         IconComponent={IconChartBar}
                         className="size-9 max-macair133:size-8 -ml-1"
                       />
-                      <p className=" text-black font-[700] pt-4">
+                      <p className=" text-black font-[700] sm:w-[400px] !w-[90vw] pt-4">
                         Clear Overview of Performance
                       </p>
-                      <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
+                      <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] sm:w-[400px] iphone:max-sm:!w-[90vw] !w-[30vw]">
                         Provides a comprehensive view of student performance
                         <span className="text-emphasize">
                           {" "}
@@ -423,10 +423,10 @@ export default function Login() {
                         IconComponent={IconHistogram}
                         className="size-8 max-macair133:size-7"
                       />
-                      <p className=" text-black font-[700] pt-4 ">
+                      <p className=" text-black font-[700] sm:w-[400px] iphone:max-sm:!w-[90vw] !w-[30vw] pt-4 ">
                         Unlock In-Depth Statistical Insights
                       </p>
-                      <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] w-[380px]">
+                      <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] sm:w-[400px] iphone:max-sm:!w-[90vw] !w-[30vw]">
                         <span className="text-emphasize">
                           Analyze key metrics{" "}
                         </span>
@@ -441,16 +441,16 @@ export default function Login() {
                 <div className="flex gap-20 items-center">
                   <div className="flex flex-col w-[50%] h-full gap-8 text-[18px] ">
                     <div className="flex flex-col gap-2 items-start mt-2 mb-2">
-                      <p className="font-[700] text-[36px] max-macair133:text-[34px] text-emphasize">
+                      <p className="font-[700] iphone:max-sm:!text-[28px]  text-[36px] max-macair133:text-[34px] text-emphasize">
                         PLO Performance <br />
                         <span className="-mt-1"> Spider Chart</span>
                       </p>
-                      <p className="text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[520px] ">
+                      <p className="text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap sm:w-[400px] iphone:max-sm:!w-[90vw] !w-[30vw] ">
                         Visualize student progress{" "}
                         <span className="text-emphasize">
                           in each course and across <br /> the entire curriculum{" "}
                         </span>
-                        , aligned with Program Learning <br /> Outcomes (PLOs).
+                        , aligned with Program Learning Outcomes (PLOs).
                       </p>
                     </div>
                     <div className="flex justify-start flex-col items-start mt-2 mb-2">
@@ -458,14 +458,14 @@ export default function Login() {
                       <p className=" text-black font-[700] pt-4 ">
                         Students Can Track Their Own Performance
                       </p>
-                      <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
+                      <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] sm:w-[400px] iphone:max-sm:!w-[90vw] !w-[30vw]">
                         <span className="text-emphasize">
                           Gain clear insights into your progress{" "}
                         </span>{" "}
                         across courses and learning outcomes, and discover areas
                         to improve.
                       </p>
-                      <p className=" text-deemphasize underline font-[600]  mt-10 text-[15px] leading-[22px] w-[400px] max-macair133:w-[380px]">
+                      <p className=" text-deemphasize underline font-[600]  mt-10 text-[15px] leading-[22px] sm:w-[400px] iphone:max-sm:!w-[90vw] !w-[30vw]">
                         Available now
                       </p>
                     </div>
@@ -473,19 +473,19 @@ export default function Login() {
                   <Image
                     src={studentPLOPage}
                     alt="CMULogo"
-                    className="w-[85%] max-macair133:w-[95%] max-macair133:-ml-[5%] -translate-x-28"
+                    className="w-[85%] sm:flex hidden max-macair133:w-[95%] max-macair133:-ml-[5%] -translate-x-28"
                   />
                 </div>
 
                 <div className="flex flex-col gap-20 ">
                   <div className="flex flex-col items-center">
-                    <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] max-macair133:text-[44px] ">
+                    <div className="font-[700] flex flex-col iphone:max-sm:text-[28px] gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 sm:leading-[56px] items-center text-[48px] max-macair133:text-[44px] ">
                       Easily Manage Scores <br />{" "}
                       <span className=" text-emphasize">
                         with Export and Publish
                       </span>
                     </div>
-                    <p className="mt-5 text-[17px] max-macair133:text-[15px]  text-deemphasize font-[600] text-wrap w-[800px] text-center">
+                    <p className="mt-5 text-[17px] max-macair133:text-[15px]  text-deemphasize font-[600] text-wrap sm:w-[400px] !w-[90vw] text-center">
                       Make managing scores easier than ever. With our intuitive
                       export and publish options, you can{" "}
                       <span className="text-emphasize">
@@ -495,7 +495,7 @@ export default function Login() {
                     </p>
                   </div>
 
-                  <div className="flex  justify-center gap-16">
+                  <div className="sm:flex hidden justify-center gap-16">
                     <div
                       style={{
                         boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.45)",
@@ -507,7 +507,7 @@ export default function Login() {
                       >
                         <Image
                           src={publishScoreImg}
-                          className={`h-[500px] w-full object-cover rounded-xl translate-x-14 -translate-y-8 max-macair133:translate-x-10`}
+                          className={`h-[500px] sm:flex w-full object-cover rounded-xl translate-x-14 -translate-y-8 max-macair133:translate-x-10`}
                         />
                       </div>
                       <Icon
@@ -580,13 +580,13 @@ export default function Login() {
         </div>
 
         {/* TQFs */}
-        <div className="sm:flex flex-col w-full h-fit pt-16 hidden">
-          <div className="flex flex-col items-start text-start px-28">
-            <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start text-[48px] max-macair133:text-[44px] ">
+        <div className="sm:flex flex-col w-full h-fit pt-16 ">
+          <div className="flex flex-col items-start text-start sm:px-28 px-10">
+            <div className="font-[700] flex flex-col gap-1 iphone:max-sm:text-[28px] text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 sm:leading-[56px]  items-start text-[48px] max-macair133:text-[44px] ">
               <p>New TQF system</p>
               <p className="text-[#1D1D1F]">Convenient, Fast and Effortless</p>
             </div>
-            <p className="mt-5 text-[17px]max-macair133:text-[15px]  text-deemphasize font-[600] text-wrap w-[750px]">
+            <p className="mt-5 text-[17px]max-macair133:text-[15px]  text-deemphasize font-[600] text-wrap sm:w-[750px] iphone:max-sm:!w-[80vw] !w-[30vw]">
               With ScoreOBE+, generating TQF 3 and TQF 5 reports is now easier
               than ever. Automatically compile course objectives, track learning
               progress, and align with program goals —all in one place. Save
@@ -600,13 +600,13 @@ export default function Login() {
           </div>
 
           {/* benefit */}
-          <div className="flex flex-col mt-16">
+          <div className="flex flex-col mt-16 iphone:max-sm:-mt-36  ">
             <div className="flex gap-16 h-screen w-screen justify-center items-center">
               <div className="flex flex-col gap-6 items-start text-start">
-                <p className="font-[700] flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] max-macair133:text-[24px]">
+                <p className="font-[700]  flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] max-macair133:text-[24px]">
                   Create TQF Reports <br /> Quickly and Easily.
                 </p>
-                <p className=" text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[400px] max-macair133:w-[370px]">
+                <p className=" text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap sm:w-[400px] iphone:max-sm:!w-[80vw] !w-[30vw]">
                   <span className="text-emphasize">
                     Save time, reduce effort, and ensure consistency across all
                     your reports.
@@ -619,7 +619,7 @@ export default function Login() {
 
               {/* Image */}
               <div
-                className={`h-[80%] w-[50%] object-cover rounded-xl max-macair133:w-[45%]`}
+                className={`sm:h-[80%] sm:w-[50% sm:flex hidden sm:object-cover rounded-xl max-macair133:w-[45%]`}
               >
                 <Image
                   src={exportTQFImag}
@@ -629,15 +629,15 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="bg-[#fafafa] py-14 flex flex-col gap-10 -mt-10">
+          <div className="bg-[#fafafa] py-14 flex flex-col iphone:max-sm:-mt-64 gap-10 -mt-10">
             {/* TQF3 */}
             <div className="flex flex-col items-center text-center font-[600] gap-14 ">
               <div className="mx-28">
-                <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px] max-macair133:text-[44px] ">
+                <div className="font-[700] flex flex-col gap-1 iphone:max-sm:text-[28px] text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 sm:leading-[56px] items-center text-[48px] max-macair133:text-[44px] ">
                   <p>TQF 3</p>
                   <p className="text-[#1D1D1F]">Save Time & Focus on Content</p>
                 </div>
-                <p className="mt-5 text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[800px]">
+                <p className="mt-5 text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap sm:w-[800px] iphone:max-sm:!w-[80vw] !w-[30vw]">
                   With our reusable TQF 3 templates, you can{" "}
                   <span className="text-emphasize">
                     {" "}
@@ -649,9 +649,9 @@ export default function Login() {
                 </p>
               </div>
 
-              <div className="relative flex gap-16  max-macair133:gap-8">
+              <div className="relative sm:flex sm:gap-16 iphone:max-sm:flex-col iphone:max-sm:gap-5  ">
                 <div className="absolute left-0 right-0 top-[75%] z-0 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
-                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  max-macair133:w-[330px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg py-6">
+                <div className="flex flex-col iphone:max-sm:mb-4 items-center justify-center gap-3 text-pretty w-[370px]  max-macair133:w-[330px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg py-6">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
@@ -725,13 +725,13 @@ export default function Login() {
             {/* TQF5*/}
             <div className="flex flex-col items-center text-center font-[600] gap-14">
               <div className="flex flex-col items-center mx-28">
-                <div className="font-[700] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px] items-center text-[48px]  max-macair133:text-[44px]">
+                <div className="font-[700] flex flex-col iphone:max-sm:text-[28px] gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 sm:leading-[56px] items-center text-[48px]  max-macair133:text-[44px]">
                   <p>TQF 5</p>
                   <p className="text-[#1D1D1F]">
                     Unlock Deep Insights into Your Course
                   </p>
                 </div>
-                <p className="mt-5 text-[17px]  max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[800px] ">
+                <p className="mt-5 text-[17px]  max-macair133:text-[15px] text-deemphasize font-[600] text-wrap sm:w-[800px] iphone:max-sm:!w-[80vw] !w-[30vw] ">
                   <span className="text-emphasize">
                     TQF 5 helps you analyze course objectives based on real
                     student performance data
@@ -836,21 +836,21 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="bg-[#F2F2F2] sm:flex hidden h-fit w-full flex-col gap-28 py-36">
-          <div className="flex flex-col items-start text-start px-28">
-            <div className="font-[700] flex flex-col gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default leading-[56px]  items-start text-[48px]  max-macair133:text-[44px]">
+        <div className="bg-[#F2F2F2] sm:flex  h-fit w-full flex-col gap-28 py-36 ">
+          <div className="flex flex-col iphone:max-sm:-mt-24 items-start text-start sm:px-28 px-10">
+            <div className="font-[700] flex flex-col iphone:max-sm:text-[28px] gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default sm:leading-[56px]  items-start text-[48px]  max-macair133:text-[44px]">
               <p>
                 Say Goodbye to Complexity, <br /> Hello to Seamless Course
                 Management!
               </p>
             </div>
-            <p className="mt-5 text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap w-[900px]">
+            <p className="mt-5 text-[17px] max-macair133:text-[15px] text-deemphasize font-[600] text-wrap sm:w-[900px] iphone:max-sm:!w-[80vw] !w-[30vw]">
               Unlock the ultimate tools for TQF, PLO, and CLO management with
               our powerful admin features.
             </p>
           </div>
 
-          <div className=" flex items-center justify-center ">
+          <div className=" flex items-center justify-center iphone:max-sm:mt-8 ">
             {/* <div className="absolute left-0 right-0 top-[50%] z-0 -ml-20 h-40 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[200px]"></div> */}
             <Tabs defaultValue="tqf">
               <Tabs.List className="flex justify-center">
@@ -943,13 +943,13 @@ export default function Login() {
             </Tabs>
           </div>
 
-          <div className="flex h-fit items-center mt-8">
-            <div className="flex flex-col items-start justify-center gap-4 max-macair133:gap-2 h-[85%]  pl-28 samsungA24:pl-48">
+          <div className="flex h-fit items-center mt-8 iphone:max-sm:-mt-48">
+            <div className="flex flex-col items-start justify-center gap-4 max-macair133:gap-2 h-[85%] iphone:max-sm:px-10  sm:pl-28 samsungA24:pl-48">
               <div className="flex flex-col gap-2 items-start mt-2 mb-2">
                 <p className="font-[700] text-[36px] text-emphasize">
                   Course Management
                 </p>
-                <p className="text-[17px] text-deemphasize font-[600] text-wrap w-[520px]">
+                <p className="text-[17px] text-deemphasize font-[600] text-wrap sm:w-[520px] iphone:max-sm:!w-[80vw] !w-[30vw]">
                   Manage courses within the Faculty of Engineering, <br />{" "}
                   organized by department.
                 </p>
@@ -958,7 +958,7 @@ export default function Login() {
                 <p className=" text-black font-[700] pt-4 ">
                   Recurrence course
                 </p>
-                <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] w-[400px]">
+                <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] sm:w-[400px] iphone:max-sm:!w-[80vw] !w-[30vw]">
                   <span className="text-[#4285f4]">
                     Easily set courses to recur in the next semester
                   </span>
@@ -967,7 +967,7 @@ export default function Login() {
                   courses each term.
                 </p>
               </div>
-              <div className="flex justify-start flex-col items-start mt-2 mb-2">
+              <div className="flex justify-start flex-col items-start mt-2 mb-2 ">
                 <p className=" text-black font-[700] pt-4 ">
                   Manage Co-instructors
                 </p>
@@ -982,7 +982,7 @@ export default function Login() {
               </div>
               <div className="flex justify-start flex-col items-start mt-2 mb-2">
                 <p className=" text-black font-[700] pt-4 ">Manage Sections</p>
-                <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] w-[400px] max-macair133:w-[350px]">
+                <p className=" text-deemphasize font-[600] pt-2 text-[15px] leading-[22px] sm:w-[450px] iphone:max-sm:!w-[80vw] !w-[30vw]">
                   Easily manage course sections,{" "}
                   <span className="text-[#4285f4]">
                     {" "}
@@ -995,26 +995,26 @@ export default function Login() {
             <Image
               src={courseManagementImg}
               alt="CMULogo"
-              className="w-[75%] max-macair133:w-[90%] -translate-x-36 samsungA24:-translate-x-20"
+              className="w-[75%] sm:flex hidden max-macair133:w-[90%] -translate-x-36 samsungA24:-translate-x-20"
             />
           </div>
         </div>
 
-        <div className="sm:flex flex-col gap-16 items-center bg-[#fafafa]  h-fit text-white  sm:px-28 sm:py-20 py-12 ">
-          <div className="flex flex-col gap-20 items-center hidden">
+        <div className="sm:flex flex-col gap-16 items-center bg-[#fafafa] iphone:max-sm:-mt-24  h-fit text-white   sm:px-28 sm:py-20 py-12 ">
+          <div className="flex flex-col gap-20 items-center ">
             <div className="text-[21px] text-center">
-              <p className="font-[600] text-[60px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] max-macair133:text-[48px]">
+              <p className="font-[600] text-[60px] iphone:max-sm:text-[28px] iphone:max-sm:px-2 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] max-macair133:text-[48px]">
                 Boost Student Success with{" "}
                 <span className="font-[600] ">ScoreOBE+!</span>
               </p>
-              <p className="max-macair133:text-[18px] text-black font-[600] ">
+              <p className="sm:text-[18px] iphone:max-sm:text-[14px]  iphone:max-sm:mt-4 iphone:max-sm:px-5 text-default font-[600] ">
                 Simplifies score announcements, tracks student progress, and
                 helps instructors align with educational goals.
               </p>
             </div>
 
             <div className="flex flex-col gap-16 justify-center w-full font-[600] text-[17px] max-macair133:text-[15px]  px-10">
-              <div className="flex items-start text-default justify-center gap-28">
+              <div className="flex items-start text-default justify-center sm:gap-28 iphone:max-sm:gap-16">
                 <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
                   <Icon
                     IconComponent={IconWand}
@@ -1043,7 +1043,7 @@ export default function Login() {
                 </div>
               </div>
 
-              <div className="flex items-start text-default justify-center gap-28">
+              <div className="flex iphone:max-sm:mb-12 items-start text-default justify-center sm:gap-28 iphone:max-sm:gap-16">
                 <div className="flex flex-col items-start gap-3 text-pretty w-[370px]">
                   <Icon
                     IconComponent={IconRocket}
