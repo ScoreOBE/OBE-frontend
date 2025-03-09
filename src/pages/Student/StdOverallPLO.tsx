@@ -7,7 +7,7 @@ import { ROLE } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading/Loading";
 import { Accordion, Button, Tabs, TextInput } from "@mantine/core";
 import DrawerPLOdes from "@/components/DrawerPLO";
-import SpiderChart from "@/components/Chart/SpiderChart";
+import BarChart from "@/components/Chart/PloBarChart";
 import { TbSearch } from "react-icons/tb";
 import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
 import { setLoading } from "@/store/loading";
@@ -20,7 +20,7 @@ export default function StdOverallPLO() {
   const [activeTab, setActiveTab] = useState<string | null>();
   const [activeSection, setActiveSection] = useState<string | null>();
   const user = useAppSelector((state) => state.user);
-  const height = window.innerWidth >= 1800 ? 650 : 450;
+  const height = window.innerWidth >= 1500 ? 440 : 420;
   const dispatch = useAppDispatch();
   const [courses, setCourses] = useState<IModelEnrollCourse[]>([]);
   const [courseCurriculums, setCourseCurriculums] = useState<
@@ -82,57 +82,44 @@ export default function StdOverallPLO() {
               />
             )}
 
-           { !isMobile && <div className="flex flex-row -mt-2 items-center justify-between">
-              {!!courses.length ? (
-                <div className="flex flex-col">
-                  <p className="text-secondary text-[18px] font-semibold ">
-                    Hi there, {user.firstNameEN}
-                  </p>
-                  <p className="text-[#575757] text-[14px]">
-                    You have completed{" "}
-                    <span className="text-[#1f69f3] font-semibold">
-                      {courses.length} Course{" "}
-                    </span>
-                    in CPE curriculum
-                  </p>
+            {!isMobile && (
+              <div className="flex flex-row -mt-2 items-center justify-between">
+                {!!courses.length ? (
+                  <div className="flex flex-col">
+                    <p className="text-secondary text-[18px] font-semibold ">
+                      Hi there, {user.firstNameEN}
+                    </p>
+                    <p className="text-[#575757] text-[14px]">
+                      You have completed{" "}
+                      <span className="text-[#1f69f3] font-semibold">
+                        {courses.length} Course{" "}
+                      </span>
+                      in CPE curriculum
+                    </p>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                <div className="flex gap-3">
+                  {activeTab === "course" && (
+                    <TextInput
+                      leftSection={<TbSearch />}
+                      className="w-[350px]"
+                      placeholder="Course No / Course Name / Course Topic"
+                      size="xs"
+                      value={searchValue}
+                      onChange={(event: any) =>
+                        setSearchValue(event.currentTarget.value)
+                      }
+                    />
+                  )}
                 </div>
-              ) : (
-                <></>
-              )}
-              <div className="flex gap-3">
-                {activeTab === "course" && (
-                  <TextInput
-                    leftSection={<TbSearch />}
-                    className="w-[350px]"
-                    placeholder="Course No / Course Name / Course Topic"
-                    size="xs"
-                    value={searchValue}
-                    onChange={(event: any) =>
-                      setSearchValue(event.currentTarget.value)
-                    }
-                  />
-                )}
-                {activeTab != "course" && (
-                  <Button
-                    color="#e9e9e9"
-                    className="text-center px-4"
-                    onClick={() => setOpenDrawerPLOdes(true)}
-                  >
-                    <div className="flex gap-2 acerSwift:max-macair133:!text-b5 !text-default">
-                      <Icon
-                        IconComponent={IconPLO}
-                        className="acerSwift:max-macair133:!size-3"
-                      />
-                      PLO Description
-                    </div>
-                  </Button>
-                )}
               </div>
-            </div>}
+            )}
 
             <Tabs
               classNames={{
-                root: "overflow-hidden -mt-0.5 flex flex-col h-full max-h-full mb-12",
+                root: "overflow-hidden -mt-0.5 flex flex-col h-full max-h-full mb-4",
               }}
               value={activeTab}
               onChange={setActiveTab}
@@ -150,9 +137,9 @@ export default function StdOverallPLO() {
                     className="flex h-full max-h-full "
                     value={curriculum}
                   >
-                    <div className="flex py-6 items-between justify-center rounded-lg rounded-r-none mt-2 w-[62%] mb-12">
-                      <div className="flex flex-col justify-between items-center h-full w-[90vw]">
-                        <div className="flex flex-col">
+                    <div className="flex py-6 items-between justify-center rounded-lg rounded-r-none mt-2 w-[62%]  pr-6">
+                      <div className="flex flex-col justify-between items-center h-full w-[90vw] ">
+                        <div className="flex flex-col pb-4">
                           <p className="text-secondary text-b1 sm:max-acerSwift:text-[15px] font-semibold text-center ">
                             ผลการเรียนรู้ของผู้เรียนตลอดหลักสูตร
                           </p>
@@ -160,8 +147,8 @@ export default function StdOverallPLO() {
                             Overall Program Learning Outcome
                           </p>
                         </div>
-                        <div className="w-full h-full flex items-start justify-center sm:max-acerSwift:-mt-5">
-                          <SpiderChart data={plos} height={height} />
+                        <div className="w-full h-full flex items-start justify-center -translate-x-1">
+                          <BarChart data={plos} height={height} />
                         </div>
                       </div>
                     </div>
@@ -196,20 +183,28 @@ export default function StdOverallPLO() {
                             </Accordion.Control>
                             <Accordion.Panel className="text-start text-b3 sm:max-acerSwift:text-b4 !p-0">
                               <div className="flex flex-col">
-                                {plo.courses.map((course) => (
-                                  <div
-                                    key={course.courseNo}
-                                    className="flex w-full text-pretty py-3 sm:max-acerSwift:py-2.5 pl-6 border-b last:border-none last:pb-0"
-                                  >
-                                    <p className="font-semibold text-default !w-[50px]">
-                                      {course.courseNo}
-                                    </p>
-                                    <p className="break-words">
-                                      {course.courseName} <br />{" "}
-                                      {course.topic && `(${course.topic})`}
+                                {plo.courses.length ? (
+                                  plo.courses.map((course) => (
+                                    <div
+                                      key={course.courseNo}
+                                      className="flex w-full text-pretty py-3 sm:max-acerSwift:py-2.5 pl-6 border-b last:border-none last:pb-0"
+                                    >
+                                      <p className="font-semibold text-default !w-[50px]">
+                                        {course.courseNo}
+                                      </p>
+                                      <p className="break-words">
+                                        {course.courseName} <br />
+                                        {course.topic && `(${course.topic})`}
+                                      </p>
+                                    </div>
+                                  ))
+                                ) : (
+                                  <div className="flex w-full text-pretty py-3 sm:max-acerSwift:py-2.5 pl-6 border-b last:border-none last:pb-0">
+                                    <p className="text-gray-400 italic">
+                                      No courses that evaluate this PLO
                                     </p>
                                   </div>
-                                ))}
+                                )}
                               </div>
                             </Accordion.Panel>
                           </Accordion.Item>
@@ -231,34 +226,40 @@ export default function StdOverallPLO() {
                         searchValue
                       )
                     )
-                    .map((course) => (
-                      <div
-                        key={course.id}
-                        className="border rounded-lg text-b2 shadow-sm flex flex-col gap-0 overflow-clip pb-4"
-                      >
-                        <div className="px-5 pt-4 flex justify-between">
-                          <div>
-                            <p className="font-bold text-secondary">
-                              {course.courseNo} ({course.semester}/{course.year}
-                              )
-                            </p>
-                            <p className="text-b4 text-[#4b5563] font-medium">
-                              {course.courseName}
-                              <br />{" "}
-                              {course.section.topic &&
-                                `(${course.section.topic})`}
-                            </p>
+                    .map((course) => {
+                      console.log("course.plos", course.plos);
+
+                      return (
+                        <div
+                          key={course.id}
+                          className="border rounded-lg text-b2 shadow-sm flex flex-col gap-4  pb-4"
+                        >
+                          <div className="px-5 pt-4 flex justify-between">
+                            <div>
+                              <p className="font-bold text-secondary">
+                                {course.courseNo} ({course.semester}/
+                                {course.year})
+                              </p>
+                              <p className="text-b4 text-[#4b5563] font-medium">
+                                {course.courseName}
+                                <br />{" "}
+                                {course.section.topic &&
+                                  `(${course.section.topic})`}
+                              </p>
+                            </div>
                           </div>
+                          {course.plos.length ? (
+                            <div className="-translate-x-3 pr-4">
+                              <BarChart data={course.plos} height={325} />
+                            </div>
+                          ) : (
+                            <div className="flex h-full justify-center items-center">
+                              This Course has no PLO data
+                            </div>
+                          )}
                         </div>
-                        {course.plos.length ? (
-                          <SpiderChart data={course.plos} height={350} />
-                        ) : (
-                          <div className="flex h-full justify-center items-center">
-                            This Course has no PLO data
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                      );
+                    })}
                 </div>
               </Tabs.Panel>
             </Tabs>
