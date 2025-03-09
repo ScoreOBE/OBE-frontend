@@ -21,9 +21,14 @@ export default function NotAvailablePage() {
   }, []);
   return (
     <div className="flex flex-col justify-center text-center items-center px-3 h-full w-full">
+      Oops!
       {location.includes(ROUTE_PATH.STD_DASHBOARD)
-        ? "Oops! The chart view isn't available on mobile. Try switching to a desktop or tablet for the best experience."
-        : "Oops! The admin view isn't available on mobile. Try switching to a desktop or tablet for the best experience."}
+        ? location.includes(ROUTE_PATH.HISTOGRAM)
+          ? " The chart view "
+          : " The PLO view "
+        : " The admin view "}
+      isn't available on mobile. Try switching to a desktop or tablet for the
+      best experience.
     </div>
   );
 }

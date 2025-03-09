@@ -68,7 +68,7 @@ export default function ModalManageEvalTopic({
     } as Partial<IModelEval>,
     validate: {
       topicTH: (value) =>
-        validateTextInput(value, "Topic Thai language", 0, false),
+        validateTextInput(value, "Topic Thai language", 120, false),
       topicEN: (value) =>
         validateTextInput(value, "Topic English language", 0, false),
       percent: (value) => !value && "Evaluation Percentage is required",
