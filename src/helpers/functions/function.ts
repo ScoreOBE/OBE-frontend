@@ -8,6 +8,8 @@ import { ROLE } from "../constants/enum";
 import { ROUTE_PATH } from "../constants/route";
 import { IModelPLORequire } from "@/models/ModelCourseManagement";
 
+export const isMobile =  window.innerWidth < 450;
+
 export const goToDashboard = (role: ROLE) => {
   switch (role) {
     case ROLE.STUDENT:

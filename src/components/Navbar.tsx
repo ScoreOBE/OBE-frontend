@@ -13,6 +13,7 @@ import { ROLE } from "@/helpers/constants/enum";
 import { Button } from "@mantine/core";
 import Icon from "./Icon";
 import IconFeedback from "@/assets/icons/feedback.svg?react";
+import { isMobile } from "@/helpers/functions/function";
 
 export default function Navbar() {
   const { name } = useParams();
@@ -106,10 +107,33 @@ export default function Navbar() {
     );
   };
 
+  const feedback = () => {
+    return (
+      <a
+        href={
+          [ROLE.STUDENT, ROLE.TA].includes(user.role)
+            ? "https://docs.google.com/forms/d/e/1FAIpQLSfstqyy0ijNp8u0JU0a7bBU_x0HGPhJ5V7flAD0ZymzD9cZqA/viewform"
+            : "https://forms.gle/HwxjaAZAJs99v8aDA"
+        }
+        target="_blank"
+      >
+        <Button variant="light">
+          <div className="flex items-center gap-1  acerSwift:max-macair133:text-b5">
+            <Icon
+              className="size-5  acerSwift:max-macair133:size-4"
+              IconComponent={IconFeedback}
+            />
+            <span>Feedback</span>
+          </div>
+        </Button>
+      </a>
+    );
+  };
+
   return (
     <>
       <div
-        className={`min-h-14  acerSwift:max-macair133:min-h-[50px] acerSwift:max-macair133:py-1 bg-[#fafafa] border-b border-[#e0e0e0] text-secondary px-6 inline-flex flex-wrap justify-between items-center z-50 ${
+        className={`min-h-14  acerSwift:max-macair133:min-h-[50px] acerSwift:max-macair133:py-1 bg-[#fafafa] border-b border-[#e0e0e0] text-secondary sm:px-6 iphone:max-sm:px-3 inline-flex flex-wrap justify-between items-center z-50 ${
           [ROUTE_PATH.LOGIN].includes(location)
             ? "border-none min-h-14 acerSwift:max-macair133:min-h-12 items-center"
             : ""
@@ -122,7 +146,7 @@ export default function Navbar() {
       >
         <div className="flex w-fit gap-3 items-center">
           <p
-            className={`font-semibold text-h2 acerSwift:max-macair133:text-b1 ${
+            className={`font-semibold sm:text-h2 iphone:max-sm:text-[16px] acerSwift:max-macair133:text-b1 ${
               location.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
                 ? ""
                 : "md:w-fit w-full"
@@ -133,7 +157,7 @@ export default function Navbar() {
         </div>
         {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
           location.includes(path)
-        ) && (
+        ) && !isMobile && (
           <SearchInput
             onSearch={searchCourse}
             placeholder="Course No / Course Name"
@@ -163,24 +187,7 @@ export default function Navbar() {
         )}
         {![ROUTE_PATH.LOGIN].includes(location) && (
           <div className="flex gap-2 items-center">
-            <a
-              href={
-                [ROLE.STUDENT, ROLE.TA].includes(user.role)
-                  ? "https://docs.google.com/forms/d/e/1FAIpQLSfstqyy0ijNp8u0JU0a7bBU_x0HGPhJ5V7flAD0ZymzD9cZqA/viewform"
-                  : "https://forms.gle/HwxjaAZAJs99v8aDA"
-              }
-              target="_blank"
-            >
-              <Button variant="light">
-                <div className="flex items-center gap-1  acerSwift:max-macair133:text-b5">
-                  <Icon
-                    className="size-5  acerSwift:max-macair133:size-4"
-                    IconComponent={IconFeedback}
-                  />
-                  <span>Feedback</span>
-                </div>
-              </Button>
-            </a>
+            {!isMobile && feedback()}
             <Profile />
           </div>
         )}

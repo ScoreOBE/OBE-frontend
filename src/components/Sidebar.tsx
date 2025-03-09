@@ -26,7 +26,7 @@ import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { setLoading } from "@/store/loading";
 import { useEffect } from "react";
 import { setAllCourseList } from "@/store/allCourse";
-import { goToDashboard } from "@/helpers/functions/function";
+import { goToDashboard, isMobile } from "@/helpers/functions/function";
 import { getFaculty } from "@/services/faculty/faculty.service";
 import { setFaculty } from "@/store/faculty";
 import StdCourseSidebar from "./Sidebar/StdCourseSidebar";
@@ -169,7 +169,7 @@ export default function Sidebar() {
       className={`${
         openSidebar
           ? "w-[255px] acerSwift:max-macair133:w-[225px] p-5"
-          : "w-[65px] acerSwift:max-macair133:w-[90px] py-5 px-3"
+          : "w-[70px] acerSwift:max-macair133:w-[90px] py-5 px-3"
       } border-r-[1px] heig h-screen flex sidebar-linear-gradient transition-all duration-300 ease-in-out`}
     >
       <div className="flex w-full flex-col gap-11 acerSwift:max-macair133:gap-8">
@@ -220,7 +220,7 @@ export default function Sidebar() {
               </Tooltip>
             )}
           </div>
-          {!openSidebar && (
+          {!openSidebar && !isMobile && (
             <Tooltip
               transitionProps={{ transition: "fade-right", duration: 200 }}
               classNames={{

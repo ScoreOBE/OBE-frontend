@@ -11,7 +11,7 @@ import { getEnrollCourse } from "@/services/student/student.service";
 import { setEnrollCourseList } from "@/store/enrollCourse";
 import Loading from "@/components/Loading/Loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import { getSectionNo } from "@/helpers/functions/function";
+import { getSectionNo, isMobile } from "@/helpers/functions/function";
 import { Alert } from "@mantine/core";
 import Icon from "@/components/Icon";
 
@@ -85,7 +85,7 @@ export default function StdDashboard() {
 
   return (
     <div className=" flex flex-col h-full w-full  overflow-hidden">
-      <div className="flex flex-row px-6 pt-3   items-center justify-between">
+     {!isMobile && <div className="flex flex-row px-6 pt-3   items-center justify-between">
         <div className="flex flex-col">
           <p className="text-secondary text-[18px] font-semibold ">
             Hi there, {user.firstNameEN}
@@ -110,14 +110,14 @@ export default function StdDashboard() {
             )}
           </p>
         </div>
-      </div>
+      </div>}
       <div className="flex h-full w-full overflow-hidden">
         {loading ? (
           <Loading />
         ) : !!enrollCourses.courses.length ? (
           <div className="w-full">
             {" "}
-            <Alert
+            {/* <Alert
               radius="md"
               variant="light"
               classNames={{
@@ -128,15 +128,15 @@ export default function StdDashboard() {
               title={
                 <div className="flex items-center gap-2">
                   <Icon IconComponent={IconInfo2} className="mr-2" />
-                  <p>
+                  <p className="iphone:max-sm:text-[12px]">
                     ScoreOBE+ is currently in its development (beta) phase. You
                     may encounter unstable features or bugs. Please report any
                     issues using the button at the top right of your profile.
                   </p>
                 </div>
               }
-            ></Alert>
-            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 macair133:grid-cols-4  pb-5 gap-4 px-6 p-3">
+            ></Alert> */}
+            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 iphone:max-sm:grid-cols-1 sm:grid-cols-3 macair133:grid-cols-4  pb-5 gap-4 sm:px-6 p-3">
               {enrollCourses.courses.map((item) => (
                 <div
                   key={item.id}

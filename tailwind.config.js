@@ -23,6 +23,7 @@ export default {
         disable: "#f1f3f5",
       },
       screens: {
+        iphone: "330px",
         sm: "1024px",
         ipad11: "1180px",
         acerSwift: "1200px",

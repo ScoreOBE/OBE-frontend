@@ -37,7 +37,7 @@ import IconChartBar from "@/assets/icons/chartBar.svg?react";
 import IconRadar from "@/assets/icons/radar.svg?react";
 import gradescope from "@/assets/image/gradescope.png";
 import "@mantine/carousel/styles.css";
-import { goToDashboard } from "@/helpers/functions/function";
+import { goToDashboard, isMobile } from "@/helpers/functions/function";
 import studentPLOPage from "@/assets/image/studentPLO.png";
 import LoadingOverlay from "@/components/Loading/LoadingOverlay";
 import exportScoreImg from "@/assets/image/exporScore.png";
@@ -187,11 +187,11 @@ export default function Login() {
   const ButtonLogin = () => {
     return (
       <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
-        <Button className="z-[52] bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg !text-[14px] !h-[44px]">
+        <Button className="z-[52] bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[12px] !h-[44px]">
           <img
             src={cmulogoLogin}
             alt="CMULogo"
-            className="h-[13px] mr-3 rounded-1xl"
+            className="sm:h-[13px] iphone:max-sm:h-[10px] mr-3 rounded-1xl"
           />
           Sign in CMU account
         </Button>
@@ -225,35 +225,23 @@ export default function Login() {
           </div>
         </div>
 
-        <p className="!font-[600] text-center drop-shadow-xl cursor-default px-[12px] w-full mt-[70px] sm:mt-8 sm:font-[600] item-start rounded text-emphasize sm:text-[48px] text-[28px] mb-5 sm:mb-0  ipad11:text-[50px] leading-[48px] sm:leading-[66px]">
+        <p className="!font-[600] text-center drop-shadow-xl cursor-default px-[12px]  w-full mt-[70px] sm:mt-8 sm:font-[600] item-start rounded text-emphasize sm:text-[48px] text-[28px] mb-5 sm:mb-0  ipad11:text-[50px] leading-[48px] sm:leading-[66px]">
           <span className=" text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE+{" "}
           </span>
-          Academic Supercharger
+         {!isMobile && <>Academic Supercharger
           <br />
-          for instructors and students
+          for instructors and students</>}
         </p>
-        <p className="mt-5 text-h2 text-[#4F4D55] w-full hidden sm:flex justify-center items-center text-center px-[118px] font-[500]">
+        <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[13px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[30px] font-[500]">
           Discover A Better Way to Do OBE Simplify Your Academic Journey
         </p>
 
-        {/* Smartphone size */}
-        <div className="flex items-center  mt-8 text-center w-full justify-center px-[40px] mb-8  sm:hidden">
-          <p className="text-center  font-medium flex flex-col  text-[#4F4D55]">
-            <span className="font-bold text-b1 text-secondary ">
-              ScoreOBE+ is not available <br /> on your current window size.
-            </span>
-            <br />
-            <span className="text-b2">
-              To log in, please use ScoreOBE+ on a tablet in landscape mode{" "}
-              <br /> or a desktop for the best experience.
-            </span>
-          </p>
-        </div>
+      
 
         <div
           ref={buttonRef}
-          className="items-center mt-8 text-center w-full justify-center px-[118px] hidden sm:flex"
+          className="items-center mt-8 text-center w-full justify-center   "
         >
           {ButtonLogin()}
         </div>
@@ -1009,8 +997,8 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="sm:flex flex-col gap-16 items-center bg-slate-100 h-fit text-white px-28 py-20 hidden">
-          <div className="flex flex-col gap-20 items-center">
+        <div className="sm:flex flex-col gap-16 items-center bg-[#fafafa]  h-fit text-white sm:px-28 sm:py-20 py-12 ">
+          <div className="flex flex-col gap-20 items-center hidden">
             <div className="text-[21px] text-center">
               <p className="font-[600] text-[60px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] max-macair133:text-[48px]">
                 Boost Student Success with{" "}
@@ -1083,7 +1071,7 @@ export default function Login() {
             </div>
           </div>
           <footer className="w-full border-t text-default  pt-10 ">
-            <div className="container px-4 mx-auto">
+            <div className="container sm:px-4 mx-auto">
               <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
                 {/* Logo and main info */}
                 <div className="md:col-span-5 space-y-4">
@@ -1097,18 +1085,18 @@ export default function Login() {
                       ScoreOBE+
                     </h2>
                   </div>
-                  <p className="text-sm  max-w-md">
+                  <p className="sm:text-sm iphone:max-sm:text-[12px]  max-w-md">
                     Advanced scoring and assessment software designed to
                     streamline educational evaluation processes.
                   </p>
                 </div>
 
-                {/* Quick links */}
+             
                 <div className="md:col-span-3 space-y-4">
                   <h3 className="text-sm font-semibold text-secondary ">
                     Quick Links
                   </h3>
-                  <ul className="space-y-2 text-[14px]">
+                  <ul className="space-y-2 sm:text-[14px] iphone:max-sm:text-[12px]">
                     <li>
                       <a href="#">Documentation</a>
                     </li>
@@ -1128,10 +1116,10 @@ export default function Login() {
 
                 {/* University links */}
                 <div className="md:col-span-4 space-y-4">
-                  <h3 className="text-sm font-semibold text-secondary ">
+                <h3 className="text-sm font-semibold text-secondary ">
                     Chiang Mai University
                   </h3>
-                  <ul className="space-y-2 text-[14px]">
+                  <ul className="space-y-2 sm:text-[14px] iphone:max-sm:text-[12px]">
                   <a className="flex items-center flex-row ">
                       <a href="https://www.cpe.eng.cmu.ac.th/" target="_blank">
                         Department of Computer Engineering
@@ -1154,18 +1142,18 @@ export default function Login() {
                 </div>
               </div>
 
-              <div className="my-8 border bg-slate-200 dark:bg-slate-700"></div>
+              <div className="my-8 border-[1px]  "></div>
 
-              <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                <p className="text-xs text-slate-600  text-center md:text-left">
+              <div className="flex flex-col md:flex-row justify-between md:items-center items-start  gap-4">
+                <p className="sm:text-xs iphone:max-sm:text-[10px] text-slate-600  text-center md:text-left">
                   &copy; {currentYear} ScoreOBE+ Software. All rights reserved.
                 </p>
-                <div className="flex flex-col items-end text-end gap-1">
-                  <p className="text-xs text-slate-600 ">
+                <div className="flex flex-col md:items-end md:text-end gap-1">
+                  <p className="sm:text-xs iphone:max-sm:text-[10px] text-slate-600 ">
                     Designed and developed by the Department of Computer
                     Engineering,
                   </p>
-                  <p className="text-xs text-slate-600 ">
+                  <p className="sm:text-xs iphone:max-sm:text-[10px] text-slate-600 ">
                     Faculty of Engineering, Chiang Mai University
                   </p>
                 </div>
