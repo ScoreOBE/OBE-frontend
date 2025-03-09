@@ -115,7 +115,7 @@ export default function ModalUploadGrade({
         setWarningStudentList(notExistStudent);
         setOpenModalWarningStudentList(true);
       }
-    }
+    }    
   }, [result]);
 
   const onClickUpload = async () => {
