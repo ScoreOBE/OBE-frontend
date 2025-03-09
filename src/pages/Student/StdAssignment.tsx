@@ -144,7 +144,7 @@ export default function StdAssignment() {
                   return (
                     <div
                       key={index}
-                      className={`hover:bg-[#F3F3F3] border flex flex-col justify-between rounded-md p-3 `}
+                      className={`border flex flex-col justify-between rounded-md p-3 `}
                       onClick={() => goToAssignment(`${assignment.name}`)}
                     >
                       <div>

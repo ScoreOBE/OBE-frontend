@@ -41,6 +41,7 @@ import { goToDashboard, isMobile } from "@/helpers/functions/function";
 import studentPLOPage from "@/assets/image/studentPLO.png";
 import LoadingOverlay from "@/components/Loading/LoadingOverlay";
 import exportScoreImg from "@/assets/image/exporScore.png";
+import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import publishScoreImg from "@/assets/image/publishScore.png";
 import tqf3Pt1Img from "@/assets/image/tqf3pt1.png";
 import tqf3Pt2Img from "@/assets/image/tqf3pt2.png";
@@ -187,7 +188,7 @@ export default function Login() {
   const ButtonLogin = () => {
     return (
       <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
-        <Button className="z-[52] bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[12px] !h-[44px]">
+        <Button className="z-[52] iphone:max-sm:!rounded-xl iphone:max-sm:px-8 bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]">
           <img
             src={cmulogoLogin}
             alt="CMULogo"
@@ -225,19 +226,21 @@ export default function Login() {
           </div>
         </div>
 
-        <p className="!font-[600] text-center drop-shadow-xl cursor-default px-[12px]  w-full mt-[70px] sm:mt-8 sm:font-[600] item-start rounded text-emphasize sm:text-[48px] text-[28px] mb-5 sm:mb-0  ipad11:text-[50px] leading-[48px] sm:leading-[66px]">
+        <p className="!font-[600] text-center drop-shadow-xl cursor-default px-[12px]  w-full mt-[70px] sm:mt-8 sm:font-[600] item-start rounded text-emphasize sm:text-[48px] text-[32px] mb-5 sm:mb-0  ipad11:text-[50px] leading-[48px] sm:leading-[66px]">
           <span className=" text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
             ScoreOBE+{" "}
           </span>
-         {!isMobile && <>Academic Supercharger
-          <br />
-          for instructors and students</>}
+          {!isMobile && (
+            <>
+              Academic Supercharger
+              <br />
+              for instructors and students
+            </>
+          )}
         </p>
-        <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[13px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[30px] font-[500]">
+        <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[14px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[20px] font-[500]">
           Discover A Better Way to Do OBE Simplify Your Academic Journey
         </p>
-
-      
 
         <div
           ref={buttonRef}
@@ -997,7 +1000,7 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="sm:flex flex-col gap-16 items-center bg-[#fafafa]  h-fit text-white sm:px-28 sm:py-20 py-12 ">
+        <div className="sm:flex flex-col gap-16 items-center bg-[#fafafa]  h-fit text-white  sm:px-28 sm:py-20 py-12 ">
           <div className="flex flex-col gap-20 items-center hidden">
             <div className="text-[21px] text-center">
               <p className="font-[600] text-[60px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] max-macair133:text-[48px]">
@@ -1070,8 +1073,8 @@ export default function Login() {
               </div>
             </div>
           </div>
-          <footer className="w-full border-t text-default  pt-10 ">
-            <div className="container sm:px-4 mx-auto">
+          <footer className="w-full border-t  text-default  pt-10 ">
+            <div className=" px-8 sm:px-4  mx-auto">
               <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
                 {/* Logo and main info */}
                 <div className="md:col-span-5 space-y-4">
@@ -1091,7 +1094,6 @@ export default function Login() {
                   </p>
                 </div>
 
-             
                 <div className="md:col-span-3 space-y-4">
                   <h3 className="text-sm font-semibold text-secondary ">
                     Quick Links
@@ -1106,8 +1108,11 @@ export default function Login() {
                         Privacy Policy
                       </a>
                     </li>
-                    <li >
-                      <a className=" cursor-pointer" onClick={() => setOpenModalTOS(true)}>
+                    <li>
+                      <a
+                        className=" cursor-pointer"
+                        onClick={() => setOpenModalTOS(true)}
+                      >
                         Terms of Service
                       </a>
                     </li>
@@ -1116,27 +1121,36 @@ export default function Login() {
 
                 {/* University links */}
                 <div className="md:col-span-4 space-y-4">
-                <h3 className="text-sm font-semibold text-secondary ">
+                  <h3 className="text-sm font-semibold text-secondary ">
                     Chiang Mai University
                   </h3>
                   <ul className="space-y-2 sm:text-[14px] iphone:max-sm:text-[12px]">
-                  <a className="flex items-center flex-row ">
+                    <a className="flex items-center flex-row ">
                       <a href="https://www.cpe.eng.cmu.ac.th/" target="_blank">
                         Department of Computer Engineering
                       </a>
-                      <Icon IconComponent={IconExternal} className="size-4 ml-1" />
+                      <Icon
+                        IconComponent={IconExternal}
+                        className="size-4 ml-1"
+                      />
                     </a>
                     <a className="flex items-center flex-row ">
                       <a href="https://eng.cmu.ac.th/" target="_blank">
                         Faculty of Engineering
                       </a>
-                      <Icon IconComponent={IconExternal} className="size-4 ml-1" />
+                      <Icon
+                        IconComponent={IconExternal}
+                        className="size-4 ml-1"
+                      />
                     </a>
                     <a className="flex items-center flex-row ">
                       <a href="https://www.cmu.ac.th/" target="_blank">
                         Chiang Mai University
                       </a>
-                      <Icon IconComponent={IconExternal} className="size-4 ml-1" />
+                      <Icon
+                        IconComponent={IconExternal}
+                        className="size-4 ml-1"
+                      />
                     </a>
                   </ul>
                 </div>
@@ -1149,6 +1163,11 @@ export default function Login() {
                   &copy; {currentYear} ScoreOBE+ Software. All rights reserved.
                 </p>
                 <div className="flex flex-col md:items-end md:text-end gap-1">
+                  <img
+                    src={cpeLogoRed}
+                    alt="cpeLogo"
+                    className="sm:h-[36px] mb-2 h-[30px] w-[105px] iphone:max-sm:-ml-[4px] "
+                  />
                   <p className="sm:text-xs iphone:max-sm:text-[10px] text-slate-600 ">
                     Designed and developed by the Department of Computer
                     Engineering,

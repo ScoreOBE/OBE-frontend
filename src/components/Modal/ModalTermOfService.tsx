@@ -22,6 +22,7 @@ import { setUser } from "@/store/user";
 import IconTh from "@/assets/icons/thai.svg?react";
 import IconEng from "@/assets/icons/eng.svg?react";
 import { isEmpty } from "lodash";
+import { isMobile } from "@/helpers/functions/function";
 
 type Props = {
   opened: boolean;
@@ -60,17 +61,21 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         blur: 10,
       }}
       title={
-        <div className="mt-1 text-[22px] flex item-center  justify-between">
-          <div className="flex flex-col gap-3">
+        <div className="mt-1 sm:text-[22px] iphone:max-sm:text-[16px] flex item-center iphone:max-sm:gap-3 justify-between">
+          <div className="flex iphone:max-sm:w-full  flex-col gap-3 ">
             {isEN === "EN" ? (
-              <p>
+              <p className="iphone:max-sm:leading-[22px]">
                 <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                   ScoreOBE+
                 </span>
-                <span className=" text-default"> Terms of Service</span>
+                <br />
+                <span className=" text-default iphone:mt-2">
+                  {" "}
+                  Terms of Service
+                </span>
               </p>
             ) : (
-              <p className="font-bold">
+              <p className="font-bold iphone:max-sm:leading-[22px]">
                 <span className=" font-semibold text-default">
                   ข้อกำหนดและเงื่อนไขในการให้บริการ
                 </span>{" "}
@@ -79,30 +84,36 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                 </span>
               </p>
             )}
-            <p className=" text-default text-b2">
+            <p className=" text-default iphone:max-sm:text-[11px] iphone:max-sm:-mt-1 text-b2">
               {isEN === "EN"
                 ? "Last updated: December 20, 2024"
                 : "อัปเดตล่าสุด: 20 ธันวาคม 2567"}
             </p>
           </div>
-          <div>
+          <div className="iphone:max-sm:max-w-fit">
             <Tabs
               value={isEN}
               onChange={setIsEN}
               variant="pills"
-              className="min-w-fit"
+              className=" iphone:max-sm:!max-w-fit iphone:max-sm:!item-end iphone:max-sm:!flex iphone:max-sm:!jusitfy-end iphone:max-sm:!text-end"
             >
-              <Tabs.List>
-                <Tabs.Tab value="TH">
+              <Tabs.List className="iphone:max-sm:!p-0 iphone:max-sm:max-w-fit  iphone:max-sm:!gap-0 iphone:max-sm:!flex iphone:max-sm:!justify-end">
+                <Tabs.Tab
+                  value="TH"
+                  className="iphone:max-sm:!w-full iphone:max-sm:!rounded-md"
+                >
                   <div className="flex flex-row items-center gap-2 ">
                     <Icon IconComponent={IconTh} />
-                    ไทย
+                    {!isMobile && "ไทย"}
                   </div>
                 </Tabs.Tab>
-                <Tabs.Tab value="EN">
+                <Tabs.Tab
+                  value="EN"
+                  className="iphone:max-sm:!w-full iphone:max-sm:!rounded-md"
+                >
                   <div className="flex flex-row items-center gap-2 ">
                     <Icon IconComponent={IconEng} />
-                    Eng
+                    {!isMobile && "Eng"}
                   </div>
                 </Tabs.Tab>
               </Tabs.List>
@@ -111,7 +122,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         </div>
       }
       centered
-      size="68vw"
+      size={isMobile ? "100vw" : "68vw"}
       transitionProps={{ transition: "pop" }}
       classNames={{
         title: "!w-full ",
@@ -121,14 +132,14 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
     >
       <div className=" mt-2 h-[70vh] overflow-y-auto text-slate-700 font-medium">
         {isEN === "EN" ? (
-          <p className=" text-[18px] font-bold text-default mb-[10px]">
+          <p className=" text-[18px] iphone:max-sm:text-[14px] font-bold text-default mb-[10px]">
             Welcome to{" "}
             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
               ScoreOBE+
             </span>
           </p>
         ) : (
-          <p className=" text-[18px] font-bold text-default mb-[10px]">
+          <p className=" text-[18px] iphone:max-sm:text-[13px] font-bold text-default mb-[10px]">
             <span className="font-semibold">ยินดีต้อนรับสู่ </span>
             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
               ScoreOBE+
@@ -140,7 +151,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           radius="md"
           icon={
             <Icon
-              className="size-8  stroke-[1.5px]"
+              className="size-8 iphone:max-sm:size-6  stroke-[1.5px]"
               IconComponent={IconExclamamtion}
             />
           }
@@ -148,25 +159,25 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           color="orange"
           className="mb-3"
           classNames={{
-            icon: "size-6",
+            icon: "size-6 ",
             body: " flex ml-1 justify-center",
             title: "-mb-1 text-[15px]",
           }}
           title={
             isEN === "EN" ? (
-              <p>IMPORTANT</p>
+              <p className="iphone:max-sm:text-[13px]">IMPORTANT</p>
             ) : (
-              <p className=" font-semibold">สำคัญ</p>
+              <p className=" font-semibold iphone:max-sm:text-[13px]">สำคัญ</p>
             )
           }
         >
           {isEN === "EN" ? (
-            <p className=" leading-6 text-default text-b2">
+            <p className="iphone:max-sm:text-[13px] leading-6 text-default text-b2">
               Please read, review and understand these Terms of Service
               carefully before using ScoreOBE+.
             </p>
           ) : (
-            <p className=" leading-6 text-default text-b2">
+            <p className=" leading-6 iphone:max-sm:text-[13px]  text-default text-b2">
               โปรดอ่าน ตรวจสอบ
               และทำความเข้าใจข้อกำหนดและเงื่อนไขในการให้บริการนี้อย่างละเอียดก่อนใช้งาน
               ScoreOBE+
@@ -177,7 +188,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           radius="md"
           icon={
             <Icon
-              className=" stroke-[1.5px] size-8"
+              className=" stroke-[1.5px] size-8 iphone:max-sm:size-6"
               IconComponent={IconUserScan}
             />
           }
@@ -191,73 +202,121 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           }}
           title={
             isEN === "EN" ? (
-              <p>Data Linked to You</p>
+              <p className="iphone:max-sm:text-[13px]">Data Linked to You</p>
             ) : (
-              <p className=" font-semibold"> ข้อมูลที่เชื่อมโยงกับคุณ</p>
+              <p className=" font-semibold iphone:max-sm:text-[13px]">
+                {" "}
+                ข้อมูลที่เชื่อมโยงกับคุณ
+              </p>
             )
           }
         >
-          <div className=" justify-start leading-6 text-b2 text-default text-start items-start">
+          <div className=" justify-start iphone:max-sm:text-[13px] leading-6 text-b2 text-default text-start items-start">
             <p className="mb-2">
               {isEN === "EN"
                 ? "The following data from CMU EntraID and ScoreOBE+ will be collected after you agree these Terms of Service and linked to your identity to enhance the functionality of web application:"
                 : "ข้อมูลต่อไปนี้ที่มาจากการลงชื่อเข้าสู่ระบบผ่าน CMU EntraID และ ScoreOBE+ จะถูกเก็บหลังจากคุณยอมรับข้อตกลงและเงื่อนไขในการให้บริการนี้ และเชื่อมโยงกับตัวตนของคุณ เพื่อปรับปรุงการทำงานของเว็บแอปพลิเคชั่น:"}
             </p>{" "}
             <br />
-            <div className="flex gap-8 -mt-4">
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconAddressBook} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Name and Surname" : "ชื่อและสกุล"}
-                  </span>
+            {!isMobile ? (
+              <div className="flex gap-8 -mt-4">
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconAddressBook} />
+                    <span className="ml-2">
+                      {isEN === "EN" ? "Name and Surname" : "ชื่อและสกุล"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconListNumber} />
+                    <span className="ml-2">
+                      {isEN === "EN" ? "Academic Record" : "บันทึกผลการเรียน"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconBook} />
+                    <span className="ml-2">
+                      {isEN === "EN"
+                        ? "Data in Course Information"
+                        : "ข้อมูลในกระบวนวิชา"}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconListNumber} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Academic Record" : "บันทึกผลการเรียน"}
-                  </span>
+
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconMail} />
+                    <span className="ml-2">
+                      {isEN === "EN" ? "CMU Email" : "อีเมล CMU"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-start">
+                    <Icon
+                      className="size-5"
+                      IconComponent={IconClipboardText}
+                    />
+                    <span className="ml-2">
+                      {isEN === "EN"
+                        ? "Data in TQF Document"
+                        : "ข้อมูลในเอกสาร TQF"}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconBook} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Data in Course Information" : "ข้อมูลในกระบวนวิชา"}
-                  </span>
+
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconSchool} />
+                    <span className="ml-2">
+                      {isEN === "EN" ? "Faculty" : "คณะ"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-start">
+                    <Icon
+                      className="size-5 stroke-[1.4px]"
+                      IconComponent={IconBooks}
+                    />
+                    <span className="ml-2">
+                      {isEN === "EN"
+                        ? "Enrolled Course"
+                        : "กระบวนวิชาที่ลงทะเบียนเรียน"}
+                    </span>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconMail} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "CMU Email" : "อีเมล CMU"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconClipboardText} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Data in TQF Document" : "ข้อมูลในเอกสาร TQF"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconSchool} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Faculty" : "คณะ"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5 stroke-[1.4px]" IconComponent={IconBooks} />
-                  <span className="ml-2">
+            ) : (
+              <div>
+                {" "}
+                <div className="flex items-start flex-col -mt-4 justify-start">
+                  <p>
+                    {isEN === "EN" ? "- Name and Surname" : "- ชื่อและสกุล"}
+                  </p>
+                  <p>
+                    {" "}
+                    {isEN === "EN" ? "- Academic Record" : "- บันทึกผลการเรียน"}
+                  </p>
+                  <p>
                     {isEN === "EN"
-                      ? "Enrolled Course"
-                      : "กระบวนวิชาที่ลงทะเบียนเรียน"}
-                  </span>
+                      ? "- Data in Course Information"
+                      : "- ข้อมูลในกระบวนวิชา"}
+                  </p>
+                  <p> {isEN === "EN" ? "- CMU Email" : "- อีเมล CMU"}</p>
+                  <p>
+                    {" "}
+                    {isEN === "EN"
+                      ? "- Data in TQF Document"
+                      : "- ข้อมูลในเอกสาร TQF"}
+                  </p>
+                  <p> {isEN === "EN" ? "- Faculty" : "- คณะ"}</p>
+                  <p>
+                    {" "}
+                    {isEN === "EN"
+                      ? "- Enrolled Course"
+                      : "- กระบวนวิชาที่ลงทะเบียนเรียน"}
+                  </p>
+                  <p></p>
                 </div>
               </div>
-            </div>
+            )}
             {isEN === "EN" ? (
               <p className="mt-3 leading-6">
                 The developer,{" "}
@@ -299,7 +358,10 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         <Alert
           radius="md"
           icon={
-            <Icon className=" size-8 stroke-[1.5px]" IconComponent={IconAPI} />
+            <Icon
+              className=" size-8 iphone:max-sm:size-6 stroke-[1.5px]"
+              IconComponent={IconAPI}
+            />
           }
           variant="light"
           color="blue"
@@ -311,28 +373,27 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           }}
           title={
             isEN === "EN" ? (
-              <p>CMU API</p>
+              <p className="iphone:max-sm:text-[13px]">CMU API</p>
             ) : (
-              <p className=" font-bold">CMU API</p>
+              <p className="iphone:max-sm:text-[13px] font-bold">CMU API</p>
             )
           }
         >
-          <div className=" justify-start text-b2 leading-6 text-default text-start items-start">
+          <div className=" iphone:max-sm:text-[13px] justify-start text-b2 leading-6 text-default text-start items-start">
             <p className="mb-2">
               {isEN === "EN" ? (
                 <p>
-                  The CMU API is a service designed by Chiang Mai University. It provides API
-                  routes that offer essential information exclusively about
-                  instructors and courses for Chiang Mai University, including
-                  course data and instructor information. <br /> The following
-                  data from the CMU API has been collected and integrated into
-                  ScoreOBE+, linked to your identity to enhance the
-                  functionality of the web application:
+                  The CMU API is a service designed by Chiang Mai University. It
+                  provides API routes that offer essential information
+                  exclusively about instructors and courses for Chiang Mai
+                  University, including course data and instructor information.{" "}
+                  <br /> The following data from the CMU API has been collected
+                  and integrated into ScoreOBE+, linked to your identity to
+                  enhance the functionality of the web application:
                 </p>
               ) : (
                 <p>
-                  CMU API
-                  เป็นบริการที่ออกแบบโดยของมหาวิทยาลัยเชียงใหม่
+                  CMU API เป็นบริการที่ออกแบบโดยของมหาวิทยาลัยเชียงใหม่
                   บริการนี้ให้บริการ API routes
                   ที่ให้ข้อมูลที่จำเป็นโดยเฉพาะเกี่ยวกับผู้สอนและหลักสูตรภายในมหาวิทยาลัยเชียงใหม่เท่านั้น
                   รวมถึงข้อมูลหลักสูตรและข้อมูลของผู้สอน <br /> ข้อมูลต่อไปนี้
@@ -343,68 +404,103 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               )}
             </p>{" "}
             <br />
-            <div className="flex gap-8 -mt-4">
-            <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconAddressBook} />
-                  <span className="ml-2">
-                    {isEN === "EN"
-                      ? "Name and Surname Instrcutor"
-                      : "ชื่อและสกุลของอาจารย์"}
-                  </span>
+            {!isMobile ? (
+              <div className="flex gap-8 -mt-4">
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconAddressBook} />
+                    <span className="ml-2">
+                      {isEN === "EN"
+                        ? "Name and Surname Instrcutor"
+                        : "ชื่อและสกุลของอาจารย์"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconSchool} />
+                    <span className="ml-2">
+                      {isEN === "EN" ? "Faculty" : "คณะ"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconCalendar} />
+                    <span className="ml-2">
+                      {isEN === "EN" ? "Academic Year" : "ปีการศึกษา"}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconSchool} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Faculty" : "คณะ"}
-                  </span>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconBook} />
+                    <span className="ml-2">
+                      {isEN === "EN" ? "Course Title" : "ชื่อกระบวนวิชา"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconNumber} />
+                    <span className="ml-2">
+                      {isEN === "EN" ? "Course Code" : "รหัสกระบวนวิชา"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconDes} />
+                    <span className="ml-2">
+                      {isEN === "EN"
+                        ? "Course Description"
+                        : "คำบรรยายกระบวนวิชา"}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconCalendar} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Academic Year" : "ปีการศึกษา"}
-                  </span>
-                </div>
-               
-              </div>
-              <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconBook} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Course Title" : "ชื่อกระบวนวิชา"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconNumber} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Course Code" : "รหัสกระบวนวิชา"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconDes} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Course Description" : "คำบรรยายกระบวนวิชา"}
-                  </span>
-                </div>
-              </div>
 
-              <div className="flex flex-col gap-3">
-                
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconPrere} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Prerequisite Course" : "เงื่อนไขทีต้องผ่านก่อนของกระบวนวิชา"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-start">
-                  <Icon className="size-5" IconComponent={IconCredit} />
-                  <span className="ml-2">
-                    {isEN === "EN" ? "Course Credit" : "หน่วยกิตของกระบวนวิชา"}
-                  </span>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconPrere} />
+                    <span className="ml-2">
+                      {isEN === "EN"
+                        ? "Prerequisite Course"
+                        : "เงื่อนไขทีต้องผ่านก่อนของกระบวนวิชา"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-start">
+                    <Icon className="size-5" IconComponent={IconCredit} />
+                    <span className="ml-2">
+                      {isEN === "EN"
+                        ? "Course Credit"
+                        : "หน่วยกิตของกระบวนวิชา"}
+                    </span>
+                  </div>
                 </div>
               </div>
-              
-            </div>
+            ) : (
+              <div>
+                {" "}
+                <div className="flex items-start flex-col -mt-4 justify-start">
+                  <p>
+                    {isEN === "EN"
+                      ? "- Name and Surname Instrcutor"
+                      : "- ชื่อและสกุลของอาจารย์"}
+                  </p>
+                  <p>{isEN === "EN" ? "- Faculty" : "- คณะ"}</p>
+                  <p> {isEN === "EN" ? "- Academic Year" : "- ปีการศึกษา"}</p>
+                  <p> {isEN === "EN" ? "- Course Title" : "- ชื่อกระบวนวิชา"}</p>
+                  <p>
+                    {isEN === "EN"
+                      ? "- Course Description"
+                      : "- คำบรรยายกระบวนวิชา"}
+                  </p>
+                  <p> {isEN === "EN" ? "- Course Code" : "- รหัสกระบวนวิชา"}</p>
+                  <p>
+                    {" "}
+                    {isEN === "EN"
+                      ? "- Prerequisite Course"
+                      : "- เงื่อนไขทีต้องผ่านก่อนของกระบวนวิชา"}
+                  </p>
+                  <p>
+                    {" "}
+                    {isEN === "EN" ? "- Course Credit" : "- หน่วยกิตของกระบวนวิชา"}
+                  </p>
+                </div>
+              </div>
+            )}
             {isEN === "EN" ? (
               <p className="mt-3 leading-6">
                 The developer,{" "}
@@ -447,7 +543,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         </Alert>
 
         {isEN === "EN" ? (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1"> Agreement</p>
             By accessing and using ScoreOBE+, you acknowledge that you have
             read, understood, and agree to be bound by all Terms of Service.
@@ -459,7 +555,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             data collection through CMU EntraID.
           </p>
         ) : (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">ข้อตกลง</p>
             <p className="font-normal">
               การเข้าถึงและใช้งาน ScoreOBE+ แสดงว่าผู้ใช้ยืนยันว่าได้อ่าน
@@ -476,7 +572,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
 
         {isEN === "EN" ? (
           <div className="mb-4">
-            <p className=" text-b2 mb-3 leading-6">
+            <p className=" text-b2 iphone:max-sm:text-[13px] mb-3 leading-6">
               <span className="font-bold">ScoreOBE+</span> is a web application
               developed as a tool to facilitate lecturers, students, and staff
               in the Faculty of Engineering, Chiang Mai University , in managing
@@ -484,29 +580,29 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               Education (TQF:HEd) of the course related to Outcome-Based
               Education (OBE) and announcing scores via this system.
             </p>
-            <p className=" text-b2 font-bold mb-3 leading-6">1. Definition </p>
+            <p className=" text-b2 iphone:max-sm:text-[13px] font-bold mb-3 leading-6">1. Definition </p>
 
             <Table>
               <Table.Tbody className="text-default">
                 {/* Entire Table Row as Control */}
-                <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
+                <Table.Tr className="text-b2 iphone:max-sm:text-[13px] border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"You"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
                     Refers to ScoreOBE+ web application users
                   </Table.Td>
                 </Table.Tr>
-                <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
+                <Table.Tr className="text-b2 iphone:max-sm:text-[13px] border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"We"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
                     Refers to the Department of Computer Engineering, Faculty of
                     Engineering, Chiang Mai University.
                   </Table.Td>
                 </Table.Tr>
-                <Table.Tr className="text-b2 font-normal py-b2 w-full ">
+                <Table.Tr className="text-b2 iphone:max-sm:text-[13px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[25%] ">"System"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[75%]">
-                    Refers to the ScoreOBE+ web application which is provided
-                    by the Department of Computer Engineering, Faculty of
+                    Refers to the ScoreOBE+ web application which is provided by
+                    the Department of Computer Engineering, Faculty of
                     Engineering, Chiang Mai University, including any part that
                     has been changed, improved, updated or added by the
                     Department of Computer Engineering, Faculty of Engineering,
@@ -518,7 +614,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </div>
         ) : (
           <div className=" mb-4">
-            <p className=" text-b2 mb-3 font-normal leading-6">
+            <p className=" text-b2 iphone:max-sm:text-[13px] mb-3 font-normal leading-6">
               <span className="font-bold">ScoreOBE+ </span> เป็นเว็บแอปพลิเคชัน
               ที่พัฒนาขึ้นเป็นเครื่องมืออำนวยความสะดวกแก่อาจารย์ นักศึกษา
               และบุคลากร คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเชียงใหม่
@@ -526,25 +622,25 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               ของรายวิชาที่เกี่ยวข้องกับการศึกษาตามผลลัพธ์ (OBE)
               และการประกาศผลคะแนนผ่านระบบนี้
             </p>
-            <p className=" text-b2 font-bold mb-3 leading-6">1. นิยาม </p>
+            <p className=" text-b2 iphone:max-sm:text-[13px] font-bold mb-3 leading-6">1. นิยาม </p>
 
             <Table>
               <Table.Tbody className="text-default">
                 {/* Entire Table Row as Control */}
-                <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
+                <Table.Tr className="text-b2 iphone:max-sm:text-[13px] border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"ท่าน"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
                     หมายถึง ผู้ใช้บริการเว็บแอปพลิเคชั่น ScoreOBE+
                   </Table.Td>
                 </Table.Tr>
-                <Table.Tr className="text-b2 border-t-[1px] font-normal py-b2 w-full ">
+                <Table.Tr className="text-b2 iphone:max-sm:text-[13px] border-t-[1px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[20%] ">"เรา"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[80%]">
                     หมายถึง ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์
                     มหาวิทยาลัยเชียงใหม่
                   </Table.Td>
                 </Table.Tr>
-                <Table.Tr className="text-b2 font-normal py-b2 w-full ">
+                <Table.Tr className="text-b2 iphone:max-sm:text-[13px] font-normal py-b2 w-full ">
                   <Table.Td className="text-start  w-[25%] ">"ระบบ"</Table.Td>
                   <Table.Td className="text-start pr-[70px] w-[75%]">
                     หมายถึง เว็บแอปพลิเคชั่น ScoreOBE+
@@ -560,7 +656,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         )}
 
         {isEN === "EN" ? (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1 ">2. System Objectives</p>
             <p className="ml-3">
               <li className="mb-1">
@@ -586,7 +682,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>
           </p>
         ) : (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1"> 2. วัตถุประสงค์ของระบบ</p>
             <p className="ml-3 font-normal">
               <li className="mb-1">
@@ -611,7 +707,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         )}
 
         {isEN === "EN" ? (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">3. Amendment</p>
             <p>
               We reserve the right to modify, amend, add, or remove any Terms
@@ -624,7 +720,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>
           </p>
         ) : (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1"> 3. การแก้ไขเพิ่มเติม</p>
             <p className="font-normal">
               เราขอสงวนสิทธิในการแก้ไข เปลี่ยนแปลง เพิ่มเติม ตัดทอน
@@ -640,7 +736,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </p>
         )}
         {isEN === "EN" ? (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">4. Personal Data Protection</p>
             <p>
               {" "}
@@ -668,7 +764,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>
           </p>
         ) : (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">4. การคุ้มครองข้อมูลส่วนบุคคล</p>
             <p className="font-normal">
               {" "}
@@ -699,7 +795,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </p>
         )}
         {isEN === "EN" ? (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">5. Use of System Services</p>
             <p>
               {" "}
@@ -728,7 +824,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>
           </p>
         ) : (
-          <p className=" text-b2  mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">5. การใช้บริการระบบ</p>
             <p className="font-normal">
               {" "}
@@ -769,7 +865,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </p>
         )}
         {isEN === "EN" ? (
-          <p className=" text-b2  mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">
               {" "}
               6. Right to Collect Data Linked to You
@@ -788,7 +884,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>
           </p>
         ) : (
-          <p className=" text-b2  mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">
               6. สิทธิในการนำข้อมูลที่เชื่อมโยงกับคุณเข้าระบบ
             </p>
@@ -807,7 +903,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </p>
         )}
         {isEN === "EN" ? (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">7. Limitation of Our Liability</p>
             <p>
               We disclaim any liability for damages arising from any content
@@ -826,7 +922,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>
           </p>
         ) : (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">7. การจำกัดความรับผิดของเรา</p>
             <p className="font-normal">
               {" "}
@@ -850,7 +946,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         )}
 
         {isEN === "EN" ? (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">
               {" "}
               8. Improvement or Discontinuation of the System
@@ -865,7 +961,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             </p>
           </p>
         ) : (
-          <p className=" text-b2 mb-6 leading-6">
+          <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
             <p className="font-bold mb-1">
               {" "}
               8. การปรับปรุงหรือหยุดให้บริการระบบ
@@ -883,34 +979,36 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           </p>
         )}
       </div>
-     {!isEmpty(user) && <div className="flex justify-end mt-6 sticky w-full">
-        <Group className="flex w-full gap-2 h-fit items-end justify-between">
-          <Button
-            loading={loading}
-            onClick={() => submitTermsOfService(false)}
-            classNames={{ label: "font-bold text-b2" }}
-            variant="subtle"
-          >
-            {isEN === "EN" ? (
-              "Log out"
-            ) : (
-              <p className="font-semibold">ออกจากระบบ</p>
-            )}
-          </Button>
+      {!isEmpty(user) && (
+        <div className="flex justify-end mt-6 sticky w-full">
+          <Group className="flex  w-full gap-2 h-fit items-end justify-between">
+            <Button
+              loading={loading}
+              onClick={() => submitTermsOfService(false)}
+              classNames={{ label: "font-bold text-b2 iphone:max-sm:text-[13px]" }}
+              variant="subtle"
+            >
+              {isEN === "EN" ? (
+                "Log out"
+              ) : (
+                <p className="font-semibold">ออกจากระบบ</p>
+              )}
+            </Button>
 
-          <Button
-            loading={loading}
-            classNames={{ label: "font-bold text-b2" }}
-            onClick={() => submitTermsOfService(true)}
-          >
-            {isEN === "EN" ? (
-              "I agree with terms"
-            ) : (
-              <p className="font-semibold">ฉันยอมรับข้อกำหนด</p>
-            )}
-          </Button>
-        </Group>
-      </div>}
+            <Button
+              loading={loading}
+              classNames={{ label: "font-bold text-b2 iphone:max-sm:text-[13px]" }}
+              onClick={() => submitTermsOfService(true)}
+            >
+              {isEN === "EN" ? (
+                "I agree with terms"
+              ) : (
+                <p className="font-semibold">ฉันยอมรับข้อกำหนด</p>
+              )}
+            </Button>
+          </Group>
+        </div>
+      )}
     </Modal>
   );
 }
