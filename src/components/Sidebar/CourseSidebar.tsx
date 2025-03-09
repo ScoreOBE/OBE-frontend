@@ -20,7 +20,7 @@ import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconSkills from "@/assets/icons/briftcase.svg?react";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import { IModelUser } from "@/models/ModelUser";
-import { getUserName, sortData } from "@/helpers/functions/function";
+import { getUserName, isMobile, sortData } from "@/helpers/functions/function";
 import MainPopup from "../Popup/MainPopup";
 import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
 import { getOneCourse } from "@/services/course/course.service";
@@ -707,7 +707,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                   Course Action
                 </p>
               )}
-              <Button
+             {!isMobile && <Button
                 onClick={onClickLeaveCourse}
                 leftSection={
                   openSidebar && (
@@ -754,7 +754,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                     </div>
                   </Tooltip>
                 )}
-              </Button>
+              </Button>}
             </div>
           )}
       </div>

@@ -32,7 +32,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { dateFormatter, getSectionNo } from "@/helpers/functions/function";
+import { dateFormatter, getSectionNo, isMobile } from "@/helpers/functions/function";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import Loading from "@/components/Loading/Loading";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -268,6 +268,7 @@ export default function AllAssignment() {
     return (
       <Button
         className="text-center px-4 acerSwift:max-macair133:!text-b5"
+        disabled={isMobile}
         leftSection={
           <Icon
             IconComponent={IconUpload}
@@ -664,12 +665,12 @@ export default function AllAssignment() {
         onClose={() => setOpenModalExportScore(false)}
       />
 
-      <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-2 overflow-hidden">
+      <div className="bg-white flex flex-col h-full w-full sm:px-6 iphone:max-sm:px-3 py-5 gap-2 overflow-hidden">
         {loading.loading ? (
           <Loading />
         ) : (
           <>
-            {allAssignments.length !== 0 && (
+            {allAssignments.length !== 0 && !isMobile && (
               <div className="flex flex-row items-center justify-between">
                 <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 font-semibold">
                   {allAssignments.length} Evaluation
@@ -799,7 +800,7 @@ export default function AllAssignment() {
                   panel: "overflow-hidden w-full flex flex-col max-h-full",
                 }}
               >
-                <Tabs.List>
+               {!isMobile && <Tabs.List>
                   <Tabs.Tab
                     value="assignment"
                     className="acerSwift:max-macair133:!text-b3"
@@ -812,7 +813,7 @@ export default function AllAssignment() {
                   >
                     Charts
                   </Tabs.Tab>
-                </Tabs.List>
+                </Tabs.List>}
                 <Tabs.Panel value="assignment">
                   <div
                     className="overflow-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
@@ -1110,8 +1111,8 @@ export default function AllAssignment() {
                 </Tabs.Panel>
               </Tabs>
             ) : (
-              <div className="flex items-center  !h-full !w-full justify-between px-16">
-                <div className="flex flex-col gap-2 text-start">
+              <div className="flex items-center  !h-full !w-full justify-between  sm:px-16">
+              <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
                   <p className="!h-full text-[20px] text-secondary font-semibold">
                     No Evaluation
                   </p>{" "}
@@ -1121,13 +1122,13 @@ export default function AllAssignment() {
                   </p>{" "}
                   {activeTerm && <div className="mt-3">{uploadButton()}</div>}
                 </div>
-                <div className=" items-center justify-center flex">
+               {!isMobile && <div className=" items-center justify-center flex">
                   <img
                     src={notFoundImage}
                     className="h-full items-center  w-[24vw] justify-center flex flex-col"
                     alt="notFound"
                   ></img>
-                </div>
+                </div>}
               </div>
             )}
           </>

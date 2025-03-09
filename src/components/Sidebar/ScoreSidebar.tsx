@@ -14,7 +14,7 @@ import IconLogout from "@/assets/icons/logout.svg?react";
 import IconStudent from "@/assets/icons/student.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
-import { getSectionNo, getUserName } from "@/helpers/functions/function";
+import { getSectionNo, getUserName, isMobile } from "@/helpers/functions/function";
 import { IModelSection } from "@/models/ModelCourse";
 import Loading from "../Loading/Loading";
 
@@ -202,7 +202,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
                 Course Action
               </p>
             )}
-            <Button
+            { !isMobile &&<Button
               onClick={onClickLeaveCourse}
               leftSection={
                 openSidebar && (
@@ -246,7 +246,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
                   </div>
                 </Tooltip>
               )}
-            </Button>
+            </Button>}
           </div>
         )}
     </div>
