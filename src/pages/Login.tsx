@@ -188,7 +188,7 @@ export default function Login() {
   const ButtonLogin = () => {
     return (
       <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
-        <Button className="z-[52] iphone:max-sm:!rounded-xl iphone:max-sm:px-8 bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]">
+        <Button className="z-[52] drop-shadow-2xl iphone:max-sm:!rounded-xl iphone:max-sm:px-8 bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]">
           <img
             src={cmulogoLogin}
             alt="CMULogo"
@@ -371,7 +371,7 @@ export default function Login() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-20 sm:px-[118px] iphone:max-sm:px-8">
+              <div className="flex flex-col gap-20 sm:px-[118px] iphone:max-sm:-mt-20 iphone:max-sm:px-8">
                 <div className="flex flex-col items-start text-start">
                   <div className="font-[700] iphone:max-sm:!text-[28px] iphone:max-sm:!leading-[36px] flex flex-col gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 leading-[56px]  items-start text-[48px] ">
                     <p>See Beyond the Scores</p>
@@ -477,7 +477,7 @@ export default function Login() {
                   />
                 </div>
 
-                <div className="flex flex-col gap-20 ">
+                <div className="flex flex-col gap-20 iphone:max-sm:-mt-20 ">
                   <div className="flex flex-col items-center">
                     <div className="font-[700] flex flex-col iphone:max-sm:text-[28px] gap-1 text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 sm:leading-[56px] items-center text-[48px] max-macair133:text-[44px] ">
                       Easily Manage Scores <br />{" "}
@@ -600,7 +600,7 @@ export default function Login() {
           </div>
 
           {/* benefit */}
-          <div className="flex flex-col mt-16 iphone:max-sm:-mt-36  ">
+          <div className="flex flex-col mt-16 iphone:max-sm:-mt-44  ">
             <div className="flex gap-16 h-screen w-screen justify-center items-center">
               <div className="flex flex-col gap-6 items-start text-start">
                 <p className="font-[700]  flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] max-macair133:text-[24px]">
@@ -629,7 +629,7 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="bg-[#fafafa] py-14 flex flex-col iphone:max-sm:-mt-64 gap-10 -mt-10">
+          <div className="bg-[#fafafa] py-14 flex flex-col iphone:max-sm:-mt-64 gap-10 -mt-24">
             {/* TQF3 */}
             <div className="flex flex-col items-center text-center font-[600] gap-14 ">
               <div className="mx-28">
@@ -741,9 +741,9 @@ export default function Login() {
                 </p>
               </div>
 
-              <div className="relative flex gap-16 max-macair133:gap-8">
-                <div className="absolute left-0 right-0 top-[50%] z-0 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
-                <div className="relative flex flex-col items-center gap-3 text-pretty w-[370px] max-macair133:w-[330px] border shadow-md bg-white/65 backdrop-blur-[150px] border-24 p-6 rounded-lg">
+              <div className="relative sm:flex  iphone:max-sm:flex-col gap-16 ">
+                <div className="absolute left-0 right-0 top-[50%] iphone:max-sm:mb-4 z-0 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
+                <div className="relative flex flex-col items-center iphone:max-sm:mb-4 gap-3 text-pretty w-[370px] iphone:max-sm:py-8 max-macair133:w-[330px] border shadow-md bg-white/65 backdrop-blur-[150px] border-24 p-6 rounded-lg">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
@@ -759,7 +759,7 @@ export default function Login() {
                     providing versatility for any reporting need.
                   </p>
                 </div>
-                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px] max-macair133:w-[330px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg">
+                <div className="flex flex-col items-center justify-center iphone:max-sm:mb-4 gap-3 text-pretty w-[370px] iphone:max-sm:py-8 max-macair133:w-[330px]  border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
@@ -776,7 +776,7 @@ export default function Login() {
                     for more precise results.
                   </p>
                 </div>
-                <div className="flex flex-col items-center justify-center gap-3 text-pretty w-[370px]  max-macair133:w-[330px] border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg">
+                <div className="flex flex-col items-center  justify-center gap-3 text-pretty w-[370px] iphone:max-sm:py-8 max-macair133:w-[330px] border shadow-md bg-white/65 backdrop-blur-[150px] border-24 rounded-lg">
                   <div className=" flex flex-col gap-1">
                     <Icon
                       IconComponent={IconBulb}
@@ -943,7 +943,7 @@ export default function Login() {
             </Tabs>
           </div>
 
-          <div className="flex h-fit items-center mt-8 iphone:max-sm:-mt-48">
+          <div className="flex h-fit items-center mt-8 iphone:max-sm:-mt-56">
             <div className="flex flex-col items-start justify-center gap-4 max-macair133:gap-2 h-[85%] iphone:max-sm:px-10  sm:pl-28 samsungA24:pl-48">
               <div className="flex flex-col gap-2 items-start mt-2 mb-2">
                 <p className="font-[700] text-[36px] text-emphasize">
