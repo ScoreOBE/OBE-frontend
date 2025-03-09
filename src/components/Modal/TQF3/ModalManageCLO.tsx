@@ -90,7 +90,7 @@ export default function ModalManageCLO({
     } as Partial<IModelCLO>,
     validate: {
       descTH: (value) =>
-        validateTextInput(value, "CLO Thai language", 0, false),
+        validateTextInput(value, "CLO Thai language", 300, false),
       descEN: (value) =>
         validateTextInput(value, "CLO English language", 0, false),
       learningMethod: (value) =>

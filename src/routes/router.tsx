@@ -196,7 +196,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.PLO,
             element: (
               <Suspense fallback={loadingPage}>
-               {!isMobile ?  <AdminDashboardPLO /> : <NotAvailablePage />}
+                {!isMobile ? <AdminDashboardPLO /> : <NotAvailablePage />}
               </Suspense>
             ),
           },
@@ -204,7 +204,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.CLO,
             element: (
               <Suspense fallback={loadingPage}>
-               {!isMobile ?  <AdminDashboardCLO /> : <NotAvailablePage />}
+                {!isMobile ? <AdminDashboardCLO /> : <NotAvailablePage />}
               </Suspense>
             ),
           },
@@ -225,7 +225,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.PLO,
             element: (
               <Suspense fallback={loadingPage}>
-                <StdOverallPLO />
+                {!isMobile ? <StdOverallPLO /> : <NotAvailablePage />}
               </Suspense>
             ),
           },
@@ -257,7 +257,7 @@ const router = createBrowserRouter([
                 path: ROUTE_PATH.HISTOGRAM,
                 element: (
                   <Suspense fallback={loadingPage}>
-                   {!isMobile? <StdChart /> : <NotAvailablePage />}
+                    {!isMobile ? <StdChart /> : <NotAvailablePage />}
                   </Suspense>
                 ),
               },
@@ -273,7 +273,7 @@ const router = createBrowserRouter([
                 path: ROUTE_PATH.PLO,
                 element: (
                   <Suspense fallback={loadingPage}>
-                    <StdPLO />
+                    {!isMobile ? <StdPLO /> : <NotAvailablePage />}
                   </Suspense>
                 ),
               },
