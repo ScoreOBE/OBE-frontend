@@ -33,7 +33,6 @@ export default function ModalExportTQF5({
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const tqf5 = useAppSelector((state) => state.tqf5);
-  const course = useAppSelector((state) => state.course.courses);
   const [selectedMerge, setSelectedMerge] = useState("unzipfile");
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
@@ -50,23 +49,8 @@ export default function ModalExportTQF5({
     }
   }, [opened, dataTQF]);
 
-  const activeCurriculums = dataExport.part1?.list?.filter((cur) => {
-    let courseSection;
-
-    if (dataTQF) {
-      courseSection = course?.find(
-        (e) => e.courseNo === dataTQF.courseNo
-      )?.sections;
-    } else {
-      courseSection = tqf5?.sections;
-    }
-
-    return (
-      courseSection?.some(
-        (sec) => cur.curriculum?.includes(sec.curriculum!) && sec.isActive
-      ) ?? false
-    );
-  });
+  const activeCurriculums =
+    dataExport.part1?.list.map(({ curriculum }) => curriculum) || [];
 
   const onCloseModal = () => {
     onClose();
@@ -169,14 +153,12 @@ export default function ModalExportTQF5({
                 searchable
                 nothingFoundMessage="No result"
                 data={(activeCurriculums ?? []).map((item) => {
-                  const value = item.curriculum ?? "-";
-
                   const matchedCurriculum = (curriculum ?? []).find(
-                    (e) => e.code === item.curriculum
+                    (e) => e.code === item
                   );
 
                   return {
-                    value,
+                    value: item ?? "-",
                     label: matchedCurriculum
                       ? `${matchedCurriculum.nameTH} [${matchedCurriculum.code}]`
                       : "หลักสูตรอื่นๆ (No curriculum for this section.)",
