@@ -7,7 +7,7 @@ import Loading from "@/components/Loading/Loading";
 import { ROLE } from "@/helpers/constants/enum";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { getSectionNo, getUserName } from "@/helpers/functions/function";
+import { getSectionNo, getUserName, isMobile } from "@/helpers/functions/function";
 import { IModelUser } from "@/models/ModelUser";
 import { TbSearch } from "react-icons/tb";
 import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
@@ -195,7 +195,7 @@ export default function OneAssignment() {
         data={editScore!}
       />
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-2 overflow-hidden">
-        <Breadcrumbs items={items} />
+       {!isMobile && <Breadcrumbs items={items} />}
         {loading.loading ? (
           <Loading />
         ) : (

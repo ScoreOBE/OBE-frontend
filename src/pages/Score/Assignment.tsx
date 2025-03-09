@@ -29,7 +29,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { dateFormatter, getSectionNo } from "@/helpers/functions/function";
+import { dateFormatter, getSectionNo, isMobile } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
@@ -255,8 +255,8 @@ export default function Assignment() {
         }
       />
 
-      <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
-        <Breadcrumbs items={items} />
+      <div className="bg-white flex flex-col h-full w-full sm:px-6 iphone:max-sm:px-3 py-5 gap-3 overflow-hidden">
+      { !isMobile && <Breadcrumbs items={items} />}
         {loading.loading ? (
           <Loading />
         ) : (section?.instructor as IModelUser)?.id === user.id ||
@@ -264,9 +264,9 @@ export default function Assignment() {
             ?.map(({ id }) => id)
             .includes(user.id) ? (
           <>
-            {section?.assignments?.length !== 0 && (
+            {section?.assignments?.length !== 0 && !isMobile && (
               <div className="flex flex-row  py-1  items-center justify-between">
-                <p className="text-secondary text-h1 macair133:text-b1 py-2 acerSwift:max-macair133:!text-b2 font-semibold">
+                <p className="text-secondary text-h1 macair133:text-b1  py-2 acerSwift:max-macair133:!text-b2 font-semibold">
                   {section?.assignments?.length} Evaluation
                   {section?.assignments?.length! > 1 && "s"}
                 </p>
@@ -302,7 +302,7 @@ export default function Assignment() {
                      {activeTerm && <Table.Th className="w-10 !px-4 sm:max-macair133:text-b3 text-center">
                         Published
                       </Table.Th>}
-                  { activeTerm &&   <Table.Th className="w-5 sm:max-macair133:text-b3"></Table.Th>}
+                  { activeTerm && !isMobile &&   <Table.Th className="w-5 sm:max-macair133:text-b3"></Table.Th>}
                     </Table.Tr>
                   </Table.Thead>
 
@@ -382,7 +382,7 @@ export default function Assignment() {
                               )}
                             </div>
                           </Table.Td>}
-                         {activeTerm && <Table.Td className="text-center flex items-center justify-center">
+                         {activeTerm && !isMobile &&    <Table.Td className="text-center flex items-center justify-center">
                             <div
                               className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
                               onClick={(event) => event.stopPropagation()}
@@ -449,8 +449,8 @@ export default function Assignment() {
                 </Table>
               </div>
             ) : (
-              <div className="flex items-center  !h-full !w-full justify-between px-16">
-                <div className="flex flex-col gap-3 text-start">
+              <div className="flex items-center  !h-full !w-full  justify-between  sm:px-16">
+              <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
                   <p className="!h-full text-h1  acerSwift:max-macair133:!text-h2 text-secondary font-semibold">
                     No Evaluation
                   </p>{" "}
@@ -459,19 +459,19 @@ export default function Assignment() {
                     yet.
                   </p>{" "}
                 </div>
-                <div className=" items-center justify-center flex">
+                { !isMobile && <div className=" items-center justify-center flex">
                   <img
                     src={notFoundImage}
                     className="h-full items-center  w-[24vw] justify-center flex flex-col"
                     alt="notFound"
                   ></img>
-                </div>
+                </div>}
               </div>
             )}
           </>
         ) : (
-          <div className="flex px-16 mt-5 flex-row items-center justify-between h-full">
-            <div className="flex justify-center  h-full items-start gap-2 flex-col">
+          <div className="flex items-center  !h-full !w-full justify-between  sm:px-16">
+          <div className="flex flex-col gap-2 iphone:max-sm:text-center sm:text-start">
               <p className="   text-secondary font-semibold text-[22px]">
                 You need access
               </p>
@@ -480,11 +480,11 @@ export default function Assignment() {
                 instructor for access.
               </p>
             </div>
-            <img
+            { !isMobile && <img
               className=" z-50  size-[460px] "
               src={needAccess}
               alt="loginImage"
-            />
+            />}
           </div>
         )}
       </div>

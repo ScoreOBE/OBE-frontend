@@ -16,7 +16,7 @@ import IconExcel from "@/assets/icons/excel.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { getOneCourse } from "@/services/course/course.service";
 import { editCourse, editSection, removeSection } from "@/store/course";
-import { getSectionNo, getUserName } from "@/helpers/functions/function";
+import { getSectionNo, getUserName, isMobile } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import PageError from "./PageError";
 import MainPopup from "@/components/Popup/MainPopup";
@@ -254,7 +254,7 @@ export default function Section() {
         <Loading />
       ) : (
         <div className=" flex flex-col h-full w-full overflow-hidden">
-          <div className="flex flex-row  px-6 pt-3 min-h-[60px] items-center justify-between">
+         {!isMobile && <div className="flex flex-row  sm:px-6 pt-3 iphone:max-sm:px-3 min-h-[60px] items-center justify-between">
             <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 font-semibold">
               {course?.sections.length} Section
               {course?.sections.length! > 1 && "s"}
@@ -282,7 +282,7 @@ export default function Section() {
               ) : (
                 <></>
               )}
-              {activeTerm && user.role != ROLE.TA && (
+              {activeTerm && user.role != ROLE.TA  && (
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
                   <Menu trigger="click" position="bottom-end">
                     <Menu.Target>
@@ -349,9 +349,9 @@ export default function Section() {
                 </div>
               )}
             </div>
-          </div>
-          <div className="flex h-full w-full rounded-[5px] overflow-hidden">
-            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4  pb-5 gap-4 px-6 p-3">
+          </div>}
+          <div className="flex h-full w-full  rounded-[5px] overflow-hidden">
+            <div className="overflow-y-auto w-full h-fit iphone:max-sm:grid-cols-1 max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4  pb-5 gap-4 iphone:max-sm:px-3 sm:px-6 p-3">
               {course?.sections.map((sec, index) => {
                 const owner = (sec.instructor as IModelUser).id == user.id;
                 const addFirstTime = course.addFirstTime || sec.addFirstTime;
@@ -363,7 +363,7 @@ export default function Section() {
                     }`}
                     onClick={() => goToAssignment(sec.sectionNo!)}
                   >
-                    {activeTerm && owner && (
+                    {activeTerm && owner && !isMobile && (
                       <div onClick={(event) => event.stopPropagation()}>
                         <Menu trigger="click" position="bottom-end" offset={30}>
                           <Menu.Target>
@@ -450,7 +450,7 @@ export default function Section() {
                             Section {getSectionNo(sec.sectionNo)}
                           </p>
                           <p
-                            className={`tag-tqf bg-secondary text-secondary flex gap-1 items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 ${owner && activeTerm && 'mr-7'} 
+                            className={`tag-tqf ${isMobile ? 'translate-x-0' : ''} bg-secondary text-secondary flex gap-1 items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 ${owner && activeTerm && 'mr-7'} 
                           
                            `}
                           >

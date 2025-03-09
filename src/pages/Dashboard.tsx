@@ -430,7 +430,7 @@ export default function Dashboard() {
                 height={"100%"}
                 loader={<Loading />}
                 hasMore={payload?.hasMore}
-                className="overflow-y-auto w-full h-fit iphone:max-sm:grid-cols-1 max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4 pb-5 gap-4 px-6 p-3"
+                className="overflow-y-auto w-full h-fit iphone:max-sm:grid-cols-1 sm:px-6 p-3 max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4 pb-5 gap-4 "
                 style={{ height: "fit-content", maxHeight: "100%" }}
               >
                 {courseList.courses.map((item) => {

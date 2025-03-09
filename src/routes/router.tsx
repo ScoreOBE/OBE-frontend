@@ -120,7 +120,7 @@ const router = createBrowserRouter([
                 path: `:sectionNo/${ROUTE_PATH.HISTOGRAM}`,
                 element: (
                   <Suspense fallback={loadingPage}>
-                    <Histogram />
+                  {!isMobile ?  <Histogram /> : <NotAvailablePage />} 
                   </Suspense>
                 ),
               },
@@ -167,7 +167,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.TQF3,
             element: (
               <Suspense fallback={loadingPage}>
-                <TQF3 />
+                {!isMobile ? <TQF3 /> : <NotAvailablePage />}  
               </Suspense>
             ),
           },
@@ -175,7 +175,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.TQF5,
             element: (
               <Suspense fallback={loadingPage}>
-                <TQF5 />
+               {!isMobile ? <TQF5 /> : <NotAvailablePage />}  
               </Suspense>
             ),
           },

@@ -12,7 +12,7 @@ import IconDots from "@/assets/icons/dots.svg?react";
 import IconManageAdmin from "@/assets/icons/addCo.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { getSectionNo, getUserName } from "@/helpers/functions/function";
+import { getSectionNo, getUserName, isMobile } from "@/helpers/functions/function";
 import { useParams, useSearchParams } from "react-router-dom";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 import MainPopup from "@/components/Popup/MainPopup";
@@ -225,7 +225,7 @@ export default function Roster() {
           <Table.Td>{student.studentId}</Table.Td>
           <Table.Td>{getUserName(student, 3)}</Table.Td>
           <Table.Td>{student.email ? student.email : "Not login yet"}</Table.Td>
-          {activeTerm && user.role != ROLE.TA && (
+          {activeTerm && user.role != ROLE.TA && !isMobile && (
             <Table.Td>
               <div className="flex gap-3">
                 <Button
@@ -282,7 +282,7 @@ export default function Roster() {
     return (
       <>
         {(hasData || search) && (
-          <div className=" px-1 mb-2 flex items-center justify-between">
+          <div className=" sm:px-1 mb-2 sm:flex iphone:max-sm:flex-col items-center justify-between">
             <p className="  text-secondary font-semibold acerSwift:max-macair133:!text-b2">
               {(() => {
                 const totalStudents = course?.sections.reduce(
@@ -300,10 +300,10 @@ export default function Roster() {
                 placeholder="Section No, Student No, Name"
                 size="xs"
                 rightSectionPointerEvents="all"
-                className="mx-1 w-[25vw] "
+                className="mx-1 sm:w-[25vw] iphone:max-sm:w-full iphone:max-sm:mt-2 iphone:max-sm:-ml-[2px] "
                 onChange={(event) => setFilter(event.currentTarget.value)}
               ></TextInput>
-              {activeTerm && user.role != ROLE.TA && (
+              {activeTerm && user.role != ROLE.TA && !isMobile && (
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
                   <Menu trigger="click" position="bottom-end">
                     <Menu.Target>
@@ -371,7 +371,7 @@ export default function Roster() {
                   <Table.Th className="w-[25%] acerSwift:max-macair133:!text-b3">
                     CMU account
                   </Table.Th>
-                  {activeTerm && user.role != ROLE.TA && (
+                  {activeTerm && user.role != ROLE.TA && !isMobile && (
                     <Table.Th className="w-[10%] acerSwift:max-macair133:!text-b3">
                       Action
                     </Table.Th>
@@ -381,8 +381,8 @@ export default function Roster() {
               <Table.Tbody>{rows}</Table.Tbody>
             </Table>
           ) : (
-            <div className="flex items-center !h-screen  justify-between px-10 !w-full">
-              <p className="text-start font-semibold text-[20px] text-secondary px-6 -translate-y-1 py-10">
+            <div className="flex items-center !h-screen   justify-between px-10 !w-full">
+              <p className="text-start font-semibold text-[20px] iphone:max-sm:text-center text-secondary sm:px-6 -translate-y-1 py-10">
                 {search
                   ? `No results for "${filter}"`
                   : "No Course Roster found"}
@@ -398,6 +398,7 @@ export default function Roster() {
                       <Icon className="size-5" IconComponent={IconImport} />
                     }
                     variant="filled"
+                    disabled={isMobile}
                     onClick={() => setOpenModalUploadStudentList(true)}
                     className=" font-bold mt-5"
                   >

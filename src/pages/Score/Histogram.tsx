@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useRef, useState } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useParams, useSearchParams } from "react-router-dom";
-import { getSectionNo } from "@/helpers/functions/function";
+import { getSectionNo, isMobile } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
 import Loading from "@/components/Loading/Loading";
@@ -107,7 +107,7 @@ export default function Histogram() {
 
   return (
     <div className="bg-white flex flex-col h-full w-full px-6 pt-5  gap-3 overflow-hidden">
-      <Breadcrumbs items={items} />
+      {!isMobile && <Breadcrumbs items={items} />}
       {loading ? (
         <Loading />
       ) : (section?.instructor as any)?.id === user.id ||
@@ -207,8 +207,8 @@ export default function Histogram() {
               </div>
             </div>
           ) : (
-            <div className="flex items-center !h-full !w-full -mt-[10px] justify-between px-16">
-              <div className="flex flex-col gap-3 text-start">
+            <div className="flex items-center  !h-full !w-full -mt-[10px] justify-between  sm:px-16">
+              <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
                 <p className="!h-full text-[20px] text-secondary font-semibold">
                   No Evaluation
                 </p>{" "}
@@ -216,19 +216,21 @@ export default function Histogram() {
                   The histogram will show when the evaluation is uploaded.
                 </p>{" "}
               </div>
-              <div className=" items-center justify-center flex">
-                <img
-                  src={notFoundImage}
-                  className="h-full items-center  w-[24vw] justify-center flex flex-col"
-                  alt="notFound"
-                ></img>
-              </div>
+              {!isMobile && (
+                <div className=" items-center justify-center flex">
+                  <img
+                    src={notFoundImage}
+                    className="h-full items-center  w-[24vw] justify-center flex flex-col"
+                    alt="notFound"
+                  ></img>
+                </div>
+              )}
             </div>
           )}
         </div>
       ) : (
-        <div className="flex px-16  flex-row items-center justify-between h-full">
-          <div className="flex justify-center h-full items-start gap-2 flex-col">
+        <div className="flex items-center  !h-full !w-full justify-between  sm:px-16">
+          <div className="flex flex-col gap-2 iphone:max-sm:text-center sm:text-start">
             <p className="text-secondary font-semibold text-[22px]">
               You need access
             </p>
@@ -237,11 +239,13 @@ export default function Histogram() {
               Instructor for access.
             </p>
           </div>
-          <img
-            className="z-50 size-[460px]"
-            src={needAccess}
-            alt="loginImage"
-          />
+          {!isMobile && (
+            <img
+              className="z-50 size-[460px]"
+              src={needAccess}
+              alt="loginImage"
+            />
+          )}
         </div>
       )}
     </div>
