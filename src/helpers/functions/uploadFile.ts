@@ -588,8 +588,9 @@ const gradeTemplete = (
         rowObject[header] = row[index].replace("+", "plus");
       } else if (!["SECLEC", "SECLAB"].includes(header)) {
         rowObject[header] = row[index];
-      } else if (row[index] != "000") {
-        rowObject.section = parseInt(row[index]);
+      } else if (row[index] != "000" && row[index]) {
+        rowObject.section =
+          typeof row[index] == "number" ? row[index] : parseInt(row[index]);
       }
     });
     return rowObject;

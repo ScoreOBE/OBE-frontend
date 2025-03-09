@@ -72,6 +72,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
 
   useEffect(() => {
     if (
+      course &&
       tqf5.method == METHOD_TQF5.SCORE_OBE &&
       form.getValues().data[0]?.assess
     ) {
@@ -80,7 +81,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
         const { sectionsData, score } = calCloScore(
           tqf5.part2?.data[index]!,
           tqf5.method!,
-          course?.sections.filter(
+          course.sections.filter(
             (sec) => sec.isActive && sec.topic == tqf5.topic
           ) as any,
           cloItem.assess
@@ -90,7 +91,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
       });
       setAssessmentCloScores(newCalCloScore as any);
     }
-  }, [form.getValues().data]);
+  }, [form.getValues().data, course]);
 
   useEffect(() => {
     if (tqf3.part2) {

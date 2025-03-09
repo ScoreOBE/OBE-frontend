@@ -43,7 +43,7 @@ export default function StdPLO() {
           )}
           <div className="flex flex-col   overflow-y-auto overflow-x-hidden max-w-full h-full">
             <div className="flex flex-row pb-[14px] items-center justify-between">
-              {course?.plo.id ? (
+              {!!course?.plos.length ? (
                 <>
                   <p className="text-secondary text-[16px] font-semibold">
                     ผลลัพธ์การเรียนรู้ของหลักสูตร
@@ -124,6 +124,7 @@ export default function StdPLO() {
                   <Tooltip
                     arrowOffset={125}
                     arrowSize={8}
+                    events={{ hover: true, focus: true, touch: true,   }}
                     arrowRadius={1}
                     transitionProps={{
                       transition: "fade",

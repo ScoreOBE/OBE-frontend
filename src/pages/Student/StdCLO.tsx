@@ -123,6 +123,7 @@ export default function StdCLO() {
                   arrowOffset={125}
                   arrowSize={8}
                   arrowRadius={1}
+                  events={{ hover: true, focus: true, touch: true,   }}
                   transitionProps={{
                     transition: "fade",
                     duration: 300,
