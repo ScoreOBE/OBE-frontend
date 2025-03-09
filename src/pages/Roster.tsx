@@ -407,9 +407,9 @@ export default function Roster() {
                 )}
               </p>
 
-              <div className="h-full  w-[24vw] m-6 justify-center -translate-y-1 flex flex-col">
+             {!isMobile && <div className="h-full  w-[24vw] m-6 justify-center -translate-y-1 flex flex-col">
                 <img src={notFoundImage} alt="notFound"></img>
-              </div>
+              </div>}
             </div>
           )}
         </div>
