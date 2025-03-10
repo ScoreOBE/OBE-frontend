@@ -139,7 +139,7 @@ export default function StdAssignment() {
                 </Table>
               </div>
             ) : (
-              <div className="flex flex-col gap-3 ">
+              <div className="flex flex-col gap-3 overflow-y-auto h-full ">
                 {" "}
                 {course?.section?.assignments?.map((assignment, index) => {
                   const totalStudent = assignment.scores.length;
@@ -147,7 +147,7 @@ export default function StdAssignment() {
                   return (
                     <div
                       key={index}
-                      className={`border flex flex-col justify-between rounded-md p-3 `}
+                      className={`border flex flex-col hover:bg-bgTableHeader justify-between rounded-md p-3 `}
                       onClick={() => goToAssignment(`${assignment.name}`)}
                     >
                       <div className="flex items-center justify-between">
