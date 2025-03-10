@@ -137,7 +137,7 @@ export default function StdScore() {
                   {totalStudent} Students
                 </p>
               </div>
-              <div className="sm:flex  sm:px-10 iphone:max-sm:-mt-1 iphone:max-sm:grid iphone:max-sm:gap-3 iphone:max-sm:grid-cols-2 iphone:max-sm:p-3 iphone:max-sm:bg-slate-100 iphone:max-sm:rounded-md sm:flex-row justify-between w-full">
+              <div className="sm:flex  sm:px-10 iphone:max-sm:-mt-1 iphone:max-sm:grid iphone:max-sm:gap-3 iphone:max-sm:grid-cols-2 iphone:max-sm:p-3 iphone:max-sm:bg-gray-50 iphone:max-sm:rounded-md sm:flex-row justify-between w-full">
                 <div className="flex flex-col">
                   <p className="font-semibold sm:text-[16px] iphone:max-sm:text-[14px] text-secondary">
                     Your Score
@@ -303,29 +303,49 @@ export default function StdScore() {
                         </div>
                   
                       </div>
-                      <div className="mt-2 text-[12px] flex flex-col ">
-                        <div className="grid grid-cols-2 p-2 bg-slate-100 rounded-t-md">
-                          <div className="text-start">
-                            Mean: {stat.mean.toFixed(2)}
+                      <div className="mt-2 text-[12px] border-t flex flex-col ">
+                        {" "}
+                        <div className="grid grid-cols-2 p-2 mt-1 rounded-t-md">
+                          <div className="flex flex-col">
+                            <div className="text-start">Mean</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.mean.toFixed(2)}
+                            </p>
                           </div>
-                          <div className="text-start">
-                            SD: {stat.sd.toFixed(2)}
+                          <div className="flex flex-col">
+                            <div className="text-start">SD</div>
+                            <p className="text-[13px] font-semibold">
+                              {" "}
+                              {stat.sd.toFixed(2)}
+                            </p>
                           </div>
                         </div>
-                        <div className="grid grid-cols-2 p-2 bg-slate-100">
-                          <div className="text-start">
-                            Median: {stat.median.toFixed(2)}
+                        <div className="grid grid-cols-2 p-2  ">
+                          <div className="flex flex-col">
+                            <div className="text-start">Median</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.median.toFixed(2)}
+                            </p>
                           </div>
-                          <div className="text-start">
-                            Max: {stat.maxScore.toFixed(2)}
+                          <div className="flex flex-col">
+                            <div className="text-start">Max</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.maxScore.toFixed(2)}
+                            </p>
                           </div>
                         </div>
-                        <div className="grid grid-cols-2 p-2 bg-slate-100 rounded-b-md">
-                          <div className="text-start">
-                            Q3: {stat.q3.toFixed(2)}
+                        <div className="grid grid-cols-2 p-2  rounded-b-md">
+                          <div className="flex flex-col">
+                            <div className="text-start">Q3</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.q3.toFixed(2)}
+                            </p>
                           </div>
-                          <div className="text-start">
-                            Q1: {stat.q1 ? stat.q1.toFixed(2) : "-"}
+                          <div className="flex flex-col">
+                            <div className="text-start ">Q1</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.q1 ? stat.q1.toFixed(2) : "-"}
+                            </p>
                           </div>
                         </div>
                       </div>

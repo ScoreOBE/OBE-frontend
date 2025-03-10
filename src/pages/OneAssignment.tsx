@@ -317,7 +317,7 @@ export default function OneAssignment() {
                 </div>
               </div>
             ) : (
-              <div className=" flex flex-col mt-1 gap-2">
+              <div className=" flex flex-col text-start mt-1 gap-2">
                 <div className="flex flex-col gap-[2px]">
                   <div className=" font-semibold text-default text-[14px]">
                     {name}
@@ -327,7 +327,7 @@ export default function OneAssignment() {
                     {fullScore?.toFixed(2)} pts.
                   </div>
                 </div>
-                <div className=" grid grid-cols-2 gap-4 text-[14px] p-3  bg-slate-100 rounded-md">
+                <div className=" grid grid-cols-2 gap-4 text-[14px] p-3 text-start  border-b border-t  rounded-md">
                   <div className="flex flex-col">
                     <p className="font-semibold text-[#777777]">Mean</p>
                     <p className="font-bold sm:max-macair133:text-h1 text-default">

@@ -1,4 +1,4 @@
-import { Alert, Button, Group, Modal, Table, Tabs } from "@mantine/core";
+import { Alert, Button, FocusTrapInitialFocus, Group, Modal, Table, Tabs } from "@mantine/core";
 import { useState } from "react";
 import Icon from "../Icon";
 import IconExclamamtion from "@/assets/icons/exclamationCircle.svg?react";
@@ -130,6 +130,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
         body: "flex flex-col overflow-hidden max-h-full h-fit",
       }}
     >
+      <FocusTrapInitialFocus />
       <div className=" mt-2 h-[70vh] overflow-y-auto text-slate-700 font-medium">
         {isEN === "EN" ? (
           <p className=" text-[18px] iphone:max-sm:text-[14px] font-bold text-default mb-[10px]">
