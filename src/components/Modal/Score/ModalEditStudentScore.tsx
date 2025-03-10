@@ -1,4 +1,5 @@
 import { NOTI_TYPE } from "@/helpers/constants/enum";
+import { isMobile } from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { IModelAssignment, IModelCourse } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
@@ -109,7 +110,7 @@ export default function ModalEditStudentScore({
       opened={opened}
       onClose={onClose}
       title={`Edit Score ${form.getValues().student?.studentId}`}
-      size="35vw"
+      size={!isMobile ? '35vw' : '90vw'}
       centered
       closeOnClickOutside={false}
       transitionProps={{ transition: "pop" }}
@@ -147,7 +148,7 @@ export default function ModalEditStudentScore({
             ))}
         </div>
 
-        <div className="flex gap-2  items-end  justify-end h-fit">
+        <div className="flex gap-2 mt-2  items-end  justify-end h-fit">
           <Button
             onClick={() => {
               onClose();

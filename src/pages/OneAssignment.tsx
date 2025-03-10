@@ -7,7 +7,11 @@ import Loading from "@/components/Loading/Loading";
 import { ROLE } from "@/helpers/constants/enum";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { getSectionNo, getUserName, isMobile } from "@/helpers/functions/function";
+import {
+  getSectionNo,
+  getUserName,
+  isMobile,
+} from "@/helpers/functions/function";
 import { IModelUser } from "@/models/ModelUser";
 import { TbSearch } from "react-icons/tb";
 import ModalEditStudentScore from "@/components/Modal/Score/ModalEditStudentScore";
@@ -24,12 +28,12 @@ import ModalEvalChart from "@/components/Modal/Score/ModalEvalChart";
 export default function OneAssignment() {
   const { courseNo, name } = useParams();
   const [params, setParams] = useSearchParams();
-    const academicYear = useAppSelector((state) => state.academicYear);
-    const activeTerm = academicYear.find(
-      (term) =>
-        term.year == parseInt(params.get("year") || "") &&
-        term.semester == parseInt(params.get("semester") || "")
-    )?.isActive;
+  const academicYear = useAppSelector((state) => state.academicYear);
+  const activeTerm = academicYear.find(
+    (term) =>
+      term.year == parseInt(params.get("year") || "") &&
+      term.semester == parseInt(params.get("semester") || "")
+  )?.isActive;
   const loading = useAppSelector((state) => state.loading);
   const [isSort, setIsSort] = useState(false);
   const course = useAppSelector((state) =>
@@ -194,123 +198,205 @@ export default function OneAssignment() {
         assignment={assignment!}
         data={editScore!}
       />
-      <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-2 overflow-hidden">
+      <div className="bg-white flex flex-col h-full w-full sm:px-6 iphone:max-sm:p-4 iphone:max-sm:overflow-y-auto  py-5 gap-2 overflow-hidden">
         <Breadcrumbs items={items} />
         {loading.loading ? (
           <Loading />
         ) : (
           <>
-            <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
-              <div className="flex justify-between w-full px-2 items-center">
-                <div className="flex flex-col py-1">
-                  <div className="flex gap-1">
-                    <p className="text-[#3f4474] font-semibold text-b1 acerSwift:max-macair133:!size-b2">
-                      {name}
+            {!isMobile ? (
+              <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
+                <div className="flex justify-between w-full px-2 items-center">
+                  <div className="flex flex-col py-1">
+                    <div className="flex gap-1">
+                      <p className="text-[#3f4474] font-semibold text-b1 acerSwift:max-macair133:!size-b2">
+                        {name}
+                      </p>
+                      <div
+                        className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20 cursor-pointer"
+                        onClick={() => setOpenModalChart(true)}
+                      >
+                        <Icon
+                          IconComponent={IconChart}
+                          className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474]"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-secondary text-h1 font-semibold">
+                      {fullScore?.toFixed(2)}{" "}
+                      <span className="text-b1 acerSwift:max-macair133:!text-b2 ">
+                        pts.
+                      </span>
                     </p>
-                    <div
-                      className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20 cursor-pointer"
-                      onClick={() => setOpenModalChart(true)}
-                    >
+                  </div>
+                  <p className="text-[#3f4474] mb-1 font-semibold sm:max-macair133:text-[14px] text-b1 acerSwift:max-macair133:!text-b2">
+                    {allStudent.length} Students
+                  </p>
+                </div>
+                <div className="flex px-10 flex-row justify-between w-full  ">
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Mean
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {mean.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      SD
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {sd.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Median
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {median.toFixed(2)}
+                    </p>
+                  </div>
+                  <div
+                    className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
+                    onClick={() =>
+                      scrollToStudent(studentRefs, studentMaxMin.max)
+                    }
+                  >
+                    <div className="flex gap-1">
+                      <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                        Max
+                      </p>
                       <Icon
-                        IconComponent={IconChart}
-                        className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474]"
+                        IconComponent={IconListSearch}
+                        className="text-default size-4"
                       />
                     </div>
-                  </div>
-                  <p className="text-secondary text-h1 font-semibold">
-                    {fullScore?.toFixed(2)}{" "}
-                    <span className="text-b1 acerSwift:max-macair133:!text-b2 ">
-                      pts.
-                    </span>
-                  </p>
-                </div>
-                <p className="text-[#3f4474] mb-1 font-semibold sm:max-macair133:text-[14px] text-b1 acerSwift:max-macair133:!text-b2">
-                  {allStudent.length} Students
-                </p>
-              </div>
-              <div className="flex px-10 flex-row justify-between w-full  ">
-                <div className="flex flex-col">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Mean
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {mean.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    SD
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {sd.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Median
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {median.toFixed(2)}
-                  </p>
-                </div>
-                <div
-                  className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
-                  onClick={() =>
-                    scrollToStudent(studentRefs, studentMaxMin.max)
-                  }
-                >
-                  <div className="flex gap-1">
-                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                      Max
-                    </p>
-                    <Icon
-                      IconComponent={IconListSearch}
-                      className="text-default size-4"
-                    />
-                  </div>
 
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {maxScore.toFixed(2)}
-                  </p>
-                </div>
-                <div
-                  className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
-                  onClick={() =>
-                    scrollToStudent(studentRefs, studentMaxMin.min)
-                  }
-                >
-                  <div className="flex gap-1">
-                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                      Min
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {maxScore.toFixed(2)}
                     </p>
-                    <Icon
-                      IconComponent={IconListSearch}
-                      className="text-default size-4"
-                    />
                   </div>
+                  <div
+                    className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
+                    onClick={() =>
+                      scrollToStudent(studentRefs, studentMaxMin.min)
+                    }
+                  >
+                    <div className="flex gap-1">
+                      <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                        Min
+                      </p>
+                      <Icon
+                        IconComponent={IconListSearch}
+                        className="text-default size-4"
+                      />
+                    </div>
 
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {minScore.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Q3
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {q3.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Q1
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {q1 ? q1.toFixed(2) : "-"}
-                  </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {minScore.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Q3
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                      {q3.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Q1
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-[20px] text-default">
+                      {q1 ? q1.toFixed(2) : "-"}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className=" flex flex-col mt-1 gap-2">
+                <div className="flex flex-col gap-[2px]">
+                  <div className=" font-semibold text-default text-[14px]">
+                    {name}
+                  </div>
+                  <div className="font-semibold text-secondary text-[14px] ">
+                    {" "}
+                    {fullScore?.toFixed(2)} pts.
+                  </div>
+                </div>
+                <div className=" grid grid-cols-2 gap-4 text-[14px] p-3  bg-slate-100 rounded-md">
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-[#777777]">Mean</p>
+                    <p className="font-bold sm:max-macair133:text-h1 text-default">
+                      {mean.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-[#777777]">SD</p>
+                    <p className="font-bold sm:max-macair133:text-h1 text-default">
+                      {sd.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-[#777777]">Median</p>
+                    <p className="font-bold sm:max-macair133:text-h1 text-default">
+                      {median.toFixed(2)}
+                    </p>
+                  </div>
+                  <div
+                    className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md "
+                    onClick={() =>
+                      scrollToStudent(studentRefs, studentMaxMin.max)
+                    }
+                  >
+                    <div className="flex gap-1">
+                      <p className="font-semibold text-[#777777]">Max</p>
+                      <Icon
+                        IconComponent={IconListSearch}
+                        className="text-default size-4"
+                      />
+                    </div>
+
+                    <p className="font-bold sm:max-macair133:text-h1 text-default">
+                      {maxScore.toFixed(2)}
+                    </p>
+                  </div>
+                  <div
+                    className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md"
+                    onClick={() =>
+                      scrollToStudent(studentRefs, studentMaxMin.min)
+                    }
+                  >
+                    <div className="flex gap-1">
+                      <p className="font-semibold text-[#777777]">Min</p>
+                      <Icon
+                        IconComponent={IconListSearch}
+                        className="text-default size-4"
+                      />
+                    </div>
+
+                    <p className="font-bold sm:max-macair133:text-h1 text-default">
+                      {minScore.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-[#777777]">Q3</p>
+                    <p className="font-bold sm:max-macair133:text-[20px] text-default">
+                      {q3.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-[#777777]">Q1</p>
+                    <p className="font-bold sm:max-macair133:text-[20px] text-default">
+                      {q1 ? q1.toFixed(2) : "-"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="flex my-2 gap-2 w-full">
               <TextInput
                 leftSection={<TbSearch />}
@@ -320,161 +406,238 @@ export default function OneAssignment() {
                 className="w-full"
                 onChange={(event: any) => setFilter(event.currentTarget.value)}
               ></TextInput>
-              <Button
-                className="min-w-fit acerSwift:max-macair133:!text-b5 !h-full"
-                disabled={!isSort}
-                onClick={() => {
-                  setSort((prev: any) => {
-                    const resetSort: any = {};
-                    for (const key in prev) {
-                      resetSort[key] = null;
-                    }
-                    return resetSort;
-                  });
-                  allStudent?.sort((a, b) =>
-                    a.student.studentId!.localeCompare(b.student.studentId!)
-                  );
-                  setIsSort(false);
+              {!isMobile && (
+                <Button
+                  className="min-w-fit acerSwift:max-macair133:!text-b5 !h-full"
+                  disabled={!isSort}
+                  onClick={() => {
+                    setSort((prev: any) => {
+                      const resetSort: any = {};
+                      for (const key in prev) {
+                        resetSort[key] = null;
+                      }
+                      return resetSort;
+                    });
+                    allStudent?.sort((a, b) =>
+                      a.student.studentId!.localeCompare(b.student.studentId!)
+                    );
+                    setIsSort(false);
+                  }}
+                >
+                  Reset Sort
+                </Button>
+              )}
+            </div>
+            {!isMobile ? (
+              <div
+                className="relative overflow-auto border rounded-lg border-secondary"
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
                 }}
               >
-                Reset Sort
-              </Button>
-            </div>
-            <div
-              className="relative overflow-auto border rounded-lg border-secondary"
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-              }}
-            >
-              <Table stickyHeader striped>
-                <Table.Thead>
-                  <Table.Tr className="bg-[#dfebff]">
-                    <Table.Th className="acerSwift:max-macair133:!text-b3">
-                      Section
-                    </Table.Th>
-                    <Table.Th>
-                      <div
-                        className="flex items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
-                        onClick={() => onClickSort("studentId")}
-                      >
-                        <p>Student ID</p>
-                        {sort.studentId === null ? (
-                          <IconNotSort className="size-4" />
-                        ) : sort.studentId ? (
-                          <IconSortAsc className="size-5" />
-                        ) : (
-                          <IconSortDes className="size-5" />
-                        )}
-                      </div>
-                    </Table.Th>
-                    <Table.Th className="acerSwift:max-macair133:!text-b3">
-                      Name
-                    </Table.Th>
-                    <Table.Th>
-                      <div
-                        className="flex items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
-                        onClick={() => onClickSort("score")}
-                      >
-                        <p>Score</p>
-                        {sort.score === null ? (
-                          <IconNotSort className="size-4" />
-                        ) : sort.score ? (
-                          <IconSortAsc className="size-5" />
-                        ) : (
-                          <IconSortDes className="size-5" />
-                        )}
-                      </div>
-                    </Table.Th>
-                    {questions?.map((item, index) => (
-                      <Table.Th key={index}>
+                <Table stickyHeader striped>
+                  <Table.Thead>
+                    <Table.Tr className="bg-[#dfebff]">
+                      <Table.Th className="acerSwift:max-macair133:!text-b3">
+                        Section
+                      </Table.Th>
+                      <Table.Th>
                         <div
-                          className="flex justify-end items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3  pr-6"
-                          onClick={() => onClickSort(item.name)}
+                          className="flex items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
+                          onClick={() => onClickSort("studentId")}
                         >
-                          <p>{item.name}</p>
-                          {(sort as any)[item.name] === null ? (
+                          <p>Student ID</p>
+                          {sort.studentId === null ? (
                             <IconNotSort className="size-4" />
-                          ) : (sort as any)[item.name] ? (
+                          ) : sort.studentId ? (
                             <IconSortAsc className="size-5" />
                           ) : (
                             <IconSortDes className="size-5" />
                           )}
                         </div>
                       </Table.Th>
-                    ))}
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody className="text-default">
-                  {allStudent
-                    ?.filter((item) =>
-                      parseInt(filter)
-                        ? item.sectionNo.includes(filter) ||
-                          item.student.studentId?.toString().includes(filter)
-                        : getUserName(item.student, 3)?.includes(filter)
-                    )
-                    .map((item) => {
-                      const studentId = item.student.studentId!;
-                      if (
-                        item.sumScore == maxScore &&
-                        !studentMaxMin.max.includes(studentId)
-                      ) {
-                        setStudentMaxMin((prev) => ({
-                          ...prev,
-                          max: [...prev.max, studentId],
-                        }));
-                      } else if (
-                        item.sumScore == minScore &&
-                        !studentMaxMin.min.includes(studentId)
-                      ) {
-                        setStudentMaxMin((prev) => ({
-                          ...prev,
-                          min: [...prev.min, studentId],
-                        }));
-                      }
-                      return (
-                        <Table.Tr
-                          key={studentId}
-                          ref={(el) => studentRefs.current.set(studentId, el)}
-                          className="hover:bg-[#F3F3F3] text-b3 acerSwift:max-macair133:!text-b4 font-normal py-[14px] w-full"
+                      <Table.Th className="acerSwift:max-macair133:!text-b3">
+                        Name
+                      </Table.Th>
+                      <Table.Th>
+                        <div
+                          className="flex items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
+                          onClick={() => onClickSort("score")}
                         >
-                          <Table.Td>{item.sectionNo}</Table.Td>
-                          <Table.Td>{studentId}</Table.Td>
-                          <Table.Td>{getUserName(item.student, 3)}</Table.Td>
-                          <Table.Td className="w-[5%]">
-                            <div className="flex gap-3 justify-end items-center">
-                              <p>{item.sumScore?.toFixed(2)}</p>
-                            { activeTerm && <div
-                                className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
-                                onClick={() => {
-                                  setEditScore({
-                                    section: parseInt(item.sectionNo),
-                                    student: item.student,
-                                    questions: item.scores || [],
-                                  });
-                                  setOpenEditScore(true);
-                                }}
-                              >
-                                <Icon
-                                  IconComponent={IconEdit}
-                                  className="size-4 cursor-pointer text-default"
-                                />
-                              </div>}
-                            </div>
-                          </Table.Td>
-                          {questions?.map((ques, index) => (
-                            <Table.Td key={index} className="text-end pr-9">
-                              {item[ques.name] == undefined ||
-                              item[ques.name] < 0
-                                ? "-"
-                                : item[ques.name].toFixed(2)}
+                          <p>Score</p>
+                          {sort.score === null ? (
+                            <IconNotSort className="size-4" />
+                          ) : sort.score ? (
+                            <IconSortAsc className="size-5" />
+                          ) : (
+                            <IconSortDes className="size-5" />
+                          )}
+                        </div>
+                      </Table.Th>
+                      {questions?.map((item, index) => (
+                        <Table.Th key={index}>
+                          <div
+                            className="flex justify-end items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3  pr-6"
+                            onClick={() => onClickSort(item.name)}
+                          >
+                            <p>{item.name}</p>
+                            {(sort as any)[item.name] === null ? (
+                              <IconNotSort className="size-4" />
+                            ) : (sort as any)[item.name] ? (
+                              <IconSortAsc className="size-5" />
+                            ) : (
+                              <IconSortDes className="size-5" />
+                            )}
+                          </div>
+                        </Table.Th>
+                      ))}
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody className="text-default">
+                    {allStudent
+                      ?.filter((item) =>
+                        parseInt(filter)
+                          ? item.sectionNo.includes(filter) ||
+                            item.student.studentId?.toString().includes(filter)
+                          : getUserName(item.student, 3)?.includes(filter)
+                      )
+                      .map((item) => {
+                        const studentId = item.student.studentId!;
+                        if (
+                          item.sumScore == maxScore &&
+                          !studentMaxMin.max.includes(studentId)
+                        ) {
+                          setStudentMaxMin((prev) => ({
+                            ...prev,
+                            max: [...prev.max, studentId],
+                          }));
+                        } else if (
+                          item.sumScore == minScore &&
+                          !studentMaxMin.min.includes(studentId)
+                        ) {
+                          setStudentMaxMin((prev) => ({
+                            ...prev,
+                            min: [...prev.min, studentId],
+                          }));
+                        }
+                        return (
+                          <Table.Tr
+                            key={studentId}
+                            ref={(el) => studentRefs.current.set(studentId, el)}
+                            className="hover:bg-[#F3F3F3] text-b3 acerSwift:max-macair133:!text-b4 font-normal py-[14px] w-full"
+                          >
+                            <Table.Td>{item.sectionNo}</Table.Td>
+                            <Table.Td>{studentId}</Table.Td>
+                            <Table.Td>{getUserName(item.student, 3)}</Table.Td>
+                            <Table.Td className="w-[5%]">
+                              <div className="flex gap-3 justify-end items-center">
+                                <p>{item.sumScore?.toFixed(2)}</p>
+                                {activeTerm && (
+                                  <div
+                                    className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
+                                    onClick={() => {
+                                      setEditScore({
+                                        section: parseInt(item.sectionNo),
+                                        student: item.student,
+                                        questions: item.scores || [],
+                                      });
+                                      setOpenEditScore(true);
+                                    }}
+                                  >
+                                    <Icon
+                                      IconComponent={IconEdit}
+                                      className="size-4 cursor-pointer text-default"
+                                    />
+                                  </div>
+                                )}
+                              </div>
                             </Table.Td>
-                          ))}
-                        </Table.Tr>
-                      );
-                    })}
-                </Table.Tbody>
-              </Table>
-            </div>
+                            {questions?.map((ques, index) => (
+                              <Table.Td key={index} className="text-end pr-9">
+                                {item[ques.name] == undefined ||
+                                item[ques.name] < 0
+                                  ? "-"
+                                  : item[ques.name].toFixed(2)}
+                              </Table.Td>
+                            ))}
+                          </Table.Tr>
+                        );
+                      })}
+                  </Table.Tbody>
+                </Table>
+              </div>
+            ) : (
+              <div className="flex flex-col rounded-md gap-2 border py-3 px-4">
+                {" "}
+                {allStudent
+                  ?.filter((item) =>
+                    parseInt(filter)
+                      ? item.sectionNo.includes(filter) ||
+                        item.student.studentId?.toString().includes(filter)
+                      : getUserName(item.student, 3)?.includes(filter)
+                  )
+                  .map((item) => {
+                    const studentId = item.student.studentId!;
+                    if (
+                      item.sumScore == maxScore &&
+                      !studentMaxMin.max.includes(studentId)
+                    ) {
+                      setStudentMaxMin((prev) => ({
+                        ...prev,
+                        max: [...prev.max, studentId],
+                      }));
+                    } else if (
+                      item.sumScore == minScore &&
+                      !studentMaxMin.min.includes(studentId)
+                    ) {
+                      setStudentMaxMin((prev) => ({
+                        ...prev,
+                        min: [...prev.min, studentId],
+                      }));
+                    }
+                    return (
+                      <div
+                        key={studentId}
+                        ref={(el) => studentRefs.current.set(studentId, el)}
+                        className=" flex flex-col border-b text-b3 acerSwift:max-macair133:!text-b4 font-normal pb-4 pt-2 w-full"
+                      >
+                        <div className="grid grid-cols-2 w-full items-center">
+                          <div className="flex gap-[2px] flex-col">
+                            <div>{studentId}</div>
+                            <div>{getUserName(item.student, 3)}</div>{" "}
+                            <div className="  text-default">
+                              Section: {item.sectionNo}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="flex gap-3 w-full text-end justify-end  items-center">
+                              <p>{item.sumScore?.toFixed(2)}</p>
+                              {activeTerm && (
+                                <div
+                                  className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
+                                  onClick={() => {
+                                    setEditScore({
+                                      section: parseInt(item.sectionNo),
+                                      student: item.student,
+                                      questions: item.scores || [],
+                                    });
+                                    setOpenEditScore(true);
+                                  }}
+                                >
+                                  <Icon
+                                    IconComponent={IconEdit}
+                                    className="size-4 cursor-pointer text-default"
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            )}
           </>
         )}
       </div>
