@@ -23,7 +23,12 @@ import notFoundImage from "@/assets/image/notFound.jpg";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import MainPopup from "../components/Popup/MainPopup";
 import ModalEditCourse from "../components/Modal/CourseManage/ModalEditCourse";
-import { NOTI_TYPE, ROLE, TQF_STATUS } from "@/helpers/constants/enum";
+import {
+  COURSE_TYPE,
+  NOTI_TYPE,
+  ROLE,
+  TQF_STATUS,
+} from "@/helpers/constants/enum";
 import { IModelCourse } from "@/models/ModelCourse";
 import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
@@ -33,6 +38,8 @@ import ModalUploadScore from "../components/Modal/Score/ModalUploadScore";
 import { IModelSection } from "@/models/ModelCourse";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 import { isMobile } from "@/helpers/functions/function";
+import { setSelectTqf3Topic } from "@/store/tqf3";
+import { setSelectTqf5Topic } from "@/store/tqf5";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -144,6 +151,13 @@ export default function Dashboard() {
     const pathname = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.EVALUATION}`;
     navigate({
       pathname,
+      search: "?" + params.toString(),
+    });
+  };
+
+  const goToTqfPage = (courseNo: string, pathname: string) => {
+    navigate({
+      pathname: `${ROUTE_PATH.COURSE}/${courseNo}/${pathname}`,
       search: "?" + params.toString(),
     });
   };
@@ -332,73 +346,75 @@ export default function Dashboard() {
         />
       )}
       <div className="flex flex-col h-full w-full overflow-hidden">
-       { !isMobile && <div className="flex flex-row px-6 pt-3 items-center justify-between">
-          <div className="flex flex-col ">
-            <p className="text-secondary text-h2 acerSwift:max-macair133:text-[17px] font-semibold ">
-              Hi there, {user.firstNameEN}
-            </p>
-            {courseList.search.length ? (
-              <p className="text-[#575757] text-b2 acerSwift:max-macair133:text-b3">
-                {courseList.total} result{courseList.total > 1 ? "s " : " "}{" "}
-                found
+        {!isMobile && (
+          <div className="flex flex-row px-6 pt-3 items-center justify-between">
+            <div className="flex flex-col ">
+              <p className="text-secondary text-h2 acerSwift:max-macair133:text-[17px] font-semibold ">
+                Hi there, {user.firstNameEN}
               </p>
-            ) : (
-              <p className="text-[#575757] text-b2 acerSwift:max-macair133:text-b3">
-                In semester{" "}
-                <span className="text-[#1f69f3] font-semibold">
-                  {" "}
-                  {term?.semester ?? ""}/{term?.year ?? ""}!
-                </span>{" "}
-                {courseList.courses.length === 0 ? (
-                  <span>Your course card is currently empty</span>
-                ) : (
-                  <span>
-                    You have{" "}
-                    <span className="text-secondary font-semibold">
-                      {courseList.total} Course
-                      {courseList.total > 1 ? "s " : " "}
+              {courseList.search.length ? (
+                <p className="text-[#575757] text-b2 acerSwift:max-macair133:text-b3">
+                  {courseList.total} result{courseList.total > 1 ? "s " : " "}{" "}
+                  found
+                </p>
+              ) : (
+                <p className="text-[#575757] text-b2 acerSwift:max-macair133:text-b3">
+                  In semester{" "}
+                  <span className="text-[#1f69f3] font-semibold">
+                    {" "}
+                    {term?.semester ?? ""}/{term?.year ?? ""}!
+                  </span>{" "}
+                  {courseList.courses.length === 0 ? (
+                    <span>Your course card is currently empty</span>
+                  ) : (
+                    <span>
+                      You have{" "}
+                      <span className="text-secondary font-semibold">
+                        {courseList.total} Course
+                        {courseList.total > 1 ? "s " : " "}
+                      </span>
+                      on your plate.
                     </span>
-                    on your plate.
-                  </span>
+                  )}
+                </p>
+              )}
+            </div>
+            {term?.isActive && !!courseList.courses.length && (
+              <div className="flex gap-3 flex-wrap">
+                {user.role != ROLE.TA && (
+                  <Button
+                    variant="outline"
+                    className="text-center px-4 acerSwift:max-macair133:!text-b5"
+                    leftSection={
+                      <Icon
+                        IconComponent={IconAdd}
+                        className="acerSwift:max-macair133:size-3.5"
+                      />
+                    }
+                    onClick={() => setOpenAddModal(true)}
+                  >
+                    Add Course
+                  </Button>
                 )}
-              </p>
-            )}
-          </div>
-          {term?.isActive && !!courseList.courses.length  && (
-            <div className="flex gap-3 flex-wrap">
-              {user.role != ROLE.TA && (
                 <Button
-                  variant="outline"
                   className="text-center px-4 acerSwift:max-macair133:!text-b5"
                   leftSection={
                     <Icon
-                      IconComponent={IconAdd}
-                      className="acerSwift:max-macair133:size-3.5"
+                      IconComponent={IconUpload}
+                      className="size-4 acerSwift:max-macair133:size-3.5"
                     />
                   }
-                  onClick={() => setOpenAddModal(true)}
+                  onClick={() => {
+                    setUploadCourse(undefined);
+                    setOpenModalSelectCourse(true);
+                  }}
                 >
-                  Add Course
+                  Upload score
                 </Button>
-              )}
-              <Button
-                className="text-center px-4 acerSwift:max-macair133:!text-b5"
-                leftSection={
-                  <Icon
-                    IconComponent={IconUpload}
-                    className="size-4 acerSwift:max-macair133:size-3.5"
-                  />
-                }
-                onClick={() => {
-                  setUploadCourse(undefined);
-                  setOpenModalSelectCourse(true);
-                }}
-              >
-                Upload score
-              </Button>
-            </div>
-          )}
-        </div>}
+              </div>
+            )}
+          </div>
+        )}
         <div className="flex h-full w-full overflow-hidden">
           {loading ? (
             <Loading />
@@ -474,7 +490,8 @@ export default function Dashboard() {
                         {item.sections.find(
                           (sec) => (sec.instructor as IModelUser).id == user.id
                         ) &&
-                          term?.isActive && !isMobile && (
+                          term?.isActive &&
+                          !isMobile && (
                             <div onClick={(event) => event.stopPropagation()}>
                               <Menu
                                 trigger="click"
@@ -545,16 +562,35 @@ export default function Dashboard() {
                           {item.sections.length} Section
                           {item.sections.length > 1 ? "s" : ""}
                         </p>
-                        <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">
+                        <div
+                          className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center"
+                          onClick={(event) => event.stopPropagation()}
+                        >
                           <p
                             className="tag-tqf rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
                             tqf-status={statusTqf3}
+                            onClick={() => {
+                              if (item.type == COURSE_TYPE.SEL_TOPIC.en) {
+                                dispatch(
+                                  setSelectTqf3Topic(item.sections[0].topic)
+                                );
+                              }
+                              goToTqfPage(item.courseNo, ROUTE_PATH.TQF3);
+                            }}
                           >
                             TQF 3
                           </p>
                           <p
                             className="tag-tqf rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
                             tqf-status={statusTqf5}
+                            onClick={() => {
+                              if (item.type == COURSE_TYPE.SEL_TOPIC.en) {
+                                dispatch(
+                                  setSelectTqf5Topic(item.sections[0].topic)
+                                );
+                              }
+                              goToTqfPage(item.courseNo, ROUTE_PATH.TQF5);
+                            }}
                           >
                             TQF 5
                           </p>
@@ -581,7 +617,9 @@ export default function Dashboard() {
                     <>
                       It looks like you haven't added any courses yet.
                       <br />
-                     {!isMobile && <>Click 'Add Course' button below to get started!</>}
+                      {!isMobile && (
+                        <>Click 'Add Course' button below to get started!</>
+                      )}
                     </>
                   )}
                 </p>
@@ -590,7 +628,6 @@ export default function Dashboard() {
                   <Button
                     className="text-center px-4"
                     onClick={() => setOpenAddModal(true)}
-                    
                   >
                     <div className="flex gap-2">
                       <Icon IconComponent={IconAdd} />
@@ -599,9 +636,11 @@ export default function Dashboard() {
                   </Button>
                 )}
               </div>
-             { !isMobile && <div className="h-full  w-[24vw] justify-center flex flex-col">
-                <img src={notFoundImage} alt="notFound"></img>
-              </div>}
+              {!isMobile && (
+                <div className="h-full  w-[24vw] justify-center flex flex-col">
+                  <img src={notFoundImage} alt="notFound"></img>
+                </div>
+              )}
             </div>
           )}
         </div>

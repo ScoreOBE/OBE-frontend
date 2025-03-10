@@ -411,8 +411,10 @@ export default function TQF3() {
           return;
         }
         dispatch(setLoadingOverlay(true));
-        if (tqf3Part == "part4") payload.tqf5 = tqf5?.id;
-        else if (tqf3Part == "part6" && !tqf3.coursePLO?.length)
+        if (tqf3Part == "part4") {
+          payload.tqf5 = tqf5?.id;
+          if (tqf3Original?.part6) payload.done = true;
+        } else if (tqf3Part == "part6" && !tqf3.coursePLO?.length)
           payload.done = true;
         if (confirmToEditData) payload.inProgress = true;
         const res = await saveTQF3(tqf3Part, payload);
