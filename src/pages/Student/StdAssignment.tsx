@@ -16,7 +16,6 @@ import { isMobile } from "@/helpers/functions/function";
 import IconChevron from "@/assets/icons/chevronRight.svg?react";
 import Icon from "@/components/Icon";
 
-
 export default function StdAssignment() {
   const { courseNo } = useParams();
   const path = useLocation().pathname;
@@ -147,47 +146,76 @@ export default function StdAssignment() {
                   return (
                     <div
                       key={index}
-                      className={`border flex flex-col hover:bg-bgTableHeader justify-between rounded-md p-3 `}
+                      className={`border flex flex-col hover:bg-slate-50 justify-between rounded-md p-3 `}
                       onClick={() => goToAssignment(`${assignment.name}`)}
                     >
                       <div className="flex items-center justify-between">
-                      <div className="flex flex-col">
-                        <div className=" font-semibold text-default text-[14px]">{assignment.name}</div>
+                        <div className="flex flex-col">
+                          <div className=" font-semibold text-default text-[14px]">
+                            {assignment.name}
+                          </div>
 
-                        <div className="font-semibold text-secondary text-[14px] ">
-                          {course?.scores
-                            .find(
-                              ({ assignmentName }) =>
-                                assignmentName == assignment.name
-                            )
-                            ?.questions.filter(({ score }) => score >= 0)
-                            .reduce((a, { score }) => a + score, 0)
-                            .toFixed(2)}{" "}
-                          /{" "}
-                          {assignment.questions
-                            .reduce((a, { fullScore }) => a + fullScore, 0)
-                            .toFixed(2)}
+                          <div className="font-semibold text-secondary text-[14px] ">
+                            {course?.scores
+                              .find(
+                                ({ assignmentName }) =>
+                                  assignmentName == assignment.name
+                              )
+                              ?.questions.filter(({ score }) => score >= 0)
+                              .reduce((a, { score }) => a + score, 0)
+                              .toFixed(2)}{" "}
+                            /{" "}
+                            {assignment.questions
+                              .reduce((a, { fullScore }) => a + fullScore, 0)
+                              .toFixed(2)}
+                          </div>
                         </div>
+                        <Icon IconComponent={IconChevron} />
                       </div>
-                      <Icon IconComponent={IconChevron} />
-                       </div>
-                      <div className="mt-2 text-[12px] flex flex-col ">
+                      <div className="mt-2 text-[12px] border-t flex flex-col ">
                         {" "}
-                        <div className="grid grid-cols-2 p-2 bg-slate-100 rounded-t-md">
-                        <div className="text-start">Mean: {stat.mean.toFixed(2)}</div>
-                        <div className="text-start">SD: {stat.sd.toFixed(2)}</div>
+                        <div className="grid grid-cols-2 p-2 mt-1  rounded-t-md">
+                          <div className="flex flex-col">
+                            <div className="text-start">Mean</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.mean.toFixed(2)}
+                            </p>
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="text-start">SD</div>
+                            <p className="text-[13px] font-semibold">
+                              {" "}
+                              {stat.sd.toFixed(2)}
+                            </p>
+                          </div>
                         </div>
-                        <div className="grid grid-cols-2 p-2 bg-slate-100 ">
-                        <div className="text-start">Median:{stat.median.toFixed(2)}</div>
-                        <div className="text-start">
-                          Max:{stat.maxScore.toFixed(2)}
+                        <div className="grid grid-cols-2 p-2  ">
+                          <div className="flex flex-col">
+                            <div className="text-start">Median</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.median.toFixed(2)}
+                            </p>
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="text-start">Max</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.maxScore.toFixed(2)}
+                            </p>
+                          </div>
                         </div>
-                        </div>
-                        <div className="grid grid-cols-2 p-2 bg-slate-100 rounded-b-md">
-                        <div className="text-start">Q3: {stat.q3.toFixed(2)}</div>
-                        <div className="text-start ">
-                          Q1: {stat.q1 ? stat.q1.toFixed(2) : "-"}
-                        </div>
+                        <div className="grid grid-cols-2 p-2  rounded-b-md">
+                          <div className="flex flex-col">
+                            <div className="text-start">Q3</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.q3.toFixed(2)}
+                            </p>
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="text-start ">Q1</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.q1 ? stat.q1.toFixed(2) : "-"}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>

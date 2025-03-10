@@ -25,6 +25,8 @@
   .mantine-Table-td {
     animation: blink 1s ease-in-out 3;
   }
+  animation: blink 1s ease-in-out 3;
+
 }
 
 .error-text {

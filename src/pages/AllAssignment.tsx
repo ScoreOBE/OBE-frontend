@@ -272,23 +272,25 @@ export default function AllAssignment() {
   const uploadButton = () => {
     return (
       <>
-      {!isMobile && <Button
-        className="text-center px-4 acerSwift:max-macair133:!text-b5"
-       
-        leftSection={
-          <Icon
-            IconComponent={IconUpload}
-            className="size-4 acerSwift:max-macair133:size-3.5 acerSwift:max-macair133:stroke-2"
-          />
-        }
-        onClick={() =>
-          course?.sections.find(({ students }) => students?.length)
-            ? setOpenModalUploadScore(true)
-            : setOpenModalUploadStudentList(true)
-        }
-      >
-        Upload score
-      </Button>}</>
+        {!isMobile && (
+          <Button
+            className="text-center px-4 acerSwift:max-macair133:!text-b5"
+            leftSection={
+              <Icon
+                IconComponent={IconUpload}
+                className="size-4 acerSwift:max-macair133:size-3.5 acerSwift:max-macair133:stroke-2"
+              />
+            }
+            onClick={() =>
+              course?.sections.find(({ students }) => students?.length)
+                ? setOpenModalUploadScore(true)
+                : setOpenModalUploadStudentList(true)
+            }
+          >
+            Upload score
+          </Button>
+        )}
+      </>
     );
   };
 
@@ -1150,7 +1152,7 @@ export default function AllAssignment() {
                     return (
                       <div
                         key={index}
-                        className={`border flex flex-col hover:bg-bgTableHeader justify-between rounded-md p-3 `}
+                        className={`border flex flex-col hover:bg-slate-50 justify-between rounded-md p-3 `}
                         onClick={() => goToAssignment(`${assignment.name}`)}
                       >
                         <div className="flex items-center justify-between">
@@ -1168,7 +1170,7 @@ export default function AllAssignment() {
                           </div>
                           <Icon IconComponent={IconChevron} />
                         </div>
-                        <div className="mt-3 bg-slate-100 rounded-md p-4 text-[12px] grid grid-cols-2  ">
+                        <div className="mt-3 border-t rounded-md p-4 text-[12px] grid grid-cols-2  ">
                           <div>
                             Mean{" "}
                             {((totalScore || 0) / (totalStudent || 1)).toFixed(
@@ -1178,15 +1180,15 @@ export default function AllAssignment() {
                           <div>Student(s): {totalStudent || 0}</div>
                         </div>
                         {activeTerm && (
-                          <div className="text-center  !w-full justify-items-center">
-                           <Button
-                                                          variant="filled"
-                                                          classNames={{ label: "!font-semibold " }}
-                                                          className={`rounded-full mt-3 ${
-                                                            assignment.isPublish
-                                                              ? " bg-orange-600 hover:bg-orange-700"
-                                                              : " bg-teal-500 hover:bg-teal-600"
-                              } items-center justify-center !h-10 flex flex-1 !w-full cursor-pointer`}
+                          <div className="text-start  !w-full justify-items-center">
+                            <Button
+                              variant='light'
+                              classNames={{ label: "!font-semibold " }}
+                              className={`rounded-full mt-3 ${
+                                assignment.isPublish
+                                  ? " bg-orange-600/20 text-orange-600 hover:text-orange-600 hover:bg-orange-700/20"
+                                  : " bg-teal-500/20 text-teal-600 hover:text-teal-600 hover:bg-teal-600/20"
+                              } items-center justify-center !-mt-1 !h-10 flex !rounded-xl flex-1 !w-full cursor-pointer`}
                               onClick={(event) => {
                                 event.stopPropagation();
                                 form.setFieldValue(

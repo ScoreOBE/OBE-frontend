@@ -567,7 +567,7 @@ export default function OneAssignment() {
                 </Table>
               </div>
             ) : (
-              <div className="flex flex-col rounded-md gap-2 border py-3 px-4">
+              <div className="flex flex-col rounded-md  border py-3 ">
                 {" "}
                 {allStudent
                   ?.filter((item) =>
@@ -599,7 +599,7 @@ export default function OneAssignment() {
                       <div
                         key={studentId}
                         ref={(el) => studentRefs.current.set(studentId, el)}
-                        className=" flex flex-col border-b text-b3 acerSwift:max-macair133:!text-b4 font-normal pb-4 pt-2 w-full"
+                        className=" flex flex-col border-b text-[12px] font-normal p-4 w-full"
                       >
                         <div className="grid grid-cols-2 w-full items-center">
                           <div className="flex gap-[2px] flex-col">
