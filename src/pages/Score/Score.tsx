@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Modal, Table, Tabs } from "@mantine/core";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useParams, useSearchParams } from "react-router-dom";
-import { getSectionNo } from "@/helpers/functions/function";
+import { getSectionNo, isMobile } from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
@@ -115,8 +115,8 @@ export default function Overall() {
         onClose={() => setOpenModalQuestionChart(false)}
         question={selectQuestion}
       />
-      <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-3 overflow-hidden">
-        <Breadcrumbs items={items} />
+      <div className="bg-white iphone:max-sm:overflow-y-auto flex flex-col h-full w-full sm:px-6 iphone:max-sm:p-3 py-5 gap-3 overflow-hidden">
+        {!isMobile && <Breadcrumbs items={items} />}
         {loading ? (
           <Loading />
         ) : (section?.instructor as IModelUser)?.id === user.id ||
@@ -124,190 +124,353 @@ export default function Overall() {
             ?.map(({ id }) => id)
             .includes(user.id) ? (
           <>
-            <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
-              <div className="flex justify-between w-full px-2 items-center">
-                <div className="flex flex-col py-1">
-                  <div className="flex gap-1">
-                    <p className="text-[#3f4474] font-semibold text-b1 acerSwift:max-macair133:!size-b2">
-                      {name}
+            {!isMobile ? (
+              <div className="flex flex-col border-b-2 border-nodata pt-2 pb-3 items-start gap-4 text-start">
+                <div className="flex justify-between w-full px-2 items-center">
+                  <div className="flex flex-col py-1">
+                    <div className="flex gap-1">
+                      <p className="text-[#3f4474] font-semibold text-b1 acerSwift:max-macair133:!size-b2">
+                        {name}
+                      </p>
+                      <div
+                        className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20 cursor-pointer"
+                        onClick={() => setOpenModalChart(true)}
+                      >
+                        <Icon
+                          IconComponent={IconChart}
+                          className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474]"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-secondary text-h1 acerSwift:max-macair133:!text-h2 font-semibold">
+                      {fullScore?.toFixed(2)}{" "}
+                      <span className="text-b1 acerSwift:max-macair133:!size-b2 ">
+                        pts.
+                      </span>
                     </p>
-                    <div
-                      className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20 cursor-pointer"
-                      onClick={() => setOpenModalChart(true)}
-                    >
-                      <Icon
-                        IconComponent={IconChart}
-                        className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474]"
-                      />
+                  </div>
+                  <p className="text-[#3f4474] mb-1 font-semibold sm:max-macair133:text-b2 text-b1 acerSwift:max-macair133:!size-b2">
+                    {totalStudent} Students
+                  </p>
+                </div>
+                <div className="flex px-10 flex-row justify-between w-full">
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Mean
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {mean.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      SD
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {sd.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Median
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {median.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col px-1.5">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Max
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {maxScore.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col px-1.5">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Min
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {minScore.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Q3
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {q3.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
+                      Q1
+                    </p>
+                    <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
+                      {q1 ? q1.toFixed(2) : "-"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className=" flex flex-col text-start mt-1 gap-2">
+                <div className="flex items-center  justify-between">
+                  <div className="flex flex-col gap-[2px]">
+                    <div className=" font-semibold text-default text-[14px]">
+                      {name}
+                    </div>
+                    <div className="font-semibold text-secondary text-[14px] ">
+                      {" "}
+                      {fullScore?.toFixed(2)} pts.
                     </div>
                   </div>
-                  <p className="text-secondary text-h1 acerSwift:max-macair133:!text-h2 font-semibold">
-                    {fullScore?.toFixed(2)}{" "}
-                    <span className="text-b1 acerSwift:max-macair133:!size-b2 ">
-                      pts.
-                    </span>
+                  <p className="text-[#3f4474] mb-1 font-semibold  text-b3">
+                    {totalStudent} Students
                   </p>
                 </div>
-                <p className="text-[#3f4474] mb-1 font-semibold sm:max-macair133:text-b2 text-b1 acerSwift:max-macair133:!size-b2">
-                  {totalStudent} Students
-                </p>
-              </div>
-              <div className="flex px-10 flex-row justify-between w-full">
-                <div className="flex flex-col">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Mean
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {mean.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    SD
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {sd.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Median
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {median.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col px-1.5">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Max
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {maxScore.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col px-1.5">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Min
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {minScore.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Q3
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {q3.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
-                    Q1
-                  </p>
-                  <p className="font-bold text-[24px] sm:max-macair133:text-h1 text-default">
-                    {q1 ? q1.toFixed(2) : "-"}
-                  </p>
+                <div className=" grid grid-cols-2 gap-4 text-[14px] p-3 text-start  border-b border-t  rounded-md">
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-[#777777]">Mean</p>
+                    <p className="font-bold sm:max-macair133:text-h1 text-default">
+                      {mean.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-[#777777]">SD</p>
+                    <p className="font-bold sm:max-macair133:text-h1 text-default">
+                      {sd.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-[#777777]">Median</p>
+                    <p className="font-bold sm:max-macair133:text-h1 text-default">
+                      {median.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="flex gap-1">
+                      <p className="font-semibold text-[#777777]">Max</p>
+                    </div>
+
+                    <p className="font-bold sm:max-macair133:text-h1 text-default">
+                      {maxScore.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col ">
+                    <div className="flex gap-1">
+                      <p className="font-semibold text-[#777777]">Min</p>
+                    </div>
+
+                    <p className="font-bold sm:max-macair133:text-h1 text-default">
+                      {minScore.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-[#777777]">Q3</p>
+                    <p className="font-bold sm:max-macair133:text-[20px] text-default">
+                      {q3.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-[#777777]">Q1</p>
+                    <p className="font-bold sm:max-macair133:text-[20px] text-default">
+                      {q1 ? q1.toFixed(2) : "-"}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              className="relative overflow-auto mt-2 border rounded-lg border-secondary"
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-              }}
-            >
-              <Table className="sticky top-0 z-[1]">
-                <Table.Thead>
-                  <Table.Tr className="bg-[#dfebff]">
-                    <Table.Th className="w-[12%] acerSwift:max-macair133:!text-b3">
-                      Question
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[50px] w-[14%] acerSwift:max-macair133:!text-b3">
-                      Full Score
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
-                      Mean
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
-                      SD
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
-                      Median
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
-                      Max
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
-                      Q3
-                    </Table.Th>
-                    <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
-                      Q1
-                    </Table.Th>
-                    {/* <Table.Th className="text-end pr-[70px] w-[8%]"></Table.Th> */}
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody className="text-default">
-                  {assignment?.questions.map((ques, index) => {
-                    const dataScores =
-                      section?.students
-                        ?.flatMap(({ scores }) =>
-                          scores
-                            .filter((item) => item.assignmentName === name)
-                            .flatMap((item) =>
-                              item.questions.filter((q) => q.name === ques.name)
-                            )
-                            .map((question) => question.score)
-                            .filter((e) => e >= 0)
-                        )
-                        .sort((a, b) => a - b) || [];
-                    const stat = calStat(dataScores, scores?.length);
-                    return (
-                      <Table.Tr
-                        key={index}
-                        className={`hover:bg-[#F3F3F3] text-[13px] font-normal py-[14px] w-full cursor-pointer ${
-                          index % 2 === 0 && "bg-[#F8F9FA]"
-                        }`}
-                        onClick={() => {
-                          setSelectQuestion({
-                            assignment,
-                            ...ques,
-                            scores,
-                            students: section?.students,
-                          });
-                          setOpenModalQuestionChart(true);
-                        }}
-                      >
-                        <Table.Td className="text-start w-[12%] acerSwift:max-macair133:!text-b4">
-                          {ques.name}
-                        </Table.Td>
-                        <Table.Td className="text-end pr-[50px] w-[14%] acerSwift:max-macair133:!text-b4">
-                          {ques.fullScore}
-                        </Table.Td>
-                        <Table.Td className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b4">
-                          {stat.mean.toFixed(2)}
-                        </Table.Td>
-                        <Table.Td className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b4">
-                          {stat.sd.toFixed(2)}
-                        </Table.Td>
-                        <Table.Td className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b4">
-                          {stat.median.toFixed(2)}
-                        </Table.Td>
-                        <Table.Td className="text-end pr-[70px]  w-[11%] acerSwift:max-macair133:!text-b4">
-                          {stat.maxScore.toFixed(2)}
-                        </Table.Td>
-                        <Table.Td className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b4">
-                          {stat.q3.toFixed(2)}
-                        </Table.Td>
-                        <Table.Td className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b4">
-                          {stat.q1 ? stat.q1.toFixed(2) : "-"}
-                        </Table.Td>
-                      </Table.Tr>
-                    );
-                  })}
-                </Table.Tbody>
-              </Table>
-            </div>
+            )}
+            {!isMobile ? (
+              <div
+                className="relative overflow-auto mt-2 border rounded-lg border-secondary"
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
+                }}
+              >
+                <Table className="sticky top-0 z-[1]">
+                  <Table.Thead>
+                    <Table.Tr className="bg-[#dfebff]">
+                      <Table.Th className="w-[12%] acerSwift:max-macair133:!text-b3">
+                        Question
+                      </Table.Th>
+                      <Table.Th className="text-end pr-[50px] w-[14%] acerSwift:max-macair133:!text-b3">
+                        Full Score
+                      </Table.Th>
+                      <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
+                        Mean
+                      </Table.Th>
+                      <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
+                        SD
+                      </Table.Th>
+                      <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
+                        Median
+                      </Table.Th>
+                      <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
+                        Max
+                      </Table.Th>
+                      <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
+                        Q3
+                      </Table.Th>
+                      <Table.Th className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b3">
+                        Q1
+                      </Table.Th>
+                      {/* <Table.Th className="text-end pr-[70px] w-[8%]"></Table.Th> */}
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody className="text-default">
+                    {assignment?.questions.map((ques, index) => {
+                      const dataScores =
+                        section?.students
+                          ?.flatMap(({ scores }) =>
+                            scores
+                              .filter((item) => item.assignmentName === name)
+                              .flatMap((item) =>
+                                item.questions.filter(
+                                  (q) => q.name === ques.name
+                                )
+                              )
+                              .map((question) => question.score)
+                              .filter((e) => e >= 0)
+                          )
+                          .sort((a, b) => a - b) || [];
+                      const stat = calStat(dataScores, scores?.length);
+                      return (
+                        <Table.Tr
+                          key={index}
+                          className={`hover:bg-[#F3F3F3] text-[13px] font-normal py-[14px] w-full cursor-pointer ${
+                            index % 2 === 0 && "bg-[#F8F9FA]"
+                          }`}
+                          onClick={() => {
+                            setSelectQuestion({
+                              assignment,
+                              ...ques,
+                              scores,
+                              students: section?.students,
+                            });
+                            setOpenModalQuestionChart(true);
+                          }}
+                        >
+                          <Table.Td className="text-start w-[12%] acerSwift:max-macair133:!text-b4">
+                            {ques.name}
+                          </Table.Td>
+                          <Table.Td className="text-end pr-[50px] w-[14%] acerSwift:max-macair133:!text-b4">
+                            {ques.fullScore}
+                          </Table.Td>
+                          <Table.Td className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b4">
+                            {stat.mean.toFixed(2)}
+                          </Table.Td>
+                          <Table.Td className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b4">
+                            {stat.sd.toFixed(2)}
+                          </Table.Td>
+                          <Table.Td className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b4">
+                            {stat.median.toFixed(2)}
+                          </Table.Td>
+                          <Table.Td className="text-end pr-[70px]  w-[11%] acerSwift:max-macair133:!text-b4">
+                            {stat.maxScore.toFixed(2)}
+                          </Table.Td>
+                          <Table.Td className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b4">
+                            {stat.q3.toFixed(2)}
+                          </Table.Td>
+                          <Table.Td className="text-end pr-[70px] w-[11%] acerSwift:max-macair133:!text-b4">
+                            {stat.q1 ? stat.q1.toFixed(2) : "-"}
+                          </Table.Td>
+                        </Table.Tr>
+                      );
+                    })}
+                  </Table.Tbody>
+                </Table>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3 h-full">
+                {" "}
+                {assignment?.questions.map((ques, index) => {
+                  const dataScores =
+                    section?.students
+                      ?.flatMap(({ scores }) =>
+                        scores
+                          .filter((item) => item.assignmentName === name)
+                          .flatMap((item) =>
+                            item.questions.filter((q) => q.name === ques.name)
+                          )
+                          .map((question) => question.score)
+                          .filter((e) => e >= 0)
+                      )
+                      .sort((a, b) => a - b) || [];
+                  const stat = calStat(dataScores, scores?.length);
+                  return (
+                    <div
+                      key={index}
+                      className={` border flex flex-col justify-between rounded-md p-3 `}
+                      onClick={() => {
+                        setSelectQuestion({
+                          assignment,
+                          ...ques,
+                          scores,
+                          students: section?.students,
+                        });
+                      }}
+                    >
+                      <div className="flex  justify-between">
+                        <div className="flex flex-col">
+                          <div className=" font-semibold text-default text-[14px]">
+                            {ques.name}
+                          </div>
+                          <div className="font-semibold text-secondary text-[12px] ">
+                            {ques.fullScore} pts.
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-2 text-[12px] border-t flex flex-col ">
+                        {" "}
+                        <div className="grid grid-cols-2 p-2 mt-1 rounded-t-md">
+                          <div className="flex flex-col">
+                            <div className="text-start">Mean</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.mean.toFixed(2)}
+                            </p>
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="text-start">SD</div>
+                            <p className="text-[13px] font-semibold">
+                              {" "}
+                              {stat.sd.toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 p-2  ">
+                          <div className="flex flex-col">
+                            <div className="text-start">Median</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.median.toFixed(2)}
+                            </p>
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="text-start">Max</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.maxScore.toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 p-2  rounded-b-md">
+                          <div className="flex flex-col">
+                            <div className="text-start">Q3</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.q3.toFixed(2)}
+                            </p>
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="text-start ">Q1</div>
+                            <p className="text-[13px] font-semibold">
+                              {stat.q1 ? stat.q1.toFixed(2) : "-"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </>
         ) : (
           <div className="flex px-16  flex-row items-center justify-between h-full">
@@ -320,11 +483,13 @@ export default function Overall() {
                 instructor for access.
               </p>
             </div>
-            <img
-              className=" z-50  size-[460px] "
-              src={needAccess}
-              alt="loginImage"
-            />
+            {!isMobile && (
+              <img
+                className=" z-50  size-[460px] "
+                src={needAccess}
+                alt="loginImage"
+              />
+            )}
           </div>
         )}
       </div>

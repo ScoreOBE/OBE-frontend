@@ -1188,7 +1188,7 @@ export default function AllAssignment() {
                                 assignment.isPublish
                                   ? " bg-orange-600/20 text-orange-600 hover:text-orange-600 hover:bg-orange-700/20"
                                   : " bg-teal-500/20 text-teal-600 hover:text-teal-600 hover:bg-teal-600/20"
-                              } items-center justify-center !-mt-1 !h-10 flex !rounded-xl flex-1 !w-full cursor-pointer`}
+                              } items-center justify-center  !h-10 flex !rounded-xl flex-1 !w-full cursor-pointer`}
                               onClick={(event) => {
                                 event.stopPropagation();
                                 form.setFieldValue(
