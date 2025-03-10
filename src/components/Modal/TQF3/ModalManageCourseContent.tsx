@@ -45,6 +45,7 @@ export default function ModalManageTopic({
   const topicRef = useRef<HTMLDivElement>(null);
   const [isAdded, setIsAdded] = useState(false);
   const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+  const [textareaLength, setTextareaLength] = useState(0);
 
   const form = useForm({
     mode: "controlled",
@@ -63,7 +64,7 @@ export default function ModalManageTopic({
       labHour: 0,
     } as Partial<IModelSchedule>,
     validate: {
-      topic: (value) => validateTextInput(value, "Course Content", 0, false),
+      topic: (value) => validateTextInput(value, "Course Content", 300, false),
       lecHour: (value, values) =>
         !value && !values.labHour && "Lecture hour or Lab hour is required",
       labHour: (value, values) =>
@@ -78,6 +79,10 @@ export default function ModalManageTopic({
       }
       localStorage.setItem("dataAddWeekCourseContent", JSON.stringify(values));
     },
+  });
+
+  formOneWeek.watch("topic", (value) => {
+    setTextareaLength(value.value?.length || 0);
   });
 
   useEffect(() => {
@@ -228,22 +233,28 @@ export default function ModalManageTopic({
             }}
           >
             <div className="flex flex-col gap-4  h-[80%]">
-              <Textarea
-                autoFocus={false}
-                label={
-                  <p className="font-semibold flex gap-1">
-                    Course Content <span className=" text-error">*</span>
-                  </p>
-                }
-                className="w-full border-none rounded-r-none"
-                classNames={{
-                  input:
-                    "flex h-[100px] acerSwift:max-macair133:!h-[108px] p-3 text-b3 acerSwift:max-macair133:!text-b4",
-                  label: "flex pb-1 acerSwift:max-macair133:!text-b4",
-                }}
-                placeholder="การอินทิเกรต (Integration)"
-                {...formOneWeek.getInputProps("topic")}
-              />
+              <div>
+                <Textarea
+                  autoFocus={false}
+                  label={
+                    <p className="font-semibold flex gap-1">
+                      Course Content <span className=" text-error">*</span>
+                    </p>
+                  }
+                  maxLength={300}
+                  className="w-full border-none rounded-r-none"
+                  classNames={{
+                    input:
+                      "flex h-[100px] acerSwift:max-macair133:!h-[108px] p-3 text-b3 acerSwift:max-macair133:!text-b4",
+                    label: "flex pb-1 acerSwift:max-macair133:!text-b4",
+                  }}
+                  placeholder="การอินทิเกรต (Integration)"
+                  {...formOneWeek.getInputProps("topic")}
+                />
+                <p className="text-end text-b4 text-deemphasize">
+                  {textareaLength}/300
+                </p>
+              </div>
 
               <NumberInput
                 label={

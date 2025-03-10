@@ -5,7 +5,7 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { COURSE_TYPE, NOTI_TYPE } from "@/helpers/constants/enum";
 import { useForm } from "@mantine/form";
@@ -37,6 +37,11 @@ export default function ModalEditCourse({
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const dispatch = useAppDispatch();
+  const [textareaLength, setTextareaLength] = useState({
+    descTH: 0,
+    descEN: 0,
+  });
+
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {} as Partial<IModelCourse> & Record<string, any>,
@@ -49,6 +54,19 @@ export default function ModalEditCourse({
         validateTextInput(value, "Description English", 1600, false),
     },
     validateInputOnBlur: true,
+  });
+
+  form.watch("descTH", (value) => {
+    setTextareaLength((prev) => ({
+      ...prev,
+      descTH: value.value?.length || 0,
+    }));
+  });
+  form.watch("descEN", (value) => {
+    setTextareaLength((prev) => ({
+      ...prev,
+      descEN: value.value?.length || 0,
+    }));
   });
 
   useEffect(() => {
@@ -134,42 +152,54 @@ export default function ModalEditCourse({
           }
           {...form.getInputProps("courseName")}
         />
-        <Textarea
-          withAsterisk={true}
-          autoFocus={false}
-          label={
-            <p className="font-semibold flex gap-1 h-full">
-              Description <span className="text-secondary">Thai</span>
-            </p>
-          }
-          size="xs"
-          className="w-full border-none rounded-r-none"
-          classNames={{
-            input:
-              "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[120px] sm:h-[75px] ipad11:h-[95px]",
-            label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
-          }}
-          placeholder=""
-          {...form.getInputProps("descTH")}
-        />
-        <Textarea
-          withAsterisk={true}
-          autoFocus={false}
-          label={
-            <p className="font-semibold flex gap-1 h-full">
-              Description <span className="text-secondary">English</span>
-            </p>
-          }
-          size="xs"
-          className="w-full border-none rounded-r-none"
-          classNames={{
-            input:
-              "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[120px] sm:h-[75px] ipad11:h-[95px]",
-            label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
-          }}
-          placeholder=""
-          {...form.getInputProps("descEN")}
-        />
+        <div>
+          <Textarea
+            withAsterisk={true}
+            autoFocus={false}
+            label={
+              <p className="font-semibold flex gap-1 h-full">
+                Description <span className="text-secondary">Thai</span>
+              </p>
+            }
+            size="xs"
+            maxLength={1600}
+            className="w-full border-none rounded-r-none"
+            classNames={{
+              input:
+                "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[120px] sm:h-[75px] ipad11:h-[95px]",
+              label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
+            }}
+            placeholder=""
+            {...form.getInputProps("descTH")}
+          />
+          <p className="text-end text-b4 text-deemphasize">
+            {textareaLength.descTH}/1600
+          </p>
+        </div>
+        <div>
+          <Textarea
+            withAsterisk={true}
+            autoFocus={false}
+            label={
+              <p className="font-semibold flex gap-1 h-full">
+                Description <span className="text-secondary">English</span>
+              </p>
+            }
+            size="xs"
+            maxLength={1600}
+            className="w-full border-none rounded-r-none"
+            classNames={{
+              input:
+                "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[120px] sm:h-[75px] ipad11:h-[95px]",
+              label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
+            }}
+            placeholder=""
+            {...form.getInputProps("descEN")}
+          />
+          <p className="text-end text-b4 text-deemphasize">
+            {textareaLength.descEN}/1600
+          </p>
+        </div>
         <div className="flex gap-2 mt-3 justify-end">
           <Button onClick={onClose} variant="subtle" loading={loading}>
             Cancel

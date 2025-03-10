@@ -3,9 +3,7 @@ import { IModelCLO, IModelTQF3Part2 } from "@/models/ModelTQF3";
 import {
   Button,
   Checkbox,
-  FocusTrapInitialFocus,
   Modal,
-  rem,
   Textarea,
   Tooltip,
   Kbd,
@@ -54,6 +52,10 @@ export default function ModalManageCLO({
   const [isAdded, setIsAdded] = useState(false);
   const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
   const refTextarea = useRef<HTMLTextAreaElement>(null);
+  const [textareaLength, setTextareaLength] = useState({
+    descTH: 0,
+    descEN: 0,
+  });
 
   const updateHeight = () => {
     if (descriptionRef.current) {
@@ -92,7 +94,7 @@ export default function ModalManageCLO({
       descTH: (value) =>
         validateTextInput(value, "CLO Thai language", 300, false),
       descEN: (value) =>
-        validateTextInput(value, "CLO English language", 0, false),
+        validateTextInput(value, "CLO English language", 300, false),
       learningMethod: (value) =>
         !value?.length && "Select Learning Method at least one",
       other: (value, values) =>
@@ -104,6 +106,19 @@ export default function ModalManageCLO({
     onValuesChange: (values) => {
       localStorage.setItem("dataAddOneClo", JSON.stringify(values));
     },
+  });
+
+  formOneCLO.watch("descTH", (value) => {
+    setTextareaLength((prev) => ({
+      ...prev,
+      descTH: value.value?.length || 0,
+    }));
+  });
+  formOneCLO.watch("descEN", (value) => {
+    setTextareaLength((prev) => ({
+      ...prev,
+      descEN: value.value?.length || 0,
+    }));
   });
 
   useEffect(() => {
@@ -260,41 +275,52 @@ export default function ModalManageCLO({
               }}
             >
               <div className="flex flex-col gap-4 h-[90%]">
-                <Textarea
-                  data-autoFocus={true}
-                  ref={refTextarea}
-                  label={
-                    <p className="font-semibold flex gap-1 h-full ">
-                      CLO <span className="text-secondary">Thai</span>
-                      <span className=" text-error">*</span>
-                    </p>
-                  }
-                  className="w-full border-none"
-                  classNames={{
-                    input:
-                      "flex h-[80px] acerSwift:max-macair133:!h-[70px] px-3 py-2 text-b3 acerSwift:max-macair133:!text-b4",
-                    label: "flex pb-1 acerSwift:max-macair133:!text-b4",
-                  }}
-                  placeholder="อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
-                  {...formOneCLO.getInputProps("descTH")}
-                />
-
-                <Textarea
-                  label={
-                    <p className="font-semibold flex gap-1">
-                      CLO <span className="text-secondary">English</span>
-                      <span className=" text-error">*</span>
-                    </p>
-                  }
-                  className="w-full border-none"
-                  classNames={{
-                    input:
-                      "flex h-[80px] px-3 acerSwift:max-macair133:!h-[70px] py-2 text-b3 acerSwift:max-macair133:!text-b4",
-                    label: "flex pb-1 acerSwift:max-macair133:!text-b4",
-                  }}
-                  placeholder="Explain the working principle of computer operating systems."
-                  {...formOneCLO.getInputProps("descEN")}
-                />
+                <div>
+                  <Textarea
+                    data-autoFocus={true}
+                    ref={refTextarea}
+                    label={
+                      <p className="font-semibold flex gap-1 h-full ">
+                        CLO <span className="text-secondary">Thai</span>
+                        <span className=" text-error">*</span>
+                      </p>
+                    }
+                    maxLength={300}
+                    className="w-full border-none"
+                    classNames={{
+                      input:
+                        "flex h-[80px] acerSwift:max-macair133:!h-[70px] px-3 py-2 text-b3 acerSwift:max-macair133:!text-b4",
+                      label: "flex pb-1 acerSwift:max-macair133:!text-b4",
+                    }}
+                    placeholder="อธิบายหลักการทำงานของระบบปฏิบัติการคอมพิวเตอร์"
+                    {...formOneCLO.getInputProps("descTH")}
+                  />
+                  <p className="text-end text-b4 text-deemphasize">
+                    {textareaLength.descTH}/300
+                  </p>
+                </div>
+                <div>
+                  <Textarea
+                    label={
+                      <p className="font-semibold flex gap-1">
+                        CLO <span className="text-secondary">English</span>
+                        <span className=" text-error">*</span>
+                      </p>
+                    }
+                    maxLength={300}
+                    className="w-full border-none"
+                    classNames={{
+                      input:
+                        "flex h-[80px] px-3 acerSwift:max-macair133:!h-[70px] py-2 text-b3 acerSwift:max-macair133:!text-b4",
+                      label: "flex pb-1 acerSwift:max-macair133:!text-b4",
+                    }}
+                    placeholder="Explain the working principle of computer operating systems."
+                    {...formOneCLO.getInputProps("descEN")}
+                  />
+                  <p className="text-end text-b4 text-deemphasize">
+                    {textareaLength.descEN}/300
+                  </p>
+                </div>
 
                 <div className="flex flex-col gap-2 pb-1 ">
                   <p className="text-secondary text-b3 acerSwift:max-macair133:!text-b4 mb-1 font-semibold">

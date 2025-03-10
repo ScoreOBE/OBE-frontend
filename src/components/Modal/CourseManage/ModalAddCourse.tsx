@@ -64,6 +64,10 @@ export default function ModalAddCourse({
   const [sectionNoList, setSectionNoList] = useState<string[]>([]);
   const [coInsList, setCoInsList] = useState<any[]>([]);
   const [firstInput, setFirstInput] = useState(true);
+  const [textareaLength, setTextareaLength] = useState({
+    descTH: 0,
+    descEN: 0,
+  });
 
   const form = useForm({
     mode: "uncontrolled",
@@ -91,6 +95,19 @@ export default function ModalAddCourse({
         getCourseData(values.courseNo!);
       }
     },
+  });
+
+  form.watch("descTH", (value) => {
+    setTextareaLength((prev) => ({
+      ...prev,
+      descTH: value.value?.length || 0,
+    }));
+  });
+  form.watch("descEN", (value) => {
+    setTextareaLength((prev) => ({
+      ...prev,
+      descEN: value.value?.length || 0,
+    }));
   });
 
   useEffect(() => {
@@ -588,42 +605,56 @@ export default function ModalAddCourse({
                 }
                 {...form.getInputProps("courseName")}
               />
-              <Textarea
-                withAsterisk={true}
-                autoFocus={false}
-                label={
-                  <p className="font-semibold flex gap-1 h-full">
-                    Course Description <span className="text-secondary">Thai</span>
-                  </p>
-                }
-                size="xs"
-                className="w-full border-none rounded-r-none "
-                classNames={{
-                  input:
-                    "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[100px] sm:h-[45px] ipad11:h-[60px] acerSwift:max-macair133:h-[45px]",
-                  label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
-                }}
-                placeholder=""
-                {...form.getInputProps("descTH")}
-              />
-              <Textarea
-                withAsterisk={true}
-                autoFocus={false}
-                label={
-                  <p className="font-semibold flex gap-1 h-full">
-                    Course Description <span className="text-secondary">English</span>
-                  </p>
-                }
-                size="xs"
-                className="w-full border-none rounded-r-none "
-                classNames={{
-                  input:
-                    "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[100px] sm:h-[45px] ipad11:h-[60px] acerSwift:max-macair133:h-[45px]",
-                  label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
-                }}
-                placeholder=""
-                {...form.getInputProps("descEN")}
-              />
+              <div>
+                <Textarea
+                  withAsterisk={true}
+                  autoFocus={false}
+                  label={
+                    <p className="font-semibold flex gap-1 h-full">
+                      Course Description{" "}
+                      <span className="text-secondary">Thai</span>
+                    </p>
+                  }
+                  size="xs"
+                  maxLength={1600}
+                  className="w-full border-none rounded-r-none "
+                  classNames={{
+                    input:
+                      "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[100px] sm:h-[45px] ipad11:h-[60px] acerSwift:max-macair133:h-[45px]",
+                    label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
+                  }}
+                  placeholder="(Required)"
+                  {...form.getInputProps("descTH")}
+                />
+                <p className="text-end text-b4 text-deemphasize">
+                  {textareaLength.descTH}/1600
+                </p>
+              </div>
+              <div>
+                <Textarea
+                  withAsterisk={true}
+                  autoFocus={false}
+                  label={
+                    <p className="font-semibold flex gap-1 h-full">
+                      Course Description{" "}
+                      <span className="text-secondary">English</span>
+                    </p>
+                  }
+                  size="xs"
+                  maxLength={1600}
+                  className="w-full border-none rounded-r-none "
+                  classNames={{
+                    input:
+                      "focus:border-primary acerSwift:max-macair133:!text-b5 macair133:h-[100px] sm:h-[45px] ipad11:h-[60px] acerSwift:max-macair133:h-[45px]",
+                    label: "flex pb-1 gap-1 acerSwift:max-macair133:!text-b4",
+                  }}
+                  placeholder="(Required)"
+                  {...form.getInputProps("descEN")}
+                />
+                <p className="text-end text-b4 text-deemphasize">
+                  {textareaLength.descEN}/1600
+                </p>
+              </div>
               {form.getValues().type == COURSE_TYPE.SEL_TOPIC.en && (
                 <TextInput
                   label="Course Topic"

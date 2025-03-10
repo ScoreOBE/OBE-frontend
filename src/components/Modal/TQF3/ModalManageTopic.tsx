@@ -3,7 +3,7 @@ import { IModelTQF3Part6 } from "@/models/ModelTQF3";
 import { Button, Group, Modal, Textarea, Select, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { upperFirst } from "lodash";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import { NOTI_TYPE } from "@/helpers/constants/enum";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
@@ -55,6 +55,8 @@ export default function ModalManageTopic({
   editData,
   data,
 }: Props) {
+  const [textareaLength, setTextareaLength] = useState(0);
+
   const form = useForm({
     mode: "controlled",
     initialValues: {} as any,
@@ -62,6 +64,10 @@ export default function ModalManageTopic({
       topic: (value) => !value?.length && "Topic is required",
       detail: (value) => validateTextInput(value, "Description", 1000, false),
     },
+  });
+
+  form.watch("detail", (value) => {
+    setTextareaLength(value.value?.length || 0);
   });
 
   const onCloseModal = () => {
@@ -226,7 +232,7 @@ export default function ModalManageTopic({
           )}
 
           {(form.getValues().topic || type === "edit") && (
-            <>
+            <div>
               <Textarea
                 autoFocus={false}
                 label={
@@ -235,6 +241,7 @@ export default function ModalManageTopic({
                     <span className=" text-error">*</span>
                   </p>
                 }
+                maxLength={1000}
                 className="w-full border-none rounded-r-none"
                 classNames={{
                   input:
@@ -244,7 +251,10 @@ export default function ModalManageTopic({
                 placeholder="แบบสอบถามความพึงพอใจให้นักศึกษาประเมิน (Student satisfaction questionnaire)"
                 {...form.getInputProps("detail")}
               />
-            </>
+              <p className="text-end text-b4 text-deemphasize">
+                {textareaLength}/1000
+              </p>
+            </div>
           )}
         </div>
       </div>
