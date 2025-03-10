@@ -15,6 +15,7 @@ import IconEyePublish from "@/assets/icons/eyePublish.svg?react";
 import IconPublish from "@/assets/icons/publish.svg?react";
 import IconUnPublish from "@/assets/icons/unPublish.svg?react";
 import IconPublishEach from "@/assets/icons/publishEach.svg?react";
+import IconChevron from "@/assets/icons/chevronRight.svg?react";
 import IconPublishAll from "@/assets/icons/publishAll.svg?react";
 import IconDots from "@/assets/icons/dots.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
@@ -29,7 +30,11 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { dateFormatter, getSectionNo, isMobile } from "@/helpers/functions/function";
+import {
+  dateFormatter,
+  getSectionNo,
+  isMobile,
+} from "@/helpers/functions/function";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import needAccess from "@/assets/image/needAccess.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
@@ -78,12 +83,12 @@ export default function Assignment() {
   ]);
   const [editDeleteAssignment, setEditDeleteAssignment] = useState("");
   const [editName, setEditName] = useState("");
-   const academicYear = useAppSelector((state) => state.academicYear);
-    const activeTerm = academicYear.find(
-      (term) =>
-        term.year == parseInt(params.get("year") || "") &&
-        term.semester == parseInt(params.get("semester") || "")
-    )?.isActive;
+  const academicYear = useAppSelector((state) => state.academicYear);
+  const activeTerm = academicYear.find(
+    (term) =>
+      term.year == parseInt(params.get("year") || "") &&
+      term.semester == parseInt(params.get("semester") || "")
+  )?.isActive;
   const [openModalEditAssignment, setOpenModalEditAssignment] = useState(false);
   const [openModalDeleteAssignment, setOpenModalDeleteAssignment] =
     useState(false);
@@ -256,7 +261,7 @@ export default function Assignment() {
       />
 
       <div className="bg-white flex flex-col h-full w-full sm:px-6 iphone:max-sm:px-3 py-5 gap-3 overflow-hidden">
-      <Breadcrumbs items={items} />
+        <Breadcrumbs items={items} />
         {loading.loading ? (
           <Loading />
         ) : (section?.instructor as IModelUser)?.id === user.id ||
@@ -274,86 +279,257 @@ export default function Assignment() {
             )}
             {/* Table */}
             {section?.assignments?.length !== 0 ? (
-              <div
-                className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full  border flex flex-col rounded-lg border-secondary"
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-                  height: "fit-content",
-                }}
-              >
-                <Table stickyHeader>
-                  <Table.Thead>
-                    <Table.Tr className="bg-[#e5e7f6]">
-                      <Table.Th className="w-20 sm:max-macair133:text-b3">
-                        Name
-                      </Table.Th>
-                      <Table.Th className="w-20 sm:max-macair133:text-b3  text-end pr-14 !pl-0">
-                        Full Scores
-                      </Table.Th>
-                      <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
-                        Mean
-                      </Table.Th>
-                      <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b3">
-                        Created
-                      </Table.Th>
-                      <Table.Th className="w-10 sm:max-macair133:text-b3">
-                        Student(s)
-                      </Table.Th>
-                     {activeTerm && <Table.Th className="w-10 !px-4 sm:max-macair133:text-b3 text-center">
-                        Published
-                      </Table.Th>}
-                  { activeTerm && !isMobile &&   <Table.Th className="w-5 sm:max-macair133:text-b3"></Table.Th>}
-                    </Table.Tr>
-                  </Table.Thead>
+              !isMobile ? (
+                <div
+                  className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full  border flex flex-col rounded-lg border-secondary"
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
+                    height: "fit-content",
+                  }}
+                >
+                  <Table stickyHeader>
+                    <Table.Thead>
+                      <Table.Tr className="bg-[#e5e7f6]">
+                        <Table.Th className="w-20 sm:max-macair133:text-b3">
+                          Name
+                        </Table.Th>
+                        <Table.Th className="w-20 sm:max-macair133:text-b3  text-end pr-14 !pl-0">
+                          Full Scores
+                        </Table.Th>
+                        <Table.Th className=" w-10 sm:max-macair133:text-b3 text-end pr-20 !pl-0">
+                          Mean
+                        </Table.Th>
+                        <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b3">
+                          Created
+                        </Table.Th>
+                        <Table.Th className="w-10 sm:max-macair133:text-b3">
+                          Student(s)
+                        </Table.Th>
+                        {activeTerm && (
+                          <Table.Th className="w-10 !px-4 sm:max-macair133:text-b3 text-center">
+                            Published
+                          </Table.Th>
+                        )}
+                        {activeTerm && !isMobile && (
+                          <Table.Th className="w-5 sm:max-macair133:text-b3"></Table.Th>
+                        )}
+                      </Table.Tr>
+                    </Table.Thead>
 
-                  <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px] ">
-                    {section?.assignments?.map((assignment, index) => {
-                      const totalStudent = section.students?.filter(
-                        ({ scores }) =>
-                          scores.find(
-                            ({ assignmentName }) =>
-                              assignmentName == assignment.name
-                          )
-                      ).length;
-                      const totalScore = section.students?.reduce(
-                        (a, b) =>
-                          a +
-                          (b.scores
-                            .find(
+                    <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px] ">
+                      {section?.assignments?.map((assignment, index) => {
+                        const totalStudent = section.students?.filter(
+                          ({ scores }) =>
+                            scores.find(
                               ({ assignmentName }) =>
                                 assignmentName == assignment.name
                             )
-                            ?.questions.filter(({ score }) => score >= 0)
-                            .reduce((sum, { score }) => sum + score, 0) || 0),
-                        0
-                      );
-                      return (
-                        <Table.Tr
-                          key={index}
-                          className={`hover:bg-[#F3F3F3] cursor-pointer ${
-                            index % 2 === 0 && "bg-[#F8F9FA]"
-                          }`}
-                          onClick={() => goToOverall(`${assignment.name}`)}
-                        >
-                          <Table.Td>{assignment.name}</Table.Td>
-                          <Table.Td className="text-end pr-14 !pl-0">
-                            {assignment.questions.reduce(
-                              (sum, { fullScore }) => sum + fullScore,
-                              0
+                        ).length;
+                        const totalScore = section.students?.reduce(
+                          (a, b) =>
+                            a +
+                            (b.scores
+                              .find(
+                                ({ assignmentName }) =>
+                                  assignmentName == assignment.name
+                              )
+                              ?.questions.filter(({ score }) => score >= 0)
+                              .reduce((sum, { score }) => sum + score, 0) || 0),
+                          0
+                        );
+                        return (
+                          <Table.Tr
+                            key={index}
+                            className={`hover:bg-[#F3F3F3] cursor-pointer ${
+                              index % 2 === 0 && "bg-[#F8F9FA]"
+                            }`}
+                            onClick={() => goToOverall(`${assignment.name}`)}
+                          >
+                            <Table.Td>{assignment.name}</Table.Td>
+                            <Table.Td className="text-end pr-14 !pl-0">
+                              {assignment.questions.reduce(
+                                (sum, { fullScore }) => sum + fullScore,
+                                0
+                              )}
+                            </Table.Td>
+                            <Table.Td className="text-end pr-20 !pl-0">
+                              {(
+                                (totalScore || 0) / (totalStudent || 1)
+                              ).toFixed(2)}
+                            </Table.Td>
+                            <Table.Td className="!pl-12">
+                              {dateFormatter(assignment.createdAt, 3)}
+                            </Table.Td>
+                            <Table.Td>{totalStudent || 0}</Table.Td>
+                            {activeTerm && (
+                              <Table.Td className="text-center justify-items-center">
+                                <div
+                                  className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    form.setFieldValue(
+                                      "isPublish",
+                                      !assignment.isPublish
+                                    );
+                                    form.setFieldValue("sections", [
+                                      parseInt(sectionNo!),
+                                    ]);
+                                    form.setFieldValue("assignments", [
+                                      assignment.name,
+                                    ]);
+                                    onClickPublish();
+                                  }}
+                                >
+                                  {assignment.isPublish ? (
+                                    <Icon
+                                      IconComponent={IconPublish}
+                                      className="text-default"
+                                    />
+                                  ) : (
+                                    <Icon
+                                      IconComponent={IconUnPublish}
+                                      className="text-default"
+                                    />
+                                  )}
+                                </div>
+                              </Table.Td>
                             )}
-                          </Table.Td>
-                          <Table.Td className="text-end pr-20 !pl-0">
+                            {activeTerm && !isMobile && (
+                              <Table.Td className="text-center flex items-center justify-center">
+                                <div
+                                  className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                                  onClick={(event) => event.stopPropagation()}
+                                >
+                                  <Menu
+                                    trigger="click"
+                                    position="bottom-end"
+                                    offset={2}
+                                  >
+                                    <Menu.Target>
+                                      <div>
+                                        <Icon
+                                          IconComponent={IconDots}
+                                          className=" rounded-full w-fit hover:bg-gray-300"
+                                        />
+                                      </div>
+                                    </Menu.Target>
+                                    <Menu.Dropdown
+                                      className="rounded-md backdrop-blur-xl bg-white/70 "
+                                      style={{
+                                        boxShadow:
+                                          "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                                      }}
+                                    >
+                                      <Menu.Item
+                                        className="text-[#3E3E3E] font-semibold text-b4 h-7 w-[180px] acerSwift:max-macair133:!text-b5"
+                                        onClick={() => {
+                                          setEditDeleteAssignment(
+                                            assignment.name
+                                          );
+                                          setEditName(assignment.name);
+                                          setOpenModalEditAssignment(true);
+                                        }}
+                                      >
+                                        <div className="flex items-center gap-2">
+                                          <Icon
+                                            IconComponent={IconPencilMinus}
+                                            className="size-4 stroke-[2px]   acerSwift:max-macair133:!size-3.5"
+                                          />
+                                          <span>Edit Evaluation Name</span>
+                                        </div>
+                                      </Menu.Item>
+                                      <Menu.Item
+                                        className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 w-[180px]"
+                                        onClick={() => {
+                                          setEditDeleteAssignment(
+                                            assignment.name
+                                          );
+                                          setOpenModalDeleteAssignment(true);
+                                        }}
+                                      >
+                                        <div className="flex items-center gap-2">
+                                          <Icon
+                                            IconComponent={IconTrash}
+                                            className="size-4 stroke-[2px] acerSwift:max-macair133:!size-3.5"
+                                          />
+                                          <span>Delete Evaluation</span>
+                                        </div>
+                                      </Menu.Item>
+                                    </Menu.Dropdown>
+                                  </Menu>
+                                </div>
+                              </Table.Td>
+                            )}
+                          </Table.Tr>
+                        );
+                      })}
+                    </Table.Tbody>
+                  </Table>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3 overflow-y-auto h-full ">
+                  {" "}
+                  {section?.assignments?.map((assignment, index) => {
+                    const totalStudent = section.students?.filter(
+                      ({ scores }) =>
+                        scores.find(
+                          ({ assignmentName }) =>
+                            assignmentName == assignment.name
+                        )
+                    ).length;
+                    const totalScore = section.students?.reduce(
+                      (a, b) =>
+                        a +
+                        (b.scores
+                          .find(
+                            ({ assignmentName }) =>
+                              assignmentName == assignment.name
+                          )
+                          ?.questions.filter(({ score }) => score >= 0)
+                          .reduce((sum, { score }) => sum + score, 0) || 0),
+                      0
+                    );
+                    return (
+                      <div
+                        key={index}
+                        className={`border flex flex-col hover:bg-bgTableHeader justify-between rounded-md p-3 `}
+                        onClick={() => goToOverall(`${assignment.name}`)}
+                      >
+                         <div className="flex items-center justify-between">
+                          <div className="flex flex-col">
+                            <div className=" font-semibold text-default text-[14px]">
+                              {assignment.name}
+                            </div>
+                            <div className="font-semibold text-secondary text-[14px] ">
+                              Full score:{" "}
+                              {assignment.questions.reduce(
+                                (sum, { fullScore }) => sum + fullScore,
+                                0
+                              )}
+                            </div>
+                          </div>
+                          <Icon IconComponent={IconChevron} />
+                        </div>
+                        <div className="mt-3 bg-slate-100 rounded-md p-4 text-[12px] grid grid-cols-2  ">
+                          <div>
+                            Mean{" "}
                             {((totalScore || 0) / (totalStudent || 1)).toFixed(
                               2
                             )}
-                          </Table.Td>
-                          <Table.Td className="!pl-12">
-                            {dateFormatter(assignment.createdAt, 3)}
-                          </Table.Td>
-                          <Table.Td>{totalStudent || 0}</Table.Td>
-                         {activeTerm && <Table.Td className="text-center justify-items-center">
-                            <div
-                              className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                          </div>
+                          <div>Student(s): {totalStudent || 0}</div>
+                        </div>
+                        {activeTerm && (
+                     
+                            <div className="text-center  !w-full justify-items-center">
+                                                        <Button
+                                                          variant="filled"
+                                                          classNames={{ label: "!font-semibold " }}
+                                                          className={`rounded-full mt-3 ${
+                                                            assignment.isPublish
+                                                              ? " bg-teal-500 hover:bg-teal-600"
+                                                              : " bg-orange-600 hover:bg-orange-700"
+                                                          } items-center justify-center !h-10 flex flex-1 !w-full cursor-pointer`}
                               onClick={(event) => {
                                 event.stopPropagation();
                                 form.setFieldValue(
@@ -370,87 +546,21 @@ export default function Assignment() {
                               }}
                             >
                               {assignment.isPublish ? (
-                                <Icon
-                                  IconComponent={IconPublish}
-                                  className="text-default"
-                                />
+                                <p className="!font-semibold">Publish</p>
                               ) : (
-                                <Icon
-                                  IconComponent={IconUnPublish}
-                                  className="text-default"
-                                />
+                                <p className="!font-semibold">Unpublish</p>
                               )}
-                            </div>
-                          </Table.Td>}
-                         {activeTerm && !isMobile &&    <Table.Td className="text-center flex items-center justify-center">
-                            <div
-                              className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
-                              onClick={(event) => event.stopPropagation()}
-                            >
-                              <Menu
-                                trigger="click"
-                                position="bottom-end"
-                                offset={2}
-                              >
-                                <Menu.Target>
-                                  <div>
-                                    <Icon
-                                      IconComponent={IconDots}
-                                      className=" rounded-full w-fit hover:bg-gray-300"
-                                    />
-                                  </div>
-                                </Menu.Target>
-                                <Menu.Dropdown
-                                  className="rounded-md backdrop-blur-xl bg-white/70 "
-                                  style={{
-                                    boxShadow:
-                                      "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                                  }}
-                                >
-                                  <Menu.Item
-                                    className="text-[#3E3E3E] font-semibold text-b4 h-7 w-[180px] acerSwift:max-macair133:!text-b5"
-                                    onClick={() => {
-                                      setEditDeleteAssignment(assignment.name);
-                                      setEditName(assignment.name);
-                                      setOpenModalEditAssignment(true);
-                                    }}
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      <Icon
-                                        IconComponent={IconPencilMinus}
-                                        className="size-4 stroke-[2px]   acerSwift:max-macair133:!size-3.5"
-                                      />
-                                      <span>Edit Evaluation Name</span>
-                                    </div>
-                                  </Menu.Item>
-                                  <Menu.Item
-                                    className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 w-[180px]"
-                                    onClick={() => {
-                                      setEditDeleteAssignment(assignment.name);
-                                      setOpenModalDeleteAssignment(true);
-                                    }}
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      <Icon
-                                        IconComponent={IconTrash}
-                                        className="size-4 stroke-[2px] acerSwift:max-macair133:!size-3.5"
-                                      />
-                                      <span>Delete Evaluation</span>
-                                    </div>
-                                  </Menu.Item>
-                                </Menu.Dropdown>
-                              </Menu>
-                            </div>
-                          </Table.Td>}
-                        </Table.Tr>
-                      );
-                    })}
-                  </Table.Tbody>
-                </Table>
-              </div>
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )
             ) : (
               <div className="flex items-center  !h-full !w-full  justify-between  sm:px-16">
-              <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
+                <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
                   <p className="!h-full text-h1  acerSwift:max-macair133:!text-h2 text-secondary font-semibold">
                     No Evaluation
                   </p>{" "}
@@ -459,19 +569,21 @@ export default function Assignment() {
                     yet.
                   </p>{" "}
                 </div>
-                { !isMobile && <div className=" items-center justify-center flex">
-                  <img
-                    src={notFoundImage}
-                    className="h-full items-center  w-[24vw] justify-center flex flex-col"
-                    alt="notFound"
-                  ></img>
-                </div>}
+                {!isMobile && (
+                  <div className=" items-center justify-center flex">
+                    <img
+                      src={notFoundImage}
+                      className="h-full items-center  w-[24vw] justify-center flex flex-col"
+                      alt="notFound"
+                    ></img>
+                  </div>
+                )}
               </div>
             )}
           </>
         ) : (
           <div className="flex items-center  !h-full !w-full justify-between  sm:px-16">
-          <div className="flex flex-col gap-2 iphone:max-sm:text-center sm:text-start">
+            <div className="flex flex-col gap-2 iphone:max-sm:text-center sm:text-start">
               <p className="   text-secondary font-semibold text-[22px]">
                 You need access
               </p>
@@ -480,11 +592,13 @@ export default function Assignment() {
                 instructor for access.
               </p>
             </div>
-            { !isMobile && <img
-              className=" z-50  size-[460px] "
-              src={needAccess}
-              alt="loginImage"
-            />}
+            {!isMobile && (
+              <img
+                className=" z-50  size-[460px] "
+                src={needAccess}
+                alt="loginImage"
+              />
+            )}
           </div>
         )}
       </div>

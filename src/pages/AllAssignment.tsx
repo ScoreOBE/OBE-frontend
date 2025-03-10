@@ -17,6 +17,7 @@ import IconUpload from "@/assets/icons/upload.svg?react";
 import IconPublish from "@/assets/icons/publish.svg?react";
 import IconUnPublish from "@/assets/icons/unPublish.svg?react";
 import IconPublishEach from "@/assets/icons/publishEach.svg?react";
+import IconChevron from "@/assets/icons/chevronRight.svg?react";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import IconPublishAll from "@/assets/icons/publishAll.svg?react";
 import IconDots from "@/assets/icons/dots.svg?react";
@@ -32,7 +33,11 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { dateFormatter, getSectionNo, isMobile } from "@/helpers/functions/function";
+import {
+  dateFormatter,
+  getSectionNo,
+  isMobile,
+} from "@/helpers/functions/function";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import Loading from "@/components/Loading/Loading";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
@@ -793,326 +798,428 @@ export default function AllAssignment() {
               </div>
             )}
             {allAssignments.length !== 0 ? (
-              <Tabs
-                defaultValue="assignment"
-                classNames={{
-                  root: "overflow-hidden w-full flex flex-col max-h-full gap-4",
-                  panel: "overflow-hidden w-full flex flex-col max-h-full",
-                }}
-              >
-               {!isMobile && <Tabs.List>
-                  <Tabs.Tab
-                    value="assignment"
-                    className="acerSwift:max-macair133:!text-b3"
-                  >
-                    List
-                  </Tabs.Tab>
-                  <Tabs.Tab
-                    value="charts"
-                    className="acerSwift:max-macair133:!text-b3"
-                  >
-                    Charts
-                  </Tabs.Tab>
-                </Tabs.List>}
-                <Tabs.Panel value="assignment">
-                  <div
-                    className="overflow-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
-                    style={{
-                      boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-                    }}
-                  >
-                    <Table stickyHeader>
-                      <Table.Thead>
-                        <Table.Tr className="bg-[#e5e7f6]">
-                          <Table.Th className="w-20 sm:max-macair133:text-b4 ">
-                            Name
-                          </Table.Th>
-                          <Table.Th className="w-20 sm:max-macair133:text-b4  text-end pr-14 !pl-0">
-                            Full Scores
-                          </Table.Th>
-                          <Table.Th className=" w-10 sm:max-macair133:text-b4 text-end pr-20 !pl-0">
-                            Mean
-                          </Table.Th>
-                          <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b4">
-                            Created
-                          </Table.Th>
-                          <Table.Th className="w-10 sm:max-macair133:text-b4">
-                            Student(s)
-                          </Table.Th>
-                          {activeTerm && (
-                            <Table.Th className="w-10 !px-4 sm:max-macair133:text-b4 text-center">
-                              Published
+              !isMobile ? (
+                <Tabs
+                  defaultValue="assignment"
+                  classNames={{
+                    root: "overflow-hidden w-full flex flex-col max-h-full gap-4",
+                    panel: "overflow-hidden w-full flex flex-col max-h-full",
+                  }}
+                >
+                  {!isMobile && (
+                    <Tabs.List>
+                      <Tabs.Tab
+                        value="assignment"
+                        className="acerSwift:max-macair133:!text-b3"
+                      >
+                        List
+                      </Tabs.Tab>
+                      <Tabs.Tab
+                        value="charts"
+                        className="acerSwift:max-macair133:!text-b3"
+                      >
+                        Charts
+                      </Tabs.Tab>
+                    </Tabs.List>
+                  )}
+                  <Tabs.Panel value="assignment">
+                    <div
+                      className="overflow-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
+                      style={{
+                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
+                      }}
+                    >
+                      <Table stickyHeader>
+                        <Table.Thead>
+                          <Table.Tr className="bg-[#e5e7f6]">
+                            <Table.Th className="w-20 sm:max-macair133:text-b4 ">
+                              Name
                             </Table.Th>
-                          )}
-                          {activeTerm && (
-                            <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>
-                          )}
-                        </Table.Tr>
-                      </Table.Thead>
-                      <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-b3 acerSwift:max-macair133:text-b4">
-                        {allAssignments.map((assignment, index) => {
-                          const students =
-                            course?.sections
-                              .map((sec) => sec.students!)
-                              .flat() || [];
-                          const totalStudent = students.filter(({ scores }) =>
-                            scores.find(
-                              ({ assignmentName }) =>
-                                assignmentName == assignment.name
-                            )
-                          ).length;
-                          const totalScore = students.reduce(
-                            (a, b) =>
-                              a +
-                              (b.scores
-                                .find(
-                                  ({ assignmentName }) =>
-                                    assignmentName == assignment.name
-                                )
-                                ?.questions.filter(({ score }) => score >= 0)
-                                .reduce((sum, { score }) => sum + score, 0) ||
-                                0),
-                            0
-                          );
-                          return (
-                            <Table.Tr
-                              key={index}
-                              className={`hover:bg-[#F3F3F3] cursor-pointer acerSwift:max-macair133:!text-b4 ${
-                                index % 2 === 0 && "bg-[#F8F9FA]"
-                              }`}
-                              onClick={() =>
-                                goToAssignment(`${assignment.name}`)
-                              }
-                            >
-                              <Table.Td>{assignment.name}</Table.Td>
-                              <Table.Td className="text-end pr-14 !pl-0 ">
-                                {assignment.questions.reduce(
-                                  (sum, { fullScore }) => sum + fullScore,
-                                  0
-                                )}
-                              </Table.Td>
-                              <Table.Td className="text-end pr-20 !pl-0">
-                                {(
-                                  (totalScore || 0) / (totalStudent || 1)
-                                ).toFixed(2)}
-                              </Table.Td>
-                              <Table.Td className="!pl-12">
-                                {dateFormatter(assignment.createdAt, 3)}
-                              </Table.Td>
-                              <Table.Td>{totalStudent || 0}</Table.Td>
-                              {activeTerm && (
-                                <Table.Td className="text-center justify-items-center">
-                                  <div
-                                    className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
-                                    onClick={(event) => {
-                                      event.stopPropagation();
-                                      form.setFieldValue(
-                                        "isPublish",
-                                        !assignment.isPublish
-                                      );
-                                      form.setFieldValue(
-                                        "sections",
-                                        course?.sections.map(
-                                          (sec) => sec.sectionNo
-                                        ) || []
-                                      );
-                                      form.setFieldValue("assignments", [
-                                        assignment.name,
-                                      ]);
-                                      onClickPublish();
-                                    }}
-                                  >
-                                    {assignment.isPublish ? (
-                                      <Icon
-                                        IconComponent={IconPublish}
-                                        className="text-default "
-                                      />
-                                    ) : (
-                                      <Icon
-                                        IconComponent={IconUnPublish}
-                                        className="text-default"
-                                      />
-                                    )}
-                                  </div>
+                            <Table.Th className="w-20 sm:max-macair133:text-b4  text-end pr-14 !pl-0">
+                              Full Scores
+                            </Table.Th>
+                            <Table.Th className=" w-10 sm:max-macair133:text-b4 text-end pr-20 !pl-0">
+                              Mean
+                            </Table.Th>
+                            <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b4">
+                              Created
+                            </Table.Th>
+                            <Table.Th className="w-10 sm:max-macair133:text-b4">
+                              Student(s)
+                            </Table.Th>
+                            {activeTerm && (
+                              <Table.Th className="w-10 !px-4 sm:max-macair133:text-b4 text-center">
+                                Published
+                              </Table.Th>
+                            )}
+                            {activeTerm && (
+                              <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>
+                            )}
+                          </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-b3 acerSwift:max-macair133:text-b4">
+                          {allAssignments.map((assignment, index) => {
+                            const students =
+                              course?.sections
+                                .map((sec) => sec.students!)
+                                .flat() || [];
+                            const totalStudent = students.filter(({ scores }) =>
+                              scores.find(
+                                ({ assignmentName }) =>
+                                  assignmentName == assignment.name
+                              )
+                            ).length;
+                            const totalScore = students.reduce(
+                              (a, b) =>
+                                a +
+                                (b.scores
+                                  .find(
+                                    ({ assignmentName }) =>
+                                      assignmentName == assignment.name
+                                  )
+                                  ?.questions.filter(({ score }) => score >= 0)
+                                  .reduce((sum, { score }) => sum + score, 0) ||
+                                  0),
+                              0
+                            );
+                            return (
+                              <Table.Tr
+                                key={index}
+                                className={`hover:bg-[#F3F3F3] cursor-pointer acerSwift:max-macair133:!text-b4 ${
+                                  index % 2 === 0 && "bg-[#F8F9FA]"
+                                }`}
+                                onClick={() =>
+                                  goToAssignment(`${assignment.name}`)
+                                }
+                              >
+                                <Table.Td>{assignment.name}</Table.Td>
+                                <Table.Td className="text-end pr-14 !pl-0 ">
+                                  {assignment.questions.reduce(
+                                    (sum, { fullScore }) => sum + fullScore,
+                                    0
+                                  )}
                                 </Table.Td>
-                              )}
-                              {activeTerm && (
-                                <Table.Td className="text-center flex items-center justify-center">
-                                  <div
-                                    className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
-                                    onClick={(event) => event.stopPropagation()}
-                                  >
-                                    <Menu
-                                      trigger="click"
-                                      position="bottom-end"
-                                      offset={2}
+                                <Table.Td className="text-end pr-20 !pl-0">
+                                  {(
+                                    (totalScore || 0) / (totalStudent || 1)
+                                  ).toFixed(2)}
+                                </Table.Td>
+                                <Table.Td className="!pl-12">
+                                  {dateFormatter(assignment.createdAt, 3)}
+                                </Table.Td>
+                                <Table.Td>{totalStudent || 0}</Table.Td>
+                                {activeTerm && (
+                                  <Table.Td className="text-center justify-items-center">
+                                    <div
+                                      className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                                      onClick={(event) => {
+                                        event.stopPropagation();
+                                        form.setFieldValue(
+                                          "isPublish",
+                                          !assignment.isPublish
+                                        );
+                                        form.setFieldValue(
+                                          "sections",
+                                          course?.sections.map(
+                                            (sec) => sec.sectionNo
+                                          ) || []
+                                        );
+                                        form.setFieldValue("assignments", [
+                                          assignment.name,
+                                        ]);
+                                        onClickPublish();
+                                      }}
                                     >
-                                      <Menu.Target>
-                                        <div>
-                                          <Icon
-                                            IconComponent={IconDots}
-                                            className=" rounded-full w-fit hover:bg-gray-300"
-                                          />
-                                        </div>
-                                      </Menu.Target>
-                                      <Menu.Dropdown
-                                        className="rounded-md backdrop-blur-xl bg-white/70 "
-                                        style={{
-                                          boxShadow:
-                                            "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                                        }}
+                                      {assignment.isPublish ? (
+                                        <Icon
+                                          IconComponent={IconPublish}
+                                          className="text-default "
+                                        />
+                                      ) : (
+                                        <Icon
+                                          IconComponent={IconUnPublish}
+                                          className="text-default"
+                                        />
+                                      )}
+                                    </div>
+                                  </Table.Td>
+                                )}
+                                {activeTerm && (
+                                  <Table.Td className="text-center flex items-center justify-center">
+                                    <div
+                                      className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                                      onClick={(event) =>
+                                        event.stopPropagation()
+                                      }
+                                    >
+                                      <Menu
+                                        trigger="click"
+                                        position="bottom-end"
+                                        offset={2}
                                       >
-                                        <Menu.Item
-                                          className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
-                                          onClick={() => {
-                                            setEditDeleteAssignment(
-                                              assignment.name
-                                            );
-                                            setEditName(assignment.name);
-                                            setOpenModalEditAssignment(true);
+                                        <Menu.Target>
+                                          <div>
+                                            <Icon
+                                              IconComponent={IconDots}
+                                              className=" rounded-full w-fit hover:bg-gray-300"
+                                            />
+                                          </div>
+                                        </Menu.Target>
+                                        <Menu.Dropdown
+                                          className="rounded-md backdrop-blur-xl bg-white/70 "
+                                          style={{
+                                            boxShadow:
+                                              "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                                           }}
                                         >
-                                          <div className="flex items-center gap-2">
-                                            <Icon
-                                              IconComponent={IconPencilMinus}
-                                              className="size-4 stroke-[2px]"
-                                            />
-                                            <span>Edit Evaluation Name</span>
-                                          </div>
-                                        </Menu.Item>
-                                        <Menu.Item
-                                          className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
-                                          onClick={() => {
-                                            setEditDeleteAssignment(
-                                              assignment.name
-                                            );
-                                            setOpenModalDeleteAssignment(true);
-                                          }}
-                                        >
-                                          <div className="flex items-center gap-2">
-                                            <Icon
-                                              IconComponent={IconTrash}
-                                              className="size-4 stroke-[2px]"
-                                            />
-                                            <span>Delete Evaluation</span>
-                                          </div>
-                                        </Menu.Item>
-                                      </Menu.Dropdown>
-                                    </Menu>
-                                  </div>
-                                </Table.Td>
-                              )}
-                            </Table.Tr>
-                          );
-                        })}
-                      </Table.Tbody>
-                    </Table>
-                  </div>
-                </Tabs.Panel>
-                <Tabs.Panel value="charts">
-                  <div className="flex overflow-y-auto overflow-x-hidden max-w-full h-full">
-                    <div className="flex gap-6 w-full h-full">
-                      <div className="gap-5 flex flex-col min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
-                        {allAssignments.map((item, i) => {
-                          const students =
-                            course?.sections
-                              .map((sec) => sec.students!)
-                              .flat() || [];
-                          return (
+                                          <Menu.Item
+                                            className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
+                                            onClick={() => {
+                                              setEditDeleteAssignment(
+                                                assignment.name
+                                              );
+                                              setEditName(assignment.name);
+                                              setOpenModalEditAssignment(true);
+                                            }}
+                                          >
+                                            <div className="flex items-center gap-2">
+                                              <Icon
+                                                IconComponent={IconPencilMinus}
+                                                className="size-4 stroke-[2px]"
+                                              />
+                                              <span>Edit Evaluation Name</span>
+                                            </div>
+                                          </Menu.Item>
+                                          <Menu.Item
+                                            className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
+                                            onClick={() => {
+                                              setEditDeleteAssignment(
+                                                assignment.name
+                                              );
+                                              setOpenModalDeleteAssignment(
+                                                true
+                                              );
+                                            }}
+                                          >
+                                            <div className="flex items-center gap-2">
+                                              <Icon
+                                                IconComponent={IconTrash}
+                                                className="size-4 stroke-[2px]"
+                                              />
+                                              <span>Delete Evaluation</span>
+                                            </div>
+                                          </Menu.Item>
+                                        </Menu.Dropdown>
+                                      </Menu>
+                                    </div>
+                                  </Table.Td>
+                                )}
+                              </Table.Tr>
+                            );
+                          })}
+                        </Table.Tbody>
+                      </Table>
+                    </div>
+                  </Tabs.Panel>
+                  <Tabs.Panel value="charts">
+                    <div className="flex overflow-y-auto overflow-x-hidden max-w-full h-full">
+                      <div className="flex gap-6 w-full h-full">
+                        <div className="gap-5 flex flex-col min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
+                          {allAssignments.map((item, i) => {
+                            const students =
+                              course?.sections
+                                .map((sec) => sec.students!)
+                                .flat() || [];
+                            return (
+                              <div
+                                className={`last:mb-[2px] flex px-2  bg-[#ffffff] flex-col rounded-md gap-10 py-2 ${
+                                  activeSection === i ? "active" : ""
+                                }`}
+                                style={{
+                                  boxShadow:
+                                    "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                                }}
+                                id={`${item.name}`}
+                                key={i}
+                                ref={sectionRefs.current!.at(i)} // Dynamic refs
+                              >
+                                <Tabs
+                                  classNames={{
+                                    root: "overflow-hidden mt-1 mx-3 flex flex-col max-h-full",
+                                  }}
+                                  value={tabStates[i] || "bellCurve"} // Default tab for new items
+                                  onChange={(newValue) =>
+                                    handleTabChange(i, newValue)
+                                  } // Update specific tab
+                                >
+                                  <Tabs.List className="mb-2">
+                                    <Tabs.Tab
+                                      value="bellCurve"
+                                      className="acerSwift:max-macair133:!text-b3"
+                                    >
+                                      Distribution
+                                    </Tabs.Tab>
+                                    <Tabs.Tab
+                                      value="histogram"
+                                      className="acerSwift:max-macair133:!text-b3"
+                                    >
+                                      Histogram
+                                    </Tabs.Tab>
+                                  </Tabs.List>
+                                  <Tabs.Panel
+                                    className="flex flex-col gap-1"
+                                    value="histogram"
+                                  >
+                                    <ChartContainer
+                                      type="histogram"
+                                      data={item}
+                                      students={students}
+                                    />
+                                  </Tabs.Panel>
+                                  <Tabs.Panel
+                                    className="flex flex-col gap-1"
+                                    value="bellCurve"
+                                  >
+                                    <ChartContainer
+                                      type="curve"
+                                      data={item}
+                                      students={students}
+                                    />
+                                    <p className=" text-[10px] translate-x-6 mb-2">
+                                      Score distribution powered by Andrew C.
+                                      Myers (Cornell University)
+                                    </p>
+                                  </Tabs.Panel>
+                                </Tabs>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        <div className="max-w-[12%] mt-3 flex flex-col  ">
+                          {allAssignments.map((item, i) => (
                             <div
-                              className={`last:mb-[2px] flex px-2  bg-[#ffffff] flex-col rounded-md gap-10 py-2 ${
+                              key={i}
+                              className={`max-w-fit  ${
                                 activeSection === i ? "active" : ""
                               }`}
-                              style={{
-                                boxShadow:
-                                  "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                              }}
-                              id={`${item.name}`}
-                              key={i}
-                              ref={sectionRefs.current!.at(i)} // Dynamic refs
                             >
-                              <Tabs
-                                classNames={{
-                                  root: "overflow-hidden mt-1 mx-3 flex flex-col max-h-full",
-                                }}
-                                value={tabStates[i] || "bellCurve"} // Default tab for new items
-                                onChange={(newValue) =>
-                                  handleTabChange(i, newValue)
-                                } // Update specific tab
-                              >
-                                <Tabs.List className="mb-2">
-                                  <Tabs.Tab
-                                    value="bellCurve"
-                                    className="acerSwift:max-macair133:!text-b3"
-                                  >
-                                    Distribution
-                                  </Tabs.Tab>
-                                  <Tabs.Tab
-                                    value="histogram"
-                                    className="acerSwift:max-macair133:!text-b3"
-                                  >
-                                    Histogram
-                                  </Tabs.Tab>
-                                </Tabs.List>
-                                <Tabs.Panel
-                                  className="flex flex-col gap-1"
-                                  value="histogram"
+                              <a href={`#${item.name}`}>
+                                <p
+                                  className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-b3 acerSwift:max-macair133:!text-b4 ${
+                                    activeSection === i
+                                      ? "text-secondary"
+                                      : "text-[#D2C9C9] "
+                                  }`}
                                 >
-                                  <ChartContainer
-                                    type="histogram"
-                                    data={item}
-                                    students={students}
-                                  />
-                                </Tabs.Panel>
-                                <Tabs.Panel
-                                  className="flex flex-col gap-1"
-                                  value="bellCurve"
-                                >
-                                  <ChartContainer
-                                    type="curve"
-                                    data={item}
-                                    students={students}
-                                  />
-                                  <p className=" text-[10px] translate-x-6 mb-2">
-                                    Score distribution powered by Andrew C.
-                                    Myers (Cornell University)
-                                  </p>
-                                </Tabs.Panel>
-                              </Tabs>
+                                  {item.name}
+                                </p>
+                              </a>
                             </div>
-                          );
-                        })}
-                      </div>
-
-                      <div className="max-w-[12%] mt-3 flex flex-col  ">
-                        {allAssignments.map((item, i) => (
-                          <div
-                            key={i}
-                            className={`max-w-fit  ${
-                              activeSection === i ? "active" : ""
-                            }`}
-                          >
-                            <a href={`#${item.name}`}>
-                              <p
-                                className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-b3 acerSwift:max-macair133:!text-b4 ${
-                                  activeSection === i
-                                    ? "text-secondary"
-                                    : "text-[#D2C9C9] "
-                                }`}
-                              >
-                                {item.name}
-                              </p>
-                            </a>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Tabs.Panel>
-              </Tabs>
+                  </Tabs.Panel>
+                </Tabs>
+              ) : (
+                <div className="flex flex-col gap-3 overflow-y-auto h-full ">
+                  {" "}
+                  {allAssignments.map((assignment, index) => {
+                    const students =
+                      course?.sections.map((sec) => sec.students!).flat() || [];
+                    const totalStudent = students.filter(({ scores }) =>
+                      scores.find(
+                        ({ assignmentName }) =>
+                          assignmentName == assignment.name
+                      )
+                    ).length;
+                    const totalScore = students.reduce(
+                      (a, b) =>
+                        a +
+                        (b.scores
+                          .find(
+                            ({ assignmentName }) =>
+                              assignmentName == assignment.name
+                          )
+                          ?.questions.filter(({ score }) => score >= 0)
+                          .reduce((sum, { score }) => sum + score, 0) || 0),
+                      0
+                    );
+                    return (
+                      <div
+                        key={index}
+                        className={`border flex flex-col hover:bg-bgTableHeader justify-between rounded-md p-3 `}
+                        onClick={() => goToAssignment(`${assignment.name}`)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex flex-col">
+                            <div className=" font-semibold text-default text-[14px]">
+                              {assignment.name}
+                            </div>
+                            <div className="font-semibold text-secondary text-[14px] ">
+                              Full score:{" "}
+                              {assignment.questions.reduce(
+                                (sum, { fullScore }) => sum + fullScore,
+                                0
+                              )}
+                            </div>
+                          </div>
+                          <Icon IconComponent={IconChevron} />
+                        </div>
+                        <div className="mt-3 bg-slate-100 rounded-md p-4 text-[12px] grid grid-cols-2  ">
+                          <div>
+                            Mean{" "}
+                            {((totalScore || 0) / (totalStudent || 1)).toFixed(
+                              2
+                            )}
+                          </div>
+                          <div>Student(s): {totalStudent || 0}</div>
+                        </div>
+                        {activeTerm && (
+                          <div className="text-center  !w-full justify-items-center">
+                            <Button
+                              variant="filled"
+                              classNames={{ label: "!font-semibold " }}
+                              className={`rounded-full mt-3 ${
+                                assignment.isPublish
+                                  ? " bg-teal-500 hover:bg-teal-600"
+                                  : " bg-orange-600 hover:bg-orange-700"
+                              } items-center justify-center !h-10 flex flex-1 !w-full cursor-pointer`}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                form.setFieldValue(
+                                  "isPublish",
+                                  !assignment.isPublish
+                                );
+                                form.setFieldValue(
+                                  "sections",
+                                  course?.sections.map(
+                                    (sec) => sec.sectionNo
+                                  ) || []
+                                );
+                                form.setFieldValue("assignments", [
+                                  assignment.name,
+                                ]);
+                                onClickPublish();
+                              }}
+                            >
+                              {assignment.isPublish ? (
+                                <p className="!font-semibold">Publish</p>
+                              ) : (
+                                <p className="!font-semibold ">Unpublish</p>
+                              )}
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )
             ) : (
               <div className="flex items-center  !h-full !w-full justify-between  sm:px-16">
-              <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
+                <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
                   <p className="!h-full text-[20px] text-secondary font-semibold">
                     No Evaluation
                   </p>{" "}
@@ -1122,13 +1229,15 @@ export default function AllAssignment() {
                   </p>{" "}
                   {activeTerm && <div className="mt-3">{uploadButton()}</div>}
                 </div>
-               {!isMobile && <div className=" items-center justify-center flex">
-                  <img
-                    src={notFoundImage}
-                    className="h-full items-center  w-[24vw] justify-center flex flex-col"
-                    alt="notFound"
-                  ></img>
-                </div>}
+                {!isMobile && (
+                  <div className=" items-center justify-center flex">
+                    <img
+                      src={notFoundImage}
+                      className="h-full items-center  w-[24vw] justify-center flex flex-col"
+                      alt="notFound"
+                    ></img>
+                  </div>
+                )}
               </div>
             )}
           </>
