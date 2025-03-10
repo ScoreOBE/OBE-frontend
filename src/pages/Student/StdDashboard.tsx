@@ -136,7 +136,7 @@ export default function StdDashboard() {
                 </div>
               }
             ></Alert> */}
-            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 iphone:max-sm:grid-cols-1 sm:grid-cols-3 macair133:grid-cols-4  pb-5 gap-4 sm:px-6 p-3">
+            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 iphone:max-sm:grid-cols-1 sm:grid-cols-3 macair133:grid-cols-4  pb-5 gap-4 sm:px-6 p-4">
               {enrollCourses.courses.map((item) => (
                 <div
                   key={item.id}
@@ -167,19 +167,19 @@ export default function StdDashboard() {
             </div>
           </div>
         ) : (
-          <div className=" flex flex-row flex-1 px-[95px] sm:max-ipad11:px-[70px] justify-between">
-            <div className="h-full  justify-center flex flex-col">
-              <p className="text-secondary text-[22px] sm:max-ipad11:text-[20px] font-semibold">
+          <div className=" flex iphone:max-sm:justify-center iphone:max-sm:text-center iphone:max-sm:items-center flex-row flex-1 px-[95px] iphone:max-sm:px-16 sm:max-ipad11:px-[70px] justify-between">
+            <div className="h-full iphone:max-sm:w-full  justify-center flex flex-col">
+              <p className="text-secondary iphone:max-sm:item-center text-[22px] sm:max-ipad11:text-[20px] font-semibold">
                 No Course Found
               </p>
               <br />
               <p className=" -mt-4 mb-6 sm:max-ipad11:mb-2 text-b2 break-words font-medium leading-relaxed">
-                It looks like you haven't enrolled any courses.
+                It looks like instructor hasn't published your score yet. 
               </p>
             </div>
-            <div className="h-full  w-[24vw] justify-center flex flex-col">
+           {!isMobile && <div className="h-full  w-[24vw] justify-center flex flex-col">
               <img src={notFoundImage} alt="notFound"></img>
-            </div>
+            </div>}
           </div>
         )}
       </div>

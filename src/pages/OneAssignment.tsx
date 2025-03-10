@@ -195,7 +195,7 @@ export default function OneAssignment() {
         data={editScore!}
       />
       <div className="bg-white flex flex-col h-full w-full px-6 py-5 gap-2 overflow-hidden">
-       {!isMobile && <Breadcrumbs items={items} />}
+        <Breadcrumbs items={items} />
         {loading.loading ? (
           <Loading />
         ) : (

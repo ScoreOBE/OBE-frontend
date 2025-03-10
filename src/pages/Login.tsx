@@ -1,7 +1,7 @@
 "use client";
 import cmulogoLogin from "@/assets/image/cmuLogoLoginWhite.png";
 import loginImage from "@/assets/image/loginPage.png";
-import { Accordion, Button, Tabs, Title } from "@mantine/core";
+import { Accordion, Alert, Button, Tabs, Title } from "@mantine/core";
 import { Image } from "@mantine/core";
 import ModalTermsOfService from "@/components/Modal/ModalTermOfService";
 import scoreobe from "@/assets/image/scoreOBElogobold.png";
@@ -17,6 +17,7 @@ import {
 import Icon from "@/components/Icon";
 import IconLock from "@/assets/icons/lockIcon.svg?react";
 import IconExternal from "@/assets/icons/externalLink.svg?react";
+import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconRefresh from "@/assets/icons/refresh.svg?react";
 import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
@@ -188,7 +189,7 @@ export default function Login() {
   const ButtonLogin = () => {
     return (
       <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
-        <Button className="z-[52] drop-shadow-2xl iphone:max-sm:!rounded-xl iphone:max-sm:px-8 bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]">
+        <Button className="z-[52] iphone:max-sm:mb-28  drop-shadow-2xl iphone:max-sm:!rounded-3xl iphone:max-sm:px-8 bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]">
           <img
             src={cmulogoLogin}
             alt="CMULogo"
@@ -202,7 +203,7 @@ export default function Login() {
 
   return (
     <div
-      className=" bg-[#fafafa] h-full w-screen items-center flex flex-col overflow-y-auto overflow-x-hidden"
+      className=" bg-[#fafafa]  h-full w-screen items-center flex flex-col overflow-y-auto overflow-x-hidden"
       ref={scrollableRef}
     >
       <ModalTermsOfService
@@ -238,10 +239,33 @@ export default function Login() {
             </>
           )}
         </p>
-        <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[14px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[40px] font-[500]">
+       { !isMobile ? <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[14px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[40px] font-[500]">
           Discover A Better Way to Do OBE Simplify Your Academic Journey
-        </p>
-
+        </p> : <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[16px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[40px] font-[500]"> Academic Supercharger for instructors and students</p>}
+        <div className=" mx-8">
+          <Alert
+            radius="md"
+            variant="light"
+            color="indigo"
+            className=" iphone:max-sm:flex hidden w-full items-center justify-center mt-6 "
+            classNames={{
+              body: " flex justify-center",
+            }}
+            
+      
+            title={
+              <div className="flex items-center gap-2 text-[12px]">
+                <Icon
+                  IconComponent={IconExclamationCircle}
+                  className="acerSwift:max-macair133:size-5"
+                />
+                <p>
+                Some features may not be fully supported on smaller screens.
+                </p>
+              </div>
+            }>
+          </Alert>
+        </div>
         <div
           ref={buttonRef}
           className="items-center mt-8 text-center w-full justify-center   "
@@ -312,18 +336,19 @@ export default function Login() {
 
           <img src={loginImage} alt="loginImage" />
         </div>
+     
 
         {/* Upload, Publish grading efficiency. */}
-        <div className="bg-[#fafafa] sm:flex  h-full w-full gap-16 ">
+        <div className="bg-[#fafafa] sm:flex   h-full w-full gap-16 ">
           <div className="relative items-start text-start pb-32 justify-start w-full overflow-clip">
             {" "}
             <div className="absolute left-0 right-0 bottom-0 z-0 h-40 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px]"></div>
             <div className="relative">
               <div
-                className="relative h-fit w-full py-20 mt-16 max-macair133:mt-8 sm:px-[118px] iphone:max-sm:px-8"
+                className="relative h-fit w-full iphone:max-sm:-translate-y-20 py-20 mt-16 max-macair133:mt-8 sm:px-[118px] iphone:max-sm:px-8"
                 ref={targetRef}
               >
-                <div className="absolute ml-[40%] max-macair133:ml-0 left-0 right-0 bottom-40 z-0 max-macair133:h-16 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px] max-macair133:blur-[200px]"></div>
+                <div className="absolute ml-[40%]  max-macair133:ml-0 left-0 right-0 bottom-40 z-0 max-macair133:h-16 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px] max-macair133:blur-[200px]"></div>
                 <p className="drop-shadow-xl pb-2 cursor-default leading-[56px] iphone:max-sm:!leading-[36px] max-macair133:text-center text-[#000000] text-[48px] ">
                   <span className="font-[700] iphone:max-sm:!text-[24px] iphone:max-sm:!leading-[12px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default sm:leading-[56px] sm:text-[48px] max-macair133:text-[44px]">
                     Upload, Publish
@@ -580,7 +605,7 @@ export default function Login() {
         </div>
 
         {/* TQFs */}
-        <div className="sm:flex flex-col w-full h-fit pt-16 ">
+        <div className="sm:flex flex-col w-full h-fit iphone:max-sm:-translate-y-20 pt-16 ">
           <div className="flex flex-col items-start text-start sm:px-28 px-10">
             <div className="font-[700] flex flex-col gap-1 iphone:max-sm:text-[28px] text-[#ec407a] drop-shadow-xl pb-2 cursor-default mt-16 sm:leading-[56px]  items-start text-[48px] max-macair133:text-[44px] ">
               <p>New TQF system</p>
@@ -600,7 +625,7 @@ export default function Login() {
           </div>
 
           {/* benefit */}
-          <div className="flex flex-col mt-16 iphone:max-sm:-mt-44  ">
+          <div className="flex flex-col mt-16 iphone:max-sm:-mt-48  ">
             <div className="flex gap-16 h-screen w-screen justify-center items-center">
               <div className="flex flex-col gap-6 items-start text-start">
                 <p className="font-[700]  flex flex-col gap-1 text-emphasize drop-shadow-xl cursor-default items-start text-[28px] max-macair133:text-[24px]">
@@ -629,7 +654,7 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="bg-[#fafafa] py-14 flex flex-col iphone:max-sm:-mt-64 gap-10 -mt-24">
+          <div className="bg-[#fafafa] py-14 flex flex-col iphone:max-sm:-mt-80 gap-10 -mt-24">
             {/* TQF3 */}
             <div className="flex flex-col items-center text-center font-[600] gap-14 ">
               <div className="mx-28">
@@ -836,8 +861,8 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="bg-[#F2F2F2] sm:flex  h-fit w-full flex-col gap-28 py-36 ">
-          <div className="flex flex-col iphone:max-sm:-mt-24 items-start text-start sm:px-28 px-10">
+        <div className=" sm:flex  h-fit w-full flex-col gap-28 py-36 ">
+          <div className="flex flex-col iphone:max-sm:-mt-32 items-start text-start sm:px-28 px-10">
             <div className="font-[700] flex flex-col iphone:max-sm:text-[28px] gap-1 text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default sm:leading-[56px]  items-start text-[48px]  max-macair133:text-[44px]">
               <p>
                 Say Goodbye to Complexity, <br /> Hello to Seamless Course
@@ -943,7 +968,7 @@ export default function Login() {
             </Tabs>
           </div>
 
-          <div className="flex h-fit items-center mt-8 iphone:max-sm:-mt-56">
+          <div className="flex h-fit items-center mt-8 iphone:max-sm:-mt-72">
             <div className="flex flex-col items-start justify-center gap-4 max-macair133:gap-2 h-[85%] iphone:max-sm:px-10  sm:pl-28 samsungA24:pl-48">
               <div className="flex flex-col gap-2 items-start mt-2 mb-2">
                 <p className="font-[700] text-[36px] text-emphasize">

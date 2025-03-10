@@ -10,7 +10,7 @@ export default function Breadcrumbs({ items = [] }: Props) {
     <div className="flex gap-3 bg-[#e7f0ff] px-4 py-[10px] rounded-md">
       {items.map((item, index) => (
         <div
-          className="flex items-center justify-center gap-3 text-b2  acerSwift:max-macair133:!text-b3"
+          className="flex items-center iphone:max-sm:text-[12px] justify-center gap-3 text-b2  acerSwift:max-macair133:!text-b3"
           key={item.title}
         >
           <Link

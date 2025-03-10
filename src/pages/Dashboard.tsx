@@ -430,7 +430,7 @@ export default function Dashboard() {
                 height={"100%"}
                 loader={<Loading />}
                 hasMore={payload?.hasMore}
-                className="overflow-y-auto w-full h-fit iphone:max-sm:grid-cols-1 sm:px-6 p-3 max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4 pb-5 gap-4 "
+                className="overflow-y-auto w-full h-fit iphone:max-sm:grid-cols-1 sm:px-6 p-4 max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4 pb-5 gap-4 "
                 style={{ height: "fit-content", maxHeight: "100%" }}
               >
                 {courseList.courses.map((item) => {
@@ -566,8 +566,8 @@ export default function Dashboard() {
               </InfiniteScroll>
             </div>
           ) : (
-            <div className=" flex flex-row flex-1 px-[95px] sm:max-ipad11:px-[70px] justify-between">
-              <div className="h-full  justify-center flex flex-col">
+            <div className=" flex flex-row flex-1 px-[95px] iphone:max-sm:px-16 sm:max-ipad11:px-[70px] justify-between">
+              <div className="h-full iphone:max-sm:items-center iphone:max-sm:justify-center iphone:max-sm:text-center justify-center flex flex-col">
                 <p className="text-secondary text-[22px] sm:max-ipad11:text-[20px] font-semibold">
                   {courseList.search.length
                     ? `No results for "${courseList.search}" `
@@ -581,15 +581,16 @@ export default function Dashboard() {
                     <>
                       It looks like you haven't added any courses yet.
                       <br />
-                      Click 'Add Course' button below to get started!
+                     {!isMobile && <>Click 'Add Course' button below to get started!</>}
                     </>
                   )}
                 </p>
 
-                {term?.isActive && !courseList.search.length && (
+                {term?.isActive && !courseList.search.length && !isMobile && (
                   <Button
                     className="text-center px-4"
                     onClick={() => setOpenAddModal(true)}
+                    
                   >
                     <div className="flex gap-2">
                       <Icon IconComponent={IconAdd} />
@@ -598,9 +599,9 @@ export default function Dashboard() {
                   </Button>
                 )}
               </div>
-              <div className="h-full  w-[24vw] justify-center flex flex-col">
+             { !isMobile && <div className="h-full  w-[24vw] justify-center flex flex-col">
                 <img src={notFoundImage} alt="notFound"></img>
-              </div>
+              </div>}
             </div>
           )}
         </div>

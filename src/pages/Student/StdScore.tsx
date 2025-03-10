@@ -102,7 +102,7 @@ export default function StdScore() {
         question={selectQuestion}
       />
       <div className="bg-white flex flex-col h-full w-full sm:px-6 iphone:max-sm:px-3 iphone:max-sm:py-3 sm:py-5 gap-3 iphone:max-sm:overflow-y-auto  overflow-hidden">
-        {!isMobile && <Breadcrumbs items={items} />}
+        <Breadcrumbs items={items} />
         {loading ? (
           <Loading />
         ) : (
@@ -288,41 +288,47 @@ export default function StdScore() {
                     <div
                       key={index}
                       className={` border flex flex-col  justify-between rounded-md p-3 `}
-                    ><div>
-                        <div className=" font-semibold text-default text-[14px]">{ques.name}</div>
-                        <div className="font-semibold text-secondary text-[14px] ">
-                        {!studentScore || studentScore < 0
-                          ? "-"
-                          : studentScore.toFixed(2)}{" "}
-                        / {ques.fullScore.toFixed(2)}
-                      </div>
+                    >
+                      <div className="flex  justify-between">
+                        <div className="flex flex-col">
+                          <div className=" font-semibold text-default text-[14px]">
+                            {ques.name}
+                          </div>
+                          <div className="font-semibold text-secondary text-[12px] ">
+                            {!studentScore || studentScore < 0
+                              ? "-"
+                              : studentScore.toFixed(2)}{" "}
+                            / {ques.fullScore.toFixed(2)}
+                          </div>
+                        </div>
+                  
                       </div>
                       <div className="mt-2 text-[12px] flex flex-col ">
-                      <div className="grid grid-cols-2 p-2 bg-slate-100 rounded-t-md">
-                      <div className="text-start">
-                        Mean: {stat.mean.toFixed(2)}
+                        <div className="grid grid-cols-2 p-2 bg-slate-100 rounded-t-md">
+                          <div className="text-start">
+                            Mean: {stat.mean.toFixed(2)}
+                          </div>
+                          <div className="text-start">
+                            SD: {stat.sd.toFixed(2)}
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 p-2 bg-slate-100">
+                          <div className="text-start">
+                            Median: {stat.median.toFixed(2)}
+                          </div>
+                          <div className="text-start">
+                            Max: {stat.maxScore.toFixed(2)}
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 p-2 bg-slate-100 rounded-b-md">
+                          <div className="text-start">
+                            Q3: {stat.q3.toFixed(2)}
+                          </div>
+                          <div className="text-start">
+                            Q1: {stat.q1 ? stat.q1.toFixed(2) : "-"}
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-start">
-                        SD: {stat.sd.toFixed(2)}
-                      </div>
-                      </div>
-                      <div className="grid grid-cols-2 p-2 bg-slate-100">
-                      <div className="text-start">
-                        Median: {stat.median.toFixed(2)}
-                      </div>
-                      <div className="text-start">
-                        Max: {stat.maxScore.toFixed(2)}
-                      </div>
-                      </div>
-                      <div className="grid grid-cols-2 p-2 bg-slate-100 rounded-b-md">
-                      <div className="text-start">
-                        Q3: {stat.q3.toFixed(2)}
-                      </div>
-                      <div className="text-start">
-                        Q1: {stat.q1 ? stat.q1.toFixed(2) : "-"}
-                      </div>
-                      </div>
-                    </div>
                     </div>
                   );
                 })}
