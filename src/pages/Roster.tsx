@@ -276,6 +276,76 @@ export default function Roster() {
       ))
   );
 
+  const dataMobile = course?.sections?.map((sec) =>
+    sec.students
+      ?.map(({ student }) => student)
+      .filter((student) =>
+        parseInt(filter)
+          ? student.studentId?.toString().includes(filter) ||
+            sec.sectionNo?.toString().includes(filter)
+          : getUserName(student, 3)?.includes(filter)
+      )
+      ?.map((student) => (
+        <div
+          className="font-medium  grid grid-cols-2 justify-between items-center p-4  border-b text-default text-b3 acerSwift:max-macair133:!text-b4"
+          key={student.studentId}
+        >
+        <div className="flex flex-col gap-[2px]">
+          <div>{student.studentId}</div>
+          <div>{getUserName(student, 3)}</div></div>
+          <div className="text-end">Section:{getSectionNo(sec.sectionNo)}</div>
+          <div>{student.email ? student.email : ""}</div>
+          {activeTerm && user.role != ROLE.TA && !isMobile && (
+            <div>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setActionModal("Edit");
+                    setSelectedUser({
+                      sectionNo: getSectionNo(sec.sectionNo),
+                      ...student,
+                    });
+                    form.setValues({
+                      sectionNo: getSectionNo(sec.sectionNo),
+                      name: getUserName(student, 3),
+                      studentId: student.studentId,
+                      email: student.email,
+                    });
+                    setOpenModalAddEditStudent(true);
+                  }}
+                  color="yellow"
+                  className="tag-tqf !px-3 !rounded-full text-center"
+                >
+                  <Icon
+                    className="size-5 acerSwift:max-macair133:size-4"
+                    IconComponent={IconEdit}
+                  />
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedUser({
+                      sectionNo: getSectionNo(sec.sectionNo),
+                      ...student,
+                    });
+                    setOpenPopupDeleteStudent(true);
+                  }}
+                  color="red"
+                  className="tag-tqf !px-3 !rounded-full text-center"
+                >
+                  <Icon
+                    className="size-5 acerSwift:max-macair133:size-4"
+                    IconComponent={Iconbin}
+                  />
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      ))
+  );
+
   const studentTable = () => {
     const hasData = rows && rows.flat().length > 0;
     const search = filter.length > 0;
@@ -416,6 +486,80 @@ export default function Roster() {
       </>
     );
   };
+
+  const rosterMobile = () => {
+    const hasData = rows && rows.flat().length > 0;
+    const search = filter.length > 0;
+    return (
+      <>
+        {(hasData || search) && (
+          <div className=" sm:px-1 mb-2 sm:flex iphone:max-sm:flex-col items-center justify-between">
+            <p className="  text-secondary font-semibold acerSwift:max-macair133:!text-b2">
+              {(() => {
+                const totalStudents = course?.sections.reduce(
+                  (total, sec) => total + (sec.students?.length || 0),
+                  0
+                );
+                return `${totalStudents} ${
+                  totalStudents === 1 ? "Student" : "Students"
+                }`;
+              })()}
+            </p>
+            <div className="flex gap-3 items-center">
+              <TextInput
+                leftSection={<TbSearch />}
+                placeholder="Section No, Student No, Name"
+                size="xs"
+                rightSectionPointerEvents="all"
+                className="mx-1 sm:w-[25vw] iphone:max-sm:w-full iphone:max-sm:mt-2 iphone:max-sm:-ml-[2px] "
+                onChange={(event) => setFilter(event.currentTarget.value)}
+              ></TextInput>
+              
+            </div>
+          </div>
+        )}
+        <div
+        
+          className="mx-1 border mt-3 max-h-screen h-fit flex flex-col bg-white mb-1 rounded-md overflow-y-auto acerSwift:max-macair133:!text-b4"
+        >
+          {hasData ? (
+            <div>{dataMobile}</div>
+          ) : (
+            <div className="flex items-center !h-screen   justify-between px-10 !w-full">
+              <p className="text-start font-semibold text-[20px] iphone:max-sm:text-center text-secondary sm:px-6 -translate-y-1 py-10">
+                {search
+                  ? `No results for "${filter}"`
+                  : "No Course Roster found"}
+                <br />
+                <p className="mt-1 text-[#333333] font-medium text-b2">
+                  {search
+                    ? "Check the spelling or try a new search."
+                    : "Course Roster will show when you import first."}
+                </p>
+                {!search && activeTerm && !isMobile && (
+                  <Button
+                    leftSection={
+                      <Icon className="size-5" IconComponent={IconImport} />
+                    }
+                    variant="filled"
+                   
+                    onClick={() => setOpenModalUploadStudentList(true)}
+                    className=" font-bold mt-5"
+                  >
+                    Import Course Roster
+                  </Button>
+                )}
+              </p>
+
+             {!isMobile && <div className="h-full  w-[24vw] m-6 justify-center -translate-y-1 flex flex-col">
+                <img src={notFoundImage} alt="notFound"></img>
+              </div>}
+            </div>
+          )}
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className=" flex flex-col sm:p-5 iphone:max-sm:p-3 h-full w-full overflow-hidden">
@@ -595,7 +739,7 @@ export default function Roster() {
           </div>
         </div>
       </Modal>
-      {loading.loading ? <Loading /> : studentTable()}
+      {loading.loading ? <Loading /> : (!isMobile ? studentTable() : rosterMobile())}
     </div>
   );
 }
