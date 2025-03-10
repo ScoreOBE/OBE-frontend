@@ -527,8 +527,8 @@ export default function Assignment() {
                                                           classNames={{ label: "!font-semibold " }}
                                                           className={`rounded-full mt-3 ${
                                                             assignment.isPublish
-                                                              ? " bg-teal-500 hover:bg-teal-600"
-                                                              : " bg-orange-600 hover:bg-orange-700"
+                                                              ? " bg-orange-600 hover:bg-orange-700"
+                                                              : " bg-teal-500 hover:bg-teal-600"
                                                           } items-center justify-center !h-10 flex flex-1 !w-full cursor-pointer`}
                               onClick={(event) => {
                                 event.stopPropagation();
@@ -546,9 +546,9 @@ export default function Assignment() {
                               }}
                             >
                               {assignment.isPublish ? (
-                                <p className="!font-semibold">Publish</p>
-                              ) : (
                                 <p className="!font-semibold">Unpublish</p>
+                              ) : (
+                                <p className="!font-semibold">Publish</p>
                               )}
                             </Button>
                           </div>
