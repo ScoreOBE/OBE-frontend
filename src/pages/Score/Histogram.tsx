@@ -107,7 +107,7 @@ export default function Histogram() {
 
   return (
     <div className="bg-white flex flex-col h-full w-full px-6 pt-5  gap-3 overflow-hidden">
-      {!isMobile && <Breadcrumbs items={items} />}
+     <Breadcrumbs items={items} />
       {loading ? (
         <Loading />
       ) : (section?.instructor as any)?.id === user.id ||

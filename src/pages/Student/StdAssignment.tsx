@@ -13,6 +13,9 @@ import Loading from "@/components/Loading/Loading";
 import { Table } from "@mantine/core";
 import { calStat } from "@/helpers/functions/score";
 import { isMobile } from "@/helpers/functions/function";
+import IconChevron from "@/assets/icons/chevronRight.svg?react";
+import Icon from "@/components/Icon";
+
 
 export default function StdAssignment() {
   const { courseNo } = useParams();
@@ -147,7 +150,8 @@ export default function StdAssignment() {
                       className={`border flex flex-col justify-between rounded-md p-3 `}
                       onClick={() => goToAssignment(`${assignment.name}`)}
                     >
-                      <div>
+                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
                         <div className=" font-semibold text-default text-[14px]">{assignment.name}</div>
 
                         <div className="font-semibold text-secondary text-[14px] ">
@@ -165,6 +169,8 @@ export default function StdAssignment() {
                             .toFixed(2)}
                         </div>
                       </div>
+                      <Icon IconComponent={IconChevron} />
+                       </div>
                       <div className="mt-2 text-[12px] flex flex-col ">
                         {" "}
                         <div className="grid grid-cols-2 p-2 bg-slate-100 rounded-t-md">

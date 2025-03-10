@@ -256,7 +256,7 @@ export default function Assignment() {
       />
 
       <div className="bg-white flex flex-col h-full w-full sm:px-6 iphone:max-sm:px-3 py-5 gap-3 overflow-hidden">
-      { !isMobile && <Breadcrumbs items={items} />}
+      <Breadcrumbs items={items} />
         {loading.loading ? (
           <Loading />
         ) : (section?.instructor as IModelUser)?.id === user.id ||

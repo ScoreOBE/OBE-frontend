@@ -351,7 +351,7 @@ export default function Section() {
             </div>
           </div>}
           <div className="flex h-full w-full  rounded-[5px] overflow-hidden">
-            <div className="overflow-y-auto w-full h-fit iphone:max-sm:grid-cols-1 max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4  pb-5 gap-4 iphone:max-sm:px-3 sm:px-6 p-3">
+            <div className="overflow-y-auto w-full h-fit iphone:max-sm:grid-cols-1 max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4  pb-5 gap-4 iphone:max-sm:px-3 sm:px-6 p-4">
               {course?.sections.map((sec, index) => {
                 const owner = (sec.instructor as IModelUser).id == user.id;
                 const addFirstTime = course.addFirstTime || sec.addFirstTime;
