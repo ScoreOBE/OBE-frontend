@@ -1,15 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import {
-  Alert,
-  Button,
-  Group,
-  Menu,
-  Modal,
-  Radio,
-  Select,
-  Tabs,
-} from "@mantine/core";
+import { Alert, Button, Group, Menu, Modal, Radio, Tabs } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconDots from "@/assets/icons/dots.svg?react";
 import IconCheck from "@/assets/icons/Check.svg?react";

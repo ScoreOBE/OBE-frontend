@@ -48,6 +48,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
     initialValues: { data: [] as IModelTQF5Part3[] },
     validateInputOnBlur: true,
     onValuesChange(values, previous) {
+      delete (values as any).id;
       if (!isEqual(values, previous)) {
         dispatch(
           updatePartTQF5({ part: "part3", data: cloneDeep(form.getValues()) })
@@ -90,8 +91,10 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
           ) as any,
           cloItem.assess
         );
-        cloItem.sections = sectionsData;
-        cloItem.score = score;
+        if (form.getValues().data[index].score != score) {
+          form.setFieldValue(`data.${index}.sections`, sectionsData);
+          form.setFieldValue(`data.${index}.score`, score);
+        }
       });
       setAssessmentCloScores(newCalCloScore as any);
     }
