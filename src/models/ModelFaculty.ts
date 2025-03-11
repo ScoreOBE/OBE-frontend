@@ -3,7 +3,6 @@ export interface IModelFaculty {
   facultyCode: string;
   facultyTH: string;
   facultyEN: string;
-  code: string;
   department: IModelDepartment[];
   curriculum: IModelCurriculum[];
 }
