@@ -6,7 +6,7 @@ import { Button, Table, Tabs, TextInput } from "@mantine/core";
 import Icon from "../Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconCheck2 from "@/assets/icons/Check2.svg?react";
-import { METHOD_TQF5 } from "@/helpers/constants/enum";
+import { METHOD_TQF5, ROLE } from "@/helpers/constants/enum";
 import { useForm } from "@mantine/form";
 import { IModelTQF5Part3 } from "@/models/ModelTQF5";
 import { updatePartTQF5 } from "@/store/tqf5";
@@ -24,8 +24,12 @@ type Props = {
 
 export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
   const { courseNo } = useParams();
+  const dashboard = useAppSelector((state) => state.config.dashboard);
   const course = useAppSelector((state) =>
-    state.course.courses.find((e) => e.courseNo == courseNo)
+    (dashboard == ROLE.CURRICULUM_ADMIN
+      ? state.allCourse
+      : state.course
+    ).courses.find((c) => c.courseNo == courseNo)
   );
   const tqf5 = useAppSelector((state) => state.tqf5);
   const dispatch = useAppDispatch();

@@ -34,10 +34,12 @@ export default function Part1TQF3({ setForm }: Props) {
     parseInt(params.get("year") || "") !== academicYear.year &&
     parseInt(params.get("semester") || "") !== academicYear.semester;
   const dashboard = useAppSelector((state) => state.config.dashboard);
-  const courseType = useAppSelector((state) =>
-    dashboard == ROLE.CURRICULUM_ADMIN
-      ? state.allCourse.courses.find((c) => c.courseNo == courseNo)?.type
-      : state.course.courses.find((c) => c.courseNo == courseNo)?.type
+  const courseType = useAppSelector(
+    (state) =>
+      (dashboard == ROLE.CURRICULUM_ADMIN
+        ? state.allCourse
+        : state.course
+      ).courses.find((c) => c.courseNo == courseNo)?.type
   );
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
