@@ -3,9 +3,14 @@ import { BarChart } from "@mantine/charts";
 type Props = {
   data: object[];
   height: any;
+  courseCard?: boolean;
 };
 
-export default function PloBarChart({ data, height }: Props) {
+export default function PloBarChart({
+  data,
+  height,
+  courseCard = false,
+}: Props) {
   return (
     <BarChart
       h={height}
@@ -18,7 +23,7 @@ export default function PloBarChart({ data, height }: Props) {
       style={{
         "--chart-cursor-fill": "#EAEBEB",
       }}
-      className="w-full"
+      className="w-full "
       barLabelColor={"red"}
       barChartProps={{
         barGap: 0,
@@ -36,7 +41,11 @@ export default function PloBarChart({ data, height }: Props) {
           if (active && payload && payload.length) {
             const { score, descTH, descEN, notMap } = payload[0].payload;
             return (
-              <div className="bg-gray-900 text-white p-4 rounded-xl shadow-lg max-w-[460px]">
+              <div
+                className={`bg-gray-900 text-white p-4 rounded-xl shadow-lg max-w-[460px] ${
+                  courseCard && "-translate-x-14"
+                }`}
+              >
                 <div className="flex flex-col mb-2">
                   <p className="text-sm font-semibold text-white">
                     {label}

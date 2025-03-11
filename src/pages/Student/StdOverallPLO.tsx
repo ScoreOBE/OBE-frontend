@@ -7,7 +7,7 @@ import { ROLE } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading/Loading";
 import { Accordion, Button, Tabs, TextInput } from "@mantine/core";
 import DrawerPLOdes from "@/components/DrawerPLO";
-import BarChart from "@/components/Chart/PloBarChart";
+import PloBarChart from "@/components/Chart/PloBarChart";
 import { TbSearch } from "react-icons/tb";
 import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
 import { setLoading } from "@/store/loading";
@@ -148,7 +148,7 @@ export default function StdOverallPLO() {
                           </p>
                         </div>
                         <div className="w-full h-full flex items-start justify-center -translate-x-1">
-                          <BarChart data={plos} height={height} />
+                          <PloBarChart data={plos} height={height} />
                         </div>
                       </div>
                     </div>
@@ -250,7 +250,11 @@ export default function StdOverallPLO() {
                           </div>
                           {course.plos.length ? (
                             <div className="-translate-x-3 pr-4">
-                              <BarChart data={course.plos} height={325} />
+                              <PloBarChart
+                                data={course.plos}
+                                height={325}
+                                courseCard={true}
+                              />
                             </div>
                           ) : (
                             <div className="flex h-full justify-center items-center">

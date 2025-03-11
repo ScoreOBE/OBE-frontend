@@ -10,7 +10,7 @@ import DrawerPLOdes from "@/components/DrawerPLO";
 import Icon from "@/components/Icon";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import IconBulb from "@/assets/icons/bulb.svg?react";
-import BarChart from "@/components/Chart/PloBarChart";
+import PloBarChart from "@/components/Chart/PloBarChart";
 import { isMobile } from "@/helpers/functions/function";
 
 export default function StdPLO() {
@@ -75,7 +75,7 @@ export default function StdPLO() {
                     program
                   </p>
                 </Alert>
-                {/* <BarChart data={course.plos} height={350} /> */}
+                {/* <PloBarChart data={course.plos} height={350} /> */}
 
                 <div
                   className="flex flex-col justify-center items-center border rounded-lg  py-8 w-full"
@@ -89,7 +89,7 @@ export default function StdPLO() {
                       Program Learning Outcomes for {courseNo} Course
                     </p>
                   </div>
-                  <BarChart data={course.plos} height={350} /> */}
+                  <PloBarChart data={course.plos} height={350} /> */}
                   <div className="flex flex-col justify-between items-center h-full">
                     <div className="flex flex-col pb-8">
                       <p className="text-secondary text-b1 sm:max-acerSwift:text-[15px] font-semibold text-center ">
@@ -100,7 +100,7 @@ export default function StdPLO() {
                       </p>
                     </div>
                     <div className="w-[60vw] h-full flex items-start justify-center -translate-x-6">
-                      <BarChart data={course.plos} height={height} />
+                      <PloBarChart data={course.plos} height={height} />
                     </div>
                   </div>
                 </div>
