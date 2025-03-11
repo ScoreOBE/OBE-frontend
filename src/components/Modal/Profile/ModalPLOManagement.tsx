@@ -96,7 +96,10 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
       <Modal
         title={`${collection.name}`}
         opened={openModal}
-        onClose={() => setOpenModal(false)}
+        onClose={() => {
+          setOpenModal(false);
+          setIsTH("TH");
+        }}
         transitionProps={{ transition: "pop" }}
         size="60vw"
         centered
@@ -127,7 +130,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               </Tabs.List>
             </Tabs>
           </div>
-          <div className="flex flex-col max-h-[520px] h-fit rounded-lg border overflow-y-auto border-secondary">
+          <div className="flex flex-col max-h-[490px] h-fit rounded-lg border overflow-y-auto border-secondary">
             <Table verticalSpacing="sm" stickyHeader className="rounded-md">
               <Table.Thead>
                 <Table.Tr className="bg-[#e5e7f6]">

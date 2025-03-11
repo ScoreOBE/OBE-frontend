@@ -1,4 +1,12 @@
-import { Alert, Button, FocusTrapInitialFocus, Group, Modal, Table, Tabs } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  FocusTrapInitialFocus,
+  Group,
+  Modal,
+  Table,
+  Tabs,
+} from "@mantine/core";
 import { useState } from "react";
 import Icon from "../Icon";
 import IconExclamamtion from "@/assets/icons/exclamationCircle.svg?react";
@@ -86,8 +94,8 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             )}
             <p className=" text-default iphone:max-sm:text-[11px] iphone:max-sm:-mt-1 text-b2">
               {isEN === "EN"
-                ? "Last updated: December 20, 2024"
-                : "อัปเดตล่าสุด: 20 ธันวาคม 2567"}
+                ? "Last updated: March 11, 2025"
+                : "อัปเดตล่าสุด: 11 มีนาคม 2568"}
             </p>
           </div>
           <div className="iphone:max-sm:max-w-fit">
@@ -215,8 +223,8 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           <div className=" justify-start iphone:max-sm:text-[13px] leading-6 text-b2 text-default text-start items-start">
             <p className="mb-2">
               {isEN === "EN"
-                ? "The following data from CMU EntraID and ScoreOBE+ will be collected after you agree these Terms of Service and linked to your identity to enhance the functionality of web application:"
-                : "ข้อมูลต่อไปนี้ที่มาจากการลงชื่อเข้าสู่ระบบผ่าน CMU EntraID และ ScoreOBE+ จะถูกเก็บหลังจากคุณยอมรับข้อตกลงและเงื่อนไขในการให้บริการนี้ และเชื่อมโยงกับตัวตนของคุณ เพื่อปรับปรุงการทำงานของเว็บแอปพลิเคชั่น:"}
+                ? "The following data from CMU EntraID and ScoreOBE+ will be collected and linked to your identity to enhance the functionality of web application:"
+                : "ข้อมูลต่อไปนี้ที่มาจากการลงชื่อเข้าสู่ระบบผ่าน CMU EntraID และ ScoreOBE+ จะถูกเก็บและเชื่อมโยงกับตัวตนของคุณ เพื่อปรับปรุงการทำงานของเว็บแอปพลิเคชั่น:"}
             </p>{" "}
             <br />
             {!isMobile ? (
@@ -482,7 +490,10 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                   </p>
                   <p>{isEN === "EN" ? "- Faculty" : "- คณะ"}</p>
                   <p> {isEN === "EN" ? "- Academic Year" : "- ปีการศึกษา"}</p>
-                  <p> {isEN === "EN" ? "- Course Title" : "- ชื่อกระบวนวิชา"}</p>
+                  <p>
+                    {" "}
+                    {isEN === "EN" ? "- Course Title" : "- ชื่อกระบวนวิชา"}
+                  </p>
                   <p>
                     {isEN === "EN"
                       ? "- Course Description"
@@ -497,7 +508,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                   </p>
                   <p>
                     {" "}
-                    {isEN === "EN" ? "- Course Credit" : "- หน่วยกิตของกระบวนวิชา"}
+                    {isEN === "EN"
+                      ? "- Course Credit"
+                      : "- หน่วยกิตของกระบวนวิชา"}
                   </p>
                 </div>
               </div>
@@ -530,7 +543,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
                   มหาวิทยาลัยเชียงใหม่
                 </span>{" "}
                 ได้รับการอนุญาตและการเข้าถึงข้อมูล CMU API อย่างถูกต้องจาก
-                ผศ.โดม โพธิการนนท์ อาจารย์ประจำภาควิชาวิศวกรรมคอมพิวเตอร์
+                ผศ.โดม โพธิกานนท์ อาจารย์ประจำภาควิชาวิศวกรรมคอมพิวเตอร์
                 มหาวิทยาลัยเชียงใหม่ สำหรับข้อมูลเพิ่มเติม ให้ดูที่{" "}
                 <a
                   className=" text-blue-500 font-semibold hover:underline"
@@ -552,8 +565,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             terms. If you do not agree with all these Terms of Service you are
             expressly prohibited from further use of the ScoreOBE+ and must
             discontinue immediately by selecting the "Log out" option located in
-            the bottom-left corner. Upon logging out, ScoreOBE+ will cease any
-            data collection through CMU EntraID.
+            the bottom-left corner.
           </p>
         ) : (
           <p className=" text-b2 iphone:max-sm:text-[13px] mb-6 leading-6">
@@ -565,8 +577,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               นี้ถือเป็นการยอมรับข้อกำหนดและเงื่อนไขทั้งหมดอย่างไม่อาจเพิกถอนได้
               หากผู้ใช้ไม่ยอมรับข้อกำหนดในการให้บริการ ผู้ใช้จะถูกห้ามใช้
               ScoreOBE+ โดยเด็ดขาดและต้องยุติการใช้งานทันที โดยเลือก
-              "ออกจากระบบ" ที่มุมล่างซ้าย เมื่อออกจากระบบแล้ว ScoreOBE+
-              จะหยุดการเก็บข้อมูลใด ๆ ผ่าน CMU EntraID
+              "ออกจากระบบ" ที่มุมล่างซ้าย
             </p>
           </p>
         )}
@@ -581,7 +592,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               Education (TQF:HEd) of the course related to Outcome-Based
               Education (OBE) and announcing scores via this system.
             </p>
-            <p className=" text-b2 iphone:max-sm:text-[13px] font-bold mb-3 leading-6">1. Definition </p>
+            <p className=" text-b2 iphone:max-sm:text-[13px] font-bold mb-3 leading-6">
+              1. Definition{" "}
+            </p>
 
             <Table>
               <Table.Tbody className="text-default">
@@ -623,7 +636,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               ของรายวิชาที่เกี่ยวข้องกับการศึกษาตามผลลัพธ์ (OBE)
               และการประกาศผลคะแนนผ่านระบบนี้
             </p>
-            <p className=" text-b2 iphone:max-sm:text-[13px] font-bold mb-3 leading-6">1. นิยาม </p>
+            <p className=" text-b2 iphone:max-sm:text-[13px] font-bold mb-3 leading-6">
+              1. นิยาม{" "}
+            </p>
 
             <Table>
               <Table.Tbody className="text-default">
@@ -986,7 +1001,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             <Button
               loading={loading}
               onClick={() => submitTermsOfService(false)}
-              classNames={{ label: "font-bold text-b2 iphone:max-sm:text-[13px]" }}
+              classNames={{
+                label: "font-bold text-b2 iphone:max-sm:text-[13px]",
+              }}
               variant="subtle"
             >
               {isEN === "EN" ? (
@@ -998,7 +1015,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
 
             <Button
               loading={loading}
-              classNames={{ label: "font-bold text-b2 iphone:max-sm:text-[13px]" }}
+              classNames={{
+                label: "font-bold text-b2 iphone:max-sm:text-[13px]",
+              }}
               onClick={() => submitTermsOfService(true)}
             >
               {isEN === "EN" ? (
