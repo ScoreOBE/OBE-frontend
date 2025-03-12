@@ -237,7 +237,9 @@ const scoreOBETemplete = (
     const description = resultsData[0].section ? {} : resultsData.shift();
 
     resultsData = resultsData.filter((row) =>
-      Object.values(row).some((value) => value !== null && value !== "")
+      Object.values(row).some(
+        (value) => value !== undefined && value !== null && value !== ""
+      )
     );
 
     resultsData.forEach((data, i) => {
@@ -309,9 +311,6 @@ const scoreOBETemplete = (
 
       const checkSection = canUpload?.students?.find(
         ({ student }) => student.studentId == data.studentId
-        // student[firstNameIsEng ? "firstNameEN" : "firstNameTH"] ==
-        //   firstName &&
-        // student[lastNameIsEng ? "lastNameEN" : "lastNameTH"] == lastName
       );
       const checkStudent = checkSection
         ? checkSection.student.studentId != data.studentId

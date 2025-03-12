@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { useParams, useSearchParams } from "react-router-dom";
 import {
@@ -12,14 +12,15 @@ import needAccess from "@/assets/image/needAccess.jpg";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import { IModelUser } from "@/models/ModelUser";
 import Loading from "@/components/Loading/Loading";
-import { Button, Modal, Table, Tabs, TextInput } from "@mantine/core";
+import { Button, Table, TextInput } from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconEdit from "@/assets/icons/edit.svg?react";
 import IconSortAsc from "@/assets/icons/sortAsc.svg?react";
 import IconSortDes from "@/assets/icons/sortDes.svg?react";
 import IconNotSort from "@/assets/icons/arrowUpDown.svg?react";
-import IconSearch from "@/assets/icons/search.svg?react";
 import IconChart from "@/assets/icons/histogram.svg?react";
+import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
+import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import { calStat, scrollToStudent } from "@/helpers/functions/score";
 import { TbSearch } from "react-icons/tb";
 import { cloneDeep } from "lodash";
@@ -62,6 +63,13 @@ export default function Students() {
     questions: { name: string; score: number | string }[];
   }>();
   const [openModalChart, setOpenModalChart] = useState(false);
+  const limit = 50;
+  const [startEndPage, setStartEndPage] = useState({
+    start: 1,
+    end: limit,
+    page: 1,
+    scroll: null as null | "max" | "min",
+  });
 
   const [items, setItems] = useState<any[]>([
     {
@@ -129,10 +137,14 @@ export default function Students() {
     )
     .filter((item) => item != undefined)
     .sort((a, b) => a - b) || [0];
-  const totalStudent =
-    section?.students?.filter((item) =>
-      item.scores.find(({ assignmentName }) => assignmentName == name)
-    ).length || 0;
+
+  const totalStudent = useMemo(() => {
+    return (
+      section?.students?.filter((item) =>
+        item.scores.find(({ assignmentName }) => assignmentName == name)
+      ).length || 0
+    );
+  }, [section]);
   const { mean, sd, median, maxScore, minScore, q1, q3 } = calStat(
     scores,
     totalStudent
@@ -157,6 +169,31 @@ export default function Students() {
       scoresData[binIndex].Students += 1;
     }
   });
+
+  useEffect(() => {
+    if (
+      startEndPage.scroll == "min" &&
+      studentRefs.current.get(studentMaxMin.min[0])
+    ) {
+      scrollToStudent(studentRefs, studentMaxMin.min);
+    } else if (
+      startEndPage.scroll == "max" &&
+      studentRefs.current.get(studentMaxMin.max[0])
+    ) {
+      scrollToStudent(studentRefs, studentMaxMin.max);
+    }
+  }, [startEndPage, studentRefs]);
+
+  const filteredData = useMemo(() => {
+    if (!students.length) return [];
+    return students?.filter(({ student }) =>
+      parseInt(filter)
+        ? student.studentId?.toString().includes(filter)
+        : getUserName(student, 3)?.includes(filter)
+    );
+  }, [students, filter]);
+
+  const studentFilter = useMemo(() => [...filteredData], [filteredData]);
 
   const onClickSort = (key: string) => {
     setIsSort(true);
@@ -186,6 +223,44 @@ export default function Students() {
       }
     });
     setStudents(newStudents);
+  };
+
+  const onChangePage = async (page: number) => {
+    if (page < 1 || page > Math.ceil(studentFilter.length / limit)) return;
+    setStartEndPage({
+      start: (page - 1) * limit + 1,
+      end: Math.min(page * limit, studentFilter.length),
+      page,
+      scroll: null,
+    });
+  };
+
+  const scrollMax = () => {
+    setFilter("");
+    const stdIndex = students.findIndex(
+      ({ student }) => student.studentId == studentMaxMin.max[0]
+    );
+    const page = Math.floor(stdIndex / limit) + 1;
+    setStartEndPage({
+      start: (page - 1) * limit + 1,
+      end: Math.min(page * limit, students.length!),
+      page,
+      scroll: "max",
+    });
+  };
+
+  const scrollMin = () => {
+    setFilter("");
+    const stdIndex = students.findIndex(
+      ({ student }) => student.studentId == studentMaxMin.min[0]
+    );
+    const page = Math.floor(stdIndex / limit) + 1;
+    setStartEndPage({
+      start: (page - 1) * limit + 1,
+      end: Math.min(page * limit, students.length!),
+      page,
+      scroll: "min",
+    });
   };
 
   return (
@@ -271,9 +346,7 @@ export default function Students() {
                   </div>
                   <div
                     className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
-                    onClick={() =>
-                      scrollToStudent(studentRefs, studentMaxMin.max)
-                    }
+                    onClick={scrollMax}
                   >
                     <div className="flex gap-1">
                       <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
@@ -291,9 +364,7 @@ export default function Students() {
                   </div>
                   <div
                     className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
-                    onClick={() =>
-                      scrollToStudent(studentRefs, studentMaxMin.min)
-                    }
+                    onClick={scrollMin}
                   >
                     <div className="flex gap-1">
                       <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
@@ -334,7 +405,6 @@ export default function Students() {
                     {name}
                   </div>
                   <div className="font-semibold text-secondary text-[14px] ">
-                    {" "}
                     {fullScore?.toFixed(2)} pts.
                   </div>
                 </div>
@@ -359,9 +429,7 @@ export default function Students() {
                   </div>
                   <div
                     className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md "
-                    onClick={() =>
-                      scrollToStudent(studentRefs, studentMaxMin.max)
-                    }
+                    onClick={scrollMax}
                   >
                     <div className="flex gap-1">
                       <p className="font-semibold text-[#777777]">Max</p>
@@ -377,9 +445,7 @@ export default function Students() {
                   </div>
                   <div
                     className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md"
-                    onClick={() =>
-                      scrollToStudent(studentRefs, studentMaxMin.min)
-                    }
+                    onClick={scrollMin}
                   >
                     <div className="flex gap-1">
                       <p className="font-semibold text-[#777777]">Min</p>
@@ -418,6 +484,31 @@ export default function Students() {
                 className="w-full"
                 onChange={(event: any) => setFilter(event.currentTarget.value)}
               ></TextInput>
+              <div className="flex gap-2 items-center">
+                <div
+                  aria-disabled={startEndPage.start == 1}
+                  onClick={() => onChangePage(startEndPage.page - 1)}
+                  className={`cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                    startEndPage.start !== 1 && "hover:bg-[#eeeeee]"
+                  } rounded-full`}
+                >
+                  <Icon IconComponent={IconChevronLeft} />
+                </div>
+                <div className="text-b3 text-nowrap">
+                  {startEndPage.start} - {startEndPage.end} of{" "}
+                  {studentFilter.length}
+                </div>
+                <div
+                  aria-disabled={startEndPage.end >= studentFilter.length}
+                  onClick={() => onChangePage(startEndPage.page + 1)}
+                  className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                    startEndPage.end !== studentFilter.length &&
+                    "hover:bg-[#eeeeee]"
+                  } rounded-full`}
+                >
+                  <Icon IconComponent={IconChevronRight} />
+                </div>
+              </div>
               {!isMobile && (
                 <Button
                   className="min-w-fit acerSwift:max-macair133:!text-b5 !h-full"
@@ -517,15 +608,9 @@ export default function Students() {
                   </Table.Thead>
 
                   <Table.Tbody className="text-default text-b3 acerSwift:max-macair133:!text-b4">
-                    {students
-                      ?.filter((student) =>
-                        parseInt(filter)
-                          ? student.student.studentId
-                              ?.toString()
-                              .includes(filter)
-                          : getUserName(student.student, 3)?.includes(filter)
-                      )
-                      ?.map((student) => {
+                    {studentFilter
+                      ?.slice(startEndPage.start - 1, startEndPage.end)
+                      .map((student) => {
                         const studentId = student.student.studentId!;
                         if (
                           student.sumScore == maxScore &&
@@ -597,13 +682,9 @@ export default function Students() {
               </div>
             ) : (
               <div className="flex flex-col rounded-md  border">
-                {students
-                  ?.filter((student) =>
-                    parseInt(filter)
-                      ? student.student.studentId?.toString().includes(filter)
-                      : getUserName(student.student, 3)?.includes(filter)
-                  )
-                  ?.map((student) => {
+                {studentFilter
+                  ?.slice(startEndPage.start - 1, startEndPage.end)
+                  .map((student) => {
                     const studentId = student.student.studentId!;
                     if (
                       student.sumScore == maxScore &&

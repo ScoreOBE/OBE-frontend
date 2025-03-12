@@ -56,7 +56,7 @@ export const scrollToStudent = (
   studentIds: string[]
 ) => {
   studentRefs.current.forEach((row) => {
-    row.classList.remove("highlight-row");
+    row?.classList.remove("highlight-row");
   });
   studentIds.forEach((studentId, index) => {
     const studentRow = studentRefs.current.get(studentId);

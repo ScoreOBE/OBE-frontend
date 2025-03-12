@@ -1,6 +1,6 @@
 import { Menu, Modal, Table, TextInput } from "@mantine/core";
 import { Alert, Button } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 import Iconbin from "@/assets/icons/trash.svg?react";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
@@ -11,6 +11,8 @@ import IconImport from "@/assets/icons/fileImport.svg?react";
 import IconDots from "@/assets/icons/dots.svg?react";
 import IconManageAdmin from "@/assets/icons/addCo.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
+import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
+import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
   getSectionNo,
@@ -40,7 +42,7 @@ import { useForm } from "@mantine/form";
 import { updateStudentList } from "@/store/course";
 import { isEqual } from "lodash";
 import { setShowSidebar, setShowNavbar, setDashboard } from "@/store/config";
-import { IModelCourse } from "@/models/ModelCourse";
+import { useDebouncedValue } from "@mantine/hooks";
 
 export default function Roster() {
   const { courseNo } = useParams();
@@ -67,7 +69,13 @@ export default function Roster() {
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
   );
-  const [courseFilter, setCourseFilter] = useState<Partial<IModelCourse>>({});
+  const [debouncedFilter] = useDebouncedValue(filter, 300);
+  const limit = 100;
+  const [startEndPage, setStartEndPage] = useState({
+    start: 1,
+    end: limit,
+    page: 1,
+  });
   const form = useForm({
     mode: "controlled",
     initialValues: { sectionNo: "", studentId: "", name: "", email: "" },
@@ -110,23 +118,29 @@ export default function Roster() {
     localStorage.setItem("dashboard", ROLE.INSTRUCTOR);
   }, []);
 
-  useEffect(() => {
-    if (course?.sections) {
-      setCourseFilter({
-        ...course,
-        sections: course.sections.map((sec) => ({
-          ...sec,
-          students:
-            sec.students?.filter(({ student }) =>
-              parseInt(filter) >= 0
-                ? student.studentId?.toString().includes(filter) ||
-                  getSectionNo(sec.sectionNo).includes(filter)
-                : getUserName(student, 3)?.includes(filter)
-            ) || [],
-        })) as any,
-      });
-    }
-  }, [course, filter]);
+  const filteredData = useMemo(() => {
+    if (!course?.sections) return [];
+    return course.sections.flatMap(
+      (sec) =>
+        sec.students
+          ?.filter(({ student }) =>
+            parseInt(filter) >= 0
+              ? student.studentId?.toString().includes(filter) ||
+                getSectionNo(sec.sectionNo).includes(filter)
+              : getUserName(student, 3)?.includes(filter)
+          )
+          .map(({ student }) => ({ student, sec })) || []
+    );
+  }, [course, debouncedFilter]);
+
+  const studentFilter = useMemo(() => [...filteredData], [filteredData]);
+
+  const totalStudents = useMemo(() => {
+    return course?.sections.reduce(
+      (total, sec) => total + (sec.students?.length || 0),
+      0
+    );
+  }, [course]);
 
   const onClickAddStudent = async () => {
     if (!form.validate().hasErrors) {
@@ -231,129 +245,96 @@ export default function Roster() {
     form.reset();
   };
 
-  const rows = courseFilter.sections?.map((sec) =>
-    sec.students?.map(({ student }) => (
-      <Table.Tr
-        className="font-medium text-default text-b3 acerSwift:max-macair133:!text-b4"
-        key={student.studentId}
-      >
-        <Table.Td>{getSectionNo(sec.sectionNo)}</Table.Td>
-        <Table.Td>{student.studentId}</Table.Td>
-        <Table.Td>{getUserName(student, 3)}</Table.Td>
-        <Table.Td>{student.email ? student.email : "Not login yet"}</Table.Td>
-        {activeTerm && user.role != ROLE.TA && !isMobile && (
-          <Table.Td>
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setActionModal("Edit");
-                  setSelectedUser({
-                    sectionNo: getSectionNo(sec.sectionNo),
-                    ...student,
-                  });
-                  form.setValues({
-                    sectionNo: getSectionNo(sec.sectionNo),
-                    name: getUserName(student, 3),
-                    studentId: student.studentId,
-                    email: student.email,
-                  });
-                  setOpenModalAddEditStudent(true);
-                }}
-                color="yellow"
-                className="tag-tqf !px-3 !rounded-full text-center"
-              >
-                <Icon
-                  className="size-5 acerSwift:max-macair133:size-4"
-                  IconComponent={IconEdit}
-                />
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSelectedUser({
-                    sectionNo: getSectionNo(sec.sectionNo),
-                    ...student,
-                  });
-                  setOpenPopupDeleteStudent(true);
-                }}
-                color="red"
-                className="tag-tqf !px-3 !rounded-full text-center"
-              >
-                <Icon
-                  className="size-5 acerSwift:max-macair133:size-4"
-                  IconComponent={Iconbin}
-                />
-              </Button>
-            </div>
-          </Table.Td>
-        )}
-      </Table.Tr>
-    ))
-  );
+  const handleEditStudent = useCallback((student: IModelUser, sec: any) => {
+    setActionModal("Edit");
+    setSelectedUser({ sectionNo: getSectionNo(sec.sectionNo), ...student });
+    form.setValues({
+      sectionNo: getSectionNo(sec.sectionNo),
+      name: getUserName(student, 3),
+      studentId: student.studentId,
+      email: student.email,
+    });
+    setOpenModalAddEditStudent(true);
+  }, []);
 
-  const dataMobile = courseFilter.sections?.map((sec) =>
-    sec.students?.map(({ student }) => (
-      <div
-        className="font-medium  grid grid-cols-2 justify-between items-center p-4  border-b text-default text-b3 acerSwift:max-macair133:!text-b4"
-        key={student.studentId}
-      >
-        <div className="flex flex-col gap-[2px]">
-          <div>{student.studentId}</div>
-          <div>{getUserName(student, 3)}</div>
-        </div>
-        <div className="text-end">Section:{getSectionNo(sec.sectionNo)}</div>
-        <div>{student.email ? student.email : ""}</div>
-        {activeTerm && user.role != ROLE.TA && !isMobile && (
-          <div>
-            <div className="flex gap-3">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setActionModal("Edit");
-                  setSelectedUser({
-                    sectionNo: getSectionNo(sec.sectionNo),
-                    ...student,
-                  });
-                  form.setValues({
-                    sectionNo: getSectionNo(sec.sectionNo),
-                    name: getUserName(student, 3),
-                    studentId: student.studentId,
-                    email: student.email,
-                  });
-                  setOpenModalAddEditStudent(true);
-                }}
-                color="yellow"
-                className="tag-tqf !px-3 !rounded-full text-center"
-              >
-                <Icon
-                  className="size-5 acerSwift:max-macair133:size-4"
-                  IconComponent={IconEdit}
-                />
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSelectedUser({
-                    sectionNo: getSectionNo(sec.sectionNo),
-                    ...student,
-                  });
-                  setOpenPopupDeleteStudent(true);
-                }}
-                color="red"
-                className="tag-tqf !px-3 !rounded-full text-center"
-              >
-                <Icon
-                  className="size-5 acerSwift:max-macair133:size-4"
-                  IconComponent={Iconbin}
-                />
-              </Button>
-            </div>
+  const handleDeleteStudent = useCallback((student: IModelUser, sec: any) => {
+    setSelectedUser({
+      sectionNo: getSectionNo(sec.sectionNo),
+      ...student,
+    });
+    setOpenPopupDeleteStudent(true);
+  }, []);
+
+  const onChangePage = async (page: number) => {
+    if (page < 1 || page > Math.ceil(studentFilter.length! / limit)) return;
+    setStartEndPage({
+      start: (page - 1) * limit + 1,
+      end: Math.min(page * limit, studentFilter.length!),
+      page,
+    });
+  };
+
+  const rows = useMemo(() => {
+    return studentFilter
+      ?.slice(startEndPage.start - 1, startEndPage.end)
+      .map(({ student, sec }) => (
+        <Table.Tr
+          className="font-medium text-default text-b3 acerSwift:max-macair133:!text-b4"
+          key={student.studentId}
+        >
+          <Table.Td>{getSectionNo(sec.sectionNo)}</Table.Td>
+          <Table.Td>{student.studentId}</Table.Td>
+          <Table.Td>{getUserName(student, 3)}</Table.Td>
+          <Table.Td>{student.email ? student.email : "Not login yet"}</Table.Td>
+          {activeTerm && user.role != ROLE.TA && (
+            <Table.Td>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => handleEditStudent(student, sec)}
+                  color="yellow"
+                  className="tag-tqf !px-3 !rounded-full text-center"
+                >
+                  <Icon
+                    className="size-5 acerSwift:max-macair133:size-4"
+                    IconComponent={IconEdit}
+                  />
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleDeleteStudent(student, sec)}
+                  color="red"
+                  className="tag-tqf !px-3 !rounded-full text-center"
+                >
+                  <Icon
+                    className="size-5 acerSwift:max-macair133:size-4"
+                    IconComponent={Iconbin}
+                  />
+                </Button>
+              </div>
+            </Table.Td>
+          )}
+        </Table.Tr>
+      ));
+  }, [studentFilter, startEndPage]);
+
+  const dataMobile = useMemo(() => {
+    return studentFilter
+      ?.slice(startEndPage.start - 1, startEndPage.end)
+      .map(({ student, sec }) => (
+        <div
+          className="font-medium  grid grid-cols-2 justify-between items-center p-4  border-b text-default text-b3 acerSwift:max-macair133:!text-b4"
+          key={student.studentId}
+        >
+          <div className="flex flex-col gap-[2px]">
+            <div>{student.studentId}</div>
+            <div>{getUserName(student, 3)}</div>
           </div>
-        )}
-      </div>
-    ))
-  );
+          <div className="text-end">Section:{getSectionNo(sec.sectionNo)}</div>
+          <div>{student.email ? student.email : ""}</div>
+        </div>
+      ));
+  }, [studentFilter, startEndPage]);
 
   const studentTable = () => {
     const hasData = rows && rows.flat().length > 0;
@@ -363,15 +344,7 @@ export default function Roster() {
         {(hasData || search) && (
           <div className=" sm:px-1 mb-2 sm:flex iphone:max-sm:flex-col items-center justify-between">
             <p className="  text-secondary font-semibold acerSwift:max-macair133:!text-b2">
-              {(() => {
-                const totalStudents = course?.sections.reduce(
-                  (total, sec) => total + (sec.students?.length || 0),
-                  0
-                );
-                return `${totalStudents} ${
-                  totalStudents === 1 ? "Student" : "Students"
-                }`;
-              })()}
+              {totalStudents} Student{totalStudents === 1 ? "" : "s"}
             </p>
             <div className="flex gap-3 items-center">
               <TextInput
@@ -379,10 +352,35 @@ export default function Roster() {
                 placeholder="Section No, Student No, Name"
                 size="xs"
                 rightSectionPointerEvents="all"
-                className="mx-1 sm:w-[25vw] iphone:max-sm:w-full iphone:max-sm:mt-2 iphone:max-sm:-ml-[2px] "
+                className="mx-1 sm:w-[25vw] iphone:max-sm:w-full"
                 onChange={(event) => setFilter(event.currentTarget.value)}
               ></TextInput>
-              {activeTerm && user.role != ROLE.TA && !isMobile && (
+              <div className="flex gap-2 items-center">
+                <div
+                  aria-disabled={startEndPage.start == 1}
+                  onClick={() => onChangePage(startEndPage.page - 1)}
+                  className={`cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                    startEndPage.start !== 1 && "hover:bg-[#eeeeee]"
+                  } rounded-full`}
+                >
+                  <Icon IconComponent={IconChevronLeft} />
+                </div>
+                <div className="text-b3 text-nowrap">
+                  {startEndPage.start} - {startEndPage.end} of{" "}
+                  {studentFilter.length}
+                </div>
+                <div
+                  aria-disabled={startEndPage.end >= studentFilter.length}
+                  onClick={() => onChangePage(startEndPage.page + 1)}
+                  className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                    startEndPage.end !== studentFilter.length &&
+                    "hover:bg-[#eeeeee]"
+                  } rounded-full`}
+                >
+                  <Icon IconComponent={IconChevronRight} />
+                </div>
+              </div>
+              {activeTerm && user.role != ROLE.TA && (
                 <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
                   <Menu trigger="click" position="bottom-end">
                     <Menu.Target>
@@ -450,7 +448,7 @@ export default function Roster() {
                   <Table.Th className="w-[25%] acerSwift:max-macair133:!text-b3">
                     CMU account
                   </Table.Th>
-                  {activeTerm && user.role != ROLE.TA && !isMobile && (
+                  {activeTerm && user.role != ROLE.TA && (
                     <Table.Th className="w-[10%] acerSwift:max-macair133:!text-b3">
                       Action
                     </Table.Th>
@@ -486,11 +484,9 @@ export default function Roster() {
                 )}
               </p>
 
-              {!isMobile && (
-                <div className="h-full  w-[24vw] m-6 justify-center -translate-y-1 flex flex-col">
-                  <img src={notFoundImage} alt="notFound"></img>
-                </div>
-              )}
+              <div className="h-full  w-[24vw] m-6 justify-center -translate-y-1 flex flex-col">
+                <img src={notFoundImage} alt="notFound"></img>
+              </div>
             </div>
           )}
         </div>
@@ -506,15 +502,7 @@ export default function Roster() {
         {(hasData || search) && (
           <div className=" sm:px-1 mb-2 sm:flex iphone:max-sm:flex-col items-center justify-between">
             <p className="  text-secondary font-semibold acerSwift:max-macair133:!text-b2">
-              {(() => {
-                const totalStudents = course?.sections.reduce(
-                  (total, sec) => total + (sec.students?.length || 0),
-                  0
-                );
-                return `${totalStudents} ${
-                  totalStudents === 1 ? "Student" : "Students"
-                }`;
-              })()}
+              {totalStudents} Student{totalStudents === 1 ? "" : "s"}
             </p>
             <div className="flex gap-3 items-center">
               <TextInput
@@ -525,6 +513,33 @@ export default function Roster() {
                 className="mx-1 sm:w-[25vw] iphone:max-sm:w-full iphone:max-sm:mt-2 iphone:max-sm:-ml-[2px] "
                 onChange={(event) => setFilter(event.currentTarget.value)}
               ></TextInput>
+              <div className="flex gap-2 items-center">
+                <div
+                  aria-disabled={startEndPage.start == 1}
+                  onClick={() => onChangePage(startEndPage.page - 1)}
+                  className={`cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                    startEndPage.start !== 1 && "hover:bg-[#eeeeee]"
+                  } rounded-full`}
+                >
+                  <Icon IconComponent={IconChevronLeft} />
+                </div>
+                <div className="text-b3 text-nowrap">
+                  <p>
+                    {startEndPage.start} - {startEndPage.end}
+                  </p>
+                  <p>of {studentFilter.length}</p>
+                </div>
+                <div
+                  aria-disabled={startEndPage.end >= studentFilter.length}
+                  onClick={() => onChangePage(startEndPage.page + 1)}
+                  className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                    startEndPage.end !== studentFilter.length &&
+                    "hover:bg-[#eeeeee]"
+                  } rounded-full`}
+                >
+                  <Icon IconComponent={IconChevronRight} />
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -543,25 +558,7 @@ export default function Roster() {
                     ? "Check the spelling or try a new search."
                     : "Course Roster will show when you import first."}
                 </p>
-                {!search && activeTerm && !isMobile && (
-                  <Button
-                    leftSection={
-                      <Icon className="size-5" IconComponent={IconImport} />
-                    }
-                    variant="filled"
-                    onClick={() => setOpenModalUploadStudentList(true)}
-                    className=" font-bold mt-5"
-                  >
-                    Import Course Roster
-                  </Button>
-                )}
               </p>
-
-              {!isMobile && (
-                <div className="h-full  w-[24vw] m-6 justify-center -translate-y-1 flex flex-col">
-                  <img src={notFoundImage} alt="notFound"></img>
-                </div>
-              )}
             </div>
           )}
         </div>

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Table, TextInput, Tooltip } from "@mantine/core";
 import { useParams, useSearchParams } from "react-router-dom";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
@@ -22,6 +22,8 @@ import IconSortDes from "@/assets/icons/sortDes.svg?react";
 import IconNotSort from "@/assets/icons/arrowUpDown.svg?react";
 import IconListSearch from "@/assets/icons/listSearch.svg?react";
 import IconChart from "@/assets/icons/histogram.svg?react";
+import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
+import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import { calStat, scrollToStudent } from "@/helpers/functions/score";
 import ModalEvalChart from "@/components/Modal/Score/ModalEvalChart";
 
@@ -94,17 +96,13 @@ export default function OneAssignment() {
     },
     { title: name },
   ]);
-  const [studentFilter, setStudentFilter] = useState<
-    ({
-      sectionNo: string;
-      student: IModelUser;
-      scores: {
-        score: string | number;
-        name: string;
-      }[];
-      sumScore: number;
-    } & Record<string, any>)[]
-  >([]);
+  const limit = 50;
+  const [startEndPage, setStartEndPage] = useState({
+    start: 1,
+    end: limit,
+    page: 1,
+    scroll: null as null | "max" | "min",
+  });
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -164,17 +162,30 @@ export default function OneAssignment() {
   }, [course]);
 
   useEffect(() => {
-    if (allStudent.length) {
-      setStudentFilter(
-        allStudent.filter((item) =>
-          parseInt(filter) >= 0
-            ? getSectionNo(item.sectionNo).includes(filter) ||
-              item.student.studentId?.toString().includes(filter)
-            : getUserName(item.student, 3)?.includes(filter)
-        )
-      );
+    if (
+      startEndPage.scroll == "min" &&
+      studentRefs.current.get(studentMaxMin.min[0])
+    ) {
+      scrollToStudent(studentRefs, studentMaxMin.min);
+    } else if (
+      startEndPage.scroll == "max" &&
+      studentRefs.current.get(studentMaxMin.max[0])
+    ) {
+      scrollToStudent(studentRefs, studentMaxMin.max);
     }
+  }, [startEndPage, studentRefs]);
+
+  const filteredData = useMemo(() => {
+    if (!allStudent.length) return [];
+    return allStudent.filter((item) =>
+      parseInt(filter) >= 0
+        ? getSectionNo(item.sectionNo).includes(filter) ||
+          item.student.studentId?.toString().includes(filter)
+        : getUserName(item.student, 3)?.includes(filter)
+    );
   }, [allStudent, filter]);
+
+  const studentFilter = useMemo(() => [...filteredData], [filteredData]);
 
   const onClickSort = (key: string) => {
     setIsSort(true);
@@ -201,6 +212,44 @@ export default function OneAssignment() {
       }
     });
     setAllStudent(newStudents);
+  };
+
+  const onChangePage = async (page: number) => {
+    if (page < 1 || page > Math.ceil(studentFilter.length! / limit)) return;
+    setStartEndPage({
+      start: (page - 1) * limit + 1,
+      end: Math.min(page * limit, studentFilter.length!),
+      page,
+      scroll: null,
+    });
+  };
+
+  const scrollMax = () => {
+    setFilter("");
+    const stdIndex = allStudent.findIndex(
+      ({ student }) => student.studentId == studentMaxMin.max[0]
+    );
+    const page = Math.floor(stdIndex / limit) + 1;
+    setStartEndPage({
+      start: (page - 1) * limit + 1,
+      end: Math.min(page * limit, allStudent.length!),
+      page,
+      scroll: "max",
+    });
+  };
+
+  const scrollMin = () => {
+    setFilter("");
+    const stdIndex = allStudent.findIndex(
+      ({ student }) => student.studentId == studentMaxMin.min[0]
+    );
+    const page = Math.floor(stdIndex / limit) + 1;
+    setStartEndPage({
+      start: (page - 1) * limit + 1,
+      end: Math.min(page * limit, allStudent.length!),
+      page,
+      scroll: "min",
+    });
   };
 
   return (
@@ -284,9 +333,7 @@ export default function OneAssignment() {
                   </div>
                   <div
                     className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
-                    onClick={() =>
-                      scrollToStudent(studentRefs, studentMaxMin.max)
-                    }
+                    onClick={scrollMax}
                   >
                     <div className="flex gap-1">
                       <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
@@ -304,9 +351,7 @@ export default function OneAssignment() {
                   </div>
                   <div
                     className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md px-1.5"
-                    onClick={() =>
-                      scrollToStudent(studentRefs, studentMaxMin.min)
-                    }
+                    onClick={scrollMin}
                   >
                     <div className="flex gap-1">
                       <p className="font-semibold text-b1 acerSwift:max-macair133:!text-b2 text-[#777777]">
@@ -371,9 +416,7 @@ export default function OneAssignment() {
                   </div>
                   <div
                     className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md "
-                    onClick={() =>
-                      scrollToStudent(studentRefs, studentMaxMin.max)
-                    }
+                    onClick={scrollMax}
                   >
                     <div className="flex gap-1">
                       <p className="font-semibold text-[#777777]">Max</p>
@@ -389,9 +432,7 @@ export default function OneAssignment() {
                   </div>
                   <div
                     className="flex flex-col cursor-pointer hover:bg-deemphasize/10 hover:rounded-md"
-                    onClick={() =>
-                      scrollToStudent(studentRefs, studentMaxMin.min)
-                    }
+                    onClick={scrollMin}
                   >
                     <div className="flex gap-1">
                       <p className="font-semibold text-[#777777]">Min</p>
@@ -429,6 +470,31 @@ export default function OneAssignment() {
                 className="w-full"
                 onChange={(event: any) => setFilter(event.currentTarget.value)}
               ></TextInput>
+              <div className="flex gap-2 items-center">
+                <div
+                  aria-disabled={startEndPage.start == 1}
+                  onClick={() => onChangePage(startEndPage.page - 1)}
+                  className={`cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                    startEndPage.start !== 1 && "hover:bg-[#eeeeee]"
+                  } rounded-full`}
+                >
+                  <Icon IconComponent={IconChevronLeft} />
+                </div>
+                <div className="text-b3 text-nowrap">
+                  {startEndPage.start} - {startEndPage.end} of{" "}
+                  {studentFilter.length}
+                </div>
+                <div
+                  aria-disabled={startEndPage.end >= studentFilter.length}
+                  onClick={() => onChangePage(startEndPage.page + 1)}
+                  className={` cursor-pointer aria-disabled:cursor-default aria-disabled:text-[#dcdcdc] p-1 ${
+                    startEndPage.end !== studentFilter.length &&
+                    "hover:bg-[#eeeeee]"
+                  } rounded-full`}
+                >
+                  <Icon IconComponent={IconChevronRight} />
+                </div>
+              </div>
               {!isMobile && (
                 <Button
                   className="min-w-fit acerSwift:max-macair133:!text-b5 !h-full"
@@ -522,68 +588,70 @@ export default function OneAssignment() {
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody className="text-default">
-                    {studentFilter.map((item) => {
-                      const studentId = item.student.studentId!;
-                      if (
-                        item.sumScore == maxScore &&
-                        !studentMaxMin.max.includes(studentId)
-                      ) {
-                        setStudentMaxMin((prev) => ({
-                          ...prev,
-                          max: [...prev.max, studentId],
-                        }));
-                      } else if (
-                        item.sumScore == minScore &&
-                        !studentMaxMin.min.includes(studentId)
-                      ) {
-                        setStudentMaxMin((prev) => ({
-                          ...prev,
-                          min: [...prev.min, studentId],
-                        }));
-                      }
-                      return (
-                        <Table.Tr
-                          key={studentId}
-                          ref={(el) => studentRefs.current.set(studentId, el)}
-                          className="hover:bg-[#F3F3F3] text-b3 acerSwift:max-macair133:!text-b4 font-normal py-[14px] w-full"
-                        >
-                          <Table.Td>{item.sectionNo}</Table.Td>
-                          <Table.Td>{studentId}</Table.Td>
-                          <Table.Td>{getUserName(item.student, 3)}</Table.Td>
-                          <Table.Td className="w-[5%]">
-                            <div className="flex gap-3 justify-end items-center">
-                              <p>{item.sumScore?.toFixed(2)}</p>
-                              {activeTerm && (
-                                <div
-                                  className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
-                                  onClick={() => {
-                                    setEditScore({
-                                      section: parseInt(item.sectionNo),
-                                      student: item.student,
-                                      questions: item.scores || [],
-                                    });
-                                    setOpenEditScore(true);
-                                  }}
-                                >
-                                  <Icon
-                                    IconComponent={IconEdit}
-                                    className="size-4 cursor-pointer text-default"
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          </Table.Td>
-                          {questions?.map((ques, index) => (
-                            <Table.Td key={index} className="text-end pr-9">
-                              {item[ques.name] == undefined ||
-                              item[ques.name] < 0
-                                ? "-"
-                                : item[ques.name].toFixed(2)}
+                    {studentFilter
+                      .slice(startEndPage.start - 1, startEndPage.end)
+                      .map((item) => {
+                        const studentId = item.student.studentId!;
+                        if (
+                          item.sumScore == maxScore &&
+                          !studentMaxMin.max.includes(studentId)
+                        ) {
+                          setStudentMaxMin((prev) => ({
+                            ...prev,
+                            max: [...prev.max, studentId],
+                          }));
+                        } else if (
+                          item.sumScore == minScore &&
+                          !studentMaxMin.min.includes(studentId)
+                        ) {
+                          setStudentMaxMin((prev) => ({
+                            ...prev,
+                            min: [...prev.min, studentId],
+                          }));
+                        }
+                        return (
+                          <Table.Tr
+                            key={studentId}
+                            ref={(el) => studentRefs.current.set(studentId, el)}
+                            className="hover:bg-[#F3F3F3] text-b3 acerSwift:max-macair133:!text-b4 font-normal py-[14px] w-full"
+                          >
+                            <Table.Td>{item.sectionNo}</Table.Td>
+                            <Table.Td>{studentId}</Table.Td>
+                            <Table.Td>{getUserName(item.student, 3)}</Table.Td>
+                            <Table.Td className="w-[5%]">
+                              <div className="flex gap-3 justify-end items-center">
+                                <p>{item.sumScore?.toFixed(2)}</p>
+                                {activeTerm && (
+                                  <div
+                                    className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
+                                    onClick={() => {
+                                      setEditScore({
+                                        section: parseInt(item.sectionNo),
+                                        student: item.student,
+                                        questions: item.scores || [],
+                                      });
+                                      setOpenEditScore(true);
+                                    }}
+                                  >
+                                    <Icon
+                                      IconComponent={IconEdit}
+                                      className="size-4 cursor-pointer text-default"
+                                    />
+                                  </div>
+                                )}
+                              </div>
                             </Table.Td>
-                          ))}
-                        </Table.Tr>
-                      );
-                    })}
+                            {questions?.map((ques, index) => (
+                              <Table.Td key={index} className="text-end pr-9">
+                                {item[ques.name] == undefined ||
+                                item[ques.name] < 0
+                                  ? "-"
+                                  : item[ques.name].toFixed(2)}
+                              </Table.Td>
+                            ))}
+                          </Table.Tr>
+                        );
+                      })}
                   </Table.Tbody>
                 </Table>
               </div>
