@@ -106,9 +106,9 @@ export default function ModalStudentList({
     sec.students
       ?.map(({ student }) => student)
       .filter((student) =>
-        parseInt(filter)
+        parseInt(filter) >= 0
           ? student.studentId?.toString().includes(filter) ||
-            sec.sectionNo?.toString().includes(filter)
+            getSectionNo(sec.sectionNo).includes(filter)
           : getUserName(student, 3)?.includes(filter)
       )
       ?.map((student) => (
@@ -129,16 +129,14 @@ export default function ModalStudentList({
     const hasData = rows && rows.flat().length > 0;
     return (
       <>
-        {hasData && (
-          <TextInput
-            leftSection={<TbSearch />}
-            placeholder="Section No, Student No, Name"
-            size="xs"
-            rightSectionPointerEvents="all"
-            className="mx-1"
-            onChange={(event: any) => setFilter(event.currentTarget.value)}
-          ></TextInput>
-        )}
+        <TextInput
+          leftSection={<TbSearch />}
+          placeholder="Section No, Student No, Name"
+          size="xs"
+          rightSectionPointerEvents="all"
+          className="mx-1"
+          onChange={(event: any) => setFilter(event.currentTarget.value)}
+        ></TextInput>
         <div
           className="mx-1 max-h-[500px] sm:max-h-[400px] h-fit flex flex-col bg-white mb-1 mt-2 rounded-md overflow-y-auto"
           style={{
@@ -162,7 +160,6 @@ export default function ModalStudentList({
                 No Student List found
                 <br />
                 <p className="mt-1  text-[#777777] font-medium text-b2" font->
-                  {" "}
                   Student list will show when you upload score first.
                 </p>
               </p>

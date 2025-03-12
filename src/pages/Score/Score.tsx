@@ -220,7 +220,6 @@ export default function Overall() {
                       {name}
                     </div>
                     <div className="font-semibold text-secondary text-[14px] ">
-                      {" "}
                       {fullScore?.toFixed(2)} pts.
                     </div>
                   </div>
@@ -352,6 +351,9 @@ export default function Overall() {
                         >
                           <Table.Td className="text-start w-[12%] acerSwift:max-macair133:!text-b4">
                             {ques.name}
+                            {ques.desc && (
+                              <p className="text-b4">({ques.desc})</p>
+                            )}
                           </Table.Td>
                           <Table.Td className="text-end pr-[50px] w-[14%] acerSwift:max-macair133:!text-b4">
                             {ques.fullScore}
@@ -382,7 +384,6 @@ export default function Overall() {
               </div>
             ) : (
               <div className="flex flex-col gap-3 h-full">
-                {" "}
                 {assignment?.questions.map((ques, index) => {
                   const dataScores =
                     section?.students
@@ -414,6 +415,9 @@ export default function Overall() {
                         <div className="flex flex-col">
                           <div className=" font-semibold text-default text-[14px]">
                             {ques.name}
+                            {ques.desc && (
+                              <p className="text-b4">({ques.desc})</p>
+                            )}
                           </div>
                           <div className="font-semibold text-secondary text-[12px] ">
                             {ques.fullScore} pts.
@@ -421,7 +425,6 @@ export default function Overall() {
                         </div>
                       </div>
                       <div className="mt-2 text-[12px] border-t flex flex-col ">
-                        {" "}
                         <div className="grid grid-cols-2 p-2 mt-1 rounded-t-md">
                           <div className="flex flex-col">
                             <div className="text-start">Mean</div>
@@ -432,7 +435,6 @@ export default function Overall() {
                           <div className="flex flex-col">
                             <div className="text-start">SD</div>
                             <p className="text-[13px] font-semibold">
-                              {" "}
                               {stat.sd.toFixed(2)}
                             </p>
                           </div>

@@ -144,6 +144,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         setResult(undefined);
       }
       dispatch(setLoadingOverlay(false));
+      onClose();
     } else {
       showNotifications(
         NOTI_TYPE.ERROR,

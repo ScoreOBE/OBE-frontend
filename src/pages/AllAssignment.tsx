@@ -1127,7 +1127,6 @@ export default function AllAssignment() {
                 </Tabs>
               ) : (
                 <div className="flex flex-col gap-3 overflow-y-auto h-full ">
-                  {" "}
                   {allAssignments.map((assignment, index) => {
                     const students =
                       course?.sections.map((sec) => sec.students!).flat() || [];
@@ -1182,7 +1181,7 @@ export default function AllAssignment() {
                         {activeTerm && (
                           <div className="text-start  !w-full justify-items-center">
                             <Button
-                              variant='light'
+                              variant="light"
                               classNames={{ label: "!font-semibold " }}
                               className={`rounded-full mt-3 ${
                                 assignment.isPublish

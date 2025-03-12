@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useRef, useState } from "react";
-import { Button, Table, TextInput } from "@mantine/core";
+import { Button, Table, TextInput, Tooltip } from "@mantine/core";
 import { useParams, useSearchParams } from "react-router-dom";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
 import Loading from "@/components/Loading/Loading";
@@ -94,6 +94,17 @@ export default function OneAssignment() {
     },
     { title: name },
   ]);
+  const [studentFilter, setStudentFilter] = useState<
+    ({
+      sectionNo: string;
+      student: IModelUser;
+      scores: {
+        score: string | number;
+        name: string;
+      }[];
+      sumScore: number;
+    } & Record<string, any>)[]
+  >([]);
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -151,6 +162,19 @@ export default function OneAssignment() {
       );
     }
   }, [course]);
+
+  useEffect(() => {
+    if (allStudent.length) {
+      setStudentFilter(
+        allStudent.filter((item) =>
+          parseInt(filter) >= 0
+            ? getSectionNo(item.sectionNo).includes(filter) ||
+              item.student.studentId?.toString().includes(filter)
+            : getUserName(item.student, 3)?.includes(filter)
+        )
+      );
+    }
+  }, [allStudent, filter]);
 
   const onClickSort = (key: string) => {
     setIsSort(true);
@@ -323,7 +347,6 @@ export default function OneAssignment() {
                     {name}
                   </div>
                   <div className="font-semibold text-secondary text-[14px] ">
-                    {" "}
                     {fullScore?.toFixed(2)} pts.
                   </div>
                 </div>
@@ -480,7 +503,12 @@ export default function OneAssignment() {
                             className="flex justify-end items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3  pr-6"
                             onClick={() => onClickSort(item.name)}
                           >
-                            <p>{item.name}</p>
+                            <Tooltip
+                              className="text-b4 acerSwift:max-macair133:text-b5"
+                              label={item.desc}
+                            >
+                              <p>{item.name}</p>
+                            </Tooltip>
                             {(sort as any)[item.name] === null ? (
                               <IconNotSort className="size-4" />
                             ) : (sort as any)[item.name] ? (
@@ -494,123 +522,36 @@ export default function OneAssignment() {
                     </Table.Tr>
                   </Table.Thead>
                   <Table.Tbody className="text-default">
-                    {allStudent
-                      ?.filter((item) =>
-                        parseInt(filter)
-                          ? item.sectionNo.includes(filter) ||
-                            item.student.studentId?.toString().includes(filter)
-                          : getUserName(item.student, 3)?.includes(filter)
-                      )
-                      .map((item) => {
-                        const studentId = item.student.studentId!;
-                        if (
-                          item.sumScore == maxScore &&
-                          !studentMaxMin.max.includes(studentId)
-                        ) {
-                          setStudentMaxMin((prev) => ({
-                            ...prev,
-                            max: [...prev.max, studentId],
-                          }));
-                        } else if (
-                          item.sumScore == minScore &&
-                          !studentMaxMin.min.includes(studentId)
-                        ) {
-                          setStudentMaxMin((prev) => ({
-                            ...prev,
-                            min: [...prev.min, studentId],
-                          }));
-                        }
-                        return (
-                          <Table.Tr
-                            key={studentId}
-                            ref={(el) => studentRefs.current.set(studentId, el)}
-                            className="hover:bg-[#F3F3F3] text-b3 acerSwift:max-macair133:!text-b4 font-normal py-[14px] w-full"
-                          >
-                            <Table.Td>{item.sectionNo}</Table.Td>
-                            <Table.Td>{studentId}</Table.Td>
-                            <Table.Td>{getUserName(item.student, 3)}</Table.Td>
-                            <Table.Td className="w-[5%]">
-                              <div className="flex gap-3 justify-end items-center">
-                                <p>{item.sumScore?.toFixed(2)}</p>
-                                {activeTerm && (
-                                  <div
-                                    className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
-                                    onClick={() => {
-                                      setEditScore({
-                                        section: parseInt(item.sectionNo),
-                                        student: item.student,
-                                        questions: item.scores || [],
-                                      });
-                                      setOpenEditScore(true);
-                                    }}
-                                  >
-                                    <Icon
-                                      IconComponent={IconEdit}
-                                      className="size-4 cursor-pointer text-default"
-                                    />
-                                  </div>
-                                )}
-                              </div>
-                            </Table.Td>
-                            {questions?.map((ques, index) => (
-                              <Table.Td key={index} className="text-end pr-9">
-                                {item[ques.name] == undefined ||
-                                item[ques.name] < 0
-                                  ? "-"
-                                  : item[ques.name].toFixed(2)}
-                              </Table.Td>
-                            ))}
-                          </Table.Tr>
-                        );
-                      })}
-                  </Table.Tbody>
-                </Table>
-              </div>
-            ) : (
-              <div className="flex flex-col rounded-md  border py-3 ">
-                {" "}
-                {allStudent
-                  ?.filter((item) =>
-                    parseInt(filter)
-                      ? item.sectionNo.includes(filter) ||
-                        item.student.studentId?.toString().includes(filter)
-                      : getUserName(item.student, 3)?.includes(filter)
-                  )
-                  .map((item) => {
-                    const studentId = item.student.studentId!;
-                    if (
-                      item.sumScore == maxScore &&
-                      !studentMaxMin.max.includes(studentId)
-                    ) {
-                      setStudentMaxMin((prev) => ({
-                        ...prev,
-                        max: [...prev.max, studentId],
-                      }));
-                    } else if (
-                      item.sumScore == minScore &&
-                      !studentMaxMin.min.includes(studentId)
-                    ) {
-                      setStudentMaxMin((prev) => ({
-                        ...prev,
-                        min: [...prev.min, studentId],
-                      }));
-                    }
-                    return (
-                      <div
-                        key={studentId}
-                        ref={(el) => studentRefs.current.set(studentId, el)}
-                        className=" flex flex-col border-b text-[12px] font-normal p-4 w-full"
-                      >
-                        <div className="grid grid-cols-2 w-full items-center">
-                          <div className="flex gap-[2px] flex-col">
-                            <div>{studentId}</div>
-                            <div>{getUserName(item.student, 3)}</div>{" "}
-                            <div className="  text-default">
-                              Section: {item.sectionNo}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="flex gap-3 w-full text-end justify-end  items-center">
+                    {studentFilter.map((item) => {
+                      const studentId = item.student.studentId!;
+                      if (
+                        item.sumScore == maxScore &&
+                        !studentMaxMin.max.includes(studentId)
+                      ) {
+                        setStudentMaxMin((prev) => ({
+                          ...prev,
+                          max: [...prev.max, studentId],
+                        }));
+                      } else if (
+                        item.sumScore == minScore &&
+                        !studentMaxMin.min.includes(studentId)
+                      ) {
+                        setStudentMaxMin((prev) => ({
+                          ...prev,
+                          min: [...prev.min, studentId],
+                        }));
+                      }
+                      return (
+                        <Table.Tr
+                          key={studentId}
+                          ref={(el) => studentRefs.current.set(studentId, el)}
+                          className="hover:bg-[#F3F3F3] text-b3 acerSwift:max-macair133:!text-b4 font-normal py-[14px] w-full"
+                        >
+                          <Table.Td>{item.sectionNo}</Table.Td>
+                          <Table.Td>{studentId}</Table.Td>
+                          <Table.Td>{getUserName(item.student, 3)}</Table.Td>
+                          <Table.Td className="w-[5%]">
+                            <div className="flex gap-3 justify-end items-center">
                               <p>{item.sumScore?.toFixed(2)}</p>
                               {activeTerm && (
                                 <div
@@ -631,11 +572,83 @@ export default function OneAssignment() {
                                 </div>
                               )}
                             </div>
+                          </Table.Td>
+                          {questions?.map((ques, index) => (
+                            <Table.Td key={index} className="text-end pr-9">
+                              {item[ques.name] == undefined ||
+                              item[ques.name] < 0
+                                ? "-"
+                                : item[ques.name].toFixed(2)}
+                            </Table.Td>
+                          ))}
+                        </Table.Tr>
+                      );
+                    })}
+                  </Table.Tbody>
+                </Table>
+              </div>
+            ) : (
+              <div className="flex flex-col rounded-md  border py-3 ">
+                {studentFilter.map((item) => {
+                  const studentId = item.student.studentId!;
+                  if (
+                    item.sumScore == maxScore &&
+                    !studentMaxMin.max.includes(studentId)
+                  ) {
+                    setStudentMaxMin((prev) => ({
+                      ...prev,
+                      max: [...prev.max, studentId],
+                    }));
+                  } else if (
+                    item.sumScore == minScore &&
+                    !studentMaxMin.min.includes(studentId)
+                  ) {
+                    setStudentMaxMin((prev) => ({
+                      ...prev,
+                      min: [...prev.min, studentId],
+                    }));
+                  }
+                  return (
+                    <div
+                      key={studentId}
+                      ref={(el) => studentRefs.current.set(studentId, el)}
+                      className=" flex flex-col border-b text-[12px] font-normal p-4 w-full"
+                    >
+                      <div className="grid grid-cols-2 w-full items-center">
+                        <div className="flex gap-[2px] flex-col">
+                          <div>{studentId}</div>
+                          <div>{getUserName(item.student, 3)}</div>{" "}
+                          <div className="  text-default">
+                            Section: {item.sectionNo}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex gap-3 w-full text-end justify-end  items-center">
+                            <p>{item.sumScore?.toFixed(2)}</p>
+                            {activeTerm && (
+                              <div
+                                className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
+                                onClick={() => {
+                                  setEditScore({
+                                    section: parseInt(item.sectionNo),
+                                    student: item.student,
+                                    questions: item.scores || [],
+                                  });
+                                  setOpenEditScore(true);
+                                }}
+                              >
+                                <Icon
+                                  IconComponent={IconEdit}
+                                  className="size-4 cursor-pointer text-default"
+                                />
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </>

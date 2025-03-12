@@ -468,7 +468,6 @@ export default function Assignment() {
                 </div>
               ) : (
                 <div className="flex flex-col gap-3 overflow-y-auto h-full ">
-                  {" "}
                   {section?.assignments?.map((assignment, index) => {
                     const totalStudent = section.students?.filter(
                       ({ scores }) =>

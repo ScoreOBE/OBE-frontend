@@ -163,7 +163,7 @@ const studentList = (
           : row.firstName,
         lastNameTH: row.lastName.endsWith(" ")
           ? row.lastName.slice(0, -1)
-          : row.lastName,
+          : row.lastName ?? "",
       };
       if (!existSec) {
         result.push({
@@ -305,9 +305,9 @@ const scoreOBETemplete = (
 
       const checkSection = canUpload?.students?.find(
         ({ student }) => student.studentId == data.studentId
-          // student[firstNameIsEng ? "firstNameEN" : "firstNameTH"] ==
-          //   firstName &&
-          // student[lastNameIsEng ? "lastNameEN" : "lastNameTH"] == lastName
+        // student[firstNameIsEng ? "firstNameEN" : "firstNameTH"] ==
+        //   firstName &&
+        // student[lastNameIsEng ? "lastNameEN" : "lastNameTH"] == lastName
       );
       const checkStudent = checkSection
         ? checkSection.student.studentId != data.studentId

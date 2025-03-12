@@ -245,6 +245,9 @@ export default function StdScore() {
                         >
                           <Table.Td className="text-start w-[10%]">
                             {ques.name}
+                            {ques.desc && (
+                              <p className="text-b4">({ques.desc})</p>
+                            )}
                           </Table.Td>
                           <Table.Td className="text-end w-[10%]">
                             {!studentScore || studentScore < 0
@@ -278,7 +281,6 @@ export default function StdScore() {
               </div>
             ) : (
               <div className="flex flex-col gap-3">
-                {" "}
                 {assignment?.questions.map((ques, index) => {
                   const stat = calStat(ques.scores, ques.scores.length);
                   const studentScore = yourScores?.questions.find(
@@ -293,6 +295,9 @@ export default function StdScore() {
                         <div className="flex flex-col">
                           <div className=" font-semibold text-default text-[14px]">
                             {ques.name}
+                            {ques.desc && (
+                              <p className="text-b4">({ques.desc})</p>
+                            )}
                           </div>
                           <div className="font-semibold text-secondary text-[12px] ">
                             {!studentScore || studentScore < 0
@@ -301,10 +306,8 @@ export default function StdScore() {
                             / {ques.fullScore.toFixed(2)}
                           </div>
                         </div>
-                  
                       </div>
                       <div className="mt-2 text-[12px] border-t flex flex-col ">
-                        {" "}
                         <div className="grid grid-cols-2 p-2 mt-1 rounded-t-md">
                           <div className="flex flex-col">
                             <div className="text-start">Mean</div>
@@ -315,7 +318,6 @@ export default function StdScore() {
                           <div className="flex flex-col">
                             <div className="text-start">SD</div>
                             <p className="text-[13px] font-semibold">
-                              {" "}
                               {stat.sd.toFixed(2)}
                             </p>
                           </div>
