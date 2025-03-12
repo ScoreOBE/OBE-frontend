@@ -503,7 +503,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
             >
               {warningStudentList.map((std) => (
                 <div className="ml-8">
-                  {std.studentId} - {std.firstName} {std.firstName}{" "}
+                  {std.studentId} - {std.firstName} {std.lastName}{" "}
                 </div>
               ))}
             </Alert>

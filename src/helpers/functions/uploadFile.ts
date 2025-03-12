@@ -290,19 +290,24 @@ const scoreOBETemplete = (
       ) {
         errorSection.push(getSectionNo(sectionNo));
       }
+      const firstNameIsEng = validateEngLanguage(data.firstName);
+      const lastNameIsEng = validateEngLanguage(data.lastName);
       const firstName = data.firstName?.endsWith(" ")
         ? data.firstName.slice(0, -1)
+        : firstNameIsEng
+        ? capitalize(data.firstName)
         : data.firstName;
       const lastName = data.lastName?.endsWith(" ")
         ? data.lastName.slice(0, -1)
+        : lastNameIsEng
+        ? capitalize(data.lastName)
         : data.lastName;
-      const firstNameIsEng = validateEngLanguage(firstName);
-      const lastNameIsEng = validateEngLanguage(lastName);
+
       const checkSection = canUpload?.students?.find(
-        ({ student }) =>
-          student[firstNameIsEng ? "firstNameEN" : "firstNameTH"] ==
-            firstName &&
-          student[lastNameIsEng ? "lastNameEN" : "lastNameTH"] == lastName
+        ({ student }) => student.studentId == data.studentId
+          // student[firstNameIsEng ? "firstNameEN" : "firstNameTH"] ==
+          //   firstName &&
+          // student[lastNameIsEng ? "lastNameEN" : "lastNameTH"] == lastName
       );
       const checkStudent = checkSection
         ? checkSection.student.studentId != data.studentId
