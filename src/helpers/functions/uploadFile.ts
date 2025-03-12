@@ -230,11 +230,15 @@ const scoreOBETemplete = (
     delete worksheet.E2;
     delete worksheet.E3;
 
-    const resultsData: any[] = XLSX.utils.sheet_to_json(worksheet);
+    let resultsData: any[] = XLSX.utils.sheet_to_json(worksheet);
 
     const assignmentName = sheet;
     const fullScore = resultsData.shift();
     const description = resultsData[0].section ? {} : resultsData.shift();
+
+    resultsData = resultsData.filter((row) =>
+      Object.values(row).some((value) => value !== null && value !== "")
+    );
 
     resultsData.forEach((data, i) => {
       // Validate the studentId
