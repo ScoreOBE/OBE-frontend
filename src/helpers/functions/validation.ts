@@ -115,6 +115,10 @@ export const validateEmail = (email: string) => {
   return /^\S+@cmu\.ac\.th$/i.test(email);
 };
 
+export const validateEngLanguage = (value: string) => {
+  return /[A-Za-z ]/.test(value);
+};
+
 export const validateThaiLanguage = (value: string) => {
   return /[\u0E00-\u0E7F]/.test(value);
 };

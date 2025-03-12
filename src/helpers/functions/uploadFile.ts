@@ -7,6 +7,7 @@ import store from "@/store";
 import { IModelUser } from "@/models/ModelUser";
 import { getSectionNo } from "./function";
 import { capitalize } from "lodash";
+import { validateEngLanguage } from "./validation";
 
 export const isNumeric = (value: any) => {
   return !isNaN(parseFloat(value)) && isFinite(value);
@@ -289,15 +290,19 @@ const scoreOBETemplete = (
       ) {
         errorSection.push(getSectionNo(sectionNo));
       }
-      const firstNameTH = data.firstName?.endsWith(" ")
+      const firstName = data.firstName?.endsWith(" ")
         ? data.firstName.slice(0, -1)
         : data.firstName;
-      const lastNameTH = data.lastName?.endsWith(" ")
+      const lastName = data.lastName?.endsWith(" ")
         ? data.lastName.slice(0, -1)
         : data.lastName;
+      const firstNameIsEng = validateEngLanguage(firstName);
+      const lastNameIsEng = validateEngLanguage(lastName);
       const checkSection = canUpload?.students?.find(
         ({ student }) =>
-          student.firstNameTH == firstNameTH && student.lastNameTH == lastNameTH
+          student[firstNameIsEng ? "firstNameEN" : "firstNameTH"] ==
+            firstName &&
+          student[lastNameIsEng ? "lastNameEN" : "lastNameTH"] == lastName
       );
       const checkStudent = checkSection
         ? checkSection.student.studentId != data.studentId
@@ -309,18 +314,20 @@ const scoreOBETemplete = (
           students?.find(
             ({ student }) =>
               student.studentId == data.studentId ||
-              (student.firstNameTH == firstNameTH &&
-                student.lastNameTH == lastNameTH)
+              (student[firstNameIsEng ? "firstNameEN" : "firstNameTH"] ==
+                firstName &&
+                student[lastNameIsEng ? "lastNameEN" : "lastNameTH"] ==
+                  lastName)
           )
         ) &&
         (!checkSection || checkStudent) &&
         !errorStudent.find(
-          ({ student }) => student == `${firstNameTH} ${lastNameTH}`
+          ({ student }) => student == `${firstName} ${lastName}`
         )
       ) {
         errorStudent.push({
           studentId: data.studentId,
-          student: `${firstNameTH} ${lastNameTH}`,
+          student: `${firstName} ${lastName}`,
           studentIdNotMatch: checkStudent,
           sectionNotMatch: !checkSection,
         });
@@ -350,8 +357,9 @@ const scoreOBETemplete = (
           ({ student }) => student.studentId == data.studentId
         )?.student.id,
         studentId: data.studentId,
-        firstNameTH,
-        lastNameTH,
+        ...(firstNameIsEng
+          ? { firstNameEN: firstName, lastNameEN: lastName }
+          : { firstNameTH: firstName, lastNameTH: lastName }),
         scores: [score],
       };
       if (!existSec) {
