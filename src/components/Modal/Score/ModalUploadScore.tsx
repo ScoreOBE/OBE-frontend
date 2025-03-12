@@ -376,7 +376,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 }}
                 onReject={(files) => onRejectFile(files)}
                 maxFiles={1}
-                maxSize={5 * 1024 ** 2}
+                maxSize={10 * 1024 * 1024}
                 accept={[...MS_EXCEL_MIME_TYPE, MIME_TYPES.csv]}
                 className="bg-white hover:bg-gray-50 border-[#8f9ae37f] border-dashed cursor-pointer border-[2px] rounded-md"
               >
