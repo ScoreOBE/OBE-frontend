@@ -582,9 +582,9 @@ export default function Students() {
                               return (
                                 <Table.Td key={index}>
                                   <div className=" justify-end flex pr-10">
-                                    {score != undefined
-                                      ? score.toFixed(2)
-                                      : "-"}
+                                    {score == undefined || score < 0
+                                      ? "-"
+                                      : score.toFixed(2)}
                                   </div>
                                 </Table.Td>
                               );
@@ -628,30 +628,30 @@ export default function Students() {
                         ref={(el) => studentRefs.current.set(studentId, el)}
                         className=" flex flex-col border-b text-[12px]  font-normal p-4 w-full"
                       >
-                             <div className="grid grid-cols-2 w-full items-center">
-                        <div className="flex gap-[2px] flex-col">
-                          <div>{studentId}</div>
-                          <div> {getUserName(student.student, 3)}</div>{" "}
-                        </div>
-
-                        <div className="flex gap-3 w-full text-end justify-end  items-center">
-                          <p>{student.sumScore?.toFixed(2)}</p>
-                          <div
-                            className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
-                            onClick={() => {
-                              setEditScore({
-                                student: student.student,
-                                questions: student.questions || [],
-                              });
-                              setOpenEditScore(true);
-                            }}
-                          >
-                            <Icon
-                              IconComponent={IconEdit}
-                              className="size-4 cursor-pointer text-default"
-                            />
+                        <div className="grid grid-cols-2 w-full items-center">
+                          <div className="flex gap-[2px] flex-col">
+                            <div>{studentId}</div>
+                            <div> {getUserName(student.student, 3)}</div>{" "}
                           </div>
-                        </div>
+
+                          <div className="flex gap-3 w-full text-end justify-end  items-center">
+                            <p>{student.sumScore?.toFixed(2)}</p>
+                            <div
+                              className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
+                              onClick={() => {
+                                setEditScore({
+                                  student: student.student,
+                                  questions: student.questions || [],
+                                });
+                                setOpenEditScore(true);
+                              }}
+                            >
+                              <Icon
+                                IconComponent={IconEdit}
+                                className="size-4 cursor-pointer text-default"
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     );

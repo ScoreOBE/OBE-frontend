@@ -1,4 +1,4 @@
-import { generateBellCurveData } from "@/helpers/functions/score";
+import { generateBellCurveData, getStepSize } from "@/helpers/functions/score";
 import annotationPlugin from "chartjs-plugin-annotation";
 import {
   Chart,
@@ -170,14 +170,7 @@ export default function Curve({
                 min: 0,
                 max: fullScore,
                 ticks: {
-                  stepSize:
-                    fullScore <= 1
-                      ? 0.2
-                      : fullScore <= 5
-                      ? 0.5
-                      : fullScore <= 30
-                      ? 1
-                      : 5,
+                  stepSize: getStepSize(fullScore),
                   autoSkip: false,
                 },
               },

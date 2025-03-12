@@ -354,7 +354,7 @@ const scoreOBETemplete = (
         assignmentName,
         questions: questions.map(({ name }) => ({
           name: name,
-          score: data[name] ?? -1,
+          score: data[name] ?? null,
         })),
       };
       const student = {

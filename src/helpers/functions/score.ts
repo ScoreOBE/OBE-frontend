@@ -1,4 +1,3 @@
-import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelTQF5 } from "@/models/ModelTQF5";
 
@@ -87,6 +86,19 @@ const apriori = (x: number, min: number, max: number) => {
   return p * (1.0 - p);
 };
 
+export const getStepSize = (fullScore: number) => {
+  if (fullScore <= 1) return 0.2;
+  if (fullScore <= 5) return 0.5;
+  if (fullScore <= 30) return 1;
+  if (fullScore <= 100) return 5;
+
+  let step = Math.ceil(fullScore / 20);
+  while (fullScore % step !== 0) {
+    step--;
+  }
+  return step;
+};
+
 export const generateBellCurveData = (
   scores: number[],
   mean: number,
@@ -94,7 +106,7 @@ export const generateBellCurveData = (
   fullScore: number
 ): { x: number; y: number }[] => {
   const bins = fullScore <= 5 ? 100 : 200;
-  const spread = 5;
+  const spread = getStepSize(fullScore);
   const bellCurveData: { x: number; y: number }[] = [];
   const precomputedApriori = Array.from({ length: bins }, (_, j) => {
     const frac = j / (bins - 1);
