@@ -61,7 +61,7 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
   const activeCurriculums = form
     .getValues()
     .list?.filter((cur) =>
-      tqf5.sections?.some(
+      tqf5.sections.some(
         (sec) => cur.curriculum?.includes(sec.curriculum!) && sec.isActive
       )
     );

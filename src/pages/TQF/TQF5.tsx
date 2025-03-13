@@ -350,8 +350,16 @@ export default function TQF5() {
       delete newTqf5?.assignmentsMap;
       delete newTqf5?.part2;
       delete newTqf5?.part3;
-      setTqf5Original({ ...newTqf5, method: res.method });
-      dispatch(setDataTQF5({ ...newTqf5, method: res.method }));
+      setTqf5Original({ ...newTqf5, ...res, method: res.method });
+      dispatch(
+        setDataTQF5({
+          ...newTqf5,
+          ...res,
+          type: tqf5.type,
+          sections: tqf5.sections,
+          method: res.method,
+        })
+      );
       showNotifications(
         NOTI_TYPE.SUCCESS,
         "Method Changed Successfully",
