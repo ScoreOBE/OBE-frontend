@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { setLoadingOverlay } from "@/store/loading";
-import noData from "@/assets/image/noData.jpg";
+import scoreobe from "@/assets/image/scoreOBElogobold.png";
 import { setShowSidebar, setShowNavbar } from "@/store/config";
 import LoadingOverlay from "@/components/Loading/LoadingOverlay";
 
@@ -16,6 +16,7 @@ export default function CourseSyllabus() {
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const [pdfString, setPdfString] = useState<string | null>(null);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(setShowSidebar(false));
@@ -66,9 +67,26 @@ export default function CourseSyllabus() {
           style={{ border: "none" }}
         ></iframe>
       ) : (
-        <div>
-          Not Found Course Syllabus for Course {courseNo} ({semester}/
-          {year?.slice(-2)})
+        <div className="flex items-center justify-center h-full w-full gap-24 bg-sky-50">
+          <div className=" flex  gap-8">
+            <img src={scoreobe} alt="cpeLogo" className=" size-16 mt-[6px]" />
+            <p className="!font-[600] -ml-5 text-center drop-shadow-xl  px-[12px]  sm:font-[600] item-start rounded text-emphasize sm:text-[48px] text-[32px]   ">
+              <span className=" !drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                ScoreOBE+{" "}
+              </span>
+            </p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-[24px] font-semibold text-gray-800">
+              Oops! {courseNo} Course Specifications Not Available
+            </h2>
+
+            <p className="text-gray-600">
+              We couldn't find the document for course{" "}
+              <span className="font-medium">{courseNo}</span>({semester}/{" "}
+              {year?.slice()})
+            </p>
+          </div>
         </div>
       )}
     </div>

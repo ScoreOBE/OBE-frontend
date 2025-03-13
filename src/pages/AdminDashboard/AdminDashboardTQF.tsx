@@ -293,7 +293,7 @@ export default function AdminDashboardTQF() {
                         />
                       </Button>
                     </Tooltip>
-                    <CopyButton
+                    {/* <CopyButton
                       value={`${window.location.origin.toString()}${
                         ROUTE_PATH.COURSE_SYLLABUS
                       }/${sec.TQF3?.id}?courseNo=${course.courseNo}&year=${
@@ -328,7 +328,7 @@ export default function AdminDashboardTQF() {
                           </Button>
                         </Tooltip>
                       )}
-                    </CopyButton>
+                    </CopyButton> */}
                   </>
                 )}
               </div>
@@ -483,7 +483,7 @@ export default function AdminDashboardTQF() {
                     <Icon className="size-5" IconComponent={IconFileExport} />
                   </Button>
                 </Tooltip>
-                <CopyButton
+                {/* <CopyButton
                   value={`${window.location.origin.toString()}${
                     ROUTE_PATH.COURSE_SYLLABUS
                   }/${course.TQF3?.id}?courseNo=${course.courseNo}&year=${
@@ -518,7 +518,7 @@ export default function AdminDashboardTQF() {
                       </Button>
                     </Tooltip>
                   )}
-                </CopyButton>
+                </CopyButton> */}
               </>
             )}
           </div>

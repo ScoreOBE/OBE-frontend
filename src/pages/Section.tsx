@@ -450,7 +450,7 @@ export default function Section() {
                             Section {getSectionNo(sec.sectionNo)}
                           </p>
                           <p
-                            className={`tag-tqf ${isMobile ? 'translate-x-0' : ''} bg-secondary text-secondary flex gap-1 items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 ${owner && activeTerm && 'mr-7'} 
+                            className={`tag-tqf ${isMobile ? 'translate-x-0' : ''} bg-secondary text-secondary flex gap-[6px] px-2 py-[4px]  items-center bg-opacity-15 rounded-xl !text-[13px] acerSwift:max-macair133:!text-b6 ${owner && activeTerm && 'mr-7'} 
                           
                            `}
                           >
@@ -470,7 +470,7 @@ export default function Section() {
                           {sec?.topic}
                         </p>
                         {!!sec.curriculum?.length && (
-                          <p className="tag-tqf w-fit bg-secondary text-secondary items-center bg-opacity-15 rounded-xl !text-b5 acerSwift:max-macair133:!text-b6 mt-1">
+                          <p className="tag-tqf w-fit bg-secondary text-secondary items-center bg-opacity-15 rounded-xl px-2 py-[5px] !text-[12px] acerSwift:max-macair133:!text-b6 mt-1">
                             {sec.curriculum}
                           </p>
                         )}
