@@ -57,6 +57,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
   });
 
   useEffect(() => {
+    form.reset();
     if (tqf5.part2) {
       form.setValues(cloneDeep(tqf5.part2));
     } else if (tqf3.part4) {
