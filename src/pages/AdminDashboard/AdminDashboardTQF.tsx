@@ -1,12 +1,21 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
-import { Button, Checkbox, Menu, Table, Tabs, Tooltip } from "@mantine/core";
+import {
+  Button,
+  Checkbox,
+  CopyButton,
+  Menu,
+  Table,
+  Tabs,
+  Tooltip,
+} from "@mantine/core";
 import Icon from "@/components/Icon";
 import IconFilter from "@/assets/icons/horizontalAdjustments.svg?react";
 import IconActionTQF from "@/assets/icons/actionTQF.svg?react";
 import IconTQF3 from "@/assets/icons/TQF3.svg?react";
 import IconTQF5 from "@/assets/icons/TQF5.svg?react";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
+import { HiOutlineClipboardCopy, HiCheck } from "react-icons/hi";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
@@ -253,33 +262,74 @@ export default function AdminDashboardTQF() {
                 </div>
 
                 {sec.TQF3?.status === TQF_STATUS.DONE && (
-                  <Tooltip
-                    withArrow
-                    arrowPosition="side"
-                    arrowOffset={50}
-                    arrowSize={7}
-                    position="bottom-end"
-                    label={
-                      <div className="text-default font-semibold text-[13px] p-1">
-                        Export TQF3
-                      </div>
-                    }
-                    color="#FCFCFC"
-                  >
-                    <Button
-                      variant="light"
-                      className="tag-tqf  !px-3 !rounded-full text-center"
-                      onClick={() => {
-                        setExportDataTQF3({
-                          ...sec.TQF3!,
-                          courseNo: course.courseNo,
-                        });
-                        setOpenModalExportTQF3(true);
-                      }}
+                  <>
+                    <Tooltip
+                      withArrow
+                      arrowPosition="side"
+                      arrowOffset={50}
+                      arrowSize={7}
+                      position="bottom-end"
+                      label={
+                        <div className="text-default font-semibold text-[13px] p-1">
+                          Export TQF3
+                        </div>
+                      }
+                      color="#FCFCFC"
                     >
-                      <Icon className="size-5" IconComponent={IconFileExport} />
-                    </Button>
-                  </Tooltip>
+                      <Button
+                        variant="light"
+                        className="tag-tqf  !px-3 !rounded-full text-center"
+                        onClick={() => {
+                          setExportDataTQF3({
+                            ...sec.TQF3!,
+                            courseNo: course.courseNo,
+                          });
+                          setOpenModalExportTQF3(true);
+                        }}
+                      >
+                        <Icon
+                          className="size-5"
+                          IconComponent={IconFileExport}
+                        />
+                      </Button>
+                    </Tooltip>
+                    <CopyButton
+                      value={`${window.location.origin.toString()}${
+                        ROUTE_PATH.COURSE_SYLLABUS
+                      }/${sec.TQF3?.id}?courseNo=${course.courseNo}&year=${
+                        course.year
+                      }&semester=${course.semester}`}
+                      timeout={2000}
+                    >
+                      {({ copied, copy }) => (
+                        <Tooltip
+                          withArrow
+                          arrowPosition="side"
+                          arrowOffset={50}
+                          arrowSize={7}
+                          position="bottom-end"
+                          label={
+                            <div className="text-default font-semibold text-[13px] p-1">
+                              Course Syllabus
+                            </div>
+                          }
+                          color="#FCFCFC"
+                        >
+                          <Button
+                            variant="light"
+                            className="tag-tqf !px-3 !rounded-full text-center"
+                            onClick={copy}
+                          >
+                            {copied ? (
+                              <HiCheck size={20} />
+                            ) : (
+                              <HiOutlineClipboardCopy size={20} />
+                            )}
+                          </Button>
+                        </Tooltip>
+                      )}
+                    </CopyButton>
+                  </>
                 )}
               </div>
             </Table.Td>
@@ -405,33 +455,71 @@ export default function AdminDashboardTQF() {
               {course.TQF3?.status}
             </div>
             {course.TQF3?.status === TQF_STATUS.DONE && (
-              <Tooltip
-                withArrow
-                arrowPosition="side"
-                arrowOffset={50}
-                arrowSize={7}
-                position="bottom-end"
-                label={
-                  <div className="text-default font-semibold text-[13px] p-1">
-                    Export TQF3
-                  </div>
-                }
-                color="#FCFCFC"
-              >
-                <Button
-                  variant="light"
-                  className="tag-tqf !px-3 !rounded-full text-center"
-                  onClick={() => {
-                    setExportDataTQF3({
-                      ...course.TQF3!,
-                      courseNo: course.courseNo,
-                    });
-                    setOpenModalExportTQF3(true);
-                  }}
+              <>
+                <Tooltip
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={50}
+                  arrowSize={7}
+                  position="bottom-end"
+                  label={
+                    <div className="text-default font-semibold text-[13px] p-1">
+                      Export TQF3
+                    </div>
+                  }
+                  color="#FCFCFC"
                 >
-                  <Icon className="size-5" IconComponent={IconFileExport} />
-                </Button>
-              </Tooltip>
+                  <Button
+                    variant="light"
+                    className="tag-tqf !px-3 !rounded-full text-center"
+                    onClick={() => {
+                      setExportDataTQF3({
+                        ...course.TQF3!,
+                        courseNo: course.courseNo,
+                      });
+                      setOpenModalExportTQF3(true);
+                    }}
+                  >
+                    <Icon className="size-5" IconComponent={IconFileExport} />
+                  </Button>
+                </Tooltip>
+                <CopyButton
+                  value={`${window.location.origin.toString()}${
+                    ROUTE_PATH.COURSE_SYLLABUS
+                  }/${course.TQF3?.id}?courseNo=${course.courseNo}&year=${
+                    course.year
+                  }&semester=${course.semester}`}
+                  timeout={2000}
+                >
+                  {({ copied, copy }) => (
+                    <Tooltip
+                      withArrow
+                      arrowPosition="side"
+                      arrowOffset={50}
+                      arrowSize={7}
+                      position="bottom-end"
+                      label={
+                        <div className="text-default font-semibold text-[13px] p-1">
+                          {copied ? "Copied" : "Course Syllabus"}
+                        </div>
+                      }
+                      color="#FCFCFC"
+                    >
+                      <Button
+                        variant="light"
+                        className="tag-tqf !px-3 !rounded-full text-center"
+                        onClick={copy}
+                      >
+                        {copied ? (
+                          <HiCheck size={20} />
+                        ) : (
+                          <HiOutlineClipboardCopy size={20} />
+                        )}
+                      </Button>
+                    </Tooltip>
+                  )}
+                </CopyButton>
+              </>
             )}
           </div>
         </Table.Td>

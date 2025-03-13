@@ -20,6 +20,7 @@ import AllAssignment from "@/pages/AllAssignment";
 import OneAssignment from "@/pages/OneAssignment";
 import { isMobile } from "@/helpers/functions/function";
 import NotAvailablePage from "@/pages/NotAvailable";
+import CourseSyllabus from "@/pages/CourseSyllabus";
 
 const Login = lazy(() => import("@/pages/Login"));
 const CmuEntraIDCallback = lazy(() => import("@/pages/CmuEntraIDCallback"));
@@ -57,14 +58,14 @@ const router = createBrowserRouter([
         path: ROUTE_PATH.CMU_ENTRAID_CALLBACK,
         element: <CmuEntraIDCallback />,
       },
-      // {
-      //   path: ROUTE_PATH.SELECTED_DEPARTMENT,
-      //   element: (
-      //     <Suspense fallback={loadingPage}>
-      //       <SelectDepartment />
-      //     </Suspense>
-      //   ),
-      // },
+      {
+        path: `${ROUTE_PATH.COURSE_SYLLABUS}/:tqf3`,
+        element: (
+          <Suspense fallback={loadingPage}>
+            <CourseSyllabus />
+          </Suspense>
+        ),
+      },
       {
         path: ROUTE_PATH.INS_DASHBOARD,
         element: (
@@ -120,7 +121,7 @@ const router = createBrowserRouter([
                 path: `:sectionNo/${ROUTE_PATH.HISTOGRAM}`,
                 element: (
                   <Suspense fallback={loadingPage}>
-                  {!isMobile ?  <Histogram /> : <NotAvailablePage />} 
+                    {!isMobile ? <Histogram /> : <NotAvailablePage />}
                   </Suspense>
                 ),
               },
@@ -167,7 +168,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.TQF3,
             element: (
               <Suspense fallback={loadingPage}>
-                {!isMobile ? <TQF3 /> : <NotAvailablePage />}  
+                {!isMobile ? <TQF3 /> : <NotAvailablePage />}
               </Suspense>
             ),
           },
@@ -175,7 +176,7 @@ const router = createBrowserRouter([
             path: ROUTE_PATH.TQF5,
             element: (
               <Suspense fallback={loadingPage}>
-               {!isMobile ? <TQF5 /> : <NotAvailablePage />}  
+                {!isMobile ? <TQF5 /> : <NotAvailablePage />}
               </Suspense>
             ),
           },

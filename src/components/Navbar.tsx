@@ -2,27 +2,29 @@ import Profile from "./Profile";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { setCourseList } from "@/store/course";
+import course, { setCourseList } from "@/store/course";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import { getCourse } from "@/services/course/course.service";
 import scoreobe from "@/assets/image/scoreOBElogobold.png";
 import { SearchInput } from "./SearchInput";
 import { setAllCourseList } from "@/store/allCourse";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
-import { ROLE } from "@/helpers/constants/enum";
-import { Button } from "@mantine/core";
+import { ROLE, TQF_STATUS } from "@/helpers/constants/enum";
+import { Button, CopyButton, Tooltip } from "@mantine/core";
 import Icon from "./Icon";
 import IconFeedback from "@/assets/icons/feedback.svg?react";
 import { isMobile } from "@/helpers/functions/function";
+import { HiCheck, HiOutlineClipboardCopy } from "react-icons/hi";
 
 export default function Navbar() {
-  const { name } = useParams();
+  const { name, courseNo } = useParams();
   const location = useLocation().pathname;
   const user = useAppSelector((state) => state.user);
   const showButtonLogin = useAppSelector(
     (state) => state.config.showButtonLogin
   );
   const [params, setParams] = useSearchParams();
+  const tqf3 = useAppSelector((state) => state.tqf3);
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
   const tqf5Topic = useAppSelector((state) => state.tqf5.topic);
   const dispatch = useAppDispatch();
@@ -154,15 +156,55 @@ export default function Navbar() {
           >
             {topicPath()}
           </p>
+          {location.includes(ROUTE_PATH.TQF3) &&
+            tqf3.status == TQF_STATUS.DONE && (
+              <CopyButton
+                value={`${window.location.origin.toString()}${
+                  ROUTE_PATH.COURSE_SYLLABUS
+                }/${tqf3.id}?courseNo=${courseNo}&year=${params.get(
+                  "year"
+                )}&semester=${params.get("semester")}`}
+                timeout={2000}
+              >
+                {({ copied, copy }) => (
+                  <Tooltip
+                    withArrow
+                    arrowPosition="side"
+                    arrowOffset={50}
+                    arrowSize={7}
+                    position="bottom-end"
+                    label={
+                      <div className="text-default font-semibold text-[13px] p-1">
+                        Course Syllabus
+                      </div>
+                    }
+                    color="#FCFCFC"
+                  >
+                    <Button
+                      variant="light"
+                      className="tag-tqf !px-3 !rounded-full text-center"
+                      onClick={copy}
+                    >
+                      {copied ? (
+                        <HiCheck size={20} />
+                      ) : (
+                        <HiOutlineClipboardCopy size={20} />
+                      )}
+                    </Button>
+                  </Tooltip>
+                )}
+              </CopyButton>
+            )}
         </div>
         {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
           location.includes(path)
-        ) && !isMobile && (
-          <SearchInput
-            onSearch={searchCourse}
-            placeholder="Course No / Course Name"
-          />
-        )}
+        ) &&
+          !isMobile && (
+            <SearchInput
+              onSearch={searchCourse}
+              placeholder="Course No / Course Name"
+            />
+          )}
         {[ROUTE_PATH.LOGIN].includes(location) && (
           <div className="bg-[#fafafa] sm:px-12 px-2 overflow-hidden items-center !w-full !h-full justify-between flex">
             <div className="flex gap-2 items-center">

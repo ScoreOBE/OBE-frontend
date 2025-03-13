@@ -18,7 +18,6 @@ import ModalTermsOfService from "./components/Modal/ModalTermOfService";
 import LoadingOverlay from "./components/Loading/LoadingOverlay";
 import { setOpenSidebar } from "./store/config";
 import { isMobile } from "./helpers/functions/function";
-import { ROLE } from "./helpers/constants/enum";
 
 function App() {
   const [openModalTermsOfService, setOpenModalTermsOfService] = useState(false);
@@ -39,6 +38,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (path.includes(ROUTE_PATH.COURSE_SYLLABUS)) return;
     const token = localStorage.getItem("token");
     if (token) {
       if (
