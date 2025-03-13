@@ -156,45 +156,71 @@ export default function Navbar() {
           >
             {topicPath()}
           </p>
-          {location.includes(ROUTE_PATH.TQF3) &&
-            tqf3.status == TQF_STATUS.DONE && (
-              <CopyButton
-                value={`${window.location.origin.toString()}${
-                  ROUTE_PATH.COURSE_SYLLABUS
-                }/${tqf3.id}?courseNo=${courseNo}&year=${params.get(
-                  "year"
-                )}&semester=${params.get("semester")}`}
-                timeout={2000}
-              >
-                {({ copied, copy }) => (
-                  <Tooltip
-                    withArrow
-                    arrowPosition="side"
-                    arrowOffset={50}
-                    arrowSize={7}
-                    position="bottom-end"
-                    label={
-                      <div className="text-default font-semibold text-[13px] p-1">
-                        Course Syllabus
-                      </div>
-                    }
-                    color="#FCFCFC"
-                  >
-                    <Button
-                      variant="light"
-                      className="tag-tqf !px-3 !rounded-full text-center"
-                      onClick={copy}
-                    >
-                      {copied ? (
-                        <HiCheck size={20} />
+          {location.includes(ROUTE_PATH.TQF3) && (
+            <CopyButton
+              value={`${window.location.origin.toString()}${
+                ROUTE_PATH.COURSE_SYLLABUS
+              }/${tqf3.id}?courseNo=${courseNo}&year=${params.get(
+                "year"
+              )}&semester=${params.get("semester")}`}
+              timeout={2000}
+            >
+              {({ copied, copy }) => (
+                <Tooltip
+                  classNames={{ tooltip: " cursor-pointer translate-x-56" }}
+                  position="bottom-end"
+                  label={
+                    <div className="text-default text-[14px] acerSwift:max-macair133:text-b4 p-1 flex flex-col gap-2">
+                      {tqf3.status === TQF_STATUS.DONE ? (
+                        <div className="text-default font-medium text-[14px] p-1">
+                          <p className="text-secondary !font-bold">
+                            Copy TQF 3 Document Link
+                          </p>
+                          <p>
+                            Click to copy the TQF 3 document link for this
+                            course. <br />
+                            You can share TQF 3 Document with your students to
+                            help them better understand your course.
+                          </p>
+                        </div>
                       ) : (
-                        <HiOutlineClipboardCopy size={20} />
+                        <div className="text-default font-semibold text-[14px] p-1">
+                          <p className="text-secondary !font-bold">
+                            Copy TQF 3 Document Link Disabled
+                          </p>
+                          <p>
+                            To copy the TQF 3 Document, you must have completed
+                            the TQF 3 document. <br />
+                            After completion, you'll be able to share TQF 3
+                            Document link with your students to help them
+                            understand your course.
+                          </p>
+                        </div>
                       )}
-                    </Button>
-                  </Tooltip>
-                )}
-              </CopyButton>
-            )}
+                    </div>
+                  }
+                  color="#FCFCFC"
+                >
+                  <Button
+                    variant="light"
+                    className={`tag-tqf !px-3 !rounded-full text-center ${
+                      tqf3.status !== TQF_STATUS.DONE
+                        ? " opacity-100 cursor-not-allowed"
+                        : ""
+                    }`}
+                    onClick={tqf3.status === TQF_STATUS.DONE ? copy : undefined} // Prevent copying if not done
+                    disabled={tqf3.status !== TQF_STATUS.DONE} // Disable button
+                  >
+                    {copied ? (
+                      <HiCheck size={20} />
+                    ) : (
+                      <HiOutlineClipboardCopy size={20} />
+                    )}
+                  </Button>
+                </Tooltip>
+              )}
+            </CopyButton>
+          )}
         </div>
         {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
           location.includes(path)
