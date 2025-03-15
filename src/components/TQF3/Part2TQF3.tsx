@@ -649,16 +649,16 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col w-full text-[15px] acerSwift:max-macair133:text-b3 text-default border-b-2">
+          <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 rounded-xl mt-2 acerSwift:max-macair133:text-b3 text-default ">
             <div className=" text-secondary acerSwift:max-macair133:!text-b2 font-semibold whitespace-break-spaces border-b pb-4">
               {PartTopicTQF3.part2}
             </div>
-            <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full grid grid-cols-2 py-5">
-              <div className="flex text-secondary flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
-                <p className="font-semibold">ลักษณะของกระบวนวิชา</p>
-                <p className="font-semibold">Teaching Method</p>
+            <div className=" border-b-[1px] border-[#e6e6e6] px-10 justify-between h-fit w-full grid grid-cols-2 py-5">
+              <div className="flex text-gray-800 flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
+                <p className="font-medium">ลักษณะของกระบวนวิชา</p>
+                <p className="font-medium">Teaching Method</p>
               </div>
-              <div className="flex flex-col text-default gap-2 font-medium text-b3 acerSwift:max-macair133:text-b4">
+              <div className="flex flex-col text-default gap-2 font-medium text-b2 acerSwift:max-macair133:text-b4">
                 {Object.values(TEACHING_METHOD)
                   .filter((key) => tqf3.part2?.teachingMethod?.includes(key.en))
                   .map((key) => (
@@ -668,20 +668,20 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                   ))}
               </div>
             </div>
-            <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5">
-              <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
-                <p className="font-semibold">การวัดและประเมินผล</p>
-                <p className="font-semibold">Evaluation</p>
+            <div className="w-full border-b-[1px] px-10 border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5">
+              <div className="flex text-gray-800 flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+                <p className="font-medium">การวัดและประเมินผล</p>
+                <p className="font-medium">Evaluation</p>
               </div>
-              <div className="flex flex-col text-default font-medium text-b3 acerSwift:max-macair133:!text-b4">
+              <div className="flex flex-col text-default font-medium text-b2 acerSwift:max-macair133:!text-b4">
                 <p>{tqf3.part2?.evaluate}</p>
               </div>
             </div>
-            <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 py-4">
-              <div className="flex text-secondary items-center w-full justify-between">
-                <p className="font-semibold text-[15px] acerSwift:max-macair133:!text-b2">
+            <div className="flex flex-col px-10 border-b-[1px] w-full border-[#e6e6e6] gap-4 py-4">
+              <div className="flex text-gray-800 items-center w-full justify-between">
+                <p className="font-medium text-[15px] acerSwift:max-macair133:!text-b2">
                   ผลลัพธ์การเรียนรู้ของกระบวนวิชา{" "}
-                  <span className="font-bold">
+                  <span className="font-medium">
                     (Course Learning Objective: CLO)
                   </span>
                 </p>
@@ -728,11 +728,11 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                 </Table>
               </div>
             </div>
-            <div className="flex flex-col w-full gap-4 py-4">
-              <div className="flex text-secondary items-center w-full justify-between">
-                <p className="font-semibold text-[15px] acerSwift:max-macair133:!text-b2">
+            <div className="flex flex-col px-10 w-full gap-4 pt-5 pb-2">
+              <div className="flex text-gray-800 items-center w-full justify-between">
+                <p className="font-medium text-[15px] acerSwift:max-macair133:!text-b2">
                   เนื้อหาวิชาและแผนการสอน{" "}
-                  <span className="font-bold">
+                  <span className="font-medium">
                     (Course content and Schedule)
                   </span>
                 </p>
