@@ -1,5 +1,5 @@
 import { Dropzone, FileWithPath, MS_EXCEL_MIME_TYPE } from "@mantine/dropzone";
-import { Table, Tabs, TextInput } from "@mantine/core";
+import { Chip, Group, Table, Tabs, TextInput } from "@mantine/core";
 import { Alert, Button, Modal } from "@mantine/core";
 import { IModelCourse } from "@/models/ModelCourse";
 import regcmu from "@/assets/image/regCMULogo.png";
@@ -51,6 +51,8 @@ export default function ModalStudentList({
   const [file, setFile] = useState<FileWithPath>();
   const [filter, setFilter] = useState<string>("");
   const [result, setResult] = useState<any>();
+  const [openModalSelectSection, setOpenModalSelectSection] = useState(false);
+  const [selectSection, setSelectSection] = useState<string[]>([]);
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
   const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
   const [errorSection, setErrorSection] = useState<string[]>([]);
@@ -73,6 +75,16 @@ export default function ModalStudentList({
       setErrorSection([]);
     }
   }, [openModalUploadError]);
+
+  const selectSectionToUpload = () => {
+    if (result.sections.length == 1) uploadList();
+    else {
+      setSelectSection(
+        result.sections.map((sec: any) => sec.sectionNo.toString())
+      );
+      setOpenModalSelectSection(true);
+    }
+  };
 
   const uploadList = async () => {
     if (result) {
@@ -373,7 +385,7 @@ export default function ModalStudentList({
             {tab === "importStudentList" && (
               <div className="flex justify-end mt-5 sticky w-full">
                 <Button
-                  onClick={uploadList}
+                  onClick={selectSectionToUpload}
                   loading={loading}
                   leftSection={
                     <Icon
@@ -459,7 +471,7 @@ export default function ModalStudentList({
                 {selectCourse ? "Back" : "Cancel"}
               </Button>
               <Button
-                onClick={uploadList}
+                onClick={selectSectionToUpload}
                 loading={loading}
                 rightSection={
                   type == "import" ? (
@@ -475,6 +487,81 @@ export default function ModalStudentList({
             </div>
           </div>
         )}
+      </Modal>
+
+      <Modal
+        opened={openModalSelectSection}
+        onClose={() => setOpenModalSelectSection(false)}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+        closeOnEscape={false}
+        centered
+        size="39vw"
+        title="Select Section to Upload"
+        transitionProps={{ transition: "pop" }}
+      >
+        <div className="flex flex-col gap-2 mb-6">
+          <p className="text-b2 acerSwift:max-macair133:text-b3 mb-1 font-semibold text-secondary">
+            Select section to upload score
+          </p>
+          {/* Chip */}
+          {result?.sections.length! > 1 && (
+            <Chip
+              classNames={{
+                label:
+                  "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold translate-y-[3px]",
+              }}
+              size="md"
+              checked={selectSection.length === result?.sections.length}
+              onChange={() => {
+                if (selectSection.length === result?.sections.length) {
+                  setSelectSection([]);
+                } else {
+                  setSelectSection(
+                    result?.sections?.map((sec: any) =>
+                      sec.sectionNo.toString()
+                    ) || []
+                  );
+                }
+              }}
+            >
+              All Sections
+            </Chip>
+          )}
+          <Chip.Group
+            multiple
+            value={selectSection}
+            onChange={(event) => setSelectSection(event)}
+          >
+            <Group className="flex gap-3">
+              {result?.sections.map((sec: any) => (
+                <Chip
+                  key={sec.sectionNo}
+                  classNames={{
+                    root: "h-8 min-w-[114px]  !rounded-[10px] text-center justify-center items-center",
+                    label:
+                      "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold translate-y-[3px] ",
+                  }}
+                  size="md"
+                  value={sec.sectionNo?.toString()}
+                >
+                  Section {getSectionNo(sec.sectionNo)}
+                </Chip>
+              ))}
+            </Group>
+          </Chip.Group>
+        </div>
+        <div className="flex gap-2 justify-end w-full">
+          <Button
+            onClick={() => setOpenModalSelectSection(false)}
+            variant="subtle"
+          >
+            Cancel
+          </Button>
+          <Button onClick={uploadList} disabled={!selectSection.length}>
+            Upload
+          </Button>
+        </div>
       </Modal>
 
       <ModalErrorUploadFile
