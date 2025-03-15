@@ -65,6 +65,9 @@ export default function ModalStudentList({
     setFile(undefined);
     setResult(undefined);
     setWarningSection([]);
+    setSelectSection([]);
+    setOpenModalSelectSection(false);
+    setOpenModalSelectSection(false);
   };
 
   useEffect(() => {
