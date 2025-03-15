@@ -64,6 +64,7 @@ export default function ModalStudentList({
   const reset = () => {
     setFile(undefined);
     setResult(undefined);
+    setOpenModalSelectSection(false);
     setWarningSection([]);
     setSelectSection([]);
   };
