@@ -81,7 +81,7 @@ export default function ModalStudentList({
 
   useEffect(() => {
     if (warningSection.length) setOpenModalWarningStudentList(true);
-  }, warningSection);
+  }, [warningSection]);
 
   const selectSectionToUpload = () => {
     if (result.sections.length == 1) uploadList();

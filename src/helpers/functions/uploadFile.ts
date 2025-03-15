@@ -154,6 +154,7 @@ const studentList = (
       );
       if (!canUpload && !warningSection.includes(getSectionNo(sectionNo))) {
         warningSection.push(getSectionNo(sectionNo));
+        return;
       }
       const existSec = result.find((sec) => sec.sectionNo == sectionNo);
       const student = {
