@@ -55,7 +55,9 @@ export default function ModalStudentList({
   const [selectSection, setSelectSection] = useState<string[]>([]);
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
   const [errorStudentId, setErrorStudentId] = useState<string[]>([]);
-  const [errorSection, setErrorSection] = useState<string[]>([]);
+  const [warningSection, setWarningSection] = useState<string[]>([]);
+  const [openModalWarningStudentList, setOpenModalWarningStudentList] =
+    useState(false);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const dispatch = useAppDispatch();
 
@@ -72,7 +74,7 @@ export default function ModalStudentList({
     if (!openModalUploadError) {
       reset();
       setErrorStudentId([]);
-      setErrorSection([]);
+      setWarningSection([]);
     }
   }, [openModalUploadError]);
 
@@ -196,7 +198,7 @@ export default function ModalStudentList({
             setResult,
             setOpenModalUploadError,
             setErrorStudentId,
-            setErrorSection
+            setWarningSection
           );
           setFile(files[0]);
         }}
@@ -490,6 +492,58 @@ export default function ModalStudentList({
       </Modal>
 
       <Modal
+        opened={openModalWarningStudentList}
+        onClose={() => setOpenModalWarningStudentList(false)}
+        closeOnClickOutside={false}
+        withCloseButton={false}
+        closeOnEscape={false}
+        centered
+        size="39vw"
+        title="Upload Warning"
+        transitionProps={{ transition: "pop" }}
+      >
+        <div className="flex flex-col gap-4">
+          <div className="mt-2">
+            <Alert
+              radius="md"
+              variant="light"
+              color="red"
+              classNames={{
+                body: " flex justify-center",
+              }}
+              title={
+                <div className="flex items-center  gap-2">
+                  <Icon IconComponent={IconExclamationCircle} />
+                  <p>The following section does not exist in this course</p>
+                </div>
+              }
+            >
+              <p className="ml-8 font-semibold">
+                Section: {warningSection.join(", ")}
+              </p>
+            </Alert>
+          </div>
+
+          <div className="flex gap-2 mt-2 justify-end w-full">
+            <Button
+              variant="subtle"
+              onClick={() => setOpenModalWarningStudentList(false)}
+            >
+              Continue Upload
+            </Button>
+            <Button
+              onClick={() => {
+                reset();
+                setOpenModalWarningStudentList(false);
+              }}
+            >
+              Discard Upload
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
         opened={openModalSelectSection}
         onClose={() => setOpenModalSelectSection(false)}
         closeOnClickOutside={false}
@@ -569,7 +623,7 @@ export default function ModalStudentList({
         opened={openModalUploadError}
         onClose={() => setOpenModalUploadError(false)}
         errorStudentId={errorStudentId}
-        errorSection={errorSection}
+        errorSection={[]}
       />
     </>
   );

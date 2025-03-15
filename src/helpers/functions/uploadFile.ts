@@ -107,7 +107,7 @@ const studentList = (
   setResult: React.Dispatch<React.SetStateAction<any>>,
   setOpenModalUploadError: React.Dispatch<React.SetStateAction<boolean>>,
   setErrorStudentId: React.Dispatch<React.SetStateAction<string[]>>,
-  setErrorSection: React.Dispatch<React.SetStateAction<string[]>>
+  setWaringSection: React.Dispatch<React.SetStateAction<string[]>>
 ) => {
   for (const sheet of workbook.SheetNames) {
     const result: any[] = [];
@@ -129,7 +129,7 @@ const studentList = (
     // Validate the studentId
     const studentId = "รหัสนักศึกษา";
     const errorStudentIdList: string[] = [];
-    const errorSection: string[] = [];
+    const warningSection: string[] = [];
     const keys = Object.keys(resultsData[0]);
     if (![studentId, "SECLAB", "SECLEC"].some((key) => keys.includes(key))) {
       files = [];
@@ -152,9 +152,8 @@ const studentList = (
       const canUpload = course.sections?.find(
         (sec) => sec.sectionNo == sectionNo
       );
-      if (!canUpload && !errorSection.includes(getSectionNo(sectionNo))) {
-        return;
-        // errorSection.push(getSectionNo(sectionNo));
+      if (!canUpload && !warningSection.includes(getSectionNo(sectionNo))) {
+        warningSection.push(getSectionNo(sectionNo));
       }
       const existSec = result.find((sec) => sec.sectionNo == sectionNo);
       const student = {
@@ -176,10 +175,10 @@ const studentList = (
       }
     });
 
-    if (errorStudentIdList.length || errorSection.length) {
+    if (errorStudentIdList.length || warningSection.length) {
       files = [];
       setErrorStudentId(errorStudentIdList);
-      setErrorSection(errorSection);
+      setWaringSection(warningSection);
       setOpenModalUploadError(true);
       return;
     }
