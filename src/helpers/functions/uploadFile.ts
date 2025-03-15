@@ -175,12 +175,14 @@ const studentList = (
       }
     });
 
-    if (errorStudentIdList.length || warningSection.length) {
+    if (errorStudentIdList.length) {
       files = [];
       setErrorStudentId(errorStudentIdList);
-      setWaringSection(warningSection);
       setOpenModalUploadError(true);
       return;
+    }
+    if (warningSection.length) {
+      setWaringSection(warningSection);
     }
     setResult({
       year: course.year,

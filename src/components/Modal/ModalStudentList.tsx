@@ -64,6 +64,7 @@ export default function ModalStudentList({
   const reset = () => {
     setFile(undefined);
     setResult(undefined);
+    setWarningSection([]);
   };
 
   useEffect(() => {
@@ -77,6 +78,10 @@ export default function ModalStudentList({
       setWarningSection([]);
     }
   }, [openModalUploadError]);
+
+  useEffect(() => {
+    if (warningSection.length) setOpenModalWarningStudentList(true);
+  }, warningSection);
 
   const selectSectionToUpload = () => {
     if (result.sections.length == 1) uploadList();
