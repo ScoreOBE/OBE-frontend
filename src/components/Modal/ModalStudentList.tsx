@@ -66,8 +66,6 @@ export default function ModalStudentList({
     setResult(undefined);
     setWarningSection([]);
     setSelectSection([]);
-    setOpenModalSelectSection(false);
-    setOpenModalSelectSection(false);
   };
 
   useEffect(() => {
@@ -102,8 +100,7 @@ export default function ModalStudentList({
       const res = await uploadStudentList(result);
       if (res) {
         dispatch(updateStudentList({ id: data?.id, sections: res }));
-        setFile(undefined);
-        setResult(undefined);
+        reset();
         showNotifications(
           NOTI_TYPE.SUCCESS,
           "Upload Successful",
