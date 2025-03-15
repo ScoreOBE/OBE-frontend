@@ -64,7 +64,11 @@ export default function DashboardSidebar() {
           }
           break;
         case ROLE.STUDENT:
-          if (!path.includes(ROUTE_PATH.STD_DASHBOARD)) {
+          if (
+            ![ROUTE_PATH.STD_DASHBOARD, ROUTE_PATH.COURSE_SYLLABUS].some((e) =>
+              path.includes(e)
+            )
+          ) {
             navigate({
               pathname: ROUTE_PATH.STD_DASHBOARD,
               search: "?" + params.toString(),
