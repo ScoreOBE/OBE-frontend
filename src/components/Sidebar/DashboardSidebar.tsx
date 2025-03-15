@@ -12,7 +12,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import IconSO from "@/assets/icons/SO.svg?react";
 import IconTQF from "@/assets/icons/TQF.svg?react";
-import IconBooks from "@/assets/icons/Books.svg?react";
+import IconBooks from "@/assets/icons/books.svg?react";
 import IconCLO from "@/assets/icons/targetArrow.svg?react";
 import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
 import { ROLE } from "@/helpers/constants/enum";
