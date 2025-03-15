@@ -271,7 +271,7 @@ export default function Navbar() {
               <Profile />
             ) : !isMobile ? (
               <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
-                <Button className="bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba]">
+                <Button variant='light'>
                   Sign in CMU account
                 </Button>
               </a>
