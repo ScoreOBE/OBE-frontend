@@ -502,7 +502,7 @@ export default function ModalStudentList({
       >
         <div className="flex flex-col gap-2 mb-6">
           <p className="text-b2 acerSwift:max-macair133:text-b3 mb-1 font-semibold text-secondary">
-            Select section to upload score
+            Select section to import student list
           </p>
           {/* Chip */}
           {result?.sections.length! > 1 && (
