@@ -287,7 +287,7 @@ export default function Login() {
         </div>
         <div className="items-center mt-8 iphone:max-sm:mb-12 text-center w-full justify-center flex sm:flex-row flex-col gap-5">
           {ButtonLogin()}
-          {ButtonCourseSyllabus()}
+          {!isMobile && ButtonCourseSyllabus()}
         </div>
         <div
           data-aos-duration="1000"
