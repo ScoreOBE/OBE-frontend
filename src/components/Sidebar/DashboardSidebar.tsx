@@ -12,6 +12,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import IconSO from "@/assets/icons/SO.svg?react";
 import IconTQF from "@/assets/icons/TQF.svg?react";
+import IconBooks from "@/assets/icons/Books.svg?react";
 import IconCLO from "@/assets/icons/targetArrow.svg?react";
 import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
 import { ROLE } from "@/helpers/constants/enum";
@@ -425,7 +426,7 @@ export default function DashboardSidebar() {
                   </Button>
                 </Tooltip>
               )}
-              {!isMobile && user.id && (
+              { user.id && (
                 <Tooltip
                   transitionProps={{
                     transition: "fade-right",
@@ -445,7 +446,7 @@ export default function DashboardSidebar() {
                 >
                   <Button
                     onClick={() => stdGotoPage(ROUTE_PATH.COURSE_SYLLABUS)}
-                    leftSection={openSidebar && <HiOutlineBookOpen size={18} />}
+                    leftSection={openSidebar && <Icon IconComponent={IconBooks} className=" stroke-[1.3px] size-[22px] -ml-[2px]" />}
                     className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
                       path.includes(ROUTE_PATH.COURSE_SYLLABUS)
                         ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -457,9 +458,9 @@ export default function DashboardSidebar() {
                     }`}
                   >
                     {openSidebar ? (
-                      "Course Syllabus"
+                      "Course Spec"
                     ) : (
-                      <HiOutlineBookOpen size={20} />
+                      <Icon IconComponent={IconBooks} className="stroke-[1.3px] size-[22px]"/>
                     )}
                   </Button>
                 </Tooltip>
