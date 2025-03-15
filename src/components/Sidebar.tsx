@@ -212,10 +212,10 @@ export default function Sidebar() {
               <img
                 src={scoreobe}
                 alt="scoreOBElogo"
-                className="h-[30px] cursor-pointer w-[30px] acerSwift:max-macair133:h-[27px] acerSwift:max-macair133:w-[27px]"
+                className="h-[28px] cursor-pointer w-[28px] acerSwift:max-macair133:h-[27px] acerSwift:max-macair133:w-[27px]"
               />
               {openSidebar && (
-                <p className="text-white text-[19px] acerSwift:max-macair133:text-h2 font-semibold">
+                <p className="text-white text-[19px] acerSwift:max-macair133:text-[19px] font-semibold">
                   ScoreOBE <span className="text-[#FFCD1B]"> +</span>
                 </p>
               )}

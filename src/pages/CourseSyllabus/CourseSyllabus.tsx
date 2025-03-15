@@ -227,8 +227,10 @@ export default function CourseSyllabus() {
         {loading || !tqf3.id ? (
           <Loading />
         ) : (
-          <div className="flex overflow-hidden w-full h-full gap-3 py-2">
-            <div className="flex flex-col h-full max-w-[87%] px-4 gap-4 overflow-auto">
+          <div className="flex overflow-hidden w-full  h-full gap-3 py-2">
+      
+            <div className="flex flex-col h-full max-w-[87%] pt-5 px-10 bg gap-4 overflow-auto">
+            <p className=" font-semibold text-[18px] text-secondary mb-3">{courseNo}-{course?.courseName}</p>
               {section.map((name, i) => (
                 <div
                   id={name}
@@ -268,7 +270,7 @@ export default function CourseSyllabus() {
           </div>
         )}
       </div>
-      <Bottombar />
+      {/* <Bottombar /> */}
     </>
   );
 }
