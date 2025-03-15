@@ -16,6 +16,7 @@ import { ROLE, TQF_STATUS } from "@/helpers/constants/enum";
 import { Button, CopyButton, Tooltip } from "@mantine/core";
 import Icon from "./Icon";
 import IconFeedback from "@/assets/icons/feedback.svg?react";
+import IconLogin from "@/assets/icons/login.svg?react";
 import { isMobile } from "@/helpers/functions/function";
 import { HiCheck, HiOutlineClipboardCopy } from "react-icons/hi";
 import { setSeachCourseSyllabus } from "@/store/courseSyllabus";
@@ -55,7 +56,7 @@ export default function Navbar() {
     const year = params.get("year") ? params.get("year")?.slice(-2) : "";
     switch (path) {
       case ROUTE_PATH.COURSE_SYLLABUS:
-        return "Course Syllabus";
+        return "Course Specifications";
       case ROUTE_PATH.INS_DASHBOARD:
         return "Your Courses";
       case ROUTE_PATH.STD_DASHBOARD:
@@ -265,15 +266,21 @@ export default function Navbar() {
         )}
         {![ROUTE_PATH.LOGIN].includes(location) && (
           <div className="flex gap-2 items-center">
-            {!isMobile && feedback()}
+        
             {user.id ? (
               <Profile />
-            ) : (
+            ) : !isMobile ? (
               <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
                 <Button className="bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba]">
                   Sign in CMU account
                 </Button>
               </a>
+            ) : (
+              <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
+              <Button variant='transparent' className=" !px-0" >
+                <Icon IconComponent={IconLogin} />
+              </Button>
+            </a>
             )}
           </div>
         )}

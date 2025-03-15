@@ -153,20 +153,19 @@ export default function DashboardSidebar() {
         </Button>
       </Modal>
       <div className="flex text-white flex-col gap-11  acerSwift:max-macair133:gap-9">
-        {openSidebar && (
+        {openSidebar && user.id && (
           <div className="text-sm acerSwift:max-macair133:text-b4 flex flex-col gap-[6px]">
             <p className="font-semibold">Welcome to ScoreOBE+</p>
-            {user.id && (
-              <div className="font-normal flex flex-col gap-[2px]">
-                <p>
-                  Your courses are waiting
-                  <br />
-                  on the right to jump in!
-                  <br />
-                  Account? Top right menu
-                </p>
-              </div>
-            )}
+
+            <div className="font-normal flex flex-col gap-[2px]">
+              <p>
+                Your courses are waiting
+                <br />
+                on the right to jump in!
+                <br />
+                Account? Top right menu
+              </p>
+            </div>
           </div>
         )}
 
@@ -375,7 +374,7 @@ export default function DashboardSidebar() {
           path.includes(e)
         ) && (
           <div className="flex flex-col w-full justify-center items-center gap-3">
-            {openSidebar && (
+            {openSidebar && user.id && (
               <p
                 className={`text-b2 font-semibold ${
                   openSidebar ? "w-full" : ""
@@ -426,7 +425,7 @@ export default function DashboardSidebar() {
                   </Button>
                 </Tooltip>
               )}
-              {!isMobile && (
+              {!isMobile && user.id && (
                 <Tooltip
                   transitionProps={{
                     transition: "fade-right",

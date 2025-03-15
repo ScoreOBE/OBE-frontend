@@ -74,13 +74,13 @@ export default function StdCourseSidebar() {
             className={`hover:underline cursor-pointer font-bold gap-2 text-[13px] flex ${
               openSidebar
                 ? "p-0 w-full justify-start -translate-x-[5px]"
-                : "p-1.5 w-fit justify-center items-center rounded-full text-white hover:bg-white hover:text-black"
+                : "p-1.5 w-fit justify-center iphone:max-sm:!mb-5 items-center rounded-full text-white hover:bg-white hover:text-black"
             }`}
             onClick={() => gotoPage(path.split("/")[1], true)}
           >
             <Icon
               IconComponent={IconChevronLeft}
-              className={`${openSidebar ? "size-5" : ""}`}
+              className={`${openSidebar ? "size-5 " : ""}`}
             />
             {openSidebar && "Back to Dashboard"}
           </div>
