@@ -507,7 +507,7 @@ export default function ModalStudentList({
             <Alert
               radius="md"
               variant="light"
-              color="red"
+              color="orange"
               classNames={{
                 body: " flex justify-center",
               }}
