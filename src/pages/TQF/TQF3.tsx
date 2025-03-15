@@ -24,7 +24,7 @@ import Part4TQF3 from "@/components/TQF3/Part4TQF3";
 import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
 import Part7TQF3 from "@/components/TQF3/Part7TQF3";
-import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
+import Bottombar, { partLabel, partType } from "@/components/Bottombar";
 import { isEmpty, isEqual, unionBy, uniq } from "lodash";
 import { getOneCourse } from "@/services/course/course.service";
 import {
@@ -47,7 +47,7 @@ import { setDataTQF3, setPloTQF3, updatePartTQF3 } from "@/store/tqf3";
 import { IModelSection } from "@/models/ModelCourse";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { IModelCourse } from "@/models/ModelCourse";
-import { initialTqf3Part, initialTqf3Part7 } from "@/helpers/functions/tqf3";
+import { initialTqf3Part } from "@/helpers/functions/tqf3";
 import { setLoadingOverlay } from "@/store/loading";
 import { getPLOs } from "@/services/plo/plo.service";
 import { setPloTQF5 } from "@/store/tqf5";
@@ -804,7 +804,7 @@ export default function TQF3() {
               Object.keys(partLabel).findIndex((e) => e == tqf3Part) - 1
             ] as keyof IModelTQF3
           ]) && (
-          <SaveTQFbar
+          <Bottombar
             tqf="3"
             part={tqf3Part as partType}
             data={tqf3Original[tqf3Part as keyof IModelTQF3]}

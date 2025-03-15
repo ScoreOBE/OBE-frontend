@@ -21,6 +21,7 @@ import { cloneDeep, isEqual, uniq } from "lodash";
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { initialTqf3Part1 } from "@/helpers/functions/tqf3";
+import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
 
 type Props = {
   setForm?: React.Dispatch<React.SetStateAction<any>>;
@@ -40,9 +41,8 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
   );
   const tqf3 = useAppSelector((state) => state.tqf3);
   const disabled =
-    tqf3.courseSyllabus ||
-    (parseInt(params.get("year") || "") !== academicYear.year &&
-      parseInt(params.get("semester") || "") !== academicYear.semester);
+    parseInt(params.get("year") || "") !== academicYear.year &&
+    parseInt(params.get("semester") || "") !== academicYear.semester;
   const dispatch = useAppDispatch();
   const [checked, setChecked] = useState<string[]>([]);
   const curriculum = [
@@ -63,6 +63,10 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
     { year: 5, en: "5th year", th: "ชั้นปีที่ 5" },
     { year: 6, en: "6th year", th: "ชั้นปีที่ 6" },
   ];
+  const teachingLocation = {
+    in: "ในสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Inside of Chiang Mai University)",
+    out: "นอกสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Outside of Chiang Mai University)",
+  };
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -100,7 +104,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
     },
     validateInputOnBlur: true,
     onValuesChange(values, previous) {
-      if (!isEqual(values, previous)) {
+      if (!isEqual(values, previous) && !tqf3.courseSyllabus) {
         dispatch(
           updatePartTQF3({ part: "part1", data: cloneDeep(form.getValues()) })
         );
@@ -131,7 +135,8 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
   });
 
   useEffect(() => {
-    if (tqf3.part1 || (tqf3.part1 && tqf3.courseSyllabus)) {
+    if (tqf3.courseSyllabus) return;
+    if (tqf3.part1) {
       form.setValues(cloneDeep(tqf3.part1));
       if (tqf3.part1.teachingLocation.in !== undefined) {
         checked.push("in");
@@ -145,7 +150,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
         curriculumForm.setFieldValue("department", splitCurriculum[3]);
       }
       localStorage.removeItem("setReuse");
-    } else if (!tqf3.courseSyllabus) {
+    } else {
       form.setValues({ ...initialTqf3Part1(tqf3) });
     }
   }, [localStorage.getItem("setReuse")]);
@@ -165,9 +170,9 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
     form.setFieldValue("teachingLocation", teachingLocation);
   }, [checked]);
 
-  return (
+  return !tqf3.courseSyllabus ? (
     <div className="flex w-full flex-col text-[15px] acerSwift:max-macair133:text-b3 max-h-full text-default">
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit   items-top  grid grid-cols-3  pb-4">
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-3  pb-4">
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">
             หลักสูตร <span className="text-red-500">*</span>
@@ -263,7 +268,6 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
                   placeholder="Curriculum name e.g วิศวกรรมศาสตร์ (Engineer)"
                   {...curriculumForm.getInputProps("name")}
                   key={curriculumForm.key("name")}
-                  disabled={tqf3.courseSyllabus}
                 />
                 <TextInput
                   className="mt-3"
@@ -278,14 +282,13 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
                   placeholder="Department name e.g คอมพิวเตอร์ (Computer)"
                   {...curriculumForm.getInputProps("department")}
                   key={curriculumForm.key("department")}
-                  disabled={tqf3.courseSyllabus}
                 />
               </div>
             )}
           </div>
         </Radio.Group>
       </div>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  grid grid-cols-3 py-5">
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-3 py-5">
         <div className="flex text-secondary  flex-col">
           <p className="font-semibold">
             ประเภทกระบวนวิชา <span className=" text-red-500">*</span>
@@ -314,7 +317,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
           </div>
         </Checkbox.Group>
       </div>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 py-5  ">
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">
             ชั้นปีที่เรียน <span className=" text-red-500">*</span>
@@ -351,7 +354,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
           </div>
         </Checkbox.Group>
       </div>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-center  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">
             ชื่ออาจารย์ผู้รับผิดชอบ<span className=" text-red-500">*</span>
@@ -379,7 +382,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
           />
         </div>
       </div>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-top grid grid-cols-3 py-5">
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-3 py-5">
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">
             อาจารย์ผู้สอนทั้งหมด<span className="text-red-500"> *</span>
@@ -444,7 +447,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
           )}
         </div>
       </div>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-top grid grid-cols-[1fr_2fr] py-5">
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-[1fr_2fr] py-5">
         <div className="flex text-secondary flex-col">
           <p className="font-semibold">
             สถานที่เรียน<span className=" text-red-500"> *</span>
@@ -468,7 +471,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
                   label:
                     "font-medium text-b3 acerSwift:max-macair133:text-b4 w-full",
                 }}
-                label={`ในสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Inside of Chiang Mai University)`}
+                label={teachingLocation.in}
                 value={"in"}
                 disabled={disabled}
               />
@@ -491,7 +494,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
                   label:
                     "font-medium text-b3 acerSwift:max-macair133:text-b4 flex flex-nowrap",
                 }}
-                label={`นอกสถานที่ตั้งของมหาวิทยาลัยเชียงใหม่ (Outside of Chiang Mai University)`}
+                label={teachingLocation.out}
                 value={"out"}
                 disabled={disabled}
               />
@@ -511,7 +514,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
           </Group>
         </Checkbox.Group>
       </div>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 py-5  ">
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-center  grid grid-cols-3 py-5  ">
         <div className="flex text-secondary flex-col sm:max-macair133:pr-8 acerSwift:max-macair133:pr-6">
           <p className="font-semibold">
             ชั่วโมงต่อสัปดาห์ในการให้คำปรึกษาแก่นักศึกษารายบุคคล
@@ -537,6 +540,106 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
             {...form.getInputProps("consultHoursWk")}
           />
           <p>hours / week</p>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div className="flex flex-col w-full text-[15px] acerSwift:max-macair133:text-b3 text-default border-b-2">
+      <div className=" text-secondary acerSwift:max-macair133:!text-b2 font-semibold whitespace-break-spaces border-b pb-4">
+        {PartTopicTQF3.part1}
+      </div>
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+        <div className="flex text-secondary flex-col">
+          <p className="font-semibold">หลักสูตร</p>
+          <p className="font-semibold">Curriculum</p>
+        </div>
+        <div className="flex text-default flex-col text-wrap font-medium text-b3 acerSwift:max-macair133:text-b4">
+          <p>{tqf3.part1?.curriculum}</p>
+        </div>
+      </div>
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+        <div className="flex text-secondary flex-col">
+          <p className="font-semibold">ประเภทกระบวนวิชา</p>
+          <p className="font-semibold">Course Type</p>
+        </div>
+        <div className="flex text-default flex-col gap-1 font-medium text-b3 acerSwift:max-macair133:text-b4">
+          {Object.values(COURSE_TYPE)
+            .filter((item) => tqf3.part1?.courseType?.includes(item.en))
+            ?.map((item) => (
+              <p key={item.en}>
+                {item.th} ({item.en})
+              </p>
+            ))}
+        </div>
+      </div>
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5  ">
+        <div className="flex text-secondary flex-col">
+          <p className="font-semibold">ชั้นปีที่เรียน</p>
+          <p className="font-semibold">Student Year</p>
+        </div>
+        <div className="flex flex-col text-default gap-1 font-medium text-b3 acerSwift:max-macair133:text-b4">
+          {studentYear
+            .filter((item) => tqf3.part1?.studentYear?.includes(item.year))
+            .map((item) => (
+              <p key={item.year}>
+                {item.th} ({item.en})
+              </p>
+            ))}
+        </div>
+      </div>
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5  ">
+        <div className="flex text-secondary flex-col">
+          <p className="font-semibold">ชื่ออาจารย์ผู้รับผิดชอบ</p>
+          <p className="font-semibold">Main Instructor</p>
+        </div>
+        <div className="flex flex-col text-default font-medium text-b3 acerSwift:max-macair133:text-b4">
+          <p>{tqf3.part1?.mainInstructor}</p>
+        </div>
+      </div>
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+        <div className="flex text-secondary flex-col">
+          <p className="font-semibold">อาจารย์ผู้สอนทั้งหมด</p>
+          <p className="font-semibold">Lecturers</p>
+        </div>
+        <div className="flex flex-col text-default gap-1 font-medium text-b3 acerSwift:max-macair133:text-b4">
+          {tqf3.part1?.instructors?.map((item, index) => (
+            <p key={index}>{item}</p>
+          ))}
+        </div>
+      </div>
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+        <div className="flex text-secondary flex-col">
+          <p className="font-semibold">สถานที่เรียน</p>
+          <p className="font-semibold">Teaching Location</p>
+        </div>
+        <div className="flex flex-col justify-center text-default gap-3 font-medium text-b3 acerSwift:max-macair133:text-b4">
+          {!tqf3.part1?.teachingLocation.in &&
+            !tqf3.part1?.teachingLocation.out && <p>-</p>}
+          {tqf3.part1?.teachingLocation.in && (
+            <div className="flex flex-col gap-1">
+              <p>{teachingLocation.in}</p>
+              <p>{tqf3.part1?.teachingLocation.in}</p>
+            </div>
+          )}
+          {tqf3.part1?.teachingLocation.out && (
+            <div className="flex flex-col gap-1">
+              <p>{teachingLocation.out}</p>
+              <p>{tqf3.part1?.teachingLocation.out}</p>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5">
+        <div className="flex text-secondary flex-col sm:max-macair133:pr-8 acerSwift:max-macair133:pr-6">
+          <p className="font-semibold">
+            ชั่วโมงต่อสัปดาห์ในการให้คำปรึกษาแก่นักศึกษารายบุคคล
+          </p>
+          <p className="font-semibold">
+            Individual student consultation hours per week
+          </p>
+        </div>
+        <div className="flex items-center text-b3 acerSwift:max-macair133:text-b4 font-medium gap-4">
+          <p>{tqf3.part1?.consultHoursWk} hours / week</p>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { IModelTQF3Part4 } from "@/models/ModelTQF3";
-import { partLabel } from "@/components/SaveTQFBar";
+import { partLabel } from "@/components/Bottombar";
 import { cloneDeep } from "lodash";
 import {
   IModelAssignment,
