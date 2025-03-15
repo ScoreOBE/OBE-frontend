@@ -195,7 +195,9 @@ export default function ModalAddSection({
     if (res) {
       if (fetchOneCourse) fetchOneCourse();
       if (isManage) {
-        const resOne = await getOneCourseManagement(data.courseNo!);
+        const resOne = await getOneCourseManagement({
+          courseNo: data.courseNo,
+        });
         if (resOne) {
           dispatch(editCourseManagement(resOne));
         }

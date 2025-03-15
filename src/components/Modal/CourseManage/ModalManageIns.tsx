@@ -137,7 +137,9 @@ export default function ModalManageIns({
     });
     if (res) {
       if (type == "courseManagement") {
-        const resOne = await getOneCourseManagement(data.courseNo!);
+        const resOne = await getOneCourseManagement({
+          courseNo: data.courseNo!,
+        });
         if (resOne) {
           dispatch(editCourseManagement(resOne));
         }
@@ -321,8 +323,7 @@ export default function ModalManageIns({
                 title={
                   <p className=" acerSwift:max-macair133:!text-b3">
                     You don't have permission to manage co-instructors in this
-                    course. <br /> Please contact to the instructor for
-                    manage.
+                    course. <br /> Please contact to the instructor for manage.
                   </p>
                 }
               ></Alert>

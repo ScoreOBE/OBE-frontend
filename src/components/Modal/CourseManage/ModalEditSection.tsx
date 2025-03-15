@@ -67,7 +67,7 @@ export default function ModalEditSection({
   });
 
   const fetchOneCourseManagement = async () => {
-    const res = await getOneCourseManagement(value?.courseNo);
+    const res = await getOneCourseManagement({ courseNo: value?.courseNo });
     if (res && value) {
       setSemester(
         res.sections
@@ -198,8 +198,7 @@ export default function ModalEditSection({
           data={[
             {
               value: "-",
-              label:
-                "หลักสูตรอื่นๆ (No curriculum for this section.)",
+              label: "หลักสูตรอื่นๆ (No curriculum for this section.)",
             },
             ...(curriculum?.map((item) => ({
               value: item.code,
