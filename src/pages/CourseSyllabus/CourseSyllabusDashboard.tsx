@@ -116,42 +116,7 @@ export default function CourseSyllabusDashboard() {
   return (
     <>
       <div className="flex flex-col h-full w-full overflow-hidden">
-        {!isMobile && (
-          <div className="flex flex-row px-6 pt-3 items-center justify-between">
-            <div className="flex flex-col ">
-              {user.firstNameEN && (
-                <p className="text-secondary text-h2 acerSwift:max-macair133:text-[17px] font-semibold ">
-                  Hi there, {user.firstNameEN}
-                </p>
-              )}
-              {courseSyllabus.search.length ? (
-                <p className="text-[#575757] text-b2 acerSwift:max-macair133:text-b3">
-                  {courseSyllabus.total} result
-                  {courseSyllabus.total > 1 ? "s " : " "} found
-                </p>
-              ) : (
-                <p className="text-[#575757] text-b2 acerSwift:max-macair133:text-b3">
-                  In semester{" "}
-                  <span className="text-[#1f69f3] font-semibold">
-                    {term?.semester ?? ""}/{term?.year ?? ""}!
-                  </span>{" "}
-                  {courseSyllabus.courses.length === 0 ? (
-                    <span>Course card is currently empty</span>
-                  ) : (
-                    <span>
-                      Have{" "}
-                      <span className="text-secondary font-semibold">
-                        {courseSyllabus.total} Course
-                        {courseSyllabus.total > 1 ? "s " : " "}
-                      </span>
-                      on plate.
-                    </span>
-                  )}
-                </p>
-              )}
-            </div>
-          </div>
-        )}
+      
         <div className="flex h-full w-full overflow-hidden">
           {loading ? (
             <Loading />

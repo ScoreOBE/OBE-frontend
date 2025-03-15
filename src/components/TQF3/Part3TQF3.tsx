@@ -183,7 +183,7 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
             <div className="flex text-secondary items-center w-full justify-between">
               <div className="flex flex-row gap-1 text-[15px] acerSwift:max-macair133:!text-b3">
                 <p className="font-bold">
-                  Course Syllabus<span className="ml-1 text-red-500">*</span>
+                  Evaluation Items<span className="ml-1 text-red-500">*</span>
                 </p>
               </div>
               {!disabled && (
@@ -368,7 +368,7 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
                   )}
 
                   <Table.Tfoot className="text-secondary font-semibold">
-                    <Table.Tr className="bg-[#e5e7f6] border-none">
+                    <Table.Tr className=" bg-bgTableHeader border-none">
                       <Table.Th
                         className="text-b2 acerSwift:max-macair133:!text-b3 !rounded-bl-md"
                         colSpan={3}

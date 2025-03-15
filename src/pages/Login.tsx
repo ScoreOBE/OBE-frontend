@@ -24,6 +24,7 @@ import IconChevronRight from "@/assets/icons/chevronRight.svg?react";
 import IconBulb from "@/assets/icons/bulb.svg?react";
 import IconSparkle from "@/assets/icons/sparkle.svg?react";
 import IconChevronLeft from "@/assets/icons/chevronLeft.svg?react";
+import IconSearch from "@/assets/icons/search.svg?react";
 import IconPlus2 from "@/assets/icons/plus2.svg?react";
 import IconExcel from "@/assets/icons/excel.svg?react";
 import IconShare2 from "@/assets/icons/share2.svg?react";
@@ -191,7 +192,7 @@ export default function Login() {
       <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
         <Button
           // ref={buttonRef}
-          className="z-[52]  drop-shadow-2xl iphone:max-sm:!rounded-3xl iphone:max-sm:px-8 bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]"
+          className="z-[52]   iphone:max-sm:!rounded-3xl iphone:max-sm:px-8 bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba]  sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]"
         >
           <img
             src={cmulogoLogin}
@@ -207,11 +208,13 @@ export default function Login() {
   const ButtonCourseSyllabus = () => {
     return (
       <Button
+      variant='light'
         ref={buttonRef}
+        leftSection={ <Icon IconComponent={IconSearch} className="size-4" />}
         onClick={() => navigate(ROUTE_PATH.COURSE_SYLLABUS)}
-        className="z-[52] drop-shadow-2xl iphone:max-sm:!rounded-3xl iphone:max-sm:px-8 bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]"
+        className="z-[52] drop-shadow-2xl iphone:max-sm:!rounded-3xl iphone:max-sm:px-8 !px-9 sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]"
       >
-        Course Syllabus
+        Search Course Specifications
       </Button>
     );
   };
@@ -285,10 +288,11 @@ export default function Login() {
             }
           ></Alert>
         </div>
-        <div className="items-center mt-8 iphone:max-sm:mb-12 text-center w-full justify-center flex sm:flex-row flex-col gap-5">
-          {ButtonLogin()}
-          {!isMobile && ButtonCourseSyllabus()}
+        <div className="items-center  mt-8 iphone:max-sm:mb-12 text-center w-full justify-center flex  flex-col gap-4">
+         <div> {ButtonLogin()}</div>
+         <div> {ButtonCourseSyllabus()} </div>
         </div>
+        
         <div
           data-aos-duration="1000"
           data-aos-once="false"
