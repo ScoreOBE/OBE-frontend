@@ -16,6 +16,7 @@ import IconCLO from "@/assets/icons/targetArrow.svg?react";
 import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
 import { ROLE } from "@/helpers/constants/enum";
 import { RxDashboard } from "react-icons/rx";
+import { isMobile } from "@/helpers/functions/function";
 
 export default function DashboardSidebar() {
   const path = useLocation().pathname;
@@ -421,41 +422,45 @@ export default function DashboardSidebar() {
                   </Button>
                 </Tooltip>
               )}
-              <Tooltip
-                transitionProps={{
-                  transition: "fade-right",
-                  duration: 200,
-                }}
-                classNames={{
-                  tooltip:
-                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                }}
-                label="Course Syllabus"
-                position="right-end"
-                withArrow
-                arrowPosition="side"
-                arrowOffset={15}
-                arrowSize={10}
-                opacity={openSidebar ? 0 : 1}
-              >
-                <Button
-                  onClick={() => stdGotoPage(ROUTE_PATH.COURSE_SYLLABUS)}
-                  leftSection={openSidebar && <HiOutlineBookOpen size={18} />}
-                  className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
-                    path.includes(ROUTE_PATH.COURSE_SYLLABUS)
-                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                  } ${
-                    openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
-                  }`}
+              {!isMobile && (
+                <Tooltip
+                  transitionProps={{
+                    transition: "fade-right",
+                    duration: 200,
+                  }}
+                  classNames={{
+                    tooltip:
+                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                  }}
+                  label="Course Syllabus"
+                  position="right-end"
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={15}
+                  arrowSize={10}
+                  opacity={openSidebar ? 0 : 1}
                 >
-                  {openSidebar ? (
-                    "Course Syllabus"
-                  ) : (
-                    <HiOutlineBookOpen size={20} />
-                  )}
-                </Button>
-              </Tooltip>
+                  <Button
+                    onClick={() => stdGotoPage(ROUTE_PATH.COURSE_SYLLABUS)}
+                    leftSection={openSidebar && <HiOutlineBookOpen size={18} />}
+                    className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                      path.includes(ROUTE_PATH.COURSE_SYLLABUS)
+                        ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                        : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                    } ${
+                      openSidebar
+                        ? "!w-full"
+                        : "!rounded-full !h-fit !w-fit p-2"
+                    }`}
+                  >
+                    {openSidebar ? (
+                      "Course Syllabus"
+                    ) : (
+                      <HiOutlineBookOpen size={20} />
+                    )}
+                  </Button>
+                </Tooltip>
+              )}
               {user.id && (
                 <Tooltip
                   transitionProps={{
