@@ -16,7 +16,11 @@ import IconExcel from "@/assets/icons/excel.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { getOneCourse } from "@/services/course/course.service";
 import { editCourse, editSection, removeSection } from "@/store/course";
-import { getSectionNo, getUserName, isMobile } from "@/helpers/functions/function";
+import {
+  getSectionNo,
+  getUserName,
+  isMobile,
+} from "@/helpers/functions/function";
 import { showNotifications } from "@/helpers/notifications/showNotifications";
 import PageError from "./PageError";
 import MainPopup from "@/components/Popup/MainPopup";
@@ -40,16 +44,16 @@ import ModalUploadScore from "@/components/Modal/Score/ModalUploadScore";
 export default function Section() {
   const navigate = useNavigate();
   const { courseNo } = useParams();
-  const [params, setParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const year = parseInt(searchParams.get("year") || "");
+  const semester = parseInt(searchParams.get("semester") || "");
   const error = useAppSelector((state) => state.errorResponse);
   const user = useAppSelector((state) => state.user);
   const loading = useAppSelector((state) => state.loading.loading);
   const dispatch = useAppDispatch();
   const academicYear = useAppSelector((state) => state.academicYear);
   const activeTerm = academicYear.find(
-    (term) =>
-      term.year == parseInt(params.get("year") || "") &&
-      term.semester == parseInt(params.get("semester") || "")
+    (term) => term.year == year && term.semester == semester
   )?.isActive;
   const course = useAppSelector((state) =>
     state.course.courses.find((c) => c.courseNo == courseNo)
@@ -80,11 +84,7 @@ export default function Section() {
   }, [course]);
 
   const fetchOneCourse = async () => {
-    const res = await getOneCourse({
-      year: parseInt(params.get("year") || ""),
-      semester: parseInt(params.get("semester") || ""),
-      courseNo,
-    });
+    const res = await getOneCourse({ year, semester, courseNo });
     if (res) {
       dispatch(editCourse(res));
     }
@@ -141,7 +141,7 @@ export default function Section() {
     const pathname = `${ROUTE_PATH.COURSE}/${courseNo}/${ROUTE_PATH.SECTION}`;
     navigate({
       pathname: `${pathname}/${sectionNo}/${ROUTE_PATH.EVALUATION}`,
-      search: "?" + params.toString(),
+      search: "?" + searchParams.toString(),
     });
   };
 
@@ -254,102 +254,106 @@ export default function Section() {
         <Loading />
       ) : (
         <div className=" flex flex-col h-full w-full overflow-hidden">
-         {!isMobile && <div className="flex flex-row  sm:px-6 pt-3 iphone:max-sm:px-3 min-h-[60px] items-center justify-between">
-            <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 font-semibold">
-              {course?.sections.length} Section
-              {course?.sections.length! > 1 && "s"}
-            </p>
-            <div className="flex gap-5 items-center">
-              {activeTerm ? (
-                <div className="flex gap-4">
-                  <Button
-                    className="text-center px-4 acerSwift:max-macair133:!text-b5"
-                    leftSection={
-                      <Icon
-                        IconComponent={IconUpload}
-                        className="size-4 acerSwift:max-macair133:size-3.5"
-                      />
-                    }
-                    onClick={() =>
-                      course?.sections.find(({ students }) => students?.length)
-                        ? setOpenModalUploadScore(true)
-                        : setOpenModalUploadStudentList(true)
-                    }
-                  >
-                    Upload score
-                  </Button>
-                </div>
-              ) : (
-                <></>
-              )}
-              {activeTerm && user.role != ROLE.TA  && (
-                <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
-                  <Menu trigger="click" position="bottom-end">
-                    <Menu.Target>
-                      <div>
-                        <Icon IconComponent={IconDots} />
-                      </div>
-                    </Menu.Target>
-                    <Menu.Dropdown
-                      className="rounded-md translate-y-1 backdrop-blur-xl bg-white"
-                      style={{
-                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                      }}
+          {!isMobile && (
+            <div className="flex flex-row  sm:px-6 pt-3 iphone:max-sm:px-3 min-h-[60px] items-center justify-between">
+              <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 font-semibold">
+                {course?.sections.length} Section
+                {course?.sections.length! > 1 && "s"}
+              </p>
+              <div className="flex gap-5 items-center">
+                {activeTerm ? (
+                  <div className="flex gap-4">
+                    <Button
+                      className="text-center px-4 acerSwift:max-macair133:!text-b5"
+                      leftSection={
+                        <Icon
+                          IconComponent={IconUpload}
+                          className="size-4 acerSwift:max-macair133:size-3.5"
+                        />
+                      }
+                      onClick={() =>
+                        course?.sections.find(
+                          ({ students }) => students?.length
+                        )
+                          ? setOpenModalUploadScore(true)
+                          : setOpenModalUploadStudentList(true)
+                      }
                     >
-                      <Menu.Item
-                        className=" text-[#3e3e3e] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5"
-                        onClick={() => {
-                          setAddSec({ ...course });
-                          setOpenModalAddSec(true);
+                      Upload score
+                    </Button>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                {activeTerm && user.role != ROLE.TA && (
+                  <div className="rounded-full hover:bg-gray-300 p-1 cursor-pointer">
+                    <Menu trigger="click" position="bottom-end">
+                      <Menu.Target>
+                        <div>
+                          <Icon IconComponent={IconDots} />
+                        </div>
+                      </Menu.Target>
+                      <Menu.Dropdown
+                        className="rounded-md translate-y-1 backdrop-blur-xl bg-white"
+                        style={{
+                          boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
                         }}
                       >
-                        <div className="flex items-center gap-2">
-                          <Icon
-                            IconComponent={IconPlus2}
-                            className="stroke-2 size-4 acerSwift:max-macair133:!size-3.5"
-                          />
-                          <span>Add section</span>
-                        </div>
-                      </Menu.Item>
-                      <Menu.Item
-                        className="text-[#3e3e3e] font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
-                        onClick={() => {
-                          setEditCourseData({
-                            ...course,
-                            sections: course?.sections.filter(
-                              (sec) =>
-                                (sec.instructor as IModelUser)?.id == user.id
-                            ),
-                          });
-                          setOpenModalManageIns(true);
-                        }}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Icon
-                            className="size-4 acerSwift:max-macair133:!size-3.5"
-                            IconComponent={IconManageAdmin}
-                          />
-                          <span>Manage Co-Instructor</span>
-                        </div>
-                      </Menu.Item>
-                      <Menu.Item
-                        onClick={() => setOpenModalExportScore(true)}
-                        className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
-                      >
-                        <div className="flex items-center  gap-2">
-                          <Icon
-                            className="size-4 acerSwift:max-macair133:!size-3.5"
-                            IconComponent={IconExcel}
-                          />
-                          <span>Export score</span>
-                        </div>
-                      </Menu.Item>
-                    </Menu.Dropdown>
-                  </Menu>
-                </div>
-              )}
+                        <Menu.Item
+                          className=" text-[#3e3e3e] font-semibold text-b4 h-7  acerSwift:max-macair133:!text-b5"
+                          onClick={() => {
+                            setAddSec({ ...course });
+                            setOpenModalAddSec(true);
+                          }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Icon
+                              IconComponent={IconPlus2}
+                              className="stroke-2 size-4 acerSwift:max-macair133:!size-3.5"
+                            />
+                            <span>Add section</span>
+                          </div>
+                        </Menu.Item>
+                        <Menu.Item
+                          className="text-[#3e3e3e] font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
+                          onClick={() => {
+                            setEditCourseData({
+                              ...course,
+                              sections: course?.sections.filter(
+                                (sec) =>
+                                  (sec.instructor as IModelUser)?.id == user.id
+                              ),
+                            });
+                            setOpenModalManageIns(true);
+                          }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Icon
+                              className="size-4 acerSwift:max-macair133:!size-3.5"
+                              IconComponent={IconManageAdmin}
+                            />
+                            <span>Manage Co-Instructor</span>
+                          </div>
+                        </Menu.Item>
+                        <Menu.Item
+                          onClick={() => setOpenModalExportScore(true)}
+                          className=" text-[#20884f] hover:bg-[#06B84D]/10 font-semibold text-b4 acerSwift:max-macair133:!text-b5 h-7 "
+                        >
+                          <div className="flex items-center  gap-2">
+                            <Icon
+                              className="size-4 acerSwift:max-macair133:!size-3.5"
+                              IconComponent={IconExcel}
+                            />
+                            <span>Export score</span>
+                          </div>
+                        </Menu.Item>
+                      </Menu.Dropdown>
+                    </Menu>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>}
+          )}
           <div className="flex h-full w-full  rounded-[5px] overflow-hidden">
             <div className="overflow-y-auto w-full h-fit iphone:max-sm:grid-cols-1 max-h-full grid grid-cols-2 sm:grid-cols-3 acerSwift:grid-cols-4  pb-5 gap-4 iphone:max-sm:px-3 sm:px-6 p-4">
               {course?.sections.map((sec, index) => {
@@ -411,7 +415,7 @@ export default function Section() {
                               </div>
                             </Menu.Item>
 
-                            { addFirstTime && (
+                            {addFirstTime && (
                               <Menu.Item
                                 className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
                                 disabled={course.sections.length == 1}
@@ -450,7 +454,11 @@ export default function Section() {
                             Section {getSectionNo(sec.sectionNo)}
                           </p>
                           <p
-                            className={`tag-tqf ${isMobile ? 'translate-x-0' : ''} bg-secondary text-secondary flex gap-[6px] px-2 py-[4px]  items-center bg-opacity-15 rounded-xl !text-[13px] acerSwift:max-macair133:!text-b6 ${owner && activeTerm && 'mr-7'} 
+                            className={`tag-tqf ${
+                              isMobile ? "translate-x-0" : ""
+                            } bg-secondary text-secondary flex gap-[6px] px-2 py-[4px]  items-center bg-opacity-15 rounded-xl !text-[13px] acerSwift:max-macair133:!text-b6 ${
+                              owner && activeTerm && "mr-7"
+                            } 
                           
                            `}
                           >

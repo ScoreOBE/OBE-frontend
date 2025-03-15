@@ -71,7 +71,7 @@ export default function MapPLO({ ploName = "" }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const loading = useAppSelector((state) => state.loading);
   const dispatch = useAppDispatch();
-  const [payload, setPayload] = useState<any>({});
+  const [payload, setPayload] = useState<any>({ page: 1, limit: 20 });
   const [ploList, setPloList] = useState<Partial<IModelPLO>>({});
   const [reorder, setReorder] = useState(false);
   const [state, handlers] = useListState(ploList.data || []);

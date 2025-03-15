@@ -38,7 +38,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (path.includes(ROUTE_PATH.COURSE_SYLLABUS)) return;
+    if (!academicYear.length) {
+      fetchAcademicYear();
+    }
     const token = localStorage.getItem("token");
     if (token) {
       if (
@@ -54,7 +56,10 @@ function App() {
         return;
       checkToken(token);
     } else if (
-      ![ROUTE_PATH.LOGIN, ROUTE_PATH.CMU_ENTRAID_CALLBACK].includes(path)
+      path != ROUTE_PATH.LOGIN &&
+      ![ROUTE_PATH.CMU_ENTRAID_CALLBACK, ROUTE_PATH.COURSE_SYLLABUS].some((e) =>
+        path.includes(e)
+      )
     ) {
       navigate(ROUTE_PATH.LOGIN);
     }
@@ -70,24 +75,25 @@ function App() {
     }
   };
 
+  const fetchAcademicYear = async () => {
+    const payload = new AcademicYearRequestDTO();
+    const rsAcademicYear = await getAcademicYear(payload);
+    if (rsAcademicYear) {
+      dispatch(setAcademicYear(rsAcademicYear));
+    }
+  };
+
   const fetchData = async () => {
     dispatch(setLoading(true));
     if (!user.id) {
       const res = await getUserInfo();
       if (res) {
         dispatch(setUser(res));
-      } else {
-        dispatch(setLoading(false));
       }
     } else if (!user.termsOfService) {
       setOpenModalTermsOfService(true);
-    } else if (user.termsOfService && !academicYear.length) {
-      const payload = new AcademicYearRequestDTO();
-      const rsAcademicYear = await getAcademicYear(payload);
-      if (rsAcademicYear) {
-        dispatch(setAcademicYear(rsAcademicYear));
-      }
     }
+    dispatch(setLoading(false));
   };
 
   return error.statusCode ? (

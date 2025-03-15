@@ -9,8 +9,8 @@ export const courseSlice = createSlice({
     courses: IModelCourse[];
   },
   reducers: {
-    resetSeachCourse: (state) => {
-      return { ...state, search: "" };
+    setSearchCourse: (state, action) => {
+      return { ...state, search: action.payload };
     },
     setCourseList: (state, action) => {
       return {
@@ -146,7 +146,7 @@ export const courseSlice = createSlice({
 });
 
 export const {
-  resetSeachCourse,
+  setSearchCourse,
   setCourseList,
   addLoadMoreCourse,
   editCourse,

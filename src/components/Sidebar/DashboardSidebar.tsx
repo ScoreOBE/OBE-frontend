@@ -3,12 +3,12 @@ import { Button, Modal, Select, Tooltip } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "@/store";
 import Icon from "@/components/Icon";
 import IconCalendar from "@/assets/icons/calendar.svg?react";
+import { HiOutlineBookOpen } from "react-icons/hi";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
 import { getAcademicYear } from "@/services/academicYear/academicYear.service";
 import { setAcademicYear } from "@/store/academicYear";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { setLoading } from "@/store/loading";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import IconSO from "@/assets/icons/SO.svg?react";
 import IconTQF from "@/assets/icons/TQF.svg?react";
@@ -16,8 +16,6 @@ import IconCLO from "@/assets/icons/targetArrow.svg?react";
 import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
 import { ROLE } from "@/helpers/constants/enum";
 import { RxDashboard } from "react-icons/rx";
-import { getEnrollCourse } from "@/services/student/student.service";
-import { setEnrollCourseList } from "@/store/enrollCourse";
 
 export default function DashboardSidebar() {
   const path = useLocation().pathname;
@@ -26,7 +24,6 @@ export default function DashboardSidebar() {
   const openSidebar = useAppSelector((state) => state.config.openSidebar);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
-  const dashboard = useAppSelector((state) => state.config.dashboard);
   const dispatch = useAppDispatch();
   const termOption = academicYear.map((e) => {
     return `${e.semester}/${e.year}`;
@@ -44,7 +41,6 @@ export default function DashboardSidebar() {
   );
 
   useEffect(() => {
-    if (!user.termsOfService) return;
     if (
       academicYear.length &&
       !params.get("year") &&
@@ -52,10 +48,8 @@ export default function DashboardSidebar() {
       !selectedTerm
     ) {
       setTerm(academicYear[0]);
-    } else if (!academicYear.length) {
-      fetchAcademicYear();
     }
-  }, [user.termsOfService, academicYear]);
+  }, [user, academicYear]);
 
   useEffect(() => {
     if (user.termsOfService) {
@@ -97,27 +91,6 @@ export default function DashboardSidebar() {
     }
   }, [openFilterTerm]);
 
-  const fetchCourse = async (year: number, semester: number) => {
-    dispatch(setLoading(true));
-    if (user.studentId && dashboard == ROLE.STUDENT) {
-      const res = await getEnrollCourse({ year, semester });
-      if (res) {
-        dispatch(setEnrollCourseList(res));
-      }
-    }
-    dispatch(setLoading(false));
-  };
-
-  const fetchAcademicYear = async () => {
-    const res = await getAcademicYear(new AcademicYearRequestDTO());
-    if (res) {
-      dispatch(setAcademicYear(res));
-      if (!params.get("year") && !params.get("semester") && !selectedTerm) {
-        setTerm(res[0]);
-      }
-    }
-  };
-
   const setTerm = (data: IModelAcademicYear) => {
     setParams({
       year: data.year.toString(),
@@ -130,7 +103,6 @@ export default function DashboardSidebar() {
     setOpenFilterTerm(false);
     const term = academicYear.find((e) => checkAcademic(selectedTerm, e))!;
     setTerm(term);
-    fetchCourse(term.year, term.semester);
   };
 
   const gotoPage = (newPath: string) => {
@@ -140,9 +112,9 @@ export default function DashboardSidebar() {
     });
   };
 
-  const stdGotoPage = (next: string) => {
+  const stdGotoPage = (prefix: string, next: string = "") => {
     navigate({
-      pathname: `${path.split("/")[1]}${next}`,
+      pathname: `${prefix}${next}`,
       search: "?" + params.toString(),
     });
   };
@@ -179,15 +151,17 @@ export default function DashboardSidebar() {
         {openSidebar && (
           <div className="text-sm acerSwift:max-macair133:text-b4 flex flex-col gap-[6px]">
             <p className="font-semibold">Welcome to ScoreOBE+</p>
-            <div className="font-normal flex flex-col gap-[2px]">
-              <p>
-                Your courses are waiting
-                <br />
-                on the right to jump in!
-                <br />
-                Account? Top right menu
-              </p>
-            </div>
+            {user.id && (
+              <div className="font-normal flex flex-col gap-[2px]">
+                <p>
+                  Your courses are waiting
+                  <br />
+                  on the right to jump in!
+                  <br />
+                  Account? Top right menu
+                </p>
+              </div>
+            )}
           </div>
         )}
 
@@ -201,57 +175,52 @@ export default function DashboardSidebar() {
               Course
             </p>
           )}
-          <Button
-            title={
-              openSidebar
-                ? undefined
-                : `Semester ${params.get("semester") || ""}/${
-                    params.get("year")?.slice(-2) || ""
-                  }`
-            }
-            className={`bg-transparent flex justify-start items-center border-none text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none ${
-              openSidebar
-                ? "px-3 py-1 !w-full !h-[50px]"
-                : "!rounded-full !h-fit !w-fit p-2"
-            }`}
-            leftSection={
-              openSidebar && (
-                <Icon className="-mt-4 mr-1" IconComponent={IconCalendar} />
-              )
-            }
-            variant="default"
-            onClick={() => setOpenFilterTerm(true)}
+          <Tooltip
+            transitionProps={{ transition: "fade-right", duration: 200 }}
+            classNames={{
+              tooltip:
+                "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+            }}
+            label="Semester"
+            position="right-end"
+            withArrow
+            arrowPosition="side"
+            arrowOffset={15}
+            arrowSize={10}
+            opacity={openSidebar ? 0 : 1}
           >
-            {openSidebar ? (
-              <div className="flex flex-col justify-start items-start gap-[7px]">
-                <p className="font-medium text-b2  acerSwift:max-macair133:text-b3">
-                  Semester
-                </p>
-                <p className="font-normal text-b4  acerSwift:max-macair133:text-b5">
-                  Course (
-                  {`${params.get("semester") || ""}/${
-                    params.get("year")?.slice(-2) || ""
-                  }`}
-                  )
-                </p>
-              </div>
-            ) : (
-              <Tooltip
-              transitionProps={{ transition: "fade-right", duration: 200 }}
-              classNames={{
-                tooltip:
-                  "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-              }}
-              label="Semester"
-              position="right-end"
-              withArrow
-              arrowPosition="side"
-              arrowOffset={15}
-              arrowSize={10}
-            ><div>
-              <Icon className="size-5" IconComponent={IconCalendar} /></div></Tooltip>
-            )}
-          </Button>
+            <Button
+              className={`bg-transparent flex justify-start items-center border-none text-white transition-colors duration-300 hover:bg-[#F0F0F0] hover:text-tertiary focus:border-none ${
+                openSidebar
+                  ? "px-3 py-1 !w-full !h-[50px]"
+                  : "!rounded-full !h-fit !w-fit p-2"
+              }`}
+              leftSection={
+                openSidebar && (
+                  <Icon className="-mt-4 mr-1" IconComponent={IconCalendar} />
+                )
+              }
+              variant="default"
+              onClick={() => setOpenFilterTerm(true)}
+            >
+              {openSidebar ? (
+                <div className="flex flex-col justify-start items-start gap-[7px]">
+                  <p className="font-medium text-b2  acerSwift:max-macair133:text-b3">
+                    Semester
+                  </p>
+                  <p className="font-normal text-b4  acerSwift:max-macair133:text-b5">
+                    Course (
+                    {`${params.get("semester") || ""}/${
+                      params.get("year")?.slice(-2) || ""
+                    }`}
+                    )
+                  </p>
+                </div>
+              ) : (
+                <Icon className="size-5" IconComponent={IconCalendar} />
+              )}
+            </Button>
+          </Tooltip>
         </div>
 
         {path.includes(ROUTE_PATH.ADMIN_DASHBOARD) && (
@@ -270,119 +239,136 @@ export default function DashboardSidebar() {
                 openSidebar ? "gap-2" : "gap-3"
               }`}
             >
-              <Button
-                onClick={() => gotoPage(ROUTE_PATH.TQF)}
-                leftSection={
-                  openSidebar && (
-                    <Icon
-                      className=" size-4 mr-[5px]"
-                      IconComponent={IconTQF}
-                    />
-                  )
-                }
-                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+              <Tooltip
+                transitionProps={{
+                  transition: "fade-right",
+                  duration: 200,
+                }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="TQF"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+                opacity={openSidebar ? 0 : 1}
+              >
+                <Button
+                  onClick={() => gotoPage(ROUTE_PATH.TQF)}
+                  leftSection={
+                    openSidebar && (
+                      <Icon
+                        className=" size-4 mr-[5px]"
+                        IconComponent={IconTQF}
+                      />
+                    )
+                  }
+                  className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
                 path.includes(ROUTE_PATH.TQF)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"}`}
+                >
+                  {openSidebar ? (
+                    "TQF"
+                  ) : (
+                    <Icon className="size-4" IconComponent={IconTQF} />
+                  )}
+                </Button>
+              </Tooltip>
+              <Tooltip
+                transitionProps={{
+                  transition: "fade-right",
+                  duration: 200,
+                }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="CLO"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+                opacity={openSidebar ? 0 : 1}
               >
-                {openSidebar ? (
-                  "TQF"
-                ) : (
-                  <Tooltip
-                  transitionProps={{ transition: "fade-right", duration: 200 }}
-                  classNames={{
-                    tooltip:
-                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                  }}
-                  label="TQF"
-                  position="right-end"
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={15}
-                  arrowSize={10}
-                ><div>
-                  <Icon className="size-4" IconComponent={IconTQF} /></div></Tooltip>
-                )}
-              </Button>
-              <Button
-                onClick={() => gotoPage(ROUTE_PATH.CLO)}
-                leftSection={
-                  openSidebar && (
-                    <Icon
-                      IconComponent={IconCLO}
-                      className=" size-[21px] mr-[1px] -translate-x-[2px]"
-                    />
-                  )
-                }
-                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+                <Button
+                  onClick={() => gotoPage(ROUTE_PATH.CLO)}
+                  leftSection={
+                    openSidebar && (
+                      <Icon
+                        IconComponent={IconCLO}
+                        className=" size-[21px] mr-[1px] -translate-x-[2px]"
+                      />
+                    )
+                  }
+                  className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
                    path.includes(ROUTE_PATH.CLO)
                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                  } ${
-                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
-                }`}
+                    openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                  }`}
+                >
+                  {openSidebar ? (
+                    "CLO"
+                  ) : (
+                    <Icon IconComponent={IconCLO} className="size-[21px]" />
+                  )}
+                </Button>
+              </Tooltip>
+              <Tooltip
+                transitionProps={{
+                  transition: "fade-right",
+                  duration: 200,
+                }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="PLO"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+                opacity={openSidebar ? 0 : 1}
               >
-                {openSidebar ? (
-                  "CLO"
-                ) : (
-                  <Tooltip
-                  transitionProps={{ transition: "fade-right", duration: 200 }}
-                  classNames={{
-                    tooltip:
-                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                  }}
-                  label="CLO"
-                  position="right-end"
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={15}
-                  arrowSize={10}
-                ><div>
-                  <Icon IconComponent={IconCLO} className="size-[21px]" /></div></Tooltip>
-                )}
-              </Button>
-              <Button
-                onClick={() => gotoPage(ROUTE_PATH.PLO)}
-                leftSection={
-                  openSidebar && (
-                    <Icon IconComponent={IconSO} className=" size-[18px]" />
-                  )
-                }
-                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+                <Button
+                  onClick={() => gotoPage(ROUTE_PATH.PLO)}
+                  leftSection={
+                    openSidebar && (
+                      <Icon IconComponent={IconSO} className=" size-[18px]" />
+                    )
+                  }
+                  className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
                  ${
                    path.includes(ROUTE_PATH.PLO)
                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
                  } ${
-                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
-                }`}
-              >
-                {openSidebar ? (
-                  <p className="pl-1">PLO</p>
-                ) : (
-                  <Tooltip
-                  transitionProps={{ transition: "fade-right", duration: 200 }}
-                  classNames={{
-                    tooltip:
-                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                  }}
-                  label="PLO"
-                  position="right-end"
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={15}
-                  arrowSize={10}
-                ><div>
-                  <Icon IconComponent={IconSO} className="size-[18px]" /></div></Tooltip>
-                )}
-              </Button>
+                    openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                  }`}
+                >
+                  {openSidebar ? (
+                    <p className="pl-1">PLO</p>
+                  ) : (
+                    <Icon IconComponent={IconSO} className="size-[18px]" />
+                  )}
+                </Button>
+              </Tooltip>
             </div>
           </div>
         )}
-        {path.includes(ROUTE_PATH.STD_DASHBOARD) && (
+        {[ROUTE_PATH.STD_DASHBOARD, ROUTE_PATH.COURSE_SYLLABUS].some((e) =>
+          path.includes(e)
+        ) && (
           <div className="flex flex-col w-full justify-center items-center gap-3">
             {openSidebar && (
               <p
@@ -398,42 +384,84 @@ export default function DashboardSidebar() {
                 openSidebar ? "gap-2" : "gap-3"
               }`}
             >
-              <Button
-                onClick={() => stdGotoPage("")}
-                leftSection={openSidebar && <RxDashboard size={18} />}
-                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
-                  !path.includes(ROUTE_PATH.PLO)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                } ${
-                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
-                }`}
+              {user.id && (
+                <Tooltip
+                  transitionProps={{
+                    transition: "fade-right",
+                    duration: 200,
+                  }}
+                  classNames={{
+                    tooltip:
+                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                  }}
+                  label="Dashboard"
+                  position="right-end"
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={15}
+                  arrowSize={10}
+                  opacity={openSidebar ? 0 : 1}
+                >
+                  <Button
+                    onClick={() => stdGotoPage(ROUTE_PATH.STD_DASHBOARD, "")}
+                    leftSection={openSidebar && <RxDashboard size={18} />}
+                    className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                      ![ROUTE_PATH.PLO, ROUTE_PATH.COURSE_SYLLABUS].some((e) =>
+                        path.includes(e)
+                      )
+                        ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                        : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                    } ${
+                      openSidebar
+                        ? "!w-full"
+                        : "!rounded-full !h-fit !w-fit p-2"
+                    }`}
+                  >
+                    {openSidebar ? "Dashboard" : <RxDashboard size={20} />}
+                  </Button>
+                </Tooltip>
+              )}
+              <Tooltip
+                transitionProps={{
+                  transition: "fade-right",
+                  duration: 200,
+                }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Course Syllabus"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+                opacity={openSidebar ? 0 : 1}
               >
-                {openSidebar ? "Dashboard" : <RxDashboard size={20} />}
-              </Button>
-              <Button
-                onClick={() => stdGotoPage(`/${ROUTE_PATH.PLO}`)}
-                leftSection={
-                  openSidebar && (
-                    <Icon
-                      IconComponent={IconSpiderChart}
-                      className="size-[18px] -translate-x-[1px] stroke-1"
-                    />
-                  )
-                }
-                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
-                  path.includes(ROUTE_PATH.PLO)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                } ${
-                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
-                }`}
-              >
-                {openSidebar ? (
-                  "Overall PLO"
-                ) : (
-                  <Tooltip
-                  transitionProps={{ transition: "fade-right", duration: 200 }}
+                <Button
+                  onClick={() => stdGotoPage(ROUTE_PATH.COURSE_SYLLABUS)}
+                  leftSection={openSidebar && <HiOutlineBookOpen size={18} />}
+                  className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                    path.includes(ROUTE_PATH.COURSE_SYLLABUS)
+                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                  } ${
+                    openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                  }`}
+                >
+                  {openSidebar ? (
+                    "Course Syllabus"
+                  ) : (
+                    <HiOutlineBookOpen size={20} />
+                  )}
+                </Button>
+              </Tooltip>
+              {user.id && (
+                <Tooltip
+                  transitionProps={{
+                    transition: "fade-right",
+                    duration: 200,
+                  }}
                   classNames={{
                     tooltip:
                       "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
@@ -444,13 +472,44 @@ export default function DashboardSidebar() {
                   arrowPosition="side"
                   arrowOffset={15}
                   arrowSize={10}
-                ><div>
-                  <Icon
-                    IconComponent={IconSpiderChart}
-                    className="size-5 stroke-1"
-                  /></div></Tooltip>
-                )}
-              </Button>
+                  opacity={openSidebar ? 0 : 1}
+                >
+                  <Button
+                    onClick={() =>
+                      stdGotoPage(
+                        ROUTE_PATH.STD_DASHBOARD,
+                        `/${ROUTE_PATH.PLO}`
+                      )
+                    }
+                    leftSection={
+                      openSidebar && (
+                        <Icon
+                          IconComponent={IconSpiderChart}
+                          className="size-[18px] -translate-x-[1px] stroke-1"
+                        />
+                      )
+                    }
+                    className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                      path.includes(ROUTE_PATH.PLO)
+                        ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                        : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                    } ${
+                      openSidebar
+                        ? "!w-full"
+                        : "!rounded-full !h-fit !w-fit p-2"
+                    }`}
+                  >
+                    {openSidebar ? (
+                      "Overall PLO"
+                    ) : (
+                      <Icon
+                        IconComponent={IconSpiderChart}
+                        className="size-5 stroke-1"
+                      />
+                    )}
+                  </Button>
+                </Tooltip>
+              )}
             </div>
           </div>
         )}

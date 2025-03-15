@@ -34,6 +34,7 @@ import { setEnrollCourseList } from "@/store/enrollCourse";
 import { getEnrollCourse } from "@/services/student/student.service";
 import { PiTextAlignLeft } from "react-icons/pi";
 import { setOpenSidebar } from "@/store/config";
+import { setCourseSyllabus } from "@/store/courseSyllabus";
 
 export default function Sidebar() {
   const openSidebar = useAppSelector((state) => state.config.openSidebar);
@@ -54,11 +55,16 @@ export default function Sidebar() {
   const enrollCourseList = useAppSelector(
     (state) => state.enrollCourse.courses
   );
+  const courseSyllabus = useAppSelector(
+    (state) => state.courseSyllabus.courses
+  );
   const dispatch = useAppDispatch();
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
     useDisclosure(false);
   const getSidebar = () => {
-    if (path.includes(PATH.DASHBOARD)) {
+    if (
+      [PATH.DASHBOARD, ROUTE_PATH.COURSE_SYLLABUS].some((e) => path.includes(e))
+    ) {
       if (courseNo) {
         return <StdCourseSidebar />;
       }
@@ -86,9 +92,12 @@ export default function Sidebar() {
 
   useEffect(() => {
     if (params.get("year") && params.get("semester") && academicYear.length) {
-      if (user.role != ROLE.STUDENT && !faculty.id) {
+      if (user.id && user.role != ROLE.STUDENT && !faculty.id) {
         fetchCur();
-      } else if (user.role == ROLE.STUDENT) {
+      } else if (
+        user.role == ROLE.STUDENT ||
+        path.includes(ROUTE_PATH.COURSE_SYLLABUS)
+      ) {
         fetchCourse();
       }
     }
@@ -108,7 +117,8 @@ export default function Sidebar() {
   };
 
   const fetchCourse = async () => {
-    if (!user.termsOfService) return;
+    if (!user.termsOfService && !path.includes(ROUTE_PATH.COURSE_SYLLABUS))
+      return;
     dispatch(setLoading(true));
     const term = {
       year: parseInt(params.get("year") || ""),
@@ -118,13 +128,26 @@ export default function Sidebar() {
       ...new CourseRequestDTO(),
       ...term,
     };
+    if (
+      path.includes(`${ROUTE_PATH.COURSE_SYLLABUS}/${courseNo}`) &&
+      !courseSyllabus.length
+    ) {
+      const res = await getCourse({
+        ...payload,
+        courseSyllabus: true,
+        ignorePage: true,
+      });
+      if (res) {
+        dispatch(setCourseSyllabus(res));
+      }
+    }
     if (user.studentId && !enrollCourseList.length) {
       const res = await getEnrollCourse(term);
       if (res) {
         dispatch(setEnrollCourseList(res));
       }
     }
-    if (!courseList.length) {
+    if (user.id && !courseList.length) {
       const resCourse = await getCourse(payload);
       if (resCourse) {
         dispatch(setCourseList(resCourse));
@@ -142,7 +165,8 @@ export default function Sidebar() {
         dispatch(setAllCourseList(resAllCourse));
       }
     }
-    dispatch(setLoading(false));
+    if (!path.includes(`${ROUTE_PATH.COURSE_SYLLABUS}/${courseNo}`))
+      dispatch(setLoading(false));
   };
 
   const onClickLeaveCourse = async (id: string) => {

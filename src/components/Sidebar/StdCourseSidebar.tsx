@@ -15,7 +15,8 @@ import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
 import IconSkills from "@/assets/icons/briftcase.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { getUserName } from "@/helpers/functions/function";
-import Loading from "../Loading/Loading";
+import { resetDataTQF3 } from "@/store/tqf3";
+import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
 
 export default function StdCourseSidebar() {
   const { courseNo, name } = useParams();
@@ -24,22 +25,30 @@ export default function StdCourseSidebar() {
   const path = useLocation().pathname;
   const openSidebar = useAppSelector((state) => state.config.openSidebar);
   const course = useAppSelector((state) =>
-    state.enrollCourse.courses.find((c) => c.courseNo == courseNo)
+    (path.includes(ROUTE_PATH.COURSE_SYLLABUS)
+      ? state.courseSyllabus
+      : state.enrollCourse
+    ).courses.find((c) => c.courseNo == courseNo)
   );
   const loading = useAppSelector((state) => state.loading.loading);
   const dispatch = useAppDispatch();
 
   const gotoPage = (newPath: string, back?: boolean) => {
+    dispatch(resetDataTQF3());
+    let newParams = params.toString();
+    if (params.get("topic")) {
+      newParams = newParams.split("&").slice(0, -1).join("&");
+    }
     navigate({
       pathname: back
         ? newPath
         : `${ROUTE_PATH.STD_DASHBOARD}/${courseNo}/${newPath}`,
-      search: "?" + params.toString(),
+      search: "?" + newParams,
     });
   };
 
   return loading ? (
-    <Loading />
+    <></>
   ) : (
     <div
       className={`flex text-white flex-col h-full gap-[26px] ${
@@ -47,36 +56,35 @@ export default function StdCourseSidebar() {
       }`}
     >
       {!name && (
-        <div
-          className={`hover:underline cursor-pointer font-bold gap-2 text-[13px] flex ${
-            openSidebar
-              ? "p-0 w-full justify-start -translate-x-[5px]"
-              : "p-1.5 w-fit justify-center items-center rounded-full text-white hover:bg-white hover:text-black"
-          }`}
-          onClick={() => gotoPage(ROUTE_PATH.STD_DASHBOARD, true)}
+        <Tooltip
+          transitionProps={{ transition: "fade-right", duration: 200 }}
+          classNames={{
+            tooltip:
+              "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+          }}
+          label="Back to Dashboard"
+          position="right-end"
+          withArrow
+          arrowPosition="side"
+          arrowOffset={15}
+          arrowSize={10}
+          opacity={openSidebar ? 0 : 1}
         >
-          <Tooltip
-            transitionProps={{ transition: "fade-right", duration: 200 }}
-            classNames={{
-              tooltip:
-                "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-            }}
-            label="Back to Dashboard"
-            position="right-end"
-            withArrow
-            arrowPosition="side"
-            arrowOffset={15}
-            arrowSize={10}
+          <div
+            className={`hover:underline cursor-pointer font-bold gap-2 text-[13px] flex ${
+              openSidebar
+                ? "p-0 w-full justify-start -translate-x-[5px]"
+                : "p-1.5 w-fit justify-center items-center rounded-full text-white hover:bg-white hover:text-black"
+            }`}
+            onClick={() => gotoPage(path.split("/")[1], true)}
           >
-            <div>
-              <Icon
-                IconComponent={IconChevronLeft}
-                className={`${openSidebar ? "size-5" : ""}`}
-              />
-            </div>
-          </Tooltip>
-          {openSidebar && "Back to Dashboard"}
-        </div>
+            <Icon
+              IconComponent={IconChevronLeft}
+              className={`${openSidebar ? "size-5" : ""}`}
+            />
+            {openSidebar && "Back to Dashboard"}
+          </div>
+        </Tooltip>
       )}
       <div
         className={`flex flex-col gap-5 ${
@@ -101,7 +109,7 @@ export default function StdCourseSidebar() {
             </p>
           </div>
         )}
-        {!name && (
+        {!name && path.includes(ROUTE_PATH.STD_DASHBOARD) && (
           <div
             className={`flex flex-col ${
               openSidebar
@@ -109,161 +117,163 @@ export default function StdCourseSidebar() {
                 : "gap-3 w-full justify-center items-center text-center"
             }`}
           >
-            <Button
-              onClick={() => gotoPage(ROUTE_PATH.EVALUATION)}
-              leftSection={openSidebar && <Icon IconComponent={IconList} />}
-              className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+            <Tooltip
+              transitionProps={{ transition: "fade-right", duration: 200 }}
+              classNames={{
+                tooltip:
+                  "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+              }}
+              label="Evaluations"
+              position="right-end"
+              withArrow
+              arrowPosition="side"
+              arrowOffset={15}
+              arrowSize={10}
+              opacity={openSidebar ? 0 : 1}
+            >
+              <Button
+                onClick={() => gotoPage(ROUTE_PATH.EVALUATION)}
+                leftSection={openSidebar && <Icon IconComponent={IconList} />}
+                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group
               ${
                 path.includes(ROUTE_PATH.EVALUATION)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
               } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-1"}`}
+              >
+                {openSidebar ? (
+                  "Evaluations"
+                ) : (
+                  <Icon IconComponent={IconList} className="size-7" />
+                )}
+              </Button>
+            </Tooltip>
+            <Tooltip
+              transitionProps={{ transition: "fade-right", duration: 200 }}
+              classNames={{
+                tooltip:
+                  "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+              }}
+              label="Chart"
+              position="right-end"
+              withArrow
+              arrowPosition="side"
+              arrowOffset={15}
+              arrowSize={10}
+              opacity={openSidebar ? 0 : 1}
             >
-              {openSidebar ? (
-                "Evaluations"
-              ) : (
-                <Tooltip
-                  transitionProps={{ transition: "fade-right", duration: 200 }}
-                  classNames={{
-                    tooltip:
-                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                  }}
-                  label="Evaluations"
-                  position="right-end"
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={15}
-                  arrowSize={10}
-                >
-                  <div>
-                    <Icon IconComponent={IconList} className="size-7" />
-                  </div>
-                </Tooltip>
-              )}
-            </Button>
-            <Button
-              onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
-              leftSection={
-                openSidebar && (
-                  <Icon
-                    IconComponent={IconHistogram}
-                    className="pb-1 pl-[2px] size-[22px]"
-                  />
-                )
-              }
-              className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-                path.includes(ROUTE_PATH.HISTOGRAM)
-                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-              } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"}`}
-            >
-              {openSidebar ? (
-                <p className="pl-[3px]">Chart</p>
-              ) : (
-                <Tooltip
-                  transitionProps={{ transition: "fade-right", duration: 200 }}
-                  classNames={{
-                    tooltip:
-                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                  }}
-                  label="Chart"
-                  position="right-end"
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={15}
-                  arrowSize={10}
-                >
-                  <div>
+              <Button
+                onClick={() => gotoPage(ROUTE_PATH.HISTOGRAM)}
+                leftSection={
+                  openSidebar && (
                     <Icon
                       IconComponent={IconHistogram}
                       className="pb-1 pl-[2px] size-[22px]"
                     />
-                  </div>
-                </Tooltip>
-              )}
-            </Button>
-            <Button
-              onClick={() => gotoPage(ROUTE_PATH.CLO)}
-              leftSection={
-                openSidebar && (
+                  )
+                }
+                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                  path.includes(ROUTE_PATH.HISTOGRAM)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                } ${
+                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                }`}
+              >
+                {openSidebar ? (
+                  <p className="pl-[3px]">Chart</p>
+                ) : (
                   <Icon
-                    IconComponent={IconArrow}
-                    className=" stroke-[1.5px] size-[22px] "
+                    IconComponent={IconHistogram}
+                    className="pb-1 pl-[2px] size-[22px]"
                   />
-                )
-              }
-              className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-                path.includes(ROUTE_PATH.CLO)
-                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-              } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"}`}
+                )}
+              </Button>
+            </Tooltip>
+            <Tooltip
+              transitionProps={{ transition: "fade-right", duration: 200 }}
+              classNames={{
+                tooltip:
+                  "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+              }}
+              label="CLO"
+              position="right-end"
+              withArrow
+              arrowPosition="side"
+              arrowOffset={15}
+              arrowSize={10}
+              opacity={openSidebar ? 0 : 1}
             >
-              {openSidebar ? (
-                <p className="pl-[3px]">CLO</p>
-              ) : (
-                <Tooltip
-                  transitionProps={{ transition: "fade-right", duration: 200 }}
-                  classNames={{
-                    tooltip:
-                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                  }}
-                  label="CLO"
-                  position="right-end"
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={15}
-                  arrowSize={10}
-                >
-                  <div>
+              <Button
+                onClick={() => gotoPage(ROUTE_PATH.CLO)}
+                leftSection={
+                  openSidebar && (
                     <Icon
                       IconComponent={IconArrow}
                       className=" stroke-[1.5px] size-[22px] "
                     />
-                  </div>
-                </Tooltip>
-              )}
-            </Button>
-            <Button
-              onClick={() => gotoPage(ROUTE_PATH.PLO)}
-              leftSection={
-                openSidebar && (
+                  )
+                }
+                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                  path.includes(ROUTE_PATH.CLO)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                } ${
+                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                }`}
+              >
+                {openSidebar ? (
+                  <p className="pl-[3px]">CLO</p>
+                ) : (
                   <Icon
-                    IconComponent={IconSpiderChart}
-                    className="pl-[2px] stroke-[1.2px] size-[20px]"
+                    IconComponent={IconArrow}
+                    className=" stroke-[1.5px] size-[22px] "
                   />
-                )
-              }
-              className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-                path.includes(ROUTE_PATH.PLO)
-                  ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                  : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-              } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"}`}
+                )}
+              </Button>
+            </Tooltip>
+            <Tooltip
+              transitionProps={{ transition: "fade-right", duration: 200 }}
+              classNames={{
+                tooltip:
+                  "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+              }}
+              label="PLO"
+              position="right-end"
+              withArrow
+              arrowPosition="side"
+              arrowOffset={15}
+              arrowSize={10}
+              opacity={openSidebar ? 0 : 1}
             >
-              {openSidebar ? (
-                <p className="pl-[6px]">PLO</p>
-              ) : (
-                <Tooltip
-                  transitionProps={{ transition: "fade-right", duration: 200 }}
-                  classNames={{
-                    tooltip:
-                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                  }}
-                  label="PLO"
-                  position="right-end"
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={15}
-                  arrowSize={10}
-                >
-                  <div>
+              <Button
+                onClick={() => gotoPage(ROUTE_PATH.PLO)}
+                leftSection={
+                  openSidebar && (
                     <Icon
                       IconComponent={IconSpiderChart}
-                      className="stroke-[1.2px] size-[20px]"
+                      className="pl-[2px] stroke-[1.2px] size-[20px]"
                     />
-                  </div>
-                </Tooltip>
-              )}
-            </Button>
+                  )
+                }
+                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                  path.includes(ROUTE_PATH.PLO)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                } ${
+                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                }`}
+              >
+                {openSidebar ? (
+                  <p className="pl-[6px]">PLO</p>
+                ) : (
+                  <Icon
+                    IconComponent={IconSpiderChart}
+                    className="stroke-[1.2px] size-[20px]"
+                  />
+                )}
+              </Button>
+            </Tooltip>
             {/* <Button
               onClick={() => gotoPage(ROUTE_PATH.SKILLS)}
               leftSection={
@@ -284,17 +294,20 @@ export default function StdCourseSidebar() {
         )}
       </div>
 
-      {openSidebar && (
+      {openSidebar && path.includes(ROUTE_PATH.STD_DASHBOARD) && (
         <>
           <div className="flex flex-col w-full gap-2 mt-5">
             <p className="text-b2 font-bold mb-1">Instructor</p>
             <div className="max-h-[120px] flex flex-col gap-1 overflow-y-auto">
               <p className="text-pretty font-medium text-[12px]">
-                {getUserName(course?.section?.instructor, 1)}
+                {getUserName(
+                  (course as IModelEnrollCourse)?.section?.instructor,
+                  1
+                )}
               </p>
             </div>
           </div>
-          {!!course?.section?.coInstructors?.length && (
+          {!!(course as IModelEnrollCourse)?.section?.coInstructors?.length && (
             <div className="flex flex-col w-full gap-2">
               <p className="text-b2 font-bold mb-1">Co-Instructor</p>
               <div
@@ -302,16 +315,18 @@ export default function StdCourseSidebar() {
                   name ? "max-h-[200px]" : "max-h-[140px]"
                 } gap-1 flex flex-col  overflow-y-auto`}
               >
-                {course?.section.coInstructors.map((item, index) => {
-                  return (
-                    <p
-                      key={index}
-                      className="text-pretty font-medium text-[12px]"
-                    >
-                      {getUserName(item, 1)}
-                    </p>
-                  );
-                })}
+                {(course as IModelEnrollCourse)?.section.coInstructors.map(
+                  (item, index) => {
+                    return (
+                      <p
+                        key={index}
+                        className="text-pretty font-medium text-[12px]"
+                      >
+                        {getUserName(item, 1)}
+                      </p>
+                    );
+                  }
+                )}
               </div>
             </div>
           )}

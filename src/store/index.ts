@@ -12,6 +12,7 @@ import tqf5Reducer from "./tqf5";
 import allCourseReducer from "./allCourse";
 import facultyReducer from "./faculty";
 import enrollCourseReducer from "./enrollCourse";
+import courseSyllabusReducer from "./courseSyllabus";
 
 const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ const store = configureStore({
     user: userReducer,
     faculty: facultyReducer,
     academicYear: academicYearReducer,
+    courseSyllabus: courseSyllabusReducer,
     allCourse: allCourseReducer,
     course: courseReducer,
     courseManagement: courseManagementReducer,

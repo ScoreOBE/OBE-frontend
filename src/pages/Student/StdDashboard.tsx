@@ -22,8 +22,8 @@ export default function StdDashboard() {
   const academicYear = useAppSelector((state) => state.academicYear);
   const enrollCourses = useAppSelector((state) => state.enrollCourse);
   const dispatch = useAppDispatch();
-  const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
   const [params, setParams] = useSearchParams({});
+  const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
 
   useEffect(() => {
     dispatch(setShowSidebar(true));
@@ -56,20 +56,18 @@ export default function StdDashboard() {
   }, [academicYear, term, params]);
 
   useEffect(() => {
-    if (
-      term.year &&
-      term.semester &&
-      enrollCourses.year != term.year &&
-      enrollCourses.semester != term.semester
-    ) {
-      fetchCourse(term.year, term.semester);
+    if (term.id) {
+      fetchCourse();
     }
   }, [term]);
 
-  const fetchCourse = async (year: number, semester: number) => {
+  const fetchCourse = async () => {
     if (!user.termsOfService) return;
     dispatch(setLoading(true));
-    const res = await getEnrollCourse({ year, semester });
+    const res = await getEnrollCourse({
+      year: term.year,
+      semester: term.semester,
+    });
     if (res) {
       dispatch(setEnrollCourseList(res));
     }
@@ -85,38 +83,38 @@ export default function StdDashboard() {
 
   return (
     <div className=" flex flex-col h-full w-full  overflow-hidden">
-     {!isMobile && <div className="flex flex-row px-6 pt-3   items-center justify-between">
-        <div className="flex flex-col">
-          <p className="text-secondary text-[18px] font-semibold ">
-            Hi there, {user.firstNameEN}
-          </p>
-          <p className="text-[#575757] text-[14px]">
-            In semester{" "}
-            <span className="text-[#1f69f3] font-semibold">
-              {" "}
-              {enrollCourses.semester || ""}/{enrollCourses.year || ""}!
-            </span>{" "}
-            {enrollCourses.courses.length === 0 ? (
-              <span>Your course card is currently empty</span>
-            ) : (
-              <span>
-                You have{" "}
-                <span className="text-[#1f69f3] font-semibold">
-                  {enrollCourses.courses.length} Course
-                  {enrollCourses.courses.length > 1 ? "s " : " "}
+      {!isMobile && (
+        <div className="flex flex-row px-6 pt-3   items-center justify-between">
+          <div className="flex flex-col">
+            <p className="text-secondary text-[18px] font-semibold ">
+              Hi there, {user.firstNameEN}
+            </p>
+            <p className="text-[#575757] text-[14px]">
+              In semester{" "}
+              <span className="text-[#1f69f3] font-semibold">
+                {enrollCourses.semester || ""}/{enrollCourses.year || ""}!
+              </span>{" "}
+              {enrollCourses.courses.length === 0 ? (
+                <span>Your course card is currently empty</span>
+              ) : (
+                <span>
+                  You have{" "}
+                  <span className="text-[#1f69f3] font-semibold">
+                    {enrollCourses.courses.length} Course
+                    {enrollCourses.courses.length > 1 ? "s " : " "}
+                  </span>
+                  on your plate.
                 </span>
-                on your plate.
-              </span>
-            )}
-          </p>
+              )}
+            </p>
+          </div>
         </div>
-      </div>}
+      )}
       <div className="flex h-full w-full overflow-hidden">
         {loading ? (
           <Loading />
         ) : !!enrollCourses.courses.length ? (
           <div className="w-full">
-            {" "}
             {/* <Alert
               radius="md"
               variant="light"
@@ -174,12 +172,14 @@ export default function StdDashboard() {
               </p>
               <br />
               <p className=" -mt-4 mb-6 sm:max-ipad11:mb-2 text-b2 break-words font-medium leading-relaxed">
-                It looks like instructor hasn't published your score yet. 
+                It looks like instructor hasn't published your score yet.
               </p>
             </div>
-           {!isMobile && <div className="h-full  w-[24vw] justify-center flex flex-col">
-              <img src={notFoundImage} alt="notFound"></img>
-            </div>}
+            {!isMobile && (
+              <div className="h-full  w-[24vw] justify-center flex flex-col">
+                <img src={notFoundImage} alt="notFound"></img>
+              </div>
+            )}
           </div>
         )}
       </div>

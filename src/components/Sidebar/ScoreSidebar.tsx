@@ -14,9 +14,12 @@ import IconLogout from "@/assets/icons/logout.svg?react";
 import IconStudent from "@/assets/icons/student.svg?react";
 import { IModelCourse } from "@/models/ModelCourse";
 import { IModelUser } from "@/models/ModelUser";
-import { getSectionNo, getUserName, isMobile } from "@/helpers/functions/function";
+import {
+  getSectionNo,
+  getUserName,
+  isMobile,
+} from "@/helpers/functions/function";
 import { IModelSection } from "@/models/ModelCourse";
-import Loading from "../Loading/Loading";
 
 type Props = {
   onClickLeaveCourse: () => void;
@@ -53,7 +56,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
   };
 
   return loading ? (
-    <Loading />
+    <></>
   ) : (
     <div className="flex text-white flex-col h-full  gap-[26px]">
       <div
@@ -74,84 +77,85 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
           </div>
         )}
         <div className={`flex flex-col ${openSidebar ? "gap-2" : "gap-3"}`}>
-          <Button
-            onClick={() => gotoPage(ROUTE_PATH.SCORE)}
-            leftSection={
-              openSidebar && (
-                <Icon
-                  IconComponent={IconList}
-                  className="acerSwift:max-macair133:!size-5"
-                />
-              )
-            }
-            className={`!text-[13px] acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+          <Tooltip
+            transitionProps={{ transition: "fade-right", duration: 200 }}
+            classNames={{
+              tooltip:
+                "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+            }}
+            label="Scores"
+            position="right-end"
+            withArrow
+            arrowPosition="side"
+            arrowOffset={15}
+            arrowSize={10}
+            opacity={openSidebar ? 0 : 1}
+          >
+            <Button
+              onClick={() => gotoPage(ROUTE_PATH.SCORE)}
+              leftSection={
+                openSidebar && (
+                  <Icon
+                    IconComponent={IconList}
+                    className="acerSwift:max-macair133:!size-5"
+                  />
+                )
+              }
+              className={`!text-[13px] acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group
             ${
               path.includes(ROUTE_PATH.SCORE)
                 ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                 : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
             } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-1"}`}
+            >
+              {openSidebar ? (
+                "Scores"
+              ) : (
+                <Icon IconComponent={IconList} className="size-7" />
+              )}
+            </Button>
+          </Tooltip>
+          <Tooltip
+            transitionProps={{ transition: "fade-right", duration: 200 }}
+            classNames={{
+              tooltip:
+                "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+            }}
+            label="Students"
+            position="right-end"
+            withArrow
+            arrowPosition="side"
+            arrowOffset={15}
+            arrowSize={10}
+            opacity={openSidebar ? 0 : 1}
           >
-            {openSidebar ? (
-              "Scores"
-            ) : (
-              <Tooltip
-                transitionProps={{ transition: "fade-right", duration: 200 }}
-                classNames={{
-                  tooltip:
-                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                }}
-                label="Scores"
-                position="right-end"
-                withArrow
-                arrowPosition="side"
-                arrowOffset={15}
-                arrowSize={10}
-              ><div>
-              <Icon IconComponent={IconList} className="size-7" /></div></Tooltip>
-            )}
-          </Button>
-          <Button
-            onClick={() => gotoPage(ROUTE_PATH.STUDENTS)}
-            leftSection={
-              openSidebar && (
-                <Icon
-                  IconComponent={IconStudent}
-                  className="pb-1 pl-[2px] size-[22px] acerSwift:max-macair133:!size-5"
-                />
-              )
-            }
-            className={`!text-[13px] acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group
+            <Button
+              onClick={() => gotoPage(ROUTE_PATH.STUDENTS)}
+              leftSection={
+                openSidebar && (
+                  <Icon
+                    IconComponent={IconStudent}
+                    className="pb-1 pl-[2px] size-[22px] acerSwift:max-macair133:!size-5"
+                  />
+                )
+              }
+              className={`!text-[13px] acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none group
             ${
               path.includes(ROUTE_PATH.STUDENTS)
                 ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                 : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
             } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"}`}
-          >
-            {openSidebar ? (
-              <p className="pl-[3px]">Students</p>
-            ) : (
-              <Tooltip
-                transitionProps={{ transition: "fade-right", duration: 200 }}
-                classNames={{
-                  tooltip:
-                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                }}
-                label="Students"
-                position="right-end"
-                withArrow
-                arrowPosition="side"
-                arrowOffset={15}
-                arrowSize={10}
-              >
-                <div>
-                  <Icon
-                    IconComponent={IconStudent}
-                    className="size-[22px] acerSwift:max-macair133:!size-5"
-                  />
-                </div>
-              </Tooltip>
-            )}
-          </Button>
+            >
+              {openSidebar ? (
+                <p className="pl-[3px]">Students</p>
+              ) : (
+                <Icon
+                  IconComponent={IconStudent}
+                  className="size-[22px] acerSwift:max-macair133:!size-5"
+                />
+              )}
+            </Button>
+          </Tooltip>
         </div>
       </div>
 
@@ -202,51 +206,55 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
                 Course Action
               </p>
             )}
-            { !isMobile &&<Button
-              onClick={onClickLeaveCourse}
-              leftSection={
-                openSidebar && (
-                  <Icon
-                    IconComponent={IconLogout}
-                    className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
-                  />
-                )
-              }
-              className={`text-[#ffffff] bg-transparent hover:bg-[#d55757] flex justify-start items-center transition-colors duration-300 focus:border-none ${
-                openSidebar
-                  ? "!w-full !h-9 acerSwift:max-macair133:!h-8"
-                  : "!h-fit !w-fit p-2 !rounded-full"
-              }`}
-            >
-              {openSidebar ? (
-                <div className="flex flex-col justify-start w-full items-start gap-[7px] ">
-                  <p className="font-medium text-b3 acerSwift:max-macair133:text-b4">
-                    Leave from Course
-                  </p>
-                </div>
-              ) : (
-                <Tooltip
-                  transitionProps={{ transition: "fade-right", duration: 200 }}
-                  classNames={{
-                    tooltip:
-                      "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                  }}
-                  label="Leave Course"
-                  position="right-end"
-                  withArrow
-                  arrowPosition="side"
-                  arrowOffset={15}
-                  arrowSize={10}
+            {!isMobile && (
+              <Tooltip
+                transitionProps={{
+                  transition: "fade-right",
+                  duration: 200,
+                }}
+                classNames={{
+                  tooltip:
+                    "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Leave Course"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+                opacity={openSidebar ? 0 : 1}
+              >
+                <Button
+                  onClick={onClickLeaveCourse}
+                  leftSection={
+                    openSidebar && (
+                      <Icon
+                        IconComponent={IconLogout}
+                        className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
+                      />
+                    )
+                  }
+                  className={`text-[#ffffff] bg-transparent hover:bg-[#d55757] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                    openSidebar
+                      ? "!w-full !h-9 acerSwift:max-macair133:!h-8"
+                      : "!h-fit !w-fit p-2 !rounded-full"
+                  }`}
                 >
-                  <div>
+                  {openSidebar ? (
+                    <div className="flex flex-col justify-start w-full items-start gap-[7px] ">
+                      <p className="font-medium text-b3 acerSwift:max-macair133:text-b4">
+                        Leave from Course
+                      </p>
+                    </div>
+                  ) : (
                     <Icon
                       IconComponent={IconLogout}
                       className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
                     />
-                  </div>
-                </Tooltip>
-              )}
-            </Button>}
+                  )}
+                </Button>
+              </Tooltip>
+            )}
           </div>
         )}
     </div>

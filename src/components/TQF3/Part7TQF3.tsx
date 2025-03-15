@@ -19,20 +19,24 @@ import { IModelPLORequire } from "@/models/ModelCourseManagement";
 import { getSectionNo } from "@/helpers/functions/function";
 
 type Props = {
-  setForm: React.Dispatch<React.SetStateAction<any>>;
-  tqf3Original: Partial<IModelTQF3> & {
+  setForm?: React.Dispatch<React.SetStateAction<any>>;
+  tqf3Original?: Partial<IModelTQF3> & {
     topic?: string;
     ploRequired?: IModelPLORequire[];
   };
 };
 
-export default function Part7TQF3({ setForm, tqf3Original }: Props) {
+export default function Part7TQF3({
+  setForm = () => {},
+  tqf3Original = {},
+}: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [params, setParams] = useSearchParams({});
-  const disabled =
-    parseInt(params.get("year") || "") !== academicYear.year &&
-    parseInt(params.get("semester") || "") !== academicYear.semester;
   const tqf3 = useAppSelector((state) => state.tqf3);
+  const disabled =
+    tqf3.courseSyllabus ||
+    (parseInt(params.get("year") || "") !== academicYear.year &&
+      parseInt(params.get("semester") || "") !== academicYear.semester);
   const dispatch = useAppDispatch();
   const [sectionList, setSectionList] = useState<string[]>([]);
   const [ploRequire, setPloRequire] = useState<string[]>([]);
@@ -232,10 +236,12 @@ export default function Part7TQF3({ setForm, tqf3Original }: Props) {
               {form.getValues().list.map((cur, index) => (
                 <Tabs.Tab key={cur.curriculum} value={cur.curriculum}>
                   <div className="flex items-center gap-2">
-                    <Icon
-                      IconComponent={IconCheck}
-                      className={checkPart7Status(cur, index)}
-                    />
+                    {!tqf3.courseSyllabus && (
+                      <Icon
+                        IconComponent={IconCheck}
+                        className={checkPart7Status(cur, index)}
+                      />
+                    )}
                     {cur.curriculum}
                   </div>
                 </Tabs.Tab>

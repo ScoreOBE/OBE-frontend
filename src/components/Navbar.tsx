@@ -1,13 +1,16 @@
 import Profile from "./Profile";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { useAppDispatch, useAppSelector } from "@/store";
-import course, { setCourseList } from "@/store/course";
-import { CourseRequestDTO } from "@/services/course/dto/course.dto";
-import { getCourse } from "@/services/course/course.service";
+import { setSearchCourse } from "@/store/course";
 import scoreobe from "@/assets/image/scoreOBElogobold.png";
 import { SearchInput } from "./SearchInput";
-import { setAllCourseList } from "@/store/allCourse";
+import { setSearchAllCourse } from "@/store/allCourse";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { ROLE, TQF_STATUS } from "@/helpers/constants/enum";
 import { Button, CopyButton, Tooltip } from "@mantine/core";
@@ -15,6 +18,7 @@ import Icon from "./Icon";
 import IconFeedback from "@/assets/icons/feedback.svg?react";
 import { isMobile } from "@/helpers/functions/function";
 import { HiCheck, HiOutlineClipboardCopy } from "react-icons/hi";
+import { setSeachCourseSyllabus } from "@/store/courseSyllabus";
 
 export default function Navbar() {
   const { name, courseNo } = useParams();
@@ -28,44 +32,30 @@ export default function Navbar() {
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
   const tqf5Topic = useAppSelector((state) => state.tqf5.topic);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const searchCourse = async (searchValue: string, reset?: boolean) => {
+  const searchCourse = async (searchValue: string) => {
     const path = "/" + location.split("/")[1];
-    let res;
-    let payloadCourse: any = {};
-    if (reset) payloadCourse.search = "";
-    else payloadCourse.search = searchValue;
     switch (path) {
       case ROUTE_PATH.INS_DASHBOARD:
+        dispatch(setSearchCourse(searchValue));
       case ROUTE_PATH.ADMIN_DASHBOARD:
-        payloadCourse = {
-          ...new CourseRequestDTO(),
-          ...payloadCourse,
-          manage: path.includes(ROUTE_PATH.ADMIN_DASHBOARD),
-        };
-        payloadCourse.year = parseInt(params.get("year") ?? "");
-        payloadCourse.semester = parseInt(params.get("semester") ?? "");
-        res = await getCourse(payloadCourse);
-        if (res) {
-          res.search = payloadCourse.search;
-          if (path.includes(ROUTE_PATH.ADMIN_DASHBOARD)) {
-            dispatch(setAllCourseList(res));
-          } else {
-            dispatch(setCourseList(res));
-          }
-        }
+        dispatch(setSearchAllCourse(searchValue));
+      case ROUTE_PATH.COURSE_SYLLABUS:
+        dispatch(setSeachCourseSyllabus(searchValue));
         break;
       default:
         break;
     }
-    localStorage.setItem("search", "true");
   };
 
   const topicPath = () => {
     const path = "/" + location.split("/")[1];
-    const semester = params.get("semester") || "Unknown Semester";
-    const year = params.get("year") ? params.get("year")?.slice(-2) : "??";
+    const semester = params.get("semester") || "";
+    const year = params.get("year") ? params.get("year")?.slice(-2) : "";
     switch (path) {
+      case ROUTE_PATH.COURSE_SYLLABUS:
+        return "Course Syllabus";
       case ROUTE_PATH.INS_DASHBOARD:
         return "Your Courses";
       case ROUTE_PATH.STD_DASHBOARD:
@@ -101,11 +91,23 @@ export default function Navbar() {
 
   const ButtonLogin = () => {
     return (
-      <a href={import.meta.env.VITE_CMU_ENTRAID_URL} className="hidden sm:flex">
-        <Button size="xs" variant="light" className="!text-[12px]">
+      <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
+        <Button size="xs" variant="light">
           Sign in CMU account
         </Button>
       </a>
+    );
+  };
+
+  const ButtonCourseSyllabus = () => {
+    return (
+      <Button
+        size="xs"
+        variant="light"
+        onClick={() => navigate(ROUTE_PATH.COURSE_SYLLABUS)}
+      >
+        Course Syllabus
+      </Button>
     );
   };
 
@@ -160,7 +162,9 @@ export default function Navbar() {
             <CopyButton
               value={`${window.location.origin.toString()}${
                 ROUTE_PATH.COURSE_SYLLABUS
-              }/${tqf3.id}?courseNo=${courseNo}&year=${params.get(
+              }/${ROUTE_PATH.PDF}/${
+                tqf3.id
+              }?courseNo=${courseNo}&year=${params.get(
                 "year"
               )}&semester=${params.get("semester")}`}
               timeout={2000}
@@ -222,9 +226,10 @@ export default function Navbar() {
             </CopyButton>
           )}
         </div>
-        {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
+        {([ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
           location.includes(path)
-        ) &&
+        ) ||
+          location == ROUTE_PATH.COURSE_SYLLABUS) &&
           !isMobile && (
             <SearchInput
               onSearch={searchCourse}
@@ -243,8 +248,13 @@ export default function Navbar() {
                 ScoreOBE+
               </span>
             </div>
-            <div className="py-5 flex items-end gap-5 justify-end h-full">
-              {showButtonLogin && ButtonLogin()}
+            <div className="sm:py-5 flex items-center gap-5 justify-end h-full">
+              {showButtonLogin && (
+                <div className="flex items-center gap-3">
+                  {ButtonLogin()}
+                  {ButtonCourseSyllabus()}
+                </div>
+              )}
               <img
                 src={cpeLogoRed}
                 alt="cpeLogo"
@@ -256,7 +266,15 @@ export default function Navbar() {
         {![ROUTE_PATH.LOGIN].includes(location) && (
           <div className="flex gap-2 items-center">
             {!isMobile && feedback()}
-            <Profile />
+            {user.id ? (
+              <Profile />
+            ) : (
+              <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
+                <Button className="bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba]">
+                  Sign in CMU account
+                </Button>
+              </a>
+            )}
           </div>
         )}
       </div>

@@ -3,38 +3,49 @@ import { Suspense, lazy } from "react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import App from "@/App";
 import Loading from "@/components/Loading/Loading";
-import AdminDashboardTQF from "@/pages/AdminDashboard/AdminDashboardTQF";
-import AdminDashboardPLO from "@/pages/AdminDashboard/AdminDashboardPLO";
-import AdminDashboardCLO from "@/pages/AdminDashboard/AdminDashboardCLO";
-import TQF5 from "@/pages/TQF/TQF5";
-import StdDashboard from "@/pages/Student/StdDashboard";
-import Roster from "@/pages/Roster";
-import StdOverallPLO from "@/pages/Student/StdOverallPLO";
-import StdAssignment from "@/pages/Student/StdAssignment";
-import StdChart from "@/pages/Student/StdChart";
-import StdScore from "@/pages/Student/StdScore";
-import StdCLO from "@/pages/Student/StdCLO";
-import StdPLO from "@/pages/Student/StdPLO";
-import StdSkills from "@/pages/Student/StdSkills";
-import AllAssignment from "@/pages/AllAssignment";
-import OneAssignment from "@/pages/OneAssignment";
 import { isMobile } from "@/helpers/functions/function";
-import NotAvailablePage from "@/pages/NotAvailable";
-import CourseSyllabus from "@/pages/CourseSyllabus";
 
 const Login = lazy(() => import("@/pages/Login"));
 const CmuEntraIDCallback = lazy(() => import("@/pages/CmuEntraIDCallback"));
-// const SelectDepartment = lazy(() => import("@/pages/SelectDepartment"));
+const CourseSyllabusDashboard = lazy(
+  () => import("@/pages/CourseSyllabus/CourseSyllabusDashboard")
+);
+const CourseSyllabus = lazy(
+  () => import("@/pages/CourseSyllabus/CourseSyllabus")
+);
+const CourseSyllabusPDF = lazy(
+  () => import("@/pages/CourseSyllabus/CourseSyllabusPDF")
+);
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Section = lazy(() => import("@/pages/Section"));
-const TQF3 = lazy(() => import("@/pages/TQF/TQF3"));
 const Assignment = lazy(() => import("@/pages/Score/Assignment"));
-const Histogram = lazy(() => import("@/pages/Score/Histogram"));
 const Score = lazy(() => import("@/pages/Score/Score"));
 const Students = lazy(() => import("@/pages/Score/Students"));
-const Skills = lazy(() => import("@/pages/Skills"));
+const Histogram = lazy(() => import("@/pages/Score/Histogram"));
+const AllAssignment = lazy(() => import("@/pages/AllAssignment"));
+const OneAssignment = lazy(() => import("@/pages/OneAssignment"));
+const Roster = lazy(() => import("@/pages/Roster"));
+const TQF3 = lazy(() => import("@/pages/TQF/TQF3"));
+const TQF5 = lazy(() => import("@/pages/TQF/TQF5"));
+const AdminDashboardTQF = lazy(
+  () => import("@/pages/AdminDashboard/AdminDashboardTQF")
+);
+const AdminDashboardCLO = lazy(
+  () => import("@/pages/AdminDashboard/AdminDashboardCLO")
+);
+const AdminDashboardPLO = lazy(
+  () => import("@/pages/AdminDashboard/AdminDashboardPLO")
+);
+const StdDashboard = lazy(() => import("@/pages/Student/StdDashboard"));
+const StdOverallPLO = lazy(() => import("@/pages/Student/StdOverallPLO"));
+const StdAssignment = lazy(() => import("@/pages/Student/StdAssignment"));
+const StdScore = lazy(() => import("@/pages/Student/StdScore"));
+const StdChart = lazy(() => import("@/pages/Student/StdChart"));
+const StdCLO = lazy(() => import("@/pages/Student/StdCLO"));
+const StdPLO = lazy(() => import("@/pages/Student/StdPLO"));
+// const Skills = lazy(() => import("@/pages/Skills"));
 const Page404 = lazy(() => import("@/pages/Page404"));
-// const PageError = lazy(() => import("@/pages/PageError"));
+const NotAvailablePage = lazy(() => import("@/pages/NotAvailable"));
 
 const loadingPage = (
   <div className="flex h-screen w-screen">
@@ -59,12 +70,33 @@ const router = createBrowserRouter([
         element: <CmuEntraIDCallback />,
       },
       {
-        path: `${ROUTE_PATH.COURSE_SYLLABUS}/:tqf3`,
-        element: (
-          <Suspense fallback={loadingPage}>
-            <CourseSyllabus />
-          </Suspense>
-        ),
+        path: ROUTE_PATH.COURSE_SYLLABUS,
+        children: [
+          {
+            path: "",
+            element: (
+              <Suspense fallback={loadingPage}>
+                <CourseSyllabusDashboard />
+              </Suspense>
+            ),
+          },
+          {
+            path: ":courseNo",
+            element: (
+              <Suspense fallback={loadingPage}>
+                <CourseSyllabus />
+              </Suspense>
+            ),
+          },
+          {
+            path: `${ROUTE_PATH.PDF}/:tqf3`,
+            element: (
+              <Suspense fallback={loadingPage}>
+                <CourseSyllabusPDF />
+              </Suspense>
+            ),
+          },
+        ],
       },
       {
         path: ROUTE_PATH.INS_DASHBOARD,
@@ -194,18 +226,18 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: ROUTE_PATH.PLO,
-            element: (
-              <Suspense fallback={loadingPage}>
-                {!isMobile ? <AdminDashboardPLO /> : <NotAvailablePage />}
-              </Suspense>
-            ),
-          },
-          {
             path: ROUTE_PATH.CLO,
             element: (
               <Suspense fallback={loadingPage}>
                 {!isMobile ? <AdminDashboardCLO /> : <NotAvailablePage />}
+              </Suspense>
+            ),
+          },
+          {
+            path: ROUTE_PATH.PLO,
+            element: (
+              <Suspense fallback={loadingPage}>
+                {!isMobile ? <AdminDashboardPLO /> : <NotAvailablePage />}
               </Suspense>
             ),
           },

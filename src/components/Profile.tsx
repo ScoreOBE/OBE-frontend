@@ -28,7 +28,7 @@ import { getUserName, isMobile } from "@/helpers/functions/function";
 import ModalCourseManagement from "./Modal/Profile/ModalCourseManagement";
 import ModalPLOManagement from "./Modal/Profile/ModalPLOManagement";
 import { logout } from "@/services/user/user.service";
-import { resetSeachCourseManagement } from "@/store/courseManagement";
+import { setSeachCourseManagement } from "@/store/courseManagement";
 
 export default function Profile() {
   const path = useLocation().pathname;
@@ -112,7 +112,7 @@ export default function Profile() {
         opened={openModalCourseManagement}
         onClose={() => {
           setOpenModalCourseManagement(false);
-          dispatch(resetSeachCourseManagement());
+          dispatch(setSeachCourseManagement(""));
         }}
       />
       <ModalPLOManagement
@@ -130,24 +130,28 @@ export default function Profile() {
             color="#fafafa"
             className="flex hover:bg-[#efefef] flex-row  justify-end px-0 !h-10 items-center"
           >
-           { !isMobile && <div className="flex flex-col gap-1 pl-4 text-end mr-3 text-b4 acerSwift:max-macair133:text-b5">
-              <p className="font-semibold text-default">{getUserName(user)}</p>
-              <p
-                className="font-medium"
-                style={{ color: getRoleColor(user.role) }}
-              >
-                {![ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) &&
-                  user.role}
-                {[ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) &&
-                  (dashboard === ROLE.CURRICULUM_ADMIN ? (
-                    <span>Curr. Admin</span>
-                  ) : dashboard === ROLE.INSTRUCTOR ? (
-                    <span>Instructor</span>
-                  ) : (
-                    <span>Student</span>
-                  ))}
-              </p>
-            </div>}
+            {!isMobile && (
+              <div className="flex flex-col gap-1 pl-4 text-end mr-3 text-b4 acerSwift:max-macair133:text-b5">
+                <p className="font-semibold text-default">
+                  {getUserName(user)}
+                </p>
+                <p
+                  className="font-medium"
+                  style={{ color: getRoleColor(user.role) }}
+                >
+                  {![ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) &&
+                    user.role}
+                  {[ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) &&
+                    (dashboard === ROLE.CURRICULUM_ADMIN ? (
+                      <span>Curr. Admin</span>
+                    ) : dashboard === ROLE.INSTRUCTOR ? (
+                      <span>Instructor</span>
+                    ) : (
+                      <span>Student</span>
+                    ))}
+                </p>
+              </div>
+            )}
             {/* <Icon IconComponent={ProfileIcon} /> */}
             {getProfileIcon(user.role)}
           </Button>
@@ -248,16 +252,15 @@ export default function Profile() {
           </>
 
           {/* SUB MENU MANAGEMENT */}
-          {[ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role)  && (
+          {[ROLE.ADMIN, ROLE.CURRICULUM_ADMIN].includes(user.role) && (
             <Menu
               trigger="hover"
               openDelay={100}
               closeDelay={200}
               classNames={{ item: "text-[#3e3e3e] h-8 w-full" }}
-            
             >
               <Menu.Target>
-                <Menu.Item  disabled={isMobile}>
+                <Menu.Item disabled={isMobile}>
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex gap-2 items-center acerSwift:max-macair133:text-b5">
                       <Icon
@@ -360,22 +363,29 @@ export default function Profile() {
             </Menu>
           )}
 
-          {![ROLE.STUDENT, ROLE.TA].includes(user.role) && !isMobile && <Menu.Divider />}
- {    isMobile &&     <a
-            href={
-              [ROLE.STUDENT, ROLE.TA].includes(user.role)
-                ? "https://docs.google.com/forms/d/e/1FAIpQLSfstqyy0ijNp8u0JU0a7bBU_x0HGPhJ5V7flAD0ZymzD9cZqA/viewform"
-                : "https://forms.gle/HwxjaAZAJs99v8aDA"
-            }
-            target="_blank"
-          >
-            <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
-              <div className="flex items-center gap-2">
-                <Icon className="size-4  acerSwift:max-macair133:size- " IconComponent={IconFeedback} />
-                <span>Feedback</span>
-              </div>
-            </Menu.Item>
-          </a>}
+          {![ROLE.STUDENT, ROLE.TA].includes(user.role) && !isMobile && (
+            <Menu.Divider />
+          )}
+          {isMobile && (
+            <a
+              href={
+                [ROLE.STUDENT, ROLE.TA].includes(user.role)
+                  ? "https://docs.google.com/forms/d/e/1FAIpQLSfstqyy0ijNp8u0JU0a7bBU_x0HGPhJ5V7flAD0ZymzD9cZqA/viewform"
+                  : "https://forms.gle/HwxjaAZAJs99v8aDA"
+              }
+              target="_blank"
+            >
+              <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">
+                <div className="flex items-center gap-2">
+                  <Icon
+                    className="size-4  acerSwift:max-macair133:size- "
+                    IconComponent={IconFeedback}
+                  />
+                  <span>Feedback</span>
+                </div>
+              </Menu.Item>
+            </a>
+          )}
 
           <a href="https://forms.gle/haNFpme6KBzyejG18" target="_blank">
             <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">

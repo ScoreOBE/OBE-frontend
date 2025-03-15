@@ -20,16 +20,17 @@ import { cloneDeep, isEqual } from "lodash";
 import { useSearchParams } from "react-router-dom";
 
 type Props = {
-  setForm: React.Dispatch<React.SetStateAction<any>>;
+  setForm?: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function Part6TQF3({ setForm }: Props) {
+export default function Part6TQF3({ setForm = () => {} }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [params, setParams] = useSearchParams({});
-  const disabled =
-    parseInt(params.get("year") || "") !== academicYear.year &&
-    parseInt(params.get("semester") || "") !== academicYear.semester;
   const tqf3 = useAppSelector((state) => state.tqf3);
+  const disabled =
+    tqf3.courseSyllabus ||
+    (parseInt(params.get("year") || "") !== academicYear.year &&
+      parseInt(params.get("semester") || "") !== academicYear.semester);
   const dispatch = useAppDispatch();
   const [formEdit, setFormEdit] =
     useState<Partial<IModelTQF3Part6 & { index: number }>>();
@@ -307,9 +308,10 @@ export default function Part6TQF3({ setForm }: Props) {
                         <span className="text-red-500">*</span>
                       </span>
                       <span className="font-bold ">{topics[index].en}</span>
-                      <p className="error-text">
+                      <br />
+                      <span className="error-text">
                         {form.getInputProps(`data.${index}.detail`).error}
-                      </p>
+                      </span>
                     </p>
                   </div>
                   <Checkbox.Group

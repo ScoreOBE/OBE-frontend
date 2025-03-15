@@ -87,20 +87,13 @@ export default function AdminDashboardCLO() {
   }, [curriculumList]);
 
   useEffect(() => {
-    if (term) {
-      setPayload(initialPayload());
-      localStorage.removeItem("search");
-    }
-  }, [localStorage.getItem("search")]);
-
-  useEffect(() => {
     if (term.id && curriculumList?.length && selectCurriculum.code) {
       if (!curriculumPLO.curriculum?.includes(selectCurriculum.code)) {
         fetchPLO();
       }
       fetchCourse();
     }
-  }, [selectCurriculum, term]);
+  }, [selectCurriculum, term, courseList.search]);
 
   const fetchPLO = async () => {
     const resPloCol = await getOnePLO({ curriculum: selectCurriculum.code });
@@ -120,7 +113,7 @@ export default function AdminDashboardCLO() {
       semester: term.semester!,
       curriculum: dep,
       search: courseList.search,
-      hasMore: courseList.total >= payload?.limit,
+      hasMore: courseList.total ? courseList.total >= payload?.limit : true,
     };
   };
 
@@ -135,7 +128,7 @@ export default function AdminDashboardCLO() {
         dispatch(setAllCourseList(res));
         setPayload({
           ...payloadCourse,
-          hasMore: res.totalCount >= payload.limit,
+          hasMore: res.totalCount >= payloadCourse.limit!,
         });
       }
     }

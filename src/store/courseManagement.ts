@@ -9,8 +9,8 @@ export const courseManagementSlice = createSlice({
     courseManagements: IModelCourseManagement[];
   },
   reducers: {
-    resetSeachCourseManagement: (state) => {
-      return { ...state, search: "" };
+    setSeachCourseManagement: (state, action) => {
+      return { ...state, search: action.payload };
     },
     setCourseManagementList: (state, action) => {
       return {
@@ -83,7 +83,7 @@ export const courseManagementSlice = createSlice({
 });
 
 export const {
-  resetSeachCourseManagement,
+  setSeachCourseManagement,
   setCourseManagementList,
   addLoadMoreCourseManagement,
   editCourseManagement,

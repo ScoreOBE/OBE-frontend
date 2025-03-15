@@ -23,22 +23,23 @@ import { useSearchParams } from "react-router-dom";
 import { initialTqf3Part4 } from "@/helpers/functions/tqf3";
 
 type Props = {
-  setForm: React.Dispatch<React.SetStateAction<any>>;
-  openedAlert: boolean;
-  onCloseAlert: () => void;
+  setForm?: React.Dispatch<React.SetStateAction<any>>;
+  openedAlert?: boolean;
+  onCloseAlert?: () => void;
 };
 
 export default function Part4TQF3({
-  setForm,
-  openedAlert,
-  onCloseAlert,
+  setForm = () => {},
+  openedAlert = false,
+  onCloseAlert = () => {},
 }: Props) {
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [params, setParams] = useSearchParams({});
-  const disabled =
-    parseInt(params.get("year") || "") !== academicYear.year &&
-    parseInt(params.get("semester") || "") !== academicYear.semester;
   const tqf3 = useAppSelector((state) => state.tqf3);
+  const disabled =
+    tqf3.courseSyllabus ||
+    (parseInt(params.get("year") || "") !== academicYear.year &&
+      parseInt(params.get("semester") || "") !== academicYear.semester);
   const dispatch = useAppDispatch();
   const tableRefs = useRef<(HTMLInputElement | null)[][]>([]);
   const form = useForm({

@@ -13,13 +13,6 @@ type Props = {
 export function SearchInput({ onSearch, placeholder }: Props) {
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const dispatch = useAppDispatch();
-
-  // useEffect(() => {
-  //   setIsFocused(false);
-  //   setSearchValue("");
-  //   dispatch(resetSeachCourse());
-  // }, [location]);
 
   const reset = () => {
     setSearchValue("");

@@ -31,6 +31,7 @@ import { isEmpty, isEqual } from "lodash";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";
 import { resetDataTQF5, setSelectTqf5Topic } from "@/store/tqf5";
 import { IModelPLORequire } from "@/models/ModelCourseManagement";
+import { setCourseList } from "@/store/course";
 
 type Props = {
   onClickLeaveCourse: () => void;
@@ -60,6 +61,17 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
   const [tqf3Original, setTqf3Original] = useState<
     Partial<IModelTQF3> & { topic?: string; ploRequired?: IModelPLORequire[] }
   >();
+
+  useEffect(() => {
+    if (
+      !course &&
+      courseNo &&
+      path.includes(ROUTE_PATH.COURSE) &&
+      !path.includes(ROUTE_PATH.COURSE_SYLLABUS)
+    ) {
+      fetchOneCourse();
+    }
+  }, [courseNo]);
 
   useEffect(() => {
     if (course) {
@@ -105,6 +117,17 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
       navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`);
     }
   }, [course]);
+
+  const fetchOneCourse = async () => {
+    const res = await getOneCourse({
+      year: params.get("year"),
+      semester: params.get("semester"),
+      courseNo,
+    });
+    if (res) {
+      dispatch(setCourseList({ courses: [{ ...res }] }));
+    }
+  };
 
   const goToPage = (pathname: string, back?: boolean) => {
     navigate({
@@ -203,56 +226,46 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           openSidebar ? "" : "items-center"
         }`}
       >
-        <div
-          title={
-            openSidebar
-              ? undefined
-              : `Back to ${
-                  dashboard == ROLE.CURRICULUM_ADMIN
-                    ? "Curriculum Admin Dashboard"
-                    : "Your Course"
-                }`
-          }
-          className={`w-fit hover:underline cursor-pointer font-bold gap-2 text-b3 acerSwift:max-macair133:text-b4 flex ${
-            openSidebar
-              ? "justify-start -translate-x-[5px]"
-              : "p-1 justify-center items-center rounded-full text-white hover:bg-white hover:text-black"
+        <Tooltip
+          transitionProps={{ transition: "fade-right", duration: 200 }}
+          classNames={{
+            tooltip:
+              "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+          }}
+          label={`Back to ${
+            dashboard === ROLE.CURRICULUM_ADMIN
+              ? "Curriculum Admin Dashboard"
+              : "Your Course"
           }`}
-          onClick={() => fetchTqf3()}
+          position="right-end"
+          withArrow
+          arrowPosition="side"
+          arrowOffset={15}
+          arrowSize={10}
+          opacity={openSidebar ? 0 : 1}
         >
-          <Tooltip
-            transitionProps={{ transition: "fade-right", duration: 200 }}
-            classNames={{
-              tooltip:
-                "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-            }}
-            label={`Back to ${
-              dashboard === ROLE.CURRICULUM_ADMIN
-                ? "Curriculum Admin Dashboard"
-                : "Your Course"
+          <div
+            className={`w-fit hover:underline cursor-pointer font-bold gap-2 text-b3 acerSwift:max-macair133:text-b4 flex ${
+              openSidebar
+                ? "justify-start -translate-x-[5px]"
+                : "p-1 justify-center items-center rounded-full text-white hover:bg-white hover:text-black"
             }`}
-            position="right-end"
-            withArrow
-            arrowPosition="side"
-            arrowOffset={15}
-            arrowSize={10}
+            onClick={() => fetchTqf3()}
           >
-            <div>
-              <Icon
-                IconComponent={IconChevronLeft}
-                className={`${
-                  openSidebar ? "size-5 acerSwift:max-macair133:size-4" : ""
-                }`}
-              />
-            </div>
-          </Tooltip>
-          {openSidebar &&
-            `Back to ${
-              dashboard == ROLE.CURRICULUM_ADMIN
-                ? "Curriculum Admin Dashboard"
-                : "Your Course"
-            }`}
-        </div>
+            <Icon
+              IconComponent={IconChevronLeft}
+              className={`${
+                openSidebar ? "size-5 acerSwift:max-macair133:size-4" : ""
+              }`}
+            />
+            {openSidebar &&
+              `Back to ${
+                dashboard == ROLE.CURRICULUM_ADMIN
+                  ? "Curriculum Admin Dashboard"
+                  : "Your Course"
+              }`}
+          </div>
+        </Tooltip>
 
         <div className="flex flex-col w-full gap-5 ">
           {openSidebar && (
@@ -274,148 +287,145 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
             }`}
           >
             {dashboard == ROLE.INSTRUCTOR && (
-              <Button
-                onClick={() => goToPage(ROUTE_PATH.EVALUATION)}
-                leftSection={
-                  openSidebar && (
-                    <Icon
-                      IconComponent={IconTQF}
-                      className="mr-0.5 acerSwift:max-macair133:!size-4"
-                    />
-                  )
-                }
-                className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
-                  path.includes(ROUTE_PATH.EVALUATION)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                } ${
-                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
-                }`}
+              <Tooltip
+                transitionProps={{
+                  transition: "fade-right",
+                  duration: 200,
+                }}
+                classNames={{
+                  tooltip:
+                    " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Evaluations"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+                opacity={openSidebar ? 0 : 1}
               >
-                {openSidebar ? (
-                  "Evaluations"
-                ) : (
-                  <Tooltip
-                    transitionProps={{
-                      transition: "fade-right",
-                      duration: 200,
-                    }}
-                    classNames={{
-                      tooltip:
-                        " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                    }}
-                    label="Evaluations"
-                    position="right-end"
-                    withArrow
-                    arrowPosition="side"
-                    arrowOffset={15}
-                    arrowSize={10}
-                  >
-                    <div>
+                <Button
+                  onClick={() => goToPage(ROUTE_PATH.EVALUATION)}
+                  leftSection={
+                    openSidebar && (
                       <Icon
                         IconComponent={IconTQF}
-                        className="  acerSwift:max-macair133:!size-4"
+                        className="mr-0.5 acerSwift:max-macair133:!size-4"
                       />
-                    </div>
-                  </Tooltip>
-                )}
-              </Button>
+                    )
+                  }
+                  className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                    path.includes(ROUTE_PATH.EVALUATION)
+                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                  } ${
+                    openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                  }`}
+                >
+                  {openSidebar ? (
+                    "Evaluations"
+                  ) : (
+                    <Icon
+                      IconComponent={IconTQF}
+                      className="  acerSwift:max-macair133:!size-4"
+                    />
+                  )}
+                </Button>
+              </Tooltip>
             )}
             {dashboard == ROLE.INSTRUCTOR && (
-              <Button
-                onClick={() => goToPage(ROUTE_PATH.SECTION)}
-                leftSection={
-                  openSidebar && (
-                    <RxDashboard
-                      size={18}
-                      className="acerSwift:max-macair133:size-4"
-                    />
-                  )
-                }
-                className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
-                  path.includes(ROUTE_PATH.SECTION)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                } ${
-                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
-                }`}
+              <Tooltip
+                transitionProps={{
+                  transition: "fade-right",
+                  duration: 200,
+                }}
+                classNames={{
+                  tooltip:
+                    " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Sections"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+                opacity={openSidebar ? 0 : 1}
               >
-                {openSidebar ? (
-                  "Sections"
-                ) : (
-                  <Tooltip
-                    transitionProps={{
-                      transition: "fade-right",
-                      duration: 200,
-                    }}
-                    classNames={{
-                      tooltip:
-                        " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                    }}
-                    label="Sections"
-                    position="right-end"
-                    withArrow
-                    arrowPosition="side"
-                    arrowOffset={15}
-                    arrowSize={10}
-                  >
-                    <div>
+                <Button
+                  onClick={() => goToPage(ROUTE_PATH.SECTION)}
+                  leftSection={
+                    openSidebar && (
                       <RxDashboard
                         size={18}
                         className="acerSwift:max-macair133:size-4"
                       />
-                    </div>
-                  </Tooltip>
-                )}
-              </Button>
+                    )
+                  }
+                  className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                    path.includes(ROUTE_PATH.SECTION)
+                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                  } ${
+                    openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                  }`}
+                >
+                  {openSidebar ? (
+                    "Sections"
+                  ) : (
+                    <RxDashboard
+                      size={18}
+                      className="acerSwift:max-macair133:size-4"
+                    />
+                  )}
+                </Button>
+              </Tooltip>
             )}
             {dashboard == ROLE.INSTRUCTOR && (
-              <Button
-                onClick={() => goToPage(ROUTE_PATH.ROSTER)}
-                leftSection={
-                  openSidebar && (
-                    <Icon
-                      IconComponent={IconStudent}
-                      className="size-[19px] stroke-1 acerSwift:max-macair133:size-4"
-                    />
-                  )
-                }
-                className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
-                  path.includes(ROUTE_PATH.ROSTER)
-                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                } ${
-                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
-                }`}
+              <Tooltip
+                transitionProps={{
+                  transition: "fade-right",
+                  duration: 200,
+                }}
+                classNames={{
+                  tooltip:
+                    " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Roster"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+                opacity={openSidebar ? 0 : 1}
               >
-                {openSidebar ? (
-                  "Roster"
-                ) : (
-                  <Tooltip
-                    transitionProps={{
-                      transition: "fade-right",
-                      duration: 200,
-                    }}
-                    classNames={{
-                      tooltip:
-                        " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                    }}
-                    label="Roster"
-                    position="right-end"
-                    withArrow
-                    arrowPosition="side"
-                    arrowOffset={15}
-                    arrowSize={10}
-                  >
-                    <div>
+                <Button
+                  onClick={() => goToPage(ROUTE_PATH.ROSTER)}
+                  leftSection={
+                    openSidebar && (
                       <Icon
                         IconComponent={IconStudent}
-                        className="size-[19px] !stroke-[2px] acerSwift:max-macair133:size-4"
+                        className="size-[19px] stroke-1 acerSwift:max-macair133:size-4"
                       />
-                    </div>
-                  </Tooltip>
-                )}
-              </Button>
+                    )
+                  }
+                  className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                    path.includes(ROUTE_PATH.ROSTER)
+                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                  } ${
+                    openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                  }`}
+                >
+                  {openSidebar ? (
+                    "Roster"
+                  ) : (
+                    <Icon
+                      IconComponent={IconStudent}
+                      className="size-[19px] !stroke-[2px] acerSwift:max-macair133:size-4"
+                    />
+                  )}
+                </Button>
+              </Tooltip>
             )}
             {/* {dashboard == ROLE.INSTRUCTOR && (
               <Button
@@ -446,67 +456,66 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                   transitionProps={{ transition: "pop", duration: 0 }}
                 >
                   <Menu.Target>
-                    <Button
-                      onClick={() => {
-                        goToPage(ROUTE_PATH.TQF3);
+                    <Tooltip
+                      transitionProps={{
+                        transition: "fade-right",
+                        duration: 200,
                       }}
-                      leftSection={
-                        openSidebar && (
-                          <Icon
-                            IconComponent={IconTQF3}
-                            className="size-5 translate-x-[1px] acerSwift:max-macair133:size-4"
-                          />
-                        )
-                      }
-                      rightSection={
-                        course?.type == COURSE_TYPE.SEL_TOPIC.en &&
-                        uniqTopic.length > 1 && (
-                          <Icon
-                            IconComponent={IconChevronRight}
-                            className={`size-5 absolute flex ${
-                              openSidebar ? "right-2" : ""
-                            }`}
-                          />
-                        )
-                      }
-                      className={`!text-b3 acerSwift:max-macair133:!text-b4 flex justify-start items-center transition-colors duration-300 focus:border-none ${
-                        path.includes(ROUTE_PATH.TQF3)
-                          ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                          : "text-white bg-transparent hover:text-tertiary hover:bg-[#f0f0f0]"
-                      } ${
-                        openSidebar
-                          ? "!w-full acerSwift:max-macair133:!h-[30px]"
-                          : "!rounded-full !h-fit !w-fit p-2"
-                      }`}
+                      classNames={{
+                        tooltip:
+                          " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                      }}
+                      label="TQF 3"
+                      position="right-end"
+                      withArrow
+                      arrowPosition="side"
+                      arrowOffset={15}
+                      arrowSize={10}
+                      opacity={openSidebar ? 0 : 1}
                     >
-                      {openSidebar ? (
-                        "TQF 3"
-                      ) : (
-                        <Tooltip
-                          transitionProps={{
-                            transition: "fade-right",
-                            duration: 200,
-                          }}
-                          classNames={{
-                            tooltip:
-                              " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                          }}
-                          label="TQF 3"
-                          position="right-end"
-                          withArrow
-                          arrowPosition="side"
-                          arrowOffset={15}
-                          arrowSize={10}
-                        >
-                          <div>
+                      <Button
+                        onClick={() => {
+                          goToPage(ROUTE_PATH.TQF3);
+                        }}
+                        leftSection={
+                          openSidebar && (
                             <Icon
                               IconComponent={IconTQF3}
-                              className="size-5 translate-x-[2px] acerSwift:max-macair133:size-4"
+                              className="size-5 translate-x-[1px] acerSwift:max-macair133:size-4"
                             />
-                          </div>
-                        </Tooltip>
-                      )}
-                    </Button>
+                          )
+                        }
+                        rightSection={
+                          course?.type == COURSE_TYPE.SEL_TOPIC.en &&
+                          uniqTopic.length > 1 && (
+                            <Icon
+                              IconComponent={IconChevronRight}
+                              className={`size-5 absolute flex ${
+                                openSidebar ? "right-2" : ""
+                              }`}
+                            />
+                          )
+                        }
+                        className={`!text-b3 acerSwift:max-macair133:!text-b4 flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                          path.includes(ROUTE_PATH.TQF3)
+                            ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                            : "text-white bg-transparent hover:text-tertiary hover:bg-[#f0f0f0]"
+                        } ${
+                          openSidebar
+                            ? "!w-full acerSwift:max-macair133:!h-[30px]"
+                            : "!rounded-full !h-fit !w-fit p-2"
+                        }`}
+                      >
+                        {openSidebar ? (
+                          "TQF 3"
+                        ) : (
+                          <Icon
+                            IconComponent={IconTQF3}
+                            className="size-5 translate-x-[2px] acerSwift:max-macair133:size-4"
+                          />
+                        )}
+                      </Button>
+                    </Tooltip>
                   </Menu.Target>
                   {course?.type == COURSE_TYPE.SEL_TOPIC.en &&
                     uniqTopic.length > 1 && (
@@ -551,67 +560,66 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                   transitionProps={{ transition: "pop", duration: 0 }}
                 >
                   <Menu.Target>
-                    <Button
-                      onClick={() => {
-                        goToPage(ROUTE_PATH.TQF5);
+                    <Tooltip
+                      transitionProps={{
+                        transition: "fade-right",
+                        duration: 200,
                       }}
-                      leftSection={
-                        openSidebar && (
-                          <Icon
-                            IconComponent={IconTQF5}
-                            className="size-5 translate-x-[1px]  acerSwift:max-macair133:size-4"
-                          />
-                        )
-                      }
-                      rightSection={
-                        course?.type == COURSE_TYPE.SEL_TOPIC.en &&
-                        uniqTopic.length > 1 && (
-                          <Icon
-                            IconComponent={IconChevronRight}
-                            className={`size-5 absolute flex acerSwift:max-macair133:size-4 ${
-                              openSidebar ? "right-2" : ""
-                            }`}
-                          />
-                        )
-                      }
-                      className={`!text-b3 acerSwift:max-macair133:!text-b4 mb-1 flex justify-start items-center transition-colors duration-300 focus:border-none group ${
-                        path.includes(ROUTE_PATH.TQF5)
-                          ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                          : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                      } ${
-                        openSidebar
-                          ? "!w-full acerSwift:max-macair133:!h-[30px]"
-                          : "!rounded-full !h-fit !w-fit p-2"
-                      }`}
+                      classNames={{
+                        tooltip:
+                          " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                      }}
+                      label="TQF 5"
+                      position="right-end"
+                      withArrow
+                      arrowPosition="side"
+                      arrowOffset={15}
+                      arrowSize={10}
+                      opacity={openSidebar ? 0 : 1}
                     >
-                      {openSidebar ? (
-                        "TQF 5"
-                      ) : (
-                        <Tooltip
-                          transitionProps={{
-                            transition: "fade-right",
-                            duration: 200,
-                          }}
-                          classNames={{
-                            tooltip:
-                              " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                          }}
-                          label="TQF 5"
-                          position="right-end"
-                          withArrow
-                          arrowPosition="side"
-                          arrowOffset={15}
-                          arrowSize={10}
-                        >
-                          <div>
+                      <Button
+                        onClick={() => {
+                          goToPage(ROUTE_PATH.TQF5);
+                        }}
+                        leftSection={
+                          openSidebar && (
                             <Icon
                               IconComponent={IconTQF5}
-                              className="size-5 translate-x-[2px] acerSwift:max-macair133:size-4"
+                              className="size-5 translate-x-[1px]  acerSwift:max-macair133:size-4"
                             />
-                          </div>
-                        </Tooltip>
-                      )}
-                    </Button>
+                          )
+                        }
+                        rightSection={
+                          course?.type == COURSE_TYPE.SEL_TOPIC.en &&
+                          uniqTopic.length > 1 && (
+                            <Icon
+                              IconComponent={IconChevronRight}
+                              className={`size-5 absolute flex acerSwift:max-macair133:size-4 ${
+                                openSidebar ? "right-2" : ""
+                              }`}
+                            />
+                          )
+                        }
+                        className={`!text-b3 acerSwift:max-macair133:!text-b4 mb-1 flex justify-start items-center transition-colors duration-300 focus:border-none group ${
+                          path.includes(ROUTE_PATH.TQF5)
+                            ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                            : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                        } ${
+                          openSidebar
+                            ? "!w-full acerSwift:max-macair133:!h-[30px]"
+                            : "!rounded-full !h-fit !w-fit p-2"
+                        }`}
+                      >
+                        {openSidebar ? (
+                          "TQF 5"
+                        ) : (
+                          <Icon
+                            IconComponent={IconTQF5}
+                            className="size-5 translate-x-[2px] acerSwift:max-macair133:size-4"
+                          />
+                        )}
+                      </Button>
+                    </Tooltip>
                   </Menu.Target>
                   {course?.type == COURSE_TYPE.SEL_TOPIC.en &&
                     uniqTopic.length > 1 && (
@@ -707,54 +715,55 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                   Course Action
                 </p>
               )}
-             {!isMobile && <Button
-                onClick={onClickLeaveCourse}
-                leftSection={
-                  openSidebar && (
-                    <Icon
-                      IconComponent={IconLogout}
-                      className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
-                    />
-                  )
-                }
-                className={`text-[#ffffff] bg-transparent hover:bg-[#d55757] flex justify-start items-center transition-colors duration-300 focus:border-none ${
-                  openSidebar
-                    ? "!w-full !h-9 acerSwift:max-macair133:!h-8"
-                    : "!h-fit !w-fit p-2 !rounded-full"
-                }`}
-              >
-                {openSidebar ? (
-                  <div className="flex flex-col justify-start w-full items-start gap-[7px] ">
-                    <p className="font-medium text-b3 acerSwift:max-macair133:text-b4">
-                      Leave from Course
-                    </p>
-                  </div>
-                ) : (
-                  <Tooltip
-                    transitionProps={{
-                      transition: "fade-right",
-                      duration: 200,
-                    }}
-                    classNames={{
-                      tooltip:
-                        " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                    }}
-                    label="Leave Course"
-                    position="right-end"
-                    withArrow
-                    arrowPosition="side"
-                    arrowOffset={15}
-                    arrowSize={10}
+              {!isMobile && (
+                <Tooltip
+                  transitionProps={{
+                    transition: "fade-right",
+                    duration: 200,
+                  }}
+                  classNames={{
+                    tooltip:
+                      " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                  }}
+                  label="Leave Course"
+                  position="right-end"
+                  withArrow
+                  arrowPosition="side"
+                  arrowOffset={15}
+                  arrowSize={10}
+                  opacity={openSidebar ? 0 : 1}
+                >
+                  <Button
+                    onClick={onClickLeaveCourse}
+                    leftSection={
+                      openSidebar && (
+                        <Icon
+                          IconComponent={IconLogout}
+                          className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
+                        />
+                      )
+                    }
+                    className={`text-[#ffffff] bg-transparent hover:bg-[#d55757] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                      openSidebar
+                        ? "!w-full !h-9 acerSwift:max-macair133:!h-8"
+                        : "!h-fit !w-fit p-2 !rounded-full"
+                    }`}
                   >
-                    <div>
+                    {openSidebar ? (
+                      <div className="flex flex-col justify-start w-full items-start gap-[7px] ">
+                        <p className="font-medium text-b3 acerSwift:max-macair133:text-b4">
+                          Leave from Course
+                        </p>
+                      </div>
+                    ) : (
                       <Icon
                         IconComponent={IconLogout}
                         className="size-5 stroke-[2px] acerSwift:max-macair133:size-4"
                       />
-                    </div>
-                  </Tooltip>
-                )}
-              </Button>}
+                    )}
+                  </Button>
+                </Tooltip>
+              )}
             </div>
           )}
       </div>

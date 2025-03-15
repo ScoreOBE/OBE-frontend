@@ -7,7 +7,7 @@ import scoreobe from "@/assets/image/scoreOBElogobold.png";
 import { setShowSidebar, setShowNavbar } from "@/store/config";
 import LoadingOverlay from "@/components/Loading/LoadingOverlay";
 
-export default function CourseSyllabus() {
+export default function CourseSyllabusPDF() {
   const { tqf3 } = useParams();
   const [searchParams] = useSearchParams();
   const courseNo = searchParams.get("courseNo");

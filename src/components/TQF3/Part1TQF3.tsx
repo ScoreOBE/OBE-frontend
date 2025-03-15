@@ -23,16 +23,13 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { initialTqf3Part1 } from "@/helpers/functions/tqf3";
 
 type Props = {
-  setForm: React.Dispatch<React.SetStateAction<any>>;
+  setForm?: React.Dispatch<React.SetStateAction<any>>;
 };
 
-export default function Part1TQF3({ setForm }: Props) {
+export default function Part1TQF3({ setForm = () => {} }: Props) {
   const { courseNo } = useParams();
   const academicYear = useAppSelector((state) => state.academicYear[0]);
   const [params, setParams] = useSearchParams({});
-  const disabled =
-    parseInt(params.get("year") || "") !== academicYear.year &&
-    parseInt(params.get("semester") || "") !== academicYear.semester;
   const dashboard = useAppSelector((state) => state.config.dashboard);
   const courseType = useAppSelector(
     (state) =>
@@ -42,6 +39,10 @@ export default function Part1TQF3({ setForm }: Props) {
       ).courses.find((c) => c.courseNo == courseNo)?.type
   );
   const tqf3 = useAppSelector((state) => state.tqf3);
+  const disabled =
+    tqf3.courseSyllabus ||
+    (parseInt(params.get("year") || "") !== academicYear.year &&
+      parseInt(params.get("semester") || "") !== academicYear.semester);
   const dispatch = useAppDispatch();
   const [checked, setChecked] = useState<string[]>([]);
   const curriculum = [
@@ -130,7 +131,7 @@ export default function Part1TQF3({ setForm }: Props) {
   });
 
   useEffect(() => {
-    if (tqf3.part1) {
+    if (tqf3.part1 || (tqf3.part1 && tqf3.courseSyllabus)) {
       form.setValues(cloneDeep(tqf3.part1));
       if (tqf3.part1.teachingLocation.in !== undefined) {
         checked.push("in");
@@ -144,7 +145,7 @@ export default function Part1TQF3({ setForm }: Props) {
         curriculumForm.setFieldValue("department", splitCurriculum[3]);
       }
       localStorage.removeItem("setReuse");
-    } else {
+    } else if (!tqf3.courseSyllabus) {
       form.setValues({ ...initialTqf3Part1(tqf3) });
     }
   }, [localStorage.getItem("setReuse")]);
@@ -262,6 +263,7 @@ export default function Part1TQF3({ setForm }: Props) {
                   placeholder="Curriculum name e.g วิศวกรรมศาสตร์ (Engineer)"
                   {...curriculumForm.getInputProps("name")}
                   key={curriculumForm.key("name")}
+                  disabled={tqf3.courseSyllabus}
                 />
                 <TextInput
                   className="mt-3"
@@ -276,6 +278,7 @@ export default function Part1TQF3({ setForm }: Props) {
                   placeholder="Department name e.g คอมพิวเตอร์ (Computer)"
                   {...curriculumForm.getInputProps("department")}
                   key={curriculumForm.key("department")}
+                  disabled={tqf3.courseSyllabus}
                 />
               </div>
             )}
@@ -305,7 +308,7 @@ export default function Part1TQF3({ setForm }: Props) {
                 }}
                 label={`${key.th} (${key.en})`}
                 value={key.en}
-                disabled={key.en == courseType}
+                disabled={key.en == courseType || tqf3.courseSyllabus}
               />
             ))}
           </div>
@@ -407,7 +410,7 @@ export default function Part1TQF3({ setForm }: Props) {
                 {...form.getInputProps(`instructors.${index}`)}
                 value={form.getValues().instructors[index]}
               />
-              {index !== 0 && (
+              {index !== 0 && !disabled && (
                 <Button
                   className="text-center px-2 border-none hover:bg-[#ff4747]/10"
                   variant="outline"
@@ -422,21 +425,23 @@ export default function Part1TQF3({ setForm }: Props) {
               )}
             </div>
           ))}
-          <div className=" w-[440px] acerSwift:max-macair133:w-[370px] flex ">
-            <Button
-              className="text-center px-4 mt-2 "
-              variant="outline"
-              onClick={() => form.insertListItem("instructors", "")}
-            >
-              <div className="flex gap-2 acerSwift:max-macair133:!text-b4">
-                <Icon
-                  IconComponent={IconAdd}
-                  className="acerSwift:max-macair133:size-3"
-                />
-                Add
-              </div>
-            </Button>
-          </div>
+          {!disabled && (
+            <div className=" w-[440px] acerSwift:max-macair133:w-[370px] flex ">
+              <Button
+                className="text-center px-4 mt-2 "
+                variant="outline"
+                onClick={() => form.insertListItem("instructors", "")}
+              >
+                <div className="flex gap-2 acerSwift:max-macair133:!text-b4">
+                  <Icon
+                    IconComponent={IconAdd}
+                    className="acerSwift:max-macair133:size-3"
+                  />
+                  Add
+                </div>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-top grid grid-cols-[1fr_2fr] py-5">

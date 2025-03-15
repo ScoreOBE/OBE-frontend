@@ -48,7 +48,7 @@ import { setLoadingOverlay } from "@/store/loading";
 type Props = {
   opened: boolean;
   onClose: () => void;
-  fetchCourse: (year: number, semester: number) => void;
+  fetchCourse: () => void;
 };
 export default function ModalAddCourse({
   opened,
@@ -239,7 +239,7 @@ export default function ModalAddCourse({
         } has been successfully added to your course`
       );
       closeModal();
-      fetchCourse(academicYear.year, academicYear.semester);
+      fetchCourse();
     }
   };
 

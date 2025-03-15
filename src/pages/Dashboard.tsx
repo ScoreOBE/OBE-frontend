@@ -48,7 +48,7 @@ export default function Dashboard() {
   const academicYear = useAppSelector((state) => state.academicYear);
   const courseList = useAppSelector((state) => state.course);
   const dispatch = useAppDispatch();
-  const [payload, setPayload] = useState<any>();
+  const [payload, setPayload] = useState<any>({ page: 1, limit: 20 });
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
   const [delCourse, setDelCourse] = useState<Partial<IModelCourse>>();
@@ -86,33 +86,30 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (term.id) {
-      fetchCourse(term.year!, term.semester!);
+      fetchCourse();
     }
-  }, [term]);
+  }, [term, courseList.search]);
 
-  useEffect(() => {
-    if (term) {
-      setPayload({
-        ...new CourseRequestDTO(),
-        year: term.year,
-        semester: term.semester,
-        search: courseList.search,
-        hasMore: courseList.total >= payload?.limit,
-      });
-      localStorage.removeItem("search");
-    }
-  }, [localStorage.getItem("search")]);
+  const initialPayload = () => {
+    return {
+      ...new CourseRequestDTO(),
+      year: term.year!,
+      semester: term.semester!,
+      search: courseList.search,
+      hasMore: courseList.total ? courseList.total >= payload?.limit : true,
+    };
+  };
 
-  const fetchCourse = async (year: number, semester: number) => {
+  const fetchCourse = async () => {
     if (!user.termsOfService) return;
     dispatch(setLoading(true));
-    const payloadCourse = { ...new CourseRequestDTO(), year, semester };
+    const payloadCourse = initialPayload();
     const res = await getCourse(payloadCourse);
     if (res) {
       dispatch(setCourseList(res));
       setPayload({
         ...payloadCourse,
-        hasMore: res.totalCount >= payload.limit,
+        hasMore: res.totalCount >= payloadCourse.limit!,
       });
     }
     dispatch(setLoading(false));
@@ -207,7 +204,7 @@ export default function Dashboard() {
       <ModalAddCourse
         opened={openAddModal}
         onClose={() => setOpenAddModal(false)}
-        fetchCourse={(year, semester) => fetchCourse(year, semester)}
+        fetchCourse={() => fetchCourse()}
       />
       <ModalEditCourse
         opened={openModalEditCourse}

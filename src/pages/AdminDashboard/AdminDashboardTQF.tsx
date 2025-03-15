@@ -53,7 +53,7 @@ export default function AdminDashboardTQF() {
   const academicYear = useAppSelector((state) => state.academicYear);
   const courseList = useAppSelector((state) => state.allCourse);
   const dispatch = useAppDispatch();
-  const [payload, setPayload] = useState<any>({ page: 1, limit: 20 });
+  const [payload, setPayload] = useState<any>();
   const [params, setParams] = useSearchParams({});
   const [term, setTerm] = useState<Partial<IModelAcademicYear>>({});
   const [exportDataTQF3, setExportDataTQF3] = useState<
@@ -120,14 +120,7 @@ export default function AdminDashboardTQF() {
   useEffect(() => {
     if (term.id && curriculumList?.length && selectCurriculum.code)
       fetchCourse();
-  }, [curriculumList, selectCurriculum, term]);
-
-  useEffect(() => {
-    if (term) {
-      setPayload(initialPayload());
-      localStorage.removeItem("search");
-    }
-  }, [localStorage.getItem("search")]);
+  }, [curriculumList, selectCurriculum, term, courseList.search]);
 
   useEffect(() => {
     if (
@@ -152,7 +145,7 @@ export default function AdminDashboardTQF() {
       search: courseList.search,
       tqf3: tqf3Filters,
       tqf5: tqf5Filters,
-      hasMore: courseList.total >= payload?.limit,
+      hasMore: courseList.total ? courseList.total >= payload?.limit : true,
     };
   };
 
@@ -180,7 +173,7 @@ export default function AdminDashboardTQF() {
         dispatch(setAllCourseList(res));
         setPayload({
           ...payloadCourse,
-          hasMore: res.totalCount >= payload.limit,
+          hasMore: res.totalCount >= payloadCourse.limit!,
         });
       }
     }
@@ -296,7 +289,7 @@ export default function AdminDashboardTQF() {
                     {/* <CopyButton
                       value={`${window.location.origin.toString()}${
                         ROUTE_PATH.COURSE_SYLLABUS
-                      }/${sec.TQF3?.id}?courseNo=${course.courseNo}&year=${
+                      }/${ROUTE_PATH.PDF}/${sec.TQF3?.id}?courseNo=${course.courseNo}&year=${
                         course.year
                       }&semester=${course.semester}`}
                       timeout={2000}
@@ -486,7 +479,7 @@ export default function AdminDashboardTQF() {
                 {/* <CopyButton
                   value={`${window.location.origin.toString()}${
                     ROUTE_PATH.COURSE_SYLLABUS
-                  }/${course.TQF3?.id}?courseNo=${course.courseNo}&year=${
+                  }/${ROUTE_PATH.PDF}/${course.TQF3?.id}?courseNo=${course.courseNo}&year=${
                     course.year
                   }&semester=${course.semester}`}
                   timeout={2000}

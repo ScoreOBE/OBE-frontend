@@ -161,7 +161,7 @@ export default function StdChart() {
                       activeSection === i ? "active" : ""
                     }`}
                   >
-                    <a href={`#${item.name}`}>
+                    <a href={`#${item.name}`} onClick={() => setActiveSection(i)}>
                       <p
                         className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
                           activeSection === i

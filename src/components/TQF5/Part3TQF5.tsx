@@ -573,7 +573,7 @@ export default function Part3TQF5({ setForm, tqf3, assignments }: Props) {
                   activeSection === index ? "active" : ""
                 }`}
               >
-                <a href={`#${clo?.no}`}>
+                <a href={`#${clo?.no}`} onClick={() => setActiveSection(index)}>
                   <p
                     className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-[13px] ${
                       activeSection === index

@@ -6,16 +6,17 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const tqf3Slice = createSlice({
   name: "tqf3",
-  initialState: {} as IModelTQF3 &
+  initialState: { courseSyllabus: false } as IModelTQF3 &
     IModelCourse & {
       topic?: string;
       curriculum?: string[];
       ploRequired?: IModelPLORequire[];
       coursePLO?: Partial<IModelPLO>[];
+      courseSyllabus: boolean;
     },
   reducers: {
     resetDataTQF3: () => {
-      return {} as any;
+      return { courseSyllabus: false } as any;
     },
     setDataTQF3: (state, action) => {
       return {

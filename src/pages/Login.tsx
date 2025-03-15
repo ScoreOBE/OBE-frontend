@@ -55,7 +55,6 @@ import tqf5Pt1Img from "@/assets/image/tqf5pt1.png";
 import tqf5Pt2Img from "@/assets/image/tqf5pt2.png";
 import tqf5Pt3Img from "@/assets/image/tqf5pt3.png";
 import chartImg from "@/assets/image/chart.png";
-import tqf5ComingImg from "@/assets/image/tqf5Coming.png";
 import tqfOverviewImg from "@/assets/image/tqfOverview.png";
 import exportTQFImag from "@/assets/image/exportTQF.png";
 import courseManagementImg from "@/assets/image/courseManagement.png";
@@ -65,13 +64,14 @@ import addPLOColImg from "@/assets/image/addPLOCol.png";
 import ploMappingImg from "@/assets/image/ploMapping.png";
 import reuseTQF3Img from "@/assets/image/reuseTQF3.png";
 import { useScrollIntoView } from "@mantine/hooks";
+import { ROUTE_PATH } from "@/helpers/constants/route";
 
 export default function Login() {
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const buttonRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const { scrollIntoView, targetRef, scrollableRef } = useScrollIntoView<
     HTMLDivElement,
     HTMLDivElement
@@ -189,7 +189,10 @@ export default function Login() {
   const ButtonLogin = () => {
     return (
       <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
-        <Button className="z-[52] iphone:max-sm:mb-28  drop-shadow-2xl iphone:max-sm:!rounded-3xl iphone:max-sm:px-8 bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]">
+        <Button
+          // ref={buttonRef}
+          className="z-[52]  drop-shadow-2xl iphone:max-sm:!rounded-3xl iphone:max-sm:px-8 bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]"
+        >
           <img
             src={cmulogoLogin}
             alt="CMULogo"
@@ -198,6 +201,18 @@ export default function Login() {
           Sign in CMU account
         </Button>
       </a>
+    );
+  };
+
+  const ButtonCourseSyllabus = () => {
+    return (
+      <Button
+        ref={buttonRef}
+        onClick={() => navigate(ROUTE_PATH.COURSE_SYLLABUS)}
+        className="z-[52] drop-shadow-2xl iphone:max-sm:!rounded-3xl iphone:max-sm:px-8 bg-[#5768d5] hover:bg-[#4b5bc5] active:bg-[#4857ba] drop-shadow-lg sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]"
+      >
+        Course Syllabus
+      </Button>
     );
   };
 
@@ -239,9 +254,15 @@ export default function Login() {
             </>
           )}
         </p>
-       { !isMobile ? <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[14px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[40px] font-[500]">
-          Discover A Better Way to Do OBE Simplify Your Academic Journey
-        </p> : <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[16px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[40px] font-[500]"> Academic Supercharger for instructors and students</p>}
+        {!isMobile ? (
+          <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[14px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[40px] font-[500]">
+            Discover A Better Way to Do OBE Simplify Your Academic Journey
+          </p>
+        ) : (
+          <p className="mt-5 text-h2 text-[#4F4D55] iphone:max-sm:text-[16px] w-full  sm:flex justify-center items-center text-center sm:px-[118px] px-[40px] font-[500]">
+            Academic Supercharger for instructors and students
+          </p>
+        )}
         <div className=" mx-8">
           <Alert
             radius="md"
@@ -251,8 +272,6 @@ export default function Login() {
             classNames={{
               body: " flex justify-center",
             }}
-            
-      
             title={
               <div className="flex items-center gap-2 text-[12px]">
                 <Icon
@@ -260,17 +279,15 @@ export default function Login() {
                   className="acerSwift:max-macair133:size-5"
                 />
                 <p>
-                Some features may not be fully supported on smaller screens.
+                  Some features may not be fully supported on smaller screens.
                 </p>
               </div>
-            }>
-          </Alert>
+            }
+          ></Alert>
         </div>
-        <div
-          ref={buttonRef}
-          className="items-center mt-8 text-center w-full justify-center   "
-        >
+        <div className="items-center mt-8 iphone:max-sm:mb-12 text-center w-full justify-center flex sm:flex-row flex-col gap-5">
           {ButtonLogin()}
+          {ButtonCourseSyllabus()}
         </div>
         <div
           data-aos-duration="1000"
@@ -336,7 +353,6 @@ export default function Login() {
 
           <img src={loginImage} alt="loginImage" />
         </div>
-     
 
         {/* Upload, Publish grading efficiency. */}
         <div className="bg-[#fafafa] sm:flex   h-full w-full gap-16 ">
@@ -1150,7 +1166,7 @@ export default function Login() {
                     Chiang Mai University
                   </h3>
                   <ul className="space-y-2 sm:text-[14px] iphone:max-sm:text-[12px]">
-                    <a className="flex items-center flex-row ">
+                    <div className="flex items-center flex-row ">
                       <a href="https://www.cpe.eng.cmu.ac.th/" target="_blank">
                         Department of Computer Engineering
                       </a>
@@ -1158,8 +1174,8 @@ export default function Login() {
                         IconComponent={IconExternal}
                         className="size-4 ml-1"
                       />
-                    </a>
-                    <a className="flex items-center flex-row ">
+                    </div>
+                    <div className="flex items-center flex-row ">
                       <a href="https://eng.cmu.ac.th/" target="_blank">
                         Faculty of Engineering
                       </a>
@@ -1167,8 +1183,8 @@ export default function Login() {
                         IconComponent={IconExternal}
                         className="size-4 ml-1"
                       />
-                    </a>
-                    <a className="flex items-center flex-row ">
+                    </div>
+                    <div className="flex items-center flex-row ">
                       <a href="https://www.cmu.ac.th/" target="_blank">
                         Chiang Mai University
                       </a>
@@ -1176,7 +1192,7 @@ export default function Login() {
                         IconComponent={IconExternal}
                         className="size-4 ml-1"
                       />
-                    </a>
+                    </div>
                   </ul>
                 </div>
               </div>

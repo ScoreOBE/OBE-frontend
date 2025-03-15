@@ -191,7 +191,7 @@ export default function Histogram() {
                       activeSection === i ? "active" : ""
                     }`}
                   >
-                    <a href={`#${item.name}`}>
+                    <a href={`#${item.name}`} onClick={() => setActiveSection(i)}>
                       <p
                         className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-b3 acerSwift:max-macair133:!text-b4 ${
                           activeSection === i

@@ -177,7 +177,7 @@ export default function TQF5() {
         semester: params.get("semester"),
         courseNo,
       }),
-      getOneCourseManagement(courseNo!),
+      getOneCourseManagement({ courseNo }),
     ]);
     if (dashboard == ROLE.CURRICULUM_ADMIN && courseAdmin) {
       resCourse = courseAdmin;
