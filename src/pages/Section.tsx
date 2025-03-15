@@ -279,7 +279,7 @@ export default function Section() {
                           : setOpenModalUploadStudentList(true)
                       }
                     >
-                      Upload score
+                      Import score
                     </Button>
                   </div>
                 ) : (

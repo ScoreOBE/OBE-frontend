@@ -366,7 +366,7 @@ export default function Profile() {
           {![ROLE.STUDENT, ROLE.TA].includes(user.role) && !isMobile && (
             <Menu.Divider />
           )}
-          
+       
             <a
               href={
                 [ROLE.STUDENT, ROLE.TA].includes(user.role)
@@ -385,7 +385,7 @@ export default function Profile() {
                 </div>
               </Menu.Item>
             </a>
-    
+     
 
           <a href="https://forms.gle/haNFpme6KBzyejG18" target="_blank">
             <Menu.Item className="text-[#3e3e3e] h-8 w-w-full ">

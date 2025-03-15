@@ -129,8 +129,8 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
       if (res) {
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Upload Successful",
-          "Your  file has been uploaded."
+          "Import Successful",
+          "Your file has been imported."
         );
         const res = await getOneCourse({
           year: data.year,
@@ -149,7 +149,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
       showNotifications(
         NOTI_TYPE.ERROR,
         "Invalid File",
-        "The uploaded file does not contain a valid data. Please check the file and try again."
+        "The imported file does not contain a valid data. Please check the file and try again."
       );
     }
   };
@@ -187,7 +187,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               <div className="inline-flex gap-2 items-center font-semibold text-b1 text-secondary">
                 <Modal.CloseButton className="!m-0" />
                 <div className="flex flex-col">
-                  <p>Upload Score</p>
+                  <p>Import Score</p>
                   <p className=" text-[12px] text-noData">
                     {data.courseNo} {data.courseName}
                   </p>
@@ -231,7 +231,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     ScoreOBE+ Template{" "}
                   </span>
                   provided below to submit your scores. Please read the template
-                  guide carefully, then download the template to upload your
+                  guide carefully, then download the template to import your
                   score.
                 </p>
               </Alert>
@@ -255,7 +255,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                       <span style={{ fontFamily: "Lexand" }}>
                         Gradescope template{" "}
                       </span>
-                      for upload score
+                      for import score
                     </p>
                   </div>
                 }
@@ -267,11 +267,11 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     className=" h-[35px] ml-8  w-[156px] "
                   />
                   <p className="pl-8 text-default font-medium leading-[22px]">
-                    To upload scores from Gradescope to the ScoreOBE+, simply{" "}
+                    To import scores from Gradescope to the ScoreOBE+, simply{" "}
                     <span className="font-extrabold">
                       export the assignment scores
                     </span>{" "}
-                    as a CSV file from Gradescope. <br /> Then, upload the CSV
+                    as a CSV file from Gradescope. <br /> Then, import the CSV
                     file directly. This quick process ensures seamless
                     integration of your grading data.
                   </p>
@@ -291,7 +291,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   </div>
                   <div className="flex flex-col gap-1 text-b1 acerSwift:max-macair133:text-b2">
                     <p className="text-secondary font-semibold ">
-                      Use this template to upload score
+                      Use this template to import score
                     </p>
                     <p className="text-[#6a6a6a] text-b2 acerSwift:max-macair133:text-b3 font-[500]">
                       Accurate grades and TQF5 qualifications rely on <br />{" "}
@@ -346,7 +346,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 title={
                   <div className="flex items-center gap-2">
                     <Icon IconComponent={IconInfo2} />
-                    <p>Upload Existing Score</p>
+                    <p>Import Existing Score</p>
                   </div>
                 }
               >
@@ -354,7 +354,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   <span className="font-extrabold">
                     Existing score will be replaced
                   </span>
-                  , when you upload file with matching Section, Evaluation, and
+                  , when you import file with matching Section, Evaluation, and
                   Question
                 </p>
               </Alert>
@@ -418,7 +418,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                         }}
                         loading={loading}
                       >
-                        Upload
+                        Import
                       </Button>
                     </div>
                   </div>
@@ -447,7 +447,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                     </Dropzone.Idle>
                     <p className="font-semibold text-default">
                       <span className="text-secondary underline">
-                        Click to upload
+                        Click to import
                       </span>{" "}
                       or drag and drop
                     </p>
@@ -480,7 +480,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         closeOnEscape={false}
         centered
         size="39vw"
-        title="Upload Warning"
+        title="Import Warning"
         transitionProps={{ transition: "pop" }}
       >
         <div className="flex flex-col gap-4">
@@ -497,7 +497,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   <Icon IconComponent={IconExclamationCircle} />
                   <p>
                     The following Student is in the Course Roster but missing
-                    from the file you uploaded:
+                    from the file you imported:
                   </p>
                 </div>
               }
@@ -507,6 +507,8 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   {std.studentId} - {std.firstName} {std.lastName}{" "}
                 </div>
               ))}
+
+              <p className=" ml-8 mt-5 font-medium">""If you continue importing scores, these student scores will be excluded from the import.""</p>
             </Alert>
           </div>
 
@@ -515,7 +517,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               variant="subtle"
               onClick={() => setOpenModalWarningStudentList(false)}
             >
-              Continue Upload
+              Continue Import
             </Button>
             <Button
               onClick={() => {
@@ -523,7 +525,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 setOpenModalWarningStudentList(false);
               }}
             >
-              Discard Upload
+              Discard Import
             </Button>
           </div>
         </div>

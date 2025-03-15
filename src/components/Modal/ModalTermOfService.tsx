@@ -820,9 +820,9 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
               Modify, adapt, translate, or reverse engineer any part of the
               system, system framework, or any of its services, nor allow any
               third party to do so without our explicit authorization. <br />{" "}
-              (2) Upload or share any information that is obscene, pornographic,
+              (2) Import or share any information that is obscene, pornographic,
               defamatory, threatening, or intended to blackmail other members or
-              third parties. <br /> (3) Upload any content or information that
+              third parties. <br /> (3) Import any content or information that
               implies our endorsement or approval without prior permission or
               legitimate association with us. <br /> (4) Introduce any viruses,
               malware, or disruptive system, or take any action that could

@@ -446,7 +446,7 @@ export default function DashboardSidebar() {
                 >
                   <Button
                     onClick={() => stdGotoPage(ROUTE_PATH.COURSE_SYLLABUS)}
-                    leftSection={openSidebar && <Icon IconComponent={IconBooks} className=" stroke-[1.3px] size-[22px] -ml-[2px]" />}
+                    leftSection={openSidebar && <Icon IconComponent={IconBooks} className=" stroke-[1.3px] size-[22px] -ml-[3px]" />}
                     className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
                       path.includes(ROUTE_PATH.COURSE_SYLLABUS)
                         ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"

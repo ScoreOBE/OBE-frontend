@@ -135,7 +135,7 @@ export default function Login() {
       id: "1",
       topic: "Course Evaluation",
       description:
-        "Upload grade sheets for processing, or manually enter the number of students who received each grade and complete the corresponding criteria.",
+        "Import grade sheets for processing, or manually enter the number of students who received each grade and complete the corresponding criteria.",
       img: tqf5Pt1Img,
     },
     {
@@ -371,14 +371,14 @@ export default function Login() {
                 <div className="absolute ml-[40%]  max-macair133:ml-0 left-0 right-0 bottom-40 z-0 max-macair133:h-16 h-20 bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00] blur-[160px] max-macair133:blur-[200px]"></div>
                 <p className="drop-shadow-xl pb-2 cursor-default leading-[56px] iphone:max-sm:!leading-[36px] max-macair133:text-center text-[#000000] text-[48px] ">
                   <span className="font-[700] iphone:max-sm:!text-[24px] iphone:max-sm:!leading-[12px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00] drop-shadow-xl pb-2 cursor-default sm:leading-[56px] sm:text-[48px] max-macair133:text-[44px]">
-                    Upload, Publish
+                    Import, Publish
                     <br /> grading efficiency.
                   </span>{" "}
                   <br />
                 </p>
                 <div className="flex max-macair133:flex-col max-macair133:gap-24 items-center justify-between">
                   <p className="mt-5 iphone:max-sm:text-[14px] text-[19px] max-macair133:text-[17px] max-macair133:text-center text-black font-[600]">
-                    Effortless score uploads, instant analytics, <br /> and
+                    Effortless score import, instant analytics, <br /> and
                     visual insights! Elevate your grading today! <br />
                   </p>
                   <div className="flex iphone:max-sm:flex-col justify-end gap-10 iphone:max-sm:gap-2 iphone:max-sm:ml-0 ml-12 -mt-14">
@@ -1068,7 +1068,7 @@ export default function Login() {
                   <p className="font-[600] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                     Effortless -{"  "}
                     <span className="text-default">
-                      Easily upload, publish, and manage course scores in just a
+                      Easily import, publish, and manage course scores in just a
                       few clicks, saving you time and effort.
                     </span>
                   </p>

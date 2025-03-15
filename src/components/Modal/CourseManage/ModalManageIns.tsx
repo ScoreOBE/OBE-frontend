@@ -348,7 +348,7 @@ export default function ModalManageIns({
                 className="mb-4"
                 title={
                   <p className="acerSwift:max-macair133:!text-b3">
-                    Co-instructors can only access and upload scores for your
+                    Co-instructors can only access and import scores for your
                     selected sections and manage the course TQF documents.
                   </p>
                 }

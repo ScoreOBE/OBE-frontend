@@ -214,7 +214,7 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                 onClick={() => setOpenModalUploadGrade(true)}
                 className="acerSwift:max-macair133:!text-b5"
               >
-                Upload Grade Sheet
+                Import Grade Sheet
               </Button>
               <Button
                 leftSection={

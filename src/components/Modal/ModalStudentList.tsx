@@ -104,8 +104,8 @@ export default function ModalStudentList({
         reset();
         showNotifications(
           NOTI_TYPE.SUCCESS,
-          "Upload Successful",
-          "Your file has been uploaded."
+          "Import Successful",
+          "Your file has been imported."
         );
         onClose();
         if (onNext) {
@@ -117,7 +117,7 @@ export default function ModalStudentList({
       showNotifications(
         NOTI_TYPE.ERROR,
         "Invalid File",
-        "The uploaded file does not contain a valid student list. Please check the file and try again."
+        "The imported file does not contain a valid student list. Please check the file and try again."
       );
     }
   };
@@ -180,7 +180,7 @@ export default function ModalStudentList({
                 No Student List found
                 <br />
                 <p className="mt-1  text-[#777777] font-medium text-b2" font->
-                  Student list will show when you upload score first.
+                  Student list will show when you import first.
                 </p>
               </p>
               <div className="h-full  w-[18vw] justify-center flex flex-col">
@@ -439,7 +439,7 @@ export default function ModalStudentList({
                     />
                     <p className="pl-5 text-default leading-6 font-medium  acerSwift:max-macair133:text-b4">
                       <span className="font-bold">
-                        Before uploading scores for course {data?.courseNo}{" "}
+                        Before importing scores for course {data?.courseNo}{" "}
                         {data?.courseName}
                       </span>
                       , <br /> you must import the student list (.xlsx) in this
@@ -490,7 +490,7 @@ export default function ModalStudentList({
                   ) : null
                 }
               >
-                {type == "import" ? "Import & Next to Upload" : "Import"}
+                {type == "import" ? "Next" : "Import"}
               </Button>
             </div>
           </div>
@@ -504,8 +504,8 @@ export default function ModalStudentList({
         withCloseButton={false}
         closeOnEscape={false}
         centered
-        size="39vw"
-        title="Upload Warning"
+        size="42vw"
+        title="Import Warning"
         transitionProps={{ transition: "pop" }}
       >
         <div className="flex flex-col gap-4">
@@ -520,17 +520,16 @@ export default function ModalStudentList({
               title={
                 <div className="flex items-center  gap-2">
                   <Icon IconComponent={IconExclamationCircle} />
-                  <p>The following section does not exist in this course</p>
+                  <p>The following section in Student list file that you import does not exist for this course</p>
                 </div>
               }
             >
-              <p className="ml-8 font-semibold">
+              <p className="ml-8 mt-3 font-semibold">
                 Section: {warningSection.join(", ")}
               </p>
+              <p className="ml-8 mt-6 text-default font-medium">If you continue import, students in these sections will be excluded from the import.</p>
             </Alert>
-            <p className="text-b2 mt-2">
-              Not have any sections can import student list
-            </p>
+
           </div>
 
           <div className="flex gap-2 mt-2 justify-end w-full">
@@ -539,7 +538,7 @@ export default function ModalStudentList({
               onClick={() => setOpenModalWarningStudentList(false)}
               disabled={result?.sections.length == 0}
             >
-              Continue Upload
+              Continue Import
             </Button>
             <Button
               onClick={() => {
@@ -547,7 +546,7 @@ export default function ModalStudentList({
                 setOpenModalWarningStudentList(false);
               }}
             >
-              Discard Upload
+              Discard Import
             </Button>
           </div>
         </div>
@@ -561,11 +560,11 @@ export default function ModalStudentList({
         closeOnEscape={false}
         centered
         size="39vw"
-        title="Select Section to Upload"
+        title="Import Student List"
         transitionProps={{ transition: "pop" }}
       >
         <div className="flex flex-col gap-2 mb-6">
-          <p className="text-b2 acerSwift:max-macair133:text-b3 mb-1 font-semibold text-secondary">
+          <p className="text-b2 acerSwift:max-macair133:text-b3 mb-1 font-semibold text-default">
             Select section to import student list
           </p>
           {/* Chip */}
@@ -623,7 +622,7 @@ export default function ModalStudentList({
             Cancel
           </Button>
           <Button onClick={uploadList} disabled={!selectSection.length}>
-            Upload
+            Import
           </Button>
         </div>
       </Modal>

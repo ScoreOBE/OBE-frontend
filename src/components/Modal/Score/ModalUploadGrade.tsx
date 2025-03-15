@@ -137,7 +137,7 @@ export default function ModalUploadGrade({
   return (
     <>
       <Modal
-        title="Upload Grade"
+        title="import Grade"
         size="55vw"
         opened={opened}
         onClose={onClose}
@@ -228,7 +228,7 @@ export default function ModalUploadGrade({
                       }}
                       loading={loading}
                     >
-                      Upload
+                      Import
                     </Button>
                   </div>
                 </div>
@@ -257,7 +257,7 @@ export default function ModalUploadGrade({
                   </Dropzone.Idle>
                   <p className="font-semibold text-default">
                     <span className="text-secondary underline">
-                      Click to upload
+                      Click to import
                     </span>{" "}
                     or drag and drop
                   </p>

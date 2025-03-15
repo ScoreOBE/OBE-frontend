@@ -336,7 +336,7 @@ export default function TQF5() {
       showNotifications(
         NOTI_TYPE.ERROR,
         "Method Changed Failed",
-        `This course must have upload score for use ${
+        `This course must have import score for use ${
           method || selectedMethod
         } method.`
       );

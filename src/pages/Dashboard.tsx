@@ -212,7 +212,7 @@ export default function Dashboard() {
         value={editCourse}
       />
       <Modal
-        title="Upload score"
+        title="Import score"
         transitionProps={{ transition: "pop" }}
         centered
         classNames={{
@@ -226,7 +226,7 @@ export default function Dashboard() {
       >
         <div className="flex flex-col gap-8">
           <Select
-            label="Select course to upload"
+            label="Select course to import"
             placeholder="Course"
             size="sm"
             searchable
@@ -406,7 +406,7 @@ export default function Dashboard() {
                     setOpenModalSelectCourse(true);
                   }}
                 >
-                  Upload score
+                  Import score
                 </Button>
               </div>
             )}

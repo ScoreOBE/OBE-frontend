@@ -677,7 +677,7 @@ export default function ModalAddSection({
                 }}
                 title={
                   <p className="acerSwift:max-macair133:text-b3 acerSwift:max-macair133:mt-0.5">
-                    Co-instructors can only access and upload scores for your
+                    Co-instructors can only access and import scores for your
                     selected sections and manage the course TQF documents.
                   </p>
                 }

@@ -825,7 +825,7 @@ export default function ModalAddCourse({
                 }}
                 title={
                   <p>
-                    Co-instructors can only access and upload scores for your
+                    Co-instructors can only access and import scores for your
                     selected sections and manage the course TQF documents.
                   </p>
                 }

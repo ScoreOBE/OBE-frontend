@@ -287,7 +287,7 @@ export default function AllAssignment() {
                 : setOpenModalUploadStudentList(true)
             }
           >
-            Upload score
+            Import score
           </Button>
         )}
       </>

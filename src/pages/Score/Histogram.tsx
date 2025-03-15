@@ -213,7 +213,7 @@ export default function Histogram() {
                   No Evaluation
                 </p>{" "}
                 <p className=" text-[#333333] -mt-1 text-b2 break-words font-medium leading-relaxed">
-                  The histogram will show when the evaluation is uploaded.
+                  The histogram will show when the evaluation is imported.
                 </p>{" "}
               </div>
               {!isMobile && (
