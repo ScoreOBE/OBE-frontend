@@ -527,12 +527,16 @@ export default function ModalStudentList({
                 Section: {warningSection.join(", ")}
               </p>
             </Alert>
+            <p className="text-b2 mt-2">
+              Not have any sections can import student list
+            </p>
           </div>
 
           <div className="flex gap-2 mt-2 justify-end w-full">
             <Button
               variant="subtle"
               onClick={() => setOpenModalWarningStudentList(false)}
+              disabled={result?.sections.length == 0}
             >
               Continue Upload
             </Button>

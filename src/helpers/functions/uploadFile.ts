@@ -152,10 +152,13 @@ const studentList = (
       const canUpload = course.sections?.find(
         (sec) => sec.sectionNo == sectionNo
       );
-      if (!canUpload && !warningSection.includes(getSectionNo(sectionNo))) {
-        warningSection.push(getSectionNo(sectionNo));
+      if (!canUpload) {
+        if (!warningSection.includes(getSectionNo(sectionNo))) {
+          warningSection.push(getSectionNo(sectionNo));
+        }
         return;
       }
+
       const existSec = result.find((sec) => sec.sectionNo == sectionNo);
       const student = {
         studentId: row[studentId],
