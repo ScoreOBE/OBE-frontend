@@ -392,7 +392,7 @@ export default function Profile() {
               <div className="flex items-center gap-2 acerSwift:max-macair133:text-b5">
                 <Icon
                   IconComponent={IconExclamationCircle}
-                  className="size-4  acerSwift:max-macair133:size- stroke-[1.5px] stroke-[#3e3e3e]"
+                  className="size-4  acerSwift:max-macair133:size- stroke-[1.5px] -ml-[1px] mr-[1px] stroke-[#3e3e3e]"
                 />
                 <span>Report issue</span>
               </div>
