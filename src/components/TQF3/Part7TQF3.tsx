@@ -471,7 +471,8 @@ export default function Part7TQF3({
         ) : (
           <div className="flex flex-col w-full text-[15px] acerSwift:max-macair133:text-b3 text-default">
             <div className="text-secondary acerSwift:max-macair133:!text-b2 font-semibold whitespace-break-spaces pb-4">
-              {PartTopicTQF3.part7}
+              Part 6 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้ <br/>
+              Curriculum Mapping
             </div>
             <Tabs
               value={selectCurriculum}

@@ -398,22 +398,22 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col w-full text-[15px] acerSwift:max-macair133:text-b3 text-default border-b-2">
-            <div className=" text-secondary acerSwift:max-macair133:!text-b2 font-semibold whitespace-break-spaces border-b pb-4">
+          <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
+            <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
               {PartTopicTQF3.part3}
             </div>
-            <div className="flex text-secondary gap-2 items-start w-full border-b-[1px] border-[#e6e6e6] py-4 flex-col">
-              <div className="flex flex-row gap-1 text-[15px] acerSwift:max-macair133:!text-b3">
-                <p className="font-semibold">การกำหนดเกรด</p>
-                <p className="font-bold">(Grading)</p>
+            <div className=" border-b-[1px] border-[#e6e6e6] px-10 justify-between h-fit w-full grid grid-cols-2 py-5">
+            <div className="flex text-gray-800 flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
+                <p className="font-medium">การกำหนดเกรด</p>
+                <p className="font-semibold">Grading</p>
               </div>
-              <div className="flex flex-col text-default font-medium text-b3 acerSwift:max-macair133:text-b4">
+              <div className="flex flex-col text-default gap-2 font-medium text-b2 acerSwift:max-macair133:text-b4">
                 <p>{tqf3.part3?.gradingPolicy}</p>
               </div>
             </div>
-            <div className="flex flex-col w-full gap-4 py-4">
-              <div className="flex text-secondary items-center w-full justify-between">
-                <p className="font-bold">Evaluation Items</p>
+            <div className="flex flex-col w-full px-10 gap-4 pt-5 pb-2">
+              <div className="flex text-gray-800 items-center w-full justify-between">
+                <p className="font-semibold">Evaluation Items</p>
               </div>
               <div
                 className="overflow-auto w-full flex flex-col rounded-md border border-secondary"

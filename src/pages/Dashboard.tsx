@@ -6,7 +6,7 @@ import Icon from "@/components/Icon";
 import IconAdd from "@/assets/icons/plus.svg?react";
 import IconDots from "@/assets/icons/dots.svg?react";
 import IconTrash from "@/assets/icons/trash.svg?react";
-import IconInfo2 from "@/assets/icons/Info2.svg?react";
+
 import IconUpload from "@/assets/icons/upload.svg?react";
 import IconPencilMinus from "@/assets/icons/pencilMinus.svg?react";
 import IconArrowRight from "@/assets/icons/arrowRight.svg?react";

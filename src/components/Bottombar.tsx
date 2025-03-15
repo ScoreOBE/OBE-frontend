@@ -67,10 +67,7 @@ export default function Bottombar({
           <></>
         ) : tqf3.courseSyllabus ? (
           <>
-            <p className="font-semibold text-b2">
-              {courseNo} - {courseSyllabus?.courseName}
-              {topic ? ` (${topic})` : ""} ({semester}/{year})
-            </p>
+            Data from ScoreOBE+
           </>
         ) : (
           <>

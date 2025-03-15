@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useParams, useSearchParams } from "react-router-dom";
 import { setLoading } from "@/store/loading";
+import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { setShowSidebar, setShowNavbar, setDashboard } from "@/store/config";
 import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
 import { setDataTQF3, setPloTQF3, setSelectTqf3Topic } from "@/store/tqf3";
@@ -12,6 +13,7 @@ import Icon from "@/components/Icon";
 import React from "react";
 import { getPLOs } from "@/services/plo/plo.service";
 import Part1TQF3 from "@/components/TQF3/Part1TQF3";
+import scoreobe from "@/assets/image/scoreOBElogobold.png";
 import Part2TQF3 from "@/components/TQF3/Part2TQF3";
 import Part3TQF3 from "@/components/TQF3/Part3TQF3";
 import Part4TQF3 from "@/components/TQF3/Part4TQF3";
@@ -20,6 +22,14 @@ import Part6TQF3 from "@/components/TQF3/Part6TQF3";
 import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import Loading from "@/components/Loading/Loading";
 import Bottombar from "@/components/Bottombar";
+import { getCourse } from "@/services/course/course.service";
+import { CourseRequestDTO } from "@/services/course/dto/course.dto";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
+import { setCourseSyllabus } from "@/store/courseSyllabus";
+import { isMobile } from "@/helpers/functions/function";
+import IconExternal from "@/assets/icons/externalLink.svg?react";
+import ModalTermsOfService from "@/components/Modal/ModalTermOfService";
+import { Alert } from "@mantine/core";
 
 export default function CourseSyllabus() {
   const { courseNo } = useParams();
@@ -35,16 +45,10 @@ export default function CourseSyllabus() {
     )
   );
   const tqf3 = useAppSelector((state) => state.tqf3);
+  const [openModalTOS, setOpenModalTOS] = useState(false);
+  const currentYear = new Date().getFullYear();
   const dispatch = useAppDispatch();
-  const section = [
-    "Part 1",
-    "Part 2",
-    "Part 3",
-    "Part 4",
-    "Part 5",
-    "Part 6",
-    "Part 7",
-  ];
+  const section = ["Part 1", "Part 2", "Part 3", "Part 4", "Part 5", "Part 6"];
   const partSections = [
     {
       value: section[0],
@@ -66,12 +70,9 @@ export default function CourseSyllabus() {
       value: section[4],
       compo: <Part5TQF3 />,
     },
+
     {
       value: section[5],
-      compo: <Part6TQF3 />,
-    },
-    {
-      value: section[6],
       compo: <Part7TQF3 />,
     },
   ];
@@ -81,9 +82,25 @@ export default function CourseSyllabus() {
   const [activeSection, setActiveSection] = useState<number>(0);
 
   useEffect(() => {
+    dispatch(setShowSidebar(false));
     dispatch(setShowNavbar(true));
-    dispatch(setShowSidebar(!!user.id));
-  }, [user]);
+    if (!course && year! && semester!) fetchCourse();
+  }, [year, semester]);
+
+  const fetchCourse = async () => {
+    dispatch(setLoading(true));
+    const res = await getCourse({
+      ...new CourseRequestDTO(),
+      year: Number(year),
+      semester: Number(semester),
+      courseSyllabus: true,
+      ignorePage: true,
+    });
+    if (res) {
+      dispatch(setCourseSyllabus(res));
+    }
+    dispatch(setLoading(false));
+  };
 
   useEffect(() => {
     if (tqf3.id) {
@@ -223,14 +240,48 @@ export default function CourseSyllabus() {
 
   return (
     <>
+      <ModalTermsOfService
+        opened={openModalTOS}
+        onClose={() => setOpenModalTOS(false)}
+      />
       <div className="flex overflow-hidden justify-center items-center w-full h-full">
         {loading || !tqf3.id ? (
           <Loading />
         ) : (
           <div className="flex overflow-hidden w-full  h-full gap-3 py-2">
-      
-            <div className="flex flex-col h-full max-w-[87%] pt-5 px-10 bg gap-4 overflow-auto">
-            <p className=" font-semibold text-[18px] text-secondary mb-3">{courseNo}-{course?.courseName}</p>
+            <div className="flex flex-col h-full max-w-[87%] py-5 px-10 bg gap-4 overflow-auto">
+              <div>
+              <Alert
+                radius="md"
+                variant="light"
+                classNames={{
+                  body: " flex justify-center",
+                }}
+                color="orange"
+                title={
+                  <div className="flex items-center gap-2">
+                    <Icon IconComponent={IconInfo2} className="mr-2" />
+                    <p>
+                      Course Specifications Feature is currently in its
+                      development (beta) phase. You may encounter unstable
+                      features or bugs.
+                    </p>
+                  </div>
+                }
+              ></Alert>
+              </div>
+              <div className=" flex gap-2 ">
+                {" "}
+                <p className="!font-[600] text-[20px]">
+                  <span className=" !drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                    ScoreOBE+{" "}
+                  </span>
+                </p>
+              </div>
+              <p className=" font-semibold text-[18px] text-secondary mb-3 -mt-2">
+                {courseNo} - {course?.courseName}
+              </p>
+
               {section.map((name, i) => (
                 <div
                   id={name}
@@ -241,6 +292,116 @@ export default function CourseSyllabus() {
                   {partSections[i].compo}
                 </div>
               ))}
+              <footer className="w-full border-t  text-default  pt-10 ">
+                <div className=" px-8 sm:px-4  mx-auto">
+                  <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
+                    {/* Logo and main info */}
+                    <div className="md:col-span-5 space-y-4">
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={scoreobe}
+                          alt="cpeLogo"
+                          className=" sm:h-[28px] h-[22px] "
+                        />
+                        <h2 className="font-[600] sm:text-[18px] text-[14px] text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4]  via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                          ScoreOBE+
+                        </h2>
+                      </div>
+                      <p className="sm:text-sm iphone:max-sm:text-[12px]  max-w-md">
+                        Advanced scoring and assessment software designed to
+                        streamline educational evaluation processes.
+                      </p>
+                    </div>
+
+                    <div className="md:col-span-3 space-y-4">
+                      <h3 className="text-sm font-semibold text-secondary ">
+                        Quick Links
+                      </h3>
+                      <ul className="space-y-2 sm:text-[14px] iphone:max-sm:text-[12px]">
+                        <li>
+                          <a href="#">Documentation</a>
+                        </li>
+
+                        <li>
+                          <a href="https://www.cmu.ac.th/th/privacy">
+                            Privacy Policy
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            className=" cursor-pointer"
+                            onClick={() => setOpenModalTOS(true)}
+                          >
+                            Terms of Service
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+
+                    {/* University links */}
+                    <div className="md:col-span-4 space-y-4">
+                      <h3 className="text-sm font-semibold text-secondary ">
+                        Chiang Mai University
+                      </h3>
+                      <ul className="space-y-2 sm:text-[14px] iphone:max-sm:text-[12px]">
+                        <div className="flex items-center flex-row ">
+                          <a
+                            href="https://www.cpe.eng.cmu.ac.th/"
+                            target="_blank"
+                          >
+                            Department of Computer Engineering
+                          </a>
+                          <Icon
+                            IconComponent={IconExternal}
+                            className="size-4 ml-1"
+                          />
+                        </div>
+                        <div className="flex items-center flex-row ">
+                          <a href="https://eng.cmu.ac.th/" target="_blank">
+                            Faculty of Engineering
+                          </a>
+                          <Icon
+                            IconComponent={IconExternal}
+                            className="size-4 ml-1"
+                          />
+                        </div>
+                        <div className="flex items-center flex-row ">
+                          <a href="https://www.cmu.ac.th/" target="_blank">
+                            Chiang Mai University
+                          </a>
+                          <Icon
+                            IconComponent={IconExternal}
+                            className="size-4 ml-1"
+                          />
+                        </div>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="my-8 border-[1px]  "></div>
+
+                  <div className="flex flex-col md:flex-row justify-between md:items-center items-start  gap-4">
+                    <p className="sm:text-xs iphone:max-sm:text-[10px] text-slate-600  text-center md:text-left">
+                      &copy; {currentYear} ScoreOBE+ Software. All rights
+                      reserved.
+                    </p>
+                    <div className="flex flex-col md:items-end md:text-end gap-1">
+                      <img
+                        src={cpeLogoRed}
+                        alt="cpeLogo"
+                        className="sm:h-[36px] mb-2 h-[30px] sm:w-[125px] w-[105px] iphone:max-sm:-ml-[4px] "
+                      />
+                      <p className="sm:text-xs iphone:max-sm:text-[10px] text-slate-600 ">
+                        Designed and developed by the Department of Computer
+                        Engineering,
+                      </p>
+                      <p className="sm:text-xs iphone:max-sm:text-[10px] text-slate-600 ">
+                        Faculty of Engineering, Chiang Mai University
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </footer>
             </div>
 
             <div className="max-w-[12%] mt-3 flex flex-col gap-[7px]">
@@ -270,7 +431,6 @@ export default function CourseSyllabus() {
           </div>
         )}
       </div>
-      {/* <Bottombar /> */}
     </>
   );
 }

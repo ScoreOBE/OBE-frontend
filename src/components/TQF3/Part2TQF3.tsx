@@ -650,7 +650,7 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
           </div>
         ) : (
           <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 rounded-xl mt-2 acerSwift:max-macair133:text-b3 text-default ">
-            <div className=" text-secondary acerSwift:max-macair133:!text-b2 font-semibold whitespace-break-spaces border-b pb-4">
+           <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
               {PartTopicTQF3.part2}
             </div>
             <div className=" border-b-[1px] border-[#e6e6e6] px-10 justify-between h-fit w-full grid grid-cols-2 py-5">

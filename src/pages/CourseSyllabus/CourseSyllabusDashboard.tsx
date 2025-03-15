@@ -18,6 +18,8 @@ import {
   setCourseSyllabus,
 } from "@/store/courseSyllabus";
 import { setSelectTqf3Topic } from "@/store/tqf3";
+import IconInfo2 from "@/assets/icons/Info2.svg?react";
+import { Alert } from "@mantine/core";
 
 export default function CourseSyllabusDashboard() {
   const navigate = useNavigate();
@@ -121,6 +123,24 @@ export default function CourseSyllabusDashboard() {
             <Loading />
           ) : courseSyllabus.total ? (
             <div className="flex flex-col h-full w-full overflow-hidden">
+               <Alert
+                radius="md"
+                variant="light"
+                classNames={{
+                  body: " flex justify-center",
+                }}
+                className=" mt-5  mx-6 "
+                color="orange"
+                title={
+                  <div className="flex items-center gap-2">
+                    <Icon IconComponent={IconInfo2} className="mr-2" />
+                    <p>
+                      Course Specifications Feature is currently in its development (beta) phase.
+                      You may encounter unstable features or bugs. 
+                    </p>
+                  </div>
+                }
+              ></Alert>
               <InfiniteScroll
                 dataLength={courseSyllabus.courses.length}
                 next={onShowMore}

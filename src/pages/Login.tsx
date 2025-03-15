@@ -1211,7 +1211,7 @@ export default function Login() {
                   <img
                     src={cpeLogoRed}
                     alt="cpeLogo"
-                    className="sm:h-[36px] mb-2 h-[30px] w-[105px] iphone:max-sm:-ml-[4px] "
+                    className="sm:h-[36px] mb-2 h-[30px] sm:w-[125px] w-[105px] iphone:max-sm:-ml-[4px] "
                   />
                   <p className="sm:text-xs iphone:max-sm:text-[10px] text-slate-600 ">
                     Designed and developed by the Department of Computer
