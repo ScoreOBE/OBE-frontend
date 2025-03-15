@@ -192,7 +192,7 @@ export default function Sidebar() {
       transition={{ duration: 0.3, type: "keyframes", stiffness: 100 }}
       className={`${
         openSidebar
-          ? "w-[260px] acerSwift:max-macair133:w-[225px] p-5"
+          ? "w-[270px] acerSwift:max-macair133:w-[225px] p-5"
           : "w-[70px] acerSwift:max-macair133:w-[90px] py-5 px-3"
       } border-r-[1px] heig h-screen flex sidebar-linear-gradient transition-all duration-300 ease-in-out`}
     >
