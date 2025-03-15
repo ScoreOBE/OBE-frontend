@@ -177,6 +177,7 @@ export default function OneAssignment() {
 
   const filteredData = useMemo(() => {
     if (!allStudent.length) return [];
+    setStartEndPage((prev) => ({ ...prev, start: 1, end: limit, page: 1 }));
     return allStudent.filter((item) =>
       parseInt(filter) >= 0
         ? getSectionNo(item.sectionNo).includes(filter) ||

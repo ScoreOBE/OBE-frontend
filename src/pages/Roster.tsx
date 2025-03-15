@@ -120,6 +120,7 @@ export default function Roster() {
 
   const filteredData = useMemo(() => {
     if (!course?.sections) return [];
+    setStartEndPage((prev) => ({ ...prev, start: 1, end: limit, page: 1 }));
     return course.sections.flatMap(
       (sec) =>
         sec.students

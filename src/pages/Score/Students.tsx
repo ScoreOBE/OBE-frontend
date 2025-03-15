@@ -186,6 +186,7 @@ export default function Students() {
 
   const filteredData = useMemo(() => {
     if (!students.length) return [];
+    setStartEndPage((prev) => ({ ...prev, start: 1, end: limit, page: 1 }));
     return students?.filter(({ student }) =>
       parseInt(filter)
         ? student.studentId?.toString().includes(filter)
