@@ -59,12 +59,6 @@ export default function Navbar() {
     const year = params.get("year") ? params.get("year")?.slice(-2) : "";
     switch (path) {
       case ROUTE_PATH.COURSE_SYLLABUS:
-        if (courseNo && courseSyllabus)
-          return `${courseNo} ${courseSyllabus.courseName}${
-            courseSyllabus.sections[0].topic
-              ? ` (${courseSyllabus.sections[0].topic})`
-              : ""
-          } (${semester}/${year})`;
         return "Course Specifications";
       case ROUTE_PATH.INS_DASHBOARD:
         return "Your Courses";

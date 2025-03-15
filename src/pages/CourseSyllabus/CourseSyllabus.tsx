@@ -81,9 +81,9 @@ export default function CourseSyllabus() {
   const [activeSection, setActiveSection] = useState<number>(0);
 
   useEffect(() => {
-    dispatch(setShowSidebar(true));
     dispatch(setShowNavbar(true));
-  }, []);
+    dispatch(setShowSidebar(!!user.id));
+  }, [user]);
 
   useEffect(() => {
     if (tqf3.id) {
