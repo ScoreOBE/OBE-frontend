@@ -192,7 +192,7 @@ export default function Sidebar() {
       transition={{ duration: 0.3, type: "keyframes", stiffness: 100 }}
       className={`${
         openSidebar
-          ? "w-[255px] acerSwift:max-macair133:w-[225px] p-5"
+          ? "w-[260px] acerSwift:max-macair133:w-[225px] p-5"
           : "w-[70px] acerSwift:max-macair133:w-[90px] py-5 px-3"
       } border-r-[1px] heig h-screen flex sidebar-linear-gradient transition-all duration-300 ease-in-out`}
     >
@@ -215,7 +215,7 @@ export default function Sidebar() {
                 className="h-[28px] cursor-pointer w-[28px] acerSwift:max-macair133:h-[27px] acerSwift:max-macair133:w-[27px]"
               />
               {openSidebar && (
-                <p className="text-white text-[19px] acerSwift:max-macair133:text-[19px] font-semibold">
+                <p className="text-white text-[18px] acerSwift:max-macair133:text-[18px] font-semibold">
                   ScoreOBE <span className="text-[#FFCD1B]"> +</span>
                 </p>
               )}
