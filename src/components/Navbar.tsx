@@ -29,6 +29,9 @@ export default function Navbar() {
     (state) => state.config.showButtonLogin
   );
   const [params, setParams] = useSearchParams();
+  const courseSyllabus = useAppSelector((state) =>
+    state.courseSyllabus.courses.find((course) => course.courseNo == courseNo)
+  );
   const tqf3 = useAppSelector((state) => state.tqf3);
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
   const tqf5Topic = useAppSelector((state) => state.tqf5.topic);
@@ -56,6 +59,12 @@ export default function Navbar() {
     const year = params.get("year") ? params.get("year")?.slice(-2) : "";
     switch (path) {
       case ROUTE_PATH.COURSE_SYLLABUS:
+        if (courseNo && courseSyllabus)
+          return `${courseNo} ${courseSyllabus.courseName}${
+            courseSyllabus.sections[0].topic
+              ? ` (${courseSyllabus.sections[0].topic})`
+              : ""
+          } (${semester}/${year})`;
         return "Course Specifications";
       case ROUTE_PATH.INS_DASHBOARD:
         return "Your Courses";
@@ -266,21 +275,18 @@ export default function Navbar() {
         )}
         {![ROUTE_PATH.LOGIN].includes(location) && (
           <div className="flex gap-2 items-center">
-        
             {user.id ? (
               <Profile />
             ) : !isMobile ? (
               <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
-                <Button variant='light'>
-                  Sign in CMU account
-                </Button>
+                <Button variant="light">Sign in CMU account</Button>
               </a>
             ) : (
               <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
-              <Button variant='transparent' className=" !px-0" >
-                <Icon IconComponent={IconLogin} />
-              </Button>
-            </a>
+                <Button variant="transparent" className=" !px-0">
+                  <Icon IconComponent={IconLogin} />
+                </Button>
+              </a>
             )}
           </div>
         )}

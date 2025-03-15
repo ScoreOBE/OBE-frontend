@@ -17,6 +17,8 @@ import { ROUTE_PATH } from "@/helpers/constants/route";
 import { getUserName } from "@/helpers/functions/function";
 import { resetDataTQF3 } from "@/store/tqf3";
 import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
+import { IModelCourse } from "@/models/ModelCourse";
+import { COURSE_TYPE } from "@/helpers/constants/enum";
 
 export default function StdCourseSidebar() {
   const { courseNo, name } = useParams();
@@ -55,7 +57,7 @@ export default function StdCourseSidebar() {
         openSidebar ? "" : "items-center"
       }`}
     >
-      {!name && (
+      {!name && !path.includes(ROUTE_PATH.COURSE_SYLLABUS) && (
         <Tooltip
           transitionProps={{ transition: "fade-right", duration: 200 }}
           classNames={{
@@ -107,6 +109,12 @@ export default function StdCourseSidebar() {
             <p className="text-[13px] font-semibold text-pretty max-w-full">
               {course?.courseName}
             </p>
+            {path.includes(ROUTE_PATH.COURSE_SYLLABUS) &&
+              course?.type == COURSE_TYPE.SEL_TOPIC.en && (
+                <p className="text-[13px] font-semibold text-pretty max-w-full">
+                  ({(course as IModelCourse)?.sections[0].topic ?? ""})
+                </p>
+              )}
           </div>
         )}
         {!name && path.includes(ROUTE_PATH.STD_DASHBOARD) && (

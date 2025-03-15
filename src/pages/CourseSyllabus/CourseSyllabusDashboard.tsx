@@ -106,17 +106,16 @@ export default function CourseSyllabusDashboard() {
   };
 
   const goToCourse = (courseNo: string, topic: string | undefined) => {
-    const pathname = `${ROUTE_PATH.COURSE_SYLLABUS}/${courseNo}`;
-    navigate({
-      pathname,
-      search: "?" + params.toString() + (topic ? `&topic=${topic}` : ""),
-    });
+    window.open(
+      `${window.location.origin.toString()}${
+        ROUTE_PATH.COURSE_SYLLABUS
+      }/${courseNo}?${params.toString()}${topic ? `&topic=${topic}` : ""}`
+    );
   };
 
   return (
     <>
       <div className="flex flex-col h-full w-full overflow-hidden">
-      
         <div className="flex h-full w-full overflow-hidden">
           {loading ? (
             <Loading />
@@ -154,10 +153,10 @@ export default function CourseSyllabusDashboard() {
                         )}
                       </div>
                       <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
-                    <p className="p-2.5 text-secondary font-[700] text-[12px]">
-                    {item.type}
-                    </p>
-                  </div>
+                        <p className="p-2.5 text-secondary font-[700] text-[12px]">
+                          {item.type}
+                        </p>
+                      </div>
                     </div>
                   );
                 })}

@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { cloneDeep, isEqual } from "lodash";
 import { useSearchParams } from "react-router-dom";
+import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
 
 type Props = {
   setForm?: React.Dispatch<React.SetStateAction<any>>;
@@ -182,6 +183,7 @@ export default function Part6TQF3({ setForm = () => {} }: Props) {
   });
 
   useEffect(() => {
+    if (tqf3.courseSyllabus) return;
     if (tqf3.part6) {
       form.setValues(cloneDeep(tqf3.part6));
     }
@@ -260,177 +262,259 @@ export default function Part6TQF3({ setForm = () => {} }: Props) {
       />
 
       {tqf3.part5?.updatedAt ? (
-        <div className="flex flex-col w-full  max-h-full gap-4">
-          {/* Topic */}
-          <div className="flex text-secondary items-center -mt-1 w-full justify-between">
-            <p className="text-[15px] acerSwift:max-macair133:!text-b3 font-semibold">
-              หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
-              <span className=" font-bold">(Topic)</span>
-            </p>
-            {!disabled && (
-              <Button
-                onClick={() => setOpenModalSelectTopic(true)}
-                onMouseOver={() => setOpenedTooltip(true)}
-                onMouseLeave={() => setOpenedTooltip(false)}
-                className="text-center px-4"
-              >
-                <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
-                  <Icon IconComponent={IconAdd} />
-                  Add Topic
-                </div>
-              </Button>
-            )}
-            {/* </Tooltip> */}
-          </div>
-          <div
-            style={{
-              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-            }}
-            className=" rounded-md border-[1px] overflow-y-auto mb-4 border-secondary"
-          >
-            {/* Table */}
-            {form.getValues().data.map((topic, index) => {
-              const option = optionsTopicPart6.find(
-                (e: any) => e.th === topic.topic
-              )!;
-              return topics[index] ? (
-                <div
-                  key={index}
-                  className="w-full h-full max-h-full flex flex-col"
+        !tqf3.courseSyllabus ? (
+          <div className="flex flex-col w-full  max-h-full gap-4">
+            {/* Topic */}
+            <div className="flex text-secondary items-center -mt-1 w-full justify-between">
+              <p className="text-[15px] acerSwift:max-macair133:!text-b3 font-semibold">
+                หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
+                <span className=" font-bold">(Topic)</span>
+              </p>
+              {!disabled && (
+                <Button
+                  onClick={() => setOpenModalSelectTopic(true)}
+                  onMouseOver={() => setOpenedTooltip(true)}
+                  onMouseLeave={() => setOpenedTooltip(false)}
+                  className="text-center px-4"
                 >
-                  <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader">
-                    <p className="flex flex-col font-medium text-[28px] acerSwift:max-macair133:text-[24px]">
-                      {index + 1}.
-                    </p>
-                    <p className="flex flex-col gap-1 text-b2 acerSwift:max-macair133:!text-b3">
-                      <span className="font-semibold">
-                        {topics[index].th}{" "}
-                        <span className="text-red-500">*</span>
-                      </span>
-                      <span className="font-bold ">{topics[index].en}</span>
-                      <br />
-                      <span className="error-text">
-                        {form.getInputProps(`data.${index}.detail`).error}
-                      </span>
-                    </p>
+                  <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
+                    <Icon IconComponent={IconAdd} />
+                    Add Topic
                   </div>
-                  <Checkbox.Group
-                    {...form.getInputProps(`data.${index}.detail`)}
-                    className="items-center"
-                    error={<></>}
-                    onChange={(event) => {
-                      if (event.includes("ไม่มี (None)")) {
-                        form.setFieldValue(`data.${index}.detail`, [
-                          "ไม่มี (None)",
-                        ]);
-                        form.setFieldValue(`data.${index}.other`, "");
-                      } else {
-                        form.setFieldValue(`data.${index}.detail`, event);
-                      }
-                    }}
+                </Button>
+              )}
+              {/* </Tooltip> */}
+            </div>
+            <div
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
+              className=" rounded-md border-[1px] overflow-y-auto mb-4 border-secondary"
+            >
+              {/* Table */}
+              {form.getValues().data.map((topic, index) => {
+                const option = optionsTopicPart6.find(
+                  (e: any) => e.th === topic.topic
+                )!;
+                return topics[index] ? (
+                  <div
+                    key={index}
+                    className="w-full h-full max-h-full flex flex-col"
                   >
-                    <Group className="flex items-center flex-col gap-0">
-                      {topics[index].list?.map((item, checkIndex) => (
-                        <div
-                          key={checkIndex}
-                          className="border-b-[1px] last:border-none py-4 px-6 w-full"
-                        >
-                          <Checkbox
-                            classNames={{
-                              label:
-                                "font-medium text-b3 acerSwift:max-macair133:!text-b4 leading-6 text-[#333333]",
-                              body: "flex flex-row gap-2 items-center ",
-                            }}
-                            className=" whitespace-break-spaces items-center"
-                            size="sm"
-                            label={item.label}
-                            value={item.label}
-                            disabled={
-                              disabled ||
-                              (form
+                    <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader">
+                      <p className="flex flex-col font-medium text-[28px] acerSwift:max-macair133:text-[24px]">
+                        {index + 1}.
+                      </p>
+                      <p className="flex flex-col gap-1 text-b2 acerSwift:max-macair133:!text-b3">
+                        <span className="font-semibold">
+                          {topics[index].th}{" "}
+                          <span className="text-red-500">*</span>
+                        </span>
+                        <span className="font-bold ">{topics[index].en}</span>
+                        <br />
+                        <span className="error-text">
+                          {form.getInputProps(`data.${index}.detail`).error}
+                        </span>
+                      </p>
+                    </div>
+                    <Checkbox.Group
+                      {...form.getInputProps(`data.${index}.detail`)}
+                      className="items-center"
+                      error={<></>}
+                      onChange={(event) => {
+                        if (event.includes("ไม่มี (None)")) {
+                          form.setFieldValue(`data.${index}.detail`, [
+                            "ไม่มี (None)",
+                          ]);
+                          form.setFieldValue(`data.${index}.other`, "");
+                        } else {
+                          form.setFieldValue(`data.${index}.detail`, event);
+                        }
+                      }}
+                    >
+                      <Group className="flex items-center flex-col gap-0">
+                        {topics[index].list?.map((item, checkIndex) => (
+                          <div
+                            key={checkIndex}
+                            className="border-b-[1px] last:border-none py-4 px-6 w-full"
+                          >
+                            <Checkbox
+                              classNames={{
+                                label:
+                                  "font-medium text-b3 acerSwift:max-macair133:!text-b4 leading-6 text-[#333333]",
+                                body: "flex flex-row gap-2 items-center ",
+                              }}
+                              className=" whitespace-break-spaces items-center"
+                              size="sm"
+                              label={item.label}
+                              value={item.label}
+                              disabled={
+                                disabled ||
+                                (form
+                                  .getValues()
+                                  .data[index]?.detail.includes(
+                                    "ไม่มี (None)"
+                                  ) &&
+                                  item.label !== "ไม่มี (None)")
+                              }
+                            ></Checkbox>
+                            {item.label == "อื่นๆ (Other)" &&
+                              form
                                 .getValues()
-                                .data[index]?.detail.includes("ไม่มี (None)") &&
-                                item.label !== "ไม่มี (None)")
-                            }
-                          ></Checkbox>
-                          {item.label == "อื่นๆ (Other)" &&
-                            form
-                              .getValues()
-                              .data[index]?.detail.includes(item.label) && (
-                              <Textarea
-                                className="mt-2 pl-10"
-                                placeholder="(Required)"
-                                classNames={{
-                                  input: `text-b3 acerSwift:max-macair133:!text-b4 text-[#333333] h-[100px] ${
-                                    disabled && "!cursor-default"
-                                  }`,
-                                }}
-                                disabled={disabled}
-                                {...form.getInputProps(`data.${index}.other`)}
-                              />
-                            )}
-                        </div>
-                      ))}
-                    </Group>
-                  </Checkbox.Group>
-                </div>
-              ) : (
-                <div
-                  key={index}
-                  className="  w-full h-full max-h-full  flex flex-col "
-                >
-                  <div className="w-full sticky top-0 z-10 text-[#228BE6] flex flex-row gap-4 items-center pl-6 py-4 bg-[#E8F3FC]">
-                    <p className="flex flex-col font-medium text-[28px] acerSwift:max-macair133:text-[24px]">
-                      {index + 1}.
-                    </p>
-                    <p className="flex flex-col gap-1 text-b2 acerSwift:max-macair133:!text-b3">
-                      <span className="font-semibold">{option.th}</span>
-                      <span className="font-bold ">{option.en}</span>
-                    </p>
+                                .data[index]?.detail.includes(item.label) && (
+                                <Textarea
+                                  className="mt-2 pl-10"
+                                  placeholder="(Required)"
+                                  classNames={{
+                                    input: `text-b3 acerSwift:max-macair133:!text-b4 text-[#333333] h-[100px] ${
+                                      disabled && "!cursor-default"
+                                    }`,
+                                  }}
+                                  disabled={disabled}
+                                  {...form.getInputProps(`data.${index}.other`)}
+                                />
+                              )}
+                          </div>
+                        ))}
+                      </Group>
+                    </Checkbox.Group>
                   </div>
-                  <div className="text-default border-b-[1px] last:border-none py-4 px-6  w-full text-b3 acerSwift:max-macair133:!text-b4 font-medium">
-                    <div className="flex justify-between items-center whitespace-pre-wrap gap-8">
-                      <div className="pl-10">{topic.detail}</div>
-                      {!disabled && (
-                        <div className="flex justify-start gap-4 items-center">
-                          <div
-                            className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
-                            onClick={() => {
-                              setDeleteIndex(index),
-                                setFormEdit({
-                                  ...form.getValues().data[index],
-                                  index: index,
+                ) : (
+                  <div
+                    key={index}
+                    className="  w-full h-full max-h-full  flex flex-col "
+                  >
+                    <div className="w-full sticky top-0 z-10 text-[#228BE6] flex flex-row gap-4 items-center pl-6 py-4 bg-[#E8F3FC]">
+                      <p className="flex flex-col font-medium text-[28px] acerSwift:max-macair133:text-[24px]">
+                        {index + 1}.
+                      </p>
+                      <p className="flex flex-col gap-1 text-b2 acerSwift:max-macair133:!text-b3">
+                        <span className="font-semibold">{option.th}</span>
+                        <span className="font-bold ">{option.en}</span>
+                      </p>
+                    </div>
+                    <div className="text-default border-b-[1px] last:border-none py-4 px-6  w-full text-b3 acerSwift:max-macair133:!text-b4 font-medium">
+                      <div className="flex justify-between items-center whitespace-pre-wrap gap-8">
+                        <div className="pl-10">{topic.detail}</div>
+                        {!disabled && (
+                          <div className="flex justify-start gap-4 items-center">
+                            <div
+                              className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                              onClick={() => {
+                                setDeleteIndex(index),
+                                  setFormEdit({
+                                    ...form.getValues().data[index],
+                                    index: index,
+                                  });
+                                setOpenModalEditSelectTopic(true);
+                              }}
+                            >
+                              <Icon
+                                IconComponent={IconEdit}
+                                className="size-4 stroke-2"
+                              />
+                            </div>
+                            <div
+                              className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                              onClick={() => {
+                                setDeleteIndex(index);
+                                setDeleteOption({
+                                  th: option.th,
+                                  en: option.en,
                                 });
-                              setOpenModalEditSelectTopic(true);
-                            }}
-                          >
-                            <Icon
-                              IconComponent={IconEdit}
-                              className="size-4 stroke-2"
-                            />
+                                setOpenPopupDelAddTopic(true);
+                              }}
+                            >
+                              <Icon
+                                IconComponent={IconTrash}
+                                className="size-4 stroke-2"
+                              />
+                            </div>
                           </div>
-                          <div
-                            className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
-                            onClick={() => {
-                              setDeleteIndex(index);
-                              setDeleteOption({ th: option.th, en: option.en });
-                              setOpenPopupDelAddTopic(true);
-                            }}
-                          >
-                            <Icon
-                              IconComponent={IconTrash}
-                              className="size-4 stroke-2"
-                            />
-                          </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex flex-col w-full text-[15px] acerSwift:max-macair133:text-b3 text-default border-b-2">
+            <div className=" text-secondary acerSwift:max-macair133:!text-b2 font-semibold whitespace-break-spaces border-b pb-4">
+              {PartTopicTQF3.part6}
+            </div>
+            <div className="flex flex-col w-full gap-4 py-4">
+              <div className="flex text-secondary items-center w-full justify-between">
+                <p className="text-[15px] acerSwift:max-macair133:!text-b3 font-semibold">
+                  หัวข้อการประเมินกระบวนวิชาและกระบวนการปรับปรุง{" "}
+                  <span className="font-bold">(Topic)</span>
+                </p>
+              </div>
+              <div
+                className=" rounded-md border-[1px] overflow-y-auto mb-4 border-secondary"
+                style={{
+                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                }}
+              >
+                {tqf3.part6?.data.map((topic, index) => {
+                  const option = optionsTopicPart6.find(
+                    (e: any) => e.th === topic.topic
+                  )!;
+                  return topics[index] ? (
+                    <div
+                      key={index}
+                      className="w-full h-full max-h-full flex flex-col"
+                    >
+                      <div className="w-full sticky top-0 z-10 text-secondary flex flex-row gap-4 items-center pl-6 py-4 bg-bgTableHeader">
+                        <p className="flex flex-col font-medium text-[28px] acerSwift:max-macair133:text-[24px]">
+                          {index + 1}.
+                        </p>
+                        <p className="flex flex-col gap-1 text-b2 acerSwift:max-macair133:!text-b3">
+                          <span className="font-semibold">
+                            {topics[index].th}
+                          </span>
+                          <span className="font-bold ">{topics[index].en}</span>
+                          <br />
+                        </p>
+                      </div>
+                      <div className="flex flex-col text-default w-full font-medium text-b3 acerSwift:max-macair133:!text-b4 leading-6">
+                        {topic.detail.map((detail) => (
+                          <div key={detail} className="py-4 px-6 border-b last:border-none">
+                            <p>{detail}</p>
+                            {detail == "อื่นๆ (Other)" && (
+                              <p className="pl-4">{topic.other}</p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      key={index}
+                      className="  w-full h-full max-h-full  flex flex-col "
+                    >
+                      <div className="w-full sticky top-0 z-10 text-[#228BE6] flex flex-row gap-4 items-center pl-6 py-4 bg-[#E8F3FC]">
+                        <p className="flex flex-col font-medium text-[28px] acerSwift:max-macair133:text-[24px]">
+                          {index + 1}.
+                        </p>
+                        <p className="flex flex-col gap-1 text-b2 acerSwift:max-macair133:!text-b3">
+                          <span className="font-semibold">{option.th}</span>
+                          <span className="font-bold ">{option.en}</span>
+                        </p>
+                      </div>
+                      <div className="text-default border-b-[1px] last:border-none py-4 px-6 w-full text-b3 acerSwift:max-macair133:!text-b4 font-medium">
+                        <div className="flex justify-between items-center whitespace-pre-wrap gap-8">
+                          <p>{topic.detail}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )
       ) : (
         <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
           <div className="flex justify-center  h-full items-start gap-2 flex-col">

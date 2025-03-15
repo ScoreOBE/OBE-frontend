@@ -19,6 +19,7 @@ import MainPopup from "../Popup/MainPopup";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useSearchParams } from "react-router-dom";
+import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
 
 type Props = {
   setForm?: React.Dispatch<React.SetStateAction<any>>;
@@ -77,6 +78,7 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
   });
 
   useEffect(() => {
+    if (tqf3.courseSyllabus) return;
     if (tqf3.part2) {
       form.setValues(cloneDeep(tqf3.part2));
     }
@@ -210,106 +212,480 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
         action={onClickDeleteTopic}
       />
       {tqf3.part1?.updatedAt ? (
-        <div className="flex flex-col w-full max-h-full gap-5 ">
-          <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 pb-5   ">
-            <div className="flex text-secondary flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
-              <p className="font-semibold">
-                ลักษณะของกระบวนวิชา <span className=" text-red-500">*</span>
-              </p>
-              <p className="font-semibold">Teaching Method</p>
-              <p className="error-text mt-1">
-                {form.getInputProps("teachingMethod").error}
-              </p>
-            </div>
-            <Checkbox.Group
-              key={form.key("teachingMethod")}
-              {...form.getInputProps("teachingMethod")}
-              error={<></>}
-            >
-              <div className="flex flex-col text-default gap-4">
-                {Object.values(TEACHING_METHOD).map((key) => (
-                  <Checkbox
-                    key={key.en}
-                    classNames={{
-                      label:
-                        "font-medium text-b3 acerSwift:max-macair133:!text-b4",
-                    }}
-                    label={`${key.th} (${key.en})`}
-                    value={key.en}
-                    disabled={disabled}
-                  />
-                ))}
+        !tqf3.courseSyllabus ? (
+          <div className="flex flex-col w-full max-h-full gap-5 ">
+            <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 pb-5   ">
+              <div className="flex text-secondary flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
+                <p className="font-semibold">
+                  ลักษณะของกระบวนวิชา <span className=" text-red-500">*</span>
+                </p>
+                <p className="font-semibold">Teaching Method</p>
+                <p className="error-text mt-1">
+                  {form.getInputProps("teachingMethod").error}
+                </p>
               </div>
-            </Checkbox.Group>
-          </div>
-          <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 pb-5  ">
-            <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
-              <p className="font-semibold">
-                การวัดและประเมินผล <span className=" text-red-500">*</span>
-              </p>
-              <p className="font-semibold">Evaluation</p>
-              <p className="error-text mt-1">
-                {form.getInputProps("evaluate").error}
-              </p>
+              <Checkbox.Group
+                key={form.key("teachingMethod")}
+                {...form.getInputProps("teachingMethod")}
+                error={<></>}
+              >
+                <div className="flex flex-col text-default gap-4">
+                  {Object.values(TEACHING_METHOD).map((key) => (
+                    <Checkbox
+                      key={key.en}
+                      classNames={{
+                        label:
+                          "font-medium text-b3 acerSwift:max-macair133:!text-b4",
+                      }}
+                      label={`${key.th} (${key.en})`}
+                      value={key.en}
+                      disabled={disabled}
+                    />
+                  ))}
+                </div>
+              </Checkbox.Group>
             </div>
-            <Radio.Group
-              key={form.key("evaluate")}
-              {...form.getInputProps("evaluate")}
-              error={<></>}
-            >
-              <div className="flex gap-8 text-default">
-                {Object.values(EVALUATE_TYPE).map((item) => (
-                  <Radio
-                    key={item}
-                    classNames={{
-                      radio: `${disabled && "!cursor-default"}`,
-                      label: `${
-                        disabled && "!cursor-default"
-                      } font-medium text-b3 acerSwift:max-macair133:!text-b4`,
-                    }}
-                    label={item}
-                    value={item}
-                    disabled={disabled}
-                  />
-                ))}
+            <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-center  grid grid-cols-3 pb-5  ">
+              <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+                <p className="font-semibold">
+                  การวัดและประเมินผล <span className=" text-red-500">*</span>
+                </p>
+                <p className="font-semibold">Evaluation</p>
+                <p className="error-text mt-1">
+                  {form.getInputProps("evaluate").error}
+                </p>
               </div>
-            </Radio.Group>
-          </div>
-          {/* CLO */}
-          <div
-            key={form.key("clo")}
-            {...form.getInputProps("clo")}
-            className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 pb-2"
-          >
-            <div className="flex text-secondary items-center w-full justify-between">
-              <p className="font-semibold text-[15px] acerSwift:max-macair133:!text-b2">
-                ผลลัพธ์การเรียนรู้ของกระบวนวิชา{" "}
-                <span className="font-bold">
-                  (Course Learning Objective: CLO)
-                </span>
-                <span className=" text-red-500">*</span>
-              </p>
-              {!disabled && (
-                <Button
-                  className="text-center px-4"
-                  onClick={() => setOpenModalAddCLO(true)}
+              <Radio.Group
+                key={form.key("evaluate")}
+                {...form.getInputProps("evaluate")}
+                error={<></>}
+              >
+                <div className="flex gap-8 text-default">
+                  {Object.values(EVALUATE_TYPE).map((item) => (
+                    <Radio
+                      key={item}
+                      classNames={{
+                        radio: `${disabled && "!cursor-default"}`,
+                        label: `${
+                          disabled && "!cursor-default"
+                        } font-medium text-b3 acerSwift:max-macair133:!text-b4`,
+                      }}
+                      label={item}
+                      value={item}
+                      disabled={disabled}
+                    />
+                  ))}
+                </div>
+              </Radio.Group>
+            </div>
+            {/* CLO */}
+            <div
+              key={form.key("clo")}
+              {...form.getInputProps("clo")}
+              className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 pb-2"
+            >
+              <div className="flex text-secondary items-center w-full justify-between">
+                <p className="font-semibold text-[15px] acerSwift:max-macair133:!text-b2">
+                  ผลลัพธ์การเรียนรู้ของกระบวนวิชา{" "}
+                  <span className="font-bold">
+                    (Course Learning Objective: CLO)
+                  </span>
+                  <span className=" text-red-500">*</span>
+                </p>
+                {!disabled && (
+                  <Button
+                    className="text-center px-4"
+                    onClick={() => setOpenModalAddCLO(true)}
+                  >
+                    <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
+                      <Icon IconComponent={IconAdd} />
+                      Add CLO
+                    </div>
+                  </Button>
+                )}
+              </div>
+              <DragDropContext
+                onDragEnd={({ destination, source }) => {
+                  if (!destination) return;
+                  form.reorderListItem("clo", {
+                    from: source.index,
+                    to: destination.index,
+                  });
+                }}
+              >
+                <div
+                  className="overflow-x-auto mt-1 w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    height: "fit-content",
+                  }}
                 >
-                  <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
-                    <Icon IconComponent={IconAdd} />
-                    Add CLO
-                  </div>
-                </Button>
-              )}
+                  <Table stickyHeader striped className="w-full">
+                    <Table.Thead className="acerSwift:max-macair133:!text-b3">
+                      <Table.Tr className="bg-[#e5e7f6]">
+                        <Table.Th className="w-[10%]">CLO No.</Table.Th>
+                        <Table.Th className="w-[50%]">CLO Description</Table.Th>
+                        <Table.Th className="w-[20%]">Learning Method</Table.Th>
+                        {!disabled && (
+                          <>
+                            <Table.Th className="w-[15%]">Action</Table.Th>
+                            <Table.Th className="w-[5%]"></Table.Th>
+                          </>
+                        )}
+                      </Table.Tr>
+                    </Table.Thead>
+
+                    {!form.getValues().clo?.length ? (
+                      <Table.Tbody>
+                        <Table.Tr>
+                          <Table.Td colSpan={5} className="text-center">
+                            No CLO
+                          </Table.Td>
+                        </Table.Tr>
+                      </Table.Tbody>
+                    ) : (
+                      <Droppable droppableId="dnd-list" direction="vertical">
+                        {(provided) => (
+                          <Table.Tbody
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full"
+                          >
+                            {form.getValues().clo?.map((item, index) => (
+                              <Draggable
+                                key={item.no.toString()}
+                                index={index}
+                                draggableId={item.no.toString()}
+                              >
+                                {(provided, snapshot) => (
+                                  <Table.Tr
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    className={`table-row ${
+                                      snapshot.isDragging ? "bg-hover " : ""
+                                    }`}
+                                  >
+                                    <Table.Td className="w-[10%]">
+                                      {item.no}
+                                    </Table.Td>
+                                    <Table.Td className="w-[50%]">
+                                      <div className="flex flex-col gap-0.5">
+                                        <p>{item.descTH}</p>
+                                        <p>{item.descEN}</p>
+                                      </div>
+                                    </Table.Td>
+                                    <Table.Td className="w-[20%]">
+                                      <div className="flex flex-col gap-0.5">
+                                        {item.learningMethod.map((method) => (
+                                          <p key={method}>
+                                            {method == LearningMethod.Other
+                                              ? item.other
+                                              : method}
+                                          </p>
+                                        ))}
+                                      </div>
+                                    </Table.Td>
+                                    {!disabled && (
+                                      <>
+                                        <Table.Td className="w-[15%]">
+                                          <div className="flex justify-start gap-4 items-center">
+                                            <div
+                                              className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                                              onClick={() => {
+                                                setEditData(item);
+                                                setOpenModalEditCLO(true);
+                                              }}
+                                            >
+                                              <Icon
+                                                IconComponent={IconEdit}
+                                                className="size-4 stroke-[2px]"
+                                              />
+                                            </div>
+                                            <div
+                                              className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                                              onClick={() => {
+                                                setEditData(item);
+                                                setOpenPopupDelCLO(true);
+                                              }}
+                                            >
+                                              <Icon
+                                                IconComponent={IconTrash}
+                                                className="size-4 stroke-[2px] acerSwift:max-macair133:!size-4"
+                                              />
+                                            </div>
+                                          </div>
+                                        </Table.Td>
+                                        <Table.Td
+                                          className={`${
+                                            snapshot.isDragging ? "w-[5%]" : ""
+                                          }`}
+                                        >
+                                          <div
+                                            className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
+                                            {...provided.dragHandleProps}
+                                          >
+                                            <Icon
+                                              IconComponent={IconGripVertical}
+                                              className="size-5 stroke-[2px]"
+                                            />
+                                          </div>
+                                        </Table.Td>
+                                      </>
+                                    )}
+                                  </Table.Tr>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </Table.Tbody>
+                        )}
+                      </Droppable>
+                    )}
+                  </Table>
+                </div>
+              </DragDropContext>
+              <p className="error-text -mt-1">
+                {form.getInputProps("clo").error}
+              </p>
             </div>
-            <DragDropContext
-              onDragEnd={({ destination, source }) => {
-                if (!destination) return;
-                form.reorderListItem("clo", {
-                  from: source.index,
-                  to: destination.index,
-                });
-              }}
+            {/* Planning */}
+            <div
+              key={form.key("schedule")}
+              {...form.getInputProps("schedule")}
+              className="flex flex-col  w-full gap-4 pb-2"
             >
+              <div className="flex text-secondary items-center w-full justify-between">
+                <p className="font-semibold text-[15px] acerSwift:max-macair133:!text-b2">
+                  เนื้อหาวิชาและแผนการสอน{" "}
+                  <span className="font-bold">
+                    (Course content and Schedule){" "}
+                    <span className=" text-red-500">*</span>
+                  </span>
+                </p>
+                {!disabled && (
+                  <Button
+                    className="text-center px-4"
+                    onClick={() => setOpenModalAddTopic(true)}
+                  >
+                    <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
+                      <Icon IconComponent={IconAdd} />
+                      Add Course Content
+                    </div>
+                  </Button>
+                )}
+              </div>
+              <DragDropContext
+                onDragEnd={({ destination, source }) => {
+                  if (!destination) return;
+                  form.reorderListItem("schedule", {
+                    from: source.index,
+                    to: destination.index,
+                  });
+                }}
+              >
+                <div
+                  className="overflow-y-auto mt-1 overflow-x-auto w-full  h-fit max-h-full border flex flex-col rounded-md border-secondary"
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    height: "fit-content",
+                  }}
+                >
+                  <Table stickyHeader striped className="w-full">
+                    <Table.Thead className="acerSwift:max-macair133:!text-b3">
+                      <Table.Tr className=" bg-bgTableHeader">
+                        <Table.Th className="w-[10%] ">Week No.</Table.Th>
+                        <Table.Th className="w-[30%]">Topic</Table.Th>
+                        <Table.Th className="w-[20%] text-end">
+                          Lecture Hour
+                        </Table.Th>
+                        <Table.Th className="w-[20%] text-end !pr-24">
+                          Lab Hour
+                        </Table.Th>
+                        {!disabled && (
+                          <>
+                            <Table.Th className="w-[15%]">Action</Table.Th>
+                            <Table.Th className="w-[5%]"></Table.Th>
+                          </>
+                        )}
+                      </Table.Tr>
+                    </Table.Thead>
+
+                    {!form.getValues().schedule?.length ? (
+                      <Table.Tbody>
+                        <Table.Tr>
+                          <Table.Td colSpan={6} className="text-center">
+                            No Course content and Schedule
+                          </Table.Td>
+                        </Table.Tr>
+                      </Table.Tbody>
+                    ) : (
+                      <Droppable droppableId="dnd-list" direction="vertical">
+                        {(provided) => (
+                          <Table.Tbody
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full"
+                          >
+                            {form.getValues().schedule?.map((item, index) => (
+                              <Draggable
+                                key={item.weekNo.toString()}
+                                index={index}
+                                draggableId={item.weekNo.toString()}
+                              >
+                                {(provided, snapshot) => (
+                                  <Table.Tr
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    className={`table-row ${
+                                      snapshot.isDragging ? "bg-hover" : ""
+                                    }`}
+                                  >
+                                    <Table.Td className="w-[10%]">
+                                      {item.weekNo}
+                                    </Table.Td>
+                                    <Table.Td className="w-[30%]">
+                                      <p>{item.topic}</p>
+                                    </Table.Td>
+                                    <Table.Td className="w-[20%] text-end">
+                                      <p>{item.lecHour}</p>
+                                    </Table.Td>
+                                    <Table.Td className="w-[20%] text-end !pr-24">
+                                      <p>{item.labHour}</p>
+                                    </Table.Td>
+                                    {!disabled && (
+                                      <>
+                                        <Table.Td className="w-[15%]">
+                                          <div className="flex justify-start gap-4 items-center">
+                                            <div
+                                              className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
+                                              onClick={() => {
+                                                setEditData(item);
+                                                setOpenModalEditTopic(true);
+                                              }}
+                                            >
+                                              <Icon
+                                                IconComponent={IconEdit}
+                                                className="size-4 stroke-[2px]"
+                                              />
+                                            </div>
+                                            <div
+                                              className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
+                                              onClick={() => {
+                                                setEditData(item);
+                                                setOpenPopupDelTopic(true);
+                                              }}
+                                            >
+                                              <Icon
+                                                IconComponent={IconTrash}
+                                                className="size-4 stroke-[2px]"
+                                              />
+                                            </div>
+                                          </div>
+                                        </Table.Td>
+                                        <Table.Td
+                                          className={`${
+                                            snapshot.isDragging ? "w-[5%]" : ""
+                                          }`}
+                                        >
+                                          <div
+                                            className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
+                                            {...provided.dragHandleProps}
+                                          >
+                                            <Icon
+                                              IconComponent={IconGripVertical}
+                                              className="size-5 stroke-[2px]"
+                                            />
+                                          </div>
+                                        </Table.Td>
+                                      </>
+                                    )}
+                                  </Table.Tr>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </Table.Tbody>
+                        )}
+                      </Droppable>
+                    )}
+
+                    <Table.Tfoot className="text-secondary font-semibold !h-[10px] acerSwift:max-macair133:!text-b3">
+                      <Table.Tr className=" bg-bgTableHeader border-none">
+                        <Table.Th className="!rounded-bl-md" colSpan={2}>
+                          Total
+                        </Table.Th>
+                        <Table.Th className="text-end">
+                          {form
+                            .getValues()
+                            .schedule?.reduce(
+                              (acc, { lecHour }) => acc + lecHour,
+                              0.0
+                            )
+                            .toFixed(1)}
+                        </Table.Th>
+                        <Table.Th className="text-end !pr-24">
+                          {form
+                            .getValues()
+                            .schedule?.reduce(
+                              (acc, { labHour }) => acc + labHour,
+                              0.0
+                            )
+                            .toFixed(1)}
+                        </Table.Th>
+                        {!disabled && (
+                          <Table.Th
+                            className="!rounded-br-md"
+                            colSpan={2}
+                          ></Table.Th>
+                        )}
+                      </Table.Tr>
+                    </Table.Tfoot>
+                  </Table>
+                </div>
+              </DragDropContext>
+              <p className="error-text -mt-1">
+                {form.getInputProps("schedule").error}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col w-full text-[15px] acerSwift:max-macair133:text-b3 text-default border-b-2">
+            <div className=" text-secondary acerSwift:max-macair133:!text-b2 font-semibold whitespace-break-spaces border-b pb-4">
+              {PartTopicTQF3.part2}
+            </div>
+            <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full grid grid-cols-2 py-5">
+              <div className="flex text-secondary flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
+                <p className="font-semibold">ลักษณะของกระบวนวิชา</p>
+                <p className="font-semibold">Teaching Method</p>
+              </div>
+              <div className="flex flex-col text-default gap-2 font-medium text-b3 acerSwift:max-macair133:text-b4">
+                {Object.values(TEACHING_METHOD)
+                  .filter((key) => tqf3.part2?.teachingMethod?.includes(key.en))
+                  .map((key) => (
+                    <p key={key.en}>
+                      {key.th} ({key.en})
+                    </p>
+                  ))}
+              </div>
+            </div>
+            <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5">
+              <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+                <p className="font-semibold">การวัดและประเมินผล</p>
+                <p className="font-semibold">Evaluation</p>
+              </div>
+              <div className="flex flex-col text-default font-medium text-b3 acerSwift:max-macair133:!text-b4">
+                <p>{tqf3.part2?.evaluate}</p>
+              </div>
+            </div>
+            <div className="flex flex-col border-b-[1px] w-full border-[#e6e6e6] gap-4 py-4">
+              <div className="flex text-secondary items-center w-full justify-between">
+                <p className="font-semibold text-[15px] acerSwift:max-macair133:!text-b2">
+                  ผลลัพธ์การเรียนรู้ของกระบวนวิชา{" "}
+                  <span className="font-bold">
+                    (Course Learning Objective: CLO)
+                  </span>
+                </p>
+              </div>
               <div
                 className="overflow-x-auto mt-1 w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
                 style={{
@@ -323,163 +699,44 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                       <Table.Th className="w-[10%]">CLO No.</Table.Th>
                       <Table.Th className="w-[50%]">CLO Description</Table.Th>
                       <Table.Th className="w-[20%]">Learning Method</Table.Th>
-                      {!disabled && (
-                        <>
-                          <Table.Th className="w-[15%]">Action</Table.Th>
-                          <Table.Th className="w-[5%]"></Table.Th>
-                        </>
-                      )}
                     </Table.Tr>
                   </Table.Thead>
-
-                  {!form.getValues().clo?.length ? (
-                    <Table.Tbody>
-                      <Table.Tr>
-                        <Table.Td colSpan={5} className="text-center">
-                          No CLO
+                  <Table.Tbody className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full">
+                    {tqf3.part2?.clo?.map((item) => (
+                      <Table.Tr key={item.no.toString()}>
+                        <Table.Td className="w-[10%]">{item.no}</Table.Td>
+                        <Table.Td className="w-[50%]">
+                          <div className="flex flex-col gap-0.5">
+                            <p>{item.descTH}</p>
+                            <p>{item.descEN}</p>
+                          </div>
+                        </Table.Td>
+                        <Table.Td className="w-[20%]">
+                          <div className="flex flex-col gap-0.5">
+                            {item.learningMethod.map((method) => (
+                              <p key={method}>
+                                {method == LearningMethod.Other
+                                  ? item.other
+                                  : method}
+                              </p>
+                            ))}
+                          </div>
                         </Table.Td>
                       </Table.Tr>
-                    </Table.Tbody>
-                  ) : (
-                    <Droppable droppableId="dnd-list" direction="vertical">
-                      {(provided) => (
-                        <Table.Tbody
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full"
-                        >
-                          {form.getValues().clo?.map((item, index) => (
-                            <Draggable
-                              key={item.no.toString()}
-                              index={index}
-                              draggableId={item.no.toString()}
-                            >
-                              {(provided, snapshot) => (
-                                <Table.Tr
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  className={`table-row ${
-                                    snapshot.isDragging ? "bg-hover " : ""
-                                  }`}
-                                >
-                                  <Table.Td className="w-[10%]">
-                                    {item.no}
-                                  </Table.Td>
-                                  <Table.Td className="w-[50%]">
-                                    <div className="flex flex-col gap-0.5">
-                                      <p>{item.descTH}</p>
-                                      <p>{item.descEN}</p>
-                                    </div>
-                                  </Table.Td>
-                                  <Table.Td className="w-[20%]">
-                                    <div className="flex flex-col gap-0.5">
-                                      {item.learningMethod.map((method) => (
-                                        <p key={method}>
-                                          {method == LearningMethod.Other
-                                            ? item.other
-                                            : method}
-                                        </p>
-                                      ))}
-                                    </div>
-                                  </Table.Td>
-                                  {!disabled && (
-                                    <>
-                                      <Table.Td className="w-[15%]">
-                                        <div className="flex justify-start gap-4 items-center">
-                                          <div
-                                            className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
-                                            onClick={() => {
-                                              setEditData(item);
-                                              setOpenModalEditCLO(true);
-                                            }}
-                                          >
-                                            <Icon
-                                              IconComponent={IconEdit}
-                                              className="size-4 stroke-[2px]"
-                                            />
-                                          </div>
-                                          <div
-                                            className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
-                                            onClick={() => {
-                                              setEditData(item);
-                                              setOpenPopupDelCLO(true);
-                                            }}
-                                          >
-                                            <Icon
-                                              IconComponent={IconTrash}
-                                              className="size-4 stroke-[2px] acerSwift:max-macair133:!size-4"
-                                            />
-                                          </div>
-                                        </div>
-                                      </Table.Td>
-                                      <Table.Td
-                                        className={`${
-                                          snapshot.isDragging ? "w-[5%]" : ""
-                                        }`}
-                                      >
-                                        <div
-                                          className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
-                                          {...provided.dragHandleProps}
-                                        >
-                                          <Icon
-                                            IconComponent={IconGripVertical}
-                                            className="size-5 stroke-[2px]"
-                                          />
-                                        </div>
-                                      </Table.Td>
-                                    </>
-                                  )}
-                                </Table.Tr>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </Table.Tbody>
-                      )}
-                    </Droppable>
-                  )}
+                    ))}
+                  </Table.Tbody>
                 </Table>
               </div>
-            </DragDropContext>
-            <p className="error-text -mt-1">
-              {form.getInputProps("clo").error}
-            </p>
-          </div>
-          {/* Planning */}
-          <div
-            key={form.key("schedule")}
-            {...form.getInputProps("schedule")}
-            className="flex flex-col  w-full gap-4 pb-2"
-          >
-            <div className="flex text-secondary items-center w-full justify-between">
-              <p className="font-semibold text-[15px] acerSwift:max-macair133:!text-b2">
-                เนื้อหาวิชาและแผนการสอน{" "}
-                <span className="font-bold">
-                  (Course content and Schedule){" "}
-                  <span className=" text-red-500">*</span>
-                </span>
-              </p>
-              {!disabled && (
-                <Button
-                  className="text-center px-4"
-                  onClick={() => setOpenModalAddTopic(true)}
-                >
-                  <div className="flex gap-2 acerSwift:max-macair133:!text-b5">
-                    <Icon IconComponent={IconAdd} />
-                    Add Course Content
-                  </div>
-                </Button>
-              )}
             </div>
-            <DragDropContext
-              onDragEnd={({ destination, source }) => {
-                if (!destination) return;
-                form.reorderListItem("schedule", {
-                  from: source.index,
-                  to: destination.index,
-                });
-              }}
-            >
+            <div className="flex flex-col w-full gap-4 py-4">
+              <div className="flex text-secondary items-center w-full justify-between">
+                <p className="font-semibold text-[15px] acerSwift:max-macair133:!text-b2">
+                  เนื้อหาวิชาและแผนการสอน{" "}
+                  <span className="font-bold">
+                    (Course content and Schedule)
+                  </span>
+                </p>
+              </div>
               <div
                 className="overflow-y-auto mt-1 overflow-x-auto w-full  h-fit max-h-full border flex flex-col rounded-md border-secondary"
                 style={{
@@ -498,114 +755,24 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                       <Table.Th className="w-[20%] text-end !pr-24">
                         Lab Hour
                       </Table.Th>
-                      {!disabled && (
-                        <>
-                          <Table.Th className="w-[15%]">Action</Table.Th>
-                          <Table.Th className="w-[5%]"></Table.Th>
-                        </>
-                      )}
                     </Table.Tr>
                   </Table.Thead>
-
-                  {!form.getValues().schedule?.length ? (
-                    <Table.Tbody>
-                      <Table.Tr>
-                        <Table.Td colSpan={6} className="text-center">
-                          No Course content and Schedule
+                  <Table.Tbody className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full">
+                    {tqf3.part2?.schedule?.map((item) => (
+                      <Table.Tr key={item.weekNo.toString()}>
+                        <Table.Td className="w-[10%]">{item.weekNo}</Table.Td>
+                        <Table.Td className="w-[30%]">
+                          <p>{item.topic}</p>
+                        </Table.Td>
+                        <Table.Td className="w-[20%] text-end">
+                          <p>{item.lecHour}</p>
+                        </Table.Td>
+                        <Table.Td className="w-[20%] text-end !pr-24">
+                          <p>{item.labHour}</p>
                         </Table.Td>
                       </Table.Tr>
-                    </Table.Tbody>
-                  ) : (
-                    <Droppable droppableId="dnd-list" direction="vertical">
-                      {(provided) => (
-                        <Table.Tbody
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full"
-                        >
-                          {form.getValues().schedule?.map((item, index) => (
-                            <Draggable
-                              key={item.weekNo.toString()}
-                              index={index}
-                              draggableId={item.weekNo.toString()}
-                            >
-                              {(provided, snapshot) => (
-                                <Table.Tr
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  className={`table-row ${
-                                    snapshot.isDragging ? "bg-hover" : ""
-                                  }`}
-                                >
-                                  <Table.Td className="w-[10%]">
-                                    {item.weekNo}
-                                  </Table.Td>
-                                  <Table.Td className="w-[30%]">
-                                    <p>{item.topic}</p>
-                                  </Table.Td>
-                                  <Table.Td className="w-[20%] text-end">
-                                    <p>{item.lecHour}</p>
-                                  </Table.Td>
-                                  <Table.Td className="w-[20%] text-end !pr-24">
-                                    <p>{item.labHour}</p>
-                                  </Table.Td>
-                                  {!disabled && (
-                                    <>
-                                      <Table.Td className="w-[15%]">
-                                        <div className="flex justify-start gap-4 items-center">
-                                          <div
-                                            className="flex justify-center items-center bg-transparent border-[1px] border-[#F39D4E] text-[#F39D4E] size-8 bg-none rounded-full cursor-pointer hover:bg-[#F39D4E]/10"
-                                            onClick={() => {
-                                              setEditData(item);
-                                              setOpenModalEditTopic(true);
-                                            }}
-                                          >
-                                            <Icon
-                                              IconComponent={IconEdit}
-                                              className="size-4 stroke-[2px]"
-                                            />
-                                          </div>
-                                          <div
-                                            className="flex justify-center items-center bg-transparent border-[1px] size-8 bg-none rounded-full cursor-pointer border-[#FF4747] text-[#FF4747] hover:bg-[#FF4747]/10"
-                                            onClick={() => {
-                                              setEditData(item);
-                                              setOpenPopupDelTopic(true);
-                                            }}
-                                          >
-                                            <Icon
-                                              IconComponent={IconTrash}
-                                              className="size-4 stroke-[2px]"
-                                            />
-                                          </div>
-                                        </div>
-                                      </Table.Td>
-                                      <Table.Td
-                                        className={`${
-                                          snapshot.isDragging ? "w-[5%]" : ""
-                                        }`}
-                                      >
-                                        <div
-                                          className="cursor-pointer hover:bg-hover text-tertiary size-8 rounded-full flex items-center justify-center"
-                                          {...provided.dragHandleProps}
-                                        >
-                                          <Icon
-                                            IconComponent={IconGripVertical}
-                                            className="size-5 stroke-[2px]"
-                                          />
-                                        </div>
-                                      </Table.Td>
-                                    </>
-                                  )}
-                                </Table.Tr>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </Table.Tbody>
-                      )}
-                    </Droppable>
-                  )}
-
+                    ))}
+                  </Table.Tbody>
                   <Table.Tfoot className="text-secondary font-semibold !h-[10px] acerSwift:max-macair133:!text-b3">
                     <Table.Tr className=" bg-bgTableHeader border-none">
                       <Table.Th className="!rounded-bl-md" colSpan={2}>
@@ -639,12 +806,9 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                   </Table.Tfoot>
                 </Table>
               </div>
-            </DragDropContext>
-            <p className="error-text -mt-1">
-              {form.getInputProps("schedule").error}
-            </p>
+            </div>
           </div>
-        </div>
+        )
       ) : (
         <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
           <div className="flex justify-center  h-full items-start gap-2 flex-col">

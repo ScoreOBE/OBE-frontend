@@ -19,7 +19,7 @@ import Part5TQF3 from "@/components/TQF3/Part5TQF3";
 import Part6TQF3 from "@/components/TQF3/Part6TQF3";
 import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import Loading from "@/components/Loading/Loading";
-import { isInViewPort } from "@/helpers/functions/function";
+import Bottombar from "@/components/Bottombar";
 
 export default function CourseSyllabus() {
   const { courseNo } = useParams();
@@ -222,51 +222,53 @@ export default function CourseSyllabus() {
   };
 
   return (
-    <div className="flex overflow-hidden justify-center items-center w-full h-full">
-      {loading || !tqf3.id ? (
-        <Loading />
-      ) : (
-        <div className="flex overflow-hidden w-full h-full gap-3 py-2">
-          <div className="flex flex-col h-full max-w-[87%] px-4 gap-4 overflow-auto">
-            {section.map((name, i) => (
-              <div
-                id={name}
-                key={i}
-                ref={sectionRefs.current.at(i)}
-                className={`${activeSection === i ? "active" : ""}`}
-              >
-                <p className="text-default font-semibold text-b1">{name}</p>
-                {partSections[i].compo}
-              </div>
-            ))}
-          </div>
-
-          <div className="max-w-[12%] mt-3 flex flex-col gap-[7px]">
-            {section.map((name, i) => (
-              <div
-                key={name}
-                className={`max-w-fit cursor-pointer ${
-                  activeSection === i ? "active" : ""
-                }`}
-                onClick={() => {
-                  setActiveSection(i);
-                  sectionRefs.current[i].current?.scrollIntoView({
-                    behavior: "smooth",
-                  });
-                }}
-              >
-                <p
-                  className={`text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-b3 acerSwift:max-macair133:!text-b4 ${
-                    activeSection === i ? "text-secondary" : "text-[#D2C9C9]"
-                  }`}
+    <>
+      <div className="flex overflow-hidden justify-center items-center w-full h-full">
+        {loading || !tqf3.id ? (
+          <Loading />
+        ) : (
+          <div className="flex overflow-hidden w-full h-full gap-3 py-2">
+            <div className="flex flex-col h-full max-w-[87%] px-4 gap-4 overflow-auto">
+              {section.map((name, i) => (
+                <div
+                  id={name}
+                  key={i}
+                  ref={sectionRefs.current.at(i)}
+                  className={`${activeSection === i ? "active" : ""}`}
                 >
-                  {name}
-                </p>
-              </div>
-            ))}
+                  {partSections[i].compo}
+                </div>
+              ))}
+            </div>
+
+            <div className="max-w-[12%] mt-3 flex flex-col gap-[7px]">
+              {section.map((name, i) => (
+                <div
+                  key={name}
+                  className={`max-w-fit cursor-pointer ${
+                    activeSection === i ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveSection(i);
+                    sectionRefs.current[i].current?.scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  }}
+                >
+                  <p
+                    className={`text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-b3 acerSwift:max-macair133:!text-b4 ${
+                      activeSection === i ? "text-secondary" : "text-[#D2C9C9]"
+                    }`}
+                  >
+                    {name}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+      <Bottombar />
+    </>
   );
 }

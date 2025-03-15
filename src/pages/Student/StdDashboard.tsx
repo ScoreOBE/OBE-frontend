@@ -149,7 +149,7 @@ export default function StdDashboard() {
                       </p>
                     </div>
                     <p className=" text-xs font-medium text-[#757575]">
-                      Section {getSectionNo(item.section.sectionNo)}
+                      Section {getSectionNo(item.section?.sectionNo)}
                     </p>
                   </div>
                   <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">

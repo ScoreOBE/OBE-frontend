@@ -1,4 +1,4 @@
-import { IModelCourse, IModelSection } from "@/models/ModelCourse";
+import { IModelSection } from "@/models/ModelCourse";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelTQF5 } from "@/models/ModelTQF5";
 import { IModelUser } from "@/models/ModelUser";
@@ -9,11 +9,6 @@ import { ROUTE_PATH } from "../constants/route";
 import { IModelPLORequire } from "@/models/ModelCourseManagement";
 
 export const isMobile = window.innerWidth < 450;
-
-export const isInViewPort = (entry: IntersectionObserverEntry, offset = 0) => {
-  const rect = entry.boundingClientRect;
-  return rect.top - 1 <= 0 + offset && rect.bottom >= 0 + offset;
-};
 
 export const goToDashboard = (role: ROLE) => {
   switch (role) {

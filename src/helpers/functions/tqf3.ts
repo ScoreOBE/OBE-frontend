@@ -2,7 +2,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { IModelTQF3Part1, IModelTQF3Part2 } from "@/models/ModelTQF3";
 import { IModelUser } from "@/models/ModelUser";
 import { getUniqueInstructors, getUserName } from "./function";
-import { partLabel } from "@/components/SaveTQFBar";
+import { partLabel } from "@/components/Bottombar";
 import { cloneDeep } from "lodash";
 
 export const initialTqf3Part = (tqf3: any, part: any) => {

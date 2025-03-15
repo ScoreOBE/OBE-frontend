@@ -11,7 +11,7 @@ import IconHorizontalAdjustments from "@/assets/icons/horizontalAdjustments.svg?
 import { useParams, useSearchParams } from "react-router-dom";
 import unplug from "@/assets/image/unplug.png";
 import pictureTQF5 from "@/assets/image/TQF5.jpg";
-import SaveTQFbar, { partLabel, partType } from "@/components/SaveTQFBar";
+import Bottombar, { partLabel, partType } from "@/components/Bottombar";
 import { getValueEnumByKey } from "@/helpers/functions/function";
 import { UseFormReturnType } from "@mantine/form";
 import Loading from "@/components/Loading/Loading";
@@ -827,7 +827,7 @@ export default function TQF5() {
         </Tabs>
       </div>
       {checkActiveTerm() && tqf5Original && tqf5.id && showSaveTQFbar() && (
-        <SaveTQFbar
+        <Bottombar
           tqf="5"
           part={tqf5Part as partType}
           data={tqf5Original[tqf5Part as keyof IModelTQF5]}

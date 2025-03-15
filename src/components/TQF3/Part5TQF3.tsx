@@ -7,6 +7,7 @@ import unplug from "@/assets/image/unplug.png";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useSearchParams } from "react-router-dom";
+import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
 
 type Props = {
   setForm?: React.Dispatch<React.SetStateAction<any>>;
@@ -36,6 +37,7 @@ export default function Part5TQF3({ setForm = () => {} }: Props) {
   });
 
   useEffect(() => {
+    if (tqf3.courseSyllabus) return;
     if (tqf3.part5) {
       form.setValues(tqf3.part5);
     } else {
@@ -45,58 +47,87 @@ export default function Part5TQF3({ setForm = () => {} }: Props) {
   }, []);
 
   return tqf3?.part4?.updatedAt ? (
-    <>
-      <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 pb-5  ">
-        <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
-          <p className="font-semibold">ตำราและเอกสาร</p>
-          <p className="font-semibold">Main Reference</p>
+    !tqf3.courseSyllabus ? (
+      <>
+        <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 pb-5  ">
+          <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+            <p className="font-semibold">ตำราและเอกสาร</p>
+            <p className="font-semibold">Main Reference</p>
+          </div>
+          <div className="flex flex-col gap-3 text-default">
+            <Textarea
+              key={form.key("mainRef")}
+              label="Description"
+              size="xs"
+              placeholder="(optional)"
+              className="w-[500px]"
+              classNames={{
+                input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 ${
+                  disabled && "!cursor-default"
+                }`,
+                label: "text-default acerSwift:max-macair133:!text-b4",
+              }}
+              disabled={disabled}
+              {...form.getInputProps("mainRef")}
+            ></Textarea>
+          </div>
         </div>
-        <div className="flex flex-col gap-3 text-default">
-          <Textarea
-            key={form.key("mainRef")}
-            label="Description"
-            size="xs"
-            placeholder="(optional)"
-            className="w-[500px]"
-            classNames={{
-              input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 ${
-                disabled && "!cursor-default"
-              }`,
-              label: "text-default acerSwift:max-macair133:!text-b4",
-            }}
-            disabled={disabled}
-            {...form.getInputProps("mainRef")}
-          ></Textarea>
-        </div>
-      </div>
-      <div className="w-full justify-between h-fit  items-top  grid grid-cols-3 pt-5 pb-6 border-b-[1px] ">
-        <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
-          <p className="font-semibold">เอกสารแนะนำ</p>
-          <p className="font-semibold">
-            Recommended Documents
-            <br /> e.g. Lecture notes, E-documents, etc.
-          </p>
-        </div>
+        <div className="w-full justify-between h-fit  items-top  grid grid-cols-3 pt-5 pb-6 border-b-[1px] ">
+          <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+            <p className="font-semibold">เอกสารแนะนำ</p>
+            <p className="font-semibold">
+              Recommended Documents
+              <br /> e.g. Lecture notes, E-documents, etc.
+            </p>
+          </div>
 
-        <div className="flex flex-col gap-3 text-default ">
-          <Textarea
-            key={form.key("recDoc")}
-            label="Description"
-            size="xs"
-            placeholder="(optional)"
-            className="w-[500px]"
-            classNames={{
-              input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 ${
-                disabled && "!cursor-default"
-              }`,
-              label: "text-default acerSwift:max-macair133:!text-b4",
-            }}
-            disabled={disabled}
-            {...form.getInputProps("recDoc")}
-          ></Textarea>
+          <div className="flex flex-col gap-3 text-default ">
+            <Textarea
+              key={form.key("recDoc")}
+              label="Description"
+              size="xs"
+              placeholder="(optional)"
+              className="w-[500px]"
+              classNames={{
+                input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 ${
+                  disabled && "!cursor-default"
+                }`,
+                label: "text-default acerSwift:max-macair133:!text-b4",
+              }}
+              disabled={disabled}
+              {...form.getInputProps("recDoc")}
+            ></Textarea>
+          </div>
+        </div>
+      </>
+    ) : (
+      <div className="flex flex-col w-full text-[15px] acerSwift:max-macair133:text-b3 max-h-full text-default border-b-2">
+        <div className=" text-secondary acerSwift:max-macair133:!text-b2 font-semibold whitespace-break-spaces border-b pb-4">
+          {PartTopicTQF3.part5}
+        </div>
+        <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+          <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+            <p className="font-semibold">ตำราและเอกสาร</p>
+            <p className="font-semibold">Main Reference</p>
+          </div>
+          <div className="flex flex-col justify-center text-default font-medium text-b3 acerSwift:max-macair133:text-b4">
+            <p>{tqf3?.part5?.mainRef.length ? tqf3?.part5?.mainRef : "-"}</p>
+          </div>
+        </div>
+        <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+          <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+            <p className="font-semibold">เอกสารแนะนำ</p>
+            <p className="font-semibold">
+              Recommended Documents
+              <br /> e.g. Lecture notes, E-documents, etc.
+            </p>
+          </div>
+          <div className="flex flex-col justify-center text-default font-medium text-b3 acerSwift:max-macair133:text-b4">
+            <p>{tqf3?.part5?.recDoc.length ? tqf3?.part5?.recDoc : "-"}</p>
+          </div>
         </div>
       </div>
-    </>
+    )
   ) : (
     <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
       <div className="flex justify-center  h-full items-start gap-2 flex-col">
