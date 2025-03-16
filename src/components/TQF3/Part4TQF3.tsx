@@ -702,8 +702,8 @@ export default function Part4TQF3({
           </Tabs>
         </div>
       ) : (
-        <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
-          <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces  pb-4">
+        <div className="flex flex-col w-full text-[15px] iphone:max-sm:text-[12px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
+          <div className=" text-secondary iphone:max-sm:text-[14px] text-b1 font-semibold whitespace-break-spaces  pb-4">
             {PartTopicTQF3.part4}
           </div>
           <div

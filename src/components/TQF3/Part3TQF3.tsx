@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useSearchParams } from "react-router-dom";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
+import { isMobile } from "@/helpers/functions/function";
 
 type Props = {
   setForm?: React.Dispatch<React.SetStateAction<any>>;
@@ -398,80 +399,104 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
-            <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
+          <div className="flex flex-col w-full text-[15px] iphone:max-sm:text-[12px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
+            <div className=" text-secondary text-b1 iphone:max-sm:text-[14px] font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
               {PartTopicTQF3.part3}
             </div>
-            <div className=" border-b-[1px] border-[#e6e6e6] px-6 justify-between h-fit w-full grid grid-cols-2 py-5">
-            <div className="flex text-gray-800 flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
+            <div className=" border-b-[1px] border-[#e6e6e6] px-6 iphone:max-sm:px-3 justify-between h-fit w-full grid grid-cols-2 py-5">
+              <div className="flex text-gray-800 flex-col  text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b3">
                 <p className="font-medium">การกำหนดเกรด</p>
-                <p className="font-semibold">Grading</p>
+                <p className="font-medium">Grading</p>
               </div>
-              <div className="flex flex-col text-default gap-2 font-medium text-b2 acerSwift:max-macair133:text-b4">
+              <div className="flex flex-col text-default gap-2 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
                 <p>{tqf3.part3?.gradingPolicy}</p>
               </div>
             </div>
-            <div className="flex flex-col w-full px-6 gap-4 pt-5 pb-2">
+            <div className="flex flex-col w-full px-6 iphone:max-sm:px-3 gap-4 pt-5 pb-2">
               <div className="flex text-gray-800 items-center w-full justify-between">
-                <p className="font-semibold">Evaluation Items</p>
+                <p className="font-medium">Evaluation Items</p>
               </div>
-              <div
-                className="overflow-auto w-full flex flex-col rounded-md border border-secondary"
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                }}
-              >
-                <Table stickyHeader striped className="w-full">
-                  <Table.Thead className="acerSwift:max-macair133:!text-b3">
-                    <Table.Tr className="bg-[#e5e7f6] ">
-                      <Table.Th className="w-[5%] !rounded-tl-md">No.</Table.Th>
-                      <Table.Th className=" w-[15%]">Method</Table.Th>
-                      <Table.Th className="w-[65%]">Description</Table.Th>
-                      <Table.Th className="w-[5%] text-end">
-                        <div className="flex flex-row !justify-end items-center gap-2">
-                          Evaluate
-                        </div>
-                      </Table.Th>
-                      <Table.Th className="w-[5%] !rounded-tr-md"></Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody className="text-b3 acerSwift:max-macair133:!text-b4 font-normal text-[#333333] w-full">
-                    {tqf3.part3?.eval?.map((item) => (
-                      <Table.Tr key={item.no.toString()}>
-                        <Table.Td className="w-[5%] ">{item.no}</Table.Td>
-                        <Table.Td className="w-[15%] ">
-                          <p>{item.topicTH}</p>
-                          <p>{item.topicEN}</p>
-                        </Table.Td>
-                        <Table.Td className="w-[65%] max-w-[65%] flex-wrap">
-                          {item.desc.length ? item.desc : "-"}
-                        </Table.Td>
-                        <Table.Td className="w-[5%] acerSwift:max-macair133:!text-b2 text-end text-b1">
-                          <p>{item.percent}%</p>
-                        </Table.Td>
-                        <Table.Td></Table.Td>
+              {!isMobile ? (
+                <div
+                  className="overflow-auto w-full flex flex-col rounded-md border border-secondary"
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                  }}
+                >
+                  <Table stickyHeader striped className="w-full">
+                    <Table.Thead className="acerSwift:max-macair133:!text-b3">
+                      <Table.Tr className="bg-[#e5e7f6] ">
+                        <Table.Th className="w-[5%] !rounded-tl-md">
+                          No.
+                        </Table.Th>
+                        <Table.Th className=" w-[15%]">Method</Table.Th>
+                        <Table.Th className="w-[65%]">Description</Table.Th>
+                        <Table.Th className="w-[5%] text-end">
+                          <div className="flex flex-row !justify-end items-center gap-2">
+                            Evaluate
+                          </div>
+                        </Table.Th>
+                        <Table.Th className="w-[5%] !rounded-tr-md"></Table.Th>
                       </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                  <Table.Tfoot className="text-secondary font-semibold">
-                    <Table.Tr className=" bg-bgTableHeader border-none">
-                      <Table.Th
-                        className="text-b2 acerSwift:max-macair133:!text-b3 !rounded-bl-md"
-                        colSpan={3}
-                      >
-                        Total
-                      </Table.Th>
-                      <Table.Th className="text-b1 acerSwift:max-macair133:!text-b2 text-end">
-                        {percentTotal}%
-                      </Table.Th>
-                      <Table.Th
-                        className="!rounded-br-md"
-                        colSpan={2}
-                      ></Table.Th>
-                    </Table.Tr>
-                  </Table.Tfoot>
-                </Table>
-              </div>
+                    </Table.Thead>
+                    <Table.Tbody className="text-b3 acerSwift:max-macair133:!text-b4 font-normal text-[#333333] w-full">
+                      {tqf3.part3?.eval?.map((item) => (
+                        <Table.Tr key={item.no.toString()}>
+                          <Table.Td className="w-[5%] ">{item.no}</Table.Td>
+                          <Table.Td className="w-[15%] ">
+                            <p>{item.topicTH}</p>
+                            <p>{item.topicEN}</p>
+                          </Table.Td>
+                          <Table.Td className="w-[65%] max-w-[65%] flex-wrap">
+                            {item.desc.length ? item.desc : "-"}
+                          </Table.Td>
+                          <Table.Td className="w-[5%] acerSwift:max-macair133:!text-b2 text-end text-b1">
+                            <p>{item.percent}%</p>
+                          </Table.Td>
+                          <Table.Td></Table.Td>
+                        </Table.Tr>
+                      ))}
+                    </Table.Tbody>
+                    <Table.Tfoot className="text-secondary font-semibold">
+                      <Table.Tr className=" bg-bgTableHeader border-none">
+                        <Table.Th
+                          className="text-b2 acerSwift:max-macair133:!text-b3 !rounded-bl-md"
+                          colSpan={3}
+                        >
+                          Total
+                        </Table.Th>
+                        <Table.Th className="text-b1 acerSwift:max-macair133:!text-b2 text-end">
+                          {percentTotal}%
+                        </Table.Th>
+                        <Table.Th
+                          className="!rounded-br-md"
+                          colSpan={2}
+                        ></Table.Th>
+                      </Table.Tr>
+                    </Table.Tfoot>
+                  </Table>
+                </div>
+              ) : (
+                <div className="flex flex-col -mt-2">
+                  {tqf3.part3?.eval?.map((item) => (
+                    <div
+                      className="border-b flex flex-col gap-1 last:border-none py-3 last:pb-0"
+                      key={item.no.toString()}
+                    >
+                      <div className="font-semibold p-1 text-secondary mb-[2px] bg-bgTableHeader w-fit !px-3 rounded-xl">
+                        Item-{item.no} ({item.percent}%)
+                      </div>
+
+                      <li>{item.topicTH}</li>
+                      <li>{item.topicEN}</li>
+
+                      <li className=" flex-wrap">
+                        {item.desc.length ? item.desc : "-"}
+                      </li>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )

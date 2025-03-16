@@ -544,25 +544,25 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
       </div>
     </div>
   ) : (
-    <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 -mt-1 rounded-xl acerSwift:max-macair133:text-b3 text-default ">
-      <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
+    <div className="flex flex-col w-full text-[15px] iphone:max-sm:text-[12px] bg-[#dfebff]/40 p-5 -mt-1 rounded-xl acerSwift:max-macair133:text-b3 text-default ">
+      <div className=" text-secondary text-b1 iphone:max-sm:text-[14px] font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
         {PartTopicTQF3.part1}
       </div>
-      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">หลักสูตร</p>
           <p className="font-medium">Curriculum</p>
         </div>
-        <div className="flex text-default flex-col text-wrap font-medium text-b2 acerSwift:max-macair133:text-b4">
+        <div className="flex text-default flex-col text-wrap font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
           <p>{tqf3.part1?.curriculum}</p>
         </div>
       </div>
-      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">ประเภทกระบวนวิชา</p>
           <p className="font-medium">Course Type</p>
         </div>
-        <div className="flex text-default flex-col gap-1 font-medium text-b2 acerSwift:max-macair133:text-b4">
+        <div className="flex text-default flex-col gap-1 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
           {Object.values(COURSE_TYPE)
             .filter((item) => tqf3.part1?.courseType?.includes(item.en))
             ?.map((item) => (
@@ -572,12 +572,12 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
             ))}
         </div>
       </div>
-      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5  ">
+      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5  ">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">ชั้นปีที่เรียน</p>
           <p className="font-medium">Student Year</p>
         </div>
-        <div className="flex flex-col text-default gap-1 font-medium text-b2 acerSwift:max-macair133:text-b4">
+        <div className="flex flex-col text-default gap-1 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
           {studentYear
             .filter((item) => tqf3.part1?.studentYear?.includes(item.year))
             .map((item) => (
@@ -587,32 +587,32 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
             ))}
         </div>
       </div>
-      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5  ">
+      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5  ">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">ชื่ออาจารย์ผู้รับผิดชอบ</p>
           <p className="font-medium">Main Instructor</p>
         </div>
-        <div className="flex flex-col text-default font-medium text-b2 acerSwift:max-macair133:text-b4">
+        <div className="flex flex-col text-default font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
           <p>{tqf3.part1?.mainInstructor}</p>
         </div>
       </div>
-      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">อาจารย์ผู้สอนทั้งหมด</p>
           <p className="font-medium">Lecturers</p>
         </div>
-        <div className="flex flex-col text-default gap-1 font-medium text-b2 acerSwift:max-macair133:text-b4">
+        <div className="flex flex-col text-default gap-1 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
           {tqf3.part1?.instructors?.map((item, index) => (
             <p key={index}>{item}</p>
           ))}
         </div>
       </div>
-      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">สถานที่เรียน</p>
           <p className="font-medium">Teaching Location</p>
         </div>
-        <div className="flex flex-col justify-center text-default gap-3 font-medium text-b2 acerSwift:max-macair133:text-b4">
+        <div className="flex flex-col justify-center text-default gap-3 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
           {!tqf3.part1?.teachingLocation.in &&
             !tqf3.part1?.teachingLocation.out && <p>-</p>}
           {tqf3.part1?.teachingLocation.in && (
@@ -629,7 +629,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
           )}
         </div>
       </div>
-      <div className="w-full  justify-between h-fit px-6 items-center grid grid-cols-2 pt-5 pb-2">
+      <div className="w-full  justify-between h-fit px-6 iphone:max-sm:px-3 items-center grid grid-cols-2 pt-5 pb-2">
         <div className="flex text-gray-800 flex-col sm:max-macair133:pr-8 acerSwift:max-macair133:pr-6">
           <p className="font-medium">
             ชั่วโมงต่อสัปดาห์ในการให้คำปรึกษาแก่นักศึกษารายบุคคล
@@ -638,7 +638,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
             Individual student consultation hours per week
           </p>
         </div>
-        <div className="flex items-center text-b2 acerSwift:max-macair133:text-b4 font-medium gap-4">
+        <div className="flex items-center text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4 font-medium gap-4">
           <p>{tqf3.part1?.consultHoursWk} hours / week</p>
         </div>
       </div>

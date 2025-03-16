@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePartTQF3 } from "@/store/tqf3";
 import { useSearchParams } from "react-router-dom";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
+import { isMobile } from "@/helpers/functions/function";
 
 type Props = {
   setForm?: React.Dispatch<React.SetStateAction<any>>;
@@ -215,7 +216,7 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
         !tqf3.courseSyllabus ? (
           <div className="flex flex-col w-full max-h-full gap-5 ">
             <div className=" border-b-[1px] border-[#e6e6e6] justify-between h-fit w-full  items-top  grid grid-cols-3 pb-5   ">
-              <div className="flex text-secondary flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
+              <div className="flex text-secondary flex-col  text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b3">
                 <p className="font-semibold">
                   ลักษณะของกระบวนวิชา <span className=" text-red-500">*</span>
                 </p>
@@ -649,16 +650,16 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 rounded-xl mt-2 acerSwift:max-macair133:text-b3 text-default ">
-           <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
+          <div className="flex flex-col w-full text-[15px] iphone:max-sm:text-[12px] bg-[#dfebff]/40 p-5 rounded-xl mt-2 acerSwift:max-macair133:text-b3 text-default ">
+            <div className=" text-secondary text-b1 iphone:max-sm:text-[14px] font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
               {PartTopicTQF3.part2}
             </div>
-            <div className=" border-b-[1px] border-[#e6e6e6] px-6 justify-between h-fit w-full grid grid-cols-2 py-5">
-              <div className="flex text-gray-800 flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
+            <div className=" border-b-[1px] border-[#e6e6e6] px-6 iphone:max-sm:px-3 justify-between h-fit w-full grid grid-cols-2 py-5">
+              <div className="flex text-gray-800 flex-col  text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b3">
                 <p className="font-medium">ลักษณะของกระบวนวิชา</p>
                 <p className="font-medium">Teaching Method</p>
               </div>
-              <div className="flex flex-col text-default gap-2 font-medium text-b2 acerSwift:max-macair133:text-b4">
+              <div className="flex flex-col text-default gap-2 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
                 {Object.values(TEACHING_METHOD)
                   .filter((key) => tqf3.part2?.teachingMethod?.includes(key.en))
                   .map((key) => (
@@ -668,144 +669,214 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                   ))}
               </div>
             </div>
-            <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5">
-              <div className="flex text-gray-800 flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+            <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5">
+              <div className="flex text-gray-800 flex-col text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b3">
                 <p className="font-medium">การวัดและประเมินผล</p>
                 <p className="font-medium">Evaluation</p>
               </div>
-              <div className="flex flex-col text-default font-medium text-b2 acerSwift:max-macair133:!text-b4">
+              <div className="flex flex-col text-default font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b4">
                 <p>{tqf3.part2?.evaluate}</p>
               </div>
             </div>
-            <div className="flex flex-col px-6 border-b-[1px] w-full border-[#e6e6e6] gap-4 py-4">
+            <div className="flex flex-col px-6 iphone:max-sm:px-3 border-b-[1px] w-full border-[#e6e6e6] gap-4 py-4">
               <div className="flex text-gray-800 items-center w-full justify-between">
-                <p className="font-medium text-[15px] acerSwift:max-macair133:!text-b2">
+                <p className="font-medium text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b2">
                   ผลลัพธ์การเรียนรู้ของกระบวนวิชา{" "}
                   <span className="font-medium">
                     (Course Learning Objective: CLO)
                   </span>
                 </p>
               </div>
-              <div
-                className="overflow-x-auto mt-1 w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  height: "fit-content",
-                }}
-              >
-                <Table stickyHeader striped className="w-full">
-                  <Table.Thead className="acerSwift:max-macair133:!text-b3">
-                    <Table.Tr className="bg-[#e5e7f6]">
-                      <Table.Th className="w-[10%]">CLO No.</Table.Th>
-                      <Table.Th className="w-[50%]">CLO Description</Table.Th>
-                      <Table.Th className="w-[20%]">Learning Method</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full">
-                    {tqf3.part2?.clo?.map((item) => (
-                      <Table.Tr key={item.no.toString()}>
-                        <Table.Td className="w-[10%]">{item.no}</Table.Td>
-                        <Table.Td className="w-[50%]">
-                          <div className="flex flex-col gap-0.5">
-                            <p>{item.descTH}</p>
-                            <p>{item.descEN}</p>
-                          </div>
-                        </Table.Td>
-                        <Table.Td className="w-[20%]">
-                          <div className="flex flex-col gap-0.5">
-                            {item.learningMethod.map((method) => (
-                              <p key={method}>
-                                {method == LearningMethod.Other
-                                  ? item.other
-                                  : method}
-                              </p>
-                            ))}
-                          </div>
-                        </Table.Td>
+              {!isMobile ? (
+                <div
+                  className="overflow-x-auto mt-1 w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    height: "fit-content",
+                  }}
+                >
+                  <Table stickyHeader striped className="w-full">
+                    <Table.Thead className="acerSwift:max-macair133:!text-b3">
+                      <Table.Tr className="bg-[#e5e7f6]">
+                        <Table.Th className="w-[10%]">CLO No.</Table.Th>
+                        <Table.Th className="w-[50%]">CLO Description</Table.Th>
+                        <Table.Th className="w-[20%]">Learning Method</Table.Th>
                       </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                </Table>
-              </div>
+                    </Table.Thead>
+                    <Table.Tbody className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full">
+                      {tqf3.part2?.clo?.map((item) => (
+                        <Table.Tr key={item.no.toString()}>
+                          <Table.Td className="w-[10%]">{item.no}</Table.Td>
+                          <Table.Td className="w-[50%]">
+                            <div className="flex flex-col gap-0.5">
+                              <p>{item.descTH}</p>
+                              <p>{item.descEN}</p>
+                            </div>
+                          </Table.Td>
+                          <Table.Td className="w-[20%]">
+                            <div className="flex flex-col gap-0.5">
+                              {item.learningMethod.map((method) => (
+                                <p key={method}>
+                                  {method == LearningMethod.Other
+                                    ? item.other
+                                    : method}
+                                </p>
+                              ))}
+                            </div>
+                          </Table.Td>
+                        </Table.Tr>
+                      ))}
+                    </Table.Tbody>
+                  </Table>
+                </div>
+              ) : (
+                <div className="flex flex-col -mt-2">
+                  {tqf3.part2?.clo?.map((item) => (
+                    <div
+                      className=" border-b flex flex-col gap-1 last:border-none py-3 "
+                      key={item.no.toString()}
+                    >
+                      <div className="font-semibold p-1 text-secondary bg-bgTableHeader w-fit !px-3 rounded-xl ">
+                        CLO-{item.no}
+                      </div>
+
+                      <div className="flex flex-col gap-0.5">
+                        <li> {item.descTH}</li>
+                        <li> {item.descEN}</li>
+                      </div>
+
+                      <div className="">
+                        <div className="flex flex-col gap-0.5">
+                          {item.learningMethod.map((method) => (
+                            <li key={method}>
+                              {" "}
+                              Learning Method:{" "}
+                              {method == LearningMethod.Other
+                                ? item.other
+                                : method}
+                            </li>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="flex flex-col px-6 w-full gap-4 pt-5 pb-2">
+            <div className="flex flex-col px-6 iphone:max-sm:px-3 w-full gap-4 pt-5 pb-2">
               <div className="flex text-gray-800 items-center w-full justify-between">
-                <p className="font-medium text-[15px] acerSwift:max-macair133:!text-b2">
+                <p className="font-medium text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b2">
                   เนื้อหาวิชาและแผนการสอน{" "}
                   <span className="font-medium">
                     (Course content and Schedule)
                   </span>
                 </p>
               </div>
-              <div
-                className="overflow-y-auto mt-1 overflow-x-auto w-full  h-fit max-h-full border flex flex-col rounded-md border-secondary"
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  height: "fit-content",
-                }}
-              >
-                <Table stickyHeader striped className="w-full">
-                  <Table.Thead className="acerSwift:max-macair133:!text-b3">
-                    <Table.Tr className=" bg-bgTableHeader">
-                      <Table.Th className="w-[10%] ">Week No.</Table.Th>
-                      <Table.Th className="w-[30%]">Topic</Table.Th>
-                      <Table.Th className="w-[20%] text-end">
-                        Lecture Hour
-                      </Table.Th>
-                      <Table.Th className="w-[20%] text-end !pr-24">
-                        Lab Hour
-                      </Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full">
-                    {tqf3.part2?.schedule?.map((item) => (
-                      <Table.Tr key={item.weekNo.toString()}>
-                        <Table.Td className="w-[10%]">{item.weekNo}</Table.Td>
-                        <Table.Td className="w-[30%]">
-                          <p>{item.topic}</p>
-                        </Table.Td>
-                        <Table.Td className="w-[20%] text-end">
-                          <p>{item.lecHour}</p>
-                        </Table.Td>
-                        <Table.Td className="w-[20%] text-end !pr-24">
-                          <p>{item.labHour}</p>
-                        </Table.Td>
+              {!isMobile ? (
+                <div
+                  className="overflow-y-auto mt-1 overflow-x-auto w-full  h-fit max-h-full border flex flex-col rounded-md border-secondary"
+                  style={{
+                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                    height: "fit-content",
+                  }}
+                >
+                  <Table stickyHeader striped className="w-full">
+                    <Table.Thead className="acerSwift:max-macair133:!text-b3">
+                      <Table.Tr className=" bg-bgTableHeader">
+                        <Table.Th className="w-[10%] ">Week No.</Table.Th>
+                        <Table.Th className="w-[30%]">Topic</Table.Th>
+                        <Table.Th className="w-[20%] text-end">
+                          Lecture Hour
+                        </Table.Th>
+                        <Table.Th className="w-[20%] text-end !pr-24">
+                          Lab Hour
+                        </Table.Th>
                       </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                  <Table.Tfoot className="text-secondary font-semibold !h-[10px] acerSwift:max-macair133:!text-b3">
-                    <Table.Tr className=" bg-bgTableHeader border-none">
-                      <Table.Th className="!rounded-bl-md" colSpan={2}>
-                        Total
-                      </Table.Th>
-                      <Table.Th className="text-end">
-                        {form
-                          .getValues()
-                          .schedule?.reduce(
-                            (acc, { lecHour }) => acc + lecHour,
-                            0.0
-                          )
-                          .toFixed(1)}
-                      </Table.Th>
-                      <Table.Th className="text-end !pr-24">
-                        {form
-                          .getValues()
-                          .schedule?.reduce(
-                            (acc, { labHour }) => acc + labHour,
-                            0.0
-                          )
-                          .toFixed(1)}
-                      </Table.Th>
-                      {!disabled && (
-                        <Table.Th
-                          className="!rounded-br-md"
-                          colSpan={2}
-                        ></Table.Th>
-                      )}
-                    </Table.Tr>
-                  </Table.Tfoot>
-                </Table>
-              </div>
+                    </Table.Thead>
+                    <Table.Tbody className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full">
+                      {tqf3.part2?.schedule?.map((item) => (
+                        <Table.Tr key={item.weekNo.toString()}>
+                          <Table.Td className="w-[10%]">{item.weekNo}</Table.Td>
+                          <Table.Td className="w-[30%]">
+                            <p>{item.topic}</p>
+                          </Table.Td>
+                          <Table.Td className="w-[20%] text-end">
+                            <p>{item.lecHour}</p>
+                          </Table.Td>
+                          <Table.Td className="w-[20%] text-end !pr-24">
+                            <p>{item.labHour}</p>
+                          </Table.Td>
+                        </Table.Tr>
+                      ))}
+                    </Table.Tbody>
+                    <Table.Tfoot className="text-secondary font-semibold !h-[10px] acerSwift:max-macair133:!text-b3">
+                      <Table.Tr className=" bg-bgTableHeader border-none">
+                        <Table.Th className="!rounded-bl-md" colSpan={2}>
+                          Total
+                        </Table.Th>
+                        <Table.Th className="text-end">
+                          {form
+                            .getValues()
+                            .schedule?.reduce(
+                              (acc, { lecHour }) => acc + lecHour,
+                              0.0
+                            )
+                            .toFixed(1)}
+                        </Table.Th>
+                        <Table.Th className="text-end !pr-24">
+                          {form
+                            .getValues()
+                            .schedule?.reduce(
+                              (acc, { labHour }) => acc + labHour,
+                              0.0
+                            )
+                            .toFixed(1)}
+                        </Table.Th>
+                        {!disabled && (
+                          <Table.Th
+                            className="!rounded-br-md"
+                            colSpan={2}
+                          ></Table.Th>
+                        )}
+                      </Table.Tr>
+                    </Table.Tfoot>
+                  </Table>
+                </div>
+              ) : (
+                <div className="flex flex-col -mt-2">
+                  {tqf3.part2?.schedule?.map((item) => (
+                    <div
+                      className="border-b flex flex-col gap-1 last:border-none py-3"
+                      key={item.weekNo.toString()}
+                    >
+                      <div className="font-semibold p-1 text-secondary mb-[2px] bg-bgTableHeader w-fit !px-3 rounded-xl">
+                        Week-{item.weekNo}
+                      </div>
+
+                      <li>{item.topic}</li>
+                      <li>Lecture hour: {item.lecHour}</li>
+                      <li>Lab hour: {item.labHour}</li>
+                    </div>
+                  ))}
+
+                  <div className="mt-4 gap-1 text-secondary rounded-md flex flex-col justify-between font-semibold">
+                    <span>
+                      Total Lecture Hours:{" "}
+                      {tqf3.part2?.schedule
+                        ?.reduce((acc, item) => acc + (item.lecHour || 0), 0)
+                        .toFixed(1)}
+                    </span>
+                    <span>
+                      Total Lab Hours:{" "} 
+                      {tqf3.part2?.schedule
+                        ?.reduce((acc, item) => acc + (item.labHour || 0), 0)
+                        .toFixed(1)}
+                    </span>
+                  </div>
+
+                  {!disabled && <div className="!rounded-br-md"></div>}
+                </div>
+              )}
             </div>
           </div>
         )

@@ -146,7 +146,7 @@ export default function Navbar() {
       >
         <div className="flex w-fit gap-3 items-center">
           <p
-            className={`font-semibold sm:text-h2 iphone:max-sm:text-[16px] acerSwift:max-macair133:text-b1 ${
+            className={`font-semibold sm:text-h2 iphone:max-sm:text-[16px] iphone:max-sm:ml-2 acerSwift:max-macair133:text-b1 ${
               location.includes(ROUTE_PATH.TQF3 || ROUTE_PATH.TQF5)
                 ? ""
                 : "md:w-fit w-full"

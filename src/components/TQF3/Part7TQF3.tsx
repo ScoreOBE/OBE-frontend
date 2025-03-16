@@ -16,7 +16,7 @@ import { useSearchParams } from "react-router-dom";
 import { initialTqf3Part7 } from "@/helpers/functions/tqf3";
 import { IModelPLO } from "@/models/ModelPLO";
 import { IModelPLORequire } from "@/models/ModelCourseManagement";
-import { getSectionNo } from "@/helpers/functions/function";
+import { getSectionNo, isMobile } from "@/helpers/functions/function";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
 
 type Props = {
@@ -470,7 +470,7 @@ export default function Part7TQF3({
           </div>
         ) : (
           <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
-          <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces  pb-4">
+            <div className=" text-secondary  iphone:max-sm:text-[14px] text-b1 font-semibold whitespace-break-spaces  pb-4">
               Part 6 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้ <br />
               Curriculum Mapping
             </div>
@@ -639,10 +639,16 @@ export default function Part7TQF3({
       </>
     ) : (
       <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
-          <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces grid grid-cols-2 ">
+        <div className={` text-secondary iphone:max-sm:text-[14px] text-b1 font-semibold whitespace-break-spaces ${!isMobile ? 'grid grid-cols-2' : ''}  `}>
           Part 6 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้ <br />
-          Curriculum Mapping  <div className="flex flex-col justify-center text-default font-medium text-b2 acerSwift:max-macair133:text-b4">None</div>
+          Curriculum Mapping{" "}
+          {!isMobile && <div className="flex flex-col justify-center text-default font-medium text-b2 acerSwift:max-macair133:text-b4">
+            None
+          </div>}
         </div>
+        <li className=" mt-4 justify-center text-default font-medium text-b2 acerSwift:max-macair133:text-b4">
+            None
+          </li>
       </div>
     )
   ) : (

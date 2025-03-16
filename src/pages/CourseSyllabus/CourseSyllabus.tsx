@@ -48,14 +48,13 @@ export default function CourseSyllabus() {
   const [openModalTOS, setOpenModalTOS] = useState(false);
   const currentYear = new Date().getFullYear();
   const dispatch = useAppDispatch();
-  const section = ["Part 1", "Part 2", "Part 3", "Part 4", "Part 5", "Part 6"];
+  const section = ["Part 1", "Part 2", "Part 3", "Part 4", "Part 5"];
   const partSections = [
     { value: section[0], compo: <Part1TQF3 /> },
     { value: section[1], compo: <Part2TQF3 /> },
     { value: section[2], compo: <Part3TQF3 /> },
     { value: section[3], compo: <Part4TQF3 /> },
     { value: section[4], compo: <Part5TQF3 /> },
-    { value: section[5], compo: <Part7TQF3 /> },
   ];
   const sectionRefs = useRef(
     section.map(() => React.createRef<HTMLDivElement>())
@@ -230,7 +229,7 @@ export default function CourseSyllabus() {
           <Loading />
         ) : (
           <div className="flex overflow-hidden w-full  h-full gap-3 py-2">
-            <div className="flex flex-col h-full max-w-[87%] iphone:max-sm:max-w-[100%] py-5 px-10 bg gap-4 overflow-auto">
+            <div className="flex flex-col h-full max-w-[87%]  iphone:max-sm:max-w-[100%] py-5 px-10 iphone:max-sm:px-5 bg gap-4 overflow-auto">
               
               <div className=" flex gap-2 ">
                 {" "}
@@ -240,7 +239,7 @@ export default function CourseSyllabus() {
                   </span>
                 </p>
               </div>
-              <p className=" font-semibold text-[18px] text-secondary mb-3 -mt-2">
+              <p className=" font-semibold text-[18px] iphone:max-sm:text-[16px] text-secondary mb-3 -mt-2">
                 {courseNo} - {course?.courseName}
               </p>
 
