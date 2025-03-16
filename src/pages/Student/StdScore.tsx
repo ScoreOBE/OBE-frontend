@@ -310,7 +310,7 @@ export default function StdScore() {
                           });
                           setOpenModalChart(true);
                         }}
-                        className="bg-white rounded-lg shadow-sm border mt-5 border-gray-200 overflow-hidden hover:border-[#1f69f3]/30 transition-all duration-300 cursor-pointer"
+                        className="bg-white rounded-lg shadow-sm border  border-gray-200 overflow-hidden hover:border-[#1f69f3]/30 transition-all duration-300 cursor-pointer"
                       >
                         <div className="p-4 border-b border-gray-100">
                           <div className="flex justify-between items-start">

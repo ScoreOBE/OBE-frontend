@@ -69,13 +69,9 @@ export default function NotAvailablePage() {
     >
       <div style={{ maxWidth: "450px", width: "100%" }}>
         <h3 className=" text-secondary text-[18px] font-semibold">
-          Landscape mode Required
+          Rotate Your Device to Landscape Mode
         </h3>
-        <p className="text-[13px] mt-4" style={{ color: "#666" }}>
-          The{" "}
-          <strong style={{ color: theme.primaryColor }}>{viewType} view</strong>{" "}
-          isn't optimized for portrait mode.
-        </p>
+        
         <div
           style={{
             display: "flex",
@@ -85,7 +81,7 @@ export default function NotAvailablePage() {
             marginTop: "24px",
           }}
         >
-          <div style={{ fontSize: "42px", color: "#999" }}>📱 ❌</div>
+          <div style={{ fontSize: "42px", color: "#999" }}>📱🔄</div>
           <div
             style={{
               fontSize: "24px",
@@ -93,7 +89,7 @@ export default function NotAvailablePage() {
               color: theme.primaryColor,
             }}
           >
-            →
+            or
           </div>
           <div style={{ fontSize: "42px", color: theme.primaryColor }}>
             💻 ✅
@@ -103,7 +99,7 @@ export default function NotAvailablePage() {
           className="text-[13px] mt-4"
           style={{ color: "#666", marginTop: "16px" }}
         >
-        For the best experience, please use a desktop or tablet. If you're on a mobile device, try switching to landscape mode and refresh page again.
+        <span className="text-secondary">If you’re using a mobile device, try rotating your phone to landscape mode and refreshing the page. </span>  Alternatively, switch to using a desktop or tablet for the best experience.
         </p>
       </div>
     </div>
