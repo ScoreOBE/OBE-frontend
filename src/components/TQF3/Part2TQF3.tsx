@@ -737,7 +737,7 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                       className="bg-white rounded-lg shadow-sm p-5 border border-gray-100 hover:shadow-md transition-shadow"
                     >
                       <div className="mb-4">
-                        <span className=" bg-[#ecf2fc] text-secondary font-semibold px-4 py-1.5 rounded-full text-sm">
+                        <span className=" bg-[#ecf2fc] text-secondary font-semibold px-4 py-1.5 rounded-full text-[12px]">
                           CLO-{item.no}
                         </span>
                       </div>
