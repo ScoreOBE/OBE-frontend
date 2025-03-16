@@ -78,7 +78,7 @@ export default function CourseSyllabusPDF() {
           </div>
           <div className="flex flex-col gap-2">
             <h2 className="text-[24px] font-semibold text-gray-800">
-              Oops! {courseNo} Course Specifications Not Available
+              Oops! {courseNo} Course Syllabus Not Available
             </h2>
 
             <p className="text-gray-600">

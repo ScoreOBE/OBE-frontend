@@ -507,7 +507,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                         }`}
                       >
                         {openSidebar ? (
-                          "TQF 3"
+                          "Syllabus (TQF 3)"
                         ) : (
                           <Icon
                             IconComponent={IconTQF3}
@@ -611,7 +611,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                         }`}
                       >
                         {openSidebar ? (
-                          "TQF 5"
+                          "Evaluation (TQF 5)"
                         ) : (
                           <Icon
                             IconComponent={IconTQF5}

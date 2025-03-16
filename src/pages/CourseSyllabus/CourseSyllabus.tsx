@@ -243,7 +243,7 @@ export default function CourseSyllabus() {
                     <div className="flex items-center gap-2">
                       <Icon IconComponent={IconInfo2} className="mr-2" />
                       <p>
-                        Course Specifications Feature is currently in its
+                        Course Syllabus Feature is currently in its
                         development (beta) phase. You may encounter unstable
                         features or bugs.
                       </p>

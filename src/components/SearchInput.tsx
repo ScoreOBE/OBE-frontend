@@ -6,17 +6,24 @@ import { TbSearch } from "react-icons/tb";
 
 type Props = {
   value?: string;
+  onChange?: (value: string) => void;
   onSearch: (value: string, reset?: boolean) => void;
   placeholder?: string;
 };
 
-export function SearchInput({ value, onSearch, placeholder }: Props) {
+export function SearchInput({ value, onSearch, placeholder, onChange }: Props) {
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     if (value == "" && searchValue != "") reset();
   }, [value]);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(searchValue);
+    }
+  }, [searchValue]);
 
   const reset = () => {
     setSearchValue("");

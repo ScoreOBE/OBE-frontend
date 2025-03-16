@@ -216,7 +216,7 @@ export default function Login() {
         }
         className="z-[52] drop-shadow-2xl iphone:max-sm:!rounded-3xl iphone:max-sm:px-8 !px-9 sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]"
       >
-        Search Course Specifications
+        Search Course Syllabus
       </Button>
     );
   };
