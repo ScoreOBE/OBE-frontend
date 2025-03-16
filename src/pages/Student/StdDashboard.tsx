@@ -115,25 +115,7 @@ export default function StdDashboard() {
           <Loading />
         ) : !!enrollCourses.courses.length ? (
           <div className="w-full">
-            {/* <Alert
-              radius="md"
-              variant="light"
-              classNames={{
-                body: " flex justify-center",
-              }}
-              color="orange"
-              className=" mt-3 mb-2 mx-6 "
-              title={
-                <div className="flex items-center gap-2">
-                  <Icon IconComponent={IconInfo2} className="mr-2" />
-                  <p className="iphone:max-sm:text-[12px]">
-                    ScoreOBE+ is currently in its development (beta) phase. You
-                    may encounter unstable features or bugs. Please report any
-                    issues using the button at the top right of your profile.
-                  </p>
-                </div>
-              }
-            ></Alert> */}
+            
             <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 iphone:max-sm:grid-cols-1 sm:grid-cols-3 macair133:grid-cols-4  pb-5 gap-4 sm:px-6 p-4">
               {enrollCourses.courses.map((item) => (
                 <div
@@ -143,7 +125,7 @@ export default function StdDashboard() {
                 >
                   <div className="p-2.5 h-full justify-between flex flex-col">
                     <div>
-                      <p className="font-bold text-sm">{item.courseNo}</p>{" "}
+                      <p className="font-bold text-default text-sm">{item.courseNo}</p>{" "}
                       <p className="text-xs  font-medium text-gray-600">
                         {item.courseName}
                       </p>

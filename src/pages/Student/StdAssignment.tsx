@@ -43,210 +43,275 @@ export default function StdAssignment() {
   };
 
   return (
-    <div className="bg-white flex flex-col h-full w-full sm:px-6 iphone:max-sm:px-3 iphone:max-sm:py-3 sm:py-5 gap-3 overflow-hidden">
-      {loading ? (
-        <Loading />
-      ) : (
-        <>
-          {course?.section?.assignments?.length !== 0 && (
-            <div className="flex flex-row  py-1  items-center justify-between">
-              <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 mb-2 font-semibold">
-                {course?.section?.assignments?.length} Evaluation
-                {course?.section?.assignments?.length! > 1 && "s"}
-              </p>
-            </div>
-          )}
+    <div className="bg-white h-full  overflow-hidden  ">
+      {/* Header */}
 
-          {course?.section?.assignments?.length !== 0 ? (
-            !isMobile ? (
-              <div
-                className="overflow-y-auto overflow-x-auto w-full h-fit max-h-full  border flex flex-col rounded-lg border-secondary"
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-                  height: "fit-content",
-                }}
-              >
-                <Table stickyHeader>
-                  <Table.Thead>
-                    <Table.Tr className="bg-[#e5e7f6]">
-                      <Table.Th className="w-[10%]">Question</Table.Th>
-                      <Table.Th className="text-end w-[10%]">
-                        Your Score
-                      </Table.Th>
-                      <Table.Th className="text-end w-[10%]">Mean</Table.Th>
-                      <Table.Th className="text-end w-[10%]">SD</Table.Th>
-                      <Table.Th className="text-end w-[10%]">Median</Table.Th>
-                      <Table.Th className="text-end w-[10%]">Max</Table.Th>
-                      <Table.Th className="text-end w-[10%]">Q3</Table.Th>
-                      <Table.Th className="text-end w-[10%] pr-[30px]">
-                        Q1
-                      </Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-
-                  <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px] ">
-                    {course?.section?.assignments?.map((assignment, index) => {
-                      const totalStudent = assignment.scores.length;
-                      const stat = calStat(assignment.scores, totalStudent);
-                      return (
-                        <Table.Tr
-                          key={index}
-                          className={`hover:bg-[#F3F3F3] cursor-pointer ${
-                            index % 2 === 0 && "bg-[#F8F9FA]"
-                          }`}
-                          onClick={() => goToAssignment(`${assignment.name}`)}
-                        >
-                          <Table.Td>{assignment.name}</Table.Td>
-
-                          <Table.Td className="text-end ">
-                            {course?.scores
-                              .find(
-                                ({ assignmentName }) =>
-                                  assignmentName == assignment.name
-                              )
-                              ?.questions.filter(({ score }) => score >= 0)
-                              .reduce((a, { score }) => a + score, 0)
-                              .toFixed(2)}{" "}
-                            /{" "}
-                            {assignment.questions
-                              .reduce((a, { fullScore }) => a + fullScore, 0)
-                              .toFixed(2)}
-                          </Table.Td>
-
-                          <Table.Td className="text-end">
-                            {stat.mean.toFixed(2)}
-                          </Table.Td>
-                          <Table.Td className="text-end">
-                            {stat.sd.toFixed(2)}
-                          </Table.Td>
-                          <Table.Td className="text-end">
-                            {stat.median.toFixed(2)}
-                          </Table.Td>
-                          <Table.Td className="text-end">
-                            {stat.maxScore.toFixed(2)}
-                          </Table.Td>
-                          <Table.Td className="text-end">
-                            {stat.q3.toFixed(2)}
-                          </Table.Td>
-                          <Table.Td className="text-end  pr-[30px]">
-                            {stat.q1 ? stat.q1.toFixed(2) : "-"}
-                          </Table.Td>
-                        </Table.Tr>
-                      );
-                    })}
-                  </Table.Tbody>
-                </Table>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3 overflow-y-auto h-full ">
-                {" "}
-                {course?.section?.assignments?.map((assignment, index) => {
-                  const totalStudent = assignment.scores.length;
-                  const stat = calStat(assignment.scores, totalStudent);
-                  return (
-                    <div
-                      key={index}
-                      className={`border flex flex-col hover:bg-slate-50 justify-between rounded-md p-3 `}
-                      onClick={() => goToAssignment(`${assignment.name}`)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex flex-col">
-                          <div className=" font-semibold text-default text-[14px]">
-                            {assignment.name}
-                          </div>
-
-                          <div className="font-semibold text-secondary text-[14px] ">
-                            {course?.scores
-                              .find(
-                                ({ assignmentName }) =>
-                                  assignmentName == assignment.name
-                              )
-                              ?.questions.filter(({ score }) => score >= 0)
-                              .reduce((a, { score }) => a + score, 0)
-                              .toFixed(2)}{" "}
-                            /{" "}
-                            {assignment.questions
-                              .reduce((a, { fullScore }) => a + fullScore, 0)
-                              .toFixed(2)}
-                          </div>
-                        </div>
-                        <Icon IconComponent={IconChevron} />
-                      </div>
-                      <div className="mt-2 text-[12px] border-t flex flex-col ">
-                        {" "}
-                        <div className="grid grid-cols-2 p-2 mt-1  rounded-t-md">
-                          <div className="flex flex-col">
-                            <div className="text-start">Mean</div>
-                            <p className="text-[13px] font-semibold">
-                              {stat.mean.toFixed(2)}
-                            </p>
-                          </div>
-                          <div className="flex flex-col">
-                            <div className="text-start">SD</div>
-                            <p className="text-[13px] font-semibold">
-                              {" "}
-                              {stat.sd.toFixed(2)}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-2 p-2  ">
-                          <div className="flex flex-col">
-                            <div className="text-start">Median</div>
-                            <p className="text-[13px] font-semibold">
-                              {stat.median.toFixed(2)}
-                            </p>
-                          </div>
-                          <div className="flex flex-col">
-                            <div className="text-start">Max</div>
-                            <p className="text-[13px] font-semibold">
-                              {stat.maxScore.toFixed(2)}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-2 p-2  rounded-b-md">
-                          <div className="flex flex-col">
-                            <div className="text-start">Q3</div>
-                            <p className="text-[13px] font-semibold">
-                              {stat.q3.toFixed(2)}
-                            </p>
-                          </div>
-                          <div className="flex flex-col">
-                            <div className="text-start ">Q1</div>
-                            <p className="text-[13px] font-semibold">
-                              {stat.q1 ? stat.q1.toFixed(2) : "-"}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )
-          ) : (
-            <div className="flex items-center  !h-full !w-full justify-between  sm:px-16">
-              <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
-                <p className="!h-full text-[20px] text-secondary font-semibold">
-                  No Evaluation
-                </p>
-                <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                  The evaluation will show when your score is published <br />{" "}
-                  by the instructor or co-instructor.
-                </p>
-              </div>
-              {!isMobile && (
-                <div className=" items-center justify-center flex">
-                  <img
-                    src={notFoundImage}
-                    className="h-full items-center  w-[24vw] justify-center flex flex-col"
-                    alt="notFound"
-                  ></img>
+      {/* Content */}
+      <div className=" flex flex-col h-full w-full sm:px-6 iphone:max-sm:px-4 iphone:max-sm:py-3 sm:py-5 gap-3 overflow-y-auto">
+        {loading ? (
+          <Loading />
+        ) : (
+          <div className="!h-full ">
+            {course?.section?.assignments?.length !== 0 && (
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <h3 className="font-semibold text-gray-800">
+                    {course?.section?.assignments?.length} Evaluation
+                    {course?.section?.assignments?.length! > 1 && "s"}
+                  </h3>
                 </div>
-              )}
-            </div>
-          )}
-        </>
-      )}
+                <div className="bg-[#1f69f3]/10 text-[#1f69f3] text-sm font-medium px-3 py-1 rounded-full">
+                  Course Statistics
+                </div>
+              </div>
+            )}
+
+            {course?.section?.assignments?.length !== 0 ? (
+              !isMobile ? (
+                // Desktop Table View
+                <div className="overflow-auto border border-[#1f69f3]/20 rounded-md ">
+                  <table className="w-full min-w-[800px]">
+                    <thead>
+                      <tr className="bg-[#1f69f3]/10 text-[14px]">
+                        <th className="py-3 px-4 text-left text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[20%]">
+                          Evaluation
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Your Score
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Mean
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          SD
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Median
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Max
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Q3
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Q1
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {course?.section?.assignments?.map(
+                        (assignment, index) => {
+                          const totalStudent = assignment.scores.length;
+                          const stat = calStat(assignment.scores, totalStudent);
+
+                          // Calculate your score
+                          const yourScore =
+                            course?.scores
+                              .find(
+                                ({ assignmentName }) =>
+                                  assignmentName === assignment.name
+                              )
+                              ?.questions.filter(({ score }) => score >= 0)
+                              .reduce((a, { score }) => a + score, 0) || 0;
+
+                          // Calculate full score
+                          const fullScore =
+                            assignment.questions.reduce(
+                              (a, { fullScore }) => a + fullScore,
+                              0
+                            ) || 0;
+
+                          // Calculate score percentage for visual indicator
+                          const scorePercentage = (yourScore / fullScore) * 100;
+
+                          return (
+                            <tr
+                              key={index}
+                              onClick={() => goToAssignment(assignment.name)}
+                              className={`hover:bg-blue-50/30 text-[13px] cursor-pointer transition-colors ${
+                                index % 2 === 0 ? "bg-white" : "bg-gray-50/50"
+                              }`}
+                            >
+                              <td className="py-4 px-4 border-b border-gray-100">
+                                <div className="flex items-center">
+                                  <span className="font-medium text-gray-800">
+                                    {assignment.name}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="py-4 px-4 text-right border-b border-gray-100">
+                                <div className="inline-flex items-center">
+                                  {isMobile && (
+                                    <div className="mr-2 w-16 bg-gray-200 rounded-full h-2.5">
+                                      <div
+                                        className="bg-[#1f69f3] h-2.5 rounded-full"
+                                        style={{ width: `${scorePercentage}%` }}
+                                      ></div>
+                                    </div>
+                                  )}
+                                  <span className="font-medium text-[#1f69f3]">
+                                    {yourScore.toFixed(2)} /{" "}
+                                    {fullScore.toFixed(2)}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                                {stat.mean.toFixed(2)}
+                              </td>
+                              <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                                {stat.sd.toFixed(2)}
+                              </td>
+                              <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                                {stat.median.toFixed(2)}
+                              </td>
+                              <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                                {stat.maxScore.toFixed(2)}
+                              </td>
+                              <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                                {stat.q3.toFixed(2)}
+                              </td>
+                              <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                                {stat.q1 ? stat.q1.toFixed(2) : "-"}
+                              </td>
+                            </tr>
+                          );
+                        }
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                // Mobile Card View
+                <div className="space-y-4 overflow-y-auto">
+                  {course?.section?.assignments?.map((assignment, index) => {
+                    const totalStudent = assignment.scores.length;
+                    const stat = calStat(assignment.scores, totalStudent);
+
+                    // Calculate your score
+                    const yourScore =
+                      course?.scores
+                        .find(
+                          ({ assignmentName }) =>
+                            assignmentName === assignment.name
+                        )
+                        ?.questions.filter(({ score }) => score >= 0)
+                        .reduce((a, { score }) => a + score, 0) || 0;
+
+                    // Calculate full score
+                    const fullScore =
+                      assignment.questions.reduce(
+                        (a, { fullScore }) => a + fullScore,
+                        0
+                      ) || 0;
+
+                    // Calculate score percentage for visual indicator
+                    const scorePercentage = (yourScore / fullScore) * 100;
+
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => goToAssignment(assignment.name)}
+                        className="bg-white  rounded-xl shadow-sm border  border-[#1f69f3]/20 overflow-hidden hover:shadow-md transition-all duration-300 cursor-pointer"
+                      >
+                        <div className="p-4 border-b border-gray-100">
+                          <div className="flex justify-between items-center">
+                            <h4 className="font-semibold text-[14px] text-gray-800">
+                              {assignment.name}
+                            </h4>
+                            <Icon
+                              IconComponent={IconChevron}
+                              className="h-5 w-5 text-gray-400"
+                            />
+                          </div>
+
+                          <div className="mt-3">
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="text-sm text-gray-600">
+                                Your Score
+                              </span>
+                              <span className="font-semibold text-[13px] text-[#1f69f3]">
+                                {yourScore.toFixed(2)} / {fullScore.toFixed(2)}
+                              </span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2.5">
+                              <div
+                                className="bg-[#1f69f3] h-2.5 rounded-full"
+                                style={{ width: `${scorePercentage}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2 p-4 bg-gray-50">
+                          <div className="bg-white p-2 rounded-lg border border-gray-100">
+                            <div className="text-xs text-gray-500">Mean</div>
+                            <div className="font-semibold text-gray-800">
+                              {stat.mean.toFixed(2)}
+                            </div>
+                          </div>
+                          <div className="bg-white p-2 rounded-lg border border-gray-100">
+                            <div className="text-xs text-gray-500">SD</div>
+                            <div className="font-semibold text-gray-800">
+                              {stat.sd.toFixed(2)}
+                            </div>
+                          </div>
+                          <div className="bg-white p-2 rounded-lg border border-gray-100">
+                            <div className="text-xs text-gray-500">Median</div>
+                            <div className="font-semibold text-gray-800">
+                              {stat.median.toFixed(2)}
+                            </div>
+                          </div>
+                          <div className="bg-white p-2 rounded-lg border border-gray-100">
+                            <div className="text-xs text-gray-500">Max</div>
+                            <div className="font-semibold text-gray-800">
+                              {stat.maxScore.toFixed(2)}
+                            </div>
+                          </div>
+                          <div className="bg-white p-2 rounded-lg border border-gray-100">
+                            <div className="text-xs text-gray-500">Q3</div>
+                            <div className="font-semibold text-gray-800">
+                              {stat.q3.toFixed(2)}
+                            </div>
+                          </div>
+                          <div className="bg-white p-2 rounded-lg border border-gray-100">
+                            <div className="text-xs text-gray-500">Q1</div>
+                            <div className="font-semibold text-gray-800">
+                              {stat.q1 ? stat.q1.toFixed(2) : "-"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )
+            ) : (
+              // No Evaluations State
+              <div className="flex items-center  !h-full !w-full justify-between  sm:px-16">
+                <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
+                  <p className="!h-full text-[20px] text-secondary font-semibold">
+                    No Evaluation
+                  </p>
+                  <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
+                    The evaluation will show when your score is published <br />{" "}
+                    by the instructor or co-instructor.
+                  </p>
+                </div>
+                {!isMobile && (
+                  <div className=" items-center justify-center flex">
+                    <img
+                      src={notFoundImage}
+                      className="h-full items-center  w-[24vw] justify-center flex flex-col"
+                      alt="notFound"
+                    ></img>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

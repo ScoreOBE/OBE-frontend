@@ -101,263 +101,324 @@ export default function StdScore() {
         onClose={() => setOpenModalChart(false)}
         question={selectQuestion}
       />
-      <div className="bg-white flex flex-col h-full w-full sm:px-6 iphone:max-sm:px-3 iphone:max-sm:py-3 sm:py-5 gap-3 iphone:max-sm:overflow-y-auto  overflow-hidden">
-        <Breadcrumbs items={items} />
-        {loading ? (
-          <Loading />
-        ) : (
-          <>
-            <div className="flex  flex-col border-b-2 border-nodata sm:pt-2 pb-3 items-start gap-4 text-start">
-              <div className="flex justify-between w-full sm:px-2 items-center">
-                <div className="flex flex-col sm:pb-1 sm:px-2">
-                  <div className="flex gap-1">
-                    <p className="text-[#3f4474] iphone:max-sm:text-[14px] font-semibold text-b1 acerSwift:max-macair133:!size-b2">
-                      {name}
+      <div className="bg-white rounded-2xl  overflow-hidden  ">
+    
+      <div className="bg-white flex flex-col h-full w-full sm:px-6 iphone:max-sm:px-4 iphone:max-sm:py-3 sm:py-5 gap-3 overflow-hidden">
+          <Breadcrumbs items={items} />
+
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className=" overflow-y-auto">
+              {/* Assignment Summary */}
+              <div className="border-b border-gray-200 pb-4  mt-2 mb-2">
+                {/* Assignment Header */}
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-[#3f4474] font-semibold text-lg iphone:max-sm:text-[14px]">
+                        {name}
+                      </h3>
+                    </div>
+                    <p className="text-gray-800 font-semibold text-lg iphone:max-sm:text-[13px] iphone:max-sm:-mt-1">
+                      {fullScore?.toFixed(2)}{" "}
+                      <span className="text-base text-gray-600">pts.</span>
                     </p>
-                    {!isMobile && (
-                      <div
-                        className="p-1 rounded-full w-6 h-6 bg-deemphasize/10 hover:bg-deemphasize/20 cursor-pointer"
-                        onClick={() => setOpenModalEvalChart(true)}
-                      >
-                        <Icon
-                          IconComponent={IconChart}
-                          className="size-3 acerSwift:max-macair133:size-3 text-[#3f4474]"
-                        />
-                      </div>
-                    )}
                   </div>
-                  <p className="text-default iphone:max-sm:text-[14px]  text-h1 font-semibold">
-                    {fullScore?.toFixed(2)}{" "}
-                    <span className="text-b1 acerSwift:max-macair133:!text-b2 ">
-                      pts.
-                    </span>
-                  </p>
+                  <div className="bg-[#3f4474]/10 px-3 py-1 rounded-full">
+                    <p className="text-[#3f4474] font-semibold text-sm iphone:max-sm:text-[12px]">
+                      {totalStudent} Students
+                    </p>
+                  </div>
                 </div>
-                <p className="text-[#3f4474] mb-1 iphone:max-sm:text-[12px]  font-semibold sm:max-macair133:text-[14px] text-b1 acerSwift:max-macair133:!text-b2">
-                  {totalStudent} Students
-                </p>
+
+                {/* Statistics Summary */}
+                <div
+                  className={`grid ${
+                    isMobile
+                      ? "grid-cols-2 gap-3 bg-gray-50 p-4 -mt-3 rounded-lg"
+                      : "sm:grid-cols-7 gap-6"
+                  } w-full`}
+                >
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-sm iphone:max-sm:text-xs text-[#1f69f3]">
+                      Your Score
+                    </p>
+                    <p className="font-bold text-xl iphone:max-sm:text-base text-[#1f69f3]">
+                      {yourScores?.questions
+                        .filter(({ score }) => score >= 0)
+                        .reduce((a, { score }) => a + score, 0)
+                        .toFixed(2)}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-sm iphone:max-sm:text-xs text-gray-500">
+                      Mean
+                    </p>
+                    <p className="font-bold text-xl iphone:max-sm:text-base text-gray-800">
+                      {mean.toFixed(2)}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-sm iphone:max-sm:text-xs text-gray-500">
+                      SD
+                    </p>
+                    <p className="font-bold text-xl iphone:max-sm:text-base text-gray-800">
+                      {sd.toFixed(2)}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-sm iphone:max-sm:text-xs text-gray-500">
+                      Median
+                    </p>
+                    <p className="font-bold text-xl iphone:max-sm:text-base text-gray-800">
+                      {median.toFixed(2)}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-sm iphone:max-sm:text-xs text-gray-500">
+                      Max
+                    </p>
+                    <p className="font-bold text-xl iphone:max-sm:text-base text-gray-800">
+                      {maxScore.toFixed(2)}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-sm iphone:max-sm:text-xs text-gray-500">
+                      Q3
+                    </p>
+                    <p className="font-bold text-xl iphone:max-sm:text-base text-gray-800">
+                      {q3.toFixed(2)}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <p className="font-semibold text-sm iphone:max-sm:text-xs text-gray-500">
+                      Q1
+                    </p>
+                    <p className="font-bold text-xl iphone:max-sm:text-base text-gray-800">
+                      {q1 ? q1.toFixed(2) : "-"}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="sm:flex  sm:px-10 iphone:max-sm:-mt-1 iphone:max-sm:grid iphone:max-sm:gap-3 iphone:max-sm:grid-cols-2 iphone:max-sm:p-3 iphone:max-sm:bg-gray-50 iphone:max-sm:rounded-md sm:flex-row justify-between w-full">
-                <div className="flex flex-col">
-                  <p className="font-semibold sm:text-[16px] iphone:max-sm:text-[14px] text-secondary">
-                    Your Score
-                  </p>
-                  <p className="font-bold text-[24px] iphone:max-sm:text-[14px] sm:max-macair133:text-[20px] text-secondary">
-                    {yourScores?.questions
-                      .filter(({ score }) => score >= 0)
-                      .reduce((a, { score }) => a + score, 0)
-                      .toFixed(2)}
-                  </p>
+
+              {/* Questions Table/Cards */}
+              {!isMobile ? (
+                // Desktop Table View
+                <div className="border border-[#1f69f3]/20 rounded-md  overflow-hidden">
+                <div className="max-h-[60vh] overflow-auto relative">
+                  <table className="w-full min-w-[800px] ">
+                    <thead className="sticky top-0 z-10">
+                      <tr className="bg-[#e5e7f6] text-[14px]">
+                        <th className="py-3 px-4 text-left text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[20%]">
+                          Question
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Your Score
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Mean
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          SD
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Median
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Max
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Q3
+                        </th>
+                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                          Q1
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {assignment?.questions.map((ques, index) => {
+                        const stat = calStat(ques.scores, ques.scores.length);
+                        const studentScore = yourScores?.questions.find(
+                          (item) => item.name == ques.name
+                        )?.score;
+
+                        return (
+                          <tr
+                            key={index}
+                            onClick={() => {
+                              setSelectQuestion({
+                                assignment,
+                                ...ques,
+                                studentScore,
+                              });
+                              setOpenModalChart(true);
+                            }}
+                            className={`hover:bg-blue-50/30 text-[13px] cursor-pointer transition-colors ${
+                              index % 2 === 0 ? "bg-white" : "bg-gray-50/50"
+                            }`}
+                          >
+                            <td className="py-4 px-4 border-b border-gray-100">
+                              <div>
+                                <span className="font-medium text-gray-800">
+                                  {ques.name}
+                                </span>
+                                {ques.desc && (
+                                  <p className="text-sm text-gray-500">
+                                    ({ques.desc})
+                                  </p>
+                                )}
+                              </div>
+                            </td>
+                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                              <span
+                                className={
+                                  (studentScore ?? -1) >= 0
+                                    ? "text-[#1f69f3]"
+                                    : "text-gray-400"
+                                }
+                              >
+                                {!studentScore || studentScore < 0
+                                  ? "-"
+                                  : studentScore.toFixed(2)}
+                              </span>
+                              <span className="text-gray-500">
+                                {" "}
+                                / {ques.fullScore.toFixed(2)}
+                              </span>
+                            </td>
+                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                              {stat.mean.toFixed(2)}
+                            </td>
+                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                              {stat.sd.toFixed(2)}
+                            </td>
+                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                              {stat.median.toFixed(2)}
+                            </td>
+                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                              {stat.maxScore.toFixed(2)}
+                            </td>
+                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                              {stat.q3.toFixed(2)}
+                            </td>
+                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                              {stat.q1 ? stat.q1.toFixed(2) : "-"}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold iphone:max-sm:text-[14px] text-[16px] text-[#777777]">
-                    Mean
-                  </p>
-                  <p className="font-bold iphone:max-sm:text-[14px] text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {mean.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold iphone:max-sm:text-[14px] text-[16px] text-[#777777]">
-                    SD
-                  </p>
-                  <p className="font-bold iphone:max-sm:text-[14px] text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {sd.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold iphone:max-sm:text-[14px] text-[16px] text-[#777777]">
-                    Median
-                  </p>
-                  <p className="font-bold iphone:max-sm:text-[14px] text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {median.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold iphone:max-sm:text-[14px] text-[16px] text-[#777777]">
-                    Max
-                  </p>
-                  <p className="font-bold iphone:max-sm:text-[14px] text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {maxScore.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold iphone:max-sm:text-[14px] text-[16px] text-[#777777]">
-                    Q3
-                  </p>
-                  <p className="font-bold iphone:max-sm:text-[14px] text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {q3.toFixed(2)}
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-semibold iphone:max-sm:text-[14px] text-[16px] text-[#777777]">
-                    Q1
-                  </p>
-                  <p className="font-bold iphone:max-sm:text-[14px] text-[24px] sm:max-macair133:text-[20px] text-default">
-                    {q1 ? q1.toFixed(2) : "-"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* Table */}
-            {!isMobile ? (
-              <div
-                className="overflow-y-auto mt-2  overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
-                style={{
-                  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-                  height: "fit-content",
-                }}
-              >
-                <Table stickyHeader striped>
-                  <Table.Thead>
-                    <Table.Tr className="bg-[#e5e7f6]">
-                      <Table.Th className="w-[10%]">Question</Table.Th>
-                      <Table.Th className="text-end w-[10%]">
-                        Your Score
-                      </Table.Th>
-                      <Table.Th className="text-end w-[10%]">Mean</Table.Th>
-                      <Table.Th className="text-end w-[10%]">SD</Table.Th>
-                      <Table.Th className="text-end w-[10%]">Median</Table.Th>
-                      <Table.Th className="text-end w-[10%]">Max</Table.Th>
-                      <Table.Th className="text-end w-[10%]">Q3</Table.Th>
-                      <Table.Th className="text-end w-[10%] px-8">Q1</Table.Th>
-                      {/* <Table.Th className="text-end pr-[30px] w-[10%]"></Table.Th> */}
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody className="text-default">
-                    {assignment?.questions.map((ques, index) => {
-                      const stat = calStat(ques.scores, ques.scores.length);
-                      const studentScore = yourScores?.questions.find(
-                        (item) => item.name == ques.name
-                      )?.score;
-                      return (
-                        <Table.Tr
-                          key={index}
-                          className="text-[13px] font-normal py-[14px] w-full cursor-pointer"
-                          onClick={() => {
-                            setSelectQuestion({
-                              assignment,
-                              ...ques,
-                              studentScore,
-                            });
-                            setOpenModalChart(true);
-                          }}
-                        >
-                          <Table.Td className="text-start w-[10%]">
-                            {ques.name}
-                            {ques.desc && (
-                              <p className="text-b4">({ques.desc})</p>
-                            )}
-                          </Table.Td>
-                          <Table.Td className="text-end w-[10%]">
-                            {!studentScore || studentScore < 0
-                              ? "-"
-                              : studentScore.toFixed(2)}{" "}
-                            / {ques.fullScore.toFixed(2)}
-                          </Table.Td>
-                          <Table.Td className="text-end w-[10%]">
-                            {stat.mean.toFixed(2)}
-                          </Table.Td>
-                          <Table.Td className="text-end w-[10%]">
-                            {stat.sd.toFixed(2)}
-                          </Table.Td>
-                          <Table.Td className="text-end w-[10%]">
-                            {stat.median.toFixed(2)}
-                          </Table.Td>
-                          <Table.Td className="text-end w-[10%]">
-                            {stat.maxScore.toFixed(2)}
-                          </Table.Td>
-                          <Table.Td className="text-end w-[10%]">
-                            {stat.q3.toFixed(2)}
-                          </Table.Td>
-                          <Table.Td className="text-end px-8 w-[10%]">
-                            {stat.q1 ? stat.q1.toFixed(2) : "-"}
-                          </Table.Td>
-                        </Table.Tr>
-                      );
-                    })}
-                  </Table.Tbody>
-                </Table>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {assignment?.questions.map((ques, index) => {
-                  const stat = calStat(ques.scores, ques.scores.length);
-                  const studentScore = yourScores?.questions.find(
-                    (item) => item.name == ques.name
-                  )?.score;
-                  return (
-                    <div
-                      key={index}
-                      className={` border flex flex-col  justify-between rounded-md p-3 `}
-                    >
-                      <div className="flex  justify-between">
-                        <div className="flex flex-col">
-                          <div className=" font-semibold text-default text-[14px]">
-                            {ques.name}
-                            {ques.desc && (
-                              <p className="text-b4">({ques.desc})</p>
-                            )}
-                          </div>
-                          <div className="font-semibold text-secondary text-[12px] ">
-                            {!studentScore || studentScore < 0
-                              ? "-"
-                              : studentScore.toFixed(2)}{" "}
-                            / {ques.fullScore.toFixed(2)}
+              ) : (
+                // Mobile Card View
+                <div className="space-y-4">
+                  {assignment?.questions.map((ques, index) => {
+                    const stat = calStat(ques.scores, ques.scores.length);
+                    const studentScore = yourScores?.questions.find(
+                      (item) => item.name == ques.name
+                    )?.score;
+
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          setSelectQuestion({
+                            assignment,
+                            ...ques,
+                            studentScore,
+                          });
+                          setOpenModalChart(true);
+                        }}
+                        className="bg-white rounded-lg shadow-sm border mt-5 border-gray-200 overflow-hidden hover:border-[#1f69f3]/30 transition-all duration-300 cursor-pointer"
+                      >
+                        <div className="p-4 border-b border-gray-100">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h4 className="font-medium text-gray-800">
+                                {ques.name}
+                              </h4>
+                              {ques.desc && (
+                                <p className="text-xs text-gray-500">
+                                  ({ques.desc})
+                                </p>
+                              )}
+                            </div>
+                            <div className="bg-[#1f69f3]/10 px-2 py-1 rounded-md">
+                              <p
+                                className={`text-sm font-medium ${
+                                  studentScore !== undefined &&
+                                  studentScore >= 0
+                                    ? "text-[#1f69f3]"
+                                    : "text-gray-400"
+                                }`}
+                              >
+                                {!studentScore || studentScore < 0
+                                  ? "-"
+                                  : studentScore.toFixed(2)}
+                                <span className="text-gray-500">
+                                  {" "}
+                                  / {ques.fullScore.toFixed(2)}
+                                </span>
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="mt-2 text-[12px] border-t flex flex-col ">
-                        <div className="grid grid-cols-2 p-2 mt-1 rounded-t-md">
-                          <div className="flex flex-col">
-                            <div className="text-start">Mean</div>
-                            <p className="text-[13px] font-semibold">
+
+                        <div className="grid grid-cols-2 gap-2 p-3 bg-gray-50">
+                          <div className="p-2">
+                            <p className="text-xs text-gray-500">Mean</p>
+                            <p className="text-sm font-semibold text-gray-800">
                               {stat.mean.toFixed(2)}
                             </p>
                           </div>
-                          <div className="flex flex-col">
-                            <div className="text-start">SD</div>
-                            <p className="text-[13px] font-semibold">
+                          <div className="p-2">
+                            <p className="text-xs text-gray-500">SD</p>
+                            <p className="text-sm font-semibold text-gray-800">
                               {stat.sd.toFixed(2)}
                             </p>
                           </div>
-                        </div>
-                        <div className="grid grid-cols-2 p-2  ">
-                          <div className="flex flex-col">
-                            <div className="text-start">Median</div>
-                            <p className="text-[13px] font-semibold">
+                          <div className="p-2">
+                            <p className="text-xs text-gray-500">Median</p>
+                            <p className="text-sm font-semibold text-gray-800">
                               {stat.median.toFixed(2)}
                             </p>
                           </div>
-                          <div className="flex flex-col">
-                            <div className="text-start">Max</div>
-                            <p className="text-[13px] font-semibold">
+                          <div className="p-2">
+                            <p className="text-xs text-gray-500">Max</p>
+                            <p className="text-sm font-semibold text-gray-800">
                               {stat.maxScore.toFixed(2)}
                             </p>
                           </div>
-                        </div>
-                        <div className="grid grid-cols-2 p-2  rounded-b-md">
-                          <div className="flex flex-col">
-                            <div className="text-start">Q3</div>
-                            <p className="text-[13px] font-semibold">
+                          <div className="p-2">
+                            <p className="text-xs text-gray-500">Q3</p>
+                            <p className="text-sm font-semibold text-gray-800">
                               {stat.q3.toFixed(2)}
                             </p>
                           </div>
-                          <div className="flex flex-col">
-                            <div className="text-start ">Q1</div>
-                            <p className="text-[13px] font-semibold">
+                          <div className="p-2">
+                            <p className="text-xs text-gray-500">Q1</p>
+                            <p className="text-sm font-semibold text-gray-800">
                               {stat.q1 ? stat.q1.toFixed(2) : "-"}
                             </p>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </>
-        )}
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

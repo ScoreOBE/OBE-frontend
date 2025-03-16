@@ -545,7 +545,7 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
                         Total Evaluation
                       </span>
                       <span className="bg-[#1f69f3] text-white font-bold px-3 py-1 rounded-full iphone:max-sm:text-[14px]">
-                        {percentTotal}%
+                        100%
                       </span>
                     </div>
                   </div>
