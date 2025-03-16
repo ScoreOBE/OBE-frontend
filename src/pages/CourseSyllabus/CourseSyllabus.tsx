@@ -243,7 +243,7 @@ export default function CourseSyllabus() {
                 {courseNo} - {course?.courseName}
               </p>
               <li className="-mt-1 iphone:max-sm:text-[12px]">{course?.descTH}</li>
-              <li className="mb-3 -mt-1 iphone:max-sm:text-[12px]]">{course?.descEN}</li>
+              <li className="mb-3 -mt-1 iphone:max-sm:text-[12px]">{course?.descEN}</li>
 
               {section.map((name, i) => (
                 <div
