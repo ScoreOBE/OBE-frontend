@@ -152,14 +152,14 @@ export default function CourseSyllabusDashboard() {
                 {" "}
                 <p className="!font-[600] mb-4 text-[28px] iphone:max-sm:text-[24px]">
                   <span className=" !drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                    ScoreOBE+ Course Syllabus
+                  {!user.id && "ScoreOBE+"} Course Syllabus
                   </span>
                 </p>
               </div>
             </>
           )}
           <div
-            className={` px-10 pt-5 pb-4  rounded-lg ${
+            className={` px-10 iphone:max-sm:px-4 pt-5 pb-4  rounded-lg ${
               !courseSyllabus.search.length
                 ? "flex-row  items-end gap-4"
                 : "gap-4 border-b   w-full"
@@ -175,13 +175,13 @@ export default function CourseSyllabusDashboard() {
             <div
               className={`flex ${
                 isMobile
-                  ? "flex-col gap-2"
+                  ? "flex-col  gap-2"
                   : courseSyllabus.search.length
-                  ? "gap-4"
+                  ? "gap-4 "
                   : "flex-row items-end gap-4"
               }`}
             >
-              {courseSyllabus.search.length > 0 && (
+              {courseSyllabus.search.length > 0 && !user.id && (
                 <p className="!font-[600] mb-2 text-[20px]">
                   <span className="!drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                     ScoreOBE+
@@ -208,6 +208,7 @@ export default function CourseSyllabusDashboard() {
                 <SearchInput
                   value={searchValue}
                   onChange={setSearchValue}
+                  className="w-full"
                   onSearch={(value) => dispatch(setSearchCourseSyllabus(value))}
                   placeholder=" 001102 or English 2"
                 />

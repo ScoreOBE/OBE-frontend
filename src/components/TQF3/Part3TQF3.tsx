@@ -483,7 +483,7 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
                   {tqf3.part3?.eval?.map((item) => (
                     <div
                       key={item.no.toString()}
-                      className="bg-white mb-3 rounded-lg shadow-sm p-4 border border-gray-100 hover:shadow-md transition-shadow"
+                      className="bg-white mb-3 rounded-lg shadow-sm p-4 border border-gray-100 transition-shadow"
                     >
                       <div className="flex items-center gap-2 mb-3">
                         <span className="bg-blue-50 text-blue-600 font-semibold px-3 py-1 rounded-full text-[12px]">

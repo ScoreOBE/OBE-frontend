@@ -1,3 +1,4 @@
+import { isMobile } from "@/helpers/functions/function";
 import { ellipsisText } from "@/helpers/functions/validation";
 import { TextInput, Tooltip, CloseButton } from "@mantine/core";
 import { useEffect, useState } from "react";
@@ -9,9 +10,10 @@ type Props = {
   onChange?: (value: string) => void;
   onSearch: (value: string, reset?: boolean) => void;
   placeholder?: string;
+  className?: string
 };
 
-export function SearchInput({ value, onSearch, placeholder, onChange }: Props) {
+export function SearchInput({ value, onSearch, placeholder, onChange, className = "" }: Props) {
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
@@ -32,13 +34,13 @@ export function SearchInput({ value, onSearch, placeholder, onChange }: Props) {
   };
 
   return (
-    <div className="relative z-50 ipad11:w-[280px] macair133:w-[400px] w-[220px] acerSwift:max-macair133:w-[380px]">
+    <div className={`${className} relative z-50 ipad11:w-[280px] macair133:w-[400px] w-[220px] acerSwift:max-macair133:w-[380px]`}>
       <TextInput
         autoFocus={false}
         leftSection={!isFocused && <TbSearch className="size-4" />}
         placeholder={placeholder}
         size="xs"
-        className="z-50 acerSwift:max-macair133:text-b5"
+        className={`z-50 acerSwift:max-macair133:text-b5`}
         value={searchValue}
         onChange={(event: any) => setSearchValue(event.currentTarget.value)}
         onKeyDown={(event: any) => {
