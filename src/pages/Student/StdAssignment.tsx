@@ -71,30 +71,30 @@ export default function StdAssignment() {
                 // Desktop Table View
                 <div className="overflow-auto border border-[#1f69f3]/20 rounded-md ">
                   <table className="w-full min-w-[800px]">
-                    <thead>
+                    <thead className="!h-[56px]">
                       <tr className="bg-[#1f69f3]/10 text-[14px]">
-                        <th className="py-3 px-4 text-left text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[20%]">
+                        <th className="py-3 px-6 text-left text-[#1f69f3] font-bold border-b border-[#1f69f3]/10 w-[20%]">
                           Evaluation
                         </th>
-                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-bold border-b border-[#1f69f3]/10 w-[10%]">
                           Your Score
                         </th>
-                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-bold border-b border-[#1f69f3]/10 w-[10%]">
                           Mean
                         </th>
-                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-bold border-b border-[#1f69f3]/10 w-[10%]">
                           SD
                         </th>
-                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-bold border-b border-[#1f69f3]/10 w-[10%]">
                           Median
                         </th>
-                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-bold border-b border-[#1f69f3]/10 w-[10%]">
                           Max
                         </th>
-                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                        <th className="py-3 px-4 text-right text-[#1f69f3] font-bold border-b border-[#1f69f3]/10 w-[10%]">
                           Q3
                         </th>
-                        <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                        <th className="py-3 px-6 text-right text-[#1f69f3] font-bold border-b border-[#1f69f3]/10 w-[10%]">
                           Q1
                         </th>
                       </tr>
@@ -129,11 +129,11 @@ export default function StdAssignment() {
                             <tr
                               key={index}
                               onClick={() => goToAssignment(assignment.name)}
-                              className={`hover:bg-blue-50/30 text-[13px] cursor-pointer transition-colors ${
-                                index % 2 === 0 ? "bg-white" : "bg-gray-50/50"
+                              className={`hover:bg-blue-50/30   text-[13px] cursor-pointer transition-colors ${
+                                index % 2 === 0 ? "bg-white" : "bg-gray-100"
                               }`}
                             >
-                              <td className="py-4 px-4 border-b border-gray-100">
+                              <td className="py-4 px-6 border-b border-gray-100">
                                 <div className="flex items-center">
                                   <span className="font-medium text-gray-800">
                                     {assignment.name}
@@ -171,7 +171,7 @@ export default function StdAssignment() {
                               <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
                                 {stat.q3.toFixed(2)}
                               </td>
-                              <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                              <td className="py-4 px-6 text-right border-b border-gray-100 font-medium">
                                 {stat.q1 ? stat.q1.toFixed(2) : "-"}
                               </td>
                             </tr>

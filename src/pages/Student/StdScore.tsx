@@ -102,14 +102,13 @@ export default function StdScore() {
         question={selectQuestion}
       />
       <div className="bg-white rounded-2xl  overflow-hidden  ">
-    
-      <div className="bg-white flex flex-col h-full w-full sm:px-6 iphone:max-sm:px-4 iphone:max-sm:py-3 sm:py-5 gap-3 overflow-hidden">
+        <div className="bg-white flex flex-col h-full w-full sm:px-6 iphone:max-sm:px-4 iphone:max-sm:py-3 sm:py-5 gap-3 overflow-hidden">
           <Breadcrumbs items={items} />
 
           {loading ? (
             <Loading />
           ) : (
-            <div className=" overflow-y-auto">
+            <div className=" overflow-y-auto gap-4 flex flex-col">
               {/* Assignment Summary */}
               <div className="border-b border-gray-200 pb-4  mt-2 mb-2">
                 {/* Assignment Header */}
@@ -137,7 +136,7 @@ export default function StdScore() {
                   className={`grid ${
                     isMobile
                       ? "grid-cols-2 gap-3 bg-gray-50 p-4 -mt-3 rounded-lg"
-                      : "sm:grid-cols-7 gap-6"
+                      : "sm:grid-cols-7 gap-6 px-5"
                   } w-full`}
                 >
                   <div className="flex flex-col">
@@ -211,47 +210,41 @@ export default function StdScore() {
               {/* Questions Table/Cards */}
               {!isMobile ? (
                 // Desktop Table View
-                <div className="border border-[#1f69f3]/20 rounded-md  overflow-hidden">
-                <div className="max-h-[60vh] overflow-auto relative">
-                  <table className="w-full min-w-[800px] ">
-                    <thead className="sticky top-0 z-10">
-                      <tr className="bg-[#e5e7f6] text-[14px]">
-                        <th className="py-3 px-4 text-left text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[20%]">
-                          Question
-                        </th>
-                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                <div
+                  className="overflow-y-auto   overflow-x-auto w-full h-fit max-h-full border flex flex-col rounded-md border-[#1f69f3]/20 "
+                  style={{
+                  
+                    height: "fit-content",
+                  }}
+                >
+                  <Table stickyHeader striped>
+                    <Table.Thead className="">
+                      <Table.Tr className="bg-[#e5e7f6]">
+                        <Table.Th className="w-[10%]">Question</Table.Th>
+                        <Table.Th className="text-end w-[10%]">
                           Your Score
-                        </th>
-                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
-                          Mean
-                        </th>
-                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
-                          SD
-                        </th>
-                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
-                          Median
-                        </th>
-                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
-                          Max
-                        </th>
-                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
-                          Q3
-                        </th>
-                        <th className="py-3 px-4 text-right text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 w-[10%]">
+                        </Table.Th>
+                        <Table.Th className="text-end w-[10%]">Mean</Table.Th>
+                        <Table.Th className="text-end w-[10%]">SD</Table.Th>
+                        <Table.Th className="text-end w-[10%]">Median</Table.Th>
+                        <Table.Th className="text-end w-[10%]">Max</Table.Th>
+                        <Table.Th className="text-end w-[10%]">Q3</Table.Th>
+                        <Table.Th className="text-end w-[10%] px-8">
                           Q1
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
+                        </Table.Th>
+                        {/* <Table.Th className="text-end pr-[30px] w-[10%]"></Table.Th> */}
+                      </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody className="text-default">
                       {assignment?.questions.map((ques, index) => {
                         const stat = calStat(ques.scores, ques.scores.length);
                         const studentScore = yourScores?.questions.find(
                           (item) => item.name == ques.name
                         )?.score;
-
                         return (
-                          <tr
+                          <Table.Tr
                             key={index}
+                            className="text-[13px] font-normal py-[14px] w-full cursor-pointer"
                             onClick={() => {
                               setSelectQuestion({
                                 assignment,
@@ -260,63 +253,42 @@ export default function StdScore() {
                               });
                               setOpenModalChart(true);
                             }}
-                            className={`hover:bg-blue-50/30 text-[13px] cursor-pointer transition-colors ${
-                              index % 2 === 0 ? "bg-white" : "bg-gray-50/50"
-                            }`}
                           >
-                            <td className="py-4 px-4 border-b border-gray-100">
-                              <div>
-                                <span className="font-medium text-gray-800">
-                                  {ques.name}
-                                </span>
-                                {ques.desc && (
-                                  <p className="text-sm text-gray-500">
-                                    ({ques.desc})
-                                  </p>
-                                )}
-                              </div>
-                            </td>
-                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
-                              <span
-                                className={
-                                  (studentScore ?? -1) >= 0
-                                    ? "text-[#1f69f3]"
-                                    : "text-gray-400"
-                                }
-                              >
-                                {!studentScore || studentScore < 0
-                                  ? "-"
-                                  : studentScore.toFixed(2)}
-                              </span>
-                              <span className="text-gray-500">
-                                {" "}
-                                / {ques.fullScore.toFixed(2)}
-                              </span>
-                            </td>
-                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                            <Table.Td className="text-start w-[10%]">
+                              {ques.name}
+                              {ques.desc && (
+                                <p className="text-b4">({ques.desc})</p>
+                              )}
+                            </Table.Td>
+                            <Table.Td className="text-end ">
+                             <span className="text-secondary"> {!studentScore || studentScore < 0
+                                ? "-"
+                                : studentScore.toFixed(2)}{" "}</span>
+                              / {ques.fullScore.toFixed(2)}
+                            </Table.Td>
+                            <Table.Td className="text-end w-[10%]">
                               {stat.mean.toFixed(2)}
-                            </td>
-                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                            </Table.Td>
+                            <Table.Td className="text-end w-[10%]">
                               {stat.sd.toFixed(2)}
-                            </td>
-                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                            </Table.Td>
+                            <Table.Td className="text-end w-[10%]">
                               {stat.median.toFixed(2)}
-                            </td>
-                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                            </Table.Td>
+                            <Table.Td className="text-end w-[10%]">
                               {stat.maxScore.toFixed(2)}
-                            </td>
-                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                            </Table.Td>
+                            <Table.Td className="text-end w-[10%]">
                               {stat.q3.toFixed(2)}
-                            </td>
-                            <td className="py-4 px-4 text-right border-b border-gray-100 font-medium">
+                            </Table.Td>
+                            <Table.Td className="text-end px-8 w-[10%]">
                               {stat.q1 ? stat.q1.toFixed(2) : "-"}
-                            </td>
-                          </tr>
+                            </Table.Td>
+                          </Table.Tr>
                         );
                       })}
-                    </tbody>
-                  </table>
-                  </div>
+                    </Table.Tbody>
+                  </Table>
                 </div>
               ) : (
                 // Mobile Card View

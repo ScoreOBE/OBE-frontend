@@ -210,7 +210,7 @@ export default function CourseSyllabusDashboard() {
                   onChange={setSearchValue}
                   className="w-full"
                   onSearch={(value) => dispatch(setSearchCourseSyllabus(value))}
-                  placeholder=" 001102 or English 2"
+                  placeholder="e.g. 261405 or Advance Computer Engineering Technology"
                 />
               </div>
 
