@@ -730,33 +730,42 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                   </Table>
                 </div>
               ) : (
-                <div className="flex flex-col -mt-2">
+                <div className="space-y-5 ">
                   {tqf3.part2?.clo?.map((item) => (
                     <div
-                      className=" border-b flex flex-col gap-1 last:border-none py-3 "
                       key={item.no.toString()}
+                      className="bg-white rounded-lg shadow-sm p-5 border border-gray-100 hover:shadow-md transition-shadow"
                     >
-                      <div className="font-semibold p-1 text-secondary bg-bgTableHeader w-fit !px-3 rounded-xl ">
-                        CLO-{item.no}
+                      <div className="mb-4">
+                        <span className=" bg-[#ecf2fc] text-secondary font-semibold px-4 py-1.5 rounded-full text-sm">
+                          CLO-{item.no}
+                        </span>
                       </div>
 
-                      <div className="flex flex-col gap-0.5">
-                        <li> {item.descTH}</li>
-                        <li> {item.descEN}</li>
+                      <div className="space-y-2 mb-4">
+                        <p className="text-gray-800 font-medium">
+                          {item.descTH}
+                        </p>
+                        <p className="text-gray-600 italic">{item.descEN}</p>
                       </div>
 
-                      <div className="">
-                        <div className="flex flex-col gap-0.5">
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <h4 className="text-[12px] font-medium text-gray-500 mb-2">
+                          Learning Methods:
+                        </h4>
+                        <ul className="space-y-2">
                           {item.learningMethod.map((method) => (
-                            <li key={method}>
-                              {" "}
-                              Learning Method:{" "}
-                              {method == LearningMethod.Other
+                            <li
+                              key={method}
+                              className="flex items-center text-gray-700"
+                            >
+                              <span className="h-1.5 w-1.5 rounded-full bg-secondary mr-2"></span>
+                              {method === LearningMethod.Other
                                 ? item.other
                                 : method}
                             </li>
                           ))}
-                        </div>
+                        </ul>
                       </div>
                     </div>
                   ))}
@@ -843,38 +852,83 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                   </Table>
                 </div>
               ) : (
-                <div className="flex flex-col -mt-2">
-                  {tqf3.part2?.schedule?.map((item) => (
-                    <div
-                      className="border-b flex flex-col gap-1 last:border-none py-3"
-                      key={item.weekNo.toString()}
-                    >
-                      <div className="font-semibold p-1 text-secondary mb-[2px] bg-bgTableHeader w-fit !px-3 rounded-xl">
-                        Week-{item.weekNo}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                  {/* Weekly schedule */}
+                  <div className="divide-y divide-gray-100">
+                    {tqf3.part2?.schedule?.map((item) => (
+                      <div
+                        key={item.weekNo.toString()}
+                        className="p-4 hover:bg-gray-50 transition-colors"
+                      >
+                        <div className="flex items-start">
+                          <span className="bg-amber-50 text-amber-600 font-semibold px-3 py-1 rounded-full text-[12px] mr-3">
+                            Week-{item.weekNo}
+                          </span>
+
+                          <div className="flex-1">
+                            <h3 className="font-medium text-gray-800 mb-3">
+                              {item.topic}
+                            </h3>
+
+                            <div className="flex flex-col flex-wrap gap-1  text-[12px]">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 rounded-full bg-blue-400 mr-2"></div>
+                                <span className="text-gray-600">
+                                  Lecture: {item.lecHour} hrs
+                                </span>
+                              </div>
+
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 rounded-full bg-green-400 mr-2"></div>
+                                <span className="text-gray-600">
+                                  Lab: {item.labHour} hrs
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-
-                      <li>{item.topic}</li>
-                      <li>Lecture hour: {item.lecHour}</li>
-                      <li>Lab hour: {item.labHour}</li>
-                    </div>
-                  ))}
-
-                  <div className="mt-4 gap-1 text-secondary rounded-md flex flex-col justify-between font-semibold">
-                    <span>
-                      Total Lecture Hours:{" "}
-                      {tqf3.part2?.schedule
-                        ?.reduce((acc, item) => acc + (item.lecHour || 0), 0)
-                        .toFixed(1)}
-                    </span>
-                    <span>
-                      Total Lab Hours:{" "} 
-                      {tqf3.part2?.schedule
-                        ?.reduce((acc, item) => acc + (item.labHour || 0), 0)
-                        .toFixed(1)}
-                    </span>
+                    ))}
                   </div>
 
-                  {!disabled && <div className="!rounded-br-md"></div>}
+                  {/* Summary section */}
+                  <div className="bg-gray-50 p-4 border-t border-gray-100">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+                        <div className="text-[14px] text-gray-500 mb-1">
+                          Total Lecture Hours
+                        </div>
+                        <div className="text-xl font-semibold text-blue-600">
+                          {" "}
+                          {tqf3.part2?.schedule
+                            ?.reduce(
+                              (acc, item) => acc + (item.lecHour || 0),
+                              0
+                            )
+                            .toFixed(1)}
+                        </div>
+                      </div>
+
+                      <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+                        <div className="text-[14px] text-gray-500 mb-1">
+                          Total Lab Hours
+                        </div>
+                        <div className="text-xl font-semibold text-green-600">
+                          {" "}
+                          {tqf3.part2?.schedule
+                            ?.reduce(
+                              (acc, item) => acc + (item.labHour || 0),
+                              0
+                            )
+                            .toFixed(1)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {!disabled && (
+                    <div className="h-1 bg-gradient-to-r from-amber-400 to-amber-500"></div>
+                  )}
                 </div>
               )}
             </div>

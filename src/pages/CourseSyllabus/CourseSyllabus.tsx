@@ -233,15 +233,17 @@ export default function CourseSyllabus() {
               
               <div className=" flex gap-2 ">
                 {" "}
-                <p className="!font-[600] text-[20px]">
+                <p className="!font-[600] text-[20px] mb-3">
                   <span className=" !drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                     ScoreOBE+{" "}
                   </span>
                 </p>
               </div>
-              <p className=" font-semibold text-[18px] iphone:max-sm:text-[16px] text-secondary mb-3 -mt-2">
+              <p className=" font-semibold text-[18px] iphone:max-sm:text-[16px] text-secondary -mt-2">
                 {courseNo} - {course?.courseName}
               </p>
+              <li className="-mt-1 iphone:text-[12px]">{course?.descTH}</li>
+              <li className="mb-3 -mt-1 iphone:text-[12px]">{course?.descEN}</li>
 
               {section.map((name, i) => (
                 <div

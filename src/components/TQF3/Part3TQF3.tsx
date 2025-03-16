@@ -414,7 +414,9 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
             </div>
             <div className="flex flex-col w-full px-6 iphone:max-sm:px-3 gap-4 pt-5 pb-2">
               <div className="flex text-gray-800 items-center w-full justify-between">
-                <p className="font-medium">Evaluation Items</p>
+                <p className="font-medium iphone:max-sm:text-[12px]">
+                  Evaluation Items
+                </p>
               </div>
               {!isMobile ? (
                 <div
@@ -477,22 +479,36 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
                   </Table>
                 </div>
               ) : (
-                <div className="flex flex-col -mt-2">
+                <div>
                   {tqf3.part3?.eval?.map((item) => (
                     <div
-                      className="border-b flex flex-col gap-1 last:border-none py-3 last:pb-0"
                       key={item.no.toString()}
+                      className="bg-white mb-3 rounded-lg shadow-sm p-4 border border-gray-100 hover:shadow-md transition-shadow"
                     >
-                      <div className="font-semibold p-1 text-secondary mb-[2px] bg-bgTableHeader w-fit !px-3 rounded-xl">
-                        Item-{item.no} ({item.percent}%)
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="bg-blue-50 text-blue-600 font-semibold px-3 py-1 rounded-full text-[12px]">
+                          Item-{item.no}
+                        </span>
+                        <span className="bg-green-50 text-green-600 font-semibold px-3 py-1 rounded-full text-[12px]">
+                          {item.percent}%
+                        </span>
                       </div>
 
-                      <li>{item.topicTH}</li>
-                      <li>{item.topicEN}</li>
+                      <div>
+                        <p className="text-gray-800 font-medium">
+                          {item.topicTH}
+                        </p>
+                        <p className="text-gray-600 italic">{item.topicEN}</p>
 
-                      <li className=" flex-wrap">
-                        {item.desc.length ? item.desc : "-"}
-                      </li>
+                        <div className="mt-3 pt-3 border-t border-gray-100">
+                          <span className="text-gray-500 text-[12px]">
+                            Description:
+                          </span>
+                          <p className="text-gray-700 text-[12px] mt-[2px]">
+                            {item.desc.length ? item.desc : "none"}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>

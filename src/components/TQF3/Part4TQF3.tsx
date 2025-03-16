@@ -22,6 +22,7 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { initialTqf3Part4 } from "@/helpers/functions/tqf3";
 import { PartTopicTQF3 } from "@/helpers/constants/TQF3.enum";
+import { isMobile } from "@/helpers/functions/function";
 
 type Props = {
   setForm?: React.Dispatch<React.SetStateAction<any>>;
@@ -706,154 +707,216 @@ export default function Part4TQF3({
           <div className=" text-secondary iphone:max-sm:text-[14px] text-b1 font-semibold whitespace-break-spaces  pb-4">
             {PartTopicTQF3.part4}
           </div>
-          <div
-            className="overflow-auto border mt-2 mx-6 border-secondary rounded-lg relative"
-            style={{
-              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-            }}
-          >
-            <Table stickyHeader striped>
-              <Table.Thead className="z-[2] acerSwift:max-macair133:!text-b3">
-                <Table.Tr>
-                  <Table.Th
-                    className="min-w-[400px] sticky left-0 !p-0"
-                    style={{
-                      filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
-                    }}
-                  >
-                    <div className="w-full flex items-center px-[25px] h-[58px]">
-                      CLO Description / Evaluation Topic
-                    </div>
-                  </Table.Th>
-                  {evalForm.getValues().data.map((item, evalIndex) => (
+          {!isMobile ? (
+            <div
+              className="overflow-auto border mt-2 mx-6 border-secondary rounded-lg relative"
+              style={{
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
+            >
+              <Table stickyHeader striped>
+                <Table.Thead className="z-[2] acerSwift:max-macair133:!text-b3">
+                  <Table.Tr>
                     <Table.Th
-                      key={evalIndex}
-                      className="min-w-[120px] max-w-[160px] !py-3.5 !px-4.5 z-0"
+                      className="min-w-[400px] sticky left-0 !p-0"
+                      style={{
+                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
+                      }}
                     >
-                      <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                        {item.topicTH}
-                      </p>
-                      <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                        {item.topicEN}
-                      </p>
+                      <div className="w-full flex items-center px-[25px] h-[58px]">
+                        CLO Description / Evaluation Topic
+                      </div>
                     </Table.Th>
-                  ))}
-                  <Table.Th
-                    style={{
-                      filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.1))",
-                    }}
-                    className="w-[55px] !bg-[#e4f5ff] sticky right-0 !p-0"
-                  >
-                    <div className="w-[90px] text-nowrap flex items-center justify-center h-[58px]">
-                      Total <br /> CLO (%)
-                    </div>
-                  </Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
-                {tqf3.part4?.data.map(({ clo, percent, evals }, cloIndex) => {
-                  const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
-                  return (
-                    <Table.Tr
-                      key={cloIndex}
-                      className="text-[13px] table-row h-full text-default"
-                    >
-                      <Table.Td
-                        style={{
-                          filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
-                        }}
-                        className="!p-0 sticky left-0 z-[1]"
-                      >
-                        <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
-                          <div className="text-secondary min-w-fit font-bold acerSwift:max-macair133:!text-b3">
-                            CLO-{cloItem?.no}
-                          </div>
-                          <p className="flex w-fit   font-medium justify-between flex-col acerSwift:max-macair133:!text-b4">
-                            <span className="mb-1">{cloItem?.descTH}</span>
-                            <span>{cloItem?.descEN}</span>
-                          </p>
-                        </div>
-                      </Table.Td>
-                      {evalForm.getValues().data.map((item, colIndex) => {
-                        const evalItem = evals.find((e) => e.eval === item.id);
-                        const i = evals.findIndex((e) => e.eval === item.id);
-                        if (!tableRefs.current[colIndex]) {
-                          tableRefs.current[colIndex] = [];
-                        }
-                        return (
-                          <Table.Td
-                            key={colIndex}
-                            className={`${
-                              evalItem ? "text-secondary font-semibold" : ""
-                            } text-b2 !px-4.5 max-w-[200px]`}
-                          >
-                            {evalItem?.percent ?? 0}%
-                          </Table.Td>
-                        );
-                      })}
-                      <td
-                        style={{
-                          filter:
-                            "drop-shadow(-2px 0px 2px rgba(0, 0, 0, 0.1))",
-                        }}
-                        className="!bg-[#e4f5ff] !p-0 !h-full sticky z-[1] right-0 "
-                      >
-                        <div className="  max-h-full items-center justify-center px-[25px] font-semibold text-b2 acerSwift:max-macair133:!text-b3">
-                          {percent % 1 === 0 ? percent : percent.toFixed(2)}%
-                        </div>
-                      </td>
-                    </Table.Tr>
-                  );
-                })}
-              </Table.Tbody>
-              <Table.Tfoot className="z-[2] sticky bottom-0">
-                <Table.Tr className="border-none text-secondary font-semibold">
-                  <Table.Th
-                    style={{
-                      filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
-                    }}
-                    className="!bg-bgTableHeader sticky left-0 text-b2 acerSwift:max-macair133:!text-b3 !rounded-bl-md"
-                  >
-                    Total Assessment (%)
-                  </Table.Th>
-                  {evalForm.getValues().data.map((item, evalIndex) => {
-                    return (
+                    {evalForm.getValues().data.map((item, evalIndex) => (
                       <Table.Th
                         key={evalIndex}
-                        className="!bg-bgTableHeader text-b2 acerSwift:max-macair133:!text-b3 text-[#042B74]"
+                        className="min-w-[120px] max-w-[160px] !py-3.5 !px-4.5 z-0"
                       >
-                        {item.curPercent.toFixed(
-                          item.curPercent % 1 === 0 ? 0 : 2
-                        )}{" "}
-                        / {item.percent.toFixed(item.percent % 1 === 0 ? 0 : 2)}
-                        %
+                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                          {item.topicTH}
+                        </p>
+                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
+                          {item.topicEN}
+                        </p>
                       </Table.Th>
+                    ))}
+                    <Table.Th
+                      style={{
+                        filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.1))",
+                      }}
+                      className="w-[55px] !bg-[#e4f5ff] sticky right-0 !p-0"
+                    >
+                      <div className="w-[90px] text-nowrap flex items-center justify-center h-[58px]">
+                        Total <br /> CLO (%)
+                      </div>
+                    </Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {tqf3.part4?.data.map(({ clo, percent, evals }, cloIndex) => {
+                    const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
+                    return (
+                      <Table.Tr
+                        key={cloIndex}
+                        className="text-[13px] table-row h-full text-default"
+                      >
+                        <Table.Td
+                          style={{
+                            filter:
+                              "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
+                          }}
+                          className="!p-0 sticky left-0 z-[1]"
+                        >
+                          <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
+                            <div className="text-secondary min-w-fit font-bold acerSwift:max-macair133:!text-b3">
+                              CLO-{cloItem?.no}
+                            </div>
+                            <p className="flex w-fit   font-medium justify-between flex-col acerSwift:max-macair133:!text-b4">
+                              <span className="mb-1">{cloItem?.descTH}</span>
+                              <span>{cloItem?.descEN}</span>
+                            </p>
+                          </div>
+                        </Table.Td>
+                        {evalForm.getValues().data.map((item, colIndex) => {
+                          const evalItem = evals.find(
+                            (e) => e.eval === item.id
+                          );
+                          const i = evals.findIndex((e) => e.eval === item.id);
+                          if (!tableRefs.current[colIndex]) {
+                            tableRefs.current[colIndex] = [];
+                          }
+                          return (
+                            <Table.Td
+                              key={colIndex}
+                              className={`${
+                                evalItem ? "text-secondary font-semibold" : ""
+                              } text-b2 !px-4.5 max-w-[200px]`}
+                            >
+                              {evalItem?.percent ?? 0}%
+                            </Table.Td>
+                          );
+                        })}
+                        <td
+                          style={{
+                            filter:
+                              "drop-shadow(-2px 0px 2px rgba(0, 0, 0, 0.1))",
+                          }}
+                          className="!bg-[#e4f5ff] !p-0 !h-full sticky z-[1] right-0 "
+                        >
+                          <div className="  max-h-full items-center justify-center px-[25px] font-semibold text-b2 acerSwift:max-macair133:!text-b3">
+                            {percent % 1 === 0 ? percent : percent.toFixed(2)}%
+                          </div>
+                        </td>
+                      </Table.Tr>
                     );
                   })}
-                  <Table.Th
-                    style={{
-                      filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.1))",
-                    }}
-                    className="!bg-[#bae0f7] acerSwift:max-macair133:!text-b2 sticky right-0 text-b1 font-extrabold !rounded-br-md text-[#0a162b]"
+                </Table.Tbody>
+                <Table.Tfoot className="z-[2] sticky bottom-0">
+                  <Table.Tr className="border-none text-secondary font-semibold">
+                    <Table.Th
+                      style={{
+                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
+                      }}
+                      className="!bg-bgTableHeader sticky left-0 text-b2 acerSwift:max-macair133:!text-b3 !rounded-bl-md"
+                    >
+                      Total Assessment (%)
+                    </Table.Th>
+                    {evalForm.getValues().data.map((item, evalIndex) => {
+                      return (
+                        <Table.Th
+                          key={evalIndex}
+                          className="!bg-bgTableHeader text-b2 acerSwift:max-macair133:!text-b3 text-[#042B74]"
+                        >
+                          {item.curPercent.toFixed(
+                            item.curPercent % 1 === 0 ? 0 : 2
+                          )}{" "}
+                          /{" "}
+                          {item.percent.toFixed(item.percent % 1 === 0 ? 0 : 2)}
+                          %
+                        </Table.Th>
+                      );
+                    })}
+                    <Table.Th
+                      style={{
+                        filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.1))",
+                      }}
+                      className="!bg-[#bae0f7] acerSwift:max-macair133:!text-b2 sticky right-0 text-b1 font-extrabold !rounded-br-md text-[#0a162b]"
+                    >
+                      {tqf3.part4?.data
+                        .reduce((acc, cur) => acc + cur.percent, 0)
+                        .toFixed(
+                          tqf3.part4?.data.reduce(
+                            (acc, cur) => acc + cur.percent,
+                            0
+                          ) %
+                            1 ===
+                            0
+                            ? 0
+                            : 2
+                        )}
+                      %
+                    </Table.Th>
+                  </Table.Tr>
+                </Table.Tfoot>
+              </Table>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4">
+              {tqf3.part4?.data.map(({ clo, percent, evals }, cloIndex) => {
+                const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
+
+                return (
+                  <div
+                    key={cloIndex}
+                    className=" rounded-lg bg-white p-4 shadow-md relative flex flex-col gap-2"
                   >
-                    {tqf3.part4?.data
-                      .reduce((acc, cur) => acc + cur.percent, 0)
-                      .toFixed(
-                        tqf3.part4?.data.reduce(
-                          (acc, cur) => acc + cur.percent,
-                          0
-                        ) %
-                          1 ===
-                          0
-                          ? 0
-                          : 2
-                      )}
-                    %
-                  </Table.Th>
-                </Table.Tr>
-              </Table.Tfoot>
-            </Table>
-          </div>
+                    {/* CLO Header */}
+                    <div className="flex flex-col gap-2 items-start  text-[14px] bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-3 rounded-md shadow-sm">
+                      <div className="font-bold text-[14px]">CLO-{cloItem?.no}</div>
+                      <div className="flex flex-col">
+                        <span className="text-[12px] font-medium">
+                          {cloItem?.descTH}
+                        </span>
+                        <span className="text-[12px] font-medium">
+                          {cloItem?.descEN}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Evaluation Items */}
+                    <div className="flex flex-wrap gap-4 mt-2">
+                      {evalForm.getValues().data.map((item, colIndex) => {
+                        const evalItem = evals.find((e) => e.eval === item.id);
+                        return (
+                          <div
+                            key={colIndex}
+                            className={`p-3 rounded-lg border ${
+                              evalItem
+                                ? "border-blue-500 text-blue-600 font-semibold"
+                                : "border-gray-300"
+                            } flex-1 min-w-[140px]`}
+                          >
+                            <p className="text-[12px] truncate">{item.topicTH}</p>
+                            <p className="text-[12px] text-gray-500 truncate">
+                              {item.topicEN}
+                            </p>
+                            <p className="text-lg font-bold">
+                              {evalItem?.percent ?? 0}%
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Total Percentage */}
+                    <div className="text-right font-semibold text-[14px] text-indigo-600 mt-2">
+                      Total: {percent % 1 === 0 ? percent : percent.toFixed(2)}%
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </>
