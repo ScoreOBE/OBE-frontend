@@ -242,8 +242,8 @@ export default function CourseSyllabus() {
               <p className=" font-semibold text-[18px] iphone:max-sm:text-[16px] text-secondary -mt-2">
                 {courseNo} - {course?.courseName}
               </p>
-              <li className="-mt-1 iphone:text-[12px]">{course?.descTH}</li>
-              <li className="mb-3 -mt-1 iphone:text-[12px]">{course?.descEN}</li>
+              <li className="-mt-1 iphone:max-sm:text-[12px]">{course?.descTH}</li>
+              <li className="mb-3 -mt-1 iphone:max-sm:text-[12px]]">{course?.descEN}</li>
 
               {section.map((name, i) => (
                 <div

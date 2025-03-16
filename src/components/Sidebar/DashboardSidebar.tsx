@@ -462,7 +462,7 @@ export default function DashboardSidebar() {
                     }`}
                   >
                     {openSidebar ? (
-                      "Course Spec"
+                      "Syllabus"
                     ) : (
                       <Icon
                         IconComponent={IconBooks}
