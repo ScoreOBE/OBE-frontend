@@ -230,20 +230,36 @@ export default function CourseSyllabus() {
         ) : (
           <div className="flex overflow-hidden w-full  h-full gap-3 py-2">
             <div className="flex flex-col h-full max-w-[87%]  iphone:max-sm:max-w-[100%] py-5 px-10 iphone:max-sm:px-5 bg gap-4 overflow-auto">
-              
-              <div className=" flex gap-2 ">
-                {" "}
-                <p className="!font-[600] text-[20px] mb-3">
-                  <span className=" !drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                    ScoreOBE+{" "}
-                  </span>
-                </p>
+              <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100">
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-xl sm:text-2xl">
+                      <span className="!drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
+                        ScoreOBE+{" "}
+                      </span>
+                    </p>
+                    <div className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                      Course View
+                    </div>
+                  </div>
+
+                  <div className=" border-gray-200  ">
+                    <h1 className="font-semibold text-lg sm:text-xl text-[#1f69f3]">
+                      {courseNo} - {course?.courseName}
+                    </h1>
+                    <ul className="mt-4 space-y-1  text-gray-700 text-sm sm:text-base">
+                      <li className="flex items-start">
+                        <span className="inline-block w-1.5 h-1.5 bg-[#1f69f3] rounded-full mt-2 mr-2"></span>
+                        {course?.descTH}
+                      </li>
+                      <li className="flex items-start">
+                        <span className="inline-block w-1.5 h-1.5 bg-[#1f69f3] rounded-full mt-2 mr-2"></span>
+                        {course?.descEN}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-              <p className=" font-semibold text-[18px] iphone:max-sm:text-[16px] text-secondary -mt-2">
-                {courseNo} - {course?.courseName}
-              </p>
-              <li className="-mt-1 iphone:max-sm:text-[12px]">{course?.descTH}</li>
-              <li className="mb-3 -mt-1 iphone:max-sm:text-[12px]">{course?.descEN}</li>
 
               {section.map((name, i) => (
                 <div

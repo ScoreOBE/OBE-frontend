@@ -703,220 +703,253 @@ export default function Part4TQF3({
           </Tabs>
         </div>
       ) : (
-        <div className="flex flex-col w-full text-[15px] iphone:max-sm:text-[12px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
-          <div className=" text-secondary iphone:max-sm:text-[14px] text-b1 font-semibold whitespace-break-spaces  pb-4">
-            {PartTopicTQF3.part4}
+        <div className="w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 mt-6">
+          {/* Header */}
+          <div className="bg-[#1f69f3] text-white px-8 py-6 iphone:max-sm:px-4 iphone:max-sm:py-4 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#4c8af5] rounded-full opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#0d4ebc] rounded-full opacity-20 translate-y-1/2 -translate-x-1/2"></div>
+            <h2 className="text-xl iphone:max-sm:text-lg font-bold relative z-10">
+              {PartTopicTQF3.part4}
+            </h2>
           </div>
-          {!isMobile ? (
-            <div
-              className="overflow-auto border mt-2 mx-6 border-secondary rounded-lg relative"
-              style={{
-                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-              }}
-            >
-              <Table stickyHeader striped>
-                <Table.Thead className="z-[2] acerSwift:max-macair133:!text-b3">
-                  <Table.Tr>
-                    <Table.Th
-                      className="min-w-[400px] sticky left-0 !p-0"
-                      style={{
-                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
-                      }}
-                    >
-                      <div className="w-full flex items-center px-[25px] h-[58px]">
-                        CLO Description / Evaluation Topic
-                      </div>
-                    </Table.Th>
-                    {evalForm.getValues().data.map((item, evalIndex) => (
-                      <Table.Th
-                        key={evalIndex}
-                        className="min-w-[120px] max-w-[160px] !py-3.5 !px-4.5 z-0"
-                      >
-                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                          {item.topicTH}
-                        </p>
-                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">
-                          {item.topicEN}
-                        </p>
-                      </Table.Th>
-                    ))}
-                    <Table.Th
-                      style={{
-                        filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.1))",
-                      }}
-                      className="w-[55px] !bg-[#e4f5ff] sticky right-0 !p-0"
-                    >
-                      <div className="w-[90px] text-nowrap flex items-center justify-center h-[58px]">
-                        Total <br /> CLO (%)
-                      </div>
-                    </Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                  {tqf3.part4?.data.map(({ clo, percent, evals }, cloIndex) => {
-                    const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
-                    return (
-                      <Table.Tr
-                        key={cloIndex}
-                        className="text-[13px] table-row h-full text-default"
-                      >
-                        <Table.Td
-                          style={{
-                            filter:
-                              "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
-                          }}
-                          className="!p-0 sticky left-0 z-[1]"
-                        >
-                          <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
-                            <div className="text-secondary min-w-fit font-bold acerSwift:max-macair133:!text-b3">
-                              CLO-{cloItem?.no}
-                            </div>
-                            <p className="flex w-fit   font-medium justify-between flex-col acerSwift:max-macair133:!text-b4">
-                              <span className="mb-1">{cloItem?.descTH}</span>
-                              <span>{cloItem?.descEN}</span>
-                            </p>
-                          </div>
-                        </Table.Td>
-                        {evalForm.getValues().data.map((item, colIndex) => {
-                          const evalItem = evals.find(
-                            (e) => e.eval === item.id
-                          );
-                          const i = evals.findIndex((e) => e.eval === item.id);
-                          if (!tableRefs.current[colIndex]) {
-                            tableRefs.current[colIndex] = [];
-                          }
-                          return (
-                            <Table.Td
-                              key={colIndex}
-                              className={`${
-                                evalItem ? "text-secondary font-semibold" : ""
-                              } text-b2 !px-4.5 max-w-[200px]`}
-                            >
-                              {evalItem?.percent ?? 0}%
-                            </Table.Td>
-                          );
-                        })}
-                        <td
-                          style={{
-                            filter:
-                              "drop-shadow(-2px 0px 2px rgba(0, 0, 0, 0.1))",
-                          }}
-                          className="!bg-[#e4f5ff] !p-0 !h-full sticky z-[1] right-0 "
-                        >
-                          <div className="  max-h-full items-center justify-center px-[25px] font-semibold text-b2 acerSwift:max-macair133:!text-b3">
-                            {percent % 1 === 0 ? percent : percent.toFixed(2)}%
-                          </div>
-                        </td>
-                      </Table.Tr>
-                    );
-                  })}
-                </Table.Tbody>
-                <Table.Tfoot className="z-[2] sticky bottom-0">
-                  <Table.Tr className="border-none text-secondary font-semibold">
-                    <Table.Th
-                      style={{
-                        filter: "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
-                      }}
-                      className="!bg-bgTableHeader sticky left-0 text-b2 acerSwift:max-macair133:!text-b3 !rounded-bl-md"
-                    >
-                      Total Assessment (%)
-                    </Table.Th>
-                    {evalForm.getValues().data.map((item, evalIndex) => {
-                      return (
-                        <Table.Th
-                          key={evalIndex}
-                          className="!bg-bgTableHeader text-b2 acerSwift:max-macair133:!text-b3 text-[#042B74]"
-                        >
-                          {item.curPercent.toFixed(
-                            item.curPercent % 1 === 0 ? 0 : 2
-                          )}{" "}
-                          /{" "}
-                          {item.percent.toFixed(item.percent % 1 === 0 ? 0 : 2)}
-                          %
-                        </Table.Th>
-                      );
-                    })}
-                    <Table.Th
-                      style={{
-                        filter: "drop-shadow(-2px 0px 2px  rgba(0, 0, 0, 0.1))",
-                      }}
-                      className="!bg-[#bae0f7] acerSwift:max-macair133:!text-b2 sticky right-0 text-b1 font-extrabold !rounded-br-md text-[#0a162b]"
-                    >
-                      {tqf3.part4?.data
-                        .reduce((acc, cur) => acc + cur.percent, 0)
-                        .toFixed(
-                          tqf3.part4?.data.reduce(
-                            (acc, cur) => acc + cur.percent,
-                            0
-                          ) %
-                            1 ===
-                            0
-                            ? 0
-                            : 2
-                        )}
-                      %
-                    </Table.Th>
-                  </Table.Tr>
-                </Table.Tfoot>
-              </Table>
+
+          {/* Content */}
+          <div className="divide-y divide-gray-100">
+            {/* CLO Evaluation Title */}
+            <div className="flex flex-col sm:flex-row p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+              <div className="w-full sm:w-2/5 mb-3 sm:mb-0">
+                <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+                  <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+                  CLO Evaluation Matrix
+                </h3>
+                <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+                  Course Learning Outcomes Assessment
+                </p>
+              </div>
+              <div className="w-full sm:w-3/5 font-medium iphone:max-sm:text-[14px]">
+                <div className="py-3 px-4 bg-[#1f69f3]/5 rounded-lg border-l-2 border-[#1f69f3]">
+                  <p className="text-gray-800">
+                    This matrix shows how each CLO is evaluated through
+                    different assessment methods.
+                  </p>
+                </div>
+              </div>
             </div>
-          ) : (
-            <div className="flex flex-col gap-4">
-              {tqf3.part4?.data.map(({ clo, percent, evals }, cloIndex) => {
-                const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
 
-                return (
-                  <div
-                    key={cloIndex}
-                    className=" rounded-lg bg-white p-4 shadow-md relative flex flex-col gap-2"
-                  >
-                    {/* CLO Header */}
-                    <div className="flex flex-col gap-2 items-start  text-[14px] bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-3 rounded-md shadow-sm">
-                      <div className="font-bold text-[14px]">CLO-{cloItem?.no}</div>
-                      <div className="flex flex-col">
-                        <span className="text-[12px] font-medium">
-                          {cloItem?.descTH}
-                        </span>
-                        <span className="text-[12px] font-medium">
-                          {cloItem?.descEN}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Evaluation Items */}
-                    <div className="flex flex-wrap gap-4 mt-2">
-                      {evalForm.getValues().data.map((item, colIndex) => {
-                        const evalItem = evals.find((e) => e.eval === item.id);
-                        return (
-                          <div
-                            key={colIndex}
-                            className={`p-3 rounded-lg border ${
-                              evalItem
-                                ? "border-blue-500 text-blue-600 font-semibold"
-                                : "border-gray-300"
-                            } flex-1 min-w-[140px]`}
+            {/* CLO Evaluation Table/Cards */}
+            <div className="p-6 iphone:max-sm:p-4">
+              {!isMobile ? (
+                // Desktop Table View
+                <div className="overflow-auto border border-[#1f69f3]/20 rounded-xl shadow-sm mt-2">
+                  <table className="w-full min-w-[800px]">
+                    <thead>
+                      <tr className="bg-[#1f69f3]/10">
+                        <th className="py-3 px-4 text-left text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 min-w-[300px] sticky left-0 bg-[#1f69f3]/10">
+                          CLO Description
+                        </th>
+                        {evalForm.getValues().data.map((item, evalIndex) => (
+                          <th
+                            key={evalIndex}
+                            className="py-3 px-4 text-left text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 min-w-[120px]"
                           >
-                            <p className="text-[12px] truncate">{item.topicTH}</p>
-                            <p className="text-[12px] text-gray-500 truncate">
+                            <p>{item.topicTH}</p>
+                            <p className="text-sm text-gray-600">
                               {item.topicEN}
                             </p>
-                            <p className="text-lg font-bold">
-                              {evalItem?.percent ?? 0}%
+                          </th>
+                        ))}
+                        <th className="py-3 px-4 text-center text-[#1f69f3] font-semibold border-b border-[#1f69f3]/10 w-[100px] bg-[#e4f5ff]">
+                          Total
+                          <br />
+                          CLO (%)
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tqf3.part4?.data.map(
+                        ({ clo, percent, evals }, cloIndex) => {
+                          const cloItem = tqf3?.part2?.clo.find(
+                            (e) => e.id == clo
+                          );
+                          return (
+                            <tr
+                              key={cloIndex}
+                              className={`hover:bg-blue-50/30 transition-all duration-300 ${
+                                cloIndex % 2 === 0
+                                  ? "bg-white"
+                                  : "bg-blue-50/30"
+                              }`}
+                            >
+                              <td className="py-3 px-4 sticky left-0 bg-inherit border-b border-[#1f69f3]/10">
+                                <div className="flex gap-3">
+                                  <div className="text-[#1f69f3] font-bold whitespace-nowrap">
+                                    CLO-{cloItem?.no}
+                                  </div>
+                                  <div>
+                                    <p className="font-medium text-gray-800">
+                                      {cloItem?.descTH}
+                                    </p>
+                                    <p className="text-sm text-gray-600">
+                                      {cloItem?.descEN}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                              {evalForm
+                                .getValues()
+                                .data.map((item, colIndex) => {
+                                  const evalItem = evals.find(
+                                    (e) => e.eval === item.id
+                                  );
+                                  return (
+                                    <td
+                                      key={colIndex}
+                                      className="py-3 px-4 text-center border-b border-[#1f69f3]/10"
+                                    >
+                                      {evalItem ? (
+                                        <span className="inline-flex items-center justify-center px-3 py-1 bg-[#1f69f3] text-white font-medium rounded-full">
+                                          {evalItem.percent}%
+                                        </span>
+                                      ) : (
+                                        <span className="text-gray-400">
+                                          0%
+                                        </span>
+                                      )}
+                                    </td>
+                                  );
+                                })}
+                              <td className="py-3 px-4 text-center font-bold bg-[#e4f5ff] border-b border-[#1f69f3]/10">
+                                <span className="inline-flex items-center justify-center px-3 py-1 bg-[#1f69f3] text-white font-medium rounded-full">
+                                  {percent % 1 === 0
+                                    ? percent
+                                    : percent.toFixed(2)}
+                                  %
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        }
+                      )}
+                    </tbody>
+                    <tfoot>
+                      <tr className="bg-[#1f69f3]/20 font-semibold text-[#1f69f3]">
+                        <td className="py-3 px-4 sticky left-0 bg-[#1f69f3]/20">
+                          Total Assessment (%)
+                        </td>
+                        {evalForm.getValues().data.map((item, evalIndex) => (
+                          <td key={evalIndex} className="py-3 px-4 text-center">
+                            {item.curPercent.toFixed(
+                              item.curPercent % 1 === 0 ? 0 : 2
+                            )}{" "}
+                            /{" "}
+                            {item.percent.toFixed(
+                              item.percent % 1 === 0 ? 0 : 2
+                            )}
+                            %
+                          </td>
+                        ))}
+                        <td className="py-3 px-4 text-center bg-[#bae0f7]">
+                          <span className="inline-flex items-center justify-center px-3 py-1 bg-[#1f69f3] text-white font-bold rounded-full">
+                            {tqf3.part4?.data
+                              .reduce((acc, cur) => acc + cur.percent, 0)
+                              .toFixed(
+                                tqf3.part4.data.reduce(
+                                  (acc, cur) => acc + cur.percent,
+                                  0
+                                ) %
+                                  1 ===
+                                  0
+                                  ? 0
+                                  : 2
+                              )}
+                          </span>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              ) : (
+                // Mobile Card View
+                <div className="space-y-3 mt-2">
+                  {tqf3.part4?.data.map(({ clo, percent, evals }, cloIndex) => {
+                    const cloItem = tqf3?.part2?.clo.find((e) => e.id == clo);
+
+                    return (
+                      <div
+                        key={cloIndex}
+                        className="bg-white rounded-lg shadow-sm border border-[#1f69f3]/10 overflow-hidden hover:border-[#1f69f3]/30 transition-all"
+                      >
+                        <div className="flex items-center justify-between bg-[#1f69f3]/5 px-4 py-2 border-b border-[#1f69f3]/10">
+                          <div className="flex items-center gap-2">
+                            <span className="bg-[#1f69f3]/20 text-[#1f69f3] font-semibold px-2 py-0.5 rounded-full text-[12px]">
+                              CLO-{cloItem?.no}
+                            </span>
+                          </div>
+                          <span className="bg-[#1f69f3] text-white font-semibold px-2.5 py-0.5 rounded-full text-[12px]">
+                            {percent}%
+                          </span>
+                        </div>
+
+                        <div className="p-4">
+                          <div className="mb-3">
+                            <h4 className="font-medium text-gray-800 iphone:max-sm:text-[14px]">
+                              {cloItem?.descTH}
+                            </h4>
+                            <p className="text-gray-600 italic text-sm iphone:max-sm:text-[12px]">
+                              {cloItem?.descEN}
                             </p>
                           </div>
-                        );
-                      })}
-                    </div>
 
-                    {/* Total Percentage */}
-                    <div className="text-right font-semibold text-[14px] text-indigo-600 mt-2">
-                      Total: {percent % 1 === 0 ? percent : percent.toFixed(2)}%
-                    </div>
-                  </div>
-                );
-              })}
+                          <div className="grid grid-cols-2 gap-2 mt-4">
+                            {evalForm.getValues().data.map((item, colIndex) => {
+                              const evalItem = evals.find(
+                                (e) => e.eval === item.id
+                              );
+                              return (
+                                <div
+                                  key={colIndex}
+                                  className={`p-3 rounded-lg border ${
+                                    evalItem
+                                      ? "border-[#1f69f3]/30 bg-[#1f69f3]/5"
+                                      : "border-gray-200 bg-gray-50"
+                                  }`}
+                                >
+                                  <p className="text-[12px] text-gray-500">
+                                    {item.topicEN}
+                                  </p>
+                                  <p className="text-[14px] font-medium text-gray-800 truncate">
+                                    {item.topicTH}
+                                  </p>
+                                  <p
+                                    className={`text-lg font-bold mt-1 ${
+                                      evalItem
+                                        ? "text-[#1f69f3]"
+                                        : "text-gray-400"
+                                    }`}
+                                  >
+                                    {evalItem?.percent ?? 0}%
+                                  </p>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        {/* Total percentage for mobile */}
+                        <div className="bg-[#1f69f3]/10 rounded-lg p-4 mt-4 flex items-center justify-between">
+                          <span className="font-semibold text-gray-800 iphone:max-sm:text-[14px]">
+                            Total Evaluation
+                          </span>
+                          <span className="bg-[#1f69f3] text-white font-bold px-3 py-1 rounded-full iphone:max-sm:text-[14px]">
+                            {percent % 1 === 0 ? percent : percent.toFixed(2)} %
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       )}
     </>

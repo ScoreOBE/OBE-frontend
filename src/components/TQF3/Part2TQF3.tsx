@@ -650,287 +650,333 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col w-full text-[15px] iphone:max-sm:text-[12px] bg-[#dfebff]/40 p-5 rounded-xl mt-2 acerSwift:max-macair133:text-b3 text-default ">
-            <div className=" text-secondary text-b1 iphone:max-sm:text-[14px] font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
-              {PartTopicTQF3.part2}
+          <div className="w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 mt-6">
+            {/* Header */}
+            <div className="bg-[#1f69f3] text-white px-8 py-6 iphone:max-sm:px-4 iphone:max-sm:py-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#4c8af5] rounded-full opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#0d4ebc] rounded-full opacity-20 translate-y-1/2 -translate-x-1/2"></div>
+              <h2 className="text-xl iphone:max-sm:text-lg font-bold relative z-10">
+                {PartTopicTQF3.part2}
+              </h2>
             </div>
-            <div className=" border-b-[1px] border-[#e6e6e6] px-6 iphone:max-sm:px-3 justify-between h-fit w-full grid grid-cols-2 py-5">
-              <div className="flex text-gray-800 flex-col  text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b3">
-                <p className="font-medium">ลักษณะของกระบวนวิชา</p>
-                <p className="font-medium">Teaching Method</p>
-              </div>
-              <div className="flex flex-col text-default gap-2 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
-                {Object.values(TEACHING_METHOD)
-                  .filter((key) => tqf3.part2?.teachingMethod?.includes(key.en))
-                  .map((key) => (
-                    <p key={key.en}>
-                      {key.th} ({key.en})
-                    </p>
-                  ))}
-              </div>
-            </div>
-            <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5">
-              <div className="flex text-gray-800 flex-col text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b3">
-                <p className="font-medium">การวัดและประเมินผล</p>
-                <p className="font-medium">Evaluation</p>
-              </div>
-              <div className="flex flex-col text-default font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b4">
-                <p>{tqf3.part2?.evaluate}</p>
-              </div>
-            </div>
-            <div className="flex flex-col px-6 iphone:max-sm:px-3 border-b-[1px] w-full border-[#e6e6e6] gap-4 py-4">
-              <div className="flex text-gray-800 items-center w-full justify-between">
-                <p className="font-medium text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b2">
-                  ผลลัพธ์การเรียนรู้ของกระบวนวิชา{" "}
-                  <span className="font-medium">
-                    (Course Learning Objective: CLO)
-                  </span>
-                </p>
-              </div>
-              {!isMobile ? (
-                <div
-                  className="overflow-x-auto mt-1 w-full h-fit max-h-full border flex flex-col rounded-md border-secondary"
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                    height: "fit-content",
-                  }}
-                >
-                  <Table stickyHeader striped className="w-full">
-                    <Table.Thead className="acerSwift:max-macair133:!text-b3">
-                      <Table.Tr className="bg-[#e5e7f6]">
-                        <Table.Th className="w-[10%]">CLO No.</Table.Th>
-                        <Table.Th className="w-[50%]">CLO Description</Table.Th>
-                        <Table.Th className="w-[20%]">Learning Method</Table.Th>
-                      </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full">
-                      {tqf3.part2?.clo?.map((item) => (
-                        <Table.Tr key={item.no.toString()}>
-                          <Table.Td className="w-[10%]">{item.no}</Table.Td>
-                          <Table.Td className="w-[50%]">
-                            <div className="flex flex-col gap-0.5">
-                              <p>{item.descTH}</p>
-                              <p>{item.descEN}</p>
-                            </div>
-                          </Table.Td>
-                          <Table.Td className="w-[20%]">
-                            <div className="flex flex-col gap-0.5">
-                              {item.learningMethod.map((method) => (
-                                <p key={method}>
-                                  {method == LearningMethod.Other
-                                    ? item.other
-                                    : method}
-                                </p>
-                              ))}
-                            </div>
-                          </Table.Td>
-                        </Table.Tr>
-                      ))}
-                    </Table.Tbody>
-                  </Table>
+
+            {/* Content */}
+            <div className="divide-y divide-gray-100">
+              {/* Teaching Method */}
+              <div className="flex flex-col sm:flex-row p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+                <div className="w-full sm:w-2/5 mb-3 sm:mb-0">
+                  <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+                    <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+                    ลักษณะของกระบวนวิชา
+                  </h3>
+                  <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+                    Teaching Method
+                  </p>
                 </div>
-              ) : (
-                <div className="space-y-5 ">
-                  {tqf3.part2?.clo?.map((item) => (
-                    <div
-                      key={item.no.toString()}
-                      className="bg-white rounded-lg shadow-sm p-5 border border-gray-100 transition-shadow"
-                    >
-                      <div className="mb-4">
-                        <span className=" bg-[#ecf2fc] text-secondary font-semibold px-4 py-1.5 rounded-full text-[12px]">
-                          CLO-{item.no}
+                <div className="w-full sm:w-3/5 font-medium text-gray-700 space-y-2 iphone:max-sm:space-y-1.5 iphone:max-sm:text-[14px]">
+                  {Object.values(TEACHING_METHOD)
+                    .filter((item) =>
+                      tqf3.part2?.teachingMethod?.includes(item.en)
+                    )
+                    ?.map((item) => (
+                      <p key={item.en} className="flex items-center">
+                        <span className="inline-flex items-center justify-center w-6 h-6 iphone:max-sm:w-5 iphone:max-sm:h-5 rounded-full bg-[#1f69f3]/10 text-[#1f69f3] mr-2">
+                          <span className="w-2 h-2 iphone:max-sm:w-1.5 iphone:max-sm:h-1.5 bg-[#1f69f3] rounded-full"></span>
                         </span>
-                      </div>
-
-                      <div className="space-y-2 mb-4">
-                        <p className="text-gray-800 font-medium">
-                          {item.descTH}
-                        </p>
-                        <p className="text-gray-600 italic">{item.descEN}</p>
-                      </div>
-
-                      <div className="mt-4 pt-4 border-t border-gray-100">
-                        <h4 className="text-[12px] font-medium text-gray-500 mb-2">
-                          Learning Methods:
-                        </h4>
-                        <ul className="space-y-2">
-                          {item.learningMethod.map((method) => (
-                            <li
-                              key={method}
-                              className="flex items-center text-gray-700"
-                            >
-                              <span className="h-1.5 w-1.5 rounded-full bg-secondary mr-2"></span>
-                              {method === LearningMethod.Other
-                                ? item.other
-                                : method}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  ))}
+                        <span className="text-gray-800">{item.th}</span>
+                        <span className="ml-1 text-sm iphone:max-sm:text-[12px] text-[#1f69f3]">
+                          ({item.en})
+                        </span>
+                      </p>
+                    ))}
                 </div>
-              )}
-            </div>
-            <div className="flex flex-col px-6 iphone:max-sm:px-3 w-full gap-4 pt-5 pb-2">
-              <div className="flex text-gray-800 items-center w-full justify-between">
-                <p className="font-medium text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b2">
-                  เนื้อหาวิชาและแผนการสอน{" "}
-                  <span className="font-medium">
-                    (Course content and Schedule)
-                  </span>
-                </p>
               </div>
-              {!isMobile ? (
-                <div
-                  className="overflow-y-auto mt-1 overflow-x-auto w-full  h-fit max-h-full border flex flex-col rounded-md border-secondary"
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                    height: "fit-content",
-                  }}
-                >
-                  <Table stickyHeader striped className="w-full">
-                    <Table.Thead className="acerSwift:max-macair133:!text-b3">
-                      <Table.Tr className=" bg-bgTableHeader">
-                        <Table.Th className="w-[10%] ">Week No.</Table.Th>
-                        <Table.Th className="w-[30%]">Topic</Table.Th>
-                        <Table.Th className="w-[20%] text-end">
-                          Lecture Hour
-                        </Table.Th>
-                        <Table.Th className="w-[20%] text-end !pr-24">
-                          Lab Hour
-                        </Table.Th>
-                      </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody className="text-default text-b3 acerSwift:max-macair133:!text-b4 font-normal w-full">
-                      {tqf3.part2?.schedule?.map((item) => (
-                        <Table.Tr key={item.weekNo.toString()}>
-                          <Table.Td className="w-[10%]">{item.weekNo}</Table.Td>
-                          <Table.Td className="w-[30%]">
-                            <p>{item.topic}</p>
-                          </Table.Td>
-                          <Table.Td className="w-[20%] text-end">
-                            <p>{item.lecHour}</p>
-                          </Table.Td>
-                          <Table.Td className="w-[20%] text-end !pr-24">
-                            <p>{item.labHour}</p>
-                          </Table.Td>
-                        </Table.Tr>
-                      ))}
-                    </Table.Tbody>
-                    <Table.Tfoot className="text-secondary font-semibold !h-[10px] acerSwift:max-macair133:!text-b3">
-                      <Table.Tr className=" bg-bgTableHeader border-none">
-                        <Table.Th className="!rounded-bl-md" colSpan={2}>
-                          Total
-                        </Table.Th>
-                        <Table.Th className="text-end">
-                          {form
-                            .getValues()
-                            .schedule?.reduce(
-                              (acc, { lecHour }) => acc + lecHour,
-                              0.0
-                            )
-                            .toFixed(1)}
-                        </Table.Th>
-                        <Table.Th className="text-end !pr-24">
-                          {form
-                            .getValues()
-                            .schedule?.reduce(
-                              (acc, { labHour }) => acc + labHour,
-                              0.0
-                            )
-                            .toFixed(1)}
-                        </Table.Th>
-                        {!disabled && (
-                          <Table.Th
-                            className="!rounded-br-md"
-                            colSpan={2}
-                          ></Table.Th>
-                        )}
-                      </Table.Tr>
-                    </Table.Tfoot>
-                  </Table>
+
+              {/* Evaluation */}
+              <div className="flex flex-col sm:flex-row p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+                <div className="w-full sm:w-2/5 mb-3 sm:mb-0">
+                  <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+                    <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+                    การวัดและประเมินผล
+                  </h3>
+                  <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+                    Evaluation
+                  </p>
                 </div>
-              ) : (
-                <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-                  {/* Weekly schedule */}
-                  <div className="divide-y divide-gray-100">
-                    {tqf3.part2?.schedule?.map((item) => (
+                <div className="w-full sm:w-3/5 font-medium iphone:max-sm:text-[14px]">
+                  <div className="py-2 px-4 bg-[#1f69f3]/5 rounded-lg border-l-2 border-[#1f69f3]">
+                    <p className="text-gray-800">{tqf3.part2?.evaluate}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Course Learning Objectives */}
+              <div className="p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+                <div className="mb-4">
+                  <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+                    <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+                    ผลลัพธ์การเรียนรู้ของกระบวนวิชา
+                  </h3>
+                  <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+                    Course Learning Objective (CLO)
+                  </p>
+                </div>
+
+                {!isMobile ? (
+                  <div className="overflow-hidden border border-[#1f69f3]/20 rounded-xl shadow-sm mt-4">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="bg-[#1f69f3]/10">
+                          <th className="py-3 px-4 text-left text-[#1f69f3] font-semibold w-[10%] border-b border-[#1f69f3]/10">
+                            CLO No.
+                          </th>
+                          <th className="py-3 px-4 text-left text-[#1f69f3] font-semibold w-[50%] border-b border-[#1f69f3]/10">
+                            CLO Description
+                          </th>
+                          <th className="py-3 px-4 text-left text-[#1f69f3] font-semibold w-[40%] border-b border-[#1f69f3]/10">
+                            Learning Method
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {tqf3.part2?.clo?.map((item, index) => (
+                          <tr
+                            key={item.no.toString()}
+                            className={
+                              index % 2 === 0 ? "bg-white" : "bg-blue-50/30"
+                            }
+                          >
+                            <td className="py-3 px-4 align-top">{item.no}</td>
+                            <td className="py-3 px-4 align-top">
+                              <div className="space-y-1">
+                                <p className="font-medium text-gray-800">
+                                  {item.descTH}
+                                </p>
+                                <p className="text-gray-600 text-sm">
+                                  {item.descEN}
+                                </p>
+                              </div>
+                            </td>
+                            <td className="py-3 px-4 align-top">
+                              <div className="space-y-1">
+                                {item.learningMethod.map((method) => (
+                                  <p
+                                    key={method}
+                                    className="flex items-center text-gray-700"
+                                  >
+                                    <span className="inline-block w-1.5 h-1.5 bg-[#1f69f3] rounded-full mr-2"></span>
+                                    {method === LearningMethod.Other
+                                      ? item.other
+                                      : method}
+                                  </p>
+                                ))}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="space-y-4 mt-2">
+                    {tqf3.part2?.clo?.map((item) => (
                       <div
-                        key={item.weekNo.toString()}
-                        className="p-4 hover:bg-gray-50 transition-colors"
+                        key={item.no.toString()}
+                        className="bg-white rounded-lg shadow-sm p-4 border border-[#1f69f3]/10 hover:border-[#1f69f3]/30 transition-all"
                       >
-                        <div className="flex items-start">
-                          <span className="bg-amber-50 text-amber-600 font-semibold px-3 py-1 rounded-full text-[12px] mr-3">
-                            Week-{item.weekNo}
+                        <div className="mb-3">
+                          <span className="bg-[#1f69f3]/10 text-[#1f69f3] font-semibold px-3 py-1 rounded-full text-[12px]">
+                            CLO-{item.no}
                           </span>
+                        </div>
 
-                          <div className="flex-1">
-                            <h3 className="font-medium text-gray-800 mb-3">
-                              {item.topic}
-                            </h3>
+                        <div className="space-y-2 mb-3">
+                          <p className="text-gray-800 font-medium iphone:max-sm:text-[14px]">
+                            {item.descTH}
+                          </p>
+                          <p className="text-gray-600 italic text-sm iphone:max-sm:text-[12px]">
+                            {item.descEN}
+                          </p>
+                        </div>
 
-                            <div className="flex flex-col flex-wrap gap-1  text-[12px]">
-                              <div className="flex items-center">
-                                <div className="w-2 h-2 rounded-full bg-blue-400 mr-2"></div>
-                                <span className="text-gray-600">
-                                  Lecture: {item.lecHour} hrs
-                                </span>
-                              </div>
-
-                              <div className="flex items-center">
-                                <div className="w-2 h-2 rounded-full bg-green-400 mr-2"></div>
-                                <span className="text-gray-600">
-                                  Lab: {item.labHour} hrs
-                                </span>
-                              </div>
-                            </div>
-                          </div>
+                        <div className="mt-3 pt-3 border-t border-gray-100">
+                          <h4 className="text-[12px] font-medium text-[#1f69f3] mb-2">
+                            Learning Methods:
+                          </h4>
+                          <ul className="space-y-1.5">
+                            {item.learningMethod.map((method) => (
+                              <li
+                                key={method}
+                                className="flex items-center text-gray-700 iphone:max-sm:text-[12px]"
+                              >
+                                <span className="h-1.5 w-1.5 rounded-full bg-[#1f69f3] mr-2"></span>
+                                {method === LearningMethod.Other
+                                  ? item.other
+                                  : method}
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       </div>
                     ))}
                   </div>
+                )}
+              </div>
 
-                  {/* Summary section */}
-                  <div className="bg-gray-50 p-4 border-t border-gray-100">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
-                        <div className="text-[14px] text-gray-500 mb-1">
-                          Total Lecture Hours
-                        </div>
-                        <div className="text-xl font-semibold text-blue-600">
-                          {" "}
-                          {tqf3.part2?.schedule
-                            ?.reduce(
-                              (acc, item) => acc + (item.lecHour || 0),
-                              0
-                            )
-                            .toFixed(1)}
-                        </div>
+              {/* Course Content and Schedule */}
+              <div className="p-6 iphone:max-sm:p-4">
+                <div className="mb-4">
+                  <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+                    <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+                    เนื้อหาวิชาและแผนการสอน
+                  </h3>
+                  <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+                    Course Content and Schedule
+                  </p>
+                </div>
+
+                {!isMobile ? (
+                  <div className="overflow-hidden border border-[#1f69f3]/20 rounded-xl shadow-sm mt-4">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="bg-[#1f69f3]/10">
+                          <th className="py-3 px-4 text-left text-[#1f69f3] font-semibold w-[10%] border-b border-[#1f69f3]/10">
+                            Week No.
+                          </th>
+                          <th className="py-3 px-4 text-left text-[#1f69f3] font-semibold w-[50%] border-b border-[#1f69f3]/10">
+                            Topic
+                          </th>
+                          <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold w-[20%] border-b border-[#1f69f3]/10">
+                            Lecture Hour
+                          </th>
+                          <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold w-[20%] border-b border-[#1f69f3]/10">
+                            Lab Hour
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {tqf3.part2?.schedule?.map((item, index) => (
+                          <tr
+                            key={item.weekNo.toString()}
+                            className={
+                              index % 2 === 0 ? "bg-white" : "bg-blue-50/30"
+                            }
+                          >
+                            <td className="py-3 px-4">{item.weekNo}</td>
+                            <td className="py-3 px-4 font-medium">
+                              {item.topic}
+                            </td>
+                            <td className="py-3 px-4 text-right">
+                              {item.lecHour}
+                            </td>
+                            <td className="py-3 px-4 text-right">
+                              {item.labHour}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <tfoot>
+                        <tr className="bg-[#1f69f3]/20 font-semibold text-[#1f69f3]">
+                          <td className="py-3 px-4" colSpan={2}>
+                            Total
+                          </td>
+                          <td className="py-3 px-4 text-right">
+                            {tqf3.part2?.schedule
+                              ?.reduce(
+                                (acc, item) => acc + (item.lecHour || 0),
+                                0
+                              )
+                              .toFixed(1)}
+                          </td>
+                          <td className="py-3 px-4 text-right">
+                            {tqf3.part2?.schedule
+                              ?.reduce(
+                                (acc, item) => acc + (item.labHour || 0),
+                                0
+                              )
+                              .toFixed(1)}
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="mt-2">
+                    <div className="bg-white rounded-lg shadow-sm border border-[#1f69f3]/10 overflow-hidden">
+                      {/* Weekly schedule */}
+                      <div className="divide-y divide-gray-100">
+                        {tqf3.part2?.schedule?.map((item) => (
+                          <div
+                            key={item.weekNo.toString()}
+                            className="p-4 hover:bg-[#1f69f3]/5 transition-colors"
+                          >
+                            <div className="flex items-start">
+                              <span className="bg-[#1f69f3]/10 text-[#1f69f3] font-semibold px-3 py-1 rounded-full text-[12px] mr-3 flex-shrink-0">
+                                Week-{item.weekNo}
+                              </span>
+
+                              <div className="flex-1">
+                                <h3 className="font-medium text-gray-800 mb-2 iphone:max-sm:text-[14px]">
+                                  {item.topic}
+                                </h3>
+
+                                <div className="flex flex-wrap gap-3 text-[12px]">
+                                  <div className="flex items-center">
+                                    <div className="w-2 h-2 rounded-full bg-[#1f69f3] mr-2"></div>
+                                    <span className="text-gray-700">
+                                      Lecture: {item.lecHour} hrs
+                                    </span>
+                                  </div>
+
+                                  <div className="flex items-center">
+                                    <div className="w-2 h-2 rounded-full bg-[#4c8af5] mr-2"></div>
+                                    <span className="text-gray-700">
+                                      Lab: {item.labHour} hrs
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
 
-                      <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-100">
-                        <div className="text-[14px] text-gray-500 mb-1">
-                          Total Lab Hours
-                        </div>
-                        <div className="text-xl font-semibold text-green-600">
-                          {" "}
-                          {tqf3.part2?.schedule
-                            ?.reduce(
-                              (acc, item) => acc + (item.labHour || 0),
-                              0
-                            )
-                            .toFixed(1)}
+                      {/* Summary section */}
+                      <div className="bg-[#1f69f3]/5 p-4 border-t border-[#1f69f3]/10">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="bg-white rounded-lg p-3 shadow-sm border border-[#1f69f3]/10">
+                            <div className="text-[12px] text-gray-500 mb-1">
+                              Total Lecture Hours
+                            </div>
+                            <div className="text-xl iphone:max-sm:text-lg font-semibold text-[#1f69f3]">
+                              {tqf3.part2?.schedule
+                                ?.reduce(
+                                  (acc, item) => acc + (item.lecHour || 0),
+                                  0
+                                )
+                                .toFixed(1)}
+                            </div>
+                          </div>
+
+                          <div className="bg-white rounded-lg p-3 shadow-sm border border-[#1f69f3]/10">
+                            <div className="text-[12px] text-gray-500 mb-1">
+                              Total Lab Hours
+                            </div>
+                            <div className="text-xl iphone:max-sm:text-lg font-semibold text-[#4c8af5]">
+                              {tqf3.part2?.schedule
+                                ?.reduce(
+                                  (acc, item) => acc + (item.labHour || 0),
+                                  0
+                                )
+                                .toFixed(1)}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-
-                  {!disabled && (
-                    <div className="h-1 bg-gradient-to-r from-amber-400 to-amber-500"></div>
-                  )}
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         )

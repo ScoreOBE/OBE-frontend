@@ -152,7 +152,7 @@ export default function CourseSyllabusDashboard() {
                 {" "}
                 <p className="!font-[600] mb-4 text-[28px] iphone:max-sm:text-[24px]">
                   <span className=" !drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
-                  {!user.id && "ScoreOBE+"} Course Syllabus
+                    {!user.id && "ScoreOBE+"} Course Syllabus
                   </span>
                 </p>
               </div>
@@ -197,7 +197,7 @@ export default function CourseSyllabusDashboard() {
                     onChange={(_, option) => setTerm(option)}
                     allowDeselect={false}
                     withCheckIcon={false}
-                    size="xs"
+                    size="sm"
                     classNames={{
                       label: "font-medium mb-1",
                       input: "text-primary !w-28  font-medium rounded-md",
@@ -214,12 +214,15 @@ export default function CourseSyllabusDashboard() {
                 />
               </div>
 
-              { !isMobile && <Button
-                className="px-4 py-2 bg-secondary text-white rounded-md font-semibold hover:bg-primary transition-colors"
-                onClick={() => dispatch(setSearchCourseSyllabus(searchValue))}
-              >
-                Search
-              </Button>}
+              {!isMobile && (
+                <Button
+                  size="sm"
+                  className="px-4 py-2 !h-9 bg-secondary text-white rounded-md font-semibold hover:bg-primary transition-colors"
+                  onClick={() => dispatch(setSearchCourseSyllabus(searchValue))}
+                >
+                  Search
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -241,26 +244,27 @@ export default function CourseSyllabusDashboard() {
                 return (
                   <div
                     key={`${item.id}${item.sections[0].topic ?? ""}`}
-                    className=" flex border justify-between p-5 cursor-pointer rounded-[4px] hover:bg-[#f3f3f3]"
                     onClick={() =>
                       goToCourse(item.courseNo, item.sections[0].topic)
                     }
+                    className="flex items-center justify-between p-4 rounded-lg border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group"
                   >
-                    <div className=" flex flex-col">
-                      <p className="font-bold text-secondary text-sm acerSwift:max-macair133:text-b3">
+                    <div className="space-y-1">
+                      <h3 className="font-bold text-sm iphone:max-sm:text-[12px] text-secondary">
                         {item.courseNo}
-                      </p>
-                      <p className="text-xs acerSwift:max-macair133:text-b5 mt-[2px] font-medium text-gray-600">
-                        {item.courseName}
-                      </p>
-                      {item.type == COURSE_TYPE.SEL_TOPIC.en && (
-                        <p className="text-xs acerSwift:max-macair133:text-b5 font-medium text-gray-600">
+                      </h3>
+                      <p className="text-xs text-gray-600">{item.courseName}</p>
+                      {item.type === "SEL_TOPIC" && item.sections[0].topic && (
+                        <span className="inline-block text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full">
                           {item.sections[0].topic}
-                        </p>
+                        </span>
                       )}
                     </div>
-                    <div className=" flex h-8 items-center justify-between rounded-b-[4px]">
-                      <Icon IconComponent={IconChevron} />
+                    <div className="h-8 w-8 flex items-center justify-center rounded-full bg-gray-50 group-hover:bg-primary/10 transition-colors">
+                      <Icon
+                        IconComponent={IconChevron}
+                        className="h-4 w-4 text-gray-400 group-hover:text-primary"
+                      />
                     </div>
                   </div>
                 );

@@ -39,7 +39,7 @@ export function SearchInput({ value, onSearch, placeholder, onChange, className 
         autoFocus={false}
         leftSection={!isFocused && <TbSearch className="size-4" />}
         placeholder={placeholder}
-        size="xs"
+        size="sm"
         className={`z-50 acerSwift:max-macair133:text-b5`}
         value={searchValue}
         onChange={(event: any) => setSearchValue(event.currentTarget.value)}

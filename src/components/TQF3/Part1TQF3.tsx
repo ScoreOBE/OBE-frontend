@@ -544,102 +544,212 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
       </div>
     </div>
   ) : (
-    <div className="flex flex-col w-full text-[15px] iphone:max-sm:text-[12px] bg-[#dfebff]/40 p-5 -mt-1 rounded-xl acerSwift:max-macair133:text-b3 text-default ">
-      <div className=" text-secondary text-b1 iphone:max-sm:text-[14px] font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
-        {PartTopicTQF3.part1}
+    <div className="w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+      {/* Header */}
+      <div className="bg-[#1f69f3] text-white px-8 py-6 iphone:max-sm:px-4 iphone:max-sm:py-4 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#4c8af5] rounded-full opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#0d4ebc] rounded-full opacity-20 translate-y-1/2 -translate-x-1/2"></div>
+        <h2 className="text-xl iphone:max-sm:text-lg font-bold relative z-10">
+          {PartTopicTQF3.part1}
+        </h2>
       </div>
-      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
-        <div className="flex text-gray-800 flex-col">
-          <p className="font-medium">หลักสูตร</p>
-          <p className="font-medium">Curriculum</p>
+
+      {/* Content */}
+      <div className="divide-y divide-gray-100">
+        {/* Curriculum */}
+        <div className="flex flex-col sm:flex-row p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+          <div className="w-full sm:w-2/5 mb-3 sm:mb-0">
+            <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+              <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+              หลักสูตร
+            </h3>
+            <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+              Curriculum
+            </p>
+          </div>
+          <div className="w-full sm:w-3/5 font-medium text-gray-700 iphone:max-sm:text-[14px]">
+            <p className="py-1 px-3 bg-blue-50 rounded-md inline-block border-l-2 border-[#1f69f3]">
+              {tqf3.part1?.curriculum}
+            </p>
+          </div>
         </div>
-        <div className="flex text-default flex-col text-wrap font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
-          <p>{tqf3.part1?.curriculum}</p>
+
+        {/* Course Type */}
+        <div className="flex flex-col sm:flex-row p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+          <div className="w-full sm:w-2/5 mb-3 sm:mb-0">
+            <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+              <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+              ประเภทกระบวนวิชา
+            </h3>
+            <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+              Course Type
+            </p>
+          </div>
+          <div className="w-full sm:w-3/5 font-medium text-gray-700 space-y-2 iphone:max-sm:space-y-1.5 iphone:max-sm:text-[14px]">
+            {Object.values(COURSE_TYPE)
+              .filter((item) => tqf3.part1?.courseType?.includes(item.en))
+              ?.map((item) => (
+                <p key={item.en} className="flex items-center">
+                  <span className="inline-flex items-center justify-center w-6 h-6 iphone:max-sm:w-5 iphone:max-sm:h-5 rounded-full bg-[#1f69f3]/10 text-[#1f69f3] mr-2">
+                    <span className="w-2 h-2 iphone:max-sm:w-1.5 iphone:max-sm:h-1.5 bg-[#1f69f3] rounded-full"></span>
+                  </span>
+                  <span className="text-gray-800">{item.th}</span>
+                  <span className="ml-1 text-sm iphone:max-sm:text-[12px] text-[#1f69f3]">
+                    ({item.en})
+                  </span>
+                </p>
+              ))}
+          </div>
         </div>
-      </div>
-      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
-        <div className="flex text-gray-800 flex-col">
-          <p className="font-medium">ประเภทกระบวนวิชา</p>
-          <p className="font-medium">Course Type</p>
+
+        {/* Student Year */}
+        <div className="flex flex-col sm:flex-row p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+          <div className="w-full sm:w-2/5 mb-3 sm:mb-0">
+            <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+              <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+              ชั้นปีที่เรียน
+            </h3>
+            <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+              Student Year
+            </p>
+          </div>
+          <div className="w-full sm:w-3/5 font-medium text-gray-700 flex flex-wrap gap-2 iphone:max-sm:gap-1.5">
+            {studentYear
+              .filter((item) => tqf3.part1?.studentYear?.includes(item.year))
+              .map((item) => (
+                <div
+                  key={item.year}
+                  className="px-3 py-1.5 iphone:max-sm:px-2 iphone:max-sm:py-1 bg-[#1f69f3]/10 rounded-lg border border-[#1f69f3]/20"
+                >
+                  <p className="text-[#1f69f3] text-sm iphone:max-sm:text-[12px] font-medium">
+                    {item.th}
+                  </p>
+                  <p className="text-xs iphone:max-sm:text-[10px] text-gray-600">
+                    {item.en}
+                  </p>
+                </div>
+              ))}
+          </div>
         </div>
-        <div className="flex text-default flex-col gap-1 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
-          {Object.values(COURSE_TYPE)
-            .filter((item) => tqf3.part1?.courseType?.includes(item.en))
-            ?.map((item) => (
-              <p key={item.en}>
-                {item.th} ({item.en})
-              </p>
-            ))}
-        </div>
-      </div>
-      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5  ">
-        <div className="flex text-gray-800 flex-col">
-          <p className="font-medium">ชั้นปีที่เรียน</p>
-          <p className="font-medium">Student Year</p>
-        </div>
-        <div className="flex flex-col text-default gap-1 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
-          {studentYear
-            .filter((item) => tqf3.part1?.studentYear?.includes(item.year))
-            .map((item) => (
-              <p key={item.year}>
-                {item.th} ({item.en})
-              </p>
-            ))}
-        </div>
-      </div>
-      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5  ">
-        <div className="flex text-gray-800 flex-col">
-          <p className="font-medium">ชื่ออาจารย์ผู้รับผิดชอบ</p>
-          <p className="font-medium">Main Instructor</p>
-        </div>
-        <div className="flex flex-col text-default font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
-          <p>{tqf3.part1?.mainInstructor}</p>
-        </div>
-      </div>
-      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
-        <div className="flex text-gray-800 flex-col">
-          <p className="font-medium">อาจารย์ผู้สอนทั้งหมด</p>
-          <p className="font-medium">Lecturers</p>
-        </div>
-        <div className="flex flex-col text-default gap-1 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
-          {tqf3.part1?.instructors?.map((item, index) => (
-            <p key={index}>{item}</p>
-          ))}
-        </div>
-      </div>
-      <div className="w-full border-b-[1px] px-6 iphone:max-sm:px-3 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
-        <div className="flex text-gray-800 flex-col">
-          <p className="font-medium">สถานที่เรียน</p>
-          <p className="font-medium">Teaching Location</p>
-        </div>
-        <div className="flex flex-col justify-center text-default gap-3 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
-          {!tqf3.part1?.teachingLocation.in &&
-            !tqf3.part1?.teachingLocation.out && <p>-</p>}
-          {tqf3.part1?.teachingLocation.in && (
-            <div className="flex flex-col gap-1">
-              <p>{teachingLocation.in}</p>
-              <p>{tqf3.part1?.teachingLocation.in}</p>
+
+        {/* Main Instructor */}
+        <div className="flex flex-col sm:flex-row p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+          <div className="w-full sm:w-2/5 mb-3 sm:mb-0">
+            <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+              <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+              ชื่ออาจารย์ผู้รับผิดชอบ
+            </h3>
+            <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+              Main Instructor
+            </p>
+          </div>
+          <div className="w-full sm:w-3/5 font-medium iphone:max-sm:text-[14px]">
+            <div className="flex items-center">
+              <div className="w-10 h-10 iphone:max-sm:w-8 iphone:max-sm:h-8 rounded-full bg-[#1f69f3]/20 flex items-center justify-center text-[#1f69f3] mr-3">
+                <span className="text-lg iphone:max-sm:text-base font-bold">
+                  {tqf3.part1?.mainInstructor.charAt(0)}
+                </span>
+              </div>
+              <p className="text-gray-800">{tqf3.part1?.mainInstructor}</p>
             </div>
-          )}
-          {tqf3.part1?.teachingLocation.out && (
-            <div className="flex flex-col gap-1">
-              <p>{teachingLocation.out}</p>
-              <p>{tqf3.part1?.teachingLocation.out}</p>
+          </div>
+        </div>
+
+        {/* All Instructors */}
+        <div className="flex flex-col sm:flex-row p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+          <div className="w-full sm:w-2/5 mb-3 sm:mb-0">
+            <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+              <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+              อาจารย์ผู้สอนทั้งหมด
+            </h3>
+            <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+              Lecturers
+            </p>
+          </div>
+          <div className="w-full sm:w-3/5 font-medium text-gray-700 space-y-3 iphone:max-sm:space-y-2 iphone:max-sm:text-[14px]">
+            {tqf3.part1?.instructors?.map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center p-2 iphone:max-sm:p-1.5 rounded-lg hover:bg-[#1f69f3]/5 transition-colors"
+              >
+                <div className="w-8 h-8 iphone:max-sm:w-6 iphone:max-sm:h-6 rounded-full bg-[#1f69f3] text-white flex items-center justify-center mr-3 flex-shrink-0">
+                  <span className="font-bold iphone:max-sm:text-xs">
+                    {index + 1}
+                  </span>
+                </div>
+                <p>{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Teaching Location */}
+        <div className="flex flex-col sm:flex-row p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+          <div className="w-full sm:w-2/5 mb-3 sm:mb-0">
+            <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+              <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+              สถานที่เรียน
+            </h3>
+            <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+              Teaching Location
+            </p>
+          </div>
+          <div className="w-full sm:w-3/5 font-medium text-gray-700 space-y-4 iphone:max-sm:space-y-3 iphone:max-sm:text-[14px]">
+            {!tqf3.part1?.teachingLocation.in &&
+              !tqf3.part1?.teachingLocation.out && <p>-</p>}
+            {tqf3.part1?.teachingLocation.in && (
+              <div className="p-4 iphone:max-sm:p-3 bg-gradient-to-br from-white to-blue-50 rounded-xl shadow-sm border border-[#1f69f3]/10">
+                <p className="text-sm iphone:max-sm:text-[12px] font-semibold text-[#1f69f3] mb-2 iphone:max-sm:mb-1">
+                  {teachingLocation.in}
+                </p>
+                <p className="flex items-center">
+                  <span className="inline-block w-2 h-2 iphone:max-sm:w-1.5 iphone:max-sm:h-1.5 rounded-full bg-[#1f69f3] mr-2"></span>
+                  {tqf3.part1?.teachingLocation.in}
+                </p>
+              </div>
+            )}
+            {tqf3.part1?.teachingLocation.out && (
+              <div className="p-4 iphone:max-sm:p-3 bg-gradient-to-br from-white to-blue-50 rounded-xl shadow-sm border border-[#1f69f3]/10">
+                <p className="text-sm iphone:max-sm:text-[12px] font-semibold text-[#1f69f3] mb-2 iphone:max-sm:mb-1">
+                  {teachingLocation.out}
+                </p>
+                <p className="flex items-center">
+                  <span className="inline-block w-2 h-2 iphone:max-sm:w-1.5 iphone:max-sm:h-1.5 rounded-full bg-[#1f69f3] mr-2"></span>
+                  {tqf3.part1?.teachingLocation.out}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Consultation Hours */}
+        <div className="flex flex-col sm:flex-row p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+          <div className="w-full sm:w-2/5 mb-3 sm:mb-0">
+            <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+              <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+              ชั่วโมงต่อสัปดาห์ในการให้คำปรึกษาแก่นักศึกษารายบุคคล
+            </h3>
+            <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+              Individual student consultation hours per week
+            </p>
+          </div>
+          <div className="w-full sm:w-3/5 font-medium text-gray-700 iphone:max-sm:text-[14px]">
+            <div className="flex items-center">
+              <div className="relative">
+                <div className="w-16 h-16 iphone:max-sm:w-12 iphone:max-sm:h-12 rounded-full bg-[#1f69f3]/10 flex items-center justify-center">
+                  <span className="text-2xl iphone:max-sm:text-xl font-bold text-[#1f69f3]">
+                    {tqf3.part1?.consultHoursWk}
+                  </span>
+                </div>
+                <div className="absolute -top-1 -right-1 w-6 h-6 iphone:max-sm:w-5 iphone:max-sm:h-5 rounded-full bg-[#1f69f3] text-white text-xs iphone:max-sm:text-[10px] flex items-center justify-center">
+                  hr
+                </div>
+              </div>
+              <p className="ml-4 iphone:max-sm:ml-3 text-gray-600">
+                hours per week
+              </p>
             </div>
-          )}
-        </div>
-      </div>
-      <div className="w-full  justify-between h-fit px-6 iphone:max-sm:px-3 items-center grid grid-cols-2 pt-5 pb-2">
-        <div className="flex text-gray-800 flex-col sm:max-macair133:pr-8 acerSwift:max-macair133:pr-6">
-          <p className="font-medium">
-            ชั่วโมงต่อสัปดาห์ในการให้คำปรึกษาแก่นักศึกษารายบุคคล
-          </p>
-          <p className="font-medium">
-            Individual student consultation hours per week
-          </p>
-        </div>
-        <div className="flex items-center text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4 font-medium gap-4">
-          <p>{tqf3.part1?.consultHoursWk} hours / week</p>
+          </div>
         </div>
       </div>
     </div>

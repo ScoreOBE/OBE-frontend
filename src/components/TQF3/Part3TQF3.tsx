@@ -399,120 +399,158 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col w-full text-[15px] iphone:max-sm:text-[12px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
-            <div className=" text-secondary text-b1 iphone:max-sm:text-[14px] font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
-              {PartTopicTQF3.part3}
+          <div className="w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 mt-6">
+            {/* Header */}
+            <div className="bg-[#1f69f3] text-white px-8 py-6 iphone:max-sm:px-4 iphone:max-sm:py-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#4c8af5] rounded-full opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#0d4ebc] rounded-full opacity-20 translate-y-1/2 -translate-x-1/2"></div>
+              <h2 className="text-xl iphone:max-sm:text-lg font-bold relative z-10">
+                {PartTopicTQF3.part3}
+              </h2>
             </div>
-            <div className=" border-b-[1px] border-[#e6e6e6] px-6 iphone:max-sm:px-3 justify-between h-fit w-full grid grid-cols-2 py-5">
-              <div className="flex text-gray-800 flex-col  text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b3">
-                <p className="font-medium">การกำหนดเกรด</p>
-                <p className="font-medium">Grading</p>
-              </div>
-              <div className="flex flex-col text-default gap-2 font-medium text-b2 iphone:max-sm:text-[12px] acerSwift:max-macair133:text-b4">
-                <p>{tqf3.part3?.gradingPolicy}</p>
-              </div>
-            </div>
-            <div className="flex flex-col w-full px-6 iphone:max-sm:px-3 gap-4 pt-5 pb-2">
-              <div className="flex text-gray-800 items-center w-full justify-between">
-                <p className="font-medium iphone:max-sm:text-[12px]">
-                  Evaluation Items
-                </p>
-              </div>
-              {!isMobile ? (
-                <div
-                  className="overflow-auto w-full flex flex-col rounded-md border border-secondary"
-                  style={{
-                    boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                  }}
-                >
-                  <Table stickyHeader striped className="w-full">
-                    <Table.Thead className="acerSwift:max-macair133:!text-b3">
-                      <Table.Tr className="bg-[#e5e7f6] ">
-                        <Table.Th className="w-[5%] !rounded-tl-md">
-                          No.
-                        </Table.Th>
-                        <Table.Th className=" w-[15%]">Method</Table.Th>
-                        <Table.Th className="w-[65%]">Description</Table.Th>
-                        <Table.Th className="w-[5%] text-end">
-                          <div className="flex flex-row !justify-end items-center gap-2">
-                            Evaluate
-                          </div>
-                        </Table.Th>
-                        <Table.Th className="w-[5%] !rounded-tr-md"></Table.Th>
-                      </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody className="text-b3 acerSwift:max-macair133:!text-b4 font-normal text-[#333333] w-full">
-                      {tqf3.part3?.eval?.map((item) => (
-                        <Table.Tr key={item.no.toString()}>
-                          <Table.Td className="w-[5%] ">{item.no}</Table.Td>
-                          <Table.Td className="w-[15%] ">
-                            <p>{item.topicTH}</p>
-                            <p>{item.topicEN}</p>
-                          </Table.Td>
-                          <Table.Td className="w-[65%] max-w-[65%] flex-wrap">
-                            {item.desc.length ? item.desc : "-"}
-                          </Table.Td>
-                          <Table.Td className="w-[5%] acerSwift:max-macair133:!text-b2 text-end text-b1">
-                            <p>{item.percent}%</p>
-                          </Table.Td>
-                          <Table.Td></Table.Td>
-                        </Table.Tr>
-                      ))}
-                    </Table.Tbody>
-                    <Table.Tfoot className="text-secondary font-semibold">
-                      <Table.Tr className=" bg-bgTableHeader border-none">
-                        <Table.Th
-                          className="text-b2 acerSwift:max-macair133:!text-b3 !rounded-bl-md"
-                          colSpan={3}
-                        >
-                          Total
-                        </Table.Th>
-                        <Table.Th className="text-b1 acerSwift:max-macair133:!text-b2 text-end">
-                          {percentTotal}%
-                        </Table.Th>
-                        <Table.Th
-                          className="!rounded-br-md"
-                          colSpan={2}
-                        ></Table.Th>
-                      </Table.Tr>
-                    </Table.Tfoot>
-                  </Table>
+
+            {/* Content */}
+            <div className="divide-y divide-gray-100">
+              {/* Grading Policy */}
+              <div className="flex flex-col sm:flex-row p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+                <div className="w-full sm:w-2/5 mb-3 sm:mb-0">
+                  <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+                    <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+                    การกำหนดเกรด
+                  </h3>
+                  <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+                    Grading
+                  </p>
                 </div>
-              ) : (
-                <div>
-                  {tqf3.part3?.eval?.map((item) => (
-                    <div
-                      key={item.no.toString()}
-                      className="bg-white mb-3 rounded-lg shadow-sm p-4 border border-gray-100 transition-shadow"
-                    >
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="bg-blue-50 text-blue-600 font-semibold px-3 py-1 rounded-full text-[12px]">
-                          Item-{item.no}
-                        </span>
-                        <span className="bg-green-50 text-green-600 font-semibold px-3 py-1 rounded-full text-[12px]">
-                          {item.percent}%
-                        </span>
-                      </div>
+                <div className="w-full sm:w-3/5 font-medium iphone:max-sm:text-[14px]">
+                  <div className="py-3 px-4 bg-[#1f69f3]/5 rounded-lg border-l-2 border-[#1f69f3]">
+                    <p className="text-gray-800">{tqf3.part3?.gradingPolicy}</p>
+                  </div>
+                </div>
+              </div>
 
-                      <div>
-                        <p className="text-gray-800 font-medium">
-                          {item.topicTH}
-                        </p>
-                        <p className="text-gray-600 italic">{item.topicEN}</p>
+              {/* Evaluation Items */}
+              <div className="p-6 iphone:max-sm:p-4">
+                <div className="mb-4">
+                  <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+                    <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+                    Evaluation Items
+                  </h3>
+                </div>
 
-                        <div className="mt-3 pt-3 border-t border-gray-100">
-                          <span className="text-gray-500 text-[12px]">
-                            Description:
+                {!isMobile ? (
+                  <div className="overflow-hidden border border-[#1f69f3]/20 rounded-xl shadow-sm mt-4">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="bg-[#1f69f3]/10">
+                          <th className="py-3 px-4 text-left text-[#1f69f3] font-semibold w-[5%] border-b border-[#1f69f3]/10">
+                            No.
+                          </th>
+                          <th className="py-3 px-4 text-left text-[#1f69f3] font-semibold w-[15%] border-b border-[#1f69f3]/10">
+                            Method
+                          </th>
+                          <th className="py-3 px-4 text-left text-[#1f69f3] font-semibold w-[65%] border-b border-[#1f69f3]/10">
+                            Description
+                          </th>
+                          <th className="py-3 px-4 text-right text-[#1f69f3] font-semibold w-[15%] border-b border-[#1f69f3]/10">
+                            Evaluate
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {tqf3.part3?.eval?.map((item, index) => (
+                          <tr
+                            key={item.no.toString()}
+                            className={
+                              index % 2 === 0 ? "bg-white" : "bg-blue-50/30"
+                            }
+                          >
+                            <td className="py-3 px-4">{item.no}</td>
+                            <td className="py-3 px-4">
+                              <p className="font-medium text-gray-800">
+                                {item.topicTH}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                {item.topicEN}
+                              </p>
+                            </td>
+                            <td className="py-3 px-4 text-gray-700">
+                              {item.desc.length ? item.desc : "-"}
+                            </td>
+                            <td className="py-3 px-4 text-right">
+                              <span className="inline-flex items-center justify-center px-3 py-1 bg-[#1f69f3] text-white font-medium rounded-full">
+                                {item.percent}%
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <tfoot>
+                        <tr className="bg-[#1f69f3]/20 font-semibold text-[#1f69f3]">
+                          <td className="py-3 px-4" colSpan={3}>
+                            Total
+                          </td>
+                          <td className="py-3 px-4 text-right">
+                            <span className="inline-flex items-center justify-center px-3 py-1 bg-[#1f69f3] text-white font-bold rounded-full">
+                              100%
+                            </span>
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="space-y-3 mt-2">
+                    {tqf3.part3?.eval?.map((item) => (
+                      <div
+                        key={item.no.toString()}
+                        className="bg-white rounded-lg shadow-sm border border-[#1f69f3]/10 overflow-hidden hover:border-[#1f69f3]/30 transition-all"
+                      >
+                        <div className="flex items-center justify-between bg-[#1f69f3]/5 px-4 py-2 border-b border-[#1f69f3]/10">
+                          <div className="flex items-center gap-2">
+                            <span className="bg-[#1f69f3]/20 text-[#1f69f3] font-semibold px-2 py-0.5 rounded-full text-[12px]">
+                              #{item.no}
+                            </span>
+                            <h3 className="font-medium text-gray-800 iphone:max-sm:text-[14px]">
+                              {item.topicTH}
+                            </h3>
+                          </div>
+                          <span className="bg-[#1f69f3] text-white font-semibold px-2.5 py-0.5 rounded-full text-[12px]">
+                            {item.percent}%
                           </span>
-                          <p className="text-gray-700 text-[12px] mt-[2px]">
-                            {item.desc.length ? item.desc : "none"}
+                        </div>
+
+                        <div className="p-4">
+                          <p className="text-gray-600 italic text-sm iphone:max-sm:text-[12px] mb-3">
+                            {item.topicEN}
                           </p>
+
+                          <div className="mt-2">
+                            <h4 className="text-[12px] font-medium text-[#1f69f3] mb-1">
+                              Description:
+                            </h4>
+                            <p className="text-gray-700 iphone:max-sm:text-[12px]">
+                              {item.desc.length
+                                ? item.desc
+                                : "No description provided"}
+                            </p>
+                          </div>
                         </div>
                       </div>
+                    ))}
+
+                    {/* Total percentage for mobile */}
+                    <div className="bg-[#1f69f3]/10 rounded-lg p-4 mt-4 flex items-center justify-between">
+                      <span className="font-semibold text-gray-800 iphone:max-sm:text-[14px]">
+                        Total Evaluation
+                      </span>
+                      <span className="bg-[#1f69f3] text-white font-bold px-3 py-1 rounded-full iphone:max-sm:text-[14px]">
+                        {percentTotal}%
+                      </span>
                     </div>
-                  ))}
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )

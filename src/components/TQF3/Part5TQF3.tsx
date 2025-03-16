@@ -101,32 +101,68 @@ export default function Part5TQF3({ setForm = () => {} }: Props) {
         </div>
       </>
     ) : (
-      <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
-          <div className=" text-secondary text-b1 font-semibold iphone:max-sm:text-[14px] whitespace-break-spaces border-b-[1px] border-noData pb-4">
-          {PartTopicTQF3.part5}
-        </div>
-        <div className="w-full border-b-[1px] border-[#e6e6e6] iphone:max-sm:text-[12px] justify-between h-fit grid grid-cols-2 py-5">
-          <div className="flex text-gray-800 px-6 iphone:max-sm:px-3 flex-col text-[15px] iphone:max-sm:text-[12px] acerSwift:max-macair133:!text-b3">
-            <p className="font-medium">ตำราและเอกสาร</p>
-            <p className="font-medium">Main Reference</p>
-          </div>
-          <div className="flex flex-col justify-center text-default font-medium iphone:max-sm:text-[12px] text-b2 acerSwift:max-macair133:text-b4">
-            <p>{tqf3?.part5?.mainRef.length ? tqf3?.part5?.mainRef : "None"}</p>
-          </div>
-        </div>
-        <div className="w-full  border-[#e6e6e6] justify-between h-fit grid grid-cols-2 pt-5 pb-2">
-          <div className="flex text-gray-800 px-6 iphone:max-sm:px-3 iphone:max-sm:text-[12px] flex-col text-[15px] acerSwift:max-macair133:!text-b3">
-            <p className="font-medium">เอกสารแนะนำ</p>
-            <p className="font-medium">
-              Recommended Documents
-              <br /> e.g. Lecture notes, E-documents, etc.
+      <div className="w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 mt-6">
+      {/* Header */}
+      <div className="bg-[#1f69f3] text-white px-8 py-6 iphone:max-sm:px-4 iphone:max-sm:py-4 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#4c8af5] rounded-full opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#0d4ebc] rounded-full opacity-20 translate-y-1/2 -translate-x-1/2"></div>
+        <h2 className="text-xl iphone:max-sm:text-lg font-bold relative z-10">{PartTopicTQF3.part5}</h2>
+      </div>
+
+      {/* Content */}
+      <div className="divide-y divide-gray-100">
+        {/* Main Reference */}
+        <div className="p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="w-full sm:w-2/5">
+              <div className="flex items-start gap-3">
+                
+                <div>
+                <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+              <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>
+              ตำราและเอกสาร
+            </h3>
+            <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">
+             Main Reference
             </p>
+                </div>
+              </div>
+            </div>
+            <div className="w-full sm:w-3/5">
+              <div className="py-3 px-4 bg-[#1f69f3]/5 rounded-lg border-l-2 border-[#1f69f3]">
+                <p className="text-gray-800 font-medium iphone:max-sm:text-[12px]">
+                  {tqf3?.part5?.mainRef.length ? tqf3?.part5?.mainRef : "None"}
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col justify-center text-default iphone:max-sm:text-[12px] font-medium text-b2 acerSwift:max-macair133:text-b4">
-            <p>{tqf3?.part5?.recDoc.length ? tqf3?.part5?.recDoc : "None"}</p>
+        </div>
+
+        {/* Recommended Documents */}
+        <div className="p-6 iphone:max-sm:p-4 hover:bg-blue-50/30 transition-all duration-300">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="w-full sm:w-2/5">
+              <div className="flex items-start gap-3">
+               
+                <div>
+                <h3 className="font-semibold text-gray-800 flex items-center iphone:max-sm:text-[14px]">
+                <span className="inline-block w-1.5 h-5 iphone:max-sm:h-4 bg-[#1f69f3] rounded-sm mr-2"></span>เอกสารแนะนำ</h3>
+                <p className="text-sm iphone:max-sm:text-[12px] text-gray-500 ml-3.5">Recommended Documents</p>
+                 
+                </div>
+              </div>
+            </div>
+            <div className="w-full sm:w-3/5">
+              <div className="py-3 px-4 bg-[#1f69f3]/5 rounded-lg border-l-2 border-[#1f69f3]">
+                <p className="text-gray-800 font-medium iphone:max-sm:text-[12px]">
+                  {tqf3?.part5?.recDoc.length ? tqf3?.part5?.recDoc : "None"}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
     )
   ) : (
     <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
