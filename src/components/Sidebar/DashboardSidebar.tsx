@@ -5,9 +5,6 @@ import Icon from "@/components/Icon";
 import IconCalendar from "@/assets/icons/calendar.svg?react";
 import { HiOutlineBookOpen } from "react-icons/hi";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
-import { AcademicYearRequestDTO } from "@/services/academicYear/dto/academicYear.dto";
-import { getAcademicYear } from "@/services/academicYear/academicYear.service";
-import { setAcademicYear } from "@/store/academicYear";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import IconSO from "@/assets/icons/SO.svg?react";
@@ -426,7 +423,7 @@ export default function DashboardSidebar() {
                   </Button>
                 </Tooltip>
               )}
-              { user.id && (
+              {user.id && (
                 <Tooltip
                   transitionProps={{
                     transition: "fade-right",
@@ -446,7 +443,14 @@ export default function DashboardSidebar() {
                 >
                   <Button
                     onClick={() => stdGotoPage(ROUTE_PATH.COURSE_SYLLABUS)}
-                    leftSection={openSidebar && <Icon IconComponent={IconBooks} className=" stroke-[1.3px] size-[22px] -ml-[3px]" />}
+                    leftSection={
+                      openSidebar && (
+                        <Icon
+                          IconComponent={IconBooks}
+                          className=" stroke-[1.3px] size-[22px] -ml-[3px]"
+                        />
+                      )
+                    }
                     className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
                       path.includes(ROUTE_PATH.COURSE_SYLLABUS)
                         ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
@@ -460,7 +464,10 @@ export default function DashboardSidebar() {
                     {openSidebar ? (
                       "Course Spec"
                     ) : (
-                      <Icon IconComponent={IconBooks} className="stroke-[1.3px] size-[22px]"/>
+                      <Icon
+                        IconComponent={IconBooks}
+                        className="stroke-[1.3px] size-[22px]"
+                      />
                     )}
                   </Button>
                 </Tooltip>

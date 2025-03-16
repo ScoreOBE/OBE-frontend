@@ -128,19 +128,6 @@ export default function Sidebar() {
       ...new CourseRequestDTO(),
       ...term,
     };
-    if (
-      path.includes(`${ROUTE_PATH.COURSE_SYLLABUS}/${courseNo}`) &&
-      !courseSyllabus.length
-    ) {
-      const res = await getCourse({
-        ...payload,
-        courseSyllabus: true,
-        ignorePage: true,
-      });
-      if (res) {
-        dispatch(setCourseSyllabus(res));
-      }
-    }
     if (user.studentId && !enrollCourseList.length) {
       const res = await getEnrollCourse(term);
       if (res) {
@@ -165,8 +152,7 @@ export default function Sidebar() {
         dispatch(setAllCourseList(resAllCourse));
       }
     }
-    if (!path.includes(`${ROUTE_PATH.COURSE_SYLLABUS}/${courseNo}`))
-      dispatch(setLoading(false));
+    dispatch(setLoading(false));
   };
 
   const onClickLeaveCourse = async (id: string) => {

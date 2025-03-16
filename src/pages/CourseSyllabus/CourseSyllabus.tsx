@@ -50,31 +50,12 @@ export default function CourseSyllabus() {
   const dispatch = useAppDispatch();
   const section = ["Part 1", "Part 2", "Part 3", "Part 4", "Part 5", "Part 6"];
   const partSections = [
-    {
-      value: section[0],
-      compo: <Part1TQF3 />,
-    },
-    {
-      value: section[1],
-      compo: <Part2TQF3 />,
-    },
-    {
-      value: section[2],
-      compo: <Part3TQF3 />,
-    },
-    {
-      value: section[3],
-      compo: <Part4TQF3 />,
-    },
-    {
-      value: section[4],
-      compo: <Part5TQF3 />,
-    },
-
-    {
-      value: section[5],
-      compo: <Part7TQF3 />,
-    },
+    { value: section[0], compo: <Part1TQF3 /> },
+    { value: section[1], compo: <Part2TQF3 /> },
+    { value: section[2], compo: <Part3TQF3 /> },
+    { value: section[3], compo: <Part4TQF3 /> },
+    { value: section[4], compo: <Part5TQF3 /> },
+    { value: section[5], compo: <Part7TQF3 /> },
   ];
   const sectionRefs = useRef(
     section.map(() => React.createRef<HTMLDivElement>())
@@ -84,15 +65,15 @@ export default function CourseSyllabus() {
   useEffect(() => {
     dispatch(setShowSidebar(false));
     dispatch(setShowNavbar(true));
-    if (!course && year! && semester!) fetchCourse();
+    if (!course && year && semester) fetchCourse();
   }, [year, semester]);
 
   const fetchCourse = async () => {
     dispatch(setLoading(true));
     const res = await getCourse({
       ...new CourseRequestDTO(),
-      year: Number(year),
-      semester: Number(semester),
+      year: parseInt(year!),
+      semester: parseInt(semester!),
       courseSyllabus: true,
       ignorePage: true,
     });
@@ -251,24 +232,24 @@ export default function CourseSyllabus() {
           <div className="flex overflow-hidden w-full  h-full gap-3 py-2">
             <div className="flex flex-col h-full max-w-[87%] py-5 px-10 bg gap-4 overflow-auto">
               <div>
-              <Alert
-                radius="md"
-                variant="light"
-                classNames={{
-                  body: " flex justify-center",
-                }}
-                color="orange"
-                title={
-                  <div className="flex items-center gap-2">
-                    <Icon IconComponent={IconInfo2} className="mr-2" />
-                    <p>
-                      Course Specifications Feature is currently in its
-                      development (beta) phase. You may encounter unstable
-                      features or bugs.
-                    </p>
-                  </div>
-                }
-              ></Alert>
+                <Alert
+                  radius="md"
+                  variant="light"
+                  classNames={{
+                    body: " flex justify-center",
+                  }}
+                  color="orange"
+                  title={
+                    <div className="flex items-center gap-2">
+                      <Icon IconComponent={IconInfo2} className="mr-2" />
+                      <p>
+                        Course Specifications Feature is currently in its
+                        development (beta) phase. You may encounter unstable
+                        features or bugs.
+                      </p>
+                    </div>
+                  }
+                ></Alert>
               </div>
               <div className=" flex gap-2 ">
                 {" "}

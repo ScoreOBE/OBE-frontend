@@ -1,18 +1,22 @@
 import { ellipsisText } from "@/helpers/functions/validation";
-import { useAppDispatch } from "@/store";
 import { TextInput, Tooltip, CloseButton } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineEnter } from "react-icons/ai";
 import { TbSearch } from "react-icons/tb";
 
 type Props = {
+  value?: string;
   onSearch: (value: string, reset?: boolean) => void;
   placeholder?: string;
 };
 
-export function SearchInput({ onSearch, placeholder }: Props) {
+export function SearchInput({ value, onSearch, placeholder }: Props) {
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+
+  useEffect(() => {
+    if (value == "" && searchValue != "") reset();
+  }, [value]);
 
   const reset = () => {
     setSearchValue("");

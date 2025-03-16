@@ -16,10 +16,8 @@ import { ROLE, TQF_STATUS } from "@/helpers/constants/enum";
 import { Button, CopyButton, Tooltip } from "@mantine/core";
 import Icon from "./Icon";
 import IconFeedback from "@/assets/icons/feedback.svg?react";
-import IconLogin from "@/assets/icons/login.svg?react";
 import { isMobile } from "@/helpers/functions/function";
 import { HiCheck, HiOutlineClipboardCopy } from "react-icons/hi";
-import { setSeachCourseSyllabus } from "@/store/courseSyllabus";
 
 export default function Navbar() {
   const { name, courseNo } = useParams();
@@ -29,9 +27,6 @@ export default function Navbar() {
     (state) => state.config.showButtonLogin
   );
   const [params, setParams] = useSearchParams();
-  const courseSyllabus = useAppSelector((state) =>
-    state.courseSyllabus.courses.find((course) => course.courseNo == courseNo)
-  );
   const tqf3 = useAppSelector((state) => state.tqf3);
   const tqf3Topic = useAppSelector((state) => state.tqf3.topic);
   const tqf5Topic = useAppSelector((state) => state.tqf5.topic);
@@ -45,9 +40,6 @@ export default function Navbar() {
         dispatch(setSearchCourse(searchValue));
       case ROUTE_PATH.ADMIN_DASHBOARD:
         dispatch(setSearchAllCourse(searchValue));
-      case ROUTE_PATH.COURSE_SYLLABUS:
-        dispatch(setSeachCourseSyllabus(searchValue));
-        break;
       default:
         break;
     }
@@ -164,11 +156,9 @@ export default function Navbar() {
           </p>
           {location.includes(ROUTE_PATH.TQF3) && (
             <CopyButton
-              value={`${window.location.origin.toString()}${
-                ROUTE_PATH.COURSE_SYLLABUS
-              }/${ROUTE_PATH.PDF}/${
-                tqf3.id
-              }?courseNo=${courseNo}&year=${params.get(
+              value={`${window.location.origin}${ROUTE_PATH.COURSE_SYLLABUS}/${
+                ROUTE_PATH.PDF
+              }/${tqf3.id}?courseNo=${courseNo}&year=${params.get(
                 "year"
               )}&semester=${params.get("semester")}`}
               timeout={2000}
@@ -230,10 +220,9 @@ export default function Navbar() {
             </CopyButton>
           )}
         </div>
-        {([ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
+        {[ROUTE_PATH.INS_DASHBOARD, ROUTE_PATH.ADMIN_DASHBOARD].some((path) =>
           location.includes(path)
-        ) ||
-          location == ROUTE_PATH.COURSE_SYLLABUS) &&
+        ) &&
           !isMobile && (
             <SearchInput
               onSearch={searchCourse}
@@ -269,19 +258,10 @@ export default function Navbar() {
         )}
         {![ROUTE_PATH.LOGIN].includes(location) && (
           <div className="flex gap-2 items-center">
-            {user.id ? (
-              <Profile />
-            ) : !isMobile ? (
-              <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
-                <Button variant="light">Sign in CMU account</Button>
-              </a>
-            ) : (
-              <a href={import.meta.env.VITE_CMU_ENTRAID_URL}>
-                <Button variant="transparent" className=" !px-0">
-                  <Icon IconComponent={IconLogin} />
-                </Button>
-              </a>
-            )}
+            {user.id &&
+              !location.includes(
+                `${ROUTE_PATH.COURSE_SYLLABUS}/${courseNo}`
+              ) && <Profile />}
           </div>
         )}
       </div>

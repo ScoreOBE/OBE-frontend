@@ -208,10 +208,12 @@ export default function Login() {
   const ButtonCourseSyllabus = () => {
     return (
       <Button
-      variant='light'
+        variant="light"
         ref={buttonRef}
-        leftSection={ <Icon IconComponent={IconSearch} className="size-4" />}
-        onClick={() => navigate(ROUTE_PATH.COURSE_SYLLABUS)}
+        leftSection={<Icon IconComponent={IconSearch} className="size-4" />}
+        onClick={() =>
+          window.open(`${window.location.origin}${ROUTE_PATH.COURSE_SYLLABUS}`)
+        }
         className="z-[52] drop-shadow-2xl iphone:max-sm:!rounded-3xl iphone:max-sm:px-8 !px-9 sm:!text-[14px] iphone:max-sm:!text-[13px] !h-[44px]"
       >
         Search Course Specifications
@@ -289,10 +291,9 @@ export default function Login() {
           ></Alert>
         </div>
         <div className="items-center  mt-8 iphone:max-sm:mb-12 text-center w-full justify-center flex  flex-col gap-4">
-         <div> {ButtonLogin()}</div>
-         <div> {ButtonCourseSyllabus()} </div>
+          <div>{ButtonLogin()}</div>
+          <div>{ButtonCourseSyllabus()}</div>
         </div>
-        
         <div
           data-aos-duration="1000"
           data-aos-once="false"

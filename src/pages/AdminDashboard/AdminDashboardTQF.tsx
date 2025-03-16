@@ -287,9 +287,7 @@ export default function AdminDashboardTQF() {
                       </Button>
                     </Tooltip>
                     {/* <CopyButton
-                      value={`${window.location.origin.toString()}${
-                        ROUTE_PATH.COURSE_SYLLABUS
-                      }/${ROUTE_PATH.PDF}/${sec.TQF3?.id}?courseNo=${course.courseNo}&year=${
+                      value={`${window.location.origin}${ROUTE_PATH.COURSE_SYLLABUS}/${ROUTE_PATH.PDF}/${sec.TQF3?.id}?courseNo=${course.courseNo}&year=${
                         course.year
                       }&semester=${course.semester}`}
                       timeout={2000}
@@ -477,9 +475,7 @@ export default function AdminDashboardTQF() {
                   </Button>
                 </Tooltip>
                 {/* <CopyButton
-                  value={`${window.location.origin.toString()}${
-                    ROUTE_PATH.COURSE_SYLLABUS
-                  }/${ROUTE_PATH.PDF}/${course.TQF3?.id}?courseNo=${course.courseNo}&year=${
+                  value={`${window.location.origin}${ROUTE_PATH.COURSE_SYLLABUS}/${ROUTE_PATH.PDF}/${course.TQF3?.id}?courseNo=${course.courseNo}&year=${
                     course.year
                   }&semester=${course.semester}`}
                   timeout={2000}
