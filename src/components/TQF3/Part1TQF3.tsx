@@ -548,7 +548,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
       <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
         {PartTopicTQF3.part1}
       </div>
-      <div className="w-full border-b-[1px] px-10 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">หลักสูตร</p>
           <p className="font-medium">Curriculum</p>
@@ -557,7 +557,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
           <p>{tqf3.part1?.curriculum}</p>
         </div>
       </div>
-      <div className="w-full border-b-[1px] px-10 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">ประเภทกระบวนวิชา</p>
           <p className="font-medium">Course Type</p>
@@ -572,7 +572,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
             ))}
         </div>
       </div>
-      <div className="w-full border-b-[1px] px-10 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5  ">
+      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5  ">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">ชั้นปีที่เรียน</p>
           <p className="font-medium">Student Year</p>
@@ -587,7 +587,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
             ))}
         </div>
       </div>
-      <div className="w-full border-b-[1px] px-10 border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5  ">
+      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5  ">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">ชื่ออาจารย์ผู้รับผิดชอบ</p>
           <p className="font-medium">Main Instructor</p>
@@ -596,7 +596,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
           <p>{tqf3.part1?.mainInstructor}</p>
         </div>
       </div>
-      <div className="w-full border-b-[1px] px-10 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">อาจารย์ผู้สอนทั้งหมด</p>
           <p className="font-medium">Lecturers</p>
@@ -607,7 +607,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
           ))}
         </div>
       </div>
-      <div className="w-full border-b-[1px] px-10 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
+      <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
         <div className="flex text-gray-800 flex-col">
           <p className="font-medium">สถานที่เรียน</p>
           <p className="font-medium">Teaching Location</p>
@@ -629,7 +629,7 @@ export default function Part1TQF3({ setForm = () => {} }: Props) {
           )}
         </div>
       </div>
-      <div className="w-full  justify-between h-fit px-10 items-center grid grid-cols-2 pt-5 pb-2">
+      <div className="w-full  justify-between h-fit px-6 items-center grid grid-cols-2 pt-5 pb-2">
         <div className="flex text-gray-800 flex-col sm:max-macair133:pr-8 acerSwift:max-macair133:pr-6">
           <p className="font-medium">
             ชั่วโมงต่อสัปดาห์ในการให้คำปรึกษาแก่นักศึกษารายบุคคล

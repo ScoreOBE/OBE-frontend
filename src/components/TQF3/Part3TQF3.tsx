@@ -402,7 +402,7 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
             <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
               {PartTopicTQF3.part3}
             </div>
-            <div className=" border-b-[1px] border-[#e6e6e6] px-10 justify-between h-fit w-full grid grid-cols-2 py-5">
+            <div className=" border-b-[1px] border-[#e6e6e6] px-6 justify-between h-fit w-full grid grid-cols-2 py-5">
             <div className="flex text-gray-800 flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
                 <p className="font-medium">การกำหนดเกรด</p>
                 <p className="font-semibold">Grading</p>
@@ -411,7 +411,7 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
                 <p>{tqf3.part3?.gradingPolicy}</p>
               </div>
             </div>
-            <div className="flex flex-col w-full px-10 gap-4 pt-5 pb-2">
+            <div className="flex flex-col w-full px-6 gap-4 pt-5 pb-2">
               <div className="flex text-gray-800 items-center w-full justify-between">
                 <p className="font-semibold">Evaluation Items</p>
               </div>

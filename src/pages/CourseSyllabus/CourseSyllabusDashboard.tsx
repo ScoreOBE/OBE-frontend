@@ -150,7 +150,7 @@ export default function CourseSyllabusDashboard() {
             <>
               <div className=" flex gap-2 ">
                 {" "}
-                <p className="!font-[600] mb-4 text-[28px] iphone:max-sm:text-[20px]">
+                <p className="!font-[600] mb-4 text-[28px] iphone:max-sm:text-[24px]">
                   <span className=" !drop-shadow-xl text-transparent bg-clip-text bg-gradient-to-r from-[#4285f4] via-[#ec407a] via-[#a06ee1] to-[#fb8c00]">
                     ScoreOBE+ Course Syllabus
                   </span>
@@ -159,15 +159,15 @@ export default function CourseSyllabusDashboard() {
             </>
           )}
           <div
-            className={` px-6 pt-5 pb-4  rounded-lg ${
+            className={` px-10 pt-5 pb-4  rounded-lg ${
               !courseSyllabus.search.length
                 ? "flex-row  items-end gap-4"
                 : "gap-4 border-b   w-full"
             }`}
           >
             {!courseSyllabus.search.length ? (
-              <p className="text-start flex items-start mb-2 font-semibold text-[14px] ">
-                Select semester and search course
+              <p className="text-start flex items-start mb-[5px] font-semibold text-[14px] iphone:max-sm:text-[12px] ">
+                Select semester {user.id && "in the sidebar"} and search course
               </p>
             ) : (
               <></>

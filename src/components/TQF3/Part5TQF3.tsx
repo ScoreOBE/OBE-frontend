@@ -101,29 +101,29 @@ export default function Part5TQF3({ setForm = () => {} }: Props) {
         </div>
       </>
     ) : (
-      <div className="flex flex-col w-full text-[15px] acerSwift:max-macair133:text-b3 max-h-full text-default border-b-2">
-        <div className=" text-secondary acerSwift:max-macair133:!text-b2 font-semibold whitespace-break-spaces border-b pb-4">
+      <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
+          <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
           {PartTopicTQF3.part5}
         </div>
         <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
-          <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
-            <p className="font-semibold">ตำราและเอกสาร</p>
+          <div className="flex text-gray-800 px-6 flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+            <p className="font-medium">ตำราและเอกสาร</p>
             <p className="font-semibold">Main Reference</p>
           </div>
-          <div className="flex flex-col justify-center text-default font-medium text-b3 acerSwift:max-macair133:text-b4">
-            <p>{tqf3?.part5?.mainRef.length ? tqf3?.part5?.mainRef : "-"}</p>
+          <div className="flex flex-col justify-center text-default font-medium text-b2 acerSwift:max-macair133:text-b4">
+            <p>{tqf3?.part5?.mainRef.length ? tqf3?.part5?.mainRef : "None"}</p>
           </div>
         </div>
-        <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit grid grid-cols-2 py-5">
-          <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+        <div className="w-full  border-[#e6e6e6] justify-between h-fit grid grid-cols-2 pt-5 pb-2">
+          <div className="flex text-gray-800 px-6 flex-col text-[15px] acerSwift:max-macair133:!text-b3">
             <p className="font-semibold">เอกสารแนะนำ</p>
             <p className="font-semibold">
               Recommended Documents
               <br /> e.g. Lecture notes, E-documents, etc.
             </p>
           </div>
-          <div className="flex flex-col justify-center text-default font-medium text-b3 acerSwift:max-macair133:text-b4">
-            <p>{tqf3?.part5?.recDoc.length ? tqf3?.part5?.recDoc : "-"}</p>
+          <div className="flex flex-col justify-center text-default font-medium text-b2 acerSwift:max-macair133:text-b4">
+            <p>{tqf3?.part5?.recDoc.length ? tqf3?.part5?.recDoc : "None"}</p>
           </div>
         </div>
       </div>

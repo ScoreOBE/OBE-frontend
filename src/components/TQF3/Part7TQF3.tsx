@@ -469,9 +469,9 @@ export default function Part7TQF3({
             </Tabs>
           </div>
         ) : (
-          <div className="flex flex-col w-full text-[15px] acerSwift:max-macair133:text-b3 text-default">
-            <div className="text-secondary acerSwift:max-macair133:!text-b2 font-semibold whitespace-break-spaces pb-4">
-              Part 6 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้ <br/>
+          <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
+          <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces  pb-4">
+              Part 6 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้ <br />
               Curriculum Mapping
             </div>
             <Tabs
@@ -597,7 +597,10 @@ export default function Part7TQF3({
                                   </Table.Td>
                                   {coursePLO?.data?.map(({ id }, ploIndex) => {
                                     return (
-                                      <Table.Td key={ploIndex} className="!px-6">
+                                      <Table.Td
+                                        key={ploIndex}
+                                        className="!px-6"
+                                      >
                                         {tqf3.part7?.list
                                           .find(
                                             ({ curriculum }) =>
@@ -635,25 +638,10 @@ export default function Part7TQF3({
         )}
       </>
     ) : (
-      <div className="flex flex-col w-full h-full justify-center items-center">
-        <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
-          <div className="flex justify-center  h-full items-start gap-2 flex-col">
-            <p className="text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-              This Course not linked to PLO
-            </p>
-            {!tqf3.courseSyllabus && (
-              <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-                If you need to do this part, please contact your department
-                administrator. <br /> You can still proceed with completing TQF
-                5
-              </p>
-            )}
-          </div>
-          <img
-            className=" z-50 ipad11:w-[300px] sm:w-[240px] w-[240px]  macair133:w-[350px] macair133:h-[350px] "
-            src={notLinkPLO}
-            alt="loginImage"
-          />
+      <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
+          <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces grid grid-cols-2 ">
+          Part 6 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้ <br />
+          Curriculum Mapping  <div className="flex flex-col justify-center text-default font-medium text-b2 acerSwift:max-macair133:text-b4">None</div>
         </div>
       </div>
     )

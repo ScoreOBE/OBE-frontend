@@ -653,7 +653,7 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
            <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces border-b-[1px] border-noData pb-4">
               {PartTopicTQF3.part2}
             </div>
-            <div className=" border-b-[1px] border-[#e6e6e6] px-10 justify-between h-fit w-full grid grid-cols-2 py-5">
+            <div className=" border-b-[1px] border-[#e6e6e6] px-6 justify-between h-fit w-full grid grid-cols-2 py-5">
               <div className="flex text-gray-800 flex-col  text-[15px] acerSwift:max-macair133:!text-b3">
                 <p className="font-medium">ลักษณะของกระบวนวิชา</p>
                 <p className="font-medium">Teaching Method</p>
@@ -668,7 +668,7 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                   ))}
               </div>
             </div>
-            <div className="w-full border-b-[1px] px-10 border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5">
+            <div className="w-full border-b-[1px] px-6 border-[#e6e6e6] justify-between h-fit items-center grid grid-cols-2 py-5">
               <div className="flex text-gray-800 flex-col text-[15px] acerSwift:max-macair133:!text-b3">
                 <p className="font-medium">การวัดและประเมินผล</p>
                 <p className="font-medium">Evaluation</p>
@@ -677,7 +677,7 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                 <p>{tqf3.part2?.evaluate}</p>
               </div>
             </div>
-            <div className="flex flex-col px-10 border-b-[1px] w-full border-[#e6e6e6] gap-4 py-4">
+            <div className="flex flex-col px-6 border-b-[1px] w-full border-[#e6e6e6] gap-4 py-4">
               <div className="flex text-gray-800 items-center w-full justify-between">
                 <p className="font-medium text-[15px] acerSwift:max-macair133:!text-b2">
                   ผลลัพธ์การเรียนรู้ของกระบวนวิชา{" "}
@@ -728,7 +728,7 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                 </Table>
               </div>
             </div>
-            <div className="flex flex-col px-10 w-full gap-4 pt-5 pb-2">
+            <div className="flex flex-col px-6 w-full gap-4 pt-5 pb-2">
               <div className="flex text-gray-800 items-center w-full justify-between">
                 <p className="font-medium text-[15px] acerSwift:max-macair133:!text-b2">
                   เนื้อหาวิชาและแผนการสอน{" "}

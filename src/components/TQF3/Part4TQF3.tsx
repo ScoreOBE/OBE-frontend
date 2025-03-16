@@ -702,12 +702,12 @@ export default function Part4TQF3({
           </Tabs>
         </div>
       ) : (
-        <div className="flex flex-col gap-4 pb-4 w-full text-[15px] acerSwift:max-macair133:text-b3 text-default border-b-2">
-          <div className="text-secondary acerSwift:max-macair133:!text-b2 font-semibold whitespace-break-spaces">
+        <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
+          <div className=" text-secondary text-b1 font-semibold whitespace-break-spaces  pb-4">
             {PartTopicTQF3.part4}
           </div>
           <div
-            className="overflow-auto border border-secondary rounded-lg relative"
+            className="overflow-auto border mt-2 mx-6 border-secondary rounded-lg relative"
             style={{
               boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
             }}

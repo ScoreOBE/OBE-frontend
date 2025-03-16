@@ -230,27 +230,8 @@ export default function CourseSyllabus() {
           <Loading />
         ) : (
           <div className="flex overflow-hidden w-full  h-full gap-3 py-2">
-            <div className="flex flex-col h-full max-w-[87%] py-5 px-10 bg gap-4 overflow-auto">
-              <div>
-                <Alert
-                  radius="md"
-                  variant="light"
-                  classNames={{
-                    body: " flex justify-center",
-                  }}
-                  color="orange"
-                  title={
-                    <div className="flex items-center gap-2">
-                      <Icon IconComponent={IconInfo2} className="mr-2" />
-                      <p>
-                        Course Syllabus Feature is currently in its
-                        development (beta) phase. You may encounter unstable
-                        features or bugs.
-                      </p>
-                    </div>
-                  }
-                ></Alert>
-              </div>
+            <div className="flex flex-col h-full max-w-[87%] iphone:max-sm:max-w-[100%] py-5 px-10 bg gap-4 overflow-auto">
+              
               <div className=" flex gap-2 ">
                 {" "}
                 <p className="!font-[600] text-[20px]">
@@ -385,7 +366,7 @@ export default function CourseSyllabus() {
               </footer>
             </div>
 
-            <div className="max-w-[12%] mt-3 flex flex-col gap-[7px]">
+            <div className="max-w-[12%] iphone:max-sm:hidden mt-3 flex flex-col gap-[7px]">
               {section.map((name, i) => (
                 <div
                   key={name}
