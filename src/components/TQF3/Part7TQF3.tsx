@@ -736,17 +736,17 @@ export default function Part7TQF3({
         </div>
       </div>
     ) : (
-      <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
-        <div
-          className={` text-secondary iphone:max-sm:text-[14px] text-b1 font-semibold whitespace-break-spaces ${
-            !isMobile ? "grid grid-cols-2" : ""
-          }  `}
-        >
-          Part 6 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้ <br />
-          Curriculum Mapping{" "}
-          <div className="flex flex-col justify-center text-default font-medium text-b2 acerSwift:max-macair133:text-b4">
-            None
-          </div>
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+        <div className="bg-[#1f69f3] text-white px-8 py-6 iphone:max-sm:px-4 iphone:max-sm:py-4 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#4c8af5] rounded-full opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#0d4ebc] rounded-full opacity-20 translate-y-1/2 -translate-x-1/2"></div>
+          <h2 className="text-xl iphone:max-sm:text-lg font-bold relative z-10">
+            Part 6 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้ Curriculum
+            Mapping
+          </h2>
+        </div>
+        <div className="text-gray-700 p-5 iphone:max-sm:text-[12px]">
+          No Curriculum Mapping provided
         </div>
       </div>
     )
