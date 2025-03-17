@@ -37,9 +37,18 @@ Build the application for production:
 
 ## Environment Variables
 
-Create a `.env` file in the root directory and configure necessary environment variables:
+Create a `.env` file in the root directory and configure the following variables:
+
+1. Create a new `.env` file:
+   ```bash
+   touch .env
+   ```
+
+2. Add the following content to `.env`:
    ```ini
-   VITE_API_BASE_URL=http://your-api-url
+   DATABASE_URL=postgres://user:password@localhost:5432/scoreobe
+   PORT=3000
+   JWT_SECRET=your-secret-key
    ```
 
 ## Copyright
