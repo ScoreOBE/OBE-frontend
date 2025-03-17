@@ -6,11 +6,7 @@ ScoreOBE+ is a web-based information management system designed for outcome-base
 
 Ensure you have [Node.js](https://nodejs.org/) installed.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-repository-url.git
-   cd scoreobe-frontend
-   ```
+1. Clone the repository
 
 2. Install dependencies:
    ```bash
@@ -37,19 +33,7 @@ Build the application for production:
 
 ## Environment Variables
 
-Create a `.env` file in the root directory and configure the following variables:
-
-1. Create a new `.env` file:
-   ```bash
-   touch .env
-   ```
-
-2. Add the following content to `.env`:
-   ```ini
-   DATABASE_URL=postgres://user:password@localhost:5432/scoreobe
-   PORT=3000
-   JWT_SECRET=your-secret-key
-   ```
+Create a `.env` file in the root directory and configure it based on .env.example
 
 ## Copyright
 © 2025 Computer Engineering, Chiang Mai University. All rights reserved.
