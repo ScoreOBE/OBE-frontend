@@ -79,7 +79,7 @@ export default function ChartContainer({
   });
   scores?.forEach((score) => {
     const binIndex = scoresData.findIndex((item, index) => {
-      const scoreFixed2 = parseFloat(score.toFixed(2) || "0");
+      const scoreFixed2 = parseFloat(score?.toFixed(2) || "0");
       return index == scoresData.length - 1
         ? item.start <= scoreFixed2 && scoreFixed2 <= item.end
         : item.start <= scoreFixed2 && scoreFixed2 < item.end;
