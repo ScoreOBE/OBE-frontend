@@ -98,7 +98,10 @@ export default function ModalStudentList({
   const uploadList = async () => {
     if (result) {
       dispatch(setLoadingOverlay(true));
-      const res = await uploadStudentList(result);
+      const payload = result.sections.filter((sec: any) =>
+        selectSection.includes(sec.sectionNo.toString())
+      );
+      const res = await uploadStudentList(payload);
       if (res) {
         dispatch(updateStudentList({ id: data?.id, sections: res }));
         reset();
@@ -520,16 +523,21 @@ export default function ModalStudentList({
               title={
                 <div className="flex items-center  gap-2">
                   <Icon IconComponent={IconExclamationCircle} />
-                  <p>The following section in Student list file that you import does not exist for this course</p>
+                  <p>
+                    The following section in Student list file that you import
+                    does not exist for this course
+                  </p>
                 </div>
               }
             >
               <p className="ml-8 mt-3 font-semibold">
                 Section: {warningSection.join(", ")}
               </p>
-              <p className="ml-8 mt-6 text-default font-medium">If you continue import, students in these sections will be excluded from the import.</p>
+              <p className="ml-8 mt-6 text-default font-medium">
+                If you continue import, students in these sections will be
+                excluded from the import.
+              </p>
             </Alert>
-
           </div>
 
           <div className="flex gap-2 mt-2 justify-end w-full">
