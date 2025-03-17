@@ -34,7 +34,6 @@ import { setEnrollCourseList } from "@/store/enrollCourse";
 import { getEnrollCourse } from "@/services/student/student.service";
 import { PiTextAlignLeft } from "react-icons/pi";
 import { setOpenSidebar } from "@/store/config";
-import { setCourseSyllabus } from "@/store/courseSyllabus";
 
 export default function Sidebar() {
   const openSidebar = useAppSelector((state) => state.config.openSidebar);
@@ -54,9 +53,6 @@ export default function Sidebar() {
   const allCourseList = useAppSelector((state) => state.allCourse.courses);
   const enrollCourseList = useAppSelector(
     (state) => state.enrollCourse.courses
-  );
-  const courseSyllabus = useAppSelector(
-    (state) => state.courseSyllabus.courses
   );
   const dispatch = useAppDispatch();
   const [openMainPopup, { open: openedMainPopup, close: closeMainPopup }] =
@@ -101,7 +97,7 @@ export default function Sidebar() {
         fetchCourse();
       }
     }
-  }, [path, academicYear, params]);
+  }, [user, path, academicYear, params]);
 
   useEffect(() => {
     if (curriculum?.length && (!courseList.length || !allCourseList.length)) {
