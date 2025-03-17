@@ -126,7 +126,9 @@ export default function StdOverallPLO() {
             >
               <Tabs.List className="mb-2">
                 {courseCurriculums.map(({ curriculum }) => (
-                  <Tabs.Tab value={curriculum}>{curriculum}</Tabs.Tab>
+                  <Tabs.Tab key={curriculum} value={curriculum}>
+                    {curriculum}
+                  </Tabs.Tab>
                 ))}
                 <Tabs.Tab value="course">Course</Tabs.Tab>
               </Tabs.List>
@@ -194,7 +196,7 @@ export default function StdOverallPLO() {
                                       </p>
                                       <p className="break-words">
                                         {course.courseName} <br />
-                                        {course.topic && `(${course.topic})`}
+                                        {course?.topic && `(${course?.topic})`}
                                       </p>
                                     </div>
                                   ))
@@ -222,13 +224,11 @@ export default function StdOverallPLO() {
                   {courses
                     .filter(({ courseNo, courseName, section }) =>
                       checkStringContain(
-                        [courseNo, courseName, section.topic],
+                        [courseNo, courseName, section?.topic || ""],
                         searchValue
                       )
                     )
                     .map((course) => {
-                      console.log("course.plos", course.plos);
-
                       return (
                         <div
                           key={course.id}
@@ -243,12 +243,12 @@ export default function StdOverallPLO() {
                               <p className="text-b4 text-[#4b5563] font-medium">
                                 {course.courseName}
                                 <br />{" "}
-                                {course.section.topic &&
-                                  `(${course.section.topic})`}
+                                {course.section?.topic &&
+                                  `(${course.section?.topic})`}
                               </p>
                             </div>
                           </div>
-                          {course.plos.length ? (
+                          {course.plos?.length ? (
                             <div className="-translate-x-3 pr-4">
                               <PloBarChart
                                 data={course.plos}
