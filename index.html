@@ -4,13 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Enhanced SEO Optimization -->
+    <!-- Primary Title - Put ScoreOBE+ first -->
     <title>ScoreOBE+ | Student Progress Tracking System</title>
-    <meta name="description" content="ScoreOBE+ helps instructors announce scores, track student progress, and align with educational learning goals efficiently." />
-    <meta name="keywords" content="ScoreOBE+, score tracking, OBE, outcome-based education, student progress" />
-    
-    <!-- Canonical URL to prevent duplicate content issues -->
-    <link rel="canonical" href="https://score-obe.cpe.eng.cmu.ac.th" />
+    <meta name="description" content="ScoreOBE+ - A comprehensive system for tracking student progress and managing outcome-based education scoring." />
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/score-logo.png" />
@@ -20,32 +16,30 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
 
-    <!-- Enhanced Open Graph (OG) Meta Tags for Social Sharing -->
-    <meta property="og:title" content="ScoreOBE+ | Student Progress Tracking System" />
+    <!-- Open Graph Meta Tags - Put ScoreOBE+ first -->
+    <meta property="og:title" content="ScoreOBE+" />
     <meta property="og:description" content="Boost student success with ScoreOBE+! Simplifies score announcements, tracks progress, and aligns learning goals." />
     <meta property="og:image" content="https://score-obe.cpe.eng.cmu.ac.th/score-logo.png" />
     <meta property="og:url" content="https://score-obe.cpe.eng.cmu.ac.th" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ScoreOBE+" />
 
-    <!-- Twitter Card data -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="ScoreOBE+" />
-    <meta name="twitter:description" content="Boost student success with ScoreOBE+! Simplifies score announcements, tracks progress, and aligns learning goals." />
-    <meta name="twitter:image" content="https://score-obe.cpe.eng.cmu.ac.th/score-logo.png" />
-
-    <!-- Enhanced Structured Data (Schema.org) -->
+    <!-- Structured Data - Emphasize ScoreOBE+ as the primary entity -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "ScoreOBE+",
+      "alternateName": "Score OBE Plus",
       "url": "https://score-obe.cpe.eng.cmu.ac.th",
       "description": "ScoreOBE+ helps instructors announce scores, track progress, and align learning goals efficiently.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://score-obe.cpe.eng.cmu.ac.th/search?q={search_term_string}",
-        "query-input": "required name=search_term_string"
+      "publisher": {
+        "@type": "Organization",
+        "name": "ScoreOBE+",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://score-obe.cpe.eng.cmu.ac.th/score-logo.png"
+        }
       }
     }
     </script>
@@ -58,10 +52,15 @@
       import AOS from "aos"; 
       AOS.init();
     </script>
+    
+    <!-- Main content container -->
     <div id="root"></div>
     
-    <!-- Adding a hidden heading with the full name for SEO purposes -->
-    <h1 class="sr-only">ScoreOBE+ - Outcome-Based Education Scoring System</h1>
+    <!-- Primary heading - Make sure ScoreOBE+ is the first and most prominent heading -->
+    <header style="display:none;">
+      <h1>ScoreOBE+</h1>
+      <p>Student Progress Tracking System</p>
+    </header>
   </body>
 </html>
 
