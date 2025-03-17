@@ -40,18 +40,18 @@ export default function StdCLO() {
               {course?.clos.length !== 0 ? (
                 <>
                   {/* Title */}
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-[#1f69f3] font-semibold text-lg iphone:max-sm:text-base">
+                  <div className="flex items-start flex-col justify-between mb-4">
+                    <h3 className="text-[#1f69f3] font-semibold text-lg iphone:max-sm:text-[14px]">
                       ผลลัพธ์การเรียนรู้ของกระบวนวิชา
                       <br />
-                      <span className="text-gray-700">
-                        Course Learning Outcome
-                      </span>
-                    </h3>
+                    </h3>{" "}
+                    <p className="text-gray-700 -mt-1 font-semibold text-lg iphone:max-sm:text-[14px]">
+                      Course Learning Outcome
+                    </p>
                   </div>
 
                   {/* CLO Info Box */}
-                  <div className="bg-blue-50 border-l-4 border-[#1f69f3] p-4 rounded-r-lg mb-6">
+                  <div className="bg-blue-50  border-l-4 border-[#1f69f3] p-4 rounded-r-lg mb-6">
                     <div className="flex items-start">
                       <div className="bg-[#1f69f3]/10 p-2 rounded-full mr-3 mt-1">
                         <Icon
@@ -60,10 +60,10 @@ export default function StdCLO() {
                         />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-[#1f69f3] mb-2">
+                        <h4 className="font-semibold text-[#1f69f3] iphone:max-sm:text-[15px] mb-2">
                           What is CLO?
                         </h4>
-                        <p className="text-gray-700 text-sm leading-relaxed">
+                        <p className="text-gray-700 text-sm iphone:max-sm:text-[13px] leading-relaxed">
                           <span className="font-semibold">
                             Course Learning Outcome (CLO)
                           </span>{" "}
@@ -98,65 +98,64 @@ export default function StdCLO() {
                   {!isMobile ? (
                     // Desktop Table View with Sticky Header
                     <div className="border border-[#1f69f3]/20 rounded-xl shadow-sm overflow-hidden">
-                       <Table stickyHeader>
-                    <Table.Thead>
-                      <Table.Tr className="bg-[#e5e7f6]">
-                        <Table.Th>CLO No.</Table.Th>
-                        <Table.Th>CLO Description</Table.Th>
-                        <Table.Th>Score</Table.Th>
-                        <Table.Th>Evaluation</Table.Th>
-                      </Table.Tr>
-                    </Table.Thead>
-                          <Table.Tbody  className="text-default sm:max-macair133:text-b4 font-medium text-[13px]">
-                            {course?.clos.map(({ clo, score }, index) => (
-                              <Table.Tr
-                                key={index}
-                                className={`hover:bg-blue-50/30 transition-colors ${
-                                  index % 2 === 0 ? "bg-white" : "bg-gray-50/50"
-                                }`}
-                              >
-                                <Table.Td className="py-4 px-4 border-b border-gray-100 font-semibold text-[#1f69f3]">
-                                  {clo.no}
-                                </Table.Td>
-                                <Table.Td className="py-4 px-4 border-b border-gray-100">
-                                  <p className="font-medium text-gray-800">
-                                    {clo.descTH}
-                                  </p>
-                                  <p className="text-sm text-gray-600 mt-1">
-                                    {clo.descEN}
-                                  </p>
-                                </Table.Td>
-                                <Table.Td className="py-4 px-4 text-center border-b border-gray-100">
-                                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#1f69f3] text-white font-bold">
-                                    {score}
-                                  </span>
-                                </Table.Td>
-                                <Table.Td className="py-4 px-4 text-center border-b border-gray-100 font-medium">
-                                  <span
-                                    className={`px-3 py-1 rounded-full text-sm ${
-                                      score === 4
-                                        ? "bg-purple-100 text-purple-700"
-                                        : score === 3
-                                        ? "bg-green-100 text-green-700"
-                                        : score === 2
-                                        ? "bg-blue-100 text-blue-700"
-                                        : score === 1
-                                        ? "bg-yellow-100 text-yellow-700"
-                                        : score === 0
-                                        ? "bg-red-100 text-red-700"
-                                        : "bg-gray-100 text-gray-700"
-                                    }
+                      <Table stickyHeader>
+                        <Table.Thead>
+                          <Table.Tr className="bg-[#e5e7f6]">
+                            <Table.Th>CLO No.</Table.Th>
+                            <Table.Th>CLO Description</Table.Th>
+                            <Table.Th>Score</Table.Th>
+                            <Table.Th>Evaluation</Table.Th>
+                          </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-[13px]">
+                          {course?.clos.map(({ clo, score }, index) => (
+                            <Table.Tr
+                              key={index}
+                              className={`hover:bg-blue-50/30 transition-colors ${
+                                index % 2 === 0 ? "bg-white" : "bg-gray-50/50"
+                              }`}
+                            >
+                              <Table.Td className="py-4 px-4 border-b border-gray-100 font-semibold text-[#1f69f3]">
+                                {clo.no}
+                              </Table.Td>
+                              <Table.Td className="py-4 px-4 border-b border-gray-100">
+                                <p className="font-medium text-gray-800">
+                                  {clo.descTH}
+                                </p>
+                                <p className="text-sm text-gray-600 mt-1">
+                                  {clo.descEN}
+                                </p>
+                              </Table.Td>
+                              <Table.Td className="py-4 px-4 text-center border-b border-gray-100">
+                                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#1f69f3] text-white font-bold">
+                                  {score}
+                                </span>
+                              </Table.Td>
+                              <Table.Td className="py-4 px-4 text-center border-b border-gray-100 font-medium">
+                                <span
+                                  className={`px-3 py-1 rounded-full text-sm ${
+                                    score === 4
+                                      ? "bg-purple-100 text-purple-700"
+                                      : score === 3
+                                      ? "bg-green-100 text-green-700"
+                                      : score === 2
+                                      ? "bg-blue-100 text-blue-700"
+                                      : score === 1
+                                      ? "bg-yellow-100 text-yellow-700"
+                                      : score === 0
+                                      ? "bg-red-100 text-red-700"
+                                      : "bg-gray-100 text-gray-700"
+                                  }
 `}
-                                  >
-                                    {score !== "-" ? CLO_EVAL[score] : "-"}
-                                  </span>
-                                </Table.Td>
-                              </Table.Tr>
-                            ))}
-                          </Table.Tbody>
-                        </Table>
-                      </div>
-               
+                                >
+                                  {score !== "-" ? CLO_EVAL[score] : "-"}
+                                </span>
+                              </Table.Td>
+                            </Table.Tr>
+                          ))}
+                        </Table.Tbody>
+                      </Table>
+                    </div>
                   ) : (
                     // Mobile Card View
                     <div className="space-y-4 overflow-y-auto">
@@ -167,22 +166,22 @@ export default function StdCLO() {
                         >
                           <div className="bg-[#1f69f3]/10 px-4 py-3 border-b border-gray-200">
                             <div className="flex items-center justify-between">
-                              <h4 className="font-semibold text-[#1f69f3]">
+                              <h4 className="font-semibold iphone:max-sm:text-[15px] text-[#1f69f3]">
                                 CLO-{clo.no}
                               </h4>
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm text-gray-600">
+                              <div className="flex iphone:max-sm:text-[14px] items-center gap-2">
+                                <span className="text-sm iphone:max-sm:text-[14px] text-gray-600">
                                   Score:
                                 </span>
-                                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#1f69f3] text-white font-bold text-sm">
-                                  {score }
+                                <span className="inline-flex items-center iphone:max-sm:text-[14px] justify-center w-7 h-7 rounded-full bg-[#1f69f3] text-white font-bold text-sm">
+                                  {score}
                                 </span>
                               </div>
                             </div>
                           </div>
 
                           <div className="p-4">
-                            <p className="font-medium text-gray-800 text-sm">
+                            <p className="font-medium text-gray-800  text-sm">
                               {clo.descTH}
                             </p>
                             <p className="text-sm text-gray-600 mt-2">

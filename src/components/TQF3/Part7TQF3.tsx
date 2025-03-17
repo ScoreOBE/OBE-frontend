@@ -469,10 +469,14 @@ export default function Part7TQF3({
             </Tabs>
           </div>
         ) : (
-          <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
-            <div className=" text-secondary  iphone:max-sm:text-[14px] text-b1 font-semibold whitespace-break-spaces  pb-4">
-              Part 6 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้ <br />
-              Curriculum Mapping
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+            <div className="bg-[#1f69f3] text-white px-8 py-6 iphone:max-sm:px-4 iphone:max-sm:py-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#4c8af5] rounded-full opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#0d4ebc] rounded-full opacity-20 translate-y-1/2 -translate-x-1/2"></div>
+              <h2 className="text-xl iphone:max-sm:text-lg font-bold relative z-10">
+                Part 6 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้
+                Curriculum Mapping
+              </h2>
             </div>
             <Tabs
               value={selectCurriculum}
@@ -484,7 +488,7 @@ export default function Part7TQF3({
                 panel: "w-full h-fit max-h-full flex flex-col gap-2 rounded-lg",
               }}
             >
-              <Tabs.List className="!bg-transparent items-center flex w-full gap-5">
+              <Tabs.List className="!bg-transparent items-center mx-6 mt-6 flex  gap-5">
                 {tqf3.part7?.list.map((cur, index) => (
                   <Tabs.Tab key={cur.curriculum} value={cur.curriculum}>
                     <div className="flex items-center gap-2">
@@ -499,7 +503,7 @@ export default function Part7TQF3({
                   </Tabs.Tab>
                 ))}
               </Tabs.List>
-              <div className="overflow-auto flex px-3 w-full max-h-full mt-3">
+              <div className="overflow-auto flex px-6 w-full max-h-full mt-3">
                 {tqf3.part7?.list?.map((cur, index) => (
                   <Tabs.Panel
                     key={`${cur.curriculum}-${index}`}
@@ -528,107 +532,179 @@ export default function Part7TQF3({
                           </div>
                         </Button>
                       </div>
-                      <div
-                        className="overflow-auto border border-secondary rounded-lg relative"
-                        style={{
-                          boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                        }}
-                      >
-                        <Table stickyHeader striped>
-                          <Table.Thead className="z-[2] acerSwift:max-macair133:!text-b3 overflow-auto">
-                            <Table.Tr>
-                              <Table.Th
-                                style={{
-                                  filter:
-                                    "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
-                                }}
-                                className="min-w-[500px] sticky left-0 !p-0"
-                              >
-                                <div className="w-full flex items-center px-[25px] h-[58px] border-r-[1px] border-[#DEE2E6]">
-                                  CLO Description ( {tqf3.part2?.clo.length} CLO
-                                  {tqf3.part2?.clo.length! > 1 ? "s" : ""} )
-                                </div>
-                              </Table.Th>
-                              {coursePLO?.data?.map(({ no, id }) => {
-                                return (
-                                  <Table.Th
-                                    key={id}
-                                    className="!px-6 !pt-3 !pb-2 text-nowrap"
-                                  >
-                                    <p className="acerSwift:max-macair133:!text-b3">
+                      {!isMobile ? (
+                        <div className="border border-[#1f69f3]/20 rounded-xl shadow-sm overflow-hidden">
+                          <div className="max-h-[500px] overflow-auto relative">
+                            <table className="w-full min-w-[800px]">
+                              <thead className="sticky top-0 z-10">
+                                <tr className=" bg-bgTableHeader text-[14px]">
+                                  <th className="py-4 px-6 text-left text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 sticky left-0 bg-bgTableHeader min-w-[500px]">
+                                    CLO Description ({tqf3.part2?.clo.length}{" "}
+                                    CLO
+                                    {tqf3.part2?.clo.length! > 1 ? "s" : ""})
+                                  </th>
+                                  {coursePLO?.data?.map(({ no, id }) => (
+                                    <th
+                                      key={id}
+                                      className="py-4 px-6 text-center text-[#3f4474] font-semibold border-b border-[#1f69f3]/10 whitespace-nowrap"
+                                    >
                                       PLO-{no}{" "}
-                                      <span className="text-red-500">
-                                        {ploRequire.includes(id) && "*"}
-                                      </span>
-                                    </p>
-                                  </Table.Th>
-                                );
-                              })}
-                            </Table.Tr>
-                          </Table.Thead>
-                          <Table.Tbody>
-                            {cur.data.map(({ clo }, cloIndex) => {
-                              const cloItem = tqf3?.part2?.clo.find(
-                                (e) => e.id == clo
-                              );
-                              return (
-                                <Table.Tr
-                                  key={cloIndex}
-                                  className="text-[13px] text-default"
-                                >
-                                  <Table.Td
-                                    style={{
-                                      filter:
-                                        "drop-shadow(2px 0px 2px rgba(0, 0, 0, 0.1))",
-                                    }}
-                                    className="!p-0 !py-1 sticky left-0 z-[1]"
-                                  >
-                                    <div className="flex gap-5 justify-start  items-center  px-[20px] py-2">
-                                      <div className="text-secondary min-w-fit font-bold acerSwift:max-macair133:!text-b3">
-                                        CLO-{cloItem?.no}
-                                      </div>
-                                      <p className="flex w-fit font-medium justify-between flex-col acerSwift:max-macair133:!text-b4">
-                                        <span className="mb-2">
-                                          {cloItem?.descTH}
-                                        </span>
-                                        <span>{cloItem?.descEN}</span>
-                                      </p>
-                                    </div>
-                                  </Table.Td>
-                                  {coursePLO?.data?.map(({ id }, ploIndex) => {
-                                    return (
-                                      <Table.Td
-                                        key={ploIndex}
-                                        className="!px-6"
-                                      >
-                                        {tqf3.part7?.list
-                                          .find(
-                                            ({ curriculum }) =>
-                                              curriculum == selectCurriculum
-                                          )
-                                          ?.data.some(
-                                            (item) =>
-                                              item.clo === clo &&
-                                              (item.plos as string[]).includes(
-                                                id
+                                      {ploRequire.includes(id) && (
+                                        <span className="text-red-500">*</span>
+                                      )}
+                                    </th>
+                                  ))}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {cur.data.map(({ clo }, cloIndex) => {
+                                  const cloItem = tqf3?.part2?.clo.find(
+                                    (e) => e.id == clo
+                                  );
+                                  return (
+                                    <tr
+                                      key={cloIndex}
+                                      className={`hover:bg-blue-50/30 transition-colors ${
+                                        cloIndex % 2 === 0
+                                          ? "bg-white"
+                                          : "bg-gray-50/50"
+                                      }`}
+                                    >
+                                      <td className="py-4 px-6 border-b border-gray-100 sticky left-0 bg-inherit">
+                                        <div className="flex gap-4 items-start">
+                                          <div className="text-[#1f69f3] font-bold whitespace-nowrap">
+                                            CLO-{cloItem?.no}
+                                          </div>
+                                          <div>
+                                            <p className="font-medium text-gray-800 mb-2">
+                                              {cloItem?.descTH}
+                                            </p>
+                                            <p className="text-sm text-gray-600">
+                                              {cloItem?.descEN}
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </td>
+                                      {coursePLO?.data?.map(
+                                        ({ id }, ploIndex) => (
+                                          <td
+                                            key={ploIndex}
+                                            className="py-4 px-6 text-center border-b border-gray-100"
+                                          >
+                                            {tqf3.part7?.list
+                                              .find(
+                                                ({ curriculum }) =>
+                                                  curriculum == selectCurriculum
                                               )
-                                          ) ? (
-                                          <Icon
-                                            IconComponent={IconCheck}
-                                            className="text-secondary"
-                                          />
-                                        ) : (
-                                          <p className="text-center">-</p>
-                                        )}
-                                      </Table.Td>
-                                    );
-                                  })}
-                                </Table.Tr>
-                              );
-                            })}
-                          </Table.Tbody>
-                        </Table>
-                      </div>
+                                              ?.data.some(
+                                                (item) =>
+                                                  item.clo === clo &&
+                                                  (
+                                                    item.plos as string[]
+                                                  ).includes(id)
+                                              ) ? (
+                                              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-700 font-bold">
+                                                ✓
+                                              </span>
+                                            ) : (
+                                              <span className="text-gray-400">
+                                                -
+                                              </span>
+                                            )}
+                                          </td>
+                                        )
+                                      )}
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      ) : (
+                        /* Mobile Card View */
+                        <div className="space-y-4">
+                          {cur.data.map(({ clo, plos }, cloIndex) => {
+                            const cloItem = tqf3?.part2?.clo.find(
+                              (e) => e.id == clo
+                            );
+                            return (
+                              <div
+                                key={cloIndex}
+                                className="bg-white rounded-lg shadow-sm border border-[#1f69f3]/20 overflow-hidden"
+                              >
+                                {/* CLO Header */}
+                                <div className="bg-[#e5e7f6] px-4 py-3 border-b border-[#1f69f3]/10">
+                                  <div className="flex items-center">
+                                    <span className="bg-[#1f69f3] text-white font-bold px-3 py-1 rounded-lg text-sm mr-2">
+                                      CLO-{cloItem?.no}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                {/* CLO Description */}
+                                <div className="p-4 border-b border-gray-100">
+                                  <p className="font-medium text-gray-800 mb-2">
+                                    {cloItem?.descTH}
+                                  </p>
+                                  <p className="text-sm text-gray-600">
+                                    {cloItem?.descEN}
+                                  </p>
+                                </div>
+
+                                {/* PLO Mapping */}
+                                <div className="p-4 bg-gray-50">
+                                  <h4 className="text-sm font-semibold text-gray-700 mb-3">
+                                    PLO Mapping
+                                  </h4>
+                                  <div className="grid grid-cols-3 gap-2">
+                                    {coursePLO?.data?.map(({ id, no }) => {
+                                      const isLinked = tqf3.part7?.list
+                                        .find(
+                                          ({ curriculum }) =>
+                                            curriculum == selectCurriculum
+                                        )
+                                        ?.data.some(
+                                          (item) =>
+                                            item.clo === clo &&
+                                            (item.plos as string[]).includes(id)
+                                        );
+
+                                      return (
+                                        <div
+                                          key={id}
+                                          className={`p-2 rounded-lg text-center ${
+                                            isLinked
+                                              ? "bg-green-100 text-green-700 border border-green-200"
+                                              : "bg-gray-100 text-gray-400 border border-gray-200"
+                                          }`}
+                                        >
+                                          <div className="text-xs font-medium">
+                                            PLO-{no}{" "}
+                                            {ploRequire.includes(id) && (
+                                              <span className="text-red-500">
+                                                *
+                                              </span>
+                                            )}
+                                          </div>
+                                          <div className="mt-1 font-bold text-sm">
+                                            {isLinked ? "✓" : "-"}
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+
+                          {/* Legend for mobile */}
+                          <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg">
+                            <span className="text-red-500">*</span> Required PLO
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </Tabs.Panel>
                 ))}
@@ -637,18 +713,41 @@ export default function Part7TQF3({
           </div>
         )}
       </>
+    ) : !tqf3.courseSyllabus ? (
+      <div className="flex flex-col w-full h-full justify-center items-center">
+        <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
+          <div className="flex justify-center  h-full items-start gap-2 flex-col">
+            <p className="text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
+              This Course not linked to PLO
+            </p>
+            {!tqf3.courseSyllabus && (
+              <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
+                If you need to do this part, please contact your department
+                administrator. <br /> You can still proceed with completing TQF
+                5
+              </p>
+            )}
+          </div>
+          <img
+            className=" z-50 ipad11:w-[300px] sm:w-[240px] w-[240px]  macair133:w-[350px] macair133:h-[350px] "
+            src={notLinkPLO}
+            alt="loginImage"
+          />
+        </div>
+      </div>
     ) : (
       <div className="flex flex-col w-full text-[15px] bg-[#dfebff]/40 p-5 acerSwift:max-macair133:text-b3 mt-2 text-default rounded-xl">
-        <div className={` text-secondary iphone:max-sm:text-[14px] text-b1 font-semibold whitespace-break-spaces ${!isMobile ? 'grid grid-cols-2' : ''}  `}>
+        <div
+          className={` text-secondary iphone:max-sm:text-[14px] text-b1 font-semibold whitespace-break-spaces ${
+            !isMobile ? "grid grid-cols-2" : ""
+          }  `}
+        >
           Part 6 - การเชื่อมโยงหัวข้อประเมินวัตถุประสงค์การเรียนรู้ <br />
           Curriculum Mapping{" "}
-          {!isMobile && <div className="flex flex-col justify-center text-default font-medium text-b2 acerSwift:max-macair133:text-b4">
+          <div className="flex flex-col justify-center text-default font-medium text-b2 acerSwift:max-macair133:text-b4">
             None
-          </div>}
+          </div>
         </div>
-        <li className=" mt-4 justify-center text-default font-medium text-b2 acerSwift:max-macair133:text-b4">
-            None
-          </li>
       </div>
     )
   ) : (

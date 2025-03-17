@@ -48,13 +48,14 @@ export default function CourseSyllabus() {
   const [openModalTOS, setOpenModalTOS] = useState(false);
   const currentYear = new Date().getFullYear();
   const dispatch = useAppDispatch();
-  const section = ["Part 1", "Part 2", "Part 3", "Part 4", "Part 5"];
+  const section = ["Part 1", "Part 2", "Part 3", "Part 4", "Part 5", "Part 6"];
   const partSections = [
     { value: section[0], compo: <Part1TQF3 /> },
     { value: section[1], compo: <Part2TQF3 /> },
     { value: section[2], compo: <Part3TQF3 /> },
     { value: section[3], compo: <Part4TQF3 /> },
     { value: section[4], compo: <Part5TQF3 /> },
+    { value: section[5], compo: <Part7TQF3 /> },
   ];
   const sectionRefs = useRef(
     section.map(() => React.createRef<HTMLDivElement>())
@@ -66,6 +67,13 @@ export default function CourseSyllabus() {
     dispatch(setShowNavbar(true));
     if (!course && year && semester) fetchCourse();
   }, [year, semester]);
+
+  useEffect(() => {
+    if (user.id) {
+      dispatch(setDashboard(ROLE.STUDENT));
+      localStorage.setItem("dashboard", ROLE.STUDENT);
+    }
+  }, [user]);
 
   const fetchCourse = async () => {
     dispatch(setLoading(true));
@@ -106,7 +114,7 @@ export default function CourseSyllabus() {
       },
       {
         root: null,
-        threshold: 0.2,
+        threshold: 0.5,
       }
     );
 
@@ -120,13 +128,6 @@ export default function CourseSyllabus() {
       });
     };
   }, [sectionRefs.current, activeSection]);
-
-  useEffect(() => {
-    if (user.id) {
-      dispatch(setDashboard(ROLE.STUDENT));
-      localStorage.setItem("dashboard", ROLE.STUDENT);
-    }
-  }, [user]);
 
   useEffect(() => {
     dispatch(setSelectTqf3Topic(topic));
