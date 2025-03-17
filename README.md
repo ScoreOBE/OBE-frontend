@@ -33,7 +33,7 @@ Build the application for production:
 
 ## Environment Variables
 
-Create a `.env` file in the root directory and configure it based on .env.example
+Create a `.env` file in the root directory and configure it based on `.env.example`
 
 ## Copyright
 © 2025 Computer Engineering, Chiang Mai University. All rights reserved.
