@@ -37,6 +37,7 @@ import { setOpenSidebar } from "@/store/config";
 
 export default function Sidebar() {
   const openSidebar = useAppSelector((state) => state.config.openSidebar);
+  const dashboard = useAppSelector((state) => state.config.dashboard);
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const { courseNo, sectionNo } = useParams();
@@ -188,7 +189,15 @@ export default function Sidebar() {
             <div
               className="cursor-pointer flex items-center gap-2"
               onClick={() =>
-                navigate(`${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`)
+                navigate(
+                  `${
+                    dashboard == ROLE.CURRICULUM_ADMIN
+                      ? ROUTE_PATH.ADMIN_DASHBOARD
+                      : dashboard == ROLE.INSTRUCTOR
+                      ? ROUTE_PATH.INS_DASHBOARD
+                      : ROUTE_PATH.STD_DASHBOARD
+                  }?${params.toString()}`
+                )
               }
             >
               <img
