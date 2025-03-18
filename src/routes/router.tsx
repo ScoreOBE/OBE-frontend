@@ -295,6 +295,14 @@ const router = createBrowserRouter([
                 ),
               },
               {
+                path: ROUTE_PATH.COURSE_SYLLABUS.slice(1),
+                element: (
+                  <Suspense fallback={loadingPage}>
+                    <CourseSyllabus />
+                  </Suspense>
+                ),
+              },
+              {
                 path: ROUTE_PATH.CLO,
                 element: (
                   <Suspense fallback={loadingPage}>

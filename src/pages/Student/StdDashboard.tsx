@@ -74,9 +74,11 @@ export default function StdDashboard() {
     dispatch(setLoading(false));
   };
 
-  const goToCourse = (courseNo: string) => {
+  const goToCourse = (courseNo: string, path?: string) => {
     navigate({
-      pathname: `${ROUTE_PATH.STD_DASHBOARD}/${courseNo}/${ROUTE_PATH.EVALUATION}`,
+      pathname: `${ROUTE_PATH.STD_DASHBOARD}/${courseNo}/${
+        path ?? ROUTE_PATH.EVALUATION
+      }`,
       search: "?" + params.toString(),
     });
   };
@@ -114,37 +116,52 @@ export default function StdDashboard() {
         {loading ? (
           <Loading />
         ) : !!enrollCourses.courses.length ? (
-          <div className="w-full">
-            
-            <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 iphone:max-sm:grid-cols-1 sm:grid-cols-3 macair133:grid-cols-4  pb-5 gap-4 sm:px-6 p-4">
-              {enrollCourses.courses.map((item) => (
-                <div
-                  key={item.id}
-                  className="card relative justify-between h-[125px] macair133:h-[135px] sm:h-[128px] cursor-pointer rounded-[4px] hover:bg-[#f3f3f3]"
-                  onClick={() => goToCourse(item.courseNo)}
-                >
-                  <div className="p-2.5 h-full justify-between flex flex-col">
-                    <div>
-                      <p className="font-bold text-default text-sm">{item.courseNo}</p>{" "}
-                      <p className="text-xs  font-medium text-gray-600">
-                        {item.courseName}
-                      </p>
-                    </div>
-                    <p className=" text-xs font-medium text-[#757575]">
-                      Section {getSectionNo(item.section?.sectionNo)}
+          <div className="overflow-y-auto w-full h-fit max-h-full grid grid-cols-2 iphone:max-sm:grid-cols-1 sm:grid-cols-3 macair133:grid-cols-4  pb-5 gap-4 sm:px-6 p-4">
+            {enrollCourses.courses.map((item) => (
+              <div
+                key={item.id}
+                className="card relative justify-between h-[125px] macair133:h-[135px] sm:h-[128px] cursor-pointer rounded-[4px] hover:bg-[#f3f3f3]"
+                onClick={() => goToCourse(item.courseNo)}
+              >
+                <div className="p-2.5 h-full justify-between flex flex-col">
+                  <div>
+                    <p className="font-bold text-default text-sm">
+                      {item.courseNo}
+                    </p>
+                    <p className="text-xs  font-medium text-gray-600">
+                      {item.courseName}
                     </p>
                   </div>
-                  <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
-                    <p className="p-2.5 text-secondary font-[700] text-[12px]">
-                      {!item.section?.assignments.length
-                        ? "No Evaluation"
-                        : `${item.section?.assignments.length} Evaluation`}
-                      {item.section?.assignments.length > 1 ? "s" : ""}
+                  <p className=" text-xs font-medium text-[#757575]">
+                    Section {getSectionNo(item.section?.sectionNo)}
+                  </p>
+                </div>
+                <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
+                  <p className="p-2.5 text-secondary font-[700] text-[12px]">
+                    {!item.section?.assignments.length
+                      ? "No Evaluation"
+                      : `${item.section?.assignments.length} Evaluation`}
+                    {item.section?.assignments.length > 1 ? "s" : ""}
+                  </p>
+                  <div
+                    className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <p
+                      className="tag-tqf text-[#0fb790] bg-[#9cfee4] rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
+                      onClick={() =>
+                        goToCourse(
+                          item.courseNo,
+                          ROUTE_PATH.COURSE_SYLLABUS.slice(1)
+                        )
+                      }
+                    >
+                      Syllabus
                     </p>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         ) : (
           <div className=" flex iphone:max-sm:justify-center iphone:max-sm:text-center iphone:max-sm:items-center flex-row flex-1 px-[95px] iphone:max-sm:px-16 sm:max-ipad11:px-[70px] justify-between">

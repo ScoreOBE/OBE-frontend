@@ -12,12 +12,12 @@ import IconList from "@/assets/icons/list.svg?react";
 import IconArrow from "@/assets/icons/targetArrow.svg?react";
 import IconHistogram from "@/assets/icons/histogram.svg?react";
 import IconSpiderChart from "@/assets/icons/spiderChart.svg?react";
+import IconBooks from "@/assets/icons/books.svg?react";
 import IconSkills from "@/assets/icons/briftcase.svg?react";
 import { ROUTE_PATH } from "@/helpers/constants/route";
 import { getUserName } from "@/helpers/functions/function";
 import { resetDataTQF3 } from "@/store/tqf3";
 import { IModelEnrollCourse } from "@/models/ModelEnrollCourse";
-import { IModelCourse } from "@/models/ModelCourse";
 import { COURSE_TYPE } from "@/helpers/constants/enum";
 
 export default function StdCourseSidebar() {
@@ -27,10 +27,7 @@ export default function StdCourseSidebar() {
   const path = useLocation().pathname;
   const openSidebar = useAppSelector((state) => state.config.openSidebar);
   const course = useAppSelector((state) =>
-    (path.includes(ROUTE_PATH.COURSE_SYLLABUS)
-      ? state.courseSyllabus
-      : state.enrollCourse
-    ).courses.find((c) => c.courseNo == courseNo)
+    state.enrollCourse.courses.find((c) => c.courseNo == courseNo)
   );
   const loading = useAppSelector((state) => state.loading.loading);
   const dispatch = useAppDispatch();
@@ -57,7 +54,7 @@ export default function StdCourseSidebar() {
         openSidebar ? "" : "items-center"
       }`}
     >
-      {!name && !path.includes(ROUTE_PATH.COURSE_SYLLABUS) && (
+      {!name && (
         <Tooltip
           transitionProps={{ transition: "fade-right", duration: 200 }}
           classNames={{
@@ -109,15 +106,14 @@ export default function StdCourseSidebar() {
             <p className="text-[13px] font-semibold text-pretty max-w-full">
               {course?.courseName}
             </p>
-            {path.includes(ROUTE_PATH.COURSE_SYLLABUS) &&
-              course?.type == COURSE_TYPE.SEL_TOPIC.en && (
-                <p className="text-[13px] font-semibold text-pretty max-w-full">
-                  ({(course as IModelCourse)?.sections[0].topic ?? ""})
-                </p>
-              )}
+            {course?.type == COURSE_TYPE.SEL_TOPIC.en && (
+              <p className="text-[13px] font-semibold text-pretty max-w-full">
+                ({course?.section.topic ?? ""})
+              </p>
+            )}
           </div>
         )}
-        {!name && path.includes(ROUTE_PATH.STD_DASHBOARD) && (
+        {!name && (
           <div
             className={`flex flex-col ${
               openSidebar
@@ -194,6 +190,51 @@ export default function StdCourseSidebar() {
                   <Icon
                     IconComponent={IconHistogram}
                     className="pb-1 pl-[2px] size-[22px]"
+                  />
+                )}
+              </Button>
+            </Tooltip>
+            <Tooltip
+              transitionProps={{
+                transition: "fade-right",
+                duration: 200,
+              }}
+              classNames={{
+                tooltip:
+                  "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+              }}
+              label="Course Syllabus"
+              position="right-end"
+              withArrow
+              arrowPosition="side"
+              arrowOffset={15}
+              arrowSize={10}
+              opacity={openSidebar ? 0 : 1}
+            >
+              <Button
+                onClick={() => gotoPage(ROUTE_PATH.COURSE_SYLLABUS.slice(1))}
+                leftSection={
+                  openSidebar && (
+                    <Icon
+                      IconComponent={IconBooks}
+                      className=" stroke-[1.3px] size-[22px] -ml-[3px]"
+                    />
+                  )
+                }
+                className={`!text-[13px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                  path.includes(ROUTE_PATH.COURSE_SYLLABUS)
+                    ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                    : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                } ${
+                  openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                }`}
+              >
+                {openSidebar ? (
+                  "Syllabus"
+                ) : (
+                  <Icon
+                    IconComponent={IconBooks}
+                    className="stroke-[1.3px] size-[22px]"
                   />
                 )}
               </Button>
@@ -302,7 +343,7 @@ export default function StdCourseSidebar() {
         )}
       </div>
 
-      {openSidebar && path.includes(ROUTE_PATH.STD_DASHBOARD) && (
+      {openSidebar && (
         <>
           <div className="flex flex-col w-full gap-2 mt-5">
             <p className="text-b2 font-bold mb-1">Instructor</p>

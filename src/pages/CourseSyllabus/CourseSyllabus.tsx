@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useParams, useSearchParams } from "react-router-dom";
-import { setLoading } from "@/store/loading";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { setShowSidebar, setShowNavbar, setDashboard } from "@/store/config";
 import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
@@ -22,22 +21,24 @@ import Part6TQF3 from "@/components/TQF3/Part6TQF3";
 import Part7TQF3 from "@/components/TQF3/Part7TQF3";
 import Loading from "@/components/Loading/Loading";
 import Bottombar from "@/components/Bottombar";
-import { getCourse } from "@/services/course/course.service";
-import { CourseRequestDTO } from "@/services/course/dto/course.dto";
+import { getOneCourse } from "@/services/course/course.service";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
 import { setCourseSyllabus } from "@/store/courseSyllabus";
-import { isMobile } from "@/helpers/functions/function";
 import IconExternal from "@/assets/icons/externalLink.svg?react";
 import ModalTermsOfService from "@/components/Modal/ModalTermOfService";
-import { Alert } from "@mantine/core";
+import { ROUTE_PATH } from "@/helpers/constants/route";
 
 export default function CourseSyllabus() {
   const { courseNo } = useParams();
+  const enrollCourse = useAppSelector((state) =>
+    state.enrollCourse.courses.find((e) => e.courseNo == courseNo)
+  );
   const [searchParams] = useSearchParams();
+  const location = useLocation().pathname;
   const year = searchParams.get("year");
   const semester = searchParams.get("semester");
-  const topic = searchParams.get("topic") ?? null;
-  const loading = useAppSelector((state) => state.loading.loading);
+  const topic = searchParams.get("topic") ?? enrollCourse?.section.topic;
+  const [loading, setLoading] = useState(false);
   const user = useAppSelector((state) => state.user);
   const course = useAppSelector((state) =>
     state.courseSyllabus.courses.find(
@@ -63,10 +64,11 @@ export default function CourseSyllabus() {
   const [activeSection, setActiveSection] = useState<number>(0);
 
   useEffect(() => {
-    dispatch(setShowSidebar(false));
+    const stdOneCourse = location.includes(ROUTE_PATH.STD_DASHBOARD);
+    dispatch(setShowSidebar(stdOneCourse));
     dispatch(setShowNavbar(true));
-    if (!course && year && semester) fetchCourse();
-  }, [year, semester]);
+    if (courseNo && year && semester && !course) fetchCourse();
+  }, [course]);
 
   useEffect(() => {
     if (user.id) {
@@ -76,18 +78,18 @@ export default function CourseSyllabus() {
   }, [user]);
 
   const fetchCourse = async () => {
-    dispatch(setLoading(true));
-    const res = await getCourse({
-      ...new CourseRequestDTO(),
+    setLoading(true);
+    const res = await getOneCourse({
+      courseNo,
+      topic: enrollCourse?.section?.topic,
       year: parseInt(year!),
       semester: parseInt(semester!),
       courseSyllabus: true,
-      ignorePage: true,
     });
     if (res) {
-      dispatch(setCourseSyllabus(res));
+      dispatch(setCourseSyllabus({ courses: [{ ...res }] }));
     }
-    dispatch(setLoading(false));
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -174,7 +176,7 @@ export default function CourseSyllabus() {
   };
 
   const fetchOneCourse = async () => {
-    dispatch(setLoading(true));
+    setLoading(true);
     let resPloRequired = await getOneCourseManagement({
       courseNo,
       courseSyllabus: true,
@@ -216,7 +218,7 @@ export default function CourseSyllabus() {
         );
       }
     }
-    dispatch(setLoading(false));
+    setLoading(false);
   };
 
   return (
