@@ -1,14 +1,14 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect, useState } from "react";
 import Icon from "@/components/Icon";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { getCourse } from "@/services/course/course.service";
 import { CourseRequestDTO } from "@/services/course/dto/course.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IModelAcademicYear } from "@/models/ModelAcademicYear";
 import notFoundImage from "@/assets/image/notFound.jpg";
 import { ROUTE_PATH } from "@/helpers/constants/route";
-import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
+import { ROLE } from "@/helpers/constants/enum";
 import Loading from "@/components/Loading/Loading";
 import { setLoading } from "@/store/loading";
 import { setDashboard, setShowNavbar, setShowSidebar } from "@/store/config";
@@ -19,13 +19,11 @@ import {
   setSearchCourseSyllabus,
 } from "@/store/courseSyllabus";
 import IconInfo2 from "@/assets/icons/Info2.svg?react";
-
 import IconChevron from "@/assets/icons/chevronRight.svg?react";
 import { Alert, Button, Select } from "@mantine/core";
 import { SearchInput } from "@/components/SearchInput";
 
 export default function CourseSyllabusDashboard() {
-  const navigate = useNavigate();
   const loading = useAppSelector((state) => state.loading.loading);
   const user = useAppSelector((state) => state.user);
   const academicYear = useAppSelector((state) => state.academicYear);
@@ -194,7 +192,13 @@ export default function CourseSyllabusDashboard() {
                   <Select
                     data={termOption}
                     value={term.value}
-                    onChange={(_, option) => setTerm(option)}
+                    onChange={(_, option: any) => {
+                      setParams({
+                        year: option.year.toString(),
+                        semester: option.semester.toString(),
+                      });
+                      setTerm(option);
+                    }}
                     allowDeselect={false}
                     withCheckIcon={false}
                     size="sm"
