@@ -382,7 +382,7 @@ export default function ModalManageEvalTopic({
                     <Icon
                       IconComponent={IconList2}
                       className="acerSwift:max-macair133:size-5"
-                    />{" "}
+                    />
                     List Evaluation Topic Added
                   </span>
                 </div>

@@ -206,9 +206,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               </Button>
             </div>
           </Modal.Header>
-
           <Modal.Body className="flex flex-col h-full w-full">
-            {/* Topic */}
             <div className="flex flex-col gap-3 lg:px-44 px-10 py-6 ">
               <Alert
                 radius="md"
@@ -503,12 +501,15 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               }
             >
               {warningStudentList.map((std) => (
-                <div className="ml-8">
+                <div key={std.studentId} className="ml-8">
                   {std.studentId} - {std.firstName} {std.lastName}{" "}
                 </div>
               ))}
 
-              <p className=" ml-8 mt-5 font-medium">""If you continue importing scores, these student scores will be excluded from the import.""</p>
+              <p className=" ml-8 mt-5 font-medium">
+                If you continue importing scores, these student scores will be
+                excluded from the import.
+              </p>
             </Alert>
           </div>
 

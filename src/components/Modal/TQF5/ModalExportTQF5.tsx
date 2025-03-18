@@ -116,10 +116,10 @@ export default function ModalExportTQF5({
       title={
         <div className="flex flex-col gap-2">
           <p>Export TQF5</p>
-          <p className="text-b4 acerSwift:max-macair133:!text-b5 inline-flex items-center text-[#e13b3b] -mt-[6px]">
+          <div className="text-b4 acerSwift:max-macair133:!text-b5 inline-flex items-center text-[#e13b3b] -mt-[6px]">
             File format:{" "}
             <Icon IconComponent={IconPDF} className="ml-1 stroke-[#e13b3b]" />
-          </p>
+          </div>
         </div>
       }
       centered

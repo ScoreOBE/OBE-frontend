@@ -137,7 +137,6 @@ export default function ModalMappingAssignment({
                     <p className="ml-4">{eva.topicEN}</p>
                   </Table.Td>
                   <Table.Td>
-                    {" "}
                     <Icon
                       IconComponent={IconArrowMapping}
                       className="text-secondary size-10"

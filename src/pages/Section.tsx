@@ -453,7 +453,7 @@ export default function Section() {
                           >
                             Section {getSectionNo(sec.sectionNo)}
                           </p>
-                          <p
+                          <div
                             className={`tag-tqf ${
                               isMobile ? "translate-x-0" : ""
                             } bg-secondary text-secondary flex gap-[6px] px-2 py-[4px]  items-center bg-opacity-15 rounded-xl !text-[13px] acerSwift:max-macair133:!text-b6 ${
@@ -467,7 +467,7 @@ export default function Section() {
                               className="size-[14px] acerSwift:max-macair133:size-[11px] text-secondary stroke-secondary"
                             />
                             {sec.students?.length}
-                          </p>
+                          </div>
                         </div>
 
                         <p

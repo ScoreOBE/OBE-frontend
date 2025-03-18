@@ -8,6 +8,7 @@ import { IModelUser } from "@/models/ModelUser";
 import { getSectionNo } from "./function";
 import { capitalize } from "lodash";
 import { validateEngLanguage } from "./validation";
+import { setLoadingOverlay } from "@/store/loading";
 
 export const isNumeric = (value: any) => {
   return !isNaN(parseFloat(value)) && isFinite(value);
@@ -40,7 +41,7 @@ export const onUploadFile = async (
     const dataExcel = await file.arrayBuffer();
     workbook = XLSX.read(dataExcel);
     if (type == "studentList") {
-      studentList(
+      await studentList(
         course,
         files,
         workbook,
@@ -52,7 +53,7 @@ export const onUploadFile = async (
     } else if (type == "score") {
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       if (worksheet.C1?.v == "SID" || worksheet[0]?.SID) {
-        gradescopeFile(
+        await gradescopeFile(
           course,
           files,
           workbook,
@@ -62,7 +63,7 @@ export const onUploadFile = async (
           setErrorPoint!
         );
       } else {
-        scoreOBETemplete(
+        await scoreOBETemplete(
           course,
           files,
           workbook,
@@ -76,7 +77,7 @@ export const onUploadFile = async (
         );
       }
     } else {
-      gradeTemplete(
+      await gradeTemplete(
         course,
         files,
         workbook,
@@ -100,7 +101,7 @@ const templateNotMatch = () => {
   );
 };
 
-const studentList = (
+const studentList = async (
   course: Partial<IModelCourse>,
   files: FileWithPath[],
   workbook: XLSX.WorkBook,
@@ -197,7 +198,7 @@ const studentList = (
   }
 };
 
-const scoreOBETemplete = (
+const scoreOBETemplete = async (
   course: Partial<IModelCourse>,
   files: FileWithPath[],
   workbook: XLSX.WorkBook,
@@ -209,8 +210,11 @@ const scoreOBETemplete = (
   setErrorPoint: React.Dispatch<React.SetStateAction<any[]>>,
   setErrorStudent: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
+  await new Promise((resolve) => {
+    store.dispatch(setLoadingOverlay(true));
+    setTimeout(resolve, 3);
+  });
   const user = store.getState().user;
-  const result: any[] = [];
   const errorStudentIdList: { name: string; cell: string[] }[] = [];
   const errorSection: string[] = [];
   const errorSectionNoStudents: string[] = [];
@@ -221,13 +225,15 @@ const scoreOBETemplete = (
     studentIdNotMatch: boolean;
     sectionNotMatch: boolean;
   }[] = [];
+  const result: any[] = [];
   for (const sheet of workbook.SheetNames) {
-    const worksheet = workbook.Sheets[sheet];
+    let worksheet = workbook.Sheets[sheet];
     if (
       worksheet.E1?.v != "Question" ||
       worksheet.E2?.v != "Full Score" ||
       worksheet.E3?.v != "Description (Optional)"
     ) {
+      store.dispatch(setLoadingOverlay(false));
       files = [];
       templateNotMatch();
       return;
@@ -236,17 +242,13 @@ const scoreOBETemplete = (
     delete worksheet.E2;
     delete worksheet.E3;
 
+    worksheet = removeEmptyRows(worksheet);
+
     let resultsData: any[] = XLSX.utils.sheet_to_json(worksheet);
 
     const assignmentName = sheet;
     const fullScore = resultsData.shift();
     const description = resultsData[0].section ? {} : resultsData.shift();
-
-    resultsData = resultsData.filter((row) =>
-      Object.values(row).some(
-        (value) => value !== undefined && value !== null && value !== ""
-      )
-    );
 
     resultsData.forEach((data, i) => {
       // Validate the studentId
@@ -394,6 +396,7 @@ const scoreOBETemplete = (
       }
     });
   }
+  store.dispatch(setLoadingOverlay(false));
   if (
     errorStudentIdList.length ||
     errorSection.length ||
@@ -418,7 +421,7 @@ const scoreOBETemplete = (
   });
 };
 
-const gradescopeFile = (
+const gradescopeFile = async (
   course: Partial<IModelCourse>,
   files: FileWithPath[],
   workbook: XLSX.WorkBook,
@@ -551,7 +554,7 @@ const gradescopeFile = (
   });
 };
 
-const gradeTemplete = (
+const gradeTemplete = async (
   course: Partial<IModelCourse>,
   files: FileWithPath[],
   workbook: XLSX.WorkBook,
@@ -680,4 +683,26 @@ export const onRejectFile = (files: FileRejection[]) => {
       break;
   }
   showNotifications(NOTI_TYPE.ERROR, title, message);
+};
+
+const removeEmptyRows = (worksheet: XLSX.WorkSheet): XLSX.WorkSheet => {
+  if (!worksheet["!ref"]) return worksheet;
+  const range = XLSX.utils.decode_range(worksheet["!ref"]);
+  const newData: Record<string, XLSX.CellObject> = {};
+  let newRow = 0;
+  let lastRow = range.e.r;
+
+  for (let row = range.e.r; row >= range.s.r; row--) {
+    const cellAddress = XLSX.utils.encode_cell({ r: row, c: 0 }); // Column "A" = index 0
+    if (worksheet[cellAddress]) {
+      lastRow = row;
+      break;
+    }
+  }
+
+  const newRange = XLSX.utils.encode_range({
+    s: { r: 0, c: 0 },
+    e: { r: lastRow, c: range.e.c },
+  });
+  return { ...worksheet, ...newData, "!ref": newRange };
 };

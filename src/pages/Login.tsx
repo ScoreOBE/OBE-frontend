@@ -230,7 +230,6 @@ export default function Login() {
         opened={openModalTOS}
         onClose={() => setOpenModalTOS(false)}
       />
-      {loading && <LoadingOverlay />}
       <div className="relative flex flex-col w-full">
         <div className="max-sm:hidden absolute z-10 h-screen w-screen top-screen flex justify-center items-end pb-28 max-macair133:pb-32">
           <div

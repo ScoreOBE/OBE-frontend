@@ -105,9 +105,9 @@ export default function ModalExportPLO({
       title={
         <div className="flex flex-col gap-3">
           <p>Export PLO</p>
-          <p className="text-[12px] inline-flex items-center text-[#20884f] -mt-[6px]">
+          <div className="text-[12px] inline-flex items-center text-[#20884f] -mt-[6px]">
             File format: <Icon IconComponent={IconExcel} className="ml-1 " />
-          </p>
+          </div>
         </div>
       }
       centered
