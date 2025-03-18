@@ -148,7 +148,7 @@ export default function StdDashboard() {
                     onClick={(event) => event.stopPropagation()}
                   >
                     <p
-                      className="tag-tqf text-[#0fb790] bg-[#9cfee4] rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
+                      className="tag-tqf text-[#ffffff] py-[6px] bg-secondary rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
                       onClick={() =>
                         goToCourse(
                           item.courseNo,
