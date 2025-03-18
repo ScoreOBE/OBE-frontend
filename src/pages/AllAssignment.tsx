@@ -204,7 +204,7 @@ export default function AllAssignment() {
         `Score${
           form.getValues().isPublish ? " Published" : " Unpublished"
         }  Successfully`,
-        `Evaluation ${form.getValues().assignments.join(", ")} in ${form
+        `Scores ${form.getValues().assignments.join(", ")} in ${form
           .getValues()
           .sections.map((item) => getSectionNo(item))
           .join(", ")} ${
@@ -233,8 +233,8 @@ export default function AllAssignment() {
       dispatch(updateAssignments({ ...res }));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        "Evaluation Edited Successfully",
-        `Evaluation has been successfully updated.`
+        "Scores Edited Successfully",
+        `Scores has been successfully updated.`
       );
       setOpenModalEditAssignment(false);
       setEditDeleteAssignment("");
@@ -253,8 +253,8 @@ export default function AllAssignment() {
       dispatch(updateAssignments({ ...res }));
       showNotifications(
         NOTI_TYPE.SUCCESS,
-        `Evaluation Deleted Successfully`,
-        `Evaluation ${editDeleteAssignment} has been deleted.`
+        `Scores Deleted Successfully`,
+        `Scores ${editDeleteAssignment} has been deleted.`
       );
       setOpenModalDeleteAssignment(false);
       setEditDeleteAssignment("");
@@ -376,7 +376,7 @@ export default function AllAssignment() {
                 }
               }}
             >
-              All Evaluations
+              All Scores
             </Chip>
           )}
           <Chip.Group
@@ -608,12 +608,12 @@ export default function AllAssignment() {
         onClose={() => setOpenModalEditAssignment(false)}
         centered
         transitionProps={{ transition: "pop" }}
-        title="Edit Evaluation Name"
+        title="Edit Scores Name"
         classNames={{ title: "acerSwift:max-macair133:!text-b1" }}
       >
         <TextInput
           classNames={{ input: "focus:border-primary" }}
-          label="Evaluation name"
+          label="Scores name"
           size="xs"
           withAsterisk
           placeholder="Quiz 1"
@@ -643,7 +643,7 @@ export default function AllAssignment() {
         onClose={() => setOpenModalDeleteAssignment(false)}
         action={onClickDeleteAssignment}
         type="delete"
-        labelButtonRight="Delete Evaluation"
+        labelButtonRight="Delete Scores"
         title={`Delete' ${editDeleteAssignment}'`}
         message={
           <>
@@ -653,7 +653,7 @@ export default function AllAssignment() {
               title={
                 <p className="acerSwift:max-macair133:!text-b3">
                   This action cannot be undone. After you delete this
-                  assignment, <br /> it will be permanently deleted from this
+                  scores, <br /> it will be permanently deleted from this
                   course.
                 </p>
               }
@@ -681,8 +681,7 @@ export default function AllAssignment() {
             {allAssignments.length !== 0 && !isMobile && (
               <div className="flex flex-row items-center justify-between">
                 <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 font-semibold">
-                  {allAssignments.length} Evaluation
-                  {allAssignments.length! > 1 && "s"}
+                Score Items
                 </p>
                 <div className="flex flex-wrap justify-end items-center gap-3">
                   {activeTerm ? (
@@ -836,7 +835,7 @@ export default function AllAssignment() {
                         <Table.Thead>
                           <Table.Tr className="bg-[#e5e7f6]">
                             <Table.Th className="w-20 sm:max-macair133:text-b4 ">
-                              Name
+                              Score name
                             </Table.Th>
                             <Table.Th className="w-20 sm:max-macair133:text-b4  text-end pr-14 !pl-0">
                               Full Scores
@@ -990,7 +989,7 @@ export default function AllAssignment() {
                                                 IconComponent={IconPencilMinus}
                                                 className="size-4 stroke-[2px]"
                                               />
-                                              <span>Edit Evaluation Name</span>
+                                              <span>Edit Scores Name</span>
                                             </div>
                                           </Menu.Item>
                                           <Menu.Item
@@ -1009,7 +1008,7 @@ export default function AllAssignment() {
                                                 IconComponent={IconTrash}
                                                 className="size-4 stroke-[2px]"
                                               />
-                                              <span>Delete Evaluation</span>
+                                              <span>Delete Scores</span>
                                             </div>
                                           </Menu.Item>
                                         </Menu.Dropdown>
@@ -1223,10 +1222,10 @@ export default function AllAssignment() {
               <div className="flex items-center  !h-full !w-full justify-between  sm:px-16">
                 <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
                   <p className="!h-full text-[20px] text-secondary font-semibold">
-                    No Evaluation
+                    No Score
                   </p>{" "}
                   <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                    It seems like no evaluations have been added to this course
+                    It seems like no score have been added to this course
                     yet.
                   </p>{" "}
                   {activeTerm && <div className="mt-3">{uploadButton()}</div>}

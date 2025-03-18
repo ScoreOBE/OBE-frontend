@@ -235,7 +235,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
           label={`Back to ${
             dashboard === ROLE.CURRICULUM_ADMIN
               ? "Curriculum Admin Dashboard"
-              : "Your Course"
+              : "Your Courses"
           }`}
           position="right-end"
           withArrow
@@ -262,7 +262,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
               `Back to ${
                 dashboard == ROLE.CURRICULUM_ADMIN
                   ? "Curriculum Admin Dashboard"
-                  : "Your Course"
+                  : "Your Courses"
               }`}
           </div>
         </Tooltip>
@@ -296,7 +296,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                   tooltip:
                     " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
                 }}
-                label="Evaluations"
+                label="Scores"
                 position="right-end"
                 withArrow
                 arrowPosition="side"
@@ -323,11 +323,58 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                   }`}
                 >
                   {openSidebar ? (
-                    "Evaluations"
+                    "Scores"
                   ) : (
                     <Icon
                       IconComponent={IconTQF}
                       className="  acerSwift:max-macair133:!size-4"
+                    />
+                  )}
+                </Button>
+              </Tooltip>
+            )}{" "}
+            {dashboard == ROLE.INSTRUCTOR && (
+              <Tooltip
+                transitionProps={{
+                  transition: "fade-right",
+                  duration: 200,
+                }}
+                classNames={{
+                  tooltip:
+                    " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
+                }}
+                label="Roster"
+                position="right-end"
+                withArrow
+                arrowPosition="side"
+                arrowOffset={15}
+                arrowSize={10}
+                opacity={openSidebar ? 0 : 1}
+              >
+                <Button
+                  onClick={() => goToPage(ROUTE_PATH.ROSTER)}
+                  leftSection={
+                    openSidebar && (
+                      <Icon
+                        IconComponent={IconStudent}
+                        className="size-[19px] stroke-1 acerSwift:max-macair133:size-4"
+                      />
+                    )
+                  }
+                  className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
+                    path.includes(ROUTE_PATH.ROSTER)
+                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
+                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
+                  } ${
+                    openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
+                  }`}
+                >
+                  {openSidebar ? (
+                    "Roster"
+                  ) : (
+                    <Icon
+                      IconComponent={IconStudent}
+                      className="size-[19px] !stroke-[2px] acerSwift:max-macair133:size-4"
                     />
                   )}
                 </Button>
@@ -375,53 +422,6 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
                     <RxDashboard
                       size={18}
                       className="acerSwift:max-macair133:size-4"
-                    />
-                  )}
-                </Button>
-              </Tooltip>
-            )}
-            {dashboard == ROLE.INSTRUCTOR && (
-              <Tooltip
-                transitionProps={{
-                  transition: "fade-right",
-                  duration: 200,
-                }}
-                classNames={{
-                  tooltip:
-                    " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
-                }}
-                label="Roster"
-                position="right-end"
-                withArrow
-                arrowPosition="side"
-                arrowOffset={15}
-                arrowSize={10}
-                opacity={openSidebar ? 0 : 1}
-              >
-                <Button
-                  onClick={() => goToPage(ROUTE_PATH.ROSTER)}
-                  leftSection={
-                    openSidebar && (
-                      <Icon
-                        IconComponent={IconStudent}
-                        className="size-[19px] stroke-1 acerSwift:max-macair133:size-4"
-                      />
-                    )
-                  }
-                  className={`!text-b3 acerSwift:max-macair133:!text-b4 acerSwift:max-macair133:!h-[30px] flex justify-start items-center transition-colors duration-300 focus:border-none ${
-                    path.includes(ROUTE_PATH.ROSTER)
-                      ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
-                      : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-                  } ${
-                    openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-2"
-                  }`}
-                >
-                  {openSidebar ? (
-                    "Roster"
-                  ) : (
-                    <Icon
-                      IconComponent={IconStudent}
-                      className="size-[19px] !stroke-[2px] acerSwift:max-macair133:size-4"
                     />
                   )}
                 </Button>

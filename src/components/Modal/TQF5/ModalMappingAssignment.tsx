@@ -39,7 +39,7 @@ export default function ModalMappingAssignment({
       assignments: {
         assignment: (value) =>
           value.length == 0 &&
-          "Evaluation must be linked to at least one Assignment",
+          "Evaluation item must be linked to at least one Assignment",
       },
     },
     validateInputOnBlur: true,
@@ -83,7 +83,7 @@ export default function ModalMappingAssignment({
       closeOnClickOutside={false}
       centered
       size="55vw"
-      title="Evaluation Mapping"
+      title="Evaluation Item Mapping"
       transitionProps={{ transition: "pop" }}
     >
       <div>
@@ -99,7 +99,7 @@ export default function ModalMappingAssignment({
           }}
           title={
             <p>
-              Each Course Evluation must be linked to at least one assignment
+              Each Evaluation Item must be linked to at least one assignment
             </p>
           }
         ></Alert>
@@ -117,7 +117,7 @@ export default function ModalMappingAssignment({
             <Table.Thead>
               <Table.Tr className="bg-[#e5e7f6] border-b-[1px] border-secondary">
                 <Table.Th className=" w-[40%] items-center justify-center text-start ">
-                  From: Course Evaluation
+                  From: Evaluation Item
                 </Table.Th>
                 <Table.Th className="w-[4%]"></Table.Th>
                 <Table.Th className="items-center justify-center w-[56%]  text-start">

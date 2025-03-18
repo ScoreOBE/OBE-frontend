@@ -85,7 +85,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
               tooltip:
                 " font-semibold text-[15px] py-2 bg-default stroke-default border-default",
             }}
-            label="Evaluation"
+            label="Scores"
             position="right-end"
             withArrow
             arrowPosition="side"
@@ -111,7 +111,7 @@ export default function AssignmentSidebar({ onClickLeaveCourse }: Props) {
               } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-1"}`}
             >
               {openSidebar ? (
-                "Evaluations"
+                "Scores"
               ) : (
                 <Icon IconComponent={IconList} className="size-7" />
               )}

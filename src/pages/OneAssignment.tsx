@@ -89,7 +89,7 @@ export default function OneAssignment() {
   }>();
   const [items, setItems] = useState<any[]>([
     {
-      title: "Evaluations",
+      title: "Scores",
       path: `${ROUTE_PATH.COURSE}/${courseNo}/${
         ROUTE_PATH.EVALUATION
       }?${params.toString()}`,

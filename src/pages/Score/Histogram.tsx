@@ -38,7 +38,7 @@ export default function Histogram() {
   const dispatch = useAppDispatch();
   const [items, setItems] = useState<any[]>([
     {
-      title: "Your Course",
+      title: "Your Courses",
       path: `${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`,
     },
     {
@@ -210,10 +210,10 @@ export default function Histogram() {
             <div className="flex items-center  !h-full !w-full -mt-[10px] justify-between  sm:px-16">
               <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
                 <p className="!h-full text-[20px] text-secondary font-semibold">
-                  No Evaluation
+                  No Score
                 </p>{" "}
                 <p className=" text-[#333333] -mt-1 text-b2 break-words font-medium leading-relaxed">
-                  The histogram will show when the evaluation is imported.
+                  The histogram will show when the score is imported.
                 </p>{" "}
               </div>
               {!isMobile && (

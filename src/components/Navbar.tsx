@@ -55,7 +55,7 @@ export default function Navbar() {
       case ROUTE_PATH.INS_DASHBOARD:
         return "Your Courses";
       case ROUTE_PATH.STD_DASHBOARD:
-        if (location.includes(ROUTE_PATH.EVALUATION)) return `Evaluations`;
+        if (location.includes(ROUTE_PATH.EVALUATION)) return `Scores`;
         else if (location.includes(ROUTE_PATH.HISTOGRAM)) return `Chart`;
         else if (location.includes(ROUTE_PATH.CLO)) return `CLO`;
         else if (location.includes(ROUTE_PATH.PLO) && /\d/.test(location))
@@ -77,7 +77,7 @@ export default function Navbar() {
         else if (location.includes(ROUTE_PATH.ROSTER)) return `Course Roster`;
         // else if (location.includes(ROUTE_PATH.SKILLS)) return "Skills";
         else if (location.includes(ROUTE_PATH.STUDENTS)) return `${name}`;
-        else if (location.includes(ROUTE_PATH.EVALUATION)) return "Evaluations";
+        else if (location.includes(ROUTE_PATH.EVALUATION)) return "Scores";
         else if (location.includes(ROUTE_PATH.HISTOGRAM)) return "Chart";
         else return "Section";
       default:

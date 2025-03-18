@@ -340,7 +340,7 @@ export default function Part2TQF5({ setForm, tqf3, assignments }: Props) {
                 Setup Evaluation Mapping
               </p>
               <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-                Map the course evaluation to the assignments you import in this
+                Map the Evaluation Items to the Scores you import in this
                 course <br /> to ensure accurate assessment and analysis.
               </p>
               {tqf5.method == METHOD_TQF5.SCORE_OBE && (

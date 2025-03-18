@@ -445,13 +445,27 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
               Factors Contributing to Abnormal Score Levels
             </p>
           </div>
-          <div className="flex flex-col gap-3 text-default">
+          <div className="flex  !mr-2    text-default">
             <Textarea
               key={form.key(`list.${curIndex}.abnormalScoreFactor`)}
-              label="Description"
+              label="Recommendations from the most recent semester of teaching"
+              size="xs"
+              disabled={true}
+              placeholder=""
+              className="w-[1000px]"
+              classNames={{
+                input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 `,
+                label: "text-default acerSwift:max-macair133:!text-b4",
+              }}
+            ></Textarea>
+          </div>
+          <div className="flex  ml-2   text-default">
+            <Textarea
+              key={form.key(`list.${curIndex}.abnormalScoreFactor`)}
+              label="Recommendations for improving this semester"
               size="xs"
               placeholder="(optional)"
-              className="w-[500px]"
+              className="w-[1000px]"
               classNames={{
                 input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 `,
                 label: "text-default acerSwift:max-macair133:!text-b4",
@@ -471,13 +485,27 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
             </p>
           </div>
 
-          <div className="flex flex-col gap-3 text-default ">
+          <div className="flex  !mr-2    text-default">
             <Textarea
               key={form.key(`list.${curIndex}.reviewingSLO`)}
-              label="Description"
+              label="Recommendations from the most recent semester of teaching "
+              size="xs"
+              disabled={true}
+              placeholder=""
+              className="w-[1000px]"
+              classNames={{
+                input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4`,
+                label: "text-default acerSwift:max-macair133:!text-b4",
+              }}
+            ></Textarea>
+          </div>
+          <div className="flex  !ml-2    text-default">
+            <Textarea
+              key={form.key(`list.${curIndex}.reviewingSLO`)}
+              label="Recommendations for improving this semester"
               size="xs"
               placeholder="(optional)"
-              className="w-[500px]"
+              className="w-[1000px]"
               classNames={{
                 input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4`,
                 label: "text-default acerSwift:max-macair133:!text-b4",

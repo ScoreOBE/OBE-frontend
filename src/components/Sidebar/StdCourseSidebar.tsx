@@ -127,7 +127,7 @@ export default function StdCourseSidebar() {
                 tooltip:
                   "font-semibold text-[15px] py-2 bg-default stroke-default border-default",
               }}
-              label="Evaluations"
+              label="Scores"
               position="right-end"
               withArrow
               arrowPosition="side"
@@ -143,10 +143,10 @@ export default function StdCourseSidebar() {
                 path.includes(ROUTE_PATH.EVALUATION)
                   ? "bg-[#F0F0F0] text-primary hover:bg-[#F0F0F0] hover:text-primary"
                   : "text-white bg-transparent hover:text-tertiary hover:bg-[#F0F0F0]"
-              } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit p-1"}`}
+              } ${openSidebar ? "!w-full" : "!rounded-full !h-fit !w-fit mt-5 p-1"}`}
               >
                 {openSidebar ? (
-                  "Evaluations"
+                  "Scores"
                 ) : (
                   <Icon IconComponent={IconList} className="size-7" />
                 )}
@@ -217,7 +217,7 @@ export default function StdCourseSidebar() {
                   openSidebar && (
                     <Icon
                       IconComponent={IconBooks}
-                      className=" stroke-[1.3px] size-[22px] -ml-[3px]"
+                      className=" stroke-[1.3px] size-[22px] -ml-[1px] mr-1"
                     />
                   )
                 }

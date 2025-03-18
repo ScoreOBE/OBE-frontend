@@ -35,11 +35,11 @@ export default function StdScore() {
   const dispatch = useAppDispatch();
   const [items, setItems] = useState<any[]>([
     {
-      title: "Your Course",
+      title: "Your Courses",
       path: `${ROUTE_PATH.STD_DASHBOARD}?${params.toString()}`,
     },
     {
-      title: `Evaluations`,
+      title: `Scores`,
       path: `${ROUTE_PATH.STD_DASHBOARD}/${courseNo}/${
         ROUTE_PATH.EVALUATION
       }?${params.toString()}`,

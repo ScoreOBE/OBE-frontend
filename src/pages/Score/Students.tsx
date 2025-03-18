@@ -73,7 +73,7 @@ export default function Students() {
 
   const [items, setItems] = useState<any[]>([
     {
-      title: "Your Course",
+      title: "Your Courses",
       path: `${ROUTE_PATH.INS_DASHBOARD}?${params.toString()}`,
     },
     {
@@ -83,7 +83,7 @@ export default function Students() {
       }?${params.toString()}`,
     },
     {
-      title: `Evaluation Section ${getSectionNo(sectionNo)}`,
+      title: `Scores Section ${getSectionNo(sectionNo)}`,
       path: `${ROUTE_PATH.COURSE}/${courseNo}/${
         ROUTE_PATH.SECTION
       }/${sectionNo}/${ROUTE_PATH.EVALUATION}?${params.toString()}`,

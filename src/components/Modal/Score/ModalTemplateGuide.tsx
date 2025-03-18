@@ -146,7 +146,7 @@ export default function ModalTemplateGuide({ opened, onClose }: Props) {
         return (
           <>
             <p className="text-[#0295A9] leading-[38px] text-[28px] mb-7 font-semibold">
-              Adding Score <br /> New Evaluation
+              Adding Score <br /> New Assignment
             </p>
             <p className="text-[14px] mb-16 text-default font-medium">
               <span className="text-emphasize font-semibold">

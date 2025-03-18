@@ -280,7 +280,7 @@ export default function Sidebar() {
               variant="light"
               color="red"
               className="mb-3"
-              title={` After you leave ${course?.courseNo} course, you won't have access to Evaluations, Score, TQF document and Grades in this course `}
+              title={` After you leave ${course?.courseNo} course, you won't have access to Sections, Scores, TQF document and Grades in this course `}
               icon={
                 <Icon
                   IconComponent={IconExclamationCircle}

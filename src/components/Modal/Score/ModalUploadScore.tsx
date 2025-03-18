@@ -352,7 +352,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   <span className="font-extrabold">
                     Existing score will be replaced
                   </span>
-                  , when you import file with matching Section, Evaluation, and
+                  , when you import file with matching Section, Assignment, and
                   Question
                 </p>
               </Alert>

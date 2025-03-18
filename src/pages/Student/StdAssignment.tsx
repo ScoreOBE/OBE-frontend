@@ -56,8 +56,7 @@ export default function StdAssignment() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
                   <h3 className="font-semibold text-gray-800">
-                    {course?.section?.assignments?.length} Evaluation
-                    {course?.section?.assignments?.length! > 1 && "s"}
+                    Score Items
                   </h3>
                 </div>
                 <div className="bg-[#1f69f3]/10 text-[#1f69f3] text-sm font-medium px-3 py-1 rounded-full">
@@ -74,7 +73,7 @@ export default function StdAssignment() {
                     <thead className="!h-[56px]">
                       <tr className="bg-[#1f69f3]/10 text-[14px]">
                         <th className="py-3 px-6 text-left text-[#1f69f3] font-bold border-b border-[#1f69f3]/10 w-[20%]">
-                          Evaluation
+                          Scores name
                         </th>
                         <th className="py-3 px-4 text-right text-[#1f69f3] font-bold border-b border-[#1f69f3]/10 w-[10%]">
                           Your Score
@@ -291,10 +290,10 @@ export default function StdAssignment() {
               <div className="flex items-center  !h-full !w-full justify-between  sm:px-16">
                 <div className="flex flex-col gap-3 iphone:max-sm:text-center sm:text-start">
                   <p className="!h-full text-[20px] text-secondary font-semibold">
-                    No Evaluation
+                    No Score
                   </p>
                   <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                    The evaluation will show when your score is published <br />{" "}
+                    The score will show when your score is published <br />{" "}
                     by the instructor or co-instructor.
                   </p>
                 </div>

@@ -139,8 +139,8 @@ export default function StdDashboard() {
                 <div className="bg-[#e7f0ff] flex h-8 items-center justify-between rounded-b-[4px]">
                   <p className="p-2.5 text-secondary font-[700] text-[12px]">
                     {!item.section?.assignments.length
-                      ? "No Evaluation"
-                      : `${item.section?.assignments.length} Evaluation`}
+                      ? "No Score"
+                      : `${item.section?.assignments.length} Score`}
                     {item.section?.assignments.length > 1 ? "s" : ""}
                   </p>
                   <div

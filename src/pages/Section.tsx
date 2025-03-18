@@ -498,10 +498,10 @@ export default function Section() {
                             ? ""
                             : sec.assignments?.length}
                           {(sec.assignments?.length ?? 0) === 1
-                            ? ` Evaluation`
+                            ? ` Score`
                             : (sec.assignments?.length ?? 0) > 1
-                            ? ` Evaluations`
-                            : "No Evaluation"}
+                            ? ` Scores`
+                            : "No Score"}
                         </p>
                         {course.type == COURSE_TYPE.SEL_TOPIC.en && (
                           <div className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center">

@@ -327,7 +327,7 @@ export default function Part4TQF3({
                           }}
                         >
                           <div className="w-full flex items-center px-[25px] h-[58px]">
-                            CLO Description / Evaluation Topic
+                            CLO Description / Evaluation Item
                           </div>
                         </Table.Th>
                         {evalForm.getValues().data.map((item, evalIndex) => (
@@ -564,7 +564,7 @@ export default function Part4TQF3({
                         </Table.Th>
                         <Table.Th className="!w-[12%] !max-w-[12%] px-2 !py-3.5  z-0">
                           <div className=" flex items-center  h-[24px]">
-                            Evaluation Topic
+                            Evaluation Items
                           </div>
                         </Table.Th>
                         <Table.Th className="w-[40%] !py-3.5 z-0">
