@@ -67,6 +67,7 @@ export default function CourseSyllabus() {
     const stdOneCourse = location.includes(ROUTE_PATH.STD_DASHBOARD);
     dispatch(setShowSidebar(stdOneCourse));
     dispatch(setShowNavbar(true));
+    dispatch(setSelectTqf3Topic(topic));
     if (courseNo && year && semester && !course) fetchCourse();
   }, [course]);
 
@@ -158,7 +159,7 @@ export default function CourseSyllabus() {
   };
 
   useEffect(() => {
-    if (courseNo && year && semester && tqf3.coursePLO) {
+    if (course && tqf3.coursePLO) {
       fetchOneCourse();
     }
   }, [tqf3.topic, tqf3.coursePLO]);
