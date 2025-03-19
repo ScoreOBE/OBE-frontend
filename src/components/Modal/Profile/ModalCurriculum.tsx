@@ -59,6 +59,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
   const [selectCurriculum, setSelectCurriculum] = useState<
     Partial<IModelCurriculum & { plo: string }>
   >({});
+  const [disabledEdit, setDisabledEdit] = useState(false);
 
   const form = useForm({
     mode: "controlled",
@@ -210,6 +211,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
             label="Curriculum Thai Name"
             placeholder="หลักสูตรวิศวกรรมศาสตรบัณฑิต สาขาวิศวกรรมคอมพิวเตอร์ (2563)"
             size="xs"
+            disabled={disabledEdit}
             {...form.getInputProps("nameTH")}
           />
           <TextInput
@@ -222,6 +224,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
             label="Curriculum English Name"
             placeholder="Bachelor of Engineering Program in Computer Engineering (2563)"
             size="xs"
+            disabled={disabledEdit}
             {...form.getInputProps("nameEN")}
           />
           <TextInput
@@ -234,6 +237,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
             label="Code of Curriculum"
             placeholder="CPE-2563"
             size="xs"
+            disabled={disabledEdit}
             {...form.getInputProps("code")}
           />
           <Select
@@ -383,6 +387,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                                 plo.curriculum.includes(item.code)
                               )!.id,
                             });
+                            setDisabledEdit(!!item.disable);
                             form.setFieldValue("nameTH", item.nameTH);
                             form.setFieldValue("nameEN", item.nameEN);
                             form.setFieldValue("code", item.code);
@@ -396,7 +401,7 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                             setIsEditCurriculum(true);
                           }}
                           loading={loading}
-                          disabled={item.disable}
+                          disabled={item.disableEditPlo}
                         >
                           {/* <Icon
                             IconComponent={IconEdit}
