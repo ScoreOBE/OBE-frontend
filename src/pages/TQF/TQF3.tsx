@@ -4,14 +4,12 @@ import {
   Alert,
   Button,
   FocusTrapInitialFocus,
-  Menu,
   Modal,
   Select,
   Tabs,
   Tooltip,
 } from "@mantine/core";
 import Icon from "@/components/Icon";
-import IconDots from "@/assets/icons/dots.svg?react";
 import IconExclamationCircle from "@/assets/icons/exclamationCircle.svg?react";
 import IconDupTQF from "@/assets/icons/dupTQF.svg?react";
 import IconCheck from "@/assets/icons/Check.svg?react";
@@ -70,7 +68,9 @@ export default function TQF3() {
   const [tqf3Original, setTqf3Original] = useState<
     Partial<IModelTQF3> & { topic?: string; ploRequired?: IModelPLORequire[] }
   >();
-  const [tqf5, setTqf5] = useState<IModelTQF5 & OldRecommendation>();
+  const [tqf5, setTqf5] = useState<
+    IModelTQF5 & { oldRecommendation?: OldRecommendation[] }
+  >();
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<UseFormReturnType<any>>();
