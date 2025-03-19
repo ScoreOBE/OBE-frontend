@@ -18,4 +18,5 @@ export interface IModelCurriculum {
   nameEN: string;
   code: string;
   disable?: boolean;
+  disableEditPlo?: boolean;
 }
