@@ -66,7 +66,7 @@ export default function ModalEditStudentScore({
       values.questions?.forEach((item) => {
         if (
           typeof item.score != "number" &&
-          !item.score.endsWith(".") &&
+          !item.score?.endsWith(".") &&
           !isNaN(parseFloat(item.score))
         ) {
           item.score = parseFloat(item.score);
