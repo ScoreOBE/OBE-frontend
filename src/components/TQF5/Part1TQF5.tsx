@@ -409,7 +409,6 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                   </Table.Th>
                 </Table.Tr>
               </Table.Thead>
-
               <Table.Tbody className="justify-center items-center text-center ">
                 {Object.keys(cur.gradingCriteria || {}).map((key) => (
                   <Table.Tr
@@ -445,9 +444,8 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
               Factors Contributing to Abnormal Score Levels
             </p>
           </div>
-          <div className="flex  !mr-2    text-default">
+          <div className="flex !mr-2 text-default">
             <Textarea
-              key={form.key(`list.${curIndex}.abnormalScoreFactor`)}
               label="Recommendations from the most recent semester of teaching"
               size="xs"
               disabled={true}
@@ -457,9 +455,14 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                 input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 `,
                 label: "text-default acerSwift:max-macair133:!text-b4",
               }}
-            ></Textarea>
+              value={
+                tqf5.oldRecommendation?.find(
+                  ({ curriculum }) => curriculum === selectCurriculum
+                )?.abnormalScoreFactor
+              }
+            />
           </div>
-          <div className="flex  ml-2   text-default">
+          <div className="flex ml-2 text-default">
             <Textarea
               key={form.key(`list.${curIndex}.abnormalScoreFactor`)}
               label="Recommendations for improving this semester"
@@ -471,7 +474,7 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                 label: "text-default acerSwift:max-macair133:!text-b4",
               }}
               {...form.getInputProps(`list.${curIndex}.abnormalScoreFactor`)}
-            ></Textarea>
+            />
           </div>
         </div>
         <div className="w-full justify-between h-fit  items-top  grid grid-cols-3 pt-5 pb-6  !-mt-3">
@@ -484,10 +487,8 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
               TQF 3)
             </p>
           </div>
-
-          <div className="flex  !mr-2    text-default">
+          <div className="flex !mr-2 text-default">
             <Textarea
-              key={form.key(`list.${curIndex}.reviewingSLO`)}
               label="Recommendations from the most recent semester of teaching "
               size="xs"
               disabled={true}
@@ -497,9 +498,14 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                 input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4`,
                 label: "text-default acerSwift:max-macair133:!text-b4",
               }}
-            ></Textarea>
+              value={
+                tqf5.oldRecommendation?.find(
+                  ({ curriculum }) => curriculum === selectCurriculum
+                )?.reviewingSLO
+              }
+            />
           </div>
-          <div className="flex  !ml-2    text-default">
+          <div className="flex !ml-2 text-default">
             <Textarea
               key={form.key(`list.${curIndex}.reviewingSLO`)}
               label="Recommendations for improving this semester"

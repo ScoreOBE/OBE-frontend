@@ -176,12 +176,10 @@ export default function TQF5() {
         year: params.get("year"),
         semester: params.get("semester"),
         courseNo,
+        curAdmin: dashboard == ROLE.CURRICULUM_ADMIN,
       }),
       getOneCourseManagement({ courseNo }),
     ]);
-    if (dashboard == ROLE.CURRICULUM_ADMIN && courseAdmin) {
-      resCourse = courseAdmin;
-    }
     if (resCourse) {
       if (resCourse.type == COURSE_TYPE.SEL_TOPIC.en) {
         const section = resCourse.sections.find(

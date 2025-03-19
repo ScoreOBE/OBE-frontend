@@ -12,6 +12,11 @@ export const tqf5Slice = createSlice({
       curriculum?: string[];
       ploRequired?: IModelPLORequire[];
       coursePLO?: Partial<IModelPLO>[];
+      oldRecommendation: {
+        curriculum: string;
+        abnormalScoreFactor: string;
+        reviewingSLO: string;
+      }[];
     },
   reducers: {
     resetDataTQF5: () => {
