@@ -50,7 +50,7 @@ import { IModelCourse } from "@/models/ModelCourse";
 import { initialTqf3Part } from "@/helpers/functions/tqf3";
 import { setLoadingOverlay } from "@/store/loading";
 import { getPLOs } from "@/services/plo/plo.service";
-import { setPloTQF5 } from "@/store/tqf5";
+import { OldRecommendation, setPloTQF5 } from "@/store/tqf5";
 import { IModelTQF5 } from "@/models/ModelTQF5";
 import { IModelPLORequire } from "@/models/ModelCourseManagement";
 
@@ -70,7 +70,7 @@ export default function TQF3() {
   const [tqf3Original, setTqf3Original] = useState<
     Partial<IModelTQF3> & { topic?: string; ploRequired?: IModelPLORequire[] }
   >();
-  const [tqf5, setTqf5] = useState<IModelTQF5>();
+  const [tqf5, setTqf5] = useState<IModelTQF5 & OldRecommendation>();
   const tqf3 = useAppSelector((state) => state.tqf3);
   const dispatch = useAppDispatch();
   const [form, setForm] = useState<UseFormReturnType<any>>();

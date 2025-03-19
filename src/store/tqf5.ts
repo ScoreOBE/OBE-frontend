@@ -4,6 +4,12 @@ import { IModelPLO } from "@/models/ModelPLO";
 import { IModelTQF5 } from "@/models/ModelTQF5";
 import { createSlice } from "@reduxjs/toolkit";
 
+export type OldRecommendation = {
+  curriculum: string;
+  abnormalScoreFactor: string;
+  reviewingSLO: string;
+};
+
 export const tqf5Slice = createSlice({
   name: "tqf5",
   initialState: {} as IModelTQF5 &
@@ -12,11 +18,7 @@ export const tqf5Slice = createSlice({
       curriculum?: string[];
       ploRequired?: IModelPLORequire[];
       coursePLO?: Partial<IModelPLO>[];
-      oldRecommendation: {
-        curriculum: string;
-        abnormalScoreFactor: string;
-        reviewingSLO: string;
-      }[];
+      oldRecommendation: OldRecommendation[];
     },
   reducers: {
     resetDataTQF5: () => {
