@@ -1,4 +1,14 @@
-import { Button, Table, Tabs, Textarea, TextInput } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Card,
+  Group,
+  Table,
+  Tabs,
+  Textarea,
+  TextInput,
+  ThemeIcon,
+} from "@mantine/core";
 import Icon from "../Icon";
 import IconUpload from "@/assets/icons/upload.svg?react";
 import IconEdit from "@/assets/icons/edit.svg?react";
@@ -11,12 +21,13 @@ import { useParams } from "react-router-dom";
 import { IModelTQF5, IModelTQF5Part1 } from "@/models/ModelTQF5";
 import ModalUploadGrade from "../Modal/Score/ModalUploadGrade";
 import { cloneDeep, isEqual } from "lodash";
-import { updatePartTQF5 } from "@/store/tqf5";
+import { OldRecommendation, updatePartTQF5 } from "@/store/tqf5";
 import { getSectionNo } from "@/helpers/functions/function";
 import { IModelUser } from "@/models/ModelUser";
 import { ROLE } from "@/helpers/constants/enum";
 import { initialTqf5Part1 } from "@/helpers/functions/tqf5";
 import { IModelPLORequire } from "@/models/ModelCourseManagement";
+import { IconContext } from "react-icons/lib";
 
 type Props = {
   setForm: React.Dispatch<React.SetStateAction<any>>;
@@ -43,6 +54,11 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
   const [isEditCourseEval, setIsEditCourseEval] = useState(false);
   const [isEditCriteria, setIsEditCriteria] = useState(false);
   const [selectCurriculum, setSelectCurriculum] = useState<string | null>();
+
+  const oldRecommendation: OldRecommendation | undefined =
+    tqf5.oldRecommendation?.find(
+      ({ curriculum }) => curriculum === selectCurriculum
+    );
 
   const form = useForm({
     mode: "controlled",
@@ -437,31 +453,37 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
             </Table>
           </div>
         </div>
-        <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-3 pb-5">
-          <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+        <div className="w-full border-b-[1px] border-[#e6e6e6] justify-between h-fit  items-top  grid grid-cols-2 pb-5">
+          <div className="flex text-secondary flex-col text-[15px] w-[80%] acerSwift:max-macair133:!text-b3">
             <p className="font-semibold">ปัจจัยที่ทำให้ระดับคะแนนผิดปกติ</p>
             <p className="font-semibold">
               Factors Contributing to Abnormal Score Levels
             </p>
+
+            <div className="mt-4 border rounded-xl p-4 items-center justify-center">
+              <div className="flex gap-2 mb-2">
+                <Icon
+                  IconComponent={IconEdit}
+                  className="size-6 stroke-default"
+                />
+                <p className="text-[14px] text-default font-semibold">
+                  Recommendation from the latest submitted TQF 5
+                </p>
+              </div>
+              <div className="bg-gray-100 p-3 flex w-auto rounded-md break-words">
+                {oldRecommendation?.reviewingSLO?.length ? (
+                  <p className="text-[14px]">
+                    {oldRecommendation.reviewingSLO}
+                  </p>
+                ) : (
+                  <p className="text-[14px] break-words">
+                    No abnormal score data available
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
-          <div className="flex !mr-2 text-default">
-            <Textarea
-              label="Recommendations from the most recent semester of teaching"
-              size="xs"
-              disabled={true}
-              placeholder=""
-              className="w-[1000px]"
-              classNames={{
-                input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 `,
-                label: "text-default acerSwift:max-macair133:!text-b4",
-              }}
-              value={
-                tqf5.oldRecommendation?.find(
-                  ({ curriculum }) => curriculum === selectCurriculum
-                )?.abnormalScoreFactor
-              }
-            />
-          </div>
+
           <div className="flex ml-2 text-default">
             <Textarea
               key={form.key(`list.${curIndex}.abnormalScoreFactor`)}
@@ -470,15 +492,15 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
               placeholder="(optional)"
               className="w-[1000px]"
               classNames={{
-                input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4 `,
+                input: `h-[200px] p-3 acerSwift:max-macair133:!text-b4 `,
                 label: "text-default acerSwift:max-macair133:!text-b4",
               }}
               {...form.getInputProps(`list.${curIndex}.abnormalScoreFactor`)}
             />
           </div>
         </div>
-        <div className="w-full justify-between h-fit  items-top  grid grid-cols-3 pt-5 pb-6  !-mt-3">
-          <div className="flex text-secondary flex-col text-[15px] acerSwift:max-macair133:!text-b3">
+        <div className="w-full justify-between h-fit  items-top  grid grid-cols-2 pt-5 pb-6  !-mt-3">
+          <div className="flex text-secondary flex-col text-[15px] w-[80%] acerSwift:max-macair133:!text-b3">
             <p className="font-semibold">
               การทวนสอบผลสัมฤทธิ์ของนักศึกษา <br /> (ให้อ้างอิงจาก มคอ. 2 และ 3)
             </p>
@@ -486,25 +508,30 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
               Reviewing Student Learning Outcome <br /> (According to TQF 2 and
               TQF 3)
             </p>
+            <div className="mt-4 border rounded-xl p-4 items-center justify-center">
+              <div className="flex gap-2 mb-2">
+                <Icon
+                  IconComponent={IconEdit}
+                  className="size-6 stroke-default"
+                />
+                <p className="text-[14px] text-default font-semibold">
+                  Recommendation from the latest submitted TQF 5
+                </p>
+              </div>
+              <div className="bg-gray-100 p-3 flex rounded-md">
+                {oldRecommendation?.reviewingSLO?.length ? (
+                  <p className="text-[14px]">
+                    {oldRecommendation.reviewingSLO}
+                  </p>
+                ) : (
+                  <p className="text-[14px]">
+                    No reviewing Student Learning Outcome data available
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
-          <div className="flex !mr-2 text-default">
-            <Textarea
-              label="Recommendations from the most recent semester of teaching "
-              size="xs"
-              disabled={true}
-              placeholder=""
-              className="w-[1000px]"
-              classNames={{
-                input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4`,
-                label: "text-default acerSwift:max-macair133:!text-b4",
-              }}
-              value={
-                tqf5.oldRecommendation?.find(
-                  ({ curriculum }) => curriculum === selectCurriculum
-                )?.reviewingSLO
-              }
-            />
-          </div>
+
           <div className="flex !ml-2 text-default">
             <Textarea
               key={form.key(`list.${curIndex}.reviewingSLO`)}
@@ -513,7 +540,7 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
               placeholder="(optional)"
               className="w-[1000px]"
               classNames={{
-                input: `h-[150px] p-3 acerSwift:max-macair133:!text-b4`,
+                input: `h-[200px] p-3 acerSwift:max-macair133:!text-b4`,
                 label: "text-default acerSwift:max-macair133:!text-b4",
               }}
               {...form.getInputProps(`list.${curIndex}.reviewingSLO`)}
