@@ -258,13 +258,13 @@ export const calCloScore = (
           if (0 <= score && score < e.range0) {
             e.score0++;
             cloScores.push({ score: 0, percent: e.percent! });
-          } else if (e.range0 <= score && score <= e.range1) {
+          } else if (e.range0 <= score && score < e.range1) {
             e.score1++;
             cloScores.push({ score: 1, percent: e.percent! });
-          } else if (e.range1 < score && score <= e.range2) {
+          } else if (e.range1 <= score && score < e.range2) {
             e.score2++;
             cloScores.push({ score: 2, percent: e.percent! });
-          } else if (e.range2 < score && score <= e.range3) {
+          } else if (e.range2 <= score && score < e.range3) {
             e.score3++;
             cloScores.push({ score: 3, percent: e.percent! });
           } else {
