@@ -2,6 +2,7 @@ name: project_obe
 
 services:
   frontend:
+    container_name: obe-frontend
     build:
       context: ./
       dockerfile: Dockerfile
