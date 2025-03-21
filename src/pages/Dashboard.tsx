@@ -561,7 +561,11 @@ export default function Dashboard() {
                         </p>
                         <div
                           className="flex gap-3 px-2.5 font-semibold py-1 justify-end items-center"
-                          onClick={(event) => event.stopPropagation()}
+                          onClick={(event) =>
+                            user.role == ROLE.TA
+                              ? undefined
+                              : event.stopPropagation()
+                          }
                         >
                           <p
                             className="tag-tqf rounded-xl !text-b5 acerSwift:max-macair133:!text-b6"
