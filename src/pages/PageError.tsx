@@ -30,11 +30,11 @@ export default function PageError() {
     dispatch(setErrorResponse({}));
     if (localStorage.getItem("token")) {
       navigate(
-        user.role == ROLE.STUDENT
-          ? ROUTE_PATH.STD_DASHBOARD
-          : user.role == ROLE.INSTRUCTOR
+        user.role.includes(ROLE.ADMIN)
+          ? `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
+          : [ROLE.TA, ROLE.INSTRUCTOR].includes(user.role)
           ? ROUTE_PATH.INS_DASHBOARD
-          : `${ROUTE_PATH.ADMIN_DASHBOARD}/${ROUTE_PATH.TQF}`
+          : ROUTE_PATH.STD_DASHBOARD
       );
     } else {
       dispatch(setUser({}));
