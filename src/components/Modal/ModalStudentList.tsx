@@ -98,9 +98,11 @@ export default function ModalStudentList({
   const uploadList = async () => {
     if (result) {
       dispatch(setLoadingOverlay(true));
-      const filterSection = result.sections.filter((sec: any) =>
-        selectSection.includes(sec.sectionNo.toString())
-      );
+      const filterSection = selectSection.length
+        ? result.sections.filter((sec: any) =>
+            selectSection.includes(sec.sectionNo.toString())
+          )
+        : result.sections;
       const res = await uploadStudentList({
         ...result,
         sections: filterSection,
