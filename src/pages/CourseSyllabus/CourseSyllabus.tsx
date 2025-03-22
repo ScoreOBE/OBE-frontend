@@ -4,7 +4,7 @@ import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { setShowSidebar, setShowNavbar, setDashboard } from "@/store/config";
 import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
-import OBEDocument from "../assets/document.pdf"
+import OBEDocument from "@/assets/document.pdf";
 import { setDataTQF3, setPloTQF3, setSelectTqf3Topic } from "@/store/tqf3";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { IModelSection } from "@/models/ModelCourse";
