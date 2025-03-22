@@ -135,7 +135,6 @@ export default function MapPLO({ ploName = "" }: Props) {
     if (selectedCurriculum) {
       const payloadCourse = {
         ...new CourseManagementSearchDTO(),
-        isPloMapping: true,
         limit: 20,
         curriculum: [selectedCurriculum],
       };
@@ -353,7 +352,6 @@ export default function MapPLO({ ploName = "" }: Props) {
     setCourseManagement([]);
     let payloadCourse: any = {
       ...new CourseManagementSearchDTO(),
-      isPloMapping: true,
       limit: 20,
       curriculum: [selectedCurriculum],
     };
