@@ -23,6 +23,7 @@ export default function PloBarChart({
       style={{
         "--chart-cursor-fill": "#EAEBEB",
       }}
+      xAxisProps={{ domain: [0, 4] }}
       className="w-full "
       barLabelColor={"red"}
       barChartProps={{
