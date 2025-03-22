@@ -311,7 +311,7 @@ export default function Part6TQF3({ setForm = () => {} }: Props) {
                           <span className="text-red-500">*</span>
                         </span>
                         <span className="font-bold ">{topics[index].en}</span>
-                        <br />
+                       
                         <span className="error-text">
                           {form.getInputProps(`data.${index}.detail`).error}
                         </span>

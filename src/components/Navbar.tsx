@@ -242,7 +242,7 @@ export default function Navbar() {
               </span>
             </div>
             <div className="sm:py-5 flex items-center gap-5 justify-end h-full">
-              {showButtonLogin && (
+              {showButtonLogin && !isMobile && (
                 <div className="flex items-center gap-3">
                   {ButtonLogin()}
                   {ButtonCourseSyllabus()}

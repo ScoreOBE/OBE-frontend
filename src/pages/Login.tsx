@@ -3,6 +3,7 @@ import cmulogoLogin from "@/assets/image/cmuLogoLoginWhite.png";
 import loginImage from "@/assets/image/loginPage.png";
 import { Accordion, Alert, Button, Tabs, Title } from "@mantine/core";
 import { Image } from "@mantine/core";
+import OBEDocument from "../assets/document.pdf";
 import ModalTermsOfService from "@/components/Modal/ModalTermOfService";
 import scoreobe from "@/assets/image/scoreOBElogobold.png";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -1145,9 +1146,14 @@ export default function Login() {
                   </h3>
                   <ul className="space-y-2 sm:text-[14px] iphone:max-sm:text-[12px]">
                     <li>
-                      <a href="#">Documentation</a>
+                      <a
+                        href={OBEDocument}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Documentation
+                      </a>
                     </li>
-
                     <li>
                       <a href="https://www.cmu.ac.th/th/privacy">
                         Privacy Policy

@@ -4,6 +4,7 @@ import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import cpeLogoRed from "@/assets/image/cpeLogoRed.png";
 import { setShowSidebar, setShowNavbar, setDashboard } from "@/store/config";
 import { COURSE_TYPE, ROLE } from "@/helpers/constants/enum";
+import OBEDocument from "../assets/document.pdf"
 import { setDataTQF3, setPloTQF3, setSelectTqf3Topic } from "@/store/tqf3";
 import { getOneCourseManagement } from "@/services/courseManagement/courseManagement.service";
 import { IModelSection } from "@/models/ModelCourse";
@@ -301,9 +302,15 @@ export default function CourseSyllabus() {
                         Quick Links
                       </h3>
                       <ul className="space-y-2 sm:text-[14px] iphone:max-sm:text-[12px]">
-                        <li>
-                          <a href="#">Documentation</a>
-                        </li>
+                      <li>
+                      <a
+                        href={OBEDocument}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Documentation
+                      </a>
+                    </li>
 
                         <li>
                           <a href="https://www.cmu.ac.th/th/privacy">
