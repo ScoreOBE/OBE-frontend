@@ -155,7 +155,7 @@ export default function Sidebar() {
   const onClickLeaveCourse = async (id: string) => {
     const res = await leaveCourse(id);
     if (res) {
-      dispatch(removeCourse(res.id));
+      dispatch(removeCourse(id));
       closeMainPopup();
       showNotifications(
         NOTI_TYPE.SUCCESS,

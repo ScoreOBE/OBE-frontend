@@ -134,7 +134,7 @@ export default function Dashboard() {
   const onClickDeleteCourse = async (id: string) => {
     const res = await deleteCourse(id);
     if (res) {
-      dispatch(removeCourse(res.id));
+      dispatch(removeCourse(id));
       setOpenDelPopup(false);
       showNotifications(
         NOTI_TYPE.SUCCESS,
