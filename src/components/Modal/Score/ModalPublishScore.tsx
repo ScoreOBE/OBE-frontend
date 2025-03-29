@@ -166,8 +166,8 @@ export default function ModalPublishScore({
               }
               classNames={{
                 icon: "size-6",
-                root: "bg-blue-50 border border-blue-100 rounded-xl",
                 title: "text-blue-800",
+                root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
               }}
               className="mb-5"
             ></Alert>
@@ -410,7 +410,7 @@ export default function ModalPublishScore({
             Select section to publish
           </p>
           {/* Chip */}
-          <div className="max-h-[150px] h-full overflow-y-auto">
+          <div className="ipad11:max-acerSwift:max-h-[130px] acerSwift:max-h-[150px] h-full overflow-y-auto">
             {course?.sections.length! > 1 && (
               <Chip
                 className="mb-3"
@@ -481,12 +481,10 @@ export default function ModalPublishScore({
                   </span>
                 </p>
               }
-              icon={
-                <Icon IconComponent={IconInfo2} className="text-blue-500" />
-              }
+              icon={<Icon IconComponent={IconInfo2} />}
               classNames={{
                 icon: "size-6",
-                root: "bg-blue-50 border border-blue-100 rounded-xl",
+                root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
               }}
             ></Alert>
             <Alert
@@ -542,5 +540,11 @@ export default function ModalPublishScore({
         </div>
       </Modal>
     </>
+    // for orange
+    //  classNames={{
+    //             icon: "size-6",
+    //             body: " flex justify-center",
+    //             root: "border border-amber-200 rounded-xl",
+    //           }}
   );
 }

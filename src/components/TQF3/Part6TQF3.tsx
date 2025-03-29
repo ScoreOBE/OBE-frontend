@@ -233,6 +233,14 @@ export default function Part6TQF3({ setForm = () => {} }: Props) {
                   className="size-6"
                 />
               }
+              className="border border-red-100 rounded-xl bg-red-50"
+              classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                icon: "size-6",
+                body: " flex justify-center",
+                root: "p-4",
+                wrapper: "items-start",
+              }}
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b4  text-[#808080]">Topic Description</p>
@@ -311,7 +319,7 @@ export default function Part6TQF3({ setForm = () => {} }: Props) {
                           <span className="text-red-500">*</span>
                         </span>
                         <span className="font-bold ">{topics[index].en}</span>
-                       
+
                         <span className="error-text">
                           {form.getInputProps(`data.${index}.detail`).error}
                         </span>
@@ -480,7 +488,10 @@ export default function Part6TQF3({ setForm = () => {} }: Props) {
                       </div>
                       <div className="flex flex-col text-default w-full font-medium text-b3 acerSwift:max-macair133:!text-b4 leading-6">
                         {topic.detail.map((detail) => (
-                          <div key={detail} className="py-4 px-6 border-b last:border-none">
+                          <div
+                            key={detail}
+                            className="py-4 px-6 border-b last:border-none"
+                          >
                             <p>{detail}</p>
                             {detail == "อื่นๆ (Other)" && (
                               <p className="pl-4">{topic.other}</p>

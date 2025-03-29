@@ -591,6 +591,14 @@ export default function Roster() {
                   className="size-6"
                 />
               }
+              className="border border-red-100 rounded-xl bg-red-50"
+              classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                icon: "size-6",
+                body: " flex justify-center",
+                root: "p-4",
+                wrapper: "items-start",
+              }}
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b4  text-[#808080]">Section</p>
@@ -646,6 +654,7 @@ export default function Roster() {
             color="blue"
             classNames={{
               body: " flex justify-center",
+              root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
             }}
             title={
               <div className="flex items-center gap-2">

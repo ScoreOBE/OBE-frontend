@@ -56,9 +56,13 @@ export default function ModalErrorUploadFile({
               radius="md"
               variant="light"
               color="red"
-              className="mb-3"
+              className="mb-3 border border-red-100 rounded-xl bg-red-50"
               classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                icon: "size-6",
+                root: "p-4",
                 body: " flex justify-center",
+                wrapper: "items-start",
               }}
               title={
                 <div className="flex items-center  gap-2">
@@ -84,8 +88,13 @@ export default function ModalErrorUploadFile({
                   radius="md"
                   variant="light"
                   color="red"
+                  className="border border-red-100 rounded-xl bg-red-50"
                   classNames={{
+                    title: "acerSwift:max-macair133:!text-b3",
+                    icon: "size-6",
                     body: " flex justify-center",
+                    root: "p-4",
+                    wrapper: "items-start",
                   }}
                   title={
                     <div className="flex items-center  gap-2">
@@ -126,8 +135,13 @@ export default function ModalErrorUploadFile({
                   radius="md"
                   variant="light"
                   color="red"
+                  className="border border-red-100 rounded-xl bg-red-50"
                   classNames={{
+                    title: "acerSwift:max-macair133:!text-b3",
+                    icon: "size-6",
                     body: " flex justify-center",
+                    root: "p-4",
+                    wrapper: "items-start",
                   }}
                   title={
                     <div className="flex items-center  gap-2">
@@ -168,8 +182,13 @@ export default function ModalErrorUploadFile({
                   radius="md"
                   variant="light"
                   color="red"
+                  className="border border-red-100 rounded-xl bg-red-50"
                   classNames={{
+                    title: "acerSwift:max-macair133:!text-b3",
+                    icon: "size-6",
                     body: " flex justify-center",
+                    root: "p-4",
+                    wrapper: "items-start",
                   }}
                   title={
                     <div className="flex items-center  gap-2">
@@ -194,8 +213,13 @@ export default function ModalErrorUploadFile({
                     radius="md"
                     variant="light"
                     color="red"
+                    className="border border-red-100 rounded-xl bg-red-50"
                     classNames={{
+                      title: "acerSwift:max-macair133:!text-b3",
+                      icon: "size-6",
                       body: " flex justify-center",
+                      root: "p-4",
+                      wrapper: "items-start",
                     }}
                     title={
                       <div className="flex items-center  gap-2">
@@ -227,8 +251,13 @@ export default function ModalErrorUploadFile({
                     radius="md"
                     variant="light"
                     color="red"
+                    className="border border-red-100 rounded-xl bg-red-50"
                     classNames={{
+                      title: "acerSwift:max-macair133:!text-b3",
+                      icon: "size-6",
                       body: " flex justify-center",
+                      root: "p-4",
+                      wrapper: "items-start",
                     }}
                     title={
                       <div className="flex items-center  gap-2">
@@ -258,8 +287,13 @@ export default function ModalErrorUploadFile({
                   radius="md"
                   variant="light"
                   color="red"
+                  className="border border-red-100 rounded-xl bg-red-50"
                   classNames={{
+                    title: "acerSwift:max-macair133:!text-b3",
+                    icon: "size-6",
                     body: " flex justify-center",
+                    root: "p-4",
+                    wrapper: "items-start",
                   }}
                   title={
                     <div className="flex items-center  gap-2">

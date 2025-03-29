@@ -171,6 +171,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             icon: "size-6 ",
             body: " flex ml-1 justify-center",
             title: "-mb-1 text-[15px]",
+            root: "border border-amber-100 rounded-xl",
           }}
           title={
             isEN === "EN" ? (
@@ -208,6 +209,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             icon: "size-6",
             body: " flex ml-1 justify-center",
             title: "-mb-1 text-[15px]",
+            root: "border border-indigo-100 rounded-xl",
           }}
           title={
             isEN === "EN" ? (
@@ -368,7 +370,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
           radius="md"
           icon={
             <Icon
-              className=" size-8 iphone:max-sm:size-6 stroke-[1.5px]"
+              className=" size-8 iphone:max-sm:size-6 stroke-[1.5px] text-blue-500"
               IconComponent={IconAPI}
             />
           }
@@ -379,6 +381,7 @@ export default function ModalTermsOfService({ opened, onClose }: Props) {
             icon: "size-6",
             body: " flex ml-1 justify-center",
             title: "-mb-1 text-[15px]",
+            root: "bg-blue-50 border border-blue-100 rounded-xl",
           }}
           title={
             isEN === "EN" ? (

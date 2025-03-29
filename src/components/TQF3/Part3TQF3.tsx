@@ -137,6 +137,14 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
                   className="size-6"
                 />
               }
+              className="border border-red-100 rounded-xl bg-red-50"
+              classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                icon: "size-6",
+                body: " flex justify-center",
+                root: "p-4",
+                wrapper: "items-start",
+              }}
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b4  text-[#808080]">Evaluation Method</p>
@@ -212,6 +220,7 @@ export default function Part3TQF3({ setForm = () => {} }: Props) {
                     classNames={{
                       icon: "size-6",
                       body: " flex justify-center",
+                      root: "border border-green-200 rounded-xl ",
                     }}
                     className="w-full"
                     title={

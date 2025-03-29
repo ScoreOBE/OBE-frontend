@@ -227,6 +227,7 @@ export default function Part4TQF3({
             color="blue"
             classNames={{
               body: " flex justify-center",
+              root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
             }}
             title={
               <div className="flex items-center  gap-2">
@@ -294,6 +295,7 @@ export default function Part4TQF3({
                       classNames={{
                         icon: "size-6",
                         body: " flex justify-center",
+                        root: "border border-green-200 rounded-xl ",
                       }}
                       className="w-full mb-1"
                       title={

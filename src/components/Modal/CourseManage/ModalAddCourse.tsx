@@ -565,12 +565,15 @@ export default function ModalAddCourse({
               body: " flex  justify-center",
               label:
                 "sm:text-b3  acerSwift:max-macair133:text-b4 ipad11:text-b2",
+              root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
             }}
             title={
-              "Please fill only the section number for the section you own."
+              <div className="text-blue-700">
+                Please fill only the section number for the section you own.
+              </div>
             }
           ></Alert>
-          <div className="flex flex-col max-h-[430px] mt-2 w-full h-fit overflow-hidden bg-white mb-5 acerSwift:max-macair133:mb-3 rounded-md acerSwift:max-macair133:max-h-[240px]">
+          <div className="flex flex-col max-h-[330px] mt-2 w-full h-fit overflow-hidden bg-white mb-5 acerSwift:max-macair133:mb-3 rounded-md ">
             <div className="flex flex-col max-h-full overflow-auto gap-3 acerSwift:max-macair133:gap-2">
               <TextInput
                 classNames={{
@@ -822,9 +825,10 @@ export default function ModalAddCourse({
                   body: " flex justify-center",
                   label:
                     "sm:text-b3 acerSwift:max-macair133:text-b4 ipad11:text-b2 ",
+                  root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
                 }}
                 title={
-                  <p>
+                  <p className=" text-blue-700">
                     Co-instructors can only access and import scores for your
                     selected sections and manage the course TQF documents.
                   </p>

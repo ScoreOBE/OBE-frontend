@@ -289,6 +289,7 @@ export default function Part7TQF3({
                           classNames={{
                             icon: "size-6",
                             body: "flex justify-center",
+                            root: "border border-green-200 rounded-xl ",
                           }}
                           className="w-full"
                           title={

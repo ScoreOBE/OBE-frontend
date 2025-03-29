@@ -186,6 +186,14 @@ export default function Section() {
                   className="size-6 acerSwift:max-macair133:!size-5"
                 />
               }
+              className="border border-red-100 rounded-xl bg-red-50"
+              classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                icon: "size-6",
+                body: " flex justify-center",
+                root: "p-4",
+                wrapper: "items-start",
+              }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">

@@ -425,6 +425,7 @@ export default function TQF5() {
               classNames={{
                 icon: "size-6",
                 body: " flex justify-center",
+                root: "border border-amber-200 rounded-xl",
               }}
               title={
                 <p>

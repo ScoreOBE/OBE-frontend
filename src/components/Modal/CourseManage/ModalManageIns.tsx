@@ -292,6 +292,7 @@ export default function ModalManageIns({
                   classNames={{
                     icon: "size-6",
                     body: "flex justify-center",
+                    root: "border border-amber-200 rounded-xl",
                   }}
                   title={
                     <p className=" acerSwift:max-macair133:!text-b3">
@@ -319,9 +320,10 @@ export default function ModalManageIns({
                 classNames={{
                   icon: "size-6",
                   body: " flex justify-center",
+                  root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
                 }}
                 title={
-                  <p className=" acerSwift:max-macair133:!text-b3">
+                  <p className=" acerSwift:max-macair133:!text-b3  text-blue-700">
                     You don't have permission to manage co-instructors in this
                     course. <br /> Please contact to the instructor for manage.
                   </p>
@@ -344,10 +346,11 @@ export default function ModalManageIns({
                 classNames={{
                   icon: "size-6",
                   body: " flex justify-center",
+                  root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
                 }}
                 className="mb-4"
                 title={
-                  <p className="acerSwift:max-macair133:!text-b3">
+                  <p className="acerSwift:max-macair133:!text-b3 text-blue-700">
                     Co-instructors can only access and import scores for your
                     selected sections and manage the course TQF documents.
                   </p>

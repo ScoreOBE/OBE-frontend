@@ -502,8 +502,13 @@ export default function ModalAddSection({
               classNames={{
                 icon: "size-6",
                 body: " flex justify-center",
+                root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
               }}
-              title={<p>Each section can only have one instructor.</p>}
+              title={
+                <p className="text-blue-700">
+                  Each section can only have one instructor.
+                </p>
+              }
             ></Alert>
             <div className="flex flex-col max-h-[380px] h-fit w-full mt-1 mb-5  p-[2px]    overflow-y-auto  ">
               <div className="flex flex-col font-medium text-b2 acerSwift:max-macair133:text-b3 gap-5">
@@ -672,8 +677,9 @@ export default function ModalAddSection({
                 color="blue"
                 className="mb-1"
                 classNames={{
-                  icon: "size-6",
+                  icon: "size-6 text-blue-500",
                   body: " flex justify-center",
+                  root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
                 }}
                 title={
                   <p className="acerSwift:max-macair133:text-b3 acerSwift:max-macair133:mt-0.5">

@@ -130,8 +130,6 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
     if (selectSemester) {
       const active = yearList.find((semester) => semester.isActive);
 
-    
-
       let newSemester = active!.semester + 3;
       let newYear = active!.year;
       // Adjust the year if the semester exceeds 3
@@ -188,6 +186,7 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
             color="blue"
             classNames={{
               body: " flex justify-center",
+              root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
             }}
             title={
               <div className="flex items-center  gap-2">
@@ -313,10 +312,14 @@ export default function ModalManageSemester({ opened, onClose }: Props) {
           variant="light"
           color="red"
           title={`After you activate semester ${activateSemester?.semester}/${activateSemester?.year}, semester ${academicYear?.semester}/${academicYear?.year} cannot be reactivated. This means that instructor can't make any changes to them courses for that semester.  `}
-          icon={
-            <Icon IconComponent={IconExclamationCircle} className="size-6" />
-          }
-          className="mb-5"
+          icon={<Icon IconComponent={IconExclamationCircle} />}
+          className="mb-5 border border-red-100 rounded-xl bg-red-50"
+          classNames={{
+            title: "acerSwift:max-macair133:!text-b3",
+            icon: "size-6",
+            root: "p-4",
+            wrapper: "items-start",
+          }}
         ></Alert>
         <TextInput
           label={`To confirm, type "semester${activateSemester?.semester}year${activateSemester?.year}" in the box below`}
