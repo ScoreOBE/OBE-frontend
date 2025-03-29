@@ -525,15 +525,15 @@ export default function OneAssignment() {
                   boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
                 }}
               >
-                <Table stickyHeader striped>
+                <Table stickyHeader striped className="w-full">
                   <Table.Thead>
-                    <Table.Tr className="bg-[#dfebff]">
-                      <Table.Th className="acerSwift:max-macair133:!text-b3">
+                    <Table.Tr className="bg-[#f0f7ff] border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+                      <Table.Th className="acerSwift:max-macair133:!text-b3 py-4 px-4 font-semibold w-[100px] min-w-[100px]">
                         Section
                       </Table.Th>
-                      <Table.Th>
+                      <Table.Th className="py-4 px-4">
                         <div
-                          className="flex items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
+                          className="flex items-center w-[120px] min-w-[120px] gap-2 cursor-pointer acerSwift:max-macair133:!text-b3 transition-colors duration-200"
                           onClick={() => onClickSort("studentId")}
                         >
                           <p>Student ID</p>
@@ -546,12 +546,12 @@ export default function OneAssignment() {
                           )}
                         </div>
                       </Table.Th>
-                      <Table.Th className="acerSwift:max-macair133:!text-b3">
+                      <Table.Th className="acerSwift:max-macair133:!text-b3 py-4 px-4 font-semibold w-[220px] min-w-[220px] max-w-[250px]">
                         Name
                       </Table.Th>
-                      <Table.Th>
+                      <Table.Th className="py-4 px-4">
                         <div
-                          className="flex items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3"
+                          className="flex items-center justify-end text-end  gap-2 w-[100px] min-w-[100px]  cursor-pointer acerSwift:max-macair133:!text-b3 transition-colors duration-200"
                           onClick={() => onClickSort("score")}
                         >
                           <p>Score</p>
@@ -565,16 +565,18 @@ export default function OneAssignment() {
                         </div>
                       </Table.Th>
                       {questions?.map((item, index) => (
-                        <Table.Th key={index}>
+                        <Table.Th key={index} className="py-4 w-[170px]  min-w-[170px] max-w-[200px] px-4">
                           <div
-                            className="flex justify-end items-center gap-2 cursor-pointer acerSwift:max-macair133:!text-b3  pr-6"
+                            className="flex justify-end items-center text-end  gap-2 cursor-pointer acerSwift:max-macair133:!text-b3 pr-6 transition-colors duration-200"
                             onClick={() => onClickSort(item.name)}
                           >
                             <Tooltip
                               className="text-b4 acerSwift:max-macair133:text-b5"
                               label={item.desc}
                             >
-                              <p>{item.name}</p>
+                              <p>
+                                {item.name} ({item.fullScore})
+                              </p>
                             </Tooltip>
                             {(sort as any)[item.name] === null ? (
                               <IconNotSort className="size-4" />
@@ -588,7 +590,7 @@ export default function OneAssignment() {
                       ))}
                     </Table.Tr>
                   </Table.Thead>
-                  <Table.Tbody className="text-default">
+                  <Table.Tbody className="text-default divide-y divide-gray-100">
                     {studentFilter
                       .slice(startEndPage.start - 1, startEndPage.end)
                       .map((item) => {
@@ -614,20 +616,30 @@ export default function OneAssignment() {
                           <Table.Tr
                             key={studentId}
                             ref={(el) => studentRefs.current.set(studentId, el)}
-                            className="hover:bg-[#F3F3F3] text-b3 acerSwift:max-macair133:!text-b4 font-normal py-[14px] w-full"
+                            className="hover:bg-[#F8F9FF] text-b3 acerSwift:max-macair133:!text-b4 font-normal transition-colors duration-150"
                           >
-                            <Table.Td>{item.sectionNo}</Table.Td>
-                            <Table.Td>{studentId}</Table.Td>
-                            <Table.Td>{getUserName(item.student, 3)}</Table.Td>
-                            <Table.Td className="w-[5%]">
+                            <Table.Td className="py-4 px-4 w-[100px] min-w-[100px]">
+                              {item.sectionNo}
+                            </Table.Td>
+                            <Table.Td className="py-4 px-4 w-[120px] min-w-[120px]">
+                              {studentId}
+                            </Table.Td>
+                            <Table.Td className="py-4 px-4 w-[220px] min-w-[220px] max-w-[250px]">
+                              {getUserName(item.student, 3)}
+                            </Table.Td>
+                            <Table.Td className="w-[100px] min-w-[100px] py-4 px-4">
                               <div className="flex gap-3 justify-end items-center">
-                                <p>{item.sumScore?.toFixed(2)}</p>
+                                <p className="font-medium">
+                                  {item.sumScore?.toFixed(2)}
+                                </p>
                                 {activeTerm && (
                                   <div
-                                    className="hover:bg-[#e9e9e9] p-1 rounded-lg mt-0.5 "
+                                    className="hover:bg-[#e9e9e9] p-1.5 rounded-lg transition-colors duration-200"
                                     onClick={() => {
                                       setEditScore({
-                                        section: parseInt(item.sectionNo),
+                                        section: Number.parseInt(
+                                          item.sectionNo
+                                        ),
                                         student: item.student,
                                         questions: item.scores || [],
                                       });
@@ -643,7 +655,10 @@ export default function OneAssignment() {
                               </div>
                             </Table.Td>
                             {questions?.map((ques, index) => (
-                              <Table.Td key={index} className="text-end pr-9">
+                              <Table.Td
+                                key={index}
+                                className="text-end pr-9 py-4 w-[150px]   min-w-[150px] max-w-[200px] px-4"
+                              >
                                 {item[ques.name] == undefined ||
                                 item[ques.name] < 0
                                   ? "-"
