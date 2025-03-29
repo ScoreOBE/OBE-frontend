@@ -32,6 +32,7 @@ import { uploadScore } from "@/services/score/score.service";
 import { getOneCourse } from "@/services/course/course.service";
 import { editCourse } from "@/store/course";
 import scoreOBETemplate from "@/assets/image/ScoreOBETemplate.png";
+import ModalPublishScore from "./ModalPublishScore";
 
 type Props = {
   opened: boolean;
@@ -43,10 +44,12 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
   const [openModalStudentList, setOpenModalStudentList] = useState(false);
   const [openModalTemplateGuide, setOpenModalTemplateGuide] = useState(false);
   const [openModalUploadError, setOpenModalUploadError] = useState(false);
+  const [openPublishScoreModal, setOpenPublishScoreModal] = useState(false);
   const [openModalWarningStudentList, setOpenModalWarningStudentList] =
     useState(false);
   const [file, setFile] = useState<FileWithPath>();
   const [result, setResult] = useState<any>();
+  const [dataAssignmentName, setAssignmentName] = useState();
   const [errorStudentId, setErrorStudentId] = useState<
     { name: string; cell: string[] }[]
   >([]);
@@ -115,6 +118,16 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
           }
         });
       });
+      const asData = result.sections.flatMap(
+        (sec: any) => sec.assignments?.map((asName: any) => asName.name) || []
+      );
+
+      // Remove duplicates
+      const uniqueAsData = asData.filter(
+        (value: any, index: any, self: any) => self.indexOf(value) === index
+      );
+      setAssignmentName(uniqueAsData);
+
       if (notExistStudent.length) {
         setWarningStudentList(notExistStudent);
         setOpenModalWarningStudentList(true);
@@ -142,9 +155,9 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
         }
         setFile(undefined);
         setResult(undefined);
+        setOpenPublishScoreModal(true);
       }
       dispatch(setLoadingOverlay(false));
-      onClose();
     } else {
       showNotifications(
         NOTI_TYPE.ERROR,
@@ -156,6 +169,16 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
 
   return (
     <>
+      <ModalPublishScore
+        opened={openPublishScoreModal}
+        onClose={() => {
+          setOpenPublishScoreModal(false);
+          onClose();
+        }}
+        courseData={data}
+        data={dataAssignmentName}
+        isUploadScore={true}
+      />
       <ModalTemplateGuide
         opened={openModalTemplateGuide}
         onClose={() => setOpenModalTemplateGuide(false)}

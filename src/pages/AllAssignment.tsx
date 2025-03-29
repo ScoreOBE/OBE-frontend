@@ -56,6 +56,7 @@ import MainPopup from "@/components/Popup/MainPopup";
 import { IModelAssignment } from "@/models/ModelCourse";
 import ModalStudentList from "@/components/Modal/ModalStudentList";
 import ModalUploadScore from "@/components/Modal/Score/ModalUploadScore";
+import ModalPublishScore from "@/components/Modal/Score/ModalPublishScore";
 import ChartContainer from "@/components/Chart/ChartContainer";
 import React from "react";
 import ModalExportScore from "@/components/Modal/Score/ModalExportScore";
@@ -101,7 +102,6 @@ export default function AllAssignment() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [openPublishScoreModal, setOpenPublishScoreModal] = useState(false);
-  const [openSelectSecModal, setOpenSelectSecModal] = useState(false);
   const [isPublishAll, setIsPublishAll] = useState(false);
   const [editDeleteAssignment, setEditDeleteAssignment] = useState("");
   const [editName, setEditName] = useState("");
@@ -172,12 +172,6 @@ export default function AllAssignment() {
     }
   }, [sectionRefs.current]);
 
-  const onClosePublishModal = () => {
-    setOpenPublishScoreModal(false);
-    setOpenSelectSecModal(false);
-    form.reset();
-  };
-
   const onClickPublishScore = () => {
     form.setFieldValue("isPublish", true);
     if (isPublishAll) {
@@ -216,7 +210,6 @@ export default function AllAssignment() {
         }`
       );
       setOpenPublishScoreModal(false);
-      setOpenSelectSecModal(false);
       form.reset();
     }
     dispatch(setLoadingOverlay(false));
@@ -319,289 +312,13 @@ export default function AllAssignment() {
           }}
         />
       )}
-      {/* Select assignment to publish */}
-      <Modal
+
+      {/* Publish Score */}
+      <ModalPublishScore
         opened={openPublishScoreModal}
-        closeOnClickOutside={false}
-        size="35vw"
-        title={
-          <div className="flex flex-col gap-2 acerSwift:max-macair133:text-h2">
-            <p>Publish score {isPublishAll ? "all" : "each"} sections</p>
-            <p className=" text-b4 acerSwift:max-macair133:text-b5 text-noData">
-              {courseNo} {course?.courseName}
-            </p>
-          </div>
-        }
-        transitionProps={{ transition: "pop" }}
-        centered
-        onClose={onClosePublishModal}
-      >
-        {isPublishAll && (
-          <Alert
-            variant="light"
-            color="blue"
-            title={
-              <p className="acerSwift:max-macair133:text-b4">
-                <span className="font-extrabold underline">All students</span>
-                {` enrolled in this course will be able to see the assignments score you publish.`}
-              </p>
-            }
-            icon={<Icon IconComponent={IconInfo2} />}
-            classNames={{
-              icon: "size-6",
-            }}
-            className="mb-5"
-          ></Alert>
-        )}
-        <div className="mb-6 acerSwift:max-macair133:p-0 rounded-2xl flex flex-col gap-3">
-          {course?.sections.length! > 1 && (
-            <Chip
-              classNames={{
-                label:
-                  "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold ",
-              }}
-              size="md"
-              checked={
-                form.getValues().assignments.length === allAssignments!.length
-              }
-              onChange={() => {
-                if (
-                  form.getValues().assignments.length === allAssignments!.length
-                ) {
-                  form.setFieldValue("assignments", []);
-                } else {
-                  form.setFieldValue("assignments", [
-                    ...allAssignments.map((as) => as.name),
-                  ]);
-                }
-              }}
-            >
-              All Scores
-            </Chip>
-          )}
-          <Chip.Group
-            {...form.getInputProps("assignments")}
-            multiple
-            value={form.getValues().assignments?.map((as) => as)}
-            onChange={(event) => form.setFieldValue("assignments", event)}
-          >
-            <Group>
-              <div className="flex gap-3 flex-wrap">
-                {allAssignments.map((as, index) => (
-                  <Chip
-                    key={index}
-                    classNames={{
-                      root: "h-8 !rounded-[10px] text-center justify-center items-center",
-                      label:
-                        "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold  ",
-                    }}
-                    size="md"
-                    value={as.name}
-                  >
-                    {as.name}
-                  </Chip>
-                ))}
-              </div>
-            </Group>
-          </Chip.Group>
-        </div>
-
-        <div className="flex gap-2 justify-end w-full">
-          <Button onClick={onClosePublishModal} variant="subtle">
-            Cancel
-          </Button>
-          {!isPublishAll ? (
-            <Button
-              rightSection={
-                <Icon
-                  IconComponent={IconArrowRight}
-                  className="size-5 stroke-2"
-                />
-              }
-              disabled={!form.getValues().assignments.length}
-              onClick={() => {
-                setOpenPublishScoreModal(false);
-                setOpenSelectSecModal(true);
-              }}
-            >
-              Next
-            </Button>
-          ) : (
-            <Button
-              onClick={onClickPublishScore}
-              disabled={!form.getValues().assignments.length}
-            >
-              Publish
-            </Button>
-          )}
-        </div>
-      </Modal>
-      {/* Select section to publish */}
-      <Modal
-        opened={openSelectSecModal}
-        closeOnClickOutside={false}
-        size="38vw"
-        title={
-          <div className="flex flex-col gap-2">
-            <p>Publish score {isPublishAll ? "all" : "each"} sections</p>
-            <p className=" text-b4 acerSwift:max-macair133:text-b5 text-noData">
-              {courseNo} {course?.courseName}
-            </p>
-          </div>
-        }
-        transitionProps={{ transition: "pop" }}
-        centered
-        onClose={onClosePublishModal}
-      >
-        <Alert
-          variant="light"
-          color="blue"
-          title={
-            <p className="mt-[2px] acerSwift:max-macair133:text-b3">
-              You choose{" "}
-              <span className="acerSwift:max-macair133:text-[#00559E]">
-                {form
-                  .getValues()
-                  .assignments.join(", ")
-                  .replace(/, ([^,]*)$/, "and $1")}{" "}
-              </span>
-              to publish.
-            </p>
-          }
-          icon={<Icon IconComponent={IconInfo2} />}
-          classNames={{ icon: "size-6" }}
-          className="mb-5"
-        ></Alert>
-
-        {(() => {
-          const assignments = form.getValues().assignments;
-          const selectedSectionNumbers = form
-            .getValues()
-            .sections.map((item) => Number(item));
-
-          const missingAssignments = assignments
-            .map((assign) => {
-              const sectionsNotFound = course?.sections
-                ?.filter((sec) =>
-                  selectedSectionNumbers.includes(sec.sectionNo!)
-                )
-                ?.filter(
-                  (sec) =>
-                    !sec.assignments?.some((item) => item.name === assign)
-                )
-                ?.map((sec) => sec.sectionNo);
-
-              return sectionsNotFound?.length
-                ? { assign, sections: sectionsNotFound }
-                : null;
-            })
-            .filter(Boolean);
-
-          return missingAssignments.length > 0 ? (
-            <Alert
-              variant="light"
-              color="#D0820C"
-              title={
-                <p className="font-medium">
-                  <span className="font-extrabold text-[#D0820C] acerSwift:max-macair133:text-b3 acerSwift:max-macair133:font-bold">
-                    The following assignments were not found in the selected
-                    sections:
-                  </span>
-                </p>
-              }
-              icon={<Icon IconComponent={IconExclamationCircle} />}
-              classNames={{ icon: "size-6" }}
-              className="mb-5 -mt-2"
-            >
-              <ul className="list-disc pl-5 acerSwift:max-macair133:text-b3 font-bold text-[#3E3E3E]">
-                {missingAssignments.map(({ assign, sections }: any) => (
-                  <li key={assign}>
-                    <span className="text-[#D0820C]">{assign}</span> not found
-                    in Section
-                    {sections.length > 1 ? "s" : ""} {sections.join(", ")}
-                  </li>
-                ))}
-              </ul>
-            </Alert>
-          ) : null;
-        })()}
-
-        <div className="-mt-1 gap-2 flex flex-col mb-6">
-          <p className="text-b2 acerSwift:max-macair133:text-b3 mb-1 font-semibold text-secondary">
-            Select section to publish
-          </p>
-          {/* Chip */}
-          {course?.sections.length! > 1 && (
-            <Chip
-              classNames={{
-                label:
-                  "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold translate-y-[3px]",
-              }}
-              size="md"
-              checked={
-                form.getValues().sections.length === course?.sections.length
-              }
-              onChange={() => {
-                if (
-                  form.getValues().sections.length === course?.sections.length
-                ) {
-                  form.setFieldValue("sections", []);
-                } else {
-                  const allSec =
-                    course?.sections?.map((sec) => sec.sectionNo!.toString()) ||
-                    [];
-                  form.setFieldValue("sections", allSec);
-                }
-              }}
-            >
-              All Sections
-            </Chip>
-          )}
-          <Chip.Group
-            {...form.getInputProps("sections")}
-            multiple
-            value={form.getValues().sections.map((sec) => sec.toString())}
-            onChange={(event) => {
-              form.setFieldValue("sections", event);
-            }}
-          >
-            <Group className="flex gap-3">
-              {course?.sections.map((sec) => (
-                <Chip
-                  key={sec.id}
-                  classNames={{
-                    root: "h-8 min-w-[114px]  !rounded-[10px] text-center justify-center items-center",
-                    label:
-                      "text-b3 acerSwift:max-macair133:text-b4 text-default font-semibold translate-y-[3px] ",
-                  }}
-                  size="md"
-                  value={sec.sectionNo?.toString()}
-                >
-                  Section {sec.sectionNo}
-                </Chip>
-              ))}
-            </Group>
-          </Chip.Group>
-        </div>
-
-        <div className="flex gap-2 justify-end w-full">
-          <Button
-            onClick={() => {
-              setOpenSelectSecModal(false);
-              setOpenPublishScoreModal(true);
-            }}
-            variant="subtle"
-          >
-            Back
-          </Button>
-          <Button
-            onClick={onClickPublishScore}
-            disabled={!form.getValues().sections.length}
-          >
-            Publish
-          </Button>
-        </div>
-      </Modal>
+        onClose={() => setOpenPublishScoreModal(false)}
+        isPublishAll={isPublishAll}
+      />
       {/* Edit Evaluation Name */}
       <Modal
         opened={openModalEditAssignment}
@@ -644,7 +361,7 @@ export default function AllAssignment() {
         action={onClickDeleteAssignment}
         type="delete"
         labelButtonRight="Delete Scores"
-        title={`Delete' ${editDeleteAssignment}'`}
+        title={`Delete '${editDeleteAssignment}'`}
         message={
           <>
             <Alert
@@ -652,9 +369,8 @@ export default function AllAssignment() {
               color="red"
               title={
                 <p className="acerSwift:max-macair133:!text-b3">
-                  This action cannot be undone. After you delete this
-                  scores, <br /> it will be permanently deleted from this
-                  course.
+                  This action cannot be undone. After you delete this scores,{" "}
+                  <br /> it will be permanently deleted from this course.
                 </p>
               }
               icon={
@@ -681,7 +397,7 @@ export default function AllAssignment() {
             {allAssignments.length !== 0 && !isMobile && (
               <div className="flex flex-row items-center justify-between">
                 <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 font-semibold">
-                Score Items
+                  Score Items
                 </p>
                 <div className="flex flex-wrap justify-end items-center gap-3">
                   {activeTerm ? (
@@ -1106,7 +822,10 @@ export default function AllAssignment() {
                                 activeSection === i ? "active" : ""
                               }`}
                             >
-                              <a href={`#${item.name}`} onClick={() => setActiveSection(i)}>
+                              <a
+                                href={`#${item.name}`}
+                                onClick={() => setActiveSection(i)}
+                              >
                                 <p
                                   className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-b3 acerSwift:max-macair133:!text-b4 ${
                                     activeSection === i
@@ -1225,8 +944,7 @@ export default function AllAssignment() {
                     No Score
                   </p>{" "}
                   <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                    It seems like no score have been added to this course
-                    yet.
+                    It seems like no score have been added to this course yet.
                   </p>{" "}
                   {activeTerm && <div className="mt-3">{uploadButton()}</div>}
                 </div>

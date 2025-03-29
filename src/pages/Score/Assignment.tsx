@@ -235,7 +235,7 @@ export default function Assignment() {
         action={onClickDeleteAssignment}
         type="delete"
         labelButtonRight="Delete Score"
-        title={`Delete' ${editDeleteAssignment}'`}
+        title={`Delete '${editDeleteAssignment}'`}
         message={
           <>
             <Alert
@@ -243,9 +243,8 @@ export default function Assignment() {
               color="red"
               title={
                 <p className="acerSwift:max-macair133:!text-b3">
-                  This action cannot be undone. After you delete this
-                  scores, <br /> it will be permanently deleted from this
-                  course.
+                  This action cannot be undone. After you delete this scores,{" "}
+                  <br /> it will be permanently deleted from this course.
                 </p>
               }
               icon={
@@ -563,8 +562,7 @@ export default function Assignment() {
                     No Score
                   </p>{" "}
                   <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
-                    It seems like no score have been added to this course
-                    yet.
+                    It seems like no score have been added to this course yet.
                   </p>{" "}
                 </div>
                 {!isMobile && (
