@@ -128,10 +128,7 @@ export default function ModalChangeAdmin({ opened, onClose }: Props) {
           }
           variant="light"
           color="red"
-          className="mb-2"
-          classNames={{
-            body: " flex justify-center",
-          }}
+          className="mb-4 border border-red-100 rounded-xl bg-red-50"
           title={
             <p>
               Changing the Admin
@@ -142,6 +139,12 @@ export default function ModalChangeAdmin({ opened, onClose }: Props) {
               your current role
             </p>
           }
+          classNames={{
+            title: "acerSwift:max-macair133:!text-b3",
+            body: " flex justify-center",
+            root: "p-4",
+            wrapper: "items-start",
+          }}
         ></Alert>
         <Alert
           radius="md"
@@ -151,6 +154,7 @@ export default function ModalChangeAdmin({ opened, onClose }: Props) {
           className="mb-4"
           classNames={{
             body: " flex justify-center",
+            root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
           }}
           title={
             <p>
@@ -238,7 +242,12 @@ export default function ModalChangeAdmin({ opened, onClose }: Props) {
           color="red"
           title={`After you change your role, it will automatically be updated from Admin to Curriculum Admin.`}
           icon={<Icon IconComponent={IconInfo2} className="size-6" />}
-          className="mb-5"
+          className="mb-5 border border-red-100 rounded-xl bg-red-50"
+          classNames={{
+            title: "acerSwift:max-macair133:!text-b3",
+            root: "p-4",
+            wrapper: "items-start",
+          }}
         ></Alert>
         <div className="px-4 pt-3 pb-4 rounded-md bg-gray-100 mb-4">
           <MultiSelect

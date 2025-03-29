@@ -191,12 +191,14 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
                   Collection, <br /> it will affect all courses that use it.
                 </p>
               }
-              icon={
-                <Icon
-                  IconComponent={IconExclamationCircle}
-                  className="size-6"
-                />
-              }
+              icon={<Icon IconComponent={IconExclamationCircle} />}
+              className="border border-red-100 rounded-xl bg-red-50"
+              classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                icon: "size-6",
+                root: "p-4",
+                wrapper: "items-start",
+              }}
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b4  text-[#808080]">PLO Collection name</p>
@@ -227,7 +229,8 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
             color="blue"
             classNames={{
               body: " flex justify-center gap-1",
-              icon: "size-6",
+              icon: "size-6 mt-1",
+              root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
             }}
             title={
               <div className="flex items-center gap-2">
@@ -236,7 +239,7 @@ export default function ModalPLOManagement({ opened, onClose }: Props) {
               </div>
             }
           >
-            <p className="font-medium  mx-8 ">
+            <p className="font-medium  mx-8 text-blue-500">
               We’ve found {totalPLOs} similar PLO Collections. <br /> Select one
               to duplicate and edit, or skip duplicate.
             </p>

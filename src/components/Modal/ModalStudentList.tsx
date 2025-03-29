@@ -349,7 +349,10 @@ export default function ModalStudentList({
                   variant="light"
                   color="blue"
                   classNames={{
+                    icon: "size-6",
                     body: " flex justify-center",
+                    root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
+                    title: "text-blue-800",
                   }}
                   title={
                     <div className="flex items-center  gap-2">
@@ -422,9 +425,13 @@ export default function ModalStudentList({
                 radius="md"
                 variant="light"
                 color="red"
-                className="mb-3"
+                className="mb-4 border border-red-200 rounded-xl bg-red-50"
                 classNames={{
+                  title: "acerSwift:max-macair133:!text-b3",
                   body: " flex justify-center",
+                  root: "p-4",
+                  wrapper: "items-start",
+                  icon: "mt-1",
                 }}
                 title={
                   <div className="flex items-center gap-2 acerSwift:max-macair133:text-b3">
@@ -523,7 +530,9 @@ export default function ModalStudentList({
               variant="light"
               color="orange"
               classNames={{
+                icon: "size-6",
                 body: " flex justify-center",
+                root: "border border-amber-100 rounded-xl",
               }}
               title={
                 <div className="flex items-center  gap-2">

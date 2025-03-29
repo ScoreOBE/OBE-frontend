@@ -783,6 +783,7 @@ export default function MapPLO({ ploName = "" }: Props) {
             <Alert
               variant="light"
               color="red"
+              className="mb-4 border border-red-100 rounded-xl bg-red-50"
               title={
                 <p>
                   This action cannot be undone. After you delete this PLO,{" "}

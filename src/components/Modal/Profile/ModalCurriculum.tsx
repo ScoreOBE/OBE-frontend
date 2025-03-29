@@ -301,7 +301,13 @@ export default function ModalCurriculum({ opened, onClose }: Props) {
                 </p>
               }
               icon={<Icon IconComponent={IconExclamationCircle} />}
-              classNames={{ icon: "size-6" }}
+              className="border border-red-100 rounded-xl bg-red-50"
+              classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                icon: "size-6",
+                root: "p-4",
+                wrapper: "items-start",
+              }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">

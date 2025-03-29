@@ -136,6 +136,7 @@ export default function ModalManageTopic({
           className="mb-2"
           classNames={{
             body: " flex justify-center",
+            root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
           }}
           title={
             <div className="flex items-center  gap-2">

@@ -162,6 +162,14 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                   className="size-6 acerSwift:max-macair133:size-5"
                 />
               }
+              className="border border-red-100 rounded-xl bg-red-50"
+              classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                icon: "size-6",
+                body: " flex justify-center",
+                root: "p-4",
+                wrapper: "items-start",
+              }}
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b4 acerSwift:max-macair133:!text-b5 text-[#808080]">
@@ -202,6 +210,14 @@ export default function Part2TQF3({ setForm = () => {} }: Props) {
                   className="size-6"
                 />
               }
+              className="border border-red-100 rounded-xl bg-red-50"
+              classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                icon: "size-6",
+                body: " flex justify-center",
+                root: "p-4",
+                wrapper: "items-start",
+              }}
             ></Alert>
             <div className="flex flex-col mt-3 ">
               <p className="text-b4  text-[#808080]">Course Content Topic</p>

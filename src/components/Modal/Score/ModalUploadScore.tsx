@@ -235,8 +235,13 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 radius="md"
                 variant="light"
                 color="red"
+                className="border border-red-100 rounded-xl bg-red-50"
                 classNames={{
-                  body: "flex justify-center",
+                  title: "acerSwift:max-macair133:!text-b3",
+                  icon: "size-6",
+                  body: " flex justify-center",
+                  root: "p-4",
+                  wrapper: "items-start",
                 }}
                 title={
                   <div className="flex items-center gap-2">
@@ -262,6 +267,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 color="rgba(0, 156, 140, 1)"
                 classNames={{
                   body: " flex justify-center",
+                  root: " border border-emerald-200 rounded-xl",
                 }}
                 title={
                   <div className="flex items-center  gap-2">
@@ -363,6 +369,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                 color="blue"
                 classNames={{
                   body: " flex justify-center",
+                  root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
                 }}
                 title={
                   <div className="flex items-center gap-2">
@@ -371,7 +378,7 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
                   </div>
                 }
               >
-                <p className="pl-8 text-default font-medium -mt-1">
+                <p className="pl-8 text-blue-500 font-medium -mt-1">
                   <span className="font-extrabold">
                     Existing score will be replaced
                   </span>
@@ -511,7 +518,8 @@ export default function ModalUploadScore({ opened, onClose, data }: Props) {
               variant="light"
               color="orange"
               classNames={{
-                body: " flex justify-center",
+                body: "flex justify-center",
+                root: "border border-amber-200 rounded-xl",
               }}
               title={
                 <div className="flex items-center  gap-2">

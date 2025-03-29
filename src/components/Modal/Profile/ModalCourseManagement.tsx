@@ -258,7 +258,13 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
                 </p>
               }
               icon={<Icon IconComponent={IconExclamationCircle} />}
-              classNames={{ icon: "size-6" }}
+              className=" border border-red-100 rounded-xl bg-red-50"
+              classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                icon: "size-6",
+                root: "p-4",
+                wrapper: "items-start",
+              }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">
@@ -298,7 +304,13 @@ export default function ModalCourseManagement({ opened, onClose }: Props) {
           the current semester. Data from previous semesters will not be affected. 
           "
               icon={<Icon IconComponent={IconExclamationCircle} />}
-              classNames={{ icon: "size-6" }}
+              className="border border-red-100 rounded-xl bg-red-50"
+              classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                icon: "size-6",
+                root: "p-4",
+                wrapper: "items-start",
+              }}
             ></Alert>
             <div className="flex flex-col mt-3 gap-2">
               <div className="flex flex-col  ">

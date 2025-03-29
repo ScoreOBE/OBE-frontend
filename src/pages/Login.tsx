@@ -276,6 +276,7 @@ export default function Login() {
             className=" iphone:max-sm:flex hidden w-full items-center justify-center mt-6 "
             classNames={{
               body: " flex justify-center",
+              root: "border border-blue-100 rounded-xl text-blue-700",
             }}
             title={
               <div className="flex items-center gap-2 text-[12px]">

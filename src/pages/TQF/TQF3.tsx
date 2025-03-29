@@ -548,7 +548,14 @@ export default function TQF3() {
                 className="size-6 acerSwift:max-macair133:!size-5"
               />
             }
-            classNames={{ title: "acerSwift:max-macair133:!text-b3" }}
+            className="border border-red-100 rounded-xl bg-red-50"
+            classNames={{
+              title: "acerSwift:max-macair133:!text-b3",
+              icon: "size-6",
+              body: " flex justify-center",
+              root: "p-4",
+              wrapper: "items-start",
+            }}
           ></Alert>
           <Alert
             variant="light"
@@ -560,7 +567,10 @@ export default function TQF3() {
                 className="size-6 acerSwift:max-macair133:!size-5"
               />
             }
-            classNames={{ title: "acerSwift:max-macair133:!text-b3" }}
+            classNames={{
+              title: "acerSwift:max-macair133:!text-b3",
+              root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
+            }}
           ></Alert>
           <Select
             rightSectionPointerEvents="all"
@@ -615,8 +625,13 @@ export default function TQF3() {
             radius="md"
             variant="light"
             color="red"
+            className="mb-4 border border-red-100 rounded-xl bg-red-50"
             classNames={{
+              title: "acerSwift:max-macair133:!text-b3",
+              icon: "size-6",
               body: " flex justify-center",
+              root: "p-4",
+              wrapper: "items-start",
             }}
             title={
               <div className="flex items-center gap-2">
@@ -633,7 +648,6 @@ export default function TQF3() {
                 </p>
               </div>
             }
-            className="mb-4"
           >
             <p className="pl-8 text-default -mt-1 leading-6 font-medium ">
               After you save this changes, you will need to update data in TQF 3

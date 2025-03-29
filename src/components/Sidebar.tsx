@@ -279,16 +279,22 @@ export default function Sidebar() {
             <Alert
               variant="light"
               color="red"
-              className="mb-3"
+              className="mb-4 border border-red-200 rounded-xl bg-red-50"
               title={` After you leave ${course?.courseNo} course, you won't have access to Sections, Scores, TQF document and Grades in this course `}
               icon={
                 <Icon
                   IconComponent={IconExclamationCircle}
-                  className="size-6 mt-1 "
+                  className="size-6 "
                 />
               }
-              classNames={{ title: "acerSwift:max-macair133:!text-b3" }}
+              classNames={{
+                title: "acerSwift:max-macair133:!text-b3",
+                root: "p-4",
+                wrapper: "items-start",
+                icon: "mt-1",
+              }}
             ></Alert>
+
             <div className="flex flex-col">
               <p className="text-b4  acerSwift:max-macair133:!text-b5  text-[#808080]">
                 Course no.

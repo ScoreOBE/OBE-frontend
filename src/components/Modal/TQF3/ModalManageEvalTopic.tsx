@@ -218,6 +218,7 @@ export default function ModalManageEvalTopic({
           color="blue"
           classNames={{
             body: " flex justify-center",
+            root: "bg-blue-50 border border-blue-100 rounded-xl text-blue-700",
           }}
           className="mb-2"
           title={
