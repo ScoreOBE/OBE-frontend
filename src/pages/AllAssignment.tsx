@@ -82,7 +82,7 @@ export default function AllAssignment() {
     [];
   course?.sections.forEach((sec) => {
     let sectionGroup = allAssignments.find(
-      (group) => group.topic === sec.topic
+      (group) => group.topic === sec.topic && sec.isActive
     );
     if (!sectionGroup) {
       sectionGroup = { topic: sec.topic, assignments: [] };
