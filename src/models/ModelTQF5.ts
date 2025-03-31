@@ -44,8 +44,6 @@ export interface IModelTQF5Part1 {
   };
   abnormalScoreFactor: string;
   reviewingSLO: string;
-  recommendAbnormalScoreFactor?: string;
-  recommendReviewingSLO?: string;
 }
 export interface IModelTQF5Part2 {
   clo: IModelCLO | string;
