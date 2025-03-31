@@ -81,8 +81,9 @@ export default function AllAssignment() {
   const allAssignments: { topic?: string; assignments: IModelAssignment[] }[] =
     [];
   course?.sections.forEach((sec) => {
+    if (!sec.isActive) return;
     let sectionGroup = allAssignments.find(
-      (group) => group.topic === sec.topic && sec.isActive
+      (group) => group.topic === sec.topic
     );
     if (!sectionGroup) {
       sectionGroup = { topic: sec.topic, assignments: [] };
