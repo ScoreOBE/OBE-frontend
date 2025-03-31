@@ -467,13 +467,13 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                   className="size-6 stroke-default"
                 />
                 <p className="text-[14px] text-default font-semibold">
-                  Recommendation from the latest submitted TQF 5
+                  Description from the latest submitted TQF 5
                 </p>
               </div>
               <div className="bg-gray-100 p-3 flex w-auto rounded-md break-words">
-                {oldRecommendation?.recommendAbnormalScoreFactor?.length ? (
+                {oldRecommendation?.abnormalScoreFactor?.length ? (
                   <p className="text-[14px]">
-                    {oldRecommendation.recommendAbnormalScoreFactor}
+                    {oldRecommendation.abnormalScoreFactor}
                   </p>
                 ) : (
                   <p className="text-[14px] break-words">
@@ -484,32 +484,18 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
             </div>
           </div>
 
-          <div className="flex w-full gap-4 text-default">
+          <div className="flex w-full ml-2 text-default">
             <Textarea
               key={form.key(`list.${curIndex}.abnormalScoreFactor`)}
               label="Description"
               size="xs"
               placeholder="(optional)"
-              className="w-[45%]"
+              className="w-[100%]"
               classNames={{
                 input: `h-[200px] p-3 acerSwift:max-macair133:!text-b4 `,
                 label: "text-default acerSwift:max-macair133:!text-b4",
               }}
               {...form.getInputProps(`list.${curIndex}.abnormalScoreFactor`)}
-            />
-            <Textarea
-              key={form.key(`list.${curIndex}.recommendAbnormalScoreFactor`)}
-              label="Recommendations for improving this semester"
-              size="xs"
-              placeholder="(optional)"
-              className="w-[55%]"
-              classNames={{
-                input: `h-[200px] p-3 acerSwift:max-macair133:!text-b4 `,
-                label: "text-default acerSwift:max-macair133:!text-b4",
-              }}
-              {...form.getInputProps(
-                `list.${curIndex}.recommendAbnormalScoreFactor`
-              )}
             />
           </div>
         </div>
@@ -529,13 +515,13 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                   className="size-6 stroke-default"
                 />
                 <p className="text-[14px] text-default font-semibold">
-                  Recommendation from the latest submitted TQF 5
+                  Description from the latest submitted TQF 5
                 </p>
               </div>
               <div className="bg-gray-100 p-3 flex rounded-md">
-                {oldRecommendation?.recommendReviewingSLO?.length ? (
+                {oldRecommendation?.reviewingSLO?.length ? (
                   <p className="text-[14px]">
-                    {oldRecommendation.recommendReviewingSLO}
+                    {oldRecommendation.reviewingSLO}
                   </p>
                 ) : (
                   <p className="text-[14px]">
@@ -546,30 +532,18 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
             </div>
           </div>
 
-          <div className="flex w-full gap-4 text-default">
+          <div className="flex w-full !ml-2 text-default">
             <Textarea
               key={form.key(`list.${curIndex}.reviewingSLO`)}
               label="Description"
               size="xs"
               placeholder="(optional)"
-              className="w-[45%]"
+              className="w-[100%]"
               classNames={{
                 input: `h-[200px] p-3 acerSwift:max-macair133:!text-b4`,
                 label: "text-default acerSwift:max-macair133:!text-b4",
               }}
               {...form.getInputProps(`list.${curIndex}.reviewingSLO`)}
-            />
-            <Textarea
-              key={form.key(`list.${curIndex}.recommendReviewingSLO`)}
-              label="Recommendations for improving this semester"
-              size="xs"
-              placeholder="(optional)"
-              className="w-[55%]"
-              classNames={{
-                input: `h-[200px] p-3 acerSwift:max-macair133:!text-b4`,
-                label: "text-default acerSwift:max-macair133:!text-b4",
-              }}
-              {...form.getInputProps(`list.${curIndex}.recommendReviewingSLO`)}
             />
           </div>
         </div>

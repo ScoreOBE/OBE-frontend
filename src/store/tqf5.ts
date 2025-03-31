@@ -6,8 +6,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export type OldRecommendation = {
   curriculum: string;
-  recommendAbnormalScoreFactor: string;
-  recommendReviewingSLO: string;
+  abnormalScoreFactor: string;
+  reviewingSLO: string;
 };
 
 export const tqf5Slice = createSlice({
