@@ -78,16 +78,26 @@ export default function AllAssignment() {
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)
   );
-  const allAssignments: IModelAssignment[] = [];
-  const assignmentsMap: Map<string, IModelAssignment> = new Map();
+  const allAssignments: { topic?: string; assignments: IModelAssignment[] }[] =
+    [];
   course?.sections.forEach((sec) => {
+    let sectionGroup = allAssignments.find(
+      (group) => group.topic === sec.topic
+    );
+    if (!sectionGroup) {
+      sectionGroup = { topic: sec.topic, assignments: [] };
+      allAssignments.push(sectionGroup);
+    }
+    const topicAssignmentsSet = new Set(
+      sectionGroup.assignments.map((assign) => assign.name)
+    );
     sec.assignments?.forEach((assign) => {
-      if (assign?.name && !assignmentsMap.has(assign.name)) {
-        assignmentsMap.set(assign.name, assign);
+      if (assign?.name && !topicAssignmentsSet.has(assign.name)) {
+        topicAssignmentsSet.add(assign.name);
+        sectionGroup!.assignments.push(assign);
       }
     });
   });
-  allAssignments.push(...assignmentsMap.values());
   const [tabStates, setTabStates] = useState<TabState>({});
   const handleTabChange = (index: any, newValue: any) => {
     setTabStates((prevStates) => ({
@@ -96,13 +106,16 @@ export default function AllAssignment() {
     }));
   };
   const sectionRefs = useRef(
-    allAssignments!.map(() => React.createRef<HTMLDivElement>())
+    allAssignments!.flatMap(({ assignments }) =>
+      assignments.map(() => React.createRef<HTMLDivElement>())
+    )
   );
   const [activeSection, setActiveSection] = useState<number>(0);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [openPublishScoreModal, setOpenPublishScoreModal] = useState(false);
   const [isPublishAll, setIsPublishAll] = useState(false);
+  const [selectTopic, setSelectTopic] = useState<string>();
   const [editDeleteAssignment, setEditDeleteAssignment] = useState("");
   const [editName, setEditName] = useState("");
   const [openModalEditAssignment, setOpenModalEditAssignment] = useState(false);
@@ -130,8 +143,11 @@ export default function AllAssignment() {
 
   useEffect(() => {
     if (allAssignments.length) {
-      sectionRefs.current = allAssignments.map(
-        (_, i) => sectionRefs.current?.at(i) || React.createRef()
+      let refIndex = 0;
+      sectionRefs.current = allAssignments.flatMap(({ assignments }) =>
+        assignments.map(
+          (_) => sectionRefs.current?.at(refIndex++) || React.createRef()
+        )
       );
     }
   }, [allAssignments]);
@@ -172,19 +188,6 @@ export default function AllAssignment() {
     }
   }, [sectionRefs.current]);
 
-  const onClickPublishScore = () => {
-    form.setFieldValue("isPublish", true);
-    if (isPublishAll) {
-      const allSec = course?.sections?.map((sec) => sec.sectionNo) || [];
-      form.setFieldValue("sections", allSec);
-    }
-    const sectionsToNum = form
-      .getValues()
-      .sections.map((sec: string) => parseInt(sec));
-    form.setFieldValue("sections", sectionsToNum);
-    onClickPublish();
-  };
-
   const onClickPublish = async () => {
     dispatch(setLoadingOverlay(true));
     const res = await publishScore({
@@ -219,6 +222,7 @@ export default function AllAssignment() {
     dispatch(setLoadingOverlay(true));
     const res = await updateAssignmentName({
       course: course?.id,
+      topic: selectTopic,
       oldName: editDeleteAssignment,
       name: editName,
     });
@@ -232,6 +236,7 @@ export default function AllAssignment() {
       setOpenModalEditAssignment(false);
       setEditDeleteAssignment("");
       setEditName("");
+      setSelectTopic(undefined);
     }
     dispatch(setLoadingOverlay(false));
   };
@@ -240,6 +245,7 @@ export default function AllAssignment() {
     dispatch(setLoadingOverlay(true));
     const res = await deleteAssignment({
       course: course?.id,
+      topic: selectTopic,
       name: editDeleteAssignment,
     });
     if (res) {
@@ -251,14 +257,15 @@ export default function AllAssignment() {
       );
       setOpenModalDeleteAssignment(false);
       setEditDeleteAssignment("");
+      setSelectTopic(undefined);
     }
     dispatch(setLoadingOverlay(false));
   };
 
-  const goToAssignment = (name: string) => {
+  const goToAssignment = (name: string, topic: string) => {
     navigate({
       pathname: `${path}/${name}`,
-      search: "?" + params.toString(),
+      search: "?" + `${params.toString()}&topic=${topic}`,
     });
   };
 
@@ -548,303 +555,393 @@ export default function AllAssignment() {
                     </Tabs.List>
                   )}
                   <Tabs.Panel value="assignment">
-                    <div
-                      className="overflow-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
-                      style={{
-                        boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
-                      }}
-                    >
-                      <Table stickyHeader>
-                        <Table.Thead>
-                          <Table.Tr className="bg-[#e5e7f6]">
-                            <Table.Th className="w-20 sm:max-macair133:text-b4 ">
-                              Score name
-                            </Table.Th>
-                            <Table.Th className="w-20 sm:max-macair133:text-b4  text-end pr-14 !pl-0">
-                              Full Scores
-                            </Table.Th>
-                            <Table.Th className=" w-10 sm:max-macair133:text-b4 text-end pr-20 !pl-0">
-                              Mean
-                            </Table.Th>
-                            <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b4">
-                              Created
-                            </Table.Th>
-                            <Table.Th className="w-10 sm:max-macair133:text-b4">
-                              Student(s)
-                            </Table.Th>
-                            {activeTerm && (
-                              <Table.Th className="w-10 !px-4 sm:max-macair133:text-b4 text-center">
-                                Published
-                              </Table.Th>
-                            )}
-                            {activeTerm && (
-                              <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>
-                            )}
-                          </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-b3 acerSwift:max-macair133:text-b4">
-                          {allAssignments.map((assignment, index) => {
-                            const students =
-                              course?.sections
-                                .map((sec) => sec.students!)
-                                .flat() || [];
-                            const totalStudent = students.filter(({ scores }) =>
-                              scores.find(
-                                ({ assignmentName }) =>
-                                  assignmentName == assignment.name
-                              )
-                            ).length;
-                            const totalScore = students.reduce(
-                              (a, b) =>
-                                a +
-                                (b.scores
-                                  .find(
-                                    ({ assignmentName }) =>
-                                      assignmentName == assignment.name
-                                  )
-                                  ?.questions.filter(({ score }) => score >= 0)
-                                  .reduce((sum, { score }) => sum + score, 0) ||
-                                  0),
-                              0
-                            );
-                            return (
-                              <Table.Tr
-                                key={index}
-                                className={`hover:bg-[#F3F3F3] cursor-pointer acerSwift:max-macair133:!text-b4 ${
-                                  index % 2 === 0 && "bg-[#F8F9FA]"
-                                }`}
-                                onClick={() =>
-                                  goToAssignment(`${assignment.name}`)
-                                }
-                              >
-                                <Table.Td>{assignment.name}</Table.Td>
-                                <Table.Td className="text-end pr-14 !pl-0 ">
-                                  {assignment.questions.reduce(
-                                    (sum, { fullScore }) => sum + fullScore,
-                                    0
+                    <div className="overflow-auto w-full h-fit max-h-full flex flex-col gap-4">
+                      {allAssignments.map(({ topic, assignments }) => (
+                        <div
+                          key={topic}
+                          className="w-full h-fit max-h-full flex flex-col gap-2"
+                        >
+                          {topic && <p>{topic}</p>}
+                          <div
+                            className="overflow-auto w-full h-fit max-h-full border flex flex-col rounded-lg border-secondary"
+                            style={{
+                              boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.30)",
+                            }}
+                          >
+                            <Table stickyHeader>
+                              <Table.Thead>
+                                <Table.Tr className="bg-[#e5e7f6]">
+                                  <Table.Th className="w-20 sm:max-macair133:text-b4 ">
+                                    Score name
+                                  </Table.Th>
+                                  <Table.Th className="w-20 sm:max-macair133:text-b4  text-end pr-14 !pl-0">
+                                    Full Scores
+                                  </Table.Th>
+                                  <Table.Th className=" w-10 sm:max-macair133:text-b4 text-end pr-20 !pl-0">
+                                    Mean
+                                  </Table.Th>
+                                  <Table.Th className="!pl-12 w-20 sm:max-macair133:text-b4">
+                                    Created
+                                  </Table.Th>
+                                  <Table.Th className="w-10 sm:max-macair133:text-b4">
+                                    Student(s)
+                                  </Table.Th>
+                                  {activeTerm && (
+                                    <Table.Th className="w-10 !px-4 sm:max-macair133:text-b4 text-center">
+                                      Published
+                                    </Table.Th>
                                   )}
-                                </Table.Td>
-                                <Table.Td className="text-end pr-20 !pl-0">
-                                  {(
-                                    (totalScore || 0) / (totalStudent || 1)
-                                  ).toFixed(2)}
-                                </Table.Td>
-                                <Table.Td className="!pl-12">
-                                  {dateFormatter(assignment.createdAt, 3)}
-                                </Table.Td>
-                                <Table.Td>{totalStudent || 0}</Table.Td>
-                                {activeTerm && (
-                                  <Table.Td className="text-center justify-items-center">
-                                    <div
-                                      className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
-                                      onClick={(event) => {
-                                        event.stopPropagation();
-                                        form.setFieldValue(
-                                          "isPublish",
-                                          !assignment.isPublish
-                                        );
-                                        form.setFieldValue(
-                                          "sections",
-                                          course?.sections.map(
-                                            (sec) => sec.sectionNo
-                                          ) || []
-                                        );
-                                        form.setFieldValue("assignments", [
-                                          assignment.name,
-                                        ]);
-                                        onClickPublish();
-                                      }}
-                                    >
-                                      {assignment.isPublish ? (
-                                        <Icon
-                                          IconComponent={IconPublish}
-                                          className="text-default "
-                                        />
-                                      ) : (
-                                        <Icon
-                                          IconComponent={IconUnPublish}
-                                          className="text-default"
-                                        />
-                                      )}
-                                    </div>
-                                  </Table.Td>
-                                )}
-                                {activeTerm && (
-                                  <Table.Td className="text-center flex items-center justify-center">
-                                    <div
-                                      className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
-                                      onClick={(event) =>
-                                        event.stopPropagation()
+                                  {activeTerm && (
+                                    <Table.Th className="w-5 sm:max-macair133:text-b4"></Table.Th>
+                                  )}
+                                </Table.Tr>
+                              </Table.Thead>
+                              <Table.Tbody className="text-default sm:max-macair133:text-b4 font-medium text-b3 acerSwift:max-macair133:text-b4">
+                                {assignments.map((assignment, index) => {
+                                  const students =
+                                    course?.sections
+                                      .filter((sec) => sec.topic == topic)
+                                      .map((sec) => sec.students!)
+                                      .flat() || [];
+                                  const totalStudent = students.filter(
+                                    ({ scores }) =>
+                                      scores.find(
+                                        ({ assignmentName }) =>
+                                          assignmentName == assignment.name
+                                      )
+                                  ).length;
+                                  const totalScore = students.reduce(
+                                    (a, b) =>
+                                      a +
+                                      (b.scores
+                                        .find(
+                                          ({ assignmentName }) =>
+                                            assignmentName == assignment.name
+                                        )
+                                        ?.questions.filter(
+                                          ({ score }) => score >= 0
+                                        )
+                                        .reduce(
+                                          (sum, { score }) => sum + score,
+                                          0
+                                        ) || 0),
+                                    0
+                                  );
+                                  return (
+                                    <Table.Tr
+                                      key={index}
+                                      className={`hover:bg-[#F3F3F3] cursor-pointer acerSwift:max-macair133:!text-b4 ${
+                                        index % 2 === 0 && "bg-[#F8F9FA]"
+                                      }`}
+                                      onClick={() =>
+                                        goToAssignment(
+                                          `${assignment.name}`,
+                                          topic || ""
+                                        )
                                       }
                                     >
-                                      <Menu
-                                        trigger="click"
-                                        position="bottom-end"
-                                        offset={2}
-                                      >
-                                        <Menu.Target>
-                                          <div>
-                                            <Icon
-                                              IconComponent={IconDots}
-                                              className=" rounded-full w-fit hover:bg-gray-300"
-                                            />
+                                      <Table.Td>{assignment.name}</Table.Td>
+                                      <Table.Td className="text-end pr-14 !pl-0 ">
+                                        {assignment.questions.reduce(
+                                          (sum, { fullScore }) =>
+                                            sum + fullScore,
+                                          0
+                                        )}
+                                      </Table.Td>
+                                      <Table.Td className="text-end pr-20 !pl-0">
+                                        {(
+                                          (totalScore || 0) /
+                                          (totalStudent || 1)
+                                        ).toFixed(2)}
+                                      </Table.Td>
+                                      <Table.Td className="!pl-12">
+                                        {dateFormatter(assignment.createdAt, 3)}
+                                      </Table.Td>
+                                      <Table.Td>{totalStudent || 0}</Table.Td>
+                                      {activeTerm && (
+                                        <Table.Td className="text-center justify-items-center">
+                                          <div
+                                            className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                                            onClick={(event) => {
+                                              event.stopPropagation();
+                                              form.setFieldValue(
+                                                "isPublish",
+                                                !assignment.isPublish
+                                              );
+                                              form.setFieldValue(
+                                                "sections",
+                                                course?.sections.map(
+                                                  (sec) => sec.sectionNo
+                                                ) || []
+                                              );
+                                              form.setFieldValue(
+                                                "assignments",
+                                                [assignment.name]
+                                              );
+                                              onClickPublish();
+                                            }}
+                                          >
+                                            {assignment.isPublish ? (
+                                              <Icon
+                                                IconComponent={IconPublish}
+                                                className="text-default "
+                                              />
+                                            ) : (
+                                              <Icon
+                                                IconComponent={IconUnPublish}
+                                                className="text-default"
+                                              />
+                                            )}
                                           </div>
-                                        </Menu.Target>
-                                        <Menu.Dropdown
-                                          className="rounded-md backdrop-blur-xl bg-white/70 "
-                                          style={{
-                                            boxShadow:
-                                              "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                                          }}
-                                        >
-                                          <Menu.Item
-                                            className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
-                                            onClick={() => {
-                                              setEditDeleteAssignment(
-                                                assignment.name
-                                              );
-                                              setEditName(assignment.name);
-                                              setOpenModalEditAssignment(true);
-                                            }}
+                                        </Table.Td>
+                                      )}
+                                      {activeTerm && (
+                                        <Table.Td className="text-center flex items-center justify-center">
+                                          <div
+                                            className="rounded-full hover:bg-gray-300 p-1 w-fit cursor-pointer"
+                                            onClick={(event) =>
+                                              event.stopPropagation()
+                                            }
                                           >
-                                            <div className="flex items-center gap-2">
-                                              <Icon
-                                                IconComponent={IconPencilMinus}
-                                                className="size-4 stroke-[2px]"
-                                              />
-                                              <span>Edit Scores Name</span>
-                                            </div>
-                                          </Menu.Item>
-                                          <Menu.Item
-                                            className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
-                                            onClick={() => {
-                                              setEditDeleteAssignment(
-                                                assignment.name
-                                              );
-                                              setOpenModalDeleteAssignment(
-                                                true
-                                              );
-                                            }}
-                                          >
-                                            <div className="flex items-center gap-2">
-                                              <Icon
-                                                IconComponent={IconTrash}
-                                                className="size-4 stroke-[2px]"
-                                              />
-                                              <span>Delete Scores</span>
-                                            </div>
-                                          </Menu.Item>
-                                        </Menu.Dropdown>
-                                      </Menu>
-                                    </div>
-                                  </Table.Td>
-                                )}
-                              </Table.Tr>
-                            );
-                          })}
-                        </Table.Tbody>
-                      </Table>
+                                            <Menu
+                                              trigger="click"
+                                              position="bottom-end"
+                                              offset={2}
+                                            >
+                                              <Menu.Target>
+                                                <div>
+                                                  <Icon
+                                                    IconComponent={IconDots}
+                                                    className=" rounded-full w-fit hover:bg-gray-300"
+                                                  />
+                                                </div>
+                                              </Menu.Target>
+                                              <Menu.Dropdown
+                                                className="rounded-md backdrop-blur-xl bg-white/70 "
+                                                style={{
+                                                  boxShadow:
+                                                    "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                                                }}
+                                              >
+                                                <Menu.Item
+                                                  className="text-[#3E3E3E] font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
+                                                  onClick={() => {
+                                                    setSelectTopic(topic);
+                                                    setEditDeleteAssignment(
+                                                      assignment.name
+                                                    );
+                                                    setEditName(
+                                                      assignment.name
+                                                    );
+                                                    setOpenModalEditAssignment(
+                                                      true
+                                                    );
+                                                  }}
+                                                >
+                                                  <div className="flex items-center gap-2">
+                                                    <Icon
+                                                      IconComponent={
+                                                        IconPencilMinus
+                                                      }
+                                                      className="size-4 stroke-[2px]"
+                                                    />
+                                                    <span>
+                                                      Edit Scores Name
+                                                    </span>
+                                                  </div>
+                                                </Menu.Item>
+                                                <Menu.Item
+                                                  className="text-[#FF4747] disabled:text-[#adb5bd] hover:bg-[#d55757]/10 font-semibold text-b4 acerSwift:max-macair133:text-b5 h-7 w-[180px]"
+                                                  onClick={() => {
+                                                    setSelectTopic(topic);
+                                                    setEditDeleteAssignment(
+                                                      assignment.name
+                                                    );
+                                                    setOpenModalDeleteAssignment(
+                                                      true
+                                                    );
+                                                  }}
+                                                >
+                                                  <div className="flex items-center gap-2">
+                                                    <Icon
+                                                      IconComponent={IconTrash}
+                                                      className="size-4 stroke-[2px]"
+                                                    />
+                                                    <span>Delete Scores</span>
+                                                  </div>
+                                                </Menu.Item>
+                                              </Menu.Dropdown>
+                                            </Menu>
+                                          </div>
+                                        </Table.Td>
+                                      )}
+                                    </Table.Tr>
+                                  );
+                                })}
+                              </Table.Tbody>
+                            </Table>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </Tabs.Panel>
                   <Tabs.Panel value="charts">
                     <div className="flex overflow-y-auto overflow-x-hidden max-w-full h-full">
                       <div className="flex gap-6 w-full h-full">
-                        <div className="gap-5 flex flex-col min-w-[86%] max-w-[87%] overflow-y-auto px-1 pt-1 max-h-full">
-                          {allAssignments.map((item, i) => {
-                            const students =
-                              course?.sections
-                                .map((sec) => sec.students!)
-                                .flat() || [];
-                            return (
-                              <div
-                                className={`last:mb-[2px] flex px-2  bg-[#ffffff] flex-col rounded-md gap-10 py-2 ${
-                                  activeSection === i ? "active" : ""
-                                }`}
-                                style={{
-                                  boxShadow:
-                                    "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-                                }}
-                                id={`${item.name}`}
-                                key={i}
-                                ref={sectionRefs.current!.at(i)} // Dynamic refs
-                              >
-                                <Tabs
-                                  classNames={{
-                                    root: "overflow-hidden mt-1 mx-3 flex flex-col max-h-full",
-                                  }}
-                                  value={tabStates[i] || "bellCurve"} // Default tab for new items
-                                  onChange={(newValue) =>
-                                    handleTabChange(i, newValue)
-                                  } // Update specific tab
+                        <div className="flex flex-col gap-4 w-full h-full overflow-auto">
+                          {allAssignments.map(
+                            ({ topic, assignments }, index) => {
+                              let flatIndex = assignments.reduce(
+                                (count) =>
+                                  count +
+                                  allAssignments
+                                    .slice(0, index)
+                                    .reduce(
+                                      (sum, sec) =>
+                                        sum + sec.assignments.length,
+                                      0
+                                    ),
+                                0
+                              );
+                              return (
+                                <div
+                                  key={topic}
+                                  className="gap-5 flex flex-col min-w-[86%] max-w-[87%] px-1 pt-1"
                                 >
-                                  <Tabs.List className="mb-2">
-                                    <Tabs.Tab
-                                      value="bellCurve"
-                                      className="acerSwift:max-macair133:!text-b3"
-                                    >
-                                      Distribution
-                                    </Tabs.Tab>
-                                    <Tabs.Tab
-                                      value="histogram"
-                                      className="acerSwift:max-macair133:!text-b3"
-                                    >
-                                      Histogram
-                                    </Tabs.Tab>
-                                  </Tabs.List>
-                                  <Tabs.Panel
-                                    className="flex flex-col gap-1"
-                                    value="histogram"
-                                  >
-                                    <ChartContainer
-                                      type="histogram"
-                                      data={item}
-                                      students={students}
-                                    />
-                                  </Tabs.Panel>
-                                  <Tabs.Panel
-                                    className="flex flex-col gap-1"
-                                    value="bellCurve"
-                                  >
-                                    <ChartContainer
-                                      type="curve"
-                                      data={item}
-                                      students={students}
-                                    />
-                                    <p className=" text-[10px] translate-x-6 mb-2">
-                                      Score distribution powered by Andrew C.
-                                      Myers (Cornell University)
-                                    </p>
-                                  </Tabs.Panel>
-                                </Tabs>
-                              </div>
-                            );
-                          })}
+                                  {topic && <p>{topic}</p>}
+                                  {assignments.map((item, i) => {
+                                    const curIndex = flatIndex + i;
+                                    const students =
+                                      course?.sections
+                                        .filter((sec) => sec.topic == topic)
+                                        .map((sec) => sec.students!)
+                                        .flat() || [];
+                                    return (
+                                      <div
+                                        className={`last:mb-[2px] flex px-2  bg-[#ffffff] flex-col rounded-md gap-10 py-2 ${
+                                          activeSection === curIndex
+                                            ? "active"
+                                            : ""
+                                        }`}
+                                        style={{
+                                          boxShadow:
+                                            "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+                                        }}
+                                        id={`${item.name}`}
+                                        key={i}
+                                        ref={sectionRefs.current!.at(curIndex)} // Dynamic refs
+                                      >
+                                        <Tabs
+                                          classNames={{
+                                            root: "overflow-hidden mt-1 mx-3 flex flex-col max-h-full",
+                                          }}
+                                          value={tabStates[i] || "bellCurve"} // Default tab for new items
+                                          onChange={(newValue) =>
+                                            handleTabChange(i, newValue)
+                                          } // Update specific tab
+                                        >
+                                          <Tabs.List className="mb-2">
+                                            <Tabs.Tab
+                                              value="bellCurve"
+                                              className="acerSwift:max-macair133:!text-b3"
+                                            >
+                                              Distribution
+                                            </Tabs.Tab>
+                                            <Tabs.Tab
+                                              value="histogram"
+                                              className="acerSwift:max-macair133:!text-b3"
+                                            >
+                                              Histogram
+                                            </Tabs.Tab>
+                                          </Tabs.List>
+                                          <Tabs.Panel
+                                            className="flex flex-col gap-1"
+                                            value="histogram"
+                                          >
+                                            <ChartContainer
+                                              type="histogram"
+                                              data={item}
+                                              students={students}
+                                            />
+                                          </Tabs.Panel>
+                                          <Tabs.Panel
+                                            className="flex flex-col gap-1"
+                                            value="bellCurve"
+                                          >
+                                            <ChartContainer
+                                              type="curve"
+                                              data={item}
+                                              students={students}
+                                            />
+                                            <p className=" text-[10px] translate-x-6 mb-2">
+                                              Score distribution powered by
+                                              Andrew C. Myers (Cornell
+                                              University)
+                                            </p>
+                                          </Tabs.Panel>
+                                        </Tabs>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              );
+                            }
+                          )}
                         </div>
-
-                        <div className="max-w-[12%] mt-3 flex flex-col  ">
-                          {allAssignments.map((item, i) => (
-                            <div
-                              key={i}
-                              className={`max-w-fit  ${
-                                activeSection === i ? "active" : ""
-                              }`}
-                            >
-                              <a
-                                href={`#${item.name}`}
-                                onClick={() => setActiveSection(i)}
-                              >
-                                <p
-                                  className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-b3 acerSwift:max-macair133:!text-b4 ${
-                                    activeSection === i
-                                      ? "text-secondary"
-                                      : "text-[#D2C9C9] "
-                                  }`}
-                                >
-                                  {item.name}
-                                </p>
-                              </a>
-                            </div>
-                          ))}
+                        <div className="max-w-[12%] mt-3 flex flex-col">
+                          {allAssignments.map(
+                            ({ topic, assignments }, index) => {
+                              let flatIndex = assignments.reduce(
+                                (count) =>
+                                  count +
+                                  allAssignments
+                                    .slice(0, index)
+                                    .reduce(
+                                      (sum, sec) =>
+                                        sum + sec.assignments.length,
+                                      0
+                                    ),
+                                0
+                              );
+                              return (
+                                <div key={topic}>
+                                  {topic && <p className="text-b1">{topic}</p>}
+                                  {assignments.map((item, i) => {
+                                    const curIndex = flatIndex + i;
+                                    return (
+                                      <div
+                                        key={i}
+                                        className={`max-w-fit ${
+                                          topic && "ml-2"
+                                        } ${
+                                          activeSection === curIndex
+                                            ? "active"
+                                            : ""
+                                        }`}
+                                      >
+                                        <a
+                                          href={`#${item.name}`}
+                                          onClick={() =>
+                                            setActiveSection(curIndex)
+                                          }
+                                        >
+                                          <p
+                                            className={`mb-[7px] text-ellipsis font-semibold overflow-hidden whitespace-nowrap text-b3 acerSwift:max-macair133:!text-b4 ${
+                                              activeSection === curIndex
+                                                ? "text-secondary"
+                                                : "text-[#D2C9C9] "
+                                            }`}
+                                          >
+                                            {item.name}
+                                          </p>
+                                        </a>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              );
+                            }
+                          )}
                         </div>
                       </div>
                     </div>
@@ -852,96 +949,106 @@ export default function AllAssignment() {
                 </Tabs>
               ) : (
                 <div className="flex flex-col gap-3 overflow-y-auto h-full ">
-                  {allAssignments.map((assignment, index) => {
-                    const students =
-                      course?.sections.map((sec) => sec.students!).flat() || [];
-                    const totalStudent = students.filter(({ scores }) =>
-                      scores.find(
-                        ({ assignmentName }) =>
-                          assignmentName == assignment.name
-                      )
-                    ).length;
-                    const totalScore = students.reduce(
-                      (a, b) =>
-                        a +
-                        (b.scores
-                          .find(
+                  {allAssignments.map(({ topic, assignments }) => (
+                    <div key={topic} className="flex flex-col gap-3">
+                      {topic && <p>{topic}</p>}
+                      {assignments.map((assignment, index) => {
+                        const students =
+                          course?.sections
+                            .filter((sec) => sec.topic == topic)
+                            .map((sec) => sec.students!)
+                            .flat() || [];
+                        const totalStudent = students.filter(({ scores }) =>
+                          scores.find(
                             ({ assignmentName }) =>
                               assignmentName == assignment.name
                           )
-                          ?.questions.filter(({ score }) => score >= 0)
-                          .reduce((sum, { score }) => sum + score, 0) || 0),
-                      0
-                    );
-                    return (
-                      <div
-                        key={index}
-                        className={`border flex flex-col hover:bg-slate-50 justify-between rounded-md p-3 `}
-                        onClick={() => goToAssignment(`${assignment.name}`)}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex flex-col">
-                            <div className=" font-semibold text-default text-[14px]">
-                              {assignment.name}
+                        ).length;
+                        const totalScore = students.reduce(
+                          (a, b) =>
+                            a +
+                            (b.scores
+                              .find(
+                                ({ assignmentName }) =>
+                                  assignmentName == assignment.name
+                              )
+                              ?.questions.filter(({ score }) => score >= 0)
+                              .reduce((sum, { score }) => sum + score, 0) || 0),
+                          0
+                        );
+                        return (
+                          <div
+                            key={index}
+                            className={`border flex flex-col hover:bg-slate-50 justify-between rounded-md p-3 `}
+                            onClick={() =>
+                              goToAssignment(`${assignment.name}`, topic || "")
+                            }
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex flex-col">
+                                <div className=" font-semibold text-default text-[14px]">
+                                  {assignment.name}
+                                </div>
+                                <div className="font-semibold text-secondary text-[14px] ">
+                                  Full score:{" "}
+                                  {assignment.questions.reduce(
+                                    (sum, { fullScore }) => sum + fullScore,
+                                    0
+                                  )}
+                                </div>
+                              </div>
+                              <Icon IconComponent={IconChevron} />
                             </div>
-                            <div className="font-semibold text-secondary text-[14px] ">
-                              Full score:{" "}
-                              {assignment.questions.reduce(
-                                (sum, { fullScore }) => sum + fullScore,
-                                0
-                              )}
+                            <div className="mt-3 border-t rounded-md p-4 text-[12px] grid grid-cols-2  ">
+                              <div>
+                                Mean{" "}
+                                {(
+                                  (totalScore || 0) / (totalStudent || 1)
+                                ).toFixed(2)}
+                              </div>
+                              <div>Student(s): {totalStudent || 0}</div>
                             </div>
-                          </div>
-                          <Icon IconComponent={IconChevron} />
-                        </div>
-                        <div className="mt-3 border-t rounded-md p-4 text-[12px] grid grid-cols-2  ">
-                          <div>
-                            Mean{" "}
-                            {((totalScore || 0) / (totalStudent || 1)).toFixed(
-                              2
+                            {activeTerm && (
+                              <div className="text-start  !w-full justify-items-center">
+                                <Button
+                                  variant="light"
+                                  classNames={{ label: "!font-semibold " }}
+                                  className={`rounded-full mt-3 ${
+                                    assignment.isPublish
+                                      ? " bg-orange-600/20 text-orange-600 hover:text-orange-600 hover:bg-orange-700/20"
+                                      : " bg-teal-500/20 text-teal-600 hover:text-teal-600 hover:bg-teal-600/20"
+                                  } items-center justify-center  !h-10 flex !rounded-xl flex-1 !w-full cursor-pointer`}
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    form.setFieldValue(
+                                      "isPublish",
+                                      !assignment.isPublish
+                                    );
+                                    form.setFieldValue(
+                                      "sections",
+                                      course?.sections.map(
+                                        (sec) => sec.sectionNo
+                                      ) || []
+                                    );
+                                    form.setFieldValue("assignments", [
+                                      assignment.name,
+                                    ]);
+                                    onClickPublish();
+                                  }}
+                                >
+                                  {assignment.isPublish ? (
+                                    <p className="!font-semibold">Unpublish</p>
+                                  ) : (
+                                    <p className="!font-semibold ">Publish</p>
+                                  )}
+                                </Button>
+                              </div>
                             )}
                           </div>
-                          <div>Student(s): {totalStudent || 0}</div>
-                        </div>
-                        {activeTerm && (
-                          <div className="text-start  !w-full justify-items-center">
-                            <Button
-                              variant="light"
-                              classNames={{ label: "!font-semibold " }}
-                              className={`rounded-full mt-3 ${
-                                assignment.isPublish
-                                  ? " bg-orange-600/20 text-orange-600 hover:text-orange-600 hover:bg-orange-700/20"
-                                  : " bg-teal-500/20 text-teal-600 hover:text-teal-600 hover:bg-teal-600/20"
-                              } items-center justify-center  !h-10 flex !rounded-xl flex-1 !w-full cursor-pointer`}
-                              onClick={(event) => {
-                                event.stopPropagation();
-                                form.setFieldValue(
-                                  "isPublish",
-                                  !assignment.isPublish
-                                );
-                                form.setFieldValue(
-                                  "sections",
-                                  course?.sections.map(
-                                    (sec) => sec.sectionNo
-                                  ) || []
-                                );
-                                form.setFieldValue("assignments", [
-                                  assignment.name,
-                                ]);
-                                onClickPublish();
-                              }}
-                            >
-                              {assignment.isPublish ? (
-                                <p className="!font-semibold">Unpublish</p>
-                              ) : (
-                                <p className="!font-semibold ">Publish</p>
-                              )}
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                        );
+                      })}
+                    </div>
+                  ))}
                 </div>
               )
             ) : (

@@ -30,6 +30,7 @@ import ModalEvalChart from "@/components/Modal/Score/ModalEvalChart";
 export default function OneAssignment() {
   const { courseNo, name } = useParams();
   const [params, setParams] = useSearchParams();
+  const topic = params.get("topic");
   const academicYear = useAppSelector((state) => state.academicYear);
   const activeTerm = academicYear.find(
     (term) =>
@@ -41,9 +42,11 @@ export default function OneAssignment() {
   const course = useAppSelector((state) =>
     state.course.courses.find((e) => e.courseNo == courseNo)
   );
-  const assignment = course?.sections[0].assignments?.find(
-    (item) => item.name == name
-  );
+  const assignment = (
+    topic != ""
+      ? course?.sections.find((sec) => !sec.topic || sec.topic == topic)
+      : course?.sections[0]
+  )?.assignments?.find((item) => item.name == name);
   const fullScore =
     assignment?.questions.reduce((a, { fullScore }) => a + fullScore, 0) || 0;
   const studentRefs = useRef(new Map());
@@ -62,7 +65,11 @@ export default function OneAssignment() {
       sumScore: number;
     } & Record<string, any>)[]
   >([]);
-  const students = course?.sections.map((sec) => sec.students!).flat() || [];
+  const students =
+    course?.sections
+      .filter((sec) => !sec.topic || sec.topic == topic)
+      .map((sec) => sec.students!)
+      .flat() || [];
   const [sort, setSort] = useState<any>({});
   const [filter, setFilter] = useState<string>("");
   const questions = assignment?.questions;
@@ -123,6 +130,7 @@ export default function OneAssignment() {
       });
       setAllStudent(
         (course?.sections
+          .filter((sec) => !sec.topic || sec.topic == topic)
           .flatMap((sec) => {
             return sec.students
               ?.map((std) => {
@@ -565,7 +573,10 @@ export default function OneAssignment() {
                         </div>
                       </Table.Th>
                       {questions?.map((item, index) => (
-                        <Table.Th key={index} className="py-4 w-[170px]  min-w-[170px] max-w-[200px] px-4">
+                        <Table.Th
+                          key={index}
+                          className="py-4 w-[170px]  min-w-[170px] max-w-[200px] px-4"
+                        >
                           <div
                             className="flex justify-end items-center text-end  gap-2 cursor-pointer acerSwift:max-macair133:!text-b3 pr-6 transition-colors duration-200"
                             onClick={() => onClickSort(item.name)}

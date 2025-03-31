@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, Outlet, useParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  Outlet,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import { setUser } from "@/store/user";
@@ -22,6 +28,7 @@ import { isMobile } from "./helpers/functions/function";
 function App() {
   const [openModalTermsOfService, setOpenModalTermsOfService] = useState(false);
   const { courseNo } = useParams();
+  const [params, setParams] = useSearchParams();
   const config = useAppSelector((state) => state.config);
   const loading = useAppSelector((state) => state.loading.loadingOverlay);
   const error = useAppSelector((state) => state.errorResponse);
@@ -64,6 +71,17 @@ function App() {
       navigate(ROUTE_PATH.LOGIN);
     }
   }, [user, path]);
+
+  useEffect(() => {
+    if (
+      params.get("topic") &&
+      (!path.includes(ROUTE_PATH.EVALUATION) ||
+        path.includes(ROUTE_PATH.SECTION))
+    ) {
+      params.delete("topic");
+      setParams(params);
+    }
+  }, [params, path, setParams]);
 
   const checkToken = async (token: string) => {
     const isExpired = await checkTokenExpired(token);
