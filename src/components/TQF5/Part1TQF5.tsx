@@ -126,7 +126,7 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
     if (tqf5.part1) {
       form.setValues(
         !!tqf5.curriculum?.length
-          ? {
+          ? ({
               list: tqf5.curriculum.map((cur) => {
                 const temp = tqf5.part1?.list.find(
                   ({ curriculum }) => curriculum == cur
@@ -171,7 +171,7 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                 };
               }),
               updatedAt: tqf5.part1.updatedAt,
-            }
+            } as any)
           : cloneDeep(tqf5.part1)
       );
       setCurIndex(
@@ -471,9 +471,9 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                 </p>
               </div>
               <div className="bg-gray-100 p-3 flex w-auto rounded-md break-words">
-                {oldRecommendation?.reviewingSLO?.length ? (
+                {oldRecommendation?.recommendAbnormalScoreFactor?.length ? (
                   <p className="text-[14px]">
-                    {oldRecommendation.reviewingSLO}
+                    {oldRecommendation.recommendAbnormalScoreFactor}
                   </p>
                 ) : (
                   <p className="text-[14px] break-words">
@@ -484,18 +484,32 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
             </div>
           </div>
 
-          <div className="flex ml-2 text-default">
+          <div className="flex w-full gap-4 text-default">
             <Textarea
               key={form.key(`list.${curIndex}.abnormalScoreFactor`)}
-              label="Recommendations for improving this semester"
+              label="Description"
               size="xs"
               placeholder="(optional)"
-              className="w-[1000px]"
+              className="w-[45%]"
               classNames={{
                 input: `h-[200px] p-3 acerSwift:max-macair133:!text-b4 `,
                 label: "text-default acerSwift:max-macair133:!text-b4",
               }}
               {...form.getInputProps(`list.${curIndex}.abnormalScoreFactor`)}
+            />
+            <Textarea
+              key={form.key(`list.${curIndex}.recommendAbnormalScoreFactor`)}
+              label="Recommendations for improving this semester"
+              size="xs"
+              placeholder="(optional)"
+              className="w-[55%]"
+              classNames={{
+                input: `h-[200px] p-3 acerSwift:max-macair133:!text-b4 `,
+                label: "text-default acerSwift:max-macair133:!text-b4",
+              }}
+              {...form.getInputProps(
+                `list.${curIndex}.recommendAbnormalScoreFactor`
+              )}
             />
           </div>
         </div>
@@ -519,9 +533,9 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
                 </p>
               </div>
               <div className="bg-gray-100 p-3 flex rounded-md">
-                {oldRecommendation?.reviewingSLO?.length ? (
+                {oldRecommendation?.recommendReviewingSLO?.length ? (
                   <p className="text-[14px]">
-                    {oldRecommendation.reviewingSLO}
+                    {oldRecommendation.recommendReviewingSLO}
                   </p>
                 ) : (
                   <p className="text-[14px]">
@@ -532,19 +546,31 @@ export default function Part1TQF5({ setForm, tqf5Original }: Props) {
             </div>
           </div>
 
-          <div className="flex !ml-2 text-default">
+          <div className="flex w-full gap-4 text-default">
             <Textarea
               key={form.key(`list.${curIndex}.reviewingSLO`)}
-              label="Recommendations for improving this semester"
+              label="Description"
               size="xs"
               placeholder="(optional)"
-              className="w-[1000px]"
+              className="w-[45%]"
               classNames={{
                 input: `h-[200px] p-3 acerSwift:max-macair133:!text-b4`,
                 label: "text-default acerSwift:max-macair133:!text-b4",
               }}
               {...form.getInputProps(`list.${curIndex}.reviewingSLO`)}
-            ></Textarea>
+            />
+            <Textarea
+              key={form.key(`list.${curIndex}.recommendReviewingSLO`)}
+              label="Recommendations for improving this semester"
+              size="xs"
+              placeholder="(optional)"
+              className="w-[55%]"
+              classNames={{
+                input: `h-[200px] p-3 acerSwift:max-macair133:!text-b4`,
+                label: "text-default acerSwift:max-macair133:!text-b4",
+              }}
+              {...form.getInputProps(`list.${curIndex}.recommendReviewingSLO`)}
+            />
           </div>
         </div>
       </div>
