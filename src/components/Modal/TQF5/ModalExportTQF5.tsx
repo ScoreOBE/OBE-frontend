@@ -2,7 +2,7 @@ import { Button, Checkbox, Group, Modal, Radio, Select } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import IconPDF from "@/assets/icons/pdf.svg?react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import { IModelTQF5 } from "@/models/ModelTQF5";
 import IconFileExport from "@/assets/icons/fileExport.svg?react";
@@ -31,7 +31,7 @@ export default function ModalExportTQF5({
   tqf3,
 }: Props) {
   const { courseNo } = useParams();
-  const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [params] = useSearchParams();
   const tqf5 = useAppSelector((state) => state.tqf5);
   const [selectedMerge, setSelectedMerge] = useState("unzipfile");
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
@@ -72,8 +72,8 @@ export default function ModalExportTQF5({
     const payload: any = {
       curriculum: selectCurriculum,
       courseNo: dataTQF?.courseNo ?? courseNo,
-      academicYear: academicYear.year,
-      academicTerm: academicYear.semester,
+      academicYear: params.get("year"),
+      academicTerm: params.get("semester"),
       tqf3: tqf3,
       tqf5: dataExport.id,
       oneFile: selectedMerge.includes("unzipfile"),
@@ -86,9 +86,9 @@ export default function ModalExportTQF5({
       const disposition = res.headers["content-disposition"];
       const filename = disposition
         ? disposition.split("filename=")[1]
-        : `TQF5_Parts_${dataTQF?.courseNo ?? courseNo}_${academicYear.year}_${
-            academicYear.semester
-          }.zip`;
+        : `TQF5_Parts_${dataTQF?.courseNo ?? courseNo}_${params.get(
+            "year"
+          )}_${params.get("semester")}.zip`;
       const blob = new Blob([res.data], { type: contentType });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");

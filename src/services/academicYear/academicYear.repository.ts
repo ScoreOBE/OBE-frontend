@@ -10,7 +10,7 @@ export const academicYearController = (configService = {}) => {
 
   return {
     getAcademicYear: async (params?: AcademicYearRequestDTO) => {
-      return service.get(`${prefix}`, { ...params });
+      return apiService({ noAuth: true }).get(`${prefix}`, { ...params });
     },
     createAcademicYear: async (params: CreateAcademicYearRequestDTO) => {
       return service.post(`${prefix}`, { ...params });

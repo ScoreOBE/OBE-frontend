@@ -8,7 +8,7 @@ import {
 } from "@/helpers/constants/TQF3.enum";
 import { genPdfTQF3 } from "@/services/tqf3/tqf3.service";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { IModelTQF3 } from "@/models/ModelTQF3";
 import noData from "@/assets/image/noData.jpg";
 import IconPDF from "@/assets/icons/pdf.svg?react";
@@ -24,7 +24,7 @@ type Props = {
 
 export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
   const { courseNo } = useParams();
-  const academicYear = useAppSelector((state) => state.academicYear[0]);
+  const [params] = useSearchParams();
   const tqf3 = useAppSelector((state) => state.tqf3);
   const [selectedMerge, setSelectedMerge] = useState("unzipfile");
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
@@ -67,8 +67,8 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
 
     const payload: any = {
       courseNo: dataTQF?.courseNo ?? courseNo,
-      academicYear: academicYear.year,
-      academicTerm: academicYear.semester,
+      academicYear: params.get("year"),
+      academicTerm: params.get("semester"),
       tqf3: dataExport.id,
       oneFile: selectedMerge.includes("unzipfile"),
     };
@@ -80,9 +80,9 @@ export default function ModalExportTQF3({ opened, onClose, dataTQF }: Props) {
       const disposition = res.headers["content-disposition"];
       const filename = disposition
         ? disposition.split("filename=")[1]
-        : `TQF3_Parts_${dataTQF?.courseNo ?? courseNo}_${academicYear.year}_${
-            academicYear.semester
-          }.zip`;
+        : `TQF3_Parts_${dataTQF?.courseNo ?? courseNo}_${params.get(
+            "year"
+          )}_${params.get("semester")}.zip`;
       const blob = new Blob([res.data], { type: contentType });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
