@@ -163,10 +163,10 @@ const studentList = async (
       const existSec = result.find((sec) => sec.sectionNo == sectionNo);
       const student = {
         studentId: row[studentId],
-        firstNameTH: row.firstName.endsWith(" ")
+        firstNameTH: row.firstName?.endsWith(" ")
           ? row.firstName.slice(0, -1)
           : row.firstName,
-        lastNameTH: row.lastName.endsWith(" ")
+        lastNameTH: row.lastName?.endsWith(" ")
           ? row.lastName.slice(0, -1)
           : row.lastName ?? "",
       };
