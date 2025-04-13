@@ -77,7 +77,7 @@ export default function CourseSidebar({ onClickLeaveCourse }: Props) {
     if (course) {
       const temp: string[] = [];
       course.sections?.filter((sec) => {
-        if (sec.topic && !temp.includes(sec.topic)) {
+        if (sec.topic && !temp.includes(sec.topic) && sec.isActive) {
           temp.push(sec.topic);
         }
       });

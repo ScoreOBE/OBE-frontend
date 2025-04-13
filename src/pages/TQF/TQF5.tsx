@@ -689,12 +689,12 @@ export default function TQF5() {
                   <div className="flex px-12 sm:max-ipad11:px-8 flex-row items-center justify-between h-full">
                     <div className="h-full  justify-center flex flex-col">
                       <p className="text-secondary text-[21px] font-semibold">
-                        TQF 3 Completion Needed
+                      TQF 5 requires all 6 parts of TQF 3.
                       </p>
                       <br />
                       <p className=" -mt-3 mb-6 text-b2 break-words font-medium leading-relaxed">
                         It seems this TQF 3 for {courseNo} isn’t fully completed
-                        all parts yet. <br /> Review and fill in the missing
+                        6 parts yet. <br /> Review and fill in the missing
                         sections to ensure everything is in place!
                       </p>
                     </div>

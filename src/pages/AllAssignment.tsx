@@ -409,7 +409,7 @@ export default function AllAssignment() {
           <Loading />
         ) : (
           <>
-            {allAssignments.length !== 0 && !isMobile && (
+            {!allAssignments?.every(item => item.assignments?.length === 0) && !isMobile && (
               <div className="flex flex-row items-center justify-between">
                 <p className="text-secondary text-b1 acerSwift:max-macair133:text-b2 font-semibold">
                   Score Items
@@ -530,7 +530,7 @@ export default function AllAssignment() {
                 </div>
               </div>
             )}
-            {allAssignments.length !== 0 ? (
+            {!allAssignments?.every(item => item.assignments?.length === 0) ? (
               !isMobile ? (
                 <Tabs
                   defaultValue="assignment"
@@ -1058,7 +1058,7 @@ export default function AllAssignment() {
                   <p className="!h-full text-[20px] text-secondary font-semibold">
                     No Score
                   </p>{" "}
-                  <p className=" text-[#333333] -mt-1  text-b2 break-words font-medium leading-relaxed">
+                  <p className=" text-[#333333] -mt-2  text-b2 break-words font-medium leading-relaxed">
                     It seems like no score have been added to this course yet.
                   </p>{" "}
                   {activeTerm && <div className="mt-3">{uploadButton()}</div>}

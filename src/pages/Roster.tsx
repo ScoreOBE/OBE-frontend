@@ -463,7 +463,7 @@ export default function Roster() {
               <p className="text-start font-semibold text-[20px] iphone:max-sm:text-center text-secondary sm:px-6 -translate-y-1 py-10">
                 {search
                   ? `No results for "${filter}"`
-                  : "No Course Roster found"}
+                  : "No Course Roster"}
                 <br />
                 <p className="mt-1 text-[#333333] font-medium text-b2">
                   {search
@@ -478,7 +478,7 @@ export default function Roster() {
                     variant="filled"
                     disabled={isMobile}
                     onClick={() => setOpenModalUploadStudentList(true)}
-                    className=" font-bold mt-5"
+                    className=" font-bold mt-6"
                   >
                     Import Course Roster
                   </Button>
@@ -552,7 +552,7 @@ export default function Roster() {
               <p className="text-start font-semibold text-[20px] iphone:max-sm:text-center text-secondary sm:px-6 -translate-y-1 py-10">
                 {search
                   ? `No results for "${filter}"`
-                  : "No Course Roster found"}
+                  : "No Course Roster"}
                 <br />
                 <p className="mt-1 text-[#333333] font-medium text-b2">
                   {search
