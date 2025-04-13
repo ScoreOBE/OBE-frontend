@@ -776,7 +776,7 @@ export default function TQF3() {
                         className="size-5 acerSwift:max-macair133:size-4"
                         IconComponent={exportFile}
                       />
-                      Export TQF3
+                      Export TQF 3
                     </div>
                   </Button>
                 </div>

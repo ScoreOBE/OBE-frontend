@@ -530,10 +530,10 @@ export default function Part6TQF3({ setForm = () => {} }: Props) {
         <div className="flex px-16  w-full ipad11:px-8 sm:px-2  gap-5  items-center justify-between h-full">
           <div className="flex justify-center  h-full items-start gap-2 flex-col">
             <p className="   text-secondary font-semibold text-[22px] sm:max-ipad11:text-[20px]">
-              Complete TQF3 Part 5 First
+            TQF 3 Part 5 is required to continue
             </p>
             <p className=" text-[#333333] leading-6 font-medium text-[14px] sm:max-ipad11:text-[13px]">
-              To start TQF3 Part 6, please complete and save TQF3 Part 5. <br />{" "}
+              To start TQF 3 Part 6, please complete and save TQF 3 Part 5. <br />{" "}
               Once done, you can continue to do it.
             </p>
           </div>

@@ -370,10 +370,16 @@ export default function Section() {
                 return (
                   <div
                     key={index}
-                    className={`card relative justify-between h-[135px] cursor-pointer macair133:h-[135px] sm:h-[128px]  rounded-[4px] ${
-                      sec.isActive ? "hover:bg-[#F3F3F3] cursor-pointer" : ""
+                    className={`card relative justify-between h-[135px]  macair133:h-[135px] sm:h-[128px] rounded-[4px] ${
+                      sec.isActive
+                        ? "hover:bg-[#F3F3F3] cursor-pointer "
+                        : " cursor-not-allowed"
                     }`}
-                    onClick={() => goToAssignment(sec.sectionNo!)}
+                    onClick={() => {
+                      if (sec.isActive) {
+                        goToAssignment(sec.sectionNo!);
+                      }
+                    }}
                   >
                     {activeTerm && owner && !isMobile && (
                       <div onClick={(event) => event.stopPropagation()}>
@@ -382,7 +388,7 @@ export default function Section() {
                             <div>
                               <Icon
                                 IconComponent={IconDots}
-                                className="absolute top-2 right-2 rounded-full hover:bg-gray-300"
+                                className="absolute top-2 right-2 rounded-full cursor-pointer hover:bg-gray-300"
                               />
                             </div>
                           </Menu.Target>
@@ -461,21 +467,31 @@ export default function Section() {
                           >
                             Section {getSectionNo(sec.sectionNo)}
                           </p>
-                          <div
-                            className={`tag-tqf ${
-                              isMobile ? "translate-x-0" : ""
-                            } bg-secondary text-secondary flex gap-[6px] px-2 py-[4px]  items-center bg-opacity-15 rounded-xl !text-[13px] acerSwift:max-macair133:!text-b6 ${
-                              owner && activeTerm && "mr-7"
-                            } 
+                          {sec.isActive ? (
+                            <div
+                              className={`tag-tqf ${
+                                isMobile ? "translate-x-0" : ""
+                              } bg-secondary text-secondary flex gap-[6px] px-2 py-[4px]  items-center bg-opacity-15 rounded-xl !text-[13px] acerSwift:max-macair133:!text-b6 ${
+                                owner && activeTerm && "mr-7"
+                              } 
                           
                            `}
-                          >
-                            <Icon
-                              IconComponent={IconStudent}
-                              className="size-[14px] acerSwift:max-macair133:size-[11px] text-secondary stroke-secondary"
-                            />
-                            {sec.students?.length}
-                          </div>
+                            >
+                              <Icon
+                                IconComponent={IconStudent}
+                                className="size-[14px] acerSwift:max-macair133:size-[11px] text-secondary stroke-secondary"
+                              />
+                              {sec.students?.length}
+                            </div>
+                          ) : (
+                            <p
+                              className={`text-[12px] font-medium text-red-600 ${
+                                owner && activeTerm && "mr-7"
+                              }`}
+                            >
+                              inactive
+                            </p>
+                          )}
                         </div>
 
                         <p
