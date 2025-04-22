@@ -46,18 +46,20 @@ export default function ModalMappingAssignment({
   });
 
   useEffect(() => {
-    if (tqf5.assignmentsMap?.length) {
-      form.setFieldValue("assignments", tqf5.assignmentsMap);
-    } else if (assignments?.length) {
-      form.setFieldValue(
-        "assignments",
-        tqf3?.part3?.eval.map((assign) => ({
-          eval: assign.topicEN,
-          assignment: [],
-        })) || []
-      );
+    if (opened) {
+      if (tqf5.assignmentsMap?.length) {
+        form.setFieldValue("assignments", tqf5.assignmentsMap);
+      } else if (assignments?.length) {
+        form.setFieldValue(
+          "assignments",
+          tqf3?.part3?.eval.map((assign) => ({
+            eval: assign.topicEN,
+            assignment: [],
+          })) || []
+        );
+      }
     }
-  }, [tqf5.assignmentsMap]);
+  }, [opened, tqf5.assignmentsMap]);
 
   const saveMapping = async () => {
     if (!form.validate().hasErrors) {
